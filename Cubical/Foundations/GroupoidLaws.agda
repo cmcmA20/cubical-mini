@@ -4,7 +4,7 @@ This file proves the higher groupoid structure of types
 for homogeneous and heterogeneous paths
 
 -}
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --erased-cubical #-}
 module Cubical.Foundations.GroupoidLaws where
 
 open import Cubical.Foundations.Prelude

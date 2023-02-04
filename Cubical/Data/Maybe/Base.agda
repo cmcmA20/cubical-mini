@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --erased-cubical #-}
 module Cubical.Data.Maybe.Base where
 
 open import Cubical.Core.Everything

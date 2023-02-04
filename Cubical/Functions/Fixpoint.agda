@@ -1,7 +1,7 @@
 {-
   Definition of function fixpoint and Kraus' lemma
 -}
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --erased-cubical #-}
 module Cubical.Functions.Fixpoint where
 
 open import Cubical.Foundations.Prelude

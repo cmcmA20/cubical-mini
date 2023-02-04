@@ -5,7 +5,7 @@ This file contains:
 - Definition of propositional truncation
 
 -}
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --erased-cubical #-}
 module Cubical.HITs.PropositionalTruncation.Base where
 
 open import Cubical.Core.Primitives

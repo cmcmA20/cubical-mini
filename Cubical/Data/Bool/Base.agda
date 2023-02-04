@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --erased-cubical #-}
 module Cubical.Data.Bool.Base where
 
 open import Cubical.Foundations.Prelude
