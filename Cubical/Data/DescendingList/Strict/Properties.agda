@@ -158,7 +158,7 @@ module IsoToLFSet
      ⊔-elim (x ≡ₚ y) (x ∈ʰ unsort ys)
        (λ _ → ((cons x xs x>xs) ≡ (cons y ys y>ys)) , SDL-isSet _ _)
        (PropTrunc.rec (SDL-isSet _ _) with-x≡y)
-       (⊥.rec ∘ x∉ys)
+       (λ p → ⊥.rec (x∉ys p))
        (transport (λ i → ⟨ e i x ⟩) (inl ∣ refl ∣₁)) where
 
     xxs = cons x xs x>xs

@@ -63,8 +63,6 @@ elim
   → (∀{k} → P {suc k} zero)
   → (∀{k} → {fn : Fin k} → P fn → P (suc fn))
   → {k : ℕ} → (fn : Fin k) → P fn
-
-elim P fz fs {zero} = ⊥.rec ∘ ¬Fin0
 elim P fz fs {suc k} zero = fz
 elim P fz fs {suc k} (suc fj) = fs (elim P fz fs fj)
 

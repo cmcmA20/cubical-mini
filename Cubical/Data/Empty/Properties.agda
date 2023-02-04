@@ -26,7 +26,7 @@ fst isContrΠ⊥* ()
 snd isContrΠ⊥* f i ()
 
 uninhabEquiv : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'}
-  → (A → ⊥) → (B → ⊥) → A ≃ B
+  → @0 (A → ⊥) → @0 (B → ⊥) → A ≃ B
 uninhabEquiv ¬a ¬b = isoToEquiv isom
   where
   open Iso

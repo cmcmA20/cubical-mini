@@ -75,7 +75,7 @@ inj-cong : {n : ℕ} → {k l : Fin n} → (p : toℕ k ≡ toℕ l) → cong to
 inj-cong p = isSetℕ _ _ _ _
 
 isPropFin0 : isProp (Fin 0)
-isPropFin0 = ⊥.rec ∘ ¬Fin0
+isPropFin0 ()
 
 isContrFin1 : isContr (Fin 1)
 isContrFin1 .fst = zero

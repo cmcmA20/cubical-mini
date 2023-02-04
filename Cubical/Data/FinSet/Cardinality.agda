@@ -164,7 +164,7 @@ module _
 -- results to be used in direct induction on FinSet
 
 card𝟘 : card (𝟘 {ℓ}) ≡ 0
-card𝟘 {ℓ = ℓ} = isEmpty→card≡0 (𝟘 {ℓ}) (Empty.rec*)
+card𝟘 {ℓ = ℓ} = isEmpty→card≡0 (𝟘 {ℓ}) (λ x → Empty.rec* x)
 
 card𝟙 : card (𝟙 {ℓ}) ≡ 1
 card𝟙 {ℓ = ℓ} = isContr→card≡1 (𝟙 {ℓ}) isContrUnit*

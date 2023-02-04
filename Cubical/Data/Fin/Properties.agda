@@ -39,7 +39,7 @@ private
 
 -- Fin 0 is empty, and thus a proposition.
 isPropFin0 : isProp (Fin 0)
-isPropFin0 = Empty.rec ∘ ¬Fin0
+isPropFin0 x = Empty.rec (¬Fin0 x)
 
 -- Fin 1 has only one value.
 isContrFin1 : isContr (Fin 1)
@@ -138,7 +138,7 @@ private
     ∘ inj-m+ {suc k}
 
   expand×Emb : ∀ k → isEmbedding (expand× {k})
-  expand×Emb 0 = Empty.rec ∘ ¬Fin0 ∘ fst
+  expand×Emb 0 (x , _) = Empty.rec (¬Fin0 x)
   expand×Emb (suc k)
     = injEmbedding isSetℕ (expand×Inj k)
 

@@ -142,8 +142,8 @@ cover (Nat.suc n) = embed n
 cover-inj : ∀ m n → cover m ≡ cover n → m ≡ n
 cover-inj Nat.zero Nat.zero _ = refl
 cover-inj (Nat.suc m) (Nat.suc n) p = cong Nat.suc (embed-inj m n p)
-cover-inj Nat.zero (Nat.suc n) = ⊥.rec ∘ embed≢∞ n ∘ sym
-cover-inj (Nat.suc m) Nat.zero = ⊥.rec ∘ embed≢∞ m
+cover-inj Nat.zero (Nat.suc n) p = ⊥.rec (embed≢∞ n (sym p))
+cover-inj (Nat.suc m) Nat.zero p = ⊥.rec (embed≢∞ m p)
 
 module IsSet where
   ≡-stable  : {x y : Conat} → Stable (x ≡ y)

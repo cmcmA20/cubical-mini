@@ -71,8 +71,6 @@ compute-eqℕ (suc n) (suc m) p = compute-eqℕ n m (injSuc p)
 
 decodeℕ : (n m : ℕ) → codeℕ n m → (n ≡ m)
 decodeℕ zero zero = λ _ → refl
-decodeℕ zero (suc m) = ⊥.rec
-decodeℕ (suc n) zero = ⊥.rec
 decodeℕ (suc n) (suc m) = λ r → cong suc (decodeℕ n m r)
 
 ≡ℕ≃Codeℕ : (n m : ℕ) → (n ≡ m) ≃ codeℕ n m

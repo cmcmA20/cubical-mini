@@ -337,7 +337,7 @@ private
     }
 
 <-wellfounded : WellFounded _<_
-<-wellfounded zero = acc λ _ → ⊥.rec ∘ ¬-<-zero
+<-wellfounded zero = acc λ _ p → ⊥.rec (¬-<-zero p)
 <-wellfounded (suc n) = acc-suc (<-wellfounded n)
 
 <→≢ : n < m → ¬ n ≡ m

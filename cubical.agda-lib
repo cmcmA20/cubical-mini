@@ -1,4 +1,4 @@
 name: cubical-0.5
 include: .
 depend:
-flags: --cubical --no-import-sorts -WnoUnsupportedIndexedMatch
+flags: --cubical --erasure --no-import-sorts -WnoUnsupportedIndexedMatch

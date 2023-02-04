@@ -38,7 +38,7 @@ module _
   {ℓ : Level} where
 
   𝟘 : FinSet ℓ
-  𝟘 = ⊥* , 0 , ∣ uninhabEquiv Empty.rec* Empty.rec ∣₁
+  𝟘 = ⊥* , 0 , ∣ uninhabEquiv (λ x → Empty.rec* x) (λ x → Empty.rec x) ∣₁
 
   𝟙 : FinSet ℓ
   𝟙 = Unit* , isContr→isFinSet (isContrUnit*)
@@ -54,7 +54,7 @@ module _
   -- useful properties
 
   𝟘≃Empty : 𝟘 .fst ≃ ⊥
-  𝟘≃Empty = uninhabEquiv rec* (λ x → x)
+  𝟘≃Empty = uninhabEquiv (λ x → rec* x) (λ x → x)
 
   𝟙≃Unit : 𝟙 .fst ≃ Unit
   𝟙≃Unit = isContr→≃Unit (isContrUnit*)

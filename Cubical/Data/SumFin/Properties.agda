@@ -103,14 +103,14 @@ SumFin∥∥≃ (suc n) =
 ℕ→Bool (suc n) = true
 
 SumFin∥∥DecProp : (n : ℕ) → ∥ Fin n ∥₁ ≃ Bool→Type (ℕ→Bool n)
-SumFin∥∥DecProp 0 = uninhabEquiv (Prop.rec isProp⊥ ⊥.rec) ⊥.rec
+SumFin∥∥DecProp 0 = uninhabEquiv (Prop.rec isProp⊥ (λ x → ⊥.rec x)) (λ x → ⊥.rec x)
 SumFin∥∥DecProp (suc n) = isContr→≃Unit (inhProp→isContr ∣ inl tt ∣₁ isPropPropTrunc)
 
 -- negation of SumFin
 
 SumFin¬ : (n : ℕ) → (¬ Fin n) ≃ Bool→Type (isZero n)
 SumFin¬ 0 = isContr→≃Unit isContr⊥→A
-SumFin¬ (suc n) = uninhabEquiv (λ f → f fzero) ⊥.rec
+SumFin¬ (suc n) = uninhabEquiv (λ f → f fzero) (λ x → ⊥.rec x)
 
 -- SumFin 1 is equivalent to unit
 
@@ -173,7 +173,7 @@ SumFin∃→ (suc n) f =
   ∘ Σ⊎≃ .fst
 
 SumFin∃← : (n : ℕ)(f : Fin n → Bool) → Bool→Type (trueForSome n f) → Σ _ (Bool→Type ∘ f)
-SumFin∃← 0 _ = ⊥.rec
+SumFin∃← 0 _ p = ⊥.rec p
 SumFin∃← (suc n) f =
     invEq Σ⊎≃
   ∘ map-⊎ (invEq (ΣUnit (Bool→Type ∘ f ∘ inl))) (SumFin∃← n (f ∘ inr))
@@ -208,8 +208,8 @@ isSetSumFin (suc n) = isSet⊎ (isProp→isSet isPropUnit) (isSetSumFin n)
 SumFin≡≃ : (n : ℕ) → (a b : Fin n) → (a ≡ b) ≃ Bool→Type (SumFin≡ n a b)
 SumFin≡≃ 0 _ _ = isContr→≃Unit (isProp→isContrPath isProp⊥ _ _)
 SumFin≡≃ (suc n) (inl tt) (inl tt) = isContr→≃Unit (inhProp→isContr refl (isSetSumFin _ _ _))
-SumFin≡≃ (suc n) (inl tt) (inr y) = invEquiv (⊎Path.Cover≃Path _ _) ⋆ uninhabEquiv ⊥.rec* ⊥.rec
-SumFin≡≃ (suc n) (inr x) (inl tt) = invEquiv (⊎Path.Cover≃Path _ _) ⋆ uninhabEquiv ⊥.rec* ⊥.rec
+SumFin≡≃ (suc n) (inl tt) (inr y) = invEquiv (⊎Path.Cover≃Path _ _) ⋆ uninhabEquiv (λ x → ⊥.rec* x) (λ x → ⊥.rec x)
+SumFin≡≃ (suc n) (inr x) (inl tt) = invEquiv (⊎Path.Cover≃Path _ _) ⋆ uninhabEquiv (λ x → ⊥.rec* x) (λ x → ⊥.rec x)
 SumFin≡≃ (suc n) (inr x) (inr y) = invEquiv (_ , isEmbedding-inr x y) ⋆ SumFin≡≃ n x y
 
 -- propositional truncation of Fin

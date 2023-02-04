@@ -280,7 +280,7 @@ open import Cubical.Data.Unit
 
 BoolProp≃BoolProp* : {a : Bool} → Bool→Type a ≃ Bool→Type* {ℓ} a
 BoolProp≃BoolProp* {a = true} = Unit≃Unit*
-BoolProp≃BoolProp* {a = false} = uninhabEquiv Empty.rec Empty.rec*
+BoolProp≃BoolProp* {a = false} = uninhabEquiv (λ x → Empty.rec x) (λ x → Empty.rec* x)
 
 Bool→TypeInj : (a b : Bool) → Bool→Type a ≃ Bool→Type b → a ≡ b
 Bool→TypeInj true true _ = refl
@@ -383,8 +383,8 @@ Bool≡ false false = true
 
 Bool≡≃ : (a b : Bool) → (a ≡ b) ≃ Bool→Type (Bool≡ a b)
 Bool≡≃ true true = isContr→≃Unit (inhProp→isContr refl (isSetBool _ _))
-Bool≡≃ true false = uninhabEquiv true≢false Empty.rec
-Bool≡≃ false true = uninhabEquiv false≢true Empty.rec
+Bool≡≃ true false = uninhabEquiv true≢false (λ x → Empty.rec x)
+Bool≡≃ false true = uninhabEquiv false≢true (λ x → Empty.rec x)
 Bool≡≃ false false = isContr→≃Unit (inhProp→isContr refl (isSetBool _ _))
 open Iso
 

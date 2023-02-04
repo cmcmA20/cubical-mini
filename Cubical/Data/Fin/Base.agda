@@ -81,7 +81,7 @@ elim
   → (∀{k} → P {suc k} fzero)
   → (∀{k} {fn : Fin k} → P fn → P (fsuc fn))
   → {k : ℕ} → (fn : Fin k) → P fn
-elim P fz fs {zero} = ⊥.rec ∘ ¬Fin0
+elim P fz fs {zero} fj = ⊥.rec (¬Fin0 fj)
 elim P fz fs {suc k} fj
   = case fsplit fj return (λ _ → P fj) of λ
   { (inl p) → subst P p fz

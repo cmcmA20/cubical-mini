@@ -52,8 +52,8 @@ VecMatrix→FinMatrix M fn fm = lookup fm (lookup fn M)
 
 FinMatrix→VecMatrix→FinMatrix : {m n : ℕ} (M : FinMatrix A m n)
                               → VecMatrix→FinMatrix (FinMatrix→VecMatrix M) ≡ M
-FinMatrix→VecMatrix→FinMatrix {m = zero} M = funExt (⊥.rec ∘ ¬Fin0)
-FinMatrix→VecMatrix→FinMatrix {n = zero} M = funExt₂ (λ _ → ⊥.rec ∘ ¬Fin0)
+FinMatrix→VecMatrix→FinMatrix {m = zero} M = funExt λ x → ⊥.rec (¬Fin0 x)
+FinMatrix→VecMatrix→FinMatrix {n = zero} M = funExt₂ (λ _ y → ⊥.rec (¬Fin0 y))
 FinMatrix→VecMatrix→FinMatrix {m = suc m} {n = suc n} M = funExt₂ goal
   where
   goal : (fm : Fin (suc m)) (fn : Fin (suc n))
