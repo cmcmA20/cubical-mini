@@ -9,7 +9,7 @@ The file contains:
 - Unique existence: ∃![x ∈ A] B
 
 -}
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --erased-cubical #-}
 module Cubical.Data.Sigma.Base where
 
 open import Cubical.Core.Primitives public
