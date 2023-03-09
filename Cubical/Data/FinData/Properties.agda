@@ -266,10 +266,10 @@ Iso.rightInv finSucMaybeIso (just i) = refl
 Iso.leftInv finSucMaybeIso zero = refl
 Iso.leftInv finSucMaybeIso (suc i) = refl
 
-finSuc≡Maybe : Fin (ℕ.suc n) ≡ Maybe (Fin n)
+@0 finSuc≡Maybe : Fin (ℕ.suc n) ≡ Maybe (Fin n)
 finSuc≡Maybe = isoToPath finSucMaybeIso
 
-finSuc≡Maybe∙ : (Fin (ℕ.suc n) , zero) ≡ Maybe∙ (Fin n)
+@0 finSuc≡Maybe∙ : (Fin (ℕ.suc n) , zero) ≡ Maybe∙ (Fin n)
 finSuc≡Maybe∙ = pointed-sip _ _ ((isoToEquiv finSucMaybeIso) , refl)
 
 -- Proof that Fin n ⊎ Fin m ≃ Fin (n+m)

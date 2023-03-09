@@ -258,7 +258,7 @@ equivToEquiv (f , p) i =
 
 
 -- We can finally prove univalence with Id everywhere from the one for Path
-EquivContr : ∀ (A : Type ℓ) → isContr (Σ[ T ∈ Type ℓ ] (T ≃ A))
+@0 EquivContr : ∀ (A : Type ℓ) → isContr (Σ[ T ∈ Type ℓ ] (T ≃ A))
 EquivContr {ℓ = ℓ} A = helper1 f1 f2 f12 (EquivContrPath A)
   where
   f1 : {A : Type ℓ} → Σ[ T ∈ Type ℓ ] (EquivPath T A) → Σ[ T ∈ Type ℓ ] (T ≃ A)
@@ -285,7 +285,7 @@ EquivContr {ℓ = ℓ} A = helper1 f1 f2 f12 (EquivContrPath A)
 
 -- Univalence
 
-path≡Id : ∀ {ℓ} {A B : Type ℓ} → Path _ (Path _ A B) (Id A B)
+@0 path≡Id : ∀ {ℓ} {A B : Type ℓ} → Path _ (Path _ A B) (Id A B)
 path≡Id = isoToPath (iso pathToId idToPath idToPathToId pathToIdToPath )
 
 equivPathToEquivPath : ∀ {ℓ} {A : Type ℓ} {B : Type ℓ} → (p : EquivPath A B) →
@@ -293,10 +293,10 @@ equivPathToEquivPath : ∀ {ℓ} {A : Type ℓ} {B : Type ℓ} → (p : EquivPat
 equivPathToEquivPath (f , p) i =
   ( f , isPropIsEquivPath f (equivToEquivPath (equivPathToEquiv (f , p)) .pr₂) p i )
 
-equivPath≡Equiv : ∀ {ℓ} {A B : Type ℓ} → Path _ (EquivPath A B) (A ≃ B)
+@0 equivPath≡Equiv : ∀ {ℓ} {A B : Type ℓ} → Path _ (EquivPath A B) (A ≃ B)
 equivPath≡Equiv {ℓ} = isoToPath (iso (equivPathToEquiv {ℓ}) equivToEquivPath equivToEquiv equivPathToEquivPath)
 
-univalenceId : ∀ {ℓ} {A B : Type ℓ} → (A ≡ B) ≃ (A ≃ B)
+@0 univalenceId : ∀ {ℓ} {A B : Type ℓ} → (A ≡ B) ≃ (A ≃ B)
 univalenceId {ℓ} {A = A} {B = B} = equivPathToEquiv rem
   where
   rem0 : Path _ (Lift (EquivPath A B)) (Lift (A ≃ B))

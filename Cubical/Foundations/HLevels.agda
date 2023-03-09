@@ -512,8 +512,8 @@ isOfHLevel≃ (suc n) {A = A} {B = B} hA hB =
   isOfHLevelΣ (suc n) (isOfHLevelΠ _ λ _ → hB)
               (λ f → isProp→isOfHLevelSuc n (isPropIsEquiv f))
 
-isOfHLevel≡ : ∀ n → {A B : Type ℓ} (hA : isOfHLevel n A) (hB : isOfHLevel n B) →
-  isOfHLevel n (A ≡ B)
+@0 isOfHLevel≡ : ∀ n → {A B : Type ℓ} (hA : isOfHLevel n A) (hB : isOfHLevel n B) →
+     isOfHLevel n (A ≡ B)
 isOfHLevel≡ n hA hB = isOfHLevelRetractFromIso n univalenceIso (isOfHLevel≃ n hA hB)
 
 isOfHLevel⁺≃ₗ
@@ -534,18 +534,18 @@ isOfHLevel⁺≃ᵣ (suc n) hB e
   where
   m = suc (suc n)
 
-isOfHLevel⁺≡ₗ
-  : ∀ n → {A B : Type ℓ}
-  → isOfHLevel (suc n) A → isOfHLevel (suc n) (A ≡ B)
+@0 isOfHLevel⁺≡ₗ
+     : ∀ n → {A B : Type ℓ}
+     → isOfHLevel (suc n) A → isOfHLevel (suc n) (A ≡ B)
 isOfHLevel⁺≡ₗ zero pA P = isOfHLevel≡ 1 pA (subst isProp P pA) P
 isOfHLevel⁺≡ₗ (suc n) hA P
   = isOfHLevel≡ m hA (subst (isOfHLevel m) P hA) P
   where
   m = suc (suc n)
 
-isOfHLevel⁺≡ᵣ
-  : ∀ n → {A B : Type ℓ}
-  → isOfHLevel (suc n) B → isOfHLevel (suc n) (A ≡ B)
+@0 isOfHLevel⁺≡ᵣ
+     : ∀ n → {A B : Type ℓ}
+     → isOfHLevel (suc n) B → isOfHLevel (suc n) (A ≡ B)
 isOfHLevel⁺≡ᵣ zero pB P = isOfHLevel≡ 1 (subst⁻ isProp P pB) pB P
 isOfHLevel⁺≡ᵣ (suc n) hB P
   = isOfHLevel≡ m (subst⁻ (isOfHLevel m) P hB) hB P
@@ -554,20 +554,20 @@ isOfHLevel⁺≡ᵣ (suc n) hB P
 
 -- h-level of TypeOfHLevel
 
-isPropHContr : isProp (TypeOfHLevel ℓ 0)
+@0 isPropHContr : isProp (TypeOfHLevel ℓ 0)
 isPropHContr x y = Σ≡Prop (λ _ → isPropIsContr) (isOfHLevel≡ 0 (x .snd) (y .snd) .fst)
 
-isOfHLevelTypeOfHLevel : ∀ n → isOfHLevel (suc n) (TypeOfHLevel ℓ n)
+@0 isOfHLevelTypeOfHLevel : ∀ n → isOfHLevel (suc n) (TypeOfHLevel ℓ n)
 isOfHLevelTypeOfHLevel zero = isPropHContr
 isOfHLevelTypeOfHLevel (suc n) (X , a) (Y , b) =
   isOfHLevelRetract (suc n) (cong fst) (Σ≡Prop λ _ → isPropIsOfHLevel (suc n))
     (section-Σ≡Prop λ _ → isPropIsOfHLevel (suc n))
     (isOfHLevel≡ (suc n) a b)
 
-isSetHProp : isSet (hProp ℓ)
+@0 isSetHProp : isSet (hProp ℓ)
 isSetHProp = isOfHLevelTypeOfHLevel 1
 
-isGroupoidHSet : isGroupoid (hSet ℓ)
+@0 isGroupoidHSet : isGroupoid (hSet ℓ)
 isGroupoidHSet = isOfHLevelTypeOfHLevel 2
 
 
@@ -785,7 +785,7 @@ module _ (isSet-A : isSet A) (isSet-A' : isSet A') where
 
 
 
-isSet→Iso-Iso-≡ : (isSet-A : isSet A) → (isSet-A' : isSet A') →  Iso (Iso A A') (A ≡ A')
+@0 isSet→Iso-Iso-≡ : (isSet-A : isSet A) → (isSet-A' : isSet A') →  Iso (Iso A A') (A ≡ A')
 isSet→Iso-Iso-≡ isSet-A isSet-A' = ww
   where
     open Iso
@@ -796,5 +796,5 @@ isSet→Iso-Iso-≡ isSet-A isSet-A' = ww
     rightInv ww b = isInjectiveTransport (funExt λ _ → transportRefl _)
     leftInv ww a = SetsIso≡-ext isSet-A isSet-A' (λ _ → transportRefl (fun a _)) λ _ → cong (inv a) (transportRefl _)
 
-hSet-Iso-Iso-≡ : (A : hSet ℓ) → (A' : hSet ℓ) → Iso (Iso (fst A) (fst A')) (A ≡ A')
+@0 hSet-Iso-Iso-≡ : (A : hSet ℓ) → (A' : hSet ℓ) → Iso (Iso (fst A) (fst A')) (A ≡ A')
 hSet-Iso-Iso-≡ A A' = compIso (isSet→Iso-Iso-≡ (snd A) (snd A')) (equivToIso (_ , isEquiv-Σ≡Prop λ _ → isPropIsSet))

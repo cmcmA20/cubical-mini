@@ -32,12 +32,12 @@ AxiomsEquivStr : {S : Type ℓ → Type ℓ₁} (ι : StrEquiv S ℓ₁')
   → StrEquiv (AxiomsStructure S axioms) ℓ₁'
 AxiomsEquivStr ι axioms (X , (s , a)) (Y , (t , b)) e = ι (X , s) (Y , t) e
 
-axiomsUnivalentStr : {S : Type ℓ → Type ℓ₁}
-  (ι : (A B : TypeWithStr ℓ S) → A .fst ≃ B .fst → Type ℓ₁')
-  {axioms : (X : Type ℓ) → S X → Type ℓ₂}
-  (axioms-are-Props : (X : Type ℓ) (s : S X) → isProp (axioms X s))
-  (θ : UnivalentStr S ι)
-  → UnivalentStr (AxiomsStructure S axioms) (AxiomsEquivStr ι axioms)
+@0 axiomsUnivalentStr : {S : Type ℓ → Type ℓ₁}
+     (ι : (A B : TypeWithStr ℓ S) → A .fst ≃ B .fst → Type ℓ₁')
+     {axioms : (X : Type ℓ) → S X → Type ℓ₂}
+     (axioms-are-Props : (X : Type ℓ) (s : S X) → isProp (axioms X s))
+     (θ : UnivalentStr S ι)
+     → UnivalentStr (AxiomsStructure S axioms) (AxiomsEquivStr ι axioms)
 axiomsUnivalentStr {S = S} ι {axioms = axioms} axioms-are-Props θ {X , s , a} {Y , t , b} e =
   ι (X , s) (Y , t) e
     ≃⟨ θ e ⟩
@@ -48,22 +48,22 @@ axiomsUnivalentStr {S = S} ι {axioms = axioms} axioms-are-Props θ {X , s , a} 
   PathP (λ i → AxiomsStructure S axioms (ua e i)) (s , a) (t , b)
   ■
 
-inducedStructure : {S : Type ℓ → Type ℓ₁}
-  {ι : (A B : TypeWithStr ℓ S) → A .fst ≃ B .fst → Type ℓ₁'}
-  (θ : UnivalentStr S ι)
-  {axioms : (X : Type ℓ) → S X → Type ℓ₂}
-  (A : TypeWithStr ℓ (AxiomsStructure S axioms)) (B : TypeWithStr ℓ S)
-  → (typ A , str A .fst) ≃[ ι ] B
-  → TypeWithStr ℓ (AxiomsStructure S axioms)
+@0 inducedStructure : {S : Type ℓ → Type ℓ₁}
+     {ι : (A B : TypeWithStr ℓ S) → A .fst ≃ B .fst → Type ℓ₁'}
+     (θ : UnivalentStr S ι)
+     {axioms : (X : Type ℓ) → S X → Type ℓ₂}
+     (A : TypeWithStr ℓ (AxiomsStructure S axioms)) (B : TypeWithStr ℓ S)
+     → (typ A , str A .fst) ≃[ ι ] B
+     → TypeWithStr ℓ (AxiomsStructure S axioms)
 inducedStructure θ {axioms} A B eqv =
   B .fst , B .snd , subst (uncurry axioms) (sip θ _ _ eqv) (A .snd .snd)
 
-transferAxioms : {S : Type ℓ → Type ℓ₁}
-  {ι : (A B : TypeWithStr ℓ S) → A .fst ≃ B .fst → Type ℓ₁'}
-  (θ : UnivalentStr S ι)
-  {axioms : (X : Type ℓ) → S X → Type ℓ₂}
-  (A : TypeWithStr ℓ (AxiomsStructure S axioms)) (B : TypeWithStr ℓ S)
-  → (typ A , str A .fst) ≃[ ι ] B
-  → axioms (fst B) (snd B)
+@0 transferAxioms : {S : Type ℓ → Type ℓ₁}
+     {ι : (A B : TypeWithStr ℓ S) → A .fst ≃ B .fst → Type ℓ₁'}
+     (θ : UnivalentStr S ι)
+     {axioms : (X : Type ℓ) → S X → Type ℓ₂}
+     (A : TypeWithStr ℓ (AxiomsStructure S axioms)) (B : TypeWithStr ℓ S)
+     → (typ A , str A .fst) ≃[ ι ] B
+     → axioms (fst B) (snd B)
 transferAxioms θ {axioms} A B eqv =
   subst (uncurry axioms) (sip θ _ _ eqv) (A .snd .snd)

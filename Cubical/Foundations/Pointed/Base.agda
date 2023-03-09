@@ -56,9 +56,9 @@ compEquiv∙ : ∀ {ℓ ℓ' ℓ''} {A : Pointed ℓ} {B : Pointed ℓ'} {C : Po
 fst (compEquiv∙ e1 e2) = compEquiv (fst e1) (fst e2)
 snd (compEquiv∙ e1 e2) = cong (fst (fst e2)) (snd e1) ∙ snd e2
 
-Equiv∙J : {B : Pointed ℓ} (C : (A : Pointed ℓ) → A ≃∙ B → Type ℓ')
-          → C B (idEquiv (fst B) , refl)
-          → {A : _} (e : A ≃∙ B) → C A e
+@0 Equiv∙J : {B : Pointed ℓ} (C : (A : Pointed ℓ) → A ≃∙ B → Type ℓ')
+             → C B (idEquiv (fst B) , refl)
+             → {A : _} (e : A ≃∙ B) → C A e
 Equiv∙J {ℓ} {ℓ'} {B = B} C ind {A = A} =
   uncurry λ e p → help e (pt A) (pt B) p C ind
   where
@@ -79,8 +79,8 @@ Equiv∙J {ℓ} {ℓ'} {B = B} C ind {A = A} =
       C (typ B , a) (idEquiv (typ B) , p))
          λ _ p → p
 
-ua∙ : {A B : Pointed ℓ} (e : fst A ≃ fst B)
-                  → fst e (snd A) ≡ snd B → A ≡ B
+@0 ua∙ : {A B : Pointed ℓ} (e : fst A ≃ fst B)
+                     → fst e (snd A) ≡ snd B → A ≡ B
 fst (ua∙ e p i) = ua e i
 snd (ua∙ {A = A} e p i) = ua-gluePath e p i
 
@@ -108,14 +108,14 @@ Iso.rightInv IsoPointedPointer ⌊ x ⌋ = refl
 Iso.rightInv IsoPointedPointer (id i) j = id (i ∧ j)
 Iso.leftInv IsoPointedPointer x = refl
 
-Pointed≡Pointer : {A : Pointed ℓ} → typ A ≡ Pointer A
+@0 Pointed≡Pointer : {A : Pointed ℓ} → typ A ≡ Pointer A
 Pointed≡Pointer = isoToPath IsoPointedPointer
 
 Pointer∙ : (A : Pointed ℓ) → Pointed ℓ
 Pointer∙ A .fst = Pointer A
 Pointer∙ A .snd = pt₀
 
-Pointed≡∙Pointer : {A : Pointed ℓ} → A ≡ (Pointer A , pt₀)
+@0 Pointed≡∙Pointer : {A : Pointed ℓ} → A ≡ (Pointer A , pt₀)
 Pointed≡∙Pointer {A = A} i = (Pointed≡Pointer {A = A} i) , helper i
   where
   helper : PathP (λ i → Pointed≡Pointer {A = A} i) (pt A) pt₀

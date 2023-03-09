@@ -26,16 +26,16 @@ PointedStructure X = X
 PointedEquivStr : StrEquiv PointedStructure ℓ
 PointedEquivStr A B f = equivFun f (pt A) ≡ pt B
 
-pointedUnivalentStr : UnivalentStr {ℓ} PointedStructure PointedEquivStr
+@0 pointedUnivalentStr : UnivalentStr {ℓ} PointedStructure PointedEquivStr
 pointedUnivalentStr f = invEquiv (ua-ungluePath-Equiv f)
 
-pointedSIP : (A B : Pointed ℓ) → A ≃[ PointedEquivStr ] B ≃ (A ≡ B)
+@0 pointedSIP : (A B : Pointed ℓ) → A ≃[ PointedEquivStr ] B ≃ (A ≡ B)
 pointedSIP = SIP pointedUnivalentStr
 
-pointed-sip : (A B : Pointed ℓ) → A ≃[ PointedEquivStr ] B → (A ≡ B)
+@0 pointed-sip : (A B : Pointed ℓ) → A ≃[ PointedEquivStr ] B → (A ≡ B)
 pointed-sip A B = equivFun (pointedSIP A B) -- ≡ λ (e , p) i → ua e i , ua-gluePath e p i
 
-pointed-sip-idEquiv∙ : (A : Pointed ℓ) → pointed-sip A A (idEquiv∙ A) ≡ refl
+@0 pointed-sip-idEquiv∙ : (A : Pointed ℓ) → pointed-sip A A (idEquiv∙ A) ≡ refl
 fst (pointed-sip-idEquiv∙ A i j) = uaIdEquiv i j
 snd (pointed-sip-idEquiv∙ A i j) = glue {φ = i ∨ ~ j ∨ j} (λ _ → pt A) (pt A)
 
@@ -46,10 +46,10 @@ snd (pointed-sip-idEquiv∙ A i j) = glue {φ = i ∨ ~ j ∨ j} (λ _ → pt A)
     Cubical.Homotopy.HSpace
 -}
 abstract
-  pointed-sip⁻ : (A B : Pointed ℓ) → (A ≡ B) → A ≃[ PointedEquivStr ] B
+  @0 pointed-sip⁻ : (A B : Pointed ℓ) → (A ≡ B) → A ≃[ PointedEquivStr ] B
   pointed-sip⁻ A B = invEq (pointedSIP A B)
 
-  pointed-sip⁻-refl : (A : Pointed ℓ) → pointed-sip⁻ A A refl ≡ idEquiv∙ A
+  @0 pointed-sip⁻-refl : (A : Pointed ℓ) → pointed-sip⁻ A A refl ≡ idEquiv∙ A
   pointed-sip⁻-refl A = sym (invEq (equivAdjointEquiv (pointedSIP A A)) (pointed-sip-idEquiv∙ A))
 
 pointedEquivAction : EquivAction {ℓ} PointedStructure

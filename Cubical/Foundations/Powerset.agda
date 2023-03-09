@@ -27,7 +27,7 @@ private
 ℙ : Type ℓ → Type (ℓ-suc ℓ)
 ℙ X = X → hProp _
 
-isSetℙ : isSet (ℙ X)
+@0 isSetℙ : isSet (ℙ X)
 isSetℙ = isSetΠ λ x → isSetHProp
 
 infix 5 _∈_
@@ -54,11 +54,11 @@ subst-∈ A = subst (_∈ A)
 ⊆-refl-consequence A B p = subst (A ⊆_) p (⊆-refl A)
                          , subst (B ⊆_) (sym p) (⊆-refl B)
 
-⊆-extensionality : (A B : ℙ X) → (A ⊆ B) × (B ⊆ A) → A ≡ B
+@0 ⊆-extensionality : (A B : ℙ X) → (A ⊆ B) × (B ⊆ A) → A ≡ B
 ⊆-extensionality A B (φ , ψ) =
   funExt (λ x → TypeOfHLevel≡ 1 (hPropExt (A x .snd) (B x .snd) (φ x) (ψ x)))
 
-⊆-extensionalityEquiv : (A B : ℙ X) → (A ⊆ B) × (B ⊆ A) ≃ (A ≡ B)
+@0 ⊆-extensionalityEquiv : (A B : ℙ X) → (A ⊆ B) × (B ⊆ A) ≃ (A ≡ B)
 ⊆-extensionalityEquiv A B = isoToEquiv (iso (⊆-extensionality A B)
                                             (⊆-refl-consequence A B)
                                             (λ _ → isSetℙ A B _ _)

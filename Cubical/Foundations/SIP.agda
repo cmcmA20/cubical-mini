@@ -42,7 +42,7 @@ A ≃[ ι ] B = Σ[ e ∈ typ A ≃ typ B ] (ι A B e)
 
 -- The following PathP version of SNS is a bit easier to work with
 -- for the proof of the SIP
-UnivalentStr : (S : Type ℓ₁ → Type ℓ₂) (ι : StrEquiv S ℓ₃) → Type (ℓ-max (ℓ-max (ℓ-suc ℓ₁) ℓ₂) ℓ₃)
+@0 UnivalentStr : (S : Type ℓ₁ → Type ℓ₂) (ι : StrEquiv S ℓ₃) → Type (ℓ-max (ℓ-max (ℓ-suc ℓ₁) ℓ₂) ℓ₃)
 UnivalentStr {ℓ₁} S ι =
   {A B : TypeWithStr ℓ₁ S} (e : typ A ≃ typ B)
   → ι A B e ≃ PathP (λ i → S (ua e i)) (str A) (str B)
@@ -50,8 +50,8 @@ UnivalentStr {ℓ₁} S ι =
 -- A quick sanity-check that our definition is interchangeable with
 -- Escardó's. The direction SNS→UnivalentStr corresponds more or less
 -- to a dependent EquivJ formulation of Escardó's homomorphism-lemma.
-UnivalentStr→SNS : (S : Type ℓ₁ → Type ℓ₂) (ι : StrEquiv S ℓ₃)
-  → UnivalentStr S ι → SNS S ι
+@0 UnivalentStr→SNS : (S : Type ℓ₁ → Type ℓ₂) (ι : StrEquiv S ℓ₃)
+     → UnivalentStr S ι → SNS S ι
 UnivalentStr→SNS S ι θ {X = X} s t =
   ι (X , s) (X , t) (idEquiv X)
     ≃⟨ θ (idEquiv X) ⟩
@@ -61,7 +61,7 @@ UnivalentStr→SNS S ι θ {X = X} s t =
   ■
 
 
-SNS→UnivalentStr : (ι : StrEquiv S ℓ₃) → SNS S ι → UnivalentStr S ι
+@0 SNS→UnivalentStr : (ι : StrEquiv S ℓ₃) → SNS S ι → UnivalentStr S ι
 SNS→UnivalentStr {S = S} ι θ {A = A} {B = B} e = EquivJ P C e (str A) (str B)
   where
   Y = typ B
@@ -78,12 +78,12 @@ SNS→UnivalentStr {S = S} ι θ {A = A} {B = B} e = EquivJ P C e (str A) (str B
     PathP (λ i → S (ua (idEquiv Y) i)) s t
     ■
 
-TransportStr : {S : Type ℓ → Type ℓ₁} (α : EquivAction S) → Type (ℓ-max (ℓ-suc ℓ) ℓ₁)
+@0 TransportStr : {S : Type ℓ → Type ℓ₁} (α : EquivAction S) → Type (ℓ-max (ℓ-suc ℓ) ℓ₁)
 TransportStr {ℓ} {S = S} α =
   {X Y : Type ℓ} (e : X ≃ Y) (s : S X) → equivFun (α e) s ≡ subst S (ua e) s
 
-TransportStr→UnivalentStr : {S : Type ℓ → Type ℓ₁} (α : EquivAction S)
-  → TransportStr α → UnivalentStr S (EquivAction→StrEquiv α)
+@0 TransportStr→UnivalentStr : {S : Type ℓ → Type ℓ₁} (α : EquivAction S)
+     → TransportStr α → UnivalentStr S (EquivAction→StrEquiv α)
 TransportStr→UnivalentStr {S = S} α τ {X , s} {Y , t} e =
   equivFun (α e) s ≡ t
     ≃⟨ pathToEquiv (cong (_≡ t) (τ e s)) ⟩
@@ -92,13 +92,13 @@ TransportStr→UnivalentStr {S = S} α τ {X , s} {Y , t} e =
   PathP (λ i → S (ua e i)) s t
   ■
 
-UnivalentStr→TransportStr : {S : Type ℓ → Type ℓ₁} (α : EquivAction S)
-  → UnivalentStr S (EquivAction→StrEquiv α) → TransportStr α
+@0 UnivalentStr→TransportStr : {S : Type ℓ → Type ℓ₁} (α : EquivAction S)
+     → UnivalentStr S (EquivAction→StrEquiv α) → TransportStr α
 UnivalentStr→TransportStr {S = S} α θ e s =
   invEq (θ e) (transport-filler (cong S (ua e)) s)
 
-invTransportStr : {S : Type ℓ → Type ℓ₂} (α : EquivAction S) (τ : TransportStr α)
-  {X Y : Type ℓ} (e : X ≃ Y) (t : S Y) → invEq (α e) t ≡ subst⁻ S (ua e) t
+@0 invTransportStr : {S : Type ℓ → Type ℓ₂} (α : EquivAction S) (τ : TransportStr α)
+     {X Y : Type ℓ} (e : X ≃ Y) (t : S Y) → invEq (α e) t ≡ subst⁻ S (ua e) t
 invTransportStr {S = S} α τ e t =
   sym (transport⁻Transport (cong S (ua e)) (invEq (α e) t))
   ∙∙ sym (cong (subst⁻ S (ua e)) (τ e (invEq (α e) t)))
@@ -109,7 +109,7 @@ invTransportStr {S = S} α τ e t =
 ---
 ---    sip : A ≃[ ι ] B → A ≡ B
 
-module _ {S : Type ℓ₁ → Type ℓ₂} {ι : StrEquiv S ℓ₃}
+module @0 _ {S : Type ℓ₁ → Type ℓ₂} {ι : StrEquiv S ℓ₃}
   (θ : UnivalentStr S ι) (A B : TypeWithStr ℓ₁ S)
   where
 

@@ -84,8 +84,8 @@ module _ {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ'}
 
   unquoteDecl ΣPath≃PathΣ = declStrictIsoToEquiv ΣPath≃PathΣ ΣPathIsoPathΣ
 
-  ΣPath≡PathΣ : (Σ[ p ∈ PathP A (fst x) (fst y) ] (PathP (λ i → B i (p i)) (snd x) (snd y)))
-              ≡ (PathP (λ i → Σ (A i) (B i)) x y)
+  @0 ΣPath≡PathΣ : (Σ[ p ∈ PathP A (fst x) (fst y) ] (PathP (λ i → B i (p i)) (snd x) (snd y)))
+                 ≡ (PathP (λ i → Σ (A i) (B i)) x y)
   ΣPath≡PathΣ = ua ΣPath≃PathΣ
 
 ×≡Prop : isProp A' → {u v : A × A'} → u .fst ≡ v .fst → u ≡ v
@@ -114,6 +114,7 @@ module _ {A : I → Type ℓ} {B : (i : I) → (a : A i) → Type ℓ'}
 
   unquoteDecl ΣPathP≃PathPΣ = declStrictIsoToEquiv ΣPathP≃PathPΣ ΣPathPIsoPathPΣ
 
+  @0 ΣPathP≡PathPΣ : _
   ΣPathP≡PathPΣ = ua ΣPathP≃PathPΣ
 
 -- Σ of discrete types
@@ -126,7 +127,7 @@ discreteΣ {B = B} Adis Bdis (a0 , b0) (a1 , b1) = discreteΣ' (Adis a0 a1)
       where
         discreteΣ'' : (b1 : B a0) → Dec ((a0 , b0) ≡ (a0 , b1))
         discreteΣ'' b1 with Bdis a0 b0 b1
-        ... | (yes q) = yes (transport ΣPath≡PathΣ (refl , q))
+        ... | (yes q) = yes (cong₂ _,_ refl q)
         ... | (no ¬q) = no (λ r → ¬q (subst (λ X → PathP (λ i → B (X i)) b0 b1) (Discrete→isSet Adis a0 a0 (cong fst r) refl) (cong snd r)))
     discreteΣ' (no ¬p) = no (λ r → ¬p (cong fst r))
 
@@ -289,7 +290,7 @@ IsoΣPathTransportPathΣ {B = B} a b =
 PathΣ→ΣPathTransport : (a b : Σ A B) → (a ≡ b) → ΣPathTransport a b
 PathΣ→ΣPathTransport a b = Iso.inv (IsoΣPathTransportPathΣ a b)
 
-ΣPathTransport≡PathΣ : (a b : Σ A B) → ΣPathTransport a b ≡ (a ≡ b)
+@0 ΣPathTransport≡PathΣ : (a b : Σ A B) → ΣPathTransport a b ≡ (a ≡ b)
 ΣPathTransport≡PathΣ a b = ua (ΣPathTransport≃PathΣ a b)
 
 Σ-contractFstIso : (c : isContr A) → Iso (Σ A B) (B (c .fst))

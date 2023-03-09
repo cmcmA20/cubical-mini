@@ -100,8 +100,8 @@ module _ {ℓ ℓ' : Level} {A : Pointed ℓ} {B : Pointed ℓ'} (f : A →∙ B
   isInKer∙ : (x : fst A) → Type ℓ'
   isInKer∙ x = fst f x ≡ snd B
 
-pre∘∙equiv : ∀ {ℓ ℓ'} {A : Pointed ℓ} {B C : Pointed ℓ'}
- → (B ≃∙ C) → Iso (A →∙ B) (A →∙ C)
+@0 pre∘∙equiv : ∀ {ℓ ℓ'} {A : Pointed ℓ} {B C : Pointed ℓ'}
+    → (B ≃∙ C) → Iso (A →∙ B) (A →∙ C)
 pre∘∙equiv {A = A} {B = B} {C = C} eq = main
   where
   module _ {ℓ ℓ' : Level} (A : Pointed ℓ) (B C : Pointed ℓ')
@@ -134,8 +134,8 @@ pre∘∙equiv {A = A} {B = B} {C = C} eq = main
   Iso.rightInv main = J-lem eq .snd
   Iso.leftInv main = J-lem eq .fst
 
-post∘∙equiv : ∀ {ℓ ℓC} {A B : Pointed ℓ} {C : Pointed ℓC}
-  → (A ≃∙ B) → Iso (A →∙ C) (B →∙ C)
+@0 post∘∙equiv : ∀ {ℓ ℓC} {A B : Pointed ℓ} {C : Pointed ℓC}
+     → (A ≃∙ B) → Iso (A →∙ C) (B →∙ C)
 post∘∙equiv {A = A} {B = B} {C = C} eq = main
   where
   module _ {ℓ ℓC : Level} (A B : Pointed ℓ) (C : Pointed ℓC)

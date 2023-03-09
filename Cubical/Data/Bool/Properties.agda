@@ -46,12 +46,12 @@ notIsEquiv = involIsEquiv {f = not} notnot
 notEquiv : Bool ≃ Bool
 notEquiv = involEquiv {f = not} notnot
 
-notEq : Bool ≡ Bool
+@0 notEq : Bool ≡ Bool
 notEq = involPath {f = not} notnot
 
 private
   -- This computes to false as expected
-  nfalse : Bool
+  @0 nfalse : Bool
   nfalse = transp (λ i → notEq i) i0 true
 
   -- Sanity check
@@ -171,10 +171,10 @@ not-⊕ˡ true  y = notnot y
 isEquiv-⊕ : ∀ x → isEquiv (x ⊕_)
 isEquiv-⊕ x = involIsEquiv (⊕-invol x)
 
-⊕-Path : ∀ x → Bool ≡ Bool
+@0 ⊕-Path : ∀ x → Bool ≡ Bool
 ⊕-Path x = involPath {f = x ⊕_} (⊕-invol x)
 
-⊕-Path-refl : ⊕-Path false ≡ refl
+@0 ⊕-Path-refl : ⊕-Path false ≡ refl
 ⊕-Path-refl = isInjectiveTransport refl
 
 ¬transportNot : ∀(P : Bool ≡ Bool) b → ¬ (transport P (not b) ≡ transport P b)
@@ -208,7 +208,7 @@ module BoolReflection where
   notLemma P ft tf i false = ft i
   notLemma P ft tf i true  = tf i
 
-  categorize : ∀ P → transport P ≡ transport (⊕-Path (transport P false))
+  @0 categorize : ∀ P → transport P ≡ transport (⊕-Path (transport P false))
   categorize P with table P
   categorize P | inspect false true p q
     = subst (λ b → transport P ≡ transport (⊕-Path b)) (sym p) (reflLemma P p q)
@@ -219,21 +219,21 @@ module BoolReflection where
   categorize P | inspect true true p q
     = Empty.rec (¬transportNot P false (q ∙ sym p))
 
-  ⊕-complete : ∀ P → P ≡ ⊕-Path (transport P false)
+  @0 ⊕-complete : ∀ P → P ≡ ⊕-Path (transport P false)
   ⊕-complete P = isInjectiveTransport (categorize P)
 
-  ⊕-comp : ∀ p q → ⊕-Path p ∙ ⊕-Path q ≡ ⊕-Path (q ⊕ p)
+  @0 ⊕-comp : ∀ p q → ⊕-Path p ∙ ⊕-Path q ≡ ⊕-Path (q ⊕ p)
   ⊕-comp p q = isInjectiveTransport (λ i x → ⊕-assoc q p x i)
 
   open Iso
 
-  reflectIso : Iso Bool (Bool ≡ Bool)
+  @0 reflectIso : Iso Bool (Bool ≡ Bool)
   reflectIso .fun = ⊕-Path
   reflectIso .inv P = transport P false
   reflectIso .leftInv = ⊕-identityʳ
   reflectIso .rightInv P = sym (⊕-complete P)
 
-  reflectEquiv : Bool ≃ (Bool ≡ Bool)
+  @0 reflectEquiv : Bool ≃ (Bool ≡ Bool)
   reflectEquiv = isoToEquiv reflectIso
 
 _≤_ : Bool → Bool → Type

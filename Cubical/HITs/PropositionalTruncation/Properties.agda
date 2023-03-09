@@ -154,7 +154,7 @@ propTruncIdempotent≃ {A = A} hA = isoToEquiv f
   Iso.rightInv f _ = refl
   Iso.leftInv f    = elim (λ _ → isProp→isSet isPropPropTrunc _ _) (λ _ → refl)
 
-propTruncIdempotent : isProp A → ∥ A ∥₁ ≡ A
+@0 propTruncIdempotent : isProp A → ∥ A ∥₁ ≡ A
 propTruncIdempotent hA = ua (propTruncIdempotent≃ hA)
 
 -- We could also define the eliminator using the recursor
@@ -297,7 +297,7 @@ elim2→Set {A = A} {B = B} {P = P} Pset f kf₁ kf₂ sf =
                → PathP (λ i → (u : ∥ B ∥₁) → P (squash₁ ∣ x ∣₁ ∣ y ∣₁ i) u) (mapHelper x) (mapHelper y)
   squareHelper x y i = elim→Set (λ _ → Pset _ _) (λ v → kf₁ x y v i) λ v w → sf x y v w i
 
-RecHProp : (P : A → hProp ℓ) (kP : ∀ x y → P x ≡ P y) → ∥ A ∥₁ → hProp ℓ
+@0 RecHProp : (P : A → hProp ℓ) (kP : ∀ x y → P x ≡ P y) → ∥ A ∥₁ → hProp ℓ
 RecHProp P kP = rec→Set isSetHProp P kP
 
 module GpdElim (Bgpd : isGroupoid B) where
@@ -471,7 +471,7 @@ elim→Gpd {A = A} P Pgpd f kf 3kf t = rec→Gpd (Pgpd t) g 3kg t
   3kg .coh₁ x y z i j
     = transp (λ k → P (squash₁ (squash₁ᵗ x y z i j) t k)) i0 (3kf x y z i j)
 
-RecHSet : (P : A → TypeOfHLevel ℓ 2) → 3-Constant P → ∥ A ∥₁ → TypeOfHLevel ℓ 2
+@0 RecHSet : (P : A → TypeOfHLevel ℓ 2) → 3-Constant P → ∥ A ∥₁ → TypeOfHLevel ℓ 2
 RecHSet P 3kP = rec→Gpd (isOfHLevelTypeOfHLevel 2) P 3kP
 
 ∥∥-IdempotentL-⊎-≃ : ∥ ∥ A ∥₁ ⊎ A′ ∥₁ ≃ ∥ A ⊎ A′ ∥₁
@@ -488,7 +488,7 @@ RecHSet P 3kP = rec→Gpd (isOfHLevelTypeOfHLevel 2) P 3kP
         Iso.rightInv ∥∥-IdempotentL-⊎-Iso x = squash₁ (Iso.fun ∥∥-IdempotentL-⊎-Iso (Iso.inv ∥∥-IdempotentL-⊎-Iso x)) x
         Iso.leftInv ∥∥-IdempotentL-⊎-Iso x  = squash₁ (Iso.inv ∥∥-IdempotentL-⊎-Iso (Iso.fun ∥∥-IdempotentL-⊎-Iso x)) x
 
-∥∥-IdempotentL-⊎ : ∥ ∥ A ∥₁ ⊎ A′ ∥₁ ≡ ∥ A ⊎ A′ ∥₁
+@0 ∥∥-IdempotentL-⊎ : ∥ ∥ A ∥₁ ⊎ A′ ∥₁ ≡ ∥ A ⊎ A′ ∥₁
 ∥∥-IdempotentL-⊎ = ua ∥∥-IdempotentL-⊎-≃
 
 ∥∥-IdempotentR-⊎-≃ : ∥ A ⊎ ∥ A′ ∥₁ ∥₁ ≃ ∥ A ⊎ A′ ∥₁
@@ -505,10 +505,10 @@ RecHSet P 3kP = rec→Gpd (isOfHLevelTypeOfHLevel 2) P 3kP
         Iso.rightInv ∥∥-IdempotentR-⊎-Iso x = squash₁ (Iso.fun ∥∥-IdempotentR-⊎-Iso (Iso.inv ∥∥-IdempotentR-⊎-Iso x)) x
         Iso.leftInv ∥∥-IdempotentR-⊎-Iso x  = squash₁ (Iso.inv ∥∥-IdempotentR-⊎-Iso (Iso.fun ∥∥-IdempotentR-⊎-Iso x)) x
 
-∥∥-IdempotentR-⊎ : ∥ A ⊎ ∥ A′ ∥₁ ∥₁ ≡ ∥ A ⊎ A′ ∥₁
+@0 ∥∥-IdempotentR-⊎ : ∥ A ⊎ ∥ A′ ∥₁ ∥₁ ≡ ∥ A ⊎ A′ ∥₁
 ∥∥-IdempotentR-⊎ = ua ∥∥-IdempotentR-⊎-≃
 
-∥∥-Idempotent-⊎ : {A : Type ℓ} {A′ : Type ℓ'} → ∥ ∥ A ∥₁ ⊎ ∥ A′ ∥₁ ∥₁ ≡ ∥ A ⊎ A′ ∥₁
+@0 ∥∥-Idempotent-⊎ : {A : Type ℓ} {A′ : Type ℓ'} → ∥ ∥ A ∥₁ ⊎ ∥ A′ ∥₁ ∥₁ ≡ ∥ A ⊎ A′ ∥₁
 ∥∥-Idempotent-⊎ {A = A} {A′} = ∥ ∥ A ∥₁ ⊎ ∥ A′ ∥₁ ∥₁ ≡⟨ ∥∥-IdempotentR-⊎ ⟩
                                ∥ ∥ A ∥₁ ⊎ A′ ∥₁     ≡⟨ ∥∥-IdempotentL-⊎ ⟩
                                ∥ A ⊎ A′ ∥₁         ∎
@@ -525,7 +525,7 @@ RecHSet P 3kP = rec→Gpd (isOfHLevelTypeOfHLevel 2) P 3kP
         Iso.rightInv ∥∥-IdempotentL-×-Iso x = squash₁ (Iso.fun ∥∥-IdempotentL-×-Iso (Iso.inv ∥∥-IdempotentL-×-Iso x)) x
         Iso.leftInv ∥∥-IdempotentL-×-Iso x  = squash₁ (Iso.inv ∥∥-IdempotentL-×-Iso (Iso.fun ∥∥-IdempotentL-×-Iso x)) x
 
-∥∥-IdempotentL-× : ∥ ∥ A ∥₁ × A′ ∥₁ ≡ ∥ A × A′ ∥₁
+@0 ∥∥-IdempotentL-× : ∥ ∥ A ∥₁ × A′ ∥₁ ≡ ∥ A × A′ ∥₁
 ∥∥-IdempotentL-× = ua ∥∥-IdempotentL-×-≃
 
 ∥∥-IdempotentR-×-≃ : ∥ A × ∥ A′ ∥₁ ∥₁ ≃ ∥ A × A′ ∥₁
@@ -540,10 +540,10 @@ RecHSet P 3kP = rec→Gpd (isOfHLevelTypeOfHLevel 2) P 3kP
         Iso.rightInv ∥∥-IdempotentR-×-Iso x = squash₁ (Iso.fun ∥∥-IdempotentR-×-Iso (Iso.inv ∥∥-IdempotentR-×-Iso x)) x
         Iso.leftInv ∥∥-IdempotentR-×-Iso x  = squash₁ (Iso.inv ∥∥-IdempotentR-×-Iso (Iso.fun ∥∥-IdempotentR-×-Iso x)) x
 
-∥∥-IdempotentR-× : ∥ A × ∥ A′ ∥₁ ∥₁ ≡ ∥ A × A′ ∥₁
+@0 ∥∥-IdempotentR-× : ∥ A × ∥ A′ ∥₁ ∥₁ ≡ ∥ A × A′ ∥₁
 ∥∥-IdempotentR-× = ua ∥∥-IdempotentR-×-≃
 
-∥∥-Idempotent-× : {A : Type ℓ} {A′ : Type ℓ'} → ∥ ∥ A ∥₁ × ∥ A′ ∥₁ ∥₁ ≡ ∥ A × A′ ∥₁
+@0 ∥∥-Idempotent-× : {A : Type ℓ} {A′ : Type ℓ'} → ∥ ∥ A ∥₁ × ∥ A′ ∥₁ ∥₁ ≡ ∥ A × A′ ∥₁
 ∥∥-Idempotent-× {A = A} {A′} = ∥ ∥ A ∥₁ × ∥ A′ ∥₁ ∥₁ ≡⟨ ∥∥-IdempotentR-× ⟩
                                ∥ ∥ A ∥₁ × A′ ∥₁     ≡⟨ ∥∥-IdempotentL-× ⟩
                                ∥ A × A′ ∥₁         ∎
@@ -554,7 +554,7 @@ RecHSet P 3kP = rec→Gpd (isOfHLevelTypeOfHLevel 2) P 3kP
 ∥∥-×-≃ : {A : Type ℓ} {A′ : Type ℓ'} → ∥ A ∥₁ × ∥ A′ ∥₁ ≃ ∥ A × A′ ∥₁
 ∥∥-×-≃ {A = A} {A′} = compEquiv (invEquiv (propTruncIdempotent≃ (isProp× isPropPropTrunc isPropPropTrunc))) ∥∥-Idempotent-×-≃
 
-∥∥-× : {A : Type ℓ} {A′ : Type ℓ'} → ∥ A ∥₁ × ∥ A′ ∥₁ ≡ ∥ A × A′ ∥₁
+@0 ∥∥-× : {A : Type ℓ} {A′ : Type ℓ'} → ∥ A ∥₁ × ∥ A′ ∥₁ ≡ ∥ A × A′ ∥₁
 ∥∥-× = ua ∥∥-×-≃
 
 -- using this we get a convenient recursor/eliminator for binary functions into sets

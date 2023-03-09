@@ -25,18 +25,18 @@ module _ {ℓ} {A : Type ℓ} {f : A → A} (invol : isInvolution f) where
   involEquiv : A ≃ A
   involEquiv = f , involIsEquiv
 
-  involPath : A ≡ A
+  @0 involPath : A ≡ A
   involPath = ua involEquiv
 
   involEquivComp : compEquiv involEquiv involEquiv ≡ idEquiv A
   involEquivComp
     = equivEq (λ i x → invol x i)
 
-  involPathComp : involPath ∙ involPath ≡ refl
+  @0 involPathComp : involPath ∙ involPath ≡ refl
   involPathComp
     = sym (uaCompEquiv involEquiv involEquiv) ∙∙ cong ua involEquivComp ∙∙ uaIdEquiv
 
-  involPath² : Square involPath refl refl involPath
+  @0 involPath² : Square involPath refl refl involPath
   involPath²
     = subst (λ s → Square involPath s refl involPath)
         involPathComp (compPath-filler involPath involPath)

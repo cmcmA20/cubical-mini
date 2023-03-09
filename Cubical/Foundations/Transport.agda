@@ -74,7 +74,7 @@ substSubst⁻ {x = x} {y = y} B p v = transportTransport⁻ {A = B x} {B = B y} 
 substEquiv : ∀ {ℓ ℓ'} {A : Type ℓ} {a a' : A} (P : A → Type ℓ') (p : a ≡ a') → P a ≃ P a'
 substEquiv P p = (subst P p , isEquivTransport (λ i → P (p i)))
 
-liftEquiv : ∀ {ℓ ℓ'} {A B : Type ℓ} (P : Type ℓ → Type ℓ') (e : A ≃ B) → P A ≃ P B
+@0 liftEquiv : ∀ {ℓ ℓ'} {A B : Type ℓ} (P : Type ℓ → Type ℓ') (e : A ≃ B) → P A ≃ P B
 liftEquiv P e = substEquiv P (ua e)
 
 transpEquiv : ∀ {ℓ} {A B : Type ℓ} (p : A ≡ B) → ∀ i → p i ≃ B
@@ -83,7 +83,7 @@ transpEquiv P i .snd
   = transp (λ k → isEquiv (transp (λ j → P (i ∨ (j ∧ k))) (i ∨ ~ k)))
       i (idIsEquiv (P i))
 
-uaTransportη : ∀ {ℓ} {A B : Type ℓ} (P : A ≡ B) → ua (pathToEquiv P) ≡ P
+@0 uaTransportη : ∀ {ℓ} {A B : Type ℓ} (P : A ≡ B) → ua (pathToEquiv P) ≡ P
 uaTransportη P i j
   = Glue (P i1) λ where
       (j = i0) → P i0 , pathToEquiv P
@@ -96,8 +96,8 @@ Iso.inv (pathToIso x) = transport⁻ x
 Iso.rightInv (pathToIso x) = transportTransport⁻ x
 Iso.leftInv (pathToIso x) = transport⁻Transport x
 
-isInjectiveTransport : ∀ {ℓ : Level} {A B : Type ℓ} {p q : A ≡ B}
-  → transport p ≡ transport q → p ≡ q
+@0 isInjectiveTransport : ∀ {ℓ : Level} {A B : Type ℓ} {p q : A ≡ B}
+     → transport p ≡ transport q → p ≡ q
 isInjectiveTransport {p = p} {q} α i =
   hcomp
     (λ j → λ
@@ -109,7 +109,7 @@ isInjectiveTransport {p = p} {q} α i =
   t : PathP (λ i → isEquiv (λ a → α i a)) (pathToEquiv p .snd) (pathToEquiv q .snd)
   t = isProp→PathP (λ i → isPropIsEquiv (λ a → α i a)) _ _
 
-transportUaInv : ∀ {ℓ} {A B : Type ℓ} (e : A ≃ B) → transport (ua (invEquiv e)) ≡ transport (sym (ua e))
+@0 transportUaInv : ∀ {ℓ} {A B : Type ℓ} (e : A ≃ B) → transport (ua (invEquiv e)) ≡ transport (sym (ua e))
 transportUaInv e = cong transport (uaInvEquiv e)
 -- notice that transport (ua e) would reduce, thus an alternative definition using EquivJ can give
 -- refl for the case of idEquiv:

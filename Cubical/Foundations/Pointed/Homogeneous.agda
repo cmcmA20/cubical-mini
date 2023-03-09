@@ -159,7 +159,7 @@ isHomogeneousProd hA hB (a , b) i .fst = typ (hA a i) × typ (hB b i)
 isHomogeneousProd hA hB (a , b) i .snd .fst = pt (hA a i)
 isHomogeneousProd hA hB (a , b) i .snd .snd = pt (hB b i)
 
-isHomogeneousPath : ∀ {ℓ} (A : Type ℓ) {x y : A} (p : x ≡ y) → isHomogeneous ((x ≡ y) , p)
+@0 isHomogeneousPath : ∀ {ℓ} (A : Type ℓ) {x y : A} (p : x ≡ y) → isHomogeneous ((x ≡ y) , p)
 isHomogeneousPath A {x} {y} p q
   = pointed-sip ((x ≡ y) , p) ((x ≡ y) , q) (eqv , compPathr-cancel p q)
   where eqv : (x ≡ y) ≃ (x ≡ y)
@@ -202,7 +202,7 @@ module HomogeneousDiscrete {ℓ} {A∙ : Pointed ℓ} (dA : Discrete (typ A∙))
   switch-eqv : typ A∙ ≃ typ A∙
   switch-eqv = isoToEquiv (iso switch switch switch-idp switch-idp)
 
-isHomogeneousDiscrete : ∀ {ℓ} {A∙ : Pointed ℓ} (dA : Discrete (typ A∙)) → isHomogeneous A∙
+@0 isHomogeneousDiscrete : ∀ {ℓ} {A∙ : Pointed ℓ} (dA : Discrete (typ A∙)) → isHomogeneous A∙
 isHomogeneousDiscrete {ℓ} {A∙} dA y
   = pointed-sip (typ A∙ , pt A∙) (typ A∙ , y) (switch-eqv , switch-ptA∙)
   where open HomogeneousDiscrete {ℓ} {A∙} dA y

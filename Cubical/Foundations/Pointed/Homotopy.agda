@@ -59,7 +59,7 @@ module _ {A : Pointed ℓ} {B : typ A → Type ℓ'} {ptB : B (pt A)} where
       p = H ⋆
       r = f₂
       s = g₂
-      P≡Q : P ≡ Q
+      @0 P≡Q : P ≡ Q
       P≡Q = p ≡ r ∙ s ⁻¹
               ≡⟨ isoToPath symIso ⟩
             r ∙ s ⁻¹ ≡ p
@@ -80,28 +80,28 @@ module _ {A : Pointed ℓ} {B : typ A → Type ℓ'} {ptB : B (pt A)} where
 
       -- φ is a fiberwise transformation (H : f ∼ g) → P H → Q H
       -- φ is even a fiberwise equivalence by P≡Q
-      φ : P → Q
+      @0 φ : P → Q
       φ = transport P≡Q
 
     -- The total map corresponding to φ
-    totφ : (f g : Π∙ A B ptB) → f ∙∼ g → f ∙∼P g
+    @0 totφ : (f g : Π∙ A B ptB) → f ∙∼ g → f ∙∼P g
     totφ f g p .fst = p .fst
     totφ f g p .snd = φ f g (p .fst) (p .snd)
 
   -- transformation of the homotopies using totφ
-  ∙∼→∙∼P : (f g : Π∙ A B ptB) → (f ∙∼ g) → (f ∙∼P g)
+  @0 ∙∼→∙∼P : (f g : Π∙ A B ptB) → (f ∙∼ g) → (f ∙∼P g)
   ∙∼→∙∼P f g = totφ f g
 
   -- Proof that ∙∼ and ∙∼P are equivalent using the fiberwise equivalence φ
-  ∙∼≃∙∼P : (f g : Π∙ A B ptB) → (f ∙∼ g) ≃ (f ∙∼P g)
+  @0 ∙∼≃∙∼P : (f g : Π∙ A B ptB) → (f ∙∼ g) ≃ (f ∙∼P g)
   ∙∼≃∙∼P f g = Σ-cong-equiv-snd (λ H → pathToEquiv (P≡Q f g H))
 
   -- inverse of ∙∼→∙∼P extracted from the equivalence
-  ∙∼P→∙∼ : {f g : Π∙ A B ptB} → f ∙∼P g → f ∙∼ g
+  @0 ∙∼P→∙∼ : {f g : Π∙ A B ptB} → f ∙∼P g → f ∙∼ g
   ∙∼P→∙∼ {f = f} {g = g} = invEq (∙∼≃∙∼P f g)
 
   -- ∙∼≃∙∼P transformed to a path
-  ∙∼≡∙∼P : (f g : Π∙ A B ptB) → (f ∙∼ g) ≡ (f ∙∼P g)
+  @0 ∙∼≡∙∼P : (f g : Π∙ A B ptB) → (f ∙∼ g) ≡ (f ∙∼P g)
   ∙∼≡∙∼P f g = ua (∙∼≃∙∼P f g)
 
   -- Verifies that the pointed homotopies actually correspond

@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --erased-cubical #-}
+{-# OPTIONS --safe #-}
 module Cubical.Relation.Nullary.Base where
 
 open import Cubical.Foundations.Prelude

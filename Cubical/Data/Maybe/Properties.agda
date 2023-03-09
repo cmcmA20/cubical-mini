@@ -82,7 +82,7 @@ module MaybePath {ℓ} {A : Type ℓ} where
   Cover≃Path c c' = isoToEquiv
     (iso (decode c c') (encode c c') (decodeEncode c c') (encodeDecode c c'))
 
-  Cover≡Path : ∀ c c' → Cover c c' ≡ (c ≡ c')
+  @0 Cover≡Path : ∀ c c' → Cover c c' ≡ (c ≡ c')
   Cover≡Path c c' = isoToPath
     (iso (decode c c') (encode c c') (decodeEncode c c') (encodeDecode c c'))
 
@@ -125,17 +125,17 @@ isEmbedding-just  w z = MaybePath.Cover≃Path (just w) (just z) .snd
 ¬just≡nothing : ∀ {x : A} → ¬ (just x ≡ nothing)
 ¬just≡nothing {A = A} {x = x} p = lower (subst (caseMaybe (Lift ⊥) (Maybe A)) p (just x))
 
-isProp-x≡nothing : (x : Maybe A) → isProp (x ≡ nothing)
+@0 isProp-x≡nothing : (x : Maybe A) → isProp (x ≡ nothing)
 isProp-x≡nothing nothing x w =
   subst isProp (MaybePath.Cover≡Path nothing nothing) (isOfHLevelLift 1 isPropUnit) x w
 isProp-x≡nothing (just _) p _ = ⊥.rec (¬just≡nothing p)
 
-isProp-nothing≡x : (x : Maybe A) → isProp (nothing ≡ x)
+@0 isProp-nothing≡x : (x : Maybe A) → isProp (nothing ≡ x)
 isProp-nothing≡x nothing x w =
   subst isProp (MaybePath.Cover≡Path nothing nothing) (isOfHLevelLift 1 isPropUnit) x w
 isProp-nothing≡x (just _) p _ = ⊥.rec (¬nothing≡just p)
 
-isContr-nothing≡nothing : isContr (nothing {A = A} ≡ nothing)
+@0 isContr-nothing≡nothing : isContr (nothing {A = A} ≡ nothing)
 isContr-nothing≡nothing = inhProp→isContr refl (isProp-x≡nothing _)
 
 discreteMaybe : Discrete A → Discrete (Maybe A)
@@ -163,7 +163,7 @@ module SumUnit where
   SumUnit→Maybe→SumUnit (inl _) = refl
   SumUnit→Maybe→SumUnit (inr _) = refl
 
-Maybe≡SumUnit : Maybe A ≡ Unit ⊎ A
+@0 Maybe≡SumUnit : Maybe A ≡ Unit ⊎ A
 Maybe≡SumUnit = isoToPath (iso Maybe→SumUnit SumUnit→Maybe SumUnit→Maybe→SumUnit Maybe→SumUnit→Maybe)
   where open SumUnit
 

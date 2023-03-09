@@ -24,11 +24,11 @@ private
 
 -- A quicker proof provided by @ecavallo: uaOver e F equiv = ua→ (λ a → ua (_ , equiv a))
 -- Unfortunately it gives a larger term overall.
-uaOver :
-  {A B : Type ℓ} {P : A → Type ℓ'} {Q : B → Type ℓ'}
-  (e : A ≃ B) (F : mapOver (e .fst) P Q)
-  (equiv : isEquivOver {P = P} {Q = Q} F)
-  → PathP (λ i → ua e i → Type ℓ') P Q
+@0 uaOver :
+     {A B : Type ℓ} {P : A → Type ℓ'} {Q : B → Type ℓ'}
+     (e : A ≃ B) (F : mapOver (e .fst) P Q)
+     (equiv : isEquivOver {P = P} {Q = Q} F)
+     → PathP (λ i → ua e i → Type ℓ') P Q
 uaOver {A = A} {P = P} {Q} e F equiv i x =
   hcomp (λ j → λ
     { (i = i0) → ua (_ , equiv x) (~ j)
@@ -40,9 +40,9 @@ uaOver {A = A} {P = P} {Q} e F equiv i x =
 
 open isHAEquiv
 
-isoToPathOver :
-  {A B : Type ℓ} {P : A → Type ℓ'} {Q : B → Type ℓ'}
-  (f : A → B) (hae : isHAEquiv f)
-  (isom : IsoOver (isHAEquiv→Iso hae) P Q)
-  → PathP (λ i → ua (_ , isHAEquiv→isEquiv hae) i → Type ℓ') P Q
+@0 isoToPathOver :
+     {A B : Type ℓ} {P : A → Type ℓ'} {Q : B → Type ℓ'}
+     (f : A → B) (hae : isHAEquiv f)
+     (isom : IsoOver (isHAEquiv→Iso hae) P Q)
+     → PathP (λ i → ua (_ , isHAEquiv→isEquiv hae) i → Type ℓ') P Q
 isoToPathOver f hae isom = uaOver _ _ (isoToEquivOver f hae isom)

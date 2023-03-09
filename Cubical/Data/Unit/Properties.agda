@@ -41,7 +41,7 @@ module _ (A : Type ℓ) where
   UnitToType≃ : (Unit → A) ≃ A
   unquoteDef UnitToType≃ = defStrictEquiv UnitToType≃ (λ f → f _) const
 
-UnitToTypePath : ∀ {ℓ} (A : Type ℓ) → (Unit → A) ≡ A
+@0 UnitToTypePath : ∀ {ℓ} (A : Type ℓ) → (Unit → A) ≡ A
 UnitToTypePath A = ua (UnitToType≃ A)
 
 module _ (A : Unit → Type ℓ) where
@@ -82,10 +82,10 @@ inv (isContr→Iso2 iscontr) b _ = b
 rightInv (isContr→Iso2 iscontr) _ = refl
 leftInv (isContr→Iso2 iscontr) f = funExt λ x → cong f (snd iscontr x)
 
-diagonal-unit : Unit ≡ Unit × Unit
+@0 diagonal-unit : Unit ≡ Unit × Unit
 diagonal-unit = isoToPath (iso (λ x → tt , tt) (λ x → tt) (λ {(tt , tt) i → tt , tt}) λ {tt i → tt})
 
-fibId : (A : Type ℓ) → (fiber (λ (x : A) → tt) tt) ≡ A
+@0 fibId : (A : Type ℓ) → (fiber (λ (x : A) → tt) tt) ≡ A
 fibId A = ua e
   where
   unquoteDecl e = declStrictEquiv e fst (λ a → a , refl)
@@ -93,7 +93,7 @@ fibId A = ua e
 isContr→≃Unit : {A : Type ℓ} → isContr A → A ≃ Unit
 isContr→≃Unit contr = isoToEquiv (iso (λ _ → tt) (λ _ → fst contr) (λ _ → refl) λ _ → snd contr _)
 
-isContr→≡Unit : {A : Type₀} → isContr A → A ≡ Unit
+@0 isContr→≡Unit : {A : Type₀} → isContr A → A ≡ Unit
 isContr→≡Unit contr = ua (isContr→≃Unit contr)
 
 isContrUnit* : ∀ {ℓ} → isContr (Unit* {ℓ})
@@ -117,5 +117,5 @@ Unit≃Unit* = invEquiv (isContr→≃Unit isContrUnit*)
 isContr→≃Unit* : {A : Type ℓ} → isContr A → A ≃ Unit* {ℓ}
 isContr→≃Unit* contr = compEquiv (isContr→≃Unit contr) Unit≃Unit*
 
-isContr→≡Unit* : {A : Type ℓ} → isContr A → A ≡ Unit*
+@0 isContr→≡Unit* : {A : Type ℓ} → isContr A → A ≡ Unit*
 isContr→≡Unit* contr = ua (isContr→≃Unit* contr)

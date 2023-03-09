@@ -46,18 +46,18 @@ module UU-Lemmas where
   nu : ∀ x y → x ≡ y → El x ≃ El y
   nu x y p = pathToEquiv (cong El p)
 
-  cong-un-te
-    : ∀ x y (p : El x ≡ El y)
-    → cong El (un x y (pathToEquiv p)) ≡ p
+  @0 cong-un-te
+       : ∀ x y (p : El x ≡ El y)
+       → cong El (un x y (pathToEquiv p)) ≡ p
   cong-un-te x y p
     = comp (pathToEquiv p) ∙ uaTransportη p
 
-  nu-un : ∀ x y (e : El x ≃ El y) → nu x y (un x y e) ≡ e
+  @0 nu-un : ∀ x y (e : El x ≃ El y) → nu x y (un x y e) ≡ e
   nu-un x y e
     = equivEq {e = nu x y (un x y e)} {f = e} λ i z
         → (cong (λ p → transport p z) (comp e) ∙ uaβ e z) i
 
-  El-un-equiv : ∀ x i → El (un x x (idEquiv _) i) ≃ El x
+  @0 El-un-equiv : ∀ x i → El (un x x (idEquiv _) i) ≃ El x
   El-un-equiv x i = λ where
       .fst → transp (λ j → p j) (i ∨ ~ i)
       .snd → transp (λ j → isEquiv (transp (λ k → p (j ∧ k)) (~ j ∨ i ∨ ~ i)))
@@ -67,7 +67,7 @@ module UU-Lemmas where
     p : T ≡ El x
     p j = (comp (idEquiv _) ∙ uaIdEquiv {A = El x}) j i
 
-  un-refl : ∀ x → un x x (idEquiv (El x)) ≡ refl
+  @0 un-refl : ∀ x → un x x (idEquiv (El x)) ≡ refl
   un-refl x i j
     = hcomp (λ k → λ where
           (i = i0) → un x x (idEquiv (El x)) j
@@ -79,30 +79,30 @@ module UU-Lemmas where
   nu-refl : ∀ x → nu x x refl ≡ idEquiv (El x)
   nu-refl x = equivEq {e = nu x x refl} {f = idEquiv (El x)} reg
 
-  un-nu : ∀ x y (p : x ≡ y) → un x y (nu x y p) ≡ p
+  @0 un-nu : ∀ x y (p : x ≡ y) → un x y (nu x y p) ≡ p
   un-nu x y p
     = J (λ z q → un x z (nu x z q) ≡ q) (cong (un x x) (nu-refl x) ∙ un-refl x) p
 
 open UU-Lemmas
 open Iso
 
-equivIso : ∀ s t → Iso (s ≡ t) (El s ≃ El t)
+@0 equivIso : ∀ s t → Iso (s ≡ t) (El s ≃ El t)
 equivIso s t .fun = nu s t
 equivIso s t .inv = un s t
 equivIso s t .rightInv = nu-un s t
 equivIso s t .leftInv = un-nu s t
 
-pathIso : ∀ s t → Iso (s ≡ t) (El s ≡ El t)
+@0 pathIso : ∀ s t → Iso (s ≡ t) (El s ≡ El t)
 pathIso s t .fun = cong El
 pathIso s t .inv = un s t ∘ pathToEquiv
 pathIso s t .rightInv = cong-un-te s t
 pathIso s t .leftInv = un-nu s t
 
-minivalence : ∀{s t} → (s ≡ t) ≃ (El s ≃ El t)
+@0 minivalence : ∀{s t} → (s ≡ t) ≃ (El s ≃ El t)
 minivalence {s} {t} = isoToEquiv (equivIso s t)
 
-path-reflection : ∀{s t} → (s ≡ t) ≃ (El s ≡ El t)
+@0 path-reflection : ∀{s t} → (s ≡ t) ≃ (El s ≡ El t)
 path-reflection {s} {t} = isoToEquiv (pathIso s t)
 
-isEmbeddingEl : isEmbedding El
+@0 isEmbeddingEl : isEmbedding El
 isEmbeddingEl s t = snd path-reflection

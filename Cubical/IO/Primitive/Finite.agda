@@ -5,8 +5,6 @@
 -- Everything is assumed to be finite
 ------------------------------------------------------------------------
 
-{-# OPTIONS --erased-cubical #-}
-
 module Cubical.IO.Primitive.Finite where
 
 -- NOTE: the contents of this module should be accessed via `Cubical.IO` or

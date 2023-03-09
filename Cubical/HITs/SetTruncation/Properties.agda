@@ -169,7 +169,7 @@ module rec→Gpd {A : Type ℓ} {B : Type ℓ'} (Bgpd : isGroupoid B) (f : A →
                 (subst (λ px' → sym (P→≡ x px x px) ∙ P→≡ x px x px' ≡ refl)
                 (sym (substRefl {B = P} px)) (lCancel (P→≡ x px x px)))
 
- Hset : isSet H
+ @0 Hset : isSet H
  Hset = HelimProp.fun (λ _ → isPropΠ λ _ → isPropIsProp) baseCaseLeft
   where
   baseCaseLeft : (a₀ : A) (y : H) → isProp (η a₀ ≡ y)
@@ -186,7 +186,7 @@ module rec→Gpd {A : Type ℓ} {B : Type ℓ'} (Bgpd : isGroupoid B) (f : A →
 
  -- our desired function will split through H,
  -- i.e. we get a function ∥ A ∥₂ → H → B
- fun : ∥ A ∥₂ → B
+ @0 fun : ∥ A ∥₂ → B
  fun = f₁ ∘ f₂
   where
   f₁ : H → B
@@ -230,7 +230,7 @@ Iso.leftInv (setTruncIdempotentIso hA) = elim (λ _ → isSet→isGroupoid isSet
 setTruncIdempotent≃ : isSet A → ∥ A ∥₂ ≃ A
 setTruncIdempotent≃ {A = A} hA = isoToEquiv (setTruncIdempotentIso hA)
 
-setTruncIdempotent : isSet A → ∥ A ∥₂ ≡ A
+@0 setTruncIdempotent : isSet A → ∥ A ∥₂ ≡ A
 setTruncIdempotent hA = ua (setTruncIdempotent≃ hA)
 
 isContr→isContrSetTrunc : isContr A → isContr (∥ A ∥₂)
@@ -318,7 +318,7 @@ Iso.leftInv IsoSetTruncateSndΣ =
   elim (λ _ → isOfHLevelPath 2 isSetSetTrunc _ _)
          λ _ → refl
 
-PathIdTrunc₀Iso : {a b : A} → Iso (∣ a ∣₂ ≡ ∣ b ∣₂) ∥ a ≡ b ∥₁
+@0 PathIdTrunc₀Iso : {a b : A} → Iso (∣ a ∣₂ ≡ ∣ b ∣₂) ∥ a ≡ b ∥₁
 Iso.fun (PathIdTrunc₀Iso {b = b}) p =
   transport (λ i → rec {B = TypeOfHLevel _ 1} (isOfHLevelTypeOfHLevel 1)
                         (λ a → ∥ a ≡ b ∥₁ , squash₁) (p (~ i)) .fst)

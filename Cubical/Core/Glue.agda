@@ -43,14 +43,14 @@ private
     ℓ ℓ' : Level
 
 -- Uncurry Glue to make it more pleasant to use
-Glue : (A : Type ℓ) {φ : I}
-       → (Te : Partial φ (Σ[ T ∈ Type ℓ' ] T ≃ A))
-       → Type ℓ'
+@0 Glue : (A : Type ℓ) {φ : I}
+          → (Te : Partial φ (Σ[ T ∈ Type ℓ' ] T ≃ A))
+          → Type ℓ'
 Glue A Te = primGlue A (λ x → Te x .fst) (λ x → Te x .snd)
 
 -- Make the φ argument of prim^unglue explicit
-unglue : {A : Type ℓ} (φ : I) {T : Partial φ (Type ℓ')}
-         {e : PartialP φ (λ o → T o ≃ A)} → primGlue A T e → A
+@0 unglue : {A : Type ℓ} (φ : I) {T : Partial φ (Type ℓ')}
+            {e : PartialP φ (λ o → T o ≃ A)} → primGlue A T e → A
 unglue φ = prim^unglue {φ = φ}
 
 -- People unfamiliar with [Glue], [glue] and [uglue] can find the types below more
@@ -62,7 +62,7 @@ unglue φ = prim^unglue {φ = φ}
 -- Cyril Cohen, Thierry Coquand, Simon Huber, Anders Mörtberg
 private
 
-  module GluePrims (A : Type ℓ) {φ : I} (Te : Partial φ (Σ[ T ∈ Type ℓ' ] T ≃ A)) where
+  module @0 GluePrims (A : Type ℓ) {φ : I} (Te : Partial φ (Σ[ T ∈ Type ℓ' ] T ≃ A)) where
     T : Partial φ (Type ℓ')
     T φ1 = Te φ1 .fst
     e : PartialP φ (λ φ → T φ ≃ A)
@@ -135,5 +135,5 @@ private
 
     -- transport in Glue reduces to transport in A + the application of the equivalences in forward and backward
     -- direction.
-    transp-S : (t0 : T0) → T1 [ i1 ↦ (λ _ → invEq e1 (transportA (equivFun e0 t0))) ]
+    @0 transp-S : (t0 : T0) → T1 [ i1 ↦ (λ _ → invEq e1 (transportA (equivFun e0 t0))) ]
     transp-S t0 = inS (transport (λ i → Glue (A i) (Te i)) t0)

@@ -1,7 +1,5 @@
 -- NOTE: the contents of this module should be accessed via `IO`.
 
-{-# OPTIONS --erased-cubical #-}
-
 module Cubical.IO.Primitive where
 
 open import Cubical.Foundations.Prelude

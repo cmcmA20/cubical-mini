@@ -93,7 +93,7 @@ module QER→Equiv {A B : Type ℓ} (R : QuasiEquivRel A B ℓ') where
       (λ {(b' , r') → eq/ b' b ∣ a , r' , r ∣₁})
       (sim .fwd a)
 
-  fwd≡ToRel : ∀ {a b} → φ [ a ] ≡ [ b ] → R .fst .fst a b
+  @0 fwd≡ToRel : ∀ {a b} → φ [ a ] ≡ [ b ] → R .fst .fst a b
   fwd≡ToRel {a} {b} =
     Trunc.elim {P = λ s → f a s ≡ [ b ] → R .fst .fst a b}
       (λ _ → isPropΠ λ _ → R .fst .snd _ _)
@@ -154,7 +154,7 @@ module QER→Equiv {A B : Type ℓ} (R : QuasiEquivRel A B ℓ') where
             (λ {(b , r) → relToBwd≡ r})
             (sim .fwd a))
 
-  bwd≡ToRel : ∀ {a b} → ψ [ b ] ≡ [ a ] → R .fst .fst a b
+  @0 bwd≡ToRel : ∀ {a b} → ψ [ b ] ≡ [ a ] → R .fst .fst a b
   bwd≡ToRel {a} {b} p = fwd≡ToRel (cong φ (sym p) ∙ η [ b ])
 
   Thm : (A / Rᴸ) ≃ (B / Rᴿ)

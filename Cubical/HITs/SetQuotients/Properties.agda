@@ -150,7 +150,7 @@ module rec→Gpd {B : Type ℓ''} (Bgpd : isGroupoid B)
   (fprop : ∀ (a b : A) → isProp (f a ≡ f b))
   where
 
-  fun : A / R → B
+  @0 fun : A / R → B
   fun = f₁ ∘ f₂
     where
     f₁ : ∥ A /ₜ R ∥₂ → B
@@ -249,8 +249,8 @@ setQuotSymmBinOp {A = A} {R = R} isReflR isTransR _∗_ ∗Rsymm h =
       (isTransR _ _ _ (∗Rsymm a' b)
         (isTransR _ _ _ (h b b' a' rb) (∗Rsymm b' a')))
 
-effective : (Rprop : isPropValued R) (Requiv : isEquivRel R)
-  → (a b : A) → [ a ] ≡ [ b ] → R a b
+@0 effective : (Rprop : isPropValued R) (Requiv : isEquivRel R)
+     → (a b : A) → [ a ] ≡ [ b ] → R a b
 effective {A = A} {R = R} Rprop (equivRel R/refl R/sym R/trans) a b p =
   transport aa≡ab (R/refl _)
   where
@@ -267,14 +267,14 @@ effective {A = A} {R = R} Rprop (equivRel R/refl R/sym R/trans) a b p =
     aa≡ab : R a a ≡ R a b
     aa≡ab i = helper (p i) .fst
 
-isEquivRel→effectiveIso : isPropValued R → isEquivRel R
-  → (a b : A) → Iso ([ a ] ≡ [ b ]) (R a b)
+@0 isEquivRel→effectiveIso : isPropValued R → isEquivRel R
+     → (a b : A) → Iso ([ a ] ≡ [ b ]) (R a b)
 Iso.fun (isEquivRel→effectiveIso {R = R} Rprop Req a b) = effective Rprop Req a b
 Iso.inv (isEquivRel→effectiveIso {R = R} Rprop Req a b) = eq/ a b
 Iso.rightInv (isEquivRel→effectiveIso {R = R} Rprop Req a b) _ = Rprop a b _ _
 Iso.leftInv (isEquivRel→effectiveIso {R = R} Rprop Req a b) _ = squash/ _ _ _ _
 
-isEquivRel→isEffective : isPropValued R → isEquivRel R → isEffective R
+@0 isEquivRel→isEffective : isPropValued R → isEquivRel R → isEffective R
 isEquivRel→isEffective Rprop Req a b =
   isoToIsEquiv (invIso (isEquivRel→effectiveIso Rprop Req a b))
 
@@ -292,7 +292,7 @@ truncRelEquiv = isoToEquiv truncRelIso
 -- path-types for equivalence relations (not prop-valued)
 -- and their quotients
 
-isEquivRel→TruncIso : isEquivRel R → (a b : A) → Iso ([ a ] ≡ [ b ]) ∥ R a b ∥₁
+@0 isEquivRel→TruncIso : isEquivRel R → (a b : A) → Iso ([ a ] ≡ [ b ]) ∥ R a b ∥₁
 isEquivRel→TruncIso {A = A} {R = R} Req a b =
   compIso
     (isProp→Iso (squash/ _ _) (squash/ _ _)
@@ -305,9 +305,9 @@ isEquivRel→TruncIso {A = A} {R = R} Req a b =
   symmetric ∥R∥eq a b = PropTrunc.map (symmetric Req a b)
   transitive ∥R∥eq a b c = PropTrunc.map2 (transitive Req a b c)
 
-discreteSetQuotients : isEquivRel R
-  → (∀ a₀ a₁ → Dec (R a₀ a₁))
-  → Discrete (A / R)
+@0 discreteSetQuotients : isEquivRel R
+     → (∀ a₀ a₁ → Dec (R a₀ a₁))
+     → Discrete (A / R)
 discreteSetQuotients {A = A} {R = R} Req Rdec =
   elimProp2
     (λ _ _ → isPropDec (squash/ _ _))

@@ -173,7 +173,7 @@ module _ {a₀₀ a₀₁ : A} {a₀₋ : a₀₀ ≡ a₀₁} {a₁₀ a₁₁ 
   flipSquareEquiv : Square a₀₋ a₁₋ a₋₀ a₋₁ ≃ Square a₋₀ a₋₁ a₀₋ a₁₋
   unquoteDef flipSquareEquiv = defStrictEquiv flipSquareEquiv flipSquare flipSquare
 
-  flipSquarePath : Square a₀₋ a₁₋ a₋₀ a₋₁ ≡ Square a₋₀ a₋₁ a₀₋ a₁₋
+  @0 flipSquarePath : Square a₀₋ a₁₋ a₋₀ a₋₁ ≡ Square a₋₀ a₋₁ a₀₋ a₁₋
   flipSquarePath = ua flipSquareEquiv
 
 module _ {a₀₀ a₁₁ : A} {a₋ : a₀₀ ≡ a₁₁}

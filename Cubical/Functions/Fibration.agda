@@ -64,7 +64,7 @@ module _ (B : Type ℓb) (ℓ : Level) where
     ℓ' = ℓ-max ℓb ℓ
 
   -- HoTT Theorem 4.8.3
-  fibrationEquiv : (Σ[ E ∈ Type ℓ' ] (E → B)) ≃ (B → Type ℓ')
+  @0 fibrationEquiv : (Σ[ E ∈ Type ℓ' ] (E → B)) ≃ (B → Type ℓ')
   fibrationEquiv = isoToEquiv isom
     where isom : Iso (Σ[ E ∈ Type ℓ' ] (E → B)) (B → Type ℓ')
           Iso.fun isom (E , p) = fiber p
@@ -87,19 +87,19 @@ module ForSets {E : Type ℓ} {isSetB : isSet B} (f : E → B) where
 -- The path type in a fiber of f is equivalent to a fiber of (cong f)
 open import Cubical.Foundations.Function
 
-fiberPath : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} {f : A → B} {b : B} (h h' : fiber f b) →
-             (Σ[ p ∈ (fst h ≡ fst h') ] (PathP (λ i → f (p i) ≡ b) (snd h) (snd h')))
-           ≡ fiber (cong f) (h .snd ∙∙ refl ∙∙ sym (h' .snd))
+@0 fiberPath : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} {f : A → B} {b : B} (h h' : fiber f b) →
+                (Σ[ p ∈ (fst h ≡ fst h') ] (PathP (λ i → f (p i) ≡ b) (snd h) (snd h')))
+              ≡ fiber (cong f) (h .snd ∙∙ refl ∙∙ sym (h' .snd))
 fiberPath h h' = cong (Σ (h .fst ≡ h' .fst)) (funExt λ p → flipSquarePath ∙ PathP≡doubleCompPathʳ _ _ _ _)
 
-fiber≡ : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} {f : A → B} {b : B} (h h' : fiber f b)
-  → (h ≡ h') ≡ fiber (cong f) (h .snd ∙∙ refl ∙∙ sym (h' .snd))
+@0 fiber≡ : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} {f : A → B} {b : B} (h h' : fiber f b)
+     → (h ≡ h') ≡ fiber (cong f) (h .snd ∙∙ refl ∙∙ sym (h' .snd))
 fiber≡ {f = f} {b = b} h h' =
   ΣPath≡PathΣ ⁻¹ ∙
   fiberPath h h'
 
-fiberCong : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} (f : A → B) {a₀ a₁ : A} (q : f a₀ ≡ f a₁)
-  → fiber (cong f) q ≡ Path (fiber f (f a₁)) (a₀ , q) (a₁ , refl)
+@0 fiberCong : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} (f : A → B) {a₀ a₁ : A} (q : f a₀ ≡ f a₁)
+     → fiber (cong f) q ≡ Path (fiber f (f a₁)) (a₀ , q) (a₁ , refl)
 fiberCong f q =
   cong (fiber (cong f)) (cong sym (lUnit (sym q)))
   ∙ sym (fiber≡ (_ , q) (_ , refl))

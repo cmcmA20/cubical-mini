@@ -67,7 +67,7 @@ module Recover {ℓ} (A∙ : Pointed ℓ) (h : isHomogeneous A∙) where
 
 private
   open import Cubical.Data.Nat
-  open Recover (ℕ , zero) (isHomogeneousDiscrete discreteℕ)
+  open module @0 R = Recover (ℕ , zero) (isHomogeneousDiscrete discreteℕ)
 
   -- only `∣hidden∣` is exported, `hidden` is no longer in scope
   module _ where

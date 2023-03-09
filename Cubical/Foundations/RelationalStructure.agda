@@ -128,10 +128,10 @@ record StrRelAction {S : Type ℓ → Type ℓ'} (ρ : StrRel S ℓ'')
 
 open StrRelAction public
 
-strRelQuotientComparison : {S : Type ℓ → Type ℓ'} {ρ : StrRel S ℓ''}
-  (θ : SuitableStrRel S ρ) (α : StrRelAction ρ)
-  {X : Type ℓ} (R : EquivPropRel X ℓ)
-  → (S X / ρ (R .fst .fst)) → S (X / R .fst .fst)
+@0 strRelQuotientComparison : {S : Type ℓ → Type ℓ'} {ρ : StrRel S ℓ''}
+     (θ : SuitableStrRel S ρ) (α : StrRelAction ρ)
+     {X : Type ℓ} (R : EquivPropRel X ℓ)
+     → (S X / ρ (R .fst .fst)) → S (X / R .fst .fst)
 strRelQuotientComparison θ α R [ s ] = α .actStr [_] s
 strRelQuotientComparison {ρ = ρ} θ α R (eq/ s t r i) =
   (sym leftEq ∙ rightEq) i
@@ -180,7 +180,7 @@ record PositiveStrRel {S : Type ℓ → Type ℓ'} {ρ : StrRel S ℓ''} (θ : S
     act : StrRelAction ρ
     reflexive : isReflexiveStrRel ρ
     detransitive : isDetransitiveStrRel ρ
-    quo : {X : Type ℓ} (R : EquivPropRel X ℓ) → isEquiv (strRelQuotientComparison θ act R)
+    @0 quo : {X : Type ℓ} (R : EquivPropRel X ℓ) → isEquiv (strRelQuotientComparison θ act R)
 
 open PositiveStrRel public
 
@@ -217,11 +217,11 @@ record QERDescends (S : Type ℓ → Type ℓ') (ρ : StrRel S ℓ'')
 
 open QERDescends
 
-structuredQER→structuredEquiv : {S : Type ℓ → Type ℓ'} {ρ : StrRel S ℓ''}
-  (θ : SuitableStrRel S ρ)
-  (A B : TypeWithStr ℓ S) (R : QuasiEquivRel (typ A) (typ B) ℓ)
-  → ρ (R .fst .fst) (A .snd) (B .snd)
-  → QERDescends S ρ A B R
+@0 structuredQER→structuredEquiv : {S : Type ℓ → Type ℓ'} {ρ : StrRel S ℓ''}
+     (θ : SuitableStrRel S ρ)
+     (A B : TypeWithStr ℓ S) (R : QuasiEquivRel (typ A) (typ B) ℓ)
+     → ρ (R .fst .fst) (A .snd) (B .snd)
+     → QERDescends S ρ A B R
 structuredQER→structuredEquiv {ρ = ρ} θ (X , s) (Y , t) R r .quoᴸ =
   θ .quo (X , s) (QER→EquivRel R)
     (θ .transitive (R .fst) (invPropRel (R .fst)) r (θ .symmetric (R .fst) r))

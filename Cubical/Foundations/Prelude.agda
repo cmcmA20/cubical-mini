@@ -20,7 +20,7 @@ This file proves a variety of basic results about paths:
 - Export universe lifting
 
 -}
-{-# OPTIONS --safe --erased-cubical #-}
+{-# OPTIONS --safe #-}
 module Cubical.Foundations.Prelude where
 
 open import Cubical.Core.Primitives public

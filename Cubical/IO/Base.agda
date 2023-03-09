@@ -1,4 +1,4 @@
-{-# OPTIONS --erased-cubical --guardedness #-}
+{-# OPTIONS --guardedness #-}
 
 module Cubical.IO.Base where
 

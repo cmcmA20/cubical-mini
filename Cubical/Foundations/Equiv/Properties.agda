@@ -155,18 +155,18 @@ isEquiv→sectionIsEquiv {f = f} {g = g} isEquiv-f section-g = subst isEquiv f�
                                (fst f⁻¹ , section-f⁻¹)
                                (g , section-g))
 
-cong≃ : (F : Type ℓ → Type ℓ') → (A ≃ B) → F A ≃ F B
+@0 cong≃ : (F : Type ℓ → Type ℓ') → (A ≃ B) → F A ≃ F B
 cong≃ F e = pathToEquiv (cong F (ua e))
 
-cong≃-char : (F : Type ℓ → Type ℓ') {A B : Type ℓ} (e : A ≃ B) → ua (cong≃ F e) ≡ cong F (ua e)
+@0 cong≃-char : (F : Type ℓ → Type ℓ') {A B : Type ℓ} (e : A ≃ B) → ua (cong≃ F e) ≡ cong F (ua e)
 cong≃-char F e = ua-pathToEquiv (cong F (ua e))
 
-cong≃-idEquiv : (F : Type ℓ → Type ℓ') (A : Type ℓ) → cong≃ F (idEquiv A) ≡ idEquiv (F A)
+@0 cong≃-idEquiv : (F : Type ℓ → Type ℓ') (A : Type ℓ) → cong≃ F (idEquiv A) ≡ idEquiv (F A)
 cong≃-idEquiv F A = cong≃ F (idEquiv A) ≡⟨ cong (λ p → pathToEquiv (cong F p)) uaIdEquiv  ⟩
                     pathToEquiv refl    ≡⟨ pathToEquivRefl ⟩
                     idEquiv (F A)       ∎
 
-isPropIsHAEquiv : {f : A → B} → isProp (isHAEquiv f)
+@0 isPropIsHAEquiv : {f : A → B} → isProp (isHAEquiv f)
 isPropIsHAEquiv {f = f} ishaef = goal ishaef where
   equivF : isEquiv f
   equivF = isHAEquiv→isEquiv ishaef
