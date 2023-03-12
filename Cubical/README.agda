@@ -22,4 +22,18 @@ import Cubical.Core.Everything
 import Cubical.Foundations.Prelude
 import Cubical.Foundations.Everything
 
+-- Other modules (TODO: add descriptions)
+import Cubical.Induction.Everything
+import Cubical.Structures.Everything
+
+
+import Cubical.Algebra.Everything
+
+-- Reflection
+import Cubical.Reflection.Everything
+
+-- Displayed univalent graphs
+import Cubical.Displayed.Everything
+
+
 import Cubical.IO

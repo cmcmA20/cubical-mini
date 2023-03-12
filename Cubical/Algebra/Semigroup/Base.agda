@@ -16,7 +16,10 @@ open import Cubical.Displayed.Auto
 open import Cubical.Displayed.Record
 open import Cubical.Displayed.Universe
 
+open import Cubical.Interface.HLevels
+
 open Iso
+open IsOfHLevel ⦃ ... ⦄
 
 
 private
@@ -35,7 +38,7 @@ record IsSemigroup {A : Type ℓ} (_·_ : A → A → A) : Type ℓ where
   constructor issemigroup
 
   field
-    is-set : isSet A
+    ⦃ is-set ⦄ : IsSet A
     ·Assoc : (x y z : A) → x · (y · z) ≡ (x · y) · z
 
 unquoteDecl IsSemigroupIsoΣ = declareRecordIsoΣ IsSemigroupIsoΣ (quote IsSemigroup)
@@ -46,11 +49,11 @@ record SemigroupStr (A : Type ℓ) : Type ℓ where
 
   field
     _·_         : A → A → A
-    @0 isSemigroup : IsSemigroup _·_
+    isSemigroup : IsSemigroup _·_
 
   infixl 7 _·_
 
-  open module @0 IS = IsSemigroup isSemigroup public
+  open IsSemigroup isSemigroup public
 
 Semigroup : ∀ ℓ → Type (ℓ-suc ℓ)
 Semigroup ℓ = TypeWithStr ℓ SemigroupStr
@@ -85,8 +88,8 @@ isPropIsSemigroup : {A : Type ℓ} (_·_ : A → A → A) → isProp (IsSemigrou
 isPropIsSemigroup _·_ =
   isOfHLevelRetractFromIso 1 IsSemigroupIsoΣ
     (isPropΣ
-      isPropIsSet
-      (λ isSetA → isPropΠ3 λ _ _ _ → isSetA _ _))
+      (λ _ _ → IsOfHLevel≡ (isPropIsSet _ _))
+      (λ isSetA → isPropΠ3 λ _ _ _ → isSetA .iohl _ _))
 
 @0 𝒮ᴰ-Semigroup : DUARel (𝒮-Univ ℓ) SemigroupStr ℓ
 𝒮ᴰ-Semigroup =

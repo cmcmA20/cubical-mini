@@ -4,6 +4,7 @@ module Cubical.Algebra.Monoid.Instances.NatPlusBis where
 open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.Nat
+open import Cubical.Data.Nat.HLevel
 
 open import Cubical.Algebra.Monoid
 
@@ -13,4 +14,4 @@ NatPlusBis-Monoid : Monoid ℓ-zero
 fst NatPlusBis-Monoid = ℕ
 MonoidStr.ε (snd NatPlusBis-Monoid) = 0
 MonoidStr._·_ (snd NatPlusBis-Monoid) = _+'_
-MonoidStr.isMonoid (snd NatPlusBis-Monoid) = makeIsMonoid isSetℕ +'-assoc +'-rid +'-lid
+MonoidStr.isMonoid (snd NatPlusBis-Monoid) = makeIsMonoid +'-assoc +'-rid +'-lid

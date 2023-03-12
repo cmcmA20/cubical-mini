@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
 module Cubical.Algebra.Monoid.Base where
 
 open import Cubical.Foundations.Prelude
@@ -18,7 +18,10 @@ open import Cubical.Displayed.Universe
 
 open import Cubical.Reflection.RecordEquiv
 
+open import Cubical.Interface.HLevels
+
 open Iso
+open IsOfHLevel ⦃ ... ⦄
 
 private
   variable
@@ -42,11 +45,11 @@ record MonoidStr (A : Type ℓ) : Type ℓ where
   field
     ε        : A
     _·_      : A → A → A
-    @0 isMonoid : IsMonoid ε _·_
+    isMonoid : IsMonoid ε _·_
 
   infixl 7 _·_
 
-  open module @0 IM = IsMonoid isMonoid public
+  open IsMonoid isMonoid public
 
 Monoid : ∀ ℓ → Type (ℓ-suc ℓ)
 Monoid ℓ = TypeWithStr ℓ MonoidStr
@@ -57,23 +60,23 @@ monoid A ε _·_ h = A , monoidstr ε _·_ h
 -- Easier to use constructors
 
 makeIsMonoid : {M : Type ℓ} {ε : M} {_·_ : M → M → M}
-               (is-setM : isSet M)
+               ⦃ is-setM : IsSet M ⦄
                (·Assoc : (x y z : M) → x · (y · z) ≡ (x · y) · z)
                (·IdR : (x : M) → x · ε ≡ x)
                (·IdL : (x : M) → ε · x ≡ x)
              → IsMonoid ε _·_
-IsMonoid.isSemigroup (makeIsMonoid is-setM ·Assoc ·IdR ·IdL) = issemigroup is-setM ·Assoc
-IsMonoid.·IdR (makeIsMonoid is-setM ·Assoc ·IdR ·IdL) = ·IdR
-IsMonoid.·IdL (makeIsMonoid is-setM ·Assoc ·IdR ·IdL) = ·IdL
+IsMonoid.isSemigroup (makeIsMonoid ·Assoc ·IdR ·IdL) = issemigroup ·Assoc
+IsMonoid.·IdR (makeIsMonoid ·Assoc ·IdR ·IdL) = ·IdR
+IsMonoid.·IdL (makeIsMonoid ·Assoc ·IdR ·IdL) = ·IdL
 
 makeMonoid : {M : Type ℓ} (ε : M) (_·_ : M → M → M)
-             (is-setM : isSet M)
+             ⦃ is-setM : IsSet M ⦄
              (·Assoc : (x y z : M) → x · (y · z) ≡ (x · y) · z)
              (·IdR : (x : M) → x · ε ≡ x)
              (·IdL : (x : M) → ε · x ≡ x)
            → Monoid ℓ
-makeMonoid ε _·_ is-setM ·Assoc ·IdR ·IdL =
-  monoid _ ε _·_ (makeIsMonoid is-setM ·Assoc ·IdR ·IdL)
+makeMonoid ε _·_ ·Assoc ·IdR ·IdL =
+  monoid _ ε _·_ (makeIsMonoid ·Assoc ·IdR ·IdL)
 
 record IsMonoidHom {A : Type ℓ} {B : Type ℓ'}
   (M : MonoidStr A) (f : A → B) (N : MonoidStr B)
@@ -107,8 +110,8 @@ isPropIsMonoid : {M : Type ℓ} (ε : M) (_·_ : M → M → M) → isProp (IsMo
 isPropIsMonoid ε _·_ =
   isOfHLevelRetractFromIso 1 IsMonoidIsoΣ
     (isPropΣ (isPropIsSemigroup _·_)
-             (λ semi → isProp× (isPropΠ (λ _ → is-set semi _ _))
-                                (isPropΠ (λ _ → is-set semi _ _))))
+             (λ semi → isProp× (isPropΠ (λ _ → is-set semi .iohl _ _))
+                                (isPropΠ (λ _ → is-set semi .iohl _ _))))
   where
   open IsSemigroup
 
@@ -126,7 +129,7 @@ isPropIsMonoid ε _·_ =
 @0 MonoidPath : (M N : Monoid ℓ) → MonoidEquiv M N ≃ (M ≡ N)
 MonoidPath = ∫ 𝒮ᴰ-Monoid .UARel.ua
 
-module @0 MonoidTheory {ℓ} (M : Monoid ℓ) where
+module MonoidTheory {ℓ} (M : Monoid ℓ) where
 
   open MonoidStr (snd M)
 
