@@ -32,4 +32,4 @@ instance
 
 instance
   ShowList : ⦃ Show A ⦄ → Show (List A)
-  Show.show ShowList xs = foldr _++ₛ_ "" $ intersperse ", " $ map show xs
+  Show.show ShowList xs = "[" ++ₛ ((foldr _++ₛ_ "" $ intersperse ", " $ map show xs) ++ₛ "]")
