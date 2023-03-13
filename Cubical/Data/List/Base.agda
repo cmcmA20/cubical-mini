@@ -50,3 +50,11 @@ module _ {ℓ} {A : Type ℓ} where
   foldl : ∀ {ℓ'} {B : Type ℓ'} → (B → A → B) → B → List A → B
   foldl f b [] = b
   foldl f b (x ∷ xs) = foldl f (f b x) xs
+
+  prependToAll : A -> List A -> List A
+  prependToAll _   []       = []
+  prependToAll sep (x ∷ xs) = sep ∷ x ∷ prependToAll sep xs
+
+  intersperse : A → List A → List A
+  intersperse _   []       = []
+  intersperse sep (x ∷ xs) = x ∷ prependToAll sep xs

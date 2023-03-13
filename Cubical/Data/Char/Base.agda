@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --cubical-compatible #-}
+{-# OPTIONS --safe #-}
 module Cubical.Data.Char.Base where
 
 open import Cubical.Foundations.Prelude

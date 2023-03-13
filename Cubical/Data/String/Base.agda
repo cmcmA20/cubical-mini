@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --cubical-compatible #-}
+{-# OPTIONS --safe #-}
 module Cubical.Data.String.Base where
 
 open import Cubical.Data.Bool.Base

@@ -24,10 +24,6 @@ instance
   IsOfHLevelSuc : ⦃ Al : IsOfHLevel n A ⦄ → IsOfHLevel (suc n) A
   IsOfHLevel.iohl (IsOfHLevelSuc ⦃ Al ⦄) = isOfHLevelSuc _ iohl
 
-  IsOfHLevelΣ : ⦃ Al : IsOfHLevel n A ⦄ ⦃ Bl : {x : A} → IsOfHLevel n (B x) ⦄
-              → IsOfHLevel n (Σ A B)
-  IsOfHLevel.iohl IsOfHLevelΣ = isOfHLevelΣ _ iohl (λ _ → iohl)
-
   -- IsOfHLevel× : {B : Type ℓ′}
   --               ⦃ Al : IsOfHLevel n A ⦄ ⦃ Bl : IsOfHLevel n B ⦄
   --             → IsOfHLevel n (A × B)

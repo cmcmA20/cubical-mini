@@ -10,6 +10,7 @@ open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Erased
 
 open import Cubical.Data.Sigma
+open import Cubical.Data.Sigma.Instances
 
 open import Cubical.Interface.HLevels
 

@@ -22,6 +22,9 @@ open import Cubical.Displayed.Universe
 
 open import Cubical.Relation.Binary.Base
 
+open import Cubical.Interface.HLevels
+
+open IsOfHLevel ⦃ ... ⦄
 open Iso
 open BinaryRelation
 
@@ -30,18 +33,18 @@ private
   variable
     ℓ ℓ' ℓ'' ℓ₀ ℓ₀' ℓ₁ ℓ₁' : Level
 
-record @0 IsPoset {A : Type ℓ} (_≤_ : A → A → Type ℓ') : Type (ℓ-max ℓ ℓ') where
+record IsPoset {A : Type ℓ} (_≤_ : A → A → Type ℓ') : Type (ℓ-max ℓ ℓ') where
   no-eta-equality
   constructor isposet
 
   field
-    is-set : isSet A
+    ⦃ is-set ⦄ : IsSet A
     is-prop-valued : isPropValued _≤_
     is-refl : isRefl _≤_
     is-trans : isTrans _≤_
     is-antisym : isAntisym _≤_
 
-module @0 _ where unquoteDecl IsPosetIsoΣ = declareRecordIsoΣ IsPosetIsoΣ (quote IsPoset)
+unquoteDecl IsPosetIsoΣ = declareRecordIsoΣ IsPosetIsoΣ (quote IsPoset)
 
 
 record PosetStr (ℓ' : Level) (A : Type ℓ) : Type (ℓ-max ℓ (ℓ-suc ℓ')) where
@@ -50,11 +53,11 @@ record PosetStr (ℓ' : Level) (A : Type ℓ) : Type (ℓ-max ℓ (ℓ-suc ℓ')
 
   field
     _≤_     : A → A → Type ℓ'
-    @0 isPoset : IsPoset _≤_
+    isPoset : IsPoset _≤_
 
   infixl 7 _≤_
 
-  open module @0 IP = IsPoset isPoset public
+  open IsPoset isPoset public
 
 Poset : ∀ ℓ ℓ' → Type (ℓ-max (ℓ-suc ℓ) (ℓ-suc ℓ'))
 Poset ℓ ℓ' = TypeWithStr ℓ (PosetStr ℓ')
@@ -80,14 +83,14 @@ record IsPosetEquiv {A : Type ℓ₀} {B : Type ℓ₁}
 PosetEquiv : (M : Poset ℓ₀ ℓ₀') (M : Poset ℓ₁ ℓ₁') → Type (ℓ-max (ℓ-max ℓ₀ ℓ₀') (ℓ-max ℓ₁ ℓ₁'))
 PosetEquiv M N = Σ[ e ∈ ⟨ M ⟩ ≃ ⟨ N ⟩ ] IsPosetEquiv (M .snd) e (N .snd)
 
-@0 isPropIsPoset : {A : Type ℓ} (_≤_ : A → A → Type ℓ') → isProp (IsPoset _≤_)
+isPropIsPoset : {A : Type ℓ} (_≤_ : A → A → Type ℓ') → isProp (IsPoset _≤_)
 isPropIsPoset _≤_ = isOfHLevelRetractFromIso 1 IsPosetIsoΣ
-  (isPropΣ isPropIsSet
+  (isPropΣ (IsPropIsOfHLevel .iohl)
     λ isSetA → isPropΣ (isPropΠ2 (λ _ _ → isPropIsProp))
       λ isPropValued≤ → isProp×2
                          (isPropΠ (λ _ → isPropValued≤ _ _))
                            (isPropΠ5 λ _ _ _ _ _ → isPropValued≤ _ _)
-                             (isPropΠ4 λ _ _ _ _ → isSetA _ _))
+                             (isPropΠ4 λ _ _ _ _ → isSetA .iohl _ _))
 
 @0 𝒮ᴰ-Poset : DUARel (𝒮-Univ ℓ) (PosetStr ℓ') (ℓ-max ℓ ℓ')
 𝒮ᴰ-Poset =
@@ -123,7 +126,7 @@ module _ {P : Poset ℓ₀ ℓ₀'} {S : Poset ℓ₁ ℓ₁'} (e : ⟨ P ⟩ �
       isMonInv' x y ex≤ey = transport (λ i → retEq e x i P.≤ retEq e y i) (isMonInv _ _ ex≤ey)
 
 
-module @0 PosetReasoning (P' : Poset ℓ ℓ') where
+module PosetReasoning (P' : Poset ℓ ℓ') where
  private P = fst P'
  open PosetStr (snd P')
  open IsPoset
