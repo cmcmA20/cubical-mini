@@ -315,13 +315,14 @@ private
   test-winding-refl : winding refl ≡ pos 0
   test-winding-refl = refl
 
-  -- These should type check if things would compute:
+  -- These should type check if things would compute
+  -- Ahem, they actually do
 
-  -- test-winding-loop : winding loop ≡ pos 1
-  -- test-winding-loop = refl
+  test-winding-loop : winding loop ≡ pos 1
+  test-winding-loop = refl
 
-  -- test-winding-pos5 : winding (loop^ (pos 2)) ≡ pos 2
-  -- test-winding-pos5 = refl
+  test-winding-pos5 : winding (loop^ (pos 2)) ≡ pos 2
+  test-winding-pos5 = refl
 
-  -- test-winding-neg5 : winding (loop^ (negsuc 2)) ≡ negsuc 2
-  -- test-winding-neg5 = refl
+  test-winding-neg5 : winding (loop^ (negsuc 2)) ≡ negsuc 2
+  test-winding-neg5 = refl
