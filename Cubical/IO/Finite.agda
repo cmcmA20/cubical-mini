@@ -8,10 +8,14 @@ open import Cubical.IO.Base
 import Cubical.IO.Primitive as Prim
 import Cubical.IO.Primitive.Finite as Prim
 open import Cubical.Foundations.Prelude
+open import Cubical.Interface.Show
+
+open Show ⦃ ... ⦄
 
 private
   variable
-    ℓ : Level
+    ℓ ℓ′ : Level
+    A : Type ℓ
 
 ------------------------------------------------------------------------
 -- Simple lazy IO
@@ -45,3 +49,9 @@ putStr s = lift′ (Prim.putStr s)
 
 putStrLn : String → IO {ℓ} Unit*
 putStrLn s = lift′ (Prim.putStrLn s)
+
+print : ⦃ Show A ⦄ → A → IO {ℓ′} Unit*
+print a = putStr (show a)
+
+printLn : ⦃ Show A ⦄ → A → IO {ℓ′} Unit*
+printLn a = putStrLn (show a)
