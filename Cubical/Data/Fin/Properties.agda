@@ -212,7 +212,7 @@ module Reduce (k₀ : ℕ) where
   reduce = +induction k₀ (Residue k) base step
 
   reduce′ : ∀ n → Residue k n
-  reduce′ = +induction k₀ (Residue k) base step′ 
+  reduce′ = +induction k₀ (Residue k) base step′
 
   reduce-link : reduce ≡ reduce′
   reduce-link = cong (+induction k₀ (Residue k) base) step-link

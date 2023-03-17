@@ -16,9 +16,11 @@ instance
   DecEqℕ : DecEq ℕ
   DecEq._≟_ DecEqℕ = discreteℕ
 
+
 instance
   IsSetℕ : IsSet ℕ
   IsOfHLevel.iohl IsSetℕ = isSetℕ
+
 
 instance
   Showℕ : Show ℕ

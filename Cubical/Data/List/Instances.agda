@@ -25,10 +25,12 @@ instance
   DecEqList : ⦃ DecEq A ⦄ → DecEq (List A)
   DecEq._≟_ DecEqList = discreteList _≟_
 
+
 instance
   IsOfHLevelList : ⦃ IsOfHLevel (suc (suc n))       A ⦄
                  →   IsOfHLevel (suc (suc n)) (List A)
   IsOfHLevel.iohl (IsOfHLevelList ⦃ Al ⦄) = isOfHLevelList _ (Al .iohl)
+
 
 instance
   ShowList : ⦃ Show A ⦄ → Show (List A)

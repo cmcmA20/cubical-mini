@@ -3,15 +3,18 @@ module Cubical.Data.Sum.Instances where
 
 open import Cubical.Foundations.Prelude
 
+open import Cubical.Data.FinSet.Constructors
 open import Cubical.Data.Nat.Base
 open import Cubical.Data.Sum.Base
 open import Cubical.Data.Sum.Properties
 
 open import Cubical.Interface.DecEq
+open import Cubical.Interface.Finite
 open import Cubical.Interface.HLevels
 open import Cubical.Interface.Show
 
 open DecEq ⦃ ... ⦄
+open Finite ⦃ ... ⦄
 open IsOfHLevel ⦃ ... ⦄
 open Show ⦃ ... ⦄
 
@@ -25,10 +28,17 @@ instance
   DecEq⊎ : ⦃ DecEq A ⦄ → ⦃ DecEq B ⦄ → DecEq (A ⊎ B)
   DecEq._≟_ DecEq⊎ = discrete⊎ _≟_ _≟_
 
+
+instance
+  Finite⊎ : ⦃ Finite A ⦄ → ⦃ Finite B ⦄ → Finite (A ⊎ B)
+  Finite.isFinite (Finite⊎ {A = A} {B = B}) = isFinSet⊎ (A , isFinite) (B , isFinite)
+
+
 instance
   IsOfHLevel⊎ : ⦃ IsOfHLevel (suc (suc n)) A ⦄ → ⦃ IsOfHLevel (suc (suc n)) B ⦄
               → IsOfHLevel (suc (suc n)) (A ⊎ B)
   IsOfHLevel.iohl (IsOfHLevel⊎ ⦃ Al ⦄ ⦃ Bl ⦄) = isOfHLevel⊎ _ (Al .iohl) (Bl .iohl)
+
 
 instance
   Show⊎ : ⦃ Show A ⦄ → ⦃ Show B ⦄ → Show (A ⊎ B)

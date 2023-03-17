@@ -13,7 +13,7 @@ open IsOfHLevel ⦃ ... ⦄
 
 private variable
   ℓ ℓ′ : Level
-  n : ℕ
+  n : HLevel
   A : Type ℓ
   B : A → Type ℓ′
 
@@ -40,6 +40,10 @@ instance
 
   IsOfHLevelPath : ⦃ Al : IsOfHLevel (suc n) A ⦄ → {x y : A} → IsOfHLevel n (x ≡ y)
   IsOfHLevel.iohl (IsOfHLevelPath ⦃ Al ⦄) = isOfHLevelPath' _ (Al .iohl) _ _
+
+  -- should be true
+  -- @0 IsOfHLevelLift : ⦃ Al : IsOfHLevel n A ⦄ → IsOfHLevel n (Lift {ℓ} {ℓ′} A)
+  -- IsOfHLevel.iohl IsOfHLevelLift = {!!}
 
   IsPropErased : ⦃ Al : IsProp A ⦄ → IsProp (Erased A)
   IsOfHLevel.iohl (IsPropErased ⦃ Al ⦄) _ _ = []-cong [ Al .iohl _ _ ]
