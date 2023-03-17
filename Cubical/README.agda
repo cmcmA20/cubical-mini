@@ -78,7 +78,7 @@ import Cubical.Displayed.Everything
 -- import Cubical.Axiom.Everything
 
 -- Automatic proving, solvers
--- import Cubical.Tactics.Everything
+import Cubical.Tactics.Everything
 
 -- I/O
 import Cubical.IO
