@@ -41,7 +41,7 @@ import Cubical.HITs.Everything
 import Cubical.Relation.Everything
 
 -- Category theory
--- import Cubical.Categories.Everything
+import Cubical.Categories.Everything
 
 -- Homotopy theory
 import Cubical.Homotopy.Everything
