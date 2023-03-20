@@ -80,5 +80,8 @@ import Cubical.Displayed.Everything
 -- Automatic proving, solvers
 import Cubical.Tactics.Everything
 
+-- Interfaces for everyday programming
+import Cubical.Interface.Everything
+
 -- I/O
 import Cubical.IO

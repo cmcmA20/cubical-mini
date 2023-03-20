@@ -31,16 +31,20 @@ check-whitespace:
 
 .PHONY : check-everythings
 check-everythings:
-	$(EVERYTHINGS) check-except Experiments
+	$(EVERYTHINGS) check-except IO
+#	$(EVERYTHINGS) check-except Experiments
 
 .PHONY : gen-everythings
 gen-everythings:
-	$(EVERYTHINGS) gen-except Core Foundations Codata Experiments
+	$(EVERYTHINGS) gen-except Core Foundations IO
+#	$(EVERYTHINGS) gen-except Core Foundations Codata Experiments
 
 .PHONY : gen-and-check-everythings
 gen-and-check-everythings:
-	$(EVERYTHINGS) gen-except Core Foundations Codata Experiments
-	$(EVERYTHINGS) check Core Foundations Codata
+	$(EVERYTHINGS) gen-except Core Foundations IO
+	$(EVERYTHINGS) check Core Foundations
+#	$(EVERYTHINGS) gen-except Core Foundations Codata Experiments
+#	$(EVERYTHINGS) check Core Foundations Codata
 
 .PHONY : check-README
 check-README:

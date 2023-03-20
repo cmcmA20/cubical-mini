@@ -73,8 +73,9 @@ checkEverythings dirs = do
 checkREADME :: IO ()
 checkREADME = do
   (sub_dirs, _) <- getSubDirsFiles ["Cubical"]
+  let sub_dirs' = sub_dirs \\ ["IO"]
   imported <- getImported ["README","Cubical"]
-  let missing_files = fmap (\dir -> ["Everything",dir,"Cubical"]) sub_dirs \\ imported
+  let missing_files = fmap (\dir -> ["Everything",dir,"Cubical"]) sub_dirs' \\ imported
   if null missing_files then pure ()
   else do putStrLn "Found some Everything.agda's which are not imported in README.agda:"
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')

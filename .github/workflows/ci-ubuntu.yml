@@ -33,8 +33,8 @@ on:
 ########################################################################
 
 env:
-  GHC_VERSION: 8.6.5
-  CABAL_VERSION: 3.2.0.0
+  GHC_VERSION: 9.2.5
+  CABAL_VERSION: 3.6.2.0
   CABAL_INSTALL: cabal install --overwrite-policy=always --ghc-options='-O1 +RTS -M6G -RTS'
 
 jobs:
@@ -51,7 +51,7 @@ jobs:
       - name: Initialise variables
         run: |
           # Pick Agda version
-          echo "AGDA_BRANCH=v2.6.3" >> $GITHUB_ENV
+          echo "AGDA_BRANCH=master" >> $GITHUB_ENV
 
 
       ########################################################################
@@ -147,10 +147,3 @@ jobs:
             AGDA_EXEC='~/.cabal/bin/agda -WnoUnsupportedIndexedMatch -W error' \
             FIX_WHITESPACE='~/.cabal/bin/fix-whitespace' \
             EVERYTHINGS='cabal run Everythings'
-
-      - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref_name == 'master'
-        uses: JamesIves/github-pages-deploy-action@4.1.8
-        with:
-          branch: gh-pages
-          folder: html

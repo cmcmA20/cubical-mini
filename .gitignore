@@ -7,3 +7,4 @@ Cubical/*/Everything.agda
 !Cubical/Foundations/Everything.agda
 !Cubical/Codata/Everything.agda
 !Cubical/Experiments/Everything.agda
+dist-newstyle/
