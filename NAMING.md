@@ -9,7 +9,7 @@ For naming conventions specific to the Algebra subfolder, see
 
 * Use either descriptive names for universe levels or
   ```
-  ℓ ℓ' ℓ'' ℓ''' ...
+  ℓ ℓ′ ℓ' ℓ″ ℓ'' ℓ‴ ℓ''' ...
   ```
 
 * Names of types should begin with an uppercase letter; names of
