@@ -18,7 +18,7 @@ open import Cubical.Functions.Fixpoint
 open import Cubical.Data.Empty as ⊥
 
 open import Cubical.Relation.Nullary.Base
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 private
   variable
@@ -89,7 +89,7 @@ Dec∥∥ = mapDec ∣_∣₁ ¬→¬∥∥
 -- ⟪ X ⟫ ── notEmptyPopulated ─→ NonEmpty X
 
 -- reexport propositional truncation for uniformity
-open Cubical.HITs.PropositionalTruncation.Base
+open Cubical.Truncation.Propositional.Base
 
 populatedBy : ∥ A ∥₁ → ⟪ A ⟫
 populatedBy {A = A} a (f , fIsConst) = h a where

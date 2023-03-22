@@ -21,7 +21,7 @@ open import Cubical.Data.Empty as Empty
 open import Cubical.Data.Sigma
 open import Cubical.Data.Unit using (Unit; isPropUnit)
 
-open import Cubical.HITs.PropositionalTruncation hiding (rec)
+open import Cubical.Truncation.Propositional hiding (rec)
 
 open import Cubical.Relation.Nullary
 

@@ -7,7 +7,7 @@ open import Cubical.Foundations.HLevels
 open import Cubical.Foundations.Equiv
 
 open import Cubical.Data.Sigma
-open import Cubical.HITs.PropositionalTruncation as Prop
+open import Cubical.Truncation.Propositional as Prop
 
 open import Cubical.Categories.Category
 open import Cubical.Categories.Isomorphism

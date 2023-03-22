@@ -10,7 +10,7 @@ open import Cubical.Foundations.GroupoidLaws using (lUnit; rUnit; assoc; cong-âˆ
 open import Cubical.Foundations.HLevels
 open import Cubical.Functions.Surjection
 open import Cubical.Functions.Embedding
-open import Cubical.HITs.PropositionalTruncation as Prop
+open import Cubical.Truncation.Propositional as Prop
 open import Cubical.Data.Sigma
 open import Cubical.Categories.Category
 open import Cubical.Categories.Isomorphism

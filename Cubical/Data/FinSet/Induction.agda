@@ -13,8 +13,8 @@ open import Cubical.Foundations.Equiv renaming (_∙ₑ_ to _⋆_)
 open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Univalence
 
-open import Cubical.HITs.PropositionalTruncation as Prop
-open import Cubical.HITs.SetTruncation as Set
+open import Cubical.Truncation.Propositional as Prop
+open import Cubical.Truncation.Set as Set
 
 open import Cubical.Data.Nat
   renaming (_+_ to _+ℕ_) hiding (elim)

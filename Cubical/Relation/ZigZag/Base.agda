@@ -10,7 +10,7 @@ open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.HLevels
 open import Cubical.Data.Sigma
 open import Cubical.HITs.SetQuotients
-open import Cubical.HITs.PropositionalTruncation as Trunc
+open import Cubical.Truncation.Propositional as Trunc
 open import Cubical.Relation.Binary.Base
 
 open BinaryRelation

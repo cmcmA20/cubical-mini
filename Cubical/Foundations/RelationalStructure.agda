@@ -14,7 +14,7 @@ open import Cubical.Foundations.Structure
 open import Cubical.Foundations.Univalence
 open import Cubical.Functions.FunExtEquiv
 open import Cubical.Data.Sigma
-open import Cubical.HITs.PropositionalTruncation as Trunc
+open import Cubical.Truncation.Propositional as Trunc
 open import Cubical.HITs.SetQuotients
 open import Cubical.Relation.Binary.Base
 open import Cubical.Relation.ZigZag.Base

@@ -6,7 +6,7 @@ This file contains:
 
 -}
 {-# OPTIONS --safe #-}
-module Cubical.HITs.PropositionalTruncation.Base where
+module Cubical.Truncation.Propositional.Base where
 
 open import Cubical.Core.Primitives
 

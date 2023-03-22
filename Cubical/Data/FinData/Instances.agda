@@ -10,7 +10,7 @@ open import Cubical.Data.Nat.Base
 open import Cubical.Data.FinData.Base
 open import Cubical.Data.FinData.Properties
 open import Cubical.Data.SumFin.Properties using (SumFin≃Fin)
-open import Cubical.HITs.PropositionalTruncation
+open import Cubical.Truncation.Propositional
 
 open import Cubical.Interface.DecEq
 open import Cubical.Interface.Finite

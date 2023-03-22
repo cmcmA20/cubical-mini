@@ -11,7 +11,7 @@ open import Cubical.Functions.Embedding
 
 open import Cubical.Data.Sigma
 open import Cubical.Data.Unit
-open import Cubical.HITs.PropositionalTruncation as PT
+open import Cubical.Truncation.Propositional as PT
 
 private variable
   ℓ ℓ' : Level

@@ -4,7 +4,7 @@ module Cubical.Categories.Limits.Initial where
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.HLevels
 open import Cubical.Foundations.Isomorphism renaming (Iso to _≅_)
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 open import Cubical.Data.Sigma
 

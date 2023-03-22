@@ -8,7 +8,7 @@ open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Univalence
 
-open import Cubical.HITs.PropositionalTruncation as Prop
+open import Cubical.Truncation.Propositional as Prop
 open import Cubical.HITs.SetQuotients as SetQuot
 
 open import Cubical.Relation.Nullary

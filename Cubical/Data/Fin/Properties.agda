@@ -15,7 +15,7 @@ open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Univalence
 open import Cubical.Foundations.Transport
 
-open import Cubical.HITs.PropositionalTruncation renaming (rec to ∥∥rec)
+open import Cubical.Truncation.Propositional renaming (rec to ∥∥rec)
 
 open import Cubical.Data.Fin.Base as Fin
 open import Cubical.Data.Nat

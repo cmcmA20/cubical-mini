@@ -27,9 +27,9 @@ open import Cubical.Relation.Nullary
 open import Cubical.Relation.Binary.Base
 
 open import Cubical.HITs.TypeQuotients as TypeQuot using (_/ₜ_ ; [_] ; eq/)
-open import Cubical.HITs.PropositionalTruncation as PropTrunc
+open import Cubical.Truncation.Propositional as PropTrunc
   using (∥_∥₁ ; ∣_∣₁ ; squash₁) renaming (rec to propRec)
-open import Cubical.HITs.SetTruncation as SetTrunc
+open import Cubical.Truncation.Set as SetTrunc
   using (∥_∥₂ ; ∣_∣₂ ; squash₂ ; isSetSetTrunc)
 
 

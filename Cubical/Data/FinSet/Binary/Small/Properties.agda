@@ -15,7 +15,7 @@ open import Cubical.Functions.Involution
 
 open import Cubical.Data.Sigma
 
-open import Cubical.HITs.PropositionalTruncation
+open import Cubical.Truncation.Propositional
 
 open import Cubical.Data.FinSet.Binary.Small.Base
 

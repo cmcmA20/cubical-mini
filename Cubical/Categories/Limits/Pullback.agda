@@ -3,7 +3,7 @@ module Cubical.Categories.Limits.Pullback where
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.HLevels
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 open import Cubical.Data.Sigma
 open import Cubical.Data.Unit

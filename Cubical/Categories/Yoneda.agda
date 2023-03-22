@@ -8,7 +8,7 @@ open import Cubical.Foundations.Univalence using (ua)
 open import Cubical.Foundations.Function renaming (_∘_ to _◍_)
 open import Cubical.Data.Sigma
 open import Cubical.Foundations.Equiv
-open import Cubical.HITs.PropositionalTruncation
+open import Cubical.Truncation.Propositional
 
 open import Cubical.Categories.Category
 open import Cubical.Categories.Instances.Sets

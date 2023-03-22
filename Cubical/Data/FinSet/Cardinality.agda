@@ -24,8 +24,8 @@ open import Cubical.Foundations.Equiv renaming (_∙ₑ_ to _⋆_)
 open import Cubical.Foundations.Equiv.Properties
 open import Cubical.Foundations.Transport
 
-open import Cubical.HITs.PropositionalTruncation as Prop
-open import Cubical.HITs.SetTruncation as Set
+open import Cubical.Truncation.Propositional as Prop
+open import Cubical.Truncation.Set as Set
 
 open import Cubical.Data.Nat
 open import Cubical.Data.Nat.Order

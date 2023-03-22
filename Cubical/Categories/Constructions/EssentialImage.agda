@@ -8,7 +8,7 @@ module Cubical.Categories.Constructions.EssentialImage where
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Data.Sigma
-open import Cubical.HITs.PropositionalTruncation as PropTrunc
+open import Cubical.Truncation.Propositional as PropTrunc
 
 open import Cubical.Categories.Category
 open import Cubical.Categories.Functor

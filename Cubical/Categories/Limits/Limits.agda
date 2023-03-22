@@ -16,7 +16,7 @@ open import Cubical.Categories.Functor
 
 open import Cubical.Categories.Limits.Initial
 
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 module _ {ℓJ ℓJ' ℓC ℓC' : Level} {J : Category ℓJ ℓJ'} {C : Category ℓC ℓC'} where
   open Category

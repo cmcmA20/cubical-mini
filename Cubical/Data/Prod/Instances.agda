@@ -10,7 +10,7 @@ open import Cubical.Data.Prod.Properties
 open import Cubical.Data.Sigma using () renaming (_×_ to _×Σ_)
 open import Cubical.Data.SumFin.Base
 open import Cubical.Data.SumFin.Properties
-open import Cubical.HITs.PropositionalTruncation as ∥∥
+open import Cubical.Truncation.Propositional as ∥∥
 
 open import Cubical.Interface.DecEq
 open import Cubical.Interface.Finite

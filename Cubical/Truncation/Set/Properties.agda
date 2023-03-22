@@ -6,9 +6,9 @@ This file contains:
 
 -}
 {-# OPTIONS --safe #-}
-module Cubical.HITs.SetTruncation.Properties where
+module Cubical.Truncation.Set.Properties where
 
-open import Cubical.HITs.SetTruncation.Base
+open import Cubical.Truncation.Set.Base
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.GroupoidLaws
@@ -19,7 +19,7 @@ open import Cubical.Foundations.HLevels
 open import Cubical.Foundations.Univalence
 open import Cubical.Foundations.Pointed.Base
 open import Cubical.Data.Sigma
-open import Cubical.HITs.PropositionalTruncation
+open import Cubical.Truncation.Propositional
   renaming (rec to pRec ; elim to pElim) hiding (elim2 ; elim3 ; rec2 ; map)
 
 private

@@ -8,7 +8,7 @@ open import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Nat.Base
 open import Cubical.Data.Vec.Base
 open import Cubical.Data.Vec.Properties
-open import Cubical.HITs.PropositionalTruncation as ∥∥
+open import Cubical.Truncation.Propositional as ∥∥
 
 open import Cubical.Interface.DecEq
 open import Cubical.Interface.Finite

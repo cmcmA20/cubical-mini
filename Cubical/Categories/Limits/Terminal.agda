@@ -3,7 +3,7 @@ module Cubical.Categories.Limits.Terminal where
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.HLevels
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 open import Cubical.Data.Sigma
 

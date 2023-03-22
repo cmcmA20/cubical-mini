@@ -48,7 +48,7 @@ open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Univalence
   renaming ( EquivContr   to EquivContrPath )
 open import Cubical.Foundations.Isomorphism
-open import Cubical.HITs.PropositionalTruncation public
+open import Cubical.Truncation.Propositional public
   renaming (rec to recPropTruncPath ; elim to elimPropTruncPath )
 open import Cubical.Core.Id public
   using (Id; ⟨_,_⟩; faceId; pathId; elimId; _≡_)

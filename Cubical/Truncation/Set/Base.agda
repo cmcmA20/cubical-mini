@@ -6,7 +6,7 @@ This file contains:
 
 -}
 {-# OPTIONS --safe #-}
-module Cubical.HITs.SetTruncation.Base where
+module Cubical.Truncation.Set.Base where
 
 open import Cubical.Core.Primitives
 open import Cubical.Foundations.Pointed

@@ -5,7 +5,7 @@ open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.Empty.Base
 open import Cubical.Data.Empty.Properties
-open import Cubical.HITs.PropositionalTruncation
+open import Cubical.Truncation.Propositional
 
 open import Cubical.Interface.DecEq
 open import Cubical.Interface.Finite

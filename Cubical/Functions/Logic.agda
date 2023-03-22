@@ -24,7 +24,7 @@ open import Cubical.Data.Sum as ⊎ using (_⊎_)
 open import Cubical.Data.Unit
 open import Cubical.Data.Sigma
 
-open import Cubical.HITs.PropositionalTruncation as PropTrunc
+open import Cubical.Truncation.Propositional as PropTrunc
 
 open import Cubical.Relation.Nullary hiding (¬_)
 

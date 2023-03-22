@@ -9,7 +9,7 @@ open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Univalence
 
 open import Cubical.HITs.S1.Base
-open import Cubical.HITs.PropositionalTruncation as PropTrunc hiding ( rec ; elim )
+open import Cubical.Truncation.Propositional as PropTrunc hiding ( rec ; elim )
 
 rec : ∀ {ℓ} {A : Type ℓ} (b : A) (l : b ≡ b) → S¹ → A
 rec b l base     = b

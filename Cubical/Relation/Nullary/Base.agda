@@ -6,7 +6,7 @@ open import Cubical.Foundations.Function
 open import Cubical.Functions.Fixpoint
 
 open import Cubical.Data.Empty as ⊥
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 private
   variable
@@ -35,7 +35,7 @@ Stable : Type ℓ → Type ℓ
 Stable A = NonEmpty A → A
 
 -- reexport propositional truncation for uniformity
-open Cubical.HITs.PropositionalTruncation.Base
+open Cubical.Truncation.Propositional.Base
   using (∥_∥₁) public
 
 SplitSupport : Type ℓ → Type ℓ

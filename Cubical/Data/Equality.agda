@@ -31,7 +31,7 @@ open import Cubical.Foundations.Equiv
            ; equivIsEquiv )
 open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Univalence hiding (univalence)
-open import Cubical.HITs.PropositionalTruncation public
+open import Cubical.Truncation.Propositional public
   renaming (rec to recPropTruncPath
            ; elim to elimPropTruncPath )
 open import Cubical.HITs.S1 as S1

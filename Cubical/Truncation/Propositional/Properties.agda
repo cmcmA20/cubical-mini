@@ -6,7 +6,7 @@ This file contains:
 
 -}
 {-# OPTIONS --safe #-}
-module Cubical.HITs.PropositionalTruncation.Properties where
+module Cubical.Truncation.Propositional.Properties where
 
 open import Cubical.Core.Everything
 
@@ -22,7 +22,7 @@ open import Cubical.Data.Sum hiding (rec ; elim ; map)
 open import Cubical.Data.Nat using (ℕ ; zero ; suc)
 open import Cubical.Data.FinData using (Fin ; zero ; suc)
 
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 private
   variable

@@ -15,7 +15,7 @@ module Cubical.Data.Sigma.Base where
 open import Cubical.Core.Primitives public
 
 open import Cubical.Foundations.Prelude
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 
 -- Non-dependent pair types

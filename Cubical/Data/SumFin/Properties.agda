@@ -20,7 +20,7 @@ open import Cubical.Data.SumFin.Base as SumFin
 open import Cubical.Data.Sum
 open import Cubical.Data.Sigma
 
-open import Cubical.HITs.PropositionalTruncation as Prop
+open import Cubical.Truncation.Propositional as Prop
 
 open import Cubical.Relation.Nullary
 

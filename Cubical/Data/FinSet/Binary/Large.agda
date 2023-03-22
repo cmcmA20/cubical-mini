@@ -14,7 +14,7 @@ open import Cubical.Foundations.Univalence
 open import Cubical.Data.Bool
 open import Cubical.Data.Sigma
 
-open import Cubical.HITs.PropositionalTruncation
+open import Cubical.Truncation.Propositional
 
 private
   variable

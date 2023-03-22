@@ -13,7 +13,7 @@ Also see the follow-up post by Jason Gross:
 -}
 {-# OPTIONS --safe #-}
 
-module Cubical.HITs.PropositionalTruncation.MagicTrick where
+module Cubical.Truncation.Propositional.MagicTrick where
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Function
@@ -21,8 +21,8 @@ open import Cubical.Foundations.Path
 open import Cubical.Foundations.Pointed
 open import Cubical.Foundations.Pointed.Homogeneous
 
-open import Cubical.HITs.PropositionalTruncation.Base
-open import Cubical.HITs.PropositionalTruncation.Properties
+open import Cubical.Truncation.Propositional.Base
+open import Cubical.Truncation.Propositional.Properties
 
 module Recover {ℓ} (A∙ : Pointed ℓ) (h : isHomogeneous A∙) where
   private

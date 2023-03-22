@@ -13,7 +13,7 @@ open import Cubical.Categories.Functor
 open import Cubical.Categories.NaturalTransformation
 open import Cubical.Categories.Morphism
 open import Cubical.Categories.Equivalence.Base
-open import Cubical.HITs.PropositionalTruncation.Base
+open import Cubical.Truncation.Propositional.Base
 
 open Category
 open Functor

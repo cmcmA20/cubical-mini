@@ -1,10 +1,10 @@
 {-# OPTIONS --safe #-}
-module Cubical.HITs.PropositionalTruncation.Instances where
+module Cubical.Truncation.Propositional.Instances where
 
 open import Cubical.Foundations.Prelude
 
-open import Cubical.HITs.PropositionalTruncation.Base
-open import Cubical.HITs.PropositionalTruncation.Properties
+open import Cubical.Truncation.Propositional.Base
+open import Cubical.Truncation.Propositional.Properties
 
 open import Cubical.Interface.DecEq
 open import Cubical.Interface.HLevels
