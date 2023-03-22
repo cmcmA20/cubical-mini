@@ -6,7 +6,7 @@ This file contains:
 
 -}
 {-# OPTIONS --safe #-}
-module Cubical.HITs.SetQuotients.Base where
+module Cubical.Quotient.Set.Base where
 
 open import Cubical.Core.Primitives
 

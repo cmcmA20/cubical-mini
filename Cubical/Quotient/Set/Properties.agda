@@ -5,9 +5,9 @@ Set quotients:
 -}
 
 {-# OPTIONS --safe #-}
-module Cubical.HITs.SetQuotients.Properties where
+module Cubical.Quotient.Set.Properties where
 
-open import Cubical.HITs.SetQuotients.Base
+open import Cubical.Quotient.Set.Base
 
 open import Cubical.Core.Everything
 
@@ -26,7 +26,7 @@ open import Cubical.Data.Sigma
 open import Cubical.Relation.Nullary
 open import Cubical.Relation.Binary.Base
 
-open import Cubical.HITs.TypeQuotients as TypeQuot using (_/ₜ_ ; [_] ; eq/)
+open import Cubical.Quotient.Type as TypeQuot using (_/ₜ_ ; [_] ; eq/)
 open import Cubical.Truncation.Propositional as PropTrunc
   using (∥_∥₁ ; ∣_∣₁ ; squash₁) renaming (rec to propRec)
 open import Cubical.Truncation.Set as SetTrunc

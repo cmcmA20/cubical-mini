@@ -9,7 +9,7 @@ open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Equiv.Fiberwise
 open import Cubical.Data.Sigma
-open import Cubical.HITs.SetQuotients.Base
+open import Cubical.Quotient.Set.Base
 open import Cubical.Truncation.Propositional.Base
 
 private

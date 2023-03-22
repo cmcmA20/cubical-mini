@@ -1,6 +1,6 @@
 {-# OPTIONS --safe #-}
 
-module Cubical.HITs.SetQuotients.EqClass where
+module Cubical.Quotient.Set.EqClass where
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.HLevels
@@ -9,7 +9,7 @@ open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Univalence
 
 open import Cubical.Truncation.Propositional as Prop
-open import Cubical.HITs.SetQuotients as SetQuot
+open import Cubical.Quotient.Set as SetQuot
 
 open import Cubical.Relation.Nullary
 open import Cubical.Relation.Binary

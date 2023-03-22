@@ -12,7 +12,7 @@ open import Cubical.Foundations.Function
 open import Cubical.Foundations.HLevels
 open import Cubical.Functions.FunExtEquiv
 
-open import Cubical.HITs.SetQuotients
+open import Cubical.Quotient.Set
 
 open import Cubical.Categories.Category
 open import Cubical.Categories.Functor

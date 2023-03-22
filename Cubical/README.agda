@@ -3,7 +3,7 @@
 module Cubical.README where
 
 ------------------------------------------------------------------------
--- An experimental library for Cubical Agda
+-- A programmer's library for Cubical Agda
 -----------------------------------------------------------------------
 
 -- The library comes with a .agda-lib file, for use with the library
@@ -25,17 +25,11 @@ import Cubical.Foundations.Everything
 -- Kinds and properties of functions
 import Cubical.Functions.Everything
 
--- Data types and properties
+-- Data structures and their properties
 import Cubical.Data.Everything
 
 -- Higher-inductive types
 import Cubical.HITs.Everything
-
--- Coinductive data types and properties
--- import Cubical.Codata.Everything
-
--- Papers
--- import Cubical.Papers.Everything
 
 -- Properties and proofs about relations
 import Cubical.Relation.Everything
@@ -46,27 +40,14 @@ import Cubical.Categories.Everything
 -- Homotopy theory
 import Cubical.Homotopy.Everything
 
--- Properties and kinds of Modalities
--- import Cubical.Modalities.Everything
-
--- Various experiments using Cubical Agda
--- import Cubical.Experiments.Everything
-
 -- Other modules (TODO: add descriptions)
 import Cubical.Induction.Everything
+
+-- Standard structures a la Escardo?
 import Cubical.Structures.Everything
 
--- general definition of cohomology
--- import Cubical.Cohomology.Everything
-
--- cohomology with constant Integer coefficients
--- import Cubical.ZCohomology.Everything
-
--- Algebra library (in development)
+-- Algebra library
 import Cubical.Algebra.Everything
-
--- Various talks
--- import Cubical.Talks.Everything
 
 -- Reflection
 import Cubical.Reflection.Everything
@@ -74,8 +55,11 @@ import Cubical.Reflection.Everything
 -- Displayed univalent graphs
 import Cubical.Displayed.Everything
 
--- Various axioms and consequences
--- import Cubical.Axiom.Everything
+-- Homotopy level truncations
+import Cubical.Truncation.Everything
+
+-- Quotients
+import Cubical.Quotient.Everything
 
 -- Automatic proving, solvers
 import Cubical.Tactics.Everything

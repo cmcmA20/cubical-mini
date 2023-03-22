@@ -5,7 +5,7 @@ Type quotients:
 -}
 
 {-# OPTIONS --safe #-}
-module Cubical.HITs.TypeQuotients.Properties where
+module Cubical.Quotient.Type.Properties where
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Function
@@ -13,7 +13,7 @@ open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.HLevels
 
-open import Cubical.HITs.TypeQuotients.Base
+open import Cubical.Quotient.Type.Base
 
 private
   variable

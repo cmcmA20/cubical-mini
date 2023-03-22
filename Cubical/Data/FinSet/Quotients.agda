@@ -16,8 +16,8 @@ open import Cubical.Foundations.Equiv.Properties
 open import Cubical.Foundations.Univalence
 
 open import Cubical.Truncation.Propositional as Prop
-open import Cubical.HITs.SetQuotients as SetQuot
-open import Cubical.HITs.SetQuotients.EqClass
+open import Cubical.Quotient.Set as SetQuot
+open import Cubical.Quotient.Set.EqClass
 
 open import Cubical.Data.Nat
 open import Cubical.Data.Bool

@@ -9,7 +9,7 @@ open import Cubical.Categories.Limits.Terminal
 open import Cubical.Categories.Limits.Initial
 open import Cubical.Foundations.HLevels
 open import Cubical.Foundations.Prelude
-open import Cubical.HITs.SetQuotients renaming ([_] to ⟦_⟧)
+open import Cubical.Quotient.Set renaming ([_] to ⟦_⟧)
 
 private
   variable
