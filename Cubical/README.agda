@@ -61,6 +61,9 @@ import Cubical.Truncation.Everything
 -- Quotients
 import Cubical.Quotient.Everything
 
+-- Containers
+import Cubical.Container.Everything
+
 -- Automatic proving, solvers
 import Cubical.Tactics.Everything
 

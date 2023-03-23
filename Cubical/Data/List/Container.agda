@@ -7,10 +7,11 @@ open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Univalence
 
+open import Cubical.Container.Base
+
 open import Cubical.Data.Nat.Base
 open import Cubical.Data.List.Base
 open import Cubical.Data.List.Properties
-open import Cubical.Data.Container.Base
 open import Cubical.Data.Sigma
 open import Cubical.Data.Sum.Base as ⊎
 open import Cubical.Data.SumFin.Base

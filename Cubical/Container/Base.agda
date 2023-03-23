@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Cubical.Data.Container.Base where
+module Cubical.Container.Base where
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Equiv
