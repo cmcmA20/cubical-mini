@@ -21,3 +21,7 @@ private variable
 _∈_ : {X : Type ℓ} {S : Type ℓˢ} {P : S → Type ℓᵖ}
     → X → ⟦ S ▶ P ⟧ X → Type (ℓ-max ℓ ℓᵖ)
 x ∈ xs = fiber (xs .snd) x
+
+_∈!_ : {X : Type ℓ} {S : Type ℓˢ} {P : S → Type ℓᵖ}
+     → X → ⟦ S ▶ P ⟧ X → Type (ℓ-max ℓ ℓᵖ)
+x ∈! xs = isContr (x ∈ xs)
