@@ -13,7 +13,8 @@ open String public using ( String )
   ( primStringUncons   to uncons
   ; primStringToList   to toList
   ; primStringFromList to fromList
-  ; primShowString     to show
+  ; primShowString     to showStr
+  ; primShowNat        to showNat
   )
 
 -- infix 4 _≈_

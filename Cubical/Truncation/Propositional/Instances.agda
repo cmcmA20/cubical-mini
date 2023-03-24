@@ -6,9 +6,9 @@ open import Cubical.Foundations.Prelude
 open import Cubical.Truncation.Propositional.Base
 open import Cubical.Truncation.Propositional.Properties
 
-open import Cubical.Interface.DecEq
-open import Cubical.Interface.HLevels
-open import Cubical.Interface.Show
+open import Cubical.Instances.DecEq
+open import Cubical.Instances.HLevels
+open import Cubical.Instances.Show
 
 private variable
   ℓ : Level

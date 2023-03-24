@@ -596,3 +596,8 @@ liftExt x i = lift (x i)
 
 it : ∀ {A : Type ℓ} → ⦃ A ⦄ → A
 it ⦃ a ⦄ = a
+
+Π-syntax′ : (A : Type ℓ) → (A → Type ℓ') → Type (ℓ-max ℓ ℓ')
+Π-syntax′ A B = (x : A) → B x
+
+syntax Π-syntax′ A (λ x → B) = Π[ x ꞉ A ] B

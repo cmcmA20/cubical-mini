@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --overlapping-instances --instance-search-depth=7 #-}
 module Cubical.Algebra.CommMonoid.Properties where
 
 open import Cubical.Foundations.Prelude
@@ -10,9 +10,7 @@ open import Cubical.Data.Sigma
 open import Cubical.Algebra.Monoid
 open import Cubical.Algebra.CommMonoid.Base
 
-open import Cubical.Interface.HLevels
-
-open IsOfHLevel ⦃ ... ⦄
+open import Cubical.Instances.HLevels
 
 private
   variable
@@ -37,10 +35,13 @@ module _
       (x · y) , ·Closed x y xContained yContained
     IsCommMonoid.isMonoid (CommMonoidStr.isCommMonoid (snd makeSubCommMonoid)) =
       makeIsMonoid
-        ⦃ mkIsOfHLevel (isOfHLevelΣ 2 (IsSetFromIsCommMonoid {isCommMonoid = isCommMonoid} .iohl) λ _ → isProp→isSet (snd (P _))) ⦄
+        ⦃ lol ⦄
         (λ x y z → Σ≡Prop (λ _ → snd (P _)) (·Assoc (fst x) (fst y) (fst z)))
         (λ x → Σ≡Prop (λ _ → snd (P _)) (·IdR (fst x)))
         λ x → Σ≡Prop (λ _ → snd (P _)) (·IdL (fst x))
+        where
+          lol : IsSet _
+          lol .iohl = isOfHLevelΣ 2 (IsSetFromIsCommMonoid {isCommMonoid = isCommMonoid} .iohl) λ _ → isProp→isSet (snd (P _))
     IsCommMonoid.·Comm (CommMonoidStr.isCommMonoid (snd makeSubCommMonoid)) =
       λ x y → Σ≡Prop (λ _ → snd (P _)) (·Comm (fst x) (fst y))
 

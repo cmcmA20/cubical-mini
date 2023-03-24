@@ -7,10 +7,9 @@ open import Cubical.Data.Sigma
 
 open import Cubical.Algebra.CommMonoid.Base
 
-open import Cubical.Interface.HLevels
+open import Cubical.Instances.HLevels
 
 open CommMonoidStr
-open IsOfHLevel ⦃ ... ⦄
 
 private
   variable

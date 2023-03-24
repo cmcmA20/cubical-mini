@@ -22,9 +22,8 @@ open import Cubical.Displayed.Universe
 
 open import Cubical.Relation.Binary.Base
 
-open import Cubical.Interface.HLevels
+open import Cubical.Instances.HLevels
 
-open IsOfHLevel ⦃ ... ⦄
 open Iso
 open BinaryRelation
 

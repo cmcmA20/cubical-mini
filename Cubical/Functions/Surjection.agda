@@ -21,8 +21,17 @@ private variable
 isSurjection : (A → B) → Type _
 isSurjection f = ∀ b → ∥ fiber f b ∥₁
 
+isSplitSurjection : (A → B) → Type _
+isSplitSurjection f = ∀ b → fiber f b
+
 _↠_ : Type ℓ → Type ℓ' → Type (ℓ-max ℓ ℓ')
 A ↠ B = Σ[ f ∈ (A → B) ] isSurjection f
+
+_↠!_ : Type ℓ → Type ℓ' → Type (ℓ-max ℓ ℓ')
+A ↠! B = Σ[ f ∈ (A → B) ] isSplitSurjection f
+
+isSplitSurjection→isSurjection : isSplitSurjection f → isSurjection f
+isSplitSurjection→isSurjection s b = ∣ s b ∣₁
 
 section→isSurjection : {g : B → A} → section f g → isSurjection f
 section→isSurjection {g = g} s b = ∣ g b , s b ∣₁
@@ -30,11 +39,17 @@ section→isSurjection {g = g} s b = ∣ g b , s b ∣₁
 isPropIsSurjection : isProp (isSurjection f)
 isPropIsSurjection = isPropΠ λ _ → squash₁
 
-isEquiv→isSurjection : isEquiv f → isSurjection f
-isEquiv→isSurjection e b = ∣ fst (equiv-proof e b) ∣₁
+isEquiv→isSplitSurjection : isEquiv f → isSplitSurjection f
+isEquiv→isSplitSurjection e b = equiv-proof e b .fst
 
-isEquiv→isEmbedding×isSurjection : isEquiv f → isEmbedding f × isSurjection f
-isEquiv→isEmbedding×isSurjection e = isEquiv→isEmbedding e , isEquiv→isSurjection e
+isEquiv→isSurjection : isEquiv f → isSurjection f
+isEquiv→isSurjection e b = ∣ isEquiv→isSplitSurjection e b ∣₁
+
+isEquiv→isEmbedding×isSplitSurjection : isEquiv f → isEmbedding f × isSplitSurjection f
+isEquiv→isEmbedding×isSplitSurjection e = isEquiv→isEmbedding e , isEquiv→isSplitSurjection e
+
+-- isEquiv→isEmbedding×isSurjection : isEquiv f → isEmbedding f × isSurjection f
+-- isEquiv→isEmbedding×isSurjection e = isEquiv→isEmbedding e , isEquiv→isSurjection e
 
 isEmbedding×isSurjection→isEquiv : isEmbedding f × isSurjection f → isEquiv f
 equiv-proof (isEmbedding×isSurjection→isEquiv {f = f} (emb , sur)) b =
@@ -51,7 +66,7 @@ equiv-proof (isEmbedding×isSurjection→isEquiv {f = f} (emb , sur)) b =
 
 isEquiv≃isEmbedding×isSurjection : isEquiv f ≃ isEmbedding f × isSurjection f
 isEquiv≃isEmbedding×isSurjection = isoToEquiv (iso
-  isEquiv→isEmbedding×isSurjection
+  (map-snd isSplitSurjection→isSurjection ∘ isEquiv→isEmbedding×isSplitSurjection)
   isEmbedding×isSurjection→isEquiv
   (λ _ → isOfHLevelΣ 1 isPropIsEmbedding (\ _ → isPropIsSurjection) _ _)
   (λ _ → isPropIsEquiv _ _ _))

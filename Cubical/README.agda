@@ -49,6 +49,9 @@ import Cubical.Structures.Everything
 -- Algebra library
 import Cubical.Algebra.Everything
 
+-- Cardinals
+import Cubical.Cardinals.Everything
+
 -- Reflection
 import Cubical.Reflection.Everything
 
@@ -68,7 +71,7 @@ import Cubical.Container.Everything
 import Cubical.Tactics.Everything
 
 -- Interfaces for everyday programming
-import Cubical.Interface.Everything
+import Cubical.Instances.Everything
 
 -- I/O
 import Cubical.IO

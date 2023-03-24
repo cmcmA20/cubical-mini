@@ -8,9 +8,7 @@ open import Cubical.IO.Base
 import Cubical.IO.Primitive as Prim
 import Cubical.IO.Primitive.Finite as Prim
 open import Cubical.Foundations.Prelude
-open import Cubical.Interface.Show
-
-open Show ⦃ ... ⦄
+open import Cubical.Instances.Show
 
 private
   variable

@@ -18,10 +18,9 @@ open import Cubical.Displayed.Universe
 
 open import Cubical.Reflection.RecordEquiv
 
-open import Cubical.Interface.HLevels
+open import Cubical.Instances.HLevels
 
 open Iso
-open IsOfHLevel ⦃ ... ⦄
 
 private
   variable

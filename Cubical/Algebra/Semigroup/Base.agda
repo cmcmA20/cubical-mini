@@ -16,10 +16,9 @@ open import Cubical.Displayed.Auto
 open import Cubical.Displayed.Record
 open import Cubical.Displayed.Universe
 
-open import Cubical.Interface.HLevels
+open import Cubical.Instances.HLevels
 
 open Iso
-open IsOfHLevel ⦃ ... ⦄
 
 
 private
@@ -88,7 +87,7 @@ isPropIsSemigroup : {A : Type ℓ} (_·_ : A → A → A) → isProp (IsSemigrou
 isPropIsSemigroup _·_ =
   isOfHLevelRetractFromIso 1 IsSemigroupIsoΣ
     (isPropΣ
-      (λ _ _ → IsOfHLevel≡ (isPropIsSet _ _))
+      (λ _ _ → IsOfHLevelExt (isPropIsSet _ _))
       (λ isSetA → isPropΠ3 λ _ _ _ → isSetA .iohl _ _))
 
 @0 𝒮ᴰ-Semigroup : DUARel (𝒮-Univ ℓ) SemigroupStr ℓ

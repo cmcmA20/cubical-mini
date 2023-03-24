@@ -24,8 +24,7 @@ open import Agda.Builtin.Char public using ( Char )
   ; primNatToChar to fromℕ
   )
 
-open import Agda.Builtin.String using ()
-  renaming ( primShowChar to show )
+open import Agda.Builtin.String using (primShowChar) public
 
 infix 4 _≈_ _≉_
 _≈_ : Rel Char Char _
