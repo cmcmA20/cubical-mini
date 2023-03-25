@@ -1,9 +1,0 @@
-name: cubical-mini-0.1
-include: .
-depend:
-flags:
-  --erased-cubical
-  --erasure
-  --erased-matches
-  --no-import-sorts
-  -WnoUnsupportedIndexedMatch
