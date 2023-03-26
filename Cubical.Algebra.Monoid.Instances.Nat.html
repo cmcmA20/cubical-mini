@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cubical.Algebra.Monoid.Instances.Nat</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Algebra.Monoid.Instances.Nat.html" class="Module">Cubical.Algebra.Monoid.Instances.Nat</a> <a id="68" class="Keyword">where</a>
+
+<a id="75" class="Keyword">open</a> <a id="80" class="Keyword">import</a> <a id="87" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+
+<a id="116" class="Keyword">open</a> <a id="121" class="Keyword">import</a> <a id="128" href="Cubical.Data.Nat.html" class="Module">Cubical.Data.Nat</a>
+<a id="145" class="Comment">-- open import Cubical.Data.Nat.Instances</a>
+
+<a id="188" class="Keyword">open</a> <a id="193" class="Keyword">import</a> <a id="200" href="Cubical.Algebra.Monoid.html" class="Module">Cubical.Algebra.Monoid</a>
+
+
+<a id="225" class="Comment">-- NatMonoid : Monoid ℓ-zero</a>
+<a id="254" class="Comment">-- fst NatMonoid = ℕ</a>
+<a id="275" class="Comment">-- MonoidStr.ε (snd NatMonoid) = 0</a>
+<a id="310" class="Comment">-- MonoidStr._·_ (snd NatMonoid) = _+_</a>
+<a id="349" class="Comment">-- MonoidStr.isMonoid (snd NatMonoid) = makeIsMonoid +-assoc +-zero (λ _ → refl)</a>
+</pre></body></html>

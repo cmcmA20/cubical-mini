@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cubical.Truncation.Propositional.Instances</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Truncation.Propositional.Instances.html" class="Module">Cubical.Truncation.Propositional.Instances</a> <a id="74" class="Keyword">where</a>
+
+<a id="81" class="Keyword">open</a> <a id="86" class="Keyword">import</a> <a id="93" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+
+<a id="122" class="Keyword">open</a> <a id="127" class="Keyword">import</a> <a id="134" href="Cubical.Truncation.Propositional.Base.html" class="Module">Cubical.Truncation.Propositional.Base</a>
+<a id="172" class="Keyword">open</a> <a id="177" class="Keyword">import</a> <a id="184" href="Cubical.Truncation.Propositional.Properties.html" class="Module">Cubical.Truncation.Propositional.Properties</a>
+
+<a id="229" class="Keyword">open</a> <a id="234" class="Keyword">import</a> <a id="241" href="Cubical.Interface.DecEq.html" class="Module">Cubical.Interface.DecEq</a>
+<a id="265" class="Keyword">open</a> <a id="270" class="Keyword">import</a> <a id="277" href="Cubical.Interface.HLevels.html" class="Module">Cubical.Interface.HLevels</a>
+<a id="303" class="Keyword">open</a> <a id="308" class="Keyword">import</a> <a id="315" href="Cubical.Interface.Show.html" class="Module">Cubical.Interface.Show</a>
+
+<a id="339" class="Keyword">private</a> <a id="347" class="Keyword">variable</a>
+  <a id="358" href="Cubical.Truncation.Propositional.Instances.html#358" class="Generalizable">ℓ</a> <a id="360" class="Symbol">:</a> <a id="362" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+  <a id="370" href="Cubical.Truncation.Propositional.Instances.html#370" class="Generalizable">A</a> <a id="372" class="Symbol">:</a> <a id="374" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="379" href="Cubical.Truncation.Propositional.Instances.html#358" class="Generalizable">ℓ</a>
+  <a id="383" href="Cubical.Truncation.Propositional.Instances.html#383" class="Generalizable">n</a> <a id="385" class="Symbol">:</a> <a id="387" href="Cubical.Foundations.HLevels.html#854" class="Function">HLevel</a>
+
+<a id="395" class="Keyword">instance</a>
+  <a id="DecEqPropTrunc"></a><a id="406" href="Cubical.Truncation.Propositional.Instances.html#406" class="Function">DecEqPropTrunc</a> <a id="421" class="Symbol">:</a> <a id="423" href="Cubical.Interface.DecEq.html#190" class="Record">DecEq</a> <a id="429" href="Cubical.Truncation.Propositional.Base.html#245" class="Datatype Operator">∥</a> <a id="431" href="Cubical.Truncation.Propositional.Instances.html#370" class="Generalizable">A</a> <a id="433" href="Cubical.Truncation.Propositional.Base.html#245" class="Datatype Operator">∥₁</a>
+  <a id="438" href="Cubical.Interface.DecEq.html#236" class="Field Operator">DecEq._≟_</a> <a id="448" href="Cubical.Truncation.Propositional.Instances.html#406" class="Function">DecEqPropTrunc</a> <a id="463" href="Cubical.Truncation.Propositional.Instances.html#463" class="Bound">x</a> <a id="465" href="Cubical.Truncation.Propositional.Instances.html#465" class="Bound">y</a> <a id="467" class="Symbol">=</a> <a id="469" href="Cubical.Relation.Nullary.Base.html#474" class="InductiveConstructor">yes</a> <a id="473" class="Symbol">(</a><a id="474" href="Cubical.Truncation.Propositional.Base.html#304" class="InductiveConstructor">squash₁</a> <a id="482" href="Cubical.Truncation.Propositional.Instances.html#463" class="Bound">x</a> <a id="484" href="Cubical.Truncation.Propositional.Instances.html#465" class="Bound">y</a><a id="485" class="Symbol">)</a>
+
+<a id="488" class="Keyword">instance</a>
+  <a id="IsPropPropTrunc"></a><a id="499" href="Cubical.Truncation.Propositional.Instances.html#499" class="Function">IsPropPropTrunc</a> <a id="515" class="Symbol">:</a> <a id="517" href="Cubical.Interface.HLevels.Base.html#689" class="Function">IsProp</a> <a id="524" href="Cubical.Truncation.Propositional.Base.html#245" class="Datatype Operator">∥</a> <a id="526" href="Cubical.Truncation.Propositional.Instances.html#370" class="Generalizable">A</a> <a id="528" href="Cubical.Truncation.Propositional.Base.html#245" class="Datatype Operator">∥₁</a>
+  <a id="533" href="Cubical.Interface.HLevels.Base.html#353" class="Field">IsOfHLevel.iohl</a> <a id="549" href="Cubical.Truncation.Propositional.Instances.html#499" class="Function">IsPropPropTrunc</a> <a id="565" class="Symbol">=</a> <a id="567" href="Cubical.Truncation.Propositional.Base.html#304" class="InductiveConstructor">squash₁</a>
+
+<a id="576" class="Keyword">instance</a>
+  <a id="ShowPropTrunc"></a><a id="587" href="Cubical.Truncation.Propositional.Instances.html#587" class="Function">ShowPropTrunc</a> <a id="601" class="Symbol">:</a> <a id="603" href="Cubical.Interface.Show.html#263" class="Record">Show</a> <a id="608" href="Cubical.Truncation.Propositional.Base.html#245" class="Datatype Operator">∥</a> <a id="610" href="Cubical.Truncation.Propositional.Instances.html#370" class="Generalizable">A</a> <a id="612" href="Cubical.Truncation.Propositional.Base.html#245" class="Datatype Operator">∥₁</a>
+  <a id="617" href="Cubical.Interface.Show.html#308" class="Field">Show.show</a> <a id="627" href="Cubical.Truncation.Propositional.Instances.html#587" class="Function">ShowPropTrunc</a> <a id="641" class="Symbol">_</a> <a id="643" class="Symbol">=</a> <a id="645" class="String">&quot;∣?∣₁&quot;</a>
+</pre></body></html>
