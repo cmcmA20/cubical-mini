@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cubical.Instances.DecEq.Data.List</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Instances.DecEq.Data.List.html" class="Module">Cubical.Instances.DecEq.Data.List</a> <a id="65" class="Keyword">where</a>
+
+<a id="72" class="Keyword">open</a> <a id="77" class="Keyword">import</a> <a id="84" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+
+<a id="113" class="Keyword">open</a> <a id="118" class="Keyword">import</a> <a id="125" href="Cubical.Data.List.html" class="Module">Cubical.Data.List</a>
+
+<a id="144" class="Keyword">open</a> <a id="149" class="Keyword">import</a> <a id="156" href="Cubical.Instances.DecEq.Base.html" class="Module">Cubical.Instances.DecEq.Base</a>
+
+<a id="186" class="Keyword">private</a> <a id="194" class="Keyword">variable</a>
+  <a id="205" href="Cubical.Instances.DecEq.Data.List.html#205" class="Generalizable">ℓ</a> <a id="207" class="Symbol">:</a> <a id="209" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+  <a id="217" href="Cubical.Instances.DecEq.Data.List.html#217" class="Generalizable">A</a> <a id="219" class="Symbol">:</a> <a id="221" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="226" href="Cubical.Instances.DecEq.Data.List.html#205" class="Generalizable">ℓ</a>
+
+<a id="229" class="Keyword">instance</a>
+  <a id="DecEqList"></a><a id="240" href="Cubical.Instances.DecEq.Data.List.html#240" class="Function">DecEqList</a> <a id="250" class="Symbol">:</a> <a id="252" class="Symbol">⦃</a> <a id="254" href="Cubical.Instances.DecEq.Base.html#195" class="Record">DecEq</a> <a id="260" href="Cubical.Instances.DecEq.Data.List.html#217" class="Generalizable">A</a> <a id="262" class="Symbol">⦄</a> <a id="264" class="Symbol">→</a> <a id="266" href="Cubical.Instances.DecEq.Base.html#195" class="Record">DecEq</a> <a id="272" class="Symbol">(</a><a id="273" href="Agda.Builtin.List.html#147" class="Datatype">List</a> <a id="278" href="Cubical.Instances.DecEq.Data.List.html#217" class="Generalizable">A</a><a id="279" class="Symbol">)</a>
+  <a id="283" href="Cubical.Instances.DecEq.Base.html#241" class="Field Operator">DecEq._≟_</a> <a id="293" href="Cubical.Instances.DecEq.Data.List.html#240" class="Function">DecEqList</a> <a id="303" class="Symbol">=</a> <a id="305" href="Cubical.Data.List.Properties.html#5546" class="Function">discreteList</a> <a id="318" href="Cubical.Instances.DecEq.Base.html#241" class="Field Operator">_≟_</a>
+</pre></body></html>

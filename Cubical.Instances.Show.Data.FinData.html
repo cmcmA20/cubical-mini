@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cubical.Instances.Show.Data.FinData</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Instances.Show.Data.FinData.html" class="Module">Cubical.Instances.Show.Data.FinData</a> <a id="67" class="Keyword">where</a>
+
+<a id="74" class="Keyword">open</a> <a id="79" class="Keyword">import</a> <a id="86" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+
+<a id="115" class="Keyword">open</a> <a id="120" class="Keyword">import</a> <a id="127" href="Cubical.Data.Nat.Base.html" class="Module">Cubical.Data.Nat.Base</a>
+<a id="149" class="Keyword">open</a> <a id="154" class="Keyword">import</a> <a id="161" href="Cubical.Data.FinData.Base.html" class="Module">Cubical.Data.FinData.Base</a>
+<a id="187" class="Keyword">open</a> <a id="192" class="Keyword">import</a> <a id="199" href="Cubical.Data.String.Base.html" class="Module">Cubical.Data.String.Base</a>
+
+<a id="225" class="Keyword">open</a> <a id="230" class="Keyword">import</a> <a id="237" href="Cubical.Instances.Show.Base.html" class="Module">Cubical.Instances.Show.Base</a>
+
+<a id="266" class="Keyword">private</a> <a id="274" class="Keyword">variable</a>
+  <a id="285" href="Cubical.Instances.Show.Data.FinData.html#285" class="Generalizable">n</a> <a id="287" class="Symbol">:</a> <a id="289" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+
+<a id="292" class="Keyword">instance</a>
+  <a id="ShowFin"></a><a id="303" href="Cubical.Instances.Show.Data.FinData.html#303" class="Function">ShowFin</a> <a id="311" class="Symbol">:</a> <a id="313" href="Cubical.Instances.Show.Base.html#268" class="Record">Show</a> <a id="318" class="Symbol">(</a><a id="319" href="Cubical.Data.FinData.Base.html#375" class="Datatype">Fin</a> <a id="323" href="Cubical.Instances.Show.Data.FinData.html#285" class="Generalizable">n</a><a id="324" class="Symbol">)</a>
+  <a id="328" href="Cubical.Instances.Show.Base.html#313" class="Field">Show.show</a> <a id="338" href="Cubical.Instances.Show.Data.FinData.html#303" class="Function">ShowFin</a> <a id="346" href="Cubical.Instances.Show.Data.FinData.html#346" class="Bound">k</a> <a id="348" class="Symbol">=</a> <a id="350" href="Agda.Builtin.String.html#707" class="Primitive">showNat</a> <a id="358" class="Symbol">(</a><a id="359" href="Cubical.Data.FinData.Base.html#616" class="Function">toℕ</a> <a id="363" href="Cubical.Instances.Show.Data.FinData.html#346" class="Bound">k</a><a id="364" class="Symbol">)</a>
+</pre></body></html>

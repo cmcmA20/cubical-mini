@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cubical.Instances.Show.Data.Unit</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Instances.Show.Data.Unit.html" class="Module">Cubical.Instances.Show.Data.Unit</a> <a id="64" class="Keyword">where</a>
+
+<a id="71" class="Keyword">open</a> <a id="76" class="Keyword">import</a> <a id="83" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+
+<a id="112" class="Keyword">open</a> <a id="117" class="Keyword">import</a> <a id="124" href="Cubical.Data.Unit.Base.html" class="Module">Cubical.Data.Unit.Base</a>
+
+<a id="148" class="Keyword">open</a> <a id="153" class="Keyword">import</a> <a id="160" href="Cubical.Instances.Show.Base.html" class="Module">Cubical.Instances.Show.Base</a>
+
+<a id="189" class="Keyword">private</a> <a id="197" class="Keyword">variable</a>
+  <a id="208" href="Cubical.Instances.Show.Data.Unit.html#208" class="Generalizable">ℓ</a> <a id="210" class="Symbol">:</a> <a id="212" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+
+<a id="219" class="Keyword">instance</a>
+  <a id="ShowUnit"></a><a id="230" href="Cubical.Instances.Show.Data.Unit.html#230" class="Function">ShowUnit</a> <a id="239" class="Symbol">:</a> <a id="241" href="Cubical.Instances.Show.Base.html#268" class="Record">Show</a> <a id="246" href="Cubical.Data.Unit.Base.html#171" class="Record">Unit</a>
+  <a id="253" href="Cubical.Instances.Show.Base.html#313" class="Field">Show.show</a> <a id="263" href="Cubical.Instances.Show.Data.Unit.html#230" class="Function">ShowUnit</a> <a id="272" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a> <a id="275" class="Symbol">=</a> <a id="277" class="String">&quot;tt&quot;</a>
+
+  <a id="ShowUnit*"></a><a id="285" href="Cubical.Instances.Show.Data.Unit.html#285" class="Function">ShowUnit*</a> <a id="295" class="Symbol">:</a> <a id="297" href="Cubical.Instances.Show.Base.html#268" class="Record">Show</a> <a id="302" class="Symbol">{</a><a id="303" href="Cubical.Instances.Show.Data.Unit.html#208" class="Generalizable">ℓ</a><a id="304" class="Symbol">}</a> <a id="306" href="Cubical.Data.Unit.Base.html#211" class="Function">Unit*</a>
+  <a id="314" href="Cubical.Instances.Show.Base.html#313" class="Field">Show.show</a> <a id="324" href="Cubical.Instances.Show.Data.Unit.html#285" class="Function">ShowUnit*</a> <a id="334" class="Symbol">(</a><a id="335" href="Cubical.Foundations.Prelude.html#19357" class="InductiveConstructor">lift</a> <a id="340" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a><a id="342" class="Symbol">)</a> <a id="344" class="Symbol">=</a> <a id="346" class="String">&quot;tt&quot;</a>
+</pre></body></html>

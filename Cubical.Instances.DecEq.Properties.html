@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cubical.Instances.DecEq.Properties</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Instances.DecEq.Properties.html" class="Module">Cubical.Instances.DecEq.Properties</a> <a id="66" class="Keyword">where</a>
+
+<a id="73" class="Keyword">open</a> <a id="78" class="Keyword">import</a> <a id="85" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+
+<a id="114" class="Keyword">open</a> <a id="119" class="Keyword">import</a> <a id="126" href="Cubical.Relation.Nullary.Properties.html" class="Module">Cubical.Relation.Nullary.Properties</a>
+
+<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Cubical.Instances.HLevels.Base.html" class="Module">Cubical.Instances.HLevels.Base</a>
+<a id="206" class="Keyword">open</a> <a id="211" class="Keyword">import</a> <a id="218" href="Cubical.Instances.DecEq.Base.html" class="Module">Cubical.Instances.DecEq.Base</a>
+
+<a id="248" class="Keyword">private</a> <a id="256" class="Keyword">variable</a>
+  <a id="267" href="Cubical.Instances.DecEq.Properties.html#267" class="Generalizable">ℓ</a> <a id="269" class="Symbol">:</a> <a id="271" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+  <a id="279" href="Cubical.Instances.DecEq.Properties.html#279" class="Generalizable">A</a> <a id="281" class="Symbol">:</a> <a id="283" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="288" href="Cubical.Instances.DecEq.Properties.html#267" class="Generalizable">ℓ</a>
+
+<a id="291" class="Keyword">instance</a>
+  <a id="DecEq→IsSet"></a><a id="302" href="Cubical.Instances.DecEq.Properties.html#302" class="Function">DecEq→IsSet</a> <a id="314" class="Symbol">:</a> <a id="316" class="Symbol">⦃</a> <a id="318" href="Cubical.Instances.DecEq.Base.html#195" class="Record">DecEq</a> <a id="324" href="Cubical.Instances.DecEq.Properties.html#279" class="Generalizable">A</a> <a id="326" class="Symbol">⦄</a> <a id="328" class="Symbol">→</a> <a id="330" href="Cubical.Instances.HLevels.Base.html#753" class="Function">IsSet</a> <a id="336" href="Cubical.Instances.DecEq.Properties.html#279" class="Generalizable">A</a>
+  <a id="340" href="Cubical.Instances.HLevels.Base.html#408" class="Field">IsOfHLevel.iohl</a> <a id="356" href="Cubical.Instances.DecEq.Properties.html#302" class="Function">DecEq→IsSet</a> <a id="368" class="Symbol">=</a> <a id="370" href="Cubical.Relation.Nullary.Properties.html#6123" class="Function">Discrete→isSet</a> <a id="385" href="Cubical.Instances.DecEq.Base.html#241" class="Field Operator">_≟_</a>
+</pre></body></html>

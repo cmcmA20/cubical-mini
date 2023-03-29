@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cubical.Instances.DecEq.Data.Char</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Instances.DecEq.Data.Char.html" class="Module">Cubical.Instances.DecEq.Data.Char</a> <a id="65" class="Keyword">where</a>
+
+<a id="72" class="Keyword">open</a> <a id="77" class="Keyword">import</a> <a id="84" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+
+<a id="113" class="Keyword">open</a> <a id="118" class="Keyword">import</a> <a id="125" href="Cubical.Data.Char.html" class="Module">Cubical.Data.Char</a>
+
+<a id="144" class="Keyword">open</a> <a id="149" class="Keyword">import</a> <a id="156" href="Cubical.Instances.DecEq.Base.html" class="Module">Cubical.Instances.DecEq.Base</a>
+
+<a id="186" class="Keyword">instance</a>
+  <a id="DecEqChar"></a><a id="197" href="Cubical.Instances.DecEq.Data.Char.html#197" class="Function">DecEqChar</a> <a id="207" class="Symbol">:</a> <a id="209" href="Cubical.Instances.DecEq.Base.html#195" class="Record">DecEq</a> <a id="215" href="Agda.Builtin.Char.html#238" class="Postulate">Char</a>
+  <a id="222" href="Cubical.Instances.DecEq.Base.html#241" class="Field Operator">DecEq._≟_</a> <a id="232" href="Cubical.Instances.DecEq.Data.Char.html#197" class="Function">DecEqChar</a> <a id="242" class="Symbol">=</a> <a id="244" href="Cubical.Data.Char.Properties.html#639" class="Function">discreteChar</a>
+</pre></body></html>
