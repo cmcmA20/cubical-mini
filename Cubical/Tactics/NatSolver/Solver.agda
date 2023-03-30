@@ -32,7 +32,7 @@ module EqualityToNormalform where
             {n : ℕ}
             (e : Expr n) (xs : Vec ℕ n)
           → eval (normalize e) xs ≡ ⟦ e ⟧ xs
-  isEqualToNormalform (K r) [] = refl
+  isEqualToNormalform {n = zero   } (K r) [] = refl
   isEqualToNormalform {n = ℕ.suc n} (K r) (x ∷ xs) =
      eval (Constant (ℕ.suc n) r) (x ∷ xs)           ≡⟨ refl ⟩
      eval (0ₕ ·X+ Constant n r) (x ∷ xs)             ≡⟨ refl ⟩

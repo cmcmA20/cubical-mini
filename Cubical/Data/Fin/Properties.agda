@@ -1,4 +1,3 @@
-
 {-# OPTIONS --safe #-}
 module Cubical.Data.Fin.Properties where
 
@@ -149,9 +148,9 @@ triEq? i j a =
               ; (no ¬q) → ¬eq (¬p , ¬q) }}
 
 
-weakenRespToℕ : ∀ {n} (i : Fin n) → toℕ (weakenFin i) ≡ toℕ i
-weakenRespToℕ zero = refl
-weakenRespToℕ (suc i) = cong ℕsuc (weakenRespToℕ i)
+weakenRespToℕ : (i : Fin n) → toℕ (weakenFin i) ≡ toℕ i
+weakenRespToℕ {n = ℕsuc n} zero    = refl
+weakenRespToℕ {n = ℕsuc n} (suc i) = cong ℕsuc (weakenRespToℕ i)
 
 toFin : {n : ℕ} (m : ℕ) → m < n → Fin n
 toFin {n = ℕzero} _ m<0 = ⊥.rec (¬-<-zero m<0)

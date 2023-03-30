@@ -2,9 +2,13 @@
 module Cubical.Data.List.Base where
 
 open import Agda.Builtin.List public
-open import Cubical.Core.Everything
+
+open import Cubical.Foundations.Prelude
+open import Cubical.Foundations.Function
+
 open import Cubical.Data.Maybe.Base as Maybe
 open import Cubical.Data.Nat.Base
+open import Cubical.Data.Fin.Base
 
 module _ {ℓ} {A : Type ℓ} where
 
@@ -24,10 +28,6 @@ module _ {ℓ} {A : Type ℓ} where
 
   _∷ʳ_ : List A → A → List A
   xs ∷ʳ x = xs ++ x ∷ []
-
-  length : List A → ℕ
-  length [] = 0
-  length (x ∷ l) = 1 + length l
 
   map : ∀ {ℓ'} {B : Type ℓ'} → (A → B) → List A → List B
   map f [] = []
@@ -58,3 +58,19 @@ module _ {ℓ} {A : Type ℓ} where
   intersperse : A → List A → List A
   intersperse _   []       = []
   intersperse sep (x ∷ xs) = x ∷ prependToAll sep xs
+
+  length : List A → ℕ
+  length []      = 0
+  length (x ∷ l) = suc (length l)
+
+  lookup : (xs : List A) → Fin (length xs) → A
+  lookup (x ∷ _ ) zero    = x
+  lookup (x ∷ xs) (suc k) = lookup xs k
+
+  infixl 6 _!_
+  _!_ : (xs : List A) → Fin (length xs) → A
+  _!_ = lookup
+
+  tabulate : (n : ℕ) → (Fin n → A) → List A
+  tabulate zero    f = []
+  tabulate (suc n) f = f zero ∷ tabulate n (f ∘ suc)

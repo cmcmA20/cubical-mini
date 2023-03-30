@@ -23,13 +23,13 @@ module HomomorphismProperties where
 
   eval0H : {n : ℕ} (xs : Vec ℕ n)
          → eval 0ₕ xs ≡ 0
-  eval0H [] = refl
-  eval0H (x ∷ xs) = refl
+  eval0H {n = zero } [] = refl
+  eval0H {n = suc _} (x ∷ xs) = refl
 
   eval1ₕ : {n : ℕ} (xs : Vec ℕ n)
          → eval 1ₕ xs ≡ 1
-  eval1ₕ [] = refl
-  eval1ₕ (x ∷ xs) =
+  eval1ₕ {n = zero } [] = refl
+  eval1ₕ {n = suc _} (x ∷ xs) =
     eval 1ₕ (x ∷ xs)                             ≡⟨ refl ⟩
     eval (0H ·X+ 1ₕ) (x ∷ xs)                    ≡⟨ refl ⟩
     eval 0H (x ∷ xs) · x + eval 1ₕ xs            ≡⟨ cong (λ u → u · x + eval 1ₕ xs)

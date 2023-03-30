@@ -9,7 +9,7 @@ open import Cubical.Foundations.Transport
 
 open import Cubical.Data.Nat.Base
 open import Cubical.Data.Empty as ⊥
-open import Cubical.Data.Sigma
+open import Cubical.Data.Sigma.Base
 open import Cubical.Data.Sum.Base
 
 open import Cubical.Relation.Nullary

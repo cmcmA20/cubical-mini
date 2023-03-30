@@ -7,7 +7,7 @@ open import Cubical.Foundations.Structure
 open import Cubical.Data.Fin using (Fin)
 open import Cubical.Data.Nat using (ℕ)
 open import Cubical.Data.List
-open import Cubical.Data.Vec using (Vec; lookup)
+open import Cubical.Data.Vec as Vec using (Vec; lookup)
 
 open import Cubical.Algebra.Monoid
 
@@ -28,7 +28,7 @@ module Eval (M : Monoid ℓ) where
   -- evaluation of an expression (without normalization)
   ⟦_⟧ : ∀{n} → Expr ⟨ M ⟩ n → Env n → ⟨ M ⟩
   ⟦ ε⊗ ⟧ v      = ε
-  ⟦ ∣ i ⟧ v     = lookup i v
+  ⟦ ∣ i ⟧ v     = Vec.lookup i v
   ⟦ e₁ ⊗ e₂ ⟧ v = ⟦ e₁ ⟧ v · ⟦ e₂ ⟧ v
 
   NormalForm : ℕ → Type _
@@ -43,14 +43,14 @@ module Eval (M : Monoid ℓ) where
   -- evaluation of normalform
   eval : ∀ {n} → NormalForm n → Env n → ⟨ M ⟩
   eval [] v       = ε
-  eval (x ∷ xs) v = (lookup x v) · (eval xs v)
+  eval (x ∷ xs) v = (Vec.lookup x v) · (eval xs v)
 
   -- some calculation
   evalIsHom : ∀ {n} (x y : NormalForm n) (v : Env n)
             → eval (x ++ y) v ≡ eval x v · eval y v
   evalIsHom [] y v       = sym (·IdL _)
   evalIsHom (x ∷ xs) y v =
-    cong (λ m → (lookup x v) · m) (evalIsHom xs y v) ∙ ·Assoc _ _ _
+    cong (λ m → (Vec.lookup x v) · m) (evalIsHom xs y v) ∙ ·Assoc _ _ _
 
 module EqualityToNormalform (M : Monoid ℓ) where
   open Eval M

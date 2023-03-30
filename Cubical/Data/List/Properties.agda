@@ -1,18 +1,19 @@
 {-# OPTIONS --safe #-}
 module Cubical.Data.List.Properties where
 
-open import Agda.Builtin.List
-open import Cubical.Core.Everything
+open import Cubical.Foundations.Prelude
+open import Cubical.Foundations.Function
 open import Cubical.Foundations.GroupoidLaws
 open import Cubical.Foundations.HLevels
-open import Cubical.Foundations.Prelude
+
 open import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Nat
+open import Cubical.Data.List.Base
+open import Cubical.Data.Fin
 open import Cubical.Data.Sigma
 open import Cubical.Data.Unit
-open import Cubical.Relation.Nullary
 
-open import Cubical.Data.List.Base
+open import Cubical.Relation.Nullary
 
 module _ {ℓ} {A : Type ℓ} where
 
@@ -115,40 +116,42 @@ isOfHLevelList n ofLevel xs ys =
     (ListPath.decodeEncode xs ys)
     (ListPath.isOfHLevelCover n ofLevel xs ys)
 
-private
-  variable
-    ℓ : Level
-    A : Type ℓ
+private variable
+  ℓ ℓ′ : Level
+  A : Type ℓ
+  B : Type ℓ′
+  x y : A
+  xs ys : List A
 
-  caseList : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} → (n c : B) → List A → B
-  caseList n _ []      = n
-  caseList _ c (_ ∷ _) = c
+caseList : (n c : B) → List A → B
+caseList n _ []      = n
+caseList _ c (_ ∷ _) = c
 
-  safe-head : A → List A → A
-  safe-head x []      = x
-  safe-head _ (x ∷ _) = x
+safe-head : A → List A → A
+safe-head x []      = x
+safe-head _ (x ∷ _) = x
 
-  safe-tail : List A → List A
-  safe-tail []       = []
-  safe-tail (_ ∷ xs) = xs
+safe-tail : List A → List A
+safe-tail []       = []
+safe-tail (_ ∷ xs) = xs
 
-cons-inj₁ : ∀ {x y : A} {xs ys} → x ∷ xs ≡ y ∷ ys → x ≡ y
+cons-inj₁ : x ∷ xs ≡ y ∷ ys → x ≡ y
 cons-inj₁ {x = x} p = cong (safe-head x) p
 
-cons-inj₂ : ∀ {x y : A} {xs ys} → x ∷ xs ≡ y ∷ ys → xs ≡ ys
+cons-inj₂ : x ∷ xs ≡ y ∷ ys → xs ≡ ys
 cons-inj₂ = cong safe-tail
 
-¬cons≡nil : ∀ {x : A} {xs} → ¬ (x ∷ xs ≡ [])
+¬cons≡nil : {xs : List A} → ¬ (x ∷ xs ≡ [])
 ¬cons≡nil {A = A} p = lower (subst (caseList (Lift ⊥) (List A)) p [])
 
-¬nil≡cons : ∀ {x : A} {xs} → ¬ ([] ≡ x ∷ xs)
+¬nil≡cons : {xs : List A} → ¬ ([] ≡ x ∷ xs)
 ¬nil≡cons {A = A} p = lower (subst (caseList (List A) (Lift ⊥)) p [])
 
-¬snoc≡nil : ∀ {x : A} {xs} → ¬ (xs ∷ʳ x ≡ [])
+¬snoc≡nil : {xs : List A} → ¬ (xs ∷ʳ x ≡ [])
 ¬snoc≡nil {xs = []} contra = ¬cons≡nil contra
 ¬snoc≡nil {xs = x ∷ xs} contra = ¬cons≡nil contra
 
-¬nil≡snoc : ∀ {x : A} {xs} → ¬ ([] ≡ xs ∷ʳ x)
+¬nil≡snoc : {xs : List A} → ¬ ([] ≡ xs ∷ʳ x)
 ¬nil≡snoc contra = ¬snoc≡nil (sym contra)
 
 cons≡rev-snoc : (x : A) → (xs : List A) → x ∷ rev xs ≡ rev (xs ∷ʳ x)
@@ -158,7 +161,7 @@ cons≡rev-snoc x (y ∷ ys) = λ i → cons≡rev-snoc x ys i ++ y ∷ []
 isContr[]≡[] : isContr (Path (List A) [] [])
 isContr[]≡[] = refl , ListPath.decodeEncode [] []
 
-isPropXs≡[] : {xs : List A} → isProp (xs ≡ [])
+isPropXs≡[] : isProp (xs ≡ [])
 isPropXs≡[] {xs = []} = isOfHLevelSuc 0 isContr[]≡[]
 isPropXs≡[] {xs = x ∷ xs} = λ p _ → ⊥.rec (¬cons≡nil p)
 
@@ -175,7 +178,26 @@ foldrCons : (xs : List A) → foldr _∷_ [] xs ≡ xs
 foldrCons [] = refl
 foldrCons (x ∷ xs) = cong (x ∷_) (foldrCons xs)
 
-length-map : ∀ {ℓA ℓB} {A : Type ℓA} {B : Type ℓB} → (f : A → B) → (as : List A)
-  → length (map f as) ≡ length as
-length-map f [] = refl
+length-map : (f : A → B)
+             (as : List A)
+           → length (map f as) ≡ length as
+length-map f []       = refl
 length-map f (a ∷ as) = cong suc (length-map f as)
+
+length-tabulate : (n : ℕ) → (f : Fin n → A) → length (tabulate n f) ≡ n
+length-tabulate zero    _ = refl
+length-tabulate (suc n) f = cong suc (length-tabulate n (f ∘ suc))
+
+tabulate-lookup : (xs : List A) → tabulate (length xs) (lookup xs) ≡ xs
+tabulate-lookup []       = refl
+tabulate-lookup (x ∷ xs) = cong (x ∷_) (tabulate-lookup xs)
+
+lookup-map : (f : A → B) (xs : List A)
+             (p0 : Fin (length (map f xs)))
+             (p1 : Fin (length xs))
+             (p : PathP (λ i → Fin (length-map f xs i)) p0 p1)
+           → lookup (map f xs) p0 ≡ f (lookup xs p1)
+lookup-map f (x ∷ xs) zero    zero     p = refl
+lookup-map f (x ∷ xs) zero    (suc _)  p = ⊥.rec (znotsP p)
+lookup-map f (x ∷ xs) (suc k) zero     p = ⊥.rec (snotzP p)
+lookup-map f (x ∷ xs) (suc k) (suc k′) p = lookup-map f xs k k′ (injSucFinP p)

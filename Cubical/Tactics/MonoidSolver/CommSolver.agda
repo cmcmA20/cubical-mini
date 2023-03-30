@@ -5,7 +5,7 @@ open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Structure
 
 open import Cubical.Data.Fin
-open import Cubical.Data.Nat using (ℕ; _+_; iter)
+open import Cubical.Data.Nat using (ℕ; zero; suc; _+_; iter)
 open import Cubical.Data.Vec
 
 open import Cubical.Algebra.CommMonoid
@@ -53,26 +53,26 @@ module Eval (M : CommMonoid ℓ) where
 
   -- evaluation of normalform
   eval : {n : ℕ} → NormalForm n → Env n → ⟨ M ⟩
-  eval [] v = ε
-  eval (x ∷ xs) (v ∷ vs) = iter x (λ w → v · w) (eval xs vs)
+  eval {n = zero } [] v = ε
+  eval {n = suc _} (x ∷ xs) (v ∷ vs) = iter x (λ w → v · w) (eval xs vs)
 
 
   -- some calculations
   emptyFormEvaluatesToε : {n : ℕ} (v : Env n) → eval emptyForm v ≡ ε
-  emptyFormEvaluatesToε [] = refl
-  emptyFormEvaluatesToε (v ∷ vs) = emptyFormEvaluatesToε vs
+  emptyFormEvaluatesToε {n = zero } [] = refl
+  emptyFormEvaluatesToε {n = suc _} (v ∷ vs) = emptyFormEvaluatesToε vs
 
   UnitVecEvaluatesToVar : ∀{n} (i : Fin n) (v : Env n) →  eval e[ i ] v ≡ lookup i v
-  UnitVecEvaluatesToVar zero (v ∷ vs) =
+  UnitVecEvaluatesToVar {n = suc _} zero (v ∷ vs) =
     v · eval emptyForm vs ≡⟨ cong₂ _·_ refl (emptyFormEvaluatesToε vs) ⟩
     v · ε                 ≡⟨ ·IdR _ ⟩
     v                     ∎
-  UnitVecEvaluatesToVar (suc i) (v ∷ vs) = UnitVecEvaluatesToVar i vs
+  UnitVecEvaluatesToVar {n = suc _} (suc i) (v ∷ vs) = UnitVecEvaluatesToVar i vs
 
   evalIsHom : ∀ {n} (x y : NormalForm n) (v : Env n)
             → eval (x ⊞ y) v ≡ (eval x v) · (eval y v)
-  evalIsHom [] [] v = sym (·IdL _)
-  evalIsHom (x ∷ xs) (y ∷ ys) (v ∷ vs) =
+  evalIsHom {n = zero } [] [] v = sym (·IdL _)
+  evalIsHom {n = suc _} (x ∷ xs) (y ∷ ys) (v ∷ vs) =
     lemma x y (evalIsHom xs ys vs)
       where
       lemma : ∀ x y {a b c}(p : a ≡ b · c)

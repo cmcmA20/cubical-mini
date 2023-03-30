@@ -75,8 +75,8 @@ module VecPath {A : Type ℓ}
 
   -- encode
   reflEncode : {n : ℕ} → (v : Vec A n) → code v v
-  reflEncode [] = tt*
-  reflEncode (a ∷ v) = refl , refl
+  reflEncode {n = zero } [] = tt*
+  reflEncode {n = suc _} (a ∷ v) = refl , refl
 
   encode : {n : ℕ} → (v v' : Vec A n) → (v ≡ v') → code v v'
   encode v v' p = J (λ v' _ → code v v') (reflEncode v) p
@@ -86,12 +86,12 @@ module VecPath {A : Type ℓ}
 
   -- decode
   decode : {n : ℕ} → (v v' : Vec A n) → (r : code v v') → (v ≡ v')
-  decode [] [] _ = refl
-  decode (a ∷ v) (a' ∷ v') (p , q) = cong₂ _∷_ p q
+  decode {n = zero } [] [] _ = refl
+  decode {n = suc _} (a ∷ v) (a' ∷ v') (p , q) = cong₂ _∷_ p q
 
   decodeRefl : {n : ℕ} → (v : Vec A n) → decode v v (reflEncode v) ≡ refl
-  decodeRefl [] = refl
-  decodeRefl (a ∷ v) = refl
+  decodeRefl {n = zero } [] = refl
+  decodeRefl {n = suc _} (a ∷ v) = refl
 
   -- equiv
   ≡Vec≃codeVec : {n : ℕ} → (v v' : Vec A n) → (v ≡ v') ≃ (code v v')
@@ -104,8 +104,8 @@ module VecPath {A : Type ℓ}
       where
       sect : {n : ℕ} → (v v' : Vec A n) → (r : code v v')
              → encode v v' (decode v v' r) ≡ r
-      sect [] [] tt* = encodeRefl []
-      sect (a ∷ v) (a' ∷ v') (p , q) = J (λ a' p → encode (a ∷ v) (a' ∷ v') (decode (a ∷ v) (a' ∷ v') (p , q)) ≡ (p , q))
+      sect {n = zero } [] [] tt* = encodeRefl []
+      sect {n = suc _} (a ∷ v) (a' ∷ v') (p , q) = J (λ a' p → encode (a ∷ v) (a' ∷ v') (decode (a ∷ v) (a' ∷ v') (p , q)) ≡ (p , q))
                                        (J (λ v' q → encode (a ∷ v) (a ∷ v') (decode (a ∷ v) (a ∷ v') (refl , q)) ≡ (refl , q))
                                        (encodeRefl (a ∷ v)) q) p
     leftInv is = retr v v'

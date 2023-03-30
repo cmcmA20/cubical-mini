@@ -14,6 +14,7 @@ private
     ℓ ℓ' : Level
     A : Type ℓ
     B : Type ℓ'
+    n : ℕ
 
 nAryLevel : Level → Level → ℕ → Level
 nAryLevel ℓ₁ ℓ₂ zero    = ℓ₂
@@ -24,9 +25,9 @@ nAryOp zero A B    = B
 nAryOp (suc n) A B = A → nAryOp n A B
 
 
-_$ⁿ_ : ∀ {n} → nAryOp n A B → (Vec A n → B)
-f $ⁿ []       = f
-f $ⁿ (x ∷ xs) = f x $ⁿ xs
+_$ⁿ_ : nAryOp n A B → Vec A n → B
+_$ⁿ_ {n = zero } f []       = f
+_$ⁿ_ {n = suc n} f (x ∷ xs) = f x $ⁿ xs
 
 curryⁿ : ∀ {n} → (Vec A n → B) → nAryOp n A B
 curryⁿ {n = zero}  f   = f []

@@ -5,7 +5,7 @@ open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Function
 
 import Cubical.Data.Empty as ⊥
-open import Cubical.Data.Nat using (ℕ; zero; suc; _+_; _·_; +-assoc)
+open import Cubical.Data.Nat.Base using (ℕ; zero; suc; _+_; _·_)
 open import Cubical.Data.Bool.Base
 open import Cubical.Relation.Nullary
 
@@ -13,10 +13,11 @@ private
   variable
     ℓ : Level
     A B : Type ℓ
+    m n : ℕ
 
-data Fin : ℕ → Type₀ where
-  zero : {n : ℕ} → Fin (suc n)
-  suc  : {n : ℕ} (i : Fin n) → Fin (suc n)
+data Fin : @0 ℕ → Type₀ where
+  zero :               Fin (suc n)
+  suc  : (k : Fin n) → Fin (suc n)
 
 -- useful patterns
 pattern one   = suc zero
@@ -25,7 +26,7 @@ pattern three = suc two
 pattern four  = suc three
 pattern five  = suc four
 
-toℕ : ∀ {n} → Fin n → ℕ
+toℕ : Fin n → ℕ
 toℕ zero    = 0
 toℕ (suc i) = suc (toℕ i)
 
@@ -33,28 +34,28 @@ fromℕ : (n : ℕ) → Fin (suc n)
 fromℕ zero    = zero
 fromℕ (suc n) = suc (fromℕ n)
 
-toFromId : ∀ (n : ℕ) → toℕ (fromℕ n) ≡ n
+toFromId : (n : ℕ) → toℕ (fromℕ n) ≡ n
 toFromId zero = refl
 toFromId (suc n) = cong suc (toFromId n)
 
 ¬Fin0 : ¬ Fin 0
 ¬Fin0 ()
 
-_==_ : ∀ {n} → Fin n → Fin n → Bool
-zero == zero   = true
-zero == suc _  = false
+_==_ : Fin n → Fin n → Bool
+zero  == zero  = true
+zero  == suc _ = false
 suc _ == zero  = false
 suc m == suc n = m == n
 
-weakenFin : {n : ℕ} → Fin n → Fin (suc n)
-weakenFin zero = zero
+weakenFin : Fin n → Fin (suc n)
+weakenFin zero    = zero
 weakenFin (suc i) = suc (weakenFin i)
 
-predFin : {n : ℕ} → Fin (suc (suc n)) → Fin (suc n)
+predFin : Fin (suc (suc n)) → Fin (suc n)
 predFin zero = zero
 predFin (suc x) = x
 
-foldrFin : ∀ {n} → (A → B → B) → B → (Fin n → A) → B
+foldrFin : (A → B → B) → B → (Fin n → A) → B
 foldrFin {n = zero}  _ b _ = b
 foldrFin {n = suc n} f b l = f (l zero) (foldrFin f b (l ∘ suc))
 
@@ -66,8 +67,7 @@ elim
 elim P fz fs {suc k} zero = fz
 elim P fz fs {suc k} (suc fj) = fs (elim P fz fs fj)
 
-
-rec : ∀{k} → (a0 aS : A) → Fin k → A
+rec : (a0 aS : A) → Fin n → A
 rec a0 aS zero = a0
 rec a0 aS (suc x) = aS
 
@@ -77,8 +77,7 @@ FinVec A n = Fin n → A
 replicateFinVec : (n : ℕ) → A → FinVec A n
 replicateFinVec _ a _ = a
 
-
-_++Fin_ : {n m : ℕ} → FinVec A n → FinVec A m → FinVec A (n + m)
-_++Fin_ {n = zero} _ W i = W i
-_++Fin_ {n = suc n} V _ zero = V zero
+_++Fin_ : FinVec A n → FinVec A m → FinVec A (n + m)
+_++Fin_ {n = zero}  _ W i       = W i
+_++Fin_ {n = suc n} V _ zero    = V zero
 _++Fin_ {n = suc n} V W (suc i) = ((V ∘ suc) ++Fin W) i
