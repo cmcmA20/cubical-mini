@@ -1,9 +1,13 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
 module Cubical.Instances.HLevels.Properties where
 
 open import Cubical.Foundations.Prelude
+open import Cubical.Foundations.Erased
 
 open import Cubical.Data.Nat.Base
+
+open import Cubical.Truncation.Propositional.Base
+open import Cubical.Truncation.Set.Base
 
 open import Cubical.Instances.HLevels.Base
 
@@ -24,5 +28,11 @@ instance
   -- @0 IsOfHLevelLift : ⦃ Al : IsOfHLevel n A ⦄ → IsOfHLevel n (Lift {ℓ} {ℓ′} A)
   -- IsOfHLevel.iohl IsOfHLevelLift = {!!}
 
-  -- IsPropErased : ⦃ Al : IsProp A ⦄ → IsProp (Erased A)
-  -- IsOfHLevel.iohl (IsPropErased ⦃ Al ⦄) _ _ = []-cong [ Al .iohl _ _ ]
+  IsPropErased : ⦃ IsProp A ⦄ → IsProp (Erased A)
+  IsOfHLevel.iohl IsPropErased _ _ = []-cong [ iohl _ _ ]
+
+  IsPropTruncation : IsProp ∥ A ∥₁
+  IsOfHLevel.iohl IsPropTruncation = squash₁
+
+  IsSetTruncation : IsSet ∥ A ∥₂
+  IsOfHLevel.iohl IsSetTruncation = squash₂

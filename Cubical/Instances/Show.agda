@@ -16,3 +16,5 @@ open import Cubical.Instances.Show.Data.String public
 open import Cubical.Instances.Show.Data.Sum public
 open import Cubical.Instances.Show.Data.Unit public
 open import Cubical.Instances.Show.Data.Vec public
+
+open import Cubical.Instances.Show.HITs.Int public

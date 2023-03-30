@@ -10,11 +10,9 @@ open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Erased
 
 open import Cubical.Data.Sigma
-open import Cubical.Data.Sigma.Instances
 
-open import Cubical.Interface.HLevels
+open import Cubical.Instances.HLevels
 
-open IsOfHLevel ⦃ ... ⦄
 open MonoidStr (str ℳ)
 open Iso
 
