@@ -1,5 +1,4 @@
--- This is the preferred version of the integers in the library. Other
--- versions can be found in the MoreInts directory.
+-- This is the preferred version of the integers in the library
 {-# OPTIONS --safe #-}
 module Cubical.Data.Int.Base where
 

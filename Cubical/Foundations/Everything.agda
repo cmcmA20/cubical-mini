@@ -38,6 +38,7 @@ open import Cubical.Foundations.Equiv.HalfAdjoint
 open import Cubical.Foundations.Equiv.Dependent
 open import Cubical.Foundations.Erased public
 open import Cubical.Foundations.HLevels public
+open import Cubical.Foundations.IdentitySystem public
 open import Cubical.Foundations.Path public
 open import Cubical.Foundations.Pointed public
 open import Cubical.Foundations.RelationalStructure public
