@@ -1,18 +1,18 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="utf-8"><title>Cubical.Algebra.Monoid.Instances.Nat</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
-<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Algebra.Monoid.Instances.Nat.html" class="Module">Cubical.Algebra.Monoid.Instances.Nat</a> <a id="68" class="Keyword">where</a>
+<html><head><meta charset="utf-8"><title>Cubical.Algebra.Monoid.Instances.Nat</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Pragma">--overlapping-instances</a> <a id="44" class="Pragma">--instance-search-depth=2</a> <a id="70" class="Symbol">#-}</a>
+<a id="74" class="Keyword">module</a> <a id="81" href="Cubical.Algebra.Monoid.Instances.Nat.html" class="Module">Cubical.Algebra.Monoid.Instances.Nat</a> <a id="118" class="Keyword">where</a>
 
-<a id="75" class="Keyword">open</a> <a id="80" class="Keyword">import</a> <a id="87" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+<a id="125" class="Keyword">open</a> <a id="130" class="Keyword">import</a> <a id="137" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
 
-<a id="116" class="Keyword">open</a> <a id="121" class="Keyword">import</a> <a id="128" href="Cubical.Data.Nat.html" class="Module">Cubical.Data.Nat</a>
-<a id="145" class="Comment">-- open import Cubical.Data.Nat.Instances</a>
+<a id="166" class="Keyword">open</a> <a id="171" class="Keyword">import</a> <a id="178" href="Cubical.Data.Nat.html" class="Module">Cubical.Data.Nat</a>
 
-<a id="188" class="Keyword">open</a> <a id="193" class="Keyword">import</a> <a id="200" href="Cubical.Algebra.Monoid.html" class="Module">Cubical.Algebra.Monoid</a>
+<a id="196" class="Keyword">open</a> <a id="201" class="Keyword">import</a> <a id="208" href="Cubical.Algebra.Monoid.Base.html" class="Module">Cubical.Algebra.Monoid.Base</a>
 
+<a id="237" class="Keyword">open</a> <a id="242" class="Keyword">import</a> <a id="249" href="Cubical.Instances.DecEq.html" class="Module">Cubical.Instances.DecEq</a>
 
-<a id="225" class="Comment">-- NatMonoid : Monoid ℓ-zero</a>
-<a id="254" class="Comment">-- fst NatMonoid = ℕ</a>
-<a id="275" class="Comment">-- MonoidStr.ε (snd NatMonoid) = 0</a>
-<a id="310" class="Comment">-- MonoidStr._·_ (snd NatMonoid) = _+_</a>
-<a id="349" class="Comment">-- MonoidStr.isMonoid (snd NatMonoid) = makeIsMonoid +-assoc +-zero (λ _ → refl)</a>
+<a id="NatMonoid"></a><a id="274" href="Cubical.Algebra.Monoid.Instances.Nat.html#274" class="Function">NatMonoid</a> <a id="284" class="Symbol">:</a> <a id="286" href="Cubical.Algebra.Monoid.Base.html#1177" class="Function">Monoid</a> <a id="293" href="Agda.Primitive.html#817" class="Primitive">ℓ-zero</a>
+<a id="300" href="Agda.Builtin.Sigma.html#251" class="Field">fst</a> <a id="304" href="Cubical.Algebra.Monoid.Instances.Nat.html#274" class="Function">NatMonoid</a> <a id="314" class="Symbol">=</a> <a id="316" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+<a id="318" href="Cubical.Algebra.Monoid.Base.html#1059" class="Field">MonoidStr.ε</a> <a id="330" class="Symbol">(</a><a id="331" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a> <a id="335" href="Cubical.Algebra.Monoid.Instances.Nat.html#274" class="Function">NatMonoid</a><a id="344" class="Symbol">)</a> <a id="346" class="Symbol">=</a> <a id="348" class="Number">0</a>
+<a id="350" href="Cubical.Algebra.Monoid.Base.html#1076" class="Field Operator">MonoidStr._·_</a> <a id="364" class="Symbol">(</a><a id="365" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a> <a id="369" href="Cubical.Algebra.Monoid.Instances.Nat.html#274" class="Function">NatMonoid</a><a id="378" class="Symbol">)</a> <a id="380" class="Symbol">=</a> <a id="382" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">_+_</a>
+<a id="386" href="Cubical.Algebra.Monoid.Base.html#1101" class="Field">MonoidStr.isMonoid</a> <a id="405" class="Symbol">(</a><a id="406" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a> <a id="410" href="Cubical.Algebra.Monoid.Instances.Nat.html#274" class="Function">NatMonoid</a><a id="419" class="Symbol">)</a> <a id="421" class="Symbol">=</a> <a id="423" href="Cubical.Algebra.Monoid.Base.html#1396" class="Function">makeIsMonoid</a> <a id="436" href="Cubical.Data.Nat.Properties.html#4195" class="Function">+-assoc</a> <a id="444" href="Cubical.Data.Nat.Properties.html#3869" class="Function">+-zero</a> <a id="451" class="Symbol">(λ</a> <a id="454" href="Cubical.Algebra.Monoid.Instances.Nat.html#454" class="Bound">_</a> <a id="456" class="Symbol">→</a> <a id="458" href="Cubical.Foundations.Prelude.html#915" class="Function">refl</a><a id="462" class="Symbol">)</a>
 </pre></body></html>
