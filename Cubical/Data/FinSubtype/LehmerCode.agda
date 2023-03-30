@@ -4,7 +4,7 @@ This module develops Lehmer codes, i.e. an encoding of permutations as finite in
 
 
 -}
-module Cubical.Data.Fin.LehmerCode where
+module Cubical.Data.FinSubtype.LehmerCode where
 
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Function
@@ -23,8 +23,8 @@ open import Cubical.Data.Unit as ⊤
 open import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Nat
 open import Cubical.Data.Nat.Order
-open import Cubical.Data.Fin.Base as F
-open import Cubical.Data.Fin.Properties
+open import Cubical.Data.FinSubtype.Base as F
+open import Cubical.Data.FinSubtype.Properties
   renaming (punchOut to punchOutPrim)
 open import Cubical.Data.Sigma
 open import Cubical.Data.Sum as Sum using (_⊎_; inl; inr)

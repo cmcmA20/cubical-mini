@@ -20,7 +20,7 @@ open import Cubical.Foundations.Univalence
 open import Cubical.Data.Sigma
 open import Cubical.Data.Sum hiding (rec ; elim ; map)
 open import Cubical.Data.Nat using (ℕ ; zero ; suc)
-open import Cubical.Data.FinData using (Fin ; zero ; suc)
+open import Cubical.Data.Fin using (Fin ; zero ; suc)
 
 open import Cubical.Truncation.Propositional.Base
 

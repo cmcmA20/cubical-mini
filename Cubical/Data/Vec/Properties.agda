@@ -13,7 +13,7 @@ open import Cubical.Data.Nat
 open import Cubical.Data.Sigma
 open import Cubical.Data.Sum
 open import Cubical.Data.Vec.Base
-open import Cubical.Data.FinData
+open import Cubical.Data.Fin
 open import Cubical.Relation.Nullary
 
 open Iso

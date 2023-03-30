@@ -4,7 +4,7 @@ module Cubical.Tactics.MonoidSolver.CommSolver where
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Structure
 
-open import Cubical.Data.FinData
+open import Cubical.Data.Fin
 open import Cubical.Data.Nat using (ℕ; _+_; iter)
 open import Cubical.Data.Vec
 

@@ -6,7 +6,7 @@ module Cubical.Data.Vec.Base where
 open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.Nat
-open import Cubical.Data.FinData.Base
+open import Cubical.Data.Fin.Base
 
 private
   variable

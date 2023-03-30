@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Cubical.Data.SumFin.Base where
+module Cubical.Data.FinSum.Base where
 
 open import Cubical.Foundations.Prelude
 

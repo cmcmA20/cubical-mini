@@ -4,7 +4,7 @@ module Cubical.Tactics.MonoidSolver.Solver where
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Structure
 
-open import Cubical.Data.FinData using (Fin)
+open import Cubical.Data.Fin using (Fin)
 open import Cubical.Data.Nat using (ℕ)
 open import Cubical.Data.List
 open import Cubical.Data.Vec using (Vec; lookup)

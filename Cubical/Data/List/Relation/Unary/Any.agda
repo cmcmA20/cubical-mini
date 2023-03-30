@@ -5,7 +5,7 @@ open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.List.Base
 open import Cubical.Data.Sigma.Base
-open import Cubical.Data.SumFin.Base
+open import Cubical.Data.FinSum.Base
 
 private variable
   ℓ ℓ′ : Level

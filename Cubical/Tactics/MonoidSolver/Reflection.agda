@@ -13,7 +13,7 @@ open import Cubical.Data.Maybe
 open import Cubical.Data.Sigma
 open import Cubical.Data.List
 open import Cubical.Data.Nat
-open import Cubical.Data.FinData using () renaming (zero to fzero; suc to fsuc)
+open import Cubical.Data.Fin using () renaming (zero to fzero; suc to fsuc)
 open import Cubical.Data.Bool
 open import Cubical.Data.Vec using (Vec) renaming ([] to emptyVec; _∷_ to _∷vec_) public
 

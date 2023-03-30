@@ -4,7 +4,7 @@ module Cubical.Tactics.NatSolver.EvalHom where
 open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.Nat
-open import Cubical.Data.FinData
+open import Cubical.Data.Fin
 open import Cubical.Data.Vec
 
 open import Cubical.Tactics.NatSolver.HornerForms

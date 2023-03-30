@@ -7,7 +7,7 @@ open import Cubical.Foundations.Equiv
 open import Cubical.Container.Base
 
 open import Cubical.Data.Nat.Base
-open import Cubical.Data.SumFin.Base
+open import Cubical.Data.FinSum.Base
 open import Cubical.Data.Sigma
 
 open import Cubical.Container.Instances.List

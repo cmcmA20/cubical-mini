@@ -11,7 +11,7 @@ open import Cubical.Data.Nat.Base
 open import Cubical.Data.List renaming (List to ListI)
 open import Cubical.Data.Sigma
 open import Cubical.Data.Sum.Base as ⊎
-open import Cubical.Data.SumFin.Base
+open import Cubical.Data.FinSum.Base
 
 open import Cubical.Container.Base
 
