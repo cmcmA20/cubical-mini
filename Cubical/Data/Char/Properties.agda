@@ -12,6 +12,7 @@ open import Cubical.Data.Nat.Properties
 open import Cubical.Data.Equality using (eqToPath; pathToEq) renaming (_≡_ to _≣_)
 
 open import Cubical.Relation.Nullary
+open import Cubical.Relation.Nullary.Negation
 
 private variable
   c c₁ c₂ : Char

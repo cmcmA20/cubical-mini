@@ -12,6 +12,7 @@ open import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Sigma.Base
 open import Cubical.Data.Sum.Base
 
+open import Cubical.Relation.Nullary.Negation
 open import Cubical.Relation.Nullary
 
 private

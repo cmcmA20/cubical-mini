@@ -9,6 +9,7 @@ open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Univalence
 
 open import Cubical.Relation.Nullary
+open import Cubical.Relation.Nullary.Negation
 
 open import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Bool

@@ -18,6 +18,8 @@ open import Cubical.Functions.Fixpoint
 open import Cubical.Data.Empty as ⊥
 
 open import Cubical.Relation.Nullary.Base
+open import Cubical.Relation.Nullary.Negation
+
 open import Cubical.Truncation.Propositional.Base
 
 private

@@ -8,16 +8,13 @@ open import Cubical.Functions.Fixpoint
 open import Cubical.Data.Empty as ⊥
 open import Cubical.Truncation.Propositional.Base
 
+open import Cubical.Relation.Nullary.Negation
+open import Cubical.Relation.Nullary.Reflects
+
 private
   variable
     ℓ  : Level
     A  : Type ℓ
-
--- Negation
-infix 3 ¬_
-
-¬_ : Type ℓ → Type ℓ
-¬ A = A → ⊥
 
 -- Decidable types (inspired by standard library)
 data Dec (P : Type ℓ) : Type ℓ where
@@ -27,12 +24,6 @@ data Dec (P : Type ℓ) : Type ℓ where
 decRec : ∀ {ℓ ℓ'} {P : Type ℓ} {A : Type ℓ'} → (P → A) → (¬ P → A) → (Dec P) → A
 decRec ifyes ifno (yes p) = ifyes p
 decRec ifyes ifno (no ¬p) = ifno ¬p
-
-NonEmpty : Type ℓ → Type ℓ
-NonEmpty A = ¬ ¬ A
-
-Stable : Type ℓ → Type ℓ
-Stable A = NonEmpty A → A
 
 -- reexport propositional truncation for uniformity
 open Cubical.Truncation.Propositional.Base

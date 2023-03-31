@@ -2,8 +2,9 @@
 module Cubical.Data.Char.Base where
 
 open import Cubical.Foundations.Prelude
+
 open import Cubical.Relation.Binary
-open import Cubical.Relation.Nullary
+open import Cubical.Relation.Nullary.Negation
 
 open import Agda.Builtin.Char public using ( Char )
   renaming

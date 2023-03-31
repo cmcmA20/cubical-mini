@@ -197,3 +197,12 @@ leftInv Σ⊎Iso (inr b , eb) = refl
 map-⊎ : (A → C) → (B → D) → A ⊎ B → C ⊎ D
 map-⊎ f _ (inl a) = inl (f a)
 map-⊎ _ g (inr b) = inr (g b)
+
+_⊎?_ : {P Q : Type ℓa} → Dec P → Dec Q → Dec (P ⊎ Q)
+P? ⊎? Q? with P? | Q?
+... | yes p | _ = yes (inl p)
+... | no _  | yes q = yes (inr q)
+... | no ¬p | no ¬q  = no λ
+  { (inl p) → ¬p p
+  ; (inr q) → ¬q q
+  }

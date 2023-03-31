@@ -27,6 +27,7 @@ open import Cubical.Data.Sigma
 open import Cubical.Data.Fin.Base renaming (Fin to FinI) hiding (¬Fin0 ; toℕ)
 
 open import Cubical.Relation.Nullary
+open import Cubical.Relation.Nullary.Negation
 
 open import Cubical.Induction.WellFounded
 

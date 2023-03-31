@@ -8,7 +8,7 @@ open import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Sum.Base
 
 open import Cubical.Relation.Binary.Poset
-open import Cubical.Relation.Nullary
+open import Cubical.Relation.Nullary.Negation
 
 open import Cubical.Reflection.RecordEquiv
 

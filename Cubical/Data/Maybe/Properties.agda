@@ -17,7 +17,8 @@ open import Cubical.Data.Nat using (suc)
 open import Cubical.Data.Sum using (_⊎_; inl; inr)
 open import Cubical.Data.Sigma using (ΣPathP)
 
-open import Cubical.Relation.Nullary using (¬_; Discrete; yes; no)
+open import Cubical.Relation.Nullary.Negation
+open import Cubical.Relation.Nullary using (Discrete; yes; no)
 
 open import Cubical.Data.Maybe.Base as Maybe
 

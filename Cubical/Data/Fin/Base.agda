@@ -7,7 +7,8 @@ open import Cubical.Foundations.Function
 import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Nat.Base using (ℕ; zero; suc; _+_; _·_)
 open import Cubical.Data.Bool.Base
-open import Cubical.Relation.Nullary
+
+open import Cubical.Relation.Nullary.Negation
 
 private
   variable

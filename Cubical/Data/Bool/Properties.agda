@@ -19,11 +19,12 @@ open import Cubical.Data.Bool.Base
 open import Cubical.Data.Empty
 open import Cubical.Data.Empty as Empty
 open import Cubical.Data.Sigma
-open import Cubical.Data.Unit using (Unit; isPropUnit)
+open import Cubical.Data.Unit using (Unit; Unit*; isPropUnit)
 
 open import Cubical.Truncation.Propositional hiding (rec)
 
 open import Cubical.Relation.Nullary
+open import Cubical.Relation.Nullary.Negation
 
 private
   variable
@@ -57,6 +58,37 @@ private
   -- Sanity check
   nfalsepath : nfalse ≡ false
   nfalsepath = refl
+
+_≟_ : Discrete Bool
+false ≟ false = yes refl
+false ≟ true  = no λ p → subst (λ b → if b then ⊥ else Bool) p true
+true  ≟ false = no λ p → subst (λ b → if b then Bool else ⊥) p true
+true  ≟ true  = yes refl
+
+Dec→Bool : Dec A → Bool
+Dec→Bool (yes p) = true
+Dec→Bool (no ¬p) = false
+
+-- Helpers for automatic proof
+Bool→Type : Bool → Type₀
+Bool→Type true = Unit
+Bool→Type false = ⊥
+
+Bool→Type* : Bool → Type ℓ
+Bool→Type* true = Unit*
+Bool→Type* false = ⊥*
+
+True : Dec A → Type₀
+True Q = Bool→Type (Dec→Bool Q)
+
+False : Dec A → Type₀
+False Q = Bool→Type (not (Dec→Bool Q))
+
+toWitness : {Q : Dec A} → True Q → A
+toWitness {Q = yes p} _ = p
+
+toWitnessFalse : {Q : Dec A} → False Q → ¬ A
+toWitnessFalse {Q = no ¬p} _ = ¬p
 
 K-Bool
   : (P : {b : Bool} → b ≡ b → Type ℓ)
