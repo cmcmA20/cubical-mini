@@ -18,3 +18,6 @@ NonEmpty A = ¬ ¬ A
 
 Stable : Type ℓ → Type ℓ
 Stable A = NonEmpty A → A
+
+_≢_ : {A : Type ℓ} → A → A → Type ℓ
+x ≢ y = ¬ (x ≡ y)

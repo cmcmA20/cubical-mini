@@ -7,6 +7,7 @@ open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.Nat
 open import Cubical.Data.Fin.Base
+open import Cubical.Data.Sigma.Base
 
 private
   variable
@@ -70,3 +71,15 @@ concat (xs ∷ xss) = xs ++ concat xss
 lookup : Fin n → Vec A n → A
 lookup zero    (x ∷ xs) = x
 lookup (suc i) (x ∷ xs) = lookup i xs
+
+splitAt : (m : ℕ) {n : ℕ} (xs : Vec A (m + n))
+        → Σ[ ys ꞉ Vec A m ] Σ[ zs ꞉ Vec A n ] (xs ≡ ys ++ zs)
+splitAt zero    xs       = [] , xs , refl
+splitAt (suc m) (x ∷ xs) with splitAt m xs
+... | ys , zs , p = x ∷ ys , zs , cong (x ∷_) p
+
+drop : (m : ℕ) {n : ℕ} → Vec A (m + n) → Vec A n
+drop m xs = splitAt m xs .snd .fst
+
+take : (m : ℕ) {n : ℕ} → Vec A (m + n) → Vec A m
+take m xs = splitAt m xs .fst

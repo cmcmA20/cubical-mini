@@ -36,3 +36,7 @@ recompute (no ¬a) 0a = ⊥.rec (¬a 0a)
 decRec : (B → A) → (¬ B → A) → Dec B → A
 decRec ifyes ifno (yes p) = ifyes p
 decRec ifyes ifno (no ¬p) = ifno ¬p
+
+⌊_⌋ : Dec A → Bool
+⌊ false because _ ⌋ = false
+⌊ true  because _ ⌋ = true
