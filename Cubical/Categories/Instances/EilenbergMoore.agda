@@ -48,7 +48,7 @@ module _ {C : Category ℓC ℓC'} (monadM : Monad C) where
     (C.isSetHom _ _ (str-μ isalg) (str-μ isalg'))
 
   EMAlgebra : Type (ℓ-max ℓC ℓC')
-  EMAlgebra = Σ[ algA ∈ Algebra M ] IsEMAlgebra algA
+  EMAlgebra = Σ[ algA ꞉ Algebra M ] IsEMAlgebra algA
 
   @0 EMCategory : Category (ℓ-max (ℓ-max ℓC ℓC') ℓC') ℓC'
     -- cannot simplify level: --lossy-unification won't allow it.

@@ -126,7 +126,7 @@ doubleCompPath-filler p q r j i =
 
 -- any two definitions of double composition are equal
 compPath-unique : (p : x ≡ y) (q : y ≡ z) (r : z ≡ w)
-                  → (α β : Σ[ s ∈ x ≡ w ] PathP (λ j → p (~ j) ≡ r j) q s)
+                  → (α β : Σ[ s ꞉ x ≡ w ] PathP (λ j → p (~ j) ≡ r j) q s)
                   → α ≡ β
 compPath-unique p q r (α , α-filler) (β , β-filler) t
   = (λ i → cb i1 i) , (λ j i → cb j i)
@@ -428,7 +428,7 @@ p ▷ q  = refl ◁ p ▷ q
 -- Direct definitions of lower h-levels
 
 isContr : Type ℓ → Type ℓ
-isContr A = Σ[ x ∈ A ] (∀ y → x ≡ y)
+isContr A = Σ[ x ꞉ A ] (∀ y → x ≡ y)
 
 isProp : Type ℓ → Type ℓ
 isProp A = (x y : A) → x ≡ y
@@ -445,7 +445,7 @@ is2Groupoid A = ∀ a b → isGroupoid (Path A a b)
 -- Contractibility of singletons
 
 singlP : (A : I → Type ℓ) (a : A i0) → Type _
-singlP A a = Σ[ x ∈ A i1 ] PathP A a x
+singlP A a = Σ[ x ꞉ A i1 ] PathP A a x
 
 singl : (a : A) → Type _
 singl {A = A} a = singlP (λ _ → A) a
@@ -596,8 +596,3 @@ liftExt x i = lift (x i)
 
 it : ∀ {A : Type ℓ} → ⦃ A ⦄ → A
 it ⦃ a ⦄ = a
-
-Π-syntax′ : (A : Type ℓ) → (A → Type ℓ') → Type (ℓ-max ℓ ℓ')
-Π-syntax′ A B = (x : A) → B x
-
-syntax Π-syntax′ A (λ x → B) = Π[ x ꞉ A ] B

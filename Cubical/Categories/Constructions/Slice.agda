@@ -59,7 +59,7 @@ module _ {xf yg : SliceOb} where
     g = yg .S-arr
 
   -- a path between slice objects is the "same" as a pair of paths between C obs and C arrows
-  SOPathIsoPathΣ : Iso (xf ≡ yg) (Σ[ p ∈ x ≡ y ] PathP (λ i → C [ p i , c ]) f g)
+  SOPathIsoPathΣ : Iso (xf ≡ yg) (Σ[ p ꞉ x ≡ y ] PathP (λ i → C [ p i , c ]) f g)
   SOPathIsoPathΣ .fun p = (λ i → (p i) .S-ob) , (λ i → (p i) .S-arr)
   SOPathIsoPathΣ .inv (p , q) i = sliceob {p i} (q i)
   SOPathIsoPathΣ .rightInv _ = refl
@@ -79,7 +79,7 @@ SliceHom-≡-intro p q = λ i → slicehom (p i) (q i)
 
 SliceHom-≡-elim : ∀ {a b} {f g} {c₁} {c₂}
                 → slicehom f c₁ ≡ slicehom g c₂
-                → Σ[ p ∈ f ≡ g ] PathP (λ i → (p i) ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a) c₁ c₂
+                → Σ[ p ꞉ f ≡ g ] PathP (λ i → (p i) ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a) c₁ c₂
 SliceHom-≡-elim r = (λ i → S-hom (r i)) , λ i → S-comm (r i)
 
 
@@ -93,7 +93,7 @@ SliceHom-≡-intro' {a} {b} {f} {g} {c₁} {c₂} p i = slicehom (p i) (c₁≡c
 
 -- SliceHom is isomorphic to the Sigma type with the same components
 SliceHom-Σ-Iso : ∀ {a b}
-            → Iso (SliceHom a b) (Σ[ h ∈ C [ S-ob a , S-ob b ] ] h ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a)
+            → Iso (SliceHom a b) (Σ[ h ꞉ C [ S-ob a , S-ob b ] ] h ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a)
 SliceHom-Σ-Iso .fun (slicehom h c) = h , c
 SliceHom-Σ-Iso .inv (h , c) = slicehom h c
 SliceHom-Σ-Iso .rightInv = λ x → refl
@@ -126,9 +126,9 @@ _⋆_ SliceCat {sliceob j} {sliceob k} {sliceob l} (slicehom f p) (slicehom g p'
 isSetHom SliceCat {a} {b} (slicehom f c₁) (slicehom g c₂) p q = cong isoP p'≡q'
     where
       -- paths between SliceHoms are equivalent to the projection paths
-      p' : Σ[ p ∈ f ≡ g ] PathP (λ i → (p i) ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a) c₁ c₂
+      p' : Σ[ p ꞉ f ≡ g ] PathP (λ i → (p i) ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a) c₁ c₂
       p' = SliceHom-≡-elim p
-      q' : Σ[ p ∈ f ≡ g ] PathP (λ i → (p i) ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a) c₁ c₂
+      q' : Σ[ p ꞉ f ≡ g ] PathP (λ i → (p i) ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a) c₁ c₂
       q' = SliceHom-≡-elim q
 
       -- we want all paths between (dependent) paths of this type to be equal
@@ -337,14 +337,14 @@ module _ ⦃ isU : isUnivalent C ⦄ where
                 -- first via transport and then via our component definitions from before
                 -- we show that p'ΣT ≡ p'Σ (and same for p) via univalence
                 -- and p'Σ≡pΣ follows from our work from above
-                p'ΣT : Σ[ p ∈ x ≡ y ] PathP (λ i → C [ p i , c ]) f g
+                p'ΣT : Σ[ p ꞉ x ≡ y ] PathP (λ i → C [ p i , c ]) f g
                 p'ΣT = transport SOPath≡PathΣ p'
-                p'Σ : Σ[ p ∈ x ≡ y ] PathP (λ i → C [ p i , c ]) f g
+                p'Σ : Σ[ p ꞉ x ≡ y ] PathP (λ i → C [ p i , c ]) f g
                 p'Σ = (p'Ob , p'Mor)
 
-                pΣT : Σ[ p ∈ x ≡ y ] PathP (λ i → C [ p i , c ]) f g
+                pΣT : Σ[ p ꞉ x ≡ y ] PathP (λ i → C [ p i , c ]) f g
                 pΣT = transport SOPath≡PathΣ p
-                pΣ : Σ[ p ∈ x ≡ y ] PathP (λ i → C [ p i , c ]) f g
+                pΣ : Σ[ p ꞉ x ≡ y ] PathP (λ i → C [ p i , c ]) f g
                 pΣ = (pOb , pMor)-- transport SOPathP≡PathPSO p
 
                 -- using the computation rule to ua

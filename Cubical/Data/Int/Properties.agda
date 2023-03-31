@@ -29,32 +29,32 @@ predSuc (negsuc zero)    = refl
 predSuc (negsuc (suc n)) = refl
 
 injPos : ∀ {a b : ℕ} → pos a ≡ pos b → a ≡ b
-injPos {a} h = subst T h refl
+injPos {a} h = subst T′ h refl
   where
-  T : ℤ → Type₀
-  T (pos x)    = a ≡ x
-  T (negsuc _) = ⊥
+  T′ : ℤ → Type₀
+  T′ (pos x)    = a ≡ x
+  T′ (negsuc _) = ⊥
 
 injNegsuc : ∀ {a b : ℕ} → negsuc a ≡ negsuc b → a ≡ b
-injNegsuc {a} h = subst T h refl
+injNegsuc {a} h = subst T′ h refl
   where
-  T : ℤ → Type₀
-  T (pos _) = ⊥
-  T (negsuc x) = a ≡ x
+  T′ : ℤ → Type₀
+  T′ (pos _) = ⊥
+  T′ (negsuc x) = a ≡ x
 
 posNotnegsuc : ∀ (a b : ℕ) → ¬ (pos a ≡ negsuc b)
-posNotnegsuc a b h = subst T h 0
+posNotnegsuc a b h = subst T′ h 0
   where
-  T : ℤ → Type₀
-  T (pos _)    = ℕ
-  T (negsuc _) = ⊥
+  T′ : ℤ → Type₀
+  T′ (pos _)    = ℕ
+  T′ (negsuc _) = ⊥
 
 negsucNotpos : ∀ (a b : ℕ) → ¬ (negsuc a ≡ pos b)
-negsucNotpos a b h = subst T h 0
+negsucNotpos a b h = subst T′ h 0
   where
-  T : ℤ → Type₀
-  T (pos _)    = ⊥
-  T (negsuc _) = ℕ
+  T′ : ℤ → Type₀
+  T′ (pos _)    = ⊥
+  T′ (negsuc _) = ℕ
 
 discreteℤ : Discrete ℤ
 discreteℤ (pos n) (pos m) with discreteℕ n m

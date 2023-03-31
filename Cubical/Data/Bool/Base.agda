@@ -48,6 +48,11 @@ dichotomyBoolSym : (x : Bool) → (x ≡ false) ⊎ (x ≡ true)
 dichotomyBoolSym false = inl refl
 dichotomyBoolSym true = inr refl
 
--- TODO: this should be uncommented and implemented using instance arguments
--- _==_ : {dA : Discrete A} → A → A → Bool
--- _==_ {dA = dA} x y = Dec→Bool (dA x y)
+-- Helpers for automatic proof
+T : Bool → Type₀
+T false = ⊥
+T true  = Unit
+
+T* : Bool → Type ℓ
+T* false = ⊥*
+T* true  = Unit*

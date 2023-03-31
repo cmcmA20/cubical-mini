@@ -64,7 +64,7 @@ record isHAEquiv {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} (f : A → B) : Type 
 open isHAEquiv using (isHAEquiv→Iso; isHAEquiv→isEquiv) public
 
 HAEquiv : (A : Type ℓ) (B : Type ℓ') → Type (ℓ-max ℓ ℓ')
-HAEquiv A B = Σ[ f ∈ (A → B) ] isHAEquiv f
+HAEquiv A B = Σ[ f ꞉ (A → B) ] isHAEquiv f
 
 -- vogt's lemma (https://ncatlab.org/nlab/show/homotopy+equivalence#vogts_lemma)
 iso→HAEquiv : Iso A B → HAEquiv A B

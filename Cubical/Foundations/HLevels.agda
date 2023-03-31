@@ -249,7 +249,7 @@ isOfHLevelRespectEquiv : {A : Type ℓ} {B : Type ℓ'} → (n : HLevel) → A �
 isOfHLevelRespectEquiv n eq = isOfHLevelRetract n (invEq eq) (eq .fst) (secEq eq)
 
 isContrRetractOfConstFun : {A : Type ℓ} {B : Type ℓ'} (b₀ : B)
-   → Σ[ f ∈ (B → A) ] ((x : A) → (f ∘ (λ _ → b₀)) x ≡ x)
+   → Σ[ f ꞉ (B → A) ] ((x : A) → (f ∘ (λ _ → b₀)) x ≡ x)
    → isContr A
 fst (isContrRetractOfConstFun b₀ ret) = ret .fst b₀
 snd (isContrRetractOfConstFun b₀ ret) y = ret .snd y
@@ -605,7 +605,7 @@ isContrPartial→isContr {A = A} extend law
 -- Dependent h-level over a type
 
 isOfHLevelDep : HLevel → {A : Type ℓ} (B : A → Type ℓ') → Type (ℓ-max ℓ ℓ')
-isOfHLevelDep 0 {A = A} B = {a : A} → Σ[ b ∈ B a ] ({a' : A} (b' : B a') (p : a ≡ a') → PathP (λ i → B (p i)) b b')
+isOfHLevelDep 0 {A = A} B = {a : A} → Σ[ b ꞉ B a ] ({a' : A} (b' : B a') (p : a ≡ a') → PathP (λ i → B (p i)) b b')
 isOfHLevelDep 1 {A = A} B = {a0 a1 : A} (b0 : B a0) (b1 : B a1) (p : a0 ≡ a1) → PathP (λ i → B (p i)) b0 b1
 isOfHLevelDep (suc (suc  n)) {A = A} B = {a0 a1 : A} (b0 : B a0) (b1 : B a1) → isOfHLevelDep (suc n) {A = a0 ≡ a1} (λ p → PathP (λ i → B (p i)) b0 b1)
 

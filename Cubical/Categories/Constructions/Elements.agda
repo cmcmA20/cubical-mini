@@ -28,9 +28,9 @@ module Covariant {ℓ ℓ'} {C : Category ℓ ℓ'} where
     infix 50 ∫_
     ∫_ : ∀ {ℓS} → Functor C (SET ℓS) → Category (ℓ-max ℓ ℓS) (ℓ-max ℓ' ℓS)
     -- objects are (c , x) pairs where c ∈ C and x ∈ F c
-    (∫ F) .ob = Σ[ c ∈ C .ob ] fst (F ⟅ c ⟆)
+    (∫ F) .ob = Σ[ c ꞉ C .ob ] fst (F ⟅ c ⟆)
     -- morphisms are f : c → c' which take x to x'
-    (∫ F) .Hom[_,_] (c , x) (c' , x')  = Σ[ f ∈ C [ c , c' ] ] x' ≡ (F ⟪ f ⟫) x
+    (∫ F) .Hom[_,_] (c , x) (c' , x')  = Σ[ f ꞉ C [ c , c' ] ] x' ≡ (F ⟪ f ⟫) x
     (∫ F) .id {x = (c , x)} = C .id , sym (funExt⁻ (F .F-id) x ∙ refl)
     (∫ F) ._⋆_ {c , x} {c₁ , x₁} {c₂ , x₂} (f , p) (g , q)
       = (f ⋆⟨ C ⟩ g) , (x₂

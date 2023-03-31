@@ -42,7 +42,7 @@ private
   {B : A → Type ℓB} (𝒮ᴰ-B : DUARel 𝒮-A B ℓ≅B)
   {P : (a : A) → B a → Type ℓP}
   → (∀ a b → isProp (P a b))
-  → DUARel 𝒮-A (λ a → Σ[ b ∈ B a ] (P a b)) ℓ≅B
+  → DUARel 𝒮-A (λ a → Σ[ b ꞉ B a ] (P a b)) ℓ≅B
 𝒮ᴰ-subtype 𝒮ᴰ-B propP .DUARel._≅ᴰ⟨_⟩_ (b , _) p (b' , _) = 𝒮ᴰ-B .DUARel._≅ᴰ⟨_⟩_ b p b'
 𝒮ᴰ-subtype 𝒮ᴰ-B propP .DUARel.uaᴰ (b , _) p (b' , _) =
   compEquiv

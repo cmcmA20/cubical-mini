@@ -80,7 +80,7 @@ record IsPosetEquiv {A : Type ℓ₀} {B : Type ℓ₁}
 
 
 PosetEquiv : (M : Poset ℓ₀ ℓ₀') (M : Poset ℓ₁ ℓ₁') → Type (ℓ-max (ℓ-max ℓ₀ ℓ₀') (ℓ-max ℓ₁ ℓ₁'))
-PosetEquiv M N = Σ[ e ∈ ⟨ M ⟩ ≃ ⟨ N ⟩ ] IsPosetEquiv (M .snd) e (N .snd)
+PosetEquiv M N = Σ[ e ꞉ ⟨ M ⟩ ≃ ⟨ N ⟩ ] IsPosetEquiv (M .snd) e (N .snd)
 
 isPropIsPoset : {A : Type ℓ} (_≤_ : A → A → Type ℓ') → isProp (IsPoset _≤_)
 isPropIsPoset _≤_ = isOfHLevelRetractFromIso 1 IsPosetIsoΣ

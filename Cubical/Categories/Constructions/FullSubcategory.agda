@@ -26,7 +26,7 @@ module _ (C : Category ℓC ℓC') (P : Category.ob C → Type ℓP) where
   open Functor
 
   FullSubcategory : Category (ℓ-max ℓC ℓP) ℓC'
-  ob FullSubcategory = Σ[ x ∈ C.ob ] P x
+  ob FullSubcategory = Σ[ x ꞉ C.ob ] P x
   Hom[_,_] FullSubcategory (x , p) (y , q) = C.Hom[ x , y ]
   id FullSubcategory = C.id
   _⋆_ FullSubcategory = C._⋆_

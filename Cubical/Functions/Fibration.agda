@@ -34,9 +34,9 @@ module FiberIso {ℓ} (p⁻¹ : B → Type ℓ) (x : B) where
 
   bwd-fwd : ∀ x → bwd (fwd x) ≡ x
   bwd-fwd ((x' , y) , q) i = h (r i)
-    where h : Σ[ s ∈ singl x ] p⁻¹ (s .fst) → fiber p x
+    where h : Σ[ s ꞉ singl x ] p⁻¹ (s .fst) → fiber p x
           h ((x , p) , y) = (x , y) , sym p
-          r : Path (Σ[ s ∈ singl x ] p⁻¹ (s .fst))
+          r : Path (Σ[ s ꞉ singl x ] p⁻¹ (s .fst))
                    ((x  , refl ) , subst p⁻¹ q y)
                    ((x' , sym q) , y                            )
           r = ΣPathP (isContrSingl x .snd (x' , sym q)
@@ -64,9 +64,9 @@ module _ (B : Type ℓb) (ℓ : Level) where
     ℓ' = ℓ-max ℓb ℓ
 
   -- HoTT Theorem 4.8.3
-  @0 fibrationEquiv : (Σ[ E ∈ Type ℓ' ] (E → B)) ≃ (B → Type ℓ')
+  @0 fibrationEquiv : (Σ[ E ꞉ Type ℓ' ] (E → B)) ≃ (B → Type ℓ')
   fibrationEquiv = isoToEquiv isom
-    where isom : Iso (Σ[ E ∈ Type ℓ' ] (E → B)) (B → Type ℓ')
+    where isom : Iso (Σ[ E ꞉ Type ℓ' ] (E → B)) (B → Type ℓ')
           Iso.fun isom (E , p) = fiber p
           Iso.inv isom p⁻¹     = Σ B p⁻¹ , fst
           Iso.rightInv isom p⁻¹ i x = ua (fiberEquiv p⁻¹ x) i
@@ -88,7 +88,7 @@ module ForSets {E : Type ℓ} {isSetB : isSet B} (f : E → B) where
 open import Cubical.Foundations.Function
 
 @0 fiberPath : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} {f : A → B} {b : B} (h h' : fiber f b) →
-                (Σ[ p ∈ (fst h ≡ fst h') ] (PathP (λ i → f (p i) ≡ b) (snd h) (snd h')))
+                (Σ[ p ꞉ (fst h ≡ fst h') ] (PathP (λ i → f (p i) ≡ b) (snd h) (snd h')))
               ≡ fiber (cong f) (h .snd ∙∙ refl ∙∙ sym (h' .snd))
 fiberPath h h' = cong (Σ (h .fst ≡ h' .fst)) (funExt λ p → flipSquarePath ∙ PathP≡doubleCompPathʳ _ _ _ _)
 
@@ -108,4 +108,4 @@ FibrationStr : (B : Type ℓb) → Type ℓ → Type (ℓ-max ℓ ℓb)
 FibrationStr B A = A → B
 
 Fibration : (B : Type ℓb) → (ℓ : Level) → Type (ℓ-max ℓb (ℓ-suc ℓ))
-Fibration {ℓb = ℓb} B ℓ = Σ[ A ∈ Type ℓ ] FibrationStr B A
+Fibration {ℓb = ℓb} B ℓ = Σ[ A ꞉ Type ℓ ] FibrationStr B A

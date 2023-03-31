@@ -2,7 +2,7 @@
 
 Add axioms (i.e., propositions) to a structure S without changing the definition of structured equivalence.
 
-X ↦ Σ[ s ∈ S X ] (P X s) where (P X s) is a proposition for all X and s.
+X ↦ Σ[ s ꞉ S X ] (P X s) where (P X s) is a proposition for all X and s.
 
 -}
 {-# OPTIONS --safe #-}
@@ -25,7 +25,7 @@ private
 AxiomsStructure : (S : Type ℓ → Type ℓ₁)
   (axioms : (X : Type ℓ) → S X → Type ℓ₂)
   → Type ℓ → Type (ℓ-max ℓ₁ ℓ₂)
-AxiomsStructure S axioms X = Σ[ s ∈ S X ] (axioms X s)
+AxiomsStructure S axioms X = Σ[ s ꞉ S X ] (axioms X s)
 
 AxiomsEquivStr : {S : Type ℓ → Type ℓ₁} (ι : StrEquiv S ℓ₁')
   (axioms : (X : Type ℓ) → S X → Type ℓ₂)
@@ -43,7 +43,7 @@ axiomsUnivalentStr {S = S} ι {axioms = axioms} axioms-are-Props θ {X , s , a} 
     ≃⟨ θ e ⟩
   PathP (λ i → S (ua e i)) s t
     ≃⟨ invEquiv (Σ-contractSnd λ _ → isOfHLevelPathP' 0 (axioms-are-Props _ _) _ _) ⟩
-  Σ[ p ∈ PathP (λ i → S (ua e i)) s t ] PathP (λ i → axioms (ua e i) (p i)) a b
+  Σ[ p ꞉ PathP (λ i → S (ua e i)) s t ] PathP (λ i → axioms (ua e i) (p i)) a b
     ≃⟨ ΣPath≃PathΣ ⟩
   PathP (λ i → AxiomsStructure S axioms (ua e i)) (s , a) (t , b)
   ■

@@ -24,7 +24,7 @@ isZigZagComplete : {A B : Type ℓ} (R : A → B → Type ℓ') → Type (ℓ-ma
 isZigZagComplete R = ∀ {a b a' b'} → R a b → R a' b → R a' b' → R a b'
 
 ZigZagRel : (A B : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc ℓ'))
-ZigZagRel A B ℓ' = Σ[ R ∈ (A → B → Type ℓ') ] (isZigZagComplete R)
+ZigZagRel A B ℓ' = Σ[ R ꞉ (A → B → Type ℓ') ] (isZigZagComplete R)
 
 record isQuasiEquivRel {A B : Type ℓ} (R : A → B → Type ℓ') : Type (ℓ-max ℓ ℓ') where
   field
@@ -36,7 +36,7 @@ open isQuasiEquivRel
 
 QuasiEquivRel : (A B : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc ℓ'))
 QuasiEquivRel A B ℓ' =
-  Σ[ R ∈ PropRel A B ℓ' ] isQuasiEquivRel (R .fst)
+  Σ[ R ꞉ PropRel A B ℓ' ] isQuasiEquivRel (R .fst)
 
 invQER : {A B : Type ℓ} {ℓ' : Level} → QuasiEquivRel A B ℓ' → QuasiEquivRel B A ℓ'
 invQER (R , qer) .fst = invPropRel R

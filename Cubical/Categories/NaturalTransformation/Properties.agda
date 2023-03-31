@@ -51,7 +51,7 @@ module _ {C : Category ℓC ℓC'} {D : Category ℓD ℓD'} where
 
       -- same as Sigma version
       NatTransΣ : Type (ℓ-max (ℓ-max ℓC ℓC') ℓD')
-      NatTransΣ = Σ[ ob ∈ ((x : C .ob) → D [(F .F-ob x) , (G .F-ob x)]) ]
+      NatTransΣ = Σ[ ob ꞉ ((x : C .ob) → D [(F .F-ob x) , (G .F-ob x)]) ]
                      ({x y : _ } (f : C [ x , y ]) → (F .F-hom f) ⋆ᴰ (ob y) ≡ (ob x) ⋆ᴰ (G .F-hom f))
 
       NatTransIsoΣ : Iso (NatTrans F G) NatTransΣ
@@ -81,7 +81,7 @@ module _ {C : Category ℓC ℓC'} {D : Category ℓD ℓD'} where
         βHom = β .N-hom
       -- path between natural transformations is the same as a pair of paths (between ob and hom)
       NTPathIsoPathΣ : Iso (α ≡ β)
-                         (Σ[ p ∈ (αOb ≡ βOb) ]
+                         (Σ[ p ꞉ (αOb ≡ βOb) ]
                               (PathP (λ i → ({x y : _} (f : _) → F ⟪ f ⟫ ⋆ᴰ (p i y) ≡ (p i x) ⋆ᴰ G ⟪ f ⟫))
                                   αHom
                                   βHom))

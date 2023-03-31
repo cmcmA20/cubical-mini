@@ -123,7 +123,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
     where
       -- sends c to the disjoint union of all the images under P
       LF-ob : (c : C .ob) → (SET _) .ob
-      LF-ob c = (Σ[ x ∈ fst (F ⟅ c ⟆) ] fst (P ⟅ c , x ⟆)) , isSetΣ (snd (F ⟅ c ⟆)) (λ x → snd (P ⟅ c , x ⟆))
+      LF-ob c = (Σ[ x ꞉ fst (F ⟅ c ⟆) ] fst (P ⟅ c , x ⟆)) , isSetΣ (snd (F ⟅ c ⟆)) (λ x → snd (P ⟅ c , x ⟆))
 
       -- defines a function piecewise over the fibers by applying P
       LF-hom : ∀ {x y}
@@ -235,7 +235,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
     -- the iso we need
     -- a type is isomorphic to the disjoint union of all its fibers
     typeSectionIso : ∀ {A B : Type ℓS} {isSetB : isSet B} → (ϕ : A → B)
-                  → Iso A (Σ[ b ∈ B ] fiber ϕ b)
+                  → Iso A (Σ[ b ꞉ B ] fiber ϕ b)
     typeSectionIso ϕ .fun a = (ϕ a) , (a , refl)
     typeSectionIso ϕ .inv (b , (a , eq)) = a
     typeSectionIso {isSetB = isSetB} ϕ .rightInv (b , (a , eq))
@@ -288,7 +288,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
     -- the iso we deserve
     -- says that a type family at x is isomorphic to the fiber over x of that type family packaged up
     typeFiberIso : ∀ {ℓ ℓ'} {A : Type ℓ} {isSetA : isSet A} {x} (B : A → Type ℓ')
-                  → Iso (B x) (fiber {A = Σ[ a ∈ A ] B a} (λ (x , _) → x) x)
+                  → Iso (B x) (fiber {A = Σ[ a ꞉ A ] B a} (λ (x , _) → x) x)
     typeFiberIso {x = x} _ .fun b = (x , b) , refl
     typeFiberIso _ .inv ((a , b) , eq) = subst _ eq b
     typeFiberIso {isSetA = isSetA} {x = x} B .rightInv ((a , b) , eq)

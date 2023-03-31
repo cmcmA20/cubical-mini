@@ -80,7 +80,7 @@ isPropIsIso {C = C} f p q i .ret j =
 
 
 CatIso : (C : Category ℓ ℓ') (x y : C .ob) → Type ℓ'
-CatIso C x y = Σ[ f ∈ C [ x , y ] ] isIso C f
+CatIso C x y = Σ[ f ꞉ C [ x , y ] ] isIso C f
 
 CatIso≡ : {C : Category ℓ ℓ'}{x y : C .ob}(f g : CatIso C x y) → f .fst ≡ g .fst → f ≡ g
 CatIso≡ f g = Σ≡Prop isPropIsIso
@@ -139,7 +139,7 @@ isSetHom (C ^op)     = C .isSetHom
 
 
 ΣPropCat : (C : Category ℓ ℓ') (P : ℙ (ob C)) → Category ℓ ℓ'
-ob (ΣPropCat C P) = Σ[ x ∈ ob C ] x ∈ P
+ob (ΣPropCat C P) = Σ[ x ꞉ ob C ] x ∈ P
 Hom[_,_] (ΣPropCat C P) x y = C [ fst x , fst y ]
 id (ΣPropCat C P) = id C
 _⋆_ (ΣPropCat C P) = _⋆_ C

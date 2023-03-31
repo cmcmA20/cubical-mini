@@ -52,7 +52,7 @@ module _ {ℓC ℓC' ℓD ℓD' ℓE ℓE'}
     where
     Mor : (d : D .ob) → Type _
     Mor d =
-      Σ[ g ∈ E [ A .F-ob d , B .F-ob d ] ]
+      Σ[ g ꞉ E [ A .F-ob d , B .F-ob d ] ]
         ((c : C .ob)(f : CatIso D (F .F-ob c) d)
         → α .N-ob c ≡ A .F-hom (f .fst) ⋆⟨ E ⟩ g ⋆⟨ E ⟩ B .F-hom (f .snd .inv))
 
@@ -160,8 +160,8 @@ module _ {ℓC ℓC' ℓD ℓD' ℓE ℓE'}
   isWeakEquiv→isEssSurjPrecomp w-equiv G = ∣ Ext , Ext≃ ∣₁
     where
     Obj : (d : D .ob) → Type _
-    Obj d = Σ[ e ∈ E .ob ]
-      Σ[ k ∈ ((c : C .ob)(h : CatIso D (F .F-ob c) d) → CatIso E (G .F-ob c) e) ]
+    Obj d = Σ[ e ꞉ E .ob ]
+      Σ[ k ꞉ ((c : C .ob)(h : CatIso D (F .F-ob c) d) → CatIso E (G .F-ob c) e) ]
         ((c c' : C .ob)(h : CatIso D (F .F-ob c) d)(h' : CatIso D (F .F-ob c') d)
           → (f : C [ c , c' ])
           → F .F-hom f ⋆⟨ D ⟩ h' .fst ≡ h .fst
@@ -228,7 +228,7 @@ module _ {ℓC ℓC' ℓD ℓD' ℓE ℓE'}
 
     Mor : (d d' : D .ob)(f : D [ d , d' ]) → Type _
     Mor d d' f =
-      Σ[ g ∈ E [ Ext-ob d , Ext-ob d' ] ]
+      Σ[ g ꞉ E [ Ext-ob d , Ext-ob d' ] ]
         ((c c' : C .ob)(h : CatIso D (F .F-ob c) d)(h' : CatIso D (F .F-ob c') d')
           → (l : C [ c , c' ])
           → F .F-hom l ⋆⟨ D ⟩ h' .fst ≡ h .fst ⋆⟨ D ⟩ f

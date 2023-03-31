@@ -53,7 +53,7 @@ module Lan {ℓC ℓC' ℓD ℓD'} ℓS
     module _ (d : D.ob) where
 
       Raw : Type ℓ
-      Raw = Σ[ c ∈ C.ob ] Σ[ g ∈ D.Hom[ d , F ⟅ c ⟆ ] ] G .F-ob c .fst
+      Raw = Σ[ c ꞉ C.ob ] Σ[ g ꞉ D.Hom[ d , F ⟅ c ⟆ ] ] G .F-ob c .fst
 
       data _≈_ : (u v : Raw) → Type ℓ where
         shift : {c c' : C.ob} (g : D.Hom[ d , F ⟅ c ⟆ ]) (f : C.Hom[ c , c' ]) (a : (G ⟅ c' ⟆) .fst)
@@ -264,7 +264,7 @@ module Ran {ℓC ℓC' ℓD ℓD'} ℓS
     -- We use that End is equivalent to a Σ-type to prove its HLevel more easily
     isOfHLevelRetract 2
       {B =
-        Σ[ z ∈ ((c : C.ob) (g : D.Hom[ F ⟅ c ⟆ , d ]) → G .F-ob c .fst) ]
+        Σ[ z ꞉ ((c : C.ob) (g : D.Hom[ F ⟅ c ⟆ , d ]) → G .F-ob c .fst) ]
         ({c c' : C.ob} (f : C.Hom[ c , c' ]) (g : D.Hom[ F ⟅ c' ⟆ , d ])
           → z c (F ⟪ f ⟫ ⋆⟨ D ⟩ g) ≡ (G ⟪ f ⟫) (z c' g))
       }

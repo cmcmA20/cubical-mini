@@ -36,7 +36,7 @@ SNS {ℓ₁} S ι = ∀ {X : Type ℓ₁} (s t : S X) → ι (X , s) (X , t) (id
 -- bit differently, but this definition doesn't actually change from
 -- Escardó's notes.
 _≃[_]_ : (A : TypeWithStr ℓ₁ S) (ι : StrEquiv S ℓ₂) (B : TypeWithStr ℓ₁ S) → Type (ℓ-max ℓ₁ ℓ₂)
-A ≃[ ι ] B = Σ[ e ∈ typ A ≃ typ B ] (ι A B e)
+A ≃[ ι ] B = Σ[ e ꞉ typ A ≃ typ B ] (ι A B e)
 
 
 

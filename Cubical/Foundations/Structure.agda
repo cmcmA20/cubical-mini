@@ -13,7 +13,7 @@ private
 -- the pair (X , s) : TypeWithStr ℓ S means that X is equipped with a S-structure, witnessed by s.
 
 TypeWithStr : (ℓ : Level) (S : Type ℓ → Type ℓ') → Type (ℓ-max (ℓ-suc ℓ) ℓ')
-TypeWithStr ℓ S = Σ[ X ∈ Type ℓ ] S X
+TypeWithStr ℓ S = Σ[ X ꞉ Type ℓ ] S X
 
 typ : TypeWithStr ℓ S → Type ℓ
 typ = fst

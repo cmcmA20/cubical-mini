@@ -20,7 +20,7 @@ Rel : ∀ {ℓ} (A B : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc �
 Rel A B ℓ' = A → B → Type ℓ'
 
 PropRel : ∀ {ℓ} (A B : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc ℓ'))
-PropRel A B ℓ' = Σ[ R ∈ Rel A B ℓ' ] ∀ a b → isProp (R a b)
+PropRel A B ℓ' = Σ[ R ꞉ Rel A B ℓ' ] ∀ a b → isProp (R a b)
 
 idPropRel : ∀ {ℓ} (A : Type ℓ) → PropRel A A ℓ
 idPropRel A .fst a a' = ∥ a ≡ a' ∥₁
@@ -33,7 +33,7 @@ invPropRel R .snd b a = R .snd a b
 
 compPropRel : ∀ {ℓ ℓ' ℓ''} {A B C : Type ℓ}
   → PropRel A B ℓ' → PropRel B C ℓ'' → PropRel A C (ℓ-max ℓ (ℓ-max ℓ' ℓ''))
-compPropRel R S .fst a c = ∥ Σ[ b ∈ _ ] (R .fst a b × S .fst b c) ∥₁
+compPropRel R S .fst a c = ∥ Σ[ b ꞉ _ ] (R .fst a b × S .fst b c) ∥₁
 compPropRel R S .snd _ _ = squash₁
 
 graphRel : ∀ {ℓ} {A B : Type ℓ} → (A → B) → Rel A B ℓ
@@ -84,7 +84,7 @@ module BinaryRelation {ℓ ℓ' : Level} {A : Type ℓ} (R : Rel A A ℓ') where
 
   -- the total space corresponding to the binary relation w.r.t. a
   relSinglAt : (a : A) → Type (ℓ-max ℓ ℓ')
-  relSinglAt a = Σ[ a' ∈ A ] (R a a')
+  relSinglAt a = Σ[ a' ꞉ A ] (R a a')
 
   -- the statement that the total space is contractible at any a
   contrRelSingl : Type (ℓ-max ℓ ℓ')
@@ -128,10 +128,10 @@ module BinaryRelation {ℓ ℓ' : Level} {A : Type ℓ} (R : Rel A A ℓ') where
                                    (isContrSingl a)
 
 EquivRel : ∀ {ℓ} (A : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc ℓ'))
-EquivRel A ℓ' = Σ[ R ∈ Rel A A ℓ' ] BinaryRelation.isEquivRel R
+EquivRel A ℓ' = Σ[ R ꞉ Rel A A ℓ' ] BinaryRelation.isEquivRel R
 
 EquivPropRel : ∀ {ℓ} (A : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc ℓ'))
-EquivPropRel A ℓ' = Σ[ R ∈ PropRel A A ℓ' ] BinaryRelation.isEquivRel (R .fst)
+EquivPropRel A ℓ' = Σ[ R ꞉ PropRel A A ℓ' ] BinaryRelation.isEquivRel (R .fst)
 
 record RelIso {A : Type ℓA} (_≅_ : Rel A A ℓ≅A)
               {A' : Type ℓA'} (_≅'_ : Rel A' A' ℓ≅A') : Type (ℓ-max (ℓ-max ℓA ℓA') (ℓ-max ℓ≅A ℓ≅A')) where

@@ -69,7 +69,7 @@ hasPropFibersOfImage f = ∀ x → isProp (fiber f (f x))
 
 -- some notation
 _↪_ : Type ℓ' → Type ℓ'' → Type (ℓ-max ℓ' ℓ'')
-A ↪ B = Σ[ f ∈ (A → B) ] isEmbedding f
+A ↪ B = Σ[ f ꞉ (A → B) ] isEmbedding f
 
 hasPropFibersIsProp : isProp (hasPropFibers f)
 hasPropFibersIsProp = isPropΠ (λ _ → isPropIsProp)
@@ -230,13 +230,13 @@ Embedding-into-hLevel→hLevel (suc n) (f , isEmbeddingF) Blvl x y
 
 -- We now show that the powerset is the subtype classifier
 -- i.e. ℙ X ≃ Σ[A ∈ Type ℓ] (A ↪ X)
-Embedding→Subset : {X : Type ℓ} → Σ[ A ∈ Type ℓ ] (A ↪ X) → ℙ X
+Embedding→Subset : {X : Type ℓ} → Σ[ A ꞉ Type ℓ ] (A ↪ X) → ℙ X
 Embedding→Subset (_ , f , isEmbeddingF) x = fiber f x , isEmbedding→hasPropFibers isEmbeddingF x
 
-Subset→Embedding : {X : Type ℓ} → ℙ X → Σ[ A ∈ Type ℓ ] (A ↪ X)
+Subset→Embedding : {X : Type ℓ} → ℙ X → Σ[ A ꞉ Type ℓ ] (A ↪ X)
 Subset→Embedding {X = X} A = D , fst , Ψ
  where
-  D = Σ[ x ∈ X ] x ∈ A
+  D = Σ[ x ꞉ X ] x ∈ A
 
   Ψ : isEmbedding fst
   Ψ w x = isEmbeddingFstΣProp (∈-isProp A)
@@ -248,11 +248,11 @@ Subset→Embedding→Subset _ = funExt λ x → Σ≡Prop (λ _ → isPropIsProp
 Embedding→Subset→Embedding {ℓ = ℓ} {X = X} (A , f , ψ) =
   cong (equivFun Σ-assoc-≃) (Σ≡Prop (λ _ → isPropIsEmbedding) (retEq (fibrationEquiv X ℓ) (A , f)))
 
-@0 Subset≃Embedding : {X : Type ℓ} → ℙ X ≃ (Σ[ A ∈ Type ℓ ] (A ↪ X))
+@0 Subset≃Embedding : {X : Type ℓ} → ℙ X ≃ (Σ[ A ꞉ Type ℓ ] (A ↪ X))
 Subset≃Embedding = isoToEquiv (iso Subset→Embedding Embedding→Subset
                                     Embedding→Subset→Embedding Subset→Embedding→Subset)
 
-@0 Subset≡Embedding : {X : Type ℓ} → ℙ X ≡ (Σ[ A ∈ Type ℓ ] (A ↪ X))
+@0 Subset≡Embedding : {X : Type ℓ} → ℙ X ≡ (Σ[ A ꞉ Type ℓ ] (A ↪ X))
 Subset≡Embedding = ua Subset≃Embedding
 
 isEmbedding-∘ : isEmbedding f → isEmbedding h → isEmbedding (f ∘ h)
@@ -274,9 +274,9 @@ isEmbedding→embedsFibersIntoSingl {f = f} isE z = e , isEmbE where
   isEmbE u v = goal where
     -- "adjust" ΣeqCf by trivial equivalences that hold judgementally, which should save compositions
     Dom′ : ∀ u v → Type _
-    Dom′ u v = Σ[ p ∈    fst u  ≡    fst v  ] PathP (λ i → f (p i) ≡ z) (snd u) (snd v)
+    Dom′ u v = Σ[ p ꞉    fst u  ≡    fst v  ] PathP (λ i → f (p i) ≡ z) (snd u) (snd v)
     Cod′ : ∀ u v → Type _
-    Cod′ u v = Σ[ p ∈ f (fst u) ≡ f (fst v) ] PathP (λ i →    p i  ≡ z) (snd u) (snd v)
+    Cod′ u v = Σ[ p ꞉ f (fst u) ≡ f (fst v) ] PathP (λ i →    p i  ≡ z) (snd u) (snd v)
     ΣeqCf : Dom′ u v ≃ Cod′ u v
     ΣeqCf = Σ-cong-equiv-fst (_ , isE _ _)
 
@@ -361,15 +361,15 @@ module FibrationIdentityPrinciple {B : Type ℓ} {ℓ'} where
                λ _ → isEquiv→hasPropFibers (snd (invEquiv (preCompEquiv LiftEquiv))) _)
     where
     fiberChar : fiber liftFibration (A , f)
-              ≃ (Σ[ (E , eq) ∈ fiber L A ] fiber (_∘ lower) (transport⁻ (λ i → eq i → B) f))
+              ≃ (Σ[ (E , eq) ꞉ fiber L A ] fiber (_∘ lower) (transport⁻ (λ i → eq i → B) f))
     fiberChar =
         fiber liftFibration (A , f)
       ≃⟨ Σ-cong-equiv-snd (λ _ → invEquiv ΣPath≃PathΣ) ⟩
-        (Σ[ (E , g) ∈ Fibration B ℓ' ] Σ[ eq ∈ (L E ≡ A) ] PathP (λ i → eq i → B) (g ∘ lower) f)
+        (Σ[ (E , g) ꞉ Fibration B ℓ' ] Σ[ eq ꞉ (L E ≡ A) ] PathP (λ i → eq i → B) (g ∘ lower) f)
       ≃⟨ boringSwap ⟩
-        (Σ[ (E , eq) ∈ fiber L A ] Σ[ g ∈ (E → B) ] PathP (λ i → eq i → B) (g ∘ lower) f)
+        (Σ[ (E , eq) ꞉ fiber L A ] Σ[ g ꞉ (E → B) ] PathP (λ i → eq i → B) (g ∘ lower) f)
       ≃⟨ Σ-cong-equiv-snd (λ _ → Σ-cong-equiv-snd λ _ → pathToEquiv (PathP≡Path⁻ _ _ _)) ⟩
-        (Σ[ (E , eq) ∈ fiber L A ] fiber (_∘ lower) (transport⁻ (λ i → eq i → B) f))
+        (Σ[ (E , eq) ꞉ fiber L A ] fiber (_∘ lower) (transport⁻ (λ i → eq i → B) f))
       ■ where
       unquoteDecl boringSwap =
         declStrictEquiv boringSwap
@@ -400,7 +400,7 @@ _≃Fib_ = FibrationIdentityPrinciple.f≃g
 FibrationIP = FibrationIdentityPrinciple.FibrationIP
 
 Embedding : (B : Type ℓ') → (ℓ : Level) → Type (ℓ-max ℓ' (ℓ-suc ℓ))
-Embedding B ℓ = Σ[ A ∈ Type ℓ ] A ↪ B
+Embedding B ℓ = Σ[ A ꞉ Type ℓ ] A ↪ B
 
 module EmbeddingIdentityPrinciple {B : Type ℓ} {ℓ'} (f g : Embedding B ℓ') where
   open Σ f renaming (fst to F)

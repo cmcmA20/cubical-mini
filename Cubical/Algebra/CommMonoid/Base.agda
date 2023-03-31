@@ -103,7 +103,7 @@ IsCommMonoidEquiv : {A : Type ℓ} {B : Type ℓ'}
 IsCommMonoidEquiv M e N = IsMonoidHom (CommMonoidStr→MonoidStr M) (e .fst) (CommMonoidStr→MonoidStr N)
 
 CommMonoidEquiv : (M : CommMonoid ℓ) (N : CommMonoid ℓ') → Type (ℓ-max ℓ ℓ')
-CommMonoidEquiv M N = Σ[ e ∈ (M .fst ≃ N .fst) ] IsCommMonoidEquiv (M .snd) e (N .snd)
+CommMonoidEquiv M N = Σ[ e ꞉ M .fst ≃ N .fst ] IsCommMonoidEquiv (M .snd) e (N .snd)
 
 isPropIsCommMonoid : {M : Type ℓ} (ε : M) (_·_ : M → M → M)
              → isProp (IsCommMonoid ε _·_)

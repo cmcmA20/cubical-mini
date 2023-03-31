@@ -71,10 +71,10 @@ postCompEquiv e = _ , isEquivPostComp e
 -- see also: equivΠCod for a dependent version of postCompEquiv
 
 hasSection : (A → B) → Type _
-hasSection {A = A} {B = B} f = Σ[ g ∈ (B → A) ] section f g
+hasSection {A = A} {B = B} f = Σ[ g ꞉ (B → A) ] section f g
 
 hasRetract : (A → B) → Type _
-hasRetract {A = A} {B = B} f = Σ[ g ∈ (B → A) ] retract f g
+hasRetract {A = A} {B = B} f = Σ[ g ꞉ (B → A) ] retract f g
 
 isEquiv→isContrHasSection : {f : A → B} → isEquiv f → isContr (hasSection f)
 fst (isEquiv→isContrHasSection isEq) = invIsEq isEq , secIsEq isEq
@@ -172,13 +172,13 @@ isPropIsHAEquiv {f = f} ishaef = goal ishaef where
   equivF = isHAEquiv→isEquiv ishaef
 
   rCoh1 : (sec : hasSection f) → Type _
-  rCoh1 (g , ε) = Σ[ η ∈ retract f g ] ∀ x → cong f (η x) ≡ ε (f x)
+  rCoh1 (g , ε) = Σ[ η ꞉ retract f g ] ∀ x → cong f (η x) ≡ ε (f x)
 
   rCoh2 : (sec : hasSection f) → Type _
-  rCoh2 (g , ε) = Σ[ η ∈ retract f g ] ∀ x → Square (ε (f x)) refl (cong f (η x)) refl
+  rCoh2 (g , ε) = Σ[ η ꞉ retract f g ] ∀ x → Square (ε (f x)) refl (cong f (η x)) refl
 
   rCoh3 : (sec : hasSection f) → Type _
-  rCoh3 (g , ε) = ∀ x → Σ[ ηx ∈ g (f x) ≡ x ] Square (ε (f x)) refl (cong f ηx) refl
+  rCoh3 (g , ε) = ∀ x → Σ[ ηx ꞉ g (f x) ≡ x ] Square (ε (f x)) refl (cong f ηx) refl
 
   rCoh4 : (sec : hasSection f) → Type _
   rCoh4 (g , ε) = ∀ x → Path (fiber f (f x)) (g (f x) , ε (f x)) (x , refl)

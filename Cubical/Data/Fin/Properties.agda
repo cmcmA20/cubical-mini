@@ -115,7 +115,7 @@ discreteFin (suc x) (suc y) with discreteFin x y
 isSetFin : ∀{k} → isSet (Fin k)
 isSetFin = Discrete→isSet discreteFin
 
-isWeaken? : ∀ {n} (p : Fin (ℕsuc n)) → Dec (Σ[ q ∈ Fin n ] p ≡ weakenFin q)
+isWeaken? : ∀ {n} (p : Fin (ℕsuc n)) → Dec (Σ[ q ꞉ Fin n ] p ≡ weakenFin q)
 isWeaken? {ℕzero} zero = no λ (q , eqn) → case q of λ ()
 isWeaken? {ℕsuc n} zero = yes (zero , refl)
 isWeaken? {ℕsuc n} (suc p) with isWeaken? {n} p
@@ -344,14 +344,14 @@ module FinProdChar where
 ∀Dec :
     (P : Fin m → Type ℓ)
   → (dec : (i : Fin m) → Dec (P i))
-  → ((i : Fin m) → P i) ⊎ (Σ[ i ∈ Fin m ] ¬ P i)
+  → ((i : Fin m) → P i) ⊎ (Σ[ i ꞉ Fin m ] ¬ P i)
 ∀Dec {m = 0} _ _ = inl λ ()
 ∀Dec {m = ℕsuc m} P dec = helper (dec zero) (∀Dec _ (dec ∘ suc))
   where
     helper :
         Dec (P zero)
-      → ((i : Fin m) → P (suc i))  ⊎ (Σ[ i ∈ Fin m ] ¬ P (suc i))
-      → ((i : Fin (ℕsuc m)) → P i) ⊎ (Σ[ i ∈ Fin (ℕsuc m) ] ¬ P i)
+      → ((i : Fin m) → P (suc i))  ⊎ (Σ[ i ꞉ Fin m ] ¬ P (suc i))
+      → ((i : Fin (ℕsuc m)) → P i) ⊎ (Σ[ i ꞉ Fin (ℕsuc m) ] ¬ P i)
     helper (yes p) (inl q) = inl λ { zero → p ; (suc i) → q i }
     helper (yes _) (inr q) = inr (suc (q .fst) , q .snd)
     helper (no ¬p) _ = inr (zero , ¬p)
@@ -359,14 +359,14 @@ module FinProdChar where
 ∀Dec2 :
     (P : Fin m → Fin n → Type ℓ)
   → (dec : (i : Fin m)(j : Fin n) → Dec (P i j))
-  → ((i : Fin m)(j : Fin n) → P i j) ⊎ (Σ[ i ∈ Fin m ] Σ[ j ∈ Fin n ] ¬ P i j)
+  → ((i : Fin m)(j : Fin n) → P i j) ⊎ (Σ[ i ꞉ Fin m ] Σ[ j ꞉ Fin n ] ¬ P i j)
 ∀Dec2 {m = 0} {n = n} _ _ = inl λ ()
 ∀Dec2 {m = ℕsuc m} {n = n} P dec = helper (∀Dec (P zero) (dec zero)) (∀Dec2 (P ∘ suc) (dec ∘ suc))
   where
     helper :
-        ((j : Fin n) → P zero j) ⊎ (Σ[ j ∈ Fin n ] ¬ P zero j)
-      → ((i : Fin m)(j : Fin n) → P (suc i) j)  ⊎ (Σ[ i ∈ Fin m ] Σ[ j ∈ Fin n ] ¬ P (suc i) j)
-      → ((i : Fin (ℕsuc m))(j : Fin n) → P i j) ⊎ (Σ[ i ∈ Fin (ℕsuc m) ] Σ[ j ∈ Fin n ] ¬ P i j)
+        ((j : Fin n) → P zero j) ⊎ (Σ[ j ꞉ Fin n ] ¬ P zero j)
+      → ((i : Fin m)(j : Fin n) → P (suc i) j)  ⊎ (Σ[ i ꞉ Fin m ] Σ[ j ꞉ Fin n ] ¬ P (suc i) j)
+      → ((i : Fin (ℕsuc m))(j : Fin n) → P i j) ⊎ (Σ[ i ꞉ Fin (ℕsuc m) ] Σ[ j ꞉ Fin n ] ¬ P i j)
     helper (inl p) (inl q) = inl λ { zero j → p j ; (suc i) j → q i j }
     helper (inl _) (inr q) = inr (suc (q .fst) , q .snd .fst , q .snd .snd)
     helper (inr p) _ = inr (zero , p)

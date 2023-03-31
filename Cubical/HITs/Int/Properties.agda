@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --overlapping-instances --instance-search-depth=2 #-}
 module Cubical.HITs.Int.Properties where
 
 open import Cubical.Foundations.Prelude
@@ -14,20 +14,7 @@ open import Cubical.HITs.Int.Base
 
 open import Cubical.Relation.Nullary
 
-succEquiv : ℤ ≃ ℤ
-succEquiv = isoToEquiv (iso succ pred succPred predSucc)
-  where
-  succPred : ∀ m → succ (pred m) ≡ m
-  succPred (neg _)       = refl
-  succPred (pos zero)    = 0₋≡0₊
-  succPred (pos (suc _)) = refl
-  succPred (0₋≡0₊ i) j = 0₋≡0₊ (i ∧ j)
-
-  predSucc : ∀ m → pred (succ m) ≡ m
-  predSucc (neg zero)    = sym 0₋≡0₊
-  predSucc (neg (suc _)) = refl
-  predSucc (pos _)       = refl
-  predSucc (0₋≡0₊ i) j = sym 0₋≡0₊ (~ i ∧ j)
+open import Cubical.Instances.HLevels
 
 ℤ≃ℤᵢ : ℤ ≃ ℤᵢ
 ℤ≃ℤᵢ = isoToEquiv (iso to from li ri)
@@ -55,5 +42,26 @@ succEquiv = isoToEquiv (iso succ pred succPred predSucc)
 discreteℤ : Discrete ℤ
 discreteℤ = EquivPresDiscrete (invEquiv ℤ≃ℤᵢ) discreteℤᵢ
 
-isSetℤ : isSet ℤ
-isSetℤ = Discrete→isSet discreteℤ
+-- succEquiv : ℤ ≃ ℤ
+-- succEquiv = isoToEquiv (iso succ pred succPred predSucc)
+--   where
+--   succPred : ∀ m → succ (pred m) ≡ m
+--   succPred (neg _)       = refl
+--   succPred (pos zero)    = 0₋≡0₊
+--   succPred (pos (suc _)) = refl
+--   succPred (0₋≡0₊ i) j = 0₋≡0₊ (i ∧ j)
+
+--   predSucc : ∀ m → pred (succ m) ≡ m
+--   predSucc (neg zero)    = sym 0₋≡0₊
+--   predSucc (neg (suc _)) = refl
+--   predSucc (pos _)       = refl
+--   predSucc (0₋≡0₊ i) j = sym 0₋≡0₊ (~ i ∧ j)
+
+-- succEquiv′ : ℤ ≃ ℤ
+-- succEquiv′ = isoToEquiv (iso succ pred succPred predSucc)
+--   where
+--   succPred : ∀ m → succ (pred m) ≡ m
+--   succPred = elim-prop (λ _ → refl) (λ { zero → 0₋≡0₊ ; (suc _) → refl })
+
+--   predSucc : ∀ m → pred (succ m) ≡ m
+--   predSucc = elim-prop (λ { zero → sym 0₋≡0₊ ; (suc _) → refl }) (λ _ → refl)

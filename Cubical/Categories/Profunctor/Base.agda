@@ -212,7 +212,7 @@ module _ (ℓ ℓ' : Level) where
     NatIso (Profunctor⊶.asFunc (HomProf D profF⊶[ F , Id {C = D} ])) (Profunctor⊶.asFunc R)
 
   Representable : {C D : Cat} → C ⊶ D → Type _
-  Representable {C}{D} R = Σ[ F ∈ Functor C D ] (F Represents R)
+  Representable {C}{D} R = Σ[ F ꞉ Functor C D ] (F Represents R)
 
   record Representable' {C D : Cat} (R : C ⊶ D) : Type (ℓ-max ℓ (ℓ-suc ℓ')) where
     module R = Profunctor⊶ R

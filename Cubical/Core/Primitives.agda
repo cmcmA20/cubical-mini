@@ -206,4 +206,11 @@ infix 2 Σ-syntax
 Σ-syntax : ∀ {ℓ ℓ'} (A : Type ℓ) (B : A → Type ℓ') → Type (ℓ-max ℓ ℓ')
 Σ-syntax = Σ
 
-syntax Σ-syntax A (λ x → B) = Σ[ x ∈ A ] B
+syntax Σ-syntax A (λ x → B) = Σ[ x ꞉ A ] B
+
+infix 3 Π-syntax
+
+Π-syntax : ∀ {ℓ ℓ'} (A : Type ℓ) → (A → Type ℓ') → Type (ℓ-max ℓ ℓ')
+Π-syntax A B = (x : A) → B x
+
+syntax Π-syntax A (λ x → B) = Π[ x ꞉ A ] B

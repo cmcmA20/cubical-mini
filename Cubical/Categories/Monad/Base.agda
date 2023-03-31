@@ -53,7 +53,7 @@ module _ {C : Category ℓ ℓ'} (M : Functor C C) where
 
 module _ (C : Category ℓ ℓ') where
   Monad : Type (ℓ-max ℓ ℓ')
-  Monad = Σ[ M ∈ Functor C C ] IsMonad M
+  Monad = Σ[ M ꞉ Functor C C ] IsMonad M
 
 module _ {C : Category ℓ ℓ'} (monadM monadN : Monad C) (ν : NatTrans (fst monadM) (fst monadN)) where
 
@@ -77,4 +77,4 @@ module _ {C : Category ℓ ℓ'} (monadM monadN : Monad C) (ν : NatTrans (fst m
 
 module _ {C : Category ℓ ℓ'} (monadM monadN : Monad C) where
   MonadHom : Type (ℓ-max ℓ ℓ')
-  MonadHom = Σ[ ν ∈ NatTrans (fst monadM) (fst monadN) ] IsMonadHom monadM monadN ν
+  MonadHom = Σ[ ν ꞉ NatTrans (fst monadM) (fst monadN) ] IsMonadHom monadM monadN ν

@@ -75,7 +75,7 @@ recognizeId {A = A} {a = a} Eq eqRefl eqContr x = (fiberMap x) , (isEquivFiberMa
     fiberMap : (x : A) → a ≡ x → Eq x
     fiberMap x = J (λ x p → Eq x) eqRefl
 
-    mapOnSigma : Σ[ x ∈ A ] a ≡ x → Σ _ Eq
+    mapOnSigma : Σ[ x ꞉ A ] a ≡ x → Σ _ Eq
     mapOnSigma pair = fst pair , fiberMap (fst pair) (snd pair)
 
     equivOnSigma : (x : A) → isEquiv mapOnSigma
@@ -86,14 +86,14 @@ recognizeId {A = A} {a = a} Eq eqRefl eqContr x = (fiberMap x) , (isEquivFiberMa
 
 fundamentalTheoremOfId : {A : Type ℓ} (Eq : A → A → Type ℓ')
   → ((x : A) → Eq x x)
-  → ((x : A) → isContr (Σ[ y ∈ A ] Eq x y))
+  → ((x : A) → isContr (Σ[ y ꞉ A ] Eq x y))
   → (x y : A) → (x ≡ y) ≃ (Eq x y)
 fundamentalTheoremOfId Eq eqRefl eqContr x = recognizeId (Eq x) (eqRefl x) (eqContr x)
 
 fundamentalTheoremOfIdβ :
   {A : Type ℓ} (Eq : A → A → Type ℓ')
   → (eqRefl : (x : A) → Eq x x)
-  → (eqContr : (x : A) → isContr (Σ[ y ∈ A ] Eq x y))
+  → (eqContr : (x : A) → isContr (Σ[ y ꞉ A ] Eq x y))
   → (x : A)
   → fst (fundamentalTheoremOfId Eq eqRefl eqContr x x) refl ≡ eqRefl x
 fundamentalTheoremOfIdβ Eq eqRefl eqContr x = JRefl (λ y p → Eq x y) (eqRefl x)

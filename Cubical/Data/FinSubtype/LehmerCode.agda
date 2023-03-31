@@ -35,7 +35,7 @@ private
     n : ℕ
 
 FinExcept : (i : Fin n) → Type₀
-FinExcept i = Σ[ j ∈ Fin _ ] ¬ (i ≡ j)
+FinExcept i = Σ[ j ꞉ Fin _ ] ¬ (i ≡ j)
 
 isSetFinExcept : {i : Fin n} → isSet (FinExcept i)
 isSetFinExcept = isOfHLevelΣ 2 isSetFin (λ _ → isProp→isSet (isPropΠ (λ _ → ⊥.isProp⊥)))
@@ -134,7 +134,7 @@ lehmerEquiv {zero} = isContr→Equiv contrFF isContrLehmerZero where
 
 lehmerEquiv {suc n} =
   (Fin (suc n) ≃ Fin (suc n))                            ≃⟨ isoToEquiv i ⟩
-  (Σ[ k ∈ Fin (suc n) ] (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
+  (Σ[ k ꞉ Fin (suc n) ] (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
   (Fin (suc n) × (Fin n ≃ Fin n))                        ≃⟨ Σ-cong-equiv-snd (λ _ → lehmerEquiv) ⟩
   (Fin (suc n) × LehmerCode n)                           ≃⟨ lehmerSucEquiv ⟩
   LehmerCode (suc n) ■ where
@@ -143,7 +143,7 @@ lehmerEquiv {suc n} =
     equivIn f =
       FinExcept fzero
         ≃⟨ Σ-cong-equiv-snd (λ _ → preCompEquiv (invEquiv (congEquiv f))) ⟩
-      (Σ[ x ∈ Fin (suc n) ] ¬ ffun fzero ≡ ffun x)
+      (Σ[ x ꞉ Fin (suc n) ] ¬ ffun fzero ≡ ffun x)
         ≃⟨ Σ-cong-equiv-fst f ⟩
       FinExcept (ffun fzero)
         ■ where ffun = equivFun f
@@ -169,7 +169,7 @@ lehmerEquiv {suc n} =
     ... | (no n) = cong (λ x′ → fst (equivFun f x′)) (toℕExc-injective refl)
 
     i : Iso (Fin (suc n) ≃ Fin (suc n))
-            (Σ[ k ∈ Fin (suc n) ] (FinExcept (fzero {k = n}) ≃ FinExcept k))
+            (Σ[ k ꞉ Fin (suc n) ] (FinExcept (fzero {k = n}) ≃ FinExcept k))
     Iso.fun i f = equivFun f fzero , equivIn f
     Iso.inv i (k , f) = equivOut f
     Iso.rightInv i (k , f) = ΣPathP (refl , equivEq (funExt λ x →

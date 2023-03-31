@@ -8,12 +8,12 @@ open import Cubical.Core.Glue public
   using ( isEquiv ; equiv-proof ; _≃_ ; equivFun ; equivProof )
 
 fiber : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} (f : A → B) (y : B) → Type (ℓ-max ℓ ℓ')
-fiber {A = A} f y = Σ[ x ∈ A ] f x ≡ y
+fiber {A = A} f y = Σ[ x ꞉ A ] f x ≡ y
 
 -- Helper function for constructing equivalences from pairs (f,g) that cancel each other up to definitional
 -- equality. For such (f,g), the result type simplifies to isContr (fiber f b).
 strictContrFibers : ∀ {ℓ ℓ'} {A : Type ℓ} {B : Type ℓ'} {f : A → B} (g : B → A) (b : B)
-  → Σ[ t ∈ fiber f (f (g b)) ]
+  → Σ[ t ꞉ fiber f (f (g b)) ]
     ((t' : fiber f b) → Path (fiber f (f (g b))) t (g (f (t' .fst)) , cong (f ∘ g) (t' .snd)))
 strictContrFibers {f = f} g b .fst = (g b , refl)
 strictContrFibers {f = f} g b .snd (a , p) i = (g (p (~ i)) , λ j → f (g (p (~ i ∨ j))))

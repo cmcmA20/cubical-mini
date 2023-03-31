@@ -42,7 +42,7 @@ instance
   IsOfHLevel.iohl Representable-prop = isPropΠ2 λ _ _ → isPropΠ2 λ _ _ → is-set .iohl _ _
 
 Repr : Type ℓᵐ
-Repr = Σ[ f ∈ ⟨ 𝓜 ⟩ ] Erased (Representable f)
+Repr = Σ[ f ꞉ ⟨ 𝓜 ⟩ ] Erased (Representable f)
 
 Repr≡ : {f′ g′ : Repr} → f′ .fst ≡ g′ .fst → f′ ≡ g′
 Repr≡ {f′ = f , fr} {g′ = g , gr} p = ΣPathP (p , isProp→PathP (λ _ → helper .iohl) fr gr)
@@ -69,7 +69,7 @@ inc-rep x y g h p =
     x · (g · h) ≡⟨ ·Assoc _ _ _ ⟩
     (x · g) · h ∎
 
-rep-inc : (f′ : Repr) → Σ[ g ∈ ⟨ ℳ ⟩ ] Erased (inc g ≡ f′ .fst)
+rep-inc : (f′ : Repr) → Σ[ g ꞉ ⟨ ℳ ⟩ ] Erased (inc g ≡ f′ .fst)
 rep-inc (f , [ fr ]) = f ε , [ (funExt λ _ → sym (fr _ _ _ (sym (·IdL _)))) ]
 
 incᵣ : ⟨ ℳ ⟩ → ⟨ 𝔐 ⟩

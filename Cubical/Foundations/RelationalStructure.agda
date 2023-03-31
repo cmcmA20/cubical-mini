@@ -38,7 +38,7 @@ InducedQuotientStr : (S : Type ℓ → Type ℓ') (ρ : StrRel S ℓ'')
   (A : TypeWithStr ℓ S) (R : Rel (typ A) (typ A) ℓ)
   → Type (ℓ-max ℓ' ℓ'')
 InducedQuotientStr S ρ A R =
-  Σ[ s ∈ S (typ A / R) ] ρ (graphRel [_]) (A .snd) s
+  Σ[ s ꞉ S (typ A / R) ] ρ (graphRel [_]) (A .snd) s
 
 -- A structured equivalence relation R on a structured type A should induce a structure on A/R
 InducesQuotientStr : (S : Type ℓ → Type ℓ') (ρ : StrRel S ℓ'') → Type _

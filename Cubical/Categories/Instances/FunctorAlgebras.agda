@@ -42,7 +42,7 @@ module _ {C : Category ℓC ℓC'} (F : Functor C C) where
   open AlgebraHom
 
   RepAlgebraHom : (algA algB : Algebra) → Type ℓC'
-  RepAlgebraHom algA algB = Σ[ f ∈ C [ carrier algA , carrier algB ] ] IsAlgebraHom algA algB f
+  RepAlgebraHom algA algB = Σ[ f ꞉ C [ carrier algA , carrier algB ] ] IsAlgebraHom algA algB f
 
   isoRepAlgebraHom : (algA algB : Algebra) → AlgebraHom algA algB ≅ RepAlgebraHom algA algB
   fun (isoRepAlgebraHom algA algB) (algebraHom f isalgF) = f , isalgF

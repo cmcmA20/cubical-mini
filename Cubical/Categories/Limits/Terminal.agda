@@ -20,7 +20,7 @@ module _ (C : Category ℓ ℓ') where
   isTerminal x = ∀ (y : ob) → isContr (C [ y , x ])
 
   Terminal : Type (ℓ-max ℓ ℓ')
-  Terminal = Σ[ x ∈ ob ] isTerminal x
+  Terminal = Σ[ x ꞉ ob ] isTerminal x
 
   terminalOb : Terminal → ob
   terminalOb = fst

@@ -33,8 +33,8 @@ module _ {ℓC ℓC' ℓM ℓM' ℓA ℓA' : Level}
 
 
  _↓Diag : ob C → Category (ℓ-max ℓC' ℓM) (ℓ-max ℓC' ℓM')
- ob (x ↓Diag) = Σ[ u ∈ ob M ] C [ x , K .F-ob u ]
- Hom[_,_] (x ↓Diag) (u , f) (v , g) = Σ[ h ∈ M [ u , v ] ] f ⋆⟨ C ⟩ K .F-hom h ≡ g
+ ob (x ↓Diag) = Σ[ u ꞉ ob M ] C [ x , K .F-ob u ]
+ Hom[_,_] (x ↓Diag) (u , f) (v , g) = Σ[ h ꞉ M [ u , v ] ] f ⋆⟨ C ⟩ K .F-hom h ≡ g
  id (x ↓Diag) {x = (u , f)} = id M , cong (seq' C f) (F-id K) ∙ ⋆IdR C f
  _⋆_ (x ↓Diag) {x = (u , f)} (h , hComm) (k , kComm) = (h ⋆⟨ M ⟩ k)
                                                      , cong (seq' C f) (F-seq K h k)

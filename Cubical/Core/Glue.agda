@@ -44,7 +44,7 @@ private
 
 -- Uncurry Glue to make it more pleasant to use
 @0 Glue : (A : Type ℓ) {φ : I}
-          → (Te : Partial φ (Σ[ T ∈ Type ℓ' ] T ≃ A))
+          → (Te : Partial φ (Σ[ T ꞉ Type ℓ' ] T ≃ A))
           → Type ℓ'
 Glue A Te = primGlue A (λ x → Te x .fst) (λ x → Te x .snd)
 
@@ -62,7 +62,7 @@ unglue φ = prim^unglue {φ = φ}
 -- Cyril Cohen, Thierry Coquand, Simon Huber, Anders Mörtberg
 private
 
-  module @0 GluePrims (A : Type ℓ) {φ : I} (Te : Partial φ (Σ[ T ∈ Type ℓ' ] T ≃ A)) where
+  module @0 GluePrims (A : Type ℓ) {φ : I} (Te : Partial φ (Σ[ T ꞉ Type ℓ' ] T ≃ A)) where
     T : Partial φ (Type ℓ')
     T φ1 = Te φ1 .fst
     e : PartialP φ (λ φ → T φ ≃ A)
@@ -109,7 +109,7 @@ private
       → A [ φ ↦ trans-e (coeG→T b) ]
     unglue-S b = inS (unglue φ b)
 
-  module GlueTransp (A : I → Type ℓ) (Te : (i : I) → Partial (i ∨ ~ i) (Σ[ T ∈ Type ℓ' ] T ≃ A i)) where
+  module GlueTransp (A : I → Type ℓ) (Te : (i : I) → Partial (i ∨ ~ i) (Σ[ T ꞉ Type ℓ' ] T ≃ A i)) where
     A0 A1 : Type ℓ
     A0 = A i0
     A1 = A i1

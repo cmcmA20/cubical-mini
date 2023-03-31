@@ -70,7 +70,7 @@ module _ {ℓJ ℓJ' ℓC ℓC' : Level} {J : Category ℓJ ℓJ'} {C : Category
                                (isSetΣSndProp (isSetΠ (λ _ → isSetHom C))
                                               (λ _ → isPropImplicitΠ2 (λ _ _ → isPropΠ (λ _ → isSetHom C _ _))))
     where
-    ConeΣ = Σ[ f ∈ ((v : ob J) → C [ c , F-ob D v ]) ]
+    ConeΣ = Σ[ f ꞉ ((v : ob J) → C [ c , F-ob D v ]) ]
                ({u v : ob J} (e : J [ u , v ]) → f u ⋆⟨ C ⟩ D .F-hom e ≡ f v)
 
     toConeΣ : Cone D c → ConeΣ

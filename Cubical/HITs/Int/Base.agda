@@ -5,6 +5,8 @@ open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.Nat using (ℕ; zero; suc)
 
+open import Cubical.Instances.HLevels
+
 data ℤ : Type₀ where
   neg  : ℕ → ℤ
   pos  : ℕ → ℤ
@@ -40,3 +42,10 @@ module _ {ℓ : Level} {B : ℤ → Type ℓ}
   elim (neg n) = neg* n
   elim (pos n) = pos* n
   elim (0₋≡0₊ i) = seg* i
+
+module _ {ℓ : Level} {B : ℤ → Type ℓ}
+         (neg* : (n : ℕ) → B (neg n))
+         (pos* : (n : ℕ) → B (pos n))
+         ⦃ B-prop : {m : ℤ} → IsProp (B m) ⦄ where
+  elim-prop : (m : ℤ) → B m
+  elim-prop = elim neg* pos* (toPathP (B-prop .iohl _ _))

@@ -63,9 +63,9 @@ module _ {A : Type ℓA} {𝒮-A : UARel A ℓ≅A}
     module B = DUARel 𝒮ᴰ-B
     module C = DUARel 𝒮ᴰ-C
 
-  𝒮ᴰ-Σ : DUARel 𝒮-A (λ a → Σ[ b ∈ B a ] C (a , b)) (ℓ-max ℓ≅B ℓ≅C)
+  𝒮ᴰ-Σ : DUARel 𝒮-A (λ a → Σ[ b ꞉ B a ] C (a , b)) (ℓ-max ℓ≅B ℓ≅C)
   DUARel._≅ᴰ⟨_⟩_ 𝒮ᴰ-Σ (b , c) p (b' , c') =
-    Σ[ q ∈ b B.≅ᴰ⟨ p ⟩ b' ]  (c C.≅ᴰ⟨ p , q ⟩ c')
+    Σ[ q ꞉ b B.≅ᴰ⟨ p ⟩ b' ]  (c C.≅ᴰ⟨ p , q ⟩ c')
   DUARel.uaᴰ 𝒮ᴰ-Σ (b ,  c) p (b' , c') =
     compEquiv
       (Σ-cong-equiv (B.uaᴰ b p b') (λ q → C.uaᴰ c (p , q) c'))
@@ -94,7 +94,7 @@ module _ {A : Type ℓA} {𝒮-A : UARel A ℓ≅A}
     module B = SubstRel 𝒮ˢ-B
     module C = SubstRel 𝒮ˢ-C
 
-  𝒮ˢ-Σ : SubstRel 𝒮-A (λ a → Σ[ b ∈ B a ] C (a , b))
+  𝒮ˢ-Σ : SubstRel 𝒮-A (λ a → Σ[ b ꞉ B a ] C (a , b))
   𝒮ˢ-Σ .act p = Σ-cong-equiv (B.act p) (λ b → C.act (p , refl))
   𝒮ˢ-Σ .uaˢ p _ =
     fromPathP

@@ -266,7 +266,7 @@ record isHAEquivOver {ℓ ℓ'} {A : Type ℓ}{B : Type ℓ'}
 open isHAEquivOver
 
 HAEquivOver : (P : A → Type ℓ'')(Q : B → Type ℓ''')(hae : HAEquiv A B) → Type _
-HAEquivOver P Q hae = Σ[ f ∈ mapOver (hae .fst) P Q ] isHAEquivOver hae P Q f
+HAEquivOver P Q hae = Σ[ f ꞉ mapOver (hae .fst) P Q ] isHAEquivOver hae P Q f
 
 
 -- forget the coherence square to get an dependent isomorphism

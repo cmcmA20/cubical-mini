@@ -17,7 +17,7 @@ private
 
 -- the default pointed Π-type: A is pointed, and B has a base point in the chosen fiber
 Π∙ : (A : Pointed ℓ) (B : typ A → Type ℓ') (ptB : B (pt A)) → Type (ℓ-max ℓ ℓ')
-Π∙ A B ptB = Σ[ f ∈ ((a : typ A) → B a) ] f (pt A) ≡ ptB
+Π∙ A B ptB = Σ[ f ꞉ ((a : typ A) → B a) ] f (pt A) ≡ ptB
 
 -- the unpointed Π-type becomes a pointed type if the fibers are all pointed
 Πᵘ∙ : (A : Type ℓ) (B : A → Pointed ℓ') → Pointed (ℓ-max ℓ ℓ')
@@ -32,7 +32,7 @@ private
 
 -- the default pointed Σ-type is just the Σ-type, but as a pointed type
 Σ∙ : (A : Pointed ℓ) (B : typ A → Type ℓ') (ptB : B (pt A)) → Pointed (ℓ-max ℓ ℓ')
-Σ∙ A B ptB .fst = Σ[ a ∈ typ A ] B a
+Σ∙ A B ptB .fst = Σ[ a ꞉ typ A ] B a
 Σ∙ A B ptB .snd .fst = pt A
 Σ∙ A B ptB .snd .snd = ptB
 
@@ -95,7 +95,7 @@ const∙ _ B .snd = refl
 
 module _ {ℓ ℓ' : Level} {A : Pointed ℓ} {B : Pointed ℓ'} (f : A →∙ B) where
   isInIm∙ : (x : typ B) → Type (ℓ-max ℓ ℓ')
-  isInIm∙ x = Σ[ z ∈ typ A ] fst f z ≡ x
+  isInIm∙ x = Σ[ z ꞉ typ A ] fst f z ≡ x
 
   isInKer∙ : (x : fst A) → Type ℓ'
   isInKer∙ x = fst f x ≡ snd B

@@ -34,7 +34,7 @@ module _ {A : Pointed ℓ} {B : typ A → Type ℓ'} {ptB : B (pt A)} where
 
   -- pointed homotopy with PathP. Also a Σ-type, see ∙∼PΣ
   _∙∼P_ : (f g : Π∙ A B ptB) → Type (ℓ-max ℓ ℓ')
-  (f₁ , f₂) ∙∼P (g₁ , g₂) = Σ[ h ∈ f₁ ∼ g₁ ] PathP (λ i → h ⋆ i ≡ ptB) f₂ g₂
+  (f₁ , f₂) ∙∼P (g₁ , g₂) = Σ[ h ꞉ f₁ ∼ g₁ ] PathP (λ i → h ⋆ i ≡ ptB) f₂ g₂
 
   -- Proof that f ∙∼ g ≃ f ∙∼P g
   -- using equivalence of the total map of φ
@@ -107,10 +107,10 @@ module _ {A : Pointed ℓ} {B : typ A → Type ℓ'} {ptB : B (pt A)} where
   -- Verifies that the pointed homotopies actually correspond
   -- to their Σ-type versions
   _∙∼Σ_ : (f g : Π∙ A B ptB) → Type (ℓ-max ℓ ℓ')
-  f ∙∼Σ g = Σ[ H ∈ f .fst ∼ g .fst ] (P f g H)
+  f ∙∼Σ g = Σ[ H ꞉ f .fst ∼ g .fst ] (P f g H)
 
   _∙∼PΣ_ : (f g : Π∙ A B ptB) → Type (ℓ-max ℓ ℓ')
-  f ∙∼PΣ g = Σ[ H ∈ f .fst ∼ g .fst ] (Q f g H)
+  f ∙∼PΣ g = Σ[ H ꞉ f .fst ∼ g .fst ] (Q f g H)
 
   ∙∼≡∙∼Σ : (f g : Π∙ A B ptB) → f ∙∼ g ≡ f ∙∼Σ g
   ∙∼≡∙∼Σ f g = refl

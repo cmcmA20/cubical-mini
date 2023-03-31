@@ -25,10 +25,10 @@ isSplitSurjection : (A → B) → Type _
 isSplitSurjection f = ∀ b → fiber f b
 
 _↠_ : Type ℓ → Type ℓ' → Type (ℓ-max ℓ ℓ')
-A ↠ B = Σ[ f ∈ (A → B) ] isSurjection f
+A ↠ B = Σ[ f ꞉ (A → B) ] isSurjection f
 
 _↠!_ : Type ℓ → Type ℓ' → Type (ℓ-max ℓ ℓ')
-A ↠! B = Σ[ f ∈ (A → B) ] isSplitSurjection f
+A ↠! B = Σ[ f ꞉ (A → B) ] isSplitSurjection f
 
 isSplitSurjection→isSurjection : isSplitSurjection f → isSurjection f
 isSplitSurjection→isSurjection s b = ∣ s b ∣₁

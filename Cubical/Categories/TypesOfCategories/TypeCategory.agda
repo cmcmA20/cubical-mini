@@ -27,7 +27,7 @@ record isTypeCategory {ℓ ℓ' ℓ''} (C : Category ℓ ℓ')
     -- a Type of types over a context
     Ty[_] : ob → Type ℓ''
     -- extend a context with a type
-    cext : ∀ (Γ : _) → (A : Ty[ Γ ]) → Σ[ ΓA ∈ ob ] (C [ ΓA , Γ ])
+    cext : ∀ (Γ : _) → (A : Ty[ Γ ]) → Σ[ ΓA ꞉ ob ] (C [ ΓA , Γ ])
 
   -- the new object from a context extension
   _⍮_ : (Γ : _) → (A : Ty[ Γ ]) → ob
@@ -64,16 +64,16 @@ module _ {ℓ ℓ' ℓ'' : Level} (C : Category ℓ ℓ') where
 
   private
     isSurjSET : ∀ {ℓ} {A B : SET ℓ .ob} → (f : SET ℓ [ A , B ]) → Type _
-    isSurjSET {A = A} {B} f = ∀ (b : fst B) → Σ[ a ∈ fst A ] f a ≡ b
+    isSurjSET {A = A} {B} f = ∀ (b : fst B) → Σ[ a ꞉ fst A ] f a ≡ b
 
     -- types over Γ are types with a "projection" (aka surjection) to Γ
     PSTy[_] : PresheafCategory C ℓ'' .ob → Type _
-    PSTy[ Γ ] = Σ[ ΓA ∈ PresheafCategory C ℓ'' .ob ]
-                   Σ[ π ∈ ΓA ⇒ Γ ]
+    PSTy[ Γ ] = Σ[ ΓA ꞉ PresheafCategory C ℓ'' .ob ]
+                   Σ[ π ꞉ ΓA ⇒ Γ ]
                      (∀ (c : C .ob) → isSurjSET {A = ΓA ⟅ c ⟆} {Γ ⟅ c ⟆} (π ⟦ c ⟧))
 
     -- just directly use types from above as context extensions
-    PSCext : (Γ : _) → PSTy[ Γ ] → Σ[ ΓA ∈ PresheafCategory C ℓ'' .ob ] ΓA ⇒ Γ
+    PSCext : (Γ : _) → PSTy[ Γ ] → Σ[ ΓA ꞉ PresheafCategory C ℓ'' .ob ] ΓA ⇒ Γ
     PSCext Γ (ΓA , π , _) = ΓA , π
 
     -- the pullback or reindexed set is the disjoint union of the fibers
@@ -83,7 +83,7 @@ module _ {ℓ ℓ' ℓ'' : Level} (C : Category ℓ ℓ') where
       ΔA : PresheafCategory C ℓ'' .ob
       ΔA .F-ob c =  ΔATy , isSetΔA
         where
-          ΔATy = (Σ[ x ∈ fst (Δ ⟅ c ⟆) ] fiber (π ⟦ c ⟧) ((γ ⟦ c ⟧) x))
+          ΔATy = (Σ[ x ꞉ fst (Δ ⟅ c ⟆) ] fiber (π ⟦ c ⟧) ((γ ⟦ c ⟧) x))
 
           isSetΔA : isSet ΔATy
           isSetΔA = isOfHLevelΣ 2 (snd (Δ ⟅ c ⟆)) λ Γc → isOfHLevelΣ 2 (snd (ΓA ⟅ c ⟆)) λ ΓAc → isProp→isSet (snd (Γ ⟅ c ⟆) _ _)
@@ -154,7 +154,7 @@ module _ {ℓ ℓ' ℓ'' : Level} (C : Category ℓ ℓ') where
           eq = makeNatTransPath (funExt (λ _ → funExt λ _ → refl))
              , makeNatTransPath (funExt (λ _ → funExt λ _ → refl))
 
-          unique : ∀ (βeq : Σ[ β ∈ Θ ⇒ ΔA ] _)
+          unique : ∀ (βeq : Σ[ β ꞉ Θ ⇒ ΔA ] _)
                  → (α , eq) ≡ βeq
           unique (β , eqβ) = ΣPathP (α≡β , eq≡eqβ)
             where

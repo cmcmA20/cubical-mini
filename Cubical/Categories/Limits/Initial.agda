@@ -24,7 +24,7 @@ module _ (C : Category ℓ ℓ') where
   isInitial x = ∀ (y : ob) → isContr (C [ x , y ])
 
   Initial : Type (ℓ-max ℓ ℓ')
-  Initial = Σ[ x ∈ ob ] isInitial x
+  Initial = Σ[ x ꞉ ob ] isInitial x
 
   initialOb : Initial → ob
   initialOb = fst

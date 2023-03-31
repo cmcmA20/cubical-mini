@@ -79,7 +79,7 @@ module _ {A : Type ℓA} {𝒮-A : UARel A ℓ≅A}
   open DUARel 𝒮ᴰ-B
 
   ∫ : UARel (Σ A B) (ℓ-max ℓ≅A ℓ≅B)
-  UARel._≅_ ∫ (a , b) (a' , b') = Σ[ p ∈ a ≅ a' ] (b ≅ᴰ⟨ p ⟩ b')
+  UARel._≅_ ∫ (a , b) (a' , b') = Σ[ p ꞉ a ≅ a' ] (b ≅ᴰ⟨ p ⟩ b')
   UARel.ua ∫ (a , b) (a' , b') =
     compEquiv
       (Σ-cong-equiv (ua a a') (λ p → uaᴰ b p b'))

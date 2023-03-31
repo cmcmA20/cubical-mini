@@ -124,7 +124,7 @@ isHomogeneousΠ∙ : ∀ {ℓ ℓ'} (A : Pointed ℓ) (B : typ A → Type ℓ')
                   → (f : Π∙ A B b₀)
                   → isHomogeneous (Π∙ A B b₀ , f)
 fst (isHomogeneousΠ∙ A B b₀ h f g i) =
-  Σ[ r ∈ ((a : typ A) → fst ((h a (fst f a) (fst g a)) i)) ]
+  Σ[ r ꞉ ((a : typ A) → fst ((h a (fst f a) (fst g a)) i)) ]
     r (pt A) ≡ hcomp (λ k → λ {(i = i0) → snd f k
                               ; (i = i1) → snd g k})
                      (snd (h (pt A) (fst f (pt A)) (fst g (pt A)) i))

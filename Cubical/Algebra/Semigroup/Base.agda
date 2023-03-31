@@ -81,7 +81,7 @@ open IsSemigroup
 open IsSemigroupEquiv
 
 SemigroupEquiv : (M N : Semigroup ℓ) → Type ℓ
-SemigroupEquiv M N = Σ[ e ∈ ⟨ M ⟩ ≃ ⟨ N ⟩ ] IsSemigroupEquiv (M .snd) e (N .snd)
+SemigroupEquiv M N = Σ[ e ꞉ ⟨ M ⟩ ≃ ⟨ N ⟩ ] IsSemigroupEquiv (M .snd) e (N .snd)
 
 isPropIsSemigroup : {A : Type ℓ} (_·_ : A → A → A) → isProp (IsSemigroup _·_)
 isPropIsSemigroup _·_ =

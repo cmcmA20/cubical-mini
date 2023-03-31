@@ -24,7 +24,7 @@ private
 infix 4 _≤_ _<_ _≥_ _>_
 
 _≤_ : ℕ → ℕ → Type₀
-m ≤ n = Σ[ k ∈ ℕ ] k + m ≡ n
+m ≤ n = Σ[ k ꞉ ℕ ] (k + m ≡ n)
 
 _<_ : ℕ → ℕ → Type₀
 m < n = suc m ≤ n
@@ -352,9 +352,9 @@ module _
   open WFI (<-wellfounded)
 
   private
-    dichotomy : ∀ b n → (n < b) ⊎ (Σ[ m ∈ ℕ ] n ≡ b + m)
+    dichotomy : ∀ b n → (n < b) ⊎ (Σ[ m ꞉ ℕ ] n ≡ b + m)
     dichotomy b n
-      = case n ≟ b return (λ _ → (n < b) ⊎ (Σ[ m ∈ ℕ ] n ≡ b + m)) of λ
+      = case n ≟ b return (λ _ → (n < b) ⊎ (Σ[ m ꞉ ℕ ] n ≡ b + m)) of λ
       { (lt o) → inl o
       ; (eq p) → inr (0 , p ∙ sym (+-zero b))
       ; (gt (m , p)) → inr (suc m , sym p ∙ +-suc m b ∙ +-comm (suc m) b)
@@ -380,7 +380,7 @@ module _
     lemma₁ : ∀{x y z} → x ≡ suc z + y → y < x
     lemma₁ {y = y} {z} p = z , +-suc z y ∙ sym p
 
-    subStep : (n : ℕ) → (∀ m → m < n → P m) → (n < b) ⊎ (Σ[ m ∈ ℕ ] n ≡ b + m) → P n
+    subStep : (n : ℕ) → (∀ m → m < n → P m) → (n < b) ⊎ (Σ[ m ꞉ ℕ ] n ≡ b + m) → P n
     subStep n _   (inl l) = base n l
     subStep n rec (inr (m , p))
       = transport (cong P (sym p)) (step m (rec m (lemma₁ p)))

@@ -17,7 +17,7 @@ private
     ℓ ℓ'  : Level
 
 DecProp : (ℓ : Level) → Type (ℓ-suc ℓ)
-DecProp ℓ = Σ[ P ∈ hProp ℓ ] Dec (P .fst)
+DecProp ℓ = Σ[ P ꞉ hProp ℓ ] Dec (P .fst)
 
 @0 isSetDecProp : isSet (DecProp ℓ)
 isSetDecProp = isOfHLevelΣ 2 isSetHProp (λ P → isProp→isSet (isPropDec (P .snd)))
@@ -27,23 +27,23 @@ isSetDecProp = isOfHLevelΣ 2 isSetHProp (λ P → isProp→isSet (isPropDec (P 
 -- so it performs better when doing computation
 
 isDecProp : Type ℓ → Type ℓ
-isDecProp P = Σ[ t ∈ Bool ] P ≃ Bool→Type t
+isDecProp P = Σ[ t ꞉ Bool ] P ≃ T t
 
 DecProp' : (ℓ : Level) → Type (ℓ-suc ℓ)
-DecProp' ℓ = Σ[ P ∈ Type ℓ ] isDecProp P
+DecProp' ℓ = Σ[ P ꞉ Type ℓ ] isDecProp P
 
 -- properties of the alternative formulation
 
 isDecProp→isProp : {P : Type ℓ} → isDecProp P → isProp P
-isDecProp→isProp h = isOfHLevelRespectEquiv 1 (invEquiv (h .snd)) isPropBool→Type
+isDecProp→isProp h = isOfHLevelRespectEquiv 1 (invEquiv (h .snd)) isPropT
 
 isDecProp→Dec : {P : Type ℓ} → isDecProp P → Dec P
-isDecProp→Dec h = EquivPresDec (invEquiv (h .snd)) DecBool→Type
+isDecProp→Dec h = EquivPresDec (invEquiv (h .snd)) DecT
 
 isPropIsDecProp : {P : Type ℓ} → isProp (isDecProp P)
 isPropIsDecProp p q =
-  Σ≡PropEquiv (λ _ → isOfHLevel⁺≃ᵣ 0 isPropBool→Type) .fst
-    (Bool→TypeInj _ _ (invEquiv (p .snd) ⋆ q .snd))
+  Σ≡PropEquiv (λ _ → isOfHLevel⁺≃ᵣ 0 isPropT) .fst
+    (TInj _ _ (invEquiv (p .snd) ⋆ q .snd))
 
 isDecPropRespectEquiv : {P : Type ℓ} {Q : Type ℓ'}
   → P ≃ Q → isDecProp Q → isDecProp P

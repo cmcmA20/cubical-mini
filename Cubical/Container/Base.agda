@@ -16,7 +16,7 @@ private variable
   ℓ ℓˢ ℓᵖ : Level
 
 ⟦_⟧ : Container ℓˢ ℓᵖ → Type ℓ → Type (ℓ-max ℓ (ℓ-max ℓˢ ℓᵖ))
-⟦ S ▶ P ⟧ X = Σ[ s ∈ S ] (P s → X)
+⟦ S ▶ P ⟧ X = Σ[ s ꞉ S ] (P s → X)
 
 _∈_ : {X : Type ℓ} {S : Type ℓˢ} {P : S → Type ℓᵖ}
     → X → ⟦ S ▶ P ⟧ X → Type (ℓ-max ℓ ℓᵖ)

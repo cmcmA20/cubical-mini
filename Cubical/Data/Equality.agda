@@ -124,10 +124,10 @@ ap≡congPath {x = x} f p = JPath (λ _ q → ap f (pathToEq q) ≡ pathToEq (co
 
 -- Equivalences expressed using ≡ everywhere
 fiber : ∀ {A : Type ℓ} {B : Type ℓ'} (f : A → B) (y : B) → Type (ℓ-max ℓ ℓ')
-fiber {A = A} f y = Σ[ x ∈ A ] f x ≡ y
+fiber {A = A} f y = Σ[ x ꞉ A ] (f x ≡ y)
 
 isContr : Type ℓ → Type ℓ
-isContr A = Σ[ x ∈ A ] (∀ y → x ≡ y)
+isContr A = Σ[ x ꞉ A ] (∀ y → x ≡ y)
 
 isProp : Type ℓ → Type ℓ
 isProp A = (x y : A) → x ≡ y
@@ -141,7 +141,7 @@ open isEquiv public
 infix 4 _≃_
 
 _≃_ : ∀ (A : Type ℓ) (B : Type ℓ') → Type (ℓ-max ℓ ℓ')
-A ≃ B = Σ[ f ∈ (A → B) ] (isEquiv f)
+A ≃ B = Σ[ f ꞉ (A → B)] (isEquiv f)
 
 equivFun : A ≃ B → A → B
 equivFun e = e .fst

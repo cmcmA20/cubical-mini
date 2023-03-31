@@ -94,14 +94,14 @@ record IsMonoidHom {A : Type ℓ} {B : Type ℓ'}
     pres· : (x y : A) → f (x M.· y) ≡ f x N.· f y
 
 MonoidHom : (L : Monoid ℓ) (M : Monoid ℓ') → Type (ℓ-max ℓ ℓ')
-MonoidHom L M = Σ[ f ∈ (⟨ L ⟩ → ⟨ M ⟩) ] IsMonoidHom (L .snd) f (M .snd)
+MonoidHom L M = Σ[ f ꞉ (⟨ L ⟩ → ⟨ M ⟩) ] IsMonoidHom (L .snd) f (M .snd)
 
 IsMonoidEquiv : {A : Type ℓ} {B : Type ℓ'} (M : MonoidStr A) (e : A ≃ B) (N : MonoidStr B)
   → Type (ℓ-max ℓ ℓ')
 IsMonoidEquiv M e N = IsMonoidHom M (e .fst) N
 
 MonoidEquiv : (M : Monoid ℓ) (N : Monoid ℓ') → Type (ℓ-max ℓ ℓ')
-MonoidEquiv M N = Σ[ e ∈ ⟨ M ⟩ ≃ ⟨ N ⟩ ] IsMonoidEquiv (M .snd) e (N .snd)
+MonoidEquiv M N = Σ[ e ꞉ ⟨ M ⟩ ≃ ⟨ N ⟩ ] IsMonoidEquiv (M .snd) e (N .snd)
 
 -- We now extract the important results from the above module
 

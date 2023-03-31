@@ -63,12 +63,12 @@ module _ {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ'}
   {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
   where
 
-  ΣPathP : Σ[ p ∈ PathP A (fst x) (fst y) ] PathP (λ i → B i (p i)) (snd x) (snd y)
+  ΣPathP : Σ[ p ꞉ PathP A (fst x) (fst y) ] PathP (λ i → B i (p i)) (snd x) (snd y)
          → PathP (λ i → Σ (A i) (B i)) x y
   ΣPathP eq i = fst eq i , snd eq i
 
   PathPΣ : PathP (λ i → Σ (A i) (B i)) x y
-         → Σ[ p ∈ PathP A (fst x) (fst y) ] PathP (λ i → B i (p i)) (snd x) (snd y)
+         → Σ[ p ꞉ PathP A (fst x) (fst y) ] PathP (λ i → B i (p i)) (snd x) (snd y)
   PathPΣ eq = (λ i → fst (eq i)) , (λ i → snd (eq i))
 
   -- allows one to write
@@ -76,7 +76,7 @@ module _ {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ'}
   module PathPΣ (p : PathP (λ i → Σ (A i) (B i)) x y) where
     open Σ (PathPΣ p) public
 
-  ΣPathIsoPathΣ : Iso (Σ[ p ∈ PathP A (fst x) (fst y) ] (PathP (λ i → B i (p i)) (snd x) (snd y)))
+  ΣPathIsoPathΣ : Iso (Σ[ p ꞉ PathP A (fst x) (fst y) ] (PathP (λ i → B i (p i)) (snd x) (snd y)))
                       (PathP (λ i → Σ (A i) (B i)) x y)
   fun ΣPathIsoPathΣ        = ΣPathP
   inv ΣPathIsoPathΣ        = PathPΣ
@@ -85,7 +85,7 @@ module _ {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ'}
 
   unquoteDecl ΣPath≃PathΣ = declStrictIsoToEquiv ΣPath≃PathΣ ΣPathIsoPathΣ
 
-  @0 ΣPath≡PathΣ : (Σ[ p ∈ PathP A (fst x) (fst y) ] (PathP (λ i → B i (p i)) (snd x) (snd y)))
+  @0 ΣPath≡PathΣ : (Σ[ p ꞉ PathP A (fst x) (fst y) ] (PathP (λ i → B i (p i)) (snd x) (snd y)))
                  ≡ (PathP (λ i → Σ (A i) (B i)) x y)
   ΣPath≡PathΣ = ua ΣPath≃PathΣ
 
@@ -105,7 +105,7 @@ module _ {A : I → Type ℓ} {B : (i : I) → (a : A i) → Type ℓ'}
   where
 
   ΣPathPIsoPathPΣ :
-    Iso (Σ[ p ∈ PathP A (x .fst) (y .fst) ] PathP (λ i → B i (p i)) (x .snd) (y .snd))
+    Iso (Σ[ p ꞉ PathP A (x .fst) (y .fst) ] PathP (λ i → B i (p i)) (x .snd) (y .snd))
         (PathP (λ i → Σ (A i) (B i)) x y)
   ΣPathPIsoPathPΣ .fun (p , q) i = p i , q i
   ΣPathPIsoPathPΣ .inv pq .fst i = pq i .fst
@@ -154,7 +154,7 @@ module _ {A : Type ℓ} {A' : Type ℓ'} where
   unquoteDecl Σ-swap-≃ = declStrictIsoToEquiv Σ-swap-≃ Σ-swap-Iso
 
 module _ {A : Type ℓ} {B : A → Type ℓ'} {C : ∀ a → B a → Type ℓ''} where
-  Σ-assoc-Iso : Iso (Σ[ a ∈ Σ A B ] C (fst a) (snd a)) (Σ[ a ∈ A ] Σ[ b ∈ B a ] C a b)
+  Σ-assoc-Iso : Iso (Σ[ a ꞉ Σ A B ] C (fst a) (snd a)) (Σ[ a ꞉ A ] Σ[ b ꞉ B a ] C a b)
   fun Σ-assoc-Iso ((x , y) , z) = (x , (y , z))
   inv Σ-assoc-Iso (x , (y , z)) = ((x , y) , z)
   rightInv Σ-assoc-Iso _ = refl
@@ -162,7 +162,7 @@ module _ {A : Type ℓ} {B : A → Type ℓ'} {C : ∀ a → B a → Type ℓ''}
 
   unquoteDecl Σ-assoc-≃ = declStrictIsoToEquiv Σ-assoc-≃ Σ-assoc-Iso
 
-  Σ-Π-Iso : Iso ((a : A) → Σ[ b ∈ B a ] C a b) (Σ[ f ∈ ((a : A) → B a) ] ∀ a → C a (f a))
+  Σ-Π-Iso : Iso ((a : A) → Σ[ b ꞉ B a ] C a b) (Σ[ f ꞉ ((a : A) → B a) ] ∀ a → C a (f a))
   fun Σ-Π-Iso f         = (fst ∘ f , snd ∘ f)
   inv Σ-Π-Iso (f , g) x = (f x , g x)
   rightInv Σ-Π-Iso _    = refl
@@ -247,7 +247,7 @@ leftInv (Σ-cong-iso-snd isom) (x , y') = ΣPathP (refl , leftInv (isom x) y')
 Σ-cong-equiv-snd h = isoToEquiv (Σ-cong-iso-snd (equivToIso ∘ h))
 
 Σ-cong-snd : ((x : A) → B x ≡ B' x) → Σ A B ≡ Σ A B'
-Σ-cong-snd {A = A} p i = Σ[ x ∈ A ] (p x i)
+Σ-cong-snd {A = A} p i = Σ[ x ꞉ A ] (p x i)
 
 Σ-cong-iso : (isom : Iso A A')
            → ((x : A) → Iso (B x) (B' (fun isom x)))
@@ -275,7 +275,7 @@ leftInv (Σ-cong-iso-snd isom) (x , y') = ΣPathP (refl , leftInv (isom x) y')
 -- Alternative version for path in Σ-types, as in the HoTT book
 
 ΣPathTransport : (a b : Σ A B) → Type _
-ΣPathTransport {B = B} a b = Σ[ p ∈ (fst a ≡ fst b) ] transport (λ i → B (p i)) (snd a) ≡ snd b
+ΣPathTransport {B = B} a b = Σ[ p ꞉ (fst a ≡ fst b) ] transport (λ i → B (p i)) (snd a) ≡ snd b
 
 IsoΣPathTransportPathΣ : (a b : Σ A B) → Iso (ΣPathTransport a b) (a ≡ b)
 IsoΣPathTransportPathΣ {B = B} a b =

@@ -25,7 +25,7 @@ Pointed₀ = Pointed ℓ-zero
 
 {- Pointed functions -}
 _→∙_ : (A : Pointed ℓ) (B : Pointed ℓ') → Type (ℓ-max ℓ ℓ')
-(A , a) →∙ (B , b) = Σ[ f ∈ (A → B) ] f a ≡ b
+(A , a) →∙ (B , b) = Σ[ f ꞉ (A → B) ] f a ≡ b
 
 _→∙_∙ : (A : Pointed ℓ) (B : Pointed ℓ') → Pointed (ℓ-max ℓ ℓ')
 (A →∙ B ∙) .fst = A →∙ B
@@ -39,7 +39,7 @@ idfun∙ A .snd = refl
 infix 3 _≃∙_
 {-Pointed equivalences -}
 _≃∙_ : (A : Pointed ℓ) (B : Pointed ℓ') → Type (ℓ-max ℓ ℓ')
-A ≃∙ B = Σ[ e ∈ fst A ≃ fst B ] fst e (pt A) ≡ pt B
+A ≃∙ B = Σ[ e ꞉ fst A ≃ fst B ] fst e (pt A) ≡ pt B
 
 {- Underlying pointed map of an equivalence -}
 ≃∙map : {A : Pointed ℓ} {B : Pointed ℓ'} → A ≃∙ B → A →∙ B

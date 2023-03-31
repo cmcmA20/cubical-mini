@@ -36,7 +36,7 @@ module _
   ℙ = X → hProp ℓ'
 
   ℙDec : Type (ℓ-max ℓ (ℓ-suc ℓ'))
-  ℙDec = Σ[ P ∈ ℙ ] ((x : X) → Dec (P x .fst))
+  ℙDec = Σ[ P ꞉ ℙ ] ((x : X) → Dec (P x .fst))
 
   @0 isSetℙ : isSet ℙ
   isSetℙ = isSetΠ λ x → isSetHProp
@@ -48,13 +48,13 @@ module _
     (R : X → X → Type ℓ'') where
 
     isEqClass : ℙ → Type (ℓ-max (ℓ-max ℓ ℓ') ℓ'')
-    isEqClass P = ∥ Σ[ x ∈ X ] ((a : X) → P a .fst ≃ ∥ R a x ∥₁) ∥₁
+    isEqClass P = ∥ Σ[ x ꞉ X ] ((a : X) → P a .fst ≃ ∥ R a x ∥₁) ∥₁
 
     isPropIsEqClass : (P : ℙ) → isProp (isEqClass P)
     isPropIsEqClass P = isPropPropTrunc
 
     _∥_ : Type (ℓ-max (ℓ-max ℓ (ℓ-suc ℓ')) ℓ'')
-    _∥_ = Σ[ P ∈ ℙ ] isEqClass P
+    _∥_ = Σ[ P ꞉ ℙ ] isEqClass P
 
     @0 isSet∥ : isSet _∥_
     isSet∥ = isOfHLevelΣ 2 isSetℙ (λ _ → isProp→isSet isPropPropTrunc)
@@ -63,7 +63,7 @@ module _
       (dec : (x x' : X) → Dec (R x x')) where
 
       _∥Dec_ : Type (ℓ-max (ℓ-max ℓ (ℓ-suc ℓ')) ℓ'')
-      _∥Dec_ = Σ[ P ∈ ℙDec ] isEqClass (P .fst)
+      _∥Dec_ = Σ[ P ꞉ ℙDec ] isEqClass (P .fst)
 
       isDecEqClass : (P : _∥_) → (x : X) → Dec (P .fst x .fst)
       isDecEqClass (P , h) a =
@@ -126,7 +126,7 @@ module _
   @0 isEmbedding/→∥ : isEmbedding /→∥
   isEmbedding/→∥ = injEmbedding (isSet∥ X R) (λ {x} {y} → inj/→∥ x y)
 
-  @0 surj/→∥ : (P : X ∥ R) → ((x , _) : Σ[ x ∈ X ] ((a : X) → P .fst a .fst ≃ ∥ R a x ∥₁)) → ∥R∥ x ≡ P
+  @0 surj/→∥ : (P : X ∥ R) → ((x , _) : Σ[ x ꞉ X ] ((a : X) → P .fst a .fst ≃ ∥ R a x ∥₁)) → ∥R∥ x ≡ P
   surj/→∥ P (x , p) i .fst a .fst = ua (p a) (~ i)
   surj/→∥ P (x , p) i .fst a .snd =
     isProp→PathP {B = λ i → isProp (surj/→∥ P (x , p) i .fst a .fst)}

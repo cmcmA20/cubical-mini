@@ -34,7 +34,7 @@ record isPathSplitEquiv {ℓ ℓ'} {A : Type  ℓ} {B : Type ℓ'} (f : A → B)
     secCong : (x y : A) → hasSection (λ (p : x ≡ y) → cong f p)
 
 PathSplitEquiv : ∀ {ℓ ℓ'} (A : Type  ℓ) (B : Type ℓ') → Type (ℓ-max ℓ ℓ')
-PathSplitEquiv A B = Σ[ f ∈ (A → B) ] isPathSplitEquiv f
+PathSplitEquiv A B = Σ[ f ꞉ (A → B) ] isPathSplitEquiv f
 
 open isPathSplitEquiv
 

@@ -21,5 +21,5 @@ private variable
 ℰ! : Type ℓ → Type ℓ
 ℰ! A = Σ[ support ꞉ List A ] Π[ x ꞉ A ] (x ∈ support)
 
-ℰ!≃Fin↠! : ℰ! A ≃ Σ[ n ꞉ ℕ ] (Fin n ↠! A)
+ℰ!≃Fin↠! : ℰ! A ≃ (Σ[ n ꞉ ℕ ] (Fin n ↠! A))
 ℰ!≃Fin↠! = Σ-assoc-≃

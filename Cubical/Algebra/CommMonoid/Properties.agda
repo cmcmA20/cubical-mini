@@ -26,7 +26,7 @@ module _
     (εContained : ⟨ P ε ⟩)
     where
     private
-      subtype = Σ[ x ∈ ⟨ M ⟩ ] ⟨ P x ⟩
+      subtype = Σ[ x ꞉ ⟨ M ⟩ ] ⟨ P x ⟩
 
     makeSubCommMonoid : CommMonoid _
     fst makeSubCommMonoid = subtype

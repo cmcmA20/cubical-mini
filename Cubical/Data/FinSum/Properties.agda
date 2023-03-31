@@ -102,13 +102,13 @@ FinSum∥∥≃ (suc n) =
 ℕ→Bool 0 = false
 ℕ→Bool (suc n) = true
 
-FinSum∥∥DecProp : (n : ℕ) → ∥ Fin n ∥₁ ≃ Bool→Type (ℕ→Bool n)
+FinSum∥∥DecProp : (n : ℕ) → ∥ Fin n ∥₁ ≃ T (ℕ→Bool n)
 FinSum∥∥DecProp 0 = uninhabEquiv (Prop.rec isProp⊥ (λ x → ⊥.rec x)) (λ x → ⊥.rec x)
 FinSum∥∥DecProp (suc n) = isContr→≃Unit (inhProp→isContr ∣ inl tt ∣₁ isPropPropTrunc)
 
 -- negation of FinSum
 
-FinSum¬ : (n : ℕ) → (¬ Fin n) ≃ Bool→Type (isZero n)
+FinSum¬ : (n : ℕ) → (¬ Fin n) ≃ T (isZero n)
 FinSum¬ 0 = isContr→≃Unit isContr⊥→A
 FinSum¬ (suc n) = uninhabEquiv (λ f → f fzero) (λ x → ⊥.rec x)
 
@@ -144,15 +144,15 @@ trueCount : {n : ℕ}(f : Fin n → Bool) → ℕ
 trueCount {n = 0} _ = 0
 trueCount {n = suc n} f = Bool→ℕ (f (inl tt)) + (trueCount (f ∘ inr))
 
-FinSumDec⊎≃ : (n : ℕ)(t : Bool) → (Bool→Type t ⊎ Fin n) ≃ (Fin (Bool→ℕ t + n))
+FinSumDec⊎≃ : (n : ℕ)(t : Bool) → (T t ⊎ Fin n) ≃ (Fin (Bool→ℕ t + n))
 FinSumDec⊎≃ _ true = idEquiv _
 FinSumDec⊎≃ _ false = ⊎-swap-≃ ⋆ ⊎-⊥-≃
 
-FinSumSub≃ : (n : ℕ)(f : Fin n → Bool) → Σ _ (Bool→Type ∘ f) ≃ Fin (trueCount f)
+FinSumSub≃ : (n : ℕ)(f : Fin n → Bool) → Σ _ (T ∘ f) ≃ Fin (trueCount f)
 FinSumSub≃ 0 _ = ΣEmpty _
 FinSumSub≃ (suc n) f =
     Σ⊎≃
-  ⋆ ⊎-equiv (ΣUnit (Bool→Type ∘ f ∘ inl)) (FinSumSub≃ n (f ∘ inr))
+  ⋆ ⊎-equiv (ΣUnit (T ∘ f ∘ inl)) (FinSumSub≃ n (f ∘ inr))
   ⋆ FinSumDec⊎≃ _ (f (inl tt))
 
 -- decidable quantifier
@@ -165,32 +165,32 @@ trueForAll : (n : ℕ)(f : Fin n → Bool) → Bool
 trueForAll 0 _ = true
 trueForAll (suc n) f = f (inl tt) and trueForAll n (f ∘ inr)
 
-FinSum∃→ : (n : ℕ)(f : Fin n → Bool) → Σ _ (Bool→Type ∘ f) → Bool→Type (trueForSome n f)
+FinSum∃→ : (n : ℕ)(f : Fin n → Bool) → Σ _ (T ∘ f) → T (trueForSome n f)
 FinSum∃→ 0 _ = ΣEmpty _ .fst
 FinSum∃→ (suc n) f =
-    Bool→Type⊎' _ _
-  ∘ map-⊎ (ΣUnit (Bool→Type ∘ f ∘ inl) .fst) (FinSum∃→ n (f ∘ inr))
+    T⊎' _ _
+  ∘ map-⊎ (ΣUnit (T ∘ f ∘ inl) .fst) (FinSum∃→ n (f ∘ inr))
   ∘ Σ⊎≃ .fst
 
-FinSum∃← : (n : ℕ)(f : Fin n → Bool) → Bool→Type (trueForSome n f) → Σ _ (Bool→Type ∘ f)
+FinSum∃← : (n : ℕ)(f : Fin n → Bool) → T (trueForSome n f) → Σ _ (T ∘ f)
 FinSum∃← 0 _ p = ⊥.rec p
 FinSum∃← (suc n) f =
     invEq Σ⊎≃
-  ∘ map-⊎ (invEq (ΣUnit (Bool→Type ∘ f ∘ inl))) (FinSum∃← n (f ∘ inr))
-  ∘ Bool→Type⊎ _ _
+  ∘ map-⊎ (invEq (ΣUnit (T ∘ f ∘ inl))) (FinSum∃← n (f ∘ inr))
+  ∘ T⊎ _ _
 
-FinSum∃≃ : (n : ℕ)(f : Fin n → Bool) → ∥ Σ (Fin n) (Bool→Type ∘ f) ∥₁ ≃ Bool→Type (trueForSome n f)
+FinSum∃≃ : (n : ℕ)(f : Fin n → Bool) → ∥ Σ (Fin n) (T ∘ f) ∥₁ ≃ T (trueForSome n f)
 FinSum∃≃ n f =
-  propBiimpl→Equiv isPropPropTrunc isPropBool→Type
-    (Prop.rec isPropBool→Type (FinSum∃→ n f))
+  propBiimpl→Equiv isPropPropTrunc isPropT
+    (Prop.rec isPropT (FinSum∃→ n f))
     (∣_∣₁ ∘ FinSum∃← n f)
 
-FinSum∀≃ : (n : ℕ)(f : Fin n → Bool) → ((x : Fin n) → Bool→Type (f x)) ≃ Bool→Type (trueForAll n f)
+FinSum∀≃ : (n : ℕ)(f : Fin n → Bool) → ((x : Fin n) → T (f x)) ≃ T (trueForAll n f)
 FinSum∀≃ 0 _ = isContr→≃Unit (isContrΠ⊥)
 FinSum∀≃ (suc n) f =
     Π⊎≃
-  ⋆ Σ-cong-equiv (ΠUnit (Bool→Type ∘ f ∘ inl)) (λ _ → FinSum∀≃ n (f ∘ inr))
-  ⋆ Bool→Type×≃ _ _
+  ⋆ Σ-cong-equiv (ΠUnit (T ∘ f ∘ inl)) (λ _ → FinSum∀≃ n (f ∘ inr))
+  ⋆ T×≃ _ _
 
 -- internal equality
 
@@ -205,7 +205,7 @@ isSetFinSum : (n : ℕ)→ isSet (Fin n)
 isSetFinSum 0 = isProp→isSet isProp⊥
 isSetFinSum (suc n) = isSet⊎ (isProp→isSet isPropUnit) (isSetFinSum n)
 
-FinSum≡≃ : (n : ℕ) → (a b : Fin n) → (a ≡ b) ≃ Bool→Type (FinSum≡ n a b)
+FinSum≡≃ : (n : ℕ) → (a b : Fin n) → (a ≡ b) ≃ T (FinSum≡ n a b)
 FinSum≡≃ 0 _ _ = isContr→≃Unit (isProp→isContrPath isProp⊥ _ _)
 FinSum≡≃ (suc n) (inl tt) (inl tt) = isContr→≃Unit (inhProp→isContr refl (isSetFinSum _ _ _))
 FinSum≡≃ (suc n) (inl tt) (inr y) = invEquiv (⊎Path.Cover≃Path _ _) ⋆ uninhabEquiv (λ x → ⊥.rec* x) (λ x → ⊥.rec x)
@@ -234,7 +234,7 @@ Fin>0→isInhab : (n : ℕ) → 0 < n → Fin n
 Fin>0→isInhab 0 p = ⊥.rec (¬-<-zero p)
 Fin>0→isInhab (suc n) p = fzero
 
-Fin>1→hasNonEqualTerm : (n : ℕ) → 1 < n → Σ[ i ∈ Fin n ] Σ[ j ∈ Fin n ] ¬ i ≡ j
+Fin>1→hasNonEqualTerm : (n : ℕ) → 1 < n → Σ[ i ꞉ Fin n ] Σ[ j ꞉ Fin n ] (¬ i ≡ j)
 Fin>1→hasNonEqualTerm 0 p = ⊥.rec (snotz (≤0→≡0 p))
 Fin>1→hasNonEqualTerm 1 p = ⊥.rec (snotz (≤0→≡0 (pred-≤-pred p)))
 Fin>1→hasNonEqualTerm (suc (suc n)) _ = fzero , fsuc fzero , fzero≠fone

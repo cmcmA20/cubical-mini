@@ -17,9 +17,6 @@ open import Cubical.Core.Primitives public
 open import Cubical.Foundations.Prelude
 open import Cubical.Truncation.Propositional.Base
 
-Σ-syntax′ = Σ-syntax
-syntax Σ-syntax′ A (λ x → B) = Σ[ x ꞉ A ] B
-
 -- Non-dependent pair types
 
 _×_ : ∀ {ℓ ℓ'} (A : Type ℓ) (B : Type ℓ') → Type (ℓ-max ℓ ℓ')

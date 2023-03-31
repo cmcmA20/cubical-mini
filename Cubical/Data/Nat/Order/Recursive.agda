@@ -154,7 +154,7 @@ module Minimal where
 
   search
     : (∀ m → Dec (P m))
-    → ∀ n → (Σ[ m ∈ ℕ ] Least P m) ⊎ (∀ m → m < n → ¬ P m)
+    → ∀ n → (Σ[ m ꞉ ℕ ] Least P m) ⊎ (∀ m → m < n → ¬ P m)
   search dec zero = inr (λ _ b _ → b)
   search {P = P} dec (suc n) with search dec n
   ... | inl tup = inl tup

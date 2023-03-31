@@ -41,7 +41,7 @@ record Iso {ℓ ℓ'} (A : Type ℓ) (B : Type ℓ') : Type (ℓ-max ℓ ℓ') w
     leftInv  : retract fun inv
 
 isIso : (A → B) → Type _
-isIso {A = A} {B = B} f = Σ[ g ∈ (B → A) ] Σ[ _ ∈ section f g ] retract f g
+isIso {A = A} {B = B} f = Σ[ g ꞉ (B → A) ] Σ[ _ ꞉ section f g ] retract f g
 
 isoFunInjective : (f : Iso A B) → (x y : A) → Iso.fun f x ≡ Iso.fun f y → x ≡ y
 isoFunInjective f x y h = sym (Iso.leftInv f x) ∙∙ cong (Iso.inv f) h ∙∙ Iso.leftInv f y

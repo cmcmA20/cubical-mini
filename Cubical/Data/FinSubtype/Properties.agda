@@ -147,7 +147,7 @@ private
 -- A Residue is a family of types representing evidence that a
 -- natural is congruent to a value of a finite type.
 Residue : ℕ → ℕ → Type₀
-Residue k n = Σ[ tup ∈ Fin k × ℕ ] expand× tup ≡ n
+Residue k n = Σ[ tup ꞉ Fin k × ℕ ] expand× tup ≡ n
 
 -- There is at most one canonical finite value congruent to each
 -- natural.
@@ -260,7 +260,7 @@ moddiv : ∀ n k → (n / k) · k + n % k ≡ n
 moddiv n zero = refl
 moddiv n (suc k) = sym (expand≡ _ _ (n / suc k)) ∙ reduce′ k n .snd
 
-n%k≡n[modk] : ∀ n k → Σ[ o ∈ ℕ ] o · k + n % k ≡ n
+n%k≡n[modk] : ∀ n k → Σ[ o ꞉ ℕ ] o · k + n % k ≡ n
 n%k≡n[modk] n k = (n / k) , moddiv n k
 
 n%sk<sk : (n k : ℕ) → (n % suc k) < suc k
@@ -341,7 +341,7 @@ punchOut-inj {suc _} {i} {j} {k} i≢j i≢k p | inr (ki , prfi) | inr (kj , prf
 pigeonhole-special
   : ∀ {n}
   → (f : Fin (suc n) → Fin n)
-  → Σ[ i ∈ Fin (suc n) ] Σ[ j ∈ Fin (suc n) ] (¬ i ≡ j) × (f i ≡ f j)
+  → Σ[ i ꞉ Fin (suc n) ] Σ[ j ꞉ Fin (suc n) ] (¬ i ≡ j) × (f i ≡ f j)
 pigeonhole-special {zero} f = Empty.rec (¬Fin0 (f fzero))
 pigeonhole-special {suc n} f =
   helper (any?
@@ -351,7 +351,7 @@ pigeonhole-special {suc n} f =
   where
     helper
       : Dec (Σ (Fin (suc n)) (λ z → f (inject< ≤-refl z) ≡ f (suc n , ≤-refl)))
-      → Σ[ i ∈ Fin (suc (suc n)) ] Σ[ j ∈ Fin (suc (suc n)) ] (¬ i ≡ j) × (f i ≡ f j)
+      → Σ[ i ꞉ Fin (suc (suc n)) ] Σ[ j ꞉ Fin (suc (suc n)) ] (¬ i ≡ j) × (f i ≡ f j)
     helper (yes (i , prf)) = inject< ≤-refl i , (suc n , ≤-refl) , inject<-ne i , prf
     helper (no h) =
       let
@@ -377,7 +377,7 @@ pigeonhole
   : ∀ {m n}
   → m < n
   → (f : Fin n → Fin m)
-  → Σ[ i ∈ Fin n ] Σ[ j ∈ Fin n ] (¬ i ≡ j) × (f i ≡ f j)
+  → Σ[ i ꞉ Fin n ] Σ[ j ꞉ Fin n ] (¬ i ≡ j) × (f i ≡ f j)
 pigeonhole {m} {n} (zero , sm≡n) f =
   transport transport-prf (pigeonhole-special f′)
   where
@@ -388,10 +388,10 @@ pigeonhole {m} {n} (zero , sm≡n) f =
     f′≡f i = transport-fillerExt (cong (λ h → Fin h → Fin m) (sym sm≡n)) (~ i) f
 
     transport-prf
-      : (Σ[ i ∈ Fin (suc m) ] Σ[ j ∈ Fin (suc m) ] (¬ i ≡ j) × (f′ i ≡ f′ j))
-      ≡ (Σ[ i ∈ Fin n ] Σ[ j ∈ Fin n ] (¬ i ≡ j) × (f i ≡ f j))
+      : (Σ[ i ꞉ Fin (suc m) ] Σ[ j ꞉ Fin (suc m) ] (¬ i ≡ j) × (f′ i ≡ f′ j))
+      ≡ (Σ[ i ꞉ Fin n ] Σ[ j ꞉ Fin n ] (¬ i ≡ j) × (f i ≡ f j))
     transport-prf φ =
-      Σ[ i ∈ Fin (sm≡n φ) ] Σ[ j ∈ Fin (sm≡n φ) ]
+      Σ[ i ꞉ Fin (sm≡n φ) ] Σ[ j ꞉ Fin (sm≡n φ) ]
         (¬ i ≡ j) × (f′≡f φ i ≡ f′≡f φ j)
 pigeonhole {m} {n} (suc k , prf) f =
   let
@@ -419,10 +419,10 @@ pigeonhole {m} {n} (suc k , prf) f =
     f′≡f i = transport-fillerExt (cong (λ h → Fin h → Fin m) n≡sn′) (~ i) f
 
     transport-prf
-      : (Σ[ i ∈ Fin (suc n′) ] Σ[ j ∈ Fin (suc n′) ] (¬ i ≡ j) × (f′ i ≡ f′ j))
-      ≡ (Σ[ i ∈ Fin n ] Σ[ j ∈ Fin n ] (¬ i ≡ j) × (f i ≡ f j))
+      : (Σ[ i ꞉ Fin (suc n′) ] Σ[ j ꞉ Fin (suc n′) ] (¬ i ≡ j) × (f′ i ≡ f′ j))
+      ≡ (Σ[ i ꞉ Fin n ] Σ[ j ꞉ Fin n ] (¬ i ≡ j) × (f i ≡ f j))
     transport-prf φ =
-      Σ[ i ∈ Fin (n≡sn′ (~ φ)) ] Σ[ j ∈ Fin (n≡sn′ (~ φ)) ]
+      Σ[ i ꞉ Fin (n≡sn′ (~ φ)) ] Σ[ j ꞉ Fin (n≡sn′ (~ φ)) ]
         (¬ i ≡ j) × (f′≡f φ i ≡ f′≡f φ j)
 
 Fin-inj′ : {n m : ℕ} → n < m → ¬ Fin m ≡ Fin n
@@ -667,7 +667,7 @@ Fin>0→isInhab : (n : ℕ) → 0 < n → Fin n
 Fin>0→isInhab 0 p = Empty.rec (¬-<-zero p)
 Fin>0→isInhab (suc n) p = fzero
 
-Fin>1→hasNonEqualTerm : (n : ℕ) → 1 < n → Σ[ i ∈ Fin n ] Σ[ j ∈ Fin n ] ¬ i ≡ j
+Fin>1→hasNonEqualTerm : (n : ℕ) → 1 < n → Σ[ i ꞉ Fin n ] Σ[ j ꞉ Fin n ] ¬ i ≡ j
 Fin>1→hasNonEqualTerm 0 p = Empty.rec (snotz (≤0→≡0 p))
 Fin>1→hasNonEqualTerm 1 p = Empty.rec (snotz (≤0→≡0 (pred-≤-pred p)))
 Fin>1→hasNonEqualTerm (suc (suc n)) _ = fzero , fone , fzero≠fone

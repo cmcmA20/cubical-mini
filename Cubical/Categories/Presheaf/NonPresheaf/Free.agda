@@ -23,7 +23,7 @@ private
 
 freePresheaf : (C : Category ℓ ℓ') → isSet (ob C)
   → NonPresheaf C ℓS → Presheaf C (ℓ-max (ℓ-max ℓ ℓ') ℓS)
-fst (F-ob (freePresheaf C isSetObC X) c) = Σ[ d ∈ ob C ] C [ c , d ] × fst (X d)
+fst (F-ob (freePresheaf C isSetObC X) c) = Σ[ d ꞉ ob C ] C [ c , d ] × fst (X d)
 snd (F-ob (freePresheaf C isSetObC X) c) = isSetΣ isSetObC λ d → isSet× (isSetHom C) (snd (X d))
 F-hom (freePresheaf C isSetObC X) {d}{c} φ (e , ψ , x) = e , φ ⋆⟨ C ⟩ ψ , x
 F-id (freePresheaf C isSetObC X) {c} i (d , φ , x) = d , ⋆IdL C φ i , x

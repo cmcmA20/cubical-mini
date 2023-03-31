@@ -271,7 +271,7 @@ private
     unquoteDecl Example0IsoΣ = declareRecordIsoΣ Example0IsoΣ (quote Example0)
 
     -- `Example0IsoΣ` has the type we expect
-    test0 : Iso (Example0 B) (Σ[ a ∈ A ] (Σ[ _ ∈ A ] B a))
+    test0 : Iso (Example0 B) (Σ[ a ꞉ A ] (Σ[ _ ꞉ A ] B a))
     test0 = Example0IsoΣ
 
     -- A record with no fields is isomorphic to Unit

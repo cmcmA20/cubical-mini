@@ -99,10 +99,10 @@ module NaturalBijection where
       (F ⟪ h ⟫ ⋆⟨ D ⟩ f) ♭ ∎
 
   isLeftAdjoint : {C : Category ℓC ℓC'} {D : Category ℓD ℓD'} (F : Functor C D) → Type (ℓ-max (ℓ-max ℓC ℓC') (ℓ-max ℓD ℓD'))
-  isLeftAdjoint {C = C}{D} F = Σ[ G ∈ Functor D C ] F ⊣ G
+  isLeftAdjoint {C = C}{D} F = Σ[ G ꞉ Functor D C ] F ⊣ G
 
   isRightAdjoint : {C : Category ℓC ℓC'} {D : Category ℓD ℓD'} (G : Functor D C) → Type (ℓ-max (ℓ-max ℓC ℓC') (ℓ-max ℓD ℓD'))
-  isRightAdjoint {C = C}{D} G = Σ[ F ∈ Functor C D ] F ⊣ G
+  isRightAdjoint {C = C}{D} G = Σ[ F ꞉ Functor C D ] F ⊣ G
 
 {-
 ==============================================

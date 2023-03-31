@@ -113,7 +113,7 @@ ua-gluePt e i x = ua-glue e i (λ { (i = i0) → x }) (inS (e .fst x))
 
 -- unglue is an equivalence
 @0 unglueIsEquiv : ∀ (A : Type ℓ) (φ : I)
-                   (f : PartialP φ (λ o → Σ[ T ∈ Type ℓ ] T ≃ A)) →
+                   (f : PartialP φ (λ o → Σ[ T ꞉ Type ℓ ] T ≃ A)) →
                    isEquiv {A = Glue A f} (unglue φ)
 equiv-proof (unglueIsEquiv A φ f) = λ (b : A) →
   let u : I → Partial φ A
@@ -133,7 +133,7 @@ equiv-proof (unglueIsEquiv A φ f) = λ (b : A) →
 -- Any partial family of equivalences can be extended to a total one
 -- from Glue [ φ ↦ (T,f) ] A to A
 @0 unglueEquiv : ∀ (A : Type ℓ) (φ : I)
-                 (f : PartialP φ (λ o → Σ[ T ∈ Type ℓ ] T ≃ A)) →
+                 (f : PartialP φ (λ o → Σ[ T ꞉ Type ℓ ] T ≃ A)) →
                  (Glue A f) ≃ A
 unglueEquiv A φ f = ( unglue φ , unglueIsEquiv A φ f )
 
@@ -158,7 +158,7 @@ EquivContr {ℓ = ℓ} A =
                  ; i .snd .snd .equiv-proof → unglueEquiv _ _ (f i) .snd .equiv-proof
                  }
     where
-      f : ∀ i → PartialP (~ i ∨ i) (λ x → Σ[ T ∈ Type ℓ ] T ≃ A)
+      f : ∀ i → PartialP (~ i ∨ i) (λ x → Σ[ T ꞉ Type ℓ ] T ≃ A)
       f i = λ { (i = i0) → A , idEquiv A ; (i = i1) → w }
 
 @0 contrSinglEquiv : {A B : Type ℓ} (e : A ≃ B) → (B , idEquiv B) ≡ (A , e)

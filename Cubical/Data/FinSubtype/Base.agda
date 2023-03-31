@@ -16,7 +16,7 @@ open import Cubical.Data.Sum using (_⊎_; _⊎?_; inl; inr)
 open import Cubical.Relation.Nullary
 
 Fin : ℕ → Type₀
-Fin n = Σ[ k ∈ ℕ ] k < n
+Fin n = Σ[ k ꞉ ℕ ] k < n
 
 private
   variable
@@ -54,7 +54,7 @@ fromℕ≤ (suc m) (suc n) m≤n = fsuc (fromℕ≤ m n m≤n)
 -- A case analysis helper for induction.
 fsplit
   : ∀(fj : Fin (suc k))
-  → (fzero ≡ fj) ⊎ (Σ[ fk ∈ Fin k ] fsuc fk ≡ fj)
+  → (fzero ≡ fj) ⊎ (Σ[ fk ꞉ Fin k ] fsuc fk ≡ fj)
 fsplit (0 , k<sn) = inl (toℕ-injective refl)
 fsplit (suc k , k<sn) = inr ((k , pred-≤-pred k<sn) , toℕ-injective refl)
 
@@ -98,7 +98,7 @@ any? {n = suc n} {P = P} P? =
     ... | inl x≡0 = inl (subst P (sym x≡0) Px)
     ... | inr (k , x≡sk) = inr (k , subst P (sym x≡sk) Px)
 
-FinPathℕ : {n : ℕ} (x : Fin n) (y : ℕ) → fst x ≡ y → Σ[ p ∈ _ ] (x ≡ (y , p))
+FinPathℕ : {n : ℕ} (x : Fin n) (y : ℕ) → fst x ≡ y → Σ[ p ꞉ _ ] (x ≡ (y , p))
 FinPathℕ {n = n} x y p =
     ((fst (snd x)) , (cong (λ y → fst (snd x) + y) (cong suc (sym p)) ∙ snd (snd x)))
   , (Σ≡Prop (λ _ → isProp≤) p)
