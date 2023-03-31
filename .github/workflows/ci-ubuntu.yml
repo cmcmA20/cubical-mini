@@ -56,6 +56,8 @@ env:
 jobs:
   test-cubical:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Workaround runner image issue
         if: ${{ runner.os == 'Linux' }}

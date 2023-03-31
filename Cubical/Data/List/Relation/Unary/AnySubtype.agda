@@ -11,8 +11,8 @@ private variable
   ℓ ℓ′ : Level
   A : Type ℓ
 
-◇ : (P : A → Type ℓ′) → List A → Type _
-◇ P xs = Σ[ i ꞉ Fin (length xs) ] P (xs ! i)
+-- ◇ : (P : A → Type ℓ′) → List A → Type _
+-- ◇ P xs = Σ[ i ꞉ Fin (length xs) ] P (xs ! i)
 
-◇! : (P : A → Type ℓ′) → List A → Type _
-◇! P xs = isContr (◇ P xs)
+-- ◇! : (P : A → Type ℓ′) → List A → Type _
+-- ◇! P xs = isContr (◇ P xs)
