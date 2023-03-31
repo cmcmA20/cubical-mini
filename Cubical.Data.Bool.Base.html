@@ -49,7 +49,12 @@
 <a id="887" href="Cubical.Data.Bool.Base.html#830" class="Function">dichotomyBoolSym</a> <a id="904" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="910" class="Symbol">=</a> <a id="912" href="Cubical.Data.Sum.Base.html#222" class="InductiveConstructor">inl</a> <a id="916" href="Cubical.Foundations.Prelude.html#915" class="Function">refl</a>
 <a id="921" href="Cubical.Data.Bool.Base.html#830" class="Function">dichotomyBoolSym</a> <a id="938" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a> <a id="943" class="Symbol">=</a> <a id="945" href="Cubical.Data.Sum.Base.html#240" class="InductiveConstructor">inr</a> <a id="949" href="Cubical.Foundations.Prelude.html#915" class="Function">refl</a>
 
-<a id="955" class="Comment">-- TODO: this should be uncommented and implemented using instance arguments</a>
-<a id="1032" class="Comment">-- _==_ : {dA : Discrete A} → A → A → Bool</a>
-<a id="1075" class="Comment">-- _==_ {dA = dA} x y = Dec→Bool (dA x y)</a>
+<a id="955" class="Comment">-- Helpers for automatic proof</a>
+<a id="T"></a><a id="986" href="Cubical.Data.Bool.Base.html#986" class="Function">T</a> <a id="988" class="Symbol">:</a> <a id="990" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a> <a id="995" class="Symbol">→</a> <a id="997" href="Agda.Primitive.html#337" class="Primitive">Type₀</a>
+<a id="1003" href="Cubical.Data.Bool.Base.html#986" class="Function">T</a> <a id="1005" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="1011" class="Symbol">=</a> <a id="1013" href="Cubical.Data.Empty.Base.html#145" class="Datatype">⊥</a>
+<a id="1015" href="Cubical.Data.Bool.Base.html#986" class="Function">T</a> <a id="1017" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="1023" class="Symbol">=</a> <a id="1025" href="Cubical.Data.Unit.Base.html#171" class="Record">Unit</a>
+
+<a id="T*"></a><a id="1031" href="Cubical.Data.Bool.Base.html#1031" class="Function">T*</a> <a id="1034" class="Symbol">:</a> <a id="1036" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a> <a id="1041" class="Symbol">→</a> <a id="1043" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="1048" href="Cubical.Data.Bool.Base.html#287" class="Generalizable">ℓ</a>
+<a id="1050" href="Cubical.Data.Bool.Base.html#1031" class="Function">T*</a> <a id="1053" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="1059" class="Symbol">=</a> <a id="1061" href="Cubical.Data.Empty.Base.html#162" class="Function">⊥*</a>
+<a id="1064" href="Cubical.Data.Bool.Base.html#1031" class="Function">T*</a> <a id="1067" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="1073" class="Symbol">=</a> <a id="1075" href="Cubical.Data.Unit.Base.html#211" class="Function">Unit*</a>
 </pre></body></html>
