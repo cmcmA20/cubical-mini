@@ -56,11 +56,11 @@ private
   nfalsepath : nfalse ≡ false
   nfalsepath = refl
 
-_≟_ : Discrete Bool
-false ≟ false = yes refl
-false ≟ true  = no λ p → subst (λ b → if b then ⊥ else Bool) p true
-true  ≟ false = no λ p → subst (λ b → if b then Bool else ⊥) p true
-true  ≟ true  = yes refl
+discreteBool : Discrete Bool
+discreteBool false false = yes refl
+discreteBool false true  = no λ p → subst (λ b → if b then ⊥ else Bool) p true
+discreteBool true  false = no λ p → subst (λ b → if b then Bool else ⊥) p true
+discreteBool true  true  = yes refl
 
 True : Dec A → Type₀
 True Q = T ⌊ Q ⌋
