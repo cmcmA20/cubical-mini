@@ -23,7 +23,6 @@ open import Cubical.Data.Sigma
 open import Cubical.Truncation.Propositional as Prop
 
 open import Cubical.Relation.Nullary
-open import Cubical.Relation.Nullary.Negation
 
 private
   variable

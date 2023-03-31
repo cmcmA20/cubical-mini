@@ -26,7 +26,7 @@ open import Cubical.Data.Sigma
 
 open import Cubical.Truncation.Propositional as PropTrunc
 
-open import Cubical.Relation.Nullary
+open import Cubical.Relation.Nullary hiding (¬_)
 
 
 --------------------------------------------------------------------------------

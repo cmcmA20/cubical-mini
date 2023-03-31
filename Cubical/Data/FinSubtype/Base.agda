@@ -14,7 +14,6 @@ open import Cubical.Data.Sigma
 open import Cubical.Data.Sum using (_⊎_; _⊎?_; inl; inr)
 
 open import Cubical.Relation.Nullary
-open import Cubical.Relation.Nullary.Negation
 
 Fin : ℕ → Type₀
 Fin n = Σ[ k ∈ ℕ ] k < n

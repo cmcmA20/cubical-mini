@@ -15,10 +15,6 @@ Basic properties about Σ-types
 {-# OPTIONS --safe #-}
 module Cubical.Data.Sigma.Properties where
 
-open import Cubical.Data.Sigma.Base
-
-open import Cubical.Core.Everything
-
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Function
 open import Cubical.Foundations.Isomorphism
@@ -28,9 +24,14 @@ open import Cubical.Foundations.GroupoidLaws
 open import Cubical.Foundations.Path
 open import Cubical.Foundations.Transport
 open import Cubical.Foundations.Univalence
-open import Cubical.Relation.Nullary
+
 open import Cubical.Data.Unit.Base
 open import Cubical.Data.Empty.Base
+open import Cubical.Data.Sigma.Base
+
+open import Cubical.Relation.Nullary.Decidable
+open import Cubical.Relation.Nullary.AnonymousExistence
+open import Cubical.Relation.Nullary.Properties
 
 open import Cubical.Reflection.StrictEquiv
 

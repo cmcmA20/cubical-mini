@@ -3,13 +3,13 @@
 
 module Cubical.Data.Graph.Path where
 
+open import Cubical.Foundations.Prelude hiding (Path)
+open import Cubical.Foundations.HLevels
+
 open import Cubical.Data.Graph.Base
 open import Cubical.Data.List.Base hiding (_++_)
-open import Cubical.Data.Nat.Base
-open import Cubical.Data.Nat.Properties
+open import Cubical.Data.Nat
 open import Cubical.Data.Sigma.Base hiding (Path)
-open import Cubical.Foundations.HLevels
-open import Cubical.Foundations.Prelude hiding (Path)
 
 
 module _ {ℓv ℓe : Level} where

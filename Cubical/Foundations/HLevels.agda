@@ -22,8 +22,8 @@ open import Cubical.Foundations.Path
 open import Cubical.Foundations.Transport
 open import Cubical.Foundations.Univalence using (ua ; univalenceIso)
 
+open import Cubical.Data.Nat.Base   using (ℕ; zero; suc; _+_)
 open import Cubical.Data.Sigma
-open import Cubical.Data.Nat   using (ℕ; zero; suc; _+_; +-zero; +-comm)
 
 HLevel : Type₀
 HLevel = ℕ

@@ -7,7 +7,7 @@ open import Cubical.Foundations.Function
 open import Cubical.Data.Empty.Base as ⊥
 open import Cubical.Data.Bool.Base
 
-open import Cubical.Relation.Nullary.Negation
+open import Cubical.Relation.Nullary.Negation public
 
 data Reflects {ℓ} (P : Type ℓ) : Bool → Type ℓ where
   ofʸ : ( p :   P) → Reflects P true
@@ -19,17 +19,17 @@ private variable
   Q : Type ℓ′
   a b : Bool
 
-of : if b then P else ¬ P → Reflects P b    
-of {b = false} ¬p = ofⁿ ¬p    
-of {b = true }  p = ofʸ p    
-    
-invert : Reflects P b → if b then P else ¬ P    
-invert (ofʸ  p) = p    
+of : if b then P else ¬ P → Reflects P b
+of {b = false} ¬p = ofⁿ ¬p
+of {b = true }  p = ofʸ p
+
+invert : Reflects P b → if b then P else ¬ P
+invert (ofʸ  p) = p
 invert (ofⁿ ¬p) = ¬p
 
-¬-reflects : Reflects P b → Reflects (¬ P) (not b)    
-¬-reflects (ofʸ  p) = ofⁿ (_$ p)    
-¬-reflects (ofⁿ ¬p) = ofʸ ¬p    
+¬-reflects : Reflects P b → Reflects (¬ P) (not b)
+¬-reflects (ofʸ  p) = ofⁿ (_$ p)
+¬-reflects (ofⁿ ¬p) = ofʸ ¬p
 
 -- infixr 2 _×-reflects_
 -- _×-reflects_ : Reflects P a → Reflects Q b

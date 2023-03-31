@@ -9,6 +9,7 @@ open import Cubical.Data.Bool
 open import Cubical.Data.Sigma
 
 open import Cubical.Relation.Nullary.Base
+open import Cubical.Relation.Nullary.Decidable
 open import Cubical.Relation.Nullary.Properties
 
 private

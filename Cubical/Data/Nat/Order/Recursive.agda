@@ -17,7 +17,6 @@ open import Cubical.Data.Nat.Properties
 open import Cubical.Induction.WellFounded
 
 open import Cubical.Relation.Nullary
-open import Cubical.Relation.Nullary.Negation
 
 infix 4 _≤_ _<_
 

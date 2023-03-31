@@ -15,7 +15,6 @@ open import Cubical.Data.Nat.Properties
 
 open import Cubical.Induction.WellFounded
 
-open import Cubical.Relation.Nullary.Negation
 open import Cubical.Relation.Nullary
 
 private

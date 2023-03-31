@@ -21,10 +21,7 @@ open import Cubical.Data.Empty as Empty
 open import Cubical.Data.Sigma
 open import Cubical.Data.Unit using (Unit; Unit*; isPropUnit)
 
-open import Cubical.Truncation.Propositional hiding (rec)
-
 open import Cubical.Relation.Nullary
-open import Cubical.Relation.Nullary.Negation
 
 private
   variable

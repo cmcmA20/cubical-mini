@@ -27,11 +27,6 @@ open Erased
 substᴱ : (B : @0 A → Type ℓ′) → (@0 p : x ≡ y) → B x → B y
 substᴱ B p = subst (λ z → B (z .erased)) ([]-cong [ p ])
 
-recompute : {A-dec : Dec A} → @0 A → A
-recompute {A-dec = A-dec} with A-dec
-... | yes a = λ _ → a
-... | no ¬a = λ 0a → ⊥.rec (¬a 0a)
-
 -- isContrᴱ : Type ℓ → Type ℓ
 -- isContrᴱ A = Σ[ x ∈ A ] Erased (∀ y → x ≡ y)
 

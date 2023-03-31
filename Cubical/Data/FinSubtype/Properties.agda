@@ -344,16 +344,16 @@ pigeonhole-special
   → Σ[ i ∈ Fin (suc n) ] Σ[ j ∈ Fin (suc n) ] (¬ i ≡ j) × (f i ≡ f j)
 pigeonhole-special {zero} f = Empty.rec (¬Fin0 (f fzero))
 pigeonhole-special {suc n} f =
-  proof (any?
+  helper (any?
     (λ (i : Fin (suc n)) →
       discreteFin (f (inject< ≤-refl i)) (f (suc n , ≤-refl))
     ))
   where
-    proof
+    helper
       : Dec (Σ (Fin (suc n)) (λ z → f (inject< ≤-refl z) ≡ f (suc n , ≤-refl)))
       → Σ[ i ∈ Fin (suc (suc n)) ] Σ[ j ∈ Fin (suc (suc n)) ] (¬ i ≡ j) × (f i ≡ f j)
-    proof (yes (i , prf)) = inject< ≤-refl i , (suc n , ≤-refl) , inject<-ne i , prf
-    proof (no h) =
+    helper (yes (i , prf)) = inject< ≤-refl i , (suc n , ≤-refl) , inject<-ne i , prf
+    helper (no h) =
       let
         g : Fin (suc n) → Fin n
         g k = punchOut

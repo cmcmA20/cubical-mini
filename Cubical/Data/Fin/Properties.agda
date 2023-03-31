@@ -22,7 +22,6 @@ open import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Maybe
 
 open import Cubical.Relation.Nullary
-open import Cubical.Relation.Nullary.Negation
 
 open import Cubical.Structures.Pointed
 

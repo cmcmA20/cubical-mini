@@ -13,7 +13,6 @@ open import Cubical.Data.Fin
 open import Cubical.Data.Sigma
 open import Cubical.Data.Unit
 
-open import Cubical.Relation.Nullary.Negation
 open import Cubical.Relation.Nullary
 
 module _ {ℓ} {A : Type ℓ} where
