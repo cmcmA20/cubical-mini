@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cubical.Relation.Nullary.Negation</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Relation.Nullary.Negation.html" class="Module">Cubical.Relation.Nullary.Negation</a> <a id="65" class="Keyword">where</a>
+
+<a id="72" class="Keyword">open</a> <a id="77" class="Keyword">import</a> <a id="84" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+
+<a id="113" class="Keyword">open</a> <a id="118" class="Keyword">import</a> <a id="125" href="Cubical.Data.Empty.Base.html" class="Module">Cubical.Data.Empty.Base</a> <a id="149" class="Symbol">as</a> <a id="152" class="Module">⊥</a>
+
+<a id="155" class="Keyword">private</a> <a id="163" class="Keyword">variable</a>
+  <a id="174" href="Cubical.Relation.Nullary.Negation.html#174" class="Generalizable">ℓ</a>  <a id="177" class="Symbol">:</a> <a id="179" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+  <a id="187" href="Cubical.Relation.Nullary.Negation.html#187" class="Generalizable">A</a>  <a id="190" class="Symbol">:</a> <a id="192" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="197" href="Cubical.Relation.Nullary.Negation.html#174" class="Generalizable">ℓ</a>
+
+<a id="200" class="Keyword">infix</a> <a id="206" class="Number">3</a> <a id="208" href="Cubical.Relation.Nullary.Negation.html#211" class="Function Operator">¬_</a>
+<a id="¬_"></a><a id="211" href="Cubical.Relation.Nullary.Negation.html#211" class="Function Operator">¬_</a> <a id="214" class="Symbol">:</a> <a id="216" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="221" href="Cubical.Relation.Nullary.Negation.html#174" class="Generalizable">ℓ</a> <a id="223" class="Symbol">→</a> <a id="225" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="230" href="Cubical.Relation.Nullary.Negation.html#174" class="Generalizable">ℓ</a>
+<a id="232" href="Cubical.Relation.Nullary.Negation.html#211" class="Function Operator">¬</a> <a id="234" href="Cubical.Relation.Nullary.Negation.html#234" class="Bound">A</a> <a id="236" class="Symbol">=</a> <a id="238" href="Cubical.Relation.Nullary.Negation.html#234" class="Bound">A</a> <a id="240" class="Symbol">→</a> <a id="242" href="Cubical.Data.Empty.Base.html#145" class="Datatype">⊥</a>
+
+<a id="NonEmpty"></a><a id="245" href="Cubical.Relation.Nullary.Negation.html#245" class="Function">NonEmpty</a> <a id="254" class="Symbol">:</a> <a id="256" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="261" href="Cubical.Relation.Nullary.Negation.html#174" class="Generalizable">ℓ</a> <a id="263" class="Symbol">→</a> <a id="265" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="270" href="Cubical.Relation.Nullary.Negation.html#174" class="Generalizable">ℓ</a>
+<a id="272" href="Cubical.Relation.Nullary.Negation.html#245" class="Function">NonEmpty</a> <a id="281" href="Cubical.Relation.Nullary.Negation.html#281" class="Bound">A</a> <a id="283" class="Symbol">=</a> <a id="285" href="Cubical.Relation.Nullary.Negation.html#211" class="Function Operator">¬</a> <a id="287" href="Cubical.Relation.Nullary.Negation.html#211" class="Function Operator">¬</a> <a id="289" href="Cubical.Relation.Nullary.Negation.html#281" class="Bound">A</a>
+
+<a id="Stable"></a><a id="292" href="Cubical.Relation.Nullary.Negation.html#292" class="Function">Stable</a> <a id="299" class="Symbol">:</a> <a id="301" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="306" href="Cubical.Relation.Nullary.Negation.html#174" class="Generalizable">ℓ</a> <a id="308" class="Symbol">→</a> <a id="310" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="315" href="Cubical.Relation.Nullary.Negation.html#174" class="Generalizable">ℓ</a>
+<a id="317" href="Cubical.Relation.Nullary.Negation.html#292" class="Function">Stable</a> <a id="324" href="Cubical.Relation.Nullary.Negation.html#324" class="Bound">A</a> <a id="326" class="Symbol">=</a> <a id="328" href="Cubical.Relation.Nullary.Negation.html#245" class="Function">NonEmpty</a> <a id="337" href="Cubical.Relation.Nullary.Negation.html#324" class="Bound">A</a> <a id="339" class="Symbol">→</a> <a id="341" href="Cubical.Relation.Nullary.Negation.html#324" class="Bound">A</a>
+</pre></body></html>
