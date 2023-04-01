@@ -34,6 +34,16 @@ pred (pos zero)    = neg 1
 pred (pos (suc n)) = pos n
 pred (0₋≡0₊ _) = neg 1
 
+_⊖_ : ℕ → ℕ → ℤ
+zero  ⊖ n     = neg n
+suc m ⊖ zero  = pos (suc m)
+suc m ⊖ suc n = m ⊖ n
+
+_⊖′_ : ℕ → ℕ → ℤ
+zero  ⊖′ n     = neg n
+m     ⊖′ zero  = pos m
+suc m ⊖′ suc n = m ⊖′ n
+
 module _ {ℓ : Level} {B : ℤ → Type ℓ}
          (neg* : (n : ℕ) → B (neg n))
          (pos* : (n : ℕ) → B (pos n))
@@ -46,6 +56,6 @@ module _ {ℓ : Level} {B : ℤ → Type ℓ}
 module _ {ℓ : Level} {B : ℤ → Type ℓ}
          (neg* : (n : ℕ) → B (neg n))
          (pos* : (n : ℕ) → B (pos n))
-         ⦃ B-prop : {m : ℤ} → IsProp (B m) ⦄ where
+         (B-prop : {m : ℤ} → isProp (B m)) where
   elim-prop : (m : ℤ) → B m
-  elim-prop = elim neg* pos* (toPathP (B-prop .iohl _ _))
+  elim-prop = elim neg* pos* (toPathP (B-prop _ _))
