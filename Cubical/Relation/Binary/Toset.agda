@@ -19,11 +19,11 @@ record IsToset {A : Type ℓ} (_≤_ : A → A → Type ℓ′) : Type (ℓ-max 
   constructor istoset
 
   field
-    total : (x y : A) → (x ≤ y) ⊎ (y ≤ x)
+    _≤?_ : (x y : A) → (x ≤ y) ⊎ (y ≤ x)
     isPoset : IsPoset _≤_
 
-  total′ : (x y : A) → ¬ (x ≤ y) → y ≤ x
-  total′ x y x≰y with total x y
+  total : (x y : A) → ¬ (x ≤ y) → y ≤ x
+  total x y x≰y with x ≤? y
   ... | inr y≤x = y≤x
   ... | inl x≤y = ⊥.rec (x≰y x≤y)
 

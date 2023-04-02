@@ -1,9 +1,14 @@
 {-# OPTIONS --safe #-}
 module Cubical.Instances.TotOrd where
 
-open import Cubical.Foundations.Prelude
+open import Cubical.Instances.TotOrd.Base public
 
-open import Cubical.Relation.Binary.Toset
+open import Cubical.Instances.TotOrd.Data.Char public
+-- TODO
+-- open import Cubical.Instances.TotOrd.Data.Nat public
+-- open import Cubical.Instances.TotOrd.Data.Prod public
+-- open import Cubical.Instances.TotOrd.Data.Sigma public
+-- open import Cubical.Instances.TotOrd.Data.String public
+-- open import Cubical.Instances.TotOrd.Data.Sum public
 
-record TotOrd {ℓ} {ℓ′} (A : Type ℓ) : Type (ℓ-suc (ℓ-max ℓ ℓ′)) where
-  field totOrd : TosetStr ℓ′ A
+-- open import Cubical.Instances.TotOrd.HITs.Int public

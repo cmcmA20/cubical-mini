@@ -9,6 +9,7 @@ open import Cubical.Functions.Embedding
 
 open import Cubical.Data.Char.Base
 open import Cubical.Data.Nat.Properties
+open import Cubical.Data.Nat.Order renaming (_≤_ to _≤ₙ_; _≟_ to _≟ₙ_)
 open import Cubical.Data.Equality using (eqToPath; pathToEq) renaming (_≡_ to _≣_)
 
 open import Cubical.Relation.Nullary
@@ -25,6 +26,5 @@ private variable
 discreteChar : Discrete Char
 discreteChar c₁ c₂ = mapDec ≈⇒≡ ≉⇒≢ (discreteℕ (toℕ c₁) (toℕ c₂))
 
--- TODO injEmbedding can be refactored to not use ua
-@0 isSetChar : isSet Char
-isSetChar = Embedding-into-isSet→isSet (toℕ , injEmbedding isSetℕ ≈⇒≡) isSetℕ
+_≤_ : Char → Char → Type
+c₁ ≤ c₂ = toℕ c₁ ≤ₙ toℕ c₂
