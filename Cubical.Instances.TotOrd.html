@@ -2,10 +2,15 @@
 <html><head><meta charset="utf-8"><title>Cubical.Instances.TotOrd</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
 <a id="24" class="Keyword">module</a> <a id="31" href="Cubical.Instances.TotOrd.html" class="Module">Cubical.Instances.TotOrd</a> <a id="56" class="Keyword">where</a>
 
-<a id="63" class="Keyword">open</a> <a id="68" class="Keyword">import</a> <a id="75" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a>
+<a id="63" class="Keyword">open</a> <a id="68" class="Keyword">import</a> <a id="75" href="Cubical.Instances.TotOrd.Base.html" class="Module">Cubical.Instances.TotOrd.Base</a> <a id="105" class="Keyword">public</a>
 
-<a id="104" class="Keyword">open</a> <a id="109" class="Keyword">import</a> <a id="116" href="Cubical.Relation.Binary.Toset.html" class="Module">Cubical.Relation.Binary.Toset</a>
+<a id="113" class="Keyword">open</a> <a id="118" class="Keyword">import</a> <a id="125" href="Cubical.Instances.TotOrd.Data.Char.html" class="Module">Cubical.Instances.TotOrd.Data.Char</a> <a id="160" class="Keyword">public</a>
+<a id="167" class="Comment">-- TODO</a>
+<a id="175" class="Comment">-- open import Cubical.Instances.TotOrd.Data.Nat public</a>
+<a id="231" class="Comment">-- open import Cubical.Instances.TotOrd.Data.Prod public</a>
+<a id="288" class="Comment">-- open import Cubical.Instances.TotOrd.Data.Sigma public</a>
+<a id="346" class="Comment">-- open import Cubical.Instances.TotOrd.Data.String public</a>
+<a id="405" class="Comment">-- open import Cubical.Instances.TotOrd.Data.Sum public</a>
 
-<a id="147" class="Keyword">record</a> <a id="TotOrd"></a><a id="154" href="Cubical.Instances.TotOrd.html#154" class="Record">TotOrd</a> <a id="161" class="Symbol">{</a><a id="162" href="Cubical.Instances.TotOrd.html#162" class="Bound">ℓ</a><a id="163" class="Symbol">}</a> <a id="165" class="Symbol">{</a><a id="166" href="Cubical.Instances.TotOrd.html#166" class="Bound">ℓ′</a><a id="168" class="Symbol">}</a> <a id="170" class="Symbol">(</a><a id="171" href="Cubical.Instances.TotOrd.html#171" class="Bound">A</a> <a id="173" class="Symbol">:</a> <a id="175" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="180" href="Cubical.Instances.TotOrd.html#162" class="Bound">ℓ</a><a id="181" class="Symbol">)</a> <a id="183" class="Symbol">:</a> <a id="185" href="Agda.Primitive.html#337" class="Primitive">Type</a> <a id="190" class="Symbol">(</a><a id="191" href="Agda.Primitive.html#833" class="Primitive">ℓ-suc</a> <a id="197" class="Symbol">(</a><a id="198" href="Agda.Primitive.html#863" class="Primitive">ℓ-max</a> <a id="204" href="Cubical.Instances.TotOrd.html#162" class="Bound">ℓ</a> <a id="206" href="Cubical.Instances.TotOrd.html#166" class="Bound">ℓ′</a><a id="208" class="Symbol">))</a> <a id="211" class="Keyword">where</a>
-  <a id="219" class="Keyword">field</a> <a id="TotOrd.totOrd"></a><a id="225" href="Cubical.Instances.TotOrd.html#225" class="Field">totOrd</a> <a id="232" class="Symbol">:</a> <a id="234" href="Cubical.Relation.Binary.Toset.html#792" class="Record">TosetStr</a> <a id="243" href="Cubical.Instances.TotOrd.html#166" class="Bound">ℓ′</a> <a id="246" href="Cubical.Instances.TotOrd.html#171" class="Bound">A</a>
+<a id="462" class="Comment">-- open import Cubical.Instances.TotOrd.HITs.Int public</a>
 </pre></body></html>
