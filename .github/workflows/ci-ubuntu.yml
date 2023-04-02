@@ -44,11 +44,6 @@ env:
   CABAL_VERSION: 3.6.2.0
   CABAL_INSTALL: cabal install --overwrite-policy=always --ghc-options='-O1 +RTS -M6G -RTS'
   CACHE_PATHS: |
-    ~/.ghcup/bin
-    ~/.ghcup/cache
-    ~/.ghcup/config.yaml
-    ~/.ghcup/db
-    ~/.ghcup/ghc
     ~/.cabal/packages
     ~/.cabal/store
     ~/.cabal/bin
@@ -59,9 +54,20 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Workaround runner image issue
-        if: ${{ runner.os == 'Linux' }}
-        run: sudo chown -R $USER /usr/local/.ghcup
+      - name: Install cabal
+        uses: haskell/actions/setup@v2
+        with:
+          ghc-version: ${{ env.GHC_VERSION }}
+          cabal-version: ${{ env.CABAL_VERSION }}
+          cabal-update: true
+
+      - name: Get latest commit hash on AGDA_BRANCH
+        uses: octokit/request-action@v2.1.7
+        id: agda-branch-commit-hash
+        with:
+          route: GET /repos/agda/agda/branches/${{ env.AGDA_BRANCH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # This caching step allows us to save a lot of building time by only
       # downloading ghc and cabal, rebuilding Agda, and re-checking unchanged
@@ -72,21 +78,13 @@ jobs:
         id: cache-external-restore
         with:
           path: ${{ env.CACHE_PATHS }}
-          key: ${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH }}
+          key: ${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}
+        env:
+          AGDA_BRANCH_HASH: ${{ fromJson(steps.agda-branch-commit-hash.outputs.data).commit.sha }}
 
       ########################################################################
       ## INSTALLATION STEPS
       ########################################################################
-
-      - name: Install cabal
-        if: steps.cache-external-restore.outputs.cache-hit != 'true'
-        uses: haskell/actions/setup@v2
-        with:
-          ghc-version: ${{ env.GHC_VERSION }}
-          cabal-version: ${{ env.CABAL_VERSION }}
-
-      - name: Cabal update
-        run: cabal update
 
       - name: Download and install Agda from github
         if: steps.cache-external-restore.outputs.cache-hit != 'true'
@@ -132,9 +130,11 @@ jobs:
         id: cache-library-restore
         with:
           path: ./_build
-          key: library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH }}-${{ hashFiles('Cubical/**') }}
+          key: library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-${{ hashFiles('Cubical/**') }}
           restore-keys: |
-            library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH }}-
+            library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-
+        env:
+          AGDA_BRANCH_HASH: ${{ fromJson(steps.agda-branch-commit-hash.outputs.data).commit.sha }}
 
       - name: Put cabal programs in PATH
         run: echo "~/.cabal/bin" >> $GITHUB_PATH
