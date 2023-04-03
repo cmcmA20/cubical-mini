@@ -37,7 +37,7 @@ open import Cubical.Truncation.Propositional public
 open import Cubical.HITs.S1 as S1
   renaming (loop to loopPath)
   hiding (helix ; winding ; ΩS¹ ; encode ; intLoop ; decode ; decodeEncode)
-open import Cubical.Data.Nat
+open import Cubical.Data.Nat.Base
 open import Cubical.Data.Int
 
 -- Import the builtin equality type defined as an inductive family

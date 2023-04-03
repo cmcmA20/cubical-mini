@@ -3,8 +3,8 @@ module Cubical.Tactics.NatSolver.Examples where
 
 open import Cubical.Foundations.Prelude
 
-open import Cubical.Data.Fin
-open import Cubical.Data.Nat
+open import Cubical.Data.Fin.Base
+open import Cubical.Data.Nat.Base
 open import Cubical.Data.Vec.Base
 
 open import Cubical.Tactics.NatSolver.NatExpression

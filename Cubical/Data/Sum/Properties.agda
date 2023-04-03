@@ -1,18 +1,20 @@
 {-# OPTIONS --safe #-}
 module Cubical.Data.Sum.Properties where
 
-open import Cubical.Core.Everything
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.HLevels
-open import Cubical.Functions.Embedding
 open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Isomorphism
-open import Cubical.Data.Empty
-open import Cubical.Data.Nat
-open import Cubical.Data.Sigma
-open import Cubical.Relation.Nullary
 
+open import Cubical.Functions.Embedding
+
+
+open import Cubical.Data.Empty
+open import Cubical.Data.Nat.Base
+open import Cubical.Data.Sigma.Base
 open import Cubical.Data.Sum.Base
+
+open import Cubical.Relation.Nullary
 
 open Iso
 

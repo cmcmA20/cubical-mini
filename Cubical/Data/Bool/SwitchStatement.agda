@@ -1,12 +1,10 @@
 {-# OPTIONS --safe #-}
 module Cubical.Data.Bool.SwitchStatement where
 
-open import Cubical.Core.Everything
-
 open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.Bool.Base
-open import Cubical.Data.Nat
+open import Cubical.Data.Nat.Base
 
 {-
   Switch-case:

@@ -8,14 +8,11 @@ open import Cubical.Foundations.Function
 open import Cubical.Foundations.HLevels
 open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Equiv
+open import Cubical.Foundations.Univalence
 
-open import Cubical.Data.Nat
+open import Cubical.Data.Nat.Base
 open import Cubical.Data.Unit.Base
 open import Cubical.Data.Prod.Base
-
-open import Cubical.Foundations.Isomorphism
-open import Cubical.Foundations.Equiv
-open import Cubical.Foundations.Univalence
 
 open import Cubical.Reflection.StrictEquiv
 

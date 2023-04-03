@@ -8,8 +8,6 @@ open import Cubical.Foundations.Equiv
 
 open import Cubical.Data.Empty as ⊥
 
-open import Cubical.Relation.Nullary.Base
-
 private variable
   ℓ ℓ′ : Level
   @0 A : Type ℓ

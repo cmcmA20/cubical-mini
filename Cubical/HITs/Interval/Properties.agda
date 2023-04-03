@@ -12,9 +12,9 @@ private variable
   A : Type ℓ
 
 isContrInterval : isContr Interval
-isContrInterval = (zero , (λ x → rem x))
+isContrInterval = (zero , rem)
   where
-  rem : (x : Interval) → zero ≡ x
+  rem : (i′ : Interval) → zero ≡ i′
   rem zero      = refl
   rem one       = seg
   rem (seg i) j = seg (i ∧ j)
@@ -34,7 +34,8 @@ intervalEta f i one     = f one
 intervalEta f i (seg j) = f (seg j)
 
 externalIntervalFunctionsArePaths : (I → A) ≃ (Σ[ x ꞉ A ] Σ[ y ꞉ A ] x ≡ y)
-externalIntervalFunctionsArePaths = isoToEquiv (iso (λ f → _ , _ , λ i → f i) (λ (_ , _ , p) i → p i) (λ (_ , _ , _) → refl) (λ _ → refl))
+externalIntervalFunctionsArePaths =
+  isoToEquiv (iso (λ f → _ , _ , λ i → f i) (λ (_ , _ , p) i → p i) (λ (_ , _ , _) → refl) (λ _ → refl))
 
 internalIntervalFunctionsArePaths : (Interval → A) ≃ (Σ[ x ꞉ A ] Σ[ y ꞉ A ] x ≡ y)
 internalIntervalFunctionsArePaths = isoToEquiv (iso to from (λ _ → refl) (λ _ → funExt li′))

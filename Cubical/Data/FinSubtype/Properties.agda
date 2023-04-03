@@ -22,16 +22,15 @@ open import Cubical.Data.Nat
 open import Cubical.Data.Nat.Order
 open import Cubical.Data.Empty as Empty
 open import Cubical.Data.Unit
-open import Cubical.Data.Sum
+open import Cubical.Data.Sum.Base
 open import Cubical.Data.Sigma
 open import Cubical.Data.Fin.Base renaming (Fin to FinI) hiding (¬Fin0 ; toℕ)
 
 open import Cubical.Relation.Nullary
-open import Cubical.Relation.Nullary.Negation
+open import Cubical.Relation.Nullary.Negation  -- FIXME remove when nullary is done
+open import Cubical.Relation.Nullary.Decidable
 
 open import Cubical.Induction.WellFounded
-
-open import Cubical.Relation.Nullary
 
 private
  variable

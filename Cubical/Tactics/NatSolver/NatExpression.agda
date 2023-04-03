@@ -3,8 +3,8 @@ module Cubical.Tactics.NatSolver.NatExpression where
 
 open import Cubical.Foundations.Prelude
 
-open import Cubical.Data.Fin
-open import Cubical.Data.Nat
+open import Cubical.Data.Fin.Base
+open import Cubical.Data.Nat.Base
 open import Cubical.Data.Nat.Order using (zero-≤)
 open import Cubical.Data.Vec.Base
 

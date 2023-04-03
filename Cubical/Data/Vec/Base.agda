@@ -5,7 +5,7 @@ module Cubical.Data.Vec.Base where
 
 open import Cubical.Foundations.Prelude
 
-open import Cubical.Data.Nat
+open import Cubical.Data.Nat.Base
 open import Cubical.Data.Fin.Base
 open import Cubical.Data.Sigma.Base
 

@@ -8,23 +8,23 @@
 -}
 module Cubical.Tactics.NatSolver.Reflection where
 
-open import Cubical.Foundations.Prelude hiding (Type)
+open import Cubical.Foundations.Prelude
+
 open import Cubical.Functions.Logic
 
-open import Agda.Builtin.Reflection hiding (Type)
-open import Agda.Builtin.String
-
-open import Cubical.Reflection.Base
-
-open import Cubical.Data.Maybe
-open import Cubical.Data.Sigma
-open import Cubical.Data.List
+open import Cubical.Data.String.Base
+open import Cubical.Data.Maybe.Base
+open import Cubical.Data.Sigma.Base
+open import Cubical.Data.List.Base
 open import Cubical.Data.Nat.Literals
-open import Cubical.Data.Nat
-open import Cubical.Data.Fin using () renaming (zero to fzero; suc to fsuc)
-open import Cubical.Data.Bool
+open import Cubical.Data.Nat.Base
+open import Cubical.Data.Fin.Base using () renaming (zero to fzero; suc to fsuc)
+open import Cubical.Data.Bool.Base
 open import Cubical.Data.Bool.SwitchStatement
-open import Cubical.Data.Vec using (Vec) renaming ([] to emptyVec; _∷_ to _∷vec_) public
+open import Cubical.Data.Vec.Base using (Vec) renaming ([] to emptyVec; _∷_ to _∷vec_) public
+
+open import Agda.Builtin.Reflection hiding (Type)
+open import Cubical.Reflection.Base
 
 open import Cubical.Tactics.NatSolver.NatExpression
 open import Cubical.Tactics.NatSolver.Solver

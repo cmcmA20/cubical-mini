@@ -10,10 +10,11 @@ open import Cubical.Foundations.Univalence
 import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Unit
 open import Cubical.Data.Nat
-open import Cubical.Data.Sigma
-open import Cubical.Data.Sum
+open import Cubical.Data.Sigma.Base
+open import Cubical.Data.Sum.Base
 open import Cubical.Data.Vec.Base
-open import Cubical.Data.Fin
+open import Cubical.Data.Fin.Base
+
 open import Cubical.Relation.Nullary
 
 open Iso

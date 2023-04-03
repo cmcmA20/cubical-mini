@@ -4,12 +4,12 @@ module Cubical.Tactics.MonoidSolver.Solver where
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Structure
 
-open import Cubical.Data.Fin using (Fin)
-open import Cubical.Data.Nat using (ℕ)
-open import Cubical.Data.List
+open import Cubical.Data.Fin.Base using (Fin)
+open import Cubical.Data.Nat.Base using (ℕ)
+open import Cubical.Data.List.Base
 open import Cubical.Data.Vec as Vec using (Vec; lookup)
 
-open import Cubical.Algebra.Monoid
+open import Cubical.Algebra.Monoid.Base
 
 open import Cubical.Tactics.MonoidSolver.MonoidExpression
 

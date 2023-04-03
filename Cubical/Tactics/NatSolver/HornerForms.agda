@@ -4,8 +4,8 @@ module Cubical.Tactics.NatSolver.HornerForms where
 open import Cubical.Foundations.Prelude
 
 open import Cubical.Data.Nat hiding (isZero)
-open import Cubical.Data.Fin
-open import Cubical.Data.Vec
+open import Cubical.Data.Fin.Base
+open import Cubical.Data.Vec.Base
 open import Cubical.Data.Bool using (Bool; true; false; if_then_else_)
 
 private

@@ -8,8 +8,6 @@ This file contains:
 {-# OPTIONS --safe #-}
 module Cubical.Truncation.Propositional.Properties where
 
-open import Cubical.Core.Everything
-
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.Function
@@ -18,9 +16,9 @@ open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Univalence
 
 open import Cubical.Data.Sigma
-open import Cubical.Data.Sum hiding (rec ; elim ; map)
-open import Cubical.Data.Nat using (ℕ ; zero ; suc)
-open import Cubical.Data.Fin using (Fin ; zero ; suc)
+open import Cubical.Data.Sum.Base hiding (rec ; elim ; map)
+open import Cubical.Data.Nat.Base using (ℕ ; zero ; suc)
+open import Cubical.Data.Fin.Base using (Fin ; zero ; suc)
 
 open import Cubical.Truncation.Propositional.Base
 

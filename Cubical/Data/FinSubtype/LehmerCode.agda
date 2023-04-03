@@ -17,18 +17,18 @@ open import Cubical.Foundations.Transport
 open import Cubical.Functions.Embedding
 open import Cubical.Functions.Surjection
 
-open import Cubical.Relation.Nullary
-open import Cubical.Relation.Nullary.Negation
-
 open import Cubical.Data.Unit as ⊤
 open import Cubical.Data.Empty as ⊥
-open import Cubical.Data.Nat
+open import Cubical.Data.Nat.Base
 open import Cubical.Data.Nat.Order
 open import Cubical.Data.FinSubtype.Base as F
 open import Cubical.Data.FinSubtype.Properties
   renaming (punchOut to punchOutPrim)
 open import Cubical.Data.Sigma
 open import Cubical.Data.Sum as Sum using (_⊎_; inl; inr)
+
+open import Cubical.Relation.Nullary
+open import Cubical.Relation.Nullary.Negation
 
 private
   variable

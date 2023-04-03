@@ -3,7 +3,7 @@ module Cubical.Algebra.Monoid.Instances.NatPlusBis where
 
 open import Cubical.Foundations.Prelude
 
-open import Cubical.Data.Nat
+open import Cubical.Data.Nat.Base
 -- open import Cubical.Data.Nat.Instances
 
 open import Cubical.Algebra.Monoid

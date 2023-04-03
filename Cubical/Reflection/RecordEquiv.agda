@@ -13,12 +13,13 @@ module Cubical.Reflection.RecordEquiv where
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Equiv
-open import Cubical.Data.List as List
-open import Cubical.Data.Nat
-open import Cubical.Data.Maybe as Maybe
-open import Cubical.Data.Sigma
 
-open import Agda.Builtin.String
+open import Cubical.Data.List.Base as List
+open import Cubical.Data.Nat.Base
+open import Cubical.Data.Maybe as Maybe
+open import Cubical.Data.Sigma.Base
+open import Cubical.Data.String.Base
+
 import Agda.Builtin.Reflection as R
 open import Cubical.Reflection.Base
 

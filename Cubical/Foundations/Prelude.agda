@@ -594,5 +594,8 @@ open Lift public
 liftExt : ∀ {A : Type ℓ} {a b : Lift {ℓ} {ℓ'} A} → (lower a ≡ lower b) → a ≡ b
 liftExt x i = lift (x i)
 
+onAllPaths : (Type ℓ → Type ℓ) → Type ℓ → Type ℓ
+onAllPaths S A = (x y : A) → S (x ≡ y)
+
 it : ∀ {A : Type ℓ} → ⦃ A ⦄ → A
 it ⦃ a ⦄ = a

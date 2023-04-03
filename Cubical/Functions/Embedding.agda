@@ -13,18 +13,20 @@ open import Cubical.Foundations.Powerset
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Transport
 open import Cubical.Foundations.Univalence using (ua; univalence; pathToEquiv)
-open import Cubical.Functions.Fibration
 
-open import Cubical.Data.Sigma
+open import Cubical.Functions.Fibration
 open import Cubical.Functions.Fibration
 open import Cubical.Functions.FunExtEquiv
+
+open import Cubical.Data.Nat.Base using (ℕ; zero; suc)
+open import Cubical.Data.Sigma
+
 open import Cubical.Relation.Nullary using (Discrete; yes; no)
-open import Cubical.Structures.Axioms
 
 open import Cubical.Reflection.StrictEquiv
 
-open import Cubical.Data.Nat using (ℕ; zero; suc)
-open import Cubical.Data.Sigma
+open import Cubical.Structures.Axioms
+
 
 private
   variable

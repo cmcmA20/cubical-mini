@@ -6,7 +6,6 @@ open import Cubical.Foundations.Prelude
 open import Cubical.Data.Empty as ⊥
 open import Cubical.Data.Bool.Base
 
-open import Cubical.Relation.Nullary.Base
 open import Cubical.Relation.Nullary.Reflects public
 
 infix 2 _because_

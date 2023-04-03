@@ -13,9 +13,9 @@ open import Cubical.Functions.Embedding using (isEmbedding)
 
 open import Cubical.Data.Empty as ⊥ using (⊥; isProp⊥)
 open import Cubical.Data.Unit
-open import Cubical.Data.Nat using (suc)
-open import Cubical.Data.Sum using (_⊎_; inl; inr)
-open import Cubical.Data.Sigma using (ΣPathP)
+open import Cubical.Data.Nat.Base
+open import Cubical.Data.Sum.Base
+open import Cubical.Data.Sigma.Properties using (ΣPathP)
 
 open import Cubical.Relation.Nullary.Negation
 open import Cubical.Relation.Nullary using (Discrete; yes; no)

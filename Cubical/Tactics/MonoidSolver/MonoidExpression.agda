@@ -3,11 +3,11 @@ module Cubical.Tactics.MonoidSolver.MonoidExpression where
 
 open import Cubical.Foundations.Prelude
 
-open import Cubical.Data.Fin
-open import Cubical.Data.Nat
-open import Cubical.Data.Vec
+open import Cubical.Data.Fin.Base
+open import Cubical.Data.Nat.Base
+open import Cubical.Data.Vec.Base
 
-open import Cubical.Algebra.CommMonoid
+open import Cubical.Algebra.CommMonoid.Base
 
 private
   variable

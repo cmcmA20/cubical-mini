@@ -1,16 +1,14 @@
 {-# OPTIONS --safe #-}
 module Cubical.Data.Prod.Properties where
 
-open import Cubical.Core.Everything
-
-open import Cubical.Data.Prod.Base
-open import Cubical.Data.Sigma renaming (_×_ to _×Σ_) hiding (prodIso ; toProdIso ; curryIso)
-
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Equiv
 open import Cubical.Foundations.HLevels
 open import Cubical.Foundations.Isomorphism
 open import Cubical.Foundations.Univalence
+
+open import Cubical.Data.Prod.Base
+open import Cubical.Data.Sigma.Base renaming (_×_ to _×Σ_)
 
 private
   variable

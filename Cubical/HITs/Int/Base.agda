@@ -3,7 +3,7 @@ module Cubical.HITs.Int.Base where
 
 open import Cubical.Foundations.Prelude
 
-open import Cubical.Data.Nat using (ℕ; zero; suc)
+open import Cubical.Data.Nat.Base using (ℕ; zero; suc)
 
 open import Cubical.Instances.HLevels
 

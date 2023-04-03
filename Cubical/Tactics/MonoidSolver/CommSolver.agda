@@ -4,9 +4,9 @@ module Cubical.Tactics.MonoidSolver.CommSolver where
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Structure
 
-open import Cubical.Data.Fin
-open import Cubical.Data.Nat using (ℕ; zero; suc; _+_; iter)
-open import Cubical.Data.Vec
+open import Cubical.Data.Fin.Base
+open import Cubical.Data.Nat.Base using (ℕ; zero; suc; _+_; iter)
+open import Cubical.Data.Vec.Base
 
 open import Cubical.Algebra.CommMonoid
 
