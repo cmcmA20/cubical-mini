@@ -64,7 +64,7 @@ getMissingFiles fp fpToCheck = do
 checkEverythings :: [String] -> IO ()
 checkEverythings dirs = do
   missing_files <- concat <$> forM dirs (\dir ->
-    getMissingFiles [dir,"src"] (Just ["Everything",dir,"src"]))
+    getMissingFiles [dir, "src"] (Just ["Everything",dir, "src"]))
   if null missing_files then pure ()
   else do putStrLn "Found some files which are not imported in any Everything.agda:"
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
@@ -75,7 +75,7 @@ checkREADME = do
   (sub_dirs, _) <- getSubDirsFiles ["src"]
   let sub_dirs' = sub_dirs \\ ["IO"]
   imported <- getImported ["README", "src"]
-  let missing_files = fmap (\dir -> ["Everything",dir,"src"]) sub_dirs' \\ imported
+  let missing_files = fmap (\dir -> ["Everything",dir]) sub_dirs' \\ imported
   if null missing_files then pure ()
   else do putStrLn "Found some Everything.agda's which are not imported in README.agda:"
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
@@ -87,8 +87,8 @@ genEverythings =
     let fp = addToFP ["src"] dir
     files <- getMissingFiles fp Nothing
     let ls = ["{-# OPTIONS --safe #-}",
-              "module " ++ showFP '.' (addToFP fp "Everything") ++ " where",[]]
-             ++ sort (fmap (\file -> "import " ++ showFP '.' file)
+              "module " ++ showFP '.' ["Everything",dir] ++ " where",[]]
+             ++ sort (fmap (\file -> "import " ++ showFP '.' (init file))
                            (delete (addToFP fp "Everything") files))
     writeFile ("./" ++ showFP '/' (addToFP fp "Everything") ++ ".agda")
               (unlines ls))
@@ -119,7 +119,7 @@ main = do
     ["check-README"] -> checkREADME
     ["get-imports-README"] -> do
       imported <- filter (\fp -> head fp == "Everything")
-                    <$> getImported ["README","src"]
+                    <$> getImported ["README", "src"]
       putStrLn . unwords $ map (\fp -> showFP '/' fp ++ ".agda") imported
     "help":_ -> putStrLn helpText
     _ -> putStrLn "argument(s) not recognized, try 'help'"

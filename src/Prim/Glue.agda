@@ -21,12 +21,13 @@ open import Agda.Builtin.Cubical.Glue public
            )
 
 -- TODO comment this out? it's not used anywhere
-open import Agda.Builtin.Cubical.HCompU
-  using ( prim^glueU
-        ; prim^unglueU
-        ; primFaceForall )
-open import Agda.Builtin.Cubical.HCompU public
-  using ( transpProof )
+module _ where
+  open import Agda.Builtin.Cubical.HCompU
+    using ( prim^glueU
+          ; prim^unglueU
+          ; primFaceForall )
+  open import Agda.Builtin.Cubical.HCompU public
+    using ( transpProof )
 
 private variable ℓ ℓ′ : Level
 

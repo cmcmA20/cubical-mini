@@ -4,18 +4,18 @@ module Prim.Equiv where
 open import Prim.Type
 open import Prim.Data.Sigma
 
-private variable ℓ ℓ′ : Level
-
 open import Agda.Builtin.Cubical.Equiv public
   using ()
-  renaming ( isEquiv       to isEquiv′
+  renaming ( isEquiv       to is-equiv′
            ; equiv-proof   to equiv-proof′
            ; _≃_           to _≃′_
            ; equivFun      to forward′
-           ; equivProof    to equivProof′
-           ; pathToisEquiv to pathToisEquiv′
-           ; pathToEquiv   to pathToEquiv′
+           ; equivProof    to equiv-proof′-fast
+           ; pathToisEquiv to path-to-is-equiv′
+           ; pathToEquiv   to path-to-equiv′
            )
+
+private variable ℓ ℓ′ : Level
 
 backward′ : {A : Type ℓ} {B : Type ℓ′} → A ≃′ B → B → A
 backward′ e y = e .snd .equiv-proof′ y .fst .fst

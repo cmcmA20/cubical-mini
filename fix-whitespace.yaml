@@ -33,6 +33,7 @@ included-files:
   - "**.lagda"
   - "**.lhs"
   - "**.md"
+  - "**.org"
   - "**.rst"
   - "**.x"
   - "**.y"

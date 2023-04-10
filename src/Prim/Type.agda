@@ -20,7 +20,7 @@ level-of-term : {ℓ : Level} {A : Type ℓ} → A → Level
 level-of-term {ℓ} _ = ℓ
 
 it : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → A
-it ⦃ a ⦄ = a
+it ⦃ (a) ⦄ = a
 
 record Lift {ℓ} ℓ′ (A : Type ℓ) : Type (ℓ ⊔ ℓ′) where
   constructor lift
@@ -29,7 +29,7 @@ open Lift public
 
 instance
   Lift-inst : ∀ {ℓ ℓ′} {A : Type ℓ} → ⦃ A ⦄ → Lift ℓ′ A
-  Lift-inst ⦃ a ⦄ = lift a
+  Lift-inst ⦃ (a) ⦄ = lift a
 
 record Liftω {ℓ} (A : Type ℓ) : Typeω where
   constructor liftω
@@ -37,4 +37,4 @@ record Liftω {ℓ} (A : Type ℓ) : Typeω where
 
 instance
   Liftω-inst : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → Liftω A
-  Liftω-inst ⦃ a ⦄ = liftω a
+  Liftω-inst ⦃ (a) ⦄ = liftω a

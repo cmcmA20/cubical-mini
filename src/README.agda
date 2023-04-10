@@ -17,16 +17,16 @@ module README where
 -- It contains basic primitives.
 import Prim.Everything
 
--- -- The foundations for Cubical Agda.
--- -- The Prelude module is self-explanatory.
+-- Data structures and their properties
+import Data.Everything
+
+import Foundations.Everything
+
+-- TODO
 -- import Cubical.Foundations.Prelude
--- import Cubical.Foundations.Everything
 --
 -- -- Kinds and properties of functions
 -- import Cubical.Functions.Everything
---
--- -- Data structures and their properties
--- import Cubical.Data.Everything
 --
 -- -- Higher-inductive types
 -- import Cubical.HITs.Everything

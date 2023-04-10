@@ -6,7 +6,7 @@ open import Prim.Interval
 open import Prim.Kan
 
 record Erased {ℓ} (@0 A : Type ℓ) : Type ℓ where
-  constructor [_]
+  constructor [_]ᴱ
   field @0 erased : A
 open Erased public
 
@@ -16,8 +16,12 @@ private variable
   @0 B : Type ℓ′
   @0 x y : A
 
-[]-cong : Erased (x ＝ y) → ([ x ] ＝ [ y ])
-[]-cong [ p ] = λ i → [ p i ]
+instance
+  Erased-inst : {A : Type ℓ} → ⦃ A ⦄ → Erased A
+  Erased-inst ⦃ (a) ⦄ .erased = a
+
+[]-cong : Erased (x ＝ y) → ([ x ]ᴱ ＝ [ y ]ᴱ)
+[]-cong [ p ]ᴱ = λ i → [ p i ]ᴱ
 
 substᴱ : (B : @0 A → Type ℓ′) → (@0 p : x ＝ y) → B x → B y
 substᴱ B p = transport (λ i → B (p i))
