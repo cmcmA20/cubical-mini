@@ -36,13 +36,13 @@ check-everythings:
 
 .PHONY : gen-everythings
 gen-everythings:
-	$(EVERYTHINGS) gen-except Core Foundations IO
+	$(EVERYTHINGS) gen-except Prim Foundations IO
 #	$(EVERYTHINGS) gen-except Core Foundations Codata Experiments
 
 .PHONY : gen-and-check-everythings
 gen-and-check-everythings:
-	$(EVERYTHINGS) gen-except Core Foundations IO
-	$(EVERYTHINGS) check Core Foundations
+	$(EVERYTHINGS) gen-except Prim Foundations IO
+	$(EVERYTHINGS) check Prim Foundations
 #	$(EVERYTHINGS) gen-except Core Foundations Codata Experiments
 #	$(EVERYTHINGS) check Core Foundations Codata
 
@@ -54,15 +54,15 @@ check-README:
 
 .PHONY : check
 check: gen-everythings
-	$(AGDA) Cubical/README.agda
+	$(AGDA) src/README.agda
 
 .PHONY : timings
 timings: clean gen-everythings
-	$(AGDA) -v profile.modules:10 Cubical/README.agda
+	$(AGDA) -v profile.modules:10 src/README.agda
 
 .PHONY : listings
-listings: $(wildcard Cubical/**/*.agda)
-	$(AGDA) -i. -isrc --html Cubical/README.agda -v0
+listings: $(wildcard src/**/*.agda)
+	$(AGDA) -i. -isrc --html src/README.agda -v0
 
 .PHONY : clean
 clean:

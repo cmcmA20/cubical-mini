@@ -7,8 +7,6 @@ When preparing a PR here are some general guidelines:
 - To test your changes before submission, run `make` at the top level,
   which will generate all required `Everything` files in
   `Cubical/README.agda` and then typecheck the latter file.
-  If you're using Windows, [here](MAKEWINDOWS.md) are some instructions
-  to get the `make` command working.
 
 - Please read through and clean your code before making a PR. Clean
   code has reasonable line length (<100 characters), good indentation,
@@ -25,7 +23,7 @@ When preparing a PR here are some general guidelines:
   lemmas in comments above the definition.
 
 - For guidelines how to name things see
-  [NAMING.md](https://github.com/agda/cubical/blob/master/NAMING.md).
+  [NAMING.md](https://github.com/cmcmA20/cubical-mini/blob/master/NAMING.md).
 
 - Use `private variable` to quantify over universe levels at the top
   of the file. All definitions should be maximally universe
@@ -44,7 +42,7 @@ When preparing a PR here are some general guidelines:
   `{-# OPTIONS --safe #-}`
 
   unless there is a good reason for it not to. The `--cubical` and
-  `--no-import-sorts` flags are added in the `cubical.agda-lib` file.
+  `--no-import-sorts` flags are added in the `cubical-mini.agda-lib` file.
 
 - It is much easier for us to review and merge smaller and
   self-contained PRs. If a PR changes a lot of files all over the
@@ -90,19 +88,19 @@ When preparing a PR here are some general guidelines:
   version of a result. Try to avoid switching between these when
   constructing something, for instance if you want to construct a Path
   out of a series of Iso's then compose the Isos first and then apply
-  `isoToPath` once instead of converting all of them to paths and
+  `iso-to-path` once instead of converting all of them to paths and
   composing them as paths.
 
-- Some useful lemmas have specialized versions with higher arity to
+- FIXME
+  Some useful lemmas have specialized versions with higher arity to
   make code easier to read. See for example `isPropΠ2` and `isSetΠ2`
   in [HLevels.agda](https://github.com/agda/cubical/blob/master/Cubical/Foundations/HLevels.agda)
   as well as various versions of function extensionality in
   [FunExtEquiv.agda](https://github.com/agda/cubical/blob/master/Cubical/Functions/FunExtEquiv.agda).
 
-- Unless a file is in the `Core`, `Foundations`, `Codata` or
-  `Experiments` package you don't need to add it manually to the
-  `Everything` file as it is automatically generated when running
-  `make`.
+- Unless a file is in the `Prim` or `Foundations` package you don't need to
+  add it manually to the `Everything` file as it is automatically generated
+  when running `make`.
 
 - For folders with `Base` and `Properties` submodules, the `Base` file
   can contain some basic consequences of the main definition, but
@@ -117,5 +115,40 @@ When preparing a PR here are some general guidelines:
 - Avoid `public` imports, except in modules that are specifically meant
   to collect and re-export results from several modules.
 
-- The `Experiments` folder contains various experiments and nothing in
-  the library should depend on something from this folder.
+- Module dependency structure is stratified as follows:
+
+  In `Prim` you must import Agda primitives/builtins or define and bind them.
+  You can import other `Prim` modules as well.
+  Any other imports are prohibited.
+
+  In `Foundations` and `Data.*.Base` you can import `Prim`, `Foundations` and
+  `Data.*.Base` modules.
+  Do not import and do not use Agda primitives/builtins from `Agda.Builtin.*`
+  and the like.
+
+  In other modules you can import anything but `Prim`.
+  Do not import and do not use Agda primitives/builtins from `Agda.Builtin.*`
+  and the like.
+
+- Avoid creating folders like `Data`, `Records` or `HITs` for the sake of
+  collecting all the inductive types, records or HITs.
+  When naming new folders, take inspiration in semantics or purpose of the
+  target concept, not in it's Agda syntax.
+
+- `Data` is the correct place for data structures and their properties. If you
+  see that your "data structure" is quite general, admits a rich theory
+  `Category` or any algebraic stuff) and is applicable to many, it should be
+  moved to the top-level.
+
+- Erase type indices if it's a well-known optimization. If needed, create
+  multiple representations of the same type but with different runtime
+  performance, document their relationship by defining conversions.
+
+- Create multiple representations of the same type and document, what proofs
+  are easy in this representation, and why.
+
+- TODO
+  Put equivalent representation of the same type in ??? folders.
+  This seems to be unsolvable in a satisfying way because the underlying
+  storage is a tree, but there are types for which any representation choice
+  is arbitrary.

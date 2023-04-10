@@ -64,7 +64,7 @@ getMissingFiles fp fpToCheck = do
 checkEverythings :: [String] -> IO ()
 checkEverythings dirs = do
   missing_files <- concat <$> forM dirs (\dir ->
-    getMissingFiles [dir,"Cubical"] (Just ["Everything",dir,"Cubical"]))
+    getMissingFiles [dir,"src"] (Just ["Everything",dir,"src"]))
   if null missing_files then pure ()
   else do putStrLn "Found some files which are not imported in any Everything.agda:"
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
@@ -72,10 +72,10 @@ checkEverythings dirs = do
 
 checkREADME :: IO ()
 checkREADME = do
-  (sub_dirs, _) <- getSubDirsFiles ["Cubical"]
+  (sub_dirs, _) <- getSubDirsFiles ["src"]
   let sub_dirs' = sub_dirs \\ ["IO"]
-  imported <- getImported ["README","Cubical"]
-  let missing_files = fmap (\dir -> ["Everything",dir,"Cubical"]) sub_dirs' \\ imported
+  imported <- getImported ["README", "src"]
+  let missing_files = fmap (\dir -> ["Everything",dir,"src"]) sub_dirs' \\ imported
   if null missing_files then pure ()
   else do putStrLn "Found some Everything.agda's which are not imported in README.agda:"
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
@@ -84,7 +84,7 @@ checkREADME = do
 genEverythings :: [String] -> IO ()
 genEverythings =
   mapM_ (\dir -> do
-    let fp = addToFP ["Cubical"] dir
+    let fp = addToFP ["src"] dir
     files <- getMissingFiles fp Nothing
     let ls = ["{-# OPTIONS --safe #-}",
               "module " ++ showFP '.' (addToFP fp "Everything") ++ " where",[]]
@@ -109,7 +109,7 @@ helpText = unlines [
 
 main :: IO ()
 main = do
-  all_dirs <- filter ('.' `notElem`) <$> getDirectoryContents "./Cubical"
+  all_dirs <- filter ('.' `notElem`) <$> getDirectoryContents "./src"
   args <- getArgs
   case args of
     "check":dirs -> checkEverythings dirs
@@ -119,7 +119,7 @@ main = do
     ["check-README"] -> checkREADME
     ["get-imports-README"] -> do
       imported <- filter (\fp -> head fp == "Everything")
-                    <$> getImported ["README","Cubical"]
+                    <$> getImported ["README","src"]
       putStrLn . unwords $ map (\fp -> showFP '/' fp ++ ".agda") imported
     "help":_ -> putStrLn helpText
     _ -> putStrLn "argument(s) not recognized, try 'help'"

@@ -1,5 +1,5 @@
 name: cubical-mini-0.2
-include: .
+include: src
 depend:
 flags:
   --erased-cubical

@@ -1,15 +1,13 @@
-Installation of agda/cubical
-============================
+Installation of agda/cubical-mini
+=================================
 
-The cubical library should compile on the [latest official release](https://wiki.portal.chalmers.se/agda/Main/Download)
-of Agda:
-
-https://github.com/agda/agda
+The cubical library should compile only on
+[Agda master](https://github.com/agda/agda).
 
 This file contains detailed instruction for how to install this on
-Linux and Mac. Windows users might be able to use Cygwin to mimic
-these instructions, but this hasn't been tested.
+Linux and Mac.
 
+Disregard all the following text, FIXME:
 There are three main ways of installing the development version of Agda:
 
 1. Using cabal `v2-build`: https://www.haskell.org/cabal/
