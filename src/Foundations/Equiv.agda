@@ -2,9 +2,11 @@
 module Foundations.Equiv where
 
 open import Foundations.Prelude
+open import Foundations.HLevel
 
 private variable ℓ ℓ′ ℓ″ ℓ‴ : Level
 
+-- courtesy of Mike Shulman
 infix 4 _≃_
 record _≃_ {ℓ} (A : Type ℓ) (B : Type ℓ) : Type (ℓsuc ℓ) where
   eta-equality
@@ -26,15 +28,19 @@ inv-eq e .R             = flip (e .R)
 inv-eq e .forward-prop  = e .backward-prop
 inv-eq e .backward-prop = e .forward-prop
 
+-- definitionally involutive
 inv-eq-invol : {e : A ≃ B} → inv-eq (inv-eq e) ＝ e
 inv-eq-invol = refl
 
+-- TODO
+-- how to make the composition definitionally associative and unital?
+
 -- id-eq : A ≃ A
--- id-eq .forward = id
+-- id-eq .forward  = id
 -- id-eq .backward = id
 -- id-eq .R x y = x ＝ y
--- id-eq .forward-prop  x (a₁ , p₁) (a₂ , p₂) = cong₂ _,_ (sym p₁ ∙ p₂    ) {!!}
--- id-eq .backward-prop y (b₁ , q₁) (b₂ , q₂) = cong₂ _,_ (q₁     ∙ sym q₂) {!!}
+-- id-eq .forward-prop  x u v = let z = Singleton in {!!}
+-- id-eq .backward-prop y u v = let z = SingletonP-is-contr in Σ-PathP {!!} {!!}
 
 -- -- id-eq .R x y = x ＝ y
 -- -- id-eq .forward  x = (x , refl) , λ z i → z .snd i     , λ j → z .snd (   i ∧   j)
@@ -72,6 +78,51 @@ inv-eq-invol = refl
 -- comp-eq e e′ .R x z = Σ[ y ꞉ _ ] Σ[ _ ꞉ e .R x y ] (e′ .R y z)
 -- comp-eq e e′ .forward-prop x (c₁ , b₁ , r₁ , r₁′) (c₂ , b₂ , r₂ , r₂′) = {!!}
 -- comp-eq e e′ .backward-prop = {!!}
+
+-- comp-eq : A ≃ B → B ≃ C → A ≃ C
+-- comp-eq e e′ .forward  = e′ .forward  ∘ e  .forward
+-- comp-eq e e′ .backward = e  .backward ∘ e′ .backward
+-- comp-eq e e′ .R x z = Σ[ y ꞉ _ ] (e .R x y) × (e′ .R y z)
+-- comp-eq e e′ .forward-prop x (c₁ , b₁ , r₁ , r₁′) (c₂ , b₂ , r₂ , r₂′) = {!!}
+-- comp-eq e e′ .backward-prop = {!!}
+
+
+
+idₑ : A ≃ A
+idₑ .forward  = id
+idₑ .backward = id
+idₑ .R x y = x ＝ y
+idₑ .forward-prop  x = is-contr→is-prop (Singleton-is-contr (x , refl))
+idₑ .backward-prop y = is-contr→is-prop ((y , refl) , λ t → let zz = Singleton-is-prop in {!!})
+
+comp-eq : A ≃ B → B ≃ C → A ≃ C
+comp-eq e e′ .forward = e′ .forward ∘ e .forward
+comp-eq e e′ .backward = e .backward ∘ e′ .backward
+comp-eq e e′ .R x z = e .R x (e .forward x) × e′ .R (e′ .backward z) z
+comp-eq e e′ .forward-prop = {!!}
+comp-eq e e′ .backward-prop = {!!}
+
+infixr 29 _∙ₑ_
+_∙ₑ_ = comp-eq
+
+kekw : (e : B ≃ C) (y : B) (z : C) → (y ＝ y) × e .R (e .backward z) z
+kekw e y z = refl , let tt = inhabited-prop-is-contr {!!} {!!} in tt .fst
+
+unital-left : (e : B ≃ C) → idₑ ∙ₑ e ＝ e
+unital-left e i = record
+                    { forward = e .forward
+                    ; backward = e .backward
+                    ; R = λ y z → {!!}
+                    ; forward-prop = {!!}
+                    ; backward-prop = {!!}
+                    }
+
+-- A ≃ B , B ≃ C , C ≃ D
+-- R₁₂ x z = (y : B) × (R₁ x y × R₂ y z)
+-- R₂₃ y w = (z : C) × (R₂ y z × R₃ z w)
+
+-- R₁₋₂₃ x w = (y : B) × (R₁ x y × (z : C) × (R₂ y z × R₃ z w))
+-- R₁₂₋₃ x w = (z : C) × ((y : B) × (R₁ x y × R₂ y z) × R₃ z w)
 
 -- qwe : (e : A ≃ B)
 --     → comp-eq e id-eq ＝ e

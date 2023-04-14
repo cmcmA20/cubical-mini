@@ -139,17 +139,17 @@ _∙∙_∙∙_ : w ＝ x → x ＝ y → y ＝ z
                   │    _    │ _
                   └─────────┘
               w  ̇ p ∙∙ q ∙∙ r  ̇ z
-∙∙-filler p q r i j =
-  hfill (∂ j) i λ where
-    k (j = i0) → p (~ k)
-    k (j = i1) → r k
-    k (k = i0) → q j
+∙∙-filler p q r k i =
+  hfill (∂ i) k λ where
+    j (i = i0) → p (~ j)
+    j (i = i1) → r j
+    j (j = i0) → q i
 
 -- any two definitions of double composition are equal
 ∙∙-unique : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
           → (α β : Σ[ s ꞉ w ＝ z ] Square (sym p) q s r)
           → α ＝ β
-∙∙-unique {w} {x} {y} {z} p q r (α , α-fill) (β , β-fill) =
+∙∙-unique p q r (α , α-fill) (β , β-fill) =
   λ i → (λ j → square i j) , (λ j k → cube i j k)
   where
     cube : (i j : I) → p (~ j) ＝ r j
@@ -194,8 +194,7 @@ p ∙ q = refl ∙∙ p ∙∙ q
 ∙-unique {p} {q} r square i =
   ∙∙-unique refl p q (_ , square) (_ , (∙-filler p q)) i .fst
 
--- We could have also defined single composition by taking `r = refl`:
-
+-- We could have also defined single composition by taking `refl` on the right
 infixr 30 _∙′_
 _∙′_ : x ＝ y → y ＝ z → x ＝ z
 p ∙′ q = p ∙∙ q ∙∙ refl
@@ -238,8 +237,40 @@ p ∙′ q = p ∙∙ q ∙∙ refl
   k (j = i1) → r (i ∨ k)
   k (k = i0) → ∙-filler q r i j
 
--- Heterogeneous path composition and its filler:
+-- Or even top side `refl`
+infixr 30 _∙″_
+_∙″_ : x ＝ y → y ＝ z → x ＝ z
+p ∙″ q = p ∙∙ refl ∙∙ q
 
+∙″-filler : (p : x ＝ y) (q : y ＝ z)
+          →  y  ̇    refl      ̇ y
+                 ┌─────────┐ _
+                 │    _    │
+         sym p   │    _    │   q
+                 │    _    │ _
+                 └─────────┘
+             x  ̇    p ∙″ q    ̇ z
+∙″-filler p q = ∙∙-filler p refl q
+
+∙-filler″ : (p : x ＝ y) (q : y ＝ z)
+          →  y  ̇    refl      ̇ y
+                 ┌─────────┐ _
+                 │    _    │
+         sym p   │    _    │   q
+                 │    _    │ _
+                 └─────────┘
+             x  ̇    p ∙ q     ̇ z
+∙-filler″ {y} p q j i = hcomp (∂ i ∨ ~ j) λ where
+  k (i = i0) → p (~ j)
+  k (i = i1) → q (j ∧ k)
+  k (j = i0) → y
+  k (k = i0) → p (i ∨ ~ j)
+
+∙＝∙″ : (p : x ＝ y) (q : y ＝ z) → p ∙ q ＝ p ∙″ q
+∙＝∙″ p q j = ∙∙-unique p refl q (p ∙ q , ∙-filler″ p q) (p ∙″ q , ∙″-filler p q) j .fst
+
+
+-- Heterogeneous path composition and its filler:
 
 -- Composition in a family indexed by the interval
 infixr 31 _◎_
@@ -421,6 +452,7 @@ fun-ext-simple⁻ : {B : I → Type ℓ′}
 fun-ext-simple⁻ eq x i = eq i x
 
 _＝$S_ = fun-ext-simple⁻
+happly-simple = fun-ext-simple⁻
 
 homotopy-natural : {A : Type ℓ} {B : Type ℓ′}
                  → {f g : A → B}
@@ -439,6 +471,9 @@ homotopy-natural {f} {g} H {x} {y} p = ∙-unique _ λ i j →
 
 is-contr : Type ℓ → Type ℓ
 is-contr A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
+
+is-contr⁻ : Type ℓ → Type ℓ
+is-contr⁻ A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (y ＝ x)
 
 is-prop : Type ℓ → Type ℓ
 is-prop A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
@@ -459,27 +494,52 @@ fibre : {A : Type ℓ} {B : Type ℓ′} (f : A → B) (y : B) → Type (ℓ ⊔
 fibre {A} f y = Σ[ x ꞉ A ] (f x ＝ y)
 
 SingletonP : (A : I → Type ℓ) (a : A i0) → Type _
-SingletonP A a = Σ[ x ꞉ A i1 ] PathP A a x
+SingletonP A a = Σ[ x ꞉ A i1 ] ＜ a ／ A ＼ x ＞
+
+SingletonP⁻ : (A : I → Type ℓ) (a : A i1) → Type _
+SingletonP⁻ A a = Σ[ x ꞉ A i0 ] ＜ x ／ A ＼ a ＞
 
 Singleton : {A : Type ℓ} → A → Type _
-Singleton {A} a = SingletonP (λ _ → A) a  -- Σ[ x ꞉ _ ] a ＝ x
+Singleton {A} = SingletonP (λ _ → A)
+
+Singleton⁻ : {A : Type ℓ} → A → Type _
+Singleton⁻ {A} = SingletonP⁻ (λ _ → A)
+
+Singleton-is-prop : {A : Type ℓ} {a : A} (s : Singleton a)
+                  → (a , refl) ＝ s
+Singleton-is-prop (_ , path) i = path i , square i where
+    square : Square refl refl path path
+    square i j = path (i ∧ j)
+
+Singleton⁻-is-prop : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
+                   → (a , refl) ＝ s
+Singleton⁻-is-prop (_ , path) i = path (~ i) , square (~ i) where
+    square : Square path path refl refl
+    square i j = path (i ∨ j)
 
 Singleton-is-contr : {A : Type ℓ} {a : A} (s : Singleton a)
-                   → (a , refl) ＝ s
-Singleton-is-contr (_ , path) i = path i , square i where
-  square : Square refl refl path path
-  square i j = path (i ∧ j)
+                   → is-contr (Singleton a)
+Singleton-is-contr {a} _ = (a , refl) , Singleton-is-prop
 
--- TODO uncomment
--- isContrSingl : (a : A) → isContr (singl a)
--- isContrSingl a .fst = (a , refl)
--- isContrSingl a .snd p i .fst = p .snd i
--- isContrSingl a .snd p i .snd j = p .snd (i ∧ j)
+Singleton-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton a)
+                   → is-contr⁻ (Singleton a)
+Singleton-is-contr⁻ {a} _ = (a , refl) , sym ∘ Singleton-is-prop
 
--- isContrSinglP : (A : I → Type ℓ) (a : A i0) → isContr (singlP A a)
--- isContrSinglP A a .fst = _ , transport-filler (λ i → A i) a
--- isContrSinglP A a .snd (x , p) i =
---   _ , λ j → fill A (λ j → λ {(i = i0) → transport-filler (λ i → A i) a j; (i = i1) → p j}) (inS a) j
+Singleton⁻-is-contr : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
+                    → is-contr (Singleton⁻ a)
+Singleton⁻-is-contr {a} _ = (a , refl) , Singleton⁻-is-prop
+
+-- TODO rephrase as map on snd
+Singleton⁻-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
+                    → is-contr⁻ (Singleton⁻ a)
+Singleton⁻-is-contr⁻ {a} _ = (a , refl) , sym ∘ Singleton⁻-is-prop
+
+SingletonP-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (SingletonP A a)
+SingletonP-is-contr A a .fst = _ , transport-filler (λ i → A i) a
+SingletonP-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
+  k (i = i0) → transport-filler (λ i → A i) a k
+  k (i = i1) → p k
+  k (k = i0) → a
 
 
 -- Path induction (J) and its computation rule
@@ -489,7 +549,7 @@ module _ (P : ∀ y → x ＝ y → Type ℓ′) (d : P x refl) where
   J : (p : x ＝ y) → P y p
   J {y} p = transport (λ i → P (path i .fst) (path i .snd)) d
     where path : (x , refl) ＝ (y , p)
-          path =  Singleton-is-contr (y , p)
+          path = Singleton-is-contr (y , p) .snd _
 
   J-refl : J refl ＝ d
   J-refl = transport-refl d
@@ -604,12 +664,13 @@ module _ (A : I → Type ℓ) where
 
 PathP＝Path : (P : I → Type ℓ) (p : P i0) (q : P i1)
             → ＜ p ／ P ＼ q ＞ ＝ (transport (λ i → P i) p ＝ q)
-PathP＝Path P p q i = ＜ transport-filler (λ j → P j) p i ／ (λ j → P (i ∨ j)) ＼ q ＞
+PathP＝Path P p q i =
+  ＜ transport-filler (λ j → P j) p i ／ (λ j → P (i ∨ j)) ＼ q ＞
 
 PathP＝Path⁻ : (P : I → Type ℓ) (p : P i0) (q : P i1)
              → ＜ p ／ P ＼  q ＞ ＝ (p ＝ transport (λ i → P (~ i)) q)
-PathP＝Path⁻ P p q i = PathP (λ j → P (~ i ∧ j)) p
-                             (transport-filler (λ j → P (~ j)) q i)
+PathP＝Path⁻ P p q i =
+  ＜ p ／ (λ j → P (~ i ∧ j)) ＼ transport-filler (λ j → P (~ j)) q i ＞
 
 
 
@@ -741,7 +802,7 @@ subst-path-both : {x x′ : A}
 subst-path-both p adj = transport-path p adj adj
 
 
--- TODO Move to another file
+-- TODO Move to another file?
 -- Whiskering a dependent path by a path
 
 -- Double whiskering
@@ -777,16 +838,22 @@ _▷_ : {A : I → Type ℓ} {a₀ : A i0} {a₁ a₁′ : A i1}
 p ▷ q  = refl ◁ p ▷ q
 
 
--- TODO Move to another file
+-- TODO Move to another file?
 -- Higher cube types
 
--- SquareP :
---   (A : I → I → Type ℓ)
---   {a₀₀ : A i0 i0} {a₀₁ : A i0 i1} (a₀₋ : PathP (λ j → A i0 j) a₀₀ a₀₁)
---   {a₁₀ : A i1 i0} {a₁₁ : A i1 i1} (a₁₋ : PathP (λ j → A i1 j) a₁₀ a₁₁)
---   (a₋₀ : PathP (λ i → A i i0) a₀₀ a₁₀) (a₋₁ : PathP (λ i → A i i1) a₀₁ a₁₁)
---   → Type ℓ
--- SquareP A a₀₋ a₁₋ a₋₀ a₋₁ = PathP (λ i → PathP (λ j → A i j) (a₋₀ i) (a₋₁ i)) a₀₋ a₁₋
+-- Square : {ℓ : Level} {A : Type ℓ} {a00 a01 a10 a11 : A}
+--          (p : a00 ＝ a01) (q : a00 ＝ a10)
+--          (s : a01 ＝ a11) (r : a10 ＝ a11)
+--        → Type ℓ
+-- Square p q s r = ＜ q ／ (λ i → p i ＝ r i) ＼ s ＞
+
+SquareP
+  : (A : I → I → Type ℓ)
+    {a₀₀ : A i0 i0} {a₀₁ : A i0 i1} (a₀₋ : ＜ a₀₀ ／ (λ j → A i0 j) ＼ a₀₁ ＞)
+    {a₁₀ : A i1 i0} {a₁₁ : A i1 i1} (a₁₋ : ＜ a₁₀ ／ (λ j → A i1 j) ＼ a₁₁ ＞)
+    (a₋₀ : ＜ a₀₀ ／ (λ i → A i i0) ＼ a₁₀ ＞) (a₋₁ : ＜ a₀₁ ／ (λ i → A i i1) ＼ a₁₁ ＞)
+  → Type ℓ
+SquareP A a₀₋ a₁₋ a₋₀ a₋₁ = ＜ a₀₋ ／ (λ i → ＜ a₋₀ i ／ (λ j → A i j) ＼ a₋₁ i ＞) ＼ a₁₋ ＞
 
 -- Cube :
 --   {a₀₀₀ a₀₀₁ : A} {a₀₀₋ : a₀₀₀ ＝ a₀₀₁}

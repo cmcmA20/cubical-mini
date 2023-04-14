@@ -9,7 +9,7 @@ open import Agda.Builtin.Cubical.Equiv public
   renaming ( isEquiv       to is-equiv′
            ; equiv-proof   to equiv-proof′
            ; _≃_           to _≃′_
-           ; equivFun      to forward′
+           ; equivFun      to equiv-forward′
            ; equivProof    to equiv-proof′-fast
            ; pathToisEquiv to path-to-is-equiv′
            ; pathToEquiv   to path-to-equiv′
@@ -17,5 +17,5 @@ open import Agda.Builtin.Cubical.Equiv public
 
 private variable ℓ ℓ′ : Level
 
-backward′ : {A : Type ℓ} {B : Type ℓ′} → A ≃′ B → B → A
-backward′ e y = e .snd .equiv-proof′ y .fst .fst
+equiv-backward′ : {A : Type ℓ} {B : Type ℓ′} → A ≃′ B → B → A
+equiv-backward′ e y = e .snd .equiv-proof′ y .fst .fst
