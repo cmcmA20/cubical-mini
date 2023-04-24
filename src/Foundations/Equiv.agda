@@ -1,131 +1,106 @@
 {-# OPTIONS --safe #-}
 module Foundations.Equiv where
 
+open import Prim.Equiv
 open import Foundations.Prelude
-open import Foundations.HLevel
-
-private variable ℓ ℓ′ ℓ″ ℓ‴ : Level
-
--- courtesy of Mike Shulman
-infix 4 _≃_
-record _≃_ {ℓ} (A : Type ℓ) (B : Type ℓ) : Type (ℓsuc ℓ) where
-  eta-equality
-  field
-    forward  : A → B
-    backward : B → A
-    R : A → B → Type ℓ
-    forward-prop  : Π[ x ꞉ A ] is-prop (Σ[ y ꞉ B ] R x y)
-    backward-prop : Π[ y ꞉ B ] is-prop (Σ[ x ꞉ A ] R x y)
-open _≃_ public
+-- open import Foundations.HLevel
+open import Foundations.Path
 
 private variable
-  A B C : Type ℓ
+  ℓ ℓ′ ℓ″ ℓ‴ : Level
+  A A′ : Type ℓ
+  B B′ : Type ℓ′
+  C : Type ℓ″
+  D : Type ℓ‴
 
-inv-eq : A ≃ B → B ≃ A
-inv-eq e .forward       = e .backward
-inv-eq e .backward      = e .forward
-inv-eq e .R             = flip (e .R)
-inv-eq e .forward-prop  = e .backward-prop
-inv-eq e .backward-prop = e .forward-prop
+infix 8 _≃_
+record _≃_ (A : Type ℓ) (B : Type ℓ′) : Type (ℓ ⊔ ℓ′)
 
--- definitionally involutive
-inv-eq-invol : {e : A ≃ B} → inv-eq (inv-eq e) ＝ e
-inv-eq-invol = refl
+is-inv : {A : Type ℓ} {B : Type ℓ′} → (A → B) → (B → A) → Type (ℓ ⊔ ℓ′)
+is-inv {A} {B} f g = Π[ a ꞉ A ] Π[ b ꞉ B ] (f a ＝ b) ≃ (a ＝ g b)
 
--- TODO
--- how to make the composition definitionally associative and unital?
+record _≃_ A B where
+  coinductive
+  field
+    to   : A → B
+    from : B → A
+    equiv-proof : is-inv to from
+open _≃_ public
 
--- id-eq : A ≃ A
--- id-eq .forward  = id
--- id-eq .backward = id
--- id-eq .R x y = x ＝ y
--- id-eq .forward-prop  x u v = let z = Singleton in {!!}
--- id-eq .backward-prop y u v = let z = SingletonP-is-contr in Σ-PathP {!!} {!!}
+down : A ＝ B → A ≃ B
+down p .to   = transport p
+down p .from = transport (sym p)
+down p .equiv-proof x x′ = down
+  $ sym (PathP＝Path  (λ i → p i) x x′)
+  ∙      PathP＝Path⁻ (λ i → p i) x x′
 
--- -- id-eq .R x y = x ＝ y
--- -- id-eq .forward  x = (x , refl) , λ z i → z .snd i     , λ j → z .snd (   i ∧   j)
--- -- id-eq .backward x = (x , refl) , λ z i → z .snd (~ i) , λ j → z .snd (~ (i ∧ ~ j))
---
--- -- id-eq : A ≃ A
--- -- id-eq .R x y = x ＝ y
--- -- id-eq .forward  x = (x , refl) , λ z i → z .snd i     , λ j → z .snd (   i ∧   j)
--- -- id-eq .backward x = (x , refl) , λ z i → z .snd (~ i) , λ j → z .snd (~ (i ∧ ~ j))
-
--- -- module _ (e : A ≃ B) where
---
--- --   to : A → B
--- --   to x = e .forward x .fst .fst
---
--- --   from : B → A
--- --   from y = e .backward y .fst .fst
---
--- --   from-to : (x : A) → from (to x) ＝ x
--- --   from-to x i = e .backward (to x) .snd (x , e .forward x .fst .snd) i .fst
---
--- --   to-from : (y : B) → to (from y) ＝ y
--- --   to-from y i = e .forward (from y) .snd (y , e .backward y .fst .snd) i .fst
---
--- --   -- to-is-equiv′ : is-equiv′ to
--- --   -- to-is-equiv′ .is-equiv′.is-eqv′ y = (from y , to-from y)
--- --   --   , λ z i → let w = from-to (from y) in {!!} , {!!}
---
--- --   -- equiv′ : A ≃′ B
--- --   -- equiv′ = to , to-is-equiv′
---
--- comp-eq : A ≃ B → B ≃ C → A ≃ C
--- comp-eq e e′ .forward x = e′ .forward (e .forward x)
--- comp-eq e e′ .backward z = e .backward (e′ .backward z)
--- comp-eq e e′ .R x z = Σ[ y ꞉ _ ] Σ[ _ ꞉ e .R x y ] (e′ .R y z)
--- comp-eq e e′ .forward-prop x (c₁ , b₁ , r₁ , r₁′) (c₂ , b₂ , r₂ , r₂′) = {!!}
--- comp-eq e e′ .backward-prop = {!!}
-
--- comp-eq : A ≃ B → B ≃ C → A ≃ C
--- comp-eq e e′ .forward  = e′ .forward  ∘ e  .forward
--- comp-eq e e′ .backward = e  .backward ∘ e′ .backward
--- comp-eq e e′ .R x z = Σ[ y ꞉ _ ] (e .R x y) × (e′ .R y z)
--- comp-eq e e′ .forward-prop x (c₁ , b₁ , r₁ , r₁′) (c₂ , b₂ , r₂ , r₂′) = {!!}
--- comp-eq e e′ .backward-prop = {!!}
-
-
+-- univalence
+-- up : A ≃ B → A ＝ B
+-- up e = {!!}
 
 idₑ : A ≃ A
-idₑ .forward  = id
-idₑ .backward = id
-idₑ .R x y = x ＝ y
-idₑ .forward-prop  x = is-contr→is-prop (Singleton-is-contr (x , refl))
-idₑ .backward-prop y = is-contr→is-prop ((y , refl) , λ t → let zz = Singleton-is-prop in {!!})
-
-comp-eq : A ≃ B → B ≃ C → A ≃ C
-comp-eq e e′ .forward = e′ .forward ∘ e .forward
-comp-eq e e′ .backward = e .backward ∘ e′ .backward
-comp-eq e e′ .R x z = e .R x (e .forward x) × e′ .R (e′ .backward z) z
-comp-eq e e′ .forward-prop = {!!}
-comp-eq e e′ .backward-prop = {!!}
+idₑ .to = id
+idₑ .from = id
+idₑ .equiv-proof _ _ = idₑ
 
 infixr 29 _∙ₑ_
-_∙ₑ_ = comp-eq
+_∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
+(f ∙ₑ g) .to   = g .to   ∘ f .to
+(f ∙ₑ g) .from = f .from ∘ g .from
+(f ∙ₑ g) .equiv-proof x z =
+  let le = g .equiv-proof (f .to x) z
+      ri = f .equiv-proof x (g .from z)
+  in le ∙ₑ ri
 
-kekw : (e : B ≃ C) (y : B) (z : C) → (y ＝ y) × e .R (e .backward z) z
-kekw e y z = refl , let tt = inhabited-prop-is-contr {!!} {!!} in tt .fst
+left-unital  : (f : A ≃ B) → idₑ ∙ₑ f   ＝ f
+right-unital : (f : A ≃ B) → f   ∙ₑ idₑ ＝ f
 
-unital-left : (e : B ≃ C) → idₑ ∙ₑ e ＝ e
-unital-left e i = record
-                    { forward = e .forward
-                    ; backward = e .backward
-                    ; R = λ y z → {!!}
-                    ; forward-prop = {!!}
-                    ; backward-prop = {!!}
-                    }
+left-unital f _ .to   = f .to
+left-unital f _ .from = f .from
+left-unital f i .equiv-proof x y = right-unital (f .equiv-proof x y) i
 
--- A ≃ B , B ≃ C , C ≃ D
--- R₁₂ x z = (y : B) × (R₁ x y × R₂ y z)
--- R₂₃ y w = (z : C) × (R₂ y z × R₃ z w)
+right-unital f _ .to   = f .to
+right-unital f _ .from = f .from
+right-unital f i .equiv-proof x y = left-unital (f .equiv-proof x y) i
 
--- R₁₋₂₃ x w = (y : B) × (R₁ x y × (z : C) × (R₂ y z × R₃ z w))
--- R₁₂₋₃ x w = (z : C) × ((y : B) × (R₁ x y × R₂ y z) × R₃ z w)
+assoc : (f : A ≃ B) (g : B ≃ C) (h : C ≃ D) → (f ∙ₑ g) ∙ₑ h ＝ f ∙ₑ (g ∙ₑ h)
+assoc f g h i .to   = h .to   ∘ g .to   ∘ f .to
+assoc f g h i .from = f .from ∘ g .from ∘ h .from
+assoc f g h i .equiv-proof x w =
+  let le = f .equiv-proof x (g .from (h .from w))
+      mi = g .equiv-proof (f .to x) (h .from w)
+      ri = h .equiv-proof (g .to (f .to x)) w
+  in assoc ri mi le (~ i)
 
--- qwe : (e : A ≃ B)
---     → comp-eq e id-eq ＝ e
--- qwe e i .R x y = let z = e .forward-prop x (y , {!e .forward x .fst .fst!}) in {!!}
--- qwe e i .forward = {!!}
--- qwe e i .backward = {!!}
+-- whisker : A′ ＝ A → A ≃ B → B ＝ B′ → A′ ≃ B′
+-- whisker p e q .to   = transport q       ∘ e .to   ∘ transport p
+-- whisker p e q .from = transport (sym p) ∘ e .from ∘ transport (sym q)
+-- whisker p e q .equiv-proof x′ y′ =
+--   whisker {!!} (e .equiv-proof (transport p x′) (transport (sym q) y′)) {!!}
+
+example : {x y : A} (p : x ＝ y)
+        →   x  ̇      p       ̇ y
+                ┌─────────┐ _
+                │    _    │
+            p   │    _    │   sym p
+                │    _    │ _
+                └─────────┘
+            y  ̇    sym p     ̇ x
+example p = to-PathP (transport-path p p (sym p) ∙ ∙-cancel-l p (sym p))
+
+-- wtf : {x y : A} → (x ＝ y) ＝ (y ＝ x)
+-- wtf = {!!}
+
+-- inv : {A B : Type ℓ} → A ≃ B → B ≃ A
+-- inv e .to   = e .from
+-- inv e .from = e .to
+-- inv e .equiv-proof y x =
+--   let w = up $ e .equiv-proof x y
+--       p = e .equiv-proof (e .from y) y .from refl
+--       q = e. equiv-proof x (e .to x) .to refl
+--   in down $ {!!} ◁ sym w ▷ {!!}
+
+-- involution : (e : A ≃ B) → inv (inv e) ＝ e
+-- involution e _ .to   = e .to
+-- involution e _ .from = e .from
+-- involution e i .equiv-proof = {!!} -- e .equiv-proof

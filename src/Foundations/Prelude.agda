@@ -819,7 +819,6 @@ double-whiskering-filler
   : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
   → (p : a₀ ＝ a₀′) (pq : PathP A a₀′ a₁) (q : a₁ ＝ a₁′)
   → ＜ pq ／ (λ i → ＜ p (~ i) ／ A ＼ q i ＞) ＼ p ◁ pq ▷ q ＞
---→ ＜ pq ／ (λ i → PathP A (p (~ i)) (q i)) ＼ p ◁ pq ▷ q ＞
 double-whiskering-filler p pq q k i = hfill (∂ i) k λ where
   j (i = i0) → p (~ j)
   j (i = i1) → q j
