@@ -15,6 +15,7 @@ open import Cubical.Data.Int
   renaming ( ℤ to ℤᵢ; neg to negᵢ; _+_ to _+ᵢ_
            ; isSetℤ to isSetℤᵢ
            ; discreteℤ to discreteℤᵢ )
+open import Cubical.Data.Sigma
 
 open import Cubical.Functions.FunExtEquiv
 
@@ -148,3 +149,48 @@ module Homo where
   preservePlus (negsuc m) (negsuc 0) = cong (λ f → neg (suc f)) (+-comm 1 _)
   preservePlus (negsuc m) (negsuc (suc n)) = let ih = preservePlus (negsuc m) (negsuc n)
     in preservePred _ ∙ cong pred ih ∙ cong (λ f → neg (suc f)) (sym $ +-suc _ _)
+open Homo
+
+module SIP where
+  open import Cubical.Foundations.SIP
+  open import Cubical.Structures.Axioms
+  open import Cubical.Structures.Product
+  open import Cubical.Structures.Pointed
+  open import Cubical.Structures.Function
+
+  private variable ℓ : Level
+
+  RawStruct : Type → Type
+  RawStruct X = (X → X → X) × (X → X) -- _+_ , succ
+
+  e1 : StrEquiv (λ x → x → x → x) ℓ-zero
+  e1 = FunctionEquivStr+ pointedEquivAction
+                         (FunctionEquivStr+ pointedEquivAction PointedEquivStr)
+
+  e2 : StrEquiv (λ x → x → x) ℓ-zero
+  e2 = FunctionEquivStr+ pointedEquivAction PointedEquivStr
+
+  RawEquivStr : StrEquiv RawStruct _
+  RawEquivStr = ProductEquivStr e1 e2
+
+  @0 rawUnivalentStr : UnivalentStr _ RawEquivStr
+  rawUnivalentStr = productUnivalentStr e1 he1 e2 he2
+    where
+    he2 : UnivalentStr (λ z → z → z) e2
+    he2 = functionUnivalentStr+ pointedEquivAction pointedTransportStr
+                                PointedEquivStr pointedUnivalentStr
+
+    he1 : UnivalentStr (λ z → z → z → z) e1
+    he1 = functionUnivalentStr+ pointedEquivAction pointedTransportStr e2 he2
+
+  P : (X : Type) → RawStruct X → Type
+  P X (plus , _) = (m n : X) → plus m n ≡ plus n m
+
+  ℤᵢ-Struct : Σ[ X ꞉ Type ] (Σ[ s ꞉ RawStruct X ] (P X s))
+  ℤᵢ-Struct = ℤᵢ , (_+ᵢ_ , sucℤ) , +Comm
+
+  ℤ-RawStruct : Σ[ X ꞉ Type ] (RawStruct X)
+  ℤ-RawStruct = ℤ , (_+_ , succ)
+
+  @0 observe : (m n : ℤ) → m + n ≡ n + m
+  observe = transferAxioms rawUnivalentStr ℤᵢ-Struct ℤ-RawStruct (invEquiv ℤ≃ℤᵢ , preservePlus , preserveSucc)
