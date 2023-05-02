@@ -54,8 +54,8 @@ monoidCategory : Category (ℓ-max ℓ ℓ') ℓ'
 ob monoidCategory = Monoid
 Hom[_,_] monoidCategory = Monoid[_,_]
 carrierHom (id monoidCategory) = C.id
-nat-η (id monoidCategory {monA}) = C.⋆IdR (η monA)
-nat-μ (id monoidCategory {monA}) =
+nat-η (id monoidCategory {(monA)}) = C.⋆IdR (η monA)
+nat-μ (id monoidCategory {(monA)}) =
   C.id C.∘ μ monA
     ≡⟨ C.⋆IdR (μ monA) ⟩
   μ monA
@@ -64,7 +64,7 @@ nat-μ (id monoidCategory {monA}) =
     ≡⟨ cong (μ monA C.∘_) (sym (F-id C.─⊗─)) ⟩
   μ monA C.∘ (C.id C.⊗ₕ C.id) ∎
 carrierHom (_⋆_ monoidCategory f g) = carrierHom g C.∘ carrierHom f
-nat-η (_⋆_ monoidCategory {monA} {monB} {monC} f g) =
+nat-η (_⋆_ monoidCategory {(monA)} {(monB)} {(monC)} f g) =
   (carrierHom g C.∘ carrierHom f) C.∘ η monA
     ≡⟨ sym (C.⋆Assoc (η monA) (carrierHom f) (carrierHom g)) ⟩
   carrierHom g C.∘ (carrierHom f C.∘ η monA)
@@ -72,7 +72,7 @@ nat-η (_⋆_ monoidCategory {monA} {monB} {monC} f g) =
   carrierHom g C.∘ η monB
     ≡⟨ nat-η g ⟩
   η monC ∎
-nat-μ (_⋆_ monoidCategory {monA} {monB} {monC} f g) =
+nat-μ (_⋆_ monoidCategory {(monA)} {(monB)} {(monC)} f g) =
   (carrierHom g C.∘ carrierHom f) C.∘ μ monA
     ≡⟨ sym (C.⋆Assoc (μ monA) (carrierHom f) (carrierHom g)) ⟩
   carrierHom g C.∘ (carrierHom f C.∘ μ monA)
@@ -86,11 +86,11 @@ nat-μ (_⋆_ monoidCategory {monA} {monB} {monC} f g) =
   μ monC C.∘ ((carrierHom g C.⊗ₕ carrierHom g) C.∘ (carrierHom f C.⊗ₕ carrierHom f))
     ≡⟨ cong (μ monC C.∘_) (sym (F-seq C.─⊗─ (carrierHom f , carrierHom f) (carrierHom g , carrierHom g))) ⟩
   μ monC C.∘ ((carrierHom g C.∘ carrierHom f) C.⊗ₕ (carrierHom g C.∘ carrierHom f)) ∎
-⋆IdL monoidCategory {monA} f = monoidHomExt _ _ (C.⋆IdL (carrierHom f))
-⋆IdR monoidCategory {monA} f = monoidHomExt _ _ (C.⋆IdR (carrierHom f))
-⋆Assoc monoidCategory {monA} {monB} {monC} {monD} f g h =
+⋆IdL monoidCategory {(monA)} f = monoidHomExt _ _ (C.⋆IdL (carrierHom f))
+⋆IdR monoidCategory {(monA)} f = monoidHomExt _ _ (C.⋆IdR (carrierHom f))
+⋆Assoc monoidCategory {(monA)} {(monB)} {(monC)} {(monD)} f g h =
   monoidHomExt _ _ (C.⋆Assoc (carrierHom f) (carrierHom g) (carrierHom h))
-isSetHom monoidCategory {monA} {monB} =
+isSetHom monoidCategory {(monA)} {(monB)} =
   isOfHLevelRetractFromIso 2 isoToΣ
     (isSetΣ C.isSetHom λ _ → isProp→isSet (isProp× (C.isSetHom _ _) (C.isSetHom _ _)))
   where

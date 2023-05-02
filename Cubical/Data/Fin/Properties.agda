@@ -65,9 +65,9 @@ fromToId' (ℕsuc n) zero r = refl
 fromToId' (ℕsuc n) (suc k) r = cong suc (fromToId' n k (pred-≤-pred r))
 
 inj-toℕ : {n : ℕ} → {k l : Fin n} → (toℕ k ≡ toℕ l) → k ≡ l
-inj-toℕ {ℕsuc n}  {zero} {zero}   x = refl
-inj-toℕ {ℕsuc n}  {zero} {suc l} x = ⊥.rec (ℕznots x)
-inj-toℕ {ℕsuc n} {suc k} {zero}   x = ⊥.rec (ℕsnotz x)
+inj-toℕ {ℕsuc n}  {(zero)} {(zero)}   x = refl
+inj-toℕ {ℕsuc n}  {(zero)} {suc l} x = ⊥.rec (ℕznots x)
+inj-toℕ {ℕsuc n} {suc k} {(zero)}   x = ⊥.rec (ℕsnotz x)
 inj-toℕ {ℕsuc n} {suc k} {suc l}  x = cong suc (inj-toℕ (injSuc x))
 
 inj-cong : {n : ℕ} → {k l : Fin n} → (p : toℕ k ≡ toℕ l) → cong toℕ (inj-toℕ p) ≡ p
@@ -81,18 +81,18 @@ isContrFin1 .fst = zero
 isContrFin1 .snd zero = refl
 
 injSucFin : ∀ {n} {p q : Fin n} → suc p ≡ suc q → p ≡ q
-injSucFin {ℕsuc ℕzero} {zero} {zero} pf = refl
+injSucFin {ℕsuc ℕzero} {(zero)} {(zero)} pf = refl
 injSucFin {ℕsuc (ℕsuc n)} pf = cong predFin pf
 
 injSucFinP : ∀ {n0 n1 : ℕ} {pn : n0 ≡ n1} {p0 : Fin n0} {p1 : Fin n1}
   → PathP (λ i → Fin (ℕsuc (pn i))) (suc p0) (suc p1)
   → PathP (λ i → Fin (pn i)) p0 p1
-injSucFinP {one} {one} {pn} {zero} {zero} sucp =
+injSucFinP {(one)} {(one)} {pn} {(zero)} {(zero)} sucp =
   transport (λ j → PathP (λ i → Fin (eqn j i)) zero zero) refl
   where eqn : refl ≡ pn
         eqn = isSetℕ one one refl pn
-injSucFinP {one} {ℕsuc (ℕsuc n1)} {pn} {p0} {p1} sucp = ⊥.rec (ℕznots (injSuc pn))
-injSucFinP {ℕsuc (ℕsuc n0)} {one} {pn} {p0} {p1} sucp = ⊥.rec (ℕsnotz (injSuc pn))
+injSucFinP {(one)} {ℕsuc (ℕsuc n1)} {pn} {p0} {p1} sucp = ⊥.rec (ℕznots (injSuc pn))
+injSucFinP {ℕsuc (ℕsuc n0)} {(one)} {pn} {p0} {p1} sucp = ⊥.rec (ℕsnotz (injSuc pn))
 injSucFinP {ℕsuc (ℕsuc n0)} {ℕsuc (ℕsuc n1)} {pn} {p0} {p1} sucp =
   transport (λ j → PathP (λ i → Fin (eqn j i)) p0 p1) (
       congP (λ i → predFin) (
@@ -116,7 +116,7 @@ isSetFin : ∀{k} → isSet (Fin k)
 isSetFin = Discrete→isSet discreteFin
 
 isWeaken? : ∀ {n} (p : Fin (ℕsuc n)) → Dec (Σ[ q ꞉ Fin n ] p ≡ weakenFin q)
-isWeaken? {ℕzero} zero = no λ (q , eqn) → case q of λ ()
+isWeaken? {(ℕzero)} zero = no λ (q , eqn) → case q of λ ()
 isWeaken? {ℕsuc n} zero = yes (zero , refl)
 isWeaken? {ℕsuc n} (suc p) with isWeaken? {n} p
 ... | yes (q , p≡wq) = yes (suc q , cong suc p≡wq)
@@ -159,7 +159,7 @@ toFin {n = ℕsuc n} m (ℕsuc k , p) = weakenFin (toFin m (k , cong predℕ p))
 
 toFin0≡0 : {n : ℕ} (p : 0 < ℕsuc n) → toFin 0 p ≡ zero
 toFin0≡0 (ℕzero , p) = subst (λ x → fromℕ x ≡ zero) (cong predℕ p) refl
-toFin0≡0 {ℕzero} (ℕsuc k , p) = ⊥.rec (ℕsnotz (+-comm 1 k ∙ (cong predℕ p)))
+toFin0≡0 {(ℕzero)} (ℕsuc k , p) = ⊥.rec (ℕsnotz (+-comm 1 k ∙ (cong predℕ p)))
 toFin0≡0 {ℕsuc n} (ℕsuc k , p) =
          subst (λ x → weakenFin x ≡ zero) (sym (toFin0≡0 (k , cong predℕ p))) refl
 

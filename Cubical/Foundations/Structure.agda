@@ -27,7 +27,7 @@ str = snd
 
 instance
   mkTypeWithStr : ∀ {ℓ} {S : Type ℓ → Type ℓ'} {X} → {{S X}} → TypeWithStr ℓ S
-  mkTypeWithStr {{i}} = _ , i
+  mkTypeWithStr {{(i)}} = _ , i
 
 -- An S-structure should have a notion of S-homomorphism, or rather S-isomorphism.
 -- This will be implemented by a function ι : StrEquiv S ℓ'

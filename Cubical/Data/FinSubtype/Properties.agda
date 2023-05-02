@@ -281,7 +281,7 @@ punchOut {_} {i} {j} p | inl prfi | inl prfj =
   Empty.elim (p (i ≡⟨ sym prfi ⟩ fzero ≡⟨ prfj ⟩ j ∎))
 punchOut {_} {i} {j} p | inl prfi | inr (kj , prfj) =
   kj
-punchOut {zero} {i} {j} p  | inr (ki , prfi) | inl prfj =
+punchOut {(zero)} {i} {j} p  | inr (ki , prfi) | inl prfj =
   Empty.elim (p (
     i ≡⟨ sym (isContrFin1 .snd i) ⟩
     c ≡⟨ isContrFin1 .snd j ⟩
@@ -290,7 +290,7 @@ punchOut {zero} {i} {j} p  | inr (ki , prfi) | inl prfj =
   where c = isContrFin1 .fst
 punchOut {suc _} {i} {j} p | inr (ki , prfi) | inl prfj =
   fzero
-punchOut {zero} {i} {j} p | inr (ki , prfi) | inr (kj , prfj) =
+punchOut {(zero)} {i} {j} p | inr (ki , prfi) | inr (kj , prfj) =
   Empty.elim ((p (
     i ≡⟨ sym (isContrFin1 .snd i) ⟩
     c ≡⟨ isContrFin1 .snd j ⟩
@@ -306,7 +306,7 @@ punchOut-inj
   : ∀ {m} {i j k : Fin (suc m)} (i≢j : ¬ i ≡ j) (i≢k : ¬ i ≡ k)
   → punchOut i≢j ≡ punchOut i≢k → j ≡ k
 punchOut-inj {_} {i} {j} {k} i≢j i≢k p with fsplit i | fsplit j | fsplit k
-punchOut-inj {zero} {i} {j} {k} i≢j i≢k p | _ | _ | _ =
+punchOut-inj {(zero)} {i} {j} {k} i≢j i≢k p | _ | _ | _ =
   Empty.elim (i≢j (i ≡⟨ sym (isContrFin1 .snd i) ⟩ c ≡⟨ isContrFin1 .snd j ⟩ j ∎))
     where c = isContrFin1 .fst
 punchOut-inj {suc _} {i} {j} {k} i≢j i≢k p | inl prfi | inl prfj | _ =
@@ -341,7 +341,7 @@ pigeonhole-special
   : ∀ {n}
   → (f : Fin (suc n) → Fin n)
   → Σ[ i ꞉ Fin (suc n) ] Σ[ j ꞉ Fin (suc n) ] (¬ i ≡ j) × (f i ≡ f j)
-pigeonhole-special {zero} f = Empty.rec (¬Fin0 (f fzero))
+pigeonhole-special {(zero)} f = Empty.rec (¬Fin0 (f fzero))
 pigeonhole-special {suc n} f =
   helper (any?
     (λ (i : Fin (suc n)) →
@@ -485,7 +485,7 @@ Fin-inj n m p with n ≟ m
     }
 
 @0 factorEquiv : ∀ {n} {m} → Fin n × Fin m ≃ Fin (n · m)
-factorEquiv {zero} {m} = uninhabEquiv (¬Fin0 ∘ fst) ¬Fin0
+factorEquiv {(zero)} {m} = uninhabEquiv (¬Fin0 ∘ fst) ¬Fin0
 factorEquiv {suc n} {m} = intro , isEmbedding×isSurjection→isEquiv (isEmbeddingIntro , isSurjectionIntro) where
   intro : Fin (suc n) × Fin m → Fin (suc n · m)
   intro (nn , mm) = nm , subst (λ nm₁ → nm₁ < suc n · m) (sym (expand≡ _ (toℕ nn) (toℕ mm))) nm<n·m where
@@ -554,8 +554,8 @@ _≤?_ m n | eq m=n = inr (subst (λ - → - ≤ m) m=n ≤-refl)
 _≤?_ m n | gt n<m = inr (<-weaken n<m)
 
 ¬-<-and-≥ : {m n : ℕ} → m < n → ¬ n ≤ m
-¬-<-and-≥ {m}     {zero}  m<n n≤m = ¬-<-zero m<n
-¬-<-and-≥ {zero}  {suc n} m<n n≤m = ¬-<-zero n≤m
+¬-<-and-≥ {m}     {(zero)}  m<n n≤m = ¬-<-zero m<n
+¬-<-and-≥ {(zero)}  {suc n} m<n n≤m = ¬-<-zero n≤m
 ¬-<-and-≥ {suc m} {suc n} m<n n≤m = ¬-<-and-≥ (pred-≤-pred m<n) (pred-≤-pred n≤m)
 
 m+n∸n=m : (n m : ℕ) → (m + n) ∸ n ≡ m
@@ -566,8 +566,8 @@ m+n∸n=m (suc m) k = (k + suc m) ∸ suc m   ≡⟨ cong (λ - → - ∸ suc m)
                     k                     ∎
 
 ∸-lemma : {m n : ℕ} → m ≤ n → m + (n ∸ m) ≡ n
-∸-lemma {zero}  {k}     _   = refl {x = k}
-∸-lemma {suc m} {zero}  m≤k = Empty.rec (¬-<-and-≥ (suc-≤-suc zero-≤) m≤k)
+∸-lemma {(zero)}  {(k)}     _   = refl {x = k}
+∸-lemma {suc m} {(zero)}  m≤k = Empty.rec (¬-<-and-≥ (suc-≤-suc zero-≤) m≤k)
 ∸-lemma {suc m} {suc k} m≤k =
   suc m + (suc k ∸ suc m)   ≡⟨ refl                                 ⟩
   suc (m + (suc k ∸ suc m)) ≡⟨ refl                                 ⟩

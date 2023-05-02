@@ -46,8 +46,8 @@ private
     k l m n : ℕ
 
 isProp≤ : isProp (m ≤ n)
-isProp≤ {zero} = isPropUnit
-isProp≤ {suc m} {zero}  = isProp⊥
+isProp≤ {(zero)} = isPropUnit
+isProp≤ {suc m} {(zero)}  = isProp⊥
 isProp≤ {suc m} {suc n} = isProp≤ {m} {n}
 
 ≤-k+ : m ≤ n → k + m ≤ k + n
@@ -63,11 +63,11 @@ isProp≤ {suc m} {suc n} = isProp≤ {m} {n}
 ≤-refl (suc m) = ≤-refl m
 
 ≤-trans : k ≤ m → m ≤ n → k ≤ n
-≤-trans {zero} _ _ = _
+≤-trans {(zero)} _ _ = _
 ≤-trans {suc k} {suc m} {suc n} = ≤-trans {k} {m} {n}
 
 ≤-antisym : m ≤ n → n ≤ m → m ≡ n
-≤-antisym {zero} {zero} _ _ = refl
+≤-antisym {(zero)} {(zero)} _ _ = refl
 ≤-antisym {suc m} {suc n} m≤n n≤m = cong suc (≤-antisym m≤n n≤m)
 
 ≤-k+-cancel : k + m ≤ k + n → m ≤ n
@@ -82,13 +82,13 @@ isProp≤ {suc m} {suc n} = isProp≤ {m} {n}
 ¬m<m {suc m} = ¬m<m {m}
 
 ≤0→≡0 : n ≤ 0 → n ≡ 0
-≤0→≡0 {zero} _ = refl
+≤0→≡0 {(zero)} _ = refl
 
 ¬m+n<m : ¬ m + n < m
 ¬m+n<m {suc m} = ¬m+n<m {m}
 
 <-weaken : m < n → m ≤ n
-<-weaken {zero} _ = _
+<-weaken {(zero)} _ = _
 <-weaken {suc m} {suc n} = <-weaken {m}
 
 <-trans : k < m → m < n → k < n
@@ -120,8 +120,8 @@ n≤k+n : ∀ n → n ≤ k + n
 n≤k+n {k} n = transport (λ i → n ≤ +-comm n k i) (k≤k+n n)
 
 ≤-split : m ≤ n → (m < n) ⊎ (m ≡ n)
-≤-split {zero} {zero} m≤n = inr refl
-≤-split {zero} {suc n} m≤n = inl _
+≤-split {(zero)} {(zero)} m≤n = inr refl
+≤-split {(zero)} {suc n} m≤n = inl _
 ≤-split {suc m} {suc n} m≤n
   = Sum.map (idfun _) (cong suc) (≤-split {m} {n} m≤n)
 

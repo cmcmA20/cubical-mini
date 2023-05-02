@@ -25,7 +25,7 @@ module _ (C : Category ℓC ℓC') (D : Category ℓD ℓD') where
   FUNCTOR : Category (ℓ-max (ℓ-max ℓC ℓC') (ℓ-max ℓD ℓD')) (ℓ-max (ℓ-max ℓC ℓC') ℓD')
   ob FUNCTOR           = Functor C D
   Hom[_,_] FUNCTOR     = NatTrans
-  id FUNCTOR {F}       = idTrans F
+  id FUNCTOR {(F)}       = idTrans F
   _⋆_ FUNCTOR          = seqTrans
   ⋆IdL FUNCTOR α       = makeNatTransPath λ i x → D .⋆IdL (α .N-ob x) i
   ⋆IdR FUNCTOR α       = makeNatTransPath λ i x → D .⋆IdR (α .N-ob x) i
@@ -38,7 +38,7 @@ module _ (C : Category ℓC ℓC') (D : Category ℓD ℓD') where
              → (∀ (c : C .ob) → isIsoC D (α ⟦ c ⟧))
              → isIsoC FUNCTOR α
   FUNCTORIso α is .invC .N-ob c = (is c) .invC
-  FUNCTORIso {F} {G} α is .invC .N-hom {c} {d} f
+  FUNCTORIso {F} {G} α is .invC .N-hom {(c)} {(d)} f
     = invMoveL areInv-αc
                ( α ⟦ c ⟧ ⋆⟨ D ⟩ (G ⟪ f ⟫ ⋆⟨ D ⟩ is d .invC)
                ≡⟨ sym (D .⋆Assoc _ _ _) ⟩

@@ -75,7 +75,7 @@ isEquiv≃isEmbedding×isSurjection = isoToEquiv (iso
 -- hypothesis that one would expect:
 -- f must cancel functions from a higher universe.
 rightCancellable : (f : A → B) → Type _
-rightCancellable {ℓ} {A} {ℓ'} {B} f = ∀ {C : Type (ℓ-suc (ℓ-max ℓ ℓ'))}
+rightCancellable {(ℓ)} {A} {(ℓ')} {B} f = ∀ {C : Type (ℓ-suc (ℓ-max ℓ ℓ'))}
   → ∀ (g g' : B → C) → (∀ x → g (f x) ≡ g' (f x)) → ∀ y → g y ≡ g' y
 
 -- This statement is in Mac Lane & Moerdijk (page 143, corollary 5).

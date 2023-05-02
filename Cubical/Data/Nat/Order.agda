@@ -93,7 +93,7 @@ suc-< p = pred-≤-pred (≤-suc p)
 ≤-sucℕ = ≤-suc ≤-refl
 
 ≤-predℕ : predℕ n ≤ n
-≤-predℕ {zero} = ≤-refl
+≤-predℕ {(zero)} = ≤-refl
 ≤-predℕ {suc n} = ≤-suc ≤-refl
 
 ≤-trans : k ≤ m → m ≤ n → k ≤ n
@@ -133,7 +133,7 @@ suc-< p = pred-≤-pred (≤-suc p)
 ≤-+k-trans {m} {k} {n} p = ≤-trans (k , +-comm k m) p
 
 ≤-k+-trans : (k + m ≤ n) → m ≤ n
-≤-k+-trans {m} {k} {n} p = ≤-trans (m , refl) p
+≤-k+-trans {(m)} {(k)} {(n)} p = ≤-trans (m , refl) p
 
 ≤-·k : m ≤ n → m · k ≤ n · k
 ≤-·k {m} {n} {k} (d , r) = d · k , reason where
@@ -152,13 +152,13 @@ suc-< p = pred-≤-pred (≤-suc p)
 ¬m<m {m} = ¬-<-zero ∘ ≤-+k-cancel {k = m}
 
 ≤0→≡0 : n ≤ 0 → n ≡ 0
-≤0→≡0 {zero} ineq = refl
+≤0→≡0 {(zero)} ineq = refl
 ≤0→≡0 {suc n} ineq = ⊥.rec (¬-<-zero ineq)
 
 predℕ-≤-predℕ : m ≤ n → (predℕ m) ≤ (predℕ n)
-predℕ-≤-predℕ {zero} {zero}   ineq = ≤-refl
-predℕ-≤-predℕ {zero} {suc n}  ineq = zero-≤
-predℕ-≤-predℕ {suc m} {zero}  ineq = ⊥.rec (¬-<-zero ineq)
+predℕ-≤-predℕ {(zero)} {(zero)}   ineq = ≤-refl
+predℕ-≤-predℕ {(zero)} {suc n}  ineq = zero-≤
+predℕ-≤-predℕ {suc m} {(zero)}  ineq = ⊥.rec (¬-<-zero ineq)
 predℕ-≤-predℕ {suc m} {suc n} ineq = pred-≤-pred ineq
 
 ¬m+n<m : ¬ m + n < m
@@ -189,7 +189,7 @@ predℕ-≤-predℕ {suc m} {suc n} ineq = pred-≤-pred ineq
 <-+k-trans {m} {k} {n} p = ≤<-trans (k , +-comm k m) p
 
 <-k+-trans : (k + m < n) → m < n
-<-k+-trans {m} {k} {n} p = ≤<-trans (m , refl) p
+<-k+-trans {(m)} {(k)} {(n)} p = ≤<-trans (m , refl) p
 
 <-+-< : m < n → k < l → m + k < n + l
 <-+-<  m<n k<l = <-trans (<-+k m<n) (<-k+ k<l)
@@ -212,37 +212,37 @@ predℕ-≤-predℕ {suc m} {suc n} ineq = pred-≤-pred ineq
 ∸-≤ (suc m) (suc n) = ≤-trans (∸-≤ m n) (1 , refl)
 
 ≤-∸-+-cancel : m ≤ n → (n ∸ m) + m ≡ n
-≤-∸-+-cancel {zero} {n} _ = +-zero _
-≤-∸-+-cancel {suc m} {zero} m≤n = ⊥.rec (¬-<-zero m≤n)
+≤-∸-+-cancel {(zero)} {n} _ = +-zero _
+≤-∸-+-cancel {suc m} {(zero)} m≤n = ⊥.rec (¬-<-zero m≤n)
 ≤-∸-+-cancel {suc m} {suc n} m+1≤n+1 = +-suc _ _ ∙ cong suc (≤-∸-+-cancel (pred-≤-pred m+1≤n+1))
 
 ≤-∸-suc : m ≤ n → suc (n ∸ m) ≡ suc n ∸ m
-≤-∸-suc {zero} {n} m≤n = refl
-≤-∸-suc {suc m} {zero} m≤n = ⊥.rec (¬-<-zero m≤n)
+≤-∸-suc {(zero)} {n} m≤n = refl
+≤-∸-suc {suc m} {(zero)} m≤n = ⊥.rec (¬-<-zero m≤n)
 ≤-∸-suc {suc m} {suc n} m+1≤n+1 = ≤-∸-suc (pred-≤-pred m+1≤n+1)
 
 ≤-∸-k : m ≤ n → k + (n ∸ m) ≡ (k + n) ∸ m
-≤-∸-k {m} {n} {zero} r = refl
+≤-∸-k {m} {n} {(zero)} r = refl
 ≤-∸-k {m} {n} {suc k} r = cong suc (≤-∸-k r) ∙ ≤-∸-suc (≤-trans r (k , refl))
 
 left-≤-max : m ≤ max m n
-left-≤-max {zero} {n} = zero-≤
-left-≤-max {suc m} {zero} = ≤-refl
+left-≤-max {(zero)} {n} = zero-≤
+left-≤-max {suc m} {(zero)} = ≤-refl
 left-≤-max {suc m} {suc n} = suc-≤-suc left-≤-max
 
 right-≤-max : n ≤ max m n
-right-≤-max {zero} {m} = zero-≤
-right-≤-max {suc n} {zero} = ≤-refl
+right-≤-max {(zero)} {m} = zero-≤
+right-≤-max {suc n} {(zero)} = ≤-refl
 right-≤-max {suc n} {suc m} = suc-≤-suc right-≤-max
 
 min-≤-left : min m n ≤ m
-min-≤-left {zero} {n} = ≤-refl
-min-≤-left {suc m} {zero} = zero-≤
+min-≤-left {(zero)} {n} = ≤-refl
+min-≤-left {suc m} {(zero)} = zero-≤
 min-≤-left {suc m} {suc n} = suc-≤-suc min-≤-left
 
 min-≤-right : min m n ≤ n
-min-≤-right {zero} {n} = zero-≤
-min-≤-right {suc m} {zero} = ≤-refl
+min-≤-right {(zero)} {n} = zero-≤
+min-≤-right {suc m} {(zero)} = ≤-refl
 min-≤-right {suc m} {suc n} = suc-≤-suc min-≤-right
 
 ≤Dec : ∀ m n → Dec (m ≤ n)
@@ -294,7 +294,7 @@ splitℕ-< m n with m ≟ n
 
 <-split : m < suc n → (m < n) ⊎ (m ≡ n)
 <-split {n = zero} = inr ∘ snd ∘ m+n≡0→m≡0×n≡0 ∘ snd ∘ pred-≤-pred
-<-split {zero} {suc n} = λ _ → inl (suc-≤-suc zero-≤)
+<-split {(zero)} {suc n} = λ _ → inl (suc-≤-suc zero-≤)
 <-split {suc m} {suc n} = ⊎.map suc-≤-suc (cong suc) ∘ <-split ∘ pred-≤-pred
 
 ≤-split : m ≤ n → (m < n) ⊎ (m ≡ n)
@@ -486,7 +486,7 @@ pattern z<s {n}         = s≤s (z≤ {n})
 pattern s<s {m} {n} m<n = s≤s {m} {n} m<n
 
 ¬-<'-zero : ¬ m <' 0
-¬-<'-zero {zero} ()
+¬-<'-zero {(zero)} ()
 ¬-<'-zero {suc m} ()
 
 ≤'Dec : ∀ m n → Dec (m ≤' n)

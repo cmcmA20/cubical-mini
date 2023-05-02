@@ -90,7 +90,7 @@ module _ {ℓ ℓ' ℓ'' : Level} (C : Category ℓ ℓ') where
       -- for morphisms, we apply Δ ⟪ f ⟫ to the first component
       -- and ΓA ⟪ f ⟫ to the second
       -- the fiber rule
-      ΔA .F-hom {c} {d} f (δax , γax , eq)
+      ΔA .F-hom {(c)} {(d)} f (δax , γax , eq)
         = ((Δ ⟪ f ⟫) δax)
         , (((ΓA ⟪ f ⟫) γax)
         , ((π ⟦ d ⟧) ((ΓA ⟪ f ⟫) γax)
@@ -106,7 +106,7 @@ module _ {ℓ ℓ' ℓ'' : Level} (C : Category ℓ ℓ') where
                 → ΣPathP ((λ i → Δ .F-id i δax)
                           , fibersEqIfRepsEq {isSetB = snd (Γ ⟅ c ⟆)} _
                                             (λ i → ΓA .F-id i γax))
-      ΔA .F-seq {a} {b} {c} f g
+      ΔA .F-seq {(a)} {(b)} {(c)} f g
         = funExt λ (δax , γax , eq)
                 → ΣPathP ((λ i → Δ .F-seq f g i δax)
                   , fibersEqIfRepsEq {isSetB = snd (Γ ⟅ c ⟆)} _
@@ -123,7 +123,7 @@ module _ {ℓ ℓ' ℓ'' : Level} (C : Category ℓ ℓ') where
 
       PSq : ΔA ⇒ ΓA
       PSq .N-ob c (δax , γax , eq) = γax
-      PSq .N-hom {c} {d} f = funExt λ (δax , γax , eq) → refl
+      PSq .N-hom {(c)} {(d)} f = funExt λ (δax , γax , eq) → refl
 
       PSSq : (PresheafCategory C ℓ'' ⋆ snd (PSCext Δ (PSReindex))) γ ≡
              (PresheafCategory C ℓ'' ⋆ PSq) (snd (PSCext Γ A'))
@@ -135,13 +135,13 @@ module _ {ℓ ℓ' ℓ'' : Level} (C : Category ℓ ℓ') where
       PSIsPB : isPullback (PresheafCategory C ℓ'')
                  (cospan Δ Γ (fst (PSCext Γ A')) γ (snd (PSCext Γ A')))
                  (snd (PSCext Δ PSReindex)) PSq PSSq
-      PSIsPB {Θ} p₁ p₂ sq = (α , eq) , unique
+      PSIsPB {(Θ)} p₁ p₂ sq = (α , eq) , unique
         where
           α : Θ ⇒ ΔA
           α .N-ob c t = ((p₁ ⟦ c ⟧) t)
                       , (((p₂ ⟦ c ⟧) t)
                       , (λ i → (sq (~ i) ⟦ c ⟧) t))
-          α .N-hom {d} {c} f = funExt αHomExt
+          α .N-hom {(d)} {(c)} f = funExt αHomExt
             where
               αHomExt : ∀ (t : fst (Θ ⟅ d ⟆))
                       → ((p₁ ⟦ c ⟧) ((Θ ⟪ f ⟫) t) , (p₂ ⟦ c ⟧) ((Θ ⟪ f ⟫) t), _)

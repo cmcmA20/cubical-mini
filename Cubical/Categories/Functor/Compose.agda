@@ -36,7 +36,7 @@ module _ {ℓC ℓC' ℓD ℓD' ℓE ℓE'}
   postcomposeF : Functor (FUNCTOR C D) (FUNCTOR C E)
   postcomposeF .F-ob F = funcComp G F
   postcomposeF .F-hom α .N-ob c = G. F-hom (α .N-ob c)
-  postcomposeF .F-hom {F₀} {F₁} α .N-hom {x} {y} f =
+  postcomposeF .F-hom {(F₀)} {(F₁)} α .N-hom {x} {y} f =
     sym (G .F-seq (F₀ ⟪ f ⟫) (α ⟦ y ⟧))
     ∙∙ cong (G ⟪_⟫) (α .N-hom f)
     ∙∙ G .F-seq (α ⟦ x ⟧) (F₁ ⟪ f ⟫)

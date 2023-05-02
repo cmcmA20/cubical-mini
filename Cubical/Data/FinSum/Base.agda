@@ -28,7 +28,7 @@ elim
   → (∀ {k} → P {suc k} fzero)
   → (∀ {k} {fn : Fin k} → P fn → P (fsuc fn))
   → {k : ℕ} (fn : Fin k) → P fn
-elim P fz fs {zero}  f0        = ⊥.rec f0
+elim P fz fs {(zero)}  f0        = ⊥.rec f0
 elim P fz fs {suc k} fzero     = fz
 elim P fz fs {suc k} (fsuc fk) = fs (elim P fz fs fk)
 
@@ -45,9 +45,9 @@ toℕ {suc k} (inl tt) = zero
 toℕ {suc k} (inr x)  = suc (toℕ {k} x)
 
 toℕ-injective : {m n : Fin k} → toℕ m ≡ toℕ n → m ≡ n
-toℕ-injective {suc k} {fzero}  {fzero}  _ = refl
-toℕ-injective {suc k} {fzero}  {fsuc x} p = ⊥.rec (znots p)
-toℕ-injective {suc k} {fsuc m} {fzero}  p = ⊥.rec (snotz p)
+toℕ-injective {suc k} {(fzero)}  {(fzero)}  _ = refl
+toℕ-injective {suc k} {(fzero)}  {fsuc x} p = ⊥.rec (znots p)
+toℕ-injective {suc k} {fsuc m} {(fzero)}  p = ⊥.rec (snotz p)
 toℕ-injective {suc k} {fsuc m} {fsuc x} p = cong fsuc (toℕ-injective (injSuc p))
 
 fromℕ : (n : ℕ) → Fin (suc k)

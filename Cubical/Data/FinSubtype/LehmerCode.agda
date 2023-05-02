@@ -128,7 +128,7 @@ lehmerSucEquiv = isoToEquiv (iso (λ (e , c) → e ∷ c)
                                  (λ (e , c) → refl))
 
 @0 lehmerEquiv : (Fin n ≃ Fin n) ≃ LehmerCode n
-lehmerEquiv {zero} = isContr→Equiv contrFF isContrLehmerZero where
+lehmerEquiv {(zero)} = isContr→Equiv contrFF isContrLehmerZero where
   contrFF : isContr (Fin zero ≃ Fin zero)
   contrFF = idEquiv _ , λ y → equivEq (funExt λ f → ⊥.rec (¬Fin0 f))
 
@@ -197,7 +197,7 @@ factorial zero = 1
 factorial (suc n) = suc n · factorial n
 
 @0 lehmerFinEquiv : LehmerCode n ≃ Fin (factorial n)
-lehmerFinEquiv {zero} = isContr→Equiv isContrLehmerZero isContrFin1
+lehmerFinEquiv {(zero)} = isContr→Equiv isContrLehmerZero isContrFin1
 lehmerFinEquiv {suc n} = _ ≃⟨ invEquiv lehmerSucEquiv ⟩
                          _ ≃⟨ ≃-× (idEquiv _) lehmerFinEquiv ⟩
                          _ ≃⟨ factorEquiv ⟩

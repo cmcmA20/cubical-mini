@@ -157,7 +157,7 @@ suc-predℕ (suc n) p = refl
 +-assoc (suc m) n o = cong suc (+-assoc m n o)
 
 inj-m+ : m + l ≡ m + n → l ≡ n
-inj-m+ {zero} p = p
+inj-m+ {(zero)} p = p
 inj-m+ {suc m} p = inj-m+ (injSuc p)
 
 inj-+m : l + m ≡ n + m → l ≡ n
@@ -168,7 +168,7 @@ m+n≡n→m≡0 {n = zero} = λ p → (sym (+-zero _)) ∙ p
 m+n≡n→m≡0 {n = suc n} p = m+n≡n→m≡0 (injSuc ((sym (+-suc _ n)) ∙ p))
 
 m+n≡0→m≡0×n≡0 : m + n ≡ 0 → (m ≡ 0) × (n ≡ 0)
-m+n≡0→m≡0×n≡0 {zero} = refl ,_
+m+n≡0→m≡0×n≡0 {(zero)} = refl ,_
 m+n≡0→m≡0×n≡0 {suc m} p = ⊥.rec (snotz p)
 
 -- Arithmetic facts about ·
@@ -215,16 +215,16 @@ m+n≡0→m≡0×n≡0 {suc m} p = ⊥.rec (snotz p)
 0≡n·sm→0≡n {n = suc n} p = ⊥.rec (znots p)
 
 inj-·sm : l · suc m ≡ n · suc m → l ≡ n
-inj-·sm {zero} {m} {n} p = 0≡n·sm→0≡n p
-inj-·sm {l} {m} {zero} p = sym (0≡n·sm→0≡n (sym p))
+inj-·sm {(zero)} {(m)} {(n)} p = 0≡n·sm→0≡n p
+inj-·sm {l} {m} {(zero)} p = sym (0≡n·sm→0≡n (sym p))
 inj-·sm {suc l} {m} {suc n} p = cong suc (inj-·sm (inj-m+ {m = suc m} p))
 
 inj-sm· : suc m · l ≡ suc m · n → l ≡ n
 inj-sm· {m} {l} {n} p = inj-·sm (·-comm l (suc m) ∙ p ∙ ·-comm (suc m) n)
 
 integral-domain-· : {k l : ℕ} → (k ≡ 0 → ⊥) → (l ≡ 0 → ⊥) → (k · l ≡ 0 → ⊥)
-integral-domain-· {zero} {l} ¬p ¬q r = ¬p refl
-integral-domain-· {suc k} {zero} ¬p ¬q r = ¬q refl
+integral-domain-· {(zero)} {l} ¬p ¬q r = ¬p refl
+integral-domain-· {suc k} {(zero)} ¬p ¬q r = ¬q refl
 integral-domain-· {suc k} {suc l} ¬p ¬q r = snotz r
 
 -- Arithmetic facts about ∸

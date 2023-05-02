@@ -53,11 +53,11 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
   -- action on (slice) objects
   K-ob : (s : SliceCat .ob) → (PresheafCategory (∫ᴾ F) ℓS .ob)
   -- we take (c , x) to the fiber in A of ϕ over x
-  K-ob (sliceob {A} ϕ) .F-ob (c , x)
+  K-ob (sliceob {(A)} ϕ) .F-ob (c , x)
     = (fiber (ϕ ⟦ c ⟧) x)
     , isOfHLevelΣ 2 (snd (A ⟅ c ⟆)) λ _ → isSet→isGroupoid (snd (F ⟅ c ⟆)) _ _
   -- for morphisms, we just apply A ⟪ h ⟫ (plus equality proof)
-  K-ob (sliceob {A} ϕ) .F-hom {d , y} {c , x} (h , com) (b , eq)
+  K-ob (sliceob {(A)} ϕ) .F-hom {d , y} {c , x} (h , com) (b , eq)
     = ((A ⟪ h ⟫) b)
     , ((ϕ ⟦ c ⟧) ((A ⟪ h ⟫) b)
     ≡[ i ]⟨ (ϕ .N-hom h) i b ⟩
@@ -68,10 +68,10 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
       x
     ∎)
   -- functoriality follows from functoriality of A
-  K-ob (sliceob {A} ϕ) .F-id {x = (c , x)}
+  K-ob (sliceob {(A)} ϕ) .F-id {x = (c , x)}
     = funExt λ { (a , fibp)
                 → fibersEqIfRepsEqNatTrans ϕ (λ i → A .F-id i a) }
-  K-ob (sliceob {A} ϕ) .F-seq {x = (c , x)} {(d , y)} {(e , z)} (f' , eq1) (g' , eq2)
+  K-ob (sliceob {(A)} ϕ) .F-seq {x = (c , x)} {(d , y)} {(e , z)} (f' , eq1) (g' , eq2)
     = funExt λ { ( a , fibp )
                   → fibersEqIfRepsEqNatTrans ϕ (λ i → (A .F-seq f' g') i a) }
 
@@ -80,7 +80,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
   K-hom : {sA sB : SliceCat .ob}
         → (ε : SliceCat [ sA , sB ])
         → (K-ob sA) ⇒ (K-ob sB)
-  K-hom {sA = s1@(sliceob {A} ϕ)} {s2@(sliceob {B} ψ)} (slicehom ε com) = natTrans η-ob (λ h → funExt (η-hom h))
+  K-hom {sA = s1@(sliceob {(A)} ϕ)} {s2@(sliceob {(B)} ψ)} (slicehom ε com) = natTrans η-ob (λ h → funExt (η-hom h))
     where
       P = K-ob s1
       Q = K-ob s2
@@ -129,7 +129,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
       LF-hom : ∀ {x y}
               → (f : C [ y , x ])
               → (SET _) [ LF-ob x , LF-ob y ]
-      LF-hom {x = c} {d} f (x , a) = ((F ⟪ f ⟫) x) , (P ⟪ f , refl ⟫) a
+      LF-hom {x = c} {(d)} f (x , a) = ((F ⟪ f ⟫) x) , (P ⟪ f , refl ⟫) a
 
       L-ob-ob : Functor (C ^op) (SET _)
       L-ob-ob .F-ob = LF-ob
@@ -160,7 +160,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
                                   ((P ⟪ C .id , refl ⟫) X)
                                   ((P ⟪ ∫id ⟫) X)
                     left i = (P ⟪ ∫ᴾhomEq {F = F} (C .id , refl) ∫id (λ i → (c , leftEq i)) refl refl i ⟫) X
-      L-ob-ob .F-seq {x = c} {d} {e} f g
+      L-ob-ob .F-seq {x = c} {(d)} {(e)} f g
         = funExt seqFunEq
           where
             seqFunEq : ∀ (un : fst (LF-ob c))
@@ -206,7 +206,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
       ψ = S-arr (L-ob Q)
       arr : A ⇒ B
       arr .N-ob c (x , X) = x , ((η ⟦ c , x ⟧) X)
-      arr .N-hom {c} {d} f = funExt natu
+      arr .N-hom {(c)} {(d)} f = funExt natu
         where
           natuType : fst (A ⟅ c ⟆) → Type _
           natuType xX@(x , X) = ((F ⟪ f ⟫) x , (η ⟦ d , (F ⟪ f ⟫) x ⟧) ((P ⟪ f , refl ⟫) X)) ≡ ((F ⟪ f ⟫) x , (Q ⟪ f , refl ⟫) ((η ⟦ c , x ⟧) X))
@@ -223,8 +223,8 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
   L : Functor (PresheafCategory (∫ᴾ F) ℓS) SliceCat
   L .F-ob = L-ob
   L .F-hom = L-hom
-  L .F-id {cx} = SliceHom-≡-intro' (makeNatTransPath (funExt λ c → refl))
-  L .F-seq {cx} {dy} P Q = SliceHom-≡-intro' (makeNatTransPath (funExt λ c → refl))
+  L .F-id {(cx)} = SliceHom-≡-intro' (makeNatTransPath (funExt λ c → refl))
+  L .F-seq {(cx)} {(dy)} P Q = SliceHom-≡-intro' (makeNatTransPath (funExt λ c → refl))
 
   -- ========================================
   --              η : 𝟙 ≅ LK
@@ -247,14 +247,14 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
     -- the natural transformation
     -- just applies typeSectionIso
     ηTrans : 𝟙⟨ SliceCat ⟩ ⇒ (L ∘F K)
-    ηTrans .N-ob sob@(sliceob {A} ϕ) = slicehom A⇒LK comm
+    ηTrans .N-ob sob@(sliceob {(A)} ϕ) = slicehom A⇒LK comm
       where
         LKA = S-ob  (L ⟅ K ⟅ sob ⟆ ⟆)
         ψ = S-arr  (L ⟅ K ⟅ sob ⟆ ⟆)
 
         A⇒LK : A ⇒ LKA
         A⇒LK .N-ob c = typeSectionIso {isSetB = snd (F ⟅ c ⟆)} (ϕ ⟦ c ⟧) .fun
-        A⇒LK .N-hom {c} {d} f = funExt homFunExt
+        A⇒LK .N-hom {(c)} {(d)} f = funExt homFunExt
           where
             homFunExt : (x : fst (A ⟅ c ⟆))
                       → (((ϕ ⟦ d ⟧) ((A ⟪ f ⟫) x)) , ((A ⟪ f ⟫) x , refl))  ≡ ((F ⟪ f ⟫) ((ϕ ⟦ c ⟧) x) , (A ⟪ f ⟫) x , _)
@@ -262,7 +262,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
 
         comm : (A⇒LK) ●ᵛ ψ ≡ ϕ
         comm = makeNatTransPath (funExt λ x → refl)
-    ηTrans .N-hom {sliceob {A} α} {sliceob {B} β} (slicehom ϕ eq)
+    ηTrans .N-hom {sliceob {(A)} α} {sliceob {(B)} β} (slicehom ϕ eq)
       = SliceHom-≡-intro' (makeNatTransPath (funExt (λ c → funExt λ a → natFunExt c a)))
       where
         natFunExt : ∀ (c : C .ob) (a : fst (A ⟅ c ⟆))
@@ -332,7 +332,7 @@ module _ {ℓS : Level} (C : Category ℓ ℓ') (F : Functor (C ^op) (SET ℓS))
               -- "remove" the subst from the outside
               left : PathP (λ i → fst (P ⟅ d , eq' i ⟆)) ((P ⟪ f , refl ⟫) X') (subst (λ v → fst (P ⟅ d , v ⟆)) eq' ((P ⟪ f , refl ⟫) X'))
               left = transport-filler (λ i → fst (P ⟅ d , eq' i ⟆)) ((P ⟪ f , refl ⟫) X')
-    εTrans .N-hom {P} {Q} α = makeNatTransPath (funExt λ cx → funExt λ xX' → ε-homFunExt cx xX')
+    εTrans .N-hom {(P)} {(Q)} α = makeNatTransPath (funExt λ cx → funExt λ xX' → ε-homFunExt cx xX')
       where
         KLP = K ⟅ L ⟅ P ⟆ ⟆
 

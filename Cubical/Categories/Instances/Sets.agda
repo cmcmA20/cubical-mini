@@ -26,7 +26,7 @@ module _ ℓ where
   ⋆IdL SET f = refl
   ⋆IdR SET f = refl
   ⋆Assoc SET f g h = refl
-  isSetHom SET {A} {B} = isSetΠ (λ _ → snd B)
+  isSetHom SET {(A)} {(B)} = isSetΠ (λ _ → snd B)
 
 private
   variable
@@ -56,7 +56,7 @@ module _ {C : Category ℓ ℓ'} {F : Functor C (SET ℓ')} where
           → C [ x ,-] ⇒ F
           → C [ y ,-] ⇒ F
   preComp f α .N-ob c k = (α ⟦ c ⟧) (f ⋆⟨ C ⟩ k)
-  preComp f α .N-hom {x = c} {d} k
+  preComp f α .N-hom {x = c} {(d)} k
     = (λ l → (α ⟦ d ⟧) (f ⋆⟨ C ⟩ (l ⋆⟨ C ⟩ k)))
     ≡[ i ]⟨ (λ l → (α ⟦ d ⟧) (⋆Assoc C f l k (~ i))) ⟩
       (λ l → (α ⟦ d ⟧) (f ⋆⟨ C ⟩ l ⋆⟨ C ⟩ k))

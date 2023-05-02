@@ -123,7 +123,7 @@ _⋆_ SliceCat {sliceob j} {sliceob k} {sliceob l} (slicehom f p) (slicehom g p'
   SliceHom-≡-intro (⋆IdR C _) (toPathP (C .isSetHom _ _ _ _))
 ⋆Assoc SliceCat f g h =
   SliceHom-≡-intro (⋆Assoc C _ _ _) (toPathP (C .isSetHom _ _ _ _))
-isSetHom SliceCat {a} {b} (slicehom f c₁) (slicehom g c₂) p q = cong isoP p'≡q'
+isSetHom SliceCat {(a)} {(b)} (slicehom f c₁) (slicehom g c₂) p q = cong isoP p'≡q'
     where
       -- paths between SliceHoms are equivalent to the projection paths
       p' : Σ[ p ꞉ f ≡ g ] PathP (λ i → (p i) ⋆⟨ C ⟩ (S-arr b) ≡ S-arr a) c₁ c₂
@@ -179,7 +179,7 @@ module _ ⦃ isU : isUnivalent C ⦄ where
   instance
     @0 preservesUnivalenceSlice : isUnivalent SliceCat
     -- we prove the equivalence by going through Iso
-    preservesUnivalenceSlice .univ xf@(sliceob {x} f) yg@(sliceob {y} g) = isoToIsEquiv sIso
+    preservesUnivalenceSlice .univ xf@(sliceob {(x)} f) yg@(sliceob {(y)} g) = isoToIsEquiv sIso
       where
         -- this is just here because the type checker can't seem to infer xf and yg
         pToIIso : Iso (x ≡ y) (CatIso _ x y)

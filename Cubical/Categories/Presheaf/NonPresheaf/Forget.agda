@@ -29,6 +29,6 @@ NonPresheafCategory C ℓS = ΠC (ob C) (λ _ → SET ℓS)
 
 ForgetPresheaf : (C : Category ℓ ℓ') → Functor (PresheafCategory C ℓS) (NonPresheafCategory C ℓS)
 F-ob (ForgetPresheaf C) pshX = F-ob pshX
-F-hom (ForgetPresheaf C) {pshX} {pshY} pshF = N-ob pshF
-F-id (ForgetPresheaf C) {pshX} = refl
-F-seq (ForgetPresheaf C) {pshX} {pshY} {pshZ} pshF pshG = refl
+F-hom (ForgetPresheaf C) {(pshX)} {(pshY)} pshF = N-ob pshF
+F-id (ForgetPresheaf C) {(pshX)} = refl
+F-seq (ForgetPresheaf C) {(pshX)} {(pshY)} {(pshZ)} pshF pshG = refl

@@ -139,11 +139,11 @@ module _ {C : Category ℓC ℓC'} (monadM : Monad C) where
     )
 
   emAdjunction : FreeEMAlgebra ⊣ ForgetEMAlgebra
-  adjIso emAdjunction {a} {algebra b β , isEMB} = emBijection a (algebra b β , isEMB)
-  adjNatInD emAdjunction {a} {algebra b β , isEMB} {algebra c γ , isEMC}
+  adjIso emAdjunction {(a)} {algebra b β , isEMB} = emBijection a (algebra b β , isEMB)
+  adjNatInD emAdjunction {(a)} {algebra b β , isEMB} {algebra c γ , isEMC}
     (algebraHom f isalgF) (algebraHom g isalgG) =
     sym (C.⋆Assoc _ _ _)
-  adjNatInC emAdjunction {a} {b} {algebra c γ , isEMC} f g = AlgebraHom≡ M (
+  adjNatInC emAdjunction {(a)} {(b)} {algebra c γ , isEMC} f g = AlgebraHom≡ M (
     (F-hom M (g C.⋆ f) C.⋆ γ)
       ≡⟨ cong (C._⋆ γ) (F-seq M _ _) ⟩
     ((F-hom M g C.⋆ F-hom M f) C.⋆ γ)

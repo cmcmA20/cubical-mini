@@ -11,5 +11,4 @@ flags:
   --postfix-projections
   --hidden-argument-puns
 
-  -Wall
   -WnoUnsupportedIndexedMatch

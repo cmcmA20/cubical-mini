@@ -91,7 +91,7 @@ module Lan {ℓC ℓC' ℓD ℓD'} ℓS
   LanOb G .F-ob d .fst = Quo G d
   LanOb G .F-ob d .snd = squash/
   LanOb G .F-hom = mapR G
-  LanOb G .F-id {d} = mapRId G d
+  LanOb G .F-id {(d)} = mapRId G d
   LanOb G .F-seq h h' = mapR∘ G h' h
 
   -- Action of Quo on arrows in Cᵒᵖ → Set
@@ -133,7 +133,7 @@ module Lan {ℓC ℓC' ℓD ℓD'} ℓS
   Lan : Functor (FUNCTOR (C ^op) (SET ℓ)) (FUNCTOR (D ^op) (SET ℓ))
   Lan .F-ob = LanOb
   Lan .F-hom = LanHom
-  Lan .F-id {G} = makeNatTransPath (funExt (mapLId G))
+  Lan .F-id {(G)} = makeNatTransPath (funExt (mapLId G))
   Lan .F-seq α β = makeNatTransPath (funExt (mapL∘ β α))
 
   -- Adjunction between the left Kan extension and precomposition
@@ -145,7 +145,7 @@ module Lan {ℓC ℓC' ℓD ℓD'} ℓS
 
   η : 𝟙⟨ FUNCTOR (C ^op) (SET ℓ) ⟩ ⇒ funcComp F* Lan
   η .N-ob G .N-ob c a = [ c , D.id , a ]
-  η .N-ob G .N-hom {c'} {c} f =
+  η .N-ob G .N-hom {(c')} {(c)} f =
     funExt λ a →
     [ c , D.id , (G ⟪ f ⟫) a ]
       ≡⟨ sym (shift/ D.id f a) ⟩
@@ -166,7 +166,7 @@ module Lan {ℓC ℓC' ℓD ℓD'} ℓS
       (λ {_ _ (shift g f a) i → H .F-seq (F ⟪ f ⟫) g i a})
   ε .N-ob H .N-hom g' =
     funExt (elimProp (λ _ → (H ⟅ _ ⟆) .snd _ _) (λ (c , g , a) → funExt⁻ (H .F-seq g g') a))
-  ε .N-hom {H} {H'} α =
+  ε .N-hom {(H)} {(H')} α =
     makeNatTransPath
       (funExt₂ λ d →
          elimProp (λ _ → (H' ⟅ _ ⟆) .snd _ _)
@@ -276,7 +276,7 @@ module Ran {ℓC ℓC' ℓD ℓD'} ℓS
         (λ _ → isProp→isSet
           (isPropImplicitΠ λ _ → isPropImplicitΠ λ _ → isPropΠ2 λ _ _ → G .F-ob _ .snd _ _)))
   RanOb G .F-hom = mapR G
-  RanOb G .F-id {d} = mapRId G d
+  RanOb G .F-id {(d)} = mapRId G d
   RanOb G .F-seq h h' = mapR∘ G h' h
 
   -- Action of End on arrows in Cᵒᵖ → Set
@@ -312,7 +312,7 @@ module Ran {ℓC ℓC' ℓD ℓD'} ℓS
   Ran : Functor (FUNCTOR (C ^op) (SET ℓ)) (FUNCTOR (D ^op) (SET ℓ))
   Ran .F-ob = RanOb
   Ran .F-hom = RanHom
-  Ran .F-id {G} = makeNatTransPath (funExt (mapLId G))
+  Ran .F-id {(G)} = makeNatTransPath (funExt (mapLId G))
   Ran .F-seq α β = makeNatTransPath (funExt (mapL∘ β α))
 
   -- Adjunction between precomposition and right Kan extension
@@ -326,15 +326,15 @@ module Ran {ℓC ℓC' ℓD ℓD'} ℓS
   η .N-ob G .N-ob d a .fun c g = (G ⟪ g ⟫) a
   η .N-ob G .N-ob d a .coh f g = funExt⁻ (G .F-seq g (F ⟪ f ⟫)) a
   η .N-ob G .N-hom h = funExt λ a → end≡ _ λ c g → sym (funExt⁻ (G .F-seq h g) a)
-  η .N-hom {G} {G'} α =
+  η .N-hom {(G)} {(G')} α =
     makeNatTransPath (funExt₂ λ d a → end≡ _ λ c g → sym (funExt⁻ (α .N-hom g) a))
 
   ε : funcComp F* Ran ⇒ 𝟙⟨ FUNCTOR (C ^op) (SET ℓ) ⟩
   ε .N-ob H .N-ob c x = x .fun c D.id
-  ε .N-ob H .N-hom {c} {c'} g =
+  ε .N-ob H .N-hom {(c)} {(c')} g =
     funExt λ x →
     cong (x .fun c') (D.⋆IdL _ ∙ sym (D.⋆IdR _)) ∙ x .coh g D.id
-  ε .N-hom {H} {H'} α = makeNatTransPath refl
+  ε .N-hom {(H)} {(H')} α = makeNatTransPath refl
 
   Δ₁ : ∀ G → seqTrans (F* ⟪ η ⟦ G ⟧ ⟫) (ε ⟦ F* ⟅ G ⟆ ⟧) ≡ idTrans _
   Δ₁ G = makeNatTransPath (funExt₂ λ c a → funExt⁻ (G .F-id) a)

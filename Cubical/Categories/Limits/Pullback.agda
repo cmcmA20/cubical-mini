@@ -105,21 +105,21 @@ module _ {C : Category ℓ ℓ'} where
   Cospan→Func (cospan l m r f g) .F-ob ⓪ = l
   Cospan→Func (cospan l m r f g) .F-ob ① = m
   Cospan→Func (cospan l m r f g) .F-ob ② = r
-  Cospan→Func (cospan l m r f g) .F-hom {⓪} {①} k = f
-  Cospan→Func (cospan l m r f g) .F-hom {②} {①} k = g
-  Cospan→Func (cospan l m r f g) .F-hom {⓪} {⓪} k = id
-  Cospan→Func (cospan l m r f g) .F-hom {①} {①} k = id
-  Cospan→Func (cospan l m r f g) .F-hom {②} {②} k = id
-  Cospan→Func (cospan l m r f g) .F-id {⓪} = refl
-  Cospan→Func (cospan l m r f g) .F-id {①} = refl
-  Cospan→Func (cospan l m r f g) .F-id {②} = refl
-  Cospan→Func (cospan l m r f g) .F-seq {⓪} {⓪} {⓪} φ ψ = sym (⋆IdL _)
-  Cospan→Func (cospan l m r f g) .F-seq {⓪} {⓪} {①} φ ψ = sym (⋆IdL _)
-  Cospan→Func (cospan l m r f g) .F-seq {⓪} {①} {①} φ ψ = sym (⋆IdR _)
-  Cospan→Func (cospan l m r f g) .F-seq {①} {①} {①} φ ψ = sym (⋆IdL _)
-  Cospan→Func (cospan l m r f g) .F-seq {②} {②} {②} φ ψ = sym (⋆IdL _)
-  Cospan→Func (cospan l m r f g) .F-seq {②} {②} {①} φ ψ = sym (⋆IdL _)
-  Cospan→Func (cospan l m r f g) .F-seq {②} {①} {①} φ ψ = sym (⋆IdR _)
+  Cospan→Func (cospan l m r f g) .F-hom {(⓪)} {(①)} k = f
+  Cospan→Func (cospan l m r f g) .F-hom {(②)} {(①)} k = g
+  Cospan→Func (cospan l m r f g) .F-hom {(⓪)} {(⓪)} k = id
+  Cospan→Func (cospan l m r f g) .F-hom {(①)} {(①)} k = id
+  Cospan→Func (cospan l m r f g) .F-hom {(②)} {(②)} k = id
+  Cospan→Func (cospan l m r f g) .F-id {(⓪)} = refl
+  Cospan→Func (cospan l m r f g) .F-id {(①)} = refl
+  Cospan→Func (cospan l m r f g) .F-id {(②)} = refl
+  Cospan→Func (cospan l m r f g) .F-seq {(⓪)} {(⓪)} {(⓪)} φ ψ = sym (⋆IdL _)
+  Cospan→Func (cospan l m r f g) .F-seq {(⓪)} {(⓪)} {(①)} φ ψ = sym (⋆IdL _)
+  Cospan→Func (cospan l m r f g) .F-seq {(⓪)} {(①)} {(①)} φ ψ = sym (⋆IdR _)
+  Cospan→Func (cospan l m r f g) .F-seq {(①)} {(①)} {(①)} φ ψ = sym (⋆IdL _)
+  Cospan→Func (cospan l m r f g) .F-seq {(②)} {(②)} {(②)} φ ψ = sym (⋆IdL _)
+  Cospan→Func (cospan l m r f g) .F-seq {(②)} {(②)} {(①)} φ ψ = sym (⋆IdL _)
+  Cospan→Func (cospan l m r f g) .F-seq {(②)} {(①)} {(①)} φ ψ = sym (⋆IdR _)
 
   LimitsOfShapeCospanCat→Pullbacks : LimitsOfShape CospanCat C → Pullbacks C
   pbOb (LimitsOfShapeCospanCat→Pullbacks H cspn) = lim (H (Cospan→Func cspn))
@@ -134,7 +134,7 @@ module _ {C : Category ℓ ℓ'} where
                  (λ _ → isProp× (isSetHom _ _) (isSetHom _ _))
                  λ a' ha' → limArrowUnique (H (Cospan→Func cspn)) d cc a'
                                (λ { ⓪ → sym (ha' .fst)
-                                  ; ① → cong (a' ⋆_) (sym (limOutCommutes (H (Cospan→Func cspn)) {⓪} {①} tt))
+                                  ; ① → cong (a' ⋆_) (sym (limOutCommutes (H (Cospan→Func cspn)) {(⓪)} {(①)} tt))
                                       ∙∙ sym (⋆Assoc _ _ _)
                                       ∙∙ cong (_⋆ cspn .s₁) (sym (ha' .fst))
                                   ; ② → sym (ha' .snd) })
@@ -143,11 +143,11 @@ module _ {C : Category ℓ ℓ'} where
     coneOut cc ⓪ = h
     coneOut cc ① = h ⋆ cspn .s₁
     coneOut cc ② = k
-    coneOutCommutes cc {⓪} {⓪} e = ⋆IdR h
-    coneOutCommutes cc {⓪} {①} e = refl
-    coneOutCommutes cc {①} {①} e = ⋆IdR _
-    coneOutCommutes cc {②} {①} e = sym H'
-    coneOutCommutes cc {②} {②} e = ⋆IdR k
+    coneOutCommutes cc {(⓪)} {(⓪)} e = ⋆IdR h
+    coneOutCommutes cc {(⓪)} {(①)} e = refl
+    coneOutCommutes cc {(①)} {(①)} e = ⋆IdR _
+    coneOutCommutes cc {(②)} {(①)} e = sym H'
+    coneOutCommutes cc {(②)} {(②)} e = ⋆IdR k
 
   Limits→Pullbacks : Limits C → Pullbacks C
   Limits→Pullbacks H = LimitsOfShapeCospanCat→Pullbacks (H CospanCat)

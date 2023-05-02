@@ -115,6 +115,7 @@ doubleComp-faces : {x y z w : A } (p : x ≡ y) (r : z ≡ w)
 doubleComp-faces p r i j (i = i0) = p (~ j)
 doubleComp-faces p r i j (i = i1) = r j
 
+infix 29 _∙∙_∙∙_
 _∙∙_∙∙_ : w ≡ x → x ≡ y → y ≡ z → w ≡ z
 (p ∙∙ q ∙∙ r) i =
   hcomp (doubleComp-faces p r i) (q i)
@@ -158,6 +159,7 @@ compPath-filler p q = doubleCompPath-filler refl p q
 
 -- We could have also defined single composition by taking `r = refl`:
 
+infixr 30 _∙'_
 _∙'_ : x ≡ y → y ≡ z → x ≡ z
 p ∙' q = p ∙∙ q ∙∙ refl
 
@@ -400,6 +402,7 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where
 
 -- Whiskering a dependent path by a path
 -- Double whiskering
+infix 32 _◁_▷_
 _◁_▷_ : ∀ {ℓ} {A : I → Type ℓ} {a₀ a₀' : A i0} {a₁ a₁' : A i1}
       → a₀ ≡ a₀' → PathP A a₀' a₁ → a₁ ≡ a₁'
       → PathP A a₀ a₁'
@@ -417,10 +420,12 @@ doubleWhiskFiller p pq q k i =
         (inS (pq i))
         k
 
+-- infixr 28 _◁_
 _◁_ : ∀ {ℓ} {A : I → Type ℓ} {a₀ a₀' : A i0} {a₁ : A i1}
   → a₀ ≡ a₀' → PathP A a₀' a₁ → PathP A a₀ a₁
 (p ◁ q) = p ◁ q ▷ refl
 
+-- infix 31 _▷_
 _▷_ : ∀ {ℓ} {A : I → Type ℓ} {a₀ : A i0} {a₁ a₁' : A i1}
   → PathP A a₀ a₁ → a₁ ≡ a₁' → PathP A a₀ a₁'
 p ▷ q  = refl ◁ p ▷ q
@@ -567,7 +572,7 @@ isProp→isSet h a b p q j i =
                  ; (j = i1) → h a (q i) k }) a
 
 isProp→isSet' : isProp A → isSet' A
-isProp→isSet' h {a} p q r s i j =
+isProp→isSet' h {(a)} p q r s i j =
   hcomp (λ k → λ { (i = i0) → h a (p j) k
                  ; (i = i1) → h a (q j) k
                  ; (j = i0) → h a (r i) k
@@ -598,4 +603,4 @@ onAllPaths : (Type ℓ → Type ℓ) → Type ℓ → Type ℓ
 onAllPaths S A = (x y : A) → S (x ≡ y)
 
 it : ∀ {A : Type ℓ} → ⦃ A ⦄ → A
-it ⦃ a ⦄ = a
+it ⦃ (a) ⦄ = a
