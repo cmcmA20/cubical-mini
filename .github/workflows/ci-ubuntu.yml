@@ -40,8 +40,8 @@ on:
 
 env:
   AGDA_BRANCH: master
-  GHC_VERSION: 9.2.5
-  CABAL_VERSION: 3.6.2.0
+  GHC_VERSION: 9.6.1
+  CABAL_VERSION: 3.10.1.0
   CABAL_INSTALL: cabal install --overwrite-policy=always --ghc-options='-O1 +RTS -M6G -RTS'
   CACHE_PATHS: |
     ~/.cabal/packages
@@ -130,7 +130,8 @@ jobs:
         id: cache-library-restore
         with:
           path: ./_build
-          key: library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-${{ hashFiles('Cubical/**') }}
+          key:
+            library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-${{ hashFiles('Cubical/**', 'cubical-mini.agda-lib') }}
           restore-keys: |
             library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-
         env:
@@ -143,7 +144,7 @@ jobs:
         if: steps.cache-library-restore.outputs.cache-hit != 'true'
         run: |
           make test \
-            AGDA_EXEC='~/.cabal/bin/agda -WnoUnsupportedIndexedMatch -W error' \
+            AGDA_EXEC='~/.cabal/bin/agda' \
             FIX_WHITESPACE='~/.cabal/bin/fix-whitespace' \
             EVERYTHINGS='cabal run Everythings'
 
@@ -163,7 +164,7 @@ jobs:
         if: github.event_name == 'push' && github.ref_name == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
         run: |
           make listings \
-            AGDA_EXEC='~/.cabal/bin/agda -WnoUnsupportedIndexedMatch -W error' \
+            AGDA_EXEC='~/.cabal/bin/agda' \
             FIX_WHITESPACE='~/.cabal/bin/fix-whitespace' \
             EVERYTHINGS='cabal run Everythings'
 
