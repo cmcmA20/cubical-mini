@@ -154,43 +154,38 @@ open Homo
 module SIP where
   open import Cubical.Foundations.SIP
   open import Cubical.Structures.Axioms
-  open import Cubical.Structures.Product
-  open import Cubical.Structures.Pointed
-  open import Cubical.Structures.Function
+  open import Cubical.Structures.Auto
 
   private variable ℓ : Level
 
   RawStruct : Type → Type
-  RawStruct X = (X → X → X) × (X → X) -- _+_ , succ
-
-  e1 : StrEquiv (λ x → x → x → x) ℓ-zero
-  e1 = FunctionEquivStr+ pointedEquivAction
-                         (FunctionEquivStr+ pointedEquivAction PointedEquivStr)
-
-  e2 : StrEquiv (λ x → x → x) ℓ-zero
-  e2 = FunctionEquivStr+ pointedEquivAction PointedEquivStr
+  RawStruct X = X × (X → X) × (X → X) × (X → X → X)
+  --            0 ,  succ   ,  pred   ,     _+_
 
   RawEquivStr : StrEquiv RawStruct _
-  RawEquivStr = ProductEquivStr e1 e2
+  RawEquivStr = AutoEquivStr RawStruct
 
   @0 rawUnivalentStr : UnivalentStr _ RawEquivStr
-  rawUnivalentStr = productUnivalentStr e1 he1 e2 he2
-    where
-    he2 : UnivalentStr (λ z → z → z) e2
-    he2 = functionUnivalentStr+ pointedEquivAction pointedTransportStr
-                                PointedEquivStr pointedUnivalentStr
-
-    he1 : UnivalentStr (λ z → z → z → z) e1
-    he1 = functionUnivalentStr+ pointedEquivAction pointedTransportStr e2 he2
+  rawUnivalentStr = autoUnivalentStr RawStruct
 
   P : (X : Type) → RawStruct X → Type
-  P X (plus , _) = (m n : X) → plus m n ≡ plus n m
+  P X (z , s , p , plus) = ((m n : X) → plus m n ≡ plus n m)
+                         × ((m n k : X) → plus m (plus n k) ≡ plus (plus m n) k)
+                         × ((m : X) → s (p m) ≡ m)
+                         × ((m : X) → p (s m) ≡ m)
+                         × ((m : X) → plus m z ≡ m)
 
   ℤᵢ-Struct : Σ[ X ꞉ Type ] (Σ[ s ꞉ RawStruct X ] (P X s))
-  ℤᵢ-Struct = ℤᵢ , (_+ᵢ_ , sucℤ) , +Comm
+  ℤᵢ-Struct = ℤᵢ , (pos 0 , sucℤ , predℤ , _+ᵢ_)
+            , +Comm , +Assoc , sucPred , predSuc , (λ _ → refl)
 
   ℤ-RawStruct : Σ[ X ꞉ Type ] (RawStruct X)
-  ℤ-RawStruct = ℤ , (_+_ , succ)
+  ℤ-RawStruct = ℤ , (pos 0 , succ , pred , _+_)
 
-  @0 observe : (m n : ℤ) → m + n ≡ n + m
-  observe = transferAxioms rawUnivalentStr ℤᵢ-Struct ℤ-RawStruct (invEquiv ℤ≃ℤᵢ , preservePlus , preserveSucc)
+  @0 observe : ((m n : ℤ) → m + n ≡ n + m)
+             × ((m n k : ℤ) → m + (n + k) ≡ (m + n) + k)
+             × ((m : ℤ) → succ (pred m) ≡ m)
+             × ((m : ℤ) → pred (succ m) ≡ m)
+             × ((m : ℤ) → m + pos 0 ≡ m)
+  observe = transferAxioms rawUnivalentStr ℤᵢ-Struct ℤ-RawStruct
+          $ invEquiv ℤ≃ℤᵢ , preserveZero , preserveSucc , preservePred , preservePlus
