@@ -466,6 +466,15 @@ homotopy-natural {f} {g} H {x} {y} p = ∙-unique _ λ i j →
     k (j = i0) → f x
     k (j = i1) → H (p k) i
 
+homotopy-sym-inv : {f : A → A} (H : ∀ a → f a ＝ a) (a : A)
+                 → Path (f a ＝ f a) (λ i → H (H a (~ i)) i) refl
+homotopy-sym-inv {f} H a i j = hcomp (∂ i ∨ ∂ j) λ where
+  k (i = i0) → H (H a (~ j)) j
+  k (i = i1) → H a (j ∧ ~ k)
+  k (j = i0) → f a
+  k (j = i1) → H a (i ∧ ~ k)
+  k (k = i0) → H (H a (i ∨ ~ j)) j
+
 
 -- Direct definitions of lower h-levels
 
