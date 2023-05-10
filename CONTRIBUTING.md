@@ -41,7 +41,7 @@ When preparing a PR here are some general guidelines:
 
   `{-# OPTIONS --safe #-}`
 
-  unless there is a good reason for it not to. The `--cubical` and
+  unless there is a good reason for it not to. The `--erased-cubical` and
   `--no-import-sorts` flags are added in the `cubical-mini.agda-lib` file.
 
 - It is much easier for us to review and merge smaller and
@@ -76,7 +76,7 @@ When preparing a PR here are some general guidelines:
   ```
 
 - Use copattern-matching when instantiating records for efficiency.
-  This seems especially important when constructing Iso's.
+  This seems especially important when constructing `Iso`s.
 
 - If typechecking starts becoming slow try to fix the efficiency
   problems directly. We don't want to merge files that are very slow
@@ -84,10 +84,10 @@ When preparing a PR here are some general guidelines:
   often much easier to fix these things directly. If you don't know
   what to try, make a draft PR and ask for help.
 
-- It is often useful to give explicit names to the Iso, Equiv and Path
+- It is often useful to give explicit names to the `Iso`, `Equiv` and `Path`
   version of a result. Try to avoid switching between these when
-  constructing something, for instance if you want to construct a Path
-  out of a series of Iso's then compose the Isos first and then apply
+  constructing something, for instance if you want to construct a `Path`
+  out of a series of `Iso`s then compose the `Iso`s first and then apply
   `iso-to-path` once instead of converting all of them to paths and
   composing them as paths.
 
@@ -130,15 +130,15 @@ When preparing a PR here are some general guidelines:
   Do not import and do not use Agda primitives/builtins from `Agda.Builtin.*`
   and the like.
 
-- Avoid creating folders like `Data`, `Records` or `HITs` for the sake of
+- Avoid creating folders like `Data`, `Records` or `HITs` only for the sake of
   collecting all the inductive types, records or HITs.
   When naming new folders, take inspiration in semantics or purpose of the
   target concept, not in it's Agda syntax.
 
 - `Data` is the correct place for data structures and their properties. If you
   see that your "data structure" is quite general, admits a rich theory
-  `Category` or any algebraic stuff) and is applicable to many, it should be
-  moved to the top-level.
+  `Category` or any algebraic stuff) and is applicable to various other
+  concepts, it should be moved to the top-level.
 
 - Erase type indices if it's a well-known optimization. If needed, create
   multiple representations of the same type but with different runtime

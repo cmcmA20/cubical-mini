@@ -3,129 +3,84 @@ module Foundations.Equiv where
 
 open import Prim.Equiv
 open import Foundations.Prelude
-open import Foundations.HLevel
-open import Foundations.Path
+open import Foundations.Isomorphism
 
 private variable
-  ℓ ℓ′ ℓ″ ℓ‴ : Level
-  A A′ A″ : Type ℓ
-  B B′ B″ : Type ℓ′
-  C : Type ℓ″
-  D : Type ℓ‴
+  ℓ ℓ′ : Level
+  A : Type ℓ
+  B : Type ℓ′
 
-infix 8 _≃_
-record _≃_ (A : Type ℓ) (B : Type ℓ′) : Type (ℓ ⊔ ℓ′)
+-- Helper function for constructing equivalences from pairs (f,g) that cancel each other up to definitional
+-- equality. For such (f,g), the result type simplifies to is-contr (fibre f b).
+strict-contr-fibers : {f : A → B} (g : B → A) (b : B)
+                    → Σ[ t  ꞉ fibre f (f (g b)) ]
+                      Π[ t′ ꞉ fibre f       b   ]
+                      Path (fibre f (f (g b))) t (g (f (t′ .fst)) , cong (f ∘ g) (t′ .snd))
+strict-contr-fibers     g b .fst = g b , refl
+strict-contr-fibers {f} g b .snd (a , p) i = g (p (~ i)) , λ j → f (g (p (~ i ∨ j)))
 
-is-inv : {A : Type ℓ} {B : Type ℓ′} → (A → B) → (B → A) → Type (ℓ ⊔ ℓ′)
-is-inv {A} {B} f g = (a : A) (b : B) → (a ＝ g b) ≃ (f a ＝ b)
+-- The identity equivalence
+id-is-equiv : (A : Type ℓ) → is-equiv (id {A = A})
+id-is-equiv _ .equiv-proof = strict-contr-fibers id
 
-record _≃_ A B where
-  coinductive
-  field
-    to   : A → B
-    from : B → A
-    equiv-proof : is-inv to from
-open _≃_ public
+idₑ : (A : Type ℓ) → A ≃ A
+idₑ _ .fst = id
+idₑ A .snd = id-is-equiv A
 
--- reimplement using raw `transp`?
-down : A ＝ B → A ≃ B
-down p .to   = transport p
-down p .from = transport (sym p)
-down p .equiv-proof x x′ = down
-  $ sym (PathP＝Path⁻ (λ i → p i) x x′)
-  ∙      PathP＝Path  (λ i → p i) x x′
+equiv-centre : (e : A ≃ B) (y : B) → fibre (e .fst) y
+equiv-centre e y = e .snd .equiv-proof y .fst
 
-idₑ : A ≃ A
-idₑ .to   = id
-idₑ .from = id
-idₑ .equiv-proof _ _ = idₑ
+equiv-path : (e : A ≃ B) (y : B) (v : fibre (e .fst ) y) → equiv-centre e y ＝ v
+equiv-path e y = e .snd .equiv-proof y .snd
 
-infixr 29 _∙ₑ_
-_∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
-(f ∙ₑ g) .to   = g .to   ∘ f .to
-(f ∙ₑ g) .from = f .from ∘ g .from
-(f ∙ₑ g) .equiv-proof x z =
-  let le = f .equiv-proof        x  (g .from z)
-      ri = g .equiv-proof (f .to x)          z
-  in le ∙ₑ ri
+is-equiv-is-prop : (f : A → B) → is-prop (is-equiv f)
+is-equiv-is-prop f p q i .equiv-proof y =
+  let p₂ = p .equiv-proof y .snd
+      q₂ = q .equiv-proof y .snd
+  in p₂ (q .equiv-proof y .fst) i , λ w j → hcomp (∂ i ∨ ∂ j) λ where
+     k (i = i0) → p₂ w j
+     k (i = i1) → q₂ w (j ∨ ~ k)
+     k (j = i0) → p₂ (q₂ w (~ k)) i
+     k (j = i1) → w
+     k (k = i0) → p₂ w (i ∨ j)
 
-left-unital  : (f : A ≃ B) → idₑ ∙ₑ f   ＝ f
-left-unital f _ .to   = f .to
-left-unital f _ .from = f .from
-left-unital f i .equiv-proof x y = left-unital (f .equiv-proof x y) i
+equiv→inverse : {f : A → B} → is-equiv f → (B → A)
+equiv→inverse eqv y = eqv .equiv-proof y .fst .fst
 
-right-unital : (f : A ≃ B) → f ∙ₑ idₑ ＝ f
-right-unital f _ .to   = f .to
-right-unital f _ .from = f .from
-right-unital f i .equiv-proof x y = right-unital (f .equiv-proof x y) i
+equiv→counit : {f : A → B} (eqv : is-equiv f) (y : B) → f (equiv→inverse eqv y) ＝ y
+equiv→counit eqv y = eqv .equiv-proof y .fst .snd
 
-assoc : (f : A ≃ B) (g : B ≃ C) (h : C ≃ D) → (f ∙ₑ g) ∙ₑ h ＝ f ∙ₑ (g ∙ₑ h)
-assoc f g h _ .to   = h .to   ∘ g .to   ∘ f .to
-assoc f g h _ .from = f .from ∘ g .from ∘ h .from
-assoc f g h i .equiv-proof x w =
-  let le = f .equiv-proof               x   (g .from (h .from w))
-      mi = g .equiv-proof        (f .to x)           (h .from w)
-      ri = h .equiv-proof (g .to (f .to x))                   w
-  in assoc le mi ri i
+equiv→unit : {f : A → B} (eqv : is-equiv f) (x : A) → equiv→inverse eqv (f x) ＝ x
+equiv→unit {f} eqv x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
 
-whisker : A′ ＝ A → A ≃ B → B ＝ B′
-        → A′          ≃          B′
-whisker p e q = down p ∙ₑ e ∙ₑ down q
+equiv→zig
+  : {f : A → B} (eqv : is-equiv f) (x : A)
+  → ap f (equiv→unit eqv x) ＝ equiv→counit eqv (f x)
+equiv→zig {f = f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
+   k (i = i0) → f (equiv→unit eqv x j)
+   k (i = i1) → equiv→counit eqv (f x) (j ∨ ~ k)
+   k (j = i0) → equiv→counit eqv (f x) (i ∧ ~ k)
+   k (j = i1) → f x
+   k (k = i0) → eqv .equiv-proof (f x) .snd (x , refl) j .snd i
 
--- univalence awaits
-zero-preservation : down {ℓ} {A} refl ＝ idₑ
-zero-preservation i .to   x = transport-refl x i
-zero-preservation i .from x = transport-refl x i
-zero-preservation {A} i .equiv-proof x y = {!!}
---   in subst (λ focus → down focus ＝ {!!}) {!!} {!!} i
--- subst (λ focus → down focus ＝ idₑ) (sym (∙-inv-l refl)) what-is-this i
+equiv→zag
+  : {f : A → B} (eqv : is-equiv f) (y : B)
+  → ap (equiv→inverse eqv) (equiv→counit eqv y) ＝ equiv→unit eqv (equiv→inverse eqv y)
+equiv→zag {f} eqv b =
+  subst (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
+  g = equiv→inverse eqv
+  ε = equiv→counit eqv
+  η = equiv→unit eqv
 
--- funny one, provable both with univalence and with K
--- but is it really independent and provable using only cubical ops?
--- I think there's a unique term of this type, isn't it related to some parametricity stuff?
-mirror : {x y : A} → (x ＝ y) ＝ (y ＝ x)
-mirror = {!!}
+  helper : ∀ a → ap g (ε (f a)) ＝ η (g (f a))
+  helper a i j = hcomp (∂ i ∨ ∂ j) λ where
+    k (i = i0) → g (ε (f a) (j ∨ ~ k))
+    k (i = i1) → η (η a (~ k)) j
+    k (j = i0) → g (equiv→zig eqv a (~ i) (~ k))
+    k (j = i1) → η a (i ∧ ~ k)
+    k (k = i0) → η a (i ∧ j)
 
--- what the hell is this?
-swap : {x y : A} {z w : B} → (x ＝ y) ＝ (z ＝ w) → (w ＝ z) ＝ (y ＝ x)
-swap p = sym $ mirror ◁ p ▷ mirror
-
-swapₑ : {A B : Type ℓ} {x y : A} {z w : B} → (x ＝ y) ≃ (z ＝ w) → (w ＝ z) ≃ (y ＝ x)
-swapₑ e .to   = sym ∘ e .from ∘ sym
-swapₑ e .from = sym ∘ e .to   ∘ sym
-swapₑ e .equiv-proof p q =
-  let t = e .equiv-proof (sym q) (sym p)
-  in swapₑ $ {!!} -- need something like `cong-equiv`
-
-swapₑ-invol : {x y : A} {z w : B} (f : (x ＝ y) ≃ (z ＝ w)) → swapₑ (swapₑ f) ＝ f
-swapₑ-invol f _ .to   = f .to
-swapₑ-invol f _ .from = f .from
-swapₑ-invol f i .equiv-proof p q = let t = f .equiv-proof p q in {!!}
-
--- note the flip
-inv : {A B : Type ℓ} → A ≃ B → B ≃ A
-inv e .to   = e .from
-inv e .from = e .to
-inv e .equiv-proof y x = swapₑ $ e .equiv-proof x y
-
-involution : (e : A ≃ B) → inv (inv e) ＝ e
-involution e _ .to   = e .to
-involution e _ .from = e .from
-involution e i .equiv-proof x y = swapₑ-invol (e .equiv-proof x y) i
-
-cancel : (e : A ≃ B) → e ∙ₑ inv e ＝ idₑ
-cancel e i .to   x = e .equiv-proof x (e .to x) .from refl (~ i)
-cancel e i .from x = e .equiv-proof x (e .to x) .from refl (~ i)
-cancel e i .equiv-proof x y = {!!} -- no idea, probably need univalence again
-
-equiv-ext : (f g : A ≃ B) → (f .to ＝ g .to) → (f .from ＝ g .from) → f ＝ g
-equiv-ext _ _ p _ i .to   = p i
-equiv-ext _ _ _ q i .from = q i
-equiv-ext f g p q i .equiv-proof x y = {!!}
-
-vert : (f : A ≃ B) (g : A′ ≃ B′) (h : A″ ≃ B″)
-       (p : A ＝ A′) (q : B ＝ B′) (r : A′ ＝ A″) (s : B′ ＝ B″)
-       (α : f ∙ₑ down q ＝ down p ∙ₑ g)
-       (β : g ∙ₑ down s ＝ down r ∙ₑ h)
-     → f ∙ₑ down (q ∙ s) ＝ down (p ∙ r) ∙ₑ h
-vert f g h p q r s α β = {!!}
+is-equiv→is-iso : {f : A → B} → is-equiv f → is-iso f
+is-iso.inv  (is-equiv→is-iso eqv) = equiv→inverse eqv
+is-iso.rinv (is-equiv→is-iso eqv) y = eqv .equiv-proof y .fst .snd
+is-iso.linv (is-equiv→is-iso {f} eqv) x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst

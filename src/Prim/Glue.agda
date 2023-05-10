@@ -34,18 +34,18 @@ private variable ℓ ℓ′ : Level
 -- Uncurry Glue to make it more pleasant to use
 @0 Glue : (A : Type ℓ)
           {φ : I}
-        → (Te : Partial φ (Σ[ T ꞉ Type ℓ′ ] T ≃′ A))
+        → (Te : Partial φ (Σ[ T ꞉ Type ℓ′ ] T ≃ A))
         → Type ℓ′
 Glue A Te = primGlue A (λ x → Te x .fst) (λ x → Te x .snd)
 
 -- Make the φ argument of prim^unglue explicit
 @0 unglue : {A : Type ℓ} (φ : I) {T : Partial φ (Type ℓ′)}
-            {e : PartialP φ (λ o → T o ≃′ A)}
+            {e : PartialP φ (λ o → T o ≃ A)}
           → primGlue A T e → A
 unglue φ = prim^unglue {φ = φ}
 
 @0 glue-inc : {A : Type ℓ} (φ : I)
-            → {Tf : Partial φ (Σ[ B ꞉ Type ℓ′ ] B ≃′ A)}
+            → {Tf : Partial φ (Σ[ B ꞉ Type ℓ′ ] B ≃ A)}
             → (p : PartialP φ (λ { (φ = i1) → Tf 1=1 .fst }))
             → A [ φ ↦ (λ { (φ = i1) → Tf 1=1 .snd .fst (p 1=1) }) ]
             → Glue A Tf
