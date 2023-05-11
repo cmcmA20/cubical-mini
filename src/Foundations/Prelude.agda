@@ -31,22 +31,22 @@ private variable
 lift-ext : {a b : Lift {ℓ} ℓ′ A} → (lower a ＝ lower b) → a ＝ b
 lift-ext x i = lift (x i)
 
-Square : {a₀₀ a₀₁ a₁₀ a₁₁ : A}
-         (p : a₀₀ ＝ a₀₁) (q : a₀₀ ＝ a₁₀)
-         (s : a₀₁ ＝ a₁₁) (r : a₁₀ ＝ a₁₁)
+Square : {a₀₀ a₀₁ : A} (p : a₀₀ ＝ a₀₁)
+         {a₁₀ : A} (q : a₀₀ ＝ a₁₀)
+         {a₁₁ : A} (r : a₁₀ ＝ a₁₁) (s : a₀₁ ＝ a₁₁)
        → Type (level-of-type A)
-Square p q s r = ＜ q ／ (λ i → p i ＝ r i) ＼ s ＞
+Square p q r s = ＜ q ／ (λ i → p i ＝ r i) ＼ s ＞
 
 infix 0 Square-syntax
 Square-syntax : (d₁ d₂ d₃ d₄ d₅ : ⊤)
                 (a₀₀ a₀₁ a₁₀ a₁₁ : A)
                 (p : a₀₀ ＝ a₀₁) (q : a₀₀ ＝ a₁₀)
-                (s : a₀₁ ＝ a₁₁) (r : a₁₀ ＝ a₁₁)
+                (r : a₁₀ ＝ a₁₁) (s : a₀₁ ＝ a₁₁)
               → Type (level-of-type A)
-Square-syntax _ _ _ _ _ _ _ _ _ = Square
+Square-syntax _ _ _ _ _ _ _ _ _ p q r s = Square p q r s
 -- be not afraid
 syntax Square-syntax d₁ d₂ d₃ d₄ d₅ a₀₀ a₀₁ a₁₀ a₁₁ p q s r =
-  a₀₀  ̇ q  ̇ a₁₀ ┌─────────┐ d₁ │ d₂ │ p │ d₃ │ r │ d₄ │ d₅ └─────────┘ a₀₁  ̇ s  ̇ a₁₁
+  a₀₀  ̇ q  ̇ a₁₀ ┌─────────┐ d₁ │ d₂ │ p │ d₃ │ s │ d₄ │ d₅ └─────────┘ a₀₁  ̇ r  ̇ a₁₁
 
 -- symP infers the type of its argument from the type of its output
 symP : {A : I → Type ℓ} → {x : A i1} → {y : A i0}
@@ -150,7 +150,7 @@ _∙∙_∙∙_ : w ＝ x → x ＝ y → y ＝ z
 
 -- any two definitions of double composition are equal
 ∙∙-unique : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
-          → (α β : Σ[ s ꞉ w ＝ z ] Square (sym p) q s r)
+          → (α β : Σ[ s ꞉ w ＝ z ] Square (sym p) q r s)
           → α ＝ β
 ∙∙-unique p q r (α , α-fill) (β , β-fill) =
   λ i → (λ j → square i j) , (λ j k → cube i j k)
@@ -167,7 +167,7 @@ _∙∙_∙∙_ : w ＝ x → x ＝ y → y ＝ z
     square i j = cube i i1 j
 
 ∙∙-contract : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
-            → (β : Σ[ s ꞉ w ＝ z ] Square (sym p) q s r)
+            → (β : Σ[ s ꞉ w ＝ z ] Square (sym p) q r s)
             → (p ∙∙ q ∙∙ r , ∙∙-filler p q r) ＝ β
 ∙∙-contract p q r β = ∙∙-unique p q r _ β
 

@@ -17,47 +17,55 @@ SquareP
   → Type ℓ
 SquareP A a₀₋ a₁₋ a₋₀ a₋₁ = ＜ a₀₋ ／ (λ i → ＜ a₋₀ i ／ (λ j → A i j) ＼ a₋₁ i ＞) ＼ a₁₋ ＞
 
--- Cube :
---   {a₀₀₀ a₀₀₁ : A} {a₀₀₋ : a₀₀₀ ＝ a₀₀₁}
---   {a₀₁₀ a₀₁₁ : A} {a₀₁₋ : a₀₁₀ ＝ a₀₁₁}
---   {a₀₋₀ : a₀₀₀ ＝ a₀₁₀} {a₀₋₁ : a₀₀₁ ＝ a₀₁₁}
---   (a₀₋₋ : Square a₀₀₋ a₀₋₀ a₀₋₁ a₀₁₋)
---   {a₁₀₀ a₁₀₁ : A} {a₁₀₋ : a₁₀₀ ＝ a₁₀₁}
---   {a₁₁₀ a₁₁₁ : A} {a₁₁₋ : a₁₁₀ ＝ a₁₁₁}
---   {a₁₋₀ : a₁₀₀ ＝ a₁₁₀} {a₁₋₁ : a₁₀₁ ＝ a₁₁₁}
---   (a₁₋₋ : Square a₁₀₋ a₁₁₋ a₁₋₀ a₁₋₁)
---   {a₋₀₀ : a₀₀₀ ＝ a₁₀₀} {a₋₀₁ : a₀₀₁ ＝ a₁₀₁}
---   (a₋₀₋ : Square a₀₀₋ a₁₀₋ a₋₀₀ a₋₀₁)
---   {a₋₁₀ : a₀₁₀ ＝ a₁₁₀} {a₋₁₁ : a₀₁₁ ＝ a₁₁₁}
---   (a₋₁₋ : Square a₀₁₋ a₁₁₋ a₋₁₀ a₋₁₁)
---   (a₋₋₀ : Square a₀₋₀ a₁₋₀ a₋₀₀ a₋₁₀)
---   (a₋₋₁ : Square a₀₋₁ a₁₋₁ a₋₀₁ a₋₁₁)
---   → Type _
--- Cube a₀₋₋ a₁₋₋ a₋₀₋ a₋₁₋ a₋₋₀ a₋₋₁ =
---   PathP (λ i → Square (a₋₀₋ i) (a₋₁₋ i) (a₋₋₀ i) (a₋₋₁ i)) a₀₋₋ a₁₋₋
+-- 3d unicode diagrams are beyond my ability, sorry
+Cube
+  : {a₀₀₀ a₀₀₁ : A} {a₀₀₋ : a₀₀₀ ＝ a₀₀₁}
+    {a₀₁₀ : A} {a₀₋₀ : a₀₀₀ ＝ a₀₁₀}
+    {a₀₁₁ : A} {a₀₁₋ : a₀₁₀ ＝ a₀₁₁}
+    {a₀₋₁ : a₀₀₁ ＝ a₀₁₁}
+    (a₀₋₋ : Square a₀₀₋ a₀₋₀ a₀₁₋ a₀₋₁)
+    {a₁₀₀ : A} {a₋₀₀ : a₀₀₀ ＝ a₁₀₀}
+    {a₁₀₁ : A} {a₁₀₋ : a₁₀₀ ＝ a₁₀₁}
+    {a₋₀₁ : a₀₀₁ ＝ a₁₀₁}
+    (a₋₀₋ : Square a₀₀₋ a₋₀₀ a₁₀₋ a₋₀₁)
+    {a₁₁₀ : A} {a₁₋₀ : a₁₀₀ ＝ a₁₁₀}
+    {a₋₁₀ : a₀₁₀ ＝ a₁₁₀}
+    (a₋₋₀ : Square a₀₋₀ a₋₀₀ a₁₋₀ a₋₁₀)
+    {a₁₁₁ : A} {a₁₋₁ : a₁₀₁ ＝ a₁₁₁}
+    {a₁₁₋ : a₁₁₀ ＝ a₁₁₁}
+    (a₁₋₋ : Square a₁₀₋ a₁₋₀ a₁₁₋ a₁₋₁)
+    {a₋₁₁ : a₀₁₁ ＝ a₁₁₁}
+    (a₋₁₋ : Square a₀₁₋ a₋₁₀ a₁₁₋ a₋₁₁)
+    (a₋₋₁ : Square a₀₋₁ a₋₀₁ a₁₋₁ a₋₁₁)
+  → Type (level-of-type A)
+Cube a₀₋₋ a₋₀₋ a₋₋₀ a₁₋₋ a₋₁₋ a₋₋₁ =
+  ＜ a₋₋₀ ／ (λ i → Square (a₀₋₋ i) (a₋₀₋ i) (a₁₋₋ i) (a₋₁₋ i)  ) ＼  a₋₋₁ ＞
+
 
 -- Alternative (equivalent) definitions of hlevel n that give fillers for n-cubes instead of n-globes
 
--- isSet' : Type ℓ → Type ℓ
--- isSet' A =
---   {a₀₀ a₀₁ : A} (a₀₋ : a₀₀ ＝ a₀₁)
---   {a₁₀ a₁₁ : A} (a₁₋ : a₁₀ ＝ a₁₁)
---   (a₋₀ : a₀₀ ＝ a₁₀) (a₋₁ : a₀₁ ＝ a₁₁)
---   → Square a₀₋ a₁₋ a₋₀ a₋₁
+is-set-□ : Type ℓ → Type ℓ
+is-set-□ A =
+  {a₀₀ a₀₁ : A} (a₀₋ : a₀₀ ＝ a₀₁)
+  {a₁₀ a₁₁ : A} (a₁₋ : a₁₀ ＝ a₁₁)
+  (a₋₀ : a₀₀ ＝ a₁₀) (a₋₁ : a₀₁ ＝ a₁₁)
+  → Square a₀₋ a₋₀ a₁₋ a₋₁
 
--- isSet→isSet' : isSet A → isSet' A
--- isSet→isSet' Aset _ _ _ _ = toPathP (Aset _ _ _ _)
+is-set→is-set-□ : is-set A → is-set-□ A
+is-set→is-set-□ A-set _ _ _ _ = to-PathP (A-set _ _ _ _)
 
--- isSet'→isSet : isSet' A → isSet A
--- isSet'→isSet Aset' x y p q = Aset' p q refl refl
+is-set-□→is-set : is-set-□ A → is-set A
+is-set-□→is-set A-set-□ x y p q = A-set-□ refl refl p q
 
--- is-prop→is-set' : is-prop A → is-set′ A
--- is-prop→is-set' h {a} p q r s i j = ?
---   hcomp (λ k → λ { (i = i0) → h a (p j) k
---                  ; (i = i1) → h a (q j) k
---                  ; (j = i0) → h a (r i) k
---                  ; (j = i1) → h a (s i) k}) a
+is-prop→is-set-□ : is-prop A → is-set-□ A
+is-prop→is-set-□ h {a₀₀} p q r s i j = hcomp (∂ i ∨ ∂ j) λ where
+  k (i = i0) → h a₀₀ (r j) k
+  k (i = i1) → h a₀₀ (s j) k
+  k (j = i0) → h a₀₀ (p i) k
+  k (j = i1) → h a₀₀ (q i) k
+  k (k = i0) → a₀₀
 
+-- TODO uncomment and fix
 -- isGroupoid' : Type ℓ → Type ℓ
 -- isGroupoid' A =
 --   {a₀₀₀ a₀₀₁ : A} {a₀₀₋ : a₀₀₀ ＝ a₀₀₁}

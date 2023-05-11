@@ -67,7 +67,7 @@ module _ where private
 -- path space has a groupoid structure
 
 ∙-filler₂ : (q : x ＝ y) (r : y ＝ z)
-          → Square q (q ∙ r) r refl
+          → Square q (q ∙ r) refl r
 ∙-filler₂ q r k i = hcomp (k ∨ ∂ i) λ where
   l (l = i0) → q (i ∨ k)
   l (k = i1) → r (l ∧ i)
@@ -110,7 +110,7 @@ module _ where private
 
 commutes→square : {p : w ＝ x} {q : w ＝ y} {s : x ＝ z} {r : y ＝ z}
                 → p ∙ s ＝ q ∙ r
-                → Square p q s r
+                → Square p q r s
 commutes→square {p} {q} {s} {r} fill i j =
   hcomp (∂ i ∨ ∂ j) λ where
     k (k = i0) → fill j i
@@ -120,7 +120,7 @@ commutes→square {p} {q} {s} {r} fill i j =
     k (j = i1) → ∙-filler₂ q r k i
 
 square→commutes : {p : w ＝ x} {q : w ＝ y} {s : x ＝ z} {r : y ＝ z}
-                → Square p q s r
+                → Square p q r s
                 → p ∙ s ＝ q ∙ r
 square→commutes {p} {q} {s} {r} fill i j = hcomp (∂ i ∨ ∂ j) λ where
   k (k = i0) → fill j i
