@@ -11,6 +11,7 @@ open import Prim.Data.Sigma public
 open import Prim.Data.Pi    public
 open import Prim.Data.Unit  public
 
+
 infixr 30 _∙_
 infix  3 _∎
 infixr 2 _＝⟨_⟩_ _＝⟨⟩_
@@ -27,19 +28,21 @@ private variable
   B : A → Type ℓ
   x y z w : A
 
-Square : {ℓ : Level} {A : Type ℓ} {a00 a01 a10 a11 : A}
-         (p : a00 ＝ a01) (q : a00 ＝ a10)
-         (s : a01 ＝ a11) (r : a10 ＝ a11)
-       → Type ℓ
+lift-ext : {a b : Lift {ℓ} ℓ′ A} → (lower a ＝ lower b) → a ＝ b
+lift-ext x i = lift (x i)
+
+Square : {a₀₀ a₀₁ a₁₀ a₁₁ : A}
+         (p : a₀₀ ＝ a₀₁) (q : a₀₀ ＝ a₁₀)
+         (s : a₀₁ ＝ a₁₁) (r : a₁₀ ＝ a₁₁)
+       → Type (level-of-type A)
 Square p q s r = ＜ q ／ (λ i → p i ＝ r i) ＼ s ＞
 
 infix 0 Square-syntax
-Square-syntax : {ℓ : Level} {A : Type ℓ}
-                (d₁ d₂ d₃ d₄ d₅ : ⊤)
+Square-syntax : (d₁ d₂ d₃ d₄ d₅ : ⊤)
                 (a₀₀ a₀₁ a₁₀ a₁₁ : A)
                 (p : a₀₀ ＝ a₀₁) (q : a₀₀ ＝ a₁₀)
                 (s : a₀₁ ＝ a₁₁) (r : a₁₀ ＝ a₁₁)
-              → Type ℓ
+              → Type (level-of-type A)
 Square-syntax _ _ _ _ _ _ _ _ _ = Square
 -- be not afraid
 syntax Square-syntax d₁ d₂ d₃ d₄ d₅ a₀₀ a₀₁ a₁₀ a₁₁ p q s r =
@@ -48,7 +51,7 @@ syntax Square-syntax d₁ d₂ d₃ d₄ d₅ a₀₀ a₀₁ a₁₀ a₁₁ p 
 -- symP infers the type of its argument from the type of its output
 symP : {A : I → Type ℓ} → {x : A i1} → {y : A i0}
        (p : ＜ x    ／ (λ i → A (~ i)) ＼    y ＞)
-      →     ＜ y ／    (λ i → A    i )    ＼ x ＞
+     →      ＜ y ／    (λ i → A    i )    ＼ x ＞
 symP p j = p (~ j)
 
 -- symP infers the type of its output from the type of its argument
@@ -57,7 +60,7 @@ symP-from-goal : {A : I → Type ℓ} {x : A i0} {y : A i1}
                →      ＜ y ／    (λ i → A (~ i))    ＼ x ＞
 symP-from-goal p j = p (~ j)
 
-cong-simple : {B : Type ℓ} (f : A → B)
+cong-simple : {B : Type ℓ′} (f : A → B)
               (p : x ＝ y) → f x ＝ f y
 cong-simple f p i = f (p i)
 {-# INLINE cong-simple #-}
@@ -102,7 +105,7 @@ congP₂ f p q i = f i (p i) (q i)
 -}
 
 -- formal definition of an open box
-module _ {A : Type ℓ} {w x y z : A} {p : w ＝ x} {q : x ＝ y} {r : y ＝ z} where private
+module _ {w x y z : A} {p : w ＝ x} {q : x ＝ y} {r : y ＝ z} where private
   double-comp-tube : (i j : I) → Partial (~ i ∨ i ∨ ~ j) A
   double-comp-tube i j (i = i0) = sym p j
   double-comp-tube i j (i = i1) = r j
@@ -194,39 +197,20 @@ p ∙ q = refl ∙∙ p ∙∙ q
 ∙-unique {p} {q} r square i =
   ∙∙-unique refl p q (_ , square) (_ , (∙-filler p q)) i .fst
 
--- We could have also defined single composition by taking `refl` on the right
-infixr 30 _∙′_
-_∙′_ : x ＝ y → y ＝ z → x ＝ z
-p ∙′ q = p ∙∙ q ∙∙ refl
-
-∙′-filler : (p : x ＝ y) (q : y ＝ z)
-         →  y  ̇      q       ̇ z
-                ┌─────────┐ _
-                │    _    │
-        sym p   │    _    │   refl
-                │    _    │ _
-                └─────────┘
-            x  ̇    p ∙′ q    ̇ z
-∙′-filler p q = ∙∙-filler p q refl
-
 -- It's easy to show that `p ∙ q` also has such a filler:
 ∙-filler′ : (p : x ＝ y) (q : y ＝ z)
-         →  y  ̇      q       ̇ z
-                ┌─────────┐ _
-                │    _    │
-        sym p   │    _    │   refl
-                │    _    │ _
-                └─────────┘
-            x  ̇    p ∙ q     ̇ z
+          →  y  ̇      q       ̇ z
+                 ┌─────────┐ _
+                 │    _    │
+         sym p   │    _    │   refl
+                 │    _    │ _
+                 └─────────┘
+             x  ̇    p ∙ q     ̇ z
 ∙-filler′ p q j i = hcomp (∂ i ∨ ~ j) λ where
   k (i = i0) → p (~ j)
   k (i = i1) → q k
   k (j = i0) → q (i ∧ k)
   k (k = i0) → p (i ∨ ~ j)
-
--- From this, we can show that these two notions of composition are the same
-∙＝∙′ : (p : x ＝ y) (q : y ＝ z) → p ∙ q ＝ p ∙′ q
-∙＝∙′ p q j = ∙∙-unique p q refl (p ∙ q , ∙-filler′ p q) (p ∙′ q , ∙′-filler p q) j .fst
 
 -- Double composition agrees with iterated single composition
 ∙∙＝∙ : (p : x ＝ y) (q : y ＝ z) (r : z ＝ w)
@@ -236,38 +220,6 @@ p ∙′ q = p ∙∙ q ∙∙ refl
   k (j = i0) → p (~ k)
   k (j = i1) → r (i ∨ k)
   k (k = i0) → ∙-filler q r i j
-
--- Or even top side `refl`
-infixr 30 _∙″_
-_∙″_ : x ＝ y → y ＝ z → x ＝ z
-p ∙″ q = p ∙∙ refl ∙∙ q
-
-∙″-filler : (p : x ＝ y) (q : y ＝ z)
-          →  y  ̇    refl      ̇ y
-                 ┌─────────┐ _
-                 │    _    │
-         sym p   │    _    │   q
-                 │    _    │ _
-                 └─────────┘
-             x  ̇    p ∙″ q    ̇ z
-∙″-filler p q = ∙∙-filler p refl q
-
-∙-filler″ : (p : x ＝ y) (q : y ＝ z)
-          →  y  ̇    refl      ̇ y
-                 ┌─────────┐ _
-                 │    _    │
-         sym p   │    _    │   q
-                 │    _    │ _
-                 └─────────┘
-             x  ̇    p ∙ q     ̇ z
-∙-filler″ {y} p q j i = hcomp (∂ i ∨ ~ j) λ where
-  k (i = i0) → p (~ j)
-  k (i = i1) → q (j ∧ k)
-  k (j = i0) → y
-  k (k = i0) → p (i ∨ ~ j)
-
-∙＝∙″ : (p : x ＝ y) (q : y ＝ z) → p ∙ q ＝ p ∙″ q
-∙＝∙″ p q j = ∙∙-unique p refl q (p ∙ q , ∙-filler″ p q) (p ∙″ q , ∙″-filler p q) j .fst
 
 
 -- Heterogeneous path composition and its filler:
@@ -455,9 +407,9 @@ _＝$S_ = fun-ext-simple⁻
 happly-simple = fun-ext-simple⁻
 
 homotopy-natural : {A : Type ℓ} {B : Type ℓ′}
-                 → {f g : A → B}
-                 → (H : (x : A) → f x ＝ g x)
-                 → {x y : A} (p : x ＝ y)
+                   {f g : A → B}
+                   (H : Π[ a ꞉ A ] (f a ＝ g a))
+                   {x y : A} (p : x ＝ y)
                  → H x ∙ cong g p ＝ cong f p ∙ H y
 homotopy-natural {f} {g} H {x} {y} p = ∙-unique _ λ i j →
   hcomp (~ i ∨ ∂ j) λ where
@@ -466,14 +418,16 @@ homotopy-natural {f} {g} H {x} {y} p = ∙-unique _ λ i j →
     k (j = i0) → f x
     k (j = i1) → H (p k) i
 
-homotopy-sym-inv : {f : A → A} (H : ∀ a → f a ＝ a) (a : A)
-                 → Path (f a ＝ f a) (λ i → H (H a (~ i)) i) refl
-homotopy-sym-inv {f} H a i j = hcomp (∂ i ∨ ∂ j) λ where
-  k (i = i0) → H (H a (~ j)) j
-  k (i = i1) → H a (j ∧ ~ k)
-  k (j = i0) → f a
-  k (j = i1) → H a (i ∧ ~ k)
-  k (k = i0) → H (H a (i ∨ ~ j)) j
+homotopy-sym-inv : {f : A → A}
+                   (H : Π[ a ꞉ A ] (f a ＝ a))
+                   (x : A)
+                 → Path (f x ＝ f x) (λ i → H (H x (~ i)) i) refl
+homotopy-sym-inv {f} H x i j = hcomp (∂ i ∨ ∂ j) λ where
+  k (i = i0) → H (H x (~ j)) j
+  k (i = i1) → H x (j ∧ ~ k)
+  k (j = i0) → f x
+  k (j = i1) → H x (i ∧ ~ k)
+  k (k = i0) → H (H x (i ∨ ~ j)) j
 
 
 -- Direct definitions of lower h-levels
@@ -538,7 +492,6 @@ Singleton⁻-is-contr : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
                     → is-contr (Singleton⁻ a)
 Singleton⁻-is-contr {a} _ = (a , refl) , Singleton⁻-is-prop
 
--- TODO rephrase as map on snd
 Singleton⁻-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
                     → is-contr⁻ (Singleton⁻ a)
 Singleton⁻-is-contr⁻ {a} _ = (a , refl) , sym ∘ Singleton⁻-is-prop
@@ -740,16 +693,14 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where
 
 
 -- Sigma path space
-Σ-PathP : {A : Type ℓ} {B : A → Type ℓ′}
-        → {x y : Σ A B}
-        → (p :              x .fst ＝ y .fst                 )
+Σ-PathP : {x y : Σ A B}
+          (p :              x .fst ＝ y .fst                 )
         →   ＜ x .snd ／     (λ i → B (p i))    ＼ y .snd ＞
-        → x ＝ y
+        →      x                   ＝              y
 Σ-PathP p q i = p i , q i
 
-Σ-Path : {A : Type ℓ} {B : A → Type ℓ′}
-       → {x y : Σ A B}
-       → (p : x .fst ＝ y .fst)
+Σ-Path : {x y : Σ A B}
+         (p : x .fst ＝ y .fst)
        → subst B p (x .snd) ＝ (y .snd)
        → x ＝ y
 Σ-Path p q = Σ-PathP p (to-PathP q)
@@ -769,7 +720,7 @@ double-composite p q r i j =
 
 transport-path : {x y x′ y′ : A}
                → (p : x ＝ y)
-               → (left : x ＝ x′) → (right : y ＝ y′)
+               → (left : x ＝ x′) (right : y ＝ y′)
                → transport (λ i → left i ＝ right i) p ＝ sym left ∙ p ∙ right
 transport-path {A} p left right = lemma ∙ double-composite _ _ _
   where
@@ -809,177 +760,3 @@ subst-path-both : {x x′ : A}
                 → (adj : x ＝ x′)
                 → subst (λ x → x ＝ x) adj p ＝ sym adj ∙ p ∙ adj
 subst-path-both p adj = transport-path p adj adj
-
-
--- TODO Move to another file?
--- Whiskering a dependent path by a path
-
--- Double whiskering
-infix 8 _◁_▷_
-_◁_▷_ : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
-      →    a₀ ＝ a₀′ → ＜ a₀′ ／ A ＼ a₁ ＞ → a₁ ＝ a₁′
-      → ＜ a₀              ／    A    ＼            a₁′ ＞
-(p ◁ P ▷ q) i = hcomp (∂ i) λ where
-  j (i = i0) → p (~ j)
-  j (i = i1) → q j
-  j (j = i0) → P i
-
-double-whiskering-filler
-  : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
-  → (p : a₀ ＝ a₀′) (pq : PathP A a₀′ a₁) (q : a₁ ＝ a₁′)
-  → ＜ pq ／ (λ i → ＜ p (~ i) ／ A ＼ q i ＞) ＼ p ◁ pq ▷ q ＞
-double-whiskering-filler p pq q k i = hfill (∂ i) k λ where
-  j (i = i0) → p (~ j)
-  j (i = i1) → q j
-  j (j = i0) → pq i
-
-infix 24 _◁_
-_◁_ : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ : A i1}
-    →    a₀ ＝ a₀′ → ＜ a₀′ ／ A ＼    a₁ ＞
-    → ＜ a₀              ／    A    ＼ a₁ ＞
-(p ◁ q) = p ◁ q ▷ refl
-
-infix 24 _▷_
-_▷_ : {A : I → Type ℓ} {a₀ : A i0} {a₁ a₁′ : A i1}
-    → ＜ a₀    ／ A ＼ a₁ ＞ → a₁ ＝ a₁′
-    → ＜ a₀ ／    A    ＼            a₁′ ＞
-p ▷ q  = refl ◁ p ▷ q
-
-
--- TODO Move to another file?
--- Higher cube types
-
--- Square : {ℓ : Level} {A : Type ℓ} {a00 a01 a10 a11 : A}
---          (p : a00 ＝ a01) (q : a00 ＝ a10)
---          (s : a01 ＝ a11) (r : a10 ＝ a11)
---        → Type ℓ
--- Square p q s r = ＜ q ／ (λ i → p i ＝ r i) ＼ s ＞
-
-SquareP
-  : (A : I → I → Type ℓ)
-    {a₀₀ : A i0 i0} {a₀₁ : A i0 i1} (a₀₋ : ＜ a₀₀ ／ (λ j → A i0 j) ＼ a₀₁ ＞)
-    {a₁₀ : A i1 i0} {a₁₁ : A i1 i1} (a₁₋ : ＜ a₁₀ ／ (λ j → A i1 j) ＼ a₁₁ ＞)
-    (a₋₀ : ＜ a₀₀ ／ (λ i → A i i0) ＼ a₁₀ ＞) (a₋₁ : ＜ a₀₁ ／ (λ i → A i i1) ＼ a₁₁ ＞)
-  → Type ℓ
-SquareP A a₀₋ a₁₋ a₋₀ a₋₁ = ＜ a₀₋ ／ (λ i → ＜ a₋₀ i ／ (λ j → A i j) ＼ a₋₁ i ＞) ＼ a₁₋ ＞
-
--- Cube :
---   {a₀₀₀ a₀₀₁ : A} {a₀₀₋ : a₀₀₀ ＝ a₀₀₁}
---   {a₀₁₀ a₀₁₁ : A} {a₀₁₋ : a₀₁₀ ＝ a₀₁₁}
---   {a₀₋₀ : a₀₀₀ ＝ a₀₁₀} {a₀₋₁ : a₀₀₁ ＝ a₀₁₁}
---   (a₀₋₋ : Square a₀₀₋ a₀₁₋ a₀₋₀ a₀₋₁)
---   {a₁₀₀ a₁₀₁ : A} {a₁₀₋ : a₁₀₀ ＝ a₁₀₁}
---   {a₁₁₀ a₁₁₁ : A} {a₁₁₋ : a₁₁₀ ＝ a₁₁₁}
---   {a₁₋₀ : a₁₀₀ ＝ a₁₁₀} {a₁₋₁ : a₁₀₁ ＝ a₁₁₁}
---   (a₁₋₋ : Square a₁₀₋ a₁₁₋ a₁₋₀ a₁₋₁)
---   {a₋₀₀ : a₀₀₀ ＝ a₁₀₀} {a₋₀₁ : a₀₀₁ ＝ a₁₀₁}
---   (a₋₀₋ : Square a₀₀₋ a₁₀₋ a₋₀₀ a₋₀₁)
---   {a₋₁₀ : a₀₁₀ ＝ a₁₁₀} {a₋₁₁ : a₀₁₁ ＝ a₁₁₁}
---   (a₋₁₋ : Square a₀₁₋ a₁₁₋ a₋₁₀ a₋₁₁)
---   (a₋₋₀ : Square a₀₋₀ a₁₋₀ a₋₀₀ a₋₁₀)
---   (a₋₋₁ : Square a₀₋₁ a₁₋₁ a₋₀₁ a₋₁₁)
---   → Type _
--- Cube a₀₋₋ a₁₋₋ a₋₀₋ a₋₁₋ a₋₋₀ a₋₋₁ =
---   PathP (λ i → Square (a₋₀₋ i) (a₋₁₋ i) (a₋₋₀ i) (a₋₋₁ i)) a₀₋₋ a₁₋₋
-
-
--- TODO Move to another file
--- Horizontal composition of squares (along their second dimension)
--- See Cubical.Foundations.Path for vertical composition
-
--- infixr 30 _∙₂_
--- _∙₂_ :
---   {a₀₀ a₀₁ a₀₂ : A} {a₀₋ : a₀₀ ＝ a₀₁} {b₀₋ : a₀₁ ＝ a₀₂}
---   {a₁₀ a₁₁ a₁₂ : A} {a₁₋ : a₁₀ ＝ a₁₁} {b₁₋ : a₁₁ ＝ a₁₂}
---   {a₋₀ : a₀₀ ＝ a₁₀} {a₋₁ : a₀₁ ＝ a₁₁} {a₋₂ : a₀₂ ＝ a₁₂}
---   (p : Square a₀₋ a₁₋ a₋₀ a₋₁) (q : Square b₀₋ b₁₋ a₋₁ a₋₂)
---   → Square (a₀₋ ∙ b₀₋) (a₁₋ ∙ b₁₋) a₋₀ a₋₂
--- _∙₂_ = congP₂ (λ _ → _∙_)
-
-
--- TODO Move to another file
--- Alternative (equivalent) definitions of hlevel n that give fillers for n-cubes instead of n-globes
-
--- isSet' : Type ℓ → Type ℓ
--- isSet' A =
---   {a₀₀ a₀₁ : A} (a₀₋ : a₀₀ ＝ a₀₁)
---   {a₁₀ a₁₁ : A} (a₁₋ : a₁₀ ＝ a₁₁)
---   (a₋₀ : a₀₀ ＝ a₁₀) (a₋₁ : a₀₁ ＝ a₁₁)
---   → Square a₀₋ a₁₋ a₋₀ a₋₁
-
--- isSet→isSet' : isSet A → isSet' A
--- isSet→isSet' Aset _ _ _ _ = toPathP (Aset _ _ _ _)
-
--- isSet'→isSet : isSet' A → isSet A
--- isSet'→isSet Aset' x y p q = Aset' p q refl refl
-
--- isGroupoid' : Type ℓ → Type ℓ
--- isGroupoid' A =
---   {a₀₀₀ a₀₀₁ : A} {a₀₀₋ : a₀₀₀ ＝ a₀₀₁}
---   {a₀₁₀ a₀₁₁ : A} {a₀₁₋ : a₀₁₀ ＝ a₀₁₁}
---   {a₀₋₀ : a₀₀₀ ＝ a₀₁₀} {a₀₋₁ : a₀₀₁ ＝ a₀₁₁}
---   (a₀₋₋ : Square a₀₀₋ a₀₁₋ a₀₋₀ a₀₋₁)
---   {a₁₀₀ a₁₀₁ : A} {a₁₀₋ : a₁₀₀ ＝ a₁₀₁}
---   {a₁₁₀ a₁₁₁ : A} {a₁₁₋ : a₁₁₀ ＝ a₁₁₁}
---   {a₁₋₀ : a₁₀₀ ＝ a₁₁₀} {a₁₋₁ : a₁₀₁ ＝ a₁₁₁}
---   (a₁₋₋ : Square a₁₀₋ a₁₁₋ a₁₋₀ a₁₋₁)
---   {a₋₀₀ : a₀₀₀ ＝ a₁₀₀} {a₋₀₁ : a₀₀₁ ＝ a₁₀₁}
---   (a₋₀₋ : Square a₀₀₋ a₁₀₋ a₋₀₀ a₋₀₁)
---   {a₋₁₀ : a₀₁₀ ＝ a₁₁₀} {a₋₁₁ : a₀₁₁ ＝ a₁₁₁}
---   (a₋₁₋ : Square a₀₁₋ a₁₁₋ a₋₁₀ a₋₁₁)
---   (a₋₋₀ : Square a₀₋₀ a₁₋₀ a₋₀₀ a₋₁₀)
---   (a₋₋₁ : Square a₀₋₁ a₁₋₁ a₋₀₁ a₋₁₁)
---   → Cube a₀₋₋ a₁₋₋ a₋₀₋ a₋₁₋ a₋₋₀ a₋₋₁
-
-
--- TODO uncomment
--- Essential properties of isProp and isContr
-
--- isProp→PathP : ∀ {B : I → Type ℓ} → ((i : I) → isProp (B i))
---                → (b0 : B i0) (b1 : B i1)
---                → PathP B b0 b1
--- isProp→PathP hB b0 b1 = toPathP (hB _ _ _)
-
--- isPropIsContr : isProp (isContr A)
--- isPropIsContr (c0 , h0) (c1 , h1) j .fst = h0 c1 j
--- isPropIsContr (c0 , h0) (c1 , h1) j .snd y i =
---    hcomp (λ k → λ { (i = i0) → h0 (h0 c1 j) k;
---                     (i = i1) → h0 y k;
---                     (j = i0) → h0 (h0 y i) k;
---                     (j = i1) → h0 (h1 y i) k})
---          c0
-
--- isContr→isProp : isContr A → isProp A
--- isContr→isProp (x , p) a b = sym (p a) ∙ p b
-
--- isProp→isSet : isProp A → isSet A
--- isProp→isSet h a b p q j i =
---   hcomp (λ k → λ { (i = i0) → h a a k
---                  ; (i = i1) → h a b k
---                  ; (j = i0) → h a (p i) k
---                  ; (j = i1) → h a (q i) k }) a
-
--- isProp→isSet' : isProp A → isSet' A
--- isProp→isSet' h {a} p q r s i j =
---   hcomp (λ k → λ { (i = i0) → h a (p j) k
---                  ; (i = i1) → h a (q j) k
---                  ; (j = i0) → h a (r i) k
---                  ; (j = i1) → h a (s i) k}) a
-
--- isPropIsProp : isProp (isProp A)
--- isPropIsProp f g i a b = isProp→isSet f a b (f a b) (g a b) i
-
--- isPropSingl : {a : A} → isProp (singl a)
--- isPropSingl = isContr→isProp (isContrSingl _)
-
--- isPropSinglP : {A : I → Type ℓ} {a : A i0} → isProp (singlP A a)
--- isPropSinglP = isContr→isProp (isContrSinglP _ _)
-
-
--- TODO refactor
--- -- Universe lifting
--- liftExt : ∀ {A : Type ℓ} {a b : Lift {ℓ} {ℓ'} A} → (lower a ＝ lower b) → a ＝ b
--- liftExt x i = lift (x i)
-
--- onAllPaths : (Type ℓ → Type ℓ) → Type ℓ → Type ℓ
--- onAllPaths S A = (x y : A) → S (x ＝ y)

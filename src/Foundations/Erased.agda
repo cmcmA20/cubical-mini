@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Prim.Erased where
+module Foundations.Erased where
 
 open import Prim.Type
 open import Prim.Interval
@@ -20,9 +20,9 @@ instance
   Erased-inst : {A : Type ℓ} → ⦃ A ⦄ → Erased A
   Erased-inst ⦃ (a) ⦄ .erased = a
 
-[]-cong : Erased (x ＝ y) → ([ x ]ᴱ ＝ [ y ]ᴱ)
-[]-cong [ p ]ᴱ = λ i → [ p i ]ᴱ
+[]ᴱ-cong : Erased (x ＝ y) → ([ x ]ᴱ ＝ [ y ]ᴱ)
+[]ᴱ-cong [ p ]ᴱ = λ i → [ p i ]ᴱ
 
 substᴱ : (B : @0 A → Type ℓ′) → (@0 p : x ＝ y) → B x → B y
 substᴱ B p = transport (λ i → B (p i))
--- substᴱ B p = subst (λ z → B (z .erased)) ([]-cong [ p ])
+-- substᴱ B p = subst (λ z → B (z .erased)) ([]ᴱ-cong [ p ]ᴱ)

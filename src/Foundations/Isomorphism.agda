@@ -2,6 +2,7 @@
 module Foundations.Isomorphism where
 
 open import Foundations.Prelude
+open import Foundations.Equiv.Base
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -61,4 +62,7 @@ id-composition→Iso {f} r g p .inv = f
 id-composition→Iso {f} r g p .rinv y = sym (r .linv (g (f y))) ∙∙ cong (λ φ → r .inv (φ (f y))) p ∙∙ r .linv y
 id-composition→Iso     r g p .linv y = ap (_$ y) p
 
--- TODO properties
+is-equiv→is-iso : {f : A → B} → is-equiv f → is-iso f
+is-iso.inv  (is-equiv→is-iso eqv) = equiv→inverse eqv
+is-iso.rinv (is-equiv→is-iso eqv) y = eqv .equiv-proof y .fst .snd
+is-iso.linv (is-equiv→is-iso {f} eqv) x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst

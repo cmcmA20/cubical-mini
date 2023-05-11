@@ -44,3 +44,7 @@ Equiv-action {ℓ} S = {X Y : Type ℓ} → X ≃ Y → S X ≃ S Y
 
 Equiv-action→Str-equiv : {S : Type ℓ → Type ℓ″} → Equiv-action S → Str-equiv S ℓ″
 Equiv-action→Str-equiv α (X , s) (Y , t) e = equiv-forward (α e) s ＝ t
+
+
+_on-all-paths-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S on-all-paths-of A = (x y : A) → S (x ＝ y)
