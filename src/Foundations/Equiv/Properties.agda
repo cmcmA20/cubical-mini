@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Equiv.Properties where
 
-open import Foundations.Prelude
+open import Foundations.Base
 open import Foundations.Isomorphism
 open import Foundations.HLevel
 

@@ -6,13 +6,13 @@ Some basic utilities for reflection
 {-# OPTIONS --safe #-}
 module Prim.Reflection where
 
--- TODO: proper reexports
-
 open import Prim.Type
 open import Prim.Data.Nat
 open import Prim.Data.List
 open import Prim.Data.String
 
+-- TODO: reexport everything from here, rename as needed
+--       all the following stuff should go into `Reflection.Base`
 import Agda.Builtin.Reflection as R
 
 _>>=_ = R.bindTC

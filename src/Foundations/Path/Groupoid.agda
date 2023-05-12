@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Path.Groupoid where
 
-open import Foundations.Prelude
+open import Foundations.Base
 
 private variable
   ℓ ℓ′ : Level

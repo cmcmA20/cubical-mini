@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Prelude where
+module Foundations.Base where
 
 open import Prim.Type       public
 open import Prim.Interval   public

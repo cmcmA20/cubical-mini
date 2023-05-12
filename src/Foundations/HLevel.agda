@@ -3,7 +3,7 @@ module Foundations.HLevel where
 
 open import Prim.Data.Nat
 
-open import Foundations.Prelude
+open import Foundations.Base
 
 HLevel : Type₀
 HLevel = ℕ

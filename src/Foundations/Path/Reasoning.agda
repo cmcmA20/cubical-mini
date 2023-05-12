@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Path.Reasoning where
 
-open import Foundations.Prelude
+open import Foundations.Base
 open import Foundations.Path.Groupoid
 
 private variable

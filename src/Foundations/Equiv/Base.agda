@@ -3,7 +3,7 @@ module Foundations.Equiv.Base where
 
 open import Prim.Equiv public
 
-open import Foundations.Prelude
+open import Foundations.Base
 open import Foundations.Path
 open import Foundations.HLevel
 
@@ -28,15 +28,15 @@ section = _is-right-inverse-of_
 
 -- Helper function for constructing equivalences from pairs (f,g) that cancel each other up to definitional
 -- equality. For such (f,g), the result type simplifies to is-contr (fibre f b).
-strict-contr-fibers : (g : B → A) (b : B)
+strict-contr-fibres : (g : B → A) (b : B)
                     → Σ[ t  ꞉ fibre f (f (g b)) ]
                       Π[ t′ ꞉ fibre f       b   ]
                       Path (fibre f (f (g b))) t (g (f (t′ .fst)) , ap (f ∘ g) (t′ .snd))
-strict-contr-fibers     g b .fst = g b , refl
-strict-contr-fibers {f} g b .snd (a , p) i = g (p (~ i)) , λ j → f (g (p (~ i ∨ j)))
+strict-contr-fibres     g b .fst = g b , refl
+strict-contr-fibres {f} g b .snd (a , p) i = g (p (~ i)) , λ j → f (g (p (~ i ∨ j)))
 
 id-is-equiv : is-equiv (id {A = A})
-id-is-equiv .equiv-proof = strict-contr-fibers id
+id-is-equiv .equiv-proof = strict-contr-fibres id
 
 idₑ : A ≃ A
 idₑ = id , id-is-equiv

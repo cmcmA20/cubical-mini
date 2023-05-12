@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Isomorphism where
 
-open import Foundations.Prelude
+open import Foundations.Base
 open import Foundations.Equiv.Base
 
 private variable

@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Cubes.Base where
 
-open import Foundations.Prelude
+open import Foundations.Base
 
 private variable
   ℓ : Level
