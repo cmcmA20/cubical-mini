@@ -6,7 +6,7 @@ When preparing a PR here are some general guidelines:
 
 - To test your changes before submission, run `make` at the top level,
   which will generate all required `Everything` files in
-  `Cubical/README.agda` and then typecheck the latter file.
+  `src/README.agda` and then typecheck the latter file.
 
 - Please read through and clean your code before making a PR. Clean
   code has reasonable line length (<100 characters), good indentation,
@@ -126,7 +126,7 @@ When preparing a PR here are some general guidelines:
   Do not import and do not use Agda primitives/builtins from `Agda.Builtin.*`
   and the like.
 
-  In other modules you can import anything but `Prim`.
+  In other modules you must avoid importing `Prim`.
   Do not import and do not use Agda primitives/builtins from `Agda.Builtin.*`
   and the like.
 

@@ -13,18 +13,19 @@ module README where
 -- Module hierarchy
 ------------------------------------------------------------------------
 
--- The core library for Cubical Agda.
--- It contains basic primitives.
+-- Builtin/primitives, "machine code" of CuTT and compiler directives.
 import Prim.Everything
 
--- Data structures and their properties
-import Data.Everything
-
+-- Basic definitions, the toolset of a civilized man.
 import Foundations.Everything
 
+-- Data structures and their properties.
+import Data.Everything
+
+-- Standard structures a la Escardo
+import Structures.Everything
+
 -- TODO
--- import Cubical.Foundations.Prelude
---
 -- -- Kinds and properties of functions
 -- import Cubical.Functions.Everything
 --
@@ -43,9 +44,6 @@ import Foundations.Everything
 -- -- Other modules (TODO: add descriptions)
 -- import Cubical.Induction.Everything
 --
--- -- Standard structures a la Escardo?
--- import Cubical.Structures.Everything
---
 -- -- Algebra library
 -- import Cubical.Algebra.Everything
 --
@@ -59,18 +57,19 @@ import Foundations.Everything
 -- import Cubical.Displayed.Everything
 --
 -- -- Homotopy level truncations
--- import Cubical.Truncation.Everything
+-- import Cubical.Truncations.Everything
 --
 -- -- Quotients
--- import Cubical.Quotient.Everything
+-- import Cubical.Quotients.Everything
 --
 -- -- Containers
--- import Cubical.Container.Everything
+-- import Cubical.Containers.Everything
 --
 -- -- Automatic proving, solvers
 -- import Cubical.Tactics.Everything
 --
 -- -- Interfaces for everyday programming
+-- TODO ditch this altogether
 -- import Cubical.Instances.Everything
 --
 -- -- I/O

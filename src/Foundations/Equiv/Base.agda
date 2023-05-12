@@ -2,9 +2,14 @@
 module Foundations.Equiv.Base where
 
 open import Prim.Equiv public
+
 open import Foundations.Prelude
 open import Foundations.Path
 open import Foundations.HLevel
+
+-- include `Equiv` or `_≃_`      if the definition is about equivalences (`_≃_`)
+-- include `equiv` or `is-equiv` if the definition is about function being an equivalence (`is-equiv`)
+-- use `ₑ` subscript for common operators on equivalences
 
 private variable
   ℓ ℓ′ ℓ″ : Level

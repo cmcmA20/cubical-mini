@@ -66,9 +66,9 @@ is-contr→is-prop (centre , paths) x y i = hcomp (∂ i) λ where
   j (i = i1) → paths y j
   j (j = i0) → centre
 
-is-prop-is-contr : is-prop (is-contr A)
-is-prop-is-contr (c₀ , h₀) (c₁ , h₁) j .fst = h₀ c₁ j
-is-prop-is-contr (c₀ , h₀) (c₁ , h₁) j .snd y i = hcomp (∂ i ∨ ∂ j) λ where
+is-contr-is-prop : is-prop (is-contr A)
+is-contr-is-prop (c₀ , h₀) (c₁ , h₁) j .fst = h₀ c₁ j
+is-contr-is-prop (c₀ , h₀) (c₁ , h₁) j .snd y i = hcomp (∂ i ∨ ∂ j) λ where
   k (i = i0) → h₀ (h₀ c₁ j) k
   k (i = i1) → h₀ y k
   k (j = i0) → h₀ (h₀ y i) k

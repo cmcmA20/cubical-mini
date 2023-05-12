@@ -4,6 +4,7 @@ module Foundations.Equiv.Properties where
 open import Foundations.Prelude
 open import Foundations.Isomorphism
 open import Foundations.HLevel
+
 open import Foundations.Equiv.Base
 
 private variable
@@ -16,8 +17,8 @@ private variable
 _ₑ⁻¹ : A ≃ B → B ≃ A
 e ₑ⁻¹ = Iso→Equiv (equiv→inverse (e .snd) , iso (e .fst) (equiv→unit (e .snd)) (equiv→counit (e .snd)))
 
-sym-equiv : (x ＝ y) ≃ (y ＝ x)
-sym-equiv = sym , is-iso→is-equiv (iso sym (λ _ → refl) (λ _ → refl))
+sym-Equiv : (x ＝ y) ≃ (y ＝ x)
+sym-Equiv = sym , is-iso→is-equiv (iso sym (λ _ → refl) (λ _ → refl))
 
 is-contr→is-equiv : is-contr A → is-contr B
                   → {f : A → B} → is-equiv f
@@ -64,10 +65,10 @@ _ ≃⟨⟩ e = e
 _≃∎ : (A : Type ℓ) → A ≃ A
 _ ≃∎ = idₑ
 
-prop-ext : is-prop A → is-prop B
-         → (A → B) → (B → A)
-         → A ≃ B
-prop-ext A-prop B-prop a→b b→a .fst = a→b
-prop-ext A-prop B-prop a→b b→a .snd .equiv-proof y .fst = b→a y , B-prop _ _
-prop-ext A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
+prop-extₑ : is-prop A → is-prop B
+          → (A → B) → (B → A)
+          → A ≃ B
+prop-extₑ A-prop B-prop a→b b→a .fst = a→b
+prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .fst = b→a y , B-prop _ _
+prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
   Σ-PathP (A-prop _ _) (to-PathP (is-prop→is-set B-prop _ _ _ _))

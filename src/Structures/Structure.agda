@@ -1,9 +1,8 @@
 {-# OPTIONS --safe #-}
-module Foundations.Structure where
-
-open import Prim.Equiv public
+module Structures.Structure where
 
 open import Foundations.Prelude
+open import Foundations.Equiv.Base
 
 private variable
   ℓ ℓ′ ℓ″ : Level
