@@ -45,8 +45,8 @@ Square-syntax : (d₁ d₂ d₃ d₄ d₅ : ⊤)
               → Type (level-of-type A)
 Square-syntax _ _ _ _ _ _ _ _ _ p q r s = Square p q r s
 -- be not afraid
-syntax Square-syntax d₁ d₂ d₃ d₄ d₅ a₀₀ a₀₁ a₁₀ a₁₁ p q s r =
-  a₀₀  ̇ q  ̇ a₁₀ ┌─────────┐ d₁ │ d₂ │ p │ d₃ │ s │ d₄ │ d₅ └─────────┘ a₀₁  ̇ r  ̇ a₁₁
+syntax Square-syntax d₁ d₂ d₃ d₄ d₅ a₀₀ a₀₁ a₁₀ a₁₁ p q r s =
+  a₀₀  ̇ q  ̇ a₁₀ ┌─────────┐ d₁ │ d₂ │ p │ d₃ │ r │ d₄ │ d₅ └─────────┘ a₀₁  ̇ s  ̇ a₁₁
 
 -- symP infers the type of its argument from the type of its output
 symP : {A : I → Type ℓ} → {x : A i1} → {y : A i0}
@@ -269,8 +269,8 @@ _◎′_ {B} {x′} {p} {q} P Q i = comp (λ j → B (∙-filler p q j i)) (∂ 
     k (k = i0) → P i
 
 -- `cong` has good computational properties:
-module _ {B : Type ℓ′} {C : Type ℓ″} {x y : A} where
-  module _ {f : A → B} {g : B → C} {p : x ＝ y} where
+module _ {B : Type ℓ′} {x y : A} where
+  module _ {C : Type ℓ″} {f : A → B} {g : B → C} {p : x ＝ y} where
     cong-comp : cong (g ∘ f) p ＝ cong g (cong f p)
     cong-comp = refl
 
@@ -405,29 +405,6 @@ fun-ext-simple⁻ eq x i = eq i x
 
 _＝$S_ = fun-ext-simple⁻
 happly-simple = fun-ext-simple⁻
-
-homotopy-natural : {A : Type ℓ} {B : Type ℓ′}
-                   {f g : A → B}
-                   (H : Π[ a ꞉ A ] (f a ＝ g a))
-                   {x y : A} (p : x ＝ y)
-                 → H x ∙ cong g p ＝ cong f p ∙ H y
-homotopy-natural {f} {g} H {x} {y} p = ∙-unique _ λ i j →
-  hcomp (~ i ∨ ∂ j) λ where
-    k (k = i0) → H x (j ∧ i)
-    k (i = i0) → f (p (j ∧ k))
-    k (j = i0) → f x
-    k (j = i1) → H (p k) i
-
-homotopy-sym-inv : {f : A → A}
-                   (H : Π[ a ꞉ A ] (f a ＝ a))
-                   (x : A)
-                 → Path (f x ＝ f x) (λ i → H (H x (~ i)) i) refl
-homotopy-sym-inv {f} H x i j = hcomp (∂ i ∨ ∂ j) λ where
-  k (i = i0) → H (H x (~ j)) j
-  k (i = i1) → H x (j ∧ ~ k)
-  k (j = i0) → f x
-  k (j = i1) → H x (i ∧ ~ k)
-  k (k = i0) → H (H x (i ∨ ~ j)) j
 
 
 -- Direct definitions of lower h-levels
