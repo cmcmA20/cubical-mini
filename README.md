@@ -7,8 +7,7 @@ This library may be a toolset to help you build reliable software.
 
 Credits:
 
-- I think `Categories` in this formulation were introduced by Frederik Hanghøj
-  Iversen.
+- `Categories` in this formulation were introduced by Frederik Hanghøj Iversen.
 - `Cardinals` follow closely the work of Donnacha Oisín Kidney.
 - `Ordinals` due to Fredrik Nordvall Forsberg et al.
 - `Containers` are folklore, though I took inspiration in a talk by Thorsten

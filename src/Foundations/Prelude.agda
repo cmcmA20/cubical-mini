@@ -60,37 +60,37 @@ symP-from-goal : {A : I → Type ℓ} {x : A i0} {y : A i1}
                →      ＜ y ／    (λ i → A (~ i))    ＼ x ＞
 symP-from-goal p j = p (~ j)
 
-cong-simple : {B : Type ℓ′} (f : A → B)
+ap-simple : {B : Type ℓ′} (f : A → B)
               (p : x ＝ y) → f x ＝ f y
-cong-simple f p i = f (p i)
-{-# INLINE cong-simple #-}
+ap-simple f p i = f (p i)
+{-# INLINE ap-simple #-}
 
 ap = cong
 
-congP : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
-        (f : (i : I) → Π[ a ꞉ A i ] B i a) {x : A i0} {y : A i1}
-        (p : ＜      x    ／ (λ i →       A i) ＼         y ＞)
-      →      ＜ f i0 x ／ (λ i    →  B i (p i))   ＼ f i1 y ＞
-congP f p i = f i (p i)
-{-# INLINE congP #-}
+apP : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
+      (f : (i : I) → Π[ a ꞉ A i ] B i a) {x : A i0} {y : A i1}
+      (p : ＜      x    ／ (λ i →       A i) ＼         y ＞)
+    →      ＜ f i0 x ／ (λ i    →  B i (p i))   ＼ f i1 y ＞
+apP f p i = f i (p i)
+{-# INLINE apP #-}
 
-cong₂ : {C : Π[ a ꞉ A ] Π[ b ꞉ B a ] Type ℓ}
-        (f : Π[ a ꞉ A ] Π[ b ꞉ B a ] C a b)
-        (p : x ＝ y) {u : B x} {v : B y}
-        (q : ＜     u    ／ (λ i →          B (p i)) ＼        v ＞)
-      →      ＜ f x u ／ (λ i    → C (p i) (q    i ))   ＼ f y v ＞
-cong₂ f p q i = f (p i) (q i)
-{-# INLINE cong₂ #-}
+ap₂ : {C : Π[ a ꞉ A ] Π[ b ꞉ B a ] Type ℓ}
+      (f : Π[ a ꞉ A ] Π[ b ꞉ B a ] C a b)
+      (p : x ＝ y) {u : B x} {v : B y}
+      (q : ＜     u    ／ (λ i →          B (p i)) ＼        v ＞)
+    →      ＜ f x u ／ (λ i    → C (p i) (q    i ))   ＼ f y v ＞
+ap₂ f p q i = f (p i) (q i)
+{-# INLINE ap₂ #-}
 
-congP₂ : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
-         {C : (i : I) → Π[ a ꞉ A i ] (B i a → Type ℓ″)}
-         (f : (i : I) → Π[ a ꞉ A i ] Π[ b ꞉ B i a ] C i a b)
-         {x : A i0} {y : A i1} {u : B i0 x} {v : B i1 y}
-         (p : ＜      x         ／ (λ i →      A i)          ＼            y   ＞)
-         (q : ＜        u    ／ (λ i    →            B i (p i)) ＼           v ＞)
-       →      ＜ f i0 x u ／ (λ i       → C i (p i) (q      i ))   ＼ f i1 y v ＞
-congP₂ f p q i = f i (p i) (q i)
-{-# INLINE congP₂ #-}
+apP₂ : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
+       {C : (i : I) → Π[ a ꞉ A i ] (B i a → Type ℓ″)}
+       (f : (i : I) → Π[ a ꞉ A i ] Π[ b ꞉ B i a ] C i a b)
+       {x : A i0} {y : A i1} {u : B i0 x} {v : B i1 y}
+       (p : ＜      x         ／ (λ i →      A i)          ＼            y   ＞)
+       (q : ＜        u    ／ (λ i    →            B i (p i)) ＼           v ＞)
+     →      ＜ f i0 x u ／ (λ i       → C i (p i) (q      i ))   ＼ f i1 y v ＞
+apP₂ f p q i = f i (p i) (q i)
+{-# INLINE apP₂ #-}
 
 {- Observe an "open box".
 
@@ -268,25 +268,25 @@ _◎′_ {B} {x′} {p} {q} P Q i = comp (λ j → B (∙-filler p q j i)) (∂ 
     k (i = i1) → Q k
     k (k = i0) → P i
 
--- `cong` has good computational properties:
+-- `ap` has good computational properties:
 module _ {B : Type ℓ′} {x y : A} where
   module _ {C : Type ℓ″} {f : A → B} {g : B → C} {p : x ＝ y} where
-    cong-comp : cong (g ∘ f) p ＝ cong g (cong f p)
-    cong-comp = refl
+    ap-comp : ap (g ∘ f) p ＝ ap g (ap f p)
+    ap-comp = refl
 
-    cong-id : cong id p ＝ p
-    cong-id = refl
+    ap-id : ap id p ＝ p
+    ap-id = refl
 
-    cong-sym : sym (cong f p) ＝ cong f (sym p)
-    cong-sym = refl
+    ap-sym : sym (ap f p) ＝ ap f (sym p)
+    ap-sym = refl
 
-    cong-refl : cong f (refl {x = x}) ＝ refl
-    cong-refl = refl
+    ap-refl : ap f (refl {x = x}) ＝ refl
+    ap-refl = refl
 
-  cong-comp-∙ : (f : A → B) (p : x ＝ y) (q : y ＝ z) → cong f (p ∙ q) ＝ cong f p ∙ cong f q
-  cong-comp-∙ f p q i = ∙∙-unique refl (cong f p) (cong f q)
-    (cong f (p ∙ q)      , λ k j → f (∙-filler p q k j))
-    (cong f p ∙ cong f q , ∙-filler _ _)
+  ap-comp-∙ : (f : A → B) (p : x ＝ y) (q : y ＝ z) → ap f (p ∙ q) ＝ ap f p ∙ ap f q
+  ap-comp-∙ f p q i = ∙∙-unique refl (ap f p) (ap f q)
+    (ap f (p ∙ q)      , λ k j → f (∙-filler p q k j))
+    (ap f p ∙ ap f q   , ∙-filler _ _)
     i .fst
 
 
@@ -356,12 +356,12 @@ subst-refl = transport-refl
 
 subst-filler : (B : A → Type ℓ′) (p : x ＝ y) (b : B x)
              → ＜ b ／ (λ i → B (p i)) ＼ subst B p b ＞
-subst-filler B p = transport-filler (cong B p)
+subst-filler B p = transport-filler (ap B p)
 
 subst₂-filler : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
                 (p : x ＝ y) (q : z ＝ w) (c : C x z)
               → ＜ c ／ (λ i → C (p i) (q i)) ＼ subst₂ C p q c ＞
-subst₂-filler C p q = transport-filler (cong₂ C p q)
+subst₂-filler C p q = transport-filler (ap₂ C p q)
 
 
 -- Function extensionality
@@ -718,7 +718,7 @@ subst-path-left : {x y x′ : A}
 subst-path-left {y} p left =
   subst (λ e → e ＝ y) left p     ＝⟨⟩
   transport (λ i → left i ＝ y) p ＝⟨ transport-path p left refl ⟩
-  sym left ∙ p ∙ refl             ＝⟨ cong (sym left ∙_) (sym (∙-filler _ _)) ⟩
+  sym left ∙ p ∙ refl             ＝⟨ ap (sym left ∙_) (sym (∙-filler _ _)) ⟩
   sym left ∙ p                    ∎
 
 subst-path-right : {x y y′ : A}

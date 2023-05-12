@@ -102,7 +102,7 @@ homotopy-invert {f} H {x} i j = hcomp (∂ i ∨ ∂ j) λ where
 homotopy-natural : {f g : A → B}
                    (H : Π[ a ꞉ A ] (f a ＝ g a))
                    {x y : A} (p : x ＝ y)
-                 → H x ∙ cong g p ＝ cong f p ∙ H y
+                 → H x ∙ ap g p ＝ ap f p ∙ H y
 homotopy-natural {f} {g} H {x} {y} p = ∙-unique _ λ i j →
   hcomp (~ i ∨ ∂ j) λ where
     k (k = i0) → H x (j ∧ i)

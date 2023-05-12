@@ -26,7 +26,7 @@ section = _is-right-inverse-of_
 strict-contr-fibers : (g : B → A) (b : B)
                     → Σ[ t  ꞉ fibre f (f (g b)) ]
                       Π[ t′ ꞉ fibre f       b   ]
-                      Path (fibre f (f (g b))) t (g (f (t′ .fst)) , cong (f ∘ g) (t′ .snd))
+                      Path (fibre f (f (g b))) t (g (f (t′ .fst)) , ap (f ∘ g) (t′ .snd))
 strict-contr-fibers     g b .fst = g b , refl
 strict-contr-fibers {f} g b .snd (a , p) i = g (p (~ i)) , λ j → f (g (p (~ i ∨ j)))
 

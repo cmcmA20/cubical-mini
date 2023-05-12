@@ -20,10 +20,10 @@ record is-iso (f : A → B) : Type (level-of-type A ⊔ level-of-type B) where
     linv : inv is-left-inverse-of  f
 
   forward-injective : (x y : A) (p : f x ＝ f y) → x ＝ y
-  forward-injective x y p = sym (linv x) ∙∙ cong inv p ∙∙ linv y
+  forward-injective x y p = sym (linv x) ∙∙ ap inv p ∙∙ linv y
 
   inverse-injective : (x y : B) (p : inv x ＝ inv y) → x ＝ y
-  inverse-injective x y p = sym (rinv x) ∙∙ cong f p ∙∙ rinv y
+  inverse-injective x y p = sym (rinv x) ∙∙ ap f p ∙∙ rinv y
 
 open is-iso public
 
@@ -44,15 +44,15 @@ _ᵢ⁻¹ : Iso A B → Iso B A
 
 is-iso-comp : {g : B → C} → is-iso f → is-iso g → is-iso (g ∘ f)
 is-iso-comp     r s .inv    = r .inv ∘ s .inv
-is-iso-comp {g} r s .rinv z = cong g        (r .rinv (s .inv z)) ∙ s .rinv z
-is-iso-comp {f} r s .linv x = cong (r .inv) (s .linv (f      x)) ∙ r .linv x
+is-iso-comp {g} r s .rinv z = ap g        (r .rinv (s .inv z)) ∙ s .rinv z
+is-iso-comp {f} r s .linv x = ap (r .inv) (s .linv (f      x)) ∙ r .linv x
 
 _∙ᵢ_ : Iso A B → Iso B C → Iso A C
 𝔯 ∙ᵢ 𝔰 = 𝔰 .fst ∘ 𝔯 .fst , is-iso-comp (𝔯 .snd) (𝔰 .snd)
 
 id-composition→Iso : (r : is-iso f) (g : B → A) (p : f ∘ g ＝ id) → is-iso g
 id-composition→Iso {f} r g p .inv = f
-id-composition→Iso {f} r g p .rinv y = sym (r .linv (g (f y))) ∙∙ cong (λ φ → r .inv (φ (f y))) p ∙∙ r .linv y
+id-composition→Iso {f} r g p .rinv y = sym (r .linv (g (f y))) ∙∙ ap (λ φ → r .inv (φ (f y))) p ∙∙ r .linv y
 id-composition→Iso     r g p .linv y = ap (_$ y) p
 
 is-equiv→is-iso : is-equiv f → is-iso f
