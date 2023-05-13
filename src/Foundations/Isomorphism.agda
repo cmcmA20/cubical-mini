@@ -25,7 +25,7 @@ record is-iso (f : A → B) : Type (level-of-type A ⊔ level-of-type B) where
   inverse-injective : (x y : B) (p : inv x ＝ inv y) → x ＝ y
   inverse-injective x y p = sym (rinv x) ∙∙ ap f p ∙∙ rinv y
 
-open is-iso public
+open is-iso
 
 is-iso-inv : (r : is-iso f) → is-iso (r . inv)
 is-iso-inv {f} r .inv  = f

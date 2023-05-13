@@ -18,6 +18,8 @@ private variable
 _ₑ⁻¹ : A ≃ B → B ≃ A
 e ₑ⁻¹ = Iso→Equiv (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
 
+open is-iso
+
 inv-equiv-is-equiv : is-equiv (λ (e : A ≃ B) → e ₑ⁻¹)
 inv-equiv-is-equiv = is-iso→is-equiv goal where
   goal : is-iso _ₑ⁻¹
@@ -54,16 +56,16 @@ is-contr→is-equiv : is-contr A → is-contr B
                   → {f : A → B} → is-equiv f
 is-contr→is-equiv contr-A contr-B = is-iso→is-equiv f-is-iso where
   f-is-iso : is-iso _
-  inv  f-is-iso _ = contr-A .fst
-  rinv f-is-iso _ = is-contr→is-prop contr-B _ _
-  linv f-is-iso _ = is-contr→is-prop contr-A _ _
+  f-is-iso .inv  _ = contr-A .fst
+  f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
+  f-is-iso .linv _ = is-contr→is-prop contr-A _ _
 
 is-contr→≃ : is-contr A → is-contr B → A ≃ B
 is-contr→≃ contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
   f-is-iso : is-iso _
-  is-iso.inv f-is-iso _ = contr-A .fst
-  is-iso.rinv f-is-iso _ = is-contr→is-prop contr-B _ _
-  is-iso.linv f-is-iso _ = is-contr→is-prop contr-A _ _
+  f-is-iso .inv  _ = contr-A .fst
+  f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
+  f-is-iso .linv _ = is-contr→is-prop contr-A _ _
 
 module Equiv (e : A ≃ B) where
   to = e .fst
