@@ -319,6 +319,7 @@ along : {A : I → Type ℓ} {x : A i0} {y : A i1}
       → A i
 along i p = p i
 
+
 -- Transport and subst
 
 -- Transporting in a constant family is the identity function (up to a
@@ -330,38 +331,12 @@ transport-filler : {A B : Type ℓ} (p : A ＝ B) (x : A)
                  → ＜ x ／ (λ i → p i) ＼ transport p x ＞
 transport-filler p x i = transp (λ j → p (i ∧ j)) (~ i) x
 
-transport-filler-ext : {A B : Type ℓ} (p : A ＝ B)
-                     → ＜ id ／ (λ i → A → p i) ＼ transport p ＞
-transport-filler-ext p i x = transport-filler p x i
-
-transport⁻-filler-ext : {A B : Type ℓ} (p : A ＝ B)
-                      → ＜ id ／ (λ i → p i → A) ＼ transport (sym p) ＞
-transport⁻-filler-ext p i x = transp (λ j → p (i ∧ ~ j)) (~ i) x
-
-transport⁻transport : {A B : Type ℓ} (p : A ＝ B) (a : A)
-                    → transport (sym p) (transport p a) ＝ a
-transport⁻transport p a i =
-  transport⁻-filler-ext p (~ i) (transport-filler-ext p (~ i) a)
-
 -- We want B to be explicit in subst
 subst : (B : A → Type ℓ′) (p : x ＝ y) → B x → B y
 subst B p = transport (λ i → B (p i))
 
-subst₂ : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
-         (p : x ＝ y) (q : z ＝ w) → C x z → C y w
-subst₂ B p q = transport (λ i → B (p i) (q i))
-
 subst-refl : {B : A → Type ℓ} {x : A} (px : B x) → subst B refl px ＝ px
 subst-refl = transport-refl
-
-subst-filler : (B : A → Type ℓ′) (p : x ＝ y) (b : B x)
-             → ＜ b ／ (λ i → B (p i)) ＼ subst B p b ＞
-subst-filler B p = transport-filler (ap B p)
-
-subst₂-filler : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
-                (p : x ＝ y) (q : z ＝ w) (c : C x z)
-              → ＜ c ／ (λ i → C (p i) (q i)) ＼ subst₂ C p q c ＞
-subst₂-filler C p q = transport-filler (ap₂ C p q)
 
 
 -- Function extensionality
@@ -378,8 +353,9 @@ implicit-fun-ext : {B : A → I → Type ℓ′}
                  →            ＜ f  ／ (λ i → {x : A} → B x i) ＼ g     ＞
 implicit-fun-ext p i {x} = p {x} i
 
--- the inverse to funExt (see Functions.FunExtEquiv), converting paths
--- between functions to homotopies; `funExt⁻` is called `happly` and
+-- TODO fix the comment
+-- the inverse to `fun-ext` (see Functions.FunExtEquiv), converting paths
+-- between functions to homotopies; `fun-ext⁻` is called `happly` and
 -- defined by path induction in the HoTT book (see function 2.9.2 in
 -- section 2.9)
 fun-ext⁻ : {B : A → I → Type ℓ′}
@@ -676,11 +652,11 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where
         →      x                   ＝              y
 Σ-PathP p q i = p i , q i
 
-Σ-Path : {x y : Σ A B}
+Σ-path : {x y : Σ A B}
          (p : x .fst ＝ y .fst)
        → subst B p (x .snd) ＝ (y .snd)
        → x ＝ y
-Σ-Path p q = Σ-PathP p (to-PathP q)
+Σ-path p q = Σ-PathP p (to-PathP q)
 
 
 -- Path transport

@@ -61,37 +61,37 @@ is-equiv-is-prop f p q i .equiv-proof y =
 Equiv-ext : {e₀ e₁ : A ≃ B} (h : e₀ .fst ＝ e₁ .fst) → e₀ ＝ e₁
 Equiv-ext {e₀} {e₁} h i = h i , is-prop→PathP (λ i → is-equiv-is-prop (h i)) (e₀ .snd) (e₁ .snd) i
 
-equiv→inverse : {f : A → B} → is-equiv f → (B → A)
-equiv→inverse eqv y = eqv .equiv-proof y .fst .fst
+is-equiv→inverse : {f : A → B} → is-equiv f → (B → A)
+is-equiv→inverse eqv y = eqv .equiv-proof y .fst .fst
 
-equiv→counit : (eqv : is-equiv f) (y : B) → f (equiv→inverse eqv y) ＝ y
-equiv→counit eqv y = eqv .equiv-proof y .fst .snd
+is-equiv→counit : (eqv : is-equiv f) (y : B) → f (is-equiv→inverse eqv y) ＝ y
+is-equiv→counit eqv y = eqv .equiv-proof y .fst .snd
 
-equiv→unit : (eqv : is-equiv f) (x : A) → equiv→inverse eqv (f x) ＝ x
-equiv→unit {f} eqv x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
+is-equiv→unit : (eqv : is-equiv f) (x : A) → is-equiv→inverse eqv (f x) ＝ x
+is-equiv→unit {f} eqv x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
 
-equiv→zig : (eqv : is-equiv f) (x : A)
-          → ap f (equiv→unit eqv x) ＝ equiv→counit eqv (f x)
-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
-   k (i = i0) → f (equiv→unit eqv x j)
-   k (i = i1) → equiv→counit eqv (f x) (j ∨ ~ k)
-   k (j = i0) → equiv→counit eqv (f x) (i ∧ ~ k)
+is-equiv→zig : (eqv : is-equiv f) (x : A)
+             → ap f (is-equiv→unit eqv x) ＝ is-equiv→counit eqv (f x)
+is-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
+   k (i = i0) → f (is-equiv→unit eqv x j)
+   k (i = i1) → is-equiv→counit eqv (f x) (j ∨ ~ k)
+   k (j = i0) → is-equiv→counit eqv (f x) (i ∧ ~ k)
    k (j = i1) → f x
    k (k = i0) → eqv .equiv-proof (f x) .snd (x , refl) j .snd i
 
-equiv→zag : (eqv : is-equiv f) (y : B)
-          → ap (equiv→inverse eqv) (equiv→counit eqv y) ＝ equiv→unit eqv (equiv→inverse eqv y)
-equiv→zag {f} eqv b =
+is-equiv→zag : (eqv : is-equiv f) (y : B)
+             → ap (is-equiv→inverse eqv) (is-equiv→counit eqv y) ＝ is-equiv→unit eqv (is-equiv→inverse eqv y)
+is-equiv→zag {f} eqv b =
   subst (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
-  g = equiv→inverse eqv
-  ε = equiv→counit eqv
-  η = equiv→unit eqv
+  g = is-equiv→inverse eqv
+  ε = is-equiv→counit eqv
+  η = is-equiv→unit eqv
 
   helper : ∀ a → ap g (ε (f a)) ＝ η (g (f a))
   helper a i j = hcomp (∂ i ∨ ∂ j) λ where
     k (i = i0) → g (ε (f a) (j ∨ ~ k))
     k (i = i1) → η (η a (~ k)) j
-    k (j = i0) → g (equiv→zig eqv a (~ i) (~ k))
+    k (j = i0) → g (is-equiv→zig eqv a (~ i) (~ k))
     k (j = i1) → η a (i ∧ ~ k)
     k (k = i0) → η a (i ∧ j)
 
@@ -103,23 +103,23 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
   contract-inv = Equiv-path (g , v) c
 
   θ : (a : _) (p : g (f a) ＝ c) → _
-  θ a p = ∙-filler (ap (equiv→inverse u ∘ fst) (contract-inv (_ , p))) (equiv→unit u a)
+  θ a p = ∙-filler (ap (is-equiv→inverse u ∘ fst) (contract-inv (_ , p))) (is-equiv→unit u a)
 
   contr : is-contr (fibre (g ∘ f) c)
-  contr .fst .fst = equiv→inverse u (equiv→inverse v c)
-  contr .fst .snd = ap g (equiv→counit u (equiv→inverse v c)) ∙ equiv→counit v c
+  contr .fst .fst = is-equiv→inverse u (is-equiv→inverse v c)
+  contr .fst .snd = ap g (is-equiv→counit u (is-equiv→inverse v c)) ∙ is-equiv→counit v c
   contr .snd (a , p) i .fst = θ a p i1 i
   contr .snd (a , p) i .snd j = hcomp (i ∨ ∂ j) λ where
     k (i = i1) → f-square k
     k (j = i0) → g (f (θ a p k i))
     k (j = i1) → contract-inv (_ , p) i .snd k
-    k (k = i0) → g (equiv→counit u (contract-inv  (_ , p) i .fst) j)
+    k (k = i0) → g (is-equiv→counit u (contract-inv  (_ , p) i .fst) j)
       where
       f-square : I → _
       f-square k = hcomp (∂ j ∨ ∂ k) λ where
-        l (j = i0) → g (f (equiv→unit u a k))
+        l (j = i0) → g (f (is-equiv→unit u a k))
         l (j = i1) → p (k ∧ l)
-        l (k = i0) → g (equiv→counit u (f a) j)
+        l (k = i0) → g (is-equiv→counit u (f a) j)
         l (k = i1) → p (j ∧ l)
         l (l = i0) → g (Equiv-path (f , u) (f a) (a , refl) k .snd j)
 

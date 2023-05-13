@@ -56,7 +56,7 @@ id-composition→Iso {f} r g p .rinv y = sym (r .linv (g (f y))) ∙∙ ap (λ �
 id-composition→Iso     r g p .linv y = ap (_$ y) p
 
 is-equiv→is-iso : is-equiv f → is-iso f
-is-iso.inv  (is-equiv→is-iso eqv) = equiv→inverse eqv
+is-iso.inv  (is-equiv→is-iso eqv) = is-equiv→inverse eqv
 is-iso.rinv (is-equiv→is-iso eqv) y = eqv .equiv-proof y .fst .snd
 is-iso.linv (is-equiv→is-iso {f} eqv) x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
 
