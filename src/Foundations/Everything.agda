@@ -8,5 +8,7 @@ open import Foundations.Erased      public
 open import Foundations.HLevel      public
 open import Foundations.Isomorphism public
 open import Foundations.Path        public
+open import Foundations.Pi          public
+open import Foundations.Sigma       public
 open import Foundations.Transport   public
 open import Foundations.Univalence  public

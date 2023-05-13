@@ -19,7 +19,7 @@ transport⁻-filler-ext : (p : A ＝ B)
 transport⁻-filler-ext p i x = transp (λ j → p (i ∧ ~ j)) (~ i) x
 
 transport⁻-transport : (p : A ＝ B) (a : A)
-                    → transport (sym p) (transport p a) ＝ a
+                     → transport (sym p) (transport p a) ＝ a
 transport⁻-transport p a i =
   transport⁻-filler-ext p (~ i) (transport-filler-ext p (~ i) a)
 

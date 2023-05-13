@@ -342,16 +342,16 @@ subst-refl = transport-refl
 -- Function extensionality
 
 fun-ext : {B : A → I → Type ℓ′}
-          {f : Π[ x ꞉ A ] B x i0} {g : Π[ x ꞉ A ] B x i1}
-        → (Π[ x ꞉ A ] ＜ f x    ／                B x  ＼    g x ＞)
+          {f : Π[ a ꞉ A ] B a i0} {g : Π[ a ꞉ A ] B a i1}
+        → (Π[ a ꞉ A ] ＜ f a    ／                B a  ＼    g a ＞)
         →             ＜ f   ／ (λ i → Π[ x ꞉ A ] B x i)  ＼ g   ＞
 fun-ext p i x = p x i
 
-implicit-fun-ext : {B : A → I → Type ℓ′}
-                   {f : {x : A} → B x i0} {g : {x : A} → B x i1}
-                 → ({x : A} → ＜ f {x} ／               B x ＼    g {x} ＞)
+fun-ext-implicit : {B : A → I → Type ℓ′}
+                   {f : {a : A} → B a i0} {g : {a : A} → B a i1}
+                 → ({a : A} → ＜ f {a} ／               B a ＼    g {a} ＞)
                  →            ＜ f  ／ (λ i → {x : A} → B x i) ＼ g     ＞
-implicit-fun-ext p i {x} = p {x} i
+fun-ext-implicit p i {x} = p {x} i
 
 -- TODO fix the comment
 -- the inverse to `fun-ext` (see Functions.FunExtEquiv), converting paths
@@ -359,23 +359,23 @@ implicit-fun-ext p i {x} = p {x} i
 -- defined by path induction in the HoTT book (see function 2.9.2 in
 -- section 2.9)
 fun-ext⁻ : {B : A → I → Type ℓ′}
-           {f : Π[ x ꞉ A ] B x i0} {g : Π[ x ꞉ A ] B x i1}
-         →            ＜ f      ／ (λ i → Π[ x ꞉ A ] B x i) ＼    g   ＞
+           {f : Π[ a ꞉ A ] B a i0} {g : Π[ a ꞉ A ] B a i1}
+         →            ＜ f      ／ (λ i → Π[ a ꞉ A ] B a i) ＼    g   ＞
          → Π[ x ꞉ A ] ＜ f x ／                      B x       ＼ g x ＞
 fun-ext⁻ eq x i = eq i x
 
 happly = fun-ext⁻
 _＝$_ = fun-ext⁻
 
-implicit-fun-ext⁻ : {B : A → I → Type ℓ′}
-                    {f : {x : A} → B x i0} {g : {x : A} → B x i1}
-                  →           ＜ f        ／ (λ i → {x : A} → B x i) ＼    g     ＞
+fun-ext-implicit⁻ : {B : A → I → Type ℓ′}
+                    {f : {a : A} → B a i0} {g : {a : A} → B a i1}
+                  →           ＜ f        ／ (λ i → {a : A} → B a i) ＼    g     ＞
                   → {x : A} → ＜ f {x} ／                     B x       ＼ g {x} ＞
-implicit-fun-ext⁻ eq {x} i = eq i {x}
+fun-ext-implicit⁻ eq {x} i = eq i {x}
 
 fun-ext-simple⁻ : {B : I → Type ℓ′}
                   {f : A → B i0} {g : A → B i1}
-                →            ＜ f      ／ (λ i → Π[ x ꞉ A ] B i) ＼    g   ＞
+                →            ＜ f      ／ (λ i → Π[ _ ꞉ A ] B i) ＼    g   ＞
                 → Π[ x ꞉ A ] ＜ f x ／ (λ i    →            B i)    ＼ g x ＞
 fun-ext-simple⁻ eq x i = eq i x
 
@@ -438,7 +438,7 @@ Singleton-is-contr : {A : Type ℓ} {a : A} (s : Singleton a)
 Singleton-is-contr {a} _ = (a , refl) , Singleton-is-prop
 
 Singleton-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton a)
-                   → is-contr⁻ (Singleton a)
+                    → is-contr⁻ (Singleton a)
 Singleton-is-contr⁻ {a} _ = (a , refl) , sym ∘ Singleton-is-prop
 
 Singleton⁻-is-contr : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
@@ -446,7 +446,7 @@ Singleton⁻-is-contr : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
 Singleton⁻-is-contr {a} _ = (a , refl) , Singleton⁻-is-prop
 
 Singleton⁻-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
-                    → is-contr⁻ (Singleton⁻ a)
+                     → is-contr⁻ (Singleton⁻ a)
 Singleton⁻-is-contr⁻ {a} _ = (a , refl) , sym ∘ Singleton⁻-is-prop
 
 SingletonP-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (SingletonP A a)
@@ -455,7 +455,6 @@ SingletonP-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
   k (i = i0) → transport-filler (λ i → A i) a k
   k (i = i1) → p k
   k (k = i0) → a
-
 
 -- Path induction (J) and its computation rule
 
