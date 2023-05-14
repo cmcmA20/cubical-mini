@@ -2,10 +2,8 @@
 module Data.Bool.Base where
 
 open import Foundations.Prim.Type
--- open import Prim.Data.Empty
 
-open import Data.Bool.Prim public
-
+open import Agda.Builtin.Bool public
 
 private variable
   ℓ : Level

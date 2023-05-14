@@ -7,8 +7,8 @@ Some basic utilities for reflection
 module Reflection.Prim where
 
 open import Foundations.Prim.Type
-open import Data.Nat.Prim
-open import Data.List.Prim
+open import Data.Nat.Base
+open import Data.List.Base
 open import Data.String.Prim
 
 -- TODO: reexport everything from here, rename as needed
@@ -46,9 +46,9 @@ hlam str t = R.lam R.hidden (R.abs str t)
 
 newMeta = R.checkType R.unknown
 
-makeAuxiliaryDef : String → R.Type → R.Term → R.TC R.Term
-makeAuxiliaryDef s ty term =
-  R.freshName s >>= λ name →
-  R.declareDef (varg name) ty >>
-  R.defineFun name [ R.clause [] [] term ] >>
-  R.returnTC (R.def name [])
+-- makeAuxiliaryDef : String → R.Type → R.Term → R.TC R.Term
+-- makeAuxiliaryDef s ty term =
+--   R.freshName s >>= λ name →
+--   R.declareDef (varg name) ty >>
+--   R.defineFun name [ R.clause [] [] term ] >>
+--   R.returnTC (R.def name [])
