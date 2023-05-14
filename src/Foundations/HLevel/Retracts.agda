@@ -7,7 +7,7 @@ open import Foundations.Equiv.Properties
 open import Foundations.Isomorphism
 open import Foundations.HLevel.Base
 open import Foundations.Path.Groupoid
-open import Foundations.Sigma
+open import Foundations.Sigma.Properties
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level

@@ -36,13 +36,13 @@ check-everythings:
 
 .PHONY : gen-everythings
 gen-everythings:
-	$(EVERYTHINGS) gen-except Prim Foundations IO
+	$(EVERYTHINGS) gen-except Foundations IO
 #	$(EVERYTHINGS) gen-except Core Foundations Codata Experiments
 
 .PHONY : gen-and-check-everythings
 gen-and-check-everythings:
-	$(EVERYTHINGS) gen-except Prim Foundations IO
-	$(EVERYTHINGS) check Prim Foundations
+	$(EVERYTHINGS) gen-except Foundations IO
+	$(EVERYTHINGS) check Foundations
 #	$(EVERYTHINGS) gen-except Core Foundations Codata Experiments
 #	$(EVERYTHINGS) check Core Foundations Codata
 

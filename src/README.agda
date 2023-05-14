@@ -14,7 +14,7 @@ module README where
 ------------------------------------------------------------------------
 
 -- Builtin/primitives, "machine code" of CuTT and compiler directives.
-import Prim.Everything
+-- import Prim.Everything
 
 -- Basic definitions, the toolset of a civilized man.
 import Foundations.Everything
@@ -24,6 +24,15 @@ import Data.Everything
 
 -- Standard structures a la Escardo
 import Structures.Everything
+
+-- TODO: Make a description
+import Meta.Everything
+
+-- TODO: Make a description
+import System.Everything
+
+-- TODO: Make a description
+import Reflection.Everything
 
 -- TODO
 -- -- Kinds and properties of functions
