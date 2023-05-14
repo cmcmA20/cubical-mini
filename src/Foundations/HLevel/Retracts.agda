@@ -7,6 +7,7 @@ open import Foundations.Equiv.Properties
 open import Foundations.Isomorphism
 open import Foundations.HLevel.Base
 open import Foundations.Path.Groupoid
+open import Foundations.Sigma
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level
@@ -104,19 +105,38 @@ fun-is-of-hlevel
   → is-of-hlevel n (A → B)
 fun-is-of-hlevel n hl = Π-is-of-hlevel n (λ _ → hl)
 
--- TODO need characterization of paths in sigmas
--- Σ-is-hlevel : {A : Type ℓ} {B : A → Type ℓ′} (n : HLevel)
---             → is-of-hlevel n A
---             → ((x : A) → is-of-hlevel n (B x))
---             → is-of-hlevel n (Σ A B)
--- Σ-is-hlevel 0 acontr bcontr =
---   (acontr .fst , bcontr _ .fst) ,
---     λ x → Σ-PathP (acontr .snd _)
---                   (is-prop→PathP (λ _ → is-contr→is-prop (bcontr _)) _ _)
--- Σ-is-hlevel 1 aprop bprop (a , b) (a' , b') i =
---   (aprop a a' i) , (is-prop→PathP (λ i → bprop (aprop a a' i)) b b' i)
--- Σ-is-hlevel {B = B} (𝒽suc (𝒽suc n)) h1 h2 x y =
---   is-iso→is-of-hlevel (𝒽suc n)
---     (is-iso-inv (Σ-path-iso .snd) .is-iso.inv)
---     (Σ-path-iso .snd)
---     (Σ-is-hlevel (suc n) (h1 (fst x) (fst y)) λ x → h2 _ _ _)
+Σ-is-of-hlevel : {B : A → Type ℓ′} (n : HLevel)
+               → is-of-hlevel n A
+               → ((x : A) → is-of-hlevel n (B x))
+               → is-of-hlevel n (Σ A B)
+Σ-is-of-hlevel 0 acontr bcontr =
+  (acontr .fst , bcontr _ .fst) ,
+    λ x → Σ-PathP (acontr .snd _)
+                  (is-prop→PathP (λ _ → is-contr→is-prop (bcontr _)) _ _)
+Σ-is-of-hlevel 1 aprop bprop (a , b) (a' , b') i =
+  (aprop a a' i) , (is-prop→PathP (λ i → bprop (aprop a a' i)) b b' i)
+Σ-is-of-hlevel {B} (𝒽suc (𝒽suc n)) h1 h2 x y =
+  is-iso→is-of-hlevel (𝒽suc n)
+    (is-iso-inv (Σ-path-iso .snd) .is-iso.inv)
+    (Σ-path-iso .snd)
+    (Σ-is-of-hlevel (𝒽suc n) (h1 (fst x) (fst y)) λ x → h2 _ _ _)
+
+×-is-of-hlevel : {B : Type ℓ′}
+               → (n : HLevel)
+               → is-of-hlevel n A → is-of-hlevel n B
+               → is-of-hlevel n (A × B)
+×-is-of-hlevel n ahl bhl = Σ-is-of-hlevel n ahl (λ _ → bhl)
+
+Lift-is-of-hlevel : (n : HLevel)
+                  → is-of-hlevel n A
+                  → is-of-hlevel n (Lift ℓ′ A)
+Lift-is-of-hlevel n a-hl = retract→is-of-hlevel n lift lower (λ _ → refl) a-hl
+
+
+record H-Level {ℓ} (T : Type ℓ) (n : HLevel) : Type ℓ where
+  constructor hlevel-instance
+  field
+    has-hlevel : is-of-hlevel n T
+
+hlevel : (n : HLevel) ⦃ x : H-Level A n ⦄ → is-of-hlevel n A
+hlevel n ⦃ x ⦄ = H-Level.has-hlevel x
