@@ -25,8 +25,13 @@ import Data.Everything
 -- Standard structures a la Escardo
 import Structures.Everything
 
+-- TODO: Make a description
 import Meta.Everything
+
+-- TODO: Make a description
 import System.Everything
+
+-- TODO: Make a description
 import Reflection.Everything
 
 -- TODO
