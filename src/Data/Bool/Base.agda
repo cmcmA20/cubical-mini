@@ -1,8 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Bool.Base where
 
-open import Foundations.Type.Internal
-open import Data.Bool.Internal public
+open import Foundations.Type
+open import Data.Bool.Prim public
 -- open import Prim.Data.Empty
 
 private variable

@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module System.IO.Internal where
+module System.IO.Prim where
 
 open import Agda.Builtin.IO public
 

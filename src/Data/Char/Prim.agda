@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Char.Internal where
+module Data.Char.Prim where
 
 open import Agda.Builtin.Char public
   using ( Char )

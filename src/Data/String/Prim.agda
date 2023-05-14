@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.String.Internal where
+module Data.String.Prim where
 
 open import Agda.Builtin.String public
   using( String )

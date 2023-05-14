@@ -1,8 +1,8 @@
 {-# OPTIONS --safe #-}
-module Foundations.Extension.Internal where
+module Foundations.Prim.Extension where
 
-open import Foundations.Type.Internal
-open import Foundations.Interval.Internal
+open import Foundations.Type
+open import Foundations.Prim.Interval
 
 open import Agda.Builtin.Cubical.Sub public
   using ( inS )

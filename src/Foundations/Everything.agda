@@ -3,6 +3,7 @@ module Foundations.Everything where
 
 open import Foundations.Base        public
 open import Foundations.Cubes       public
+open import Foundations.Equality    public
 open import Foundations.Equiv       public
 open import Foundations.Erased      public
 open import Foundations.HLevel      public

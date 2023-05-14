@@ -4,12 +4,12 @@ Some basic utilities for reflection
 
 -}
 {-# OPTIONS --safe #-}
-module Reflection.Internal where
+module Reflection.Prim where
 
-open import Foundations.Type.Internal
-open import Foundations.Nat.Internal
-open import Data.List.Internal
-open import Data.String.Internal
+open import Foundations.Type
+open import Data.Nat.Prim
+open import Data.List.Prim
+open import Data.String.Prim
 
 -- TODO: reexport everything from here, rename as needed
 --       all the following stuff should go into `Reflection.Base`

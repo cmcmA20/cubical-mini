@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Nat.Internal where
+module Data.Nat.Prim where
 
 open import Agda.Builtin.Nat public
   using

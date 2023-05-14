@@ -1,17 +1,16 @@
 {-# OPTIONS --safe #-}
-module Foundations.Equiv.Internal where
+module Foundations.Prim.Equiv where
 
-open import Foundations.Type.Internal
-open import Foundations.Sigma.Internal
+open import Foundations.Type
+open import Foundations.Sigma.Base
 
 open import Agda.Builtin.Cubical.Equiv public
-  using (_≃_)
+  using (_≃_; equiv-proof)
   renaming ( isEquiv       to is-equiv
-           ; equiv-proof   to equiv-proof
            ; equivFun      to equiv-forward
            ; equivProof    to equiv-proof-fast
-           ; pathToisEquiv to path-to-is-equiv
-           ; pathToEquiv   to path-to-equiv
+           ; pathToisEquiv to path→is-equiv
+           ; pathToEquiv   to path→equiv
            )
 
 private variable ℓ ℓ′ : Level

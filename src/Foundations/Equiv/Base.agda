@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Equiv.Base where
 
-open import Foundations.Equiv.Internal public
+open import Foundations.Prim.Equiv public
 
 open import Foundations.Base
 open import Foundations.HLevel.Base

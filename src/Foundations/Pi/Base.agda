@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
-module Foundations.Pi.Internal where
+module Foundations.Pi.Base where
 
-open import Foundations.Type.Internal
+open import Foundations.Type
 
 private variable
   ℓ ℓ′ ℓ″ : Level

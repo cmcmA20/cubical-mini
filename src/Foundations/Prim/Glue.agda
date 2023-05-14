@@ -1,11 +1,11 @@
 {-# OPTIONS --safe #-}
-module Foundations.Glue.Internal where
+module Foundations.Prim.Glue where
 
-open import Foundations.Type.Internal
-open import Foundations.Interval.Internal
-open import Foundations.Extension.Internal
-open import Foundations.Equiv.Internal
-open import Foundations.Sigma.Internal
+open import Foundations.Type
+open import Foundations.Prim.Interval
+open import Foundations.Prim.Extension
+open import Foundations.Prim.Equiv
+open import Foundations.Sigma.Base
 
 open import Agda.Builtin.Cubical.Glue
   using ( primGlue     -- ∀ {ℓ ℓ′} (A : Type ℓ) {φ : I} (T : Partial φ (Type ℓ′))

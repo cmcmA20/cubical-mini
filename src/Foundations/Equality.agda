@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Equality.Internal where
+module Foundations.Equality where
 
 open import Agda.Builtin.Equality public
   using ()

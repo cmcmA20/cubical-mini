@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
-module Foundations.Unit.Internal where
+module Data.Unit.Prim where
 
-open import Foundations.Type.Internal
+open import Foundations.Type
 open import Agda.Builtin.Unit public
 
 record ⊤ω : Typeω where
