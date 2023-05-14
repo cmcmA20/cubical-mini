@@ -22,26 +22,8 @@ is-of-hlevel 0𝒽 A = is-contr A
 is-of-hlevel (𝒽suc 0𝒽) A = is-prop A
 is-of-hlevel (𝒽suc (𝒽suc h)) A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-of-hlevel (𝒽suc h) (x ＝ y)
 
--- record is-of-HLevel (h : HLevel) {ℓ} (A : Type ℓ) : Type ℓ where
---   eta-equality
---   field iohl : is-of-hlevel h A
--- open is-of-HLevel ⦃ ... ⦄ public
-
--- is-Contr : Type ℓ → Type ℓ
--- is-Contr = is-of-HLevel 0𝒽
-
--- is-Prop : Type ℓ → Type ℓ
--- is-Prop = is-of-HLevel (𝒽suc 0𝒽)
-
--- is-Set : Type ℓ → Type ℓ
--- is-Set = is-of-HLevel (𝒽suc (𝒽suc 0𝒽))
-
--- is-Groupoid : Type ℓ → Type ℓ
--- is-Groupoid = is-of-HLevel (𝒽suc (𝒽suc (𝒽suc 0𝒽)))
-
 is-of-hlevel-fun : (h : HLevel) {A : Type ℓ} {B : Type ℓ′} (f : A → B) → Type (ℓ ⊔ ℓ′)
 is-of-hlevel-fun h f = Π[ b ꞉ _ ] is-of-hlevel h (fibre f b)
-
 
 -- TODO reformulate directly without using J?
 -- is-of-hlevel-Ω→is-of-hlevel

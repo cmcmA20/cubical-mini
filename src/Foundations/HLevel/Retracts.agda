@@ -131,12 +131,3 @@ Lift-is-of-hlevel : (n : HLevel)
                   → is-of-hlevel n A
                   → is-of-hlevel n (Lift ℓ′ A)
 Lift-is-of-hlevel n a-hl = retract→is-of-hlevel n lift lower (λ _ → refl) a-hl
-
-
-record H-Level {ℓ} (T : Type ℓ) (n : HLevel) : Type ℓ where
-  constructor hlevel-instance
-  field
-    has-hlevel : is-of-hlevel n T
-
-hlevel : (n : HLevel) ⦃ x : H-Level A n ⦄ → is-of-hlevel n A
-hlevel n ⦃ x ⦄ = H-Level.has-hlevel x

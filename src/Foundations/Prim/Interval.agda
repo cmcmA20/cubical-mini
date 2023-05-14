@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Prim.Interval where
 
-open import Foundations.Type
+open import Foundations.Prim.Type
 
 open import Agda.Primitive.Cubical public
   using ( IUniv -- IUniv : SSet₁

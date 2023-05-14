@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Prim.Kan where
 
-open import Foundations.Type
+open import Foundations.Prim.Type
 open import Foundations.Prim.Interval
 open import Foundations.Prim.Extension
 

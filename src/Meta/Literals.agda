@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Meta.Literals.Prim where
+module Meta.Literals where
 
 open import Agda.Builtin.FromNat public
   using ( Number )

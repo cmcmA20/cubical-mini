@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.List.Prim where
 
-open import Foundations.Type
+open import Foundations.Prim.Type
 
 open import Agda.Builtin.List public
 

@@ -6,7 +6,7 @@ Some basic utilities for reflection
 {-# OPTIONS --safe #-}
 module Reflection.Prim where
 
-open import Foundations.Type
+open import Foundations.Prim.Type
 open import Data.Nat.Prim
 open import Data.List.Prim
 open import Data.String.Prim

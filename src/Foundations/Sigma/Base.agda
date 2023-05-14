@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Sigma.Base where
 
-open import Foundations.Type
+open import Foundations.Prim.Type
 
 open import Agda.Builtin.Sigma public
 

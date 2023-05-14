@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Pi.Base where
 
-open import Foundations.Type
+open import Foundations.Prim.Type
 
 private variable
   ℓ ℓ′ ℓ″ : Level

@@ -1,9 +1,11 @@
 {-# OPTIONS --safe #-}
 module Data.Bool.Base where
 
-open import Foundations.Type
-open import Data.Bool.Prim public
+open import Foundations.Prim.Type
 -- open import Prim.Data.Empty
+
+open import Data.Bool.Prim public
+
 
 private variable
   ℓ : Level

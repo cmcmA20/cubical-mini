@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Prim.Equiv where
 
-open import Foundations.Type
+open import Foundations.Prim.Type
 open import Foundations.Sigma.Base
 
 open import Agda.Builtin.Cubical.Equiv public

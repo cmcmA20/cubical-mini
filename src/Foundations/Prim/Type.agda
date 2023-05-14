@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Type where
+module Foundations.Prim.Type where
 
 open import Agda.Primitive public
   using ( SSet
