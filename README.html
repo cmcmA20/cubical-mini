@@ -14,74 +14,68 @@
 <a id="407" class="Comment">-- Module hierarchy</a>
 <a id="427" class="Comment">------------------------------------------------------------------------</a>
 
-<a id="501" class="Comment">-- Builtin/primitives, &quot;machine code&quot; of CuTT and compiler directives.</a>
-<a id="572" class="Comment">-- import Prim.Everything</a>
+<a id="501" class="Comment">-- Basic definitions, the toolset of a civilized man.</a>
+<a id="555" class="Keyword">import</a> <a id="562" href="Foundations.Everything.html" class="Module">Foundations.Everything</a>
 
-<a id="599" class="Comment">-- Basic definitions, the toolset of a civilized man.</a>
-<a id="653" class="Keyword">import</a> <a id="660" href="Foundations.Everything.html" class="Module">Foundations.Everything</a>
+<a id="586" class="Comment">-- TODO: Make a description</a>
+<a id="614" class="Keyword">import</a> <a id="621" href="Meta.Everything.html" class="Module">Meta.Everything</a>
 
-<a id="684" class="Comment">-- Data structures and their properties.</a>
-<a id="725" class="Keyword">import</a> <a id="732" href="Data.Everything.html" class="Module">Data.Everything</a>
+<a id="638" class="Comment">-- Data structures and their properties.</a>
+<a id="679" class="Keyword">import</a> <a id="686" href="Data.Everything.html" class="Module">Data.Everything</a>
 
-<a id="749" class="Comment">-- Standard structures a la Escardo</a>
-<a id="785" class="Keyword">import</a> <a id="792" href="Structures.Everything.html" class="Module">Structures.Everything</a>
+<a id="703" class="Comment">-- Standard structures a la Escardo</a>
+<a id="739" class="Keyword">import</a> <a id="746" href="Structures.Everything.html" class="Module">Structures.Everything</a>
 
-<a id="815" class="Comment">-- TODO: Make a description</a>
-<a id="843" class="Keyword">import</a> <a id="850" href="Meta.Everything.html" class="Module">Meta.Everything</a>
+<a id="769" class="Comment">-- TODO: Make a description</a>
+<a id="797" class="Keyword">import</a> <a id="804" href="System.Everything.html" class="Module">System.Everything</a>
 
-<a id="867" class="Comment">-- TODO: Make a description</a>
-<a id="895" class="Keyword">import</a> <a id="902" href="System.Everything.html" class="Module">System.Everything</a>
-
-<a id="921" class="Comment">-- TODO: Make a description</a>
-<a id="949" class="Keyword">import</a> <a id="956" href="Reflection.Everything.html" class="Module">Reflection.Everything</a>
-
-<a id="979" class="Comment">-- TODO</a>
-<a id="987" class="Comment">-- -- Kinds and properties of functions</a>
-<a id="1027" class="Comment">-- import Cubical.Functions.Everything</a>
-<a id="1066" class="Comment">--</a>
-<a id="1069" class="Comment">-- -- Higher-inductive types</a>
-<a id="1098" class="Comment">-- import Cubical.HITs.Everything</a>
-<a id="1132" class="Comment">--</a>
-<a id="1135" class="Comment">-- -- Properties and proofs about relations</a>
-<a id="1179" class="Comment">-- import Cubical.Relation.Everything</a>
-<a id="1217" class="Comment">--</a>
-<a id="1220" class="Comment">-- -- Category theory</a>
-<a id="1242" class="Comment">-- import Cubical.Categories.Everything</a>
-<a id="1282" class="Comment">--</a>
-<a id="1285" class="Comment">-- -- Homotopy theory</a>
-<a id="1307" class="Comment">-- import Cubical.Homotopy.Everything</a>
-<a id="1345" class="Comment">--</a>
-<a id="1348" class="Comment">-- -- Other modules (TODO: add descriptions)</a>
-<a id="1393" class="Comment">-- import Cubical.Induction.Everything</a>
-<a id="1432" class="Comment">--</a>
-<a id="1435" class="Comment">-- -- Algebra library</a>
-<a id="1457" class="Comment">-- import Cubical.Algebra.Everything</a>
-<a id="1494" class="Comment">--</a>
-<a id="1497" class="Comment">-- -- Cardinals</a>
-<a id="1513" class="Comment">-- import Cubical.Cardinals.Everything</a>
-<a id="1552" class="Comment">--</a>
-<a id="1555" class="Comment">-- -- Reflection</a>
-<a id="1572" class="Comment">-- import Cubical.Reflection.Everything</a>
-<a id="1612" class="Comment">--</a>
-<a id="1615" class="Comment">-- -- Displayed univalent graphs</a>
-<a id="1648" class="Comment">-- import Cubical.Displayed.Everything</a>
-<a id="1687" class="Comment">--</a>
-<a id="1690" class="Comment">-- -- Homotopy level truncations</a>
-<a id="1723" class="Comment">-- import Cubical.Truncations.Everything</a>
-<a id="1764" class="Comment">--</a>
-<a id="1767" class="Comment">-- -- Quotients</a>
-<a id="1783" class="Comment">-- import Cubical.Quotients.Everything</a>
-<a id="1822" class="Comment">--</a>
-<a id="1825" class="Comment">-- -- Containers</a>
-<a id="1842" class="Comment">-- import Cubical.Containers.Everything</a>
-<a id="1882" class="Comment">--</a>
-<a id="1885" class="Comment">-- -- Automatic proving, solvers</a>
-<a id="1918" class="Comment">-- import Cubical.Tactics.Everything</a>
-<a id="1955" class="Comment">--</a>
-<a id="1958" class="Comment">-- -- Interfaces for everyday programming</a>
-<a id="2000" class="Comment">-- TODO ditch this altogether</a>
-<a id="2030" class="Comment">-- import Cubical.Instances.Everything</a>
-<a id="2069" class="Comment">--</a>
-<a id="2072" class="Comment">-- -- I/O</a>
-<a id="2082" class="Comment">-- import Cubical.IO</a>
+<a id="823" class="Comment">-- TODO</a>
+<a id="831" class="Comment">-- -- Kinds and properties of functions</a>
+<a id="871" class="Comment">-- import Cubical.Functions.Everything</a>
+<a id="910" class="Comment">--</a>
+<a id="913" class="Comment">-- -- Higher-inductive types</a>
+<a id="942" class="Comment">-- import Cubical.HITs.Everything</a>
+<a id="976" class="Comment">--</a>
+<a id="979" class="Comment">-- -- Properties and proofs about relations</a>
+<a id="1023" class="Comment">-- import Cubical.Relation.Everything</a>
+<a id="1061" class="Comment">--</a>
+<a id="1064" class="Comment">-- -- Category theory</a>
+<a id="1086" class="Comment">-- import Cubical.Categories.Everything</a>
+<a id="1126" class="Comment">--</a>
+<a id="1129" class="Comment">-- -- Homotopy theory</a>
+<a id="1151" class="Comment">-- import Cubical.Homotopy.Everything</a>
+<a id="1189" class="Comment">--</a>
+<a id="1192" class="Comment">-- -- Other modules (TODO: add descriptions)</a>
+<a id="1237" class="Comment">-- import Cubical.Induction.Everything</a>
+<a id="1276" class="Comment">--</a>
+<a id="1279" class="Comment">-- -- Algebra library</a>
+<a id="1301" class="Comment">-- import Cubical.Algebra.Everything</a>
+<a id="1338" class="Comment">--</a>
+<a id="1341" class="Comment">-- -- Cardinals</a>
+<a id="1357" class="Comment">-- import Cubical.Cardinals.Everything</a>
+<a id="1396" class="Comment">--</a>
+<a id="1399" class="Comment">-- -- Reflection</a>
+<a id="1416" class="Comment">-- import Cubical.Reflection.Everything</a>
+<a id="1456" class="Comment">--</a>
+<a id="1459" class="Comment">-- -- Displayed univalent graphs</a>
+<a id="1492" class="Comment">-- import Cubical.Displayed.Everything</a>
+<a id="1531" class="Comment">--</a>
+<a id="1534" class="Comment">-- -- Homotopy level truncations</a>
+<a id="1567" class="Comment">-- import Cubical.Truncations.Everything</a>
+<a id="1608" class="Comment">--</a>
+<a id="1611" class="Comment">-- -- Quotients</a>
+<a id="1627" class="Comment">-- import Cubical.Quotients.Everything</a>
+<a id="1666" class="Comment">--</a>
+<a id="1669" class="Comment">-- -- Containers</a>
+<a id="1686" class="Comment">-- import Cubical.Containers.Everything</a>
+<a id="1726" class="Comment">--</a>
+<a id="1729" class="Comment">-- -- Automatic proving, solvers</a>
+<a id="1762" class="Comment">-- import Cubical.Tactics.Everything</a>
+<a id="1799" class="Comment">--</a>
+<a id="1802" class="Comment">-- -- Interfaces for everyday programming</a>
+<a id="1844" class="Comment">-- TODO ditch this altogether</a>
+<a id="1874" class="Comment">-- import Cubical.Instances.Everything</a>
+<a id="1913" class="Comment">--</a>
+<a id="1916" class="Comment">-- -- I/O</a>
+<a id="1926" class="Comment">-- import Cubical.IO</a>
 </pre></body></html>
