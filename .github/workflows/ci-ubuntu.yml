@@ -131,7 +131,7 @@ jobs:
         with:
           path: ./_build
           key:
-            library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-${{ hashFiles('Cubical/**', 'cubical-mini.agda-lib') }}
+            library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-${{ hashFiles('src/**', 'cubical-mini.agda-lib') }}
           restore-keys: |
             library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-
         env:
