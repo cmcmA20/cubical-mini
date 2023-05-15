@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Meta.Literals</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Meta.Literals.html" class="Module">Meta.Literals</a> <a id="45" class="Keyword">where</a>
+
+<a id="52" class="Keyword">open</a> <a id="57" class="Keyword">import</a> <a id="64" href="Agda.Builtin.FromNat.html" class="Module">Agda.Builtin.FromNat</a> <a id="85" class="Keyword">public</a>
+  <a id="94" class="Keyword">using</a> <a id="100" class="Symbol">(</a> <a id="102" href="Agda.Builtin.FromNat.html#196" class="Record">Number</a> <a id="109" class="Symbol">)</a>
+  <a id="113" class="Keyword">renaming</a> <a id="122" class="Symbol">(</a> <a id="124" href="Agda.Builtin.FromNat.html#281" class="Field">fromNat</a> <a id="132" class="Symbol">to</a> <a id="135" class="Field">from-nat</a> <a id="144" class="Symbol">)</a>
+
+<a id="147" class="Keyword">open</a> <a id="152" class="Keyword">import</a> <a id="159" href="Agda.Builtin.FromNeg.html" class="Module">Agda.Builtin.FromNeg</a> <a id="180" class="Keyword">public</a>
+  <a id="189" class="Keyword">using</a> <a id="195" class="Symbol">(</a> <a id="197" href="Agda.Builtin.FromNeg.html#196" class="Record">Negative</a> <a id="206" class="Symbol">)</a>
+  <a id="210" class="Keyword">renaming</a> <a id="219" class="Symbol">(</a> <a id="221" href="Agda.Builtin.FromNeg.html#283" class="Field">fromNeg</a> <a id="229" class="Symbol">to</a> <a id="232" class="Field">from-neg</a> <a id="241" class="Symbol">)</a>
+
+<a id="244" class="Keyword">open</a> <a id="249" class="Keyword">import</a> <a id="256" href="Agda.Builtin.FromString.html" class="Module">Agda.Builtin.FromString</a> <a id="280" class="Keyword">public</a>
+  <a id="289" class="Keyword">using</a> <a id="295" class="Symbol">()</a>
+  <a id="300" class="Keyword">renaming</a> <a id="309" class="Symbol">(</a> <a id="311" href="Agda.Builtin.FromString.html#202" class="Record">IsString</a>   <a id="322" class="Symbol">to</a> <a id="325" class="Record">is-string</a>
+           <a id="346" class="Symbol">;</a> <a id="348" href="Agda.Builtin.FromString.html#292" class="Field">fromString</a> <a id="359" class="Symbol">to</a> <a id="362" class="Field">from-string</a> <a id="374" class="Symbol">)</a>
+</pre></body></html>

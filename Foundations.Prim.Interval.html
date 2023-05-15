@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Foundations.Prim.Interval</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Foundations.Prim.Interval.html" class="Module">Foundations.Prim.Interval</a> <a id="57" class="Keyword">where</a>
+
+<a id="64" class="Keyword">open</a> <a id="69" class="Keyword">import</a> <a id="76" href="Foundations.Prim.Type.html" class="Module">Foundations.Prim.Type</a>
+
+<a id="99" class="Keyword">open</a> <a id="104" class="Keyword">import</a> <a id="111" href="Agda.Primitive.Cubical.html" class="Module">Agda.Primitive.Cubical</a> <a id="134" class="Keyword">public</a>
+  <a id="143" class="Keyword">using</a> <a id="149" class="Symbol">(</a> <a id="151" href="Agda.Primitive.Cubical.html#101" class="Primitive">IUniv</a> <a id="157" class="Comment">-- IUniv : SSet₁</a>
+        <a id="182" class="Symbol">;</a> <a id="184" href="Agda.Primitive.Cubical.html#150" class="Datatype">I</a>     <a id="190" class="Comment">-- I : IUniv</a>
+        <a id="211" class="Symbol">;</a> <a id="213" href="Agda.Primitive.Cubical.html#193" class="InductiveConstructor">i0</a>    <a id="219" class="Comment">-- i0 : I</a>
+        <a id="237" class="Symbol">;</a> <a id="239" href="Agda.Primitive.Cubical.html#221" class="InductiveConstructor">i1</a>    <a id="245" class="Comment">-- i1 : I</a>
+        <a id="263" class="Symbol">;</a> <a id="265" href="Agda.Primitive.Cubical.html#482" class="Postulate">IsOne</a> <a id="271" class="Comment">-- IsOne : I → Typeω</a>
+        <a id="300" class="Symbol">;</a> <a id="302" href="Agda.Primitive.Cubical.html#1115" class="Primitive">Partial</a> <a id="310" class="Comment">-- Partial : ∀{ℓ} (i : I) (A : Type ℓ) → Type ℓ</a>
+                  <a id="376" class="Comment">-- Partial i A = IsOne i → A</a>
+        <a id="413" class="Symbol">;</a> <a id="415" href="Agda.Primitive.Cubical.html#1149" class="Primitive">PartialP</a>
+        <a id="432" class="Symbol">;</a> <a id="434" href="Agda.Primitive.Cubical.html#1428" class="Primitive">primPOr</a> <a id="442" class="Symbol">)</a>
+  <a id="446" class="Keyword">renaming</a> <a id="455" class="Symbol">(</a> <a id="457" href="Agda.Primitive.Cubical.html#393" class="Primitive">primIMin</a> <a id="466" class="Symbol">to</a> <a id="469" class="Primitive">_∧_</a> <a id="473" class="Comment">-- _∧_ : I → I → I</a>
+           <a id="503" class="Symbol">;</a> <a id="505" href="Agda.Primitive.Cubical.html#418" class="Primitive">primIMax</a> <a id="514" class="Symbol">to</a> <a id="517" class="Primitive">_∨_</a> <a id="521" class="Comment">-- _∨_ : I → I → I</a>
+           <a id="551" class="Symbol">;</a> <a id="553" href="Agda.Primitive.Cubical.html#443" class="Primitive">primINeg</a> <a id="562" class="Symbol">to</a> <a id="565" class="Primitive">~_</a>  <a id="569" class="Comment">-- ~_ : I → I</a>
+
+           <a id="595" class="Symbol">;</a> <a id="597" href="Agda.Primitive.Cubical.html#529" class="Postulate">itIsOne</a>    <a id="608" class="Symbol">to</a> <a id="611" class="Postulate">1=1</a>       <a id="621" class="Comment">-- 1=1 : IsOne i1</a>
+           <a id="650" class="Symbol">;</a> <a id="652" href="Agda.Primitive.Cubical.html#1175" class="Postulate">isOneEmpty</a> <a id="663" class="Symbol">to</a> <a id="666" class="Postulate">is1-empty</a> <a id="676" class="Comment">-- is1-empty : ∀ {ℓ} {A : Partial i0 (Type ℓ)} → PartialP i0 A</a>
+           <a id="750" class="Symbol">;</a> <a id="752" href="Agda.Primitive.Cubical.html#550" class="Postulate">IsOne1</a>     <a id="763" class="Symbol">to</a> <a id="766" class="Postulate">is1-left</a>  <a id="776" class="Comment">-- is1-left  : ∀ i j → IsOne i → IsOne (i ∨ j)</a>
+           <a id="834" class="Symbol">;</a> <a id="836" href="Agda.Primitive.Cubical.html#601" class="Postulate">IsOne2</a>     <a id="847" class="Symbol">to</a> <a id="850" class="Postulate">is1-right</a> <a id="860" class="Comment">-- is1-right : ∀ i j → IsOne j → IsOne (i ∨ j)</a>
+           <a id="918" class="Symbol">)</a>
+</pre></body></html>
