@@ -12,7 +12,7 @@ For naming conventions specific to the Algebra subfolder, see
   ℓ ℓ′ ℓ″ ℓ‴ ...
   ```
 
-* Prefer good visually evocative notations to textual nameswhen defining stuff
+* Prefer good visually evocative notations to textual names when defining stuff
   (e.g. McBride's unicode calligraphy).
 
 * Names of types should begin with an uppercase letter; names of
@@ -23,7 +23,7 @@ For naming conventions specific to the Algebra subfolder, see
 * Use abbreviations to avoid very long names, e.g.
   - `comm` = commutative
   - `assoc` = associative
-  - `dist-right`/`dist-left` = distribute right/left
+  - `dist-r`/`dist-l` = distribute right/left
   - `comp` = composition
   - `Cat` = category
   - `hom` = homomorphism
@@ -35,10 +35,12 @@ For naming conventions specific to the Algebra subfolder, see
   For example, prefer `+-comm` to something like `m+n≡n+m`.
 
 * Use `Equiv` or `≃` to refer to equivalences of types or structures.
+  Operators can use subscript `ₑ`.
 
 * Use `Iso` or `≅` to refer to isomorphisms of types or structures.
   Here an isomorphism is a function with a quasi-inverse, i.e. a
   quasi-equivalence in the sense of the HoTT Book.
+  Operators can use subscript `ᵢ`.
 
 * Use `Path` or `＝` to refer to paths in names, not `Eq`, `Id`, or
   other "equality" or "identity"-related names.
@@ -46,6 +48,7 @@ For naming conventions specific to the Algebra subfolder, see
 * Use `≡` to refer to congruences or some other strict similarity relations.
   When defining a new target language, locally rename `＝` to `≡` for
   definitional equalities of the target language.
+  Builtin Agda equality is called `_＝ⁱ_`.
 
 * Prefer using `→` over `to`.
 
@@ -77,7 +80,7 @@ For naming conventions specific to the Algebra subfolder, see
   then use `⊥.rec` or `⊥.elim` rather than doing
   `renaming (rec to rec-⊥)` and using `rec-⊥`.
 
-  Some convetional naming :
+  Some conventional naming :
   - Empty                   -> ⊥
   - PropositionalTruncation -> PT
   - SetTruncation           -> ST

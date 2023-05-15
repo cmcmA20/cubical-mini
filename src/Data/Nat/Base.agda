@@ -14,7 +14,8 @@ open import Agda.Builtin.Nat public
     ; mod-helper )
   renaming
     ( Nat to ℕ
-    ; _*_ to _·_ )
+    ; _*_ to _·_
+    ; _<_ to _<-internal_ )
 
 private variable
   ℓ : Level

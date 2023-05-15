@@ -91,20 +91,14 @@ When preparing a PR here are some general guidelines:
   `iso-to-path` once instead of converting all of them to paths and
   composing them as paths.
 
-- FIXME
-  Some useful lemmas have specialized versions with higher arity to
-  make code easier to read. See for example `isPropΠ2` and `isSetΠ2`
-  in [HLevels.agda](https://github.com/agda/cubical/blob/master/Cubical/Foundations/HLevels.agda)
-  as well as various versions of function extensionality in
-  [FunExtEquiv.agda](https://github.com/agda/cubical/blob/master/Cubical/Functions/FunExtEquiv.agda).
-
-- Unless a file is in the `Prim` or `Foundations` package you don't need to
-  add it manually to the `Everything` file as it is automatically generated
-  when running `make`.
+- Unless a file is in the `Foundations` package you don't need to add it
+  manually to the `Everything` file as it is automatically generated when
+  running `make`.
 
 - For folders with `Base` and `Properties` submodules, the `Base` file
   can contain some basic consequences of the main definition, but
-  shouldn't include theorems that would require additional imports.
+  shouldn't include theorems that would require any additional imports outside
+  of `Foundations`.
 
 - Avoid importing `Foundations.Everything`; import only the modules in
   `Foundations` you are using. Be reasonably specific in general when
@@ -117,34 +111,30 @@ When preparing a PR here are some general guidelines:
 
 - Module dependency structure is stratified as follows:
 
-  In `Prim` you must import Agda primitives/builtins or define and bind them.
-  You can import other `Prim` modules as well.
-  Any other imports are prohibited.
+  In `Foundations` and `Data.*.Base` you can import primitives/builtins and
+  `Foundations` modules.
+  Any other imports are prohibited, `Foundations` must be self-contained.
 
-  In `Foundations` and `Data.*.Base` you can import `Prim`, `Foundations` and
-  `Data.*.Base` modules.
-  Do not import and do not use Agda primitives/builtins from `Agda.Builtin.*`
-  and the like.
+  In `Meta` you can import anything, just be precise, do not create
+  unnecessary dependencies.
 
-  In other modules you must avoid importing `Prim`.
-  Do not import and do not use Agda primitives/builtins from `Agda.Builtin.*`
-  and the like.
+  Everywhere else you must only avoid importing primitives/builtins.
 
 - Avoid creating folders like `Data`, `Records` or `HITs` only for the sake of
   collecting all the inductive types, records or HITs.
   When naming new folders, take inspiration in semantics or purpose of the
   target concept, not in it's Agda syntax.
 
-- `Data` is the correct place for data structures and their properties. If you
-  see that your "data structure" is quite general, admits a rich theory
-  `Category` or any algebraic stuff) and is applicable to various other
-  concepts, it should be moved to the top-level.
+- `Data` is the correct place for common programming data types and their
+  properties. If you see that your "data type" is quite general, admits a rich
+  theory (e.g. `Category` or any algebraic stuff) and is applicable to various
+  other concepts, it should be moved to the top-level.
 
 - Erase type indices if it's a well-known optimization. If needed, create
   multiple representations of the same type but with different runtime
   performance, document their relationship by defining conversions.
 
-- Create multiple representations of the same type and document, what proofs
+- Create multiple representations of the same type and document what proofs
   are easy in this representation, and why.
 
 - TODO

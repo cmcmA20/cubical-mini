@@ -14,7 +14,7 @@ open import Agda.Builtin.Unit      public
 
 infixr 30 _∙_
 infix  3 _∎
-infixr 2 _＝⟨_⟩_ _＝⟨⟩_
+infixr 2 _＝⟨_⟩_ _＝˘⟨_⟩_ _＝⟨⟩_
 infixr 2.5 _＝⟨_⟩＝⟨_⟩_
 infixl 4 _＝$_ _＝$S_
 
@@ -310,6 +310,9 @@ syntax ＝⟨⟩⟨⟩-syntax x y B C = x ＝⟨ B ⟩＝ y ＝⟨ C ⟩＝
 
 _＝⟨_⟩＝⟨_⟩_ : (x : A) → x ＝ y → y ＝ z → z ＝ w → x ＝ w
 _ ＝⟨ x＝y ⟩＝⟨ y＝z ⟩ z＝w = x＝y ∙∙ y＝z ∙∙ z＝w
+
+_＝˘⟨_⟩_ : (x : A) → y ＝ x → y ＝ z → x ＝ z
+x ＝˘⟨ p ⟩ q = (sym p) ∙ q
 
 _∎ : (x : A) → x ＝ x
 _ ∎ = refl
