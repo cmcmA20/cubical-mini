@@ -31,6 +31,8 @@ For naming conventions specific to the Algebra subfolder, see
 * Use kebab-case instead of camelCase, also for properties/lemmas
   related to operations. For example: `+-assoc`, `·-dist-right-+`.
 
+  Builtins and primitives can be left camelCase though.
+
 * Avoid referring to variable names in the names of definitions.
   For example, prefer `+-comm` to something like `m+n≡n+m`.
 

@@ -12,6 +12,9 @@ open import Agda.Primitive public
            ; Setω  to Typeω
            ; lzero to 0ℓ
            ; lsuc  to ℓsuc )
+open import Agda.Primitive public
+  using ()
+  renaming (Set to 𝒰)
 
 level-of-type : {ℓ : Level} → Type ℓ → Level
 level-of-type {ℓ} _ = ℓ

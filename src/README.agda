@@ -25,6 +25,9 @@ import Data.Everything
 -- Standard structures a la Escardo
 import Structures.Everything
 
+-- Containers aka polynomial functors
+import Containers.Everything
+
 -- TODO: Make a description
 import System.Everything
 
