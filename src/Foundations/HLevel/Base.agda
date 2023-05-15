@@ -1,11 +1,11 @@
 {-# OPTIONS --safe #-}
 module Foundations.HLevel.Base where
 
+open import Foundations.Base
+
 open import Agda.Builtin.Nat public
   using (zero; suc; _+_)
   renaming (Nat to ℕ)
-
-open import Foundations.Base
 
 HLevel : Type₀
 HLevel = ℕ

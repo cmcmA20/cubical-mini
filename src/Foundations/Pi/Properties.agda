@@ -2,9 +2,9 @@
 module Foundations.Pi.Properties where
 
 open import Foundations.Base
-open import Foundations.HLevel.Base
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
+open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 open import Foundations.Transport
 

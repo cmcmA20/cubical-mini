@@ -1,11 +1,11 @@
 {-# OPTIONS --safe #-}
 module Foundations.Equiv.Base where
 
-open import Foundations.Prim.Equiv public
-
 open import Foundations.Base
 open import Foundations.HLevel.Base
 open import Foundations.Path.Base
+
+open import Foundations.Prim.Equiv public
 
 -- include `Equiv` or `_≃_`      if the definition is about equivalences (`_≃_`)
 -- include `equiv` or `is-equiv` if the definition is about function being an equivalence (`is-equiv`)

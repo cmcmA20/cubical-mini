@@ -2,9 +2,9 @@
 module Foundations.Equiv.Properties where
 
 open import Foundations.Base
-open import Foundations.Isomorphism
 open import Foundations.HLevel.Base
-open import Foundations.Univalence
+open import Foundations.Isomorphism
+open import Foundations.Univalence.Base
 
 open import Foundations.Equiv.Base
 

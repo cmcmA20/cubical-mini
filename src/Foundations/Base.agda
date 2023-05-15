@@ -7,9 +7,9 @@ open import Foundations.Prim.Extension  public
 open import Foundations.Prim.Kan        public
 open import Foundations.Prim.Glue       public
 
-open import Foundations.Sigma.Base public
-open import Foundations.Pi.Base    public
 open import Agda.Builtin.Unit      public
+open import Foundations.Pi.Base    public
+open import Foundations.Sigma.Base public
 
 
 infixr 30 _∙_

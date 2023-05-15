@@ -13,5 +13,4 @@ Credits:
 - `Containers` are folklore, though I took inspiration in a talk by Thorsten
   Altenkirch and Conor McBride's lectures.
 - Amélia's 1Lab is a source of immensely good tricks regarding automation,
-  design and style in particular. See `Meta`, most of the `Foundations` and
-  `Structures`.
+  design and style in particular. See `Meta`, most of the `Foundations`.

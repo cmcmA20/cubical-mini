@@ -16,28 +16,28 @@ module README where
 -- Basic definitions, the toolset of a civilized man.
 import Foundations.Everything
 
--- TODO: Make a description
+-- Automating boring things.
 import Meta.Everything
 
--- Data structures and their properties.
+-- Basic types and their properties.
 import Data.Everything
 
--- Standard structures a la Escardo
+-- n-truncations.
+import Truncation.Everything
+
+-- (Univalent) structures.
 import Structures.Everything
 
--- Containers aka polynomial functors
+-- Containers aka polynomial functors.
 import Containers.Everything
 
--- TODO: Make a description
+-- Modalities.
+import Data.Everything
+
+-- I/O and related stuff.
 import System.Everything
 
 -- TODO
--- -- Kinds and properties of functions
--- import Cubical.Functions.Everything
---
--- -- Higher-inductive types
--- import Cubical.HITs.Everything
---
 -- -- Properties and proofs about relations
 -- import Cubical.Relation.Everything
 --
@@ -47,17 +47,11 @@ import System.Everything
 -- -- Homotopy theory
 -- import Cubical.Homotopy.Everything
 --
--- -- Other modules (TODO: add descriptions)
--- import Cubical.Induction.Everything
---
 -- -- Algebra library
 -- import Cubical.Algebra.Everything
 --
 -- -- Cardinals
 -- import Cubical.Cardinals.Everything
---
--- -- Reflection
--- import Cubical.Reflection.Everything
 --
 -- -- Displayed univalent graphs
 -- import Cubical.Displayed.Everything
@@ -67,16 +61,3 @@ import System.Everything
 --
 -- -- Quotients
 -- import Cubical.Quotients.Everything
---
--- -- Containers
--- import Cubical.Containers.Everything
---
--- -- Automatic proving, solvers
--- import Cubical.Tactics.Everything
---
--- -- Interfaces for everyday programming
--- TODO ditch this altogether
--- import Cubical.Instances.Everything
---
--- -- I/O
--- import Cubical.IO

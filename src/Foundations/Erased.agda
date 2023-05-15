@@ -1,9 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Erased where
 
-open import Foundations.Prim.Type
-open import Foundations.Prim.Interval
-open import Foundations.Prim.Kan
+open import Foundations.Base
 
 record Erased {ℓ} (@0 A : Type ℓ) : Type ℓ where
   constructor [_]ᴱ
