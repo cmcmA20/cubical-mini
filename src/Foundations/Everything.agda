@@ -1,6 +1,13 @@
 {-# OPTIONS --safe #-}
 module Foundations.Everything where
 
+open import Foundations.Prim.Extension
+open import Foundations.Prim.Interval
+open import Foundations.Prim.Glue
+open import Foundations.Prim.Type
+open import Foundations.Prim.Kan
+open import Foundations.Prim.Equiv
+
 open import Foundations.Base        public
 open import Foundations.Cubes       public
 open import Foundations.Equality    public

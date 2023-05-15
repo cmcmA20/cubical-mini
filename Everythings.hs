@@ -15,8 +15,8 @@ splitOn d = foldr go []
         go x (a:acc) = (x:a):acc
         go x [] = [[x]]
 
-
-type SplitFilePath = [String]
+type SplitFilePath   = [String]
+type SplitModuleName = [String]
 
 showFP :: Char -> SplitFilePath -> String
 showFP c fp = intercalate [c] (reverse fp)
@@ -24,19 +24,30 @@ showFP c fp = intercalate [c] (reverse fp)
 addToFP :: SplitFilePath -> String -> SplitFilePath
 addToFP fp dir = dir : fp
 
+prependToPath :: String -> SplitFilePath -> SplitFilePath
+prependToPath prefix fp = fp ++ [ prefix ]
+
+moduleToPath :: FilePath -> SplitModuleName -> SplitFilePath
+moduleToPath base xs = xs ++ [ base ]
+
+pathToModule :: String -> SplitFilePath -> SplitModuleName
+pathToModule base []  = []
+pathToModule base [x] = if x == base then [] else [x]
+pathToModule base (x : xs) = x : pathToModule base xs
+
 -- Given a path to a directory, returns a pair containing the list of all its
 --  subdirectories and the list of all agda files it contains
-getSubDirsFiles :: SplitFilePath -> IO ([String], [String])
-getSubDirsFiles fp = do
-  ls <- getDirectoryContents ("./" ++ showFP '/' fp)
+getSubDirsFiles :: String -> SplitFilePath -> IO ([String], [String])
+getSubDirsFiles base fp = do
+  ls <- getDirectoryContents ("./" ++ showFP '/' (prependToPath base fp))
   let sub_dirs = filter ('.' `notElem`) ls
       files    = mapMaybe (stripSuffix ".agda") ls
   pure (sub_dirs, files)
 
--- Given a path to an agda file, returns the list of all files it imports
-getImported :: SplitFilePath -> IO [SplitFilePath]
-getImported fp = do
-  ls <- fmap words . lines <$> readFile ("./" ++ showFP '/' fp ++ ".agda")
+-- Given a path to an agda file, returns the list of all modules it imports
+getImported :: String -> SplitFilePath -> IO [SplitModuleName]
+getImported base fp = do
+  ls <- fmap words . lines <$> readFile ("./" ++ base ++ "/" ++ showFP '/' fp ++ ".agda")
   pure $ fmap (reverse . splitOn '.') (mapMaybe f ls)
   where f :: [String] -> Maybe String
         f ("open":"import":x:_) = Just x
@@ -44,53 +55,54 @@ getImported fp = do
         f _ = Nothing
 
 -- Given a path to a directory $fp and a path to an agda file $fileToCheck.agda,
---  returns the list of all files in* $fp not imported in $fileToCheck.agda
+--  returns the list of all modules in* $fp not imported in $fileToCheck.agda
 -- * recursively
-getMissingFiles :: SplitFilePath -> Maybe SplitFilePath -> IO [SplitFilePath]
-getMissingFiles fp fpToCheck = do
-  (sub_dirs, sub_files) <- getSubDirsFiles fp
+getMissingModules :: String -> SplitFilePath -> Maybe SplitFilePath -> IO [SplitModuleName]
+getMissingModules base fp fpToCheck = do
+  (sub_dirs, sub_files) <- getSubDirsFiles base fp
   -- recursively get all files in $fp/X not imported in $fp/X.agda (if it exists)
-  missing_files <- concat <$> forM sub_dirs (\sub_dir ->
-    getMissingFiles (addToFP fp sub_dir)
-                    (addToFP fp <$> find (== sub_dir) sub_files))
+  missing_modules <- concat <$> forM sub_dirs (\sub_dir ->
+    getMissingModules base (addToFP fp sub_dir)
+                           (addToFP fp <$> find (== sub_dir) sub_files))
   -- return all of these files, plus all agda files in the current directory,
   --  except for those which are imported in $fpToCheck.agda (if it exists) or
   --  which are $fpToCheck.agda itself
-  imported <- maybe (pure []) getImported fpToCheck
-  pure $ ((addToFP fp <$> sub_files) ++ missing_files)
+  imported <- maybe (pure []) (getImported base) fpToCheck
+  pure $ ((addToFP fp <$> sub_files) ++ missing_modules)
          \\ (maybeToList fpToCheck ++ imported)
 
 
-checkEverythings :: [String] -> IO ()
-checkEverythings dirs = do
+checkEverythings :: FilePath -> [String] -> IO ()
+checkEverythings base dirs = do
   missing_files <- concat <$> forM dirs (\dir ->
-    getMissingFiles [dir, "src"] (Just ["Everything",dir, "src"]))
+    getMissingModules base [dir] (Just ["Everything",dir]))
   if null missing_files then pure ()
   else do putStrLn "Found some files which are not imported in any Everything.agda:"
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
           exitFailure
 
-checkREADME :: IO ()
-checkREADME = do
-  (sub_dirs, _) <- getSubDirsFiles ["src"]
-  let sub_dirs' = sub_dirs \\ ["IO"]
-  imported <- getImported ["README", "src"]
+checkREADME :: String -> IO ()
+checkREADME base = do
+  (sub_dirs, _) <- getSubDirsFiles base []
+  let sub_dirs' = sub_dirs \\ ["System"]
+  imported <- getImported base ["README"]
   let missing_files = fmap (\dir -> ["Everything",dir]) sub_dirs' \\ imported
   if null missing_files then pure ()
   else do putStrLn "Found some Everything.agda's which are not imported in README.agda:"
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
           exitFailure
 
-genEverythings :: [String] -> IO ()
-genEverythings =
+genEverythings :: String -> [String] -> IO ()
+genEverythings base =
   mapM_ (\dir -> do
-    let fp = addToFP ["src"] dir
-    files <- getMissingFiles fp Nothing
-    let ls = ["{-# OPTIONS --safe #-}",
-              "module " ++ showFP '.' ["Everything",dir] ++ " where",[]]
-             ++ sort (fmap (\file -> "import " ++ showFP '.' (init file))
+    let fp = [dir]
+    files <- getMissingModules base fp Nothing
+    let ls = [ "{-# OPTIONS --safe #-}"
+             , "module " ++ showFP '.' ["Everything",dir] ++ " where"
+             , [] ]
+             ++ sort (fmap (\file -> "import " ++ showFP '.' file)
                            (delete (addToFP fp "Everything") files))
-    writeFile ("./" ++ showFP '/' (addToFP fp "Everything") ++ ".agda")
+    writeFile ("./" ++ base ++ "/" ++ showFP '/' (addToFP fp "Everything") ++ ".agda")
               (unlines ls))
 
 
@@ -109,17 +121,18 @@ helpText = unlines [
 
 main :: IO ()
 main = do
-  all_dirs <- filter ('.' `notElem`) <$> getDirectoryContents "./src"
+  let base_dir = "src"
+  all_dirs <- filter ('.' `notElem`) <$> getDirectoryContents base_dir
   args <- getArgs
   case args of
-    "check":dirs -> checkEverythings dirs
-    "gen"  :dirs -> genEverythings   dirs
-    "check-except":ex_dirs -> checkEverythings (all_dirs \\ ex_dirs)
-    "gen-except"  :ex_dirs -> genEverythings   (all_dirs \\ ex_dirs)
-    ["check-README"] -> checkREADME
+    "check":dirs -> checkEverythings base_dir dirs
+    "gen"  :dirs -> genEverythings   base_dir dirs
+    "check-except":ex_dirs -> checkEverythings base_dir (all_dirs \\ ex_dirs)
+    "gen-except"  :ex_dirs -> genEverythings   base_dir (all_dirs \\ ex_dirs)
+    ["check-README"] -> checkREADME base_dir
     ["get-imports-README"] -> do
       imported <- filter (\fp -> head fp == "Everything")
-                    <$> getImported ["README", "src"]
+                    <$> getImported base_dir ["README"]
       putStrLn . unwords $ map (\fp -> showFP '/' fp ++ ".agda") imported
     "help":_ -> putStrLn helpText
     _ -> putStrLn "argument(s) not recognized, try 'help'"
