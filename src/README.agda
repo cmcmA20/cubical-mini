@@ -13,11 +13,11 @@ module README where
 -- Module hierarchy
 ------------------------------------------------------------------------
 
--- Builtin/primitives, "machine code" of CuTT and compiler directives.
--- import Prim.Everything
-
 -- Basic definitions, the toolset of a civilized man.
 import Foundations.Everything
+
+-- TODO: Make a description
+import Meta.Everything
 
 -- Data structures and their properties.
 import Data.Everything
@@ -26,13 +26,7 @@ import Data.Everything
 import Structures.Everything
 
 -- TODO: Make a description
-import Meta.Everything
-
--- TODO: Make a description
 import System.Everything
-
--- TODO: Make a description
-import Reflection.Everything
 
 -- TODO
 -- -- Kinds and properties of functions

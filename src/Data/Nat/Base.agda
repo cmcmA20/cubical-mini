@@ -9,6 +9,7 @@ open import Agda.Builtin.Nat public
     ; suc
     ; _+_
     ; _-_
+    ; _==_
     ; div-helper
     ; mod-helper )
   renaming

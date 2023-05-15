@@ -7,6 +7,7 @@ open import Agda.Builtin.String public
     ( primStringUncons   to uncons
     ; primStringToList   to to-list
     ; primStringFromList to from-list
+    ; primStringAppend   to concat-str
     ; primShowString     to show-str
     ; primShowNat        to show-ℕ )
 
