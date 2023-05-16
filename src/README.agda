@@ -31,11 +31,11 @@ import Structures.Everything
 -- Containers aka polynomial functors.
 import Containers.Everything
 
--- Modalities.
-import Data.Everything
-
 -- I/O and related stuff.
 import System.Everything
+
+-- Modalities.
+-- TODO import Modalities.Everything
 
 -- TODO
 -- -- Properties and proofs about relations
