@@ -2,6 +2,7 @@
 module Foundations.HLevel.Base where
 
 open import Foundations.Base
+open import Foundations.Cubes.Base
 
 open import Agda.Builtin.Nat public
   using (zero; suc; _+_)
@@ -122,3 +123,23 @@ is-of-hlevel-is-prop 0𝒽 = is-contr-is-prop
 is-of-hlevel-is-prop (𝒽suc 0𝒽) = is-prop-is-prop
 is-of-hlevel-is-prop (𝒽suc (𝒽suc h)) x y i a b =
   is-of-hlevel-is-prop (𝒽suc h) (x a b) (y a b) i
+
+
+is-prop→SquareP
+  : ∀ {B : I → I → Type ℓ} → ((i j : I) → is-prop (B i j))
+  → {a : B i0 i0} {b : B i0 i1} {c : B i1 i0} {d : B i1 i1}
+  → (p : PathP (λ j → B j i0) a c)
+  → (q : PathP (λ j → B i0 j) a b)
+  → (s : PathP (λ j → B i1 j) c d)
+  → (r : PathP (λ j → B j i1) b d)
+  → SquareP B q s p r
+is-prop→SquareP {B} is-propB {a} p q s r i j =
+  hcomp (∂ j ∨ ∂ i) λ where
+    k (j = i0) → is-propB i j (base i j) (p i) k
+    k (j = i1) → is-propB i j (base i j) (r i) k
+    k (i = i0) → is-propB i j (base i j) (q j) k
+    k (i = i1) → is-propB i j (base i j) (s j) k
+    k (k = i0) → base i j
+  where
+    base : (i j : I) → B i j
+    base i j = transport (λ k → B (i ∧ k) (j ∧ k)) a

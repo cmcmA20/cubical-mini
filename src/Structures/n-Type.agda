@@ -1,0 +1,104 @@
+{-# OPTIONS --safe #-}
+module Structures.n-Type where
+
+open import Foundations.Base
+open import Foundations.Equiv.Base
+open import Foundations.Equiv.Properties
+open import Foundations.Isomorphism
+open import Foundations.HLevel
+open import Foundations.Sigma.Properties
+open import Foundations.Univalence.Base
+open import Meta.HLevel
+open import Meta.Underlying
+
+record n-Type ℓ n : Type (ℓsuc ℓ) where
+  no-eta-equality
+  constructor el
+  field
+    typ   : Type ℓ
+    is-tr : is-of-hlevel n typ
+  instance
+    H-Level-n-type : ∀ {k} → H-Level (n + k) typ
+    H-Level-n-type = basic-instance n is-tr
+
+open n-Type using (is-tr ; H-Level-n-type) public
+open n-Type using (typ)
+
+private variable
+  ℓ ℓ′ : Level
+  A B : Type ℓ
+  n : HLevel
+  X Y : n-Type ℓ n
+
+instance
+  Underlying-n-Type : Underlying (n-Type ℓ n)
+  Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
+  Underlying-n-Type .⌞_⌟ = n-Type.typ
+
+≃-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ≃ B)
+≃-is-of-hlevel {A} {B} zero Ahl Bhl = e , deform where
+  e : A ≃ B
+  e = const (Bhl .fst) , is-contr→is-equiv Ahl Bhl
+
+  deform : (e′ : A ≃ B) → e ＝ e′
+  deform (g , _) = Σ-path (λ i x → Bhl .snd (g x) i)
+                          (is-equiv-is-prop _ _ _)
+
+≃-is-of-hlevel (suc n) _ Bhl =
+  Σ-is-of-hlevel (suc n)
+    (fun-is-of-hlevel (suc n) Bhl)
+    λ f → is-prop→is-hlevel-suc (is-equiv-is-prop f)
+
+@0 ＝-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
+＝-is-of-hlevel n Ahl Bhl = is-equiv→is-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
+
+n-path : ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y
+n-path f i .typ = f i
+n-path {X} {Y} f i .is-tr =
+  is-prop→PathP (λ i → is-of-hlevel-is-prop {A = f i} _) (X .is-tr) (Y .is-tr) i
+
+@0 n-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y
+n-ua f = n-path (ua f)
+
+@0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
+n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
+  inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
+  inv p = path→Equiv (ap typ p)
+
+  linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua
+  linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
+
+  rinv : ∀ {Y} → (inv {Y}) is-right-inverse-of n-ua
+  rinv = J (λ y p → n-ua (inv p) ＝ p) path where
+    path : n-ua (inv {X} refl) ＝ refl
+    path i j .typ = ua.ε refl i j
+    path i j .is-tr = is-prop→SquareP
+      (λ i j → is-of-hlevel-is-prop
+        {A = ua.ε {A = ⌞ X ⌟} refl i j } n)
+      (λ j → X .is-tr) (λ j → n-ua {X = X} {Y = X} (path→Equiv refl) j .is-tr)
+      (λ j → X .is-tr) (λ j → X .is-tr)
+      i j
+
+  isic : is-iso n-ua
+  isic = iso inv rinv (linv {Y})
+
+@0 n-Type-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
+n-Type-is-of-hlevel zero x y = n-ua
+  ((λ _ → y .is-tr .fst) , is-contr→is-equiv (x .is-tr) (y .is-tr))
+n-Type-is-of-hlevel (suc n) x y =
+  is-of-hlevel-≃ (suc n) (n-univalence ₑ⁻¹) (≃-is-of-hlevel (suc n) (x .is-tr) (y .is-tr))
+
+Prop : ∀ ℓ → Type (ℓsuc ℓ)
+Prop ℓ = n-Type ℓ 1
+
+Set : ∀ ℓ → Type (ℓsuc ℓ)
+Set ℓ = n-Type ℓ 2
+
+instance
+  @0 H-Level-nType : ∀ {n k} → H-Level (1 + k + n) (n-Type ℓ k)
+  H-Level-nType {k} = basic-instance (1 + k) (n-Type-is-of-hlevel k)
+
+  H-Level-is-equiv
+    : {A : Type ℓ} {B : Type ℓ′} {f : A → B} {n : HLevel}
+    → H-Level (suc n) (is-equiv f)
+  H-Level-is-equiv = prop-instance (is-equiv-is-prop _)

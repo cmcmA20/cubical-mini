@@ -14,15 +14,6 @@ private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level
   S T : Type ℓ → Type ℓ′
 
-record Underlying {ℓ} (T : Type ℓ) : Typeω where
-  field
-    ℓ-underlying : Level
-    ⌞_⌟          : T → Type ℓ-underlying
-
-open Underlying ⦃ ... ⦄ using (⌞_⌟) public
-open Underlying using (ℓ-underlying)
-
-
 record Structure {ℓ₁ ℓ₂} (ℓ₃ : _)
   (S : Type ℓ₁ → Type ℓ₂) : Type (ℓsuc (ℓ₁ ⊔ ℓ₃) ⊔ ℓ₂) where
 

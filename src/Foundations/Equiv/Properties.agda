@@ -104,3 +104,5 @@ prop-extₑ A-prop B-prop a→b b→a .fst = a→b
 prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .fst = b→a y , B-prop _ _
 prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
   Σ-path (A-prop _ _) (is-prop→is-set B-prop _ _ _ _)
+
+module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
