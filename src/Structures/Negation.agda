@@ -20,11 +20,20 @@ infix 5 ¬_
 ¬-is-prop : is-prop (¬ A)
 ¬-is-prop f _ = fun-ext λ x → ⊥.rec (f x)
 
+¬-extₑ : {A : Type ℓ} {B : Type ℓ′} → ¬ A → ¬ B → A ≃ B
+¬-extₑ {A} {B} ¬a ¬b = Iso→Equiv 𝔯
+  where
+  𝔯 : A ≅ B
+  𝔯 .fst a = rec (¬a a)
+  𝔯 .snd .is-iso.inv b = rec (¬b b)
+  𝔯 .snd .is-iso.rinv b = rec (¬b b)
+  𝔯 .snd .is-iso.linv a = rec (¬a a)
+
 Negation-str : Structure {ℓ′} ℓ″ ¬_
 Negation-str .is-hom _ _ _ = ⊤*
 
 @0 Negation-str-is-univalent : is-univalent {ℓ} (Negation-str {ℓ′})
-Negation-str-is-univalent {X = X , ¬x} {Y = Y , ¬y} f = Iso→Equiv 𝔯
+Negation-str-is-univalent _ = Iso→Equiv 𝔯
   where
   𝔯 : Iso _ _
   𝔯 .fst _ = to-PathP (¬-is-prop _ _)
@@ -38,6 +47,7 @@ Negation-str-is-univalent {X = X , ¬x} {Y = Y , ¬y} f = Iso→Equiv 𝔯
 -- @0 Negation-action-is-transport : is-transport-str (Negation-action {!!})
 -- Negation-action-is-transport f s = {!!}
 
+-- TODO move out
 is-non-empty : Type ℓ → Type ℓ
 is-non-empty A = ¬ ¬ A
 

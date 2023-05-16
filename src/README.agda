@@ -22,7 +22,7 @@ import Meta.Everything
 -- Basic types and their properties.
 import Data.Everything
 
--- n-truncations.
+-- Homotopy level truncations.
 import Truncation.Everything
 
 -- (Univalent) structures.
@@ -34,15 +34,19 @@ import Containers.Everything
 -- I/O and related stuff.
 import System.Everything
 
+-- Relations and their properties.
+-- Note that nullary relations are actually `Structures`.
+-- TODO import Relations.Everything
+
 -- Modalities.
 -- TODO import Modalities.Everything
 
 -- TODO
--- -- Properties and proofs about relations
--- import Cubical.Relation.Everything
---
 -- -- Category theory
 -- import Cubical.Categories.Everything
+--
+-- -- Quotients
+-- import Cubical.Quotients.Everything
 --
 -- -- Homotopy theory
 -- import Cubical.Homotopy.Everything
@@ -52,12 +56,3 @@ import System.Everything
 --
 -- -- Cardinals
 -- import Cubical.Cardinals.Everything
---
--- -- Displayed univalent graphs
--- import Cubical.Displayed.Everything
---
--- -- Homotopy level truncations
--- import Cubical.Truncations.Everything
---
--- -- Quotients
--- import Cubical.Quotients.Everything

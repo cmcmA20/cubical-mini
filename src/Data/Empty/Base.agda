@@ -2,7 +2,6 @@
 module Data.Empty.Base where
 
 open import Foundations.Base
-open import Foundations.Equiv
 
 data ⊥ : Type where
 
@@ -24,14 +23,6 @@ absurd-is-contr : is-contr (⊥ → A)
 absurd-is-contr .fst ()
 absurd-is-contr .snd _ _ ()
 
-uninhab-Equiv : {A : Type ℓ} {B : Type ℓ′} → (A → ⊥) → (B → ⊥) → A ≃ B
-uninhab-Equiv {A} {B} ¬a ¬b = Iso→Equiv 𝔯
-  where
-  𝔯 : A ≅ B
-  𝔯 .fst a = rec (¬a a)
-  𝔯 .snd .is-iso.inv b = rec (¬b b)
-  𝔯 .snd .is-iso.rinv b = rec (¬b b)
-  𝔯 .snd .is-iso.linv a = rec (¬a a)
 
 ⊥* : Type ℓ
 ⊥* {ℓ} = Lift ℓ ⊥

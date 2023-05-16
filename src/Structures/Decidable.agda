@@ -2,9 +2,11 @@
 module Structures.Decidable where
 
 open import Foundations.Base
-import Data.Empty as ⊥
-open import Data.Bool.Base
 open import Foundations.Univalence.SIP
+import      Data.Empty as ⊥
+open import Data.Bool.Base
+
+open import Structures.Path     public
 open import Structures.Reflects public
 
 infix 2 _because_

@@ -54,10 +54,6 @@ SIP {S} {σ} is-univ {X} {Y} =
 @0 sip : is-univalent σ → {X Y : Σ _ S} → (X ≃[ σ ] Y) → (X ＝ Y)
 sip is-univ = SIP is-univ .fst
 
--- looks like a structure combinator
-_on-paths-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
-S on-paths-of A = Π[ x ꞉ A ] Π[ y ꞉ A ] S (x ＝ y)
-
 Equiv-action : (S : Type ℓ → Type ℓ′) → Type _
 Equiv-action {ℓ} S = {X Y : Type ℓ} → (X ≃ Y) → (S X ≃ S Y)
 
