@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Structures.Path</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Structures.Path.html" class="Module">Structures.Path</a> <a id="47" class="Keyword">where</a>
+
+<a id="54" class="Keyword">open</a> <a id="59" class="Keyword">import</a> <a id="66" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="83" class="Keyword">open</a> <a id="88" class="Keyword">import</a> <a id="95" href="Foundations.Univalence.html" class="Module">Foundations.Univalence</a>
+
+<a id="119" class="Keyword">private</a> <a id="127" class="Keyword">variable</a>
+  <a id="138" href="Structures.Path.html#138" class="Generalizable">ℓ</a> <a id="140" href="Structures.Path.html#140" class="Generalizable">ℓ′</a> <a id="143" href="Structures.Path.html#143" class="Generalizable">ℓ″</a> <a id="146" class="Symbol">:</a> <a id="148" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+  <a id="156" href="Structures.Path.html#156" class="Generalizable">S</a> <a id="158" class="Symbol">:</a> <a id="160" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="165" href="Structures.Path.html#138" class="Generalizable">ℓ</a> <a id="167" class="Symbol">→</a> <a id="169" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="174" href="Structures.Path.html#140" class="Generalizable">ℓ′</a>
+
+<a id="_on-paths-of_"></a><a id="178" href="Structures.Path.html#178" class="Function Operator">_on-paths-of_</a> <a id="192" class="Symbol">:</a> <a id="194" class="Symbol">(</a><a id="195" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="200" href="Structures.Path.html#138" class="Generalizable">ℓ</a> <a id="202" class="Symbol">→</a> <a id="204" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="209" href="Structures.Path.html#140" class="Generalizable">ℓ′</a><a id="211" class="Symbol">)</a> <a id="213" class="Symbol">→</a> <a id="215" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="220" href="Structures.Path.html#138" class="Generalizable">ℓ</a> <a id="222" class="Symbol">→</a> <a id="224" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="229" class="Symbol">(</a><a id="230" href="Structures.Path.html#138" class="Generalizable">ℓ</a> <a id="232" href="Agda.Primitive.html#863" class="Primitive Operator">⊔</a> <a id="234" href="Structures.Path.html#140" class="Generalizable">ℓ′</a><a id="236" class="Symbol">)</a>
+<a id="238" href="Structures.Path.html#238" class="Bound">S</a> <a id="240" href="Structures.Path.html#178" class="Function Operator">on-paths-of</a> <a id="252" href="Structures.Path.html#252" class="Bound">A</a> <a id="254" class="Symbol">=</a> <a id="256" href="Foundations.Pi.Base.html#146" class="Function">Π[</a> <a id="259" href="Structures.Path.html#259" class="Bound">a</a> <a id="261" href="Foundations.Pi.Base.html#146" class="Function">꞉</a> <a id="263" href="Structures.Path.html#252" class="Bound">A</a> <a id="265" href="Foundations.Pi.Base.html#146" class="Function">]</a> <a id="267" href="Foundations.Pi.Base.html#146" class="Function">Π[</a> <a id="270" href="Structures.Path.html#270" class="Bound">a′</a> <a id="273" href="Foundations.Pi.Base.html#146" class="Function">꞉</a> <a id="275" href="Structures.Path.html#252" class="Bound">A</a> <a id="277" href="Foundations.Pi.Base.html#146" class="Function">]</a> <a id="279" href="Structures.Path.html#238" class="Bound">S</a> <a id="281" class="Symbol">(</a><a id="282" href="Structures.Path.html#259" class="Bound">a</a> <a id="284" href="Foundations.Prim.Kan.html#1272" class="Function Operator">＝</a> <a id="286" href="Structures.Path.html#270" class="Bound">a′</a><a id="288" class="Symbol">)</a>
+
+<a id="291" class="Comment">-- TODO need cong equiv</a>
+<a id="315" class="Comment">-- Path-str : Structure ℓ′ S → Structure _ (λ X → S on-paths-of X)</a>
+<a id="382" class="Comment">-- Path-str σ .is-hom (A , f) (B , g) h = let open Equiv h in</a>
+<a id="444" class="Comment">--   Π[ a ꞉ A ] Π[ a′ ꞉ A ] σ .is-hom</a>
+<a id="482" class="Comment">--     ((a ＝ a′) , f a a′)</a>
+<a id="509" class="Comment">--     ((to a ＝ to a′) , g (to a) (to a′))</a>
+<a id="552" class="Comment">--     {!!}</a>
+
+<a id="565" class="Comment">-- TODO</a>
+<a id="573" class="Comment">-- Path-str-is-univalent : {σ : Structure ℓ′ S} → is-univalent σ → is-univalent (Path-str σ)</a>
+<a id="666" class="Comment">-- Path-str-is-univalent is-univ f = {!!}</a>
+</pre></body></html>
