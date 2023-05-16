@@ -704,6 +704,8 @@ instance
   hlevel-proj-n-type .get-argument (_ ∷ _ ∷ it v∷ []) = pure it
   hlevel-proj-n-type .get-argument _ = typeError []
 
+
+-- Usage
 private
   module _ {ℓ} {A : n-Type ℓ 2} {B : ⌞ A ⌟ → n-Type ℓ 3} where
     some-def = ⌞ A ⌟
@@ -722,9 +724,9 @@ private
     _ : is-of-hlevel 2 ⌞ A ⌟
     _ = hlevel!
 
-    -- FIXME this is urgent
-    -- _ : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
-    -- _ = hlevel!
+    -- this one uses `H-Level-nType` instance which is compile-time only
+    @0 _ : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
+    _ = hlevel!
 
     _ : ∀ n (x : n-Type ℓ n) → is-of-hlevel (2 + n) ⌞ x ⌟
     _ = λ n x → hlevel!
