@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Structures.Negation</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Structures.Negation.html" class="Module">Structures.Negation</a> <a id="51" class="Keyword">where</a>
+
+<a id="58" class="Keyword">open</a> <a id="63" class="Keyword">import</a> <a id="70" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="87" class="Keyword">open</a> <a id="92" class="Keyword">import</a> <a id="99" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
+
+<a id="116" class="Keyword">private</a> <a id="124" class="Keyword">variable</a>
+  <a id="135" href="Structures.Negation.html#135" class="Generalizable">ℓ</a>  <a id="138" class="Symbol">:</a> <a id="140" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+  <a id="148" href="Structures.Negation.html#148" class="Generalizable">A</a>  <a id="151" class="Symbol">:</a> <a id="153" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="158" href="Structures.Negation.html#135" class="Generalizable">ℓ</a>
+
+<a id="161" class="Keyword">infix</a> <a id="167" class="Number">3</a> <a id="169" href="Structures.Negation.html#172" class="Function Operator">¬_</a>
+<a id="¬_"></a><a id="172" href="Structures.Negation.html#172" class="Function Operator">¬_</a> <a id="175" class="Symbol">:</a> <a id="177" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="182" href="Structures.Negation.html#135" class="Generalizable">ℓ</a> <a id="184" class="Symbol">→</a> <a id="186" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="191" href="Structures.Negation.html#135" class="Generalizable">ℓ</a>
+<a id="193" href="Structures.Negation.html#172" class="Function Operator">¬</a> <a id="195" href="Structures.Negation.html#195" class="Bound">A</a> <a id="197" class="Symbol">=</a> <a id="199" href="Structures.Negation.html#195" class="Bound">A</a> <a id="201" class="Symbol">→</a> <a id="203" href="Data.Empty.Base.html#89" class="Datatype">⊥</a>
+
+<a id="is-non-empty"></a><a id="206" href="Structures.Negation.html#206" class="Function">is-non-empty</a> <a id="219" class="Symbol">:</a> <a id="221" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="226" href="Structures.Negation.html#135" class="Generalizable">ℓ</a> <a id="228" class="Symbol">→</a> <a id="230" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="235" href="Structures.Negation.html#135" class="Generalizable">ℓ</a>
+<a id="237" href="Structures.Negation.html#206" class="Function">is-non-empty</a> <a id="250" href="Structures.Negation.html#250" class="Bound">A</a> <a id="252" class="Symbol">=</a> <a id="254" href="Structures.Negation.html#172" class="Function Operator">¬</a> <a id="256" href="Structures.Negation.html#172" class="Function Operator">¬</a> <a id="258" href="Structures.Negation.html#250" class="Bound">A</a>
+
+<a id="is-stable"></a><a id="261" href="Structures.Negation.html#261" class="Function">is-stable</a> <a id="271" class="Symbol">:</a> <a id="273" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="278" href="Structures.Negation.html#135" class="Generalizable">ℓ</a> <a id="280" class="Symbol">→</a> <a id="282" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="287" href="Structures.Negation.html#135" class="Generalizable">ℓ</a>
+<a id="289" href="Structures.Negation.html#261" class="Function">is-stable</a> <a id="299" href="Structures.Negation.html#299" class="Bound">A</a> <a id="301" class="Symbol">=</a> <a id="303" href="Structures.Negation.html#206" class="Function">is-non-empty</a> <a id="316" href="Structures.Negation.html#299" class="Bound">A</a> <a id="318" class="Symbol">→</a> <a id="320" href="Structures.Negation.html#299" class="Bound">A</a>
+
+<a id="323" class="Comment">-- TODO move</a>
+<a id="336" class="Comment">-- _≠_ : A → A → Type (level-of-type A)</a>
+<a id="376" class="Comment">-- x ≠ y = ¬ (x ＝ y)</a>
+</pre></body></html>
