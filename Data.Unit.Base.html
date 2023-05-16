@@ -6,6 +6,11 @@
 
 <a id="83" class="Keyword">open</a> <a id="88" class="Keyword">import</a> <a id="95" href="Agda.Builtin.Unit.html" class="Module">Agda.Builtin.Unit</a> <a id="113" class="Keyword">public</a>
 
-<a id="121" class="Keyword">record</a> <a id="⊤ω"></a><a id="128" href="Data.Unit.Base.html#128" class="Record">⊤ω</a> <a id="131" class="Symbol">:</a> <a id="133" href="Foundations.Prim.Type.html#255" class="Primitive">Typeω</a> <a id="139" class="Keyword">where</a>
-  <a id="147" class="Keyword">instance</a> <a id="156" class="Keyword">constructor</a> <a id="ttω"></a><a id="168" href="Data.Unit.Base.html#168" class="InductiveConstructor">ttω</a>
+<a id="121" class="Keyword">private</a> <a id="129" class="Keyword">variable</a> <a id="138" href="Data.Unit.Base.html#138" class="Generalizable">ℓ</a> <a id="140" class="Symbol">:</a> <a id="142" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+
+<a id="⊤*"></a><a id="149" href="Data.Unit.Base.html#149" class="Function">⊤*</a> <a id="152" class="Symbol">:</a> <a id="154" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="159" href="Data.Unit.Base.html#138" class="Generalizable">ℓ</a>
+<a id="161" href="Data.Unit.Base.html#149" class="Function">⊤*</a> <a id="164" class="Symbol">{</a><a id="165" href="Data.Unit.Base.html#165" class="Bound">ℓ</a><a id="166" class="Symbol">}</a> <a id="168" class="Symbol">=</a> <a id="170" href="Foundations.Prim.Type.html#590" class="Record">Lift</a> <a id="175" href="Data.Unit.Base.html#165" class="Bound">ℓ</a> <a id="177" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+
+<a id="180" class="Keyword">record</a> <a id="⊤ω"></a><a id="187" href="Data.Unit.Base.html#187" class="Record">⊤ω</a> <a id="190" class="Symbol">:</a> <a id="192" href="Foundations.Prim.Type.html#255" class="Primitive">Typeω</a> <a id="198" class="Keyword">where</a>
+  <a id="206" class="Keyword">instance</a> <a id="215" class="Keyword">constructor</a> <a id="ttω"></a><a id="227" href="Data.Unit.Base.html#227" class="InductiveConstructor">ttω</a>
 </pre></body></html>
