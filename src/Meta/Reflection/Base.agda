@@ -43,6 +43,12 @@ private variable
   ℓ ℓ′ : Level
   A : Type ℓ
 
+arg-vis : ArgInfo → Visibility
+arg-vis (arg-info v _) = v
+
+arg-modality : ArgInfo → Modality
+arg-modality (arg-info _ m) = m
+
 argH0 argH argN : A → Arg A
 argH  = arg (arg-info hidden (modality relevant quantity-ω))
 argH0 = arg (arg-info hidden (modality relevant quantity-0))

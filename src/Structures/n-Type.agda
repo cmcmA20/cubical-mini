@@ -21,8 +21,7 @@ record n-Type ℓ n : Type (ℓsuc ℓ) where
     H-Level-n-type : ∀ {k} → H-Level (n + k) typ
     H-Level-n-type = basic-instance n is-tr
 
-open n-Type using (is-tr ; H-Level-n-type) public
-open n-Type using (typ)
+open n-Type using (typ ; is-tr ; H-Level-n-type) public
 
 private variable
   ℓ ℓ′ : Level

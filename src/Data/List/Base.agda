@@ -41,3 +41,9 @@ infixr 5 _++_
 _++_ : List A → List A → List A
 []       ++ ys = ys
 (x ∷ xs) ++ ys = x ∷ (xs ++ ys)
+
+reverse : List A → List A
+reverse = go [] where
+  go : List A → List A → List A
+  go acc [] = acc
+  go acc (x ∷ xs) = go (x ∷ acc) xs
