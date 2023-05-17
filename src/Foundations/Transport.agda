@@ -23,6 +23,19 @@ transport⁻-transport : (p : A ＝ B) (a : A)
 transport⁻-transport p a i =
   transport⁻-filler-ext p (~ i) (transport-filler-ext p (~ i) a)
 
+transport-comp : (p : A ＝ B) (q : B ＝ C) (x : A)
+               → transport (p ∙ q) x ＝ transport q (transport p x)
+transport-comp p q x i = transport (∙-filler′ p q (~ i)) (transport-filler-ext p i x)
+
+transport-is-equiv : (p : A ＝ B) → is-equiv (transport p)
+transport-is-equiv p = line→is-equiv (λ i → p i)
+
+transport-flip : {A : I → Type ℓ} {x : A i0} {y : A i1}
+               → x ＝ transport (λ i → A (~ i)) y
+               → transport (λ i → A i) x ＝ y
+transport-flip {A} {y} p =
+  ap (transport (λ i → A i)) p ∙ transport⁻-transport (λ i → A (~ i)) y
+
 
 subst-filler : (B : A → Type ℓ′) (p : x ＝ y) (b : B x)
              → ＜ b ／ (λ i → B (p i)) ＼ subst B p b ＞
@@ -46,27 +59,11 @@ subst₂-filler : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
               → ＜ c ／ (λ i → C (p i) (q i)) ＼ subst₂ C p q c ＞
 subst₂-filler C p q = transport-filler (ap₂ C p q)
 
-
 subst-comp : (B : A → Type ℓ′)
            → (p : x ＝ y) (q : y ＝ z) (u : B x)
            → subst B (p ∙ q) u ＝ subst B q (subst B p u)
 subst-comp B p q Bx i =
-  transport (ap B (∙-filler′ p q (~ i))) (transport-filler-ext (cong B p) i Bx)
-
-transport-comp : (p : A ＝ B) (q : B ＝ C) (x : A)
-               → transport (p ∙ q) x ＝ transport q (transport p x)
-transport-comp = subst-comp id
-
-
-transport-is-equiv : (p : A ＝ B) → is-equiv (transport p)
-transport-is-equiv p = line→is-equiv (λ i → p i)
+  transport (ap B (∙-filler′ p q (~ i))) (transport-filler-ext (ap B p) i Bx)
 
 subst-Equiv : (P : A → Type ℓ′) (p : x ＝ y) → P x ≃ P y
 subst-Equiv P p = (subst P p , transport-is-equiv (λ i → P (p i)))
-
-
-transport-flip : {A : I → Type ℓ} {x : A i0} {y : A i1}
-               → x ＝ transport (λ i → A (~ i)) y
-               → transport (λ i → A i) x ＝ y
-transport-flip {A} {y} p =
-  ap (transport (λ i → A i)) p ∙ transport⁻-transport (λ i → A (~ i)) y

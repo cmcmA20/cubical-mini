@@ -52,6 +52,23 @@ is-contr→is-prop (centre , paths) x y i = hcomp (∂ i) λ where
   j (i = i1) → paths y j
   j (j = i0) → centre
 
+is-contr→extend : is-contr A → (φ : I) (p : Partial φ A) → A [ φ ↦ p ]
+is-contr→extend C φ p = inS (hcomp φ
+  λ { j (φ = i1) → C .snd (p 1=1) j
+    ; j (j = i0) → C .fst
+    })
+
+extend→is-contr : (∀ φ (p : Partial φ A) → A [ φ ↦ p ]) → is-contr A
+extend→is-contr ext = (outS (ext i0 λ ())) , λ x i → outS (ext i λ _ → x)
+
+is-contr→is-set : is-contr A → is-set A
+is-contr→is-set C x y p q i j = outS (is-contr→extend C (∂ i ∨ ∂ j) λ where
+  (i = i0) → p j
+  (i = i1) → q j
+  (j = i0) → x
+  (j = i1) → y)
+
+
 contractible-if-inhabited : (A → is-contr A) → is-prop A
 contractible-if-inhabited cont x y = is-contr→is-prop (cont x) x y
 

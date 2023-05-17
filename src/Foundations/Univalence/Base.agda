@@ -119,3 +119,29 @@ Equiv-J P pid eqv =
                → is-equiv (ap {x = x} {y = y} f)
 ap-is-equiv f eqv =
   Equiv-J (λ B e → is-equiv (ap (e .fst))) id-is-equiv (f , eqv)
+
+@0 unglue-is-equiv
+  : (φ : I)
+  → {B : Partial φ (Σ (Type ℓ′) (_≃ A))}
+  → is-equiv {A = Glue A B} (unglue φ)
+unglue-is-equiv {A = A} φ {B = B} .equiv-proof y = extend→is-contr ctr
+  where module _ (ψ : I) (par : Partial ψ (fibre (unglue φ) y)) where
+    fib : .(p : IsOne φ)
+        → fibre (B p .snd .fst) y
+          [ (ψ ∧ φ) ↦ (λ { (ψ = i1) (φ = i1) → par 1=1 }) ]
+    fib p = is-contr→extend (B p .snd .snd .equiv-proof y) (ψ ∧ φ) _
+
+    sys : ∀ j → Partial (φ ∨ ψ ∨ ~ j) A
+    sys j (j = i0) = y
+    sys j (φ = i1) = outS (fib 1=1) .snd (~ j)
+    sys j (ψ = i1) = par 1=1 .snd (~ j)
+
+    ctr = inS $ₛ glue-inc φ {Tf = B} (λ { (φ = i1) → outS (fib 1=1) .fst })
+                  (inS (hcomp (φ ∨ ψ) sys))
+               , (λ i → hfill (φ ∨ ψ) (~ i) sys)
+
+@0 ua-unglue-is-equiv
+  : (f : A ≃ B)
+  → ＜ f .snd ／ (λ i → is-equiv (ua-unglue f i)) ＼ id-is-equiv ＞
+ua-unglue-is-equiv f =
+  is-prop→PathP (λ j → is-equiv-is-prop (ua-unglue f j)) (f .snd) id-is-equiv
