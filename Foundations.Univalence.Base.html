@@ -120,44 +120,4 @@
                <a id="4326" class="Symbol">→</a> <a id="4328" href="Agda.Builtin.Cubical.Equiv.html#830" class="Record">is-equiv</a> <a id="4337" class="Symbol">(</a><a id="4338" href="Foundations.Base.html#2132" class="Function">ap</a> <a id="4341" class="Symbol">{</a><a id="4342" class="Argument">x</a> <a id="4344" class="Symbol">=</a> <a id="4346" href="Foundations.Univalence.Base.html#4302" class="Bound">x</a><a id="4347" class="Symbol">}</a> <a id="4349" class="Symbol">{</a><a id="4350" class="Argument">y</a> <a id="4352" class="Symbol">=</a> <a id="4354" href="Foundations.Univalence.Base.html#4304" class="Bound">y</a><a id="4355" class="Symbol">}</a> <a id="4357" href="Foundations.Univalence.Base.html#4260" class="Bound">f</a><a id="4358" class="Symbol">)</a>
 <a id="4360" href="Foundations.Univalence.Base.html#4213" class="Function">ap-is-equiv</a> <a id="4372" href="Foundations.Univalence.Base.html#4372" class="Bound">f</a> <a id="4374" href="Foundations.Univalence.Base.html#4374" class="Bound">eqv</a> <a id="4378" class="Symbol">=</a>
   <a id="4382" href="Foundations.Univalence.Base.html#3990" class="Function">Equiv-J</a> <a id="4390" class="Symbol">(λ</a> <a id="4393" href="Foundations.Univalence.Base.html#4393" class="Bound">B</a> <a id="4395" href="Foundations.Univalence.Base.html#4395" class="Bound">e</a> <a id="4397" class="Symbol">→</a> <a id="4399" href="Agda.Builtin.Cubical.Equiv.html#830" class="Record">is-equiv</a> <a id="4408" class="Symbol">(</a><a id="4409" href="Foundations.Base.html#2132" class="Function">ap</a> <a id="4412" class="Symbol">(</a><a id="4413" href="Foundations.Univalence.Base.html#4395" class="Bound">e</a> <a id="4415" class="Symbol">.</a><a id="4416" href="Agda.Builtin.Sigma.html#251" class="Field">fst</a><a id="4419" class="Symbol">)))</a> <a id="4423" href="Foundations.Equiv.Base.html#1353" class="Function">id-is-equiv</a> <a id="4435" class="Symbol">(</a><a id="4436" href="Foundations.Univalence.Base.html#4372" class="Bound">f</a> <a id="4438" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="4440" href="Foundations.Univalence.Base.html#4374" class="Bound">eqv</a><a id="4443" class="Symbol">)</a>
-
-<a id="4446" class="Comment">-- @0 ap-≃ : {A B : Type ℓ} {x y : A} (e : A ≃ B) → (x ＝ y) ≃ (e .fst x ＝ e .fst y)</a>
-<a id="4530" class="Comment">-- ap-≃ e = ap (e .fst) , ap-is-equiv (e .fst) (e .snd)</a>
-
-<a id="4587" class="Comment">-- TODO move to embeddings</a>
-<a id="4614" class="Comment">-- Fibre-Equiv : (B : A → Type ℓ′) (a : A)</a>
-<a id="4657" class="Comment">--             → fibre fst a ≃ B a</a>
-<a id="4692" class="Comment">-- Fibre-Equiv B a = Iso→Equiv isom where</a>
-<a id="4734" class="Comment">--   isom : Iso _ _</a>
-<a id="4754" class="Comment">--   isom .fst ((x , y) , p) = subst B p y</a>
-<a id="4797" class="Comment">--   isom .snd .inv x        = (a , x) , refl</a>
-<a id="4843" class="Comment">--   isom .snd .rinv x i     = coe1→i (λ _ → B a) i x</a>
-<a id="4897" class="Comment">--   isom .snd .linv ((x , y) , p) i =</a>
-<a id="4936" class="Comment">--     (p (~ i) , coe1→i (λ j → B (p (~ i ∧ ~ j))) i y) , λ j → p (~ i ∨ j)</a>
-
-<a id="5013" class="Comment">-- Total-Equiv : (p : E → B) → E ≃ Σ B (fibre p)</a>
-<a id="5062" class="Comment">-- Total-Equiv p = Iso→Equiv isom where</a>
-<a id="5102" class="Comment">--   isom : Iso _ (Σ _ (fibre p))</a>
-<a id="5136" class="Comment">--   isom .fst x                   = p x , x , refl</a>
-<a id="5188" class="Comment">--   isom .snd .inv (_ , x , _)    = x</a>
-<a id="5227" class="Comment">--   isom .snd .rinv (b , x , q) i = q i , x , λ j → q (i ∧ j)</a>
-<a id="5290" class="Comment">--   isom .snd .linv x             = refl</a>
-
-<a id="5333" class="Comment">-- @0 Fibration-Equiv : ∀ {B : Type ℓ}</a>
-<a id="5372" class="Comment">--                    → (Σ[ E ꞉ Type (ℓ ⊔ ℓ′) ] (E → B))</a>
-<a id="5429" class="Comment">--                    ≃ (B → Type (ℓ ⊔ ℓ′))</a>
-<a id="5473" class="Comment">-- Fibration-Equiv {B} = Iso→Equiv isom where</a>
-<a id="5519" class="Comment">--   isom : Iso (Σ[ E ꞉ Type _ ] (E → B)) (B → Type _)</a>
-<a id="5574" class="Comment">--   isom .fst (E , p)       = fibre p</a>
-<a id="5613" class="Comment">--   isom .snd .inv p⁻¹      = Σ _ p⁻¹ , fst</a>
-<a id="5658" class="Comment">--   isom .snd .rinv prep i x = ua (Fibre-Equiv prep x) i</a>
-<a id="5716" class="Comment">--   isom .snd .linv (E , p) i = ua e (~ i) , λ x → fst (ua-unglue e (~ i) x)</a>
-<a id="5794" class="Comment">--     where e = Total-Equiv p</a>
-
-<a id="5826" class="Comment">-- _/[_]_ : (ℓ : Level) → (Type (ℓ ⊔ ℓ′) → Type ℓ″) → Type ℓ′ → Type _</a>
-<a id="5897" class="Comment">-- _/[_]_ {ℓ′} ℓ P B =</a>
-<a id="5920" class="Comment">--   Σ[ A ꞉ Type (ℓ ⊔ ℓ′) ]</a>
-<a id="5948" class="Comment">--   Σ[ f ꞉ (A → B) ]</a>
-<a id="5970" class="Comment">--   Π[ x ꞉ B ]</a>
-<a id="5986" class="Comment">--   P (fibre f x)</a>
 </pre></body></html>
