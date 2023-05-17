@@ -25,8 +25,8 @@ Str-function-str-is-univalent {S} {T} {σ} {τ} θ₁ θ₂ eqv =
 
 -- prefer this one
 Function-str : Equiv-action S → Structure ℓ T → Structure _ (λ X → S X → T X)
-Function-str {S = S} act str .is-hom (A , f) (B , g) e =
-  (s : S A) → str .is-hom (A , f s) (B , g (act e .fst s)) e
+Function-str {S} act str .is-hom (A , f) (B , g) e =
+  Π[ s ꞉ S A ] str .is-hom (A , f s) (B , g (act e .fst s)) e
 
 @0 Function-str-is-univalent
   : (α : Equiv-action S) → is-transport-str α
@@ -44,6 +44,6 @@ Function-action actx acty eqv = function-≃ (actx eqv) (acty eqv)
   : {α : Equiv-action S} {β : Equiv-action T}
   → is-transport-str α → is-transport-str β
   → is-transport-str (Function-action α β)
-Function-action-is-transport {S = S} {α = α} {β = β} α-tr β-tr eqv f =
+Function-action-is-transport {S} {α} {β} α-tr β-tr eqv f =
   fun-ext λ x → ap (β eqv .fst ∘ f) (sym-transport-str α α-tr eqv x)
               ∙ β-tr eqv (f (subst S (sym (ua eqv)) x))

@@ -22,9 +22,6 @@ level-of-type {ℓ} _ = ℓ
 level-of-term : {ℓ : Level} {A : Type ℓ} → A → Level
 level-of-term {ℓ} _ = ℓ
 
-it : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → A
-it ⦃ (a) ⦄ = a
-
 record Lift {ℓ} ℓ′ (A : Type ℓ) : Type (ℓ ⊔ ℓ′) where
   constructor lift
   field lower : A

@@ -14,7 +14,7 @@ private variable
   P Q : A → Type ℓ′
 
 Π-cod-≃ : (Π[ x ꞉ A ] (P x ≃ Q x))
-        → (Π[ x ꞉ A ]  P x) ≃ (Π[ x ꞉ A ] Q x)
+        → (Π[ x ꞉ A ] P x) ≃ (Π[ x ꞉ A ] Q x)
 Π-cod-≃ k .fst f x = k x .fst (f x)
 Π-cod-≃ k .snd .equiv-proof f .fst .fst x   = Equiv-centre (k x) (f x) .fst
 Π-cod-≃ k .snd .equiv-proof f .fst .snd i x = Equiv-centre (k x) (f x) .snd i

@@ -27,16 +27,7 @@ inv-equiv-is-equiv = is-iso→is-equiv goal where
   goal .rinv _ = Equiv-ext refl
   goal .linv _ = Equiv-ext refl
 
--- TODO need half-adjoint equivalences
--- isEquivCong : {x y : A} (e : A ≃ B) → is-equiv (λ (p : x ＝ y) → cong (e .fst) p)
--- isEquivCong e = is-iso→is-equiv (congIso (equivToIso e))
-
--- congEquiv : {x y : A} (e : A ≃ B) → (x ≡ y) ≃ (equivFun e x ≡ equivFun e y)
--- congEquiv e = isoToEquiv (congIso (equivToIso e))
-
--- isEquivPreComp : (e : A ≃ B) → isEquiv (λ (φ : B → C) → φ ∘ equivFun e)
--- isEquivPreComp e = snd (equiv→ (invEquiv e) (idEquiv _))
-
+-- TODO
 -- preCompEquiv : (e : A ≃ B) → (B → C) ≃ (A → C)
 -- preCompEquiv e = (λ φ → φ ∘ fst e) , isEquivPreComp e
 

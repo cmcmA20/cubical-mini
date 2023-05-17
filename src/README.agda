@@ -22,6 +22,9 @@ import Meta.Everything
 -- Basic types and their properties.
 import Data.Everything
 
+-- Function kinds.
+import Functions.Everything
+
 -- Homotopy level truncations.
 import Truncation.Everything
 

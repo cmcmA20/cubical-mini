@@ -459,9 +459,13 @@ SingletonP-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
   k (i = i1) → p k
   k (k = i0) → a
 
+inspect : (x : A) → Singleton x
+inspect x = x , refl
+
+
 -- Path induction (J) and its computation rule
 
-module _ (P : ∀ y → x ＝ y → Type ℓ′) (d : P x refl) where
+module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x refl) where
 
   J : (p : x ＝ y) → P y p
   J {y} p = transport (λ i → P (path i .fst) (path i .snd)) d
@@ -715,3 +719,8 @@ subst-path-both : {x x′ : A}
                 → (adj : x ＝ x′)
                 → subst (λ x → x ＝ x) adj p ＝ sym adj ∙ p ∙ adj
 subst-path-both p adj = transport-path p adj adj
+
+
+-- TODO move somewhere?
+it : ⦃ A ⦄ → A
+it ⦃ (a) ⦄ = a

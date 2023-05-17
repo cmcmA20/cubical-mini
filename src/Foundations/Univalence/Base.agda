@@ -113,14 +113,17 @@ Equiv-is-contr A .snd (B , A≃B) i = ua A≃B i , p i , q i where
 Equiv-J P pid eqv =
   subst (λ e → P (e .fst) (e .snd)) (Equiv-is-contr _ .snd (_ , eqv)) pid
 
--- TODO move to embeddings
--- @0 is-equiv→is-embedding : {A B : Type ℓ}
---                          → (f : A → B) → is-equiv f
---                          → {x y : A}
---                          → is-equiv (ap {x = x} {y = y} f)
--- is-equiv→is-embedding f eqv =
---   Equiv-J (λ B e → is-equiv (ap (e .fst))) id-is-equiv (f , eqv)
+@0 ap-is-equiv : {A B : Type ℓ}
+                 (f : A → B) → is-equiv f
+               → {x y : A}
+               → is-equiv (ap {x = x} {y = y} f)
+ap-is-equiv f eqv =
+  Equiv-J (λ B e → is-equiv (ap (e .fst))) id-is-equiv (f , eqv)
 
+-- @0 ap-≃ : {A B : Type ℓ} {x y : A} (e : A ≃ B) → (x ＝ y) ≃ (e .fst x ＝ e .fst y)
+-- ap-≃ e = ap (e .fst) , ap-is-equiv (e .fst) (e .snd)
+
+-- TODO move to embeddings
 -- Fibre-Equiv : (B : A → Type ℓ′) (a : A)
 --             → fibre fst a ≃ B a
 -- Fibre-Equiv B a = Iso→Equiv isom where
