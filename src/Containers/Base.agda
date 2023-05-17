@@ -6,11 +6,11 @@ open import Foundations.Equiv.Base
 open import Meta.Idiom
 
 infix 5 _▶_
-record Container (ℓˢ ℓᵖ : Level) : Type (ℓsuc (ℓˢ ⊔ ℓᵖ)) where
+record Container (s p : Level) : Type (ℓsuc (s ⊔ p)) where
   constructor _▶_
   field
-    Shape    : Type ℓˢ
-    Position : Shape → Type ℓᵖ
+    Shape    : Type s
+    Position : Shape → Type p
 
 open Container public
 
