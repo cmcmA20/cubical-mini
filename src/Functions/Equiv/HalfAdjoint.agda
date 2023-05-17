@@ -3,9 +3,10 @@ module Functions.Equiv.HalfAdjoint where
 
 open import Foundations.Base
 open import Foundations.Equiv
-open import Foundations.Sigma
 open import Foundations.Path.Groupoid
+open import Foundations.Sigma
 open import Foundations.Univalence.Base
+
 open import Meta.Reflection.Marker
 
 private variable

@@ -2,12 +2,11 @@
 module Structures.n-Type where
 
 open import Foundations.Base
-open import Foundations.Equiv.Base
-open import Foundations.Equiv.Properties
-open import Foundations.Isomorphism
+open import Foundations.Equiv
 open import Foundations.HLevel
-open import Foundations.Sigma.Properties
+open import Foundations.Sigma
 open import Foundations.Univalence.Base
+
 open import Meta.HLevel
 open import Meta.Underlying public
 

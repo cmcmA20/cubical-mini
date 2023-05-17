@@ -4,22 +4,23 @@ module Meta.Reflection.HLevel where
 
 open import Foundations.Base
 open import Foundations.Equiv
-open import Foundations.Sigma.Properties
-open import Foundations.Pi.Properties
 open import Foundations.HLevel
+open import Foundations.Pi
+open import Foundations.Sigma
+
+open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Operations
 open import Data.List.Instances
 open import Data.Maybe.Base
-open import Data.Bool.Base
 open import Data.Nat.Base
-open import Structures.n-Type
 open import Data.Nat.Instances
 open import Data.String.Instances
 
-open import Meta.HLevel
-open import Meta.Underlying
+open import Structures.n-Type
+
 open import Meta.Foldable
+open import Meta.HLevel          public
 open import Meta.Reflection.Base
 
 {-

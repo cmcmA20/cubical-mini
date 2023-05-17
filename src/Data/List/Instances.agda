@@ -7,7 +7,8 @@ open import Meta.Idiom
 open import Meta.Foldable
 open import Meta.Traverse
 
-open import Data.List.Base
+open import Data.List.Base using (List; []; _∷_)
+import      Data.List.Base as List
 
 private variable
   ℓ : Level
@@ -15,7 +16,7 @@ private variable
 
 instance
   Map-List : Map (eff List)
-  Map-List .Map._<$>_ = map
+  Map-List .Map._<$>_ = List.map
 
   From-prod-List : From-product A (λ _ → List A)
   From-prod-List .From-product.from-prod = go where
@@ -32,4 +33,4 @@ instance
     go f (x ∷ xs) = ⦇ f x ∷ go f xs ⦈
 
   Foldable-List : Foldable (eff List)
-  Foldable-List .foldr = fold-r
+  Foldable-List .Foldable.fold-r = List.fold-r

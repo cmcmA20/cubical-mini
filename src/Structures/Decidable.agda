@@ -2,41 +2,27 @@
 module Structures.Decidable where
 
 open import Foundations.Base
-open import Foundations.Univalence.SIP
-import      Data.Empty as ⊥
-open import Data.Bool.Base
 
-open import Structures.Path     public
-open import Structures.Reflects public
+open import Data.Dec.Base public
 
-infix 2 _because_
-
-record Dec {ℓ} (P : Type ℓ) : Type ℓ where
-  constructor _because_
-  field
-    does  : Bool
-    proof : Reflects P does
-open Dec public
-
-pattern yes p =  true because ofʸ  p
-pattern no ¬p = false because ofⁿ ¬p
+open import Structures.Path public
 
 private variable
-  ℓ ℓ′ : Level
-  A : Type ℓ
-  B : Type ℓ′
+  ℓ : Level
+
+-- Dec-is-prop : is-prop (Dec P)
+-- Dec-is-prop (no ¬p) (no ¬p′) = ap no (fun-ext λ p → ⊥.rec (¬p p))
+-- Dec-is-prop (no ¬p) (yes p ) = ⊥.rec (¬p p)
+-- Dec-is-prop (yes p) (no ¬p ) = ⊥.rec (¬p p)
+-- Dec-is-prop (yes p) (yes p′) = ap yes {!!}
 
 Discrete : Type ℓ → Type ℓ
 Discrete A = Dec on-paths-of A
 
-recompute : Dec A → @0 A → A
-recompute (yes a) _  = a
-recompute (no ¬a) 0a = ⊥.rec (¬a 0a)
-
-rec : (A → B) → (¬ A → B) → Dec A → B
-rec ifyes ifno (yes p) = ifyes p
-rec ifyes ifno (no ¬p) = ifno ¬p
-
-⌊_⌋ : Dec A → Bool
-⌊ false because _ ⌋ = false
-⌊ true  because _ ⌋ = true
+-- FIXME not so useful without Hedberg's lemma
+-- is-set→Discrete-is-prop : is-set A → is-prop (Discrete A)
+-- is-set→Discrete-is-prop A-set d₁ d₂ i x y with d₁ x y | d₂ x y
+-- ... | false because p | false because q = false because is-prop→reflects-is-prop (A-set _ _) p q i
+-- ... | false because p | true  because q = let t = reflects-ext p q in {!!}
+-- ... | true because  p | false because q = {!!}
+-- ... | true because  p | true  because q = true because is-prop→reflects-is-prop (A-set _ _) p q i

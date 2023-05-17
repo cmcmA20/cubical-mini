@@ -4,7 +4,7 @@ module Meta.Reflection.Record where
 open import Foundations.Base
 open import Foundations.Isomorphism
 open import Data.Bool.Base
-open import Data.List
+open import Data.List.Base
 open import Data.Nat.Instances
 open import Data.String.Instances
 
