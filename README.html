@@ -7,57 +7,58 @@
 <a id="126" class="Comment">-- A programmer&#39;s library for Cubical Agda</a>
 <a id="169" class="Comment">-----------------------------------------------------------------------</a>
 
-<a id="242" class="Comment">-- The library comes with a .agda-lib file, for use with the library</a>
-<a id="311" class="Comment">-- management system.</a>
+<a id="242" class="Comment">-- Start here</a>
+<a id="256" class="Keyword">import</a> <a id="263" href="Prelude.html" class="Module">Prelude</a>
 
-<a id="334" class="Comment">------------------------------------------------------------------------</a>
-<a id="407" class="Comment">-- Module hierarchy</a>
-<a id="427" class="Comment">------------------------------------------------------------------------</a>
+<a id="272" class="Comment">------------------------------------------------------------------------</a>
+<a id="345" class="Comment">-- Module hierarchy</a>
+<a id="365" class="Comment">------------------------------------------------------------------------</a>
 
-<a id="501" class="Comment">-- Basic definitions, the toolset of a civilized man.</a>
-<a id="555" class="Keyword">import</a> <a id="562" href="Foundations.Everything.html" class="Module">Foundations.Everything</a>
+<a id="439" class="Comment">-- Core definitions.</a>
+<a id="460" class="Keyword">import</a> <a id="467" href="Foundations.Everything.html" class="Module">Foundations.Everything</a>
 
-<a id="586" class="Comment">-- Automating boring things.</a>
-<a id="615" class="Keyword">import</a> <a id="622" href="Meta.Everything.html" class="Module">Meta.Everything</a>
+<a id="491" class="Comment">-- Basic types and their properties.</a>
+<a id="528" class="Keyword">import</a> <a id="535" href="Data.Everything.html" class="Module">Data.Everything</a>
 
-<a id="639" class="Comment">-- Basic types and their properties.</a>
-<a id="676" class="Keyword">import</a> <a id="683" href="Data.Everything.html" class="Module">Data.Everything</a>
+<a id="552" class="Comment">-- Function kinds.</a>
+<a id="571" class="Keyword">import</a> <a id="578" href="Functions.Everything.html" class="Module">Functions.Everything</a>
 
-<a id="700" class="Comment">-- Function kinds.</a>
-<a id="719" class="Keyword">import</a> <a id="726" href="Functions.Everything.html" class="Module">Functions.Everything</a>
+<a id="600" class="Comment">-- (Univalent) structures.</a>
+<a id="627" class="Keyword">import</a> <a id="634" href="Structures.Everything.html" class="Module">Structures.Everything</a>
 
-<a id="748" class="Comment">-- Homotopy level truncations.</a>
-<a id="779" class="Keyword">import</a> <a id="786" href="Truncation.Everything.html" class="Module">Truncation.Everything</a>
+<a id="657" class="Comment">-- Containers aka polynomial functors.</a>
+<a id="696" class="Keyword">import</a> <a id="703" href="Containers.Everything.html" class="Module">Containers.Everything</a>
 
-<a id="809" class="Comment">-- (Univalent) structures.</a>
-<a id="836" class="Keyword">import</a> <a id="843" href="Structures.Everything.html" class="Module">Structures.Everything</a>
+<a id="726" class="Comment">-- Homotopy level truncations.</a>
+<a id="757" class="Keyword">import</a> <a id="764" href="Truncation.Everything.html" class="Module">Truncation.Everything</a>
 
-<a id="866" class="Comment">-- Containers aka polynomial functors.</a>
-<a id="905" class="Keyword">import</a> <a id="912" href="Containers.Everything.html" class="Module">Containers.Everything</a>
+<a id="787" class="Comment">-- Automating boring things.</a>
+<a id="816" class="Keyword">import</a> <a id="823" href="Meta.Everything.html" class="Module">Meta.Everything</a>
 
-<a id="935" class="Comment">-- I/O and related stuff.</a>
-<a id="961" class="Keyword">import</a> <a id="968" href="System.Everything.html" class="Module">System.Everything</a>
+<a id="840" class="Comment">-- I/O and related stuff.</a>
+<a id="866" class="Keyword">import</a> <a id="873" href="System.Everything.html" class="Module">System.Everything</a>
 
-<a id="987" class="Comment">-- Relations and their properties.</a>
-<a id="1022" class="Comment">-- Note that nullary relations are actually `Structures`.</a>
-<a id="1080" class="Comment">-- TODO import Relations.Everything</a>
+<a id="892" class="Comment">-- Nullary correspondence is called a _structure_.</a>
+<a id="943" class="Comment">-- Prop-valued correspondence is called a _relation_.</a>
+<a id="997" class="Comment">-- Nullary relation/prop-valued structure is called a _property_.</a>
+<a id="1063" class="Comment">-- TODO import Relations.Everything</a>
 
-<a id="1117" class="Comment">-- Modalities.</a>
-<a id="1132" class="Comment">-- TODO import Modalities.Everything</a>
+<a id="1100" class="Comment">-- Modalities.</a>
+<a id="1115" class="Comment">-- TODO import Modalities.Everything</a>
 
-<a id="1170" class="Comment">-- TODO</a>
-<a id="1178" class="Comment">-- -- Category theory</a>
-<a id="1200" class="Comment">-- import Cubical.Categories.Everything</a>
-<a id="1240" class="Comment">--</a>
-<a id="1243" class="Comment">-- -- Quotients</a>
-<a id="1259" class="Comment">-- import Cubical.Quotients.Everything</a>
-<a id="1298" class="Comment">--</a>
-<a id="1301" class="Comment">-- -- Homotopy theory</a>
-<a id="1323" class="Comment">-- import Cubical.Homotopy.Everything</a>
-<a id="1361" class="Comment">--</a>
-<a id="1364" class="Comment">-- -- Algebra library</a>
-<a id="1386" class="Comment">-- import Cubical.Algebra.Everything</a>
-<a id="1423" class="Comment">--</a>
-<a id="1426" class="Comment">-- -- Cardinals</a>
-<a id="1442" class="Comment">-- import Cubical.Cardinals.Everything</a>
+<a id="1153" class="Comment">-- TODO</a>
+<a id="1161" class="Comment">-- -- Category theory</a>
+<a id="1183" class="Comment">-- import Cubical.Categories.Everything</a>
+<a id="1223" class="Comment">--</a>
+<a id="1226" class="Comment">-- -- Quotients</a>
+<a id="1242" class="Comment">-- import Cubical.Quotients.Everything</a>
+<a id="1281" class="Comment">--</a>
+<a id="1284" class="Comment">-- -- Homotopy theory</a>
+<a id="1306" class="Comment">-- import Cubical.Homotopy.Everything</a>
+<a id="1344" class="Comment">--</a>
+<a id="1347" class="Comment">-- -- Algebra library</a>
+<a id="1369" class="Comment">-- import Cubical.Algebra.Everything</a>
+<a id="1406" class="Comment">--</a>
+<a id="1409" class="Comment">-- -- Cardinals</a>
+<a id="1425" class="Comment">-- import Cubical.Cardinals.Everything</a>
 </pre></body></html>
