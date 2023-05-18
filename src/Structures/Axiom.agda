@@ -44,5 +44,5 @@ module _
   → (A : Type-with (Axiom-str σ axioms)) (B : Type-with σ)
   → (A .fst , A .snd .fst) ≃[ σ ] B
   → axioms (B .fst) (B .snd)
-transfer-axioms {univ = univ} {axioms = axioms} A B eqv =
+transfer-axioms {univ} {axioms} A B eqv =
   subst (λ { (x , y) → axioms x y }) (sip univ eqv) (A .snd .snd)

@@ -100,3 +100,11 @@ instance
     : {A : Type ℓ} {B : Type ℓ′} {f : A → B} {n : HLevel}
     → H-Level (suc n) (is-equiv f)
   H-Level-is-equiv = prop-instance (is-equiv-is-prop _)
+
+-- module _ {ℓ : Level} {n : HLevel} where
+--   _ : n-Type ℓ n ≃ Type-with {S = is-of-hlevel n} (HomT→Str λ _ _ _ → ⊤)
+--   _ = Iso→Equiv the-iso
+--     where
+--       open import Meta.Reflection.Record
+--       the-iso : Iso (n-Type ℓ n) (Σ[ T ꞉ Type ℓ ] is-of-hlevel n T)
+--       unquoteDef the-iso = define-record-iso the-iso (quote n-Type)

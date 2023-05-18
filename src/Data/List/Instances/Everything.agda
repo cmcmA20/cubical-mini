@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.List.Instances.Everything where
 
-import Data.List.Instances.Foldable
-import Data.List.Instances.FromProduct
-import Data.List.Instances.Idiom
-import Data.List.Instances.Traverse
+open import Data.List.Instances.Foldable public
+open import Data.List.Instances.FromProduct public
+open import Data.List.Instances.Idiom public
+open import Data.List.Instances.Traverse public

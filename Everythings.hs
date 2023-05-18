@@ -92,17 +92,21 @@ checkREADME base = do
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
           exitFailure
 
-genEverythings :: String -> [SplitFilePath] -> IO ()
-genEverythings base =
+genEverythings :: Bool -> String -> [SplitFilePath] -> IO ()
+genEverythings public base =
   mapM_ (\dir -> do
     files <- getMissingModules base dir Nothing
     let ls = [ "{-# OPTIONS --safe #-}"
              , "module " ++ showFP '.' ("Everything" : dir) ++ " where"
              , [] ]
-             ++ sort (fmap (\file -> "import " ++ showFP '.' file)
+             ++ sort (fmap (\file -> showImport public $ showFP '.' file)
                            (delete (addToFP dir "Everything") files))
     writeFile ("./" ++ base ++ "/" ++ showFP '/' (addToFP dir "Everything") ++ ".agda")
               (unlines ls))
+    where
+      showImport :: Bool -> String -> String
+      showImport False s = "import " ++ s
+      showImport True  s = "open " ++ showImport False s ++ " public"
 
 
 helpText :: String
@@ -128,9 +132,11 @@ main = do
   args <- getArgs
   case args of
     "check":dirs -> checkEverythings base_dir dirs
-    "gen"  :dirs -> genEverythings   base_dir (kek <$> dirs)
+    "gen"  :dirs -> genEverythings   False base_dir (kek <$> dirs)
+    "gen-public"  :dirs -> genEverythings   True  base_dir (kek <$> dirs)
     "check-except":ex_dirs -> checkEverythings base_dir (all_dirs \\ ex_dirs)
-    "gen-except"  :ex_dirs -> genEverythings   base_dir (kek <$> (all_dirs \\ ex_dirs))
+    "gen-except"  :ex_dirs -> genEverythings   False base_dir (kek <$> (all_dirs \\ ex_dirs))
+    "gen-public-except"  :ex_dirs -> genEverythings   True base_dir (kek <$> (all_dirs \\ ex_dirs))
     ["check-README"] -> checkREADME base_dir
     ["get-imports-README"] -> do
       imported <- filter (\fp -> head fp == "Everything")

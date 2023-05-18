@@ -36,11 +36,12 @@ check-everythings:
 
 .PHONY : gen-data-inst-everythings
 gen-data-inst-everythings:
-	$(EVERYTHINGS) gen $(DATA_INSTANCE_DIRS)
+	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
 
 .PHONY : gen-everythings
 gen-everythings:
-	$(EVERYTHINGS) gen-except Foundations
+	$(EVERYTHINGS) gen-except Foundations Meta
+	$(EVERYTHINGS) gen-public Meta
 
 .PHONY : gen-and-check-everythings
 gen-and-check-everythings: gen-everythings check-everythings
