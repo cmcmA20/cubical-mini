@@ -17,7 +17,7 @@ open import Data.Nat.Base
 open import Data.Nat.Instances
 open import Data.String.Instances
 
-open import Structures.n-Type
+open import Structures.Instances.n-Type
 
 open import Meta.Foldable
 open import Meta.HLevel          public
@@ -604,16 +604,16 @@ macro hlevel! = hlevel-tactic-worker
 -- decomposition-projection mechanism of the tactic. We provide only
 -- some of the most common helpers:
 el! : ∀ {ℓ} (A : Type ℓ) {n} {@(tactic hlevel-tactic-worker) hl : is-of-hlevel n A} → n-Type ℓ n
-el! A {hl = hl} .typ = A
-el! A {hl = hl} .is-tr = hl
+el! A {hl} .typ = A
+el! A {hl} .is-tr = hl
 
-prop-ext!
+prop-extₑ!
   : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
     {@(tactic hlevel-tactic-worker) aprop : is-of-hlevel 1 A}
     {@(tactic hlevel-tactic-worker) bprop : is-of-hlevel 1 B}
   → (A → B) → (B → A)
   → A ≃ B
-prop-ext! {aprop = aprop} {bprop = bprop} = prop-extₑ aprop bprop
+prop-extₑ! {aprop} {bprop} = prop-extₑ aprop bprop
 
 Σ-prop-path!
   : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′}
@@ -621,13 +621,13 @@ prop-ext! {aprop = aprop} {bprop = bprop} = prop-extₑ aprop bprop
   → {x y : Σ A B}
   → x .fst ＝ y .fst
   → x ＝ y
-Σ-prop-path! {bxprop = bxprop} = Σ-prop-path bxprop
+Σ-prop-path! {bxprop} = Σ-prop-path bxprop
 
 prop!
   : ∀ {ℓ} {A : I → Type ℓ} {@(tactic hlevel-tactic-worker) aip : is-of-hlevel 1 (A i0)}
   → {x : A i0} {y : A i1}
   → PathP (λ i → A i) x y
-prop! {A = A} {aip = aip} {x} {y} =
+prop! {A} {aip} {x} {y} =
   is-prop→PathP (λ i → coe0→i (λ j → is-prop (A j)) i aip) x y
 
 open hlevel-projection

@@ -7,6 +7,8 @@ This library may be a toolset to help you build reliable software.
 
 Credits:
 
+- `Structures` due to Martin Escardo, Carlo Angiuli, Evan Cavallo,
+  Anders Mörtberg, Max Zeuner.
 - `Categories` in this formulation were introduced by Frederik Hanghøj Iversen.
 - `Cardinals` follow closely the work of Donnacha Oisín Kidney.
 - `Ordinals` due to Fredrik Nordvall Forsberg et al.

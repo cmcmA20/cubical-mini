@@ -61,25 +61,25 @@ function-≃ dom rng = Iso→Equiv the-iso where
     fun-ext λ x → rng-iso .is-iso.linv _
                 ∙ ap f (dom-iso .is-iso.linv _)
 
-funext-dep
+fun-ext-dep
   : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′} →  ∀ {f g}
   → ( ∀ {x₀ x₁} (p : ＜ x₀ ／ A ＼ x₁ ＞) → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   → ＜ f ／ (λ i → Π[ x ꞉ A i ] B i x) ＼ g ＞
-funext-dep {A} {B} h i x =
+fun-ext-dep {A} {B} h i x =
   transp (λ k → B i (coei→i A i x k)) (i ∨ ~ i)
     (h (λ j → coe A i j x) i)
 
-funext-dep-≃
+fun-ext-dep-≃
   : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
     {f : (x : A i0) → B i0 x} {g : (x : A i1) → B i1 x}
 
   → ( {x₀ : A i0} {x₁ : A i1} (p : ＜ x₀ ／ A ＼ x₁ ＞)
     → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   ≃ ＜ f ／ (λ i → (x : A i) → B i x) ＼ g ＞
-funext-dep-≃ {A} {B} {f} {g} = Iso→Equiv isom where
+fun-ext-dep-≃ {A} {B} {f} {g} = Iso→Equiv isom where
   open is-iso
   isom : Iso _ _
-  isom .fst = funext-dep
+  isom .fst = fun-ext-dep
   isom .snd .is-iso.inv q p i = q i (p i)
 
   isom .snd .rinv q m i x =

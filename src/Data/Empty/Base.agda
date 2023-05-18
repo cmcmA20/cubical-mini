@@ -13,6 +13,8 @@ private variable
 rec : @0 ⊥ → A
 rec ()
 
+absurd = rec
+
 elim : {@0 A : ⊥ → Type ℓ} → (@0 x : ⊥) → A x
 elim ()
 

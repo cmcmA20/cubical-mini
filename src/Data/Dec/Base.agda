@@ -6,7 +6,7 @@ open import Foundations.Base
 open import Data.Bool.Base public
 import      Data.Empty.Base as ⊥
 
-open import Structures.Negation public
+open import Structures.Instances.Negation public
 
 private variable
   ℓ ℓ′ : Level

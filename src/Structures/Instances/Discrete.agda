@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Structures.Decidable where
+module Structures.Instances.Discrete where
 
 open import Foundations.Base
 

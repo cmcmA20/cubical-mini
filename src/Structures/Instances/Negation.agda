@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Structures.Negation where
+module Structures.Instances.Negation where
 
 open import Foundations.Base
 open import Foundations.HLevel
@@ -53,11 +53,11 @@ Negation-action : Equiv-action S → Equiv-action {ℓ′} (λ X → ¬ (S X))
 Negation-action acts eqv .fst ¬sx sy = ¬sx $ (acts eqv ₑ⁻¹) .fst sy
 Negation-action acts eqv .snd .equiv-proof ¬sy .fst .fst sx = ¬sy (acts eqv .fst sx)
 Negation-action acts eqv .snd .equiv-proof ¬sy .fst .snd = fun-ext λ sy → ⊥.rec (¬sy sy)
-Negation-action acts eqv .snd .equiv-proof ¬sy .snd _ = Σ-prop-path hlevel! (¬-is-prop _ _)
+Negation-action acts eqv .snd .equiv-proof ¬sy .snd _ = prop!
 
 @0 Negation-action-is-transport : {α : Equiv-action S}
                                 → is-transport-str (Negation-action α)
-Negation-action-is-transport _ _ = ¬-is-prop _ _
+Negation-action-is-transport _ _ = prop!
 
 -- TODO move out
 is-non-empty : Type ℓ → Type ℓ

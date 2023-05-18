@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Structures.n-Type where
+module Structures.Instances.n-Type where
 
 open import Foundations.Base
 open import Foundations.Equiv

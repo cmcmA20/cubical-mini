@@ -21,7 +21,7 @@ Str-function-str {S} σ τ .is-hom (A , f) (B , g) h =
                                  → is-univalent σ → is-univalent τ
                                  → is-univalent (Str-function-str σ τ)
 Str-function-str-is-univalent {S} {T} {σ} {τ} θ₁ θ₂ eqv =
-  Π-impl-cod-≃ (λ s → Π-impl-cod-≃ λ t → function-≃ (θ₁ eqv) (θ₂ eqv)) ∙ₑ funext-dep-≃
+  Π-impl-cod-≃ (λ s → Π-impl-cod-≃ λ t → function-≃ (θ₁ eqv) (θ₂ eqv)) ∙ₑ fun-ext-dep-≃
 
 -- prefer this one
 Function-str : Equiv-action S → Structure ℓ T → Structure _ (λ X → S X → T X)
@@ -34,7 +34,7 @@ Function-str {S} act str .is-hom (A , f) (B , g) e =
   → is-univalent (Function-str α τ)
 Function-str-is-univalent {S} {T} α α-tr τ τ-univ {X , f} {Y , g} eqv =
   ((s : S X) → τ .is-hom (X , f s) (Y , _) eqv)     ≃⟨ Π-cod-≃ (λ s → τ-univ eqv ∙ₑ path→Equiv (ap (PathP (λ i → T (ua eqv i)) (f s) ∘ g) (α-tr _ _))) ⟩
-  ((s : S X) → PathP (λ i → T (ua eqv i)) (f s) _)  ≃⟨ (hetero-homotopy≃homotopy ₑ⁻¹) ∙ₑ funext-dep-≃ ⟩
+  ((s : S X) → PathP (λ i → T (ua eqv i)) (f s) _)  ≃⟨ (hetero-homotopy≃homotopy ₑ⁻¹) ∙ₑ fun-ext-dep-≃ ⟩
   _                                                 ≃∎
 
 Function-action : Equiv-action S → Equiv-action T → Equiv-action (λ X → S X → T X)

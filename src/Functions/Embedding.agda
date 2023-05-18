@@ -2,11 +2,13 @@
 module Functions.Embedding where
 
 open import Foundations.Base
-open import Foundations.Univalence
 open import Foundations.HLevel
 open import Foundations.Sigma
+open import Foundations.Univalence
+
 open import Functions.Equiv.Fibrewise
-open import Structures.n-Type
+
+open import Structures.Instances.n-Type
 
 private variable
   ℓ ℓ′ ℓ″ : Level
