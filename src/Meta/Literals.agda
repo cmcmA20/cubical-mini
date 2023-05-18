@@ -9,6 +9,7 @@ open import Agda.Builtin.FromNeg public
   using ( Negative )
   renaming ( fromNeg to from-neg )
 
+-- FIXME do not rename this!
 open import Agda.Builtin.FromString public
   using ()
   renaming ( IsString   to is-string

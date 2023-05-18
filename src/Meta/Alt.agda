@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Data.Bool.Base
 open import Data.String.Base
 
-open import Meta.Idiom
+open import Meta.Idiom public
 open import Meta.Bind
 
 record Alt (M : Effect) : Typeω where

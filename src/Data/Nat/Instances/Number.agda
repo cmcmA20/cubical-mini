@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Nat.Instances where
+module Data.Nat.Instances.Number where
 
 open import Foundations.Base
 open import Meta.Literals

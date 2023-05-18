@@ -5,11 +5,12 @@ open import Foundations.Base
 
 open import Data.Bool.Base
 open import Data.List.Base
-open import Data.List.Instances
+open import Data.List.Instances.FromProduct
+open import Data.List.Instances.Traverse
 open import Data.Maybe.Base
-open import Data.Nat.Instances
+open import Data.Nat.Instances.Number
 open import Data.String.Base
-open import Data.String.Instances
+open import Data.String.Instances.IsString
 
 open import Meta.Literals    public
 open import Meta.Idiom       public

@@ -92,17 +92,16 @@ checkREADME base = do
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
           exitFailure
 
-genEverythings :: String -> [String] -> IO ()
+genEverythings :: String -> [SplitFilePath] -> IO ()
 genEverythings base =
   mapM_ (\dir -> do
-    let fp = [dir]
-    files <- getMissingModules base fp Nothing
+    files <- getMissingModules base dir Nothing
     let ls = [ "{-# OPTIONS --safe #-}"
-             , "module " ++ showFP '.' ["Everything",dir] ++ " where"
+             , "module " ++ showFP '.' ("Everything" : dir) ++ " where"
              , [] ]
              ++ sort (fmap (\file -> "import " ++ showFP '.' file)
-                           (delete (addToFP fp "Everything") files))
-    writeFile ("./" ++ base ++ "/" ++ showFP '/' (addToFP fp "Everything") ++ ".agda")
+                           (delete (addToFP dir "Everything") files))
+    writeFile ("./" ++ base ++ "/" ++ showFP '/' (addToFP dir "Everything") ++ ".agda")
               (unlines ls))
 
 
@@ -119,6 +118,9 @@ helpText = unlines [
   " check-README               checks all Everything files are imported in README",
   " get-imports-README         gets the list of all Everything files imported in README"]
 
+kek :: String -> SplitFilePath
+kek = reverse . splitOn '/'
+
 main :: IO ()
 main = do
   let base_dir = "src"
@@ -126,9 +128,9 @@ main = do
   args <- getArgs
   case args of
     "check":dirs -> checkEverythings base_dir dirs
-    "gen"  :dirs -> genEverythings   base_dir dirs
+    "gen"  :dirs -> genEverythings   base_dir (kek <$> dirs)
     "check-except":ex_dirs -> checkEverythings base_dir (all_dirs \\ ex_dirs)
-    "gen-except"  :ex_dirs -> genEverythings   base_dir (all_dirs \\ ex_dirs)
+    "gen-except"  :ex_dirs -> genEverythings   base_dir (kek <$> (all_dirs \\ ex_dirs))
     ["check-README"] -> checkREADME base_dir
     ["get-imports-README"] -> do
       imported <- filter (\fp -> head fp == "Everything")

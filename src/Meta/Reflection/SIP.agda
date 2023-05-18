@@ -4,8 +4,8 @@ module Meta.Reflection.SIP where
 open import Foundations.Base
 open import Data.List.Base
 open import Data.Nat.Base
-open import Data.Nat.Instances
-open import Data.String.Instances
+open import Data.Nat.Instances.Number
+open import Data.String.Instances.IsString
 open import Meta.SIP
 
 open import Meta.Reflection.Base

@@ -3,8 +3,7 @@ module Meta.Foldable where
 
 open import Foundations.Base
 
-open import Meta.Idiom
-open import Meta.Alt
+open import Meta.Alt public
 
 record Foldable (F : Effect) : Typeω where
   private module F = Effect F

@@ -6,6 +6,7 @@ RTS_OPTIONS=+RTS -H3G -RTS
 AGDA=$(AGDA_EXEC) $(RTS_OPTIONS)
 RUNHASKELL?=runhaskell
 EVERYTHINGS=$(RUNHASKELL) ./Everythings.hs
+DATA_INSTANCE_DIRS=`find src/Data -type d -name Instances -printf "Data/%P\n"`
 
 .PHONY : all
 all : build
@@ -15,7 +16,7 @@ build :
 	$(MAKE) AGDA_EXEC=$(AGDA_BIN) gen-everythings check
 
 .PHONY : test
-test : check-whitespace gen-and-check-everythings check-README check
+test : check-whitespace gen-data-inst-everythings gen-and-check-everythings check-README check
 
 # checking and fixing whitespace
 
@@ -32,6 +33,10 @@ check-whitespace:
 .PHONY : check-everythings
 check-everythings:
 	$(EVERYTHINGS) check-except System
+
+.PHONY : gen-data-inst-everythings
+gen-data-inst-everythings:
+	$(EVERYTHINGS) gen $(DATA_INSTANCE_DIRS)
 
 .PHONY : gen-everythings
 gen-everythings:

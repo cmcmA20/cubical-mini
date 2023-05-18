@@ -11,11 +11,12 @@ open import Foundations.Sigma
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Operations
-open import Data.List.Instances
+open import Data.List.Instances.Foldable
+open import Data.List.Instances.Idiom
 open import Data.Maybe.Base
 open import Data.Nat.Base
-open import Data.Nat.Instances
-open import Data.String.Instances
+open import Data.Nat.Instances.Number
+open import Data.String.Instances.IsString
 
 open import Structures.Instances.n-Type
 

@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.String.Instances where
+module Data.String.Instances.IsString where
 
 open import Foundations.Base
 open import Meta.Literals

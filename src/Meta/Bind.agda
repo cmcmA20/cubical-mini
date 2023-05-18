@@ -3,7 +3,7 @@ module Meta.Bind where
 
 open import Foundations.Base
 
-open import Meta.Idiom
+open import Meta.Idiom public
 
 record Bind (M : Effect) : Typeω where
   private module M = Effect M

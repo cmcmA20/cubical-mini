@@ -5,8 +5,8 @@ open import Foundations.Base
 open import Foundations.Isomorphism
 open import Data.Bool.Base
 open import Data.List.Base
-open import Data.Nat.Instances
-open import Data.String.Instances
+open import Data.Nat.Instances.Number
+open import Data.String.Instances.IsString
 
 open import Meta.Reflection.Base
 

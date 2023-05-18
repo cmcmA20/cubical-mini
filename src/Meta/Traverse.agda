@@ -3,7 +3,7 @@ module Meta.Traverse where
 
 open import Foundations.Base
 
-open import Meta.Idiom
+open import Meta.Idiom public
 
 record Traverse (F : Effect) : Typeω where
   private module F = Effect F
