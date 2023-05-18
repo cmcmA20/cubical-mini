@@ -43,7 +43,7 @@ instance
 -- container morphism
 record _⇒_ (C : Container s p) (C′ : Container s′ p′)
            : Type (s ⊔ p ⊔ s′ ⊔ p′) where
-  constructor _▷_
+  constructor _▶_
   field
     shape    : Shape C → Shape C′
     position : ∀ {sh} → Position C′ (shape sh) → Position C sh

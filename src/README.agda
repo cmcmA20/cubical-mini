@@ -6,18 +6,15 @@ module README where
 -- A programmer's library for Cubical Agda
 -----------------------------------------------------------------------
 
--- The library comes with a .agda-lib file, for use with the library
--- management system.
+-- Start here
+import Prelude
 
 ------------------------------------------------------------------------
 -- Module hierarchy
 ------------------------------------------------------------------------
 
--- Basic definitions, the toolset of a civilized man.
+-- Core definitions.
 import Foundations.Everything
-
--- Automating boring things.
-import Meta.Everything
 
 -- Basic types and their properties.
 import Data.Everything
@@ -25,20 +22,24 @@ import Data.Everything
 -- Function kinds.
 import Functions.Everything
 
--- Homotopy level truncations.
-import Truncation.Everything
-
 -- (Univalent) structures.
 import Structures.Everything
 
 -- Containers aka polynomial functors.
 import Containers.Everything
 
+-- Homotopy level truncations.
+import Truncation.Everything
+
+-- Automating boring things.
+import Meta.Everything
+
 -- I/O and related stuff.
 import System.Everything
 
--- Relations and their properties.
--- Note that nullary relations are actually `Structures`.
+-- Nullary correspondence is called a _structure_.
+-- Prop-valued correspondence is called a _relation_.
+-- Nullary relation/prop-valued structure is called a _property_.
 -- TODO import Relations.Everything
 
 -- Modalities.
