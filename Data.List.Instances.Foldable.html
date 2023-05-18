@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.List.Instances.Foldable</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.List.Instances.Foldable.html" class="Module">Data.List.Instances.Foldable</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="96" class="Keyword">open</a> <a id="101" class="Keyword">import</a> <a id="108" href="Meta.Foldable.html" class="Module">Meta.Foldable</a>
+
+<a id="123" class="Keyword">open</a> <a id="128" class="Keyword">import</a> <a id="135" href="Data.List.Base.html" class="Module">Data.List.Base</a> <a id="150" class="Keyword">public</a>
+  <a id="159" class="Keyword">using</a> <a id="165" class="Symbol">(</a><a id="166" href="Agda.Builtin.List.html#147" class="Datatype">List</a><a id="170" class="Symbol">)</a>
+<a id="172" class="Keyword">import</a>      <a id="184" href="Data.List.Base.html" class="Module">Data.List.Base</a> <a id="199" class="Symbol">as</a> <a id="202" class="Module">List</a>
+
+<a id="208" class="Keyword">private</a> <a id="216" class="Keyword">variable</a>
+  <a id="227" href="Data.List.Instances.Foldable.html#227" class="Generalizable">ℓ</a> <a id="229" class="Symbol">:</a> <a id="231" href="Agda.Primitive.html#644" class="Postulate">Level</a>
+  <a id="239" href="Data.List.Instances.Foldable.html#239" class="Generalizable">A</a> <a id="241" class="Symbol">:</a> <a id="243" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="248" href="Data.List.Instances.Foldable.html#227" class="Generalizable">ℓ</a>
+
+<a id="251" class="Keyword">instance</a>
+  <a id="Foldable-List"></a><a id="262" href="Data.List.Instances.Foldable.html#262" class="Function">Foldable-List</a> <a id="276" class="Symbol">:</a> <a id="278" href="Meta.Foldable.html#118" class="Record">Foldable</a> <a id="287" class="Symbol">(</a><a id="288" href="Meta.Idiom.html#121" class="InductiveConstructor">eff</a> <a id="292" href="Agda.Builtin.List.html#147" class="Datatype">List</a><a id="296" class="Symbol">)</a>
+  <a id="300" href="Data.List.Instances.Foldable.html#262" class="Function">Foldable-List</a> <a id="314" class="Symbol">.</a><a id="315" href="Meta.Foldable.html#196" class="Field">Foldable.fold-r</a> <a id="331" class="Symbol">=</a> <a id="333" href="Data.List.Base.html#482" class="Function">List.fold-r</a>
+</pre></body></html>
