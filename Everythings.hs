@@ -92,11 +92,11 @@ checkREADME base = do
           forM_ missing_files (putStrLn . (" " ++) . showFP '.')
           exitFailure
 
-genEverythings :: Bool -> String -> [SplitFilePath] -> IO ()
-genEverythings public base =
+genEverythings :: Bool -> Bool -> String -> [SplitFilePath] -> IO ()
+genEverythings safe public base =
   mapM_ (\dir -> do
     files <- getMissingModules base dir Nothing
-    let ls = [ "{-# OPTIONS --safe #-}"
+    let ls = [ ("{-# OPTIONS " ++ (if safe then "--safe" else "--guarded") ++ " #-}")
              , "module " ++ showFP '.' ("Everything" : dir) ++ " where"
              , [] ]
              ++ sort (fmap (\file -> showImport public $ showFP '.' file)
@@ -132,11 +132,13 @@ main = do
   args <- getArgs
   case args of
     "check":dirs -> checkEverythings base_dir dirs
-    "gen"  :dirs -> genEverythings   False base_dir (kek <$> dirs)
-    "gen-public"  :dirs -> genEverythings   True  base_dir (kek <$> dirs)
+    "gen"  :dirs -> genEverythings   True False base_dir (kek <$> dirs)
+    "gen-guarded"  :dirs -> genEverythings   False False base_dir (kek <$> dirs)
+    "gen-public"  :dirs -> genEverythings   True True  base_dir (kek <$> dirs)
+    "gen-public-guarded"  :dirs -> genEverythings   False True  base_dir (kek <$> dirs)
     "check-except":ex_dirs -> checkEverythings base_dir (all_dirs \\ ex_dirs)
-    "gen-except"  :ex_dirs -> genEverythings   False base_dir (kek <$> (all_dirs \\ ex_dirs))
-    "gen-public-except"  :ex_dirs -> genEverythings   True base_dir (kek <$> (all_dirs \\ ex_dirs))
+    "gen-except"  :ex_dirs -> genEverythings   True False base_dir (kek <$> (all_dirs \\ ex_dirs))
+    "gen-public-except"  :ex_dirs -> genEverythings   True True base_dir (kek <$> (all_dirs \\ ex_dirs))
     ["check-README"] -> checkREADME base_dir
     ["get-imports-README"] -> do
       imported <- filter (\fp -> head fp == "Everything")

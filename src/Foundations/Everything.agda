@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --guarded #-}
 module Foundations.Everything where
 
 open import Foundations.Prim.Extension
@@ -7,6 +7,7 @@ open import Foundations.Prim.Glue
 open import Foundations.Prim.Type
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Equiv
+open import Foundations.Prim.Delay
 
 open import Foundations.Base        public
 open import Foundations.Cubes       public

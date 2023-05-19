@@ -1,4 +1,4 @@
-{-# OPTIONS --guardedness #-}
+{-# OPTIONS --guarded #-}
 
 module README where
 
@@ -38,7 +38,7 @@ import Truncation.Everything
 import Meta.Everything
 
 -- I/O and related stuff.
-import System.Everything
+-- import System.Everything
 
 -- Nullary correspondence is called a _structure_.
 -- Prop-valued correspondence is called a _relation_.
