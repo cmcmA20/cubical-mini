@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Bool.Instances.HLevel</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Bool.Instances.HLevel.html" class="Module">Data.Bool.Instances.HLevel</a> <a id="58" class="Keyword">where</a>
+
+<a id="65" class="Keyword">open</a> <a id="70" class="Keyword">import</a> <a id="77" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a>
+
+<a id="130" class="Keyword">open</a> <a id="135" class="Keyword">import</a> <a id="142" href="Data.Bool.Path.html" class="Module">Data.Bool.Path</a>
+
+<a id="158" class="Keyword">instance</a>
+  <a id="H-Level-Bool"></a><a id="169" href="Data.Bool.Instances.HLevel.html#169" class="Function">H-Level-Bool</a> <a id="182" class="Symbol">:</a> <a id="184" class="Symbol">∀</a> <a id="186" class="Symbol">{</a><a id="187" href="Data.Bool.Instances.HLevel.html#187" class="Bound">n</a><a id="188" class="Symbol">}</a> <a id="190" class="Symbol">→</a> <a id="192" href="Meta.HLevel.html#181" class="Record">H-Level</a> <a id="200" class="Symbol">(</a><a id="201" class="Number">2</a> <a id="203" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">+</a> <a id="205" href="Data.Bool.Instances.HLevel.html#187" class="Bound">n</a><a id="206" class="Symbol">)</a> <a id="208" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a>
+  <a id="215" href="Data.Bool.Instances.HLevel.html#169" class="Function">H-Level-Bool</a> <a id="228" class="Symbol">=</a> <a id="230" href="Meta.HLevel.html#554" class="Function">basic-instance</a> <a id="245" class="Number">2</a> <a id="247" href="Data.Bool.Path.html#583" class="Function">Bool-is-set</a>
+</pre></body></html>
