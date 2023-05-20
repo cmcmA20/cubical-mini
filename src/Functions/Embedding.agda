@@ -143,3 +143,10 @@ module _ {A : Type ℓ} {B : Type ℓ′} {f : A → B} where
       → is-of-hlevel (suc n) A
     embedding→is-hlevel n emb a-hl = is-of-hlevel-≃ (suc n) (Total-Equiv f) $
       Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-hlevel-suc (emb x)
+
+is-equiv→is-embedding : (f : A → B) → is-equiv f
+                      → is-embedding f
+is-equiv→is-embedding f eqv y = is-contr→is-prop (eqv .equiv-proof y)
+
+Equiv→embedding : A ≃ B → A ↪ B
+Equiv→embedding (f , p) = f , is-equiv→is-embedding f p

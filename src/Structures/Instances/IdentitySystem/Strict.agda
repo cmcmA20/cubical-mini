@@ -3,7 +3,6 @@ module Structures.Instances.IdentitySystem.Strict where
 
 open import Foundations.Base
 open import Foundations.HLevel
--- open import Foundations.Equiv
 
 open import Meta.HLevel
 

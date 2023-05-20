@@ -20,7 +20,8 @@ private variable
   x : A
   y : B
 
-module path-code where
+module ⊎-path-code where
+
   Code : A ⊎ B → A ⊎ B → Type (level-of-type A ⊔ level-of-type B)
   Code {B} (inj-l x₁) (inj-l x₂) = Lift (level-of-type B) (x₁ ＝ x₂)
   Code     (inj-l _)  (inj-r _)  = ⊥*
@@ -46,7 +47,7 @@ module path-code where
   Code-is-of-hlevel {s₁ = inj-r x}  {inj-l y}  ahl bhl = Lift-is-of-hlevel _ hlevel!
   Code-is-of-hlevel {s₁ = inj-r y₁} {inj-r y₂} ahl bhl = Lift-is-of-hlevel _ (bhl y₁ y₂)
 
-open path-code
+open ⊎-path-code
 
 ⊎-is-hlevel : (n : HLevel)
             → is-of-hlevel (2 + n) A
@@ -62,6 +63,15 @@ disjoint-⊎-is-prop Ap Bp notab (inj-l x₁) (inj-l x₂) = ap inj-l (Ap x₁ x
 disjoint-⊎-is-prop Ap Bp notab (inj-l x)  (inj-r y)  = absurd (notab (x , y))
 disjoint-⊎-is-prop Ap Bp notab (inj-r x)  (inj-l y)  = absurd (notab (y , x))
 disjoint-⊎-is-prop Ap Bp notab (inj-r y₁) (inj-r y₂) = ap inj-r (Bp y₁ y₂)
+
+contr-⊎-is-set
+  : is-contr A → is-contr B
+  → is-set (A ⊎ B)
+contr-⊎-is-set A-contr B-contr = identity-system→hlevel 1 ⊎-identity-system λ where
+  (inj-l x₁) (inj-l x₂) → Lift-is-of-hlevel 1 (is-contr→is-set A-contr _ _)
+  (inj-l x)  (inj-r y)  → hlevel!
+  (inj-r y)  (inj-l x)  → hlevel!
+  (inj-r y₁) (inj-r y₂) → Lift-is-of-hlevel 1 (is-contr→is-set B-contr _ _)
 
 
 inj-l-inj : {x y : A} → inj-l {B = B} x ＝ inj-l y → x ＝ y

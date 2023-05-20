@@ -18,6 +18,7 @@ private variable
   A : Type ℓ
   B : Type ℓ′
   S : Type ℓ → Type ℓ′
+  n : HLevel
 
 infix 0 ¬_
 ¬_ : Type ℓ → Type ℓ
@@ -27,6 +28,10 @@ infix 0 ¬_
 -- btw such "structures" are called _properties_
 ¬-is-prop : is-prop (¬ A)
 ¬-is-prop f _ = fun-ext λ x → ⊥.rec (f x)
+
+instance
+  H-Level-¬ : H-Level (suc n) (¬ A)
+  H-Level-¬ = prop-instance ¬-is-prop
 
 ¬-extₑ : ¬ A → ¬ B → A ≃ B
 ¬-extₑ ¬a ¬b = Iso→Equiv 𝔯
@@ -38,7 +43,7 @@ infix 0 ¬_
   𝔯 .snd .is-iso.linv a = ⊥.rec (¬a a)
 
 Negation-str : Structure {ℓ′} ℓ″ ¬_
-Negation-str .is-hom _ _ _ = ⊤*
+Negation-str .is-hom _ _ _ = Lift _ ⊤
 
 @0 Negation-str-is-univalent : is-univalent {ℓ} (Negation-str {ℓ′})
 Negation-str-is-univalent _ = Iso→Equiv 𝔯
