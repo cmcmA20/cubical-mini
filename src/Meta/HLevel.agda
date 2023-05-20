@@ -2,7 +2,7 @@
 module Meta.HLevel where
 
 open import Foundations.Base
-open import Foundations.HLevel
+open import Foundations.HLevel public
 
 private variable
   ℓ : Level

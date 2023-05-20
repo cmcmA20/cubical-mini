@@ -7,7 +7,7 @@ open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Data.Empty.Base public
-  using (⊥)
+  using (⊥; ⊥*)
 import      Data.Empty as ⊥
 open import Data.Unit.Base
 
@@ -19,7 +19,7 @@ private variable
   B : Type ℓ′
   S : Type ℓ → Type ℓ′
 
-infix 5 ¬_
+infix 0 ¬_
 ¬_ : Type ℓ → Type ℓ
 ¬ A = A → ⊥
 
