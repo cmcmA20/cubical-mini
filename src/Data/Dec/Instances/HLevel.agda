@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Data.List.Base
 open import Meta.Reflection.HLevel
 
-open import Data.Dec.Path public
+open import Data.Dec.Path
 
 private variable
   ℓ : Level

@@ -4,6 +4,7 @@
 \#*
 src/*/Everything.agda
 !src/Foundations/Everything.agda
+src/Data/*/Instances/Everything.agda
 dist-newstyle/
 _build/
 MAlonzo/
