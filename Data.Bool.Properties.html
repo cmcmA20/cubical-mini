@@ -4,22 +4,22 @@
 
 <a id="59" class="Keyword">open</a> <a id="64" class="Keyword">import</a> <a id="71" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="89" class="Keyword">open</a> <a id="94" class="Keyword">import</a> <a id="101" href="Structures.Instances.Negation.html" class="Module">Structures.Instances.Negation</a>
+<a id="89" class="Keyword">open</a> <a id="94" class="Keyword">import</a> <a id="101" href="Structures.Negation.html" class="Module">Structures.Negation</a>
 
-<a id="132" class="Keyword">open</a> <a id="137" class="Keyword">import</a> <a id="144" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a> <a id="159" class="Keyword">public</a>
+<a id="122" class="Keyword">open</a> <a id="127" class="Keyword">import</a> <a id="134" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a> <a id="149" class="Keyword">public</a>
 
-<a id="true≠false"></a><a id="167" href="Data.Bool.Properties.html#167" class="Function">true≠false</a> <a id="178" class="Symbol">:</a> <a id="180" href="Structures.Instances.Negation.html#447" class="Function Operator">¬</a> <a id="182" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a> <a id="187" href="Foundations.Prim.Kan.html#1272" class="Function Operator">＝</a> <a id="189" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a>
-<a id="195" href="Data.Bool.Properties.html#167" class="Function">true≠false</a> <a id="206" href="Data.Bool.Properties.html#206" class="Bound">p</a> <a id="208" class="Symbol">=</a> <a id="210" href="Foundations.Base.html#10679" class="Function">subst</a> <a id="216" href="Data.Bool.Properties.html#237" class="Function">discrim</a> <a id="224" href="Data.Bool.Properties.html#206" class="Bound">p</a> <a id="226" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a> <a id="229" class="Keyword">where</a>
-  <a id="237" href="Data.Bool.Properties.html#237" class="Function">discrim</a> <a id="245" class="Symbol">:</a> <a id="247" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a> <a id="252" class="Symbol">→</a> <a id="254" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a>
-  <a id="261" href="Data.Bool.Properties.html#237" class="Function">discrim</a> <a id="269" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="275" class="Symbol">=</a> <a id="277" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
-  <a id="281" href="Data.Bool.Properties.html#237" class="Function">discrim</a> <a id="289" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="295" class="Symbol">=</a> <a id="297" href="Data.Empty.Base.html#89" class="Datatype">⊥</a>
+<a id="true≠false"></a><a id="157" href="Data.Bool.Properties.html#157" class="Function">true≠false</a> <a id="168" class="Symbol">:</a> <a id="170" href="Structures.Negation.html#437" class="Function Operator">¬</a> <a id="172" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a> <a id="177" href="Foundations.Prim.Kan.html#1272" class="Function Operator">＝</a> <a id="179" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a>
+<a id="185" href="Data.Bool.Properties.html#157" class="Function">true≠false</a> <a id="196" href="Data.Bool.Properties.html#196" class="Bound">p</a> <a id="198" class="Symbol">=</a> <a id="200" href="Foundations.Base.html#10679" class="Function">subst</a> <a id="206" href="Data.Bool.Properties.html#227" class="Function">discrim</a> <a id="214" href="Data.Bool.Properties.html#196" class="Bound">p</a> <a id="216" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a> <a id="219" class="Keyword">where</a>
+  <a id="227" href="Data.Bool.Properties.html#227" class="Function">discrim</a> <a id="235" class="Symbol">:</a> <a id="237" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a> <a id="242" class="Symbol">→</a> <a id="244" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a>
+  <a id="251" href="Data.Bool.Properties.html#227" class="Function">discrim</a> <a id="259" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="265" class="Symbol">=</a> <a id="267" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+  <a id="271" href="Data.Bool.Properties.html#227" class="Function">discrim</a> <a id="279" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="285" class="Symbol">=</a> <a id="287" href="Data.Empty.Base.html#89" class="Datatype">⊥</a>
 
-<a id="300" class="Comment">-- module test where</a>
-<a id="321" class="Comment">--   open import Data.Id</a>
-<a id="346" class="Comment">--   Bool-is-setⁱ : is-setⁱ Bool</a>
-<a id="379" class="Comment">--   Bool-is-setⁱ false false reflⁱ reflⁱ = reflⁱ</a>
-<a id="429" class="Comment">--   Bool-is-setⁱ true  true  reflⁱ reflⁱ = reflⁱ</a>
+<a id="290" class="Comment">-- module test where</a>
+<a id="311" class="Comment">--   open import Data.Id</a>
+<a id="336" class="Comment">--   Bool-is-setⁱ : is-setⁱ Bool</a>
+<a id="369" class="Comment">--   Bool-is-setⁱ false false reflⁱ reflⁱ = reflⁱ</a>
+<a id="419" class="Comment">--   Bool-is-setⁱ true  true  reflⁱ reflⁱ = reflⁱ</a>
 
-<a id="480" class="Comment">--   Bool-is-set′ : is-set Bool</a>
-<a id="512" class="Comment">--   Bool-is-set′ = is-setⁱ→is-set Bool-is-setⁱ</a>
+<a id="470" class="Comment">--   Bool-is-set′ : is-set Bool</a>
+<a id="502" class="Comment">--   Bool-is-set′ = is-setⁱ→is-set Bool-is-setⁱ</a>
 </pre></body></html>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Structures.Discrete</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Structures.Discrete.html" class="Module">Structures.Discrete</a> <a id="51" class="Keyword">where</a>
+
+<a id="58" class="Keyword">open</a> <a id="63" class="Keyword">import</a> <a id="70" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="88" class="Keyword">open</a> <a id="93" class="Keyword">import</a> <a id="100" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a> <a id="114" class="Keyword">public</a>
+
+<a id="122" class="Keyword">open</a> <a id="127" class="Keyword">import</a> <a id="134" href="Structures.Base.html" class="Module">Structures.Base</a>
+
+<a id="151" class="Keyword">private</a> <a id="159" class="Keyword">variable</a>
+  <a id="170" href="Structures.Discrete.html#170" class="Generalizable">ℓ</a> <a id="172" class="Symbol">:</a> <a id="174" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+
+<a id="Discrete"></a><a id="181" href="Structures.Discrete.html#181" class="Function">Discrete</a> <a id="190" class="Symbol">:</a> <a id="192" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="197" href="Structures.Discrete.html#170" class="Generalizable">ℓ</a> <a id="199" class="Symbol">→</a> <a id="201" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="206" href="Structures.Discrete.html#170" class="Generalizable">ℓ</a>
+<a id="208" href="Structures.Discrete.html#181" class="Function">Discrete</a> <a id="217" href="Structures.Discrete.html#217" class="Bound">A</a> <a id="219" class="Symbol">=</a> <a id="221" href="Data.Dec.Base.html#1107" class="Record">Dec</a> <a id="225" href="Structures.Base.html#4006" class="Function Operator">on-paths-of</a> <a id="237" href="Structures.Discrete.html#217" class="Bound">A</a>
+
+<a id="240" class="Comment">-- FIXME not so useful without Hedberg&#39;s lemma</a>
+<a id="287" class="Comment">-- is-set→Discrete-is-prop : is-set A → is-prop (Discrete A)</a>
+<a id="348" class="Comment">-- is-set→Discrete-is-prop A-set d₁ d₂ i x y with d₁ x y | d₂ x y</a>
+<a id="414" class="Comment">-- ... | false because p | false because q = false because is-prop→reflects-is-prop (A-set _ _) p q i</a>
+<a id="516" class="Comment">-- ... | false because p | true  because q = let t = reflects-ext p q in {!!}</a>
+<a id="594" class="Comment">-- ... | true because  p | false because q = {!!}</a>
+<a id="644" class="Comment">-- ... | true because  p | true  because q = true because is-prop→reflects-is-prop (A-set _ _) p q i</a>
+</pre></body></html>
