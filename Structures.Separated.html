@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Structures.Separated</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Structures.Separated.html" class="Module">Structures.Separated</a> <a id="52" class="Keyword">where</a>
+
+<a id="59" class="Keyword">open</a> <a id="64" class="Keyword">import</a> <a id="71" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="89" class="Keyword">open</a> <a id="94" class="Keyword">import</a> <a id="101" href="Data.Empty.html" class="Module">Data.Empty</a>
+
+<a id="113" class="Keyword">open</a> <a id="118" class="Keyword">import</a> <a id="125" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a>
+
+<a id="149" class="Keyword">open</a> <a id="154" class="Keyword">import</a> <a id="161" href="Structures.Base.html" class="Module">Structures.Base</a>
+<a id="177" class="Keyword">open</a> <a id="182" class="Keyword">import</a> <a id="189" href="Structures.IdentitySystem.Base.html" class="Module">Structures.IdentitySystem.Base</a>
+
+<a id="221" class="Keyword">open</a> <a id="226" class="Keyword">import</a> <a id="233" href="Structures.Negation.html" class="Module">Structures.Negation</a>
+
+<a id="254" class="Keyword">private</a> <a id="262" class="Keyword">variable</a>
+  <a id="273" href="Structures.Separated.html#273" class="Generalizable">ℓ</a> <a id="275" class="Symbol">:</a> <a id="277" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="285" href="Structures.Separated.html#285" class="Generalizable">A</a> <a id="287" class="Symbol">:</a> <a id="289" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="294" href="Structures.Separated.html#273" class="Generalizable">ℓ</a>
+
+<a id="297" class="Keyword">infix</a> <a id="303" class="Number">0</a> <a id="305" href="Structures.Separated.html#309" class="Function Operator">¬¬_</a>
+<a id="¬¬_"></a><a id="309" href="Structures.Separated.html#309" class="Function Operator">¬¬_</a> <a id="313" class="Symbol">:</a> <a id="315" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="320" href="Structures.Separated.html#273" class="Generalizable">ℓ</a> <a id="322" class="Symbol">→</a> <a id="324" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="329" href="Structures.Separated.html#273" class="Generalizable">ℓ</a>
+<a id="331" href="Structures.Separated.html#309" class="Function Operator">¬¬</a> <a id="334" href="Structures.Separated.html#334" class="Bound">A</a> <a id="336" class="Symbol">=</a> <a id="338" href="Structures.Negation.html#437" class="Function Operator">¬</a> <a id="340" href="Structures.Negation.html#437" class="Function Operator">¬</a> <a id="342" href="Structures.Separated.html#334" class="Bound">A</a>
+
+<a id="Separated"></a><a id="345" href="Structures.Separated.html#345" class="Function">Separated</a> <a id="355" class="Symbol">:</a> <a id="357" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="362" href="Structures.Separated.html#273" class="Generalizable">ℓ</a> <a id="364" class="Symbol">→</a> <a id="366" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="371" href="Structures.Separated.html#273" class="Generalizable">ℓ</a>
+<a id="373" href="Structures.Separated.html#345" class="Function">Separated</a> <a id="383" href="Structures.Separated.html#383" class="Bound">A</a> <a id="385" class="Symbol">=</a> <a id="387" class="Symbol">(</a><a id="388" href="Structures.Separated.html#309" class="Function Operator">¬¬_</a> <a id="392" href="Structures.Base.html#4249" class="Function Operator">stable_</a><a id="399" class="Symbol">)</a> <a id="401" href="Structures.Base.html#4006" class="Function Operator">on-paths-of</a> <a id="413" href="Structures.Separated.html#383" class="Bound">A</a>
+
+<a id="separated-identity-system"></a><a id="416" href="Structures.Separated.html#416" class="Function">separated-identity-system</a>
+  <a id="444" class="Symbol">:</a> <a id="446" href="Structures.Separated.html#345" class="Function">Separated</a> <a id="456" href="Structures.Separated.html#285" class="Generalizable">A</a>
+  <a id="460" class="Symbol">→</a> <a id="462" href="Structures.IdentitySystem.Base.html#300" class="Record">is-identity-system</a> <a id="481" class="Symbol">(λ</a> <a id="484" href="Structures.Separated.html#484" class="Bound">x</a> <a id="486" href="Structures.Separated.html#486" class="Bound">y</a> <a id="488" class="Symbol">→</a> <a id="490" href="Structures.Separated.html#309" class="Function Operator">¬¬</a> <a id="493" class="Symbol">(</a><a id="494" href="Structures.Separated.html#484" class="Bound">x</a> <a id="496" href="Foundations.Prim.Kan.html#1272" class="Function Operator">＝</a> <a id="498" href="Structures.Separated.html#486" class="Bound">y</a><a id="499" class="Symbol">))</a> <a id="502" class="Symbol">(λ</a> <a id="505" href="Structures.Separated.html#505" class="Bound">_</a> <a id="507" href="Structures.Separated.html#507" class="Bound">k</a> <a id="509" class="Symbol">→</a> <a id="511" href="Structures.Separated.html#507" class="Bound">k</a> <a id="513" href="Foundations.Prim.Kan.html#1476" class="Function">refl</a><a id="517" class="Symbol">)</a>
+<a id="519" href="Structures.Separated.html#416" class="Function">separated-identity-system</a> <a id="545" href="Structures.Separated.html#545" class="Bound">A-sep</a> <a id="551" class="Symbol">=</a>
+  <a id="555" href="Structures.IdentitySystem.Base.html#7690" class="Function">set-identity-system</a> <a id="575" class="Symbol">(λ</a> <a id="578" href="Structures.Separated.html#578" class="Bound">_</a> <a id="580" href="Structures.Separated.html#580" class="Bound">_</a> <a id="582" class="Symbol">→</a> <a id="584" href="Meta.Reflection.HLevel.html#24333" class="Macro">hlevel!</a><a id="591" class="Symbol">)</a> <a id="593" class="Symbol">(</a><a id="594" href="Structures.Separated.html#545" class="Bound">A-sep</a> <a id="600" class="Symbol">_</a> <a id="602" class="Symbol">_)</a>
+</pre></body></html>

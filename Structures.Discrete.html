@@ -4,21 +4,28 @@
 
 <a id="58" class="Keyword">open</a> <a id="63" class="Keyword">import</a> <a id="70" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="88" class="Keyword">open</a> <a id="93" class="Keyword">import</a> <a id="100" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a> <a id="114" class="Keyword">public</a>
+<a id="88" class="Keyword">open</a> <a id="93" class="Keyword">import</a> <a id="100" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
+<a id="114" class="Keyword">open</a> <a id="119" class="Keyword">import</a> <a id="126" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
 
-<a id="122" class="Keyword">open</a> <a id="127" class="Keyword">import</a> <a id="134" href="Structures.Base.html" class="Module">Structures.Base</a>
+<a id="143" class="Keyword">open</a> <a id="148" class="Keyword">import</a> <a id="155" href="Structures.Base.html" class="Module">Structures.Base</a>
+<a id="171" class="Keyword">open</a> <a id="176" class="Keyword">import</a> <a id="183" href="Structures.IdentitySystem.Base.html" class="Module">Structures.IdentitySystem.Base</a>
+<a id="214" class="Keyword">open</a> <a id="219" class="Keyword">import</a> <a id="226" href="Structures.Separated.html" class="Module">Structures.Separated</a>
 
-<a id="151" class="Keyword">private</a> <a id="159" class="Keyword">variable</a>
-  <a id="170" href="Structures.Discrete.html#170" class="Generalizable">ℓ</a> <a id="172" class="Symbol">:</a> <a id="174" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+<a id="248" class="Keyword">private</a> <a id="256" class="Keyword">variable</a>
+  <a id="267" href="Structures.Discrete.html#267" class="Generalizable">ℓ</a> <a id="269" class="Symbol">:</a> <a id="271" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="279" href="Structures.Discrete.html#279" class="Generalizable">A</a> <a id="281" class="Symbol">:</a> <a id="283" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="288" href="Structures.Discrete.html#267" class="Generalizable">ℓ</a>
 
-<a id="Discrete"></a><a id="181" href="Structures.Discrete.html#181" class="Function">Discrete</a> <a id="190" class="Symbol">:</a> <a id="192" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="197" href="Structures.Discrete.html#170" class="Generalizable">ℓ</a> <a id="199" class="Symbol">→</a> <a id="201" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="206" href="Structures.Discrete.html#170" class="Generalizable">ℓ</a>
-<a id="208" href="Structures.Discrete.html#181" class="Function">Discrete</a> <a id="217" href="Structures.Discrete.html#217" class="Bound">A</a> <a id="219" class="Symbol">=</a> <a id="221" href="Data.Dec.Base.html#1107" class="Record">Dec</a> <a id="225" href="Structures.Base.html#4006" class="Function Operator">on-paths-of</a> <a id="237" href="Structures.Discrete.html#217" class="Bound">A</a>
+<a id="Discrete"></a><a id="291" href="Structures.Discrete.html#291" class="Function">Discrete</a> <a id="300" class="Symbol">:</a> <a id="302" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="307" href="Structures.Discrete.html#267" class="Generalizable">ℓ</a> <a id="309" class="Symbol">→</a> <a id="311" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="316" href="Structures.Discrete.html#267" class="Generalizable">ℓ</a>
+<a id="318" href="Structures.Discrete.html#291" class="Function">Discrete</a> <a id="327" href="Structures.Discrete.html#327" class="Bound">A</a> <a id="329" class="Symbol">=</a> <a id="331" href="Data.Dec.Base.html#1107" class="Record">Dec</a> <a id="335" href="Structures.Base.html#4006" class="Function Operator">on-paths-of</a> <a id="347" href="Structures.Discrete.html#327" class="Bound">A</a>
 
-<a id="240" class="Comment">-- FIXME not so useful without Hedberg&#39;s lemma</a>
-<a id="287" class="Comment">-- is-set→Discrete-is-prop : is-set A → is-prop (Discrete A)</a>
-<a id="348" class="Comment">-- is-set→Discrete-is-prop A-set d₁ d₂ i x y with d₁ x y | d₂ x y</a>
-<a id="414" class="Comment">-- ... | false because p | false because q = false because is-prop→reflects-is-prop (A-set _ _) p q i</a>
-<a id="516" class="Comment">-- ... | false because p | true  because q = let t = reflects-ext p q in {!!}</a>
-<a id="594" class="Comment">-- ... | true because  p | false because q = {!!}</a>
-<a id="644" class="Comment">-- ... | true because  p | true  because q = true because is-prop→reflects-is-prop (A-set _ _) p q i</a>
+<a id="350" class="Comment">-- Hedberg</a>
+<a id="Discrete→is-set"></a><a id="361" href="Structures.Discrete.html#361" class="Function">Discrete→is-set</a> <a id="377" class="Symbol">:</a> <a id="379" href="Structures.Discrete.html#291" class="Function">Discrete</a> <a id="388" href="Structures.Discrete.html#279" class="Generalizable">A</a> <a id="390" class="Symbol">→</a> <a id="392" href="Foundations.Base.html#12853" class="Function">is-set</a> <a id="399" href="Structures.Discrete.html#279" class="Generalizable">A</a>
+<a id="401" href="Structures.Discrete.html#361" class="Function">Discrete→is-set</a> <a id="417" href="Structures.Discrete.html#417" class="Bound">dec</a> <a id="421" class="Symbol">=</a>
+  <a id="425" href="Structures.IdentitySystem.Base.html#7335" class="Function">identity-system→hlevel</a> <a id="448" class="Number">1</a> <a id="450" class="Symbol">(</a><a id="451" href="Structures.Separated.html#416" class="Function">separated-identity-system</a> <a id="477" href="Structures.Discrete.html#540" class="Function">helper</a><a id="483" class="Symbol">)</a> <a id="485" class="Symbol">λ</a> <a id="487" href="Structures.Discrete.html#487" class="Bound">_</a> <a id="489" href="Structures.Discrete.html#489" class="Bound">_</a> <a id="491" href="Structures.Discrete.html#491" class="Bound">_</a> <a id="493" href="Structures.Discrete.html#493" class="Bound">f</a> <a id="495" class="Symbol">→</a>
+    <a id="501" href="Foundations.Base.html#10898" class="Function">fun-ext</a> <a id="509" class="Symbol">λ</a> <a id="511" href="Structures.Discrete.html#511" class="Bound">g</a> <a id="513" class="Symbol">→</a> <a id="515" href="Data.Empty.Base.html#194" class="Function">absurd</a> <a id="522" class="Symbol">(</a><a id="523" href="Structures.Discrete.html#493" class="Bound">f</a> <a id="525" href="Structures.Discrete.html#511" class="Bound">g</a><a id="526" class="Symbol">)</a>
+  <a id="530" class="Keyword">where</a>
+    <a id="540" href="Structures.Discrete.html#540" class="Function">helper</a> <a id="547" class="Symbol">:</a> <a id="549" href="Structures.Separated.html#345" class="Function">Separated</a> <a id="559" class="Symbol">_</a>
+    <a id="565" href="Structures.Discrete.html#540" class="Function">helper</a> <a id="572" href="Structures.Discrete.html#572" class="Bound">x</a> <a id="574" href="Structures.Discrete.html#574" class="Bound">y</a> <a id="576" href="Structures.Discrete.html#576" class="Bound">¬¬p</a> <a id="580" class="Keyword">with</a> <a id="585" href="Structures.Discrete.html#417" class="Bound">dec</a> <a id="589" href="Structures.Discrete.html#572" class="Bound">x</a> <a id="591" href="Structures.Discrete.html#574" class="Bound">y</a>
+    <a id="597" class="Symbol">...</a> <a id="601" class="Symbol">|</a> <a id="603" href="Data.Dec.Base.html#1419" class="InductiveConstructor">yes</a> <a id="607" href="Structures.Discrete.html#607" class="Bound">p</a> <a id="609" class="Symbol">=</a> <a id="611" href="Structures.Discrete.html#607" class="Bound">p</a>
+    <a id="617" class="Symbol">...</a> <a id="621" class="Symbol">|</a> <a id="623" href="Data.Dec.Base.html#1456" class="InductiveConstructor">no</a> <a id="626" href="Structures.Discrete.html#626" class="Bound">¬p</a> <a id="629" class="Symbol">=</a> <a id="631" href="Data.Empty.Base.html#194" class="Function">absurd</a> <a id="638" class="Symbol">(</a><a id="639" class="Bound">¬¬p</a> <a id="643" href="Structures.Discrete.html#626" class="Bound">¬p</a><a id="645" class="Symbol">)</a>
 </pre></body></html>
