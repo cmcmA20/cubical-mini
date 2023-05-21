@@ -103,6 +103,9 @@ S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)
 _ : id on-paths-of_ ＝ is-prop {ℓ}
 _ = fun-ext (λ _ → refl)
 
+_stable_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
+S stable A = S A → A
+
 
 module _
   (σ : Structure ℓ S)

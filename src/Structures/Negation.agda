@@ -63,14 +63,3 @@ Negation-action acts eqv .snd .equiv-proof ¬sy .snd _ = prop!
 @0 Negation-action-is-transport : {α : Equiv-action S}
                                 → is-transport-str (Negation-action α)
 Negation-action-is-transport _ _ = prop!
-
--- TODO move out
-is-non-empty : Type ℓ → Type ℓ
-is-non-empty A = ¬ ¬ A
-
-is-stable : Type ℓ → Type ℓ
-is-stable A = is-non-empty A → A
-
--- TODO move
--- _≠_ : A → A → Type (level-of-type A)
--- x ≠ y = ¬ (x ＝ y)
