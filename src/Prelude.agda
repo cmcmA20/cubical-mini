@@ -11,8 +11,8 @@ open import Foundations.Pi            public
 open import Foundations.Sigma         public
 open import Foundations.Univalence    public
 
-open import Structures.Instances.n-Type         public
-open import Structures.Instances.IdentitySystem public
+open import Structures.n-Type         public
+open import Structures.IdentitySystem public
 -- TODO add discrete and decidable stuff
 
 open import Functions.Equiv.Biinv          public

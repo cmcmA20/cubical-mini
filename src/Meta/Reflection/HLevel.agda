@@ -18,7 +18,7 @@ open import Data.Nat.Base
 open import Data.Nat.Instances.Number
 open import Data.String.Instances.IsString
 
-open import Structures.Instances.n-Type
+open import Structures.n-Type
 
 open import Meta.Foldable
 open import Meta.HLevel          public

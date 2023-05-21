@@ -8,8 +8,8 @@ open import Data.Empty
 
 open import Meta.Reflection.HLevel
 
-open import Structures.Instances.Negation
-open import Structures.Instances.IdentitySystem.Base
+open import Structures.Negation
+open import Structures.IdentitySystem.Base
 
 open import Data.Sum.Base public
 

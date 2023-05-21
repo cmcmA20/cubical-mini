@@ -6,7 +6,7 @@ open import Foundations.Transport
 open import Foundations.HLevel.Base
 open import Foundations.Equiv
 open import Meta.Reflection.HLevel
-open import Structures.Instances.IdentitySystem
+open import Structures.IdentitySystem
 
 open import Agda.Builtin.Equality public
   using ()

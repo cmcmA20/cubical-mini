@@ -1,12 +1,12 @@
 {-# OPTIONS --safe #-}
-module Structures.Instances.IdentitySystem.Strict where
+module Structures.IdentitySystem.Strict where
 
 open import Foundations.Base
 open import Foundations.HLevel
 
 open import Meta.HLevel
 
-open import Structures.Instances.IdentitySystem.Base
+open import Structures.IdentitySystem.Base
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -41,7 +41,7 @@ IdsK-refl {R} {r} {a} ids set P p =
   transport (λ i → P (set-identity-is-prop ids set (r a) (r a) i)) p ＝⟨⟩
   subst P (set-identity-is-prop ids set (r a) (r a)) p               ＝⟨ ap (λ ϕ → subst P ϕ p) lemma ⟩
   transport (λ i → P (r a)) p                                        ＝⟨ transport-refl p ⟩
-  p ∎
+  p                                                                  ∎
   where
     lemma : set-identity-is-prop ids set (r a) (r a) ＝ refl
     lemma = is-prop→is-set (set-identity-is-prop ids set) (r a) (r a) _ _

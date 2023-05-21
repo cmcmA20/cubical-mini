@@ -1,12 +1,12 @@
 {-# OPTIONS --safe #-}
-module Structures.Instances.IdentitySystem.Interface where
+module Structures.IdentitySystem.Interface where
 
 open import Foundations.Base
   hiding (J; J-refl)
 open import Foundations.HLevel.Base
 open import Foundations.Equiv
 
-open import Structures.Instances.IdentitySystem.Base
+open import Structures.IdentitySystem.Base
 
 module
   Ids {ℓ ℓ′} {A : Type ℓ} {R : A → A → Type ℓ′} {refl : ∀ a → R a a}

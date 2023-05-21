@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Structures.Instances.Negation where
+module Structures.Negation where
 
 open import Foundations.Base
 open import Foundations.HLevel

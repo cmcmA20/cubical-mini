@@ -28,6 +28,9 @@ import Structures.Everything
 -- Containers aka polynomial functors.
 import Containers.Everything
 
+-- Correspondences (proof-relevant relations).
+import Correspondences.Everything
+
 -- Homotopy level truncations.
 import Truncation.Everything
 
@@ -40,7 +43,6 @@ import System.Everything
 -- Nullary correspondence is called a _structure_.
 -- Prop-valued correspondence is called a _relation_.
 -- Nullary relation/prop-valued structure is called a _property_.
--- TODO import Relations.Everything
 
 -- Modalities.
 -- TODO import Modalities.Everything

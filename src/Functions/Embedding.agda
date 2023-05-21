@@ -8,7 +8,7 @@ open import Foundations.Univalence
 
 open import Functions.Equiv.Fibrewise
 
-open import Structures.Instances.n-Type
+open import Structures.n-Type
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -137,11 +137,11 @@ module _ {A : Type ℓ} {B : Type ℓ′} {f : A → B} where
       ((_ , refl) , (is-of-hlevel-≃ 1 (Σ-ap-snd λ _ → sym-Equiv) (emb _) _)))
 
   abstract
-    embedding→is-hlevel
+    embedding→is-of-hlevel
       : ∀ n → is-embedding f
       → is-of-hlevel (suc n) B
       → is-of-hlevel (suc n) A
-    embedding→is-hlevel n emb a-hl = is-of-hlevel-≃ (suc n) (Total-Equiv f) $
+    embedding→is-of-hlevel n emb a-hl = is-of-hlevel-≃ (suc n) (Total-Equiv f) $
       Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-hlevel-suc (emb x)
 
 is-equiv→is-embedding : (f : A → B) → is-equiv f

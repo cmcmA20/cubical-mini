@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Structures.Instances.IdentitySystem.Base where
+module Structures.IdentitySystem.Base where
 
 open import Foundations.Base
 open import Foundations.HLevel

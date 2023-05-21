@@ -2,18 +2,19 @@
 module Data.Dec.Base where
 
 open import Foundations.Base
+open import Foundations.Erased
 
 open import Data.Bool.Base public
 import      Data.Empty.Base as ⊥
 
 open import Meta.Reflection.Record
 
-open import Structures.Instances.Negation public
+open import Structures.Negation public
 
 private variable
   ℓ ℓ′ : Level
-  A P : Type ℓ
-  B Q : Type ℓ′
+  P : Type ℓ
+  Q : Type ℓ′
   a b : Bool
 
 -- some predicates can be reflected in booleans
@@ -22,14 +23,9 @@ data Reflects {ℓ} (P : Type ℓ) : Bool → Type ℓ where
   ofʸ : ( p :   P) → Reflects P true
   ofⁿ : (¬p : ¬ P) → Reflects P false
 
--- FIXME just show equivalence to sums and reuse their h-levels
-is-prop→reflects-is-prop : is-prop P → is-prop (Reflects P b)
-is-prop→reflects-is-prop P-prop (ofʸ  p) (ofʸ  p′) = ap ofʸ (P-prop _ _)
-is-prop→reflects-is-prop P-prop (ofⁿ ¬p) (ofⁿ ¬p′) = ap ofⁿ (fun-ext λ p → ⊥.rec (¬p p))
-
-of : if b then A else ¬ A → Reflects A b
-of {b = false} ¬a = ofⁿ ¬a
-of {b = true }  a = ofʸ a
+of : if b then P else ¬ P → Reflects P b
+of {b = false} ¬p = ofⁿ ¬p
+of {b = true }  p = ofʸ p
 
 invert : Reflects P b → if b then P else ¬ P
 invert (ofʸ  p) = p
@@ -63,13 +59,22 @@ module _ {ℓ} (P : Type ℓ) where
 pattern yes p =  true because ofʸ  p
 pattern no ¬p = false because ofⁿ ¬p
 
-recompute : Dec A → @0 A → A
-recompute (yes a) _  = a
-recompute (no ¬a) 0a = ⊥.rec (¬a 0a)
+recover : Dec P → Erased P → P
+recover (yes p) _  = p
+recover (no ¬p) [ 0p ]ᴱ = ⊥.rec (¬p 0p)
 
-rec : (A → B) → (¬ A → B) → Dec A → B
+rec : (P → Q) → (¬ P → Q) → Dec P → Q
 rec ifyes ifno (yes p) = ifyes p
 rec ifyes ifno (no ¬p) = ifno ¬p
 
-⌊_⌋ : Dec A → Bool
+⌊_⌋ : Dec P → Bool
 ⌊ b because _ ⌋ = b
+
+
+True : Dec P → Type
+True (false because _) = ⊥
+True (true  because _) = ⊤
+
+-- TODO check if erasure is really beneficial here
+witness : (d : Dec P) → ⦃ Erased (True d) ⦄ → P
+witness (yes p) = p

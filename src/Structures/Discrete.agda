@@ -1,20 +1,14 @@
 {-# OPTIONS --safe #-}
-module Structures.Instances.Discrete where
+module Structures.Discrete where
 
 open import Foundations.Base
 
 open import Data.Dec.Base public
 
-open import Structures.Path public
+open import Structures.Base
 
 private variable
   ℓ : Level
-
--- Dec-is-prop : is-prop (Dec P)
--- Dec-is-prop (no ¬p) (no ¬p′) = ap no (fun-ext λ p → ⊥.rec (¬p p))
--- Dec-is-prop (no ¬p) (yes p ) = ⊥.rec (¬p p)
--- Dec-is-prop (yes p) (no ¬p ) = ⊥.rec (¬p p)
--- Dec-is-prop (yes p) (yes p′) = ap yes {!!}
 
 Discrete : Type ℓ → Type ℓ
 Discrete A = Dec on-paths-of A

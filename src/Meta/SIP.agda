@@ -5,11 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv.Base
 open import Foundations.Univalence.SIP
 
-open import Structures.Axiom    public
-open import Structures.Constant public
-open import Structures.Function public
-open import Structures.Pointed  public
-open import Structures.Product  public
+open import Structures.Base public
 
 private variable
   ℓ ℓ₁ : Level
