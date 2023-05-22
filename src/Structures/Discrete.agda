@@ -4,29 +4,38 @@ module Structures.Discrete where
 open import Foundations.Base
 
 open import Data.Dec.Base
+open import Data.Dec.Path
 open import Data.Empty.Base
 
 open import Structures.Base
 open import Structures.IdentitySystem.Base
 open import Structures.Separated
 
+open import Meta.HLevel
+open import Meta.Reflection.HLevel
+
 private variable
   ℓ : Level
   A : Type ℓ
 
-Discrete : Type ℓ → Type ℓ
-Discrete A = Dec on-paths-of A
+is-discrete : Type ℓ → Type ℓ
+is-discrete A = Dec on-paths-of A
 
 dec→¬¬-stable : Dec A → ¬¬_ stable A
 dec→¬¬-stable (no ¬a) f = absurd (f ¬a)
 dec→¬¬-stable (yes a) _ = a
 
-discrete→separated : Discrete A → Separated A
-discrete→separated dec x y f = dec→¬¬-stable (dec x y) f
+is-discrete→separated : is-discrete A → Separated A
+is-discrete→separated dec x y f = dec→¬¬-stable (dec x y) f
 
 -- Hedberg
-discrete→is-set : Discrete A → is-set A
-discrete→is-set dec =
+is-discrete→is-set : is-discrete A → is-set A
+is-discrete→is-set dec =
   identity-system→hlevel 1
-    (separated-identity-system (discrete→separated dec)) λ _ _ _ f →
+    (separated-identity-system (is-discrete→separated dec)) λ _ _ _ f →
       fun-ext λ g → absurd (f g)
+
+abstract
+  is-discrete-is-prop : is-prop (is-discrete A)
+  is-discrete-is-prop d₁ _ = fun-ext λ x  → fun-ext λ y →
+    Dec-is-of-hlevel 1 (is-discrete→is-set d₁ x y) _ _

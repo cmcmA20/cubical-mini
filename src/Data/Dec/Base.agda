@@ -18,7 +18,7 @@ private variable
   a b : Bool
 
 -- there is a class of types that can be reflected in booleans
-module Reflects where
+module Reflects′ where
 
   data Reflects {ℓ} (P : Type ℓ) : Bool → Type ℓ where
     ofʸ : ( p :   P) → Reflects P true
@@ -46,7 +46,8 @@ module Reflects where
   map to fro (ofʸ  p) = ofʸ (to p)
   map to fro (ofⁿ ¬p) = ofⁿ (fro ¬p)
 
-open Reflects using (Reflects; ofʸ; ofⁿ)
+open Reflects′ public
+  using (Reflects; ofʸ; ofⁿ)
 
 
 -- witness of a predicate being (already) decided
@@ -67,7 +68,7 @@ pattern no ¬p = false because ofⁿ ¬p
 
 map : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
 map to fro dec .does  = dec .does
-map to fro dec .proof = Reflects.map to fro (dec .proof)
+map to fro dec .proof = Reflects′.map to fro (dec .proof)
 
 recover : Dec P → Erased P → P
 recover (yes p) _  = p

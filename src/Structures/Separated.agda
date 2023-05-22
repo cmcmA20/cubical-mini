@@ -20,6 +20,7 @@ infix 0 ¬¬_
 ¬¬_ : Type ℓ → Type ℓ
 ¬¬ A = ¬ ¬ A
 
+-- TODO check if it's a property
 Separated : Type ℓ → Type ℓ
 Separated A = (¬¬_ stable_) on-paths-of A
 
