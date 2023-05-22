@@ -3,9 +3,12 @@ module Meta.Discrete where
 
 open import Foundations.Base
 
+open import Data.Dec.Base public
+  using (Dec; yes; no)
+
 open import Meta.HLevel
 
-open import Structures.Discrete
+open import Structures.Discrete public
 
 private variable
   ℓ : Level
