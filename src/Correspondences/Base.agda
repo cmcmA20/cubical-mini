@@ -4,7 +4,7 @@ module Correspondences.Base where
 open import Foundations.Base
 open import Data.Nat.Base
 
-open import Data.Product
+open import Data.Product.Base
 
 Corr : (n : ℕ) (ℓ′ : Level) {ℓ : Level} (A : Type ℓ) → Type (Levelₓ ℓ (ℓsuc ℓ′) n)
 Corr n ℓ′ A = functionₓ n A (Type ℓ′)

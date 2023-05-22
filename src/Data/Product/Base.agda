@@ -6,6 +6,7 @@ open import Data.Nat.Base
 
 private variable
   ℓ ℓ′ : Level
+  n : ℕ
   A : Type ℓ
   B : Type ℓ′
 
@@ -23,7 +24,21 @@ Vecₓ A 1             = A
 Vecₓ A (suc (suc n)) = A × Vecₓ A (suc n)
 
 -- rec
-_$ₓ_ : ∀ {n} → functionₓ n A B → (Vecₓ A n → B)
+_$ₓ_ : functionₓ n A B → Vecₓ A n → B
 _$ₓ_ {n = 0          } xs _ = xs
 _$ₓ_ {n = 1          } xs   = xs
 _$ₓ_ {n = suc (suc n)} f xs = f (xs .fst) $ₓ xs .snd
+
+curryₓ : (Vecₓ A n → B) → functionₓ n A B
+curryₓ {n = 0          } f   = f (lift tt)
+curryₓ {n = 1          } f x = f x
+curryₓ {n = suc (suc n)} f x = curryₓ λ xs → f (x , xs)
+
+-- FIXME something wrong with termination checker
+-- fun₁ : {n : ℕ} {A : Type ℓ} {B : Type ℓ′} (f : Vecₓ A n → B) → _$ₓ_ {A = A} (curryₓ f) ＝ f
+-- fun₁ {n = 0          } f = fun-ext λ { (lift tt) → refl }
+-- fun₁ {n = 1          } _ = refl
+-- fun₁ {n = suc (suc n)} f = fun-ext helper
+--   where
+--   helper : _
+--   helper (x , xs) = happly (fun₁ {n = suc n} {!!}) xs
