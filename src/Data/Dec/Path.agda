@@ -20,6 +20,7 @@ private variable
 Dec≃⊎ : Dec P ≃ ((¬ P) ⊎ P)
 Dec≃⊎ = Iso→Equiv $ dec-record-iso _ ∙ᵢ reflects-as-sumᵢ
   where
+  open Reflects
   reflects-as-sumᵢ : (Σ[ b ꞉ Bool ] Reflects P b)
                    ≅ ((¬ P) ⊎ P)
   reflects-as-sumᵢ .fst (false , ofⁿ ¬p) = inj-l ¬p

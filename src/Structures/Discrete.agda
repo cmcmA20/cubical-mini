@@ -17,13 +17,16 @@ private variable
 Discrete : Type ℓ → Type ℓ
 Discrete A = Dec on-paths-of A
 
+dec→¬¬-stable : Dec A → ¬¬_ stable A
+dec→¬¬-stable (no ¬a) f = absurd (f ¬a)
+dec→¬¬-stable (yes a) _ = a
+
+discrete→separated : Discrete A → Separated A
+discrete→separated dec x y f = dec→¬¬-stable (dec x y) f
+
 -- Hedberg
-Discrete→is-set : Discrete A → is-set A
-Discrete→is-set dec =
-  identity-system→hlevel 1 (separated-identity-system helper) λ _ _ _ f →
-    fun-ext λ g → absurd (f g)
-  where
-    helper : Separated _
-    helper x y ¬¬p with dec x y
-    ... | yes p = p
-    ... | no ¬p = absurd (¬¬p ¬p)
+discrete→is-set : Discrete A → is-set A
+discrete→is-set dec =
+  identity-system→hlevel 1
+    (separated-identity-system (discrete→separated dec)) λ _ _ _ f →
+      fun-ext λ g → absurd (f g)
