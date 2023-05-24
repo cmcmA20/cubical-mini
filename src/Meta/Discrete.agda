@@ -5,64 +5,67 @@ open import Foundations.Base
 
 open import Data.Dec.Base public
   using (Dec; yes; no)
+open import Data.Dec.Base as Dec
 
 open import Meta.HLevel
 
 open import Structures.Discrete public
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ : Level
   A : Type ℓ
+  n : HLevel
 
 record Discrete {ℓ} (T : Type ℓ) : Type ℓ where
   constructor discrete-instance
   field
-    has-discrete : is-discrete T
+    _≟_ : is-discrete T
 
-open Discrete
+open Discrete ⦃ ... ⦄ public
 
 discrete : ⦃ d : Discrete A ⦄ → is-discrete A
-discrete ⦃ d ⦄ = d .has-discrete
+discrete ⦃ d ⦄ = d ._≟_
 
 Discrete-is-prop : is-prop (Discrete A)
-Discrete-is-prop d₁ d₂ i .has-discrete =
-  is-discrete-is-prop (d₁ .has-discrete) (d₂ .has-discrete) i
+Discrete-is-prop d₁ d₂ i ._≟_ =
+  is-discrete-is-prop (d₁ ._≟_) (d₂ ._≟_) i
 
 -- sadly it has to be here for now
 -- TODO check how this interacts with the usual machinery
 -- maybe we need a unified solver for discreteness and h-levels?
 -- it should be easy as both are properties of types
 instance
-  H-Level-Discrete : {n : HLevel} ⦃ d : Discrete A ⦄ → H-Level (2 + n) A
-  H-Level-Discrete ⦃ d ⦄ =
-    basic-instance 2 (is-discrete→is-set (d .has-discrete))
+  H-Level-Discrete : ⦃ Discrete A ⦄ → H-Level (2 + n) A
+  H-Level-Discrete =
+    basic-instance 2 (is-discrete→is-set _≟_)
 
--- TODO all the generic instances
+  H-Level-Discrete′ : ⦃ Discrete A ⦄ → H-Level (suc n) (Discrete A)
+  H-Level-Discrete′ = prop-instance Discrete-is-prop
 
--- instance
---   H-Level-Π
---     : {B : A → Type ℓ}
---     → ⦃ ∀ {a} → H-Level n (B a) ⦄
---     → H-Level n (Π[ x ꞉ A ] B x)
---   H-Level-Π {n} .has-hlevel = Π-is-of-hlevel n λ _ → hlevel n
+instance
+  Discrete-H-Level : Discrete (H-Level n A)
+  Discrete-H-Level ._≟_ (hlevel-instance _) (hlevel-instance _) =
+    yes (ap hlevel-instance (is-of-hlevel-is-prop _ _ _))
 
---   H-Level-Π-implicit
---     : {B : A → Type ℓ}
---     → ⦃ ∀ {a} → H-Level n (B a) ⦄
---     → H-Level n (∀ {a} → B a)
---   H-Level-Π-implicit {n} .has-hlevel = Π-is-of-hlevel-implicit n λ _ → hlevel n
+  Discrete-Σ
+    : {A : Type ℓ} {B : A → Type ℓ′}
+    → ⦃ Discrete A ⦄ → ⦃ ∀ {a} → Discrete (B a) ⦄
+    → Discrete (Σ A B)
+  Discrete-Σ {B} ._≟_ (a₁ , b₁) (a₂ , b₂) with a₁ ≟ a₂
+  ... | no ¬p = no λ q → ¬p (ap fst q)
+  ... | yes p with subst _ p b₁ ≟ b₂
+  ... | no ¬q = no λ r → ¬q $ from-PathP $
+    subst (λ X → ＜ b₁ ／ (λ i → B (X i)) ＼ b₂ ＞)
+          (is-discrete→is-set discrete a₁ a₂ (ap fst r) p)
+          (ap snd r)
+  ... | yes q = yes (Σ-path p q)
 
---   H-Level-Σ
---     : {B : A → Type ℓ}
---     → ⦃ H-Level n A ⦄ → ⦃ ∀ {a} → H-Level n (B a) ⦄
---     → H-Level n (Σ A B)
---   H-Level-Σ {n} .has-hlevel =
---     Σ-is-of-hlevel n (hlevel n) λ _ → hlevel n
+  Discrete-Lift
+    : ⦃ Discrete A ⦄ → Discrete (Lift ℓ A)
+  Discrete-Lift .Discrete._≟_ (lift x) (lift y) =
+    Dec.map (ap lift) (_∘ ap lower) (x ≟ y)
 
---   H-Level-path′
---     : ⦃ s : H-Level (suc n) A ⦄ {x y : A} → H-Level n (x ＝ y)
---   H-Level-path′ {n} .has-hlevel = Path-is-of-hlevel′ n (hlevel (suc n)) _ _
-
---   H-Level-Lift
---     : ⦃ s : H-Level n A ⦄ → H-Level n (Lift ℓ A)
---   H-Level-Lift {n} .has-hlevel = Lift-is-of-hlevel n (hlevel n)
+  Discrete-path
+    : ⦃ Discrete A ⦄ → {x y : A} → Discrete (x ＝ y)
+  Discrete-path .Discrete._≟_ _ _ =
+    yes (is-discrete→is-set discrete _ _ _ _)

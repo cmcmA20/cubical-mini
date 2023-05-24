@@ -25,17 +25,16 @@ dec→¬¬-stable : Dec A → ¬¬_ stable A
 dec→¬¬-stable (no ¬a) f = absurd (f ¬a)
 dec→¬¬-stable (yes a) _ = a
 
-is-discrete→separated : is-discrete A → Separated A
-is-discrete→separated dec x y f = dec→¬¬-stable (dec x y) f
+is-discrete→is-separated : is-discrete A → is-separated A
+is-discrete→is-separated dec x y f = dec→¬¬-stable (dec x y) f
 
 -- Hedberg
 is-discrete→is-set : is-discrete A → is-set A
-is-discrete→is-set dec =
-  identity-system→hlevel 1
-    (separated-identity-system (is-discrete→separated dec)) λ _ _ _ f →
-      fun-ext λ g → absurd (f g)
+is-discrete→is-set = is-separated→is-set ∘ is-discrete→is-separated
 
-abstract
-  is-discrete-is-prop : is-prop (is-discrete A)
-  is-discrete-is-prop d₁ _ = fun-ext λ x  → fun-ext λ y →
-    Dec-is-of-hlevel 1 (is-discrete→is-set d₁ x y) _ _
+is-discrete-is-prop : is-prop (is-discrete A)
+is-discrete-is-prop d₁ d₂ i _ _ =
+  Dec-is-of-hlevel 1 (is-discrete→is-set d₁ _ _) (d₁ _ _) (d₂ _ _) i
+
+is-of-hlevel-is-discrete : (n : HLevel) → is-discrete (is-of-hlevel n A)
+is-of-hlevel-is-discrete _ _ _ = yes (is-of-hlevel-is-prop _ _ _)
