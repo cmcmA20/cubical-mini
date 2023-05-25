@@ -74,6 +74,10 @@ recover : Dec P → Erased P → P
 recover (yes p) _  = p
 recover (no ¬p) [ 0p ]ᴱ = ⊥.rec (¬p 0p)
 
+recover′ : Dec P → @irr P → P
+recover′ (yes p) _ = p
+recover′ (no ¬p) p = ⊥.rec′ (¬p p)
+
 rec : (P → Q) → (¬ P → Q) → Dec P → Q
 rec ifyes ifno (yes p) = ifyes p
 rec ifyes ifno (no ¬p) = ifno ¬p

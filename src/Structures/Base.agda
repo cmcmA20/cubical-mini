@@ -103,6 +103,11 @@ S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)
 _ : id on-paths-of_ ＝ is-prop {ℓ}
 _ = fun-ext (λ _ → refl)
 
+-- this is the general form
+_stable′_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
+S stable′ A = A ≃ S A
+
+-- here we assume `A → S A` exists and `S` is prop-valued
 _stable_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
 S stable A = S A → A
 

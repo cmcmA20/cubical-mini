@@ -4,6 +4,7 @@ module Structures.Separated where
 open import Foundations.Base
 
 open import Data.Empty
+import Data.Empty as ⊥
 
 open import Meta.Reflection.HLevel
 

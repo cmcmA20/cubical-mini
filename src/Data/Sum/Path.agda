@@ -24,8 +24,8 @@ module ⊎-path-code where
 
   Code : A ⊎ B → A ⊎ B → Type (level-of-type A ⊔ level-of-type B)
   Code {B} (inj-l x₁) (inj-l x₂) = Lift (level-of-type B) (x₁ ＝ x₂)
-  Code     (inj-l _)  (inj-r _)  = ⊥*
-  Code     (inj-r _)  (inj-l _)  = ⊥*
+  Code     (inj-l _)  (inj-r _)  = Lift _ ⊥
+  Code     (inj-r _)  (inj-l _)  = Lift _ ⊥
   Code {A} (inj-r y₁) (inj-r y₂) = Lift (level-of-type A) (y₁ ＝ y₂)
 
   code-refl : (s : A ⊎ B) → Code s s

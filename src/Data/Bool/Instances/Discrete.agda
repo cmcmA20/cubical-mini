@@ -9,7 +9,7 @@ open import Data.Bool.Path
 
 instance
   Discrete-Bool : Discrete Bool
-  Discrete-Bool .Discrete.has-discrete false false = yes refl
-  Discrete-Bool .Discrete.has-discrete false true  = no false≠true
-  Discrete-Bool .Discrete.has-discrete true  false = no λ p → false≠true (sym p)
-  Discrete-Bool .Discrete.has-discrete true  true  = yes refl
+  Discrete-Bool .Discrete._≟_ false false = yes refl
+  Discrete-Bool .Discrete._≟_ false true  = no false≠true
+  Discrete-Bool .Discrete._≟_ true  false = no λ p → false≠true (sym p)
+  Discrete-Bool .Discrete._≟_ true  true  = yes refl

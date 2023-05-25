@@ -13,6 +13,9 @@ private variable
 rec : @0 ⊥ → A
 rec ()
 
+rec′ : @irr ⊥ → A
+rec′ ()
+
 absurd = rec
 
 elim : {@0 A : ⊥ → Type ℓ} → (@0 x : ⊥) → A x
@@ -26,16 +29,6 @@ absurd-is-contr .fst ()
 absurd-is-contr .snd _ _ ()
 
 
-⊥* : Type ℓ
-⊥* {ℓ} = Lift ℓ ⊥
-
-rec* : @0 ⊥* {ℓ′} → A
-rec* ()
-
-elim* : {@0 A : ⊥* {ℓ} → Type ℓ′} → (@0 x : ⊥*) → A x
-elim* ()
-
-
 data ⊥ω : Typeω where
 
 ⊥→⊥ω : ⊥ → ⊥ω
@@ -43,6 +36,9 @@ data ⊥ω : Typeω where
 
 recω : {@0 A : Typeω} → @0 ⊥ω → A
 recω ()
+
+recω′ : {@0 A : Typeω} → @irr ⊥ω → A
+recω′ ()
 
 elimω : {@0 A : ⊥ω → Typeω} → (@0 x : ⊥ω) → A x
 elimω ()

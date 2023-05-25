@@ -7,7 +7,7 @@ open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Data.Empty.Base public
-  using (⊥; ⊥*)
+  using (⊥)
 import      Data.Empty as ⊥
 open import Data.Unit.Base
 
