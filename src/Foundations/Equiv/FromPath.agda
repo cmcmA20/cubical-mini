@@ -75,6 +75,6 @@ line→is-equiv : is-equiv f
 line→is-equiv .equiv-proof y .fst = has-fib y
 line→is-equiv .equiv-proof y .snd = fib-prop y _
 
-line→Equiv : A ≃ B
-line→Equiv .fst = f
-line→Equiv .snd = line→is-equiv
+line→equiv : A ≃ B
+line→equiv .fst = f
+line→equiv .snd = line→is-equiv

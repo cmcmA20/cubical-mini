@@ -16,7 +16,7 @@ private variable
   x y : A
 
 _ₑ⁻¹ : A ≃ B → B ≃ A
-e ₑ⁻¹ = Iso→Equiv (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
+e ₑ⁻¹ = iso→equiv (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
 
 open is-iso
 
@@ -24,8 +24,8 @@ inv-equiv-is-equiv : is-equiv (λ (e : A ≃ B) → e ₑ⁻¹)
 inv-equiv-is-equiv = is-iso→is-equiv goal where
   goal : is-iso _ₑ⁻¹
   goal .inv  = _ₑ⁻¹
-  goal .rinv _ = Equiv-ext refl
-  goal .linv _ = Equiv-ext refl
+  goal .rinv _ = equiv-ext refl
+  goal .linv _ = equiv-ext refl
 
 -- TODO
 -- preCompEquiv : (e : A ≃ B) → (B → C) ≃ (A → C)
@@ -38,10 +38,10 @@ inv-equiv-is-equiv = is-iso→is-equiv goal where
 -- postCompEquiv e = _ , isEquivPostComp e
 
 @0 ap-≃ : (F : Type ℓ → Type ℓ′) → (A ≃ B) → F A ≃ F B
-ap-≃ F e = path→Equiv (ap F (ua e))
+ap-≃ F e = path→equiv (ap F (ua e))
 
-sym-Equiv : (x ＝ y) ≃ (y ＝ x)
-sym-Equiv = sym , is-iso→is-equiv (iso sym (λ _ → refl) (λ _ → refl))
+sym-equiv : (x ＝ y) ≃ (y ＝ x)
+sym-equiv = sym , is-iso→is-equiv (iso sym (λ _ → refl) (λ _ → refl))
 
 is-contr→is-equiv : is-contr A → is-contr B
                   → {f : A → B} → is-equiv f
@@ -51,8 +51,8 @@ is-contr→is-equiv contr-A contr-B = is-iso→is-equiv f-is-iso where
   f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
   f-is-iso .linv _ = is-contr→is-prop contr-A _ _
 
-is-contr→≃ : is-contr A → is-contr B → A ≃ B
-is-contr→≃ contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
+is-contr→equiv : is-contr A → is-contr B → A ≃ B
+is-contr→equiv contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
   f-is-iso : is-iso _
   f-is-iso .inv  _ = contr-A .fst
   f-is-iso .rinv _ = is-contr→is-prop contr-B _ _

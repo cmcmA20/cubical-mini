@@ -39,11 +39,11 @@ is-of-hlevel-fun h f = Π[ b ꞉ _ ] is-of-hlevel h (fibre f b)
 
 -- Essential properties of `is-prop` and `is-contr`
 
-is-prop→PathP : {B : I → Type ℓ}
+is-prop→pathP : {B : I → Type ℓ}
                 (h : (i : I) → is-prop (B i))
               → (b₀ : B i0) (b₁ : B i1)
               → ＜ b₀ ／ B ＼ b₁ ＞
-is-prop→PathP h b₀ b₁ = to-PathP (h _ _ _)
+is-prop→pathP h b₀ b₁ = to-pathP (h _ _ _)
 
 -- Amy says it's more efficient to use direct cubical proof
 is-contr→is-prop : is-contr A → is-prop A
@@ -97,30 +97,30 @@ is-prop→is-hlevel-suc {h = 0𝒽    } A-prop = A-prop
 is-prop→is-hlevel-suc {h = 𝒽suc h} A-prop =
   is-of-hlevel-suc (𝒽suc h) (is-prop→is-hlevel-suc A-prop)
 
-Path-is-of-hlevel : (h : HLevel) → is-of-hlevel h A → {x y : A}
+path-is-of-hlevel : (h : HLevel) → is-of-hlevel h A → {x y : A}
                   → is-of-hlevel h (x ＝ y)
-Path-is-of-hlevel 0𝒽 ahl =
+path-is-of-hlevel 0𝒽 ahl =
   is-contr→is-prop ahl _ _ , is-prop→is-set (is-contr→is-prop ahl) _ _ _
-Path-is-of-hlevel (𝒽suc h) ahl = is-of-hlevel-suc (𝒽suc h) ahl _ _
+path-is-of-hlevel (𝒽suc h) ahl = is-of-hlevel-suc (𝒽suc h) ahl _ _
 
-PathP-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
+pathP-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
                    → is-of-hlevel h (A i1)
                    → {x : A i0} {y : A i1}
                    → is-of-hlevel h (PathP A x y)
-PathP-is-of-hlevel {A} h ahl {x} {y} =
-  subst (is-of-hlevel h) (sym (PathP＝Path A x y)) (Path-is-of-hlevel h ahl)
+pathP-is-of-hlevel {A} h ahl {x} {y} =
+  subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel h ahl)
 
-Path-is-of-hlevel′ : (h : HLevel) → is-of-hlevel (𝒽suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
-Path-is-of-hlevel′ 0𝒽 ahl x y =
+path-is-of-hlevel′ : (h : HLevel) → is-of-hlevel (𝒽suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
+path-is-of-hlevel′ 0𝒽 ahl x y =
   ahl x y , is-prop→is-set ahl _ _ _
-Path-is-of-hlevel′ (𝒽suc h) p x y = p x y
+path-is-of-hlevel′ (𝒽suc h) p x y = p x y
 
-PathP-is-of-hlevel′ : {A : I → Type ℓ} (h : HLevel)
+pathP-is-of-hlevel′ : {A : I → Type ℓ} (h : HLevel)
                     → is-of-hlevel (𝒽suc h) (A i1)
                     → (x : A i0) (y : A i1)
                     → is-of-hlevel h (PathP A x y)
-PathP-is-of-hlevel′ {A} h ahl x y =
-  subst (is-of-hlevel h) (sym (PathP＝Path A x y)) (Path-is-of-hlevel′ h ahl _ _)
+pathP-is-of-hlevel′ {A} h ahl x y =
+  subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel′ h ahl _ _)
 
 
 is-contr-is-prop : is-prop (is-contr A)

@@ -61,7 +61,7 @@ symP-from-goal : {A : I → Type ℓ} {x : A i0} {y : A i1}
 symP-from-goal p j = p (~ j)
 
 ap-simple : {B : Type ℓ′} (f : A → B)
-              (p : x ＝ y) → f x ＝ f y
+            (p : x ＝ y) → f x ＝ f y
 ap-simple f p i = f (p i)
 {-# INLINE ap-simple #-}
 
@@ -424,37 +424,37 @@ Singleton {A} = SingletonP (λ _ → A)
 Singleton⁻ : {A : Type ℓ} → A → Type _
 Singleton⁻ {A} = SingletonP⁻ (λ _ → A)
 
-Singleton-is-prop : {A : Type ℓ} {a : A} (s : Singleton a)
+singleton-is-prop : {A : Type ℓ} {a : A} (s : Singleton a)
                   → (a , refl) ＝ s
-Singleton-is-prop (_ , path) i = path i , square i where
+singleton-is-prop (_ , path) i = path i , square i where
     square : Square refl refl path path
     square i j = path (i ∧ j)
 
-Singleton⁻-is-prop : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
+singleton⁻-is-prop : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
                    → (a , refl) ＝ s
-Singleton⁻-is-prop (_ , path) i = path (~ i) , square (~ i) where
+singleton⁻-is-prop (_ , path) i = path (~ i) , square (~ i) where
     square : Square path path refl refl
     square i j = path (i ∨ j)
 
-Singleton-is-contr : {A : Type ℓ} {a : A} (s : Singleton a)
+singleton-is-contr : {A : Type ℓ} {a : A} (s : Singleton a)
                    → is-contr (Singleton a)
-Singleton-is-contr {a} _ = (a , refl) , Singleton-is-prop
+singleton-is-contr {a} _ = (a , refl) , singleton-is-prop
 
-Singleton-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton a)
+singleton-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton a)
                     → is-contr⁻ (Singleton a)
-Singleton-is-contr⁻ {a} _ = (a , refl) , sym ∘ Singleton-is-prop
+singleton-is-contr⁻ {a} _ = (a , refl) , sym ∘ singleton-is-prop
 
-Singleton⁻-is-contr : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
+singleton⁻-is-contr : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
                     → is-contr (Singleton⁻ a)
-Singleton⁻-is-contr {a} _ = (a , refl) , Singleton⁻-is-prop
+singleton⁻-is-contr {a} _ = (a , refl) , singleton⁻-is-prop
 
-Singleton⁻-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
+singleton⁻-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
                      → is-contr⁻ (Singleton⁻ a)
-Singleton⁻-is-contr⁻ {a} _ = (a , refl) , sym ∘ Singleton⁻-is-prop
+singleton⁻-is-contr⁻ {a} _ = (a , refl) , sym ∘ singleton⁻-is-prop
 
-SingletonP-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (SingletonP A a)
-SingletonP-is-contr A a .fst = _ , transport-filler (λ i → A i) a
-SingletonP-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
+singletonP-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (SingletonP A a)
+singletonP-is-contr A a .fst = _ , transport-filler (λ i → A i) a
+singletonP-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
   k (i = i0) → transport-filler (λ i → A i) a k
   k (i = i1) → p k
   k (k = i0) → a
@@ -470,7 +470,7 @@ module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x refl) where
   J : (p : x ＝ y) → P y p
   J {y} p = transport (λ i → P (path i .fst) (path i .snd)) d
     where path : (x , refl) ＝ (y , p)
-          path = Singleton-is-contr (y , p) .snd _
+          path = singleton-is-contr (y , p) .snd _
 
   J-refl : J refl ＝ d
   J-refl = transport-refl d
@@ -583,39 +583,39 @@ module _ (A : I → Type ℓ) where
 
 -- Converting to and from a PathP
 
-PathP＝Path : (P : I → Type ℓ) (p : P i0) (q : P i1)
+pathP＝path : (P : I → Type ℓ) (p : P i0) (q : P i1)
             → ＜ p ／ P ＼ q ＞ ＝ (transport (λ i → P i) p ＝ q)
-PathP＝Path P p q i =
+pathP＝path P p q i =
   ＜ transport-filler (λ j → P j) p i ／ (λ j → P (i ∨ j)) ＼ q ＞
 
-PathP＝Path⁻ : (P : I → Type ℓ) (p : P i0) (q : P i1)
+pathP＝path⁻ : (P : I → Type ℓ) (p : P i0) (q : P i1)
              → ＜ p ／ P ＼  q ＞ ＝ (p ＝ transport (λ i → P (~ i)) q)
-PathP＝Path⁻ P p q i =
+pathP＝path⁻ P p q i =
   ＜ p ／ (λ j → P (~ i ∧ j)) ＼ transport-filler (λ j → P (~ j)) q i ＞
 
 
 
 module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where
-  -- to-PathP : (transport (λ i → A i) x ＝ y) → ＜ x ／ A ＼ y ＞
-  to-PathP : (coe0→1 A x ＝ y) → ＜ x ／ A ＼ y ＞
-  to-PathP p i = hcomp (∂ i) λ where
+  -- to-pathP : (transport (λ i → A i) x ＝ y) → ＜ x ／ A ＼ y ＞
+  to-pathP : (coe0→1 A x ＝ y) → ＜ x ／ A ＼ y ＞
+  to-pathP p i = hcomp (∂ i) λ where
     j (i = i0) → x
     j (i = i1) → p j
     j (j = i0) → coe0→i A i x
 
-  -- fromPathP : ＜ x ／ A ＼ y ＞ → transport (λ i → A i) x ＝ y
-  from-PathP : ＜ x ／ A ＼ y ＞ → coe0→1 A x ＝ y
-  from-PathP p i = transp (λ j → A (i ∨ j)) i (p i)
+  -- from-pathP : ＜ x ／ A ＼ y ＞ → transport (λ i → A i) x ＝ y
+  from-pathP : ＜ x ／ A ＼ y ＞ → coe0→1 A x ＝ y
+  from-pathP p i = transp (λ j → A (i ∨ j)) i (p i)
 
 module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where
-  to-PathP⁻ : x ＝ coe1→0 A y → ＜ x ／ A ＼ y ＞
-  to-PathP⁻ p = symP $ to-PathP {A = λ j → A (~ j)} (λ i → p (~ i))
+  to-pathP⁻ : x ＝ coe1→0 A y → ＜ x ／ A ＼ y ＞
+  to-pathP⁻ p = symP $ to-pathP {A = λ j → A (~ j)} (λ i → p (~ i))
 
-  from-PathP⁻ : ＜ x ／ A ＼ y ＞ → x ＝ coe1→0 A y
-  from-PathP⁻ p = sym $ from-PathP (λ i → p (~ i))
+  from-pathP⁻ : ＜ x ／ A ＼ y ＞ → x ＝ coe1→0 A y
+  from-pathP⁻ p = sym $ from-pathP (λ i → p (~ i))
 
-  to-from-PathP : (p : ＜ x ／ A ＼ y ＞) → to-PathP (from-PathP p) ＝ p
-  to-from-PathP p i j = hcomp-unique (∂ j)
+  to-from-pathP : (p : ＜ x ／ A ＼ y ＞) → to-pathP (from-pathP p) ＝ p
+  to-from-pathP p i j = hcomp-unique (∂ j)
     (λ { k (k = i0) → coe0→i A j x
        ; k (j = i0) → x
        ; k (j = i1) → coei→1 A k (p k)
@@ -624,8 +624,8 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where
     i
 
   -- just pray
-  from-to-PathP : (p : coe0→1 A x ＝ y) → from-PathP {A = A} (to-PathP p) ＝ p
-  from-to-PathP p i j =
+  from-to-pathP : (p : coe0→1 A x ＝ y) → from-pathP {A = A} (to-pathP p) ＝ p
+  from-to-pathP p i j =
     hcomp (∂ i ∨ ∂ j) λ where
       k (k = i0) →
           coei→1 A (j ∨ ~ i) $
@@ -652,17 +652,17 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where
 
 
 -- Sigma path space
-Σ-PathP : {x y : Σ A B}
+Σ-pathP : {x y : Σ A B}
           (p :              x .fst ＝ y .fst                 )
         →   ＜ x .snd ／     (λ i → B (p i))    ＼ y .snd ＞
         →      x                   ＝              y
-Σ-PathP p q i = p i , q i
+Σ-pathP p q i = p i , q i
 
 Σ-path : {x y : Σ A B}
          (p : x .fst ＝ y .fst)
        → subst B p (x .snd) ＝ (y .snd)
        → x ＝ y
-Σ-path p q = Σ-PathP p (to-PathP q)
+Σ-path p q = Σ-pathP p (to-pathP q)
 
 
 -- Path transport

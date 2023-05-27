@@ -63,7 +63,7 @@ instance
 
   H-Level-path′
     : ⦃ s : H-Level (suc n) A ⦄ {x y : A} → H-Level n (x ＝ y)
-  H-Level-path′ {n} .has-hlevel = Path-is-of-hlevel′ n (hlevel (suc n)) _ _
+  H-Level-path′ {n} .has-hlevel = path-is-of-hlevel′ n (hlevel (suc n)) _ _
 
   H-Level-Lift
     : ⦃ s : H-Level n A ⦄ → H-Level n (Lift ℓ A)

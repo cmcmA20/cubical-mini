@@ -34,7 +34,7 @@ instance
   H-Level-¬ = prop-instance ¬-is-prop
 
 ¬-extₑ : ¬ A → ¬ B → A ≃ B
-¬-extₑ ¬a ¬b = Iso→Equiv 𝔯
+¬-extₑ ¬a ¬b = iso→equiv 𝔯
   where
   𝔯 : _ ≅ _
   𝔯 .fst              a = ⊥.rec (¬a a)
@@ -45,21 +45,21 @@ instance
 Negation-str : Structure {ℓ′} ℓ″ ¬_
 Negation-str .is-hom _ _ _ = Lift _ ⊤
 
-@0 Negation-str-is-univalent : is-univalent {ℓ} (Negation-str {ℓ′})
-Negation-str-is-univalent _ = Iso→Equiv 𝔯
+@0 negation-str-is-univalent : is-univalent {ℓ} (Negation-str {ℓ′})
+negation-str-is-univalent _ = iso→equiv 𝔯
   where
   𝔯 : Iso _ _
-  𝔯 .fst _ = to-PathP (¬-is-prop _ _)
+  𝔯 .fst _ = to-pathP (¬-is-prop _ _)
   𝔯 .snd .is-iso.inv _ = _
-  𝔯 .snd .is-iso.rinv = PathP-is-of-hlevel 1 ¬-is-prop _
+  𝔯 .snd .is-iso.rinv = pathP-is-of-hlevel 1 ¬-is-prop _
   𝔯 .snd .is-iso.linv (lift tt) = refl
 
-Negation-action : Equiv-action S → Equiv-action {ℓ′} (λ X → ¬ (S X))
-Negation-action acts eqv .fst ¬sx sy = ¬sx $ (acts eqv ₑ⁻¹) .fst sy
-Negation-action acts eqv .snd .equiv-proof ¬sy .fst .fst sx = ¬sy (acts eqv .fst sx)
-Negation-action acts eqv .snd .equiv-proof ¬sy .fst .snd = fun-ext λ sy → ⊥.rec (¬sy sy)
-Negation-action acts eqv .snd .equiv-proof ¬sy .snd _ = prop!
+negation-action : Equiv-action S → Equiv-action {ℓ′} (λ X → ¬ (S X))
+negation-action acts eqv .fst ¬sx sy = ¬sx $ (acts eqv ₑ⁻¹) .fst sy
+negation-action acts eqv .snd .equiv-proof ¬sy .fst .fst sx = ¬sy (acts eqv .fst sx)
+negation-action acts eqv .snd .equiv-proof ¬sy .fst .snd = fun-ext λ sy → ⊥.rec (¬sy sy)
+negation-action acts eqv .snd .equiv-proof ¬sy .snd _ = prop!
 
-@0 Negation-action-is-transport : {α : Equiv-action S}
-                                → is-transport-str (Negation-action α)
-Negation-action-is-transport _ _ = prop!
+@0 negation-action-is-transport : {α : Equiv-action S}
+                                → is-transport-str (negation-action α)
+negation-action-is-transport _ _ = prop!

@@ -13,27 +13,27 @@ private variable
 
 open is-iso
 
-Σ-PathP-iso
+Σ-pathP-iso
   : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
     {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
   → (Σ[ p ꞉ ＜ x .fst ／ A ＼ y .fst ＞ ] ＜ x .snd ／ (λ i → B i (p i)) ＼ y .snd ＞)
   ≅ ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
-Σ-PathP-iso .fst (p , q) i = p i , q i
-Σ-PathP-iso .snd .inv p = (λ i → p i .fst) , (λ i → p i .snd)
-Σ-PathP-iso .snd .rinv x = refl
-Σ-PathP-iso .snd .linv x = refl
+Σ-pathP-iso .fst (p , q) i = p i , q i
+Σ-pathP-iso .snd .inv p = (λ i → p i .fst) , (λ i → p i .snd)
+Σ-pathP-iso .snd .rinv x = refl
+Σ-pathP-iso .snd .linv x = refl
 
 Σ-path-iso
   : {x y : Σ A B}
   → (Σ[ p ꞉ x .fst ＝ y .fst ] (subst B p (x .snd) ＝ y .snd))
   ≅ (x ＝ y)
 Σ-path-iso {B} {x} {y} = transport
-  (λ i → (Σ[ p ꞉ x .fst ＝ y .fst ] (PathP＝Path (λ j → B (p j)) (x .snd) (y .snd) i))
+  (λ i → (Σ[ p ꞉ x .fst ＝ y .fst ] (pathP＝path (λ j → B (p j)) (x .snd) (y .snd) i))
        ≅ (x ＝ y))
-  Σ-PathP-iso
+  Σ-pathP-iso
 
 Σ-ap-snd : (Π[ x ꞉ A ] (P x ≃ Q x)) → Σ A P ≃ Σ A Q
-Σ-ap-snd {A} {P} {Q} pointwise = Iso→Equiv morp where
+Σ-ap-snd {A} {P} {Q} pointwise = iso→equiv morp where
   pwise : Π[ x ꞉ A ] (P x ≅ Q x)
   pwise x = _ , is-equiv→is-iso (pointwise x .snd)
 
@@ -64,12 +64,12 @@ open is-iso
     P-ctr i = coe1→i (λ i → B (α i)) i b
 
     ctr : fibre intro x
-    ctr = (A-ctr , B-ctr) , Σ-PathP α P-ctr
+    ctr = (A-ctr , B-ctr) , Σ-pathP α P-ctr
 
     is-ctr : ∀ y → ctr ＝ y
-    is-ctr ((r , s) , p) = λ i → (a＝r i , b≠s i) , Σ-PathP (α＝ρ i) (coh i) where
-      open Σ (Σ-PathP-iso .snd .inv p) renaming (fst to ρ; snd to σ)
-      open Σ (Σ-PathP-iso .snd .inv (e .snd .equiv-proof a′ .snd (r , ρ)))
+    is-ctr ((r , s) , p) = λ i → (a＝r i , b≠s i) , Σ-pathP (α＝ρ i) (coh i) where
+      open Σ (Σ-pathP-iso .snd .inv p) renaming (fst to ρ; snd to σ)
+      open Σ (Σ-pathP-iso .snd .inv (e .snd .equiv-proof a′ .snd (r , ρ)))
         renaming (fst to a＝r; snd to α＝ρ)
 
       b≠s : PB (ap (e .fst) a＝r) B-ctr s
@@ -105,7 +105,7 @@ open is-iso
 Σ-prop-path : (∀ x → is-prop (B x))
             → {x y : Σ _ B}
             → (x .fst ＝ y .fst) → x ＝ y
-Σ-prop-path bp {x} {y} p i = p i , is-prop→PathP (λ i → bp (p i)) (x .snd) (y .snd) i
+Σ-prop-path bp {x} {y} p i = p i , is-prop→pathP (λ i → bp (p i)) (x .snd) (y .snd) i
 
 Σ-prop-path-is-equiv
   : (bp : ∀ x → is-prop (B x))
@@ -117,15 +117,15 @@ open is-iso
   isom .linv p = refl
   isom .is-iso.rinv p i j
     = p j .fst
-    , is-prop→PathP (λ k → Path-is-of-hlevel 1 (bp (p k .fst))
+    , is-prop→pathP (λ k → path-is-of-hlevel 1 (bp (p k .fst))
                                       {x = Σ-prop-path bp {x} {y} (ap fst p) k .snd}
                                       {y = p k .snd})
                              refl refl j i
 
-Σ-prop-path-≃ : (∀ x → is-prop (B x))
-              → {x y : Σ _ B}
-              → (x .fst ＝ y .fst) ≃ (x ＝ y)
-Σ-prop-path-≃ bp = Σ-prop-path bp , Σ-prop-path-is-equiv bp
+Σ-prop-path-equiv : (∀ x → is-prop (B x))
+                  → {x y : Σ _ B}
+                  → (x .fst ＝ y .fst) ≃ (x ＝ y)
+Σ-prop-path-equiv bp = Σ-prop-path bp , Σ-prop-path-is-equiv bp
 
 -- TODO
 -- Σ-prop-square
@@ -141,7 +141,7 @@ open is-iso
 --     (ap snd p) (ap snd q) (ap snd s) (ap snd r) i j
 
 Σ-contract : {B : A → Type ℓ} → (∀ x → is-contr (B x)) → Σ A B ≃ A
-Σ-contract B-contr = Iso→Equiv the-iso where
+Σ-contract B-contr = iso→equiv the-iso where
   the-iso : Iso _ _
   the-iso .fst (a , b) = a
   the-iso .snd .inv x = x , B-contr _ .fst
@@ -151,25 +151,25 @@ open is-iso
 Σ-map₂ : ({x : A} → P x → Q x) → Σ _ P → Σ _ Q
 Σ-map₂ f (x , y) = (x , f y)
 
-Σ-PathP-dep
+Σ-pathP-dep
   : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
   → {x : Σ _ (B i0)} {y : Σ _ (B i1)}
   → (p : ＜ x .fst ／ A ＼ y .fst ＞)
   → ＜ x .snd ／ (λ i → B i (p i)) ＼ y .snd ＞
   → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
-Σ-PathP-dep p q i = p i , q i
+Σ-pathP-dep p q i = p i , q i
 
-_,ₚ_ = Σ-PathP-dep
+_,ₚ_ = Σ-pathP-dep
 infixr 4 _,ₚ_
 
-Σ-prop-PathP
+Σ-prop-pathP
   : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
   → (∀ i x → is-prop (B i x))
   → {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
   → ＜ x .fst ／ A ＼ y .fst ＞
   → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
-Σ-prop-PathP bp {x} {y} p i =
-  p i , is-prop→PathP (λ i → bp i (p i)) (x .snd) (y .snd) i
+Σ-prop-pathP bp {x} {y} p i =
+  p i , is-prop→pathP (λ i → bp i (p i)) (x .snd) (y .snd) i
 
 Σ-inj-set
   : ∀ {x y z}
@@ -178,7 +178,7 @@ infixr 4 _,ₚ_
   → y ＝ z
 Σ-inj-set {B} {y} {z} A-set path =
   subst (λ e → e ＝ z) (ap (λ e → transport (ap B e) y) (A-set _ _ _ _) ∙ transport-refl y)
-    (from-PathP (ap snd path))
+    (from-pathP (ap snd path))
 
 Σ-swap₂
   : {B : Type ℓ′} {C : A → B → Type ℓ″}

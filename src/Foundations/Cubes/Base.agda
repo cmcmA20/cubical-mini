@@ -52,7 +52,7 @@ is-set-□ A =
   → Square a₀₋ a₋₀ a₁₋ a₋₁
 
 is-set→is-set-□ : is-set A → is-set-□ A
-is-set→is-set-□ A-set _ _ _ _ = to-PathP (A-set _ _ _ _)
+is-set→is-set-□ A-set _ _ _ _ = to-pathP (A-set _ _ _ _)
 
 is-set-□→is-set : is-set-□ A → is-set A
 is-set-□→is-set A-set-□ x y p q = A-set-□ refl refl p q

@@ -7,8 +7,8 @@ open import Foundations.Path.Base
 
 open import Foundations.Prim.Equiv public
 
--- include `Equiv` or `_≃_`      if the definition is about equivalences (`_≃_`)
--- include `equiv` or `is-equiv` if the definition is about function being an equivalence (`is-equiv`)
+-- include `equiv` or `_≃_` if the definition is about equivalences (`_≃_`)
+-- include `is-equiv`       if the definition is about function being an equivalence (`is-equiv`)
 -- use `ₑ` subscript for common operators on equivalences
 
 private variable
@@ -41,11 +41,11 @@ id-is-equiv .equiv-proof = strict-contr-fibres id
 idₑ : A ≃ A
 idₑ = id , id-is-equiv
 
-Equiv-centre : (e : A ≃ B) (y : B) → fibre (e .fst) y
-Equiv-centre e y = e .snd .equiv-proof y .fst
+equiv-centre : (e : A ≃ B) (y : B) → fibre (e .fst) y
+equiv-centre e y = e .snd .equiv-proof y .fst
 
-Equiv-path : (e : A ≃ B) (y : B) (v : fibre (e .fst ) y) → Equiv-centre e y ＝ v
-Equiv-path e y = e .snd .equiv-proof y .snd
+equiv-path : (e : A ≃ B) (y : B) (v : fibre (e .fst ) y) → equiv-centre e y ＝ v
+equiv-path e y = e .snd .equiv-proof y .snd
 
 is-equiv-is-prop : (f : A → B) → is-prop (is-equiv f)
 is-equiv-is-prop f p q i .equiv-proof y =
@@ -58,8 +58,8 @@ is-equiv-is-prop f p q i .equiv-proof y =
      k (j = i1) → w
      k (k = i0) → p₂ w (i ∨ j)
 
-Equiv-ext : {e₀ e₁ : A ≃ B} (h : e₀ .fst ＝ e₁ .fst) → e₀ ＝ e₁
-Equiv-ext {e₀} {e₁} h i = h i , is-prop→PathP (λ i → is-equiv-is-prop (h i)) (e₀ .snd) (e₁ .snd) i
+equiv-ext : {e₀ e₁ : A ≃ B} (h : e₀ .fst ＝ e₁ .fst) → e₀ ＝ e₁
+equiv-ext {e₀} {e₁} h i = h i , is-prop→pathP (λ i → is-equiv-is-prop (h i)) (e₀ .snd) (e₁ .snd) i
 
 is-equiv→inverse : {f : A → B} → is-equiv f → (B → A)
 is-equiv→inverse eqv y = eqv .equiv-proof y .fst .fst
@@ -100,7 +100,7 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
 (u ∙ₑ (g , v)) .fst = g ∘ u .fst
 ((f , u) ∙ₑ (g , v)) .snd .equiv-proof c = contr
   where
-  contract-inv = Equiv-path (g , v) c
+  contract-inv = equiv-path (g , v) c
 
   θ : (a : _) (p : g (f a) ＝ c) → _
   θ a p = ∙-filler (ap (is-equiv→inverse u ∘ fst) (contract-inv (_ , p))) (is-equiv→unit u a)
@@ -121,7 +121,7 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
         l (j = i1) → p (k ∧ l)
         l (k = i0) → g (is-equiv→counit u (f a) j)
         l (k = i1) → p (j ∧ l)
-        l (l = i0) → g (Equiv-path (f , u) (f a) (a , refl) k .snd j)
+        l (l = i0) → g (equiv-path (f , u) (f a) (a , refl) k .snd j)
 
 is-equiv-comp : {g : B → C}
               → is-equiv f

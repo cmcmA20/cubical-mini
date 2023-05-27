@@ -20,7 +20,7 @@ private variable
             ≃ ( (Π[ x ꞉ A ] C (inj-l x))
               × (Π[ y ꞉ B ] C (inj-r y))
               )
-⊎-universal = Iso→Equiv the-iso where
+⊎-universal = iso→equiv the-iso where
   the-iso : Iso _ _
   the-iso .fst f = (λ x → f (inj-l x)) , (λ x → f (inj-r x))
   the-iso .snd .is-iso.inv (f , g) (inj-l x) = f x
@@ -30,7 +30,7 @@ private variable
   the-iso .snd .is-iso.linv f i (inj-r x) = f (inj-r x)
 
 ⊎-ap : A ≃ B → C ≃ D → (A ⊎ C) ≃ (B ⊎ D)
-⊎-ap (f , f-eqv) (g , g-eqv) = Iso→Equiv cong′ where
+⊎-ap (f , f-eqv) (g , g-eqv) = iso→equiv cong′ where
   f-iso = is-equiv→is-iso f-eqv
   g-iso = is-equiv→is-iso g-eqv
 
@@ -50,7 +50,7 @@ private variable
 ⊎-ap-r f = ⊎-ap idₑ f
 
 ⊎-comm : (A ⊎ B) ≃ (B ⊎ A)
-⊎-comm = Iso→Equiv i where
+⊎-comm = iso→equiv i where
   i : Iso _ _
   i .fst (inj-l x) = inj-r x
   i .fst (inj-r x) = inj-l x
@@ -64,7 +64,7 @@ private variable
   i .snd .is-iso.linv (inj-r x) = refl
 
 ⊎-assoc : ((A ⊎ B) ⊎ C) ≃ (A ⊎ (B ⊎ C))
-⊎-assoc = Iso→Equiv i where
+⊎-assoc = iso→equiv i where
   i : Iso _ _
   i .fst (inj-l (inj-l x)) = inj-l x
   i .fst (inj-l (inj-r x)) = inj-r (inj-l x)
@@ -93,7 +93,7 @@ private variable
 ⊎-zero-l .snd .equiv-proof y .snd (inj-r x , p) i = inj-r (p (~ i)) , λ j → p (~ i ∨ j)
 
 ⊎-×-distribute : ((A ⊎ B) × C) ≃ ((A × C) ⊎ (B × C))
-⊎-×-distribute = Iso→Equiv i where
+⊎-×-distribute = iso→equiv i where
   i : Iso _ _
   i .fst (inj-l x , y) = inj-l (x , y)
   i .fst (inj-r x , y) = inj-r (x , y)

@@ -32,29 +32,29 @@ Term→structure (s s× s₁) = Product-str (Term→structure s) (Term→structu
 
 Term→action (s-const x₁) x = idₑ
 Term→action s∙ x = x
-Term→action (s s→ s₁) = Function-action (Term→action s) (Term→action s₁)
-Term→action (s s× s₁) = Product-action (Term→action s) (Term→action s₁)
+Term→action (s s→ s₁) = function-action (Term→action s) (Term→action s₁)
+Term→action (s s× s₁) = product-action (Term→action s) (Term→action s₁)
 
 @0 Term→structure-is-univalent : (s : Str-term ℓ ℓ₁ S) → is-univalent (Term→structure s)
 @0 Term→action-is-transport : (s : Str-term ℓ ℓ₁ S) → is-transport-str (Term→action s)
 
-Term→structure-is-univalent (s-const x) = Constant-str-is-univalent
-Term→structure-is-univalent s∙ = Pointed-str-is-univalent
+Term→structure-is-univalent (s-const x) = constant-str-is-univalent
+Term→structure-is-univalent s∙ = pointed-str-is-univalent
 Term→structure-is-univalent (s s→ s₁) =
-  Function-str-is-univalent
+  function-str-is-univalent
     (Term→action s) (Term→action-is-transport s)
     (Term→structure s₁) (Term→structure-is-univalent s₁)
 Term→structure-is-univalent (s s× s₁) =
-  Product-str-is-univalent {σ = Term→structure s} {τ = Term→structure s₁}
+  product-str-is-univalent {σ = Term→structure s} {τ = Term→structure s₁}
     (Term→structure-is-univalent s) (Term→structure-is-univalent s₁)
 
-Term→action-is-transport (s-const x) = Constant-action-is-transport
-Term→action-is-transport s∙ = Id-action-is-transport
+Term→action-is-transport (s-const x) = constant-action-is-transport
+Term→action-is-transport s∙ = id-action-is-transport
 Term→action-is-transport (s s→ s₁) =
-  Function-action-is-transport {α = Term→action s} {β = Term→action s₁}
+  function-action-is-transport {α = Term→action s} {β = Term→action s₁}
     (Term→action-is-transport s) (Term→action-is-transport s₁)
 Term→action-is-transport (s s× s₁) =
-  Product-action-is-transport {α = Term→action s} {β = Term→action s₁}
+  product-action-is-transport {α = Term→action s} {β = Term→action s₁}
     (Term→action-is-transport s) (Term→action-is-transport s₁)
 
 record Str-desc ℓ ℓ₁ S ax : Typeω where

@@ -7,8 +7,6 @@ open import Foundations.Erased
 open import Data.Bool.Base public
 import      Data.Empty.Base as ⊥
 
-open import Meta.Reflection.Record
-
 open import Structures.Negation public
 
 private variable
@@ -58,10 +56,6 @@ record Dec {ℓ} (P : Type ℓ) : Type ℓ where
     does  : Bool
     proof : Reflects P does
 open Dec public
-
-module _ {ℓ} (P : Type ℓ) where
-  dec-record-iso : Iso (Dec P) (Σ[ does ꞉ Bool ] Reflects P does)
-  unquoteDef dec-record-iso = define-record-iso dec-record-iso (quote Dec)
 
 pattern yes p =  true because ofʸ  p
 pattern no ¬p = false because ofⁿ ¬p

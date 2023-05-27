@@ -54,7 +54,7 @@ instance
   Discrete-Σ {B} ._≟_ (a₁ , b₁) (a₂ , b₂) with a₁ ≟ a₂
   ... | no ¬p = no λ q → ¬p (ap fst q)
   ... | yes p with subst _ p b₁ ≟ b₂
-  ... | no ¬q = no λ r → ¬q $ from-PathP $
+  ... | no ¬q = no λ r → ¬q $ from-pathP $
     subst (λ X → ＜ b₁ ／ (λ i → B (X i)) ＼ b₂ ＞)
           (is-discrete→is-set discrete a₁ a₂ (ap fst r) p)
           (ap snd r)

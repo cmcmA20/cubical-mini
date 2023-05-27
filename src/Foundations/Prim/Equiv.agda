@@ -9,8 +9,8 @@ open import Agda.Builtin.Cubical.Equiv public
   renaming ( isEquiv       to is-equiv
            ; equivFun      to equiv-forward
            ; equivProof    to equiv-proof-fast
-           ; pathToisEquiv to path→is-equiv
-           ; pathToEquiv   to path→equiv
+           ; pathToisEquiv to path→is-equiv-builtin
+           ; pathToEquiv   to path→equiv-builtin
            )
 
 private variable ℓ ℓ′ : Level

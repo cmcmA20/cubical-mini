@@ -12,26 +12,30 @@ open import Structures.n-Type
 
 private variable
   ℓ ℓ′ ℓ″ : Level
-  A B E : Type ℓ
-  w x : A
+  A E : Type ℓ
+  B : Type ℓ′
+  f : A → B
 
-injective : (A → B) → Type _
-injective f = ∀ {x y} → f x ＝ f y → x ＝ y
+Injective : (A → B) → Type _
+Injective f = ∀ {x y} → f x ＝ f y → x ＝ y
+
+_↣_ : Type ℓ → Type ℓ′ → Type _
+A ↣ B = Σ[ f ꞉ (A → B) ] Injective f
 
 injective→has-prop-fibres
-  : is-set B → (f : A → B) → injective f
+  : is-set B → (f : A → B) → Injective f
   → ∀ x → is-prop (fibre f x)
 injective→has-prop-fibres bset f inj x (f*x , p) (f*x′ , q) =
   Σ-prop-path (λ x → bset _ _) (inj (p ∙ sym q))
 
 has-prop-fibres→injective
   : (f : A → B) → (∀ x → is-prop (fibre f x))
-  → injective f
+  → Injective f
 has-prop-fibres→injective _ prop p = ap fst (prop _ (_ , p) (_ , refl))
 
 between-sets-injective≃has-prop-fibres
   : is-set A → is-set B → (f : A → B)
-  → injective f ≃ (∀ x → is-prop (fibre f x))
+  → Injective f ≃ (∀ x → is-prop (fibre f x))
 between-sets-injective≃has-prop-fibres A-set B-set f =
   prop-extₑ (λ p q i x → A-set _ _ (p x) (q x) i)
             (Π-is-of-hlevel 1 λ _ → is-prop-is-prop)
@@ -45,9 +49,9 @@ _↪_ : Type ℓ → Type ℓ′ → Type _
 A ↪ B = Σ[ f ꞉ (A → B) ] is-embedding f
 
 
-Fibre-Equiv : (B : A → Type ℓ′) (a : A)
+fibre-equiv : (B : A → Type ℓ′) (a : A)
             → fibre fst a ≃ B a
-Fibre-Equiv B a = Iso→Equiv isom where
+fibre-equiv B a = iso→equiv isom where
   isom : Iso _ _
   isom .fst ((x , y) , p) = subst B p y
   isom .snd .is-iso.inv x        = (a , x) , refl
@@ -55,24 +59,24 @@ Fibre-Equiv B a = Iso→Equiv isom where
   isom .snd .is-iso.linv ((x , y) , p) i =
     (p (~ i) , coe1→i (λ j → B (p (~ i ∧ ~ j))) i y) , λ j → p (~ i ∨ j)
 
-Total-Equiv : (p : E → B) → E ≃ Σ B (fibre p)
-Total-Equiv p = Iso→Equiv isom where
+total-equiv : (p : E → B) → E ≃ Σ B (fibre p)
+total-equiv p = iso→equiv isom where
   isom : Iso _ (Σ _ (fibre p))
   isom .fst x                   = p x , x , refl
   isom .snd .is-iso.inv (_ , x , _)    = x
   isom .snd .is-iso.rinv (b , x , q) i = q i , x , λ j → q (i ∧ j)
   isom .snd .is-iso.linv x             = refl
 
-@0 Fibration-Equiv : ∀ {B : Type ℓ}
+@0 fibration-equiv : ∀ {B : Type ℓ}
                    → (Σ[ E ꞉ Type (ℓ ⊔ ℓ′) ] (E → B))
                    ≃ (B → Type (ℓ ⊔ ℓ′))
-Fibration-Equiv {B} = Iso→Equiv isom where
+fibration-equiv {B} = iso→equiv isom where
   isom : Iso (Σ[ E ꞉ Type _ ] (E → B)) (B → Type _)
   isom .fst (E , p)       = fibre p
   isom .snd .is-iso.inv p⁻¹      = Σ _ p⁻¹ , fst
-  isom .snd .is-iso.rinv prep i x = ua (Fibre-Equiv prep x) i
+  isom .snd .is-iso.rinv prep i x = ua (fibre-equiv prep x) i
   isom .snd .is-iso.linv (E , p) i = ua e (~ i) , λ x → fst (ua-unglue e (~ i) x)
-    where e = Total-Equiv p
+    where e = total-equiv p
 
 _/[_]_ : (ℓ : Level) → (Type (ℓ ⊔ ℓ′) → Type ℓ″) → Type ℓ′ → Type _
 _/[_]_ {ℓ′} ℓ P B =
@@ -81,13 +85,13 @@ _/[_]_ {ℓ′} ℓ P B =
   Π[ x ꞉ B ]
   P (fibre f x)
 
-@0 Map-classifier
+@0 map-classifier
   : {ℓ : Level} {B : Type ℓ′} (P : Type (ℓ ⊔ ℓ′) → Type ℓ″)
   → ℓ /[ P ] B
   ≃ (B → Σ[ T ꞉ _ ] P T)
-Map-classifier {ℓ′} {ℓ} {B} P =
+map-classifier {ℓ′} {ℓ} {B} P =
   (Σ[ A ꞉ _ ] Σ[ f ꞉ _ ] Π[ x ꞉ B ] P (fibre f x)) ≃⟨ Σ-assoc ⟩
-  (Σ[ (_ , f) ꞉ _ ] Π[ y ꞉ B ] P (fibre f y))      ≃⟨ Σ-ap-fst (Fibration-Equiv {ℓ′} {ℓ}) ⟩
+  (Σ[ (_ , f) ꞉ _ ] Π[ y ꞉ B ] P (fibre f y))      ≃⟨ Σ-ap-fst (fibration-equiv {ℓ′} {ℓ}) ⟩
   (Σ[ A ꞉ _ ] Π[ x ꞉ B ] P (A x))                  ≃⟨ Σ-Π-distrib ₑ⁻¹ ⟩
   (B → Σ[ T ꞉ _ ] P T)                             ≃∎
 
@@ -95,14 +99,14 @@ Map-classifier {ℓ′} {ℓ} {B} P =
   : {B : Type ℓ}
   → (Σ[ A ꞉ Type ℓ ] (A ↪ B))
   ≃ (B → Σ[ T ꞉ Type ℓ ] (is-prop T))
-subtype-classifier {ℓ} = Map-classifier {ℓ = ℓ} is-prop
+subtype-classifier {ℓ} = map-classifier {ℓ = ℓ} is-prop
 
 module @0 subtype-classifier {ℓ} {B : Type ℓ} = Equiv (subtype-classifier {B = B})
 
-Subset-proj-embedding
+subset-proj-embedding
   : ∀ {B : A → Type ℓ} → (∀ x → is-prop (B x))
   → is-embedding {A = Σ A B} fst
-Subset-proj-embedding {B = B} B-prop x = is-of-hlevel-≃ 1 (Fibre-Equiv B x) (B-prop _)
+subset-proj-embedding {B = B} B-prop x = is-of-hlevel-≃ 1 (fibre-equiv B x) (B-prop _)
 
 embedding→monic
   : {A : Type ℓ} {B : Type ℓ′} {f : A → B}
@@ -120,33 +124,32 @@ monic→is-embedding {f} bset monic =
   injective→has-prop-fibres bset _ λ {x} {y} p →
     happly (monic {C = el (Lift _ ⊤) (λ _ _ _ _ i j → lift tt)} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p))) _
 
-module _ {A : Type ℓ} {B : Type ℓ′} {f : A → B} where
-  embedding-lemma : (∀ x → is-contr (fibre f (f x))) → is-embedding f
-  embedding-lemma cffx y (x , p) q =
-    is-contr→is-prop (subst is-contr (ap (fibre f) p) (cffx x)) (x , p) q
 
-  cancellable→embedding : (∀ {x y} → (f x ＝ f y) ≃ (x ＝ y)) → is-embedding f
-  cancellable→embedding eqv =
-    embedding-lemma λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → eqv)) $
-      (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
+embedding-lemma : (∀ x → is-contr (fibre f (f x))) → is-embedding f
+embedding-lemma {f} cffx y (x , p) q =
+  is-contr→is-prop (subst is-contr (ap (fibre f) p) (cffx x)) (x , p) q
 
-  embedding→cancellable : is-embedding f → ∀ {x y} → is-equiv {B = f x ＝ f y} (ap f)
-  embedding→cancellable emb = total→equiv {f = λ y p → ap {y = y} f p}
-    (is-contr→is-equiv
-      ((_ , refl) , λ (y , p) i → p i , λ j → p (i ∧ j))
-      ((_ , refl) , (is-of-hlevel-≃ 1 (Σ-ap-snd λ _ → sym-Equiv) (emb _) _)))
+cancellable→embedding : (∀ {x y} → (f x ＝ f y) ≃ (x ＝ y)) → is-embedding f
+cancellable→embedding eqv =
+  embedding-lemma λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → eqv)) $
+    (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
 
-  abstract
-    embedding→is-of-hlevel
-      : ∀ n → is-embedding f
-      → is-of-hlevel (suc n) B
-      → is-of-hlevel (suc n) A
-    embedding→is-of-hlevel n emb a-hl = is-of-hlevel-≃ (suc n) (Total-Equiv f) $
-      Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-hlevel-suc (emb x)
+is-embedding→cancellable : is-embedding f → ∀ {x y} → is-equiv {B = f x ＝ f y} (ap f)
+is-embedding→cancellable {f} emb = total→is-equiv {f = λ y p → ap {y = y} f p}
+  (is-contr→is-equiv
+    ((_ , refl) , λ (y , p) i → p i , λ j → p (i ∧ j))
+    ((_ , refl) , (is-of-hlevel-≃ 1 (Σ-ap-snd λ _ → sym-equiv) (emb _) _)))
 
-is-equiv→is-embedding : (f : A → B) → is-equiv f
-                      → is-embedding f
-is-equiv→is-embedding f eqv y = is-contr→is-prop (eqv .equiv-proof y)
+abstract
+  is-embedding→is-of-hlevel
+    : ∀ n → {f : A → B} → is-embedding f
+    → is-of-hlevel (suc n) B
+    → is-of-hlevel (suc n) A
+  is-embedding→is-of-hlevel n {f} emb a-hl = is-of-hlevel-≃ (suc n) (total-equiv f) $
+    Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-hlevel-suc (emb x)
 
-Equiv→embedding : A ≃ B → A ↪ B
-Equiv→embedding (f , p) = f , is-equiv→is-embedding f p
+is-equiv→is-embedding : is-equiv f → is-embedding f
+is-equiv→is-embedding r y = is-contr→is-prop (r .equiv-proof y)
+
+equiv→embedding : A ≃ B → A ↪ B
+equiv→embedding (f , p) = f , is-equiv→is-embedding p

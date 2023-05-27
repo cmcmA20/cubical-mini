@@ -75,11 +75,11 @@ module _ (pq＝s : p ∙ q ＝ s) where
   ∙-pull-r {r} = sym (∙-assoc r p q) ∙ ap (r ∙_) pq＝s
 
 module _ (s＝pq : s ＝ p ∙ q) where
-  ∙-pushl : s ∙ r ＝ p ∙ q ∙ r
-  ∙-pushl = sym (∙-pull-l (sym s＝pq))
+  ∙-push-l : s ∙ r ＝ p ∙ q ∙ r
+  ∙-push-l = sym (∙-pull-l (sym s＝pq))
 
-  ∙-pushr : r ∙ s ＝ (r ∙ p) ∙ q
-  ∙-pushr = sym (∙-pull-r (sym s＝pq))
+  ∙-push-r : r ∙ s ＝ (r ∙ p) ∙ q
+  ∙-push-r = sym (∙-pull-r (sym s＝pq))
 
 module _ (pq＝rs : p ∙ q ＝ r ∙ s) where
   ∙-extend-l : p ∙ (q ∙ t) ＝ r ∙ (s ∙ t)

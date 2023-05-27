@@ -46,8 +46,8 @@ is-iso→is-half-adjoint-equiv {A} {B} {f} iiso =
                → (f1 ＝ f2)
                ≃ (Σ[ γ ꞉ f1 .fst ＝ f2 .fst ] (ap f γ ∙ f2 .snd ＝ f1 .snd))
 fibre-paths {f} {y} {f1} {f2} =
-  Path (fibre f y) f1 f2                                                          ≃⟨ Iso→Equiv Σ-path-iso ₑ⁻¹ ⟩
-  (Σ[ γ ꞉ f1 .fst ＝ f2 .fst ] (subst (λ x₁ → f x₁ ＝ _) γ (f1 .snd) ＝ f2 .snd)) ≃⟨ Σ-ap-snd (λ x → path→Equiv (lemma x)) ⟩
+  Path (fibre f y) f1 f2                                                          ≃⟨ iso→equiv Σ-path-iso ₑ⁻¹ ⟩
+  (Σ[ γ ꞉ f1 .fst ＝ f2 .fst ] (subst (λ x₁ → f x₁ ＝ _) γ (f1 .snd) ＝ f2 .snd)) ≃⟨ Σ-ap-snd (λ x → path→equiv (lemma x)) ⟩
   (Σ[ γ ꞉ f1 .fst ＝ f2 .fst ] (ap f γ ∙ f2 .snd ＝ f1 .snd))                     ≃∎
   where
     helper : (p′ : f (f1 .fst) ＝ y)
@@ -55,7 +55,7 @@ fibre-paths {f} {y} {f1} {f2} =
            ＝ (ap f refl ∙ p′ ＝ f1 .snd)
     helper p′ =
       subst (λ x → f x ＝ y) refl (f1 .snd) ＝ p′ ＝⟨ ap₂ _＝_ (transport-refl _) refl ⟩
-      (f1 .snd) ＝ p′                             ＝⟨ Iso→Path (sym , iso sym (λ x → refl) (λ x → refl)) ⟩
+      (f1 .snd) ＝ p′                             ＝⟨ iso→path (sym , iso sym (λ x → refl) (λ x → refl)) ⟩
       ⌜ p′ ⌝ ＝ f1 .snd                           ＝˘⟨ ap¡ (∙-id-l _) ⟩
       refl ∙ p′ ＝ f1 .snd                        ＝⟨⟩
       ap f refl ∙ p′ ＝ f1 .snd                   ∎

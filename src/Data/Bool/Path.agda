@@ -14,7 +14,7 @@ open import Structures.Negation
 open import Data.Bool.Base public
 
 bool-as-sum : Bool ≃ (⊤ ⊎ ⊤)
-bool-as-sum = Iso→Equiv 𝔯
+bool-as-sum = iso→equiv 𝔯
   where
   𝔯 : Iso _ _
   𝔯 .fst false = inj-l tt
@@ -29,5 +29,6 @@ bool-as-sum = Iso→Equiv 𝔯
 false≠true : ¬ false ＝ true
 false≠true = ⊎-disjoint ∘ ap (bool-as-sum .fst)
 
+-- do not use this directly, there is a derived instance
 Bool-is-set : is-set Bool
 Bool-is-set = is-of-hlevel-≃ 2 bool-as-sum hlevel!

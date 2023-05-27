@@ -53,7 +53,7 @@ instance
 n-path : ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y
 n-path f i .typ = f i
 n-path {X} {Y} f i .is-tr =
-  is-prop→PathP (λ i → is-of-hlevel-is-prop {A = f i} _) (X .is-tr) (Y .is-tr) i
+  is-prop→pathP (λ i → is-of-hlevel-is-prop {A = f i} _) (X .is-tr) (Y .is-tr) i
 
 @0 n-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y
 n-ua f = n-path (ua f)
@@ -61,7 +61,7 @@ n-ua f = n-path (ua f)
 @0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
 n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
   inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
-  inv p = path→Equiv (ap typ p)
+  inv p = path→equiv (ap typ p)
 
   linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua
   linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
@@ -73,7 +73,7 @@ n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
     path i j .is-tr = is-prop→SquareP
       (λ i j → is-of-hlevel-is-prop
         {A = ua.ε {A = ⌞ X ⌟} refl i j } n)
-      (λ j → X .is-tr) (λ j → n-ua {X = X} {Y = X} (path→Equiv refl) j .is-tr)
+      (λ j → X .is-tr) (λ j → n-ua {X = X} {Y = X} (path→equiv refl) j .is-tr)
       (λ j → X .is-tr) (λ j → X .is-tr)
       i j
 

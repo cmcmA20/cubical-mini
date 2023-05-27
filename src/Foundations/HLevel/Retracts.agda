@@ -67,8 +67,8 @@ is-equiv→is-hlevel h f eqv = is-iso→is-of-hlevel h f (is-equiv→is-iso eqv)
 is-of-hlevel-≃ : (h : HLevel) → (B ≃ A) → is-of-hlevel h A → is-of-hlevel h B
 is-of-hlevel-≃ h f = is-iso→is-of-hlevel h from (iso to η ε) where open Equiv f
 
-Iso→is-hlevel : (h : HLevel) → Iso B A → is-of-hlevel h A → is-of-hlevel h B
-Iso→is-hlevel h (f , isic) = is-iso→is-of-hlevel h (isic .is-iso.inv) $
+iso→is-of-hlevel : (h : HLevel) → Iso B A → is-of-hlevel h A → is-of-hlevel h B
+iso→is-of-hlevel h (f , isic) = is-iso→is-of-hlevel h (isic .is-iso.inv) $
   iso f (isic .is-iso.linv) (isic .is-iso.rinv)
 
 Π-is-of-hlevel : {B : A → Type ℓ′} (h : HLevel)
@@ -111,10 +111,10 @@ fun-is-of-hlevel n hl = Π-is-of-hlevel n (λ _ → hl)
                → is-of-hlevel n (Σ A B)
 Σ-is-of-hlevel 0 acontr bcontr =
   (acontr .fst , bcontr _ .fst) ,
-    λ x → Σ-PathP (acontr .snd _)
-                  (is-prop→PathP (λ _ → is-contr→is-prop (bcontr _)) _ _)
+    λ x → Σ-pathP (acontr .snd _)
+                  (is-prop→pathP (λ _ → is-contr→is-prop (bcontr _)) _ _)
 Σ-is-of-hlevel 1 aprop bprop (a , b) (a' , b') i =
-  (aprop a a' i) , (is-prop→PathP (λ i → bprop (aprop a a' i)) b b' i)
+  (aprop a a' i) , (is-prop→pathP (λ i → bprop (aprop a a' i)) b b' i)
 Σ-is-of-hlevel {B} (𝒽suc (𝒽suc n)) h1 h2 x y =
   is-iso→is-of-hlevel (𝒽suc n)
     (is-iso-inv (Σ-path-iso .snd) .is-iso.inv)

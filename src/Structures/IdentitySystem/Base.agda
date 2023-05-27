@@ -61,17 +61,17 @@ IdsJ-refl {R} {r} {x} ids P p =
     P′ : Σ _ (R x) → Type _
     P′ (b , r) = P b r
 
-    lemma : Σ-PathP (ids .to-path (r x)) (ids .to-path-over (r x)) ＝ refl
+    lemma : Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x)) ＝ refl
     lemma = is-contr→is-set (is-contr-ΣR ids) _ _ _ _
 
 to-path-refl-coh
   : {r : ∀ a → R a a}
   → (ids : is-identity-system R r)
   → ∀ x
-  → (Σ-PathP (ids .to-path (r x)) (ids .to-path-over (r x))) ＝ refl
+  → (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x))) ＝ refl
 to-path-refl-coh {r} ids x =
   is-contr→is-set (is-contr-ΣR ids) _ _
-    (Σ-PathP (ids .to-path (r x)) (ids .to-path-over (r x)))
+    (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x)))
     refl
 
 to-path-refl
@@ -88,8 +88,8 @@ equiv-path→identity-system
   → is-identity-system R r
 equiv-path→identity-system {R} {r} eqv pres′ = ids where
   contract : ∀ {a} → is-contr (Σ _ (R a))
-  contract = is-of-hlevel-≃ 0 ((total (λ _ → eqv .fst) , equiv→total (eqv .snd)))
-    (_ , Singleton-is-prop)
+  contract = is-of-hlevel-≃ 0 ((total (λ _ → eqv .fst) , is-equiv→total (eqv .snd)))
+    (_ , singleton-is-prop)
 
   pres : ∀ {a} → eqv .fst (r a) ＝ refl
   pres = Equiv.injective₂ (eqv ₑ⁻¹) (Equiv.η eqv _) (pres′ _)
@@ -97,7 +97,7 @@ equiv-path→identity-system {R} {r} eqv pres′ = ids where
   ids : is-identity-system R r
   ids .to-path = eqv .fst
   ids .to-path-over {a} {b} p i =
-    is-prop→PathP
+    is-prop→pathP
     (λ i → is-contr→is-prop (eqv .snd .equiv-proof λ j → eqv .fst p (i ∧ j)))
     (r a , pres)
     (p , refl)
@@ -108,7 +108,7 @@ identity-system-gives-path
   → is-identity-system R r
   → ∀ {x y} → R x y ≃ (x ＝ y)
 identity-system-gives-path {R} {r} ids =
-  Iso→Equiv (ids .to-path , iso from ri li) where
+  iso→equiv (ids .to-path , iso from ri li) where
     from : ∀ {a b} → a ＝ b → R a b
     from {a} p = transport (λ i → R a (p i)) (r a)
 
@@ -156,7 +156,7 @@ module
   : is-identity-system {A = Type ℓ} _≃_ λ _ → idₑ
 univalence-identity-system .to-path = ua
 univalence-identity-system .to-path-over p =
-  Σ-prop-PathP (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → path→ua-PathP p refl
+  Σ-prop-pathP (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → path→ua-pathP p refl
 
 is-identity-system-is-prop
   : {R : A → A → Type ℓ′} {r : ∀ a → R a a}
@@ -227,4 +227,4 @@ set-identity-system
   → is-identity-system R r
 set-identity-system rprop rpath .to-path = rpath
 set-identity-system rprop rpath .to-path-over p =
-  is-prop→PathP (λ i → rprop _ _) _ p
+  is-prop→pathP (λ i → rprop _ _) _ p

@@ -65,5 +65,5 @@ subst-comp : (B : A → Type ℓ′)
 subst-comp B p q Bx i =
   transport (ap B (∙-filler′ p q (~ i))) (transport-filler-ext (ap B p) i Bx)
 
-subst-Equiv : (P : A → Type ℓ′) (p : x ＝ y) → P x ≃ P y
-subst-Equiv P p = (subst P p , transport-is-equiv (λ i → P (p i)))
+subst-equiv : (P : A → Type ℓ′) (p : x ＝ y) → P x ≃ P y
+subst-equiv P p = (subst P p , transport-is-equiv (λ i → P (p i)))

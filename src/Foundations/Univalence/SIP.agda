@@ -48,7 +48,7 @@ private variable
 SIP {S} {σ} is-univ {X} {Y} =
   X ≃[ σ ] Y                                                            ≃⟨⟩
   (Σ[ e ꞉ X .fst ≃  Y .fst ] (σ .is-hom X Y e))                         ≃⟨ Σ-ap (ua , univalence⁻¹) is-univ ⟩
-  (Σ[ p ꞉ X .fst ＝ Y .fst ] ＜ X .snd ／ (λ i → S (p i)) ＼ Y .snd ＞) ≃⟨ Iso→Equiv Σ-PathP-iso ⟩
+  (Σ[ p ꞉ X .fst ＝ Y .fst ] ＜ X .snd ／ (λ i → S (p i)) ＼ Y .snd ＞) ≃⟨ iso→equiv Σ-pathP-iso ⟩
   X ＝ Y                                                                ≃∎
 
 @0 sip : is-univalent σ → {X Y : Σ _ S} → (X ≃[ σ ] Y) → (X ＝ Y)
@@ -57,8 +57,8 @@ sip is-univ = SIP is-univ .fst
 Equiv-action : (S : Type ℓ → Type ℓ′) → Type _
 Equiv-action {ℓ} S = {X Y : Type ℓ} → (X ≃ Y) → (S X ≃ S Y)
 
-Action→Structure : Equiv-action S → Structure _ S
-Action→Structure act .is-hom (A , x) (B , y) f = act f .fst x ＝ y
+action→structure : Equiv-action S → Structure _ S
+action→structure act .is-hom (A , x) (B , y) f = act f .fst x ＝ y
 
 @0 is-transport-str : {S : Type ℓ → Type ℓ′} → Equiv-action S → Type _
 is-transport-str {ℓ} {S} act =
@@ -72,11 +72,11 @@ preserves-id {ℓ} {S} act =
   : (σ : Equiv-action S)
   → preserves-id σ → is-transport-str σ
 preserves-id→is-transport-str {S} σ pres-id e s =
-  Equiv-J (λ _ e → σ e .fst s ＝ subst S (ua e) s) lemma′ e
+  equiv-J (λ _ e → σ e .fst s ＝ subst S (ua e) s) lemma′ e
   where
   lemma′ : σ idₑ .fst s ＝ subst S (ua idₑ) s
   lemma′ = sym $
-    subst S (ua idₑ) s ＝⟨ ap (λ p → subst S p s) ua-id-Equiv ⟩
+    subst S (ua idₑ) s ＝⟨ ap (λ p → subst S p s) ua-idₑ ⟩
     transport refl s   ＝⟨ transport-refl _ ⟩
     s                  ＝⟨ sym (pres-id s) ⟩
     σ idₑ .fst s       ∎
@@ -93,8 +93,8 @@ sym-transport-str {S} α τ e t =
 
 @0 is-transport→is-univalent : (a : Equiv-action S)
                              → is-transport-str a
-                             → is-univalent (Action→Structure a)
+                             → is-univalent (action→structure a)
 is-transport→is-univalent {S} act is-tr {X , s} {Y , t} eqv =
-  act eqv .fst s ＝ t             ≃⟨ path→Equiv (ap (_＝ t) (is-tr eqv s)) ⟩
-  subst S (ua eqv) s ＝ t         ≃⟨ path→Equiv (sym (PathP＝Path (λ i → S (ua eqv i)) s t)) ⟩
+  act eqv .fst s ＝ t             ≃⟨ path→equiv (ap (_＝ t) (is-tr eqv s)) ⟩
+  subst S (ua eqv) s ＝ t         ≃⟨ path→equiv (sym (pathP＝path (λ i → S (ua eqv i)) s t)) ⟩
   PathP (λ i → S (ua eqv i)) s t  ≃∎

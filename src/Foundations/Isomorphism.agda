@@ -36,10 +36,10 @@ Iso : Type ℓ → Type ℓ′ → Type _
 Iso A B = Σ (A → B) is-iso
 _≅_ = Iso
 
-idᵢ : Iso A A
+idᵢ : A ≅ A
 idᵢ = id , iso id (λ _ → refl) (λ _ → refl)
 
-_ᵢ⁻¹ : Iso A B → Iso B A
+_ᵢ⁻¹ : A ≅ B → B ≅ A
 𝔯 ᵢ⁻¹ = 𝔯 .snd .inv , is-iso-inv (𝔯 .snd)
 
 is-iso-comp : {g : B → C} → is-iso f → is-iso g → is-iso (g ∘ f)
@@ -50,10 +50,10 @@ is-iso-comp {f} r s .linv x = ap (r .inv) (s .linv (f      x)) ∙ r .linv x
 _∙ᵢ_ : Iso A B → Iso B C → Iso A C
 𝔯 ∙ᵢ 𝔰 = 𝔰 .fst ∘ 𝔯 .fst , is-iso-comp (𝔯 .snd) (𝔰 .snd)
 
-id-composition→Iso : (r : is-iso f) (g : B → A) (p : f ∘ g ＝ id) → is-iso g
-id-composition→Iso {f} r g p .inv = f
-id-composition→Iso {f} r g p .rinv y = sym (r .linv (g (f y))) ∙∙ ap (λ φ → r .inv (φ (f y))) p ∙∙ r .linv y
-id-composition→Iso     r g p .linv y = ap (_$ y) p
+id-composition→iso : (r : is-iso f) (g : B → A) (p : f ∘ g ＝ id) → is-iso g
+id-composition→iso {f} r g p .inv = f
+id-composition→iso {f} r g p .rinv y = sym (r .linv (g (f y))) ∙∙ ap (λ φ → r .inv (φ (f y))) p ∙∙ r .linv y
+id-composition→iso     r g p .linv y = ap (_$ y) p
 
 is-equiv→is-iso : is-equiv f → is-iso f
 is-iso.inv  (is-equiv→is-iso eqv) = is-equiv→inverse eqv
@@ -129,5 +129,5 @@ module _ {f : A → B} (r : is-iso f) where
   is-iso→is-equiv .equiv-proof y .snd z =
     is-iso→fibre-is-prop y (g y) (fst z) (u y) (snd z)
 
-Iso→Equiv : Iso A B → A ≃ B
-Iso→Equiv (f , is-iso) = f , is-iso→is-equiv is-iso
+iso→equiv : Iso A B → A ≃ B
+iso→equiv (f , is-iso) = f , is-iso→is-equiv is-iso

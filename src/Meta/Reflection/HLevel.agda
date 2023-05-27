@@ -629,7 +629,7 @@ prop!
   → {x : A i0} {y : A i1}
   → PathP (λ i → A i) x y
 prop! {A} {aip} {x} {y} =
-  is-prop→PathP (λ i → coe0→i (λ j → is-prop (A j)) i aip) x y
+  is-prop→pathP (λ i → coe0→i (λ j → is-prop (A j)) i aip) x y
 
 open hlevel-projection
 
@@ -677,10 +677,10 @@ instance
   -- applicable. That way we don't have to juggle h-levels quite as
   -- much.
   decomp-path′ : ∀ {ℓ} {A : Type ℓ} {a b : A} → hlevel-decomposition (a ＝ b)
-  decomp-path′ = decomp (quote Path-is-of-hlevel′) (`level ∷ `search ∷ `meta ∷ `meta ∷ [])
+  decomp-path′ = decomp (quote path-is-of-hlevel′) (`level ∷ `search ∷ `meta ∷ `meta ∷ [])
 
   decomp-path : ∀ {ℓ} {A : Type ℓ} {a b : A} → hlevel-decomposition (a ＝ b)
-  decomp-path = decomp (quote Path-is-of-hlevel) (`level ∷ `search ∷ [])
+  decomp-path = decomp (quote path-is-of-hlevel) (`level ∷ `search ∷ [])
 
   decomp-univalence : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ＝ B)
   decomp-univalence = decomp (quote ＝-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )

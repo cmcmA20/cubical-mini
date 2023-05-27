@@ -16,38 +16,38 @@ private variable
 Π-cod-≃ : (Π[ x ꞉ A ] (P x ≃ Q x))
         → (Π[ x ꞉ A ] P x) ≃ (Π[ x ꞉ A ] Q x)
 Π-cod-≃ k .fst f x = k x .fst (f x)
-Π-cod-≃ k .snd .equiv-proof f .fst .fst x   = Equiv-centre (k x) (f x) .fst
-Π-cod-≃ k .snd .equiv-proof f .fst .snd i x = Equiv-centre (k x) (f x) .snd i
+Π-cod-≃ k .snd .equiv-proof f .fst .fst x   = equiv-centre (k x) (f x) .fst
+Π-cod-≃ k .snd .equiv-proof f .fst .snd i x = equiv-centre (k x) (f x) .snd i
 Π-cod-≃ k .snd .equiv-proof f .snd (g , p) i .fst x =
-  Equiv-path (k x) (f x) (g x , λ j → p j x) i .fst
+  equiv-path (k x) (f x) (g x , λ j → p j x) i .fst
 Π-cod-≃ k .snd .equiv-proof f .snd (g , p) i .snd j x =
-  Equiv-path (k x) (f x) (g x , λ k → p k x) i .snd j
+  equiv-path (k x) (f x) (g x , λ k → p k x) i .snd j
 
 Π-dom-≃ : (e : B ≃ A) → (Π[ x ꞉ A ] P x) ≃ (Π[ x ꞉ B ] P (e .fst x))
 Π-dom-≃ {P} e =
-  Iso→Equiv λ where
+  iso→equiv λ where
     .fst k x → k (e .fst x)
     .snd .is-iso.inv k x → subst P (ε x) (k (from x))
     .snd .is-iso.rinv k → fun-ext λ x →
         ap₂ (subst P) (sym (zig x))
-          (sym (from-PathP (symP-from-goal (ap k (η x)))))
+          (sym (from-pathP (symP-from-goal (ap k (η x)))))
       ∙ transport⁻-transport (ap P (ap to (sym (η x)))) (k x)
     .snd .is-iso.linv k → fun-ext λ x →
-      ap (subst P _) (sym (from-PathP (symP-from-goal (ap k (ε x)))))
+      ap (subst P _) (sym (from-pathP (symP-from-goal (ap k (ε x)))))
       ∙ transport⁻-transport (sym (ap P (ε x))) _
   where open module e = Equiv e
 
 Π-impl-cod-≃ : (Π[ x ꞉ A ] (P x ≃ Q x)) → ({x : A} → P x) ≃ ({x : A} → Q x)
 Π-impl-cod-≃ k .fst f {x} = k x .fst (f {x})
-Π-impl-cod-≃ k .snd .equiv-proof f .fst .fst {x}   = Equiv-centre (k x) (f {x}) .fst
-Π-impl-cod-≃ k .snd .equiv-proof f .fst .snd i {x} = Equiv-centre (k x) (f {x}) .snd i
+Π-impl-cod-≃ k .snd .equiv-proof f .fst .fst {x}   = equiv-centre (k x) (f {x}) .fst
+Π-impl-cod-≃ k .snd .equiv-proof f .fst .snd i {x} = equiv-centre (k x) (f {x}) .snd i
 Π-impl-cod-≃ k .snd .equiv-proof f .snd (g , p) i .fst {x} =
-  Equiv-path (k x) (f {x}) (g {x} , λ j → p j {x}) i .fst
+  equiv-path (k x) (f {x}) (g {x} , λ j → p j {x}) i .fst
 Π-impl-cod-≃ k .snd .equiv-proof f .snd (g , p) i .snd j {x} =
-  Equiv-path (k x) (f {x}) (g {x} , λ k → p k {x}) i .snd j
+  equiv-path (k x) (f {x}) (g {x} , λ k → p k {x}) i .snd j
 
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
-function-≃ dom rng = Iso→Equiv the-iso where
+function-≃ dom rng = iso→equiv the-iso where
   rng-iso = is-equiv→is-iso (rng .snd)
   dom-iso = is-equiv→is-iso (dom .snd)
 
@@ -76,7 +76,7 @@ fun-ext-dep-≃
   → ( {x₀ : A i0} {x₁ : A i1} (p : ＜ x₀ ／ A ＼ x₁ ＞)
     → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   ≃ ＜ f ／ (λ i → (x : A i) → B i x) ＼ g ＞
-fun-ext-dep-≃ {A} {B} {f} {g} = Iso→Equiv isom where
+fun-ext-dep-≃ {A} {B} {f} {g} = iso→equiv isom where
   open is-iso
   isom : Iso _ _
   isom .fst = fun-ext-dep
@@ -99,22 +99,22 @@ hetero-homotopy≃homotopy
     {f : A i0 → B i0} {g : A i1 → B i1}
   → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
   ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-hetero-homotopy≃homotopy {A} {B} {f} {g} = Iso→Equiv isom where
+hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→equiv isom where
   open is-iso
   isom : Iso _ _
-  isom .fst h x₀ = h (SingletonP-is-contr A x₀ .fst .snd)
+  isom .fst h x₀ = h (singletonP-is-contr A x₀ .fst .snd)
   isom .snd .inv k {x₀} {x₁} p =
-    subst (λ fib → PathP B (f x₀) (g (fib .fst))) (SingletonP-is-contr A x₀ .snd (x₁ , p)) (k x₀)
+    subst (λ fib → PathP B (f x₀) (g (fib .fst))) (singletonP-is-contr A x₀ .snd (x₁ , p)) (k x₀)
 
   isom .snd .rinv k = fun-ext λ x₀ →
     ap (λ α → subst (λ fib → PathP B (f x₀) (g (fib .fst))) α (k x₀))
-      (is-prop→is-set (is-contr→is-prop $ SingletonP-is-contr _ _) (SingletonP-is-contr A x₀ .fst) _
-        (SingletonP-is-contr A x₀ .snd (SingletonP-is-contr A x₀ .fst))
+      (is-prop→is-set (is-contr→is-prop $ singletonP-is-contr _ _) (singletonP-is-contr A x₀ .fst) _
+        (singletonP-is-contr A x₀ .snd (singletonP-is-contr A x₀ .fst))
         refl)
     ∙ transport-refl (k x₀)
 
   isom .snd .linv h j {x₀} {x₁} p =
     transp
-      (λ i → PathP B (f x₀) (g (SingletonP-is-contr A x₀ .snd (x₁ , p) (i ∨ j) .fst)))
+      (λ i → PathP B (f x₀) (g (singletonP-is-contr A x₀ .snd (x₁ , p) (i ∨ j) .fst)))
       j
-      (h (SingletonP-is-contr A x₀ .snd (x₁ , p) j .snd))
+      (h (singletonP-is-contr A x₀ .snd (x₁ , p) j .snd))

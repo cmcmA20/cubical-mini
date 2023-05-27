@@ -8,6 +8,7 @@ open import Data.Empty
 open import Data.Sum
 
 open import Meta.Reflection.HLevel
+open import Meta.Reflection.Record
 
 open import Data.Dec.Base public
 
@@ -18,9 +19,12 @@ private variable
   b : Bool
 
 Dec≃⊎ : Dec P ≃ ((¬ P) ⊎ P)
-Dec≃⊎ = Iso→Equiv $ dec-record-iso _ ∙ᵢ reflects-as-sumᵢ
+Dec≃⊎ = iso→equiv $ dec-record-iso _ ∙ᵢ reflects-as-sumᵢ
   where
   open Reflects
+  module _ {ℓ} (P : Type ℓ) where
+    dec-record-iso : Iso (Dec P) (Σ[ does ꞉ Bool ] Reflects P does)
+    unquoteDef dec-record-iso = define-record-iso dec-record-iso (quote Dec)
   reflects-as-sumᵢ : (Σ[ b ꞉ Bool ] Reflects P b)
                    ≅ ((¬ P) ⊎ P)
   reflects-as-sumᵢ .fst (false , ofⁿ ¬p) = inj-l ¬p
