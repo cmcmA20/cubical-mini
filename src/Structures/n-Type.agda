@@ -24,7 +24,8 @@ open n-Type using (typ ; is-tr ; H-Level-n-type) public
 
 private variable
   ℓ ℓ′ : Level
-  A B : Type ℓ
+  A : Type ℓ
+  B : Type ℓ′
   n : HLevel
   X Y : n-Type ℓ n
 
@@ -97,7 +98,7 @@ instance
   H-Level-nType {k} = basic-instance (1 + k) (n-Type-is-of-hlevel k)
 
   H-Level-is-equiv
-    : {A : Type ℓ} {B : Type ℓ′} {f : A → B} {n : HLevel}
+    : {f : A → B} {n : HLevel}
     → H-Level (suc n) (is-equiv f)
   H-Level-is-equiv = prop-instance (is-equiv-is-prop _)
 

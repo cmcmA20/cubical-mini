@@ -7,9 +7,9 @@ open import Data.Nat.Base public
 open import Data.Product.Base public
   using (Vecₓ)
 
-record From-product {ℓ} (A : Type ℓ) (T : ℕ → Type ℓ) : Type ℓ where
+record From-product {ℓ} (A : Type ℓ) (T : @0 ℕ → Type ℓ) : Type ℓ where
   field from-prod : ∀ n → Vecₓ A n → T n
 
-[_] : ∀ {ℓ} {A : Type ℓ} {T : ℕ → Type ℓ} {n} ⦃ fp : From-product A T ⦄
+[_] : ∀ {ℓ} {A : Type ℓ} {T : @0 ℕ → Type ℓ} {n} ⦃ fp : From-product A T ⦄
     → Vecₓ A n → T n
 [_] ⦃ fp ⦄ = fp .From-product.from-prod _

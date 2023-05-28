@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Vec.Instances where
+module Data.Vec.Instances.FromProduct where
 
 open import Foundations.Base
 open import Meta.FromProduct

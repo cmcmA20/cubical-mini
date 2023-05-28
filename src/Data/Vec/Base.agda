@@ -12,12 +12,12 @@ private variable
   n : ℕ
 
 infixr 5 _∷_
-data Vec (A : Type ℓ) : ℕ → Type ℓ where
+data Vec (A : Type ℓ) : @0 ℕ → Type ℓ where
   []  : Vec A zero
   _∷_ : A → Vec A n → Vec A (suc n)
 
 elim
-  : (P : ∀ {n} → Vec A n → Type ℓ′)
+  : (P : ∀ {@0 n} → Vec A n → Type ℓ′)
   → P []
   → (∀ {n} x (xs : Vec A n) → P xs → P (x ∷ xs))
   → ∀ {n} (xs : Vec A n) → P xs

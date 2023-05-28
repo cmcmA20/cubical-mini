@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Char.Prim where
+module Data.Char.Base where
 
 open import Agda.Builtin.Char public
   using ( Char )
@@ -23,7 +23,3 @@ open import Agda.Builtin.Char public
 open import Agda.Builtin.String public
   using ()
   renaming ( primShowChar to show-char )
-
-open import Agda.Builtin.Char.Properties public
-  using ()
-  renaming ( primCharToNatInjective to char-to-nat-injectiveᵢ)
