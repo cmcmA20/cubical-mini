@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Structures.DoubleNegation.Instances.Bind</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Structures.DoubleNegation.Instances.Bind.html" class="Module">Structures.DoubleNegation.Instances.Bind</a> <a id="72" class="Keyword">where</a>
+
+<a id="79" class="Keyword">open</a> <a id="84" class="Keyword">import</a> <a id="91" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="108" class="Keyword">open</a> <a id="113" class="Keyword">import</a> <a id="120" href="Meta.Bind.html" class="Module">Meta.Bind</a>
+
+<a id="131" class="Keyword">open</a> <a id="136" class="Keyword">import</a> <a id="143" href="Structures.DoubleNegation.Instances.Idiom.html" class="Module">Structures.DoubleNegation.Instances.Idiom</a> <a id="185" class="Keyword">public</a>
+
+<a id="193" class="Keyword">instance</a>
+  <a id="Bind-¬¬"></a><a id="204" href="Structures.DoubleNegation.Instances.Bind.html#204" class="Function">Bind-¬¬</a> <a id="212" class="Symbol">:</a> <a id="214" href="Meta.Bind.html#116" class="Record">Bind</a> <a id="219" class="Symbol">(</a><a id="220" href="Meta.Idiom.html#121" class="InductiveConstructor">eff</a> <a id="224" href="Structures.DoubleNegation.Base.html#352" class="Function Operator">¬¬_</a><a id="227" class="Symbol">)</a>
+  <a id="231" href="Structures.DoubleNegation.Instances.Bind.html#204" class="Function">Bind-¬¬</a> <a id="239" class="Symbol">.</a><a id="240" href="Meta.Bind.html#190" class="Field Operator">Bind._&gt;&gt;=_</a> <a id="251" href="Structures.DoubleNegation.Instances.Bind.html#251" class="Bound">¬¬a</a> <a id="255" href="Structures.DoubleNegation.Instances.Bind.html#255" class="Bound">mf</a> <a id="258" href="Structures.DoubleNegation.Instances.Bind.html#258" class="Bound">¬b</a> <a id="261" class="Symbol">=</a> <a id="263" href="Structures.DoubleNegation.Instances.Bind.html#251" class="Bound">¬¬a</a> <a id="267" class="Symbol">(λ</a> <a id="270" href="Structures.DoubleNegation.Instances.Bind.html#270" class="Bound">a</a> <a id="272" class="Symbol">→</a> <a id="274" href="Structures.DoubleNegation.Instances.Bind.html#255" class="Bound">mf</a> <a id="277" href="Structures.DoubleNegation.Instances.Bind.html#270" class="Bound">a</a> <a id="279" href="Structures.DoubleNegation.Instances.Bind.html#258" class="Bound">¬b</a><a id="281" class="Symbol">)</a>
+
+<a id="284" class="Comment">-- Usage</a>
+
+<a id="294" class="Comment">-- open import Data.Sum.Base</a>
+<a id="323" class="Comment">-- open import Data.Empty.Base</a>
+
+<a id="355" class="Comment">-- Classically = ¬¬_</a>
+
+<a id="377" class="Comment">-- LEM : Π[ A ꞉ Type ] Classically (A ⊎ (¬ A))</a>
+<a id="424" class="Comment">-- LEM A z = z (inr λ a → z (inl a))</a>
+
+<a id="462" class="Comment">-- DNE : Π[ A ꞉ Type ] Classically (¬¬ A → A)</a>
+<a id="508" class="Comment">-- DNE A = do</a>
+<a id="522" class="Comment">--   inl a ← LEM A</a>
+<a id="541" class="Comment">--     where inr a → pure λ ¬¬a → rec (¬¬a a)</a>
+<a id="587" class="Comment">--   pure $ const a</a>
+</pre></body></html>
