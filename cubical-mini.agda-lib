@@ -5,7 +5,6 @@ flags:
   --erased-cubical
   --erasure
   --erased-matches
-  --guarded
   --guardedness
   --no-import-sorts
   --postfix-projections
