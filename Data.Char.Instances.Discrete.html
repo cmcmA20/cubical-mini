@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Char.Instances.Discrete</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Char.Instances.Discrete.html" class="Module">Data.Char.Instances.Discrete</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Meta.Discrete.html" class="Module">Meta.Discrete</a>
+
+<a id="124" class="Keyword">open</a> <a id="129" class="Keyword">import</a> <a id="136" href="Data.Id.html" class="Module">Data.Id</a>
+
+<a id="145" class="Keyword">open</a> <a id="150" class="Keyword">import</a> <a id="157" href="Data.Char.Properties.html" class="Module">Data.Char.Properties</a>
+
+<a id="179" class="Keyword">instance</a>
+  <a id="Discrete-char"></a><a id="190" href="Data.Char.Instances.Discrete.html#190" class="Function">Discrete-char</a> <a id="204" class="Symbol">:</a> <a id="206" href="Meta.Discrete.html#303" class="Record">Discrete</a> <a id="215" href="Agda.Builtin.Char.html#238" class="Postulate">Char</a>
+  <a id="222" href="Data.Char.Instances.Discrete.html#190" class="Function">Discrete-char</a> <a id="236" class="Symbol">.</a><a id="237" href="Meta.Discrete.html#388" class="Field Operator">Discrete._≟_</a> <a id="250" class="Symbol">=</a>
+    <a id="256" href="Data.Id.html#2208" class="Function">is-discreteⁱ→is-discrete</a> <a id="281" href="Data.Char.Properties.html#359" class="Function">char-is-discreteⁱ</a>
+</pre></body></html>
