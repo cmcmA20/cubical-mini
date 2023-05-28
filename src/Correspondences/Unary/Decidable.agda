@@ -2,7 +2,9 @@
 module Correspondences.Unary.Decidable where
 
 open import Foundations.Base
-open import Data.Dec.Base
+open import Data.Dec.Base public
+
+open import Structures.Discrete
 
 private variable
   ℓ ℓ′ : Level
@@ -10,3 +12,5 @@ private variable
 
 Decidable : (A → Type ℓ′) → Type _
 Decidable {A} P = Π[ a ꞉ A ] Dec (P a)
+
+-- TODO properties about decidable predicates?

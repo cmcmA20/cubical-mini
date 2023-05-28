@@ -2,17 +2,12 @@
 module Structures.Discrete where
 
 open import Foundations.Base
+open import Foundations.HLevel
 
-open import Data.Dec.Base
 open import Data.Dec.Path
-open import Data.Empty.Base
 
 open import Structures.Base
-open import Structures.IdentitySystem.Base
-open import Structures.Separated
-
-open import Meta.HLevel
-open import Meta.Reflection.HLevel
+open import Structures.DoubleNegation.Base
 
 private variable
   ℓ : Level
@@ -20,10 +15,6 @@ private variable
 
 is-discrete : Type ℓ → Type ℓ
 is-discrete A = Dec on-paths-of A
-
-dec→¬¬-stable : Dec A → ¬¬_ stable A
-dec→¬¬-stable (no ¬a) f = absurd (f ¬a)
-dec→¬¬-stable (yes a) _ = a
 
 is-discrete→is-separated : is-discrete A → is-separated A
 is-discrete→is-separated dec x y f = dec→¬¬-stable (dec x y) f

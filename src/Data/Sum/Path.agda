@@ -23,29 +23,29 @@ private variable
 module ⊎-path-code where
 
   Code : A ⊎ B → A ⊎ B → Type (level-of-type A ⊔ level-of-type B)
-  Code {B} (inj-l x₁) (inj-l x₂) = Lift (level-of-type B) (x₁ ＝ x₂)
-  Code     (inj-l _)  (inj-r _)  = Lift _ ⊥
-  Code     (inj-r _)  (inj-l _)  = Lift _ ⊥
-  Code {A} (inj-r y₁) (inj-r y₂) = Lift (level-of-type A) (y₁ ＝ y₂)
+  Code {B} (inl x₁) (inl x₂) = Lift (level-of-type B) (x₁ ＝ x₂)
+  Code     (inl _)  (inr _)  = Lift _ ⊥
+  Code     (inr _)  (inl _)  = Lift _ ⊥
+  Code {A} (inr y₁) (inr y₂) = Lift (level-of-type A) (y₁ ＝ y₂)
 
   code-refl : (s : A ⊎ B) → Code s s
-  code-refl (inj-l x) = lift refl
-  code-refl (inj-r y) = lift refl
+  code-refl (inl x) = lift refl
+  code-refl (inr y) = lift refl
 
   ⊎-identity-system : is-identity-system {A = A ⊎ B} Code code-refl
-  ⊎-identity-system .to-path {inj-l x₁} {inj-l x₂} c = ap inj-l (lower c)
-  ⊎-identity-system .to-path {inj-r y₁} {inj-r y₂} c = ap inj-r (lower c)
-  ⊎-identity-system .to-path-over {inj-l x₁} {inj-l x₂} (lift p) i = lift λ j → p (i ∧ j)
-  ⊎-identity-system .to-path-over {inj-r y₁} {inj-r y₂} (lift p) i = lift λ j → p (i ∧ j)
+  ⊎-identity-system .to-path {inl x₁} {inl x₂} c = ap inl (lower c)
+  ⊎-identity-system .to-path {inr y₁} {inr y₂} c = ap inr (lower c)
+  ⊎-identity-system .to-path-over {inl x₁} {inl x₂} (lift p) i = lift λ j → p (i ∧ j)
+  ⊎-identity-system .to-path-over {inr y₁} {inr y₂} (lift p) i = lift λ j → p (i ∧ j)
 
   Code-is-of-hlevel : {s₁ s₂ : A ⊎ B} {n : HLevel}
                     → is-of-hlevel (2 + n) A
                     → is-of-hlevel (2 + n) B
                     → is-of-hlevel (1 + n) (Code s₁ s₂)
-  Code-is-of-hlevel {s₁ = inj-l x₁} {inj-l x₂} ahl bhl = Lift-is-of-hlevel _ (ahl x₁ x₂)
-  Code-is-of-hlevel {s₁ = inj-l x}  {inj-r y}  ahl bhl = Lift-is-of-hlevel _ hlevel!
-  Code-is-of-hlevel {s₁ = inj-r x}  {inj-l y}  ahl bhl = Lift-is-of-hlevel _ hlevel!
-  Code-is-of-hlevel {s₁ = inj-r y₁} {inj-r y₂} ahl bhl = Lift-is-of-hlevel _ (bhl y₁ y₂)
+  Code-is-of-hlevel {s₁ = inl x₁} {inl x₂} ahl bhl = Lift-is-of-hlevel _ (ahl x₁ x₂)
+  Code-is-of-hlevel {s₁ = inl x}  {inr y}  ahl bhl = Lift-is-of-hlevel _ hlevel!
+  Code-is-of-hlevel {s₁ = inr x}  {inl y}  ahl bhl = Lift-is-of-hlevel _ hlevel!
+  Code-is-of-hlevel {s₁ = inr y₁} {inr y₂} ahl bhl = Lift-is-of-hlevel _ (bhl y₁ y₂)
 
 open ⊎-path-code
 
@@ -59,36 +59,36 @@ open ⊎-path-code
 disjoint-⊎-is-prop
   : is-prop A → is-prop B → ¬ A × B
   → is-prop (A ⊎ B)
-disjoint-⊎-is-prop Ap Bp notab (inj-l x₁) (inj-l x₂) = ap inj-l (Ap x₁ x₂)
-disjoint-⊎-is-prop Ap Bp notab (inj-l x)  (inj-r y)  = absurd (notab (x , y))
-disjoint-⊎-is-prop Ap Bp notab (inj-r x)  (inj-l y)  = absurd (notab (y , x))
-disjoint-⊎-is-prop Ap Bp notab (inj-r y₁) (inj-r y₂) = ap inj-r (Bp y₁ y₂)
+disjoint-⊎-is-prop Ap Bp notab (inl x₁) (inl x₂) = ap inl (Ap x₁ x₂)
+disjoint-⊎-is-prop Ap Bp notab (inl x)  (inr y)  = absurd (notab (x , y))
+disjoint-⊎-is-prop Ap Bp notab (inr x)  (inl y)  = absurd (notab (y , x))
+disjoint-⊎-is-prop Ap Bp notab (inr y₁) (inr y₂) = ap inr (Bp y₁ y₂)
 
 contr-⊎-is-set
   : is-contr A → is-contr B
   → is-set (A ⊎ B)
 contr-⊎-is-set A-contr B-contr = identity-system→hlevel 1 ⊎-identity-system λ where
-  (inj-l x₁) (inj-l x₂) → Lift-is-of-hlevel 1 (is-contr→is-set A-contr _ _)
-  (inj-l x)  (inj-r y)  → hlevel!
-  (inj-r y)  (inj-l x)  → hlevel!
-  (inj-r y₁) (inj-r y₂) → Lift-is-of-hlevel 1 (is-contr→is-set B-contr _ _)
+  (inl x₁) (inl x₂) → Lift-is-of-hlevel 1 (is-contr→is-set A-contr _ _)
+  (inl x)  (inr y)  → hlevel!
+  (inr y)  (inl x)  → hlevel!
+  (inr y₁) (inr y₂) → Lift-is-of-hlevel 1 (is-contr→is-set B-contr _ _)
 
 
-inj-l-inj : {x y : A} → inj-l {B = B} x ＝ inj-l y → x ＝ y
-inj-l-inj {A} {x} path = ap f path where
+inl-inj : {x y : A} → inl {B = B} x ＝ inl y → x ＝ y
+inl-inj {A} {x} path = ap f path where
   f : A ⊎ B → A
-  f (inj-l a) = a
-  f (inj-r _) = x
+  f (inl a) = a
+  f (inr _) = x
 
-inj-r-inj : {x y : B} → inj-r {A = A} x ＝ inj-r y → x ＝ y
-inj-r-inj {B} {x} path = ap f path where
+inr-inj : {x y : B} → inr {A = A} x ＝ inr y → x ＝ y
+inr-inj {B} {x} path = ap f path where
   f : A ⊎ B → B
-  f (inj-l _) = x
-  f (inj-r b) = b
+  f (inl _) = x
+  f (inr b) = b
 
-⊎-disjoint : ¬ inj-l x ＝ inj-r y
+⊎-disjoint : ¬ inl x ＝ inr y
 ⊎-disjoint p = subst ⊎-discrim p tt
   where
   ⊎-discrim : A ⊎ B → Type
-  ⊎-discrim (inj-l _) = ⊤
-  ⊎-discrim (inj-r _) = ⊥
+  ⊎-discrim (inl _) = ⊤
+  ⊎-discrim (inr _) = ⊥

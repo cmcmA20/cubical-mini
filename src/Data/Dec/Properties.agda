@@ -22,13 +22,8 @@ _∧ᵈ_ : Dec P → Dec Q → Dec (P × Q)
 infixl 6 _∨ᵈ_
 _∨ᵈ_ : Dec P → Dec Q → Dec (P ⊎ Q)
 (dp ∨ᵈ dq) .does = dp .does or dq .does
-(yes p ∨ᵈ _ ) .proof = ofʸ (inj-l p)
+(yes p ∨ᵈ _ ) .proof = ofʸ (inl p)
 (no ¬p ∨ᵈ no ¬q) .proof = ofⁿ λ where
-  (inj-l p) → ¬p p
-  (inj-r q) → ¬q q
-(no ¬p ∨ᵈ yes q) .proof = ofʸ (inj-r q)
-
-¬ᵈ_ : Dec P → Dec (¬ P)
-¬ᵈ_ x .does = not (x .does)
-¬ᵈ_ (yes p) .proof = ofⁿ (λ ¬p → ¬p p)
-¬ᵈ_ (no ¬p) .proof = ofʸ ¬p
+  (inl p) → ¬p p
+  (inr q) → ¬q q
+(no ¬p ∨ᵈ yes q) .proof = ofʸ (inr q)

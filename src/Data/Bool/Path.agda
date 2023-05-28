@@ -17,12 +17,12 @@ bool-as-sum : Bool ≃ (⊤ ⊎ ⊤)
 bool-as-sum = iso→equiv 𝔯
   where
   𝔯 : Iso _ _
-  𝔯 .fst false = inj-l tt
-  𝔯 .fst true  = inj-r tt
-  𝔯 .snd .is-iso.inv (inj-l _) = false
-  𝔯 .snd .is-iso.inv (inj-r _) = true
-  𝔯 .snd .is-iso.rinv (inj-l _) = refl
-  𝔯 .snd .is-iso.rinv (inj-r _) = refl
+  𝔯 .fst false = inl tt
+  𝔯 .fst true  = inr tt
+  𝔯 .snd .is-iso.inv (inl _) = false
+  𝔯 .snd .is-iso.inv (inr _) = true
+  𝔯 .snd .is-iso.rinv (inl _) = refl
+  𝔯 .snd .is-iso.rinv (inr _) = refl
   𝔯 .snd .is-iso.linv false = refl
   𝔯 .snd .is-iso.linv true  = refl
 

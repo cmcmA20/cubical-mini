@@ -23,9 +23,9 @@ open import Agda.Builtin.Reflection public
   renaming (Type to Type′)
 
 instance
-  String-ErrorPart : is-string ErrorPart
-  String-ErrorPart .is-string.Constraint _ = ⊤
-  String-ErrorPart .is-string.fromString s = strErr s
+  String-ErrorPart : IsString ErrorPart
+  String-ErrorPart .IsString.Constraint _ = ⊤
+  String-ErrorPart .IsString.fromString s = strErr s
 
   Map-TC : Map (eff TC)
   Map-TC .Map._<$>_ f x = bindTC x λ x → returnTC (f x)
@@ -205,8 +205,8 @@ macro
   quote-repr! a = quote-repr-macro a
 
 instance
-  IsString-Error : is-string (List ErrorPart)
-  IsString-Error .is-string.Constraint _ = ⊤
+  IsString-Error : IsString (List ErrorPart)
+  IsString-Error .IsString.Constraint _ = ⊤
   IsString-Error .from-string s = from-string s ∷ []
 
 unify-loudly : Term → Term → TC ⊤

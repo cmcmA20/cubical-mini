@@ -7,6 +7,6 @@ open import Meta.Literals
 open import Data.String.Base
 
 instance
-  IsString-String : is-string String
-  IsString-String .is-string.Constraint _ = ⊤
-  IsString-String .is-string.fromString s = s
+  IsString-String : IsString String
+  IsString-String .IsString.Constraint _ = ⊤
+  IsString-String .IsString.fromString s = s

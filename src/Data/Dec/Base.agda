@@ -87,3 +87,8 @@ True (true  because _) = ⊤
 -- TODO check if erasure is really beneficial here
 witness : (d : Dec P) → ⦃ Erased (True d) ⦄ → P
 witness (yes p) = p
+
+¬ᵈ_ : Dec P → Dec (¬ P)
+¬ᵈ_ x .does = not (x .does)
+¬ᵈ_ (yes p) .proof = ofⁿ (λ ¬p → ¬p p)
+¬ᵈ_ (no ¬p) .proof = ofʸ ¬p

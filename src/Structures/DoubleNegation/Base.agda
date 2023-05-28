@@ -1,17 +1,17 @@
 {-# OPTIONS --safe #-}
-module Structures.Separated where
+module Structures.DoubleNegation.Base where
 
 open import Foundations.Base
 
 open import Data.Empty
-import Data.Empty as ⊥
+open import Data.Dec.Base
 
 open import Meta.Reflection.HLevel
 
 open import Structures.Base
 open import Structures.IdentitySystem.Base
 
-open import Structures.Negation
+open import Structures.Negation public
 
 private variable
   ℓ : Level
@@ -20,6 +20,10 @@ private variable
 infix 0 ¬¬_
 ¬¬_ : Type ℓ → Type ℓ
 ¬¬ A = ¬ ¬ A
+
+dec→¬¬-stable : Dec A → ¬¬_ stable A
+dec→¬¬-stable (no ¬a) f = absurd (f ¬a)
+dec→¬¬-stable (yes a) _ = a
 
 is-separated : Type ℓ → Type ℓ
 is-separated A = (¬¬_ stable_) on-paths-of A

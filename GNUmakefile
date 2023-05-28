@@ -7,6 +7,7 @@ AGDA=$(AGDA_EXEC) $(RTS_OPTIONS)
 RUNHASKELL?=runhaskell
 EVERYTHINGS=$(RUNHASKELL) ./Everythings.hs
 DATA_INSTANCE_DIRS=`find src/Data -type d -name Instances -printf "Data/%P\n"`
+STR_INSTANCE_DIRS=`find src/Structures -type d -name Instances -printf "Structures/%P\n"`
 
 .PHONY : all
 all : build
@@ -37,6 +38,7 @@ check-everythings:
 .PHONY : gen-inst-everythings
 gen-inst-everythings:
 	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
+	$(EVERYTHINGS) gen-public $(STR_INSTANCE_DIRS)
 	$(EVERYTHINGS) gen-public Truncation/Propositional/Instances
 
 .PHONY : gen-everythings

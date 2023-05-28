@@ -27,12 +27,12 @@ Dec≃⊎ = iso→equiv $ dec-record-iso _ ∙ᵢ reflects-as-sumᵢ
     unquoteDef dec-record-iso = define-record-iso dec-record-iso (quote Dec)
   reflects-as-sumᵢ : (Σ[ b ꞉ Bool ] Reflects P b)
                    ≅ ((¬ P) ⊎ P)
-  reflects-as-sumᵢ .fst (false , ofⁿ ¬p) = inj-l ¬p
-  reflects-as-sumᵢ .fst (true  , ofʸ  p) = inj-r p
-  reflects-as-sumᵢ .snd .is-iso.inv (inj-l ¬p) = false , ofⁿ ¬p
-  reflects-as-sumᵢ .snd .is-iso.inv (inj-r  p) = true , ofʸ p
-  reflects-as-sumᵢ .snd .is-iso.rinv (inj-l _) = refl
-  reflects-as-sumᵢ .snd .is-iso.rinv (inj-r _) = refl
+  reflects-as-sumᵢ .fst (false , ofⁿ ¬p) = inl ¬p
+  reflects-as-sumᵢ .fst (true  , ofʸ  p) = inr p
+  reflects-as-sumᵢ .snd .is-iso.inv (inl ¬p) = false , ofⁿ ¬p
+  reflects-as-sumᵢ .snd .is-iso.inv (inr  p) = true , ofʸ p
+  reflects-as-sumᵢ .snd .is-iso.rinv (inl _) = refl
+  reflects-as-sumᵢ .snd .is-iso.rinv (inr _) = refl
   reflects-as-sumᵢ .snd .is-iso.linv (false , ofⁿ _) = refl
   reflects-as-sumᵢ .snd .is-iso.linv (true  , ofʸ _) = refl
 
