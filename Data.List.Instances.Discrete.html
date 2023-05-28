@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.List.Instances.Discrete</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.List.Instances.Discrete.html" class="Module">Data.List.Instances.Discrete</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="96" class="Keyword">open</a> <a id="101" class="Keyword">import</a> <a id="108" href="Meta.Discrete.html" class="Module">Meta.Discrete</a>
+<a id="122" class="Keyword">open</a> <a id="127" class="Keyword">import</a> <a id="134" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a>
+
+<a id="158" class="Keyword">import</a> <a id="165" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a> <a id="179" class="Symbol">as</a> <a id="182" class="Module">Dec</a>
+<a id="186" class="Keyword">open</a> <a id="191" class="Keyword">import</a> <a id="198" href="Data.List.Base.html" class="Module">Data.List.Base</a>
+
+<a id="214" class="Comment">-- -- TODO</a>
+<a id="225" class="Comment">-- instance</a>
+<a id="237" class="Comment">--   Discrete-List : {ℓ : Level} {A : Type ℓ} → ⦃ Discrete A ⦄ → Discrete (List A)</a>
+<a id="320" class="Comment">--   Discrete-List {A} .Discrete._≟_ = go</a>
+<a id="362" class="Comment">--     where</a>
+<a id="375" class="Comment">--       go : is-discrete (List A)</a>
+<a id="410" class="Comment">--       go []       []       = yes refl</a>
+<a id="451" class="Comment">--       go []       (y ∷ ys) = no {!!}</a>
+<a id="491" class="Comment">--       go (x ∷ xs) []       = no {!!}</a>
+<a id="531" class="Comment">--       go (x ∷ xs) (y ∷ ys) with x ≟ y</a>
+<a id="572" class="Comment">--       ... | no  x≠y = no λ p → x≠y {!!}</a>
+<a id="615" class="Comment">--       ... | yes x＝y with go xs ys</a>
+<a id="652" class="Comment">--       ... | no  xs≠ys  = no λ p → xs≠ys (ap tail p)</a>
+<a id="707" class="Comment">--       ... | yes xs＝ys = yes (ap₂ _∷_ x＝y xs＝ys)</a>
+</pre></body></html>
