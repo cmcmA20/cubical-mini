@@ -46,7 +46,3 @@ if false then x else y = y
 -- T : Bool → Type₀
 -- T false = ⊥
 -- T true  = Unit
-
--- T* : Bool → Type ℓ
--- T* false = ⊥*
--- T* true  = Unit*
