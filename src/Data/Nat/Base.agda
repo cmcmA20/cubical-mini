@@ -48,3 +48,7 @@ min zero    zero    = zero
 min zero    (suc y) = zero
 min (suc x) zero    = zero
 min (suc x) (suc y) = suc (min x y)
+
+pred : ℕ → ℕ
+pred zero    = zero
+pred (suc n) = n

@@ -10,8 +10,6 @@ open import Agda.Builtin.Nat public
 
 HLevel : Type₀
 HLevel = ℕ
-pattern 0𝒽 = zero
-pattern 𝒽suc h = suc h
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ : Level
@@ -19,9 +17,9 @@ private variable
   h : HLevel
 
 is-of-hlevel : HLevel → Type ℓ → Type ℓ
-is-of-hlevel 0𝒽 A = is-contr A
-is-of-hlevel (𝒽suc 0𝒽) A = is-prop A
-is-of-hlevel (𝒽suc (𝒽suc h)) A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-of-hlevel (𝒽suc h) (x ＝ y)
+is-of-hlevel 0 A = is-contr A
+is-of-hlevel (suc 0) A = is-prop A
+is-of-hlevel (suc (suc h)) A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-of-hlevel (suc h) (x ＝ y)
 
 is-of-hlevel-fun : (h : HLevel) {A : Type ℓ} {B : Type ℓ′} (f : A → B) → Type (ℓ ⊔ ℓ′)
 is-of-hlevel-fun h f = Π[ b ꞉ _ ] is-of-hlevel h (fibre f b)
@@ -29,12 +27,12 @@ is-of-hlevel-fun h f = Π[ b ꞉ _ ] is-of-hlevel h (fibre f b)
 -- TODO reformulate directly without using J?
 -- is-of-hlevel-Ω→is-of-hlevel
 --   : (h : HLevel)
---   → (Π[ x ꞉ A ] is-of-hlevel (𝒽suc h) (x ＝ x))
+--   → (Π[ x ꞉ A ] is-of-hlevel (suc h) (x ＝ x))
 --   → is-of-hlevel (2 + h) A
--- is-of-hlevel-Ω→is-of-hlevel 0𝒽 hΩ x y =
+-- is-of-hlevel-Ω→is-of-hlevel 0 hΩ x y =
 --   J (λ y p → (q : x ＝ y) → p ＝ q) (hΩ x refl)
--- is-of-hlevel-Ω→is-of-hlevel (𝒽suc n) hΩ x _ =
---   J (λ y p → (q : x ＝ y) → is-of-hlevel (𝒽suc n) (p ＝ q)) (hΩ x refl)
+-- is-of-hlevel-Ω→is-of-hlevel (suc n) hΩ x _ =
+--   J (λ y p → (q : x ＝ y) → is-of-hlevel (suc n) (p ＝ q)) (hΩ x refl)
 
 
 -- Essential properties of `is-prop` and `is-contr`
@@ -83,25 +81,25 @@ is-prop→is-set h a b p q j i = hcomp (∂ i ∨ ∂ j) λ where
   k (j = i1) → h a (q i) k
   k (k = i0) → a
 
-is-of-hlevel-suc : (h : HLevel) → is-of-hlevel h A → is-of-hlevel (𝒽suc h) A
-is-of-hlevel-suc 0𝒽         x = is-contr→is-prop x
-is-of-hlevel-suc (𝒽suc 0𝒽) x = is-prop→is-set x
-is-of-hlevel-suc (𝒽suc (𝒽suc h)) p x y = is-of-hlevel-suc (𝒽suc h) (p x y)
+is-of-hlevel-suc : (h : HLevel) → is-of-hlevel h A → is-of-hlevel (suc h) A
+is-of-hlevel-suc 0         x = is-contr→is-prop x
+is-of-hlevel-suc (suc 0) x = is-prop→is-set x
+is-of-hlevel-suc (suc (suc h)) p x y = is-of-hlevel-suc (suc h) (p x y)
 
 is-of-hlevel-+ : (h₀ h₁ : HLevel) → is-of-hlevel h₀ A → is-of-hlevel (h₁ + h₀) A
-is-of-hlevel-+ h₀ 0𝒽     x = x
+is-of-hlevel-+ h₀ 0     x = x
 is-of-hlevel-+ h₀ (suc h₁) x = is-of-hlevel-suc _ (is-of-hlevel-+ h₀ h₁ x)
 
-is-prop→is-hlevel-suc : is-prop A → is-of-hlevel (𝒽suc h) A
-is-prop→is-hlevel-suc {h = 0𝒽    } A-prop = A-prop
-is-prop→is-hlevel-suc {h = 𝒽suc h} A-prop =
-  is-of-hlevel-suc (𝒽suc h) (is-prop→is-hlevel-suc A-prop)
+is-prop→is-hlevel-suc : is-prop A → is-of-hlevel (suc h) A
+is-prop→is-hlevel-suc {h = 0    } A-prop = A-prop
+is-prop→is-hlevel-suc {h = suc h} A-prop =
+  is-of-hlevel-suc (suc h) (is-prop→is-hlevel-suc A-prop)
 
 path-is-of-hlevel : (h : HLevel) → is-of-hlevel h A → {x y : A}
                   → is-of-hlevel h (x ＝ y)
-path-is-of-hlevel 0𝒽 ahl =
+path-is-of-hlevel 0 ahl =
   is-contr→is-prop ahl _ _ , is-prop→is-set (is-contr→is-prop ahl) _ _ _
-path-is-of-hlevel (𝒽suc h) ahl = is-of-hlevel-suc (𝒽suc h) ahl _ _
+path-is-of-hlevel (suc h) ahl = is-of-hlevel-suc (suc h) ahl _ _
 
 pathP-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
                    → is-of-hlevel h (A i1)
@@ -110,13 +108,13 @@ pathP-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
 pathP-is-of-hlevel {A} h ahl {x} {y} =
   subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel h ahl)
 
-path-is-of-hlevel′ : (h : HLevel) → is-of-hlevel (𝒽suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
-path-is-of-hlevel′ 0𝒽 ahl x y =
+path-is-of-hlevel′ : (h : HLevel) → is-of-hlevel (suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
+path-is-of-hlevel′ 0 ahl x y =
   ahl x y , is-prop→is-set ahl _ _ _
-path-is-of-hlevel′ (𝒽suc h) p x y = p x y
+path-is-of-hlevel′ (suc h) p x y = p x y
 
 pathP-is-of-hlevel′ : {A : I → Type ℓ} (h : HLevel)
-                    → is-of-hlevel (𝒽suc h) (A i1)
+                    → is-of-hlevel (suc h) (A i1)
                     → (x : A i0) (y : A i1)
                     → is-of-hlevel h (PathP A x y)
 pathP-is-of-hlevel′ {A} h ahl x y =
@@ -136,10 +134,10 @@ is-prop-is-prop : is-prop (is-prop A)
 is-prop-is-prop f g i a b = is-prop→is-set f a b (f a b) (g a b) i
 
 is-of-hlevel-is-prop : (h : HLevel) → is-prop (is-of-hlevel h A)
-is-of-hlevel-is-prop 0𝒽 = is-contr-is-prop
-is-of-hlevel-is-prop (𝒽suc 0𝒽) = is-prop-is-prop
-is-of-hlevel-is-prop (𝒽suc (𝒽suc h)) x y i a b =
-  is-of-hlevel-is-prop (𝒽suc h) (x a b) (y a b) i
+is-of-hlevel-is-prop 0 = is-contr-is-prop
+is-of-hlevel-is-prop (suc 0) = is-prop-is-prop
+is-of-hlevel-is-prop (suc (suc h)) x y i a b =
+  is-of-hlevel-is-prop (suc h) (x a b) (y a b) i
 
 
 is-prop→SquareP

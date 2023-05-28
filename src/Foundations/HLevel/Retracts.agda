@@ -37,10 +37,10 @@ retract→is-of-hlevel : (n : HLevel) (f : A → B) (g : B → A)
                      → f is-left-inverse-of g
                      → is-of-hlevel n A
                      → is-of-hlevel n B
-retract→is-of-hlevel 0𝒽 = retract→is-contr
-retract→is-of-hlevel (𝒽suc 0𝒽) = retract→is-prop
-retract→is-of-hlevel (𝒽suc (𝒽suc h)) f g p hlevel x y =
-  retract→is-of-hlevel (𝒽suc h) sect (ap g) inv (hlevel (g x) (g y))
+retract→is-of-hlevel 0 = retract→is-contr
+retract→is-of-hlevel (suc 0) = retract→is-prop
+retract→is-of-hlevel (suc (suc h)) f g p hlevel x y =
+  retract→is-of-hlevel (suc h) sect (ap g) inv (hlevel (g x) (g y))
   where
     sect : g x ＝ g y → x ＝ y
     sect path =
@@ -76,9 +76,9 @@ iso→is-of-hlevel h (f , isic) = is-iso→is-of-hlevel h (isic .is-iso.inv) $
                → is-of-hlevel h (Π[ x ꞉ A ] B x)
 Π-is-of-hlevel 0 bhl = (λ _ → bhl _ .fst) , λ x i a → bhl _ .snd (x a) i
 Π-is-of-hlevel 1 bhl f g i a = bhl a (f a) (g a) i
-Π-is-of-hlevel (𝒽suc (𝒽suc h)) bhl f g =
-  retract→is-of-hlevel (𝒽suc h) fun-ext happly (λ x → refl)
-    (Π-is-of-hlevel (𝒽suc h) λ x → bhl x (f x) (g x))
+Π-is-of-hlevel (suc (suc h)) bhl f g =
+  retract→is-of-hlevel (suc h) fun-ext happly (λ x → refl)
+    (Π-is-of-hlevel (suc h) λ x → bhl x (f x) (g x))
 
 Π-is-of-hlevel-implicit : {B : A → Type ℓ′} (h : HLevel)
                           (Bhl : (x : A) → is-of-hlevel h (B x))
@@ -115,11 +115,11 @@ fun-is-of-hlevel n hl = Π-is-of-hlevel n (λ _ → hl)
                   (is-prop→pathP (λ _ → is-contr→is-prop (bcontr _)) _ _)
 Σ-is-of-hlevel 1 aprop bprop (a , b) (a' , b') i =
   (aprop a a' i) , (is-prop→pathP (λ i → bprop (aprop a a' i)) b b' i)
-Σ-is-of-hlevel {B} (𝒽suc (𝒽suc n)) h1 h2 x y =
-  is-iso→is-of-hlevel (𝒽suc n)
+Σ-is-of-hlevel {B} (suc (suc n)) h1 h2 x y =
+  is-iso→is-of-hlevel (suc n)
     (is-iso-inv (Σ-path-iso .snd) .is-iso.inv)
     (Σ-path-iso .snd)
-    (Σ-is-of-hlevel (𝒽suc n) (h1 (fst x) (fst y)) λ x → h2 _ _ _)
+    (Σ-is-of-hlevel (suc n) (h1 (fst x) (fst y)) λ x → h2 _ _ _)
 
 ×-is-of-hlevel : {B : Type ℓ′}
                → (n : HLevel)

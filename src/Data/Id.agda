@@ -38,9 +38,9 @@ Id≃path = identity-system-gives-path Id-identity-system
 module Id≃path {ℓ} {A : Type ℓ} = Ids (Id-identity-system {A = A})
 
 is-of-hlevelⁱ : HLevel → Type ℓ → Type ℓ
-is-of-hlevelⁱ 0𝒽 A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
-is-of-hlevelⁱ (𝒽suc 0𝒽) A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
-is-of-hlevelⁱ (𝒽suc (𝒽suc h)) A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-of-hlevelⁱ (𝒽suc h) (x ＝ⁱ y)
+is-of-hlevelⁱ 0 A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
+is-of-hlevelⁱ (suc 0) A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
+is-of-hlevelⁱ (suc (suc h)) A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-of-hlevelⁱ (suc h) (x ＝ⁱ y)
 
 is-contrⁱ : Type ℓ → Type ℓ
 is-contrⁱ = is-of-hlevelⁱ 0

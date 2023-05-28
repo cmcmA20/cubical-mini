@@ -26,3 +26,4 @@ open import Truncation.Propositional.Base                 public
 open import Truncation.Propositional.Instances.Everything public
 
 open import Meta.Everything public
+  hiding (absurd)
