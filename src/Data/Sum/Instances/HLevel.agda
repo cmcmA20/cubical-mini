@@ -11,5 +11,5 @@ instance
   hlevel-decomp-⊎
     : ∀ {a b} {A : Type a} {B : Type b}
     → hlevel-decomposition (A ⊎ B)
-  hlevel-decomp-⊎ = decomp (quote ⊎-is-hlevel)
+  hlevel-decomp-⊎ = decomp (quote ⊎-is-of-hlevel)
     (`level-minus 2 ∷ `search ∷ `search ∷ [])

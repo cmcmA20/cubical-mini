@@ -49,11 +49,11 @@ module ⊎-path-code where
 
 open ⊎-path-code
 
-⊎-is-hlevel : (n : HLevel)
+⊎-is-of-hlevel : (n : HLevel)
             → is-of-hlevel (2 + n) A
             → is-of-hlevel (2 + n) B
             → is-of-hlevel (2 + n) (A ⊎ B)
-⊎-is-hlevel n ahl bhl _ _ =
+⊎-is-of-hlevel n ahl bhl _ _ =
   is-of-hlevel-≃ (1 + n) (identity-system-gives-path ⊎-identity-system ₑ⁻¹) (Code-is-of-hlevel ahl bhl)
 
 disjoint-⊎-is-prop

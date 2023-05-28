@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Data.Empty
-open import Data.Sum
+open import Data.Sum.Path
 
 open import Meta.Reflection.HLevel
 open import Meta.Reflection.Record
@@ -18,8 +18,8 @@ private variable
   Q : Type ℓ′
   b : Bool
 
-Dec≃⊎ : Dec P ≃ ((¬ P) ⊎ P)
-Dec≃⊎ = iso→equiv $ dec-record-iso _ ∙ᵢ reflects-as-sumᵢ
+dec-as-sum : Dec P ≃ ((¬ P) ⊎ P)
+dec-as-sum = iso→equiv $ dec-record-iso _ ∙ᵢ reflects-as-sumᵢ
   where
   open Reflects
   module _ {ℓ} (P : Type ℓ) where
@@ -36,12 +36,12 @@ Dec≃⊎ = iso→equiv $ dec-record-iso _ ∙ᵢ reflects-as-sumᵢ
   reflects-as-sumᵢ .snd .is-iso.linv (false , ofⁿ _) = refl
   reflects-as-sumᵢ .snd .is-iso.linv (true  , ofʸ _) = refl
 
-Dec-is-of-hlevel : (n : HLevel) → is-of-hlevel n A → is-of-hlevel n (Dec A)
-Dec-is-of-hlevel 0𝒽 (a , _) .fst = yes a
-Dec-is-of-hlevel 0𝒽 (a , p) .snd (no ¬a)  = absurd (¬a a)
-Dec-is-of-hlevel 0𝒽 (a , p) .snd (yes a′) = ap yes (p a′)
-Dec-is-of-hlevel (𝒽suc 0𝒽) A-hl =
-  is-of-hlevel-≃ 1 Dec≃⊎ (disjoint-⊎-is-prop hlevel! A-hl (λ f → f .fst (f .snd)))
-Dec-is-of-hlevel (𝒽suc (𝒽suc n)) A-hl =
-  is-of-hlevel-≃ (suc (suc n)) Dec≃⊎
-    (⊎-is-hlevel n (λ ¬a₁ ¬a₂ → is-of-hlevel-+ n 1 hlevel!) A-hl)
+dec-is-of-hlevel : (n : HLevel) → is-of-hlevel n A → is-of-hlevel n (Dec A)
+dec-is-of-hlevel 0𝒽 (a , _) .fst = yes a
+dec-is-of-hlevel 0𝒽 (a , p) .snd (no ¬a)  = absurd (¬a a)
+dec-is-of-hlevel 0𝒽 (a , p) .snd (yes a′) = ap yes (p a′)
+dec-is-of-hlevel (𝒽suc 0𝒽) A-hl =
+  is-of-hlevel-≃ 1 dec-as-sum (disjoint-⊎-is-prop hlevel! A-hl (λ f → f .fst (f .snd)))
+dec-is-of-hlevel (𝒽suc (𝒽suc n)) A-hl =
+  is-of-hlevel-≃ (suc (suc n)) dec-as-sum
+    (⊎-is-of-hlevel n (λ ¬a₁ ¬a₂ → is-of-hlevel-+ n 1 hlevel!) A-hl)
