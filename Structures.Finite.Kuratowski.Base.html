@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Structures.Finite.Kuratowski.Base</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Structures.Finite.Kuratowski.Base.html" class="Module">Structures.Finite.Kuratowski.Base</a> <a id="65" class="Keyword">where</a>
+
+<a id="72" class="Keyword">open</a> <a id="77" class="Keyword">import</a> <a id="84" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="101" class="Keyword">open</a> <a id="106" class="Keyword">import</a> <a id="113" href="Foundations.Equiv.Base.html" class="Module">Foundations.Equiv.Base</a>
+
+<a id="137" class="Keyword">open</a> <a id="142" class="Keyword">import</a> <a id="149" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a>
+<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Data.Fin.Sum.html" class="Module">Data.Fin.Sum</a>
+<a id="188" class="Keyword">open</a> <a id="193" class="Keyword">import</a> <a id="200" href="Data.List.Base.html" class="Module">Data.List.Base</a>
+
+<a id="216" class="Keyword">open</a> <a id="221" class="Keyword">import</a> <a id="228" href="Functions.Surjection.html" class="Module">Functions.Surjection</a>
+
+<a id="250" class="Keyword">open</a> <a id="255" class="Keyword">import</a> <a id="262" href="Truncation.Propositional.Base.html" class="Module">Truncation.Propositional.Base</a>
+
+<a id="293" class="Keyword">private</a> <a id="301" class="Keyword">variable</a>
+  <a id="312" href="Structures.Finite.Kuratowski.Base.html#312" class="Generalizable">ℓ</a> <a id="314" class="Symbol">:</a> <a id="316" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="324" href="Structures.Finite.Kuratowski.Base.html#324" class="Generalizable">A</a> <a id="326" class="Symbol">:</a> <a id="328" href="Foundations.Prim.Type.html#228" class="Primitive">Type</a> <a id="333" href="Structures.Finite.Kuratowski.Base.html#312" class="Generalizable">ℓ</a>
+
+<a id="336" class="Comment">-- TODO List ∈</a>
+<a id="351" class="Comment">-- 𝒦 : Type ℓ → Type ℓ</a>
+<a id="374" class="Comment">-- 𝒦 A = Σ[ support ꞉ List A ] Π[ x ꞉ A ] ∥ x ∈ support ∥₁</a>
+</pre></body></html>
