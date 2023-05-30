@@ -20,10 +20,10 @@ open import Functions.Equiv.HalfAdjoint    public
 open import Functions.Equiv.Weak           public
 open import Functions.Embedding            public
 
--- FIXME change hierarchy?
 open import Truncation.Propositional.Base                 public
   using (∥_∥₁; ∣_∣₁; squash₁)
 open import Truncation.Propositional.Instances.Everything public
 
 open import Meta.Everything public
   hiding (absurd)
+  renaming (Term to Term′; Clause to Clause′)
