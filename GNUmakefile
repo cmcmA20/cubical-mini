@@ -8,6 +8,7 @@ RUNHASKELL?=runhaskell
 EVERYTHINGS=$(RUNHASKELL) ./Everythings.hs
 DATA_INSTANCE_DIRS=`find src/Data -type d -name Instances -printf "Data/%P\n"`
 STR_INSTANCE_DIRS=`find src/Structures -type d -name Instances -printf "Structures/%P\n"`
+CON_INSTANCE_DIRS=`find src/Containers -type d -name Instances -printf "Containers/%P\n"`
 
 .PHONY : all
 all : build
@@ -39,6 +40,7 @@ check-everythings:
 gen-inst-everythings:
 	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
 	$(EVERYTHINGS) gen-public $(STR_INSTANCE_DIRS)
+	$(EVERYTHINGS) gen-public $(CON_INSTANCE_DIRS)
 	$(EVERYTHINGS) gen-public Truncation/Propositional/Instances
 
 .PHONY : gen-everythings
