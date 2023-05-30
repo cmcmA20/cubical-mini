@@ -1,5 +1,12 @@
 {-# OPTIONS --safe #-}
 module Data.String.Base where
 
--- FIXME proper interface
-open import Data.String.Prim public
+open import Agda.Builtin.String public
+  using( String )
+  renaming
+    ( primStringUncons   to uncons
+    ; primStringToList   to to-list
+    ; primStringFromList to from-list
+    ; primStringAppend   to concat-str
+    ; primShowString     to show-str
+    ; primShowNat        to show-ℕ )

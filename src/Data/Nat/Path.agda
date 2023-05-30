@@ -6,6 +6,7 @@ open import Foundations.Base
 open import Data.Empty
 
 open import Structures.IdentitySystem.Base
+open import Structures.Negation
 
 open import Data.Nat.Base public
 
@@ -34,3 +35,17 @@ module ℕ-path-code where
        → ＜ code-refl m ／ (λ i → Code m (decode m n c i)) ＼ c ＞
     go zero    zero    _ = refl
     go (suc m) (suc n) c = go m n c
+
+
+private variable
+  m n : ℕ
+
+suc≠zero : ¬ suc m ＝ 0
+suc≠zero p = transport (ap discrim p) tt
+  where
+  discrim : ℕ → Type
+  discrim 0       = ⊥
+  discrim (suc _) = ⊤
+
+suc-inj : suc m ＝ suc n → m ＝ n
+suc-inj = ap pred

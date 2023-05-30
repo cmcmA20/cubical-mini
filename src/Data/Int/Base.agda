@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Int.Prim where
+module Data.Int.Base where
 
 open import Agda.Builtin.Int public
   using

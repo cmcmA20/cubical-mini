@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Float.Prim where
+module Data.Float.Base where
 
 open import Agda.Builtin.Float public
   using ( Float )

@@ -8,7 +8,7 @@ open import Data.Nat.Base public
 
 private variable
   ℓ : Level
-  n : ℕ
+  m n : ℕ
 
 data Fin : ℕ → Type where
   fzero :         Fin (suc n)

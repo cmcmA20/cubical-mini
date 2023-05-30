@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Word.Prim where
+module Data.Word.Base where
 
 open import Agda.Builtin.Word public
   using ( Word64 )
