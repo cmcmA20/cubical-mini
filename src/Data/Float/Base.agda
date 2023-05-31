@@ -13,9 +13,9 @@ open import Agda.Builtin.Float public
     ; primFloatIsNegativeZero to float-is-negative-zero -- Float → Bool
     ; primFloatIsSafeInteger  to float-is-safe-integer  -- Float → Bool
       -- Conversions
-    ; primFloatToWord64 to float-to-word64 -- Float → Maybe Word64
-    ; primNatToFloat    to ℕ-to-float      -- ℕ → Float
-    ; primIntToFloat    to ℤ-to-float      -- ℤ → Float
+    ; primFloatToWord64 to float→maybe-word64 -- Float → Maybe Word64
+    ; primNatToFloat    to ℕ→float      -- ℕ → Float
+    ; primIntToFloat    to ℤ→float      -- ℤ → Float
     ; primFloatRound    to float-round     -- Float → Maybe ℤ
     ; primFloatFloor    to float-floor     -- Float → Maybe ℤ
     ; primFloatCeiling  to float-ceil      -- Float → Maybe ℤ
