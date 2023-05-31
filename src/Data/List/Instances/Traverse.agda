@@ -12,7 +12,7 @@ private variable
 
 instance
   Traverse-List : Traverse (eff List)
-  Traverse-List .Traverse.traverse {M = M} {a = a} {b = b} = go where
+  Traverse-List .Traverse.traverse {M} {a} {b} = go where
     private module M = Effect M
     go : (a → M.₀ b) → List a → M.₀ (List b)
     go f []       = pure []
