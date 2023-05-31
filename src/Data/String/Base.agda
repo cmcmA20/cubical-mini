@@ -5,8 +5,8 @@ open import Agda.Builtin.String public
   using( String )
   renaming
     ( primStringUncons   to uncons
-    ; primStringToList   to to-list
-    ; primStringFromList to from-list
+    ; primStringToList   to string→list
+    ; primStringFromList to list→string
     ; primStringAppend   to concat-str
     ; primShowString     to show-str
     ; primShowNat        to show-ℕ )

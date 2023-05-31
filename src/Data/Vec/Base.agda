@@ -35,3 +35,9 @@ replicate (suc n) x = x ∷ replicate n x
 _++_ : Vec A m → Vec A n → Vec A (m + n)
 []       ++ ys = ys
 (x ∷ xs) ++ ys = x ∷ (xs ++ ys)
+
+head : Vec A (suc n) → A
+head (x ∷ _) = x
+
+tail : Vec A (suc n) → Vec A n
+tail (_ ∷ xs) = xs

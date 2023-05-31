@@ -6,12 +6,15 @@ open import Foundations.HLevel
 
 open import Data.Dec.Path
 
+open import Functions.Embedding
+
 open import Structures.Base
 open import Structures.DoubleNegation.Base
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ : Level
   A : Type ℓ
+  B : Type ℓ′
 
 is-discrete : Type ℓ → Type ℓ
 is-discrete A = Dec on-paths-of A
@@ -29,3 +32,13 @@ is-discrete-is-prop d₁ d₂ i _ _ =
 
 is-of-hlevel-is-discrete : (n : HLevel) → is-discrete (is-of-hlevel n A)
 is-of-hlevel-is-discrete _ _ _ = yes (is-of-hlevel-is-prop _ _ _)
+
+is-discrete-injection : (A ↣ B) → is-discrete B → is-discrete A
+is-discrete-injection (f , f-inj) B-dis x y =
+  map f-inj
+      (λ ¬fp p → ¬fp (ap f p))
+      (B-dis (f x) (f y))
+
+is-discrete-embedding : (A ↪ B) → is-discrete B → is-discrete A
+is-discrete-embedding (f , f-emb) =
+  is-discrete-injection (f , has-prop-fibres→injective f f-emb)
