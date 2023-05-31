@@ -17,9 +17,9 @@ open import Agda.Builtin.Char public
   ; primToUpper to to-upper
   ; primToLower to to-lower
   -- converting
-  ; primCharToNat to to-ℕ
-  ; primNatToChar to from-ℕ )
+  ; primCharToNat to char→ℕ
+  ; primNatToChar to ℕ→char )
 
 open import Agda.Builtin.String public
   using ()
-  renaming ( primShowChar to show-char )
+  renaming ( primShowChar to char→string )

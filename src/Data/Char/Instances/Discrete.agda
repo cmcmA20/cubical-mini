@@ -17,6 +17,6 @@ instance
     is-discreteⁱ→is-discrete char-is-discreteⁱ
     where
     char-is-discreteⁱ : is-discreteⁱ Char
-    char-is-discreteⁱ x y with to-ℕ x ≟ to-ℕ y
-    ... | yes p = yes $ char-to-nat-injectiveⁱ _ _ ((Id≃path ₑ⁻¹) .fst p)
-    ... | no ¬p = no λ p → ¬p (ap to-ℕ (Id≃path .fst p))
+    char-is-discreteⁱ x y with char→ℕ x ≟ char→ℕ y
+    ... | yes p = yes $ char→ℕ-injⁱ _ _ ((Id≃path ₑ⁻¹) .fst p)
+    ... | no ¬p = no λ p → ¬p (ap char→ℕ (Id≃path .fst p))

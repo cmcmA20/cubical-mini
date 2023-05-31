@@ -13,4 +13,4 @@ open import Data.Char.Base public
 
 open import Agda.Builtin.Char.Properties public
   using ()
-  renaming ( primCharToNatInjective to char-to-nat-injectiveⁱ)
+  renaming ( primCharToNatInjective to char→ℕ-injⁱ)

@@ -38,23 +38,23 @@ module ⊎-path-code where
   ⊎-identity-system .to-path-over {inl x₁} {inl x₂} (lift p) i = lift λ j → p (i ∧ j)
   ⊎-identity-system .to-path-over {inr y₁} {inr y₂} (lift p) i = lift λ j → p (i ∧ j)
 
-  Code-is-of-hlevel : {s₁ s₂ : A ⊎ B} {n : HLevel}
+  code-is-of-hlevel : {s₁ s₂ : A ⊎ B} {n : HLevel}
                     → is-of-hlevel (2 + n) A
                     → is-of-hlevel (2 + n) B
                     → is-of-hlevel (1 + n) (Code s₁ s₂)
-  Code-is-of-hlevel {s₁ = inl x₁} {inl x₂} ahl bhl = Lift-is-of-hlevel _ (ahl x₁ x₂)
-  Code-is-of-hlevel {s₁ = inl x}  {inr y}  ahl bhl = Lift-is-of-hlevel _ hlevel!
-  Code-is-of-hlevel {s₁ = inr x}  {inl y}  ahl bhl = Lift-is-of-hlevel _ hlevel!
-  Code-is-of-hlevel {s₁ = inr y₁} {inr y₂} ahl bhl = Lift-is-of-hlevel _ (bhl y₁ y₂)
+  code-is-of-hlevel {s₁ = inl x₁} {inl x₂} ahl bhl = Lift-is-of-hlevel _ (ahl x₁ x₂)
+  code-is-of-hlevel {s₁ = inl x}  {inr y}  ahl bhl = hlevel!
+  code-is-of-hlevel {s₁ = inr x}  {inl y}  ahl bhl = hlevel!
+  code-is-of-hlevel {s₁ = inr y₁} {inr y₂} ahl bhl = Lift-is-of-hlevel _ (bhl y₁ y₂)
 
 open ⊎-path-code
 
 ⊎-is-of-hlevel : (n : HLevel)
-            → is-of-hlevel (2 + n) A
-            → is-of-hlevel (2 + n) B
-            → is-of-hlevel (2 + n) (A ⊎ B)
+               → is-of-hlevel (2 + n) A
+               → is-of-hlevel (2 + n) B
+               → is-of-hlevel (2 + n) (A ⊎ B)
 ⊎-is-of-hlevel n ahl bhl _ _ =
-  is-of-hlevel-≃ (1 + n) (identity-system-gives-path ⊎-identity-system ₑ⁻¹) (Code-is-of-hlevel ahl bhl)
+  is-of-hlevel-≃ (1 + n) (identity-system-gives-path ⊎-identity-system ₑ⁻¹) (code-is-of-hlevel ahl bhl)
 
 disjoint-⊎-is-prop
   : is-prop A → is-prop B → ¬ A × B
