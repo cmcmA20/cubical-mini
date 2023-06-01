@@ -15,12 +15,12 @@ private variable
   C : Type c
   D : Type d
 
-⊎-universal : {C : A ⊎ B → Type c}
-            → (Π[ x ꞉ A ⊎ B ] C x)
-            ≃ ( (Π[ x ꞉ A ] C (inl x))
-              × (Π[ y ꞉ B ] C (inr y))
-              )
-⊎-universal = iso→equiv the-iso where
+universal : {C : A ⊎ B → Type c}
+          → (Π[ x ꞉ A ⊎ B ] C x)
+          ≃ ( (Π[ x ꞉ A ] C (inl x))
+            × (Π[ y ꞉ B ] C (inr y))
+            )
+universal = iso→equiv the-iso where
   the-iso : Iso _ _
   the-iso .fst f = (λ x → f (inl x)) , (λ x → f (inr x))
   the-iso .snd .is-iso.inv (f , g) (inl x) = f x

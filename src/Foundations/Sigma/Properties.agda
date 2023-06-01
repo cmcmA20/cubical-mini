@@ -11,6 +11,11 @@ private variable
   A A′ : Type ℓ
   B P Q : A → Type ℓ′
 
+-- Unique existence
+
+∃! : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
+∃! A B = is-contr (Σ[ a ꞉ A ] B a)
+
 open is-iso
 
 Σ-pathP-iso

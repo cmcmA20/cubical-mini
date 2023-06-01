@@ -49,7 +49,7 @@ instance
     λ f → is-prop→is-hlevel-suc (is-equiv-is-prop f)
 
 @0 ＝-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
-＝-is-of-hlevel n Ahl Bhl = is-equiv→is-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
+＝-is-of-hlevel n Ahl Bhl = is-equiv→is-of-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
 
 n-path : ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y
 n-path f i .typ = f i

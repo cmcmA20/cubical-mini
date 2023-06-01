@@ -61,8 +61,8 @@ retract→is-of-hlevel (suc (suc h)) f g p hlevel x y =
 is-iso→is-of-hlevel : (h : HLevel) (f : A → B) → is-iso f → is-of-hlevel h A → is-of-hlevel h B
 is-iso→is-of-hlevel h f is-iso = retract→is-of-hlevel h f (is-iso .is-iso.inv) (is-iso .is-iso.rinv)
 
-is-equiv→is-hlevel : (h : HLevel) (f : A → B) → is-equiv f → is-of-hlevel h A → is-of-hlevel h B
-is-equiv→is-hlevel h f eqv = is-iso→is-of-hlevel h f (is-equiv→is-iso eqv)
+is-equiv→is-of-hlevel : (h : HLevel) (f : A → B) → is-equiv f → is-of-hlevel h A → is-of-hlevel h B
+is-equiv→is-of-hlevel h f eqv = is-iso→is-of-hlevel h f (is-equiv→is-iso eqv)
 
 is-of-hlevel-≃ : (h : HLevel) → (B ≃ A) → is-of-hlevel h A → is-of-hlevel h B
 is-of-hlevel-≃ h f = is-iso→is-of-hlevel h from (iso to η ε) where open Equiv f
