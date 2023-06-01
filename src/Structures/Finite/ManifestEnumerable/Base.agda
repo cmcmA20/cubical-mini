@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv.Base
 
 open import Data.Nat.Base
-open import Data.Fin.Sum
+open import Data.Fin.Base
 open import Data.List.Base
 
 open import Functions.Surjection

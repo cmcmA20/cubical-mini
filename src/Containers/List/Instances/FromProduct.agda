@@ -4,7 +4,7 @@ module Containers.List.Instances.FromProduct where
 open import Foundations.Base
 open import Meta.FromProduct
 
-open import Data.Fin.Sum
+open import Data.FinSum.Base
 
 open import Containers.List.Base
 
