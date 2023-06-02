@@ -4,9 +4,14 @@ CONTRIBUTING
 We very much appreciate contributions in the form of pull requests (PRs).
 When preparing a PR here are some general guidelines:
 
+- Abstract and automate as much as you can! Performance and conciseness
+  are top priorities, though feel free to generously sprinkle comments if
+  the code becomes too dry.
+
 - To test your changes before submission, run `make` at the top level,
   which will generate all required `Everything` files in
   `src/README.agda` and then typecheck the latter file.
+  Or you can just run `make test`.
 
 - Please read through and clean your code before making a PR. Clean
   code has reasonable line length (<100 characters), good indentation,
@@ -123,7 +128,7 @@ When preparing a PR here are some general guidelines:
 - Avoid creating folders like `Data`, `Records` or `HITs` only for the sake of
   collecting all the inductive types, records or HITs.
   When naming new folders, take inspiration in semantics or purpose of the
-  target concept, not in it's Agda syntax.
+  target concept, not in its' Agda syntax.
 
 - `Data` is the correct place for common programming data types and their
   properties. If you see that your "data type" is quite general, admits a rich
@@ -137,8 +142,6 @@ When preparing a PR here are some general guidelines:
 - Create multiple representations of the same type and document what proofs
   are easy in this representation, and why.
 
-- TODO
-  Put equivalent representation of the same type in ??? folders.
-  This seems to be unsolvable in a satisfying way because the underlying
-  storage is a tree, but there are types for which any representation choice
-  is arbitrary.
+- Put equivalent representation of the same type in different folders.
+  The computational one should be default and have no suffix.
+  For example see `Fin` and `FinSum`.
