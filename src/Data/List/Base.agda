@@ -26,8 +26,10 @@ elim
 elim P p[] p∷ []       = p[]
 elim P p[] p∷ (x ∷ xs) = p∷ x xs (elim P p[] p∷ xs)
 
+-- rec
 fold-r : (A → B → B) → B → List A → B
-fold-r f x = elim _ x (λ x _ → f x)
+fold-r _ x []       = x
+fold-r f x (a ∷ as) = f a (fold-r f x as)
 
 fold-l : (B → A → B) → B → List A → B
 fold-l f x []       = x

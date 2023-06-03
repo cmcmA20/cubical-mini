@@ -46,5 +46,6 @@ infix 2 ∃-syntax
 
 syntax ∃-syntax A (λ x → B) = ∃[ x ꞉ A ] B
 
+
 image : (A → B) → Type _
 image {A} {B} f = Σ[ b ꞉ B ] ∃[ a ꞉ A ] (f a ＝ b)
