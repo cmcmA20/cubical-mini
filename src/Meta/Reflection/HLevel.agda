@@ -421,7 +421,7 @@ from the wanted level (k + n) until is-of-hlevel-+ n (sucᵏ′ n) w works.
       gen-args has-alts level defn [] accum cont = do
         -- If we have no arguments to generate, then we can go ahead and
         -- use the accumulator as-is.
-        unify goal (def defn (reverse accum))
+        unify goal (def defn (reverse-fast accum))
         debugPrint "tactic.hlevel" 10 $
           "Committed to solution: " ∷ termErr (def defn (reverse accum)) ∷ []
         cont

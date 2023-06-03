@@ -56,7 +56,7 @@ undo-clauses = go where
   go ((r-field , sel-path) ∷ xs) =
     clause (("sig" , argN unknown) ∷ [])
            (argN (proj (quote snd)) ∷ argN (proj (quote is-iso.inv)) ∷ argN (var 0) ∷ argN (proj r-field) ∷ [])
-           (fold-r (λ n t → def n (t v∷ [])) (var 0 []) (reverse sel-path))
+           (fold-r (λ n t → def n (t v∷ [])) (var 0 []) (reverse-fast sel-path))
       ∷ go xs
 
 redo-clauses : Fields → List Clause
@@ -87,7 +87,7 @@ redo-undo-clauses = go where
   go ((r-field , sel-path) ∷ xs) =
     clause (("rec" , argN unknown) ∷ ("i" , argN (quoteTerm I)) ∷ [])
            (argN (proj (quote snd)) ∷ argN (proj (quote is-iso.rinv)) ∷ argN (var 1) ∷ argN (var 0) ∷ map (argN ∘ proj) sel-path)
-           (fold-r (λ n t → def n (t v∷ [])) (var 1 []) (reverse sel-path))
+           (fold-r (λ n t → def n (t v∷ [])) (var 1 []) (reverse-fast sel-path))
       ∷ go xs
 
 pi-term→sigma : Term → TC Term

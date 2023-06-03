@@ -25,5 +25,5 @@ open import Truncation.Propositional.Base                 public
 open import Truncation.Propositional.Instances.Everything public
 
 open import Meta.Everything public
-  hiding (absurd)
+  hiding (absurd; _▷_)
   renaming (Term to Term′; Clause to Clause′)

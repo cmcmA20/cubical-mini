@@ -43,7 +43,8 @@ _++_ : List A → List A → List A
 (x ∷ xs) ++ ys = x ∷ (xs ++ ys)
 
 reverse : List A → List A
-reverse = go [] where
-  go : List A → List A → List A
-  go acc [] = acc
-  go acc (x ∷ xs) = go (x ∷ acc) xs
+reverse []       = []
+reverse (x ∷ xs) = reverse xs ++ x ∷ []
+
+reverse-fast : List A → List A
+reverse-fast = fold-l (flip _∷_) []

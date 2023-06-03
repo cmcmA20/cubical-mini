@@ -5,9 +5,11 @@ open import Foundations.Base
 
 open import Data.Bool.Base
 open import Data.List.Base
+open import Data.List.Operations
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Traverse
 open import Data.Maybe.Base
+open import Data.Nat.Base
 open import Data.Nat.Instances.Number
 open import Data.String.Base
 open import Data.String.Instances.IsString
@@ -121,6 +123,28 @@ arg=? eq=? (arg i₁ x) (arg i₂ y) = (i₁ arg-info=? i₂) and (eq=? x y)
 -- names.
 abs=? : ∀ {a} {A : Type a} → (A → A → Bool) → Abs A → Abs A → Bool
 abs=? eq=? (abs _ x) (abs _ y) = eq=? x y
+
+_term′=?_ : {n : ℕ} → Term → Term → Bool
+_term′=?_ {0} _ _ = false
+_term′=?_ {suc n} (var nm₁ args₁) (var nm₂ args₂)
+  = (nm₁ == nm₂) and all=? (arg=? (_term′=?_ {n})) args₁ args₂
+_term′=?_ {suc n} (con c₁ args₁) (con c₂ args₂) =
+  (c₁ name=? c₂) and (all=? (arg=? (_term′=?_ {n})) args₁ args₂)
+_term′=?_ {suc n} (def f₁ args₁) (def f₂ args₂) =
+  (f₁ name=? f₂) and (all=? (arg=? (_term′=?_ {n})) args₁ args₂)
+_term′=?_ {suc n} (lam v₁ t₁) (lam v₂ t₂) =
+  (v₁ visibility=? v₂) and (abs=? (_term′=?_ {n}) t₁ t₂)
+_term′=?_ {suc n} (pat-lam cs₁ args₁) (pat-lam cs₂ args₂) = false
+_term′=?_ {suc n} (pi a₁ b₁) (pi a₂ b₂) =
+  (arg=? (_term′=?_ {n}) a₁ a₂) and (abs=? (_term′=?_ {n}) b₁ b₂)
+agda-sort s term′=? t₂ = false
+lit l term′=? t₂ = false
+meta x x₁ term′=? t₂ = false
+unknown term′=? t₂ = false
+_ term′=? _ = false
+
+_term=?_ : Term → Term → Bool
+_term=?_ = _term′=?_ {n = 1234567890} -- ;-)
 
 “refl” : Term
 “refl” = def (quote refl) []

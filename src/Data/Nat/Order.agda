@@ -32,6 +32,11 @@ _<_ : ℕ → ℕ → Type
 m < n = suc m ≤ n
 infix 3 _<_ _≤_
 
+_≥_ : ℕ → ℕ → Type
+m ≥ n = n ≤ m
+
+_>_ : ℕ → ℕ → Type
+m > n = n < m
 
 -- Properties of order
 
