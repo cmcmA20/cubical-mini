@@ -12,7 +12,7 @@ private variable
   A : Type ℓ
   S T : Type ℓ → Type ℓ₁
 
-Constant-str : (A : Type ℓ) → Structure {ℓ₁} ℓ (const A)
+Constant-str : (A : Type ℓ) → Structure {ℓ₁} ℓ (λ _ → A)
 Constant-str T .is-hom (A , x) (B , y) f = x ＝ y
 
 constant-str-is-univalent : is-univalent (Constant-str {ℓ₁ = ℓ₁} A)

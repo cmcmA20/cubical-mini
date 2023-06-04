@@ -25,7 +25,7 @@ module _ where
   flip f b a = f a b
   {-# INLINE flip #-}
 
-  const : A → B → A
+  const : A → @0 B → A
   const x _ = x
   {-# INLINE const #-}
 

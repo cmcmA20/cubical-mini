@@ -18,7 +18,7 @@ instance
     where
     go : (n : ℕ) → Vecₓ _ n → ⟦ ListC ⟧ _
     go 0 _ = 0 , λ ()
-    go 1 x = 1 , const x
+    go 1 x = 1 , λ _ → x
     go (suc (suc n)) (x , xs) with go (suc n) xs
     ... | m , f = suc m , λ where
       fzero    → x

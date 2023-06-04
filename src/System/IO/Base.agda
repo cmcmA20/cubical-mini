@@ -55,7 +55,7 @@ module _ {A B : Type ℓ} where
   f <$> m = pure f <*> m
 
   _<$_ : B → IO A → IO B
-  b <$ m = (const b) <$> m
+  b <$ m = (λ _ → b) <$> m
 
   _>>=_ : IO A → (A → IO B) → IO B
   m >>= f = bind (later m) λ x → later (f x)

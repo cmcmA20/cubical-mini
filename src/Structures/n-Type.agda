@@ -37,7 +37,7 @@ instance
 ≃-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ≃ B)
 ≃-is-of-hlevel {A} {B} zero Ahl Bhl = e , deform where
   e : A ≃ B
-  e = const (Bhl .fst) , is-contr→is-equiv Ahl Bhl
+  e = (λ _ → Bhl .fst) , is-contr→is-equiv Ahl Bhl
 
   deform : (e′ : A ≃ B) → e ＝ e′
   deform (g , _) = Σ-path (λ i x → Bhl .snd (g x) i)

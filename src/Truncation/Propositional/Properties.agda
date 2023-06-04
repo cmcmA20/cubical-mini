@@ -39,7 +39,7 @@ rec!
   : {@(tactic hlevel-tactic-worker) B-prop : is-prop B}
   → (A → B)
   → (x : ∥ A ∥₁) → B
-rec! {B-prop} = elim (const B-prop)
+rec! {B-prop} = elim (λ _ → B-prop)
 
 proj
   : {@(tactic hlevel-tactic-worker) A-prop : is-prop A}

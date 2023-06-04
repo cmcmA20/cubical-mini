@@ -12,7 +12,7 @@ private variable
   S T : Type ℓ → Type ℓ₁
 
 data Str-term ℓ : (ℓ₁ : Level) → (Type ℓ → Type ℓ₁) → Typeω where
-  s-const : ∀ {ℓ₁} (A : Type ℓ₁) → Str-term ℓ ℓ₁ (const A)
+  s-const : ∀ {ℓ₁} (A : Type ℓ₁) → Str-term ℓ ℓ₁ (λ _ → A)
   s∙ : Str-term ℓ ℓ id
 
   _s→_ : ∀ {ℓ₁ ℓ₂} {S} {T} → Str-term ℓ ℓ₁ S → Str-term ℓ ℓ₂ T
