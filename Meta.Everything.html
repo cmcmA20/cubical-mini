@@ -2,23 +2,23 @@
 <html><head><meta charset="utf-8"><title>Meta.Everything</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
 <a id="24" class="Keyword">module</a> <a id="31" href="Meta.Everything.html" class="Module">Meta.Everything</a> <a id="47" class="Keyword">where</a>
 
-<a id="54" class="Keyword">open</a> <a id="59" class="Keyword">import</a> <a id="66" href="Meta.Alt.html" class="Module">Meta.Alt</a> <a id="75" class="Keyword">public</a>
-<a id="82" class="Keyword">open</a> <a id="87" class="Keyword">import</a> <a id="94" href="Meta.Bind.html" class="Module">Meta.Bind</a> <a id="104" class="Keyword">public</a>
-<a id="111" class="Keyword">open</a> <a id="116" class="Keyword">import</a> <a id="123" href="Meta.Discrete.html" class="Module">Meta.Discrete</a> <a id="137" class="Keyword">public</a>
-<a id="144" class="Keyword">open</a> <a id="149" class="Keyword">import</a> <a id="156" href="Meta.Foldable.html" class="Module">Meta.Foldable</a> <a id="170" class="Keyword">public</a>
-<a id="177" class="Keyword">open</a> <a id="182" class="Keyword">import</a> <a id="189" href="Meta.FromProduct.html" class="Module">Meta.FromProduct</a> <a id="206" class="Keyword">public</a>
-<a id="213" class="Keyword">open</a> <a id="218" class="Keyword">import</a> <a id="225" href="Meta.HLevel.html" class="Module">Meta.HLevel</a> <a id="237" class="Keyword">public</a>
-<a id="244" class="Keyword">open</a> <a id="249" class="Keyword">import</a> <a id="256" href="Meta.Idiom.html" class="Module">Meta.Idiom</a> <a id="267" class="Keyword">public</a>
-<a id="274" class="Keyword">open</a> <a id="279" class="Keyword">import</a> <a id="286" href="Meta.Literals.html" class="Module">Meta.Literals</a> <a id="300" class="Keyword">public</a>
-<a id="307" class="Keyword">open</a> <a id="312" class="Keyword">import</a> <a id="319" href="Meta.Reflection.Base.html" class="Module">Meta.Reflection.Base</a> <a id="340" class="Keyword">public</a>
-<a id="347" class="Keyword">open</a> <a id="352" class="Keyword">import</a> <a id="359" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a> <a id="382" class="Keyword">public</a>
-<a id="389" class="Keyword">open</a> <a id="394" class="Keyword">import</a> <a id="401" href="Meta.Reflection.Marker.html" class="Module">Meta.Reflection.Marker</a> <a id="424" class="Keyword">public</a>
-<a id="431" class="Keyword">open</a> <a id="436" class="Keyword">import</a> <a id="443" href="Meta.Reflection.Record.html" class="Module">Meta.Reflection.Record</a> <a id="466" class="Keyword">public</a>
-<a id="473" class="Keyword">open</a> <a id="478" class="Keyword">import</a> <a id="485" href="Meta.Reflection.SIP.html" class="Module">Meta.Reflection.SIP</a> <a id="505" class="Keyword">public</a>
-<a id="512" class="Keyword">open</a> <a id="517" class="Keyword">import</a> <a id="524" href="Meta.Reflection.Solver.html" class="Module">Meta.Reflection.Solver</a> <a id="547" class="Keyword">public</a>
-<a id="554" class="Keyword">open</a> <a id="559" class="Keyword">import</a> <a id="566" href="Meta.Reflection.Variables.html" class="Module">Meta.Reflection.Variables</a> <a id="592" class="Keyword">public</a>
-<a id="599" class="Keyword">open</a> <a id="604" class="Keyword">import</a> <a id="611" href="Meta.SIP.html" class="Module">Meta.SIP</a> <a id="620" class="Keyword">public</a>
-<a id="627" class="Keyword">open</a> <a id="632" class="Keyword">import</a> <a id="639" href="Meta.Show.html" class="Module">Meta.Show</a> <a id="649" class="Keyword">public</a>
-<a id="656" class="Keyword">open</a> <a id="661" class="Keyword">import</a> <a id="668" href="Meta.Traverse.html" class="Module">Meta.Traverse</a> <a id="682" class="Keyword">public</a>
-<a id="689" class="Keyword">open</a> <a id="694" class="Keyword">import</a> <a id="701" href="Meta.Underlying.html" class="Module">Meta.Underlying</a> <a id="717" class="Keyword">public</a>
+<a id="54" class="Keyword">import</a> <a id="61" href="Meta.Alt.html" class="Module">Meta.Alt</a>
+<a id="70" class="Keyword">import</a> <a id="77" href="Meta.Bind.html" class="Module">Meta.Bind</a>
+<a id="87" class="Keyword">import</a> <a id="94" href="Meta.Discrete.html" class="Module">Meta.Discrete</a>
+<a id="108" class="Keyword">import</a> <a id="115" href="Meta.Foldable.html" class="Module">Meta.Foldable</a>
+<a id="129" class="Keyword">import</a> <a id="136" href="Meta.FromProduct.html" class="Module">Meta.FromProduct</a>
+<a id="153" class="Keyword">import</a> <a id="160" href="Meta.HLevel.html" class="Module">Meta.HLevel</a>
+<a id="172" class="Keyword">import</a> <a id="179" href="Meta.Idiom.html" class="Module">Meta.Idiom</a>
+<a id="190" class="Keyword">import</a> <a id="197" href="Meta.Literals.html" class="Module">Meta.Literals</a>
+<a id="211" class="Keyword">import</a> <a id="218" href="Meta.Reflection.Base.html" class="Module">Meta.Reflection.Base</a>
+<a id="239" class="Keyword">import</a> <a id="246" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a>
+<a id="269" class="Keyword">import</a> <a id="276" href="Meta.Reflection.Marker.html" class="Module">Meta.Reflection.Marker</a>
+<a id="299" class="Keyword">import</a> <a id="306" href="Meta.Reflection.Record.html" class="Module">Meta.Reflection.Record</a>
+<a id="329" class="Keyword">import</a> <a id="336" href="Meta.Reflection.SIP.html" class="Module">Meta.Reflection.SIP</a>
+<a id="356" class="Keyword">import</a> <a id="363" href="Meta.Reflection.Solver.html" class="Module">Meta.Reflection.Solver</a>
+<a id="386" class="Keyword">import</a> <a id="393" href="Meta.Reflection.Variables.html" class="Module">Meta.Reflection.Variables</a>
+<a id="419" class="Keyword">import</a> <a id="426" href="Meta.SIP.html" class="Module">Meta.SIP</a>
+<a id="435" class="Keyword">import</a> <a id="442" href="Meta.Show.html" class="Module">Meta.Show</a>
+<a id="452" class="Keyword">import</a> <a id="459" href="Meta.Traverse.html" class="Module">Meta.Traverse</a>
+<a id="473" class="Keyword">import</a> <a id="480" href="Meta.Underlying.html" class="Module">Meta.Underlying</a>
 </pre></body></html>
