@@ -14,6 +14,9 @@ open import Data.FinSum.Base
 private variable
   ℓ : Level
   A : Type ℓ
+  x : A
+  xs : List A
+  xsⁱ : Listⁱ A
 
 list→container : Listⁱ A → List A
 list→container []       = 0 , λ ()

@@ -11,6 +11,7 @@ open import Correspondences.Base public
 private variable
   ℓ ℓ′ : Level
   A : Type ℓ
+  P : Pred ℓ′ A
 
 Decidable : Pred _ (Pred ℓ′ A)
 Decidable {A} P = Π[ a ꞉ A ] Dec (P a)
