@@ -45,8 +45,7 @@ gen-inst-everythings:
 
 .PHONY : gen-everythings
 gen-everythings:
-	$(EVERYTHINGS) gen-except Foundations Meta System
-	$(EVERYTHINGS) gen-public Meta
+	$(EVERYTHINGS) gen-except Foundations System
 	$(EVERYTHINGS) gen-unsafe System
 
 .PHONY : gen-and-check-everythings

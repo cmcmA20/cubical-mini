@@ -2,7 +2,7 @@
 module Structures.Omniscience where
 
 open import Foundations.Base
-open import Data.Dec.Base public
+open import Data.Dec.Base
 
 open import Structures.DoubleNegation
 
@@ -13,11 +13,11 @@ private variable
   A : Type ℓ
 
 Exhaustible : Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
-Exhaustible {ℓ′} A = {P : A → Type ℓ′}
+Exhaustible {ℓ′} A = {P : Pred ℓ′ A}
                    → Decidable P → Dec (Π[ a ꞉ A ] (P a))
 
 Omniscient : Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
-Omniscient {ℓ′} A = {P : A → Type ℓ′}
+Omniscient {ℓ′} A = {P : Pred ℓ′ A}
                   → Decidable P → Dec (Σ[ a ꞉ A ] (P a))
 
 omniscient→exhaustible : Omniscient {ℓ′ = ℓ′} A → Exhaustible {ℓ′ = ℓ′} A
