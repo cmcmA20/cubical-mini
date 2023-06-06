@@ -7,8 +7,8 @@ open import Foundations.Equiv.Base
 open import Data.Empty.Base
 open import Data.Nat.Path
 open import Data.Nat.Order
-open import Data.Sum.Base
 import      Data.Sum.Base as ⊎
+open ⊎
 
 open import Data.Fin.Base
 

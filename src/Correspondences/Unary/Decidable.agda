@@ -3,8 +3,7 @@ module Correspondences.Unary.Decidable where
 
 open import Foundations.Base
 open import Data.Dec.Base public
-
-open import Structures.Discrete
+  using (¬_; Dec; yes; no)
 
 open import Correspondences.Base public
 

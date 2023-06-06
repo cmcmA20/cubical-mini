@@ -35,6 +35,9 @@ pointed-str-is-univalent f = ua-pathP≃path _
 id-action-is-transport : is-transport-str {ℓ} {ℓ} id
 id-action-is-transport f s = sym (transport-refl _)
 
+Type∙ : ∀ ℓ → Type (ℓsuc ℓ)
+Type∙ _ = Σ _ id
+
 
 Product-str : Structure ℓ S → Structure ℓ₂ T → Structure _ (λ X → S X × T X)
 Product-str S T .is-hom (A , x , y) (B , x′ , y′) f =

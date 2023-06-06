@@ -9,7 +9,7 @@ open import Correspondences.Unary.Decidable
 import      Data.Dec as Dec
 open import Data.Dec
 import      Data.List.Base as List
-open import Data.List.Base
+open List
 open import Data.Sum.Base
 
 private variable

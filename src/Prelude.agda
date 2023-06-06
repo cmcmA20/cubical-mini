@@ -19,7 +19,10 @@ open import Functions.Equiv.HalfAdjoint public
 open import Functions.Equiv.Weak        public
 open import Functions.Embedding         public
 
-open import Truncation.Propositional public
+import Truncation.Propositional
+module ∥-∥₁ = Truncation.Propositional
+open ∥-∥₁ public
+  using (∥_∥₁; ∣_∣₁; squash₁)
 
 
 -- Automation

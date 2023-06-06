@@ -6,8 +6,8 @@ open import Foundations.Base
 open import Correspondences.Base
 open import Correspondences.Unary.Decidable
 
-import      Data.List.Base as List
-open import Data.List.Base
+import Data.List.Base as List
+open List using (List)
 
 open import Data.List.Correspondences.Unary.Any
 

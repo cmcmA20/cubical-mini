@@ -4,9 +4,9 @@ module Structures.Negation where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Data.Empty.Base public
+import Data.Empty as ⊥
+open ⊥ public
   using (⊥)
-import      Data.Empty as ⊥
 
 private variable
   ℓ ℓ′ : Level

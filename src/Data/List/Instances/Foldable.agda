@@ -4,9 +4,9 @@ module Data.List.Instances.Foldable where
 open import Foundations.Base
 open import Meta.Foldable
 
-open import Data.List.Base public
+import Data.List.Base as List
+open List public
   using (List)
-import      Data.List.Base as List
 
 private variable
   ℓ : Level

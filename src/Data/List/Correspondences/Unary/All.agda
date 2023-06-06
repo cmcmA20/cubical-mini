@@ -6,8 +6,7 @@ open import Foundations.Base
 open import Correspondences.Base
 open import Correspondences.Unary.Decidable
 
-import      Data.Dec as Dec
-open import Data.Dec
+open import Data.Dec as Dec
 open import Data.List.Base
 
 private variable
