@@ -20,28 +20,31 @@
 <a id="608" class="Keyword">open</a> <a id="613" class="Keyword">import</a> <a id="620" href="Functions.Equiv.Weak.html" class="Module">Functions.Equiv.Weak</a>        <a id="648" class="Keyword">public</a>
 <a id="655" class="Keyword">open</a> <a id="660" class="Keyword">import</a> <a id="667" href="Functions.Embedding.html" class="Module">Functions.Embedding</a>         <a id="695" class="Keyword">public</a>
 
-<a id="703" class="Keyword">open</a> <a id="708" class="Keyword">import</a> <a id="715" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a> <a id="740" class="Keyword">public</a>
+<a id="703" class="Keyword">import</a> <a id="710" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a>
+<a id="735" class="Keyword">module</a> <a id="∥-∥₁"></a><a id="742" href="Prelude.html#742" class="Module">∥-∥₁</a> <a id="747" class="Symbol">=</a> <a id="749" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a>
+<a id="774" class="Keyword">open</a> <a id="779" href="Prelude.html#742" class="Module">∥-∥₁</a> <a id="784" class="Keyword">public</a>
+  <a id="793" class="Keyword">using</a> <a id="799" class="Symbol">(</a><a id="800" href="Truncation.Propositional.Base.html#139" class="Datatype Operator">∥_∥₁</a><a id="804" class="Symbol">;</a> <a id="806" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣_∣₁</a><a id="810" class="Symbol">;</a> <a id="812" href="Truncation.Propositional.Base.html#201" class="InductiveConstructor">squash₁</a><a id="819" class="Symbol">)</a>
 
 
-<a id="749" class="Comment">-- Automation</a>
+<a id="823" class="Comment">-- Automation</a>
 
-<a id="764" class="Keyword">open</a> <a id="769" class="Keyword">import</a> <a id="776" href="Meta.Alt.html" class="Module">Meta.Alt</a>      <a id="790" class="Keyword">public</a>
-<a id="797" class="Keyword">open</a> <a id="802" class="Keyword">import</a> <a id="809" href="Meta.Bind.html" class="Module">Meta.Bind</a>     <a id="823" class="Keyword">public</a>
-<a id="830" class="Keyword">open</a> <a id="835" class="Keyword">import</a> <a id="842" href="Meta.Foldable.html" class="Module">Meta.Foldable</a> <a id="856" class="Keyword">public</a>
-<a id="863" class="Keyword">open</a> <a id="868" class="Keyword">import</a> <a id="875" href="Meta.Idiom.html" class="Module">Meta.Idiom</a>    <a id="889" class="Keyword">public</a>
-<a id="896" class="Keyword">open</a> <a id="901" class="Keyword">import</a> <a id="908" href="Meta.Traverse.html" class="Module">Meta.Traverse</a> <a id="922" class="Keyword">public</a>
+<a id="838" class="Keyword">open</a> <a id="843" class="Keyword">import</a> <a id="850" href="Meta.Alt.html" class="Module">Meta.Alt</a>      <a id="864" class="Keyword">public</a>
+<a id="871" class="Keyword">open</a> <a id="876" class="Keyword">import</a> <a id="883" href="Meta.Bind.html" class="Module">Meta.Bind</a>     <a id="897" class="Keyword">public</a>
+<a id="904" class="Keyword">open</a> <a id="909" class="Keyword">import</a> <a id="916" href="Meta.Foldable.html" class="Module">Meta.Foldable</a> <a id="930" class="Keyword">public</a>
+<a id="937" class="Keyword">open</a> <a id="942" class="Keyword">import</a> <a id="949" href="Meta.Idiom.html" class="Module">Meta.Idiom</a>    <a id="963" class="Keyword">public</a>
+<a id="970" class="Keyword">open</a> <a id="975" class="Keyword">import</a> <a id="982" href="Meta.Traverse.html" class="Module">Meta.Traverse</a> <a id="996" class="Keyword">public</a>
 
-<a id="930" class="Keyword">open</a> <a id="935" class="Keyword">import</a> <a id="942" href="Meta.FromProduct.html" class="Module">Meta.FromProduct</a> <a id="959" class="Keyword">public</a>
-<a id="966" class="Keyword">open</a> <a id="971" class="Keyword">import</a> <a id="978" href="Meta.Literals.html" class="Module">Meta.Literals</a>    <a id="995" class="Keyword">public</a>
-<a id="1002" class="Keyword">open</a> <a id="1007" class="Keyword">import</a> <a id="1014" href="Meta.Show.html" class="Module">Meta.Show</a>        <a id="1031" class="Keyword">public</a>
+<a id="1004" class="Keyword">open</a> <a id="1009" class="Keyword">import</a> <a id="1016" href="Meta.FromProduct.html" class="Module">Meta.FromProduct</a> <a id="1033" class="Keyword">public</a>
+<a id="1040" class="Keyword">open</a> <a id="1045" class="Keyword">import</a> <a id="1052" href="Meta.Literals.html" class="Module">Meta.Literals</a>    <a id="1069" class="Keyword">public</a>
+<a id="1076" class="Keyword">open</a> <a id="1081" class="Keyword">import</a> <a id="1088" href="Meta.Show.html" class="Module">Meta.Show</a>        <a id="1105" class="Keyword">public</a>
 
-<a id="1039" class="Keyword">open</a> <a id="1044" class="Keyword">import</a> <a id="1051" href="Meta.Discrete.html" class="Module">Meta.Discrete</a>   <a id="1067" class="Keyword">public</a>
-<a id="1074" class="Keyword">open</a> <a id="1079" class="Keyword">import</a> <a id="1086" href="Meta.HLevel.html" class="Module">Meta.HLevel</a>     <a id="1102" class="Keyword">public</a>
-<a id="1109" class="Keyword">open</a> <a id="1114" class="Keyword">import</a> <a id="1121" href="Meta.SIP.html" class="Module">Meta.SIP</a>        <a id="1137" class="Keyword">public</a>
-<a id="1144" class="Keyword">open</a> <a id="1149" class="Keyword">import</a> <a id="1156" href="Meta.Underlying.html" class="Module">Meta.Underlying</a> <a id="1172" class="Keyword">public</a>
+<a id="1113" class="Keyword">open</a> <a id="1118" class="Keyword">import</a> <a id="1125" href="Meta.Discrete.html" class="Module">Meta.Discrete</a>   <a id="1141" class="Keyword">public</a>
+<a id="1148" class="Keyword">open</a> <a id="1153" class="Keyword">import</a> <a id="1160" href="Meta.HLevel.html" class="Module">Meta.HLevel</a>     <a id="1176" class="Keyword">public</a>
+<a id="1183" class="Keyword">open</a> <a id="1188" class="Keyword">import</a> <a id="1195" href="Meta.SIP.html" class="Module">Meta.SIP</a>        <a id="1211" class="Keyword">public</a>
+<a id="1218" class="Keyword">open</a> <a id="1223" class="Keyword">import</a> <a id="1230" href="Meta.Underlying.html" class="Module">Meta.Underlying</a> <a id="1246" class="Keyword">public</a>
 
-<a id="1180" class="Keyword">open</a> <a id="1185" class="Keyword">import</a> <a id="1192" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a> <a id="1215" class="Keyword">public</a>
-<a id="1222" class="Keyword">open</a> <a id="1227" class="Keyword">import</a> <a id="1234" href="Meta.Reflection.Marker.html" class="Module">Meta.Reflection.Marker</a> <a id="1257" class="Keyword">public</a>
-<a id="1264" class="Keyword">open</a> <a id="1269" class="Keyword">import</a> <a id="1276" href="Meta.Reflection.Record.html" class="Module">Meta.Reflection.Record</a> <a id="1299" class="Keyword">public</a>
-<a id="1306" class="Keyword">open</a> <a id="1311" class="Keyword">import</a> <a id="1318" href="Meta.Reflection.SIP.html" class="Module">Meta.Reflection.SIP</a>    <a id="1341" class="Keyword">public</a>
+<a id="1254" class="Keyword">open</a> <a id="1259" class="Keyword">import</a> <a id="1266" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a> <a id="1289" class="Keyword">public</a>
+<a id="1296" class="Keyword">open</a> <a id="1301" class="Keyword">import</a> <a id="1308" href="Meta.Reflection.Marker.html" class="Module">Meta.Reflection.Marker</a> <a id="1331" class="Keyword">public</a>
+<a id="1338" class="Keyword">open</a> <a id="1343" class="Keyword">import</a> <a id="1350" href="Meta.Reflection.Record.html" class="Module">Meta.Reflection.Record</a> <a id="1373" class="Keyword">public</a>
+<a id="1380" class="Keyword">open</a> <a id="1385" class="Keyword">import</a> <a id="1392" href="Meta.Reflection.SIP.html" class="Module">Meta.Reflection.SIP</a>    <a id="1415" class="Keyword">public</a>
 </pre></body></html>
