@@ -6,7 +6,7 @@ open import Foundations.Equiv
 
 open import Data.Empty.Base
 
-open import Data.Sum.Base
+open import Data.Sum.Base public
 
 private variable
   a b c d : Level

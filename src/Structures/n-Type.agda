@@ -7,7 +7,7 @@ open import Foundations.HLevel
 open import Foundations.Sigma
 open import Foundations.Univalence.Base
 
-open import Meta.HLevel
+open import Meta.HLevel     public
 open import Meta.Underlying public
 
 record n-Type ℓ n : Type (ℓsuc ℓ) where
@@ -20,7 +20,9 @@ record n-Type ℓ n : Type (ℓsuc ℓ) where
     H-Level-n-type : ∀ {k} → H-Level (n + k) typ
     H-Level-n-type = basic-instance n is-tr
 
-open n-Type using (typ ; is-tr ; H-Level-n-type) public
+open n-Type public
+  using (H-Level-n-type)
+open n-Type using (typ; is-tr)
 
 private variable
   ℓ ℓ′ : Level
@@ -33,20 +35,6 @@ instance
   Underlying-n-Type : Underlying (n-Type ℓ n)
   Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
   Underlying-n-Type .⌞_⌟ = n-Type.typ
-
-≃-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ≃ B)
-≃-is-of-hlevel {A} {B} zero Ahl Bhl = e , deform where
-  e : A ≃ B
-  e = (λ _ → Bhl .fst) , is-contr→is-equiv Ahl Bhl
-
-  deform : (e′ : A ≃ B) → e ＝ e′
-  deform (g , _) = Σ-path (λ i x → Bhl .snd (g x) i)
-                          (is-equiv-is-prop _ _ _)
-
-≃-is-of-hlevel (suc n) _ Bhl =
-  Σ-is-of-hlevel (suc n)
-    (fun-is-of-hlevel (suc n) Bhl)
-    λ f → is-prop→is-hlevel-suc (is-equiv-is-prop f)
 
 @0 ＝-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
 ＝-is-of-hlevel n Ahl Bhl = is-equiv→is-of-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
@@ -102,9 +90,11 @@ instance
     → H-Level (suc n) (is-equiv f)
   H-Level-is-equiv = prop-instance (is-equiv-is-prop _)
 
--- module _ {ℓ : Level} {n : HLevel} where
+
+-- module _ {ℓ : Level} {n : HLevel} where private
+--   open import Foundations.Univalence.SIP
 --   _ : n-Type ℓ n ≃ Type-with {S = is-of-hlevel n} (HomT→Str λ _ _ _ → ⊤)
---   _ = Iso→Equiv the-iso
+--   _ = iso→equiv the-iso
 --     where
 --       open import Meta.Reflection.Record
 --       the-iso : Iso (n-Type ℓ n) (Σ[ T ꞉ Type ℓ ] is-of-hlevel n T)

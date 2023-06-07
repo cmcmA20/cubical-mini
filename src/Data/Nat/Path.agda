@@ -10,6 +10,9 @@ open import Structures.Negation
 
 open import Data.Nat.Base public
 
+private variable
+  m n : ℕ
+
 -- only to illustrate the method
 module ℕ-path-code where
 
@@ -36,9 +39,12 @@ module ℕ-path-code where
     go zero    zero    _ = refl
     go (suc m) (suc n) c = go m n c
 
+  code-is-prop : ∀ m n → is-prop (Code m n)
+  code-is-prop zero    zero    _ _ = refl
+  code-is-prop (suc m) (suc n) = code-is-prop m _
 
-private variable
-  m n : ℕ
+ℕ-is-set : is-set ℕ
+ℕ-is-set = identity-system→hlevel 1 ℕ-path-code.ℕ-identity-system ℕ-path-code.code-is-prop
 
 suc≠zero : ¬ suc m ＝ 0
 suc≠zero p = transport (ap discrim p) tt

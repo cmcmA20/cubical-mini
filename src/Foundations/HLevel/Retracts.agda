@@ -131,3 +131,31 @@ Lift-is-of-hlevel : (n : HLevel)
                   → is-of-hlevel n A
                   → is-of-hlevel n (Lift ℓ′ A)
 Lift-is-of-hlevel n a-hl = retract→is-of-hlevel n lift lower (λ _ → refl) a-hl
+
+≃-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ≃ B)
+≃-is-of-hlevel {A} {B} zero Ahl Bhl = e , deform where
+  e : A ≃ B
+  e = (λ _ → Bhl .fst) , is-contr→is-equiv Ahl Bhl
+
+  deform : (e′ : A ≃ B) → e ＝ e′
+  deform (g , _) = Σ-path (λ i x → Bhl .snd (g x) i)
+                          (is-equiv-is-prop _ _ _)
+
+≃-is-of-hlevel (suc n) _ Bhl =
+  Σ-is-of-hlevel (suc n)
+    (fun-is-of-hlevel (suc n) Bhl)
+    λ f → is-prop→is-hlevel-suc (is-equiv-is-prop f)
+
+≃-is-of-hlevel-left-suc : (n : ℕ) → is-of-hlevel (suc n) A → is-of-hlevel (suc n) (A ≃ B)
+≃-is-of-hlevel-left-suc zero    A-hl e =
+  ≃-is-of-hlevel 1 A-hl (retract→is-prop to from ε A-hl) e
+  where open Equiv e
+≃-is-of-hlevel-left-suc (suc n) A-hl e =
+  ≃-is-of-hlevel (suc (suc n)) A-hl (is-of-hlevel-≃ (suc (suc n)) (e ₑ⁻¹) A-hl) e
+
+≃-is-of-hlevel-right-suc : (n : ℕ) → is-of-hlevel (suc n) B → is-of-hlevel (suc n) (A ≃ B)
+≃-is-of-hlevel-right-suc zero    B-hl e =
+  ≃-is-of-hlevel 1 (retract→is-prop from to η B-hl) B-hl e
+  where open Equiv e
+≃-is-of-hlevel-right-suc (suc n) B-hl e =
+  ≃-is-of-hlevel (suc (suc n)) (is-of-hlevel-≃ (suc (suc n)) e B-hl) B-hl e

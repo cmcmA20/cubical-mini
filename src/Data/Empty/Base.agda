@@ -28,6 +28,8 @@ absurd-is-contr : is-contr (⊥ → A)
 absurd-is-contr .fst ()
 absurd-is-contr .snd _ _ ()
 
+absurd-path : {y : A} {@0 x : ⊥} → absurd x ＝ y
+absurd-path {x = ()}
 
 data ⊥ω : Typeω where
 

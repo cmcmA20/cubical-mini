@@ -605,8 +605,8 @@ macro hlevel! = hlevel-tactic-worker
 -- decomposition-projection mechanism of the tactic. We provide only
 -- some of the most common helpers:
 el! : ∀ {ℓ} (A : Type ℓ) {n} {@(tactic hlevel-tactic-worker) hl : is-of-hlevel n A} → n-Type ℓ n
-el! A {hl} .typ = A
-el! A {hl} .is-tr = hl
+el! A {hl} .n-Type.typ = A
+el! A {hl} .n-Type.is-tr = hl
 
 prop-extₑ!
   : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
@@ -681,6 +681,9 @@ instance
 
   decomp-path : ∀ {ℓ} {A : Type ℓ} {a b : A} → hlevel-decomposition (a ＝ b)
   decomp-path = decomp (quote path-is-of-hlevel) (`level ∷ `search ∷ [])
+
+  decomp-equiv : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
+  decomp-equiv = decomp (quote ≃-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )
 
   decomp-univalence : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ＝ B)
   decomp-univalence = decomp (quote ＝-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )

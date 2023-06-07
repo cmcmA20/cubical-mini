@@ -38,6 +38,7 @@ open import Meta.Literals    public
 open import Meta.Show        public
 
 open import Meta.Discrete   public
+open import Meta.Finite     public
 open import Meta.HLevel     public
 open import Meta.SIP        public
 open import Meta.Underlying public
