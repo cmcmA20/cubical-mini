@@ -682,17 +682,18 @@ instance
   decomp-path : ∀ {ℓ} {A : Type ℓ} {a b : A} → hlevel-decomposition (a ＝ b)
   decomp-path = decomp (quote path-is-of-hlevel) (`level ∷ `search ∷ [])
 
-  decomp-equiv : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
-  decomp-equiv = decomp (quote ≃-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )
+  -- doesn't work as _≃_ normalizes to Σ :-(
+  -- decomp-equiv : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
+  -- decomp-equiv = decomp (quote ≃-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )
+
+  -- decomp-equiv-left : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
+  -- decomp-equiv-left = decomp (quote ≃-is-of-hlevel-left-suc) (`level-minus 1 ∷ `search ∷ [])
+
+  -- decomp-equiv-right : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
+  -- decomp-equiv-right = decomp (quote ≃-is-of-hlevel-right-suc) (`level-minus 1 ∷ `search ∷ [])
 
   decomp-univalence : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ＝ B)
   decomp-univalence = decomp (quote ＝-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )
-
-  -- List isn't really a type on the same footing as all the others, but
-  -- we're here, so we might as well, right?
-  -- TODO
-  -- decomp-list : ∀ {ℓ} {A : Type ℓ} → hlevel-decomposition (List A)
-  -- decomp-list = decomp (quote ListPath.List-is-of-hlevel) (`level-minus 2 ∷ `search ∷ [])
 
   -- This one really ought to work with instance selection only, but
   -- Agda has trouble with the (1 + k + n) level in H-Level-n-Type. The
