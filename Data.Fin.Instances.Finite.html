@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Fin.Instances.Finite</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Fin.Instances.Finite.html" class="Module">Data.Fin.Instances.Finite</a> <a id="57" class="Keyword">where</a>
+
+<a id="64" class="Keyword">open</a> <a id="69" class="Keyword">import</a> <a id="76" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Meta.Finite.html" class="Module">Meta.Finite</a>
+
+<a id="119" class="Keyword">open</a> <a id="124" class="Keyword">import</a> <a id="131" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>
+
+<a id="146" class="Keyword">open</a> <a id="151" class="Keyword">import</a> <a id="158" href="Truncation.Propositional.Base.html" class="Module">Truncation.Propositional.Base</a>
+
+<a id="189" class="Keyword">instance</a>
+  <a id="Finite-Fin"></a><a id="200" href="Data.Fin.Instances.Finite.html#200" class="Function">Finite-Fin</a> <a id="211" class="Symbol">:</a> <a id="213" class="Symbol">∀</a> <a id="215" class="Symbol">{</a><a id="216" href="Data.Fin.Instances.Finite.html#216" class="Bound">n</a><a id="217" class="Symbol">}</a> <a id="219" class="Symbol">→</a> <a id="221" href="Meta.Finite.html#477" class="Record">Finite</a> <a id="228" class="Symbol">(</a><a id="229" href="Data.Fin.Base.html#184" class="Datatype">Fin</a> <a id="233" href="Data.Fin.Instances.Finite.html#216" class="Bound">n</a><a id="234" class="Symbol">)</a>
+  <a id="238" href="Data.Fin.Instances.Finite.html#200" class="Function">Finite-Fin</a> <a id="249" class="Symbol">=</a> <a id="251" href="Meta.Finite.html#530" class="InductiveConstructor">fin</a> <a id="255" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣</a> <a id="257" href="Foundations.Equiv.Base.html#1436" class="Function">idₑ</a> <a id="261" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣₁</a>
+</pre></body></html>

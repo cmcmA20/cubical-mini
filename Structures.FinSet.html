@@ -14,85 +14,85 @@
 
 <a id="266" class="Keyword">open</a> <a id="271" class="Keyword">import</a> <a id="278" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a>
 
-<a id="304" class="Keyword">record</a> <a id="Fin-Set"></a><a id="311" href="Structures.FinSet.html#311" class="Record">Fin-Set</a> <a id="319" href="Structures.FinSet.html#319" class="Bound">ℓ</a> <a id="321" class="Symbol">:</a> <a id="323" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="328" class="Symbol">(</a><a id="329" href="Foundations.Prim.Type.html#375" class="Primitive">ℓsuc</a> <a id="334" href="Structures.FinSet.html#319" class="Bound">ℓ</a><a id="335" class="Symbol">)</a> <a id="337" class="Keyword">where</a>
-  <a id="345" class="Keyword">no-eta-equality</a>
-  <a id="363" class="Keyword">constructor</a> <a id="fin-set"></a><a id="375" href="Structures.FinSet.html#375" class="InductiveConstructor">fin-set</a>
-  <a id="385" class="Keyword">field</a>
-    <a id="Fin-Set.typ"></a><a id="395" href="Structures.FinSet.html#395" class="Field">typ</a>            <a id="410" class="Symbol">:</a> <a id="412" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="417" href="Structures.FinSet.html#319" class="Bound">ℓ</a>
-    <a id="Fin-Set.has-is-fin-set"></a><a id="423" href="Structures.FinSet.html#423" class="Field">has-is-fin-set</a> <a id="438" class="Symbol">:</a> <a id="440" href="Data.Fin.Finite.html#644" class="Function">is-fin-set</a> <a id="451" href="Structures.FinSet.html#395" class="Field">typ</a>
-  <a id="457" class="Keyword">instance</a>
-    <a id="Fin-Set.Finite-Fin-Set"></a><a id="470" href="Structures.FinSet.html#470" class="Function">Finite-Fin-Set</a> <a id="485" class="Symbol">:</a> <a id="487" href="Meta.Finite.html#393" class="Record">Finite</a> <a id="494" href="Structures.FinSet.html#395" class="Field">typ</a>
-    <a id="502" href="Structures.FinSet.html#470" class="Function">Finite-Fin-Set</a> <a id="517" class="Symbol">=</a> <a id="519" href="Meta.Finite.html#446" class="InductiveConstructor">fin</a> <a id="523" href="Foundations.Pi.Base.html#813" class="Function Operator">$</a> <a id="525" href="Structures.FinSet.html#423" class="Field">has-is-fin-set</a> <a id="540" class="Symbol">.</a><a id="541" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a>
+<a id="304" class="Keyword">record</a> <a id="FinSet"></a><a id="311" href="Structures.FinSet.html#311" class="Record">FinSet</a> <a id="318" href="Structures.FinSet.html#318" class="Bound">ℓ</a> <a id="320" class="Symbol">:</a> <a id="322" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="327" class="Symbol">(</a><a id="328" href="Foundations.Prim.Type.html#375" class="Primitive">ℓsuc</a> <a id="333" href="Structures.FinSet.html#318" class="Bound">ℓ</a><a id="334" class="Symbol">)</a> <a id="336" class="Keyword">where</a>
+  <a id="344" class="Keyword">no-eta-equality</a>
+  <a id="362" class="Keyword">constructor</a> <a id="fin-set"></a><a id="374" href="Structures.FinSet.html#374" class="InductiveConstructor">fin-set</a>
+  <a id="384" class="Keyword">field</a>
+    <a id="FinSet.typ"></a><a id="394" href="Structures.FinSet.html#394" class="Field">typ</a>            <a id="409" class="Symbol">:</a> <a id="411" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="416" href="Structures.FinSet.html#318" class="Bound">ℓ</a>
+    <a id="FinSet.has-is-fin-set"></a><a id="422" href="Structures.FinSet.html#422" class="Field">has-is-fin-set</a> <a id="437" class="Symbol">:</a> <a id="439" href="Data.Fin.Finite.html#644" class="Function">is-fin-set</a> <a id="450" href="Structures.FinSet.html#394" class="Field">typ</a>
+  <a id="456" class="Keyword">instance</a>
+    <a id="FinSet.Finite-FinSet"></a><a id="469" href="Structures.FinSet.html#469" class="Function">Finite-FinSet</a> <a id="483" class="Symbol">:</a> <a id="485" href="Meta.Finite.html#477" class="Record">Finite</a> <a id="492" href="Structures.FinSet.html#394" class="Field">typ</a>
+    <a id="500" href="Structures.FinSet.html#469" class="Function">Finite-FinSet</a> <a id="514" class="Symbol">=</a> <a id="516" href="Meta.Finite.html#530" class="InductiveConstructor">fin</a> <a id="520" href="Foundations.Pi.Base.html#813" class="Function Operator">$</a> <a id="522" href="Structures.FinSet.html#422" class="Field">has-is-fin-set</a> <a id="537" class="Symbol">.</a><a id="538" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a>
 
-    <a id="Fin-Set.H-Level-Fin-Set"></a><a id="550" href="Structures.FinSet.html#550" class="Function">H-Level-Fin-Set</a> <a id="566" class="Symbol">:</a> <a id="568" class="Symbol">∀</a> <a id="570" class="Symbol">{</a><a id="571" href="Structures.FinSet.html#571" class="Bound">n</a><a id="572" class="Symbol">}</a> <a id="574" class="Symbol">→</a> <a id="576" href="Meta.HLevel.html#181" class="Record">H-Level</a> <a id="584" class="Symbol">(</a><a id="585" class="Number">2</a> <a id="587" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">+</a> <a id="589" href="Structures.FinSet.html#571" class="Bound">n</a><a id="590" class="Symbol">)</a> <a id="592" href="Structures.FinSet.html#395" class="Field">typ</a>
-    <a id="600" href="Structures.FinSet.html#550" class="Function">H-Level-Fin-Set</a> <a id="616" class="Symbol">=</a> <a id="618" href="Meta.HLevel.html#554" class="Function">basic-instance</a> <a id="633" class="Number">2</a> <a id="635" class="Symbol">(</a><a id="636" href="Data.Fin.Finite.html#970" class="Function">is-fin-set→is-set</a> <a id="654" href="Structures.FinSet.html#423" class="Field">has-is-fin-set</a><a id="668" class="Symbol">)</a>
+    <a id="FinSet.H-Level-FinSet"></a><a id="547" href="Structures.FinSet.html#547" class="Function">H-Level-FinSet</a> <a id="562" class="Symbol">:</a> <a id="564" class="Symbol">∀</a> <a id="566" class="Symbol">{</a><a id="567" href="Structures.FinSet.html#567" class="Bound">n</a><a id="568" class="Symbol">}</a> <a id="570" class="Symbol">→</a> <a id="572" href="Meta.HLevel.html#181" class="Record">H-Level</a> <a id="580" class="Symbol">(</a><a id="581" class="Number">2</a> <a id="583" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">+</a> <a id="585" href="Structures.FinSet.html#567" class="Bound">n</a><a id="586" class="Symbol">)</a> <a id="588" href="Structures.FinSet.html#394" class="Field">typ</a>
+    <a id="596" href="Structures.FinSet.html#547" class="Function">H-Level-FinSet</a> <a id="611" class="Symbol">=</a> <a id="613" href="Meta.HLevel.html#554" class="Function">basic-instance</a> <a id="628" class="Number">2</a> <a id="630" class="Symbol">(</a><a id="631" href="Data.Fin.Finite.html#970" class="Function">is-fin-set→is-set</a> <a id="649" href="Structures.FinSet.html#422" class="Field">has-is-fin-set</a><a id="663" class="Symbol">)</a>
 
-<a id="671" class="Keyword">open</a> <a id="676" href="Structures.FinSet.html#311" class="Module">Fin-Set</a> <a id="684" class="Keyword">public</a>
-  <a id="693" class="Keyword">using</a> <a id="699" class="Symbol">(</a><a id="700" href="Structures.FinSet.html#470" class="Function">Finite-Fin-Set</a><a id="714" class="Symbol">;</a> <a id="716" href="Structures.FinSet.html#550" class="Function">H-Level-Fin-Set</a><a id="731" class="Symbol">)</a>
-<a id="733" class="Keyword">open</a> <a id="738" href="Structures.FinSet.html#311" class="Module">Fin-Set</a> <a id="746" class="Keyword">using</a> <a id="752" class="Symbol">(</a><a id="753" href="Structures.FinSet.html#395" class="Field">typ</a><a id="756" class="Symbol">;</a> <a id="758" href="Structures.FinSet.html#423" class="Field">has-is-fin-set</a><a id="772" class="Symbol">)</a>
+<a id="666" class="Keyword">open</a> <a id="671" href="Structures.FinSet.html#311" class="Module">FinSet</a> <a id="678" class="Keyword">public</a>
+  <a id="687" class="Keyword">using</a> <a id="693" class="Symbol">(</a><a id="694" href="Structures.FinSet.html#469" class="Function">Finite-FinSet</a><a id="707" class="Symbol">;</a> <a id="709" href="Structures.FinSet.html#547" class="Function">H-Level-FinSet</a><a id="723" class="Symbol">)</a>
+<a id="725" class="Keyword">open</a> <a id="730" href="Structures.FinSet.html#311" class="Module">FinSet</a> <a id="737" class="Keyword">using</a> <a id="743" class="Symbol">(</a><a id="744" href="Structures.FinSet.html#394" class="Field">typ</a><a id="747" class="Symbol">;</a> <a id="749" href="Structures.FinSet.html#422" class="Field">has-is-fin-set</a><a id="763" class="Symbol">)</a>
 
-<a id="775" class="Keyword">private</a> <a id="783" class="Keyword">variable</a>
-  <a id="794" href="Structures.FinSet.html#794" class="Generalizable">ℓ</a> <a id="796" class="Symbol">:</a> <a id="798" href="Agda.Primitive.html#742" class="Postulate">Level</a>
-  <a id="806" href="Structures.FinSet.html#806" class="Generalizable">A</a> <a id="808" class="Symbol">:</a> <a id="810" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="815" href="Structures.FinSet.html#794" class="Generalizable">ℓ</a>
+<a id="766" class="Keyword">private</a> <a id="774" class="Keyword">variable</a>
+  <a id="785" href="Structures.FinSet.html#785" class="Generalizable">ℓ</a> <a id="787" class="Symbol">:</a> <a id="789" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="797" href="Structures.FinSet.html#797" class="Generalizable">A</a> <a id="799" class="Symbol">:</a> <a id="801" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="806" href="Structures.FinSet.html#785" class="Generalizable">ℓ</a>
 
-<a id="818" class="Keyword">instance</a>
-  <a id="Underlying-Fin-Set"></a><a id="829" href="Structures.FinSet.html#829" class="Function">Underlying-Fin-Set</a> <a id="848" class="Symbol">:</a> <a id="850" href="Meta.Underlying.html#91" class="Record">Underlying</a> <a id="861" class="Symbol">(</a><a id="862" href="Structures.FinSet.html#311" class="Record">Fin-Set</a> <a id="870" href="Structures.FinSet.html#794" class="Generalizable">ℓ</a><a id="871" class="Symbol">)</a>
-  <a id="875" href="Structures.FinSet.html#829" class="Function">Underlying-Fin-Set</a> <a id="894" class="Symbol">{</a><a id="895" href="Structures.FinSet.html#895" class="Bound">ℓ</a><a id="896" class="Symbol">}</a> <a id="898" class="Symbol">.</a><a id="899" href="Meta.Underlying.html#145" class="Field">Underlying.ℓ-underlying</a> <a id="923" class="Symbol">=</a> <a id="925" href="Structures.FinSet.html#895" class="Bound">ℓ</a>
-  <a id="929" href="Structures.FinSet.html#829" class="Function">Underlying-Fin-Set</a> <a id="948" class="Symbol">.</a><a id="949" href="Meta.Underlying.html#170" class="Field Operator">⌞_⌟</a> <a id="953" class="Symbol">=</a> <a id="955" href="Structures.FinSet.html#395" class="Field">typ</a>
+<a id="809" class="Keyword">instance</a>
+  <a id="Underlying-FinSet"></a><a id="820" href="Structures.FinSet.html#820" class="Function">Underlying-FinSet</a> <a id="838" class="Symbol">:</a> <a id="840" href="Meta.Underlying.html#91" class="Record">Underlying</a> <a id="851" class="Symbol">(</a><a id="852" href="Structures.FinSet.html#311" class="Record">FinSet</a> <a id="859" href="Structures.FinSet.html#785" class="Generalizable">ℓ</a><a id="860" class="Symbol">)</a>
+  <a id="864" href="Structures.FinSet.html#820" class="Function">Underlying-FinSet</a> <a id="882" class="Symbol">{</a><a id="883" href="Structures.FinSet.html#883" class="Bound">ℓ</a><a id="884" class="Symbol">}</a> <a id="886" class="Symbol">.</a><a id="887" href="Meta.Underlying.html#145" class="Field">Underlying.ℓ-underlying</a> <a id="911" class="Symbol">=</a> <a id="913" href="Structures.FinSet.html#883" class="Bound">ℓ</a>
+  <a id="917" href="Structures.FinSet.html#820" class="Function">Underlying-FinSet</a> <a id="935" class="Symbol">.</a><a id="936" href="Meta.Underlying.html#170" class="Field Operator">⌞_⌟</a> <a id="940" class="Symbol">=</a> <a id="942" href="Structures.FinSet.html#394" class="Field">typ</a>
 
 
-<a id="961" class="Comment">-- TODO</a>
-<a id="969" class="Comment">-- fin-set-path : ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y</a>
-<a id="1009" class="Comment">-- fin-set-path f i .typ = f i</a>
-<a id="1040" class="Comment">-- fin-set-path {X} {Y} f i .has-is-fin-set = {!!} , {!!}</a>
-<a id="1098" class="Comment">--   -- is-prop→pathP (λ i → is-of-hlevel-is-prop {A = f i} _) (X .is-tr) (Y .is-tr) i</a>
+<a id="948" class="Comment">-- TODO</a>
+<a id="956" class="Comment">-- fin-set-path : ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y</a>
+<a id="996" class="Comment">-- fin-set-path f i .typ = f i</a>
+<a id="1027" class="Comment">-- fin-set-path {X} {Y} f i .has-is-fin-set = {!!} , {!!}</a>
+<a id="1085" class="Comment">--   -- is-prop→pathP (λ i → is-of-hlevel-is-prop {A = f i} _) (X .is-tr) (Y .is-tr) i</a>
 
-<a id="1186" class="Comment">-- @0 fin-set-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y</a>
-<a id="1227" class="Comment">-- fin-set-ua f = n-path (ua f)</a>
+<a id="1173" class="Comment">-- @0 fin-set-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y</a>
+<a id="1214" class="Comment">-- fin-set-ua f = n-path (ua f)</a>
 
-<a id="1260" class="Comment">-- @0 fin-set-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)</a>
-<a id="1334" class="Comment">-- fin-set-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where</a>
-<a id="1404" class="Comment">--   inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟</a>
-<a id="1445" class="Comment">--   inv p = path→equiv (ap typ p)</a>
+<a id="1247" class="Comment">-- @0 fin-set-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)</a>
+<a id="1321" class="Comment">-- fin-set-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where</a>
+<a id="1391" class="Comment">--   inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟</a>
+<a id="1432" class="Comment">--   inv p = path→equiv (ap typ p)</a>
 
-<a id="1481" class="Comment">--   linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua</a>
-<a id="1535" class="Comment">--   linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)</a>
+<a id="1468" class="Comment">--   linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua</a>
+<a id="1522" class="Comment">--   linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)</a>
 
-<a id="1612" class="Comment">--   rinv : ∀ {Y} → (inv {Y}) is-right-inverse-of n-ua</a>
-<a id="1667" class="Comment">--   rinv = J (λ y p → n-ua (inv p) ＝ p) path where</a>
-<a id="1719" class="Comment">--     path : n-ua (inv {X} refl) ＝ refl</a>
-<a id="1760" class="Comment">--     path i j .typ = ua.ε refl i j</a>
-<a id="1797" class="Comment">--     path i j .is-tr = is-prop→SquareP</a>
-<a id="1838" class="Comment">--       (λ i j → is-of-hlevel-is-prop</a>
-<a id="1877" class="Comment">--         {A = ua.ε {A = ⌞ X ⌟} refl i j } n)</a>
-<a id="1924" class="Comment">--       (λ j → X .is-tr) (λ j → n-ua {X = X} {Y = X} (path→equiv refl) j .is-tr)</a>
-<a id="2006" class="Comment">--       (λ j → X .is-tr) (λ j → X .is-tr)</a>
-<a id="2049" class="Comment">--       i j</a>
+<a id="1599" class="Comment">--   rinv : ∀ {Y} → (inv {Y}) is-right-inverse-of n-ua</a>
+<a id="1654" class="Comment">--   rinv = J (λ y p → n-ua (inv p) ＝ p) path where</a>
+<a id="1706" class="Comment">--     path : n-ua (inv {X} refl) ＝ refl</a>
+<a id="1747" class="Comment">--     path i j .typ = ua.ε refl i j</a>
+<a id="1784" class="Comment">--     path i j .is-tr = is-prop→SquareP</a>
+<a id="1825" class="Comment">--       (λ i j → is-of-hlevel-is-prop</a>
+<a id="1864" class="Comment">--         {A = ua.ε {A = ⌞ X ⌟} refl i j } n)</a>
+<a id="1911" class="Comment">--       (λ j → X .is-tr) (λ j → n-ua {X = X} {Y = X} (path→equiv refl) j .is-tr)</a>
+<a id="1993" class="Comment">--       (λ j → X .is-tr) (λ j → X .is-tr)</a>
+<a id="2036" class="Comment">--       i j</a>
 
-<a id="2063" class="Comment">--   isic : is-iso n-ua</a>
-<a id="2087" class="Comment">--   isic = iso inv rinv (linv {Y})</a>
+<a id="2050" class="Comment">--   isic : is-iso n-ua</a>
+<a id="2074" class="Comment">--   isic = iso inv rinv (linv {Y})</a>
 
-<a id="2124" class="Comment">-- @0 fin-set-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)</a>
-<a id="2193" class="Comment">-- fin-set-is-of-hlevel zero x y = n-ua</a>
-<a id="2233" class="Comment">--   ((λ _ → y .is-tr .fst) , is-contr→is-equiv (x .is-tr) (y .is-tr))</a>
-<a id="2304" class="Comment">-- fin-set-is-of-hlevel (suc n) x y =</a>
-<a id="2342" class="Comment">--   is-of-hlevel-≃ (suc n) (n-univalence ₑ⁻¹) (≃-is-of-hlevel (suc n) (x .is-tr) (y .is-tr))</a>
+<a id="2111" class="Comment">-- @0 fin-set-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)</a>
+<a id="2180" class="Comment">-- fin-set-is-of-hlevel zero x y = n-ua</a>
+<a id="2220" class="Comment">--   ((λ _ → y .is-tr .fst) , is-contr→is-equiv (x .is-tr) (y .is-tr))</a>
+<a id="2291" class="Comment">-- fin-set-is-of-hlevel (suc n) x y =</a>
+<a id="2329" class="Comment">--   is-of-hlevel-≃ (suc n) (n-univalence ₑ⁻¹) (≃-is-of-hlevel (suc n) (x .is-tr) (y .is-tr))</a>
 
-<a id="2437" class="Comment">-- instance</a>
-<a id="2449" class="Comment">--   @0 H-Level-nType : ∀ {n k} → H-Level (1 + k + n) (n-Type ℓ k)</a>
-<a id="2516" class="Comment">--   H-Level-nType {k} = basic-instance (1 + k) (n-Type-is-of-hlevel k)</a>
+<a id="2424" class="Comment">-- instance</a>
+<a id="2436" class="Comment">--   @0 H-Level-nType : ∀ {n k} → H-Level (1 + k + n) (n-Type ℓ k)</a>
+<a id="2503" class="Comment">--   H-Level-nType {k} = basic-instance (1 + k) (n-Type-is-of-hlevel k)</a>
 
-<a id="2589" class="Comment">--   H-Level-is-equiv</a>
-<a id="2611" class="Comment">--     : {f : A → B} {n : HLevel}</a>
-<a id="2645" class="Comment">--     → H-Level (suc n) (is-equiv f)</a>
-<a id="2683" class="Comment">--   H-Level-is-equiv = prop-instance (is-equiv-is-prop _)</a>
+<a id="2576" class="Comment">--   H-Level-is-equiv</a>
+<a id="2598" class="Comment">--     : {f : A → B} {n : HLevel}</a>
+<a id="2632" class="Comment">--     → H-Level (suc n) (is-equiv f)</a>
+<a id="2670" class="Comment">--   H-Level-is-equiv = prop-instance (is-equiv-is-prop _)</a>
 
-<a id="2743" class="Comment">-- module _ {ℓ : Level} where private</a>
-<a id="2781" class="Comment">--   open import Foundations.Univalence.SIP</a>
-<a id="2825" class="Comment">--   _ : Fin-Set ℓ ≃ Type-with {S = is-fin-set} (HomT→Str λ _ _ _ → ⊤)</a>
-<a id="2896" class="Comment">--   _ = iso→equiv the-iso</a>
-<a id="2923" class="Comment">--     where</a>
-<a id="2936" class="Comment">--       open import Meta.Reflection.Record</a>
-<a id="2980" class="Comment">--       the-iso : Iso (Fin-Set ℓ) (Σ[ T ꞉ Type ℓ ] is-fin-set T)</a>
-<a id="3046" class="Comment">--       unquoteDef the-iso = define-record-iso the-iso (quote Fin-Set)</a>
+<a id="2730" class="Comment">-- module _ {ℓ : Level} where private</a>
+<a id="2768" class="Comment">--   open import Foundations.Univalence.SIP</a>
+<a id="2812" class="Comment">--   _ : FinSet ℓ ≃ Type-with {S = is-fin-set} (HomT→Str λ _ _ _ → ⊤)</a>
+<a id="2882" class="Comment">--   _ = iso→equiv the-iso</a>
+<a id="2909" class="Comment">--     where</a>
+<a id="2922" class="Comment">--       open import Meta.Reflection.Record</a>
+<a id="2966" class="Comment">--       the-iso : Iso (FinSet ℓ) (Σ[ T ꞉ Type ℓ ] is-fin-set T)</a>
+<a id="3031" class="Comment">--       unquoteDef the-iso = define-record-iso the-iso (quote FinSet)</a>
 </pre></body></html>
