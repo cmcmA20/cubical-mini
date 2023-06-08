@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Fin.Finite where
+module Structures.Finite where
 
 open import Foundations.Base
 open import Foundations.Equiv

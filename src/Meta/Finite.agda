@@ -112,3 +112,10 @@ instance
     let count = finite-pi-fin sz λ x → fam $ is-equiv→inverse (eqv .snd) x
     eqv′ ← count .enumeration
     pure $ fin $ pure $ Π-dom-≃ (eqv ₑ⁻¹) ∙ₑ eqv′
+
+  Finite-Lift
+    : ⦃ Finite A ⦄ → Finite (Lift ℓ′ A)
+  Finite-Lift ⦃ (A-fin) ⦄ .Finite.cardinality = A-fin .cardinality
+  Finite-Lift ⦃ (A-fin) ⦄ .Finite.enumeration = do
+    aeq ← A-fin .enumeration
+    pure $ lift-equiv ∙ₑ aeq

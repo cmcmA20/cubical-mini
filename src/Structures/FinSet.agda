@@ -5,11 +5,12 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Data.Fin.Base
-open import Data.Fin.Finite
 
 open import Meta.HLevel
 open import Meta.Finite     public
 open import Meta.Underlying public
+
+open import Structures.Finite
 
 open import Truncation.Propositional
 
