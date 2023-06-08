@@ -8,9 +8,15 @@ open import Foundations.Sigma
 open import Data.Fin
 import      Data.Empty
 import      Data.Dec.Base as Dec
+open import Data.Dec.Properties
 open import Data.Dec.Instances.HLevel
+open import Data.Vec.Base
+open import Data.Vec.Correspondences.Unary.Any
+open import Data.Vec.Correspondences.Unary.All
+open import Data.Vec.Membership
 open import Data.Nat.Path
 open import Data.Nat.Instances.Discrete
+open import Data.Vec.Properties
 
 open import Meta.Idiom
 open import Meta.Discrete
@@ -18,6 +24,9 @@ open import Meta.Reflection.HLevel
 open import Meta.Finite            public
 open import Meta.Underlying        public
 
+open import Correspondences.Unary.Decidable
+
+open import Structures.Negation
 open import Structures.Omniscience
 
 import Truncation.Propositional as ∥-∥₁
@@ -52,14 +61,34 @@ is-fin-set→is-set (_ , ∣e∣₁) =
 fin-ordered→is-fin-set : Fin-ordered A → is-fin-set A
 fin-ordered→is-fin-set (n , e) = n , ∣ e ∣₁
 
+-- TODO
+-- fin-set→is-discrete : is-fin-set A → is-discrete A
+-- fin-set→is-discrete A-f = {!!}
+
 dec-∥-∥₁-equiv : ∥ Dec A ∥₁ ≃ Dec ∥ A ∥₁
 dec-∥-∥₁-equiv = prop-extₑ!
-  (∥-∥₁.rec! (Dec.map pure ∥-∥₁.rec!))
-  (Dec.rec (yes <$>_) (pure ∘ no ∘ _∘ pure))
+  (∥-∥₁.rec! $ Dec.map pure ∥-∥₁.rec!)
+  (Dec.rec (yes <$>_) $ pure ∘ no ∘ _∘ pure)
 
--- TODO proof search
--- is-fin-set→omniscient : is-fin-set A → Omniscient {ℓ′ = ℓ′} A
--- is-fin-set→omniscient A-f P? = {!!}
+fin-ordered→omniscient : Fin-ordered A → Omniscient {ℓ′ = ℓ′} A
+fin-ordered→omniscient {A} (n , aeq) {P} P? =
+  Dec.map lemma₁ lemma₂ (any′? P? xs) where
+    module Â = Equiv aeq
+    module V̂ = Equiv vec-fun-equiv
+
+    xs : Vec A n
+    xs = V̂.inverse .fst $ Â.inverse .fst
+
+    lemma₁ : _
+    lemma₁ (i , p) = lookup xs i , p
+
+    lemma₂ : _
+    lemma₂ ¬p (a , pa) = ¬p $ Â.to a , subst P (sym (happly (V̂.ε _) _ ∙ Â.η a)) pa
+
+is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ′ = ℓ′} A
+is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} = ∥-∥₁.elim! go ((n ,_) <$> ∣aeq∣₁) where
+    go : Π[ a ꞉ Fin-ordered A ] (Decidable P → Dec ∥ Σ A P ∥₁)
+    go A-f = Dec.map pure rec! ∘ fin-ordered→omniscient A-f
 
 record FinSet ℓ : Type (ℓsuc ℓ) where
   no-eta-equality
