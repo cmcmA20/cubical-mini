@@ -4,7 +4,7 @@ module Structures.Negation where
 open import Foundations.Base
 open import Foundations.Equiv
 
-import Data.Empty as ⊥
+import Data.Empty.Base as ⊥
 open ⊥ public
   using (⊥)
 

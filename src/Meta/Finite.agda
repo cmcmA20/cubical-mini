@@ -2,12 +2,14 @@
 module Meta.Finite where
 
 open import Foundations.Base
-open import Foundations.Equiv
+open import Foundations.Equiv public
 open import Foundations.Sigma
 open import Foundations.Pi
 
 open import Data.Nat
-open import Data.Fin
+open import Data.Fin.Base
+open import Data.Fin.Properties
+open import Data.Fin.Instances.Discrete
 open import Data.Fin.Closure
 
 open import Meta.Discrete
@@ -79,9 +81,6 @@ private
     pure $ fin $ pure work
 
 instance
-  Finite-Fin : ∀ {n} → Finite (Fin n)
-  Finite-Fin = fin ∣ idₑ ∣₁
-
   Finite-× : ⦃ Finite A ⦄ → ⦃ Finite B ⦄ → Finite (A × B)
   Finite-× {A} {B} = fin $ do
     aeq ← enumeration {T = A}

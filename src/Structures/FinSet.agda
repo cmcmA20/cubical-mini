@@ -13,31 +13,31 @@ open import Meta.Underlying public
 
 open import Truncation.Propositional
 
-record Fin-Set ℓ : Type (ℓsuc ℓ) where
+record FinSet ℓ : Type (ℓsuc ℓ) where
   no-eta-equality
   constructor fin-set
   field
     typ            : Type ℓ
     has-is-fin-set : is-fin-set typ
   instance
-    Finite-Fin-Set : Finite typ
-    Finite-Fin-Set = fin $ has-is-fin-set .snd
+    Finite-FinSet : Finite typ
+    Finite-FinSet = fin $ has-is-fin-set .snd
 
-    H-Level-Fin-Set : ∀ {n} → H-Level (2 + n) typ
-    H-Level-Fin-Set = basic-instance 2 (is-fin-set→is-set has-is-fin-set)
+    H-Level-FinSet : ∀ {n} → H-Level (2 + n) typ
+    H-Level-FinSet = basic-instance 2 (is-fin-set→is-set has-is-fin-set)
 
-open Fin-Set public
-  using (Finite-Fin-Set; H-Level-Fin-Set)
-open Fin-Set using (typ; has-is-fin-set)
+open FinSet public
+  using (Finite-FinSet; H-Level-FinSet)
+open FinSet using (typ; has-is-fin-set)
 
 private variable
   ℓ : Level
   A : Type ℓ
 
 instance
-  Underlying-Fin-Set : Underlying (Fin-Set ℓ)
-  Underlying-Fin-Set {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Fin-Set .⌞_⌟ = typ
+  Underlying-FinSet : Underlying (FinSet ℓ)
+  Underlying-FinSet {ℓ} .Underlying.ℓ-underlying = ℓ
+  Underlying-FinSet .⌞_⌟ = typ
 
 
 -- TODO
@@ -88,9 +88,9 @@ instance
 
 -- module _ {ℓ : Level} where private
 --   open import Foundations.Univalence.SIP
---   _ : Fin-Set ℓ ≃ Type-with {S = is-fin-set} (HomT→Str λ _ _ _ → ⊤)
+--   _ : FinSet ℓ ≃ Type-with {S = is-fin-set} (HomT→Str λ _ _ _ → ⊤)
 --   _ = iso→equiv the-iso
 --     where
 --       open import Meta.Reflection.Record
---       the-iso : Iso (Fin-Set ℓ) (Σ[ T ꞉ Type ℓ ] is-fin-set T)
---       unquoteDef the-iso = define-record-iso the-iso (quote Fin-Set)
+--       the-iso : Iso (FinSet ℓ) (Σ[ T ꞉ Type ℓ ] is-fin-set T)
+--       unquoteDef the-iso = define-record-iso the-iso (quote FinSet)

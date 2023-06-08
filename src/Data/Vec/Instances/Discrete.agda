@@ -8,7 +8,7 @@ open import Meta.Reflection.HLevel
 open import Data.Vec.Base
 
 instance
-  Discrete-Vec : {ℓ : Level} {A : Type ℓ} {n : HLevel}
+  Discrete-Vec : {ℓ : Level} {A : Type ℓ} {n : ℕ}
                → ⦃ Discrete A ⦄ → Discrete (Vec A n)
   Discrete-Vec {A} {n} .Discrete._≟_ = go
     where

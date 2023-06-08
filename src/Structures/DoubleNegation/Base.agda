@@ -3,7 +3,8 @@ module Structures.DoubleNegation.Base where
 
 open import Foundations.Base
 
-open import Data.Empty
+open import Data.Empty.Base
+open import Data.Empty.Instances.HLevel
 open import Data.Dec.Base
 
 open import Meta.Reflection.HLevel

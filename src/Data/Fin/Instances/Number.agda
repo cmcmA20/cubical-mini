@@ -4,7 +4,8 @@ module Data.Fin.Instances.Number where
 open import Foundations.Base
 open import Meta.Literals public
 
-open import Data.Nat.Order
+open import Data.Nat.Instances.Number public
+open import Data.Nat.Order            public
 
 open import Data.Fin.Base
 

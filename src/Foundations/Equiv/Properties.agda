@@ -97,3 +97,11 @@ prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
   Σ-path (A-prop _ _) (is-prop→is-set B-prop _ _ _ _)
 
 module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
+
+lift-equiv : Lift ℓ A ≃ A
+lift-equiv = iso→equiv 𝔯 where
+  𝔯 : Iso _ _
+  𝔯 .fst = lower
+  𝔯 .snd .inv = lift
+  𝔯 .snd .rinv _ = refl
+  𝔯 .snd .linv _ = refl

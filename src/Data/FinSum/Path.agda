@@ -11,7 +11,7 @@ open import Data.Fin.Base
   using ()
   renaming (Fin to Finⁱ; fzero to fzeroⁱ; fsuc to fsucⁱ)
 
-open import Data.FinSum.Base
+open import Data.FinSum.Base public
 
 private variable n : ℕ
 

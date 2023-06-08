@@ -4,7 +4,8 @@ module Data.Sum.Path where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Data.Empty
+open import Data.Empty.Base
+open import Data.Empty.Instances.HLevel
 
 open import Meta.Reflection.HLevel
 

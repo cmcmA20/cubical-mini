@@ -11,6 +11,7 @@ open import Foundations.Sigma      public
 open import Foundations.Univalence public
 
 open import Structures.n-Type         public
+open import Structures.FinSet         public
 open import Structures.IdentitySystem public
 
 open import Functions.Equiv.Biinv       public
