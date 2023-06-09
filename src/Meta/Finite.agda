@@ -6,6 +6,7 @@ open import Foundations.Equiv public
 open import Foundations.Sigma
 open import Foundations.Pi
 
+open import Data.Empty.Base
 open import Data.Nat
 open import Data.Fin.Base
 open import Data.Fin.Properties
@@ -119,3 +120,10 @@ instance
   Finite-Lift ⦃ (A-fin) ⦄ .Finite.enumeration = do
     aeq ← A-fin .enumeration
     pure $ lift-equiv ∙ₑ aeq
+
+  -- TODO
+  -- Finite-＝
+  --   : ⦃ Discrete A ⦄ → ⦃ Finite A ⦄ → {x y : A} → Finite (x ＝ y)
+  -- Finite-＝ {x} {y} with x ≟ y
+  -- ... | yes p = fin {cardinality = 1} $ {!!}
+  -- ... | no ¬p = fin {cardinality = 0} $ pure ((λ p → absurd (¬p p)) , {!!})

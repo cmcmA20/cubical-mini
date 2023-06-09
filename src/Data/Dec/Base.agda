@@ -79,7 +79,6 @@ rec ifyes ifno (no ¬p) = ifno ¬p
 ⌊_⌋ : Dec P → Bool
 ⌊ b because _ ⌋ = b
 
-
 True : Dec P → Type
 True (false because _) = ⊥
 True (true  because _) = ⊤

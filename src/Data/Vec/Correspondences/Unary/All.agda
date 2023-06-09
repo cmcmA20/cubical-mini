@@ -44,6 +44,6 @@ all? P? (x ∷ xs) =
           (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
           (P? x ∧ᵈ all? P? xs)
 
-¬∃¬→∀¬ : ∀ xs → ¬ (Any P {n = n} xs) → All (¬_ ∘ P) xs
-¬∃¬→∀¬ []       _ = []
-¬∃¬→∀¬ (x ∷ xs) f = f ∘ here ∷ ¬∃¬→∀¬ xs (λ z → f (there z))
+-- ¬∃¬→∀¬ : ∀ xs → ¬ (Any P {n = n} xs) → All (¬_ ∘ P) xs
+-- ¬∃¬→∀¬ []       _ = []
+-- ¬∃¬→∀¬ (x ∷ xs) f = f ∘ here ∷ ¬∃¬→∀¬ xs (λ z → f (there z))

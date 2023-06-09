@@ -2,21 +2,7 @@
 module Structures.FinSet where
 
 open import Foundations.Base
-open import Foundations.Equiv
 open import Foundations.Sigma
-
-open import Data.Fin
-import      Data.Empty
-import      Data.Dec.Base as Dec
-open import Data.Dec.Properties
-open import Data.Dec.Instances.HLevel
-open import Data.Vec.Base
-open import Data.Vec.Correspondences.Unary.Any
-open import Data.Vec.Correspondences.Unary.All
-open import Data.Vec.Membership
-open import Data.Nat.Path
-open import Data.Nat.Instances.Discrete
-open import Data.Vec.Properties
 
 open import Meta.Idiom
 open import Meta.Discrete
@@ -24,10 +10,19 @@ open import Meta.Reflection.HLevel
 open import Meta.Finite            public
 open import Meta.Underlying        public
 
+open import Structures.Omniscience
+open import Structures.n-Type
+
 open import Correspondences.Unary.Decidable
 
-open import Structures.Negation
-open import Structures.Omniscience
+import      Data.Dec.Base as Dec
+open import Data.Dec.Properties
+open import Data.Dec.Instances.HLevel
+open import Data.Empty
+open import Data.Fin
+open import Data.Nat
+open import Data.Vec
+open import Data.Vec.Correspondences.Unary.Any
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
@@ -54,6 +49,9 @@ is-fin-set-is-prop (m , ∣p∣₁) (n , ∣q∣₁) =
                ∣p∣₁
                ∣q∣₁
 
+Finite→is-fin-set : Finite A → is-fin-set A
+Finite→is-fin-set A-fin = A-fin .cardinality , A-fin .enumeration
+
 is-fin-set→is-set : is-fin-set A → is-set A
 is-fin-set→is-set (_ , ∣e∣₁) =
   ∥-∥₁.rec (is-of-hlevel-is-prop 2) (λ e → is-of-hlevel-≃ 2 e hlevel!) ∣e∣₁
@@ -65,30 +63,42 @@ fin-ordered→is-fin-set (n , e) = n , ∣ e ∣₁
 -- fin-set→is-discrete : is-fin-set A → is-discrete A
 -- fin-set→is-discrete A-f = {!!}
 
-dec-∥-∥₁-equiv : ∥ Dec A ∥₁ ≃ Dec ∥ A ∥₁
-dec-∥-∥₁-equiv = prop-extₑ!
-  (∥-∥₁.rec! $ Dec.map pure ∥-∥₁.rec!)
-  (Dec.rec (yes <$>_) $ pure ∘ no ∘ _∘ pure)
-
 fin-ordered→omniscient : Fin-ordered A → Omniscient {ℓ′ = ℓ′} A
 fin-ordered→omniscient {A} (n , aeq) {P} P? =
-  Dec.map lemma₁ lemma₂ (any′? P? xs) where
-    module Â = Equiv aeq
-    module V̂ = Equiv vec-fun-equiv
+  Dec.map lemma₁ lemma₂ (any? P? xs) where
+    module Ã = Equiv aeq
+    module Ṽ = Equiv vec-fun-equiv
 
     xs : Vec A n
-    xs = V̂.inverse .fst $ Â.inverse .fst
+    xs = Ṽ.inverse .fst $ Ã.inverse .fst
 
     lemma₁ : _
     lemma₁ (i , p) = lookup xs i , p
 
     lemma₂ : _
-    lemma₂ ¬p (a , pa) = ¬p $ Â.to a , subst P (sym (happly (V̂.ε _) _ ∙ Â.η a)) pa
+    lemma₂ ¬p (a , pa) = ¬p $ Ã.to a , subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η a)) pa
 
 is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ′ = ℓ′} A
 is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} = ∥-∥₁.elim! go ((n ,_) <$> ∣aeq∣₁) where
-    go : Π[ a ꞉ Fin-ordered A ] (Decidable P → Dec ∥ Σ A P ∥₁)
-    go A-f = Dec.map pure rec! ∘ fin-ordered→omniscient A-f
+  go : Π[ A-f ꞉ Fin-ordered A ] (Decidable₁ P → Dec ∥ Σ A _ ∥₁)
+  go A-f = Dec.map pure rec! ∘ fin-ordered→omniscient A-f
+
+is-fin-set→exhaustible₁ : is-fin-set A → Exhaustible₁ {ℓ′ = ℓ′} A
+is-fin-set→exhaustible₁ = omniscient₁→exhaustible₁ ∘ is-fin-set→omniscient₁
+
+-- is-fin-set→omniscient
+--   : is-fin-set A → {P : Pred₁ ℓ′ A} → Decidable₁ P → Dec (Σ[ a ꞉ A ] ⌞ P a ⌟)
+-- is-fin-set→omniscient A-fin P? with is-fin-set→omniscient₁ A-fin P?
+-- ... | yes p = yes {!!}
+-- ... | no ¬p = {!!}
+
+-- is-fin-set→exhaustible₁
+--   : is-fin-set A → {P : Pred₁ ℓ′ A} → Decidable₁ P → Dec (Π[ a ꞉ A ] ⌞ P a ⌟)
+-- is-fin-set→exhaustible₁ A-fin {P} P? =
+--   let z = omniscient₁→exhaustible₁ (is-fin-set→omniscient₁ A-fin) P?
+-- --       w = ∥-∥₁.proj (Finite-choice ⦃ {!!} ⦄ λ x → (dec-∥-∥₁-equiv ₑ⁻¹) .fst x)
+--   in omniscient→exhaustible {!!} P?
+-- --     in ∥-∥₁.proj {!Finite-choice ? ?!} -- ((dec-∥-∥₁-equiv ₑ⁻¹) .fst z)
 
 record FinSet ℓ : Type (ℓsuc ℓ) where
   no-eta-equality
@@ -106,6 +116,9 @@ record FinSet ℓ : Type (ℓsuc ℓ) where
 open FinSet public
   using (Finite-FinSet; H-Level-FinSet)
 open FinSet using (typ; has-is-fin-set)
+
+fin-set! : (A : Type ℓ) → ⦃ Finite A ⦄ → FinSet ℓ
+fin-set! A ⦃ (A-fin) ⦄ = fin-set A (Finite→is-fin-set A-fin)
 
 instance
   Underlying-FinSet : Underlying (FinSet ℓ)
