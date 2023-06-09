@@ -3,10 +3,29 @@
 <a id="24" class="Keyword">module</a> <a id="31" href="Data.Bool.Properties.html" class="Module">Data.Bool.Properties</a> <a id="52" class="Keyword">where</a>
 
 <a id="59" class="Keyword">open</a> <a id="64" class="Keyword">import</a> <a id="71" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="88" class="Keyword">open</a> <a id="93" class="Keyword">import</a> <a id="100" href="Foundations.Erased.html" class="Module">Foundations.Erased</a>
 
-<a id="89" class="Keyword">open</a> <a id="94" class="Keyword">import</a> <a id="101" href="Structures.Negation.html" class="Module">Structures.Negation</a>
+<a id="120" class="Keyword">open</a> <a id="125" class="Keyword">import</a> <a id="132" href="Structures.FinSet.html" class="Module">Structures.FinSet</a>
 
-<a id="122" class="Keyword">open</a> <a id="127" class="Keyword">import</a> <a id="134" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a> <a id="149" class="Keyword">public</a>
+<a id="151" class="Keyword">open</a> <a id="156" class="Keyword">import</a> <a id="163" href="Meta.Discrete.html" class="Module">Meta.Discrete</a>
+<a id="177" class="Keyword">open</a> <a id="182" class="Keyword">import</a> <a id="189" href="Meta.Finite.html" class="Module">Meta.Finite</a>
+<a id="201" class="Keyword">open</a> <a id="206" class="Keyword">import</a> <a id="213" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a>
 
-<a id="157" class="Comment">-- TODO</a>
+<a id="237" class="Keyword">open</a> <a id="242" class="Keyword">import</a> <a id="249" href="Structures.n-Type.html" class="Module">Structures.n-Type</a>
+
+<a id="268" class="Keyword">open</a> <a id="273" class="Keyword">import</a> <a id="280" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a> <a id="295" class="Keyword">public</a>
+<a id="302" class="Keyword">open</a> <a id="307" class="Keyword">import</a> <a id="314" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
+<a id="328" class="Keyword">open</a> <a id="333" class="Keyword">import</a> <a id="340" href="Data.Bool.Instances.Finite.html" class="Module">Data.Bool.Instances.Finite</a>
+<a id="367" class="Keyword">open</a> <a id="372" class="Keyword">import</a> <a id="379" href="Data.Bool.Instances.Discrete.html" class="Module">Data.Bool.Instances.Discrete</a>
+
+<a id="409" class="Comment">-- whew, painful</a>
+<a id="and-idem"></a><a id="426" href="Data.Bool.Properties.html#426" class="Function">and-idem</a> <a id="435" class="Symbol">:</a> <a id="437" class="Symbol">∀</a> <a id="439" href="Data.Bool.Properties.html#439" class="Bound">x</a> <a id="441" class="Symbol">→</a> <a id="443" href="Data.Bool.Properties.html#439" class="Bound">x</a> <a id="445" href="Data.Bool.Base.html#311" class="Function Operator">and</a> <a id="449" href="Data.Bool.Properties.html#439" class="Bound">x</a> <a id="451" href="Foundations.Prim.Kan.html#1272" class="Function Operator">＝</a> <a id="453" href="Data.Bool.Properties.html#439" class="Bound">x</a>
+<a id="455" href="Data.Bool.Properties.html#426" class="Function">and-idem</a> <a id="464" class="Symbol">=</a> <a id="466" href="Data.Dec.Base.html#2124" class="Function">witness</a> <a id="474" href="Foundations.Pi.Base.html#813" class="Function Operator">$</a>
+  <a id="478" href="Structures.FinSet.html#2424" class="Function">is-fin-set→exhaustible₁</a> <a id="502" class="Symbol">(</a><a id="503" href="Structures.FinSet.html#3680" class="Function">fin-set!</a> <a id="512" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a> <a id="517" class="Symbol">.</a><a id="518" href="Structures.FinSet.html#3336" class="Field">FinSet.has-is-fin-set</a><a id="539" class="Symbol">)</a>
+    <a id="545" class="Symbol">{</a><a id="546" class="Argument">P</a> <a id="548" class="Symbol">=</a> <a id="550" class="Symbol">λ</a> <a id="552" href="Data.Bool.Properties.html#552" class="Bound">x</a> <a id="554" class="Symbol">→</a> <a id="556" href="Meta.Reflection.HLevel.html#24617" class="Function">el!</a> <a id="560" class="Symbol">(</a><a id="561" href="Data.Bool.Properties.html#552" class="Bound">x</a> <a id="563" href="Data.Bool.Base.html#311" class="Function Operator">and</a> <a id="567" href="Data.Bool.Properties.html#552" class="Bound">x</a> <a id="569" href="Foundations.Prim.Kan.html#1272" class="Function Operator">＝</a> <a id="571" href="Data.Bool.Properties.html#552" class="Bound">x</a><a id="572" class="Symbol">)}</a> <a id="575" class="Symbol">(λ</a> <a id="578" href="Data.Bool.Properties.html#578" class="Bound">x</a> <a id="580" class="Symbol">→</a> <a id="582" class="Symbol">(</a><a id="583" href="Data.Bool.Properties.html#578" class="Bound">x</a> <a id="585" href="Data.Bool.Base.html#311" class="Function Operator">and</a> <a id="589" href="Data.Bool.Properties.html#578" class="Bound">x</a><a id="590" class="Symbol">)</a> <a id="592" href="Meta.Discrete.html#388" class="Field Operator">≟</a> <a id="594" href="Data.Bool.Properties.html#578" class="Bound">x</a><a id="595" class="Symbol">)</a>
+
+<a id="598" class="Comment">-- and-assoc : ∀ x y z → (x and y) and z ＝ x and (y and z)</a>
+<a id="657" class="Comment">-- and-assoc =</a>
+<a id="672" class="Comment">--   let t = is-fin-set→omniscient₁ (Bool-FinSet .FinSet.has-is-fin-set)</a>
+<a id="745" class="Comment">--   in {!!}</a>
 </pre></body></html>
