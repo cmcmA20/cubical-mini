@@ -16,6 +16,12 @@ private variable
 ∃! : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 ∃! A B = is-contr (Σ[ a ꞉ A ] B a)
 
+infix 2 ∃!-syntax
+∃!-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
+∃!-syntax = ∃!
+
+syntax ∃!-syntax A (λ x → B) = ∃![ x ꞉ A ] B
+
 open is-iso
 
 Σ-pathP-iso
