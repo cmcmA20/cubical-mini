@@ -10,20 +10,16 @@ open import Foundations.Pi         public
 open import Foundations.Sigma      public
 open import Foundations.Univalence public
 
-open import Structures.n-Type         public
-open import Structures.FinSet         public
-open import Structures.IdentitySystem public
+open import Structures.n-Type public
 
-open import Functions.Equiv.Biinv       public
-open import Functions.Equiv.Fibrewise   public
-open import Functions.Equiv.HalfAdjoint public
-open import Functions.Equiv.Weak        public
-open import Functions.Embedding         public
+open import Functions.Equiv.Fibrewise public
+open import Functions.Equiv.Weak      public
+open import Functions.Embedding       public
 
 import Truncation.Propositional
 module ∥-∥₁ = Truncation.Propositional
 open ∥-∥₁ public
-  using (∥_∥₁; ∣_∣₁; squash₁)
+  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; image)
 
 
 -- Automation

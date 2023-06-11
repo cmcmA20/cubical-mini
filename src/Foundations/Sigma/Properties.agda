@@ -197,3 +197,10 @@ infixr 4 _,ₚ_
   ≃ (Σ[ y ꞉ B ] Σ[ x ꞉ A ] C x y)
 Σ-swap₂ .fst (x , y , f) = y , x , f
 Σ-swap₂ .snd .equiv-proof = strict-contr-fibres _
+
+×-swap₂
+  : {B : Type ℓ′}
+  → (A × B)
+  ≃ (B × A)
+×-swap₂ .fst (x , y) = y , x
+×-swap₂ .snd .equiv-proof = strict-contr-fibres _

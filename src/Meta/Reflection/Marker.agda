@@ -2,6 +2,7 @@
 module Meta.Reflection.Marker where
 
 open import Foundations.Base
+
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.Maybe.Instances.Bind

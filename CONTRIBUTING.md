@@ -113,6 +113,7 @@ When preparing a PR here are some general guidelines:
 
 - Avoid `public` imports, except in modules that are specifically meant
   to collect and re-export results from several modules.
+  Those mostly reside in `Foundations` and `Meta`.
 
 - Module dependency structure is stratified as follows:
 
