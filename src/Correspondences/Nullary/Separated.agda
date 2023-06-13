@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Nullary.DoubleNegation.Base where
+module Correspondences.Nullary.Separated where
 
 open import Foundations.Base
 
@@ -8,9 +8,9 @@ open import Meta.HLevel
 open import Structures.Base
 open import Structures.IdentitySystem.Base
 
-open import Correspondences.Nullary.Negation public
+open import Correspondences.Nullary.Classical
 
-open import Data.Empty.Base
+import Data.Empty.Base as ⊥
 open import Data.Empty.Instances.HLevel
 open import Data.Dec.Base
 
@@ -18,16 +18,16 @@ private variable
   ℓ : Level
   A : Type ℓ
 
-infix 0 ¬¬_
-¬¬_ : Type ℓ → Type ℓ
-¬¬ A = ¬ ¬ A
+is-separated-at-hlevel : HLevel → Type ℓ → Type ℓ
+is-separated-at-hlevel 0 = ¬¬_ stable_
+is-separated-at-hlevel (suc n) = is-separated-at-hlevel n on-paths-of_
 
 dec→¬¬-stable : Dec A → ¬¬_ stable A
-dec→¬¬-stable (no ¬a) f = absurd (f ¬a)
+dec→¬¬-stable (no ¬a) f = ⊥.rec (f ¬a)
 dec→¬¬-stable (yes a) _ = a
 
 is-separated : Type ℓ → Type ℓ
-is-separated A = (¬¬_ stable_) on-paths-of A
+is-separated = is-separated-at-hlevel 1
 
 separated-identity-system
   : is-separated A
@@ -41,7 +41,7 @@ is-separated→is-set
 is-separated→is-set As =
   identity-system→hlevel 1
     (separated-identity-system As) λ _ _ _ f →
-      fun-ext λ g → absurd (f g)
+      fun-ext λ g → ⊥.rec (f g)
 
 is-separated-is-prop : is-prop (is-separated A)
 is-separated-is-prop As As′ =

@@ -11,7 +11,7 @@ open import Meta.HLevel
 open import Structures.Base
 open import Structures.IdentitySystem
 
-open import Correspondences.Nullary.Discrete
+open import Correspondences.Nullary.Decidable
 
 open import Data.Dec.Base
 

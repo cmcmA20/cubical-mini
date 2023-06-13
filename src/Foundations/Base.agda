@@ -724,3 +724,6 @@ subst-path-both p adj = transport-path p adj adj
 -- TODO move somewhere?
 it : ⦃ A ⦄ → A
 it ⦃ (a) ⦄ = a
+
+_on-paths-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)

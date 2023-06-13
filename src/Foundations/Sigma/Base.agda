@@ -22,17 +22,10 @@ infixr 4 _×_
 _×_ : (A : Type ℓ) (B : Type ℓ′) → Type (level-of-type A ⊔ level-of-type B)
 A × B = Σ[ _ ꞉ A ] B
 
-∃ᶜ : (B : A → Type ℓ′) → Type (level-of-type A ⊔ ℓ′)
-∃ᶜ = Σ _
-
-∃₂ᶜ : {B : A → Type ℓ′} (C : (x : A) → B x → Type ℓ″) → Type (level-of-type A ⊔ ℓ′ ⊔ ℓ″)
-∃₂ᶜ C = ∃ᶜ λ a → ∃ᶜ λ b → C a b
-
-infix 2 ∃ᶜ-syntax
-∃ᶜ-syntax : (A → Type ℓ′) → Type (level-of-type A ⊔ ℓ′)
-∃ᶜ-syntax = ∃ᶜ
-
-syntax ∃ᶜ-syntax (λ x → B) = ∃ᶜ[ x ] B
+infix 2 Σ-syntax′
+Σ-syntax′ : (B : A → Type ℓ′) → Type _
+Σ-syntax′ {A} = Σ A
+syntax Σ-syntax′ (λ x → B) = Σ[ x ] B
 
 _$₂_ : (f : (a : A) (b : B a) → C a b)
        (p : Σ[ x ꞉ A ] B x)
@@ -57,6 +50,10 @@ f $₅ (x , y , z , w , u) = f x y z w u
 
 -- note that `curry₁` is just `_$_`
 
-curry₂ : (f : (p : Σ[ a ꞉ A ] B a) → C (fst p) (snd p))
+curry₂ : (f : (p : Σ[ a ꞉ A ] B a) → C (p .fst) (p .snd))
          (x : A) (y : B x) → C x y
 curry₂ f x y = f (x , y)
+
+curry₃ : (f : (p : Σ[ a ꞉ A ] Σ[ b ꞉ B a ] C a b) → D (p .fst) (p .snd .fst) (p .snd .snd))
+         (x : A) (y : B x) (z : C x y) → D x y z
+curry₃ f x y z = f (x , y , z)

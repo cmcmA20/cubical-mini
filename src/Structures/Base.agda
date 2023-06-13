@@ -99,9 +99,6 @@ function-action-is-transport {S} {α} {β} α-tr β-tr eqv f =
               ∙ β-tr eqv (f (subst S (sym (ua eqv)) x))
 
 
-_on-paths-of_ : (Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
-S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)
-
 -- observe that "being a proposition" is a pointed structure on paths
 _ : id on-paths-of_ ＝ is-prop {ℓ}
 _ = fun-ext (λ _ → refl)

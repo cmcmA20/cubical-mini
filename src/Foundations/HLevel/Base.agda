@@ -18,8 +18,8 @@ private variable
 
 is-of-hlevel : HLevel → Type ℓ → Type ℓ
 is-of-hlevel 0 A = is-contr A
-is-of-hlevel (suc 0) A = is-prop A
-is-of-hlevel (suc (suc h)) A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-of-hlevel (suc h) (x ＝ y)
+is-of-hlevel 1 A = is-prop A
+is-of-hlevel (suc (suc h)) A = is-of-hlevel (suc h) on-paths-of A
 
 is-of-hlevel-fun : (h : HLevel) {A : Type ℓ} {B : Type ℓ′} (f : A → B) → Type (ℓ ⊔ ℓ′)
 is-of-hlevel-fun h f = Π[ b ꞉ _ ] is-of-hlevel h (fibre f b)

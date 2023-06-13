@@ -5,8 +5,7 @@ open import Foundations.Base
 
 open import Structures.Base
 
-open import Correspondences.Base
-open import Correspondences.Nullary.DoubleNegation
+open import Correspondences.Nullary.Separated
 open import Correspondences.Unary.Decidable
 
 open import Data.Dec as Dec

@@ -5,7 +5,7 @@ open import Foundations.Base
 
 open import Meta.HLevel.Base
 
-open import Correspondences.Nullary.Discrete public
+open import Correspondences.Nullary.Decidable public
 
 open import Data.Dec.Base public
   using (Dec; yes; no)

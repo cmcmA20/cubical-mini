@@ -8,7 +8,8 @@ open import Meta.HLevel
 
 open import Structures.n-Type
 
-open import Correspondences.Nullary.DoubleNegation
+open import Correspondences.Nullary.Classical
+open import Correspondences.Nullary.Separated
 open import Correspondences.Unary.Decidable
 
 open import Data.Dec.Base as Dec

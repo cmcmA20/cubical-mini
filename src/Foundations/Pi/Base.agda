@@ -12,6 +12,12 @@ infix 6 Π-syntax
 
 syntax Π-syntax A (λ x → B) = Π[ x ꞉ A ] B
 
+infix 6 Π-syntax′
+Π-syntax′ : {A : Type ℓ} (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
+Π-syntax′ {A} = Π-syntax A
+
+syntax Π-syntax′ (λ x → B) = Π[ x ] B
+
 
 -- non-dependent stuff
 
