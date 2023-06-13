@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Structures.Negation where
+module Correspondences.Nullary.Negation where
 
 open import Foundations.Base
 open import Foundations.Equiv

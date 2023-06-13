@@ -1,15 +1,16 @@
 {-# OPTIONS --safe #-}
-module Structures.Discrete where
+module Correspondences.Nullary.Discrete where
 
 open import Foundations.Base
 open import Foundations.HLevel
 
+open import Structures.Base
+
+open import Correspondences.Nullary.DoubleNegation.Base
+
 open import Data.Dec.Path
 
 open import Functions.Embedding
-
-open import Structures.Base
-open import Structures.DoubleNegation.Base
 
 private variable
   ℓ ℓ′ : Level

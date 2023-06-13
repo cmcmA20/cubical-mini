@@ -3,6 +3,7 @@ module Containers.Base where
 
 open import Foundations.Base
 open import Foundations.Equiv.Base
+
 open import Meta.Idiom
 
 infix 5 _▶_

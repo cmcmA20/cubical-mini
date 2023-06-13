@@ -2,11 +2,12 @@
 module Meta.Alt where
 
 open import Foundations.Base
-open import Data.Bool.Base
-open import Data.String.Base
 
 open import Meta.Idiom public
 open import Meta.Bind
+
+open import Data.Bool.Base
+open import Data.String.Base
 
 record Alt (M : Effect) : Typeω where
   private module M = Effect M

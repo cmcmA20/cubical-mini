@@ -6,11 +6,12 @@ open import Foundations.Equiv
 
 open import Meta.Reflection.HLevel
 
+open import Structures.IdentitySystem.Base
+
+open import Correspondences.Nullary.Negation
+
 open import Data.Empty
 open import Data.Unit
-
-open import Structures.Negation
-open import Structures.IdentitySystem.Base
 
 open import Data.List.Base public
 

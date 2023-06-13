@@ -2,6 +2,7 @@
 module Data.Maybe.Instances.Discrete where
 
 open import Foundations.Base
+
 open import Meta.Discrete
 
 import Data.Dec.Base as Dec

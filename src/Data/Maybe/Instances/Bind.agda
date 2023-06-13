@@ -2,6 +2,7 @@
 module Data.Maybe.Instances.Bind where
 
 open import Foundations.Base
+
 open import Meta.Bind
 
 open import Data.Maybe.Instances.Idiom public

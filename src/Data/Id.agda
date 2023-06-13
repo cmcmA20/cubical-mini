@@ -9,8 +9,9 @@ open import Foundations.Equiv
 open import Meta.Reflection.HLevel
 
 open import Structures.Base
-open import Structures.Discrete
 open import Structures.IdentitySystem
+
+open import Correspondences.Nullary.Discrete
 
 open import Data.Dec.Base
 

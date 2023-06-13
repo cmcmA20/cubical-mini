@@ -2,6 +2,7 @@
 module Data.Vec.Instances.Discrete where
 
 open import Foundations.Base
+
 open import Meta.Discrete
 open import Meta.Reflection.HLevel
 

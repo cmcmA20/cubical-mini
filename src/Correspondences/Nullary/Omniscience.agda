@@ -1,14 +1,14 @@
 {-# OPTIONS --safe #-}
-module Structures.Omniscience where
+module Correspondences.Nullary.Omniscience where
 
 open import Foundations.Base
 
 open import Meta.Idiom
 open import Meta.Reflection.HLevel
 
-open import Structures.DoubleNegation
 open import Structures.n-Type
 
+open import Correspondences.Nullary.DoubleNegation
 open import Correspondences.Unary.Decidable
 
 open import Data.Dec.Base as Dec

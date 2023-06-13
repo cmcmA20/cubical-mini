@@ -10,9 +10,9 @@ open import Meta.Reflection.HLevel
 open import Meta.Finite            public
 open import Meta.Underlying        public
 
-open import Structures.Omniscience
 open import Structures.n-Type
 
+open import Correspondences.Nullary.Omniscience
 open import Correspondences.Unary.Decidable
 
 import      Data.Dec.Base as Dec

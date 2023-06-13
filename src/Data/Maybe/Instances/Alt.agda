@@ -2,6 +2,7 @@
 module Data.Maybe.Instances.Alt where
 
 open import Foundations.Base
+
 open import Meta.Alt
 
 open import Data.Maybe.Base public

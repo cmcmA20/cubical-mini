@@ -2,6 +2,7 @@
 module Data.Maybe.Instances.Traverse where
 
 open import Foundations.Base
+
 open import Meta.Traverse
 
 open import Data.Maybe.Base public

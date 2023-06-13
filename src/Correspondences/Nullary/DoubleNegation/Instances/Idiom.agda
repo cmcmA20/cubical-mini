@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
-module Structures.DoubleNegation.Instances.Idiom where
+module Correspondences.Nullary.DoubleNegation.Instances.Idiom where
 
 open import Foundations.Base
+
 open import Meta.Idiom
 
-open import Structures.DoubleNegation.Base public
+open import Correspondences.Nullary.DoubleNegation.Base public
 
 instance
   Map-¬¬ : Map (eff ¬¬_)

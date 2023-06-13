@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
-module Structures.DoubleNegation.Instances.Bind where
+module Correspondences.Nullary.DoubleNegation.Instances.Bind where
 
 open import Foundations.Base
+
 open import Meta.Bind
 
-open import Structures.DoubleNegation.Instances.Idiom public
+open import Correspondences.Nullary.DoubleNegation.Instances.Idiom public
 
 instance
   Bind-¬¬ : Bind (eff ¬¬_)

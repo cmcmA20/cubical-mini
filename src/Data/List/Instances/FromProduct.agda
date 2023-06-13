@@ -2,6 +2,7 @@
 module Data.List.Instances.FromProduct where
 
 open import Foundations.Base
+
 open import Meta.FromProduct
 
 open import Data.List.Base using (List; []; _∷_)

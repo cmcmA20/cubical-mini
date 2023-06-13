@@ -5,11 +5,12 @@ open import Foundations.Base
 open import Foundations.Equiv
 open import Foundations.Sigma
 
-open import Containers.List.Base
 open import Data.List.Base
   renaming (List to Listⁱ)
 open import Data.Nat.Base
 open import Data.FinSum.Base
+
+open import Containers.List.Base
 
 private variable
   ℓ : Level

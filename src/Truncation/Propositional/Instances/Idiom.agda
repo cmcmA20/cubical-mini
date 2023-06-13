@@ -2,6 +2,7 @@
 module Truncation.Propositional.Instances.Idiom where
 
 open import Foundations.Base
+
 open import Meta.Idiom
 
 open import Truncation.Propositional.Base

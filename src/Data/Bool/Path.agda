@@ -4,12 +4,12 @@ module Data.Bool.Path where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Data.Sum
-open import Data.Unit
-
 open import Meta.Reflection.HLevel
 
-open import Structures.Negation
+open import Correspondences.Nullary.Negation
+
+open import Data.Sum
+open import Data.Unit
 
 open import Data.Bool.Base public
 

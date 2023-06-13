@@ -6,17 +6,17 @@ open import Foundations.Equiv public
 open import Foundations.Sigma
 open import Foundations.Pi
 
+open import Meta.Discrete
+open import Meta.HLevel
+open import Meta.Idiom
+open import Meta.Bind
+
 open import Data.Empty.Base
 open import Data.Nat
 open import Data.Fin.Base
 open import Data.Fin.Properties
 open import Data.Fin.Instances.Discrete
 open import Data.Fin.Closure
-
-open import Meta.Discrete
-open import Meta.HLevel
-open import Meta.Idiom
-open import Meta.Bind
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁

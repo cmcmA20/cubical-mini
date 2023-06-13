@@ -20,7 +20,7 @@ import Data.Everything
 -- Function kinds.
 import Functions.Everything
 
--- (Univalent) structures.
+-- (Univalently) structured types.
 import Structures.Everything
 
 -- Containers aka polynomial functors.
@@ -38,10 +38,6 @@ import Meta.Everything
 -- I/O and related stuff.
 import System.Everything
 
--- Nullary correspondence is called a _structure_.
--- Prop-valued correspondence is called a _relation_.
--- Nullary relation/prop-valued structure is called a _property_.
-
 -- Modalities.
 -- TODO import Modalities.Everything
 
@@ -57,6 +53,3 @@ import System.Everything
 --
 -- -- Algebra library
 -- import Cubical.Algebra.Everything
---
--- -- Cardinals
--- import Cubical.Cardinals.Everything

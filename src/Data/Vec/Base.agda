@@ -2,6 +2,7 @@
 module Data.Vec.Base where
 
 open import Foundations.Base
+
 open import Data.Nat.Base public
   using (ℕ; zero; suc; _+_)
 

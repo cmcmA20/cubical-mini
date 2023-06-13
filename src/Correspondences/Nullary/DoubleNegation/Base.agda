@@ -1,18 +1,18 @@
 {-# OPTIONS --safe #-}
-module Structures.DoubleNegation.Base where
+module Correspondences.Nullary.DoubleNegation.Base where
 
 open import Foundations.Base
-
-open import Data.Empty.Base
-open import Data.Empty.Instances.HLevel
-open import Data.Dec.Base
 
 open import Meta.Reflection.HLevel
 
 open import Structures.Base
 open import Structures.IdentitySystem.Base
 
-open import Structures.Negation public
+open import Correspondences.Nullary.Negation public
+
+open import Data.Empty.Base
+open import Data.Empty.Instances.HLevel
+open import Data.Dec.Base
 
 private variable
   ℓ : Level

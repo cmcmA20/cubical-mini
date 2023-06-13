@@ -5,14 +5,13 @@ open import Foundations.Base
 
 open import Meta.Discrete
 
+open import Correspondences.Nullary.Negation
 open import Correspondences.Unary.Decidable
 
 open import Data.Dec as Dec
 open import Data.Fin.Base
 open import Data.Sum.Base
 open import Data.Vec.Properties
-
-open import Structures.Negation
 
 private variable
   ℓ : Level

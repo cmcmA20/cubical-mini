@@ -2,6 +2,7 @@
 module Data.List.Instances.Foldable where
 
 open import Foundations.Base
+
 open import Meta.Foldable
 
 import Data.List.Base as List

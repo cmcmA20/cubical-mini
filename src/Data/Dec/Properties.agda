@@ -7,11 +7,11 @@ open import Foundations.Equiv
 open import Meta.Idiom
 open import Meta.Reflection.HLevel
 
-open import Data.Empty.Instances.HLevel
-open import Data.Sum.Base
-
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
+
+open import Data.Empty.Instances.HLevel
+open import Data.Sum.Base
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Instances.HLevel

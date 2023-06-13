@@ -2,6 +2,7 @@
 module Data.String.Instances.IsString where
 
 open import Foundations.Base
+
 open import Meta.Literals
 
 open import Data.String.Base

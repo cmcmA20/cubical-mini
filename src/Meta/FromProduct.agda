@@ -2,6 +2,7 @@
 module Meta.FromProduct where
 
 open import Foundations.Base
+
 open import Data.Nat.Base public
   using (ℕ; zero; suc)
 open import Data.Product.Base public

@@ -4,11 +4,11 @@ module Data.Dec.Path where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Reflection.HLevel
+
 open import Data.Empty.Base
 open import Data.Empty.Instances.HLevel
 open import Data.Sum.Path
-
-open import Meta.Reflection.HLevel
 
 open import Data.Dec.Base public
 

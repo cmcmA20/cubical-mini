@@ -2,8 +2,10 @@
 module Data.Dec.Instances.HLevel where
 
 open import Foundations.Base
-open import Data.List.Base
+
 open import Meta.Reflection.HLevel
+
+open import Data.List.Base
 
 open import Data.Dec.Path
 

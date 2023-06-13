@@ -66,14 +66,11 @@ For naming conventions specific to the Algebra subfolder, see
   should be prefixed `has-is-`, since Agda doesn't allow you to shadow
   globals with record fields.
 
--- TODO fix links and examples
 * When defining eliminators, recursors and similar functions for datatypes,
   use the names `elim` and `rec`, potentially with a suitable suffix (like `elim-prop`).
   Do not use `ind`.
   You can look
-  [here](https://github.com/agda/cubical/blob/master/Cubical/HITs/SetQuotients/Properties.agda#L42-L92)
-  and
-  [here](https://github.com/agda/cubical/blob/master/Cubical/HITs/S1/Properties.agda#L14-L20)
+  [here](https://github.com/cmcmA20/cubical-mini/blob/master/src/Truncation/Propositional/Base.agda)
   to see how diffrent versions of `elim` and `rec` are named and typed.
 
 * The `elim` and `rec` should be used as much as possible without

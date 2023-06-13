@@ -8,6 +8,12 @@ open import Foundations.HLevel
 open import Foundations.Pi
 open import Foundations.Sigma
 
+open import Meta.Foldable
+open import Meta.HLevel          public
+open import Meta.Reflection.Base
+
+open import Structures.n-Type
+
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Operations
@@ -17,12 +23,6 @@ open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Nat.Instances.Number
 open import Data.String.Instances.IsString
-
-open import Structures.n-Type
-
-open import Meta.Foldable
-open import Meta.HLevel          public
-open import Meta.Reflection.Base
 
 {-
 Tactic for generating readable h-level proofs automatically. Contains an
@@ -600,24 +600,30 @@ hlevel-tactic-worker goal = do
 ----------------------------
 macro hlevel! = hlevel-tactic-worker
 
+private variable
+  ℓ ℓ′ ℓa ℓb ℓc ℓd : Level
+  T : Type ℓ
+  A : Type ℓa
+  B : Type ℓb
+  n : HLevel
+
 -- In addition to using the macro as a.. well, macro, it can be used as
 -- a tactic argument, to replace instance search by the more powerful
 -- decomposition-projection mechanism of the tactic. We provide only
 -- some of the most common helpers:
-el! : ∀ {ℓ} (A : Type ℓ) {n} {@(tactic hlevel-tactic-worker) hl : is-of-hlevel n A} → n-Type ℓ n
+el! : (A : Type ℓ) {@(tactic hlevel-tactic-worker) hl : is-of-hlevel n A} → n-Type ℓ n
 el! A {hl} .n-Type.typ = A
 el! A {hl} .n-Type.is-tr = hl
 
 prop-extₑ!
-  : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
-    {@(tactic hlevel-tactic-worker) aprop : is-of-hlevel 1 A}
+  : {@(tactic hlevel-tactic-worker) aprop : is-of-hlevel 1 A}
     {@(tactic hlevel-tactic-worker) bprop : is-of-hlevel 1 B}
   → (A → B) → (B → A)
   → A ≃ B
 prop-extₑ! {aprop} {bprop} = prop-extₑ aprop bprop
 
 Σ-prop-path!
-  : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′}
+  : {B : A → Type ℓ′}
   → {@(tactic hlevel-tactic-worker) bxprop : ∀ x → is-of-hlevel 1 (B x)}
   → {x y : Σ A B}
   → x .fst ＝ y .fst
@@ -625,7 +631,7 @@ prop-extₑ! {aprop} {bprop} = prop-extₑ aprop bprop
 Σ-prop-path! {bxprop} = Σ-prop-path bxprop
 
 prop!
-  : ∀ {ℓ} {A : I → Type ℓ} {@(tactic hlevel-tactic-worker) aip : is-of-hlevel 1 (A i0)}
+  : {A : I → Type ℓ} {@(tactic hlevel-tactic-worker) aip : is-of-hlevel 1 (A i0)}
   → {x : A i0} {y : A i1}
   → PathP (λ i → A i) x y
 prop! {A} {aip} {x} {y} =
@@ -639,36 +645,36 @@ open hlevel-projection
 -- defined in the dependencies of this module.
 
 instance
-  decomp-lift : ∀ {ℓ ℓ′} {T : Type ℓ} → hlevel-decomposition (Lift ℓ′ T)
+  decomp-lift : {T : Type ℓ} → hlevel-decomposition (Lift ℓ′ T)
   decomp-lift = decomp (quote Lift-is-of-hlevel) (`level ∷ `search ∷ [])
 
-  -- -- Non-dependent Π and Σ for readability first:
+  -- Non-dependent Π and Σ for readability first:
 
-  decomp-fun : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′} → hlevel-decomposition (A → B)
+  decomp-fun : hlevel-decomposition (A → B)
   decomp-fun = decomp (quote fun-is-of-hlevel) (`level ∷ `search ∷ [])
 
-  decomp-prod : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′} → hlevel-decomposition (A × B)
+  decomp-prod : hlevel-decomposition (A × B)
   decomp-prod = decomp (quote ×-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [])
 
   -- Dependent type formers:
   decomp-pi³
-    : ∀ {ℓa ℓb ℓc ℓd} {A : Type ℓa} {B : A → Type ℓb} {C : ∀ x (y : B x) → Type ℓc}
+    : {B : A → Type ℓb} {C : ∀ x (y : B x) → Type ℓc}
     → {D : ∀ x y (z : C x y) → Type ℓd}
     → hlevel-decomposition (∀ a b c → D a b c)
   decomp-pi³ = decomp (quote Π₃-is-of-hlevel) (`level ∷ `search-under 3 ∷ [])
 
   decomp-pi²
-    : ∀ {ℓa ℓb ℓc} {A : Type ℓa} {B : A → Type ℓb} {C : ∀ x (y : B x) → Type ℓc}
+    : {B : A → Type ℓb} {C : ∀ x (y : B x) → Type ℓc}
     → hlevel-decomposition (∀ a b → C a b)
   decomp-pi² = decomp (quote Π₂-is-of-hlevel) (`level ∷ `search-under 2 ∷ [])
 
-  decomp-pi : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′} → hlevel-decomposition (∀ a → B a)
+  decomp-pi : {B : A → Type ℓ′} → hlevel-decomposition (∀ a → B a)
   decomp-pi = decomp (quote Π-is-of-hlevel) (`level ∷ `search-under 1 ∷ [])
 
-  decomp-impl-pi : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′} → hlevel-decomposition (∀ {a} → B a)
+  decomp-impl-pi : {B : A → Type ℓ′} → hlevel-decomposition (∀ {a} → B a)
   decomp-impl-pi = decomp (quote Π-is-of-hlevel-implicit) (`level ∷ `search-under 1 ∷ [])
 
-  decomp-sigma : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′} → hlevel-decomposition (Σ A B)
+  decomp-sigma : {B : A → Type ℓ′} → hlevel-decomposition (Σ A B)
   decomp-sigma = decomp (quote Σ-is-of-hlevel) (`level ∷ `search ∷ `search-under 1 ∷ [])
 
   -- Path decomposition rules we have in scope. Note the use of
@@ -676,10 +682,10 @@ instance
   -- solving the same goals --- but generally only one will be
   -- applicable. That way we don't have to juggle h-levels quite as
   -- much.
-  decomp-path′ : ∀ {ℓ} {A : Type ℓ} {a b : A} → hlevel-decomposition (a ＝ b)
+  decomp-path′ : {a b : A} → hlevel-decomposition (a ＝ b)
   decomp-path′ = decomp (quote path-is-of-hlevel′) (`level ∷ `search ∷ `meta ∷ `meta ∷ [])
 
-  decomp-path : ∀ {ℓ} {A : Type ℓ} {a b : A} → hlevel-decomposition (a ＝ b)
+  decomp-path : {a b : A} → hlevel-decomposition (a ＝ b)
   decomp-path = decomp (quote path-is-of-hlevel) (`level ∷ `search ∷ [])
 
   -- doesn't work as _≃_ normalizes to Σ :-(
@@ -692,13 +698,13 @@ instance
   -- decomp-equiv-right : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
   -- decomp-equiv-right = decomp (quote ≃-is-of-hlevel-right-suc) (`level-minus 1 ∷ `search ∷ [])
 
-  decomp-univalence : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ＝ B)
+  decomp-univalence : {A B : Type ℓ} → hlevel-decomposition (A ＝ B)
   decomp-univalence = decomp (quote ＝-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )
 
   -- This one really ought to work with instance selection only, but
   -- Agda has trouble with the (1 + k + n) level in H-Level-n-Type. The
   -- decomposition here is a bit more flexible.
-  decomp-ntype : ∀ {ℓ} {n} → hlevel-decomposition (n-Type ℓ n)
+  decomp-ntype : hlevel-decomposition (n-Type ℓ n)
   decomp-ntype = decomp (quote n-Type-is-of-hlevel) (`level-minus 1 ∷ [])
 
   hlevel-proj-n-type : hlevel-projection (quote n-Type.typ)
@@ -713,7 +719,7 @@ instance
 
 -- Usage
 private
-  module _ {ℓ} {A : n-Type ℓ 2} {B : ⌞ A ⌟ → n-Type ℓ 3} where
+  module _ {A : n-Type ℓ 2} {B : ⌞ A ⌟ → n-Type ℓ 3} where
     some-def = ⌞ A ⌟
     _ : is-of-hlevel 2 (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
     _ = hlevel!

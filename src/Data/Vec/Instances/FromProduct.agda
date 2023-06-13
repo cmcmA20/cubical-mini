@@ -2,6 +2,7 @@
 module Data.Vec.Instances.FromProduct where
 
 open import Foundations.Base
+
 open import Meta.FromProduct
 
 open import Data.Vec.Base

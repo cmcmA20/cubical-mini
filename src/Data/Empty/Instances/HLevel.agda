@@ -2,6 +2,7 @@
 module Data.Empty.Instances.HLevel where
 
 open import Foundations.Base
+
 open import Meta.HLevel
 
 open import Data.Empty.Base

@@ -111,6 +111,10 @@ When preparing a PR here are some general guidelines:
   In particular, avoid importing useless files or useless renaming
   and try to group them by folder like `Foundations` or `Data`
 
+  If possible, group imports in the following order: `Foundations`, `Meta`,
+  `Structures`, `Correspondences`, `Data`, `Functions`, `Containers`,
+  `Truncation`. Inside the group use the lexicographical order.
+
 - Avoid `public` imports, except in modules that are specifically meant
   to collect and re-export results from several modules.
   Those mostly reside in `Foundations` and `Meta`.
@@ -135,6 +139,11 @@ When preparing a PR here are some general guidelines:
   properties. If you see that your "data type" is quite general, admits a rich
   theory (e.g. `Category` or any algebraic stuff) and is applicable to various
   other concepts, it should be moved to the top-level.
+
+  For every (inductive) data type check that it has a recursor (`rec`),
+  dependent eliminator (`elim`), universal property for mapping out
+  (`universal`), path space characterization (`module path-code`) and useful
+  instances.
 
 - Erase type indices if it's a well-known optimization. If needed, create
   multiple representations of the same type but with different runtime

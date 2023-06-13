@@ -2,6 +2,7 @@
 module Data.Product.Base where
 
 open import Foundations.Base
+
 open import Data.Nat.Base
 
 private variable

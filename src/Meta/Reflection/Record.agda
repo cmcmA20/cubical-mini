@@ -4,12 +4,12 @@ module Meta.Reflection.Record where
 open import Foundations.Base
 open import Foundations.Isomorphism public
 
+open import Meta.Reflection.Base
+
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.Nat.Instances.Number
 open import Data.String.Instances.IsString
-
-open import Meta.Reflection.Base
 
 field-names→sigma : ∀ {ℓ} {A : Type ℓ} → List A → Term
 field-names→sigma [] = def (quote ⊤) []

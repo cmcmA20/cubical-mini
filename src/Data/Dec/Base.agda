@@ -4,10 +4,10 @@ module Data.Dec.Base where
 open import Foundations.Base
 open import Foundations.Erased
 
+open import Correspondences.Nullary.Negation public
+
 open import Data.Bool.Base public
 import      Data.Empty.Base as ⊥
-
-open import Structures.Negation public
 
 private variable
   ℓ ℓ′ : Level

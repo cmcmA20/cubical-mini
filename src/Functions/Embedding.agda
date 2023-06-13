@@ -6,9 +6,9 @@ open import Foundations.HLevel
 open import Foundations.Sigma
 open import Foundations.Univalence
 
-open import Functions.Equiv.Fibrewise
-
 open import Structures.n-Type
+
+open import Functions.Equiv.Fibrewise
 
 private variable
   ℓ ℓ′ ℓ″ : Level

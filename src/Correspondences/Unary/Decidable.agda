@@ -3,11 +3,11 @@ module Correspondences.Unary.Decidable where
 
 open import Foundations.Base
 
-open import Data.Dec.Base
+open import Structures.n-Type
 
 open import Correspondences.Base public
 
-open import Structures.n-Type
+open import Data.Dec.Base
 
 private variable
   ℓ ℓ′ : Level

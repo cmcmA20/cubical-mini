@@ -2,6 +2,7 @@
 module Data.List.Instances.Traverse where
 
 open import Foundations.Base
+
 open import Meta.Traverse
 
 open import Data.List.Base public

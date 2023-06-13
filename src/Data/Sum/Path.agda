@@ -4,13 +4,14 @@ module Data.Sum.Path where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Data.Empty.Base
-open import Data.Empty.Instances.HLevel
-
 open import Meta.Reflection.HLevel
 
-open import Structures.Negation
 open import Structures.IdentitySystem.Base
+
+open import Correspondences.Nullary.Negation
+
+open import Data.Empty.Base
+open import Data.Empty.Instances.HLevel
 
 open import Data.Sum.Base public
 

@@ -5,13 +5,12 @@ open import Foundations.Base
 open import Foundations.Sigma
 open import Foundations.Erased
 
-open import Structures.FinSet
-
 open import Meta.Discrete
 open import Meta.Finite
 open import Meta.Reflection.HLevel
 
 open import Structures.n-Type
+open import Structures.FinSet
 
 open import Data.Bool.Base public
 open import Data.Dec.Base

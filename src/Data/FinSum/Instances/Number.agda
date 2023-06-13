@@ -2,6 +2,7 @@
 module Data.FinSum.Instances.Number where
 
 open import Foundations.Base
+
 open import Meta.Literals public
 
 open import Data.Nat.Base

@@ -2,6 +2,7 @@
 module Data.Vec.Instances.Traverse where
 
 open import Foundations.Base
+
 open import Meta.Traverse
 
 open import Data.Nat.Base

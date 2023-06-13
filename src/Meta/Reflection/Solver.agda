@@ -3,13 +3,13 @@ module Meta.Reflection.Solver where
 
 open import Foundations.Base
 
+open import Meta.Reflection.Base
+open import Meta.Reflection.Variables
+
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.String.Instances.IsString
-
-open import Meta.Reflection.Base
-open import Meta.Reflection.Variables
 
 private variable
   ℓ : Level

@@ -2,6 +2,7 @@
 module Data.List.Instances.Idiom where
 
 open import Foundations.Base
+
 open import Meta.Idiom
 
 open import Data.List.Base public

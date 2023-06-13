@@ -2,6 +2,7 @@
 module Meta.Show where
 
 open import Foundations.Base
+
 open import Data.Nat.Base
 open import Data.String.Base
 

@@ -3,11 +3,11 @@ module Data.Vec.Correspondences.Unary.All where
 
 open import Foundations.Base
 
-open import Correspondences.Base
-open import Correspondences.Unary.Decidable
-
 open import Structures.Base
-open import Structures.DoubleNegation
+
+open import Correspondences.Base
+open import Correspondences.Nullary.DoubleNegation
+open import Correspondences.Unary.Decidable
 
 open import Data.Dec as Dec
 open import Data.Vec.Base

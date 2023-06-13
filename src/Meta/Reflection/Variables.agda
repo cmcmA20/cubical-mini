@@ -3,14 +3,14 @@ module Meta.Reflection.Variables where
 
 open import Foundations.Base
 
+open import Meta.Reflection.Base
+
 open import Data.Bool.Base
 open import Data.Fin.Base
 open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Vec.Base
-
-open import Meta.Reflection.Base
 
 --------------------------------------------------------------------------------
 -- Variable Binding for Terms

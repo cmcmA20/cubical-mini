@@ -6,10 +6,10 @@ open import Foundations.Equiv
 
 open import Meta.Reflection.HLevel
 
+open import Correspondences.Nullary.Negation
+
 open import Data.Sum.Path
 open import Data.Unit.Instances.HLevel
-
-open import Structures.Negation
 
 open import Data.Maybe.Base public
 

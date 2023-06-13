@@ -2,9 +2,11 @@
 module Correspondences.Base where
 
 open import Foundations.Base
+
+open import Structures.n-Type
+
 open import Data.Nat.Base
 open import Data.Product.Base
-open import Structures.n-Type
 
 Corr
   : (n : ℕ) (ℓ′ : Level)

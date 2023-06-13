@@ -1,14 +1,13 @@
 {-# OPTIONS --safe #-}
-module Structures.Connected where
+module Correspondences.Nullary.Connected where
 
 open import Foundations.Base
-open import Foundations.Equiv
 
 open import Meta.Reflection.HLevel
 
-open import Truncation.Propositional
-
 open import Structures.Base
+
+open import Truncation.Propositional
 
 private variable
   ℓ : Level

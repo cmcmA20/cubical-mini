@@ -2,6 +2,7 @@
 module Truncation.Propositional.Instances.Bind where
 
 open import Foundations.Base
+
 open import Meta.Bind
 
 open import Truncation.Propositional.Base

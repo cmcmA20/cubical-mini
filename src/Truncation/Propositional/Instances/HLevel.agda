@@ -2,6 +2,7 @@
 module Truncation.Propositional.Instances.HLevel where
 
 open import Foundations.Base
+
 open import Meta.HLevel
 
 open import Truncation.Propositional.Base
