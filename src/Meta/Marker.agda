@@ -1,9 +1,9 @@
 {-# OPTIONS --safe #-}
-module Meta.Reflection.Marker where
+module Meta.Marker where
 
 open import Foundations.Base
 
-open import Meta.Reflection.Base
+open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base

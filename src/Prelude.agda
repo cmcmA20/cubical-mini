@@ -22,8 +22,6 @@ open ∥-∥₁ public
   using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; image)
 
 
--- Automation
-
 open import Meta.Alt      public
 open import Meta.Bind     public
 open import Meta.Foldable public
@@ -34,13 +32,11 @@ open import Meta.FromProduct public
 open import Meta.Literals    public
 open import Meta.Show        public
 
-open import Meta.Discrete   public
-open import Meta.Finite     public
-open import Meta.HLevel     public
+open import Meta.Discrete public
+open import Meta.Finite   public
+open import Meta.HLevel   public
+
+open import Meta.Marker     public
+open import Meta.Record     public
 open import Meta.SIP        public
 open import Meta.Underlying public
-
-open import Meta.Reflection.HLevel public
-open import Meta.Reflection.Marker public
-open import Meta.Reflection.Record public
-open import Meta.Reflection.SIP    public

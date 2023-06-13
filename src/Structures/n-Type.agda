@@ -7,8 +7,8 @@ open import Foundations.HLevel
 open import Foundations.Sigma
 open import Foundations.Univalence.Base
 
-open import Meta.HLevel     public
-open import Meta.Underlying public
+open import Meta.HLevel.Base public
+open import Meta.Underlying  public
 
 record n-Type ℓ n : Type (ℓsuc ℓ) where
   no-eta-equality

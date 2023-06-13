@@ -6,10 +6,10 @@ open import Foundations.Equiv public
 open import Foundations.Sigma
 open import Foundations.Pi
 
+open import Meta.Bind
 open import Meta.Discrete
 open import Meta.HLevel
 open import Meta.Idiom
-open import Meta.Bind
 
 open import Data.Empty.Base
 open import Data.Nat
@@ -38,7 +38,7 @@ private variable
 
 Finite→is-set : Finite A → is-set A
 Finite→is-set (fin f) =
-  ∥-∥₁.rec (is-of-hlevel-is-prop 2) (λ e → is-of-hlevel-≃ 2 e (hlevel 2)) f
+  ∥-∥₁.rec (is-of-hlevel-is-prop 2) (λ e → is-of-hlevel-≃ 2 e hlevel!) f
 
 Finite-choice
   : {P : A → Type ℓ′}

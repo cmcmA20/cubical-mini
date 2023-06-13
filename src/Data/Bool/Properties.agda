@@ -7,7 +7,7 @@ open import Foundations.Erased
 
 open import Meta.Discrete
 open import Meta.Finite
-open import Meta.Reflection.HLevel
+open import Meta.HLevel
 
 open import Structures.n-Type
 open import Structures.FinSet

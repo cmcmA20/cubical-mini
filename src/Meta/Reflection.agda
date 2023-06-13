@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Meta.Reflection.Base where
+module Meta.Reflection where
 
 open import Foundations.Base
 

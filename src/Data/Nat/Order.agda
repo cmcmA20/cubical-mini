@@ -3,7 +3,7 @@ module Data.Nat.Order where
 
 open import Foundations.Base
 
-open import Meta.HLevel
+open import Meta.HLevel.Base
 
 open import Data.Dec.Base
 open import Data.Empty.Base

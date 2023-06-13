@@ -1,10 +1,10 @@
 {-# OPTIONS --safe #-}
-module Meta.Reflection.Record where
+module Meta.Record where
 
 open import Foundations.Base
 open import Foundations.Isomorphism public
 
-open import Meta.Reflection.Base
+open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base

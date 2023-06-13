@@ -3,7 +3,7 @@ module Data.List.Instances.HLevel where
 
 open import Foundations.Base
 
-open import Meta.Reflection.HLevel
+open import Meta.HLevel
 
 open import Data.List.Base
 open import Data.List.Path public

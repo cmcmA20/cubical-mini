@@ -1,10 +1,10 @@
 {-# OPTIONS --safe #-}
-module Meta.Reflection.SIP where
+module Meta.SIP.Reflection where
 
 open import Foundations.Base
 
-open import Meta.Reflection.Base
-open import Meta.SIP
+open import Meta.Reflection
+open import Meta.SIP.Base
 
 open import Data.List.Base
 open import Data.Nat.Base

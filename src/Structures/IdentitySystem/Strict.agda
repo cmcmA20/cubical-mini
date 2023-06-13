@@ -4,7 +4,7 @@ module Structures.IdentitySystem.Strict where
 open import Foundations.Base
 open import Foundations.HLevel
 
-open import Meta.HLevel
+open import Meta.HLevel.Base
 
 open import Structures.IdentitySystem.Base
 

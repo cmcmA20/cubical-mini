@@ -4,7 +4,7 @@ module Data.Bool.Instances.Discrete where
 open import Foundations.Base
 
 open import Meta.Discrete
-open import Meta.Reflection.HLevel
+open import Meta.HLevel
 
 open import Data.Id
 

@@ -3,7 +3,7 @@ module Correspondences.Nullary.Connected where
 
 open import Foundations.Base
 
-open import Meta.Reflection.HLevel
+open import Meta.HLevel
 
 open import Structures.Base
 

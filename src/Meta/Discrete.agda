@@ -3,7 +3,7 @@ module Meta.Discrete where
 
 open import Foundations.Base
 
-open import Meta.HLevel
+open import Meta.HLevel.Base
 
 open import Correspondences.Nullary.Discrete public
 

@@ -7,7 +7,7 @@ open import Foundations.Path.Groupoid
 open import Foundations.Sigma
 open import Foundations.Univalence.Base
 
-open import Meta.Reflection.Marker
+open import Meta.Marker
 
 private variable
   ℓ₁ ℓ₂ : Level

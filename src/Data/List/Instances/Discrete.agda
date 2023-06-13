@@ -4,7 +4,7 @@ module Data.List.Instances.Discrete where
 open import Foundations.Base
 
 open import Meta.Discrete
-open import Meta.Reflection.HLevel
+open import Meta.HLevel
 
 import Data.Dec.Base as Dec
 open import Data.List.Path

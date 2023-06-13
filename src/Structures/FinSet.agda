@@ -6,9 +6,9 @@ open import Foundations.Sigma
 
 open import Meta.Idiom
 open import Meta.Discrete
-open import Meta.Reflection.HLevel
-open import Meta.Finite            public
-open import Meta.Underlying        public
+open import Meta.HLevel
+open import Meta.Finite     public
+open import Meta.Underlying public
 
 open import Structures.n-Type
 
@@ -35,8 +35,7 @@ Fin-ordered : Type ℓ → Type ℓ
 Fin-ordered A = Σ[ n ꞉ ℕ ] A ≃ Fin n
 
 fin-ordered-is-set : is-set (Fin-ordered A)
-fin-ordered-is-set =
-  Σ-is-of-hlevel 2 hlevel! (λ _ → ≃-is-of-hlevel-right-suc 1 hlevel!)
+fin-ordered-is-set = hlevel!
 
 is-fin-set : Type ℓ → Type ℓ
 is-fin-set A = Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁

@@ -1,6 +1,6 @@
 {-# OPTIONS --safe #-}
 -- -vtactic.hlevel:20 -vtc.def:10
-module Meta.Reflection.HLevel where
+module Meta.HLevel.Reflection where
 
 open import Foundations.Base
 open import Foundations.Equiv
@@ -9,8 +9,9 @@ open import Foundations.Pi
 open import Foundations.Sigma
 
 open import Meta.Foldable
-open import Meta.HLevel          public
-open import Meta.Reflection.Base
+open import Meta.FromProduct
+open import Meta.HLevel.Base public
+open import Meta.Reflection
 
 open import Structures.n-Type
 
@@ -18,6 +19,7 @@ open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Operations
 open import Data.List.Instances.Foldable
+open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
 open import Data.Maybe.Base
 open import Data.Nat.Base
@@ -152,8 +154,12 @@ private
   -- A list of names which we should not reduce while trying to invert
   -- an application of is-hlevel/is-prop/is-set into an 'underlying
   -- type' and level arguments.
-  hlevel-types : List Name
-  hlevel-types = quote is-of-hlevel ∷ quote is-prop ∷ quote is-set ∷ []
+  atoms : List Name
+  atoms = [ quote is-of-hlevel
+          , quote is-prop
+          , quote is-set
+          , quote _≃_
+          ]
 
   pattern nat-lit n =
     def (quote Number.fromNat) (_ ∷ _ ∷ _ ∷ lit (nat n) v∷ _)
@@ -168,7 +174,7 @@ private
   -- decompose-is-hlevel′.
   decompose-is-hlevel : Term → TC (Term × Term)
   decompose-is-hlevel goal = do
-    ty ← withReduceDefs (false , hlevel-types) $ inferType goal >>= reduce
+    ty ← withReduceDefs (false , atoms) $ inferType goal >>= reduce
     decompose-is-hlevel′ ty
 
   decompose-is-hlevel′ ty = do
@@ -366,7 +372,7 @@ from the wanted level (k + n) until is-of-hlevel-+ n (sucᵏ′ n) w works.
 
         nondet (eff List) instances λ a → do
           projection ← unquoteTC {A = hlevel-projection qn} a
-          ty ← withReduceDefs (false , hlevel-types) (inferType goal >>= reduce)
+          ty ← withReduceDefs (false , atoms) (inferType goal >>= reduce)
           debugPrint "tactic.hlevel" 20 $
             "Outer type: " ∷ termErr ty ∷ []
           treat-as-n-type projection goal >> unify solved a
@@ -563,7 +569,7 @@ from the wanted level (k + n) until is-of-hlevel-+ n (sucᵏ′ n) w works.
     → Term → TC (Term × Term × (TC A → TC A) × (Term → Term))
   decompose-is-hlevel-top goal =
     do
-      ty ← withReduceDefs (false , hlevel-types) $
+      ty ← withReduceDefs (false , atoms) $
         (inferType goal >>= reduce) >>= wait-just-a-bit
       go ty
     where
@@ -579,10 +585,11 @@ from the wanted level (k + n) until is-of-hlevel-+ n (sucᵏ′ n) w works.
 -- top-level goal type and enters the search loop.
 hlevel-tactic-worker : Term → TC ⊤
 hlevel-tactic-worker goal = do
-  ty ← withReduceDefs (false , hlevel-types) $ inferType goal >>= reduce
+  ty ← withReduceDefs (false , atoms) $ inferType goal >>= reduce
+  debugPrint "tactic.hlevel" 10 $ "Target type: " ∷ termErr ty ∷ []
   (lv , ty , enter , leave) ← decompose-is-hlevel-top goal <|>
     typeError
-      ( "hlevel tactic: goal type is not of the form ``is-hlevel A n'':\n"
+      ( "Goal type is not of the form ``is-hlevel A n'':\n"
       ∷ termErr ty
       ∷ [])
 
@@ -604,7 +611,9 @@ private variable
   ℓ ℓ′ ℓa ℓb ℓc ℓd : Level
   T : Type ℓ
   A : Type ℓa
-  B : Type ℓb
+  B : A → Type ℓb
+  C : (a : A) (b : B a) → Type ℓc
+  D : (a : A) (b : B a) (c : C a b) → Type ℓd
   n : HLevel
 
 -- In addition to using the macro as a.. well, macro, it can be used as
@@ -616,15 +625,15 @@ el! A {hl} .n-Type.typ = A
 el! A {hl} .n-Type.is-tr = hl
 
 prop-extₑ!
-  : {@(tactic hlevel-tactic-worker) aprop : is-of-hlevel 1 A}
+  : {B : Type ℓb}
+    {@(tactic hlevel-tactic-worker) aprop : is-of-hlevel 1 A}
     {@(tactic hlevel-tactic-worker) bprop : is-of-hlevel 1 B}
   → (A → B) → (B → A)
   → A ≃ B
 prop-extₑ! {aprop} {bprop} = prop-extₑ aprop bprop
 
 Σ-prop-path!
-  : {B : A → Type ℓ′}
-  → {@(tactic hlevel-tactic-worker) bxprop : ∀ x → is-of-hlevel 1 (B x)}
+  : {@(tactic hlevel-tactic-worker) bxprop : ∀ x → is-of-hlevel 1 (B x)}
   → {x y : Σ A B}
   → x .fst ＝ y .fst
   → x ＝ y
@@ -633,7 +642,7 @@ prop-extₑ! {aprop} {bprop} = prop-extₑ aprop bprop
 prop!
   : {A : I → Type ℓ} {@(tactic hlevel-tactic-worker) aip : is-of-hlevel 1 (A i0)}
   → {x : A i0} {y : A i1}
-  → PathP (λ i → A i) x y
+  → PathP A x y
 prop! {A} {aip} {x} {y} =
   is-prop→pathP (λ i → coe0→i (λ j → is-prop (A j)) i aip) x y
 
@@ -645,36 +654,39 @@ open hlevel-projection
 -- defined in the dependencies of this module.
 
 instance
-  decomp-lift : {T : Type ℓ} → hlevel-decomposition (Lift ℓ′ T)
+  decomp-lift : hlevel-decomposition (Lift ℓ′ A)
   decomp-lift = decomp (quote Lift-is-of-hlevel) (`level ∷ `search ∷ [])
 
-  -- Non-dependent Π and Σ for readability first:
-
-  decomp-fun : hlevel-decomposition (A → B)
+  -- Non-dependent Π and Σ for readability (lol) first
+  decomp-fun : {B : Type ℓb} → hlevel-decomposition (A → B)
   decomp-fun = decomp (quote fun-is-of-hlevel) (`level ∷ `search ∷ [])
 
-  decomp-prod : hlevel-decomposition (A × B)
+  decomp-prod : {B : Type ℓb} → hlevel-decomposition (A × B)
   decomp-prod = decomp (quote ×-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [])
 
   -- Dependent type formers:
-  decomp-pi³
-    : {B : A → Type ℓb} {C : ∀ x (y : B x) → Type ℓc}
-    → {D : ∀ x y (z : C x y) → Type ℓd}
-    → hlevel-decomposition (∀ a b c → D a b c)
+  decomp-pi³ : hlevel-decomposition (∀ a b c → D a b c)
   decomp-pi³ = decomp (quote Π₃-is-of-hlevel) (`level ∷ `search-under 3 ∷ [])
 
-  decomp-pi²
-    : {B : A → Type ℓb} {C : ∀ x (y : B x) → Type ℓc}
-    → hlevel-decomposition (∀ a b → C a b)
+  decomp-pi² : hlevel-decomposition (∀ a b → C a b)
   decomp-pi² = decomp (quote Π₂-is-of-hlevel) (`level ∷ `search-under 2 ∷ [])
 
-  decomp-pi : {B : A → Type ℓ′} → hlevel-decomposition (∀ a → B a)
+  decomp-pi : hlevel-decomposition (∀ a → B a)
   decomp-pi = decomp (quote Π-is-of-hlevel) (`level ∷ `search-under 1 ∷ [])
 
-  decomp-impl-pi : {B : A → Type ℓ′} → hlevel-decomposition (∀ {a} → B a)
+  decomp-impl-pi : hlevel-decomposition (∀ {a} → B a)
   decomp-impl-pi = decomp (quote Π-is-of-hlevel-implicit) (`level ∷ `search-under 1 ∷ [])
 
-  decomp-sigma : {B : A → Type ℓ′} → hlevel-decomposition (Σ A B)
+  decomp-equiv-right : {B : Type ℓb} → hlevel-decomposition (A ≃ B)
+  decomp-equiv-right = decomp (quote ≃-is-of-hlevel-right-suc) (`level-minus 1 ∷ `search ∷ [])
+
+  decomp-equiv-left : {B : Type ℓb} → hlevel-decomposition (A ≃ B)
+  decomp-equiv-left = decomp (quote ≃-is-of-hlevel-left-suc) (`level-minus 1 ∷ `search ∷ [])
+
+  decomp-equiv : {B : Type ℓb} → hlevel-decomposition (A ≃ B)
+  decomp-equiv = decomp (quote ≃-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )
+
+  decomp-sigma : hlevel-decomposition (Σ A B)
   decomp-sigma = decomp (quote Σ-is-of-hlevel) (`level ∷ `search ∷ `search-under 1 ∷ [])
 
   -- Path decomposition rules we have in scope. Note the use of
@@ -687,16 +699,6 @@ instance
 
   decomp-path : {a b : A} → hlevel-decomposition (a ＝ b)
   decomp-path = decomp (quote path-is-of-hlevel) (`level ∷ `search ∷ [])
-
-  -- doesn't work as _≃_ normalizes to Σ :-(
-  -- decomp-equiv : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
-  -- decomp-equiv = decomp (quote ≃-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )
-
-  -- decomp-equiv-left : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
-  -- decomp-equiv-left = decomp (quote ≃-is-of-hlevel-left-suc) (`level-minus 1 ∷ `search ∷ [])
-
-  -- decomp-equiv-right : ∀ {ℓ} {A B : Type ℓ} → hlevel-decomposition (A ≃ B)
-  -- decomp-equiv-right = decomp (quote ≃-is-of-hlevel-right-suc) (`level-minus 1 ∷ `search ∷ [])
 
   decomp-univalence : {A B : Type ℓ} → hlevel-decomposition (A ＝ B)
   decomp-univalence = decomp (quote ＝-is-of-hlevel) (`level ∷ `search ∷ `search ∷ [] )

@@ -1,10 +1,10 @@
 {-# OPTIONS --safe #-}
-module Meta.Reflection.Solver where
+module Meta.Solver where
 
 open import Foundations.Base
 
-open import Meta.Reflection.Base
-open import Meta.Reflection.Variables
+open import Meta.Variables
+open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base
