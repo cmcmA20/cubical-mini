@@ -3,17 +3,19 @@
 <a id="24" class="Keyword">module</a> <a id="31" href="Data.Dec.Instances.HLevel.html" class="Module">Data.Dec.Instances.HLevel</a> <a id="57" class="Keyword">where</a>
 
 <a id="64" class="Keyword">open</a> <a id="69" class="Keyword">import</a> <a id="76" href="Foundations.Base.html" class="Module">Foundations.Base</a>
-<a id="93" class="Keyword">open</a> <a id="98" class="Keyword">import</a> <a id="105" href="Data.List.Base.html" class="Module">Data.List.Base</a>
-<a id="120" class="Keyword">open</a> <a id="125" class="Keyword">import</a> <a id="132" href="Meta.Reflection.HLevel.html" class="Module">Meta.Reflection.HLevel</a>
 
-<a id="156" class="Keyword">open</a> <a id="161" class="Keyword">import</a> <a id="168" href="Data.Dec.Path.html" class="Module">Data.Dec.Path</a>
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Meta.HLevel.html" class="Module">Meta.HLevel</a>
 
-<a id="183" class="Keyword">private</a> <a id="191" class="Keyword">variable</a>
-  <a id="202" href="Data.Dec.Instances.HLevel.html#202" class="Generalizable">ℓ</a> <a id="204" class="Symbol">:</a> <a id="206" href="Agda.Primitive.html#742" class="Postulate">Level</a>
-  <a id="214" href="Data.Dec.Instances.HLevel.html#214" class="Generalizable">A</a> <a id="216" class="Symbol">:</a> <a id="218" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="223" href="Data.Dec.Instances.HLevel.html#202" class="Generalizable">ℓ</a>
-  <a id="227" href="Data.Dec.Instances.HLevel.html#227" class="Generalizable">n</a> <a id="229" class="Symbol">:</a> <a id="231" href="Foundations.HLevel.Base.html#211" class="Function">HLevel</a>
+<a id="119" class="Keyword">open</a> <a id="124" class="Keyword">import</a> <a id="131" href="Data.List.Base.html" class="Module">Data.List.Base</a>
 
-<a id="239" class="Keyword">instance</a>
-  <a id="decomp-dec"></a><a id="250" href="Data.Dec.Instances.HLevel.html#250" class="Function">decomp-dec</a> <a id="261" class="Symbol">:</a> <a id="263" href="Meta.Reflection.HLevel.html#3728" class="Datatype">hlevel-decomposition</a> <a id="284" class="Symbol">(</a><a id="285" href="Data.Dec.Base.html#1327" class="Record">Dec</a> <a id="289" href="Data.Dec.Instances.HLevel.html#214" class="Generalizable">A</a><a id="290" class="Symbol">)</a>
-  <a id="294" href="Data.Dec.Instances.HLevel.html#250" class="Function">decomp-dec</a> <a id="305" class="Symbol">=</a> <a id="307" href="Meta.Reflection.HLevel.html#3781" class="InductiveConstructor">decomp</a> <a id="314" class="Symbol">(</a><a id="315" class="Keyword">quote</a> <a id="321" href="Data.Dec.Path.html#727" class="Function">dec-is-of-hlevel</a><a id="337" class="Symbol">)</a> <a id="339" class="Symbol">(</a><a id="340" href="Meta.Reflection.HLevel.html#3587" class="InductiveConstructor">`level</a> <a id="347" href="Agda.Builtin.List.html#199" class="InductiveConstructor Operator">∷</a> <a id="349" href="Meta.Reflection.HLevel.html#3553" class="InductiveConstructor">`search</a> <a id="357" href="Agda.Builtin.List.html#199" class="InductiveConstructor Operator">∷</a> <a id="359" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a><a id="361" class="Symbol">)</a>
+<a id="147" class="Keyword">open</a> <a id="152" class="Keyword">import</a> <a id="159" href="Data.Dec.Path.html" class="Module">Data.Dec.Path</a>
+
+<a id="174" class="Keyword">private</a> <a id="182" class="Keyword">variable</a>
+  <a id="193" href="Data.Dec.Instances.HLevel.html#193" class="Generalizable">ℓ</a> <a id="195" class="Symbol">:</a> <a id="197" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="205" href="Data.Dec.Instances.HLevel.html#205" class="Generalizable">A</a> <a id="207" class="Symbol">:</a> <a id="209" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="214" href="Data.Dec.Instances.HLevel.html#193" class="Generalizable">ℓ</a>
+  <a id="218" href="Data.Dec.Instances.HLevel.html#218" class="Generalizable">n</a> <a id="220" class="Symbol">:</a> <a id="222" href="Foundations.HLevel.Base.html#211" class="Function">HLevel</a>
+
+<a id="230" class="Keyword">instance</a>
+  <a id="decomp-dec"></a><a id="241" href="Data.Dec.Instances.HLevel.html#241" class="Function">decomp-dec</a> <a id="252" class="Symbol">:</a> <a id="254" href="Meta.HLevel.Reflection.html#3792" class="Datatype">hlevel-decomposition</a> <a id="275" class="Symbol">(</a><a id="276" href="Data.Dec.Base.html#1340" class="Record">Dec</a> <a id="280" href="Data.Dec.Instances.HLevel.html#205" class="Generalizable">A</a><a id="281" class="Symbol">)</a>
+  <a id="285" href="Data.Dec.Instances.HLevel.html#241" class="Function">decomp-dec</a> <a id="296" class="Symbol">=</a> <a id="298" href="Meta.HLevel.Reflection.html#3845" class="InductiveConstructor">decomp</a> <a id="305" class="Symbol">(</a><a id="306" class="Keyword">quote</a> <a id="312" href="Data.Dec.Path.html#716" class="Function">dec-is-of-hlevel</a><a id="328" class="Symbol">)</a> <a id="330" class="Symbol">(</a><a id="331" href="Meta.HLevel.Reflection.html#3651" class="InductiveConstructor">`level</a> <a id="338" href="Agda.Builtin.List.html#199" class="InductiveConstructor Operator">∷</a> <a id="340" href="Meta.HLevel.Reflection.html#3617" class="InductiveConstructor">`search</a> <a id="348" href="Agda.Builtin.List.html#199" class="InductiveConstructor Operator">∷</a> <a id="350" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a><a id="352" class="Symbol">)</a>
 </pre></body></html>
