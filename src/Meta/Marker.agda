@@ -93,7 +93,6 @@ macro
     unify goal $
       def (quote ap) (lam visible (abs "x" r′) v∷ path′ v∷ [])
 
-
 -- Usage
 module _ {ℓ} {A : Type ℓ} {x y : A} {p : x ＝ y} {f : A → (A → A) → A} where
   private

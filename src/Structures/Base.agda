@@ -130,7 +130,7 @@ module _
       σ .is-hom (A , s) (B , t) f
         ≃⟨ univ f ⟩
       ＜ s ／ (λ i → S (ua f i)) ＼ t ＞
-        ≃⟨ Σ-contract (λ x → pathP-is-of-hlevel 0 (b , (axioms-prop b))) ₑ⁻¹ ⟩
+        ≃⟨ Σ-contract-snd (λ x → pathP-is-of-hlevel 0 (b , (axioms-prop b))) ₑ⁻¹ ⟩
       (Σ[ p ꞉ ＜ s ／ (λ i → S (ua f i)) ＼ t ＞ ] ＜ a ／ (λ i → axioms (ua f i) (p i)) ＼ b ＞)
         ≃⟨ iso→equiv Σ-pathP-iso ⟩
       _

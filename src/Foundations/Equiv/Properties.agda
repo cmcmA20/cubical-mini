@@ -98,7 +98,7 @@ prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
 
 module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
 
-lift-equiv : Lift ℓ A ≃ A
+lift-equiv : Lift ℓ′ A ≃ A
 lift-equiv = iso→equiv 𝔯 where
   𝔯 : Iso _ _
   𝔯 .fst = lower

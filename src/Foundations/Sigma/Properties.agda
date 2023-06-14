@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv.Base
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
+open import Foundations.Transport
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -151,16 +152,26 @@ open is-iso
 --   is-prop→SquareP (λ i j → Bprop (sq i j))
 --     (ap snd p) (ap snd q) (ap snd s) (ap snd r) i j
 
-Σ-contract : {B : A → Type ℓ} → (∀ x → is-contr (B x)) → Σ A B ≃ A
-Σ-contract B-contr = iso→equiv the-iso where
+Σ-contract-fst : ((centre , _) : is-contr A) → (Σ[ x ꞉ A ] B x) ≃ B centre
+Σ-contract-fst {B} (centre , paths) = iso→equiv the-iso where
+  the-iso : Iso _ _
+  the-iso .fst (x , b) = subst B (sym $ paths x) b
+  the-iso .snd .inv = _ ,_
+  the-iso .snd .rinv b′
+    = sym $ subst-filler B refl b′
+    ∙ ap (λ f → subst B f b′) (is-of-hlevel-suc 0 (path-is-of-hlevel 0 (centre , paths)) _ _)
+  the-iso .snd .linv (x , b) = Σ-pathP (paths _) $ symP $ subst-filler B (sym $ paths _) b
+
+Σ-contract-snd : (∀ x → is-contr (B x)) → Σ A B ≃ A
+Σ-contract-snd B-contr = iso→equiv the-iso where
   the-iso : Iso _ _
   the-iso .fst (a , b) = a
   the-iso .snd .inv x = x , B-contr _ .fst
   the-iso .snd .rinv x = refl
   the-iso .snd .linv (a , b) i = a , B-contr a .snd b i
 
-Σ-map₂ : ({x : A} → P x → Q x) → Σ _ P → Σ _ Q
-Σ-map₂ f (x , y) = (x , f y)
+Σ-map-snd : ({x : A} → P x → Q x) → Σ _ P → Σ _ Q
+Σ-map-snd f (x , y) = (x , f y)
 
 Σ-pathP-dep
   : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
@@ -188,19 +199,16 @@ infixr 4 _,ₚ_
   → Path (Σ A B) (x , y) (x , z)
   → y ＝ z
 Σ-inj-set {B} {y} {z} A-set path =
-  subst (λ e → e ＝ z) (ap (λ e → transport (ap B e) y) (A-set _ _ _ _) ∙ transport-refl y)
+  subst (_＝ z) (ap (λ e → transport (ap B e) y) (A-set _ _ _ _) ∙ transport-refl y)
     (from-pathP (ap snd path))
 
-Σ-swap₂
+Σ-swap
   : {B : Type ℓ′} {C : A → B → Type ℓ″}
   → (Σ[ x ꞉ A ] Σ[ y ꞉ B ] C x y)
   ≃ (Σ[ y ꞉ B ] Σ[ x ꞉ A ] C x y)
-Σ-swap₂ .fst (x , y , f) = y , x , f
-Σ-swap₂ .snd .equiv-proof = strict-contr-fibres _
+Σ-swap .fst (x , y , f) = y , x , f
+Σ-swap .snd .equiv-proof = strict-contr-fibres _
 
-×-swap₂
-  : {B : Type ℓ′}
-  → (A × B)
-  ≃ (B × A)
-×-swap₂ .fst (x , y) = y , x
-×-swap₂ .snd .equiv-proof = strict-contr-fibres _
+×-swap : {B : Type ℓ′} → (A × B) ≃ (B × A)
+×-swap .fst (x , y) = y , x
+×-swap .snd .equiv-proof = strict-contr-fibres _
