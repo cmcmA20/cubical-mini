@@ -4,12 +4,12 @@ module Meta.Record where
 open import Foundations.Base
 open import Foundations.Isomorphism public
 
+open import Meta.Literals.FromNat
+open import Meta.Literals.FromString
 open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base
-open import Data.Nat.Instances.Number
-open import Data.String.Instances.IsString
 
 field-names→sigma : ∀ {ℓ} {A : Type ℓ} → List A → Term
 field-names→sigma [] = def (quote ⊤) []

@@ -9,7 +9,9 @@ open import Foundations.Pi
 open import Foundations.Sigma
 
 open import Meta.Foldable
-open import Meta.FromProduct
+open import Meta.Literals.FromNat
+open import Meta.Literals.FromProduct
+open import Meta.Literals.FromString
 open import Meta.HLevel.Base public
 open import Meta.Reflection
 
@@ -23,8 +25,6 @@ open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
 open import Data.Maybe.Base
 open import Data.Nat.Base
-open import Data.Nat.Instances.Number
-open import Data.String.Instances.IsString
 
 {-
 Tactic for generating readable h-level proofs automatically. Contains an

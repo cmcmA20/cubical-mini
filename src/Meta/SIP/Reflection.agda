@@ -3,13 +3,13 @@ module Meta.SIP.Reflection where
 
 open import Foundations.Base
 
+open import Meta.Literals.FromNat
+open import Meta.Literals.FromString
 open import Meta.Reflection
 open import Meta.SIP.Base
 
 open import Data.List.Base
 open import Data.Nat.Base
-open import Data.Nat.Instances.Number
-open import Data.String.Instances.IsString
 
 makeAutoStr-term : ℕ → Term → TC ⊤
 makeAutoStr-term zero t = typeError (strErr "autoDesc ran out of fuel" ∷ [])

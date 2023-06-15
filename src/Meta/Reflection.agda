@@ -3,12 +3,13 @@ module Meta.Reflection where
 
 open import Foundations.Base
 
-open import Meta.Literals    public
-open import Meta.Idiom       public
-open import Meta.Bind        public
-open import Meta.Alt         public
-open import Meta.Traverse    public
-open import Meta.FromProduct public
+open import Meta.Literals.FromString  public
+open import Meta.Literals.FromProduct public
+
+open import Meta.Idiom    public
+open import Meta.Bind     public
+open import Meta.Alt      public
+open import Meta.Traverse public
 
 open import Data.Bool.Base
 open import Data.List.Base
@@ -17,9 +18,7 @@ open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Traverse
 open import Data.Maybe.Base
 open import Data.Nat.Base
-open import Data.Nat.Instances.Number
 open import Data.String.Base
-open import Data.String.Instances.IsString
 
 open import Agda.Builtin.Reflection public
   renaming (Type to Type′)

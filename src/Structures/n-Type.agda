@@ -16,13 +16,8 @@ record n-Type ℓ n : Type (ℓsuc ℓ) where
   field
     typ   : Type ℓ
     is-tr : is-of-hlevel n typ
-  instance
-    H-Level-n-type : ∀ {k} → H-Level (n + k) typ
-    H-Level-n-type = basic-instance n is-tr
 
-open n-Type public
-  using (H-Level-n-type)
-open n-Type using (typ; is-tr)
+open n-Type
 
 private variable
   ℓ ℓ′ : Level
@@ -34,7 +29,7 @@ private variable
 instance
   Underlying-n-Type : Underlying (n-Type ℓ n)
   Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-n-Type .⌞_⌟ = n-Type.typ
+  Underlying-n-Type .⌞_⌟ = typ
 
 @0 ＝-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
 ＝-is-of-hlevel n Ahl Bhl = is-equiv→is-of-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
@@ -47,8 +42,8 @@ n-path {X} {Y} f i .is-tr =
 @0 n-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y
 n-ua f = n-path (ua f)
 
-@0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
-n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
+@0 n-univalence : (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
+n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where
   inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
   inv p = path→equiv (ap typ p)
 
@@ -61,7 +56,7 @@ n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
     path i j .typ = ua.ε refl i j
     path i j .is-tr = is-prop→SquareP
       (λ i j → is-of-hlevel-is-prop
-        {A = ua.ε {A = ⌞ X ⌟} refl i j } n)
+        {A = ua.ε {A = ⌞ X ⌟} refl i j } _)
       (λ j → X .is-tr) (λ j → n-ua {X = X} {Y = X} (path→equiv refl) j .is-tr)
       (λ j → X .is-tr) (λ j → X .is-tr)
       i j
@@ -82,14 +77,10 @@ Set : ∀ ℓ → Type (ℓsuc ℓ)
 Set ℓ = n-Type ℓ 2
 
 instance
-  @0 H-Level-nType : ∀ {n k} → H-Level (1 + k + n) (n-Type ℓ k)
-  H-Level-nType {k} = basic-instance (1 + k) (n-Type-is-of-hlevel k)
-
   H-Level-is-equiv
     : {f : A → B} {n : HLevel}
     → H-Level (suc n) (is-equiv f)
   H-Level-is-equiv = prop-instance (is-equiv-is-prop _)
-
 
 -- module _ {ℓ : Level} {n : HLevel} where private
 --   open import Foundations.Univalence.SIP

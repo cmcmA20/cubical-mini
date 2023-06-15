@@ -1,11 +1,12 @@
 {-# OPTIONS --safe #-}
-module Data.String.Instances.IsString where
-
-open import Foundations.Base
-
-open import Meta.Literals
+module Meta.Literals.FromString where
 
 open import Data.String.Base
+open import Data.Unit.Base
+
+open import Agda.Builtin.FromString public
+  using ( IsString )
+  renaming ( fromString to from-string )
 
 instance
   IsString-String : IsString String

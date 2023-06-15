@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Sigma
 open import Foundations.Erased
 
-open import Meta.Discrete
+open import Meta.Decision
 open import Meta.Finite
 open import Meta.HLevel
 

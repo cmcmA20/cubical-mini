@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Meta.FromProduct where
+module Meta.Literals.FromProduct where
 
 open import Foundations.Base
 

@@ -28,11 +28,13 @@ open import Meta.Foldable public
 open import Meta.Idiom    public
 open import Meta.Traverse public
 
-open import Meta.FromProduct public
-open import Meta.Literals    public
-open import Meta.Show        public
+open import Meta.Literals.FromProduct public
+open import Meta.Literals.FromNat     public
+open import Meta.Literals.FromNeg     public
+open import Meta.Literals.FromString  public
+open import Meta.Show                 public
 
-open import Meta.Discrete public
+open import Meta.Decision public
 open import Meta.Finite   public
 open import Meta.HLevel   public
 

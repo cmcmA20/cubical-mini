@@ -3,7 +3,7 @@ module Data.Nat.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Discrete
+open import Meta.Decision
 
 open import Data.Dec.Base
 open import Data.Id
@@ -12,7 +12,7 @@ open import Data.Nat.Base
 
 instance
   Discrete-ℕ : Discrete ℕ
-  Discrete-ℕ .Discrete._≟_ =
+  Discrete-ℕ .Decision.has-decidable =
     is-discreteⁱ→is-discrete ℕ-is-discreteⁱ
     where
     ℕ-is-discreteⁱ : is-discreteⁱ ℕ

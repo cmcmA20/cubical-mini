@@ -6,8 +6,6 @@ open import Foundations.Equiv
 
 open import Meta.Bind
 
-open import Correspondences.Nullary.Negation
-
 open import Data.Empty.Base
 open import Data.Nat.Path
 open import Data.Nat.Order

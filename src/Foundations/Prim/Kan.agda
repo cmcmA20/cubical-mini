@@ -60,7 +60,7 @@ Path A A0 A1 = ＜ A0 ／ (λ _ → A) ＼ A1 ＞
 
 module _ {A : Type ℓ} where
   refl : {x : A} → x ＝ x
-  refl {x = x} = λ _ → x
+  refl {x} _ = x
 
   sym : {x y : A} → x ＝ y → y ＝ x
   sym p i = p (~ i)

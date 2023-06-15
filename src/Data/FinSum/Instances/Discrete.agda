@@ -3,9 +3,10 @@ module Data.FinSum.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Discrete
+open import Meta.Decision
 
 import      Data.Dec.Base as Dec
+open Dec
 open import Data.Nat.Base
 open import Data.Sum.Path
 
@@ -13,7 +14,7 @@ open import Data.FinSum.Base
 
 instance
   Discrete-Fin : {n : ℕ} → Discrete (Fin n)
-  Discrete-Fin .Discrete._≟_ = go where
+  Discrete-Fin .Decision.has-decidable = go where
     go : {n : ℕ} → is-discrete (Fin n)
     go {suc n} fzero    fzero    = yes refl
     go {suc n} fzero    (fsuc l) = no ⊎-disjoint

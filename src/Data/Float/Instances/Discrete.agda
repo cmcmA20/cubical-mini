@@ -4,7 +4,7 @@ module Data.Float.Instances.Discrete where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Discrete
+open import Meta.Decision
 
 open import Data.Maybe.Instances.Discrete
 open import Data.Word.Instances.Discrete
@@ -14,6 +14,6 @@ open import Data.Float.Properties
 
 instance
   Discrete-Float : Discrete Float
-  Discrete-Float .Discrete._≟_ =
+  Discrete-Float .Decision.has-decidable =
     is-discrete-injection (float→maybe-word64 , float→maybe-word64-inj)
-      (it .Discrete._≟_)
+      (it .Decision.has-decidable)

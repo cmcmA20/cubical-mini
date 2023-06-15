@@ -4,13 +4,13 @@ module Meta.Marker where
 open import Foundations.Base
 
 open import Meta.Reflection
+open import Meta.Literals.FromNat
+open import Meta.Literals.FromString
 
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.Maybe.Instances.Bind
 open import Data.Nat.Base
-open import Data.Nat.Instances.Number
-open import Data.String.Instances.IsString
 
 private variable
   ℓ : Level

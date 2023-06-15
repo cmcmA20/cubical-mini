@@ -3,10 +3,10 @@ module Data.Empty.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Discrete
+open import Meta.Decision
 
 open import Data.Empty.Base
 
 instance
   Discrete-⊥ : Discrete ⊥
-  Discrete-⊥ .Discrete._≟_ ()
+  Discrete-⊥ .Decision.has-decidable ()

@@ -3,7 +3,7 @@ module Data.String.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Discrete
+open import Meta.Decision
 open import Meta.HLevel
 
 open import Data.Char.Instances.Discrete
@@ -13,6 +13,6 @@ open import Data.String.Properties
 
 instance
   Discrete-String : Discrete String
-  Discrete-String .Discrete._≟_ =
+  Discrete-String .Decision.has-decidable =
     is-discrete-injection (string→list , string→list-inj)
-      (it .Discrete._≟_)
+      (it .Decision.has-decidable)

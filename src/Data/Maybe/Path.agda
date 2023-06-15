@@ -6,8 +6,7 @@ open import Foundations.Equiv
 
 open import Meta.HLevel
 
-open import Correspondences.Nullary.Negation
-
+open import Data.Empty.Base
 open import Data.Sum.Path
 open import Data.Unit.Instances.HLevel
 

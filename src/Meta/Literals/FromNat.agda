@@ -1,11 +1,12 @@
 {-# OPTIONS --safe #-}
-module Data.Nat.Instances.Number where
-
-open import Foundations.Base
-
-open import Meta.Literals public
+module Meta.Literals.FromNat where
 
 open import Data.Nat.Base
+open import Data.Unit.Base
+
+open import Agda.Builtin.FromNat public
+  using ( Number )
+  renaming ( fromNat to from-ℕ )
 
 instance
   Number-ℕ : Number ℕ

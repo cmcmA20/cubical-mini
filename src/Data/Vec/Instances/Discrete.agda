@@ -3,15 +3,16 @@ module Data.Vec.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Discrete
+open import Meta.Decision
 open import Meta.HLevel
 
+open import Data.Dec.Base
 open import Data.Vec.Base
 
 instance
   Discrete-Vec : {ℓ : Level} {A : Type ℓ} {n : ℕ}
                → ⦃ Discrete A ⦄ → Discrete (Vec A n)
-  Discrete-Vec {A} {n} .Discrete._≟_ = go
+  Discrete-Vec {A} {n} .Decision.has-decidable = go
     where
       go : {n : ℕ} → is-discrete (Vec A n)
       go []       []       = yes refl

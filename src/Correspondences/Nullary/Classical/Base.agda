@@ -3,7 +3,7 @@ module Correspondences.Nullary.Classical.Base where
 
 open import Foundations.Base
 
-open import Correspondences.Nullary.Negation
+open import Data.Empty.Base
 
 private variable
   ℓ : Level

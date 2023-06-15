@@ -3,7 +3,7 @@ module Data.Fin.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Discrete
+open import Meta.Decision
 
 open import Data.Dec.Base
 open import Data.Id
@@ -12,7 +12,7 @@ open import Data.Fin.Base
 
 instance
   Discrete-Fin : {n : ℕ} → Discrete (Fin n)
-  Discrete-Fin .Discrete._≟_ =
+  Discrete-Fin .Decision.has-decidable =
     is-discreteⁱ→is-discrete Fin-is-discreteⁱ
     where
     Fin-is-discreteⁱ : {n : ℕ} → is-discreteⁱ (Fin n)

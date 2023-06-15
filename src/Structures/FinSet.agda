@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Sigma
 
 open import Meta.Idiom
-open import Meta.Discrete
+open import Meta.Decision
 open import Meta.HLevel
 open import Meta.Finite     public
 open import Meta.Underlying public
@@ -16,6 +16,7 @@ open import Correspondences.Nullary.Omniscience
 open import Correspondences.Unary.Decidable
 
 import      Data.Dec.Base as Dec
+open Dec
 open import Data.Dec.Properties
 open import Data.Dec.Instances.HLevel
 open import Data.Empty

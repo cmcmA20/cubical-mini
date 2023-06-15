@@ -3,7 +3,7 @@ module Data.Vec.Instances.FromProduct where
 
 open import Foundations.Base
 
-open import Meta.FromProduct
+open import Meta.Literals.FromProduct
 
 open import Data.Vec.Base
 

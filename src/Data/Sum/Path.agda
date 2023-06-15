@@ -8,8 +8,6 @@ open import Meta.HLevel
 
 open import Structures.IdentitySystem.Base
 
-open import Correspondences.Nullary.Negation
-
 open import Data.Empty.Base
 open import Data.Empty.Instances.HLevel
 
