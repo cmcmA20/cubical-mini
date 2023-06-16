@@ -5,7 +5,7 @@
 <a id="68" class="Keyword">open</a> <a id="73" class="Keyword">import</a> <a id="80" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 <a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Foundations.Equiv.html" class="Module">Foundations.Equiv</a>
 
-<a id="128" class="Keyword">open</a> <a id="133" class="Keyword">import</a> <a id="140" href="Meta.Discrete.html" class="Module">Meta.Discrete</a>
+<a id="128" class="Keyword">open</a> <a id="133" class="Keyword">import</a> <a id="140" href="Meta.Decision.html" class="Module">Meta.Decision</a>
 
 <a id="155" class="Keyword">open</a> <a id="160" class="Keyword">import</a> <a id="167" href="Data.Maybe.Instances.Discrete.html" class="Module">Data.Maybe.Instances.Discrete</a>
 <a id="197" class="Keyword">open</a> <a id="202" class="Keyword">import</a> <a id="209" href="Data.Word.Instances.Discrete.html" class="Module">Data.Word.Instances.Discrete</a>
@@ -14,8 +14,8 @@
 <a id="259" class="Keyword">open</a> <a id="264" class="Keyword">import</a> <a id="271" href="Data.Float.Properties.html" class="Module">Data.Float.Properties</a>
 
 <a id="294" class="Keyword">instance</a>
-  <a id="Discrete-Float"></a><a id="305" href="Data.Float.Instances.Discrete.html#305" class="Function">Discrete-Float</a> <a id="320" class="Symbol">:</a> <a id="322" href="Meta.Discrete.html#322" class="Record">Discrete</a> <a id="331" href="Agda.Builtin.Float.html#353" class="Postulate">Float</a>
-  <a id="339" href="Data.Float.Instances.Discrete.html#305" class="Function">Discrete-Float</a> <a id="354" class="Symbol">.</a><a id="355" href="Meta.Discrete.html#407" class="Field Operator">Discrete._≟_</a> <a id="368" class="Symbol">=</a>
-    <a id="374" href="Correspondences.Nullary.Decidable.html#2038" class="Function">is-discrete-injection</a> <a id="396" class="Symbol">(</a><a id="397" href="Agda.Builtin.Float.html#770" class="Primitive">float→maybe-word64</a> <a id="416" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="418" href="Data.Float.Properties.html#305" class="Function">float→maybe-word64-inj</a><a id="440" class="Symbol">)</a>
-      <a id="448" class="Symbol">(</a><a id="449" href="Foundations.Base.html#23035" class="Function">it</a> <a id="452" class="Symbol">.</a><a id="453" href="Meta.Discrete.html#407" class="Field Operator">Discrete._≟_</a><a id="465" class="Symbol">)</a>
+  <a id="Discrete-Float"></a><a id="305" href="Data.Float.Instances.Discrete.html#305" class="Function">Discrete-Float</a> <a id="320" class="Symbol">:</a> <a id="322" href="Meta.Decision.Base.html#468" class="Function">Discrete</a> <a id="331" href="Agda.Builtin.Float.html#353" class="Postulate">Float</a>
+  <a id="339" href="Data.Float.Instances.Discrete.html#305" class="Function">Discrete-Float</a> <a id="354" class="Symbol">.</a><a id="355" href="Meta.Decision.Base.html#394" class="Field">Decision.has-decidable</a> <a id="378" class="Symbol">=</a>
+    <a id="384" href="Correspondences.Nullary.Decidable.html#2038" class="Function">is-discrete-injection</a> <a id="406" class="Symbol">(</a><a id="407" href="Agda.Builtin.Float.html#770" class="Primitive">float→maybe-word64</a> <a id="426" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="428" href="Data.Float.Properties.html#305" class="Function">float→maybe-word64-inj</a><a id="450" class="Symbol">)</a>
+      <a id="458" class="Symbol">(</a><a id="459" href="Foundations.Base.html#23035" class="Function">it</a> <a id="462" class="Symbol">.</a><a id="463" href="Meta.Decision.Base.html#394" class="Field">Decision.has-decidable</a><a id="485" class="Symbol">)</a>
 </pre></body></html>
