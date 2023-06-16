@@ -25,7 +25,7 @@ infixl 4 _＝$_ _＝$S_
 private variable
   ℓ ℓ′ ℓ″ : Level
   A : Type ℓ
-  B : A → Type ℓ
+  B : A → Type ℓ′
   x y z w : A
 
 lift-ext : {a b : Lift {ℓ} ℓ′ A} → (lower a ＝ lower b) → a ＝ b
