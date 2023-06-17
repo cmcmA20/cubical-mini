@@ -33,7 +33,7 @@ private variable
   A : Type ℓ
 
 Fin-ordered : Type ℓ → Type ℓ
-Fin-ordered A = Σ[ n ꞉ ℕ ] A ≃ Fin n
+Fin-ordered A = Σ[ n ꞉ ℕ ] (A ≃ Fin n)
 
 fin-ordered-is-set : is-set (Fin-ordered A)
 fin-ordered-is-set = hlevel!

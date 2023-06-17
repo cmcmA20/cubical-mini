@@ -6,7 +6,7 @@ open import Foundations.Base
 open import Truncation.Propositional.Base
   using (∥_∥₁)
 
-infixr 1 _⊎_
+infixr 3 _⊎_
 data _⊎_ {ℓ ℓ′} (A : Type ℓ) (B : Type ℓ′) : Type (ℓ ⊔ ℓ′) where
   inl : A → A ⊎ B
   inr : B → A ⊎ B
