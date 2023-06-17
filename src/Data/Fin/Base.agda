@@ -8,9 +8,9 @@ open import Data.Nat.Base public
 
 private variable
   ℓ : Level
-  m n : ℕ
+  @0 m n : ℕ
 
-data Fin : ℕ → Type where
+data Fin : @0 ℕ → Type where
   fzero :         Fin (suc n)
   fsuc  : Fin n → Fin (suc n)
 
@@ -23,8 +23,8 @@ elim
   → (∀ {n} → P {suc n} fzero)
   → (∀ {n} (k : Fin n) → P k → P (fsuc k))
   → ∀ {n} (k : Fin n) → P k
-elim P pfzero pfsuc fzero = pfzero
-elim P pfzero pfsuc (fsuc x) = pfsuc x (elim P pfzero pfsuc x)
+elim P pfzero pfsuc {suc n} fzero = pfzero
+elim P pfzero pfsuc {suc n} (fsuc x) = pfsuc x (elim P pfzero pfsuc x)
 
 squish : Fin n → Fin (suc n) → Fin n
 squish fzero fzero = fzero

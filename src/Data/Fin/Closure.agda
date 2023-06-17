@@ -4,7 +4,7 @@ module Data.Fin.Closure where
 open import Foundations.Base
 open import Foundations.Equiv
 
-import Data.Empty.Base as ⊥
+import      Data.Empty.Base as ⊥
 open ⊥ using (⊥)
 open import Data.Nat.Base
 open import Data.Sum.Properties
@@ -13,7 +13,7 @@ open import Data.Fin.Properties
 
 private variable
   ℓ : Level
-  m n : ℕ
+  @0 m n : ℕ
 
 fin-0-is-initial : Fin 0 ≃ ⊥
 fin-0-is-initial .fst ()
@@ -23,7 +23,7 @@ fin-1-is-contr : is-contr (Fin 1)
 fin-1-is-contr .fst = fzero
 fin-1-is-contr .snd fzero = refl
 
-fin-suc : Fin (suc n) ≃ (⊤ ⊎ Fin n)
+fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
 fin-suc = iso→equiv (f , iso g rinv linv) where
   f : Fin (suc n) → ⊤ ⊎ Fin n
   f fzero = inl tt
@@ -43,7 +43,8 @@ fin-suc = iso→equiv (f , iso g rinv linv) where
 
 fin-suc-universal
   : {A : Fin (suc n) → Type ℓ}
-  → (∀ x → A x) ≃ (A fzero × (∀ x → A (fsuc x)))
+  → Π[ x ] A x
+  ≃ A fzero × (∀ x → A (fsuc x))
 fin-suc-universal = iso→equiv λ where
   .fst f → f fzero , (λ x → f (fsuc x))
 
@@ -55,8 +56,10 @@ fin-suc-universal = iso→equiv λ where
   .snd .is-iso.linv k i fzero    → k fzero
   .snd .is-iso.linv k i (fsuc n) → k (fsuc n)
 
-fin-coproduct : (Fin n ⊎ Fin m) ≃ Fin (n + m)
-fin-coproduct {(zero)} {m}  =
+fin-coproduct : {n m : ℕ}
+              → Fin n ⊎ Fin m
+              ≃ Fin (n + m)
+fin-coproduct {0} {m}  =
   (Fin 0 ⊎ Fin m) ≃⟨ ⊎-ap-l fin-0-is-initial ⟩
   (⊥ ⊎ Fin m)     ≃⟨ ⊎-zero-l ⟩
   Fin m           ≃∎
@@ -71,18 +74,20 @@ sum : ∀ n → (Fin n → ℕ) → ℕ
 sum zero    f = zero
 sum (suc n) f = f fzero + sum n (f ∘ fsuc)
 
-fin-sum : (B : Fin n → ℕ) → Σ (Fin _) (Fin ∘ B) ≃ Fin (sum n B)
-fin-sum {(zero)} B .fst ()
-fin-sum {(zero)} B .snd .equiv-proof ()
-fin-sum {suc n}  B =
+fin-sum : {n : ℕ} (B : Fin n → ℕ)
+        → Σ[ k ꞉ Fin n ] Fin (B k)
+        ≃ Fin (sum n B)
+fin-sum {0}     B .fst ()
+fin-sum {0}     B .snd .equiv-proof ()
+fin-sum {suc n} B =
   fin-coproduct .fst ∘ f ,
   is-equiv-comp (is-iso→is-equiv f-iso) (fin-coproduct .snd)
     where
       rec = fin-sum (B ∘ fsuc)
       module mrec = Equiv rec
 
-      f : Σ _ (Fin ∘ B) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
-      f (fzero , x) = inl x
+      f : Σ _ (λ k → Fin (B k)) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
+      f (fzero  , x) = inl x
       f (fsuc x , y) = inr (rec .fst (x , y))
 
       f-iso : is-iso f
@@ -93,12 +98,14 @@ fin-sum {suc n}  B =
       f-iso .is-iso.rinv (inl x) = refl
       f-iso .is-iso.rinv (inr x) = ap inr (mrec.ε _)
 
-      f-iso .is-iso.linv (fzero , x) = refl
+      f-iso .is-iso.linv (fzero  , _) = refl
       f-iso .is-iso.linv (fsuc x , y) =
         Σ-pathP (ap (fsuc ∘ fst) (mrec.η _)) (ap snd (mrec.η _))
 
 
-fin-product : (Fin n × Fin m) ≃ Fin (n · m)
+fin-product : {n m : ℕ}
+            → Fin n × Fin m
+            ≃ Fin (n · m)
 fin-product {n} {m} =
   (Fin n × Fin m)       ≃⟨ fin-sum (λ _ → m) ⟩
   Fin (sum n (λ _ → m)) ≃⟨ cast (sum≡* n m) , cast-is-equiv _ ⟩

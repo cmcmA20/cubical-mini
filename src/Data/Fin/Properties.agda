@@ -16,35 +16,34 @@ open import Data.Fin.Base public
 
 private variable
   ℓ : Level
-  m n : ℕ
+  @0 m n : ℕ
 
-cast : m ＝ n → Fin m → Fin n
-cast {suc m} {(zero)} p _ = absurd (suc≠zero p)
-cast {suc m} {suc n}  _ fzero    = fzero
-cast {suc m} {suc n}  p (fsuc k) = fsuc (cast (suc-inj p) k)
+cast : {m n : ℕ} → m ＝ n → Fin m → Fin n
+cast {suc m} {0}     p _        = absurd (suc≠zero p)
+cast {suc m} {suc n} _ fzero    = fzero
+cast {suc m} {suc n} p (fsuc k) = fsuc $ cast (suc-inj p) k
 
-cast-is-equiv : (p : m ＝ n) → is-equiv (cast p)
+cast-is-equiv : {m n : ℕ} (p : m ＝ n) → is-equiv (cast p)
 cast-is-equiv = J (λ _ p → is-equiv (cast p)) cast-refl-is-equiv
   where
-    id＝cast-refl : id ＝ cast (λ _ → n)
-    id＝cast-refl {(zero)} _ ()
-    id＝cast-refl {suc n} _ fzero = fzero
-    id＝cast-refl {suc n} i (fsuc k) = fsuc (id＝cast-refl i k)
+    id=cast-refl : {n : ℕ} → id ＝ cast (λ _ → n)
+    id=cast-refl {0}     _ ()
+    id=cast-refl {suc n} _ fzero = fzero
+    id=cast-refl {suc n} i (fsuc k) = fsuc $ id=cast-refl i k
 
-    cast-refl-is-equiv : is-equiv (cast (λ _ → n))
-    cast-refl-is-equiv = subst is-equiv id＝cast-refl id-is-equiv
+    cast-refl-is-equiv : {n : ℕ} → is-equiv (cast (λ _ → n))
+    cast-refl-is-equiv = subst is-equiv id=cast-refl id-is-equiv
 
-cast-equiv : m ＝ n → Fin m ≃ Fin n
+cast-equiv : {m n : ℕ} → m ＝ n → Fin m ≃ Fin n
 cast-equiv p = cast p , cast-is-equiv p
 
-strengthen : Fin (suc n) → Fin (suc n) ⊎ Fin n
-strengthen {(zero)} fzero = inl fzero
-strengthen {suc n}  fzero = inr fzero
-strengthen {suc n}  (fsuc k) = ⊎.map fsuc fsuc (strengthen k)
+strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
+strengthen fzero    = inl fzero
+strengthen {suc n} (fsuc x) = ⊎.map fsuc fsuc $ strengthen x
 
 inject : m ≤ n → Fin m → Fin n
-inject {_} {suc n} le       fzero    = fzero
-inject {_} {suc n} (s≤s le) (fsuc k) = fsuc (inject le k)
+inject (s≤s _)  fzero    = fzero
+inject (s≤s le) (fsuc x) = fsuc $ inject le x
 
 fzero≠fsuc : {k : Fin m} → ¬ fzero ＝ fsuc k
 fzero≠fsuc p = subst discrim p tt where
@@ -53,78 +52,75 @@ fzero≠fsuc p = subst discrim p tt where
   discrim (fsuc _) = ⊥
 
 fsuc-inj : {k l : Fin m} → fsuc k ＝ fsuc l → k ＝ l
-fsuc-inj {m = suc m} p = ap pred′ p
-  where
-    pred′ : Fin (suc (suc m)) → Fin (suc m)
-    pred′ fzero    = fzero
-    pred′ (fsuc _) = _
+fsuc-inj {k} = ap pred′ where
+  pred′ : Fin (suc _) → Fin _
+  pred′ fzero    = k
+  pred′ (fsuc x) = x
 
-fin-peel : ∀ {l k} → Fin (suc l) ≃ Fin (suc k) → Fin l ≃ Fin k
-fin-peel {l} {k} sl≃sk = iso→equiv (l→k , (iso k→l b→a→b a→b→a)) where
-  sk≃sl : Fin (suc k) ≃ Fin (suc l)
-  sk≃sl = sl≃sk ₑ⁻¹
-  module sl≃sk = Equiv sl≃sk
-  module sk≃sl = Equiv sk≃sl
+fin-peel : Fin (suc m) ≃ Fin (suc n) → Fin m ≃ Fin n
+fin-peel {m} {n} sm≃sn = iso→equiv $ m→n , iso n→m b→a→b a→b→a where
+  sn≃sm : Fin (suc n) ≃ Fin (suc m)
+  sn≃sm = sm≃sn ₑ⁻¹
+  module sm≃sn = Equiv sm≃sn
+  module sn≃sm = Equiv sn≃sm
 
-  l→k : Fin l → Fin k
-  l→k x with inspect (sl≃sk.to (fsuc x))
+  m→n : Fin m → Fin n
+  m→n x with inspect $ sm≃sn.to $ fsuc x
   ... | fsuc y , _ = y
-  ... | fzero , p with inspect (sl≃sk.to fzero)
+  ... | fzero , p with inspect $ sm≃sn.to fzero
   ... | fsuc y , _ = y
-  ... | fzero , q = absurd (fzero≠fsuc (sl≃sk.injective₂ q p))
+  ... | fzero , q = absurd (fzero≠fsuc $ sm≃sn.injective₂ q p)
 
-  k→l : Fin k → Fin l
-  k→l x with inspect (sk≃sl.to (fsuc x))
+  n→m : Fin n → Fin m
+  n→m x with inspect $ sn≃sm.to $ fsuc x
   ... | fsuc x , _ = x
-  ... | fzero , p with inspect (sk≃sl.to fzero)
+  ... | fzero , p with inspect $ sn≃sm.to fzero
   ... | fsuc y , _ = y
-  ... | fzero , q = absurd (fzero≠fsuc (sk≃sl.injective₂ q p))
+  ... | fzero , q = absurd (fzero≠fsuc $ sn≃sm.injective₂ q p)
 
-  a→b→a : ∀ a → k→l (l→k a) ＝ a
-  a→b→a a with inspect (sl≃sk.to (fsuc a))
-  a→b→a a | fsuc x , p′ with inspect (sk≃sl.to (fsuc x))
-  a→b→a a | fsuc x , p′ | fsuc y , q′ = fsuc-inj (
-    sym q′ ∙ ap (sk≃sl.to) (sym p′) ∙ sl≃sk.η _)
+  a→b→a : ∀ a → n→m (m→n a) ＝ a
+  a→b→a a with inspect $ sm≃sn.to $ fsuc a
+  a→b→a a | fsuc x , p′ with inspect $ sn≃sm.to $ fsuc x
+  a→b→a a | fsuc x , p′ | fsuc y , q′ =
+    fsuc-inj $ sym q′ ∙ ap (sn≃sm.to) (sym p′) ∙ sm≃sn.η _
   a→b→a a | fsuc x , p′ | fzero , q′ = absurd contra where
-    r = sl≃sk.injective₂ p′ (sl≃sk.ε (fsuc x))
-    contra = fzero≠fsuc (sym (r ∙ q′))
-  a→b→a a | fzero , p′ with inspect (sl≃sk.to fzero)
-  a→b→a a | fzero , p′ | fsuc x , q′ with inspect (sk≃sl.to (fsuc x))
+    r = sm≃sn.injective₂ p′ $ sm≃sn.ε $ fsuc x
+    contra = fzero≠fsuc $ sym $ r ∙ q′
+  a→b→a a | fzero , p′ with inspect $ sm≃sn.to fzero
+  a→b→a a | fzero , p′ | fsuc x , q′ with inspect $ sn≃sm.to $ fsuc x
   a→b→a a | fzero , p′ | fsuc x , q′ | fsuc y , r′ =
-    absurd (fzero≠fsuc (sym (sym r′ ∙ ap sk≃sl.to (sym q′) ∙ sl≃sk.η fzero)))
-  a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ with inspect (sk≃sl.to fzero)
-  a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ | fsuc z , s = fsuc-inj $
-    sym s ∙ ap sk≃sl.to (sym p′) ∙ sl≃sk.η (fsuc a)
+    absurd (fzero≠fsuc $ sym $ sym r′ ∙ ap sn≃sm.to (sym q′) ∙ sm≃sn.η fzero)
+  a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ with inspect $ sn≃sm.to fzero
+  a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ | fsuc z , s =
+    fsuc-inj $ sym s ∙ ap sn≃sm.to (sym p′) ∙ sm≃sn.η (fsuc a)
   a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ | fzero , s = absurd-path
-  a→b→a a | fzero , p′ | fzero , q′ =
-    absurd (fzero≠fsuc $ sl≃sk.injective₂ q′ p′)
+  a→b→a a | fzero , p′ | fzero , q′ = absurd (fzero≠fsuc $ sm≃sn.injective₂ q′ p′)
 
-  b→a→b : ∀ b → l→k (k→l b) ＝ b
-  b→a→b b with inspect (sk≃sl.to (fsuc b))
-  b→a→b b | fsuc x , p′ with inspect (sl≃sk.to (fsuc x))
-  b→a→b b | fsuc x , p′ | fsuc y , q′ = fsuc-inj $
-    sym q′ ∙ ap (sl≃sk.to) (sym p′) ∙ sk≃sl.η _
+  b→a→b : ∀ b → m→n (n→m b) ＝ b
+  b→a→b b with inspect $ sn≃sm.to $ fsuc b
+  b→a→b b | fsuc x , p′ with inspect $ sm≃sn.to $ fsuc x
+  b→a→b b | fsuc x , p′ | fsuc y , q′ =
+    fsuc-inj $ sym q′ ∙ ap (sm≃sn.to) (sym p′) ∙ sn≃sm.η _
   b→a→b b | fsuc x , p′ | fzero , q′ = absurd contra where
-    r = sk≃sl.injective₂ p′ (sk≃sl.ε (fsuc x))
-    contra = fzero≠fsuc (sym (r ∙ q′))
-  b→a→b b | fzero , p′ with inspect (sk≃sl.to fzero)
-  b→a→b b | fzero , p′ | fsuc x , q′ with inspect (sl≃sk.to (fsuc x))
+    r = sn≃sm.injective₂ p′ $ sn≃sm.ε $ fsuc x
+    contra = fzero≠fsuc $ sym $ r ∙ q′
+  b→a→b b | fzero , p′ with inspect $ sn≃sm.to fzero
+  b→a→b b | fzero , p′ | fsuc x , q′ with inspect $ sm≃sn.to $ fsuc x
   b→a→b b | fzero , p′ | fsuc x , q′ | fsuc y , r′  =
-    absurd (fzero≠fsuc $ sym (sym r′ ∙ ap (sl≃sk.to) (sym q′) ∙ sk≃sl.η _))
-  b→a→b b | fzero , p′ | fsuc x , q′ | fzero , r′ with inspect (sl≃sk.to fzero)
-  b→a→b a | fzero , p′ | fsuc x , q′ | fzero , r′ | fsuc z , s = fsuc-inj $
-    sym s ∙ ap (sl≃sk.to) (sym p′) ∙ sk≃sl.η (fsuc a)
+    absurd (fzero≠fsuc $ sym $ sym r′ ∙ ap (sm≃sn.to) (sym q′) ∙ sn≃sm.η _)
+  b→a→b b | fzero , p′ | fsuc x , q′ | fzero , r′ with inspect $ sm≃sn.to fzero
+  b→a→b a | fzero , p′ | fsuc x , q′ | fzero , r′ | fsuc z , s =
+    fsuc-inj $ sym s ∙ ap (sm≃sn.to) (sym p′) ∙ sn≃sm.η (fsuc a)
   b→a→b a | fzero , p′ | fsuc x , q′ | fzero , r′ | fzero , s = absurd-path
-  b→a→b b | fzero , p′ | fzero , q′ =
-    absurd (fzero≠fsuc $ sk≃sl.injective₂ q′ p′)
+  b→a→b b | fzero , p′ | fzero , q′ = absurd (fzero≠fsuc $ sn≃sm.injective₂ q′ p′)
 
-fin-injective : Fin m ≃ Fin n → m ＝ n
-fin-injective {(zero)} {(zero)} _ = refl
-fin-injective {(zero)} {suc n}  f with is-equiv→inverse (f .snd) fzero
+fin-injective : {m n : ℕ} → Fin m ≃ Fin n → m ＝ n
+fin-injective {0} {0}     _ = refl
+fin-injective {0} {suc n} f with is-equiv→inverse (f .snd) fzero
 ... | ()
-fin-injective {suc m} {(zero)}  f with f .fst fzero
+fin-injective {suc m} {0}     f with f .fst fzero
 ... | ()
-fin-injective {suc m} {suc n}   f = ap suc $ fin-injective (fin-peel f)
+fin-injective {suc m} {suc n} f = ap suc $ fin-injective (fin-peel f)
 
 fin-choice
   : ∀ n {A : Fin n → Type ℓ} {M}

@@ -11,11 +11,11 @@ open import Data.Id
 open import Data.Fin.Base
 
 instance
-  Discrete-Fin : {n : ℕ} → Discrete (Fin n)
+  Discrete-Fin : {@0 n : ℕ} → Discrete (Fin n)
   Discrete-Fin .Decision.has-decidable =
     is-discreteⁱ→is-discrete Fin-is-discreteⁱ
     where
-    Fin-is-discreteⁱ : {n : ℕ} → is-discreteⁱ (Fin n)
+    Fin-is-discreteⁱ : {@0 n : ℕ} → is-discreteⁱ (Fin n)
     Fin-is-discreteⁱ fzero    fzero    = yes reflⁱ
     Fin-is-discreteⁱ fzero    (fsuc _) = no λ ()
     Fin-is-discreteⁱ (fsuc _) fzero    = no λ ()
