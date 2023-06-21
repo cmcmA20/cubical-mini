@@ -57,13 +57,14 @@ is-set→is-set-□ A-set _ _ _ _ = to-pathP (A-set _ _ _ _)
 is-set-□→is-set : is-set-□ A → is-set A
 is-set-□→is-set A-set-□ x y p q = A-set-□ refl refl p q
 
-is-prop→is-set-□ : is-prop A → is-set-□ A
-is-prop→is-set-□ h {a₀₀} p q r s i j = hcomp (∂ i ∨ ∂ j) λ where
-  k (i = i0) → h a₀₀ (r j) k
-  k (i = i1) → h a₀₀ (s j) k
-  k (j = i0) → h a₀₀ (p i) k
-  k (j = i1) → h a₀₀ (q i) k
-  k (k = i0) → a₀₀
+opaque
+  is-prop→is-set-□ : is-prop A → is-set-□ A
+  is-prop→is-set-□ h {a₀₀} p q r s i j = hcomp (∂ i ∨ ∂ j) λ where
+    k (i = i0) → h a₀₀ (r j) k
+    k (i = i1) → h a₀₀ (s j) k
+    k (j = i0) → h a₀₀ (p i) k
+    k (j = i1) → h a₀₀ (q i) k
+    k (k = i0) → a₀₀
 
 -- TODO uncomment and fix
 -- isGroupoid' : Type ℓ → Type ℓ

@@ -43,28 +43,29 @@ is-prop→pathP : {B : I → Type ℓ}
               → ＜ b₀ ／ B ＼ b₁ ＞
 is-prop→pathP h b₀ b₁ = to-pathP (h _ _ _)
 
--- Amy says it's more efficient to use direct cubical proof
-is-contr→is-prop : is-contr A → is-prop A
-is-contr→is-prop (centre , paths) x y i = hcomp (∂ i) λ where
-  j (i = i0) → paths x j
-  j (i = i1) → paths y j
-  j (j = i0) → centre
+opaque
+  -- Amy says it's more efficient to use direct cubical proof
+  is-contr→is-prop : is-contr A → is-prop A
+  is-contr→is-prop (centre , paths) x y i = hcomp (∂ i) λ where
+    j (i = i0) → paths x j
+    j (i = i1) → paths y j
+    j (j = i0) → centre
 
-is-contr→extend : is-contr A → (φ : I) (p : Partial φ A) → A [ φ ↦ p ]
-is-contr→extend C φ p = inS (hcomp φ
-  λ { j (φ = i1) → C .snd (p 1=1) j
-    ; j (j = i0) → C .fst
-    })
+  is-contr→extend : is-contr A → (φ : I) (p : Partial φ A) → A [ φ ↦ p ]
+  is-contr→extend C φ p = inS (hcomp φ
+    λ { j (φ = i1) → C .snd (p 1=1) j
+      ; j (j = i0) → C .fst
+      })
 
-extend→is-contr : (∀ φ (p : Partial φ A) → A [ φ ↦ p ]) → is-contr A
-extend→is-contr ext = (outS (ext i0 λ ())) , λ x i → outS (ext i λ _ → x)
+  extend→is-contr : (∀ φ (p : Partial φ A) → A [ φ ↦ p ]) → is-contr A
+  extend→is-contr ext = outS (ext i0 λ ()) , λ x i → outS (ext i λ _ → x)
 
-is-contr→is-set : is-contr A → is-set A
-is-contr→is-set C x y p q i j = outS (is-contr→extend C (∂ i ∨ ∂ j) λ where
-  (i = i0) → p j
-  (i = i1) → q j
-  (j = i0) → x
-  (j = i1) → y)
+  is-contr→is-set : is-contr A → is-set A
+  is-contr→is-set C x y p q i j = outS (is-contr→extend C (∂ i ∨ ∂ j) λ where
+    (i = i0) → p j
+    (i = i1) → q j
+    (j = i0) → x
+    (j = i1) → y)
 
 
 contractible-if-inhabited : (A → is-contr A) → is-prop A
@@ -73,13 +74,14 @@ contractible-if-inhabited cont x y = is-contr→is-prop (cont x) x y
 inhabited-prop-is-contr : A → is-prop A → is-contr A
 inhabited-prop-is-contr x p = x , p x
 
-is-prop→is-set : is-prop A → is-set A
-is-prop→is-set h a b p q j i = hcomp (∂ i ∨ ∂ j) λ where
-  k (i = i0) → h a a k
-  k (i = i1) → h a b k
-  k (j = i0) → h a (p i) k
-  k (j = i1) → h a (q i) k
-  k (k = i0) → a
+opaque
+  is-prop→is-set : is-prop A → is-set A
+  is-prop→is-set h a b p q j i = hcomp (∂ i ∨ ∂ j) λ where
+    k (i = i0) → h a a k
+    k (i = i1) → h a b k
+    k (j = i0) → h a (p i) k
+    k (j = i1) → h a (q i) k
+    k (k = i0) → a
 
 is-of-hlevel-suc : (h : HLevel) → is-of-hlevel h A → is-of-hlevel (suc h) A
 is-of-hlevel-suc 0         x = is-contr→is-prop x
@@ -121,14 +123,15 @@ pathP-is-of-hlevel′ {A} h ahl x y =
   subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel′ h ahl _ _)
 
 
-is-contr-is-prop : is-prop (is-contr A)
-is-contr-is-prop (c₀ , h₀) (c₁ , h₁) j .fst = h₀ c₁ j
-is-contr-is-prop (c₀ , h₀) (c₁ , h₁) j .snd y i = hcomp (∂ i ∨ ∂ j) λ where
-  k (i = i0) → h₀ (h₀ c₁ j) k
-  k (i = i1) → h₀ y k
-  k (j = i0) → h₀ (h₀ y i) k
-  k (j = i1) → h₀ (h₁ y i) k
-  k (k = i0) → c₀
+opaque
+  is-contr-is-prop : is-prop (is-contr A)
+  is-contr-is-prop (c₀ , h₀) (c₁ , h₁) j .fst = h₀ c₁ j
+  is-contr-is-prop (c₀ , h₀) (c₁ , h₁) j .snd y i = hcomp (∂ i ∨ ∂ j) λ where
+    k (i = i0) → h₀ (h₀ c₁ j) k
+    k (i = i1) → h₀ y k
+    k (j = i0) → h₀ (h₀ y i) k
+    k (j = i1) → h₀ (h₁ y i) k
+    k (k = i0) → c₀
 
 is-prop-is-prop : is-prop (is-prop A)
 is-prop-is-prop f g i a b = is-prop→is-set f a b (f a b) (g a b) i
@@ -140,21 +143,22 @@ is-of-hlevel-is-prop (suc (suc h)) x y i a b =
   is-of-hlevel-is-prop (suc h) (x a b) (y a b) i
 
 
-is-prop→SquareP
-  : ∀ {B : I → I → Type ℓ} → ((i j : I) → is-prop (B i j))
-  → {a : B i0 i0} {b : B i0 i1} {c : B i1 i0} {d : B i1 i1}
-  → (p : PathP (λ j → B j i0) a c)
-  → (q : PathP (λ j → B i0 j) a b)
-  → (s : PathP (λ j → B i1 j) c d)
-  → (r : PathP (λ j → B j i1) b d)
-  → SquareP B q s p r
-is-prop→SquareP {B} is-propB {a} p q s r i j =
-  hcomp (∂ j ∨ ∂ i) λ where
-    k (j = i0) → is-propB i j (base i j) (p i) k
-    k (j = i1) → is-propB i j (base i j) (r i) k
-    k (i = i0) → is-propB i j (base i j) (q j) k
-    k (i = i1) → is-propB i j (base i j) (s j) k
-    k (k = i0) → base i j
-  where
-    base : (i j : I) → B i j
-    base i j = transport (λ k → B (i ∧ k) (j ∧ k)) a
+opaque
+  is-prop→SquareP
+    : ∀ {B : I → I → Type ℓ} → ((i j : I) → is-prop (B i j))
+    → {a : B i0 i0} {b : B i0 i1} {c : B i1 i0} {d : B i1 i1}
+    → (p : PathP (λ j → B j i0) a c)
+    → (q : PathP (λ j → B i0 j) a b)
+    → (s : PathP (λ j → B i1 j) c d)
+    → (r : PathP (λ j → B j i1) b d)
+    → SquareP B q s p r
+  is-prop→SquareP {B} is-propB {a} p q s r i j =
+    hcomp (∂ j ∨ ∂ i) λ where
+      k (j = i0) → is-propB i j (base i j) (p i) k
+      k (j = i1) → is-propB i j (base i j) (r i) k
+      k (i = i0) → is-propB i j (base i j) (q j) k
+      k (i = i1) → is-propB i j (base i j) (s j) k
+      k (k = i0) → base i j
+    where
+      base : (i j : I) → B i j
+      base i j = transport (λ k → B (i ∧ k) (j ∧ k)) a

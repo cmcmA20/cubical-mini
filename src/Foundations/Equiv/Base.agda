@@ -44,19 +44,20 @@ idₑ = id , id-is-equiv
 equiv-centre : (e : A ≃ B) (y : B) → fibre (e .fst) y
 equiv-centre e y = e .snd .equiv-proof y .fst
 
-equiv-path : (e : A ≃ B) (y : B) (v : fibre (e .fst ) y) → equiv-centre e y ＝ v
+equiv-path : (e : A ≃ B) (y : B) (v : fibre (e .fst) y) → equiv-centre e y ＝ v
 equiv-path e y = e .snd .equiv-proof y .snd
 
-is-equiv-is-prop : (f : A → B) → is-prop (is-equiv f)
-is-equiv-is-prop f p q i .equiv-proof y =
-  let p₂ = p .equiv-proof y .snd
-      q₂ = q .equiv-proof y .snd
-  in p₂ (q .equiv-proof y .fst) i , λ w j → hcomp (∂ i ∨ ∂ j) λ where
-     k (i = i0) → p₂ w j
-     k (i = i1) → q₂ w (j ∨ ~ k)
-     k (j = i0) → p₂ (q₂ w (~ k)) i
-     k (j = i1) → w
-     k (k = i0) → p₂ w (i ∨ j)
+opaque
+  is-equiv-is-prop : (f : A → B) → is-prop (is-equiv f)
+  is-equiv-is-prop f p q i .equiv-proof y =
+    let p₂ = p .equiv-proof y .snd
+        q₂ = q .equiv-proof y .snd
+    in p₂ (q .equiv-proof y .fst) i , λ w j → hcomp (∂ i ∨ ∂ j) λ where
+       k (i = i0) → p₂ w j
+       k (i = i1) → q₂ w (j ∨ ~ k)
+       k (j = i0) → p₂ (q₂ w (~ k)) i
+       k (j = i1) → w
+       k (k = i0) → p₂ w (i ∨ j)
 
 equiv-ext : {e₀ e₁ : A ≃ B} (h : e₀ .fst ＝ e₁ .fst) → e₀ ＝ e₁
 equiv-ext {e₀} {e₁} h i = h i , is-prop→pathP (λ i → is-equiv-is-prop (h i)) (e₀ .snd) (e₁ .snd) i
@@ -70,61 +71,67 @@ is-equiv→counit eqv y = eqv .equiv-proof y .fst .snd
 is-equiv→unit : (eqv : is-equiv f) (x : A) → is-equiv→inverse eqv (f x) ＝ x
 is-equiv→unit {f} eqv x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
 
-is-equiv→zig : (eqv : is-equiv f) (x : A)
-             → ap f (is-equiv→unit eqv x) ＝ is-equiv→counit eqv (f x)
-is-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
-   k (i = i0) → f (is-equiv→unit eqv x j)
-   k (i = i1) → is-equiv→counit eqv (f x) (j ∨ ~ k)
-   k (j = i0) → is-equiv→counit eqv (f x) (i ∧ ~ k)
-   k (j = i1) → f x
-   k (k = i0) → eqv .equiv-proof (f x) .snd (x , refl) j .snd i
+opaque
+  unfolding _∙∙_∙∙_
+  is-equiv→zig : (eqv : is-equiv f) (x : A)
+               → ap f (is-equiv→unit eqv x) ＝ is-equiv→counit eqv (f x)
+  is-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
+     k (i = i0) → f (is-equiv→unit eqv x j)
+     k (i = i1) → is-equiv→counit eqv (f x) (j ∨ ~ k)
+     k (j = i0) → is-equiv→counit eqv (f x) (i ∧ ~ k)
+     k (j = i1) → f x
+     k (k = i0) → eqv .equiv-proof (f x) .snd (x , refl) j .snd i
 
-is-equiv→zag : (eqv : is-equiv f) (y : B)
-             → ap (is-equiv→inverse eqv) (is-equiv→counit eqv y) ＝ is-equiv→unit eqv (is-equiv→inverse eqv y)
-is-equiv→zag {f} eqv b =
-  subst (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
-  g = is-equiv→inverse eqv
-  ε = is-equiv→counit eqv
-  η = is-equiv→unit eqv
+  is-equiv→zag : (eqv : is-equiv f) (y : B)
+               → ap (is-equiv→inverse eqv) (is-equiv→counit eqv y) ＝ is-equiv→unit eqv (is-equiv→inverse eqv y)
+  is-equiv→zag {B} {f} eqv b =
+    subst (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
+    g : B → _
+    g = is-equiv→inverse eqv
+    ε : (y : B) → f (is-equiv→inverse eqv y) ＝ y
+    ε = is-equiv→counit eqv
+    η : (x : _) → is-equiv→inverse eqv (f x) ＝ x
+    η = is-equiv→unit eqv
 
-  helper : ∀ a → ap g (ε (f a)) ＝ η (g (f a))
-  helper a i j = hcomp (∂ i ∨ ∂ j) λ where
-    k (i = i0) → g (ε (f a) (j ∨ ~ k))
-    k (i = i1) → η (η a (~ k)) j
-    k (j = i0) → g (is-equiv→zig eqv a (~ i) (~ k))
-    k (j = i1) → η a (i ∧ ~ k)
-    k (k = i0) → η a (i ∧ j)
+    helper : ∀ a → ap g (ε (f a)) ＝ η (g (f a))
+    helper a i j = hcomp (∂ i ∨ ∂ j) λ where
+      k (i = i0) → g (ε (f a) (j ∨ ~ k))
+      k (i = i1) → η (η a (~ k)) j
+      k (j = i0) → g (is-equiv→zig eqv a (~ i) (~ k))
+      k (j = i1) → η a (i ∧ ~ k)
+      k (k = i0) → η a (i ∧ j)
 
-infixr 30 _∙ₑ_
-_∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
-(u ∙ₑ (g , v)) .fst = g ∘ u .fst
-((f , u) ∙ₑ (g , v)) .snd .equiv-proof c = contr
-  where
-  contract-inv = equiv-path (g , v) c
+  infixr 30 _∙ₑ_
+  _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
+  (u ∙ₑ (g , v)) .fst = g ∘ u .fst
+  ((f , u) ∙ₑ (g , v)) .snd .equiv-proof c = contr
+    where
+    contract-inv : (w : fibre g c) → equiv-centre (g , v) c ＝ w
+    contract-inv = equiv-path (g , v) c
 
-  θ : (a : _) (p : g (f a) ＝ c) → _
-  θ a p = ∙-filler (ap (is-equiv→inverse u ∘ fst) (contract-inv (_ , p))) (is-equiv→unit u a)
+    θ : (a : _) (p : g (f a) ＝ c) → _
+    θ a p = ∙-filler (ap (is-equiv→inverse u ∘ fst) (contract-inv (_ , p))) (is-equiv→unit u a)
 
-  contr : is-contr (fibre (g ∘ f) c)
-  contr .fst .fst = is-equiv→inverse u (is-equiv→inverse v c)
-  contr .fst .snd = ap g (is-equiv→counit u (is-equiv→inverse v c)) ∙ is-equiv→counit v c
-  contr .snd (a , p) i .fst = θ a p i1 i
-  contr .snd (a , p) i .snd j = hcomp (i ∨ ∂ j) λ where
-    k (i = i1) → f-square k
-    k (j = i0) → g (f (θ a p k i))
-    k (j = i1) → contract-inv (_ , p) i .snd k
-    k (k = i0) → g (is-equiv→counit u (contract-inv  (_ , p) i .fst) j)
-      where
-      f-square : I → _
-      f-square k = hcomp (∂ j ∨ ∂ k) λ where
-        l (j = i0) → g (f (is-equiv→unit u a k))
-        l (j = i1) → p (k ∧ l)
-        l (k = i0) → g (is-equiv→counit u (f a) j)
-        l (k = i1) → p (j ∧ l)
-        l (l = i0) → g (equiv-path (f , u) (f a) (a , refl) k .snd j)
+    contr : is-contr (fibre (g ∘ f) c)
+    contr .fst .fst = is-equiv→inverse u (is-equiv→inverse v c)
+    contr .fst .snd = ap g (is-equiv→counit u (is-equiv→inverse v c)) ∙ is-equiv→counit v c
+    contr .snd (a , p) i .fst = θ a p i1 i
+    contr .snd (a , p) i .snd j = hcomp (i ∨ ∂ j) λ where
+      k (i = i1) → f-square k
+      k (j = i0) → g (f (θ a p k i))
+      k (j = i1) → contract-inv (_ , p) i .snd k
+      k (k = i0) → g (is-equiv→counit u (contract-inv  (_ , p) i .fst) j)
+        where
+        f-square : I → _
+        f-square k = hcomp (∂ j ∨ ∂ k) λ where
+          l (j = i0) → g (f (is-equiv→unit u a k))
+          l (j = i1) → p (k ∧ l)
+          l (k = i0) → g (is-equiv→counit u (f a) j)
+          l (k = i1) → p (j ∧ l)
+          l (l = i0) → g (equiv-path (f , u) (f a) (a , refl) k .snd j)
 
-is-equiv-comp : {g : B → C}
-              → is-equiv f
-              → is-equiv g
-              → is-equiv (g ∘ f)
-is-equiv-comp {f} {g} r s = ((f , r) ∙ₑ (g , s)) .snd
+  is-equiv-comp : {g : B → C}
+                → is-equiv f
+                → is-equiv g
+                → is-equiv (g ∘ f)
+  is-equiv-comp {f} {g} r s = ((f , r) ∙ₑ (g , s)) .snd

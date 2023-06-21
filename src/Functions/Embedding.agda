@@ -140,7 +140,7 @@ is-embedding→cancellable {f} emb = total→is-equiv {f = λ y p → ap {y = y}
     ((_ , refl) , λ (y , p) i → p i , λ j → p (i ∧ j))
     ((_ , refl) , (is-of-hlevel-≃ 1 (Σ-ap-snd λ _ → sym-equiv) (emb _) _)))
 
-abstract
+opaque
   is-embedding→is-of-hlevel
     : ∀ n → {f : A → B} → is-embedding f
     → is-of-hlevel (suc n) B

@@ -10,47 +10,48 @@ private variable
   x x′ y y′ z z′ w w′ : A
   p p′ q q′ r r′ s s′ t : x ＝ y
 
-∙-filler″ : (p : x ＝ y) (q : y ＝ z)
-          → Square refl (sym p) (p ∙ q) q
-∙-filler″ {y} p q i j =
-  hcomp (∂ i ∨ ~ j) λ where
-    k (i = i0) → p (~ j)
-    k (i = i1) → q (j ∧ k)
-    k (j = i0) → y
-    k (k = i0) → p (i ∨ ~ j)
+opaque
+  unfolding _∙∙_∙∙_
+  ∙-filler″ : (p : x ＝ y) (q : y ＝ z)
+            → Square refl (sym p) (p ∙ q) q
+  ∙-filler″ {y} p q i j =
+    hcomp (∂ i ∨ ~ j) λ where
+      k (i = i0) → p (~ j)
+      k (i = i1) → q (j ∧ k)
+      k (j = i0) → y
+      k (k = i0) → p (i ∨ ~ j)
 
--- TODO draw this and reorder args
-pasteP
-  : ∀ {α β γ δ}
-  → Square α p β p′
-  → Square α q γ q′
-  → Square β r δ r′
-  → Square γ s δ s′
-  → Square {a₀₀ = w } {a₀₁ = x } p  {a₁₀ = z } q {a₁₁ = y } s  r
-  → Square {a₀₀ = w′} {a₀₁ = x′} p′ {a₁₀ = z′} q′{a₁₁ = y′} s′ r′
-pasteP top left right bottom square i j = hcomp (∂ i ∨ ∂ j) λ where
-  k (i = i0) → left   k j
-  k (i = i1) → right  k j
-  k (j = i0) → top    k i
-  k (j = i1) → bottom k i
-  k (k = i0) → square i j
+  -- TODO draw this and reorder args
+  pasteP
+    : ∀ {α β γ δ}
+    → Square α p β p′
+    → Square α q γ q′
+    → Square β r δ r′
+    → Square γ s δ s′
+    → Square {a₀₀ = w } {a₀₁ = x } p  {a₁₀ = z } q {a₁₁ = y } s  r
+    → Square {a₀₀ = w′} {a₀₁ = x′} p′ {a₁₀ = z′} q′{a₁₁ = y′} s′ r′
+  pasteP top left right bottom square i j = hcomp (∂ i ∨ ∂ j) λ where
+    k (i = i0) → left   k j
+    k (i = i1) → right  k j
+    k (j = i0) → top    k i
+    k (j = i1) → bottom k i
+    k (k = i0) → square i j
 
-paste : p ＝ p′ → q ＝ q′ → r ＝ r′ → s ＝ s′
-      → Square p  q  r  s
-      → Square p′ q′ r′ s′
-paste p q r s = pasteP p q s r
+  ∙-id-comm : p ∙ refl ＝ refl ∙ p
+  ∙-id-comm {p} i j =
+    hcomp (∂ i ∨ ∂ j) λ where
+      k (i = i0) → ∙-filler  p refl k j
+      k (i = i1) → ∙-filler″ refl p j k
+      k (j = i0) → p i0
+      k (j = i1) → p (~ i ∨ k)
+      k (k = i0) → p (~ i ∧ j)
 
-∙-id-comm : p ∙ refl ＝ refl ∙ p
-∙-id-comm {p} i j =
-  hcomp (∂ i ∨ ∂ j) λ where
-    k (i = i0) → ∙-filler  p refl k j
-    k (i = i1) → ∙-filler″ refl p j k
-    k (j = i0) → p i0
-    k (j = i1) → p (~ i ∨ k)
-    k (k = i0) → p (~ i ∧ j)
+  paste : p ＝ p′ → q ＝ q′ → r ＝ r′ → s ＝ s′
+        → Square p  q  r  s
+        → Square p′ q′ r′ s′
+  paste p q r s = pasteP p q s r
 
-
-module _ (p＝refl : p ＝ refl) where
+module _ (p＝refl : p ＝ refl) where opaque
   ∙-elim-l : p ∙ q ＝ q
   ∙-elim-l {q} = sym $ paste (ap sym p＝refl) refl refl refl (∙-filler′ p q)
 
@@ -64,7 +65,7 @@ module _ (p＝refl : p ＝ refl) where
   ∙-intro-r = sym ∙-elim-r
 
 
-module _ (pq＝s : p ∙ q ＝ s) where
+module _ (pq＝s : p ∙ q ＝ s) where opaque
   ∙-pull-l : p ∙ q ∙ r ＝ s ∙ r
   ∙-pull-l {r} = ∙-assoc p q r ∙ ap (_∙ r) pq＝s
 
@@ -74,21 +75,21 @@ module _ (pq＝s : p ∙ q ＝ s) where
   ∙-pull-r : (r ∙ p) ∙ q ＝ r ∙ s
   ∙-pull-r {r} = sym (∙-assoc r p q) ∙ ap (r ∙_) pq＝s
 
-module _ (s＝pq : s ＝ p ∙ q) where
+module _ (s＝pq : s ＝ p ∙ q) where opaque
   ∙-push-l : s ∙ r ＝ p ∙ q ∙ r
   ∙-push-l = sym (∙-pull-l (sym s＝pq))
 
   ∙-push-r : r ∙ s ＝ (r ∙ p) ∙ q
   ∙-push-r = sym (∙-pull-r (sym s＝pq))
 
-module _ (pq＝rs : p ∙ q ＝ r ∙ s) where
+module _ (pq=rs : p ∙ q ＝ r ∙ s) where opaque
   ∙-extend-l : p ∙ (q ∙ t) ＝ r ∙ (s ∙ t)
-  ∙-extend-l {t = t} = ∙-assoc _ _ _ ∙∙ ap (_∙ t) pq＝rs ∙∙ sym (∙-assoc _ _ _)
+  ∙-extend-l {t} = ∙-assoc _ _ _ ∙∙ ap (_∙ t) pq=rs ∙∙ sym (∙-assoc _ _ _)
 
   ∙-extend-r : (t ∙ p) ∙ q ＝ (t ∙ r) ∙ s
-  ∙-extend-r {t = t} = sym (∙-assoc _ _ _) ∙∙ ap (t ∙_) pq＝rs ∙∙ ∙-assoc _ _ _
+  ∙-extend-r {t} = sym (∙-assoc _ _ _) ∙∙ ap (t ∙_) pq=rs ∙∙ ∙-assoc _ _ _
 
-module _ (inv : p ∙ q ＝ refl) where abstract
+module _ (inv : p ∙ q ＝ refl) where opaque
   ∙-cancel-l′ : p ∙ (q ∙ r) ＝ r
   ∙-cancel-l′ = ∙-pull-l inv ∙ ∙-id-l _
 
