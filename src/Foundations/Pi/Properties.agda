@@ -99,7 +99,8 @@ hetero-homotopy≃homotopy
     {f : A i0 → B i0} {g : A i1 → B i1}
   → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
   ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→equiv isom where
+hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→equiv isom where opaque
+  unfolding singletonP-is-contr
   open is-iso
   isom : Iso _ _
   isom .fst h x₀ = h (singletonP-is-contr A x₀ .fst .snd)

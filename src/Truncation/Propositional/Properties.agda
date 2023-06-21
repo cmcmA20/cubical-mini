@@ -53,26 +53,29 @@ proj
   → ∥ A ∥₁ → A
 proj {A-prop} = rec A-prop id
 
-universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
-universal {B} {A} B-prop = iso→equiv (inc′ , iso rec′ (λ _ → refl) beta) where
-  inc′ : (x : ∥ A ∥₁ → B) → A → B
-  inc′ f x = f ∣ x ∣₁
+opaque
+  unfolding is-of-hlevel
+  universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
+  universal {B} {A} B-prop = iso→equiv (inc′ , iso rec′ (λ _ → refl) beta) where
+    inc′ : (x : ∥ A ∥₁ → B) → A → B
+    inc′ f x = f ∣ x ∣₁
 
-  rec′ : (f : A → B) → ∥ A ∥₁ → B
-  rec′ f ∣ x ∣₁ = f x
-  rec′ f (squash₁ x y i) = B-prop (rec′ f x) (rec′ f y) i
+    rec′ : (f : A → B) → ∥ A ∥₁ → B
+    rec′ f ∣ x ∣₁ = f x
+    rec′ f (squash₁ x y i) = B-prop (rec′ f x) (rec′ f y) i
 
-  beta : rec′ is-left-inverse-of inc′
-  beta f = fun-ext $ elim (λ _ → is-prop→is-set B-prop _ _) (λ _ → refl)
+    beta : rec′ is-left-inverse-of inc′
+    beta f = fun-ext $ elim (λ _ → is-prop→is-set B-prop _ _) (λ _ → refl)
 
 is-prop→equiv-∥-∥₁ : is-prop A → A ≃ ∥ A ∥₁
 is-prop→equiv-∥-∥₁ A-prop =
-  prop-extₑ A-prop squash₁ ∣_∣₁ (elim (λ _ → A-prop) id)
+  prop-extₑ A-prop ∥-∥₁-is-prop ∣_∣₁ (elim (λ _ → A-prop) id)
 
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
 is-prop≃equiv-∥-∥₁ {A} =
   prop-extₑ is-prop-is-prop eqv-prop is-prop→equiv-∥-∥₁ inv
-  where
+  where opaque
+    unfolding is-of-hlevel
     inv : (A ≃ ∥ A ∥₁) → is-prop A
     inv eqv = is-equiv→is-of-hlevel 1 ((eqv ₑ⁻¹) .fst) ((eqv ₑ⁻¹) .snd) squash₁
 
@@ -83,13 +86,15 @@ is-prop≃equiv-∥-∥₁ {A} =
 image-lift : (f : A → B) → (A → image f)
 image-lift f x = f x , ∣ x , refl ∣₁
 
-is-constant→image-is-prop
-  : is-set B
-  → (f : A → B) → (∀ x y → f x ＝ f y) → is-prop (image f)
-is-constant→image-is-prop bset f f-const (a , x) (b , y) =
-  Σ-prop-path (λ _ → squash₁)
-    (elim₂ (λ _ _ → bset _ _)
-      (λ { (f*a , p) (f*b , q) → sym p ∙∙ f-const f*a f*b ∙∙ q }) x y)
+opaque
+  unfolding is-of-hlevel
+  is-constant→image-is-prop
+    : is-set B
+    → (f : A → B) → (∀ x y → f x ＝ f y) → is-prop (image f)
+  is-constant→image-is-prop bset f f-const (a , x) (b , y) =
+    Σ-prop-path (λ _ → squash₁)
+      (elim₂ (λ _ _ → bset _ _)
+        (λ { (f*a , p) (f*b , q) → sym p ∙∙ f-const f*a f*b ∙∙ q }) x y)
 
 -- TODO if codomain is an n-type, we should require f to be n-constant
 -- write a generic recursor

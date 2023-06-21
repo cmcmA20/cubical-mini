@@ -51,4 +51,4 @@ omniscient₁→exhaustible₁ omn₁ {P} P? = Dec.map
   (λ ¬∃∣p∣₁ x → ∥-∥₁.proj $ dec→¬¬-stable (map pure ∥-∥₁.rec! $ P? x)
     (¬∃∣p∣₁ ∘ λ ¬∣p∣₁ → pure $ x , λ p → ¬∣p∣₁ $ pure p))
   (λ ¬∃∣p∣₁ ∀p → ¬∃∣p∣₁ $ ∥-∥₁.rec! λ x → x .snd $ ∀p $ x .fst)
-  (¬ᵈ omn₁ {P = λ x → el! $ ¬ ⌞ P x ⌟} (¬ᵈ_ ∘ P?))
+  (¬ᵈ omn₁ {P = λ x → el (¬ ⌞ P x ⌟) ¬-is-prop} (¬ᵈ_ ∘ P?))

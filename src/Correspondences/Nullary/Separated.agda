@@ -18,6 +18,7 @@ private variable
   ℓ : Level
   A : Type ℓ
 
+-- TODO also make this opaque?
 is-separated-at-hlevel : HLevel → Type ℓ → Type ℓ
 is-separated-at-hlevel 0 = ¬¬_ stable_
 is-separated-at-hlevel (suc n) = is-separated-at-hlevel n on-paths-of_
@@ -29,20 +30,23 @@ dec→¬¬-stable (yes a) _ = a
 is-separated : Type ℓ → Type ℓ
 is-separated = is-separated-at-hlevel 1
 
+
 separated-identity-system
   : is-separated A
   → is-identity-system (λ x y → ¬¬ (x ＝ y)) (λ _ k → k refl)
 separated-identity-system A-sep =
   set-identity-system (λ _ _ → hlevel!) (A-sep _ _)
 
-is-separated→is-set
-  : is-separated A
-  → is-set A
-is-separated→is-set As =
-  identity-system→hlevel 1
-    (separated-identity-system As) λ _ _ _ f →
-      fun-ext λ g → ⊥.rec (f g)
+opaque
+  unfolding is-of-hlevel
+  is-separated→is-set
+    : is-separated A
+    → is-set A
+  is-separated→is-set As =
+    identity-system→hlevel 1
+      (separated-identity-system As) λ _ _ _ f →
+        fun-ext λ g → ⊥.rec (f g)
 
-is-separated-is-prop : is-prop (is-separated A)
-is-separated-is-prop As As′ =
-  fun-ext λ x i y p j → (is-separated→is-set As) x y (As _ _ p) (As′ _ _ p) i j
+  is-separated-is-prop : is-prop (is-separated A)
+  is-separated-is-prop As As′ =
+    fun-ext λ x i y p j → (is-separated→is-set As) x y (As _ _ p) (As′ _ _ p) i j

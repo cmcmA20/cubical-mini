@@ -101,10 +101,6 @@ function-action-is-transport {S} {α} {β} α-tr β-tr eqv f =
               ∙ β-tr eqv (f (subst S (sym (ua eqv)) x))
 
 
--- observe that "being a proposition" is a pointed structure on paths
-_ : id on-paths-of_ ＝ is-prop {ℓ}
-_ = fun-ext (λ _ → refl)
-
 -- this is the general form
 _stable′_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
 S stable′ A = A ≃ S A
@@ -125,7 +121,8 @@ module _
 
   module _
     (univ : is-univalent σ)
-    (axioms-prop : ∀ {X} {s} → is-prop (axioms X s)) where
+    (axioms-prop : ∀ {X} {s} → is-prop (axioms X s)) where opaque
+    unfolding is-of-hlevel
 
     @0 Axiom-str-univalent : is-univalent Axiom-str
     Axiom-str-univalent {X = A , s , a} {Y = B , t , b} f =

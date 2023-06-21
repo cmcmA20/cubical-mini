@@ -41,13 +41,14 @@ fin-ordered-is-set = hlevel!
 is-fin-set : Type ℓ → Type ℓ
 is-fin-set A = Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁
 
-is-fin-set-is-prop : is-prop (is-fin-set A)
-is-fin-set-is-prop (m , ∣p∣₁) (n , ∣q∣₁) =
-  Σ-prop-path-equiv hlevel! .fst $
-    ∥-∥₁.elim₂ (λ _ _ → ℕ-is-set m n)
-               (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q))
-               ∣p∣₁
-               ∣q∣₁
+-- FIXME
+-- is-fin-set-is-prop : is-prop (is-fin-set A)
+-- is-fin-set-is-prop (m , ∣p∣₁) (n , ∣q∣₁) =
+--   Σ-prop-path-equiv hlevel! .fst $
+--     ∥-∥₁.elim₂ (λ _ _ → ℕ-is-set m n)
+--                (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q))
+--                ∣p∣₁
+--                ∣q∣₁
 
 Finite→is-fin-set : Finite A → is-fin-set A
 Finite→is-fin-set A-fin = A-fin .cardinality , A-fin .enumeration
@@ -110,11 +111,11 @@ record FinSet ℓ : Type (ℓsuc ℓ) where
     Finite-FinSet : Finite typ
     Finite-FinSet = fin $ has-is-fin-set .snd
 
-    H-Level-FinSet : ∀ {n} → H-Level (2 + n) typ
-    H-Level-FinSet = basic-instance 2 (is-fin-set→is-set has-is-fin-set)
+    -- H-Level-FinSet : ∀ {n} → HLevel (2 + n) typ
+    -- H-Level-FinSet = basic-instance 2 (is-fin-set→is-set has-is-fin-set)
 
-open FinSet public
-  using (Finite-FinSet; H-Level-FinSet)
+-- open FinSet public
+--   using (Finite-FinSet; H-Level-FinSet)
 open FinSet using (typ; has-is-fin-set)
 
 fin-set! : (A : Type ℓ) → ⦃ Finite A ⦄ → FinSet ℓ

@@ -36,10 +36,6 @@ private variable
   B : Type ℓ′
   n : ℕ
 
-Finite→is-set : Finite A → is-set A
-Finite→is-set (fin f) =
-  ∥-∥₁.rec (is-of-hlevel-is-prop 2) (λ e → is-of-hlevel-≃ 2 e hlevel!) f
-
 Finite-choice
   : {P : A → Type ℓ′}
   → ⦃ Finite A ⦄
@@ -49,15 +45,20 @@ Finite-choice {P} ⦃ fin {(sz)} e ⦄ k = do
   choose ← fin-choice sz λ x → k (is-equiv→inverse (e .snd) x)
   pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e .fst x))
 
+Finite→is-set : Finite A → is-set A
+Finite→is-set (fin f) =
+  ∥-∥₁.rec (is-of-hlevel-is-prop 2) (λ e → is-of-hlevel-≃ 2 e hlevel!) f
+
 instance
-  H-Level-Finite : H-Level (suc n) (Finite A)
-  H-Level-Finite = prop-instance {A = Finite _} λ where
-    x y i .Finite.cardinality → ∥-∥₁.proj
-      ⦇ fin-injective (⦇ ⦇ x .enumeration ₑ⁻¹ ⦈ ∙ₑ y .enumeration ⦈) ⦈
-      i
-    x y i .Finite.enumeration → is-prop→pathP
+  HLevel-Finite : is-of-hlevel (suc n) (Finite A)
+  HLevel-Finite = is-prop→is-of-hlevel-suc {A = Finite _} (is-prop-η go) where
+    go : ∀ (x y : Finite _) → x ＝ y
+    go x y i .Finite.cardinality = ∥-∥₁.proj
+         ⦇ fin-injective (⦇ ⦇ x .enumeration ₑ⁻¹ ⦈ ∙ₑ y .enumeration ⦈) ⦈
+         i
+    go x y i .Finite.enumeration = is-prop→pathP
       {B = λ i → ∥ _ ≃ Fin (∥-∥₁.proj ⦇ fin-injective (⦇ ⦇ x .enumeration ₑ⁻¹ ⦈ ∙ₑ y .enumeration ⦈) ⦈ i) ∥₁}
-      (λ _ → squash₁)
+      (λ _ → ∥-∥₁-is-prop)
       (x .enumeration) (y .enumeration) i
 
 private
@@ -121,9 +122,9 @@ instance
     aeq ← A-fin .enumeration
     pure $ lift-equiv ∙ₑ aeq
 
-  -- TODO
-  -- Finite-＝
-  --   : ⦃ Discrete A ⦄ → ⦃ Finite A ⦄ → {x y : A} → Finite (x ＝ y)
-  -- Finite-＝ {x} {y} with x ≟ y
-  -- ... | yes p = fin {cardinality = 1} $ {!!}
-  -- ... | no ¬p = fin {cardinality = 0} $ pure ((λ p → absurd (¬p p)) , {!!})
+    -- TODO
+    -- Finite-＝
+    --   : ⦃ Discrete A ⦄ → ⦃ Finite A ⦄ → {x y : A} → Finite (x ＝ y)
+    -- Finite-＝ {x} {y} with x ≟ y
+    -- ... | yes p = fin {cardinality = 1} $ {!!}
+    -- ... | no ¬p = fin {cardinality = 0} $ pure ((λ p → absurd (¬p p)) , {!!})

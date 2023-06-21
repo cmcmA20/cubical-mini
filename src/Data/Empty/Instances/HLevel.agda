@@ -3,10 +3,10 @@ module Data.Empty.Instances.HLevel where
 
 open import Foundations.Base
 
-open import Meta.HLevel.Base
+open import Meta.HLevel
 
 open import Data.Empty.Base
 
 instance
-  H-Level-⊥ : {n : HLevel} → H-Level (suc n) ⊥
-  H-Level-⊥ = prop-instance ⊥-is-prop
+  HLevel-⊥ : {n : HLevel} → is-of-hlevel (suc n) ⊥
+  HLevel-⊥ = is-prop→is-of-hlevel-suc ⊥-is-prop

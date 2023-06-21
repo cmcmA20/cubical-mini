@@ -28,12 +28,16 @@ dec-as-sum = iso→equiv helper where
   helper .snd .is-iso.linv (no ¬a) = refl
   helper .snd .is-iso.linv (yes a) = refl
 
+opaque
+  unfolding is-of-hlevel
+  dec-contr : is-contr A → is-contr (Dec A)
+  dec-contr (a , _) .fst = yes a
+  dec-contr (a , p) .snd (no ¬a)  = absurd (¬a a)
+  dec-contr (a , p) .snd (yes a′) = ap yes (p a′)
+
 dec-is-of-hlevel : (n : HLevel) → is-of-hlevel n A → is-of-hlevel n (Dec A)
-dec-is-of-hlevel 0 (a , _) .fst = yes a
-dec-is-of-hlevel 0 (a , p) .snd (no ¬a)  = absurd (¬a a)
-dec-is-of-hlevel 0 (a , p) .snd (yes a′) = ap yes (p a′)
+dec-is-of-hlevel 0 = dec-contr
 dec-is-of-hlevel 1 A-hl =
   is-of-hlevel-≃ 1 dec-as-sum (disjoint-⊎-is-prop hlevel! A-hl (λ f → f .fst (f .snd)))
 dec-is-of-hlevel (suc (suc n)) A-hl =
-  is-of-hlevel-≃ (suc (suc n)) dec-as-sum
-    (⊎-is-of-hlevel n (λ ¬a₁ ¬a₂ → is-of-hlevel-+ n 1 hlevel!) A-hl)
+  is-of-hlevel-≃ (suc (suc n)) dec-as-sum (⊎-is-of-hlevel n hlevel! A-hl)

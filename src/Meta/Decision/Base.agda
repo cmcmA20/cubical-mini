@@ -3,7 +3,7 @@ module Meta.Decision.Base where
 
 open import Foundations.Base
 
-open import Meta.HLevel.Base
+open import Meta.HLevel
 
 open import Correspondences.Nullary.Decidable public
 
@@ -31,23 +31,25 @@ decide n ⦃ d ⦄ = d .has-decidable
 _≟_ : ⦃ Discrete A ⦄ → (x y : A) → Dec (x ＝ y)
 _≟_ = decide 1
 
-Decision-is-prop : is-prop (Decision (suc n) A)
-Decision-is-prop {n} d₁ d₂ i .has-decidable =
-  is-decidable-at-hlevel-is-prop n (d₁ .has-decidable) (d₂ .has-decidable) i
+opaque
+  unfolding is-of-hlevel
+  Decision-is-prop : is-prop (Decision (suc n) A)
+  Decision-is-prop {n} d₁ d₂ i .has-decidable =
+    is-decidable-at-hlevel-is-prop n (d₁ .has-decidable) (d₂ .has-decidable) i
 
-instance
-  H-Level-Discrete : ⦃ Discrete A ⦄ → H-Level (2 + n) A
-  H-Level-Discrete =
-    basic-instance 2 $ is-discrete→is-set _≟_
+instance opaque
+  unfolding is-of-hlevel
+  HLevel-Discrete : ⦃ Discrete A ⦄ → is-of-hlevel (2 + n) A
+  HLevel-Discrete = is-of-hlevel-+-left 2 _ (is-discrete→is-set _≟_)
 
-  H-Level-Discrete′ : ⦃ Discrete A ⦄ → H-Level (suc n) (Discrete A)
-  H-Level-Discrete′ = prop-instance Decision-is-prop
+  HLevel-Discrete′ : is-of-hlevel (suc n) (Discrete A)
+  HLevel-Discrete′ = is-prop→is-of-hlevel-suc Decision-is-prop
 
 -- TODO check if it's useful
-instance
-  Discrete-H-Level : Discrete (H-Level n A)
-  Discrete-H-Level .has-decidable (hlevel-instance _) (hlevel-instance _) =
-    yes (ap hlevel-instance (is-of-hlevel-is-prop _ _ _))
+-- instance
+--   Discrete-H-Level : Discrete (is-of-hlevel n A)
+--   Discrete-H-Level .has-decidable (hlevel-instance _) (hlevel-instance _) =
+--     yes (ap hlevel-instance (is-of-hlevel-is-prop _ _ _))
 
 -- TODO remove
   Discrete-Σ

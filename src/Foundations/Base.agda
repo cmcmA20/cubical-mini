@@ -7,6 +7,9 @@ open import Foundations.Prim.Extension  public
 open import Foundations.Prim.Kan        public
 open import Foundations.Prim.Glue       public
 
+open import Agda.Builtin.Nat
+  using (zero; suc)
+  renaming (Nat to ℕ)
 open import Agda.Builtin.Unit      public
 open import Foundations.Pi.Base    public
 open import Foundations.Sigma.Base public
@@ -386,25 +389,52 @@ _＝$S_ = fun-ext-simple⁻
 happly-simple = fun-ext-simple⁻
 
 
--- Direct definitions of lower h-levels
+-- h-levels
+
+HLevel : Type₀
+HLevel = ℕ
+
+_on-paths-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)
+
+opaque
+  is-of-hlevel : HLevel → Type ℓ → Type ℓ
+  is-of-hlevel 0 A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
+  is-of-hlevel 1 A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
+  is-of-hlevel (suc (suc h)) A = is-of-hlevel (suc h) on-paths-of A
 
 is-contr : Type ℓ → Type ℓ
-is-contr A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
+is-contr = is-of-hlevel 0
 
-is-contr⁻ : Type ℓ → Type ℓ
-is-contr⁻ A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (y ＝ x)
+opaque
+  unfolding is-of-hlevel
+  centre : is-contr A → A
+  centre = fst
+
+  paths : (A-c : is-contr A) → Π[ y ꞉ A ] (centre A-c ＝ y)
+  paths = snd
 
 is-prop : Type ℓ → Type ℓ
-is-prop A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
+is-prop = is-of-hlevel 1
+
+opaque
+  unfolding is-of-hlevel
+  is-prop-β : is-prop A → Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
+  is-prop-β = id
+
+  is-prop-η : Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y) → is-prop A
+  is-prop-η = id
 
 is-set : Type ℓ → Type ℓ
-is-set A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-prop (x ＝ y)
+is-set = is-of-hlevel 2
 
-is-groupoid : Type ℓ → Type ℓ
-is-groupoid A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-set (x ＝ y)
+opaque
+  unfolding is-of-hlevel
+  is-set-β : is-set A → Π[ x ꞉ A ] Π[ y ꞉ A ] Π[ p ꞉ (x ＝ y) ] Π[ q ꞉ x ＝ y ] (p ＝ q)
+  is-set-β = id
 
-is-2-groupoid : Type ℓ → Type ℓ
-is-2-groupoid A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-groupoid (x ＝ y)
+  is-set-η : Π[ x ꞉ A ] Π[ y ꞉ A ] Π[ p ꞉ (x ＝ y) ] Π[ q ꞉ x ＝ y ] (p ＝ q) → is-set A
+  is-set-η = id
 
 
 -- Singleton contractibility
@@ -415,14 +445,8 @@ fibre {A} f y = Σ[ x ꞉ A ] (f x ＝ y)
 SingletonP : (A : I → Type ℓ) (a : A i0) → Type _
 SingletonP A a = Σ[ x ꞉ A i1 ] ＜ a ／ A ＼ x ＞
 
-SingletonP⁻ : (A : I → Type ℓ) (a : A i1) → Type _
-SingletonP⁻ A a = Σ[ x ꞉ A i0 ] ＜ x ／ A ＼ a ＞
-
 Singleton : {A : Type ℓ} → A → Type _
 Singleton {A} = SingletonP (λ _ → A)
-
-Singleton⁻ : {A : Type ℓ} → A → Type _
-Singleton⁻ {A} = SingletonP⁻ (λ _ → A)
 
 singleton-is-prop : {A : Type ℓ} {a : A} (s : Singleton a)
                   → (a , refl) ＝ s
@@ -430,34 +454,18 @@ singleton-is-prop (_ , path) i = path i , square i where
     square : Square refl refl path path
     square i j = path (i ∧ j)
 
-singleton⁻-is-prop : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
-                   → (a , refl) ＝ s
-singleton⁻-is-prop (_ , path) i = path (~ i) , square (~ i) where
-    square : Square path path refl refl
-    square i j = path (i ∨ j)
+opaque
+  unfolding is-of-hlevel
+  singleton-is-contr : {A : Type ℓ} {a : A} (s : Singleton a)
+                     → is-contr (Singleton a)
+  singleton-is-contr {a} _ = (a , refl) , singleton-is-prop
 
-singleton-is-contr : {A : Type ℓ} {a : A} (s : Singleton a)
-                   → is-contr (Singleton a)
-singleton-is-contr {a} _ = (a , refl) , singleton-is-prop
-
-singleton-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton a)
-                    → is-contr⁻ (Singleton a)
-singleton-is-contr⁻ {a} _ = (a , refl) , sym ∘ singleton-is-prop
-
-singleton⁻-is-contr : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
-                    → is-contr (Singleton⁻ a)
-singleton⁻-is-contr {a} _ = (a , refl) , singleton⁻-is-prop
-
-singleton⁻-is-contr⁻ : {A : Type ℓ} {a : A} (s : Singleton⁻ a)
-                     → is-contr⁻ (Singleton⁻ a)
-singleton⁻-is-contr⁻ {a} _ = (a , refl) , sym ∘ singleton⁻-is-prop
-
-singletonP-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (SingletonP A a)
-singletonP-is-contr A a .fst = _ , transport-filler (λ i → A i) a
-singletonP-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
-  k (i = i0) → transport-filler (λ i → A i) a k
-  k (i = i1) → p k
-  k (k = i0) → a
+  singletonP-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (SingletonP A a)
+  singletonP-is-contr A a .fst = _ , transport-filler (λ i → A i) a
+  singletonP-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
+    k (i = i0) → transport-filler (λ i → A i) a k
+    k (i = i1) → p k
+    k (k = i0) → a
 
 inspect : (x : A) → Singleton x
 inspect x = x , refl
@@ -465,12 +473,13 @@ inspect x = x , refl
 
 -- Path induction (J) and its computation rule
 
-module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x refl) where
+module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x refl) where opaque
+  unfolding is-of-hlevel singleton-is-contr
 
   J : (p : x ＝ y) → P y p
-  J {y} p = transport (λ i → P (path i .fst) (path i .snd)) d
-    where path : (x , refl) ＝ (y , p)
-          path = singleton-is-contr (y , p) .snd _
+  J {y} p = transport (λ i → P (path i .fst) (path i .snd)) d where
+    path : (x , refl) ＝ (y , p)
+    path = singleton-is-contr (y , p) .snd _
 
   J-refl : J refl ＝ d
   J-refl = transport-refl d
@@ -669,7 +678,7 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 -- Path transport
 
 opaque
-  unfolding _∙∙_∙∙_ _∙_
+  unfolding _∙∙_∙∙_
   double-composite
     : (p : x ＝ y) (q : y ＝ z) (r : z ＝ w)
     → p ∙∙ q ∙∙ r ＝ p ∙ q ∙ r
@@ -727,6 +736,3 @@ subst-path-both p adj = transport-path p adj adj
 -- TODO move somewhere?
 it : ⦃ A ⦄ → A
 it ⦃ (a) ⦄ = a
-
-_on-paths-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
-S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)

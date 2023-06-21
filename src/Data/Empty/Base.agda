@@ -22,15 +22,17 @@ absurd = rec
 elim : {@0 A : ⊥ → Type ℓ} → (@0 x : ⊥) → A x
 elim ()
 
-⊥-is-prop : is-prop ⊥
-⊥-is-prop ()
-
 ⊥-ext : x ＝ y
 ⊥-ext {x = ()}
 
-absurd-is-contr : is-contr (⊥ → A)
-absurd-is-contr .fst ()
-absurd-is-contr .snd _ _ ()
+opaque
+  unfolding is-of-hlevel
+  ⊥-is-prop : is-prop ⊥
+  ⊥-is-prop ()
+
+  absurd-is-contr : is-contr (⊥ → A)
+  absurd-is-contr .fst ()
+  absurd-is-contr .snd _ _ ()
 
 absurd-path : {@0 y : A} {@0 x : ⊥} → absurd x ＝ y
 absurd-path {x = ()}
@@ -53,5 +55,7 @@ infix 0 ¬_
 ¬_ : Type ℓ → Type ℓ
 ¬ A = A → ⊥
 
-¬-is-prop : is-prop (¬ A)
-¬-is-prop ¬a₁ ¬a₂ i a = ⊥-ext {x = ¬a₁ a} {y = ¬a₂ a} i
+opaque
+  unfolding is-of-hlevel
+  ¬-is-prop : is-prop (¬ A)
+  ¬-is-prop ¬a₁ ¬a₂ i a = ⊥-ext {x = ¬a₁ a} {y = ¬a₂ a} i

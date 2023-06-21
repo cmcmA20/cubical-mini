@@ -43,20 +43,22 @@ ap-≃ F e = path→equiv (ap F (ua e))
 sym-equiv : (x ＝ y) ≃ (y ＝ x)
 sym-equiv = sym , is-iso→is-equiv (iso sym (λ _ → refl) (λ _ → refl))
 
-is-contr→is-equiv : is-contr A → is-contr B
-                  → {f : A → B} → is-equiv f
-is-contr→is-equiv contr-A contr-B = is-iso→is-equiv f-is-iso where
-  f-is-iso : is-iso _
-  f-is-iso .inv  _ = contr-A .fst
-  f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
-  f-is-iso .linv _ = is-contr→is-prop contr-A _ _
+opaque
+  unfolding is-of-hlevel
+  is-contr→is-equiv : is-contr A → is-contr B
+                    → {f : A → B} → is-equiv f
+  is-contr→is-equiv contr-A contr-B = is-iso→is-equiv f-is-iso where
+    f-is-iso : is-iso _
+    f-is-iso .inv  _ = contr-A .fst
+    f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
+    f-is-iso .linv _ = is-contr→is-prop contr-A _ _
 
-is-contr→equiv : is-contr A → is-contr B → A ≃ B
-is-contr→equiv contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
-  f-is-iso : is-iso _
-  f-is-iso .inv  _ = contr-A .fst
-  f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
-  f-is-iso .linv _ = is-contr→is-prop contr-A _ _
+  is-contr→equiv : is-contr A → is-contr B → A ≃ B
+  is-contr→equiv contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
+    f-is-iso : is-iso _
+    f-is-iso .inv  _ = contr-A .fst
+    f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
+    f-is-iso .linv _ = is-contr→is-prop contr-A _ _
 
 module Equiv (e : A ≃ B) where
   to = e .fst
@@ -66,11 +68,13 @@ module Equiv (e : A ≃ B) where
   zig = is-equiv→zig (e .snd)
   zag = is-equiv→zag (e .snd)
 
-  injective : ∀ {x y} → to x ＝ to y → x ＝ y
-  injective p = ap fst $ is-contr→is-prop (e .snd .equiv-proof _) (_ , refl) (_ , sym p)
+  opaque
+    unfolding is-of-hlevel
+    injective : ∀ {x y} → to x ＝ to y → x ＝ y
+    injective p = ap fst $ is-contr→is-prop (e .snd .equiv-proof _) (_ , refl) (_ , sym p)
 
-  injective₂ : ∀ {x y z} → to x ＝ z → to y ＝ z → x ＝ y
-  injective₂ p q = ap fst $ is-contr→is-prop (e .snd .equiv-proof _) (_ , p) (_ , q)
+    injective₂ : ∀ {x y z} → to x ＝ z → to y ＝ z → x ＝ y
+    injective₂ p q = ap fst $ is-contr→is-prop (e .snd .equiv-proof _) (_ , p) (_ , q)
 
   inverse : B ≃ A
   inverse = e ₑ⁻¹
@@ -88,13 +92,15 @@ _ ≃⟨⟩ e = e
 _≃∎ : (A : Type ℓ) → A ≃ A
 _ ≃∎ = idₑ
 
-prop-extₑ : is-prop A → is-prop B
-          → (A → B) → (B → A)
-          → A ≃ B
-prop-extₑ A-prop B-prop a→b b→a .fst = a→b
-prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .fst = b→a y , B-prop _ _
-prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
-  Σ-path (A-prop _ _) (is-prop→is-set B-prop _ _ _ _)
+opaque
+  unfolding is-of-hlevel
+  prop-extₑ : is-prop A → is-prop B
+            → (A → B) → (B → A)
+            → A ≃ B
+  prop-extₑ A-prop B-prop a→b b→a .fst = a→b
+  prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .fst = b→a y , B-prop _ _
+  prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
+    Σ-path (A-prop _ _) (is-prop→is-set B-prop _ _ _ _)
 
 module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
 

@@ -7,8 +7,7 @@ open import Foundations.HLevel
 open import Foundations.Sigma
 open import Foundations.Univalence.Base
 
-open import Meta.HLevel.Base public
-open import Meta.Underlying  public
+open import Meta.Underlying public
 
 record n-Type ℓ n : Type (ℓsuc ℓ) where
   no-eta-equality
@@ -43,7 +42,8 @@ n-path {X} {Y} f i .is-tr =
 n-ua f = n-path (ua f)
 
 @0 n-univalence : (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
-n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where
+n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where opaque
+  unfolding univalence⁻¹
   inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
   inv p = path→equiv (ap typ p)
 
@@ -64,11 +64,13 @@ n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where
   isic : is-iso n-ua
   isic = iso inv rinv (linv {Y})
 
-@0 n-Type-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
-n-Type-is-of-hlevel zero x y = n-ua
-  ((λ _ → y .is-tr .fst) , is-contr→is-equiv (x .is-tr) (y .is-tr))
-n-Type-is-of-hlevel (suc n) x y =
-  is-of-hlevel-≃ (suc n) (n-univalence ₑ⁻¹) (≃-is-of-hlevel (suc n) (x .is-tr) (y .is-tr))
+opaque
+  unfolding is-of-hlevel
+  @0 n-Type-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
+  n-Type-is-of-hlevel zero x y = n-ua
+    ((λ _ → y .is-tr .fst) , is-contr→is-equiv (x .is-tr) (y .is-tr))
+  n-Type-is-of-hlevel (suc n) x y =
+    is-of-hlevel-≃ (suc n) (n-univalence ₑ⁻¹) (≃-is-of-hlevel (suc n) (x .is-tr) (y .is-tr))
 
 Prop : ∀ ℓ → Type (ℓsuc ℓ)
 Prop ℓ = n-Type ℓ 1
@@ -77,10 +79,10 @@ Set : ∀ ℓ → Type (ℓsuc ℓ)
 Set ℓ = n-Type ℓ 2
 
 instance
-  H-Level-is-equiv
+  HLevel-is-equiv
     : {f : A → B} {n : HLevel}
-    → H-Level (suc n) (is-equiv f)
-  H-Level-is-equiv = prop-instance (is-equiv-is-prop _)
+    → is-of-hlevel (suc n) (is-equiv f)
+  HLevel-is-equiv = is-prop→is-of-hlevel-suc (is-equiv-is-prop _)
 
 -- module _ {ℓ : Level} {n : HLevel} where private
 --   open import Foundations.Univalence.SIP
