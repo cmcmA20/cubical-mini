@@ -12,7 +12,7 @@ private variable
 
 opaque
   unfolding is-of-hlevel
-  is-contr→equiv-⊤ : is-contr A → A ≃ Lift ℓ ⊤
-  is-contr→equiv-⊤ A-ctr .fst _ = lift tt
-  is-contr→equiv-⊤ A-ctr .snd .equiv-proof (lift tt)
+  is-contr→equiv-⊤ : is-contr A → A ≃ ⊤
+  is-contr→equiv-⊤ A-ctr .fst _ = tt
+  is-contr→equiv-⊤ A-ctr .snd .equiv-proof tt
     = (A-ctr .fst , refl) , λ { (a , p) i → A-ctr .snd a i , refl }

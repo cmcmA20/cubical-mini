@@ -84,8 +84,8 @@ is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} = ∥-∥₁.elim! go ((n 
   go : Π[ A-f ꞉ Fin-ordered A ] (Decidable₁ P → Dec ∥ Σ A _ ∥₁)
   go A-f = Dec.map pure rec! ∘ fin-ordered→omniscient A-f
 
-is-fin-set→exhaustible₁ : is-fin-set A → Exhaustible₁ {ℓ′ = ℓ′} A
-is-fin-set→exhaustible₁ = omniscient₁→exhaustible₁ ∘ is-fin-set→omniscient₁
+-- is-fin-set→exhaustible₁ : is-fin-set A → Exhaustible₁ {ℓ′ = ℓ′} A
+-- is-fin-set→exhaustible₁ = omniscient₁→exhaustible₁ ∘ is-fin-set→omniscient₁
 
 -- is-fin-set→omniscient
 --   : is-fin-set A → {P : Pred₁ ℓ′ A} → Decidable₁ P → Dec (Σ[ a ꞉ A ] ⌞ P a ⌟)

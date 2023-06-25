@@ -14,4 +14,4 @@ instance
   Finite-⊥ : Finite ⊤
   Finite-⊥ .Finite.cardinality = 1
   Finite-⊥ .Finite.enumeration =
-    ∣ (is-contr→equiv-⊤ fin-1-is-contr ∙ₑ lift-equiv {0ℓ}) ₑ⁻¹ ∣₁
+    ∣ (is-contr→equiv-⊤ fin-1-is-contr) ₑ⁻¹ ∣₁

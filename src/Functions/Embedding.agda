@@ -108,7 +108,7 @@ subtype-classifier {ℓ} = map-classifier {ℓ = ℓ} is-prop
 module @0 subtype-classifier {ℓ} {B : Type ℓ} = Equiv (subtype-classifier {B = B})
 
 opaque
-  unfolding is-of-hlevel
+  unfolding is-of-hlevel Carrier
   subset-proj-embedding
     : ∀ {B : A → Type ℓ} → (∀ x → is-prop (B x))
     → is-embedding {A = Σ A B} fst
@@ -128,7 +128,7 @@ opaque
     → is-embedding f
   monic→is-embedding {f} bset monic =
     injective→has-prop-fibres bset _ λ {x} {y} p →
-      happly (monic {C = el (Lift _ ⊤) (λ _ _ _ _ i j → lift tt)} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p))) _
+      happly (monic {C = el {n = 2} (Lift _ ⊤) λ _ _ _ _ i j → _} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p))) _
 
 
   embedding-lemma : (∀ x → is-contr (fibre f (f x))) → is-embedding f

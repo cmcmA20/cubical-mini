@@ -620,8 +620,7 @@ private variable
 -- decomposition-projection mechanism of the tactic. We provide only
 -- some of the most common helpers:
 el! : (A : Type ℓ) {@(tactic hlevel-tactic-worker) hl : is-of-hlevel n A} → n-Type ℓ n
-el! A {hl} .n-Type.typ = A
-el! A {hl} .n-Type.is-tr = hl
+el! A {hl} = el A hl
 
 prop-extₑ!
   : {B : Type ℓb}
@@ -708,8 +707,8 @@ instance
   decomp-ntype : hlevel-decomposition (n-Type ℓ n)
   decomp-ntype = decomp (quote n-Type-is-of-hlevel) (`level-minus 1 ∷ [])
 
-  hlevel-proj-n-type : hlevel-projection (quote n-Type.typ)
-  hlevel-proj-n-type .has-level = quote n-Type.is-tr
+  hlevel-proj-n-type : hlevel-projection (quote Carrier)
+  hlevel-proj-n-type .has-level = quote carrier-is-tr
   hlevel-proj-n-type .get-level ty = do
     def (quote n-Type) (ell v∷ lv′t v∷ []) ← reduce ty
       where _ → backtrack $ "Type of thing isn't n-Type, it is " ∷ termErr ty ∷ []

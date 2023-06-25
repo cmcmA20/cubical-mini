@@ -7,6 +7,8 @@ open import Foundations.Pi
 open import Foundations.Sigma
 open import Foundations.Univalence
 
+open import Data.Unit.Properties
+
 private variable
   ℓ ℓ₁ ℓ₂ ℓ₃ : Level
   A : Type ℓ
@@ -110,6 +112,24 @@ _stable_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
 S stable A = S A → A
 
 
+property : (S : Type ℓ → Type ℓ₁) → (∀ A → is-prop (S A)) → Structure 0ℓ S
+property _ _ .is-hom _ _ _ = ⊤
+
+@0 property-is-univalent : {S-prop : _} → is-univalent {S = S} (property S S-prop)
+property-is-univalent {S-prop} {X = _ , s} {Y = _ , t} _ =
+  is-contr→equiv-⊤ (
+    inhabited-prop-is-contr (is-prop→pathP (λ _ → S-prop _) s t)
+                            (pathP-is-of-hlevel 1 (S-prop _))
+  ) ₑ⁻¹
+
+@0 transfer-property
+  : {S-prop : _}
+  → (A : Type-with (property S S-prop)) (B : Type ℓ)
+  → A .fst ≃ B
+  → S B
+transfer-property {S} A B eqv = subst S (ua eqv) (A .snd)
+
+-- TODO use `property`?
 module _
   (σ : Structure ℓ S)
   (axioms : (X : _) → S X → Type ℓ₃)

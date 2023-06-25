@@ -45,10 +45,12 @@ Omniscient₁ : Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
 Omniscient₁ {ℓ′} A = {P : Pred₁ ℓ′ A}
                    → Decidable₁ P → Dec ∥ Σ[ a ꞉ A ] ⌞ P a ⌟ ∥₁
 
--- what the hell
-omniscient₁→exhaustible₁ : Omniscient₁ {ℓ′ = ℓ′} A → Exhaustible₁ {ℓ′ = ℓ′} A
-omniscient₁→exhaustible₁ omn₁ {P} P? = Dec.map
-  (λ ¬∃∣p∣₁ x → ∥-∥₁.proj $ dec→¬¬-stable (map pure ∥-∥₁.rec! $ P? x)
-    (¬∃∣p∣₁ ∘ λ ¬∣p∣₁ → pure $ x , λ p → ¬∣p∣₁ $ pure p))
-  (λ ¬∃∣p∣₁ ∀p → ¬∃∣p∣₁ $ ∥-∥₁.rec! λ x → x .snd $ ∀p $ x .fst)
-  (¬ᵈ omn₁ {P = λ x → el (¬ ⌞ P x ⌟) ¬-is-prop} (¬ᵈ_ ∘ P?))
+
+-- FIXME
+-- -- what the hell
+-- omniscient₁→exhaustible₁ : Omniscient₁ {ℓ′ = ℓ′} A → Exhaustible₁ {ℓ′ = ℓ′} A
+-- omniscient₁→exhaustible₁ omn₁ {P} P? = Dec.map
+--   (λ ¬∃∣p∣₁ x → ∥-∥₁.proj $ dec→¬¬-stable (map pure ∥-∥₁.rec! $ P? x)
+--     (¬∃∣p∣₁ ∘ λ ¬∣p∣₁ → pure $ x , λ p → ¬∣p∣₁ $ pure p))
+--   (λ ¬∃∣p∣₁ ∀p → ¬∃∣p∣₁ $ ∥-∥₁.rec! λ x → x .snd $ ∀p $ x .fst)
+--     (¬ᵈ omn₁ {P = λ x → el (¬ ⌞ P x ⌟) ¬-is-prop} (¬ᵈ_ ∘ P?))
