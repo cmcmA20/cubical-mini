@@ -71,16 +71,18 @@ total-equiv p = iso→equiv isom where
   isom .snd .is-iso.rinv (b , x , q) i = q i , x , λ j → q (i ∧ j)
   isom .snd .is-iso.linv x             = refl
 
-@0 fibration-equiv : ∀ {B : Type ℓ}
-                   → (Σ[ E ꞉ Type (ℓ ⊔ ℓ′) ] (E → B))
-                   ≃ (B → Type (ℓ ⊔ ℓ′))
-fibration-equiv {B} = iso→equiv isom where
-  isom : Iso (Σ[ E ꞉ Type _ ] (E → B)) (B → Type _)
-  isom .fst (E , p)       = fibre p
-  isom .snd .is-iso.inv p⁻¹      = Σ _ p⁻¹ , fst
-  isom .snd .is-iso.rinv prep i x = ua (fibre-equiv prep x) i
-  isom .snd .is-iso.linv (E , p) i = ua e (~ i) , λ x → fst (ua-unglue e (~ i) x)
-    where e = total-equiv p
+opaque
+  unfolding ua
+  @0 fibration-equiv : ∀ {B : Type ℓ}
+                     → (Σ[ E ꞉ Type (ℓ ⊔ ℓ′) ] (E → B))
+                     ≃ (B → Type (ℓ ⊔ ℓ′))
+  fibration-equiv {B} = iso→equiv isom where
+    isom : Iso (Σ[ E ꞉ Type _ ] (E → B)) (B → Type _)
+    isom .fst (E , p)       = fibre p
+    isom .snd .is-iso.inv p⁻¹      = Σ _ p⁻¹ , fst
+    isom .snd .is-iso.rinv prep i x = ua (fibre-equiv prep x) i
+    isom .snd .is-iso.linv (E , p) i = ua e (~ i) , λ x → fst (ua-unglue e (~ i) x)
+      where e : _ ≃ _ ; e = total-equiv p
 
 _/[_]_ : (ℓ : Level) → (Type (ℓ ⊔ ℓ′) → Type ℓ″) → Type ℓ′ → Type _
 _/[_]_ {ℓ′} ℓ P B =
@@ -89,15 +91,17 @@ _/[_]_ {ℓ′} ℓ P B =
   Π[ x ꞉ B ]
   P (fibre f x)
 
-@0 map-classifier
-  : {ℓ : Level} {B : Type ℓ′} (P : Type (ℓ ⊔ ℓ′) → Type ℓ″)
-  → ℓ /[ P ] B
-  ≃ (B → Σ[ T ꞉ _ ] P T)
-map-classifier {ℓ′} {ℓ} {B} P =
-  (Σ[ A ꞉ _ ] Σ[ f ꞉ _ ] Π[ x ꞉ B ] P (fibre f x)) ≃⟨ Σ-assoc ⟩
-  (Σ[ (_ , f) ꞉ _ ] Π[ y ꞉ B ] P (fibre f y))      ≃⟨ Σ-ap-fst (fibration-equiv {ℓ′} {ℓ}) ⟩
-  (Σ[ A ꞉ _ ] Π[ x ꞉ B ] P (A x))                  ≃⟨ Σ-Π-distrib ₑ⁻¹ ⟩
-  (B → Σ[ T ꞉ _ ] P T)                             ≃∎
+opaque
+  unfolding fibration-equiv
+  @0 map-classifier
+    : {ℓ : Level} {B : Type ℓ′} (P : Type (ℓ ⊔ ℓ′) → Type ℓ″)
+    → ℓ /[ P ] B
+    ≃ (B → Σ[ T ꞉ _ ] P T)
+  map-classifier {ℓ′} {ℓ} {B} P =
+    (Σ[ A ꞉ _ ] Σ[ f ꞉ _ ] Π[ x ꞉ B ] P (fibre f x)) ≃⟨ Σ-assoc ⟩
+    (Σ[ (_ , f) ꞉ _ ] Π[ y ꞉ B ] P (fibre f y))      ≃⟨ Σ-ap-fst (fibration-equiv {ℓ′} {ℓ}) ⟩
+    (Σ[ A ꞉ _ ] Π[ x ꞉ B ] P (A x))                  ≃⟨ Σ-Π-distrib ₑ⁻¹ ⟩
+    (B → Σ[ T ꞉ _ ] P T)                             ≃∎
 
 @0 subtype-classifier
   : {B : Type ℓ}

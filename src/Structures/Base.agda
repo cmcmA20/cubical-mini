@@ -34,8 +34,10 @@ Pointed-str .is-hom (A , x) (B , y) f = f .fst x ＝ y
 @0 pointed-str-is-univalent : is-univalent (Pointed-str {ℓ})
 pointed-str-is-univalent f = ua-pathP≃path _
 
-id-action-is-transport : is-transport-str {ℓ} {ℓ} id
-id-action-is-transport f s = sym (transport-refl _)
+opaque
+  unfolding ua
+  id-action-is-transport : is-transport-str {ℓ} {ℓ} id
+  id-action-is-transport f s = sym (transport-refl _)
 
 Type∙ : ∀ ℓ → Type (ℓsuc ℓ)
 Type∙ _ = Σ _ id

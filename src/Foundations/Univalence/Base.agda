@@ -28,43 +28,44 @@ module @0 _ where private
   hcomp＝Glue {φ} u = hcomp-unique φ u (glue-hfill φ u)
 
 
-@0 ua : A ≃ B → A ＝ B
-ua {A} {B} e i = Glue B λ where
-  (i = i0) → A , e
-  (i = i1) → B , idₑ
+opaque
+  @0 ua : A ≃ B → A ＝ B
+  ua {A} {B} e i = Glue B λ where
+    (i = i0) → A , e
+    (i = i1) → B , idₑ
+
+  @0 ua-unglue : (e : A ≃ B) (i : I) (x : ua e i) → B
+  ua-unglue e i x = unglue (i ∨ ~ i) x
+
+  @0 ua-pathP→path : (e : A ≃ B) {x : A} {y : B}
+                   → ＜ x ／ (λ i → ua e i) ＼ y ＞
+                   → e .fst x ＝ y
+  ua-pathP→path e p i = ua-unglue e i (p i)
+
+  @0 ua-glue : (e : A ≃ B) (i : I)
+               (x : Partial (~ i) A)
+               (y : B [ _ ↦ (λ { (i = i0) → e .fst (x 1=1) }) ])
+             → ua e i [ _ ↦ (λ { (i = i0) → x 1=1
+                               ; (i = i1) → outS y
+                               }) ]
+  ua-glue e i x y = inS (glue {φ = i ∨ ~ i}
+                                   (λ { (i = i0) → x 1=1
+                                      ; (i = i1) → outS y })
+                                   (outS y))
+
+  @0 path→ua-pathP : (e : A ≃ B) {x : A} {y : B}
+                   → e .fst x ＝ y
+                   → ＜ x ／ (λ i → ua e i) ＼ y ＞
+  path→ua-pathP e {x} p i = outS (ua-glue e i (λ { (i = i0) → x }) (inS (p i)))
+
+  @0 ua-pathP≃path : (e : A ≃ B) {x : A} {y : B}
+                   → (e .fst x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
+  ua-pathP≃path eqv .fst = path→ua-pathP eqv
+  ua-pathP≃path eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathP→path eqv) y .fst
+  ua-pathP≃path eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathP→path eqv) y .snd
 
 @0 iso→path : Iso A B → A ＝ B
 iso→path (f , r) = ua (f , is-iso→is-equiv r)
-
-@0 ua-unglue : (e : A ≃ B) (i : I) (x : ua e i) → B
-ua-unglue e i x = unglue (i ∨ ~ i) x
-
-@0 ua-pathP→path : (e : A ≃ B) {x : A} {y : B}
-                 → ＜ x ／ (λ i → ua e i) ＼ y ＞
-                 → e .fst x ＝ y
-ua-pathP→path e p i = ua-unglue e i (p i)
-
-@0 ua-glue : (e : A ≃ B) (i : I)
-             (x : Partial (~ i) A)
-             (y : B [ _ ↦ (λ { (i = i0) → e .fst (x 1=1) }) ])
-           → ua e i [ _ ↦ (λ { (i = i0) → x 1=1
-                             ; (i = i1) → outS y
-                             }) ]
-ua-glue e i x y = inS (glue {φ = i ∨ ~ i}
-                                 (λ { (i = i0) → x 1=1
-                                    ; (i = i1) → outS y })
-                                 (outS y))
-
-@0 path→ua-pathP : (e : A ≃ B) {x : A} {y : B}
-                 → e .fst x ＝ y
-                 → ＜ x ／ (λ i → ua e i) ＼ y ＞
-path→ua-pathP e {x} p i = outS (ua-glue e i (λ { (i = i0) → x }) (inS (p i)))
-
-@0 ua-pathP≃path : (e : A ≃ B) {x : A} {y : B}
-                 → (e .fst x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
-ua-pathP≃path eqv .fst = path→ua-pathP eqv
-ua-pathP≃path eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathP→path eqv) y .fst
-ua-pathP≃path eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathP→path eqv) y .snd
 
 path→equiv : A ＝ B → A ≃ B
 path→equiv p = line→equiv (λ i → p i)
@@ -73,17 +74,19 @@ path→equiv-refl : path→equiv (refl {x = A}) ＝ idₑ
 path→equiv-refl {A} = Σ-path (λ i x → coe1→i (λ i → A) i x)
                              (is-prop→pathP (λ i → is-equiv-is-prop _) _ _)
 
-@0 ua-idₑ : ua idₑ ＝ refl {x = A}
-ua-idₑ {A} i j = Glue A {φ = i ∨ ~ j ∨ j} (λ _ → A , idₑ)
+opaque
+  unfolding ua
+  @0 ua-idₑ : ua idₑ ＝ refl {x = A}
+  ua-idₑ {A} i j = Glue A {φ = i ∨ ~ j ∨ j} (λ _ → A , idₑ)
 
-ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e .fst x
-ua-β {A} {B} e x i = coe1→i (λ _ → B) i (e .fst x)
+  ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e .fst x
+  ua-β {A} {B} e x i = coe1→i (λ _ → B) i (e .fst x)
 
 @0 ua-η : (P : A ＝ B) → ua (path→equiv P) ＝ P
 ua-η = J (λ _ q → ua (path→equiv q) ＝ q) (cong ua path→equiv-refl ∙ ua-idₑ)
 
 opaque
-  unfolding is-of-hlevel
+  unfolding is-of-hlevel ua
   @0 Path≅Equiv : Iso (A ＝ B) (A ≃ B)
   Path≅Equiv = path→equiv , r where
     r : is-iso path→equiv
@@ -143,8 +146,11 @@ opaque
 ap-is-equiv f eqv =
   equiv-J (λ B e → is-equiv (ap (e .fst))) id-is-equiv (f , eqv)
 
-@0 ua-unglue-is-equiv
-  : (f : A ≃ B)
-  → ＜ f .snd ／ (λ i → is-equiv (ua-unglue f i)) ＼ id-is-equiv ＞
-ua-unglue-is-equiv f =
-  is-prop→pathP (λ j → is-equiv-is-prop (ua-unglue f j)) (f .snd) id-is-equiv
+-- TODO worth fixing?
+-- opaque
+--   unfolding ua ua-unglue
+--   @0 ua-unglue-is-equiv
+--     : (f : A ≃ B)
+--     → ＜ f .snd ／ (λ i → is-equiv (ua-unglue f i)) ＼ id-is-equiv ＞
+--   ua-unglue-is-equiv f =
+--     is-prop→pathP (λ j → is-equiv-is-prop (ua-unglue f j)) (f .snd) id-is-equiv
