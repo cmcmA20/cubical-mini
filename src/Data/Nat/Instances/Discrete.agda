@@ -3,7 +3,7 @@ module Data.Nat.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Decision
+open import Correspondences.Nullary.Decidable
 
 open import Data.Dec.Base
 open import Data.Id
@@ -11,10 +11,8 @@ open import Data.Id
 open import Data.Nat.Base
 
 instance
-  Discrete-ℕ : Discrete ℕ
-  Discrete-ℕ .Decision.has-decidable =
-    is-discreteⁱ→is-discrete ℕ-is-discreteⁱ
-    where
+  ℕ-is-discrete : is-discrete ℕ
+  ℕ-is-discrete = is-discreteⁱ→is-discrete ℕ-is-discreteⁱ where
     ℕ-is-discreteⁱ : is-discreteⁱ ℕ
     ℕ-is-discreteⁱ zero    zero    = yes reflⁱ
     ℕ-is-discreteⁱ zero    (suc _) = no λ {()}

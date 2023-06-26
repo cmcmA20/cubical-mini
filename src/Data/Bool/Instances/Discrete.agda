@@ -3,8 +3,9 @@ module Data.Bool.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Decision
 open import Meta.HLevel
+
+open import Correspondences.Nullary.Decidable
 
 open import Data.Dec.Base
 open import Data.Id
@@ -12,8 +13,8 @@ open import Data.Id
 open import Data.Bool.Path
 
 instance
-  Discrete-Bool : Discrete Bool
-  Discrete-Bool .Decision.has-decidable = is-discreteⁱ→is-discrete helper
+  bool-is-discrete : is-discrete Bool
+  bool-is-discrete = is-discreteⁱ→is-discrete helper
     where
     helper : is-discreteⁱ Bool
     helper false false = yes reflⁱ

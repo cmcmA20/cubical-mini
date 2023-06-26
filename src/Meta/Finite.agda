@@ -7,9 +7,10 @@ open import Foundations.Sigma
 open import Foundations.Pi
 
 open import Meta.Bind
-open import Meta.Decision
 open import Meta.HLevel
 open import Meta.Idiom
+
+open import Correspondences.Nullary.Decidable
 
 open import Data.Empty.Base
 open import Data.Nat

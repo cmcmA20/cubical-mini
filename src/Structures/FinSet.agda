@@ -5,13 +5,13 @@ open import Foundations.Base
 open import Foundations.Sigma
 
 open import Meta.Idiom
-open import Meta.Decision
 open import Meta.HLevel
 open import Meta.Finite     public
 open import Meta.Underlying public
 
 open import Structures.n-Type
 
+open import Correspondences.Nullary.Decidable
 open import Correspondences.Nullary.Omniscience
 open import Correspondences.Unary.Decidable
 

@@ -3,9 +3,7 @@ module Data.Vec.Membership where
 
 open import Foundations.Base
 
-open import Meta.Decision
-
-open import Correspondences.Unary.Decidable
+open import Correspondences.Nullary.Decidable
 
 open import Data.Dec as Dec
 open import Data.Empty.Base
@@ -27,7 +25,7 @@ x ∉ xs = ¬ (x ∈ xs)
 _∈!_ : A → Vec A n → Type _
 x ∈! xs = is-contr (x ∈ xs)
 
-_∈?_ : ⦃ Discrete A ⦄ → Π[ x ꞉ A ] Π[ as ꞉ Vec A n ] Dec (x ∈ as)
+_∈?_ : ⦃ is-discrete A ⦄ → Π[ x ꞉ A ] Π[ as ꞉ Vec A n ] Dec (x ∈ as)
 _∈?_ {n = 0}     x []       = no λ()
 _∈?_ {n = suc _} x (a ∷ as) =
   Dec.map [ fzero ,_ , (λ { (i , q) → fsuc i , q }) ]ᵤ
