@@ -5,16 +5,15 @@
 <a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 <a id="96" class="Keyword">open</a> <a id="101" class="Keyword">import</a> <a id="108" href="Foundations.Equiv.html" class="Module">Foundations.Equiv</a>
 
-<a id="127" class="Keyword">open</a> <a id="132" class="Keyword">import</a> <a id="139" href="Meta.Decision.html" class="Module">Meta.Decision</a>
+<a id="127" class="Keyword">open</a> <a id="132" class="Keyword">import</a> <a id="139" href="Correspondences.Nullary.Decidable.html" class="Module">Correspondences.Nullary.Decidable</a>
 
-<a id="154" class="Keyword">open</a> <a id="159" class="Keyword">import</a> <a id="166" href="Data.Nat.Instances.Discrete.html" class="Module">Data.Nat.Instances.Discrete</a>
-<a id="194" class="Keyword">open</a> <a id="199" class="Keyword">import</a> <a id="206" href="Data.Id.html" class="Module">Data.Id</a>
+<a id="174" class="Keyword">open</a> <a id="179" class="Keyword">import</a> <a id="186" href="Data.Nat.Instances.Discrete.html" class="Module">Data.Nat.Instances.Discrete</a>
+<a id="214" class="Keyword">open</a> <a id="219" class="Keyword">import</a> <a id="226" href="Data.Id.html" class="Module">Data.Id</a>
 
-<a id="215" class="Keyword">open</a> <a id="220" class="Keyword">import</a> <a id="227" href="Data.Char.Properties.html" class="Module">Data.Char.Properties</a>
+<a id="235" class="Keyword">open</a> <a id="240" class="Keyword">import</a> <a id="247" href="Data.Char.Properties.html" class="Module">Data.Char.Properties</a>
 
-<a id="249" class="Keyword">instance</a>
-  <a id="Discrete-char"></a><a id="260" href="Data.Char.Instances.Discrete.html#260" class="Function">Discrete-char</a> <a id="274" class="Symbol">:</a> <a id="276" href="Meta.Decision.Base.html#468" class="Function">Discrete</a> <a id="285" href="Agda.Builtin.Char.html#238" class="Postulate">Char</a>
-  <a id="292" href="Data.Char.Instances.Discrete.html#260" class="Function">Discrete-char</a> <a id="306" class="Symbol">.</a><a id="307" href="Meta.Decision.Base.html#394" class="Field">Decision.has-decidable</a> <a id="330" class="Symbol">=</a>
-    <a id="336" href="Correspondences.Nullary.Decidable.html#2038" class="Function">is-discrete-injection</a> <a id="358" class="Symbol">(</a><a id="359" href="Data.Char.Base.html#495" class="Primitive">char→ℕ</a> <a id="366" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="368" href="Data.Char.Properties.html#287" class="Function">char→ℕ-inj</a><a id="378" class="Symbol">)</a>
-      <a id="386" class="Symbol">(</a><a id="387" href="Meta.Decision.Base.html#394" class="Field">Decision.has-decidable</a> <a id="410" href="Data.Nat.Instances.Discrete.html#208" class="Function">Discrete-ℕ</a><a id="420" class="Symbol">)</a>
+<a id="269" class="Keyword">instance</a>
+  <a id="char-is-discrete"></a><a id="280" href="Data.Char.Instances.Discrete.html#280" class="Function">char-is-discrete</a> <a id="297" class="Symbol">:</a> <a id="299" href="Correspondences.Nullary.Decidable.html#513" class="Function">is-discrete</a> <a id="311" href="Agda.Builtin.Char.html#238" class="Postulate">Char</a>
+  <a id="318" href="Data.Char.Instances.Discrete.html#280" class="Function">char-is-discrete</a> <a id="335" class="Symbol">=</a>
+    <a id="341" href="Correspondences.Nullary.Decidable.html#2539" class="Function">is-discrete-injection</a> <a id="363" class="Symbol">(</a><a id="364" href="Data.Char.Base.html#495" class="Primitive">char→ℕ</a> <a id="371" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="373" href="Data.Char.Properties.html#287" class="Function">char→ℕ-inj</a><a id="383" class="Symbol">)</a> <a id="385" href="Foundations.Base.html#23200" class="Function">it</a>
 </pre></body></html>

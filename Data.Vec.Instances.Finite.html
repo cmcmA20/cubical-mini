@@ -5,23 +5,24 @@
 <a id="64" class="Keyword">open</a> <a id="69" class="Keyword">import</a> <a id="76" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
 <a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Meta.Bind.html" class="Module">Meta.Bind</a>
-<a id="116" class="Keyword">open</a> <a id="121" class="Keyword">import</a> <a id="128" href="Meta.Finite.html" class="Module">Meta.Finite</a>
 
-<a id="141" class="Keyword">open</a> <a id="146" class="Keyword">import</a> <a id="153" href="Data.Product.Properties.html" class="Module">Data.Product.Properties</a>
-<a id="177" class="Keyword">open</a> <a id="182" class="Keyword">import</a> <a id="189" href="Data.Vec.Base.html" class="Module">Data.Vec.Base</a>
+<a id="117" class="Keyword">open</a> <a id="122" class="Keyword">import</a> <a id="129" href="Correspondences.Nullary.Finite.Bishop.html" class="Module">Correspondences.Nullary.Finite.Bishop</a>
 
-<a id="204" class="Keyword">open</a> <a id="209" class="Keyword">import</a> <a id="216" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a>
+<a id="168" class="Keyword">open</a> <a id="173" class="Keyword">import</a> <a id="180" href="Data.Product.Properties.html" class="Module">Data.Product.Properties</a>
+<a id="204" class="Keyword">open</a> <a id="209" class="Keyword">import</a> <a id="216" href="Data.Vec.Base.html" class="Module">Data.Vec.Base</a>
 
-<a id="242" class="Comment">-- TODO looks slow, check this later</a>
-<a id="279" class="Comment">-- instance</a>
-<a id="291" class="Comment">--   Finite-Vec : {ℓ : Level} {A : Type ℓ} {n : ℕ}</a>
-<a id="342" class="Comment">--              → ⦃ Finite A ⦄ → Finite (Vec A n)</a>
-<a id="392" class="Comment">--   Finite-Vec {A} {0} = {!!}</a>
-<a id="423" class="Comment">--   Finite-Vec {A} {1} = fin do</a>
-<a id="456" class="Comment">--     aeq ← enumeration {T = A}</a>
-<a id="489" class="Comment">--     pure $ {!!} ∙ₑ aeq</a>
-<a id="515" class="Comment">--   Finite-Vec {A} {suc (suc n)} ⦃ (A-fin) ⦄ = fin do</a>
-<a id="570" class="Comment">--     let w = Finite-× ⦃ A-fin ⦄ ⦃ Finite-Vecₓ ⦄</a>
-<a id="620" class="Comment">--     veq ← w .enumeration</a>
-<a id="648" class="Comment">--     pure $ (Vecₓ≃Vec ₑ⁻¹) ∙ₑ veq</a>
+<a id="231" class="Keyword">open</a> <a id="236" class="Keyword">import</a> <a id="243" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a>
+
+<a id="269" class="Comment">-- TODO looks slow, check this later</a>
+<a id="306" class="Comment">-- instance</a>
+<a id="318" class="Comment">--   Finite-Vec : {ℓ : Level} {A : Type ℓ} {n : ℕ}</a>
+<a id="369" class="Comment">--              → ⦃ Finite A ⦄ → Finite (Vec A n)</a>
+<a id="419" class="Comment">--   Finite-Vec {A} {0} = {!!}</a>
+<a id="450" class="Comment">--   Finite-Vec {A} {1} = fin do</a>
+<a id="483" class="Comment">--     aeq ← enumeration {T = A}</a>
+<a id="516" class="Comment">--     pure $ {!!} ∙ₑ aeq</a>
+<a id="542" class="Comment">--   Finite-Vec {A} {suc (suc n)} ⦃ (A-fin) ⦄ = fin do</a>
+<a id="597" class="Comment">--     let w = Finite-× ⦃ A-fin ⦄ ⦃ Finite-Vecₓ ⦄</a>
+<a id="647" class="Comment">--     veq ← w .enumeration</a>
+<a id="675" class="Comment">--     pure $ (Vecₓ≃Vec ₑ⁻¹) ∙ₑ veq</a>
 </pre></body></html>

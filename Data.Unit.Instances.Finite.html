@@ -3,17 +3,16 @@
 <a id="24" class="Keyword">module</a> <a id="31" href="Data.Unit.Instances.Finite.html" class="Module">Data.Unit.Instances.Finite</a> <a id="58" class="Keyword">where</a>
 
 <a id="65" class="Keyword">open</a> <a id="70" class="Keyword">import</a> <a id="77" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Foundations.Equiv.html" class="Module">Foundations.Equiv</a>
 
-<a id="95" class="Keyword">open</a> <a id="100" class="Keyword">import</a> <a id="107" href="Meta.Finite.html" class="Module">Meta.Finite</a>
+<a id="125" class="Keyword">open</a> <a id="130" class="Keyword">import</a> <a id="137" href="Correspondences.Nullary.Finite.Bishop.html" class="Module">Correspondences.Nullary.Finite.Bishop</a>
 
-<a id="120" class="Keyword">open</a> <a id="125" class="Keyword">import</a> <a id="132" href="Data.Fin.Closure.html" class="Module">Data.Fin.Closure</a>
-<a id="149" class="Keyword">open</a> <a id="154" class="Keyword">import</a> <a id="161" href="Data.Unit.Properties.html" class="Module">Data.Unit.Properties</a>
+<a id="176" class="Keyword">open</a> <a id="181" class="Keyword">import</a> <a id="188" href="Data.Fin.Closure.html" class="Module">Data.Fin.Closure</a>
+<a id="205" class="Keyword">open</a> <a id="210" class="Keyword">import</a> <a id="217" href="Data.Unit.Properties.html" class="Module">Data.Unit.Properties</a>
 
-<a id="183" class="Keyword">open</a> <a id="188" class="Keyword">import</a> <a id="195" href="Truncation.Propositional.Base.html" class="Module">Truncation.Propositional.Base</a>
+<a id="239" class="Keyword">open</a> <a id="244" class="Keyword">import</a> <a id="251" href="Truncation.Propositional.Base.html" class="Module">Truncation.Propositional.Base</a>
 
-<a id="226" class="Keyword">instance</a>
-  <a id="Finite-⊥"></a><a id="237" href="Data.Unit.Instances.Finite.html#237" class="Function">Finite-⊥</a> <a id="246" class="Symbol">:</a> <a id="248" href="Meta.Finite.html#505" class="Record">Finite</a> <a id="255" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
-  <a id="259" href="Data.Unit.Instances.Finite.html#237" class="Function">Finite-⊥</a> <a id="268" class="Symbol">.</a><a id="269" href="Meta.Finite.html#575" class="Field">Finite.cardinality</a> <a id="288" class="Symbol">=</a> <a id="290" class="Number">1</a>
-  <a id="294" href="Data.Unit.Instances.Finite.html#237" class="Function">Finite-⊥</a> <a id="303" class="Symbol">.</a><a id="304" href="Meta.Finite.html#596" class="Field">Finite.enumeration</a> <a id="323" class="Symbol">=</a>
-    <a id="329" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣</a> <a id="331" class="Symbol">(</a><a id="332" href="Data.Unit.Properties.html#190" class="Function">is-contr→equiv-⊤</a> <a id="349" href="Data.Fin.Closure.html#393" class="Function">fin-1-is-contr</a> <a id="364" href="Foundations.Equiv.Base.html#3845" class="Function Operator">∙ₑ</a> <a id="367" href="Foundations.Equiv.Properties.html#2932" class="Function">lift-equiv</a> <a id="378" class="Symbol">{</a><a id="379" href="Foundations.Prim.Type.html#350" class="Primitive">0ℓ</a><a id="381" class="Symbol">})</a> <a id="384" href="Foundations.Equiv.Properties.html#332" class="Function Operator">ₑ⁻¹</a> <a id="388" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣₁</a>
+<a id="282" class="Keyword">instance</a>
+  <a id="⊤-is-fin-set"></a><a id="293" href="Data.Unit.Instances.Finite.html#293" class="Function">⊤-is-fin-set</a> <a id="306" class="Symbol">:</a> <a id="308" href="Correspondences.Nullary.Finite.Bishop.html#862" class="Function">is-fin-set</a> <a id="319" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+  <a id="323" href="Data.Unit.Instances.Finite.html#293" class="Function">⊤-is-fin-set</a> <a id="336" class="Symbol">=</a> <a id="338" href="Correspondences.Nullary.Finite.Bishop.html#1095" class="Function">fin</a> <a id="342" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣</a> <a id="344" class="Symbol">(</a><a id="345" href="Data.Unit.Properties.html#224" class="Function">is-contr→equiv-⊤</a> <a id="362" href="Data.Fin.Closure.html#427" class="Function">fin-1-is-contr</a><a id="376" class="Symbol">)</a> <a id="378" href="Foundations.Equiv.Properties.html#332" class="Function Operator">ₑ⁻¹</a> <a id="382" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣₁</a>
 </pre></body></html>

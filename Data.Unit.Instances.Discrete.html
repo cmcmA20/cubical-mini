@@ -4,12 +4,12 @@
 
 <a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Meta.Decision.html" class="Module">Meta.Decision</a>
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Correspondences.Nullary.Decidable.html" class="Module">Correspondences.Nullary.Decidable</a>
 
-<a id="124" class="Keyword">open</a> <a id="129" class="Keyword">import</a> <a id="136" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
-<a id="150" class="Keyword">open</a> <a id="155" class="Keyword">import</a> <a id="162" href="Data.Unit.Base.html" class="Module">Data.Unit.Base</a> <a id="177" class="Keyword">public</a>
+<a id="144" class="Keyword">open</a> <a id="149" class="Keyword">import</a> <a id="156" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
+<a id="170" class="Keyword">open</a> <a id="175" class="Keyword">import</a> <a id="182" href="Data.Unit.Base.html" class="Module">Data.Unit.Base</a> <a id="197" class="Keyword">public</a>
 
-<a id="185" class="Keyword">instance</a>
-  <a id="Discrete-⊤"></a><a id="196" href="Data.Unit.Instances.Discrete.html#196" class="Function">Discrete-⊤</a> <a id="207" class="Symbol">:</a> <a id="209" href="Meta.Decision.Base.html#468" class="Function">Discrete</a> <a id="218" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
-  <a id="222" href="Data.Unit.Instances.Discrete.html#196" class="Function">Discrete-⊤</a> <a id="233" class="Symbol">.</a><a id="234" href="Meta.Decision.Base.html#394" class="Field">Decision.has-decidable</a> <a id="257" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a> <a id="260" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a> <a id="263" class="Symbol">=</a> <a id="265" href="Data.Dec.Base.html#1446" class="InductiveConstructor">yes</a> <a id="269" href="Foundations.Prim.Kan.html#1476" class="Function">refl</a>
+<a id="205" class="Keyword">instance</a>
+  <a id="⊤-is-discrete"></a><a id="216" href="Data.Unit.Instances.Discrete.html#216" class="Function">⊤-is-discrete</a> <a id="230" class="Symbol">:</a> <a id="232" href="Correspondences.Nullary.Decidable.html#513" class="Function">is-discrete</a> <a id="244" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+  <a id="248" href="Data.Unit.Instances.Discrete.html#216" class="Function">⊤-is-discrete</a> <a id="262" class="Symbol">=</a> <a id="264" href="Correspondences.Nullary.Decidable.html#718" class="Function">is-discrete-η</a> <a id="278" class="Symbol">λ</a> <a id="280" href="Data.Unit.Instances.Discrete.html#280" class="Bound">_</a> <a id="282" href="Data.Unit.Instances.Discrete.html#282" class="Bound">_</a> <a id="284" class="Symbol">→</a> <a id="286" href="Data.Dec.Base.html#1446" class="InductiveConstructor">yes</a> <a id="290" href="Foundations.Prim.Kan.html#1476" class="Function">refl</a>
 </pre></body></html>
