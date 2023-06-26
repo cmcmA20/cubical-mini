@@ -7,6 +7,8 @@ open import Foundations.Pi
 open import Foundations.Sigma
 open import Foundations.Univalence
 
+open import Data.Unit.Properties
+
 private variable
   ℓ ℓ₁ ℓ₂ ℓ₃ : Level
   A : Type ℓ
@@ -32,8 +34,10 @@ Pointed-str .is-hom (A , x) (B , y) f = f .fst x ＝ y
 @0 pointed-str-is-univalent : is-univalent (Pointed-str {ℓ})
 pointed-str-is-univalent f = ua-pathP≃path _
 
-id-action-is-transport : is-transport-str {ℓ} {ℓ} id
-id-action-is-transport f s = sym (transport-refl _)
+opaque
+  unfolding ua
+  id-action-is-transport : is-transport-str {ℓ} {ℓ} id
+  id-action-is-transport f s = sym (transport-refl _)
 
 Type∙ : ∀ ℓ → Type (ℓsuc ℓ)
 Type∙ _ = Σ _ id
@@ -101,10 +105,6 @@ function-action-is-transport {S} {α} {β} α-tr β-tr eqv f =
               ∙ β-tr eqv (f (subst S (sym (ua eqv)) x))
 
 
--- observe that "being a proposition" is a pointed structure on paths
-_ : id on-paths-of_ ＝ is-prop {ℓ}
-_ = fun-ext (λ _ → refl)
-
 -- this is the general form
 _stable′_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
 S stable′ A = A ≃ S A
@@ -114,6 +114,24 @@ _stable_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
 S stable A = S A → A
 
 
+property : (S : Type ℓ → Type ℓ₁) → (∀ A → is-prop (S A)) → Structure 0ℓ S
+property _ _ .is-hom _ _ _ = ⊤
+
+@0 property-is-univalent : {S-prop : _} → is-univalent {S = S} (property S S-prop)
+property-is-univalent {S-prop} {X = _ , s} {Y = _ , t} _ =
+  is-contr→equiv-⊤ (
+    inhabited-prop-is-contr (is-prop→pathP (λ _ → S-prop _) s t)
+                            (pathP-is-of-hlevel 1 (S-prop _))
+  ) ₑ⁻¹
+
+@0 transfer-property
+  : {S-prop : _}
+  → (A : Type-with (property S S-prop)) (B : Type ℓ)
+  → A .fst ≃ B
+  → S B
+transfer-property {S} A B eqv = subst S (ua eqv) (A .snd)
+
+-- TODO use `property`?
 module _
   (σ : Structure ℓ S)
   (axioms : (X : _) → S X → Type ℓ₃)
@@ -125,7 +143,8 @@ module _
 
   module _
     (univ : is-univalent σ)
-    (axioms-prop : ∀ {X} {s} → is-prop (axioms X s)) where
+    (axioms-prop : ∀ {X} {s} → is-prop (axioms X s)) where opaque
+    unfolding is-of-hlevel
 
     @0 Axiom-str-univalent : is-univalent Axiom-str
     Axiom-str-univalent {X = A , s , a} {Y = B , t , b} f =

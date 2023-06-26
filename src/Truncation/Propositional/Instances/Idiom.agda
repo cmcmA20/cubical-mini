@@ -14,4 +14,4 @@ instance
   Idiom-∥-∥₁ : Idiom (eff ∥_∥₁)
   Idiom-∥-∥₁ .Idiom.pure = ∣_∣₁
   Idiom-∥-∥₁ .Idiom._<*>_ ∣f∣₁ ∣a∣₁ =
-    rec squash₁ (λ f → map f ∣a∣₁) ∣f∣₁
+    rec ∥-∥₁-is-prop (λ f → map f ∣a∣₁) ∣f∣₁

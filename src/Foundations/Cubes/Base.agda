@@ -51,13 +51,14 @@ is-set-□ A =
   (a₋₀ : a₀₀ ＝ a₁₀) (a₋₁ : a₀₁ ＝ a₁₁)
   → Square a₀₋ a₋₀ a₁₋ a₋₁
 
-is-set→is-set-□ : is-set A → is-set-□ A
-is-set→is-set-□ A-set _ _ _ _ = to-pathP (A-set _ _ _ _)
-
-is-set-□→is-set : is-set-□ A → is-set A
-is-set-□→is-set A-set-□ x y p q = A-set-□ refl refl p q
-
 opaque
+  unfolding is-of-hlevel
+  is-set→is-set-□ : is-set A → is-set-□ A
+  is-set→is-set-□ A-set _ _ _ _ = to-pathP (A-set _ _ _ _)
+
+  is-set-□→is-set : is-set-□ A → is-set A
+  is-set-□→is-set A-set-□ x y p q = A-set-□ refl refl p q
+
   is-prop→is-set-□ : is-prop A → is-set-□ A
   is-prop→is-set-□ h {a₀₀} p q r s i j = hcomp (∂ i ∨ ∂ j) λ where
     k (i = i0) → h a₀₀ (r j) k

@@ -3,7 +3,7 @@ module Data.Nat.Order where
 
 open import Foundations.Base
 
-open import Meta.HLevel.Base
+open import Meta.HLevel
 
 open import Data.Dec.Base
 open import Data.Empty.Base
@@ -53,9 +53,11 @@ m > n = n < m
 ≤-antisym z≤      z≤      = refl
 ≤-antisym (s≤s p) (s≤s q) = ap suc (≤-antisym p q)
 
-≤-is-prop : is-prop (m ≤ n)
-≤-is-prop z≤      z≤      = refl
-≤-is-prop (s≤s p) (s≤s q) = ap s≤s (≤-is-prop p q)
+opaque
+  unfolding is-of-hlevel
+  ≤-is-prop : is-prop (m ≤ n)
+  ≤-is-prop z≤      z≤      = refl
+  ≤-is-prop (s≤s p) (s≤s q) = ap s≤s (≤-is-prop p q)
 
 ≤-peel : suc m ≤ suc n → m ≤ n
 ≤-peel (s≤s p) = p
@@ -68,8 +70,8 @@ m > n = n < m
 ≤-ascend = ≤-suc-r ≤-refl
 
 instance
-  H-Level-≤ : H-Level (suc k) (m ≤ n)
-  H-Level-≤ = prop-instance ≤-is-prop
+  ≤-is-of-hlevel : is-of-hlevel (suc k) (m ≤ n)
+  ≤-is-of-hlevel = is-prop→is-of-hlevel-suc ≤-is-prop
 
 ≤-dec : (m n : ℕ) → Dec (m ≤ n)
 ≤-dec zero zero = yes z≤

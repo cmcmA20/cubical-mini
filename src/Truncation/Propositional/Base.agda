@@ -13,15 +13,18 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
-rec : is-prop B → (A → B) → ∥ A ∥₁ → B
-rec B-prop f ∣ x ∣₁ = f x
-rec B-prop f (squash₁ x y i) = B-prop (rec B-prop f x) (rec B-prop f y) i
+opaque
+  unfolding is-of-hlevel
+  rec : is-prop B → (A → B) → ∥ A ∥₁ → B
+  rec B-prop f ∣ x ∣₁ = f x
+  rec B-prop f (squash₁ x y i) = B-prop (rec B-prop f x) (rec B-prop f y) i
 
-∥-∥₁-is-prop : is-prop ∥ A ∥₁
-∥-∥₁-is-prop = squash₁
+  instance
+    ∥-∥₁-is-prop : is-prop ∥ A ∥₁
+    ∥-∥₁-is-prop = squash₁
 
 map : (A → B) → (∥ A ∥₁ → ∥ B ∥₁)
-map f = rec squash₁ (∣_∣₁ ∘ f)
+map f = rec ∥-∥₁-is-prop (∣_∣₁ ∘ f)
 
 elim : {P : ∥ A ∥₁ → Type ℓ′}
      → Π[ x ꞉ ∥ A ∥₁ ] is-prop (P x)

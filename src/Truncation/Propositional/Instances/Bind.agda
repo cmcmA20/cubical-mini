@@ -10,4 +10,4 @@ open import Truncation.Propositional.Instances.Idiom public
 
 instance
   Bind-∥-∥₁ : Bind (eff ∥_∥₁)
-  Bind-∥-∥₁ .Bind._>>=_ ∣a∣₁ mf = rec squash₁ mf ∣a∣₁
+  Bind-∥-∥₁ .Bind._>>=_ ∣a∣₁ mf = rec ∥-∥₁-is-prop mf ∣a∣₁

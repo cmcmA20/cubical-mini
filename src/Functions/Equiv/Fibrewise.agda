@@ -22,7 +22,8 @@ total-fibres : {f : Π[ a ꞉ A ] (P a → Q a)}
                {x : A} {v : Q x}
              → fibre (f x)          v
              ≅ fibre (total f) (x , v)
-total-fibres {A} {Q} {f} = the-iso where
+total-fibres {A} {Q} {f} = the-iso where opaque
+  unfolding J
   open is-iso
 
   to : {x : A} {v : Q x} → fibre (f x) v → fibre (total f) (x , v)
@@ -43,19 +44,21 @@ total-fibres {A} {Q} {f} = the-iso where
       (J-refl {A = Σ A Q} (λ { (x , v) _ → fibre (f x) v } ) (v , refl))
       p
 
-total→is-equiv : {f : Π[ x ꞉ A ] (P x → Q x)}
-               → is-equiv (total f)
-               → {x : A} → is-equiv (f x)
-total→is-equiv eqv {x} .equiv-proof y =
-  is-iso→is-of-hlevel 0 (total-fibres .snd .is-iso.inv)
-                        (is-iso-inv (total-fibres .snd))
-                        (eqv .equiv-proof (x , y))
+opaque
+  unfolding is-of-hlevel
+  total→is-equiv : {f : Π[ x ꞉ A ] (P x → Q x)}
+                 → is-equiv (total f)
+                 → {x : A} → is-equiv (f x)
+  total→is-equiv eqv {x} .equiv-proof y =
+    is-iso→is-of-hlevel 0 (total-fibres .snd .is-iso.inv)
+                          (is-iso-inv (total-fibres .snd))
+                          (eqv .equiv-proof (x , y))
 
-is-equiv→total : {f : Π[ x ꞉ A ] (P x → Q x)}
-               → ({x : A} → is-equiv (f x))
-               → is-equiv (total f)
-is-equiv→total always-eqv .equiv-proof y =
-  is-iso→is-of-hlevel 0
-    (total-fibres .fst)
-    (total-fibres .snd)
-    (always-eqv .equiv-proof (y .snd))
+  is-equiv→total : {f : Π[ x ꞉ A ] (P x → Q x)}
+                 → ({x : A} → is-equiv (f x))
+                 → is-equiv (total f)
+  is-equiv→total always-eqv .equiv-proof y =
+    is-iso→is-of-hlevel 0
+      (total-fibres .fst)
+      (total-fibres .snd)
+      (always-eqv .equiv-proof (y .snd))

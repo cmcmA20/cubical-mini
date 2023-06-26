@@ -48,13 +48,15 @@ is-equiv→post-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
   isiso .is-iso.rinv f = fun-ext λ x → ap f (f-iso .is-iso.linv _)
   isiso .is-iso.linv f = fun-ext λ x → ap f (f-iso .is-iso.rinv _)
 
-is-iso→is-contr-linv : is-iso f → is-contr (linv f)
-is-iso→is-contr-linv isiso =
-  is-equiv→post-is-equiv (is-iso→is-equiv isiso) .equiv-proof id
+opaque
+  unfolding is-of-hlevel
+  is-iso→is-contr-linv : is-iso f → is-contr (linv f)
+  is-iso→is-contr-linv isiso =
+    is-equiv→post-is-equiv (is-iso→is-equiv isiso) .equiv-proof id
 
-is-iso→is-contr-rinv : is-iso f → is-contr (rinv f)
-is-iso→is-contr-rinv isiso =
-  is-equiv→pre-is-equiv (is-iso→is-equiv isiso) .equiv-proof id
+  is-iso→is-contr-rinv : is-iso f → is-contr (rinv f)
+  is-iso→is-contr-rinv isiso =
+    is-equiv→pre-is-equiv (is-iso→is-equiv isiso) .equiv-proof id
 
 _ : {f : A → B} → linv f ＝ fibre (_∘ f) id
 _ = refl

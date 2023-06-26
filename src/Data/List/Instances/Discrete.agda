@@ -3,18 +3,19 @@ module Data.List.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Decision
 open import Meta.HLevel
+
+open import Correspondences.Nullary.Decidable
 
 import Data.Dec.Base as Dec
 open Dec
 open import Data.List.Path
 
 instance
-  Discrete-List : {ℓ : Level} {A : Type ℓ} → ⦃ Discrete A ⦄ → Discrete (List A)
-  Discrete-List {A} .Decision.has-decidable = go
+  list-is-discrete : {ℓ : Level} {A : Type ℓ} → ⦃ is-discrete A ⦄ → is-discrete (List A)
+  list-is-discrete {A} = is-discrete-η go
     where
-      go : is-discrete (List A)
+      go : (xs ys : List A) → Dec (xs ＝ ys)
       go []       []       = yes refl
       go []       (y ∷ ys) = no λ p → ∷≠[] (sym p)
       go (x ∷ xs) []       = no ∷≠[]

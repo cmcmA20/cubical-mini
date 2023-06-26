@@ -48,6 +48,7 @@ equiv-path : (e : A ≃ B) (y : B) (v : fibre (e .fst) y) → equiv-centre e y �
 equiv-path e y = e .snd .equiv-proof y .snd
 
 opaque
+  unfolding is-of-hlevel
   is-equiv-is-prop : (f : A → B) → is-prop (is-equiv f)
   is-equiv-is-prop f p q i .equiv-proof y =
     let p₂ = p .equiv-proof y .snd
@@ -72,7 +73,7 @@ is-equiv→unit : (eqv : is-equiv f) (x : A) → is-equiv→inverse eqv (f x) �
 is-equiv→unit {f} eqv x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
 
 opaque
-  unfolding _∙∙_∙∙_
+  unfolding _∙∙_∙∙_ is-of-hlevel
   is-equiv→zig : (eqv : is-equiv f) (x : A)
                → ap f (is-equiv→unit eqv x) ＝ is-equiv→counit eqv (f x)
   is-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where

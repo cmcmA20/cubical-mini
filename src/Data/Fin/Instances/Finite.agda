@@ -2,13 +2,14 @@
 module Data.Fin.Instances.Finite where
 
 open import Foundations.Base
+open import Foundations.Equiv
 
-open import Meta.Finite
+open import Correspondences.Nullary.Finite.Bishop
 
 open import Data.Fin.Base
 
 open import Truncation.Propositional.Base
 
 instance
-  Finite-Fin : ∀ {n} → Finite (Fin n)
-  Finite-Fin = fin ∣ idₑ ∣₁
+  fin-is-fin-set : ∀ {n} → is-fin-set (Fin n)
+  fin-is-fin-set = fin ∣ idₑ ∣₁

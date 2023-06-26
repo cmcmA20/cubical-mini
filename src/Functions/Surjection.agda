@@ -26,8 +26,10 @@ is-surjective f = Π[ y ꞉ _ ] ∥ fibre f y ∥₁
 _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f
 
-is-surjective-is-prop : is-prop (is-surjective f)
-is-surjective-is-prop p q i y = squash₁ (p y) (q y) i
+opaque
+  unfolding is-of-hlevel
+  is-surjective-is-prop : is-prop (is-surjective f)
+  is-surjective-is-prop p q i y = squash₁ (p y) (q y) i
 
 is-left-inverse-of→is-surjective : f is-left-inverse-of g → is-surjective f
 is-left-inverse-of→is-surjective {g} s b = ∣ g b , s b ∣₁

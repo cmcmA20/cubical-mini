@@ -4,7 +4,7 @@ module Data.Product.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Finite
+open import Correspondences.Nullary.Finite.Bishop
 
 open import Data.Unit.Instances.Finite
 open import Data.Vec.Base
@@ -39,9 +39,11 @@ Vecₓ≃Vec {A} = iso→equiv (f , iso g a→b→a b→a→b) where
   b→a→b {n = 1} _ = refl
   b→a→b {n = suc (suc n)} (x , xs) = ap (x ,_) (b→a→b xs)
 
-Finite-Vecₓ : {ℓ : Level} {A : Type ℓ} {n : ℕ}
-            → ⦃ Finite A ⦄ → Finite (Vecₓ A n)
-Finite-Vecₓ {A} {0} = it
-Finite-Vecₓ {A} {1} = it
-Finite-Vecₓ {A} {suc (suc n)} ⦃ (A-fin) ⦄ =
-  Finite-× ⦃ A-fin ⦄ ⦃ Finite-Vecₓ {A = A} {n = suc n} ⦄
+
+instance
+  vecₓ-is-fin-set : {ℓ : Level} {A : Type ℓ} {n : ℕ}
+                  → ⦃ is-fin-set A ⦄ → is-fin-set (Vecₓ A n)
+  vecₓ-is-fin-set {A} {0} = lift-is-fin-set ⦃ ⊤-is-fin-set ⦄
+  vecₓ-is-fin-set {A} {1} ⦃ (A-fin) ⦄ = A-fin
+  vecₓ-is-fin-set {A} {suc (suc n)} ⦃ (A-fin) ⦄ =
+    ×-is-fin-set ⦃ A-fin ⦄ ⦃ vecₓ-is-fin-set {A = A} {n = suc n} ⦃ A-fin ⦄ ⦄

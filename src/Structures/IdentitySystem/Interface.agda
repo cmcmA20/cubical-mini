@@ -29,5 +29,5 @@ module
   from-refl : ∀ {a} → from (λ _ → a) ＝ refl a
   from-refl = transport-refl (refl _)
 
-  hlevel : ∀ n → (∀ x y → is-of-hlevel n (R x y)) → is-of-hlevel (suc n) A
-  hlevel n = identity-system→hlevel n rr
+  hlevel′ : ∀ n → (∀ x y → is-of-hlevel n (R x y)) → is-of-hlevel (suc n) A
+  hlevel′ n = identity-system→hlevel n rr

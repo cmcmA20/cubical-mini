@@ -2,8 +2,9 @@
 module Data.Unit.Instances.Finite where
 
 open import Foundations.Base
+open import Foundations.Equiv
 
-open import Meta.Finite
+open import Correspondences.Nullary.Finite.Bishop
 
 open import Data.Fin.Closure
 open import Data.Unit.Properties
@@ -11,7 +12,5 @@ open import Data.Unit.Properties
 open import Truncation.Propositional.Base
 
 instance
-  Finite-⊥ : Finite ⊤
-  Finite-⊥ .Finite.cardinality = 1
-  Finite-⊥ .Finite.enumeration =
-    ∣ (is-contr→equiv-⊤ fin-1-is-contr ∙ₑ lift-equiv {0ℓ}) ₑ⁻¹ ∣₁
+  ⊤-is-fin-set : is-fin-set ⊤
+  ⊤-is-fin-set = fin ∣ (is-contr→equiv-⊤ fin-1-is-contr) ₑ⁻¹ ∣₁

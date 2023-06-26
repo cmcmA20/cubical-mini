@@ -3,7 +3,7 @@ module Data.Fin.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Decision
+open import Correspondences.Nullary.Decidable
 
 open import Data.Dec.Base
 open import Data.Id
@@ -11,15 +11,13 @@ open import Data.Id
 open import Data.Fin.Base
 
 instance
-  Discrete-Fin : {@0 n : ℕ} → Discrete (Fin n)
-  Discrete-Fin .Decision.has-decidable =
-    is-discreteⁱ→is-discrete Fin-is-discreteⁱ
-    where
-    Fin-is-discreteⁱ : {@0 n : ℕ} → is-discreteⁱ (Fin n)
-    Fin-is-discreteⁱ fzero    fzero    = yes reflⁱ
-    Fin-is-discreteⁱ fzero    (fsuc _) = no λ ()
-    Fin-is-discreteⁱ (fsuc _) fzero    = no λ ()
-    Fin-is-discreteⁱ (fsuc k) (fsuc l) =
+  fin-is-discrete : {@0 n : ℕ} → is-discrete (Fin n)
+  fin-is-discrete = is-discreteⁱ→is-discrete fin-is-discreteⁱ where
+    fin-is-discreteⁱ : {@0 n : ℕ} → is-discreteⁱ (Fin n)
+    fin-is-discreteⁱ fzero    fzero    = yes reflⁱ
+    fin-is-discreteⁱ fzero    (fsuc _) = no λ ()
+    fin-is-discreteⁱ (fsuc _) fzero    = no λ ()
+    fin-is-discreteⁱ (fsuc k) (fsuc l) =
       map (apⁱ fsuc)
           (λ { p reflⁱ → p reflⁱ })
-          (Fin-is-discreteⁱ k l)
+          (fin-is-discreteⁱ k l)

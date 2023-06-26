@@ -58,7 +58,7 @@ module Id≃path {ℓ} {A : Type ℓ} = Ids (Id-identity-system {A = A})
 
 is-of-hlevelⁱ : HLevel → Type ℓ → Type ℓ
 is-of-hlevelⁱ 0 A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
-is-of-hlevelⁱ (suc 0) A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
+is-of-hlevelⁱ 1 A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
 is-of-hlevelⁱ (suc (suc h)) A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-of-hlevelⁱ (suc h) (x ＝ⁱ y)
 
 is-contrⁱ : Type ℓ → Type ℓ
@@ -70,18 +70,20 @@ is-propⁱ = is-of-hlevelⁱ 1
 is-setⁱ : Type ℓ → Type ℓ
 is-setⁱ = is-of-hlevelⁱ 2
 
-is-contrⁱ→is-contr : is-contrⁱ A → is-contr A
-is-contrⁱ→is-contr (centre , _) .fst = centre
-is-contrⁱ→is-contr (_ , paths)  .snd x = Id≃path.to (paths x)
+opaque
+  unfolding is-of-hlevel
+  is-contrⁱ→is-contr : is-contrⁱ A → is-contr A
+  is-contrⁱ→is-contr (centre , _) .fst = centre
+  is-contrⁱ→is-contr (_ , paths)  .snd x = Id≃path.to (paths x)
 
-is-propⁱ→is-prop : is-propⁱ A → is-prop A
-is-propⁱ→is-prop A-propⁱ x y = Id≃path.to (A-propⁱ x y)
+  is-propⁱ→is-prop : is-propⁱ A → is-prop A
+  is-propⁱ→is-prop A-propⁱ x y = Id≃path.to (A-propⁱ x y)
 
-is-setⁱ→is-set : is-setⁱ A → is-set A
-is-setⁱ→is-set A-setⁱ x y p q =
-  let z = A-setⁱ x y (Id≃path.from p) (Id≃path.from q)
-      w = apⁱ Id≃path.to z
-  in Id≃path.to (subst₂ _＝ⁱ_ (Id≃path.ε _) (Id≃path.ε _) w)
+  is-setⁱ→is-set : is-setⁱ A → is-set A
+  is-setⁱ→is-set A-setⁱ x y p q =
+    let z = A-setⁱ x y (Id≃path.from p) (Id≃path.from q)
+        w = apⁱ Id≃path.to z
+    in Id≃path.to (subst₂ _＝ⁱ_ (Id≃path.ε _) (Id≃path.ε _) w)
 
 
 _on-pathsⁱ-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
@@ -91,7 +93,7 @@ is-discreteⁱ : Type ℓ → Type ℓ
 is-discreteⁱ A = Dec on-pathsⁱ-of A
 
 is-discreteⁱ→is-discrete : is-discreteⁱ A → is-discrete A
-is-discreteⁱ→is-discrete d x y =
+is-discreteⁱ→is-discrete d = is-discrete-η $ λ x y →
   map (Id≃path .fst)
       (λ ¬pⁱ p → ¬pⁱ ((Id≃path ₑ⁻¹) .fst p))
       (d x y)

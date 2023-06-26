@@ -5,12 +5,13 @@ open import Foundations.Base
 open import Foundations.Sigma
 open import Foundations.Erased
 
-open import Meta.Decision
-open import Meta.Finite
 open import Meta.HLevel
 
 open import Structures.n-Type
 open import Structures.FinSet
+
+open import Correspondences.Nullary.Decidable
+open import Correspondences.Nullary.Finite.Bishop
 
 open import Data.Bool.Base public
 open import Data.Dec.Base
@@ -24,15 +25,18 @@ FinSet-Bool : FinSet 0ℓ
 FinSet-Bool = fin-set! Bool
 
 -- whew, painful
-and-idem : ∀ x → x and x ＝ x
-and-idem = witness $
-  is-fin-set→exhaustible₁ (FinSet-Bool .FinSet.has-is-fin-set)
-    {P = λ x → el! (x and x ＝ x)} (λ x → (x and x) ≟ x)
+-- and-idem : ∀ x → x and x ＝ x
+-- and-idem = witness (is-fin-set→exhaustible₁ {!!} {!!} )
 
-what : ∃[ b ꞉ Bool ] not b ＝ true
-what = witness $
-  is-fin-set→omniscient₁ (FinSet-Bool .FinSet.has-is-fin-set)
-    {P = λ x → el! (not x ＝ true)} (λ x → not x ≟ true)
+-- and-idem = witness $
+--   is-fin-set→exhaustible₁ (FinSet-Bool .FinSet.has-is-fin-set)
+--     {P = λ x → el! (x and x ＝ x)} ?
+--         {P = λ x → el! (x and x ＝ x)} (λ x → (x and x) ≟ x)
+
+-- what : ∃[ b ꞉ Bool ] not b ＝ true
+-- what = witness $
+--   is-fin-set→omniscient₁ (FinSet-Bool .FinSet.has-is-fin-set)
+--     {P = λ x → el! (not x ＝ true)} (λ x → not x ≟ true)
 
 -- kek : Finite (Σ[ b ꞉ Bool ] not b ＝ b)
 -- kek = {!!}

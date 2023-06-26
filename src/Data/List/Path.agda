@@ -66,10 +66,12 @@ module List-path-code where
 
 open List-path-code
 
-list-is-of-hlevel : (n : HLevel)
-                  → is-of-hlevel (2 + n) A
-                  → is-of-hlevel (2 + n) (List A)
-list-is-of-hlevel n A-hl _ _ =
-  is-of-hlevel-≃ (1 + n)
-                 (identity-system-gives-path list-identity-system ₑ⁻¹)
-                 (code-is-of-hlevel A-hl)
+opaque
+  unfolding is-of-hlevel
+  list-is-of-hlevel : (n : HLevel)
+                    → is-of-hlevel (2 + n) A
+                    → is-of-hlevel (2 + n) (List A)
+  list-is-of-hlevel n A-hl _ _ =
+    is-of-hlevel-≃ (1 + n)
+                   (identity-system-gives-path list-identity-system ₑ⁻¹)
+                   (code-is-of-hlevel A-hl)
