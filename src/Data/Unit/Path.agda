@@ -2,11 +2,10 @@
 module Data.Unit.Path where
 
 open import Foundations.Base
+open import Foundations.Equiv.Base
 
 open import Data.Unit.Base public
 
-opaque
-  unfolding is-of-hlevel
-  ⊤-is-contr : is-contr ⊤
-  ⊤-is-contr .fst = tt
-  ⊤-is-contr .snd tt = refl
+⊤-path : (x y : ⊤) → (x ＝ y) ≃ ⊤
+⊤-path _ _ .fst _ = tt
+⊤-path x y .snd .equiv-proof = strict-contr-fibres (λ _ → refl)

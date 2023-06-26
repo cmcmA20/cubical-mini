@@ -14,7 +14,6 @@ open import Correspondences.Unary.Decidable
 
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base
-open import Data.Empty.Instances.HLevel
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∥_∥₁; ∣_∣₁)

@@ -39,8 +39,8 @@ opaque
 
 instance opaque
   unfolding is-of-hlevel
-  HLevel-Discrete : ⦃ Discrete A ⦄ → is-of-hlevel (2 + n) A
-  HLevel-Discrete = is-of-hlevel-+-left 2 _ (is-discrete→is-set _≟_)
+  discrete-is-of-hlevel : ⦃ Discrete A ⦄ → is-of-hlevel (2 + n) A
+  discrete-is-of-hlevel = is-of-hlevel-+-left 2 _ (is-discrete→is-set _≟_)
 
   HLevel-Discrete′ : is-of-hlevel (suc n) (Discrete A)
   HLevel-Discrete′ = is-prop→is-of-hlevel-suc Decision-is-prop

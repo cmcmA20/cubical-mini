@@ -70,8 +70,8 @@ opaque
 ≤-ascend = ≤-suc-r ≤-refl
 
 instance
-  H-Level-≤ : is-of-hlevel (suc k) (m ≤ n)
-  H-Level-≤ = is-prop→is-of-hlevel-suc ≤-is-prop
+  ≤-is-of-hlevel : is-of-hlevel (suc k) (m ≤ n)
+  ≤-is-of-hlevel = is-prop→is-of-hlevel-suc ≤-is-prop
 
 ≤-dec : (m n : ℕ) → Dec (m ≤ n)
 ≤-dec zero zero = yes z≤

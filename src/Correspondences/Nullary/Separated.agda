@@ -11,7 +11,6 @@ open import Structures.IdentitySystem.Base
 open import Correspondences.Nullary.Classical
 
 import Data.Empty.Base as ⊥
-open import Data.Empty.Instances.HLevel
 open import Data.Dec.Base
 
 private variable

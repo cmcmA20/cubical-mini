@@ -111,9 +111,6 @@ record FinSet ℓ : Type (ℓsuc ℓ) where
     Finite-FinSet : Finite typ
     Finite-FinSet = fin $ has-is-fin-set .snd
 
-    -- H-Level-FinSet : ∀ {n} → HLevel (2 + n) typ
-    -- H-Level-FinSet = basic-instance 2 (is-fin-set→is-set has-is-fin-set)
-
 -- open FinSet public
 --   using (Finite-FinSet; H-Level-FinSet)
 open FinSet using (typ; has-is-fin-set)

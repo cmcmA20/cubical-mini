@@ -28,6 +28,9 @@ bool-as-sum = iso→equiv 𝔯
 false≠true : ¬ false ＝ true
 false≠true = ⊎-disjoint ∘ ap (bool-as-sum .fst)
 
+true≠false : ¬ true ＝ false
+true≠false = false≠true ∘ sym
+
 -- do not use this directly, there is a derived instance
 Bool-is-set : is-set Bool
 Bool-is-set = is-of-hlevel-≃ 2 bool-as-sum hlevel!

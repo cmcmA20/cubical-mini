@@ -2,6 +2,7 @@
 module Data.Empty.Base where
 
 open import Foundations.Base
+open import Foundations.HLevel.Base
 
 data ⊥ : Type where
 
@@ -10,6 +11,7 @@ private variable
   @0 A : Type ℓ
   @0 x y : ⊥
   @0 Aω : Typeω
+  n : HLevel
 
 rec : @0 ⊥ → A
 rec ()
@@ -33,6 +35,10 @@ opaque
   absurd-is-contr : is-contr (⊥ → A)
   absurd-is-contr .fst ()
   absurd-is-contr .snd _ _ ()
+
+instance
+  ⊥-is-of-hlevel : is-of-hlevel (suc n) ⊥
+  ⊥-is-of-hlevel = is-prop→is-of-hlevel-suc ⊥-is-prop
 
 absurd-path : {@0 y : A} {@0 x : ⊥} → absurd x ＝ y
 absurd-path {x = ()}
