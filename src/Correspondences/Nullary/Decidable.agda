@@ -34,11 +34,13 @@ opaque
   is-discrete-η : Π[ x ꞉ A ] Π[ y ꞉ A ] Dec (x ＝ y) → is-discrete A
   is-discrete-η = id
 
-  is-decidable-at-hlevel→is-separated-at-hlevel
-    : (n : HLevel) → is-decidable-at-hlevel n A → is-separated-at-hlevel n A
-  is-decidable-at-hlevel→is-separated-at-hlevel 0 = dec→¬¬-stable
-  is-decidable-at-hlevel→is-separated-at-hlevel (suc n) di x y =
-   is-decidable-at-hlevel→is-separated-at-hlevel n $ di x y
+  opaque
+    unfolding is-separated-at-hlevel
+    is-decidable-at-hlevel→is-separated-at-hlevel
+      : (n : HLevel) → is-decidable-at-hlevel n A → is-separated-at-hlevel n A
+    is-decidable-at-hlevel→is-separated-at-hlevel 0 = dec→¬¬-stable
+    is-decidable-at-hlevel→is-separated-at-hlevel (suc n) di x y =
+     is-decidable-at-hlevel→is-separated-at-hlevel n $ di x y
 
 is-discrete→is-separated : is-discrete A → is-separated A
 is-discrete→is-separated = is-decidable-at-hlevel→is-separated-at-hlevel 1

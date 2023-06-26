@@ -4,7 +4,8 @@ module Data.Vec.Instances.Finite where
 open import Foundations.Base
 
 open import Meta.Bind
-open import Meta.Finite
+
+open import Correspondences.Nullary.Finite.Bishop
 
 open import Data.Product.Properties
 open import Data.Vec.Base

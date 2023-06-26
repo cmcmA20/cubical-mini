@@ -17,10 +17,10 @@ private variable
   ℓ : Level
   A : Type ℓ
 
--- TODO also make this opaque?
-is-separated-at-hlevel : HLevel → Type ℓ → Type ℓ
-is-separated-at-hlevel 0 = ¬¬_ stable_
-is-separated-at-hlevel (suc n) = is-separated-at-hlevel n on-paths-of_
+opaque
+  is-separated-at-hlevel : HLevel → Type ℓ → Type ℓ
+  is-separated-at-hlevel 0 = ¬¬_ stable_
+  is-separated-at-hlevel (suc n) = is-separated-at-hlevel n on-paths-of_
 
 dec→¬¬-stable : Dec A → ¬¬_ stable A
 dec→¬¬-stable (no ¬a) f = ⊥.rec (f ¬a)
@@ -30,14 +30,16 @@ is-separated : Type ℓ → Type ℓ
 is-separated = is-separated-at-hlevel 1
 
 
-separated-identity-system
-  : is-separated A
-  → is-identity-system (λ x y → ¬¬ (x ＝ y)) (λ _ k → k refl)
-separated-identity-system A-sep =
-  set-identity-system (λ _ _ → hlevel!) (A-sep _ _)
+opaque
+  unfolding is-separated-at-hlevel
+  separated-identity-system
+    : is-separated A
+    → is-identity-system (λ x y → ¬¬ (x ＝ y)) (λ _ k → k refl)
+  separated-identity-system A-sep =
+    set-identity-system (λ _ _ → hlevel!) (A-sep _ _)
 
 opaque
-  unfolding is-of-hlevel
+  unfolding is-of-hlevel is-separated-at-hlevel
   is-separated→is-set
     : is-separated A
     → is-set A

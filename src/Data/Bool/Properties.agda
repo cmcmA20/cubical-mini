@@ -5,13 +5,13 @@ open import Foundations.Base
 open import Foundations.Sigma
 open import Foundations.Erased
 
-open import Meta.Finite
 open import Meta.HLevel
 
 open import Structures.n-Type
 open import Structures.FinSet
 
 open import Correspondences.Nullary.Decidable
+open import Correspondences.Nullary.Finite.Bishop
 
 open import Data.Bool.Base public
 open import Data.Dec.Base
