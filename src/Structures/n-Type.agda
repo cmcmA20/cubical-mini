@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --overlapping-instances --instance-search-depth 1 #-}
 module Structures.n-Type where
 
 open import Foundations.Base

@@ -2,6 +2,7 @@
 module Foundations.Path.Groupoid where
 
 open import Foundations.Base
+open import Foundations.Transport
 
 private variable
   ℓ ℓ′ : Level
@@ -73,6 +74,19 @@ opaque
     k (i = i1) → ∙-filler₂ q r (~ k) j
     k (j = i0) → q (~ k ∧ i)
     k (j = i1) → s (k ∨ i)
+
+  square→conjugate
+    : {p : x ＝ y} {q : x ＝ z} {r : z ＝ w} {s : y ＝ w}
+    → Square p q r s
+    → s ＝ sym p ∙ q ∙ r
+  square→conjugate {p} {q} {r} {s} θ =
+    sym (transport-flip {A = λ i → p i ＝ r i} $ from-pathP⁻ θ) ∙ transport-path q p r
+
+  conjugate→square
+    : {p : x ＝ y} {q : x ＝ z} {r : z ＝ w} {s : y ＝ w}
+    → s ＝ sym p ∙ q ∙ r
+    → Square p q r s
+  conjugate→square {p} {q} {r} {s} α = to-pathP (transport-path q p r ∙ sym α)
 
   ∙-cancel′-l : (p : x ＝ y) (q r : y ＝ z)
               → p ∙ q ＝ p ∙ r

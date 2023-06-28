@@ -38,7 +38,7 @@ Square : {a₀₀ a₀₁ : A} (p : a₀₀ ＝ a₀₁)
          {a₁₀ : A} (q : a₀₀ ＝ a₁₀)
          {a₁₁ : A} (r : a₁₀ ＝ a₁₁) (s : a₀₁ ＝ a₁₁)
        → Type (level-of-type A)
-Square p q r s = ＜ q ／ (λ i → p i ＝ r i) ＼ s ＞
+Square p q r s = ＜ q ／ (λ j → p j ＝ r j) ＼ s ＞
 
 infix 0 Square-syntax
 Square-syntax : (d₁ d₂ d₃ d₄ d₅ : ⊤)
