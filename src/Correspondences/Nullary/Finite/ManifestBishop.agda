@@ -4,6 +4,7 @@ module Correspondences.Nullary.Finite.ManifestBishop where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
 open import Correspondences.Nullary.Decidable
@@ -11,7 +12,7 @@ open import Correspondences.Nullary.Omniscience
 
 open import Data.Dec.Base as Dec
 open import Data.Fin.Base
-open import Data.Fin.Instances.Discrete
+open import Data.Fin.Instances.Decidable
 open import Data.Nat
 open import Data.Vec.Base
 open import Data.Vec.Properties

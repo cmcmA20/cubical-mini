@@ -11,6 +11,8 @@ open import Meta.Reflection
 open import Meta.Search.Base public
 
 open import Structures.n-Type
+open Structures.n-Type public
+  using (n-Type; el)
 
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
@@ -61,66 +63,69 @@ prop! {A} {aip} {x} {y} =
 
 
 instance
-  decomp-lift : goal-decomposition (quote is-of-hlevel) (Lift ℓ′ A)
-  decomp-lift = decomp (quote Lift-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) ]
+  decomp-hlevel-lift : goal-decomposition (quote is-of-hlevel) (Lift ℓ′ A)
+  decomp-hlevel-lift = decomp (quote Lift-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) ]
 
-  decomp-fun : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A → B)
-  decomp-fun = decomp (quote fun-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) ]
+  decomp-hlevel-fun : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A → B)
+  decomp-hlevel-fun = decomp (quote fun-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) ]
 
-  decomp-prod : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A × B)
-  decomp-prod = decomp (quote ×-is-of-hlevel)
+  decomp-hlevel-prod : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A × B)
+  decomp-hlevel-prod = decomp (quote ×-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) , `search (quote is-of-hlevel) ]
 
-  decomp-pi³ : goal-decomposition (quote is-of-hlevel) (∀ a b c → D a b c)
-  decomp-pi³ = decomp (quote Π₃-is-of-hlevel)
+  decomp-hlevel-pi³ : goal-decomposition (quote is-of-hlevel) (∀ a b c → D a b c)
+  decomp-hlevel-pi³ = decomp (quote Π₃-is-of-hlevel)
     [ `level-same , `search-under 3 (quote is-of-hlevel) ]
 
-  decomp-pi² : goal-decomposition (quote is-of-hlevel) (∀ a b → C a b)
-  decomp-pi² = decomp (quote Π₂-is-of-hlevel) [ `level-same , `search-under 2 (quote is-of-hlevel) ]
+  decomp-hlevel-pi² : goal-decomposition (quote is-of-hlevel) (∀ a b → C a b)
+  decomp-hlevel-pi² = decomp (quote Π₂-is-of-hlevel) [ `level-same , `search-under 2 (quote is-of-hlevel) ]
 
-  decomp-pi : goal-decomposition (quote is-of-hlevel) (∀ a → B a)
-  decomp-pi = decomp (quote Π-is-of-hlevel) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
+  decomp-hlevel-pi : goal-decomposition (quote is-of-hlevel) (∀ a → B a)
+  decomp-hlevel-pi = decomp (quote Π-is-of-hlevel) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
 
-  decomp-impl-pi : goal-decomposition (quote is-of-hlevel) (∀ {a} → B a)
-  decomp-impl-pi = decomp (quote Π-is-of-hlevel-implicit) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
+  decomp-hlevel-impl-pi : goal-decomposition (quote is-of-hlevel) (∀ {a} → B a)
+  decomp-hlevel-impl-pi = decomp (quote Π-is-of-hlevel-implicit) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
 
-  decomp-equiv-right : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A ≃ B)
-  decomp-equiv-right = decomp (quote ≃-is-of-hlevel-right-suc) [ `level-minus 1 , `search (quote is-of-hlevel) ]
+  decomp-hlevel-equiv-right : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A ≃ B)
+  decomp-hlevel-equiv-right = decomp (quote ≃-is-of-hlevel-right-suc) [ `level-minus 1 , `search (quote is-of-hlevel) ]
 
-  decomp-equiv-left : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A ≃ B)
-  decomp-equiv-left = decomp (quote ≃-is-of-hlevel-left-suc) [ `level-minus 1 , `search (quote is-of-hlevel) ]
+  decomp-hlevel-equiv-left : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A ≃ B)
+  decomp-hlevel-equiv-left = decomp (quote ≃-is-of-hlevel-left-suc) [ `level-minus 1 , `search (quote is-of-hlevel) ]
 
-  decomp-equiv : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A ≃ B)
-  decomp-equiv = decomp (quote ≃-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) , `search (quote is-of-hlevel) ]
+  decomp-hlevel-equiv : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A ≃ B)
+  decomp-hlevel-equiv = decomp (quote ≃-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) , `search (quote is-of-hlevel) ]
 
-  decomp-sigma : goal-decomposition (quote is-of-hlevel) (Σ A B)
-  decomp-sigma = decomp (quote Σ-is-of-hlevel)
+  decomp-hlevel-sigma : goal-decomposition (quote is-of-hlevel) (Σ A B)
+  decomp-hlevel-sigma = decomp (quote Σ-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) , `search-under 1 (quote is-of-hlevel) ]
 
-  decomp-path′ : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
-  decomp-path′ = decomp (quote path-is-of-hlevel′)
+  decomp-hlevel-path′ : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
+  decomp-hlevel-path′ = decomp (quote path-is-of-hlevel′)
     [ `level-same , `search (quote is-of-hlevel) , `meta , `meta ]
 
-  decomp-path : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
-  decomp-path = decomp (quote path-is-of-hlevel)
+  decomp-hlevel-path : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
+  decomp-hlevel-path = decomp (quote path-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) ]
 
-  decomp-univalence : {A B : Type ℓ} → goal-decomposition (quote is-of-hlevel) (A ＝ B)
-  decomp-univalence = decomp (quote ＝-is-of-hlevel)
+  decomp-hlevel-univalence : {A B : Type ℓ} → goal-decomposition (quote is-of-hlevel) (A ＝ B)
+  decomp-hlevel-univalence = decomp (quote ＝-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) , `search (quote is-of-hlevel) ]
 
-  decomp-ntype : goal-decomposition (quote is-of-hlevel) (n-Type ℓ n)
-  decomp-ntype = decomp (quote n-Type-is-of-hlevel) [ `level-minus 1 ]
+  decomp-hlevel-ntype : goal-decomposition (quote is-of-hlevel) (n-Type ℓ n)
+  decomp-hlevel-ntype = decomp (quote n-Type-is-of-hlevel) [ `level-minus 1 ]
 
-  hlevel-proj-n-type : Struct-proj-desc (quote is-of-hlevel) (quote Carrier)
-  hlevel-proj-n-type .Struct-proj-desc.struct-name = quote n-Type
-  hlevel-proj-n-type .Struct-proj-desc.project-goal = quote carrier-is-tr
-  hlevel-proj-n-type .Struct-proj-desc.get-level ty = do
+  decomp-hlevel-hlevel : goal-decomposition (quote is-of-hlevel) (is-of-hlevel n A)
+  decomp-hlevel-hlevel = decomp (quote is-of-hlevel-is-of-hlevel-suc) [ `level-minus 1 ]
+
+  proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) (quote Carrier)
+  proj-hlevel-n-type .Struct-proj-desc.struct-name = quote n-Type
+  proj-hlevel-n-type .Struct-proj-desc.project-goal = quote carrier-is-tr
+  proj-hlevel-n-type .Struct-proj-desc.get-level ty = do
     def (quote n-Type) (ell v∷ lv′t v∷ []) ← reduce ty
       where _ → backtrack [ "Type of thing isn't n-Type, it is " , termErr ty ]
     normalise lv′t
-  hlevel-proj-n-type .Struct-proj-desc.get-argument (_ ∷ _ ∷ it v∷ []) = pure it
-  hlevel-proj-n-type .Struct-proj-desc.get-argument _ = typeError []
+  proj-hlevel-n-type .Struct-proj-desc.get-argument (_ ∷ _ ∷ it v∷ []) = pure it
+  proj-hlevel-n-type .Struct-proj-desc.get-argument _ = typeError []
 
 
 -- Usage

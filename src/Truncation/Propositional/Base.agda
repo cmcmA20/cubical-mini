@@ -26,6 +26,9 @@ opaque
 map : (A → B) → (∥ A ∥₁ → ∥ B ∥₁)
 map f = rec ∥-∥₁-is-prop (∣_∣₁ ∘ f)
 
+proj : (A-prop : is-prop A) → ∥ A ∥₁ → A
+proj A-prop = rec A-prop id
+
 elim : {P : ∥ A ∥₁ → Type ℓ′}
      → Π[ x ꞉ ∥ A ∥₁ ] is-prop (P x)
      → Π[ x ꞉   A    ] P ∣ x ∣₁

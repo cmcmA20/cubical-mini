@@ -1,12 +1,11 @@
 {-# OPTIONS --safe #-}
-module Data.Word.Instances.Discrete where
+module Data.Word.Instances.Decidable where
 
 open import Foundations.Base
-open import Foundations.Equiv
 
-open import Correspondences.Nullary.Decidable
+open import Meta.Search.Decidable
 
-open import Data.Nat.Instances.Discrete
+open import Data.Nat.Instances.Decidable
 open import Data.Id
 
 open import Data.Word.Properties

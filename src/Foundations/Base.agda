@@ -414,6 +414,12 @@ opaque
   paths : (A-c : is-contr A) → Π[ y ꞉ A ] (centre A-c ＝ y)
   paths = snd
 
+  is-contr-β : is-contr A → Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
+  is-contr-β = id
+
+  is-contr-η : Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y) → is-contr A
+  is-contr-η = id
+
 is-prop : Type ℓ → Type ℓ
 is-prop = is-of-hlevel 1
 
