@@ -15,5 +15,5 @@ private variable
   n : HLevel
 
 instance
-  decomp-dec : goal-decomposition (quote is-of-hlevel) (Dec A)
-  decomp-dec = decomp (quote dec-is-of-hlevel) (`level-same ∷ `search (quote is-of-hlevel) ∷ [])
+  decomp-hlevel-dec : goal-decomposition (quote is-of-hlevel) (Dec A)
+  decomp-hlevel-dec = decomp (quote dec-is-of-hlevel) (`level-same ∷ `search (quote is-of-hlevel) ∷ [])

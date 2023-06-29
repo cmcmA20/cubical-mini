@@ -16,7 +16,7 @@ open import Correspondences.Nullary.Finite.Bishop
 open import Data.Bool.Base public
 open import Data.Dec.Base
 open import Data.Bool.Instances.Finite
-open import Data.Bool.Instances.Discrete
+open import Data.Bool.Instances.Decidable
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁

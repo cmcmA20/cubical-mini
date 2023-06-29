@@ -3,6 +3,8 @@ module Data.Vec.Correspondences.Unary.Any where
 
 open import Foundations.Base
 
+open import Meta.Search.Decidable
+
 open import Correspondences.Unary.Decidable
 
 import      Data.Dec as Dec
@@ -10,6 +12,7 @@ open Dec
 open import Data.Fin.Base
 open import Data.Vec.Properties
 open import Data.Sum.Base
+open import Data.Sum.Instances.Decidable
 
 private variable
   a a′ : Level
@@ -25,7 +28,7 @@ any? {n = suc n} P? (x ∷ xs) =
   Dec.map [ (fzero ,_) , (λ { (i , q) → fsuc i , q }) ]ᵤ
           (λ { ¬ps (fzero  , p ) → ¬ps (inl p)
              ; ¬ps (fsuc i , ps) → ¬ps (inr (_ , ps)) })
-          (P? x ∨ᵈ any? P? xs)
+          (decision-β $ ⊎-decision (decision-η $ P? x) (decision-η $ any? P? xs))
 
 -- TODO
 -- any-ap

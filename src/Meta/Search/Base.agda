@@ -170,7 +170,7 @@ private
 
 
   search : Tactic-desc goal-name → Bool → Term → ℕ → Term → TC ⊤
-  search td has-alts _     zero    goal = unify goal unknown
+  search             td has-alts _     zero    goal = unify goal unknown
   search {goal-name} td has-alts level (suc n) goal
     =   use-projections
     <|> use-hints
@@ -181,7 +181,7 @@ private
       use-projections : TC ⊤
       use-projections = do
         def qn _ ← (snd <$> decompose-goal td goal) >>= reduce
-          where t → backtrack [ "Term is not headed by a definition; ignoring projections. Offender: " , termErr t ]
+          where _ → backtrack "Term is not headed by a definition; ignoring projections."
 
         go-alt ← inferType goal
         debugPrint "tactic.search" 20
@@ -284,7 +284,7 @@ private
         gen-args has-alts level defn args (wrap-lams under mv v∷ accum) do
           cont
           tactic-instance ← do
-            solved@(meta mv′ _) ← new-meta (def (quote Tactic-desc) (lit (name goal-name) v∷ []))
+            solved@(meta mv′ _) ← new-meta (def (quote Tactic-desc) (lit (name subgoal-name) v∷ []))
               where _ → typeError [ "Could not get instances:" , termErr goal ]
             (ti ∷ []) ← getInstances mv′ where
               _ → typeError [ "Too few (or many) tactic instances:" , termErr goal ]
@@ -370,6 +370,6 @@ search-tactic-worker {goal-name} td goal = do
 
   solved ← enter do
     goal′ ← new-meta (def goal-name (lv v∷ ty v∷ []))
-    search td false lv 10 goal′
+    search td false lv 15 goal′
     pure goal′
   unify goal (leave solved)

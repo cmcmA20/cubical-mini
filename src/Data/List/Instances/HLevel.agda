@@ -9,8 +9,8 @@ open import Data.List.Base
 open import Data.List.Path public
 
 instance
-  hlevel-decomp-List
+  decomp-hlevel-list
     : ∀ {ℓ} {A : Type ℓ}
     → goal-decomposition (quote is-of-hlevel) (List A)
-  hlevel-decomp-List = decomp (quote list-is-of-hlevel)
+  decomp-hlevel-list = decomp (quote list-is-of-hlevel)
     (`level-minus 2 ∷ `search (quote is-of-hlevel) ∷ [])

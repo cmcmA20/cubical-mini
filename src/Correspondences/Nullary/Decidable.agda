@@ -6,8 +6,10 @@ open import Foundations.HLevel
 
 open import Correspondences.Nullary.Separated
 
+open import Data.Bool.Base
 import Data.Dec.Base as Dec
 open import Data.Dec.Path
+open import Data.Empty.Base
 
 open import Functions.Embedding
 
@@ -22,11 +24,20 @@ opaque
   is-decidable-at-hlevel 0       = Dec
   is-decidable-at-hlevel (suc n) = is-decidable-at-hlevel n on-paths-of_
 
+Decision : Type ℓ → Type ℓ
+Decision = is-decidable-at-hlevel 0
+
 is-discrete : Type ℓ → Type ℓ
 is-discrete = is-decidable-at-hlevel 1
 
 opaque
   unfolding is-decidable-at-hlevel
+
+  decision-β : Decision A → Dec A
+  decision-β = id
+
+  decision-η : Dec A → Decision A
+  decision-η = id
 
   is-discrete-β : is-discrete A → Π[ x ꞉ A ] Π[ y ꞉ A ] Dec (x ＝ y)
   is-discrete-β = id
@@ -66,14 +77,19 @@ opaque
     : (n : HLevel)
     → is-decidable-at-hlevel (suc n) A
     → is-decidable-at-hlevel (suc (suc n)) A
-  is-decidable-at-hlevel-suc 0 di x y =
-    Dec.rec (λ x=y p q → yes $ is-discrete→is-set di x y p q)
-            (λ x≠y p q → no $ λ _ → x≠y p)
-            (di x y)
+  is-decidable-at-hlevel-suc 0       di _ _ _ _ = yes (is-discrete→is-set di _ _ _ _)
   is-decidable-at-hlevel-suc (suc n) di x y = is-decidable-at-hlevel-suc n $ di x y
 
   is-of-hlevel-is-discrete : (n : HLevel) → is-discrete (is-of-hlevel n A)
   is-of-hlevel-is-discrete _ _ _ = yes (is-of-hlevel-is-prop _ _ _)
+
+is-decidable-at-hlevel-+
+  : (m n : HLevel)
+  → is-decidable-at-hlevel (suc m) A
+  → is-decidable-at-hlevel (suc (n + m)) A
+is-decidable-at-hlevel-+ m 0       = id
+is-decidable-at-hlevel-+ m 1       = is-decidable-at-hlevel-suc m
+is-decidable-at-hlevel-+ m (suc n) = is-decidable-at-hlevel-suc (n + m) ∘ is-decidable-at-hlevel-+ m n
 
 opaque
   unfolding is-decidable-at-hlevel
@@ -93,39 +109,47 @@ is-discrete-embedding (f , f-emb) =
 decide : (n : HLevel) ⦃ d : is-decidable-at-hlevel n A ⦄ → is-decidable-at-hlevel n A
 decide n ⦃ d ⦄ = d
 
-_≟_ : ⦃ is-discrete A ⦄ → (x y : A) → Dec (x ＝ y)
-_≟_ = is-discrete-β it
-
-instance
-  discrete-is-of-hlevel : ⦃ is-discrete A ⦄ → is-of-hlevel (2 + n) A
-  discrete-is-of-hlevel = is-of-hlevel-+-left 2 _ (is-discrete→is-set it)
-
-
-instance opaque
-  unfolding is-of-hlevel
--- TODO remove when solver's ready
+opaque
+  unfolding is-of-hlevel is-decidable-at-hlevel
   Σ-is-discrete
-    : {A : Type ℓ} {B : A → Type ℓ′}
-    → ⦃ is-discrete A ⦄ → ⦃ ∀ {a} → is-discrete (B a) ⦄
+    : {B : A → Type ℓ′}
+    → is-discrete A → ((a : A) → is-discrete (B a))
     → is-discrete (Σ A B)
-  Σ-is-discrete {B} = is-discrete-η helper where
+  Σ-is-discrete {B} A-d B-d = is-discrete-η helper where
     helper : _
-    helper (a₁ , b₁) (a₂ , b₂) with a₁ ≟ a₂
-    ... | no ¬p = no λ q → ¬p (ap fst q)
-    ... | yes p with subst _ p b₁ ≟ b₂
-    ... | no ¬q = no λ r → ¬q $ from-pathP $
+    helper (a₁ , b₁) (a₂ , b₂) with A-d a₁ a₂
+    ... | no  a₁≠a₂ = no λ q → a₁≠a₂ (ap fst q)
+    ... | yes a₁=a₂ with B-d _ (subst _ a₁=a₂ b₁) b₂
+    ... | no  b₁≠b₂ = no λ r → b₁≠b₂ $ from-pathP $
       subst (λ X → ＜ b₁ ／ (λ i → B (X i)) ＼ b₂ ＞)
-            (is-discrete→is-set it a₁ a₂ (ap fst r) p)
+            (is-discrete→is-set A-d a₁ a₂ (ap fst r) a₁=a₂)
             (ap snd r)
-    ... | yes q = yes (Σ-path p q)
+    ... | yes b₁=b₂ = yes $ Σ-path a₁=a₂ b₁=b₂
+
+  ×-is-discrete
+    : is-discrete A → is-discrete B
+    → is-discrete (A × B)
+  ×-is-discrete A-d B-d = is-discrete-η helper where
+    helper : (x y : _) → Dec (x ＝ y)
+    helper (a₁ , b₁) (a₂ , b₂) with A-d a₁ a₂
+    ... | no  a₁≠a₂ = no λ q → a₁≠a₂ (ap fst q)
+    ... | yes a₁=a₂ with B-d b₁ b₂
+    ... | no  b₁≠b₂ = no λ r → b₁≠b₂ (ap snd r)
+    ... | yes b₁=b₂ = yes $ Σ-pathP a₁=a₂ b₁=b₂
 
   lift-is-discrete
-    : ⦃ is-discrete A ⦄ → is-discrete (Lift ℓ A)
-  lift-is-discrete = is-discrete-η helper where
-    helper : _
-    helper (lift x) (lift y) =
-      Dec.map (ap lift) (_∘ ap lower) (x ≟ y)
+    : is-discrete A → is-discrete (Lift ℓ A)
+  lift-is-discrete di (lift x) (lift y) =
+      Dec.map (ap lift) (_∘ ap lower) (di x y)
 
-  path-is-discrete
-    : ⦃ is-discrete A ⦄ → {x y : A} → is-discrete (x ＝ y)
-  path-is-discrete = is-discrete-η $ λ _ _ → yes (is-discrete→is-set it _ _ _ _)
+  ×-decision : Decision A → Decision B → Decision (A × B)
+  ×-decision da db .does = da .does and db .does
+  ×-decision (no ¬a) db .proof = ofⁿ $ ¬a ∘ fst
+  ×-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ snd
+  ×-decision (yes a) (yes b) .proof = ofʸ (a , b)
+
+  →-decision : Decision A → Decision B → Decision (A → B)
+  →-decision da db .does = not (da .does) or db .does
+  →-decision (no ¬a) db .proof = ofʸ $ λ a → absurd (¬a a)
+  →-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ (_$ a)
+  →-decision (yes a) (yes b) .proof = ofʸ λ _ → b

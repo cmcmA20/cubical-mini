@@ -48,10 +48,10 @@ elim!
   → (x : ∥ A ∥₁) → P x
 elim! {P-prop} = elim (λ _ → P-prop)
 
-proj
+proj!
   : {@(tactic hlevel-tactic-worker) A-prop : is-prop A}
   → ∥ A ∥₁ → A
-proj {A-prop} = rec A-prop id
+proj! {A-prop} = rec A-prop id
 
 opaque
   unfolding is-of-hlevel

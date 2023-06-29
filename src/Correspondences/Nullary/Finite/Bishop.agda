@@ -7,6 +7,7 @@ open import Foundations.Pi
 open import Foundations.Sigma
 
 open import Meta.Bind
+open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
 open import Correspondences.Nullary.Decidable
@@ -20,7 +21,7 @@ open import Data.Empty.Base
 open import Data.Fin.Base
 open import Data.Fin.Properties
 open import Data.Fin.Closure
-open import Data.Fin.Instances.Discrete
+open import Data.Fin.Instances.Decidable
 open import Data.Nat
 
 import Truncation.Propositional as ∥-∥₁
@@ -65,7 +66,7 @@ opaque
 
   is-fin-set→is-set : is-fin-set A → is-set A
   is-fin-set→is-set (_ , ∣e∣₁) =
-    ∥-∥₁.rec (is-of-hlevel-is-prop 2) (λ e → is-of-hlevel-≃ 2 e hlevel!) ∣e∣₁
+    ∥-∥₁.rec! (λ e → is-of-hlevel-≃ 2 e hlevel!) ∣e∣₁
 
   𝓑→is-fin-set : 𝓑 A → is-fin-set A
   𝓑→is-fin-set (n , e) = n , ∣ e ∣₁
@@ -124,7 +125,7 @@ private
     go .snd .is-iso.rinv fzero = refl
     go .snd .is-iso.linv _ = fun-ext λ()
 
-  finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj do
+  finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
     e ← fin-choice (suc sz) (enumeration ∘ fam)
     let rest = finite-pi-fin sz (fam ∘ fsuc)
     cont ← enumeration rest
@@ -143,7 +144,7 @@ instance
 
   Σ-is-fin-set
     : ⦃ is-fin-set A ⦄ → ⦃ ∀ x → is-fin-set (P x) ⦄ → is-fin-set (Σ A P)
-  Σ-is-fin-set {A} {P} ⦃ (afin) ⦄ ⦃ (fam) ⦄ = ∥-∥₁.proj do
+  Σ-is-fin-set {A} {P} ⦃ (afin) ⦄ ⦃ (fam) ⦄ = ∥-∥₁.proj! do
     aeq ← enumeration afin
     let
       module aeq = Equiv aeq
@@ -161,7 +162,7 @@ instance
 
   Π-is-fin-set
     : {P : A → Type ℓ′} → ⦃ is-fin-set A ⦄ → ⦃ ∀ x → is-fin-set (P x) ⦄ → is-fin-set (∀ x → P x)
-  Π-is-fin-set {A} {P} ⦃ (afin) ⦄ ⦃ (fam) ⦄ = ∥-∥₁.proj do
+  Π-is-fin-set {A} {P} ⦃ (afin) ⦄ ⦃ (fam) ⦄ = ∥-∥₁.proj! do
     eqv ← enumeration afin
     let count = finite-pi-fin (cardinality afin) λ x → fam $ is-equiv→inverse (eqv .snd) x
     eqv′ ← enumeration count

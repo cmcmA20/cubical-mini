@@ -48,7 +48,7 @@ opaque
   -- what the hell
   omniscient₁→exhaustible₁ : Omniscient₁ {ℓ′ = ℓ′} A → Exhaustible₁ {ℓ′ = ℓ′} A
   omniscient₁→exhaustible₁ omn₁ {P} P? = Dec.map
-    (λ ¬∃∣p∣₁ x → ∥-∥₁.proj $ dec→¬¬-stable (map pure ∥-∥₁.rec! $ P? x)
+    (λ ¬∃∣p∣₁ x → ∥-∥₁.proj! $ dec→¬¬-stable (map pure ∥-∥₁.rec! $ P? x)
       (¬∃∣p∣₁ ∘ λ ¬∣p∣₁ → pure $ x , λ p → ¬∣p∣₁ $ pure p))
     (λ ¬∃∣p∣₁ ∀p → ¬∃∣p∣₁ $ ∥-∥₁.rec! λ x → x .snd $ ∀p $ x .fst)
       helper where opaque

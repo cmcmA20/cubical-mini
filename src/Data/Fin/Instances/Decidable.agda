@@ -1,9 +1,9 @@
 {-# OPTIONS --safe #-}
-module Data.Fin.Instances.Discrete where
+module Data.Fin.Instances.Decidable where
 
 open import Foundations.Base
 
-open import Correspondences.Nullary.Decidable
+open import Meta.Search.Decidable
 
 open import Data.Dec.Base
 open import Data.Id

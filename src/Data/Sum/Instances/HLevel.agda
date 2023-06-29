@@ -10,8 +10,8 @@ open import Data.List.Base
 open import Data.Sum.Path public
 
 instance
-  hlevel-decomp-⊎
+  decomp-hlevel-⊎
     : ∀ {a b} {A : Type a} {B : Type b}
     → goal-decomposition (quote is-of-hlevel) (A ⊎ B)
-  hlevel-decomp-⊎ = decomp (quote ⊎-is-of-hlevel)
+  decomp-hlevel-⊎ = decomp (quote ⊎-is-of-hlevel)
     (`level-minus 2 ∷ `search (quote is-of-hlevel) ∷ `search (quote is-of-hlevel) ∷ [])

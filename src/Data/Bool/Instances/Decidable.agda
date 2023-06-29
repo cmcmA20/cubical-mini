@@ -1,16 +1,14 @@
 {-# OPTIONS --safe #-}
-module Data.Bool.Instances.Discrete where
+module Data.Bool.Instances.Decidable where
 
 open import Foundations.Base
 
-open import Meta.Search.HLevel
-
-open import Correspondences.Nullary.Decidable
+open import Meta.Search.Decidable
 
 open import Data.Dec.Base
 open import Data.Id
 
-open import Data.Bool.Path
+open import Data.Bool.Base
 
 instance
   bool-is-discrete : is-discrete Bool

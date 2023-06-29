@@ -11,7 +11,7 @@ open import Agda.Builtin.Nat public
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ : Level
   A A′ : Type ℓ
-  h : HLevel
+  h h₁ h₂ : HLevel
 
 hlevel : (n : HLevel) ⦃ x : is-of-hlevel n A ⦄ → is-of-hlevel n A
 hlevel n ⦃ x ⦄ = x
@@ -155,6 +155,9 @@ opaque
   is-of-hlevel-is-prop (suc 0) = is-prop-is-prop
   is-of-hlevel-is-prop (suc (suc h)) x y i a b =
     is-of-hlevel-is-prop (suc h) (x a b) (y a b) i
+
+  is-of-hlevel-is-of-hlevel-suc : (h₁ : HLevel) → is-of-hlevel (suc h₁) (is-of-hlevel h A)
+  is-of-hlevel-is-of-hlevel-suc h₁ = is-of-hlevel-+-left 1 h₁ (is-of-hlevel-is-prop _)
 
   is-prop→SquareP
     : ∀ {B : I → I → Type ℓ} → ((i j : I) → is-prop (B i j))

@@ -3,6 +3,8 @@ module Data.Vec.Correspondences.Unary.All where
 
 open import Foundations.Base
 
+open import Meta.Search.Decidable
+
 open import Structures.Base
 
 open import Correspondences.Nullary.Separated
@@ -41,7 +43,7 @@ all? P? []       = yes []
 all? P? (x ∷ xs) =
   Dec.map (λ { (px , ps) → px ∷ ps })
           (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
-          (P? x ∧ᵈ all? P? xs)
+          (decision-β $ ×-decision (decision-η (P? x)) (decision-η (all? P? xs)))
 
 -- ¬∃¬→∀¬ : ∀ xs → ¬ (Any P {n = n} xs) → All (¬_ ∘ P) xs
 -- ¬∃¬→∀¬ []       _ = []
