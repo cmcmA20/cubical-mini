@@ -3,7 +3,7 @@ module Data.List.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.HLevel
+open import Meta.Search.HLevel
 
 open import Correspondences.Nullary.Decidable
 

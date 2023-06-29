@@ -3,7 +3,7 @@ module Correspondences.Nullary.Separated where
 
 open import Foundations.Base
 
-open import Meta.HLevel
+open import Meta.Search.HLevel
 
 open import Structures.Base
 open import Structures.IdentitySystem.Base

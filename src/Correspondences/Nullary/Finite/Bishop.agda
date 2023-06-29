@@ -7,7 +7,7 @@ open import Foundations.Pi
 open import Foundations.Sigma
 
 open import Meta.Bind
-open import Meta.HLevel
+open import Meta.Search.HLevel
 
 open import Correspondences.Nullary.Decidable
 open import Correspondences.Nullary.Finite.ManifestBishop
@@ -57,7 +57,7 @@ opaque
   is-fin-set-is-prop = is-prop-η go where
     go : _
     go (m , ∣p∣₁) (n , ∣q∣₁) =
-      Σ-prop-path-equiv hlevel! .fst $
+      Σ-prop-path-equiv (λ _ → hlevel!) .fst $
         ∥-∥₁.elim₂ (λ _ _ → hlevel!)
                    (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q))
                    ∣p∣₁
@@ -75,7 +75,7 @@ opaque
 -- fin-set→is-discrete A-f = {!!}
 
   is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ′ = ℓ′} A
-  is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} = ∥-∥₁.elim! go ((n ,_) <$> ∣aeq∣₁) where
+  is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} = ∥-∥₁.elim (λ _ → hlevel!) go ((n ,_) <$> ∣aeq∣₁) where
     go : Π[ A-f ꞉ 𝓑 A ] (Decidable₁ P → Dec ∥ Σ A _ ∥₁)
     go A-f = Dec.map pure rec! ∘ 𝓑→omniscient A-f
 

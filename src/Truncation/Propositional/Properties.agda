@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Sigma
 open import Foundations.Equiv
 
-open import Meta.HLevel
+open import Meta.Search.HLevel
 
 open import Truncation.Propositional.Base public
 
