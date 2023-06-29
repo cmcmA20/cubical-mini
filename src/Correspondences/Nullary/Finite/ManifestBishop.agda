@@ -4,7 +4,7 @@ module Correspondences.Nullary.Finite.ManifestBishop where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.HLevel
+open import Meta.Search.HLevel
 
 open import Correspondences.Nullary.Decidable
 open import Correspondences.Nullary.Omniscience

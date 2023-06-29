@@ -3,7 +3,7 @@ module Data.Dec.Instances.HLevel where
 
 open import Foundations.Base
 
-open import Meta.HLevel
+open import Meta.Search.HLevel
 
 open import Data.List.Base
 
@@ -15,5 +15,5 @@ private variable
   n : HLevel
 
 instance
-  decomp-dec : hlevel-decomposition (Dec A)
-  decomp-dec = decomp (quote dec-is-of-hlevel) (`level ∷ `search ∷ [])
+  decomp-dec : goal-decomposition (quote is-of-hlevel) (Dec A)
+  decomp-dec = decomp (quote dec-is-of-hlevel) (`level-same ∷ `search (quote is-of-hlevel) ∷ [])

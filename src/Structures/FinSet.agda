@@ -6,7 +6,7 @@ open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Meta.Idiom
-open import Meta.HLevel
+open import Meta.Search.HLevel
 open import Meta.Underlying public
 
 open import Structures.Base

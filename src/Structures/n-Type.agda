@@ -24,6 +24,9 @@ opaque
   carrier-is-tr : ∀ {ℓ n} → (A : n-Type ℓ n) → is-of-hlevel n (Carrier A)
   carrier-is-tr = snd
 
+  carrier-is-tr′ : ∀ {ℓ} (n : HLevel) {A : n-Type ℓ n} → is-of-hlevel n (Carrier A)
+  carrier-is-tr′ _ {A} = A .snd
+
 private variable
   ℓ ℓ′ : Level
   A : Type ℓ

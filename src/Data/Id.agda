@@ -6,7 +6,7 @@ open import Foundations.Transport
 open import Foundations.HLevel.Base
 open import Foundations.Equiv
 
-open import Meta.HLevel
+open import Meta.Search.HLevel
 
 open import Structures.Base
 open import Structures.IdentitySystem

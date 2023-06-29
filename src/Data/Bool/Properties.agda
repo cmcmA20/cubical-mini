@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Sigma
 open import Foundations.Erased
 
-open import Meta.HLevel
+open import Meta.Search.HLevel
 
 open import Structures.n-Type
 open import Structures.FinSet

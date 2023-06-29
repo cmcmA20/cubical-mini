@@ -34,7 +34,7 @@ open import Meta.Literals.FromNeg     public
 open import Meta.Literals.FromString  public
 open import Meta.Show                 public
 
-open import Meta.HLevel   public
+open import Meta.Search.HLevel public
 
 open import Meta.Marker     public
 open import Meta.Record     public
