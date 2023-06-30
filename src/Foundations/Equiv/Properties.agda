@@ -9,10 +9,11 @@ open import Foundations.Univalence.Base
 open import Foundations.Equiv.Base
 
 private variable
-  ℓ ℓ′ ℓ″ : Level
+  ℓ ℓ′ ℓ″ ℓ‴ : Level
   A : Type ℓ
   B : Type ℓ′
   C : Type ℓ″
+  D : Type ℓ‴
   x y : A
 
 _ₑ⁻¹ : A ≃ B → B ≃ A
@@ -114,3 +115,16 @@ lift-equiv = iso→equiv 𝔯 where
   𝔯 .snd .inv = lift
   𝔯 .snd .rinv _ = refl
   𝔯 .snd .linv _ = refl
+
+-- TODO move to `Equiv.Groupoid` ?
+opaque
+  unfolding _∙ₑ_
+  ∙ₑ-id-l : (f : A ≃ B) → idₑ ∙ₑ f ＝ f
+  ∙ₑ-id-l f = equiv-ext refl
+
+  ∙ₑ-id-r : (f : A ≃ B) → f ∙ₑ idₑ ＝ f
+  ∙ₑ-id-r f = equiv-ext refl
+
+  ∙ₑ-assoc : (f : A ≃ B) (g : B ≃ C) (h : C ≃ D)
+           → f ∙ₑ (g ∙ₑ h) ＝ (f ∙ₑ g) ∙ₑ h
+  ∙ₑ-assoc f g h = equiv-ext refl

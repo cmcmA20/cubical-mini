@@ -35,9 +35,9 @@ A ∪ B = ∥ A ⊎ B ∥₁
   (inl x) i → p i x
   (inr x) i → q i x
 
-[]-η : (x : A ⊎ B) → [ inl , inr ]ᵤ x ＝ x
-[]-η (inl x) = refl
-[]-η (inr x) = refl
+[]ᵤ-η : (x : A ⊎ B) → [ inl , inr ]ᵤ x ＝ x
+[]ᵤ-η (inl x) = refl
+[]ᵤ-η (inr x) = refl
 
 map : (A → C) → (B → D) → A ⊎ B → C ⊎ D
 map f g (inl a) = inl (f a)
