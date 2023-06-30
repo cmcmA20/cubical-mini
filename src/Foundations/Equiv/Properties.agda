@@ -4,6 +4,7 @@ module Foundations.Equiv.Properties where
 open import Foundations.Base
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
+open import Foundations.Path.Reasoning
 open import Foundations.Univalence.Base
 
 open import Foundations.Equiv.Base
@@ -128,3 +129,12 @@ opaque
   ∙ₑ-assoc : (f : A ≃ B) (g : B ≃ C) (h : C ≃ D)
            → f ∙ₑ (g ∙ₑ h) ＝ (f ∙ₑ g) ∙ₑ h
   ∙ₑ-assoc f g h = equiv-ext refl
+
+@0 ua-∙ₑ
+  : {A B C : Type ℓ}
+    (f : A ≃ B) (g : B ≃ C)
+  → ua (f ∙ₑ g) ＝ ua f ∙ ua g
+ua-∙ₑ {C} = equiv-J (λ B′ f → Π[ g ꞉ B′ ≃ C ] (ua (f ∙ₑ g) ＝ ua f ∙ ua g))
+  (λ g → cong ua (∙ₑ-id-l g)
+       ∙ sym (cong (_∙ ua g) ua-idₑ
+       ∙ ∙-elim-l refl))
