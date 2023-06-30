@@ -34,6 +34,13 @@ if_then_else_ : Bool → A → A → A
 if true  then x else y = x
 if false then x else y = y
 
+elim : {P : Bool → Type ℓ} (t : P true) (f : P false) (b : Bool) → P b
+elim _ f false = f
+elim t _ true  = t
+
+rec : A → A → Bool → A
+rec = elim
+
 -- dichotomyBool : (x : Bool) → (x ≡ true) ⊎ (x ≡ false)
 -- dichotomyBool true  = inl refl
 -- dichotomyBool false = inr refl

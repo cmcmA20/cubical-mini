@@ -4,7 +4,8 @@ module Data.Dec.Base where
 open import Foundations.Base
 open import Foundations.Erased
 
-open import Data.Bool.Base public
+import Data.Bool.Base as Bool
+open Bool using (Bool; false; true; not; if_then_else_)
 import      Data.Empty.Base as ⊥
 open ⊥ using (⊥; ¬_)
 

@@ -27,6 +27,9 @@ inv-equiv-is-equiv = is-iso→is-equiv goal where
   goal .rinv _ = equiv-ext refl
   goal .linv _ = equiv-ext refl
 
+is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
+is-equiv-inv fe = ((_ , fe) ₑ⁻¹) .snd
+
 -- TODO
 -- preCompEquiv : (e : A ≃ B) → (B → C) ≃ (A → C)
 -- preCompEquiv e = (λ φ → φ ∘ fst e) , isEquivPreComp e
