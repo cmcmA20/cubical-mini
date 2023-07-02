@@ -3,7 +3,7 @@ module Data.FinSum.Instances.Finite where
 
 open import Foundations.Base
 
-open import Correspondences.Nullary.Finite.Bishop
+open import Meta.Search.Finite.Bishop
 
 open import Data.FinSum.Path
 

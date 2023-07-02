@@ -26,7 +26,7 @@ x ∉ xs = ¬ (x ∈ xs)
 _∈!_ : A → Vec A n → Type _
 x ∈! xs = is-contr (x ∈ xs)
 
-_∈?_ : {@(tactic dec-tactic-worker) di : is-discrete A }
+_∈?_ : {@(tactic decide-tactic-worker) di : is-discrete A }
      → Π[ x ꞉ A ] Π[ as ꞉ Vec A n ] Dec (x ∈ as)
 _∈?_ {n = 0} x [] = no λ()
 _∈?_ {n = suc _} {di} x (a ∷ as) =

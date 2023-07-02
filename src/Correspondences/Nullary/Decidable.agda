@@ -24,6 +24,7 @@ opaque
   is-decidable-at-hlevel 0       = Dec
   is-decidable-at-hlevel (suc n) = is-decidable-at-hlevel n on-paths-of_
 
+-- TODO can we drop this?
 Decision : Type ℓ → Type ℓ
 Decision = is-decidable-at-hlevel 0
 
@@ -68,8 +69,13 @@ opaque
   is-decidable-at-hlevel-is-prop (suc n) p q i x y
     = is-decidable-at-hlevel-is-prop n (p x y) (q x y) i
 
+
 is-discrete-is-prop : is-prop (is-discrete A)
 is-discrete-is-prop = is-decidable-at-hlevel-is-prop 0
+
+is-discrete-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-discrete A)
+is-discrete-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-discrete-is-prop
+
 
 opaque
   unfolding is-of-hlevel is-decidable-at-hlevel

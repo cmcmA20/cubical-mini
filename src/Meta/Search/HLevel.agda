@@ -117,9 +117,12 @@ instance
   decomp-hlevel-hlevel : goal-decomposition (quote is-of-hlevel) (is-of-hlevel n A)
   decomp-hlevel-hlevel = decomp (quote is-of-hlevel-is-of-hlevel-suc) [ `level-minus 1 ]
 
-  proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) (quote Carrier)
+  decomp-hlevel-is-equiv : {B : Type ℓ′} {f : A → B} → goal-decomposition (quote is-of-hlevel) (is-equiv f)
+  decomp-hlevel-is-equiv = decomp (quote is-equiv-is-of-hlevel) [ `level-minus 1 ]
+
+  proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) (quote n-Type-carrier)
   proj-hlevel-n-type .Struct-proj-desc.struct-name = quote n-Type
-  proj-hlevel-n-type .Struct-proj-desc.project-goal = quote carrier-is-tr
+  proj-hlevel-n-type .Struct-proj-desc.project-goal = quote n-Type-carrier-is-tr
   proj-hlevel-n-type .Struct-proj-desc.get-level ty = do
     def (quote n-Type) (ell v∷ lv′t v∷ []) ← reduce ty
       where _ → backtrack [ "Type of thing isn't n-Type, it is " , termErr ty ]

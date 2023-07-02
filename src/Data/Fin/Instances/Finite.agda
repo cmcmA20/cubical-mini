@@ -4,7 +4,7 @@ module Data.Fin.Instances.Finite where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Correspondences.Nullary.Finite.Bishop
+open import Meta.Search.Finite.Bishop
 
 open import Data.Fin.Base
 

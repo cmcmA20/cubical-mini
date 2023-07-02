@@ -34,15 +34,15 @@ private variable
   n : HLevel
 
 instance
-  Tactic-dec : Tactic-desc (quote is-decidable-at-hlevel)
-  Tactic-dec .Tactic-desc.other-atoms = [ quote _≃_ ]
-  Tactic-dec .Tactic-desc.instance-fallback-helper = quote decide
-  Tactic-dec .Tactic-desc.upwards-closure = nothing
+  Tactic-decide : Tactic-desc (quote is-decidable-at-hlevel)
+  Tactic-decide .Tactic-desc.other-atoms = [ quote _≃_ ]
+  Tactic-decide .Tactic-desc.instance-fallback-helper = quote decide
+  Tactic-decide .Tactic-desc.upwards-closure = nothing
 
-dec-tactic-worker = search-tactic-worker Tactic-dec
-macro dec! = dec-tactic-worker
+decide-tactic-worker = search-tactic-worker Tactic-decide
+macro decide! = decide-tactic-worker
 
-_≟_ : { @(tactic dec-tactic-worker) di : is-discrete A } → (x y : A) → Dec (x ＝ y)
+_≟_ : { @(tactic decide-tactic-worker) di : is-discrete A } → (x y : A) → Dec (x ＝ y)
 _≟_ {di} = is-discrete-β di
 
 hedberg-helper : (n : HLevel) → is-discrete A → is-of-hlevel (2 + n) A
@@ -73,9 +73,12 @@ instance
   decomp-dec₀-fun = decomp (quote →-decision)
     [ `search (quote is-decidable-at-hlevel) , `search (quote is-decidable-at-hlevel) ]
 
-  decomp-hlevel-dec : goal-decomposition (quote is-of-hlevel) A
-  decomp-hlevel-dec = decomp (quote hedberg-helper)
+  decomp-hlevel-hedberg : goal-decomposition (quote is-of-hlevel) A
+  decomp-hlevel-hedberg = decomp (quote hedberg-helper)
     [ `level-minus 2 , `search (quote is-decidable-at-hlevel) ]
+
+  decomp-hlevel-dec₁ : goal-decomposition (quote is-of-hlevel) (is-discrete A)
+  decomp-hlevel-dec₁ = decomp (quote is-discrete-is-of-hlevel) [ `level-minus 1 ]
 
 -- Usage
 private
@@ -91,7 +94,7 @@ private
     _ = hlevel!
 
     _ : is-discrete (A × A × A × A)
-    _ = dec!
+    _ = decide!
 
     _ : is-decidable-at-hlevel 4 A
-    _ = dec!
+    _ = decide!

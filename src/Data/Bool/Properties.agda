@@ -21,8 +21,8 @@ open import Data.Bool.Instances.Decidable
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
 
-FinSet-Bool : FinSet 0ℓ
-FinSet-Bool = fin-set! Bool
+-- FinSet-Bool : FinSet 0ℓ
+-- FinSet-Bool = fin-set! Bool
 
 -- whew, painful
 -- and-idem : ∀ x → x and x ＝ x

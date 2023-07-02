@@ -52,6 +52,6 @@ opaque
       (¬∃∣p∣₁ ∘ λ ¬∣p∣₁ → pure $ x , λ p → ¬∣p∣₁ $ pure p))
     (λ ¬∃∣p∣₁ ∀p → ¬∃∣p∣₁ $ ∥-∥₁.rec! λ x → x .snd $ ∀p $ x .fst)
       helper where opaque
-        unfolding is-of-hlevel Carrier
-        helper : Dec ((b : ∥ Σ _ (λ v → (a : Carrier (P v)) → ⊥) ∥₁) → ⊥)
+        unfolding is-of-hlevel n-Type-carrier
+        helper : Dec ((b : ∥ Σ _ (λ v → (a : n-Type-carrier (P v)) → ⊥) ∥₁) → ⊥)
         helper = (¬ᵈ omn₁ {P = λ x → (¬ P x .fst) , ¬-is-prop} (¬ᵈ_ ∘ P?))

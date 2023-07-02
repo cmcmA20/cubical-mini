@@ -15,4 +15,4 @@ open import Data.Float.Properties
 instance
   float-is-discrete : is-discrete Float
   float-is-discrete =
-    is-discrete-injection (float→maybe-word64 , float→maybe-word64-inj) dec!
+    is-discrete-injection (float→maybe-word64 , float→maybe-word64-inj) decide!
