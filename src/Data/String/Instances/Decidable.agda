@@ -13,4 +13,4 @@ open import Data.String.Properties
 instance
   string-is-discrete : is-discrete String
   string-is-discrete =
-    is-discrete-injection (string→list , string→list-inj) dec!
+    is-discrete-injection (string→list , string→list-inj) decide!
