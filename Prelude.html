@@ -20,7 +20,7 @@
 <a id="550" class="Keyword">import</a> <a id="557" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a>
 <a id="582" class="Keyword">module</a> <a id="∥-∥₁"></a><a id="589" href="Prelude.html#589" class="Module">∥-∥₁</a> <a id="594" class="Symbol">=</a> <a id="596" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a>
 <a id="621" class="Keyword">open</a> <a id="626" href="Prelude.html#589" class="Module">∥-∥₁</a> <a id="631" class="Keyword">public</a>
-  <a id="640" class="Keyword">using</a> <a id="646" class="Symbol">(</a><a id="647" href="Truncation.Propositional.Base.html#139" class="Datatype Operator">∥_∥₁</a><a id="651" class="Symbol">;</a> <a id="653" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣_∣₁</a><a id="657" class="Symbol">;</a> <a id="659" href="Truncation.Propositional.Base.html#201" class="InductiveConstructor">squash₁</a><a id="666" class="Symbol">;</a> <a id="668" href="Truncation.Propositional.Base.html#1012" class="Function">∃</a><a id="669" class="Symbol">;</a> <a id="671" href="Truncation.Propositional.Base.html#1110" class="Function">∃-syntax</a><a id="679" class="Symbol">;</a> <a id="681" href="Truncation.Propositional.Base.html#1227" class="Function">image</a><a id="686" class="Symbol">)</a>
+  <a id="640" class="Keyword">using</a> <a id="646" class="Symbol">(</a><a id="647" href="Truncation.Propositional.Base.html#139" class="Datatype Operator">∥_∥₁</a><a id="651" class="Symbol">;</a> <a id="653" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣_∣₁</a><a id="657" class="Symbol">;</a> <a id="659" href="Truncation.Propositional.Base.html#201" class="InductiveConstructor">squash₁</a><a id="666" class="Symbol">;</a> <a id="668" href="Truncation.Propositional.Base.html#1082" class="Function">∃</a><a id="669" class="Symbol">;</a> <a id="671" href="Truncation.Propositional.Base.html#1180" class="Function">∃-syntax</a><a id="679" class="Symbol">;</a> <a id="681" href="Truncation.Propositional.Base.html#1297" class="Function">image</a><a id="686" class="Symbol">)</a>
 
 
 <a id="690" class="Keyword">open</a> <a id="695" class="Keyword">import</a> <a id="702" href="Meta.Alt.html" class="Module">Meta.Alt</a>      <a id="716" class="Keyword">public</a>
@@ -35,10 +35,12 @@
 <a id="991" class="Keyword">open</a> <a id="996" class="Keyword">import</a> <a id="1003" href="Meta.Literals.FromString.html" class="Module">Meta.Literals.FromString</a>  <a id="1029" class="Keyword">public</a>
 <a id="1036" class="Keyword">open</a> <a id="1041" class="Keyword">import</a> <a id="1048" href="Meta.Show.html" class="Module">Meta.Show</a>                 <a id="1074" class="Keyword">public</a>
 
-<a id="1082" class="Keyword">open</a> <a id="1087" class="Keyword">import</a> <a id="1094" href="Meta.HLevel.html" class="Module">Meta.HLevel</a>   <a id="1108" class="Keyword">public</a>
+<a id="1082" class="Keyword">open</a> <a id="1087" class="Keyword">import</a> <a id="1094" href="Meta.Search.Decidable.html" class="Module">Meta.Search.Decidable</a>     <a id="1120" class="Keyword">public</a>
+<a id="1127" class="Keyword">open</a> <a id="1132" class="Keyword">import</a> <a id="1139" href="Meta.Search.Finite.Bishop.html" class="Module">Meta.Search.Finite.Bishop</a> <a id="1165" class="Keyword">public</a>
+<a id="1172" class="Keyword">open</a> <a id="1177" class="Keyword">import</a> <a id="1184" href="Meta.Search.HLevel.html" class="Module">Meta.Search.HLevel</a>        <a id="1210" class="Keyword">public</a>
 
-<a id="1116" class="Keyword">open</a> <a id="1121" class="Keyword">import</a> <a id="1128" href="Meta.Marker.html" class="Module">Meta.Marker</a>     <a id="1144" class="Keyword">public</a>
-<a id="1151" class="Keyword">open</a> <a id="1156" class="Keyword">import</a> <a id="1163" href="Meta.Record.html" class="Module">Meta.Record</a>     <a id="1179" class="Keyword">public</a>
-<a id="1186" class="Keyword">open</a> <a id="1191" class="Keyword">import</a> <a id="1198" href="Meta.SIP.html" class="Module">Meta.SIP</a>        <a id="1214" class="Keyword">public</a>
-<a id="1221" class="Keyword">open</a> <a id="1226" class="Keyword">import</a> <a id="1233" href="Meta.Underlying.html" class="Module">Meta.Underlying</a> <a id="1249" class="Keyword">public</a>
+<a id="1218" class="Keyword">open</a> <a id="1223" class="Keyword">import</a> <a id="1230" href="Meta.Marker.html" class="Module">Meta.Marker</a>     <a id="1246" class="Keyword">public</a>
+<a id="1253" class="Keyword">open</a> <a id="1258" class="Keyword">import</a> <a id="1265" href="Meta.Record.html" class="Module">Meta.Record</a>     <a id="1281" class="Keyword">public</a>
+<a id="1288" class="Keyword">open</a> <a id="1293" class="Keyword">import</a> <a id="1300" href="Meta.SIP.html" class="Module">Meta.SIP</a>        <a id="1316" class="Keyword">public</a>
+<a id="1323" class="Keyword">open</a> <a id="1328" class="Keyword">import</a> <a id="1335" href="Meta.Underlying.html" class="Module">Meta.Underlying</a> <a id="1351" class="Keyword">public</a>
 </pre></body></html>
