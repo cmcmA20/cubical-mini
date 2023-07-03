@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Truncation.Set.Instances.Idiom</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Truncation.Set.Instances.Idiom.html" class="Module">Truncation.Set.Instances.Idiom</a> <a id="62" class="Keyword">where</a>
+
+<a id="69" class="Keyword">open</a> <a id="74" class="Keyword">import</a> <a id="81" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="99" class="Keyword">open</a> <a id="104" class="Keyword">import</a> <a id="111" href="Meta.Idiom.html" class="Module">Meta.Idiom</a>
+
+<a id="123" class="Keyword">open</a> <a id="128" class="Keyword">import</a> <a id="135" href="Truncation.Set.Base.html" class="Module">Truncation.Set.Base</a>
+
+<a id="156" class="Keyword">instance</a>
+  <a id="Map-∥-∥₂"></a><a id="167" href="Truncation.Set.Instances.Idiom.html#167" class="Function">Map-∥-∥₂</a> <a id="176" class="Symbol">:</a> <a id="178" href="Meta.Idiom.html#209" class="Record">Map</a> <a id="182" class="Symbol">(</a><a id="183" href="Meta.Idiom.html#121" class="InductiveConstructor">eff</a> <a id="187" href="Truncation.Set.Base.html#129" class="Datatype Operator">∥_∥₂</a><a id="191" class="Symbol">)</a>
+  <a id="195" href="Truncation.Set.Instances.Idiom.html#167" class="Function">Map-∥-∥₂</a> <a id="204" class="Symbol">.</a><a id="205" href="Meta.Idiom.html#282" class="Field Operator">Map._&lt;$&gt;_</a> <a id="215" class="Symbol">=</a> <a id="217" href="Truncation.Set.Base.html#616" class="Function">map</a>
+
+  <a id="Idiom-∥-∥₂"></a><a id="224" href="Truncation.Set.Instances.Idiom.html#224" class="Function">Idiom-∥-∥₂</a> <a id="235" class="Symbol">:</a> <a id="237" href="Meta.Idiom.html#482" class="Record">Idiom</a> <a id="243" class="Symbol">(</a><a id="244" href="Meta.Idiom.html#121" class="InductiveConstructor">eff</a> <a id="248" href="Truncation.Set.Base.html#129" class="Datatype Operator">∥_∥₂</a><a id="252" class="Symbol">)</a>
+  <a id="256" href="Truncation.Set.Instances.Idiom.html#224" class="Function">Idiom-∥-∥₂</a> <a id="267" class="Symbol">.</a><a id="268" href="Meta.Idiom.html#583" class="Field">Idiom.pure</a> <a id="279" class="Symbol">=</a> <a id="281" href="Truncation.Set.Base.html#168" class="InductiveConstructor Operator">∣_∣₂</a>
+  <a id="288" href="Truncation.Set.Instances.Idiom.html#224" class="Function">Idiom-∥-∥₂</a> <a id="299" class="Symbol">.</a><a id="300" href="Meta.Idiom.html#626" class="Field Operator">Idiom._&lt;*&gt;_</a> <a id="312" href="Truncation.Set.Instances.Idiom.html#312" class="Bound">∣f∣₂</a> <a id="317" href="Truncation.Set.Instances.Idiom.html#317" class="Bound">∣a∣₂</a> <a id="322" class="Symbol">=</a>
+    <a id="328" href="Truncation.Set.Base.html#333" class="Function">rec</a> <a id="332" href="Truncation.Set.Base.html#561" class="Function">∥-∥₂-is-set</a> <a id="344" class="Symbol">(λ</a> <a id="347" href="Truncation.Set.Instances.Idiom.html#347" class="Bound">f</a> <a id="349" class="Symbol">→</a> <a id="351" href="Truncation.Set.Base.html#616" class="Function">map</a> <a id="355" href="Truncation.Set.Instances.Idiom.html#347" class="Bound">f</a> <a id="357" href="Truncation.Set.Instances.Idiom.html#317" class="Bound">∣a∣₂</a><a id="361" class="Symbol">)</a> <a id="363" href="Truncation.Set.Instances.Idiom.html#312" class="Bound">∣f∣₂</a>
+</pre></body></html>
