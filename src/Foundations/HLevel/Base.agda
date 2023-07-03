@@ -204,7 +204,7 @@ opaque
   is-prop→pathP-is-contr A-pr x y .snd p =
     is-prop→squareP (λ _ → A-pr) _ refl p refl
 
-  is-set→squarep
+  is-set→squareP
     : {A : I → I → Type ℓ}
       (is-set : (i j : I) → is-set (A i j))
       {a : A i0 i0} {b : A i0 i1} {c : A i1 i0} {d : A i1 i1}
@@ -213,7 +213,7 @@ opaque
       (s : ＜ c ／ (λ j → A i1 j) ＼ d ＞)
       (r : ＜ b ／ (λ j → A j i1) ＼ d ＞)
     → SquareP A q p s r
-  is-set→squarep is-set a₀₋ a₁₋ a₋₀ a₋₁ =
+  is-set→squareP is-set a₀₋ a₁₋ a₋₀ a₋₁ =
     transport (sym (pathP＝path _ _ _))
               (pathP-is-of-hlevel′ 1 (is-set _ _) _ _ _ _)
 

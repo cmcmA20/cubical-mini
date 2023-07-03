@@ -33,11 +33,11 @@ elim : {P : ∥ A ∥₁ → Type ℓ′}
      → Π[ x ꞉ ∥ A ∥₁ ] is-prop (P x)
      → Π[ x ꞉   A    ] P ∣ x ∣₁
      → Π[ x ꞉ ∥ A ∥₁ ] P   x
-elim pprop incc ∣ x ∣₁ = incc x
-elim pprop incc (squash₁ x y i) =
-  is-prop→pathP (λ j → pprop (squash₁ x y j)) (elim pprop incc x)
-                                              (elim pprop incc y)
-                                              i
+elim P-prop incc ∣ x ∣₁ = incc x
+elim P-prop incc (squash₁ x y i) =
+  is-prop→pathP (λ j → P-prop (squash₁ x y j)) (elim P-prop incc x)
+                                               (elim P-prop incc y)
+                                               i
 
 
 -- Mere existence

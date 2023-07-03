@@ -159,3 +159,8 @@ opaque
   →-decision (no ¬a) db .proof = ofʸ $ λ a → absurd (¬a a)
   →-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ (_$ a)
   →-decision (yes a) (yes b) .proof = ofʸ λ _ → b
+
+  ¬-decision : Decision A → Decision (¬ A)
+  ¬-decision da .does = not (da .does)
+  ¬-decision (yes a) .proof = ofⁿ (_$ a)
+  ¬-decision (no ¬a) .proof = ofʸ ¬a

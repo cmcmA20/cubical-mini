@@ -44,6 +44,7 @@ gen-inst-everythings:
 	$(EVERYTHINGS) gen-public $(CON_INSTANCE_DIRS)
 	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
 	$(EVERYTHINGS) gen-public Truncation/Propositional/Instances
+	$(EVERYTHINGS) gen-public Truncation/Set/Instances
 
 .PHONY : gen-everythings
 gen-everythings:

@@ -8,6 +8,7 @@ open import Meta.Search.HLevel
 
 open import Structures.n-Type
 
+open import Correspondences.Nullary.Decidable
 open import Correspondences.Nullary.Classical
 open import Correspondences.Nullary.Separated
 open import Correspondences.Unary.Decidable
@@ -35,7 +36,9 @@ opaque
   omniscient→exhaustible omn P? = Dec.map
     (λ ¬∃p x → dec→¬¬-stable (P? x) $ ¬∃p ∘ (x ,_))
     (λ ¬∃p ∀p → ¬∃p λ p → p .snd $ ∀p $ p .fst)
-    (¬ᵈ omn (¬ᵈ_ ∘ P?))
+    (decision-β $ ¬-decision $ decision-η $ omn $
+       decision-β ∘ ¬-decision ∘ decision-η ∘ P?)
+  -- ^ FIXME what an abomination
 
   Exhaustible₁ : Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
   Exhaustible₁ {ℓ′} A = {P : Pred₁ ℓ′ A}
@@ -48,10 +51,12 @@ opaque
   -- what the hell
   omniscient₁→exhaustible₁ : Omniscient₁ {ℓ′ = ℓ′} A → Exhaustible₁ {ℓ′ = ℓ′} A
   omniscient₁→exhaustible₁ omn₁ {P} P? = Dec.map
-    (λ ¬∃∣p∣₁ x → ∥-∥₁.proj! $ dec→¬¬-stable (map pure ∥-∥₁.rec! $ P? x)
+    (λ ¬∃∣p∣₁ x → ∥-∥₁.proj! $ dec→¬¬-stable (Dec.map pure ∥-∥₁.rec! $ P? x)
       (¬∃∣p∣₁ ∘ λ ¬∣p∣₁ → pure $ x , λ p → ¬∣p∣₁ $ pure p))
     (λ ¬∃∣p∣₁ ∀p → ¬∃∣p∣₁ $ ∥-∥₁.rec! λ x → x .snd $ ∀p $ x .fst)
       helper where opaque
         unfolding is-of-hlevel n-Type-carrier
-        helper : Dec ((b : ∥ Σ _ (λ v → (a : n-Type-carrier (P v)) → ⊥) ∥₁) → ⊥)
-        helper = (¬ᵈ omn₁ {P = λ x → (¬ P x .fst) , ¬-is-prop} (¬ᵈ_ ∘ P?))
+        helper : Dec (¬ ∥ Σ[ v ꞉ _ ] (¬ ⌞ P v ⌟) ∥₁)
+        helper = decision-β $ ¬-decision $ decision-η $
+          omn₁ {P = λ x → (¬ (P x) .fst) , ¬-is-prop} $
+            decision-β ∘ ¬-decision ∘ decision-η ∘ P?

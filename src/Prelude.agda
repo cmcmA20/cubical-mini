@@ -4,23 +4,10 @@ module Prelude where
 
 open import Foundations.Base       public
 open import Foundations.Erased     public
-open import Foundations.HLevel     public
 open import Foundations.Path       public
 open import Foundations.Pi         public
 open import Foundations.Sigma      public
 open import Foundations.Univalence public
-
-open import Structures.n-Type public
-
-open import Functions.Equiv.Fibrewise public
-open import Functions.Equiv.Weak      public
-open import Functions.Embedding       public
-
-import Truncation.Propositional
-module ∥-∥₁ = Truncation.Propositional
-open ∥-∥₁ public
-  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; image)
-
 
 open import Meta.Alt      public
 open import Meta.Bind     public
@@ -42,3 +29,19 @@ open import Meta.Marker     public
 open import Meta.Record     public
 open import Meta.SIP        public
 open import Meta.Underlying public
+
+open import Structures.n-Type public
+
+open import Functions.Equiv.Fibrewise public
+open import Functions.Equiv.Weak      public
+open import Functions.Embedding       public
+
+import Truncation.Propositional
+module ∥-∥₁ = Truncation.Propositional
+open ∥-∥₁ public
+  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; image)
+
+import Truncation.Set
+module ∥-∥₂ = Truncation.Set
+open ∥-∥₂ public
+  using (∥_∥₂; ∣_∣₂; squash₂)

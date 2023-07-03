@@ -69,6 +69,10 @@ instance
   decomp-dec₀-× = decomp (quote ×-decision)
     [ `search (quote is-decidable-at-hlevel) , `search (quote is-decidable-at-hlevel) ]
 
+  decomp-dec₀-neg : {B : Type ℓb} → goal-decomposition (quote is-decidable-at-hlevel) (¬ A)
+  decomp-dec₀-neg = decomp (quote ¬-decision)
+    [ `search (quote is-decidable-at-hlevel) ]
+
   decomp-dec₀-fun : {B : Type ℓb} → goal-decomposition (quote is-decidable-at-hlevel) (A → B)
   decomp-dec₀-fun = decomp (quote →-decision)
     [ `search (quote is-decidable-at-hlevel) , `search (quote is-decidable-at-hlevel) ]

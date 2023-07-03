@@ -12,7 +12,8 @@ open import Meta.Search.Base public
 
 open import Structures.n-Type
 open Structures.n-Type public
-  using (n-Type; el)
+  using ( n-Type; el; n-Type-carrier; Underlying-n-Type
+        ; Prop ; Set )
 
 open import Data.List.Base
 open import Data.List.Instances.FromProduct

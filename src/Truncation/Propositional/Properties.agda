@@ -43,7 +43,7 @@ rec! {B-prop} = elim (λ _ → B-prop)
 
 elim!
   : {P : ∥ A ∥₁ → Type ℓ′}
-    {@(tactic hlevel-tactic-worker) P-prop : ∀ {a} → is-prop (P a)}
+    {@(tactic hlevel-tactic-worker) P-prop : ∀{a} → is-prop (P a)}
   → Π[ a ꞉ A ] P ∣ a ∣₁
   → (x : ∥ A ∥₁) → P x
 elim! {P-prop} = elim (λ _ → P-prop)
