@@ -90,7 +90,6 @@ opaque
     is-fin-set→is-set (_ , ∣e∣₁) =
       ∥-∥₁.rec! (λ e → is-of-hlevel-≃ 2 e hlevel!) ∣e∣₁
 
-    -- TODO proj
     is-fin-set→is-of-hlevel : (n : HLevel) → is-fin-set A → is-of-hlevel (2 + n) A
     is-fin-set→is-of-hlevel n fi = is-of-hlevel-+-left 2 n (is-fin-set→is-set fi)
 

@@ -44,13 +44,13 @@ private
       ω₀ : g y ＝ x₀
       ω₀ j = comp (λ i → P (~ i)) (∂ j) (square x₀ β₀ j)
 
-      θ₀ : SquareP (λ i j → P (~ j)) (λ i → v (~ i) y) (λ i → u (~ i) x₀) (sym β₀) ω₀
+      θ₀ : SquareP (λ i j → P (~ j)) (λ i → v (~ i) y) (sym β₀) (λ i → u (~ i) x₀) ω₀
       θ₀ j i = fill ~P (∂ j) i (square x₀ β₀ j)
 
       ω₁ : g y ＝ x₁
       ω₁ j = comp (λ i → P (~ i)) (∂ j) (square x₁ β₁ j)
 
-      θ₁ : SquareP (λ i j → P (~ j)) (λ i → v (~ i) y) (λ i → u (~ i) x₁) (sym β₁) ω₁
+      θ₁ : SquareP (λ i j → P (~ j)) (λ i → v (~ i) y) (sym β₁) (λ i → u (~ i) x₁) ω₁
       θ₁ j i = fill ~P (∂ j) i (square x₁ β₁ j)
 
       ω : x₀ ＝ x₁

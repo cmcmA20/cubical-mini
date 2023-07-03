@@ -13,14 +13,15 @@ open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
 open import Structures.FinSet
+open import Structures.FinSet public
+  using (FinSet; fin-set)
 
 open import Correspondences.Nullary.Finite.Bishop
 open Correspondences.Nullary.Finite.Bishop public
   using ( is-fin-set-at-hlevel ; is-fin-set
         ; is-fin-set-β ; is-fin-set-η
         ; fin ; cardinality ; enumeration
-        ; finite ; ×-is-fin-set ; Σ-is-fin-set
-        ; Π-is-fin-set )
+        ; finite )
 
 open import Data.Dec.Base
 open import Data.Empty.Base

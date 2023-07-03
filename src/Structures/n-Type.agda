@@ -65,11 +65,13 @@ opaque
     rinv = J (λ y p → n-ua (inv p) ＝ p) path where
       path : n-ua (inv {X} refl) ＝ refl
       path i j .fst = ua.ε refl i j
-      path i j .snd = is-prop→SquareP
+      path i j .snd = is-prop→squareP
         (λ i j → is-of-hlevel-is-prop
           {A = ua.ε {A = ⌞ X ⌟} refl i j } _)
-        (λ j → n-Type-carrier-is-tr X) (λ j → n-Type-carrier-is-tr $ n-ua {X = X} {Y = X} (path→equiv refl) j)
-        (λ j → n-Type-carrier-is-tr X) (λ j → n-Type-carrier-is-tr X)
+        (λ j → n-Type-carrier-is-tr $ n-ua {X = X} {Y = X} (path→equiv refl) j)
+        (λ _ → n-Type-carrier-is-tr X)
+        (λ _ → n-Type-carrier-is-tr X)
+        (λ _ → n-Type-carrier-is-tr X)
         i j
 
     isic : is-iso n-ua

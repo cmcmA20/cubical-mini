@@ -22,9 +22,6 @@ is-groupoid = is-of-hlevel 3
 is-2-groupoid : Type ℓ → Type ℓ
 is-2-groupoid = is-of-hlevel 4
 
-is-of-hlevel-fun : (h : HLevel) {A : Type ℓ} {B : Type ℓ′} (f : A → B) → Type (ℓ ⊔ ℓ′)
-is-of-hlevel-fun h f = Π[ b ] is-of-hlevel h (fibre f b)
-
 opaque
   unfolding is-of-hlevel
 
@@ -159,21 +156,76 @@ opaque
   is-of-hlevel-is-of-hlevel-suc : (h₁ : HLevel) → is-of-hlevel (suc h₁) (is-of-hlevel h A)
   is-of-hlevel-is-of-hlevel-suc h₁ = is-of-hlevel-+-left 1 h₁ (is-of-hlevel-is-prop _)
 
-  is-prop→SquareP
-    : ∀ {B : I → I → Type ℓ} → ((i j : I) → is-prop (B i j))
-    → {a : B i0 i0} {b : B i0 i1} {c : B i1 i0} {d : B i1 i1}
-    → (p : PathP (λ j → B j i0) a c)
-    → (q : PathP (λ j → B i0 j) a b)
-    → (s : PathP (λ j → B i1 j) c d)
-    → (r : PathP (λ j → B j i1) b d)
-    → SquareP B q s p r
-  is-prop→SquareP {B} is-propB {a} p q s r i j =
+  is-of-hlevel-dep : HLevel → (A → Type ℓ′) → Type _
+  is-of-hlevel-dep 0 B =
+    ∀ {x y} (α : B x) (β : B y) (p : x ＝ y) → ＜ α ／ (λ i → B (p i)) ＼ β ＞
+  is-of-hlevel-dep (suc n) B =
+    ∀ {a₀ a₁} (b₀ : B a₀) (b₁ : B a₁)
+    → is-of-hlevel-dep {A = a₀ ＝ a₁} n (λ p → ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞)
+
+  is-of-hlevel→is-of-hlevel-dep
+    : {B : A → Type ℓ′}
+    → (n : HLevel) → Π[ x ꞉ A ] is-of-hlevel (suc n) (B x)
+    → is-of-hlevel-dep n B
+  is-of-hlevel→is-of-hlevel-dep 0 hl α β p = is-prop→pathP (λ i → hl (p i)) α β
+  is-of-hlevel→is-of-hlevel-dep {A} {B} (suc n) hl {a₀} {a₁} b₀ b₁ =
+    is-of-hlevel→is-of-hlevel-dep n (λ p → helper a₁ p b₁)
+    where
+      helper : (a₁ : A) (p : a₀ ＝ a₁) (b₁ : B a₁)
+             → is-of-hlevel (suc n) ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞
+      helper a₁ p b₁ =
+        J (λ a₁ p → ∀ b₁ → is-of-hlevel (suc n) ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞)
+          (λ _ → hl _ _ _) p b₁
+
+
+  is-prop→squareP
+    : {B : I → I → Type ℓ} → ((i j : I) → is-prop (B i j))
+    → {a : B i0 i0} {c : B i0 i1} {b : B i1 i0} {d : B i1 i1}
+    → (p : ＜ a ／ (λ j → B i0 j) ＼ c ＞)
+    → (q : ＜ a ／ (λ i → B i i0) ＼ b ＞)
+    → (r : ＜ b ／ (λ j → B i1 j) ＼ d ＞)
+    → (s : ＜ c ／(λ i → B i i1) ＼ d ＞)
+    → SquareP B p q r s
+  is-prop→squareP {B} B-pr {a} p q r s i j =
     hcomp (∂ j ∨ ∂ i) λ where
-      k (j = i0) → is-propB i j (base i j) (p i) k
-      k (j = i1) → is-propB i j (base i j) (r i) k
-      k (i = i0) → is-propB i j (base i j) (q j) k
-      k (i = i1) → is-propB i j (base i j) (s j) k
+      k (j = i0) → B-pr i j (base i j) (q i) k
+      k (j = i1) → B-pr i j (base i j) (s i) k
+      k (i = i0) → B-pr i j (base i j) (p j) k
+      k (i = i1) → B-pr i j (base i j) (r j) k
       k (k = i0) → base i j
     where
       base : (i j : I) → B i j
       base i j = transport (λ k → B (i ∧ k) (j ∧ k)) a
+
+  is-prop→pathP-is-contr
+    : {A : I → Type ℓ} → ((i : I) → is-prop (A i))
+    → (x : A i0) (y : A i1) → is-contr (PathP A x y)
+  is-prop→pathP-is-contr A-pr x y .fst = is-prop→pathP A-pr x y
+  is-prop→pathP-is-contr A-pr x y .snd p =
+    is-prop→squareP (λ _ → A-pr) _ refl p refl
+
+  is-set→squarep
+    : {A : I → I → Type ℓ}
+      (is-set : (i j : I) → is-set (A i j))
+      {a : A i0 i0} {b : A i0 i1} {c : A i1 i0} {d : A i1 i1}
+      (p : ＜ a ／ (λ j → A j i0) ＼ c ＞)
+      (q : ＜ a ／ (λ j → A i0 j) ＼ b ＞)
+      (s : ＜ c ／ (λ j → A i1 j) ＼ d ＞)
+      (r : ＜ b ／ (λ j → A j i1) ＼ d ＞)
+    → SquareP A q p s r
+  is-set→squarep is-set a₀₋ a₁₋ a₋₀ a₋₁ =
+    transport (sym (pathP＝path _ _ _))
+              (pathP-is-of-hlevel′ 1 (is-set _ _) _ _ _ _)
+
+  -- litmus
+  _ : {a b c d : A} (p : a ＝ c) (q : a ＝ b) (r : b ＝ d) (s : c ＝ d)
+    → Square p q r s ＝ SquareP (λ _ _ → A) q p s r -- observe the π/2 rotation
+  _ = λ _ _ _ _ → refl
+
+  is-set→cast-pathP
+    : {x y : A} {p q : x ＝ y} (P : A → Type ℓ′) {px : P x} {py : P y}
+    → is-set A
+    → ＜ px ／ (λ i → P (p i)) ＼ py ＞
+    → ＜ px ／ (λ i → P (q i)) ＼ py ＞
+  is-set→cast-pathP {p} {q} P {px} {py} A-set =
+    coe0→1 (λ j → ＜ px ／ (λ i → P (A-set _ _ p q j i)) ＼ py ＞)

@@ -52,7 +52,7 @@ syntax Square-syntax d₁ d₂ d₃ d₄ d₅ a₀₀ a₀₁ a₁₀ a₁₁ p 
   a₀₀  ̇ q  ̇ a₁₀ ┌─────────┐ d₁ │ d₂ │ p │ d₃ │ r │ d₄ │ d₅ └─────────┘ a₀₁  ̇ s  ̇ a₁₁
 
 -- symP infers the type of its argument from the type of its output
-symP : {A : I → Type ℓ} → {x : A i1} → {y : A i0}
+symP : {A : I → Type ℓ} {x : A i1} {y : A i0}
        (p : ＜ x    ／ (λ i → A (~ i)) ＼    y ＞)
      →      ＜ y ／    (λ i → A    i )    ＼ x ＞
 symP p j = p (~ j)
