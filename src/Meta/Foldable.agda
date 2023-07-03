@@ -27,4 +27,4 @@ nondet
   → (let module F = Effect F)
   → (let module M = Effect M)
   → F.₀ A → (A → M.₀ B) → M.₀ B
-nondet F ⦃ f = f ⦄ xs k = asum ⦃ f = f ⦄ (k <$> xs)
+nondet F ⦃ f ⦄ xs k = asum ⦃ f ⦄ (k <$> xs)

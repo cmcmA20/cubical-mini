@@ -27,9 +27,11 @@ opaque
 -- TODO can we drop this?
 Decision : Type ℓ → Type ℓ
 Decision = is-decidable-at-hlevel 0
+{-# INLINE Decision #-}
 
 is-discrete : Type ℓ → Type ℓ
 is-discrete = is-decidable-at-hlevel 1
+{-# INLINE is-discrete #-}
 
 opaque
   unfolding is-decidable-at-hlevel

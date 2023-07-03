@@ -151,7 +151,10 @@ private
     _ : ∀ a → is-of-hlevel 3 (⌞ A ⌟ × ⌞ A ⌟ × (ℕ → ⌞ B a ⌟))
     _ = hlevel!
 
-    _ : is-of-hlevel 2 ⌞ A ⌟
+    _ : (w z : Term) (x : ℕ) (r : ⌞ A ⌟) → is-of-hlevel 2 ⌞ A ⌟
+    _ = hlevel!
+
+    _ : (a : ℕ) (x y : ⌞ A ⌟) → is-prop (x ＝ y)
     _ = hlevel!
 
     -- this one uses `H-Level-nType` instance which is compile-time only

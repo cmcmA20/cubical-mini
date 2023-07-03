@@ -36,7 +36,7 @@ opaque
     : is-separated A
     → is-identity-system (λ x y → ¬¬ (x ＝ y)) (λ _ k → k refl)
   separated-identity-system A-sep =
-    set-identity-system (λ _ _ → hlevel!) (A-sep _ _)
+    set-identity-system hlevel! (A-sep _ _)
 
 opaque
   unfolding is-of-hlevel is-separated-at-hlevel

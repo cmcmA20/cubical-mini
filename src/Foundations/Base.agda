@@ -405,6 +405,7 @@ opaque
 
 is-contr : Type ℓ → Type ℓ
 is-contr = is-of-hlevel 0
+{-# INLINE is-contr #-}
 
 opaque
   unfolding is-of-hlevel
@@ -422,6 +423,7 @@ opaque
 
 is-prop : Type ℓ → Type ℓ
 is-prop = is-of-hlevel 1
+{-# INLINE is-prop #-}
 
 opaque
   unfolding is-of-hlevel
@@ -433,6 +435,7 @@ opaque
 
 is-set : Type ℓ → Type ℓ
 is-set = is-of-hlevel 2
+{-# INLINE is-set #-}
 
 opaque
   unfolding is-of-hlevel

@@ -19,18 +19,13 @@ open import Data.List.Instances.Idiom
 open import Data.Maybe.Base
 open import Data.Nat.Base
 
-data Level-spec : Type where
-  `verbatim : (n : ℕ) → Level-spec
-  `minus    : (n : ℕ) → Level-spec
-
 data Arg-spec : Type where
-  `level        : Level-spec → Arg-spec
+  `level-minus  : (n : ℕ) → Arg-spec
   `search-under : (n : ℕ) (subgoal : Name) → Arg-spec
   `meta         : Arg-spec
 
-pattern `search sg     = `search-under 0 sg
-pattern `level-same    = `level (`minus 0)
-pattern `level-minus n = `level (`minus n)
+pattern `search sg  = `search-under 0 sg
+pattern `level-same = `level-minus 0
 
 data goal-decomposition {ℓ} (goal : Name) (T : Type ℓ) : Type where
   decomp : (search-lemma : Name) (arguments : List Arg-spec)
@@ -39,9 +34,9 @@ data goal-decomposition {ℓ} (goal : Name) (T : Type ℓ) : Type where
 
 record Tactic-desc (goal-name : Name) : Type where
   field
-    other-atoms : List Name
+    other-atoms              : List Name
     instance-fallback-helper : Name
-    upwards-closure : Maybe Name
+    upwards-closure          : Maybe Name
     -- ^ it should have a following signature
     --   (h₀ h₁ : HLevel) → whatever h₀ A → whatever (h₁ + h₀) A
 
@@ -74,8 +69,9 @@ private
 
   decompose-goal′ : Tactic-desc goal-name → Term → TC (Term × Term)
   decompose-goal′ {goal-name} td ty = do
-    def goal-name (_ ∷ lv v∷ ty v∷ []) ← pure ty
-      where _ → backtrack [ "Goal type isn't " , nameErr goal-name ]
+    def actual-goal-name (_ ∷ lv v∷ ty v∷ []) ← pure ty where
+      _ → backtrack [ "Goal type isn't " , nameErr goal-name ]
+    guard (actual-goal-name name=? goal-name)
     ty ← wait-just-a-bit ty
     lv ← wait-just-a-bit lv
     pure (lv , ty)
@@ -248,11 +244,8 @@ private
         cont
 
       gen-args has-alts level defn (x ∷ args) accum cont with x
-      ... | `level (`verbatim n) = do
-        let level′ = lit (nat n)
-        gen-args has-alts level defn args (level′ v∷ accum) cont
-      ... | `level (`minus 0) = gen-args has-alts level defn args (level v∷ accum) cont
-      ... | `level (`minus n@(suc _)) =
+      ... | `level-minus 0 = gen-args has-alts level defn args (level v∷ accum) cont
+      ... | `level-minus n@(suc _) =
         do
           level ← normalise level
           debugPrint "tactic.hlevel" 10
@@ -339,9 +332,8 @@ private
         use-decomp-hints (lv , ty) solved instances
 
 
-  -- FIXME sometimes fails to get under functions
   decompose-goal-top
-    : Tactic-desc goal-name → Term → TC (Term × Term × (TC A → TC A) × (Term → Term))
+    : Tactic-desc goal-name → Term → TC (Term × Term × Telescope)
   decompose-goal-top td goal = do
       let module tac = Tactic-desc td
       ty ← withReduceDefs (false , tac.atoms) $
@@ -350,12 +342,11 @@ private
     where
       go : Term → TC _
       go (pi (arg as at) (abs vn cd)) = do
-        (lv , inner , enter , leave) ← go cd
-        pure $ lv , inner , extendContext vn (arg as at) , λ t → lam (arg-vis as) (abs vn t)
+        (lv , inner , delta) ← go cd
+        pure $ lv , inner , (vn , (arg as at)) ∷ delta
       go tm = do
         (lv , inner) ← decompose-goal′ td tm
-        pure $ lv , inner , id , id
-
+        pure $ lv , inner , []
 
 -- this is the way
 search-tactic-worker : Tactic-desc goal-name → Term → TC ⊤
@@ -363,13 +354,21 @@ search-tactic-worker {goal-name} td goal = do
   let module tac = Tactic-desc td
   ty ← withReduceDefs (false , tac.atoms) $ inferType goal >>= reduce
   debugPrint "tactic.search" 10 [ "Target type: " , termErr ty ]
-  (lv , ty , enter , leave) ← decompose-goal-top td goal
+  (lv , ty , delta) ← decompose-goal-top td goal
     <|> typeError
       [ "Goal type is not of the form ‶" , nameErr goal-name , "″:\n"
       , termErr ty ]
 
-  solved ← enter do
+  let delta = reverse-fast delta
+  solved ← enter delta do
     goal′ ← new-meta (def goal-name (lv v∷ ty v∷ []))
     search td false lv 15 goal′
     pure goal′
-  unify goal (leave solved)
+  unify goal (leave delta solved)
+  where
+    leave : Telescope → Term → Term
+    leave [] = id
+    leave ((na , arg as at) ∷ xs) = leave xs ∘ lam (arg-vis as) ∘ abs na
+    enter : Telescope → TC A → TC A
+    enter [] = id
+    enter ((na , ar) ∷ xs) = enter xs ∘ extendContext na ar

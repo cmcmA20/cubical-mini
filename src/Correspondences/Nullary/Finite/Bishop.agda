@@ -42,6 +42,7 @@ opaque
 
 is-fin-set : Type ℓ → Type ℓ
 is-fin-set = is-fin-set-at-hlevel 0
+{-# INLINE is-fin-set #-}
 
 opaque
   unfolding is-fin-set-at-hlevel
@@ -64,8 +65,8 @@ opaque
   is-fin-set-is-prop = is-prop-η go where
     go : _
     go (m , ∣p∣₁) (n , ∣q∣₁) =
-      Σ-prop-path-equiv (λ _ → hlevel!) .fst $
-        ∥-∥₁.elim₂ (λ _ _ → hlevel!)
+      Σ-prop-path-equiv hlevel! .fst $
+        ∥-∥₁.elim₂ hlevel!
                    (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q))
                    ∣p∣₁
                    ∣q∣₁
@@ -96,7 +97,7 @@ opaque
     opaque
       unfolding Omniscient₁
       is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ′ = ℓ′} A
-      is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} = ∥-∥₁.elim (λ _ → hlevel!) go ((n ,_) <$> ∣aeq∣₁) where
+      is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} = ∥-∥₁.elim! go ((n ,_) <$> ∣aeq∣₁) where
         go : Π[ A-f ꞉ 𝓑 A ] (Decidable₁ P → Dec ∥ Σ A _ ∥₁)
         go A-f = Dec.map pure rec! ∘ 𝓑→omniscient A-f
 
