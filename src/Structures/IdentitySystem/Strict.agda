@@ -4,6 +4,7 @@ module Structures.IdentitySystem.Strict where
 open import Foundations.Base
 open import Foundations.HLevel
 
+open import Meta.Marker
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
@@ -43,8 +44,8 @@ opaque
     → IdsK ids set P p (r a) ＝ p
   IdsK-refl {R} {r} {a} ids set P p =
     transport (λ i → P (set-identity-is-prop ids set (r a) (r a) i)) p ＝⟨⟩
-    subst P (set-identity-is-prop ids set (r a) (r a)) p               ＝⟨ ap (λ ϕ → subst P ϕ p) lemma ⟩
-    transport (λ i → P (r a)) p                                        ＝⟨ transport-refl p ⟩
+    subst P   ⌜ set-identity-is-prop ids set (r a) (r a) ⌝           p ＝⟨ ap! lemma ⟩
+    transport (λ _ → P (r a))                                        p ＝⟨ transport-refl p ⟩
     p                                                                  ∎
     where
       lemma : set-identity-is-prop ids set (r a) (r a) ＝ refl

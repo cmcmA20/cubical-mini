@@ -2,7 +2,7 @@
 module Foundations.HLevel.Base where
 
 open import Foundations.Base
-open import Foundations.Cubes.Base
+open import Foundations.Cubes
 
 open import Agda.Builtin.Nat public
   using (zero; suc; _+_)
@@ -25,15 +25,14 @@ is-2-groupoid = is-of-hlevel 4
 opaque
   unfolding is-of-hlevel
 
-  -- TODO reformulate directly without using J?
-  -- is-of-hlevel-Ω→is-of-hlevel
-  --   : (h : HLevel)
-  --   → (Π[ x ꞉ A ] is-of-hlevel (suc h) (x ＝ x))
-  --   → is-of-hlevel (2 + h) A
-  -- is-of-hlevel-Ω→is-of-hlevel 0 hΩ x y =
-  --   J (λ y p → (q : x ＝ y) → p ＝ q) (hΩ x refl)
-  -- is-of-hlevel-Ω→is-of-hlevel (suc n) hΩ x _ =
-  --   J (λ y p → (q : x ＝ y) → is-of-hlevel (suc n) (p ＝ q)) (hΩ x refl)
+  is-of-hlevel-Ω→is-of-hlevel
+    : (h : HLevel)
+    → Π[ x ꞉ A ] is-of-hlevel (1 + h) (x ＝ x)
+    → is-of-hlevel (2 + h) A
+  is-of-hlevel-Ω→is-of-hlevel 0 hΩ x _ =
+    J (λ y p → Π[ q ꞉ x ＝ y ] (p ＝ q)) $ hΩ x refl
+  is-of-hlevel-Ω→is-of-hlevel (suc h) hΩ x _ =
+    J (λ y p → Π[ q ꞉ x ＝ y ] is-of-hlevel (suc h) (p ＝ q)) $ hΩ x refl
 
 
   -- Essential properties of `is-prop` and `is-contr`

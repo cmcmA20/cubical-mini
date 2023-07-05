@@ -2,7 +2,7 @@
 open import Foundations.Base
 module Foundations.Equiv.FromPath {ℓ} (P : (i : I) → Type ℓ) where
 
-open import Foundations.Cubes.Base
+open import Foundations.Cubes
 open import Foundations.Equiv.Base
 
 private
