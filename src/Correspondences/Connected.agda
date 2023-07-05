@@ -1,11 +1,13 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Nullary.Connected where
+module Correspondences.Connected where
 
 open import Foundations.Base
 
 open import Meta.Search.HLevel
 
 open import Structures.Base
+
+open import Correspondences.Base public
 
 open import Truncation.Propositional
 

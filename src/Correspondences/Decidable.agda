@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Nullary.Decidable where
+module Correspondences.Decidable where
 
 open import Foundations.Base
 open import Foundations.HLevel
 
-open import Correspondences.Nullary.Separated
+open import Correspondences.Base public
+open import Correspondences.Separated
 
 open import Data.Bool.Base
 import Data.Dec.Base as Dec
@@ -166,3 +167,10 @@ opaque
   ¬-decision da .does = not (da .does)
   ¬-decision (yes a) .proof = ofⁿ (_$ a)
   ¬-decision (no ¬a) .proof = ofʸ ¬a
+
+
+-- Unary
+
+opaque
+  Decidable : Pred _ (Pred ℓ′ A)
+  Decidable P = Π[ Decision ∘ P ]

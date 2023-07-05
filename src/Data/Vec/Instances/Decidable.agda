@@ -5,7 +5,7 @@ open import Foundations.Base
 
 open import Meta.Search.Decidable
 
-open import Correspondences.Nullary.Decidable
+open import Correspondences.Decidable
 
 open import Data.Dec.Base
 open import Data.List.Base using ([]) renaming (_∷_ to _∷ₗ_)

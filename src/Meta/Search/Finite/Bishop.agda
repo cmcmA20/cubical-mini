@@ -16,8 +16,8 @@ open import Structures.FinSet
 open import Structures.FinSet public
   using (FinSet; fin-set)
 
-open import Correspondences.Nullary.Finite.Bishop
-open Correspondences.Nullary.Finite.Bishop public
+open import Correspondences.Finite.Bishop
+open Correspondences.Finite.Bishop public
   using ( is-fin-set-at-hlevel ; is-fin-set
         ; is-fin-set-β ; is-fin-set-η
         ; fin ; cardinality ; enumeration

@@ -10,8 +10,8 @@ open import Meta.Search.HLevel
 open import Structures.n-Type
 open import Structures.FinSet
 
-open import Correspondences.Nullary.Decidable
-open import Correspondences.Nullary.Finite.Bishop
+open import Correspondences.Decidable
+open import Correspondences.Finite.Bishop
 
 open import Data.Bool.Base public
 open import Data.Dec.Base

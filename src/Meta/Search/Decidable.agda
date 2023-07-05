@@ -11,8 +11,8 @@ open import Meta.Reflection
 open import Meta.Search.Base public
 open import Meta.Search.HLevel
 
-open import Correspondences.Nullary.Decidable
-open Correspondences.Nullary.Decidable public
+open import Correspondences.Decidable
+open Correspondences.Decidable public
   using ( is-decidable-at-hlevel ; Decision ; is-discrete
         ; decision-β ; decision-η ; is-discrete-β ; is-discrete-η
         ; decide ; ×-decision ; →-decision

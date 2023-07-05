@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Nullary.Separated where
+module Correspondences.Separated where
 
 open import Foundations.Base
 
@@ -8,7 +8,8 @@ open import Meta.Search.HLevel
 open import Structures.Base
 open import Structures.IdentitySystem.Base
 
-open import Correspondences.Nullary.Classical
+open import Correspondences.Base public
+open import Correspondences.Classical
 
 import Data.Empty.Base as ⊥
 open import Data.Dec.Base

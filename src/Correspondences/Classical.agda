@@ -1,9 +1,11 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Nullary.Classical where
+module Correspondences.Classical where
 
 open import Foundations.Base
 
 open import Meta.Bind
+
+open import Correspondences.Base public
 
 open import Data.Empty.Base
 

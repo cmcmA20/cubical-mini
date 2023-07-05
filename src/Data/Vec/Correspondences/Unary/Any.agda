@@ -5,7 +5,7 @@ open import Foundations.Base
 
 open import Meta.Search.Decidable
 
-open import Correspondences.Unary.Decidable
+open import Correspondences.Decidable
 
 import      Data.Dec as Dec
 open Dec
@@ -22,13 +22,15 @@ private variable
 Any : ∀ {a a′} {n} {A : Type a} (P : Pred a′ A) → Vec A n → Type _
 Any {n} P xs = Σ[ idx ꞉ Fin n ] P (lookup xs idx)
 
-any? : {n : ℕ} → Decidable P → Decidable (λ xs → Any {n = n} P xs)
-any? {n = 0}     P? [] = no λ()
-any? {n = suc n} P? (x ∷ xs) =
-  Dec.map [ (fzero ,_) , (λ { (i , q) → fsuc i , q }) ]ᵤ
-          (λ { ¬ps (fzero  , p ) → ¬ps (inl p)
-             ; ¬ps (fsuc i , ps) → ¬ps (inr (_ , ps)) })
-          (decision-β $ ⊎-decision (decision-η $ P? x) (decision-η $ any? P? xs))
+opaque
+  unfolding Decidable is-decidable-at-hlevel
+  any? : {n : ℕ} → Decidable P → Decidable (λ xs → Any {n = n} P xs)
+  any? {n = 0}     P? [] = no λ()
+  any? {n = suc n} P? (x ∷ xs) =
+    Dec.map [ (fzero ,_) , (λ { (i , q) → fsuc i , q }) ]ᵤ
+            (λ { ¬ps (fzero  , p ) → ¬ps (inl p)
+               ; ¬ps (fsuc i , ps) → ¬ps (inr (_ , ps)) })
+            (⊎-decision (P? x) (any? P? xs))
 
 -- TODO
 -- any-ap

@@ -41,6 +41,11 @@ rec!
   → (x : ∥ A ∥₁) → B
 rec! {B-prop} = elim (λ _ → B-prop)
 
+rec₂! : {@(tactic hlevel-tactic-worker) C-prop : is-prop C}
+      → (A → B → C)
+      → (x : ∥ A ∥₁) (y : ∥ B ∥₁) → C
+rec₂! {C-prop} = rec₂ C-prop
+
 elim!
   : {P : ∥ A ∥₁ → Type ℓ′}
     {@(tactic hlevel-tactic-worker) P-prop : ∀{a} → is-prop (P a)}
@@ -52,6 +57,12 @@ proj!
   : {@(tactic hlevel-tactic-worker) A-prop : is-prop A}
   → ∥ A ∥₁ → A
 proj! {A-prop} = rec A-prop id
+
+elim₂! : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
+       → {@(tactic hlevel-tactic-worker) P-prop : ∀ x y → is-prop (P x y)}
+       → (∀ x y → P ∣ x ∣₁ ∣ y ∣₁)
+       → ∀ x y → P x y
+elim₂! {A} {B} {P} {P-prop} = elim₂ P-prop
 
 opaque
   unfolding is-of-hlevel

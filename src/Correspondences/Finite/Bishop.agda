@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Nullary.Finite.Bishop where
+module Correspondences.Finite.Bishop where
 
 open import Foundations.Base
 open import Foundations.Equiv
@@ -10,9 +10,10 @@ open import Meta.Bind
 open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
-open import Correspondences.Nullary.Finite.ManifestBishop
-open import Correspondences.Nullary.Omniscience
-open import Correspondences.Unary.Decidable
+open import Correspondences.Decidable
+open import Correspondences.Exhaustible
+open import Correspondences.Finite.ManifestBishop
+open import Correspondences.Omniscient
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Instances.HLevel
@@ -64,12 +65,8 @@ opaque
   is-fin-set-is-prop : is-prop (is-fin-set A)
   is-fin-set-is-prop = is-prop-η go where
     go : _
-    go (m , ∣p∣₁) (n , ∣q∣₁) =
-      Σ-prop-path-equiv hlevel! .fst $
-        ∥-∥₁.elim₂ hlevel!
-                   (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q))
-                   ∣p∣₁
-                   ∣q∣₁
+    go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim₂!
+      (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q)) ∣p∣₁ ∣q∣₁
 
   opaque
     unfolding 𝓑
@@ -83,7 +80,6 @@ opaque
       pure $ is-discrete-embedding (equiv→embedding e) fin-is-discrete
 
     -- TODO is-decidable-at-hlevel-+-left
-    -- TODO proj
     -- fin-set→is-decidable-at-hlevel : (n : HLevel) → is-fin-set A → is-decidable-at-hlevel (suc n) A
     -- fin-set→is-decidable-at-hlevel n fi = is-decidable-at-hlevel-+ n 0 {!!}
 
@@ -95,29 +91,14 @@ opaque
     is-fin-set→is-of-hlevel n fi = is-of-hlevel-+-left 2 n (is-fin-set→is-set fi)
 
     opaque
-      unfolding Omniscient₁
-      is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ′ = ℓ′} A
-      is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} = ∥-∥₁.elim! go ((n ,_) <$> ∣aeq∣₁) where
-        go : Π[ A-f ꞉ 𝓑 A ] (Decidable₁ P → Dec ∥ Σ A _ ∥₁)
-        go A-f = Dec.map pure rec! ∘ 𝓑→omniscient A-f
+      unfolding is-omniscient-at-hlevel Decidable is-decidable-at-hlevel
+      is-fin-set→is-omniscient : is-fin-set A → is-omniscient {ℓ′ = ℓ′} A
+      is-fin-set→is-omniscient {A} (n , ∣aeq∣₁) {P} P? = ∥-∥₁.proj! do
+        aeq ← ∣aeq∣₁
+        pure $ 𝓑→is-omniscient (n , aeq) P?
 
-      is-fin-set→exhaustible₁ : is-fin-set A → Exhaustible₁ {ℓ′ = ℓ′} A
-      is-fin-set→exhaustible₁ = omniscient₁→exhaustible₁ ∘ is-fin-set→omniscient₁
-
--- TODO?
--- is-fin-set→omniscient
---   : is-fin-set A → {P : Pred₁ ℓ′ A} → Decidable₁ P → Dec (Σ[ a ꞉ A ] ⌞ P a ⌟)
--- is-fin-set→omniscient A-fin P? with is-fin-set→omniscient₁ A-fin P?
--- ... | yes p = yes {!!}
--- ... | no ¬p = {!!}
-
--- is-fin-set→exhaustible₁
---   : is-fin-set A → {P : Pred₁ ℓ′ A} → Decidable₁ P → Dec (Π[ a ꞉ A ] ⌞ P a ⌟)
--- is-fin-set→exhaustible₁ A-fin {P} P? =
---   let z = omniscient₁→exhaustible₁ (is-fin-set→omniscient₁ A-fin) P?
--- --       w = ∥-∥₁.proj (Finite-choice ⦃ {!!} ⦄ λ x → (dec-∥-∥₁-equiv ₑ⁻¹) .fst x)
---   in omniscient→exhaustible {!!} P?
--- --     in ∥-∥₁.proj {!Finite-choice ? ?!} -- ((dec-∥-∥₁-equiv ₑ⁻¹) .fst z)
+      is-fin-set→is-exhaustible : is-fin-set A → is-exhaustible {ℓ′ = ℓ′} A
+      is-fin-set→is-exhaustible = is-omniscient→is-exhaustible ∘ is-fin-set→is-omniscient
 
 finite : (n : HLevel) ⦃ d : is-fin-set-at-hlevel n A ⦄ → is-fin-set-at-hlevel n A
 finite n ⦃ d ⦄ = d

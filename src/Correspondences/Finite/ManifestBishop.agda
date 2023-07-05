@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Nullary.Finite.ManifestBishop where
+module Correspondences.Finite.ManifestBishop where
 
 open import Foundations.Base
 open import Foundations.Equiv
@@ -7,9 +7,10 @@ open import Foundations.Equiv
 open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
-open import Correspondences.Nullary.Decidable
-open import Correspondences.Nullary.Omniscience
+open import Correspondences.Decidable
+open import Correspondences.Omniscient
 
+open import Data.Empty.Base
 open import Data.Dec.Base as Dec
 open import Data.Fin.Base
 open import Data.Fin.Instances.Decidable
@@ -17,6 +18,8 @@ open import Data.Nat
 open import Data.Vec.Base
 open import Data.Vec.Properties
 open import Data.Vec.Correspondences.Unary.Any
+
+open import Truncation.Propositional as ∥-∥₁
 
 private variable
   ℓ ℓ′ : Level
@@ -30,9 +33,9 @@ opaque
   𝓑-is-set = hlevel!
 
 opaque
-  unfolding 𝓑 Omniscient
-  𝓑→omniscient : 𝓑 A → Omniscient {ℓ′ = ℓ′} A
-  𝓑→omniscient {A} (n , aeq) {P} P? =
+  unfolding 𝓑 is-omniscient-at-hlevel is-decidable-at-hlevel any?
+  𝓑→is-omniscient : 𝓑 A → is-omniscient {ℓ′ = ℓ′} A
+  𝓑→is-omniscient {A} (n , aeq) {P} P? =
     Dec.map lemma₁ lemma₂ (any? P? xs) where
       module Ã = Equiv aeq
       module Ṽ = Equiv vec-fun-equiv
@@ -41,7 +44,7 @@ opaque
       xs = Ṽ.inverse .fst $ Ã.inverse .fst
 
       lemma₁ : _
-      lemma₁ (i , p) = lookup xs i , p
+      lemma₁ (i , p) = ∣ lookup xs i , p ∣₁
 
       lemma₂ : _
-      lemma₂ ¬p (a , pa) = ¬p $ Ã.to a , subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η a)) pa
+      lemma₂ ¬p = ∥-∥₁.rec! λ (a , pa) → ¬p $ Ã.to a , subst ⌞ P ⌟ₚ (sym (happly (Ṽ.ε _) _ ∙ Ã.η a)) pa

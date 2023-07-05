@@ -4,7 +4,7 @@ module Data.Product.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Correspondences.Nullary.Finite.Bishop
+open import Correspondences.Finite.Bishop
 
 open import Data.Unit.Instances.Finite
 open import Data.Vec.Base

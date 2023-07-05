@@ -8,8 +8,8 @@ open import Meta.Underlying public
 
 open import Structures.Base
 
-open import Correspondences.Nullary.Decidable
-open import Correspondences.Nullary.Finite.Bishop
+open import Correspondences.Decidable
+open import Correspondences.Finite.Bishop
 
 private variable
   ℓ ℓ′ : Level
