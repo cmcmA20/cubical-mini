@@ -16,6 +16,7 @@ open import Data.Fin.Base
 open import Data.Fin.Instances.Decidable
 open import Data.Nat
 open import Data.Vec.Base
+open import Data.Vec.Operations
 open import Data.Vec.Properties
 open import Data.Vec.Correspondences.Unary.Any
 

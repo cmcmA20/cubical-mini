@@ -10,7 +10,7 @@ open import Correspondences.Decidable
 import      Data.Dec as Dec
 open Dec
 open import Data.Fin.Base
-open import Data.Vec.Properties
+open import Data.Vec.Operations
 open import Data.Sum.Base
 open import Data.Sum.Instances.Decidable
 

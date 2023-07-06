@@ -19,12 +19,17 @@ weaken fzero    = fzero
 weaken (fsuc k) = fsuc (weaken k)
 
 elim
-  : (P : ∀ {n} → Fin n → Type ℓ)
-  → (∀ {n} → P {suc n} fzero)
-  → (∀ {n} (k : Fin n) → P k → P (fsuc k))
-  → ∀ {n} (k : Fin n) → P k
-elim P pfzero pfsuc {suc n} fzero = pfzero
-elim P pfzero pfsuc {suc n} (fsuc x) = pfsuc x (elim P pfzero pfsuc x)
+  : {P : ∀ {@0 n} → Fin n → Type ℓ}
+  → (∀ {@0 n} → P {suc n} fzero)
+  → (∀ {@0 n} (k : Fin n) → P k → P (fsuc k))
+  → ∀ {@0 n} (k : Fin n) → P k
+elim pfzero pfsuc fzero    = pfzero
+elim pfzero pfsuc (fsuc x) = pfsuc x (elim pfzero pfsuc x)
+
+rec : {A : Type ℓ}
+      (a₀ : A) (aₛ : ∀{@0 n} → Fin n → A → A)
+    → ∀ {@0 n} → Fin n → A
+rec a₀ = elim a₀
 
 squish : Fin n → Fin (suc n) → Fin n
 squish fzero fzero = fzero

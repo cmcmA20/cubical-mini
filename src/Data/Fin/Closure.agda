@@ -85,12 +85,12 @@ fin-sum {suc n} B =
   fin-coproduct .fst ∘ f ,
   is-equiv-comp (is-iso→is-equiv f-iso) (fin-coproduct .snd)
     where
-      rec = fin-sum (B ∘ fsuc)
-      module mrec = Equiv rec
+      rec′ = fin-sum (B ∘ fsuc)
+      module mrec = Equiv rec′
 
       f : Σ _ (λ k → Fin (B k)) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
       f (fzero  , x) = inl x
-      f (fsuc x , y) = inr (rec .fst (x , y))
+      f (fsuc x , y) = inr (rec′ .fst (x , y))
 
       f-iso : is-iso f
       f-iso .is-iso.inv (inl x) = fzero , x

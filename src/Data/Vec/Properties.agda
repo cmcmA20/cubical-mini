@@ -14,8 +14,8 @@ open import Data.List.Base
   renaming (List to Listⁱ)
 open import Data.List.Container
 open import Data.Nat.Path
-import Data.Vec.Base as Vec
-open Vec public
+open import Data.Vec.Base public
+open import Data.Vec.Operations
 
 private variable
   ℓ ℓ′ : Level
@@ -28,14 +28,6 @@ cast {0}     {0}     _ xs = xs
 cast {0}     {suc n} p = absurd (suc≠zero (sym p))
 cast {suc m} {0}     p = absurd (suc≠zero p)
 cast {suc m} {suc n} p (x ∷ xs) = x ∷ cast (suc-inj p) xs
-
-tabulate : (Fin n → A) → Vec A n
-tabulate {n = 0}     _ = []
-tabulate {n = suc n} f = f fzero ∷ tabulate (f ∘ fsuc)
-
-lookup : Vec A n → Fin n → A
-lookup {n = suc _} (x ∷ _)  fzero    = x
-lookup {n = suc _} (_ ∷ xs) (fsuc k) = lookup xs k
 
 vec-fun-equiv : Vec A n ≃ (Fin n → A)
 vec-fun-equiv = iso→equiv (lookup , iso tabulate lemma₁ lemma₂) where
