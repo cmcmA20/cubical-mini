@@ -3,6 +3,7 @@ module Meta.Reflection where
 
 open import Foundations.Base
 
+open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromString  public
 open import Meta.Literals.FromProduct public
 
@@ -248,3 +249,6 @@ print-depth key level nesting es = debugPrint key level $
     nest : ℕ → String → String
     nest zero s = s
     nest (suc x) s = nest x (s <> "  ")
+
+pattern nat-lit n =
+  def (quote Number.fromNat) (_ ∷ _ ∷ _ ∷ lit (nat n) v∷ _)

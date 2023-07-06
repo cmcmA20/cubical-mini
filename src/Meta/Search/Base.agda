@@ -5,9 +5,6 @@ module Meta.Search.Base where
 open import Foundations.Base
 
 open import Meta.Foldable
-open import Meta.Literals.FromNat
-open import Meta.Literals.FromProduct
-open import Meta.Literals.FromString
 open import Meta.Reflection
 
 open import Data.Bool.Base
@@ -46,7 +43,7 @@ record Tactic-desc (goal-name : Name) : Type where
 
 record Struct-proj-desc (goal-name : Name) (carrier-name : Name) : Type where
   field
-    struct-name : Name
+    struct-name  : Name
     project-goal : Name
     get-level    : Term → TC Term -- TODO refactor this
     get-argument : List (Arg Term) → TC Term
@@ -63,10 +60,6 @@ backtrack note = do
   typeError $ "Search hit a dead-end: " ∷ note
 
 private
-
-  pattern nat-lit n =
-    def (quote Number.fromNat) (_ ∷ _ ∷ _ ∷ lit (nat n) v∷ _)
-
   decompose-goal′ : Tactic-desc goal-name → Term → TC (Term × Term)
   decompose-goal′ {goal-name} td ty = do
     def actual-goal-name (_ ∷ lv v∷ ty v∷ []) ← pure ty where
@@ -197,7 +190,8 @@ private
           ty ← withReduceDefs (false , tac.atoms) (inferType goal >>= reduce)
           debugPrint "tactic.hlevel" 20 $
             "Outer type: " ∷ termErr ty ∷ []
-          treat-as-structured-type td projection goal >> unify solved a
+          treat-as-structured-type td projection goal
+          unify solved a
 
       remove-invisible : Term → Term → TC Term
       remove-invisible
@@ -361,14 +355,14 @@ search-tactic-worker {goal-name} td goal = do
 
   let delta = reverse-fast delta
   solved ← enter delta do
-    goal′ ← new-meta (def goal-name (lv v∷ ty v∷ []))
+    goal′ ← new-meta (def goal-name (unknown h∷ lv v∷ ty v∷ []))
     search td false lv 15 goal′
     pure goal′
   unify goal (leave delta solved)
   where
     leave : Telescope → Term → Term
     leave [] = id
-    leave ((na , arg as at) ∷ xs) = leave xs ∘ lam (arg-vis as) ∘ abs na
+    leave ((na , arg as _) ∷ xs) = leave xs ∘ lam (arg-vis as) ∘ abs na
     enter : Telescope → TC A → TC A
     enter [] = id
     enter ((na , ar) ∷ xs) = enter xs ∘ extendContext na ar

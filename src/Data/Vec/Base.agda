@@ -20,8 +20,8 @@ data Vec (A : Type ℓ) : @0 ℕ → Type ℓ where
 elim
   : (P : ∀ {@0 n} → Vec A n → Type ℓ′)
   → P []
-  → (∀ {n} x (xs : Vec A n) → P xs → P (x ∷ xs))
-  → ∀ {n} (xs : Vec A n) → P xs
+  → (∀ {@0 n} x (xs : Vec A n) → P xs → P (x ∷ xs))
+  → ∀ {@0 n} (xs : Vec A n) → P xs
 elim P p[] p∷ [] = p[]
 elim P p[] p∷ (x ∷ xs) = p∷ x xs (elim P p[] p∷ xs)
 
