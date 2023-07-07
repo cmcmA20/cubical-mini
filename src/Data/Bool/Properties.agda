@@ -3,7 +3,7 @@ module Data.Bool.Properties where
 
 open import Foundations.Base
 open import Foundations.Sigma
-open import Foundations.Erased
+-- open import Foundations.Erased
 
 open import Meta.Search.HLevel
 

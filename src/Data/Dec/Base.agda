@@ -2,7 +2,8 @@
 module Data.Dec.Base where
 
 open import Foundations.Base
-open import Foundations.Erased
+
+open import Correspondences.Erased
 
 import Data.Bool.Base as Bool
 open Bool using (Bool; false; true; not; if_then_else_)
@@ -64,9 +65,9 @@ map : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
 map to fro dec .does  = dec .does
 map to fro dec .proof = Reflects′.map to fro (dec .proof)
 
-recover : Dec P → Erased P → P
+recover : Dec P → ∥ P ∥ᴱ → P
 recover (yes p) _  = p
-recover (no ¬p) [ 0p ]ᴱ = ⊥.rec (¬p 0p)
+recover (no ¬p) ∣ 0p ∣ᴱ = ⊥.rec (¬p 0p)
 
 recover′ : Dec P → @irr P → P
 recover′ (yes p) _ = p
@@ -84,5 +85,5 @@ True (false because _) = ⊥
 True (true  because _) = ⊤
 
 -- TODO check if erasure is really beneficial here
-witness : (d : Dec P) → ⦃ Erased (True d) ⦄ → P
+witness : (d : Dec P) → ⦃ ∥ True d ∥ᴱ ⦄ → P
 witness (yes p) = p

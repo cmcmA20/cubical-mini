@@ -3,7 +3,6 @@
 module Prelude where
 
 open import Foundations.Base       public
-open import Foundations.Erased     public
 open import Foundations.Path       public
 open import Foundations.Pi         public
 open import Foundations.Sigma      public
@@ -31,6 +30,8 @@ open import Meta.SIP        public
 open import Meta.Underlying public
 
 open import Structures.n-Type public
+
+open import Correspondences.Erased public
 
 open import Functions.Equiv.Fibrewise public
 open import Functions.Equiv.Weak      public
