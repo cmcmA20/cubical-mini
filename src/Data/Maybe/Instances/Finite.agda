@@ -27,5 +27,5 @@ maybe-is-fin-set fi = fin do
   pure $ maybe-as-sum ∙ₑ ⊎-ap ueq aeq ∙ₑ fin-coproduct
 
 instance
-  decomp-fin-maybe : goal-decomposition (quote is-fin-set-at-hlevel) (Maybe A)
-  decomp-fin-maybe = decomp (quote maybe-is-fin-set) (`search (quote is-fin-set-at-hlevel) ∷ [])
+  decomp-fin-maybe : goal-decomposition (quote is-fin-set) (Maybe A)
+  decomp-fin-maybe = decomp (quote maybe-is-fin-set) (`search (quote is-fin-set) ∷ [])

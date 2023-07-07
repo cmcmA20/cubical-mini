@@ -20,6 +20,7 @@ open Correspondences.Decidable public
 
 open import Data.Dec.Base
 open import Data.Empty.Base
+open import Data.Fin.Instances.FromNat
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
@@ -34,9 +35,12 @@ private variable
   n : HLevel
 
 instance
-  Tactic-decide : Tactic-desc (quote is-decidable-at-hlevel)
+  Tactic-decide : Tactic-desc (quote is-decidable-at-hlevel) by-hlevel
+  Tactic-decide .Tactic-desc.args-length = 3
+  Tactic-decide .Tactic-desc.goal-selector = 2
+  Tactic-decide .Tactic-desc.level-selector = 1
   Tactic-decide .Tactic-desc.other-atoms = [ quote _≃_ ]
-  Tactic-decide .Tactic-desc.instance-fallback-helper = quote decide
+  Tactic-decide .Tactic-desc.instance-helper = quote decide
   Tactic-decide .Tactic-desc.upwards-closure = nothing
 
 decide-tactic-worker = search-tactic-worker Tactic-decide

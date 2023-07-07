@@ -25,6 +25,6 @@ private variable
   pure $ ⊎-ap aeq beq ∙ₑ fin-coproduct
 
 instance
-  decomp-fin-⊎ : goal-decomposition (quote is-fin-set-at-hlevel) (A ⊎ B)
+  decomp-fin-⊎ : goal-decomposition (quote is-fin-set) (A ⊎ B)
   decomp-fin-⊎ = decomp (quote ⊎-is-fin-set)
-    (`search (quote is-fin-set-at-hlevel) ∷ `search (quote is-fin-set-at-hlevel) ∷ [])
+    (`search (quote is-fin-set) ∷ `search (quote is-fin-set) ∷ [])

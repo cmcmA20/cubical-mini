@@ -15,6 +15,8 @@ open Structures.n-Type public
   using ( n-Type; el; n-Type-carrier; Underlying-n-Type
         ; Prop ; Set )
 
+open import Data.Bool.Base
+open import Data.Fin.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
@@ -29,9 +31,12 @@ private variable
   n : HLevel
 
 instance
-  Tactic-hlevel : Tactic-desc (quote is-of-hlevel)
+  Tactic-hlevel : Tactic-desc (quote is-of-hlevel) by-hlevel
+  Tactic-hlevel .Tactic-desc.args-length = 3
+  Tactic-hlevel .Tactic-desc.goal-selector = fsuc (fsuc fzero)
+  Tactic-hlevel .Tactic-desc.level-selector = fsuc fzero
   Tactic-hlevel .Tactic-desc.other-atoms = [ quote _≃_ ]
-  Tactic-hlevel .Tactic-desc.instance-fallback-helper = quote hlevel
+  Tactic-hlevel .Tactic-desc.instance-helper = quote hlevel
   Tactic-hlevel .Tactic-desc.upwards-closure = just (quote is-of-hlevel-+)
 
 hlevel-tactic-worker = search-tactic-worker Tactic-hlevel
@@ -121,15 +126,13 @@ instance
   decomp-hlevel-is-equiv : {B : Type ℓ′} {f : A → B} → goal-decomposition (quote is-of-hlevel) (is-equiv f)
   decomp-hlevel-is-equiv = decomp (quote is-equiv-is-of-hlevel) [ `level-minus 1 ]
 
-  proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) (quote n-Type-carrier)
+  proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote n-Type-carrier) true
   proj-hlevel-n-type .Struct-proj-desc.struct-name = quote n-Type
-  proj-hlevel-n-type .Struct-proj-desc.project-goal = quote n-Type-carrier-is-tr
-  proj-hlevel-n-type .Struct-proj-desc.get-level ty = do
-    def (quote n-Type) (ell v∷ lv′t v∷ []) ← reduce ty
-      where _ → backtrack [ "Type of thing isn't n-Type, it is " , termErr ty ]
-    normalise lv′t
-  proj-hlevel-n-type .Struct-proj-desc.get-argument (_ ∷ _ ∷ it v∷ []) = pure it
-  proj-hlevel-n-type .Struct-proj-desc.get-argument _ = typeError []
+  proj-hlevel-n-type .Struct-proj-desc.struct-args-length = 2
+  proj-hlevel-n-type .Struct-proj-desc.goal-projection = quote n-Type-carrier-is-tr
+  proj-hlevel-n-type .Struct-proj-desc.projection-args-length = 3
+  proj-hlevel-n-type .Struct-proj-desc.level-selector = fsuc fzero
+  proj-hlevel-n-type .Struct-proj-desc.carrier-selector = fsuc (fsuc fzero)
 
 
 -- Usage

@@ -18,13 +18,15 @@ open import Structures.FinSet public
 
 open import Correspondences.Finite.Bishop
 open Correspondences.Finite.Bishop public
-  using ( is-fin-set-at-hlevel ; is-fin-set
+  using ( is-fin-set
         ; is-fin-set-β ; is-fin-set-η
         ; fin ; cardinality ; enumeration
         ; finite )
 
+open import Data.Bool.Base
 open import Data.Dec.Base
-open import Data.Empty.Base
+open import Data.Empty.Base as ⊥
+open import Data.Fin.Instances.FromNat
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
@@ -37,60 +39,58 @@ private variable
   n : HLevel
 
 instance
-  Tactic-finite : Tactic-desc (quote is-fin-set-at-hlevel)
+  Tactic-finite : Tactic-desc (quote is-fin-set) none
+  Tactic-finite .Tactic-desc.args-length = 2
+  Tactic-finite .Tactic-desc.goal-selector = 1
+  Tactic-finite .Tactic-desc.level-selector {w} = ⊥.absurd w
   Tactic-finite .Tactic-desc.other-atoms = [ quote _≃_ ]
-  Tactic-finite .Tactic-desc.instance-fallback-helper = quote finite
-  Tactic-finite .Tactic-desc.upwards-closure = nothing
+  Tactic-finite .Tactic-desc.instance-helper = quote finite
+  Tactic-finite .Tactic-desc.upwards-closure {w} = ⊥.absurd w
 
 finite-tactic-worker = search-tactic-worker Tactic-finite
 macro finite! = finite-tactic-worker
 
-fin-set! : (A : Type ℓ) {@(tactic finite-tactic-worker) fi : is-fin-set-at-hlevel 0 A} → FinSet ℓ
+fin-set! : (A : Type ℓ) {@(tactic finite-tactic-worker) fi : is-fin-set A} → FinSet ℓ
 fin-set! A {fi} = fin-set A fi
 
 instance
   decomp-hlevel-is-fin-set : goal-decomposition (quote is-of-hlevel) (is-fin-set A)
   decomp-hlevel-is-fin-set = decomp (quote is-fin-set-is-of-hlevel) [ `level-minus 1 ]
 
-  decomp-fin-lift : goal-decomposition (quote is-fin-set-at-hlevel) (Lift ℓ′ A)
+  decomp-fin-lift : goal-decomposition (quote is-fin-set) (Lift ℓ′ A)
   decomp-fin-lift = decomp (quote lift-is-fin-set) [ `search (quote lift-is-fin-set) ]
 
-  decomp-fin-Π : goal-decomposition (quote is-fin-set-at-hlevel) (∀ a → B a)
+  decomp-fin-Π : goal-decomposition (quote is-fin-set) (∀ a → B a)
   decomp-fin-Π = decomp (quote Π-is-fin-set)
-    [ `search (quote is-fin-set-at-hlevel) , `search-under 1 (quote is-fin-set-at-hlevel) ]
+    [ `search (quote is-fin-set) , `search-under 1 (quote is-fin-set) ]
 
-  decomp-fin-× : {B : Type ℓb} → goal-decomposition (quote is-fin-set-at-hlevel) (A × B)
+  decomp-fin-× : {B : Type ℓb} → goal-decomposition (quote is-fin-set) (A × B)
   decomp-fin-× = decomp (quote ×-is-fin-set)
-    [ `search (quote is-fin-set-at-hlevel) , `search (quote is-fin-set-at-hlevel) ]
+    [ `search (quote is-fin-set) , `search (quote is-fin-set) ]
 
-  decomp-fin-Σ : goal-decomposition (quote is-fin-set-at-hlevel) (Σ A B)
+  decomp-fin-Σ : goal-decomposition (quote is-fin-set) (Σ A B)
   decomp-fin-Σ = decomp (quote Σ-is-fin-set)
-    [ `search (quote is-fin-set-at-hlevel) , `search-under 1 (quote is-fin-set-at-hlevel) ]
+    [ `search (quote is-fin-set) , `search-under 1 (quote is-fin-set) ]
 
   decomp-hlevel-fin : goal-decomposition (quote is-of-hlevel) A
   decomp-hlevel-fin = decomp (quote is-fin-set→is-of-hlevel )
-    [ `level-minus 2 , `search (quote is-fin-set-at-hlevel) ]
+    [ `level-minus 2 , `search (quote is-fin-set) ]
 
-  proj-fin-finset : Struct-proj-desc (quote is-fin-set-at-hlevel) (quote FinSet-carrier)
+  proj-fin-finset : Struct-proj-desc (quote is-fin-set) none (quote FinSet-carrier) true
   proj-fin-finset .Struct-proj-desc.struct-name = quote FinSet
-  proj-fin-finset .Struct-proj-desc.project-goal = quote FinSet-carrier-is-fin-set
-  proj-fin-finset .Struct-proj-desc.get-level ty = do
-    def (quote FinSet) (ell v∷ []) ← reduce ty
-      where _ → backtrack [ "Type of thing isn't FinSet, it is " , termErr ty ]
-    normalise (lit (nat 0))
-  proj-fin-finset .Struct-proj-desc.get-argument (_ ∷ it v∷ []) = pure it
-  proj-fin-finset .Struct-proj-desc.get-argument _ = typeError []
+  proj-fin-finset .Struct-proj-desc.struct-args-length = 1
+  proj-fin-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-fin-set
+  proj-fin-finset .Struct-proj-desc.projection-args-length = 2
+  proj-fin-finset .Struct-proj-desc.level-selector {w} = ⊥.absurd w
+  proj-fin-finset .Struct-proj-desc.carrier-selector = 1
 
-  -- FIXME so much duplication
-  proj-dec₁-finset : Struct-proj-desc (quote is-decidable-at-hlevel) (quote FinSet-carrier)
+  proj-dec₁-finset : Struct-proj-desc (quote is-decidable-at-hlevel) by-hlevel (quote FinSet-carrier) false
   proj-dec₁-finset .Struct-proj-desc.struct-name = quote FinSet
-  proj-dec₁-finset .Struct-proj-desc.project-goal = quote FinSet-carrier-is-discrete
-  proj-dec₁-finset .Struct-proj-desc.get-level ty = do
-    def (quote FinSet) (ell v∷ []) ← reduce ty
-      where _ → backtrack [ "Type of thing isn't FinSet, it is " , termErr ty ]
-    normalise (lit (nat 0))
-  proj-dec₁-finset .Struct-proj-desc.get-argument (_ ∷ it v∷ []) = pure it
-  proj-dec₁-finset .Struct-proj-desc.get-argument _ = typeError []
+  proj-dec₁-finset .Struct-proj-desc.struct-args-length = 1
+  proj-dec₁-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-discrete
+  proj-dec₁-finset .Struct-proj-desc.projection-args-length = 2
+  proj-dec₁-finset .Struct-proj-desc.level-selector {z} = ⊥.absurd z
+  proj-dec₁-finset .Struct-proj-desc.carrier-selector = 1
 
 -- Usage
 private

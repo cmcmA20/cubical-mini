@@ -87,15 +87,29 @@ new-meta′ ty = do
 vlam : String → Term → Term
 vlam nam body = lam visible (abs nam body)
 
-pattern _v∷_ t xs = arg (arg-info visible (modality relevant quantity-ω)) t ∷ xs
-pattern _h∷_ t xs = arg (arg-info hidden (modality relevant quantity-ω)) t ∷ xs
-pattern _hm∷_ t xs = arg (arg-info hidden (modality relevant _)) t ∷ xs
+pattern vis-arg v t = arg (arg-info v (modality relevant quantity-ω)) t
 
-infixr 30 _v∷_ _h∷_ _hm∷_
+pattern varg t = vis-arg visible t
+pattern harg t = vis-arg hidden t
+pattern iarg t = vis-arg instance′ t
+
+pattern _v∷_ t xs = varg t ∷ xs
+pattern _h∷_ t xs = harg t ∷ xs
+pattern _hm∷_ t xs = arg (arg-info hidden (modality relevant _)) t ∷ xs
+pattern _i∷_ t xs = iarg t ∷ xs
+
+infixr 30 _v∷_ _h∷_ _hm∷_ _i∷_
 
 infer-hidden : ℕ → List (Arg Term) → List (Arg Term)
 infer-hidden zero xs = xs
 infer-hidden (suc n) xs = unknown h∷ infer-hidden n xs
+
+get-args : Term → List (Arg Term)
+get-args (var _ args) = args
+get-args (con _ args) = args
+get-args (def _ args) = args
+get-args (pat-lam _ args) = args
+get-args _ = []
 
 getName : Term → Maybe Name
 getName (def x _) = just x

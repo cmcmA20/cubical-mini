@@ -24,6 +24,10 @@ lookup : Vec A n → Fin n → A
 lookup (x ∷ _)  fzero    = x
 lookup (_ ∷ xs) (fsuc k) = lookup xs k
 
+replace : Fin n → A → Vec A n → Vec A n
+replace fzero y (_ ∷ xs) = y ∷ xs
+replace (fsuc idx) y (x ∷ xs) = x ∷ replace idx y xs
+
 vec→list : Vec A n → Σ[ xs ꞉ List A ] ∥ length xs ＝ n ∥ᴱ
 vec→list [] = [] , ∣ refl ∣ᴱ
 vec→list (x ∷ xs) =

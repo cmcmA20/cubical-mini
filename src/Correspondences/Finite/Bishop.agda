@@ -34,19 +34,13 @@ private variable
   A : Type ℓ
   P : A → Type ℓ′
   B : Type ℓ′
-  n : HLevel
 
 opaque
-  is-fin-set-at-hlevel : HLevel → Type ℓ → Type ℓ
-  is-fin-set-at-hlevel 0 A = Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁
-  is-fin-set-at-hlevel (suc n) = is-fin-set-at-hlevel n on-paths-of_
-
-is-fin-set : Type ℓ → Type ℓ
-is-fin-set = is-fin-set-at-hlevel 0
-{-# INLINE is-fin-set #-}
+  is-fin-set : Type ℓ → Type ℓ
+  is-fin-set A = Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁
 
 opaque
-  unfolding is-fin-set-at-hlevel
+  unfolding is-fin-set
   is-fin-set-β : is-fin-set A → Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁
   is-fin-set-β = id
 
@@ -100,11 +94,11 @@ opaque
       is-fin-set→is-exhaustible : is-fin-set A → is-exhaustible {ℓ′ = ℓ′} A
       is-fin-set→is-exhaustible = is-omniscient→is-exhaustible ∘ is-fin-set→is-omniscient
 
-finite : (n : HLevel) ⦃ d : is-fin-set-at-hlevel n A ⦄ → is-fin-set-at-hlevel n A
-finite n ⦃ d ⦄ = d
+finite : ⦃ d : is-fin-set A ⦄ → is-fin-set A
+finite ⦃ d ⦄ = d
 
 opaque
-  unfolding is-fin-set-at-hlevel
+  unfolding is-fin-set
   finite-choice
     : {P : A → Type ℓ′}
     → is-fin-set A
