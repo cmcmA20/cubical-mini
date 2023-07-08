@@ -10,6 +10,7 @@ open import Structures.Base
 
 open import Correspondences.Decidable
 open import Correspondences.Finite.Bishop
+open import Correspondences.Omniscient
 
 private variable
   ℓ ℓ′ : Level
@@ -33,6 +34,9 @@ opaque
 
   FinSet-carrier-is-set : (A : FinSet ℓ) → is-set (FinSet-carrier A)
   FinSet-carrier-is-set = is-fin-set→is-set ∘ snd
+
+  FinSet-carrier-is-omniscient : (A : FinSet ℓ) → is-omniscient {ℓ′ = ℓ′} (FinSet-carrier A)
+  FinSet-carrier-is-omniscient = is-fin-set→is-omniscient ∘ snd
 
 instance
   Underlying-FinSet : Underlying (FinSet ℓ)

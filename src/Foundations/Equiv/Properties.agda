@@ -32,21 +32,12 @@ inv-equiv-is-equiv = is-iso→is-equiv goal where
 is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
 is-equiv-inv fe = ((_ , fe) ₑ⁻¹) .snd
 
--- TODO
--- preCompEquiv : (e : A ≃ B) → (B → C) ≃ (A → C)
--- preCompEquiv e = (λ φ → φ ∘ fst e) , isEquivPreComp e
-
--- isEquivPostComp : (e : A ≃ B) → isEquiv (λ (φ : C → A) → e .fst ∘ φ)
--- isEquivPostComp e = snd (equivΠCod (λ _ → e))
-
--- postCompEquiv : (e : A ≃ B) → (C → A) ≃ (C → B)
--- postCompEquiv e = _ , isEquivPostComp e
-
 @0 ap-≃ : (F : Type ℓ → Type ℓ′) → (A ≃ B) → F A ≃ F B
 ap-≃ F e = path→equiv (ap F (ua e))
 
 sym-equiv : (x ＝ y) ≃ (y ＝ x)
-sym-equiv = sym , is-iso→is-equiv (iso sym (λ _ → refl) (λ _ → refl))
+sym-equiv .fst = sym
+sym-equiv .snd .equiv-proof = strict-contr-fibres sym
 
 opaque
   unfolding is-of-hlevel

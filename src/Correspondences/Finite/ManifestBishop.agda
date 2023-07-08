@@ -34,7 +34,7 @@ opaque
   𝓑-is-set = hlevel!
 
 opaque
-  unfolding 𝓑 is-omniscient-at-hlevel is-decidable-at-hlevel any?
+  unfolding 𝓑 is-omniscient is-decidable-at-hlevel any?
   𝓑→is-omniscient : 𝓑 A → is-omniscient {ℓ′ = ℓ′} A
   𝓑→is-omniscient {A} (n , aeq) {P} P? =
     Dec.map lemma₁ lemma₂ (any? P? xs) where

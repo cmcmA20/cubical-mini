@@ -22,7 +22,7 @@ rinv f = Σ[ h ꞉ (_ → _) ] (f ∘ h ＝ id)
 is-biinv : (A → B) → Type _
 is-biinv f = linv f × rinv f
 
-is-equiv→pre-is-equiv  : is-equiv f → is-equiv {A = C → A} (f ∘_)
+is-equiv→pre-is-equiv : is-equiv f → is-equiv {A = C → A} (f ∘_)
 is-equiv→pre-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
   f-iso : is-iso f
   f-iso = is-equiv→is-iso f-eqv

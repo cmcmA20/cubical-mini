@@ -10,7 +10,9 @@ open import Meta.Literals.FromProduct
 open import Meta.Reflection
 open import Meta.Search.Base public
 open import Meta.Search.Decidable
+open import Meta.Search.Exhaustible
 open import Meta.Search.HLevel
+open import Meta.Search.Omniscient
 
 open import Structures.FinSet
 open import Structures.FinSet public
@@ -22,6 +24,7 @@ open Correspondences.Finite.Bishop public
         ; is-fin-set-β ; is-fin-set-η
         ; fin ; cardinality ; enumeration
         ; finite )
+open import Correspondences.Omniscient
 
 open import Data.Bool.Base
 open import Data.Dec.Base
@@ -92,6 +95,14 @@ instance
   proj-dec₁-finset .Struct-proj-desc.level-selector {z} = ⊥.absurd z
   proj-dec₁-finset .Struct-proj-desc.carrier-selector = 1
 
+  proj-omn-finset : Struct-proj-desc (quote is-omniscient) none (quote FinSet-carrier) false
+  proj-omn-finset .Struct-proj-desc.struct-name = quote FinSet
+  proj-omn-finset .Struct-proj-desc.struct-args-length = 1
+  proj-omn-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-omniscient
+  proj-omn-finset .Struct-proj-desc.projection-args-length = 2
+  proj-omn-finset .Struct-proj-desc.level-selector {z} = ⊥.absurd z
+  proj-omn-finset .Struct-proj-desc.carrier-selector = 1
+
 -- Usage
 private
   module _ {A : FinSet ℓ} {B : ⌞ A ⌟ → FinSet ℓ′} where
@@ -106,3 +117,9 @@ private
 
     _ : is-fin-set (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
     _ = finite!
+
+    _ : is-omniscient {ℓ′ = ℓ′} ⌞ A ⌟
+    _ = omni!
+
+    _ : is-exhaustible {ℓ′ = ℓ′} ⌞ A ⌟
+    _ = exhaust!

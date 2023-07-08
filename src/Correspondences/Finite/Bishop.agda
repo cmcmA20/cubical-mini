@@ -85,7 +85,7 @@ opaque
     is-fin-set→is-of-hlevel n fi = is-of-hlevel-+-left 2 n (is-fin-set→is-set fi)
 
     opaque
-      unfolding is-omniscient-at-hlevel Decidable is-decidable-at-hlevel
+      unfolding is-omniscient Decidable is-decidable-at-hlevel
       is-fin-set→is-omniscient : is-fin-set A → is-omniscient {ℓ′ = ℓ′} A
       is-fin-set→is-omniscient {A} (n , ∣aeq∣₁) {P} P? = ∥-∥₁.proj! do
         aeq ← ∣aeq∣₁
