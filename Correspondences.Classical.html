@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Correspondences.Classical</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Correspondences.Classical.html" class="Module">Correspondences.Classical</a> <a id="57" class="Keyword">where</a>
+
+<a id="64" class="Keyword">open</a> <a id="69" class="Keyword">import</a> <a id="76" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Meta.Bind.html" class="Module">Meta.Bind</a>
+
+<a id="117" class="Keyword">open</a> <a id="122" class="Keyword">import</a> <a id="129" href="Correspondences.Base.html" class="Module">Correspondences.Base</a> <a id="150" class="Keyword">public</a>
+
+<a id="158" class="Keyword">open</a> <a id="163" class="Keyword">import</a> <a id="170" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
+
+<a id="187" class="Keyword">private</a> <a id="195" class="Keyword">variable</a>
+  <a id="206" href="Correspondences.Classical.html#206" class="Generalizable">ℓ</a> <a id="208" class="Symbol">:</a> <a id="210" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+
+<a id="217" class="Keyword">infix</a> <a id="223" class="Number">0</a> <a id="225" href="Correspondences.Classical.html#229" class="Function Operator">¬¬_</a>
+<a id="¬¬_"></a><a id="229" href="Correspondences.Classical.html#229" class="Function Operator">¬¬_</a> <a id="233" class="Symbol">:</a> <a id="235" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="240" href="Correspondences.Classical.html#206" class="Generalizable">ℓ</a> <a id="242" class="Symbol">→</a> <a id="244" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="249" href="Correspondences.Classical.html#206" class="Generalizable">ℓ</a>
+<a id="251" href="Correspondences.Classical.html#229" class="Function Operator">¬¬</a> <a id="254" href="Correspondences.Classical.html#254" class="Bound">A</a> <a id="256" class="Symbol">=</a> <a id="258" href="Data.Empty.Base.html#903" class="Function Operator">¬</a> <a id="260" href="Data.Empty.Base.html#903" class="Function Operator">¬</a> <a id="262" href="Correspondences.Classical.html#254" class="Bound">A</a>
+
+<a id="265" class="Keyword">opaque</a>
+  <a id="Classical"></a><a id="274" href="Correspondences.Classical.html#274" class="Function">Classical</a> <a id="284" class="Symbol">:</a> <a id="286" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="291" href="Correspondences.Classical.html#206" class="Generalizable">ℓ</a> <a id="293" class="Symbol">→</a> <a id="295" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="300" href="Correspondences.Classical.html#206" class="Generalizable">ℓ</a>
+  <a id="304" href="Correspondences.Classical.html#274" class="Function">Classical</a> <a id="314" class="Symbol">=</a> <a id="316" href="Correspondences.Classical.html#229" class="Function Operator">¬¬_</a>
+
+  <a id="Classically"></a><a id="323" href="Correspondences.Classical.html#323" class="Function">Classically</a> <a id="335" class="Symbol">:</a> <a id="337" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="342" href="Correspondences.Classical.html#206" class="Generalizable">ℓ</a> <a id="344" class="Symbol">→</a> <a id="346" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="351" href="Correspondences.Classical.html#206" class="Generalizable">ℓ</a>
+  <a id="355" href="Correspondences.Classical.html#323" class="Function">Classically</a> <a id="367" class="Symbol">=</a> <a id="369" href="Correspondences.Classical.html#229" class="Function Operator">¬¬_</a>
+
+  <a id="376" class="Keyword">instance</a>
+    <a id="Map-Classically"></a><a id="389" href="Correspondences.Classical.html#389" class="Function">Map-Classically</a> <a id="405" class="Symbol">:</a> <a id="407" href="Meta.Idiom.html#209" class="Record">Map</a> <a id="411" class="Symbol">(</a><a id="412" href="Meta.Idiom.html#121" class="InductiveConstructor">eff</a> <a id="416" href="Correspondences.Classical.html#323" class="Function">Classically</a><a id="427" class="Symbol">)</a>
+    <a id="433" href="Correspondences.Classical.html#389" class="Function">Map-Classically</a> <a id="449" class="Symbol">.</a><a id="450" href="Meta.Idiom.html#282" class="Field Operator">_&lt;$&gt;_</a> <a id="456" href="Correspondences.Classical.html#456" class="Bound">f</a> <a id="458" href="Correspondences.Classical.html#458" class="Bound">¬¬a</a> <a id="462" href="Correspondences.Classical.html#462" class="Bound">¬b</a> <a id="465" class="Symbol">=</a> <a id="467" href="Correspondences.Classical.html#458" class="Bound">¬¬a</a> <a id="471" class="Symbol">λ</a> <a id="473" href="Correspondences.Classical.html#473" class="Bound">a</a> <a id="475" class="Symbol">→</a> <a id="477" href="Correspondences.Classical.html#462" class="Bound">¬b</a> <a id="480" class="Symbol">(</a><a id="481" href="Correspondences.Classical.html#456" class="Bound">f</a> <a id="483" href="Correspondences.Classical.html#473" class="Bound">a</a><a id="484" class="Symbol">)</a>
+
+    <a id="Idiom-Classically"></a><a id="491" href="Correspondences.Classical.html#491" class="Function">Idiom-Classically</a> <a id="509" class="Symbol">:</a> <a id="511" href="Meta.Idiom.html#482" class="Record">Idiom</a> <a id="517" class="Symbol">(</a><a id="518" href="Meta.Idiom.html#121" class="InductiveConstructor">eff</a> <a id="522" href="Correspondences.Classical.html#323" class="Function">Classically</a><a id="533" class="Symbol">)</a>
+    <a id="539" href="Correspondences.Classical.html#491" class="Function">Idiom-Classically</a> <a id="557" class="Symbol">.</a><a id="558" href="Meta.Idiom.html#583" class="Field">pure</a> <a id="563" href="Correspondences.Classical.html#563" class="Bound">a</a> <a id="565" href="Correspondences.Classical.html#565" class="Bound">¬a</a> <a id="568" class="Symbol">=</a> <a id="570" href="Correspondences.Classical.html#565" class="Bound">¬a</a> <a id="573" href="Correspondences.Classical.html#563" class="Bound">a</a>
+    <a id="579" href="Correspondences.Classical.html#491" class="Function">Idiom-Classically</a> <a id="597" class="Symbol">.</a><a id="598" href="Meta.Idiom.html#626" class="Field Operator">_&lt;*&gt;_</a> <a id="604" href="Correspondences.Classical.html#604" class="Bound">¬¬f</a> <a id="608" href="Correspondences.Classical.html#608" class="Bound">¬¬a</a> <a id="612" href="Correspondences.Classical.html#612" class="Bound">¬b</a> <a id="615" class="Symbol">=</a> <a id="617" href="Correspondences.Classical.html#608" class="Bound">¬¬a</a> <a id="621" class="Symbol">(λ</a> <a id="624" href="Correspondences.Classical.html#624" class="Bound">a</a> <a id="626" class="Symbol">→</a> <a id="628" href="Correspondences.Classical.html#604" class="Bound">¬¬f</a> <a id="632" class="Symbol">(λ</a> <a id="635" href="Correspondences.Classical.html#635" class="Bound">f</a> <a id="637" class="Symbol">→</a> <a id="639" href="Correspondences.Classical.html#612" class="Bound">¬b</a> <a id="642" class="Symbol">(</a><a id="643" href="Correspondences.Classical.html#635" class="Bound">f</a> <a id="645" href="Correspondences.Classical.html#624" class="Bound">a</a><a id="646" class="Symbol">)))</a>
+
+    <a id="Bind-Classically"></a><a id="655" href="Correspondences.Classical.html#655" class="Function">Bind-Classically</a> <a id="672" class="Symbol">:</a> <a id="674" href="Meta.Bind.html#116" class="Record">Bind</a> <a id="679" class="Symbol">(</a><a id="680" href="Meta.Idiom.html#121" class="InductiveConstructor">eff</a> <a id="684" href="Correspondences.Classical.html#323" class="Function">Classically</a><a id="695" class="Symbol">)</a>
+    <a id="701" href="Correspondences.Classical.html#655" class="Function">Bind-Classically</a> <a id="718" class="Symbol">.</a><a id="719" href="Meta.Bind.html#190" class="Field Operator">_&gt;&gt;=_</a> <a id="725" href="Correspondences.Classical.html#725" class="Bound">¬¬a</a> <a id="729" href="Correspondences.Classical.html#729" class="Bound">mf</a> <a id="732" href="Correspondences.Classical.html#732" class="Bound">¬b</a> <a id="735" class="Symbol">=</a> <a id="737" href="Correspondences.Classical.html#725" class="Bound">¬¬a</a> <a id="741" href="Foundations.Pi.Base.html#957" class="Function Operator">$</a> <a id="743" class="Symbol">λ</a> <a id="745" href="Correspondences.Classical.html#745" class="Bound">a</a> <a id="747" class="Symbol">→</a> <a id="749" href="Correspondences.Classical.html#729" class="Bound">mf</a> <a id="752" href="Correspondences.Classical.html#745" class="Bound">a</a> <a id="754" href="Correspondences.Classical.html#732" class="Bound">¬b</a>
+
+
+<a id="759" class="Comment">-- Usage</a>
+<a id="768" class="Comment">-- module _ where private</a>
+<a id="794" class="Comment">--   open import Data.Sum.Base</a>
+<a id="825" class="Comment">--   import Data.Empty.Base as ⊥</a>
+
+<a id="859" class="Comment">--   private variable</a>
+<a id="881" class="Comment">--     A : Type</a>
+
+<a id="898" class="Comment">--   LEM : Classically $ A ⊎ (¬ A)</a>
+<a id="933" class="Comment">--   LEM = go where opaque</a>
+<a id="960" class="Comment">--     unfolding Classically</a>
+<a id="989" class="Comment">--     go : _</a>
+<a id="1003" class="Comment">--     go z = z $ inr $ z ∘ inl</a>
+
+<a id="1036" class="Comment">--   DNE : Classically (¬¬ A → A)</a>
+<a id="1070" class="Comment">--   DNE = do</a>
+<a id="1084" class="Comment">--     inl a ← LEM</a>
+<a id="1103" class="Comment">--       where inr a → pure λ ¬¬a → ⊥.rec (¬¬a a)</a>
+<a id="1153" class="Comment">--     pure λ _ → a</a>
+</pre></body></html>
