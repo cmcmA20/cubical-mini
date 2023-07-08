@@ -105,13 +105,13 @@ instance
   decomp-hlevel-sigma = decomp (quote Σ-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) , `search-under 1 (quote is-of-hlevel) ]
 
-  decomp-hlevel-path′ : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
-  decomp-hlevel-path′ = decomp (quote path-is-of-hlevel′)
-    [ `level-same , `search (quote is-of-hlevel) , `meta , `meta ]
-
   decomp-hlevel-path : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
   decomp-hlevel-path = decomp (quote path-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) ]
+
+  decomp-hlevel-path′ : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
+  decomp-hlevel-path′ = decomp (quote path-is-of-hlevel′)
+    [ `level-same , `search (quote is-of-hlevel) , `meta , `meta ]
 
   decomp-hlevel-univalence : {A B : Type ℓ} → goal-decomposition (quote is-of-hlevel) (A ＝ B)
   decomp-hlevel-univalence = decomp (quote ＝-is-of-hlevel)

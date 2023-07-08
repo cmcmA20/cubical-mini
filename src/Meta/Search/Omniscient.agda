@@ -32,10 +32,8 @@ instance
   Tactic-omni : Tactic-desc (quote is-omniscient) none
   Tactic-omni .Tactic-desc.args-length = 3
   Tactic-omni .Tactic-desc.goal-selector = 2
-  Tactic-omni .Tactic-desc.level-selector {w} = ⊥.absurd w
   Tactic-omni .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-omni .Tactic-desc.instance-helper = quote omni
-  Tactic-omni .Tactic-desc.upwards-closure {w} = ⊥.absurd w
 
 omni-tactic-worker = search-tactic-worker Tactic-omni
 macro omni! = omni-tactic-worker

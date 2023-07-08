@@ -31,10 +31,8 @@ instance
   Tactic-exhaust : Tactic-desc (quote is-exhaustible) none
   Tactic-exhaust .Tactic-desc.args-length = 3
   Tactic-exhaust .Tactic-desc.goal-selector = 2
-  Tactic-exhaust .Tactic-desc.level-selector {w} = ⊥.absurd w
   Tactic-exhaust .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-exhaust .Tactic-desc.instance-helper = quote exhaust
-  Tactic-exhaust .Tactic-desc.upwards-closure {w} = ⊥.absurd w
 
 exhaust-tactic-worker = search-tactic-worker Tactic-exhaust
 macro exhaust! = exhaust-tactic-worker

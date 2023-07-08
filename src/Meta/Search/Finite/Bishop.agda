@@ -45,10 +45,8 @@ instance
   Tactic-finite : Tactic-desc (quote is-fin-set) none
   Tactic-finite .Tactic-desc.args-length = 2
   Tactic-finite .Tactic-desc.goal-selector = 1
-  Tactic-finite .Tactic-desc.level-selector {w} = ⊥.absurd w
   Tactic-finite .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-finite .Tactic-desc.instance-helper = quote finite
-  Tactic-finite .Tactic-desc.upwards-closure {w} = ⊥.absurd w
 
 finite-tactic-worker = search-tactic-worker Tactic-finite
 macro finite! = finite-tactic-worker
@@ -75,6 +73,9 @@ instance
   decomp-fin-Σ = decomp (quote Σ-is-fin-set)
     [ `search (quote is-fin-set) , `search-under 1 (quote is-fin-set) ]
 
+  decomp-fin→omn : goal-decomposition (quote is-omniscient) A
+  decomp-fin→omn = decomp (quote is-fin-set→is-omniscient) [ `search (quote is-fin-set) ]
+
   decomp-hlevel-fin : goal-decomposition (quote is-of-hlevel) A
   decomp-hlevel-fin = decomp (quote is-fin-set→is-of-hlevel )
     [ `level-minus 2 , `search (quote is-fin-set) ]
@@ -84,7 +85,6 @@ instance
   proj-fin-finset .Struct-proj-desc.struct-args-length = 1
   proj-fin-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-fin-set
   proj-fin-finset .Struct-proj-desc.projection-args-length = 2
-  proj-fin-finset .Struct-proj-desc.level-selector {w} = ⊥.absurd w
   proj-fin-finset .Struct-proj-desc.carrier-selector = 1
 
   proj-dec₁-finset : Struct-proj-desc (quote is-decidable-at-hlevel) by-hlevel (quote FinSet-carrier) false
@@ -92,7 +92,6 @@ instance
   proj-dec₁-finset .Struct-proj-desc.struct-args-length = 1
   proj-dec₁-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-discrete
   proj-dec₁-finset .Struct-proj-desc.projection-args-length = 2
-  proj-dec₁-finset .Struct-proj-desc.level-selector {z} = ⊥.absurd z
   proj-dec₁-finset .Struct-proj-desc.carrier-selector = 1
 
   proj-omn-finset : Struct-proj-desc (quote is-omniscient) none (quote FinSet-carrier) false
@@ -100,7 +99,6 @@ instance
   proj-omn-finset .Struct-proj-desc.struct-args-length = 1
   proj-omn-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-omniscient
   proj-omn-finset .Struct-proj-desc.projection-args-length = 2
-  proj-omn-finset .Struct-proj-desc.level-selector {z} = ⊥.absurd z
   proj-omn-finset .Struct-proj-desc.carrier-selector = 1
 
 -- Usage
