@@ -19,6 +19,8 @@ open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Traverse
 open import Data.Maybe.Base
 open import Data.Nat.Base
+open import Data.Vec.Base
+open import Data.Vec.Operations
 open import Data.String.Base
 
 open import Agda.Builtin.Reflection public
@@ -46,6 +48,7 @@ instance
 private variable
   ℓ ℓ′ : Level
   A : Type ℓ
+  n : ℕ
 
 arg-vis : ArgInfo → Visibility
 arg-vis (arg-info v _) = v
@@ -64,10 +67,10 @@ Fun A B = A → B
 id′ : (A : Type ℓ) → A → A
 id′ A x = x
 
-underAbs : Term → TC A → TC A
-underAbs (lam v (abs nm _)) m = extendContext nm (arg (arg-info v (modality relevant quantity-ω)) unknown) m
-underAbs (pi a (abs nm _)) m = extendContext nm a m
-underAbs _ m = m
+under-abs : Term → TC A → TC A
+under-abs (lam v (abs nm _)) m = extendContext nm (arg (arg-info v (modality relevant quantity-ω)) unknown) m
+under-abs (pi a (abs nm _)) m = extendContext nm a m
+under-abs _ m = m
 
 new-meta : Term → TC Term
 new-meta ty = do
@@ -100,9 +103,9 @@ pattern _i∷_ t xs = iarg t ∷ xs
 
 infixr 30 _v∷_ _h∷_ _hm∷_ _i∷_
 
-infer-hidden : ℕ → List (Arg Term) → List (Arg Term)
-infer-hidden zero xs = xs
-infer-hidden (suc n) xs = unknown h∷ infer-hidden n xs
+infer-hidden : (m : ℕ) → Vec (Arg Term) n → Vec (Arg Term) (m + n)
+infer-hidden 0 xs = xs
+infer-hidden (suc n) xs = harg unknown ∷ infer-hidden n xs
 
 get-args : Term → List (Arg Term)
 get-args (var _ args) = args
@@ -111,10 +114,10 @@ get-args (def _ args) = args
 get-args (pat-lam _ args) = args
 get-args _ = []
 
-getName : Term → Maybe Name
-getName (def x _) = just x
-getName (con x _) = just x
-getName _ = nothing
+get-name : Term → Maybe Name
+get-name (def x _) = just x
+get-name (con x _) = just x
+get-name _ = nothing
 
 _name=?_ : Name → Name → Bool
 x name=? y = primQNameEquality x y

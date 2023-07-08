@@ -184,7 +184,6 @@ private
 
   treat-as-structured-type : Tactic-desc goal-name goal-strat → Struct-proj-desc goal-name goal-strat carrier-name goal-nat → Term → TC ⊤
   treat-as-structured-type td spd goal = do
-    let open Struct-proj-desc spd
     (wanted-xlevel , ty) ← decompose-goal td goal
 
     ty ← reduce ty
@@ -361,9 +360,10 @@ private
       cont
       tactic-instance ← do
         solved@(meta mv′ _) ← new-meta (def (quote Tactic-desc) (lit (name subgoal-name) v∷ gs-term v∷ []))
-          where _ → typeError [ "Could not get instances:" , termErr goal ]
+          where _ → typeError [ "Could not get tactic instances:" , termErr goal ]
         (ti ∷ []) ← getInstances mv′ where
-          _ → typeError [ "Too few (or many) tactic instances:" , termErr goal ]
+          [] → typeError [ "No tactic found for the goal " , termErr goal ]
+          _  → typeError [ "Multiple tactics for the same goal " , termErr goal ]
         unify solved ti
         pure ti
       def _ (_ ∷ subgoal-strat-term v∷ []) ← inferType tactic-instance where
@@ -399,6 +399,43 @@ private
   use-decomp-hints _ _ (_ , goal-ty) _ _ [] =
     backtrack [ "Ran out of decomposition hints for " , termErr goal-ty ]
 
+  drop-pis : Term → Term
+  drop-pis (pi _ (abs _ x)) = drop-pis x
+  drop-pis x = x
+
+  -- TODO use name
+  sort-decomps-by-generality : (gn : Name) → List Term → TC (List Term)
+  sort-decomps-by-generality gn = insertion-sort where
+    _less-general-than_ : Term → Term → Bool
+    meta _ _ less-general-than _ = false
+    unknown  less-general-than _ = false
+    var _ _  less-general-than _ = false
+    _        less-general-than _ = true
+
+    _decomp≤?_ : Term → Term → TC Bool
+    _decomp≤?_ x y = do
+      just decomp-name₁ , just decomp-name₂ ← pure $ get-name x , get-name y where
+        _ → typeError "Panic: malformed decompositions"
+      def _ (_ ∷ _ ∷ _ ∷ _ ∷ decomp-ty₁ v∷ []) ← drop-pis <$> getType decomp-name₁ where
+        _ → typeError "Panic: malformed decompositionss"
+      def _ (_ ∷ _ ∷ _ ∷ _ ∷ decomp-ty₂ v∷ []) ← drop-pis <$> getType decomp-name₂ where
+        _ → typeError "Panic: malformed decompositionss"
+      pure (decomp-ty₁ less-general-than decomp-ty₂)
+
+    insert : Term → List Term → TC (List Term)
+    insert x [] = pure [ x ]
+    insert x (a ∷ as) = do
+      false ← x decomp≤? a where
+        true → pure (x ∷ a ∷ as)
+      as′ ← insert x as
+      pure (a ∷ as′)
+
+    insertion-sort : List Term → TC (List Term)
+    insertion-sort [] = pure []
+    insertion-sort (a ∷ as) = do
+      as′ ← insertion-sort as
+      insert a as′
+
   use-hints : Tactic-desc goal-name goal-strat → ℕ → Term → TC ⊤
   use-hints _ 0 _ = typeError "use-hints: no fuel"
   use-hints {goal-name} td (suc fuel) goal = runSpeculative do
@@ -412,14 +449,14 @@ private
 
     solved@(meta mv _) ← new-meta (def (quote goal-decomposition) (lit (name goal-name) v∷ ty v∷ []))
       where _ → typeError [ termErr ty ]
-    instances ← getInstances mv
+    decomp-instances ← getInstances mv >>= sort-decomps-by-generality goal-name
 
-    t ← quoteTC instances
+    t ← quoteTC decomp-instances >>= normalise
     debugPrint "tactic.search" 10
       [ "Finding decompositions for\n" , termErr ty
       , "\nFound candidates\n "        , termErr t ]
 
-    use-decomp-hints td fuel (lv , ty) goal solved instances
+    use-decomp-hints td fuel (lv , ty) goal solved decomp-instances
 
 
   search             td has-alts _     0    goal = unify goal unknown

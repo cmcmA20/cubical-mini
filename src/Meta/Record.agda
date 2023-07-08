@@ -179,13 +179,15 @@ private
   Bar : Type
   Bar = ℕ
 
+  private variable Z : Bar
+
   Baz : Bar → Type
   Baz 0 = Bool
   Baz _ = ℕ
 
   record Foo : Type where
     field
-      foo : {A : Bar} → Baz A
+      foo : Baz Z
 
   -- works only with a full signature
   -- see agda/cubical issue #995
