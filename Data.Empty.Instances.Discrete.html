@@ -8,9 +8,14 @@
 
 <a id="132" class="Keyword">open</a> <a id="137" class="Keyword">import</a> <a id="144" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
 <a id="158" class="Keyword">open</a> <a id="163" class="Keyword">import</a> <a id="170" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
+<a id="186" class="Keyword">open</a> <a id="191" class="Keyword">import</a> <a id="198" href="Data.List.Base.html" class="Module">Data.List.Base</a>
 
-<a id="187" class="Keyword">instance</a> <a id="196" class="Keyword">opaque</a>
-  <a id="205" class="Keyword">unfolding</a> <a id="215" href="Correspondences.Discrete.html#408" class="Function">is-discrete</a>
-  <a id="⊥-is-discrete"></a><a id="229" href="Data.Empty.Instances.Discrete.html#229" class="Function">⊥-is-discrete</a> <a id="243" class="Symbol">:</a> <a id="245" href="Correspondences.Discrete.html#408" class="Function">is-discrete</a> <a id="257" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
-  <a id="261" href="Data.Empty.Instances.Discrete.html#229" class="Function">⊥-is-discrete</a> <a id="275" class="Symbol">()</a>
+<a id="214" class="Keyword">opaque</a>
+  <a id="223" class="Keyword">unfolding</a> <a id="233" href="Correspondences.Discrete.html#408" class="Function">is-discrete</a>
+  <a id="⊥-is-discrete"></a><a id="247" href="Data.Empty.Instances.Discrete.html#247" class="Function">⊥-is-discrete</a> <a id="261" class="Symbol">:</a> <a id="263" href="Correspondences.Discrete.html#408" class="Function">is-discrete</a> <a id="275" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
+  <a id="279" href="Data.Empty.Instances.Discrete.html#247" class="Function">⊥-is-discrete</a> <a id="293" class="Symbol">()</a>
+
+<a id="297" class="Keyword">instance</a>
+  <a id="decomp-dis-⊥"></a><a id="308" href="Data.Empty.Instances.Discrete.html#308" class="Function">decomp-dis-⊥</a> <a id="321" class="Symbol">:</a> <a id="323" href="Meta.Search.Base.html#2366" class="Datatype">goal-decomposition</a> <a id="342" class="Symbol">(</a><a id="343" class="Keyword">quote</a> <a id="349" href="Correspondences.Discrete.html#408" class="Function">is-discrete</a><a id="360" class="Symbol">)</a> <a id="362" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
+  <a id="366" href="Data.Empty.Instances.Discrete.html#308" class="Function">decomp-dis-⊥</a> <a id="379" class="Symbol">=</a> <a id="381" href="Meta.Search.Base.html#2511" class="InductiveConstructor">decomp</a> <a id="388" class="Symbol">(</a><a id="389" class="Keyword">quote</a> <a id="395" href="Data.Empty.Instances.Discrete.html#247" class="Function">⊥-is-discrete</a><a id="408" class="Symbol">)</a> <a id="410" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a>
 </pre></body></html>
