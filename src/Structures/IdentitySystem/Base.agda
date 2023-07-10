@@ -224,10 +224,10 @@ opaque
     is-of-hlevel-≃ (suc n) (identity-system-gives-path ids ₑ⁻¹) (hl x y)
 
 instance
-  HLevel-is-identity-system
+  is-identity-system-is-of-hlevel
     : {r : ∀ a → R a a} {n : HLevel}
     → is-of-hlevel (suc n) (is-identity-system R r)
-  HLevel-is-identity-system = is-prop→is-of-hlevel-suc is-identity-system-is-prop
+  is-identity-system-is-of-hlevel = is-prop→is-of-hlevel-suc is-identity-system-is-prop
 
 set-identity-system
   : {r : ∀ x → R x x}

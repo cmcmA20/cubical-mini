@@ -1,12 +1,11 @@
 {-# OPTIONS --safe #-}
-module Data.FinSum.Instances.Decidable where
+module Data.FinSum.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Search.Decidable
+open import Meta.Search.Discrete
 
-import Data.Dec.Base as Dec
-open Dec
+open import Data.Dec.Base as Dec
 open import Data.Nat.Base
 open import Data.Sum.Path
 

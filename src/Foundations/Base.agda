@@ -745,3 +745,6 @@ subst-path-both p adj = transport-path p adj adj
 -- TODO move somewhere?
 it : ⦃ A ⦄ → A
 it ⦃ (a) ⦄ = a
+
+_weakly-stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S weakly-stable A = S A → A

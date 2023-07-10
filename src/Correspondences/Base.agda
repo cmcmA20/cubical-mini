@@ -16,8 +16,13 @@ Corr
   → Type (Levelₓ ℓ (ℓsuc ℓ′) arity)
 Corr arity ℓ′ A = functionₓ arity A (Type ℓ′)
 
+Corr⁰ = Corr 0
+Corr¹ = Corr 1
+Corr² = Corr 2
+Corr³ = Corr 3
+
 Pred : (ℓ′ : Level) {ℓ : Level} (A : Type ℓ) → Type (ℓ ⊔ ℓsuc ℓ′)
-Pred = Corr 1
+Pred = Corr¹
 
 
 n-Corr
@@ -47,7 +52,7 @@ Rel² = Rel 2
 Rel³ = Rel 3
 
 n-Pred : (n : HLevel) (ℓ′ : Level) {ℓ : Level} (A : Type ℓ) → Type (ℓ ⊔ ℓsuc ℓ′)
-n-Pred = n-Corr 1
+n-Pred = n-Corr¹
 
 Pred₀ = n-Pred 0
 Pred₁ = n-Pred 1
@@ -71,20 +76,24 @@ infix 10 Universal Universalₙ IUniversal IUniversalₙ
 
 Universal : Pred ℓ′ A → _
 Universal {A} P = Π[ a ꞉ A ] P a
+{-# INLINE Universal #-}
 
 syntax Universal P = Π[ P ]
 
 Universalₙ : n-Pred n ℓ′ A → _
 Universalₙ {A} P = Universal (⌞_⌟ ∘ P)
+{-# INLINE Universalₙ #-}
 
 syntax Universalₙ P = Π[ P ]ₙ
 
 IUniversal : Pred ℓ′ A → _
 IUniversal P = ∀{a} → P a
+{-# INLINE IUniversal #-}
 
 syntax IUniversal P = ∀[ P ]
 
 IUniversalₙ : n-Pred n ℓ′ A → _
 IUniversalₙ P = ∀{a} → ⌞ P a ⌟
+{-# INLINE IUniversalₙ #-}
 
 syntax IUniversalₙ P = ∀[ P ]ₙ

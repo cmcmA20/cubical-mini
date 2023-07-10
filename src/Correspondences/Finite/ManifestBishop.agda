@@ -4,16 +4,15 @@ module Correspondences.Finite.ManifestBishop where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Search.Decidable
+open import Meta.Search.Discrete
 open import Meta.Search.HLevel
 
-open import Correspondences.Decidable
 open import Correspondences.Omniscient
 
 open import Data.Empty.Base
 open import Data.Dec.Base as Dec
 open import Data.Fin.Base
-open import Data.Fin.Instances.Decidable
+open import Data.Fin.Instances.Discrete
 open import Data.Nat
 open import Data.Vec.Base
 open import Data.Vec.Operations
@@ -34,7 +33,7 @@ opaque
   𝓑-is-set = hlevel!
 
 opaque
-  unfolding 𝓑 is-omniscient is-decidable-at-hlevel any?
+  unfolding 𝓑 is-omniscient
   𝓑→is-omniscient : 𝓑 A → is-omniscient {ℓ′ = ℓ′} A
   𝓑→is-omniscient {A} (n , aeq) {P} P? =
     Dec.map lemma₁ lemma₂ (any? P? xs) where

@@ -5,10 +5,6 @@ open import Foundations.Prim.Type
 
 open import Agda.Builtin.Sigma public
 
-infix 2 Σ-syntax
-Σ-syntax = Σ
-syntax Σ-syntax A (λ x → B) = Σ[ x ꞉ A ] B
-
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ ℓᶠ : Level
   A : Type ℓ
@@ -18,6 +14,12 @@ private variable
   E : (a : A) (b : B a) (c : C a b) → D a b c → Type ℓ⁗
   F : (a : A) (b : B a) (c : C a b) (d : D a b c) → E a b c d → Type ℓᶠ
 
+infix 2 Σ-syntax
+Σ-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
+Σ-syntax = Σ
+{-# INLINE Σ-syntax #-}
+syntax Σ-syntax A (λ x → B) = Σ[ x ꞉ A ] B
+
 infixr 4 _×_
 _×_ : (A : Type ℓ) (B : Type ℓ′) → Type (level-of-type A ⊔ level-of-type B)
 A × B = Σ[ _ ꞉ A ] B
@@ -25,6 +27,7 @@ A × B = Σ[ _ ꞉ A ] B
 infix 2 Σ-syntax′
 Σ-syntax′ : (B : A → Type ℓ′) → Type _
 Σ-syntax′ {A} = Σ A
+{-# INLINE Σ-syntax′ #-}
 syntax Σ-syntax′ (λ x → B) = Σ[ x ] B
 
 _$₂_ : (f : (a : A) (b : B a) → C a b)

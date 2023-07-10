@@ -356,10 +356,9 @@ private
       new-meta unknown
     debugPrint "tactic.search" 10 [ "Metavariable: " , termErr (wrap-lams under mv) ]
     gen-args fuel gs has-alts level goal defn args (wrap-lams under mv v∷ accum) do
-      gs-term ← quoteTC gs >>= normalise
       cont
       tactic-instance ← do
-        solved@(meta mv′ _) ← new-meta (def (quote Tactic-desc) (lit (name subgoal-name) v∷ gs-term v∷ []))
+        solved@(meta mv′ _) ← new-meta (def (quote Tactic-desc) (lit (name subgoal-name) v∷ unknown v∷ []))
           where _ → typeError [ "Could not get tactic instances:" , termErr goal ]
         (ti ∷ []) ← getInstances mv′ where
           [] → typeError [ "No tactic found for the goal " , termErr goal ]
@@ -459,7 +458,7 @@ private
     use-decomp-hints td fuel (lv , ty) goal solved decomp-instances
 
 
-  search             td has-alts _     0    goal = unify goal unknown
+  search td has-alts _     0          goal = unify goal unknown
   search td has-alts level (suc fuel) goal
     =   use-projections td goal
     <|> use-hints td fuel goal

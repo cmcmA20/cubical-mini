@@ -11,7 +11,7 @@ open import Meta.Search.HLevel
 open import Structures.Base
 open import Structures.IdentitySystem
 
-open import Correspondences.Decidable
+open import Correspondences.Discrete
 
 open import Data.Dec.Base
 
@@ -93,7 +93,7 @@ is-discreteⁱ : Type ℓ → Type ℓ
 is-discreteⁱ A = Dec on-pathsⁱ-of A
 
 is-discreteⁱ→is-discrete : is-discreteⁱ A → is-discrete A
-is-discreteⁱ→is-discrete d = is-discrete-η $ λ x y →
+is-discreteⁱ→is-discrete d = is-discrete-η λ x y →
   map (Id≃path .fst)
       (λ ¬pⁱ p → ¬pⁱ ((Id≃path ₑ⁻¹) .fst p))
       (d x y)

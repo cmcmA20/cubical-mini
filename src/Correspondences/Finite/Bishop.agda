@@ -7,10 +7,10 @@ open import Foundations.Pi
 open import Foundations.Sigma
 
 open import Meta.Bind
-open import Meta.Search.Decidable
+open import Meta.Search.Discrete
 open import Meta.Search.HLevel
 
-open import Correspondences.Decidable
+open import Correspondences.Discrete
 open import Correspondences.Exhaustible
 open import Correspondences.Finite.ManifestBishop
 open import Correspondences.Omniscient
@@ -21,8 +21,8 @@ open import Data.Empty.Base
 open import Data.Fin.Base
 open import Data.Fin.Properties
 open import Data.Fin.Closure
-open import Data.Fin.Instances.Decidable
-open import Data.Nat.Instances.Decidable
+open import Data.Fin.Instances.Discrete
+open import Data.Nat.Instances.Discrete
 
 open import Functions.Embedding
 
@@ -73,26 +73,13 @@ opaque
       e ← e
       pure $ is-discrete-embedding (equiv→embedding e) fin-is-discrete
 
-    -- TODO is-decidable-at-hlevel-+-left
-    -- fin-set→is-decidable-at-hlevel : (n : HLevel) → is-fin-set A → is-decidable-at-hlevel (suc n) A
-    -- fin-set→is-decidable-at-hlevel n fi = is-decidable-at-hlevel-+ n 0 {!!}
-
-    is-fin-set→is-set : is-fin-set A → is-set A
-    is-fin-set→is-set (_ , ∣e∣₁) =
-      ∥-∥₁.rec! (λ e → is-of-hlevel-≃ 2 e hlevel!) ∣e∣₁
-
-    is-fin-set→is-of-hlevel : (n : HLevel) → is-fin-set A → is-of-hlevel (2 + n) A
-    is-fin-set→is-of-hlevel n fi = is-of-hlevel-+-left 2 n (is-fin-set→is-set fi)
-
     opaque
-      unfolding is-omniscient Decidable is-decidable-at-hlevel
+      unfolding is-omniscient
       is-fin-set→is-omniscient : is-fin-set A → is-omniscient {ℓ′ = ℓ′} A
       is-fin-set→is-omniscient {A} (n , ∣aeq∣₁) {P} P? = ∥-∥₁.proj! do
         aeq ← ∣aeq∣₁
         pure $ 𝓑→is-omniscient (n , aeq) P?
 
-      is-fin-set→is-exhaustible : is-fin-set A → is-exhaustible {ℓ′ = ℓ′} A
-      is-fin-set→is-exhaustible = is-omniscient→is-exhaustible ∘ is-fin-set→is-omniscient
 
 finite : ⦃ d : is-fin-set A ⦄ → is-fin-set A
 finite ⦃ d ⦄ = d

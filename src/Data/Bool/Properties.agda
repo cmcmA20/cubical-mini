@@ -3,7 +3,6 @@ module Data.Bool.Properties where
 
 open import Foundations.Base
 open import Foundations.Sigma
--- open import Foundations.Erased
 
 open import Meta.Search.HLevel
 
@@ -16,7 +15,7 @@ open import Correspondences.Finite.Bishop
 open import Data.Bool.Base public
 open import Data.Dec.Base
 open import Data.Bool.Instances.Finite
-open import Data.Bool.Instances.Decidable
+open import Data.Bool.Instances.Discrete
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁

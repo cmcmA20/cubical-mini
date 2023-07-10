@@ -136,3 +136,8 @@ opaque
                 → is-equiv g
                 → is-equiv (g ∘ f)
   is-equiv-comp {f} {g} r s = ((f , r) ∙ₑ (g , s)) .snd
+
+
+-- this is the general form
+_stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S stable A = A ≃ S A

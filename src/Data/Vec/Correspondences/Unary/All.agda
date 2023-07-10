@@ -38,14 +38,12 @@ all-++-right : {xs : Vec A m} → All P (xs ++ ys) → All P ys
 all-++-right {xs = []}    ps       = ps
 all-++-right {xs = _ ∷ _} (_ ∷ ps) = all-++-right ps
 
-opaque
-  unfolding Decidable is-decidable-at-hlevel
-  all? : Decidable P → Decidable (λ xs → All P {n = n} xs)
-  all? P? []       = yes []
-  all? P? (x ∷ xs) =
-    Dec.map (λ { (px , ps) → px ∷ ps })
-            (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
-            (×-decision (P? x) (all? P? xs))
+all? : Decidable P → Decidable (λ xs → All P {n = n} xs)
+all? P? []       = yes []
+all? P? (x ∷ xs) =
+  Dec.map (λ { (px , ps) → px ∷ ps })
+          (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
+          (×-decision (P? x) (all? P? xs))
 
 -- ¬∃¬→∀¬ : ∀ xs → ¬ (Any P {n = n} xs) → All (¬_ ∘ P) xs
 -- ¬∃¬→∀¬ []       _ = []

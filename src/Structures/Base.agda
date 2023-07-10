@@ -105,15 +105,6 @@ function-action-is-transport {S} {α} {β} α-tr β-tr eqv f =
               ∙ β-tr eqv (f (subst S (sym (ua eqv)) x))
 
 
--- this is the general form
-_stable′_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
-S stable′ A = A ≃ S A
-
--- here we assume `A → S A` exists and `S` is prop-valued
-_stable_ : (S : Type ℓ → Type ℓ₁) → Type ℓ → Type (ℓ ⊔ ℓ₁)
-S stable A = S A → A
-
-
 property : (S : Type ℓ → Type ℓ₁) → (∀ A → is-prop (S A)) → Structure 0ℓ S
 property _ _ .is-hom _ _ _ = ⊤
 

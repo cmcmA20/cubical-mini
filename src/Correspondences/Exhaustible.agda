@@ -20,24 +20,22 @@ private variable
 opaque
   is-exhaustible : {ℓ′ : Level} → Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
   is-exhaustible {ℓ′} A =
-    {P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Decision (Π[ ⌞_⌟ ∘ P ])
+    {P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec (Π[ P ]ₙ)
 
-  is-exhaustible-β : is-exhaustible A → {P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Decision (Π[ ⌞_⌟ ∘ P ])
+  is-exhaustible-β : is-exhaustible A → {P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec Π[ P ]ₙ
   is-exhaustible-β = id
 
-  is-exhaustible-η : ({P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Decision (Π[ ⌞_⌟ ∘ P ])) → is-exhaustible {ℓ′ = ℓ′} A
+  is-exhaustible-η : ({P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec Π[ P ]ₙ) → is-exhaustible A
   is-exhaustible-η = id
 
-  opaque
-    unfolding is-decidable-at-hlevel
-    is-exhaustible-is-prop : is-prop (is-exhaustible {ℓ′ = ℓ′} A)
-    is-exhaustible-is-prop = hlevel!
+  is-exhaustible-is-prop : is-prop (is-exhaustible {ℓ′ = ℓ′} A)
+  is-exhaustible-is-prop = hlevel!
 
 exhaust : ⦃ x : is-exhaustible {ℓ′ = ℓ′} A ⦄ → is-exhaustible A
 exhaust ⦃ x ⦄ = x
 
 opaque
-  unfolding is-exhaustible is-decidable-at-hlevel Decidable
+  unfolding is-exhaustible
   lift-is-exhaustible
     : is-exhaustible {ℓ′ = ℓ′} A → is-exhaustible (Lift ℓ A)
   lift-is-exhaustible ex P? = Dec.map (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift) $ ex $ P? ∘ lift

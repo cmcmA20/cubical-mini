@@ -65,3 +65,7 @@ opaque
   unfolding is-of-hlevel
   ¬-is-prop : is-prop (¬ A)
   ¬-is-prop ¬a₁ ¬a₂ i a = ⊥-ext {x = ¬a₁ a} {y = ¬a₂ a} i
+
+instance
+  ¬-is-of-hlevel : {A : Type ℓ} → is-of-hlevel (suc n) (¬ A)
+  ¬-is-of-hlevel = is-prop→is-of-hlevel-suc ¬-is-prop

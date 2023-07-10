@@ -40,3 +40,7 @@ instance
 
   Bind-∥-∥ᴱ : Bind (eff λ T → ∥ T ∥ᴱ)
   Bind-∥-∥ᴱ ._>>=_ ∣ a ∣ᴱ mf = ∣ mf a .erased ∣ᴱ
+
+opaque
+  Recomputable : Type ℓ → Type ℓ
+  Recomputable A = ∥ A ∥ᴱ → A

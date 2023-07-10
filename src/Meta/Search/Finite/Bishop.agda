@@ -3,36 +3,30 @@ module Meta.Search.Finite.Bishop where
 
 open import Foundations.Base
 open import Foundations.Equiv
-open import Foundations.HLevel
-open import Foundations.Sigma
 
 open import Meta.Literals.FromProduct
 open import Meta.Reflection
 open import Meta.Search.Base public
-open import Meta.Search.Decidable
+open import Meta.Search.Discrete
 open import Meta.Search.Exhaustible
 open import Meta.Search.HLevel
 open import Meta.Search.Omniscient
 
 open import Structures.FinSet
-open import Structures.FinSet public
+open Structures.FinSet public
   using (FinSet; fin-set)
 
 open import Correspondences.Finite.Bishop
 open Correspondences.Finite.Bishop public
-  using ( is-fin-set
-        ; is-fin-set-β ; is-fin-set-η
+  using ( is-fin-set ; is-fin-set-β ; is-fin-set-η
         ; fin ; cardinality ; enumeration
         ; finite )
 open import Correspondences.Omniscient
 
 open import Data.Bool.Base
-open import Data.Dec.Base
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Instances.FromNat
-open import Data.List.Base
 open import Data.List.Instances.FromProduct
-open import Data.Maybe.Base
 
 private variable
   ℓ ℓ′ ℓa ℓb ℓc ℓd : Level
@@ -76,9 +70,8 @@ instance
   decomp-fin→omn : goal-decomposition (quote is-omniscient) A
   decomp-fin→omn = decomp (quote is-fin-set→is-omniscient) [ `search (quote is-fin-set) ]
 
-  decomp-hlevel-fin : goal-decomposition (quote is-of-hlevel) A
-  decomp-hlevel-fin = decomp (quote is-fin-set→is-of-hlevel )
-    [ `level-minus 2 , `search (quote is-fin-set) ]
+  decomp-fin→dis : goal-decomposition (quote is-discrete) A
+  decomp-fin→dis = decomp (quote is-fin-set→is-discrete) [ `search (quote is-fin-set) ]
 
   proj-fin-finset : Struct-proj-desc (quote is-fin-set) none (quote FinSet-carrier) true
   proj-fin-finset .Struct-proj-desc.struct-name = quote FinSet
@@ -87,19 +80,6 @@ instance
   proj-fin-finset .Struct-proj-desc.projection-args-length = 2
   proj-fin-finset .Struct-proj-desc.carrier-selector = 1
 
-  proj-dec₁-finset : Struct-proj-desc (quote is-decidable-at-hlevel) by-hlevel (quote FinSet-carrier) false
-  proj-dec₁-finset .Struct-proj-desc.struct-name = quote FinSet
-  proj-dec₁-finset .Struct-proj-desc.struct-args-length = 1
-  proj-dec₁-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-discrete
-  proj-dec₁-finset .Struct-proj-desc.projection-args-length = 2
-  proj-dec₁-finset .Struct-proj-desc.carrier-selector = 1
-
-  proj-omn-finset : Struct-proj-desc (quote is-omniscient) none (quote FinSet-carrier) false
-  proj-omn-finset .Struct-proj-desc.struct-name = quote FinSet
-  proj-omn-finset .Struct-proj-desc.struct-args-length = 1
-  proj-omn-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-omniscient
-  proj-omn-finset .Struct-proj-desc.projection-args-length = 2
-  proj-omn-finset .Struct-proj-desc.carrier-selector = 1
 
 -- Usage
 private
@@ -108,16 +88,13 @@ private
     _ = hlevel!
 
     _ : is-discrete (⌞ A ⌟ × ⌞ A ⌟)
-    _ = decide!
-
-    _ : is-fin-set ⌞ A ⌟
-    _ = finite!
+    _ = discrete!
 
     _ : is-fin-set (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
     _ = finite!
 
-    _ : is-omniscient {ℓ′ = ℓ′} ⌞ A ⌟
+    _ : is-omniscient {ℓ′ = ℓ′} (Π[ a ꞉ ⌞ A ⌟ ] ⌞ B a ⌟)
     _ = omni!
 
-    _ : is-exhaustible {ℓ′ = ℓ′} ⌞ A ⌟
+    _ : is-exhaustible {ℓ′ = ℓ′} (⌞ A ⌟ × ⌞ A ⌟)
     _ = exhaust!

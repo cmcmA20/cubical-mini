@@ -8,7 +8,7 @@ open import Meta.Underlying public
 
 open import Structures.Base
 
-open import Correspondences.Decidable
+open import Correspondences.Discrete
 open import Correspondences.Finite.Bishop
 open import Correspondences.Omniscient
 
@@ -29,14 +29,14 @@ opaque
   FinSet-carrier-is-fin-set : (A : FinSet ℓ) → is-fin-set (FinSet-carrier A)
   FinSet-carrier-is-fin-set = snd
 
-  FinSet-carrier-is-discrete : (A : FinSet ℓ) → is-discrete (FinSet-carrier A)
-  FinSet-carrier-is-discrete = is-fin-set→is-discrete ∘ snd
+  -- FinSet-carrier-is-discrete : (A : FinSet ℓ) → is-discrete (FinSet-carrier A)
+  -- FinSet-carrier-is-discrete = is-fin-set→is-discrete ∘ snd
 
-  FinSet-carrier-is-set : (A : FinSet ℓ) → is-set (FinSet-carrier A)
-  FinSet-carrier-is-set = is-fin-set→is-set ∘ snd
+  -- FinSet-carrier-is-set : (A : FinSet ℓ) → is-set (FinSet-carrier A)
+  -- FinSet-carrier-is-set = is-fin-set→is-set ∘ snd
 
-  FinSet-carrier-is-omniscient : (A : FinSet ℓ) → is-omniscient {ℓ′ = ℓ′} (FinSet-carrier A)
-  FinSet-carrier-is-omniscient = is-fin-set→is-omniscient ∘ snd
+  -- FinSet-carrier-is-omniscient : (A : FinSet ℓ) → is-omniscient {ℓ′ = ℓ′} (FinSet-carrier A)
+  -- FinSet-carrier-is-omniscient = is-fin-set→is-omniscient ∘ snd
 
 instance
   Underlying-FinSet : Underlying (FinSet ℓ)
