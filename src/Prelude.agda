@@ -21,8 +21,11 @@ open import Meta.Literals.FromString  public
 open import Meta.Show                 public
 
 open import Meta.Search.Decidable     public
+open import Meta.Search.Discrete      public
+open import Meta.Search.Exhaustible   public
 open import Meta.Search.Finite.Bishop public
 open import Meta.Search.HLevel        public
+open import Meta.Search.Omniscient    public
 
 open import Meta.Marker     public
 open import Meta.Record     public
