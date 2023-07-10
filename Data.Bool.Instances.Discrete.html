@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Bool.Instances.Discrete</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Bool.Instances.Discrete.html" class="Module">Data.Bool.Instances.Discrete</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Meta.Search.Discrete.html" class="Module">Meta.Search.Discrete</a>
+
+<a id="131" class="Keyword">open</a> <a id="136" class="Keyword">import</a> <a id="143" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
+<a id="157" class="Keyword">open</a> <a id="162" class="Keyword">import</a> <a id="169" href="Data.Id.html" class="Module">Data.Id</a>
+
+<a id="178" class="Keyword">open</a> <a id="183" class="Keyword">import</a> <a id="190" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a>
+
+<a id="206" class="Keyword">instance</a>
+  <a id="bool-is-discrete"></a><a id="217" href="Data.Bool.Instances.Discrete.html#217" class="Function">bool-is-discrete</a> <a id="234" class="Symbol">:</a> <a id="236" href="Correspondences.Discrete.html#408" class="Function">is-discrete</a> <a id="248" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a>
+  <a id="255" href="Data.Bool.Instances.Discrete.html#217" class="Function">bool-is-discrete</a> <a id="272" class="Symbol">=</a> <a id="274" href="Data.Id.html#2256" class="Function">is-discreteⁱ→is-discrete</a> <a id="299" href="Data.Bool.Instances.Discrete.html#320" class="Function">helper</a>
+    <a id="310" class="Keyword">where</a>
+    <a id="320" href="Data.Bool.Instances.Discrete.html#320" class="Function">helper</a> <a id="327" class="Symbol">:</a> <a id="329" href="Data.Id.html#2188" class="Function">is-discreteⁱ</a> <a id="342" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a>
+    <a id="351" href="Data.Bool.Instances.Discrete.html#320" class="Function">helper</a> <a id="358" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="364" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="370" class="Symbol">=</a> <a id="372" href="Data.Dec.Base.html#1503" class="InductiveConstructor">yes</a> <a id="376" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">reflⁱ</a>
+    <a id="386" href="Data.Bool.Instances.Discrete.html#320" class="Function">helper</a> <a id="393" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="399" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="405" class="Symbol">=</a> <a id="407" href="Data.Dec.Base.html#1540" class="InductiveConstructor">no</a> <a id="410" class="Symbol">λ{()}</a>
+    <a id="420" href="Data.Bool.Instances.Discrete.html#320" class="Function">helper</a> <a id="427" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="433" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="439" class="Symbol">=</a> <a id="441" href="Data.Dec.Base.html#1540" class="InductiveConstructor">no</a> <a id="444" class="Symbol">λ{()}</a>
+    <a id="454" href="Data.Bool.Instances.Discrete.html#320" class="Function">helper</a> <a id="461" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="467" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="473" class="Symbol">=</a> <a id="475" href="Data.Dec.Base.html#1503" class="InductiveConstructor">yes</a> <a id="479" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">reflⁱ</a>
+</pre></body></html>

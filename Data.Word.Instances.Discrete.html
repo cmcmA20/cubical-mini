@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Word.Instances.Discrete</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Word.Instances.Discrete.html" class="Module">Data.Word.Instances.Discrete</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Meta.Search.Discrete.html" class="Module">Meta.Search.Discrete</a>
+
+<a id="131" class="Keyword">open</a> <a id="136" class="Keyword">import</a> <a id="143" href="Data.Nat.Instances.Discrete.html" class="Module">Data.Nat.Instances.Discrete</a>
+<a id="171" class="Keyword">open</a> <a id="176" class="Keyword">import</a> <a id="183" href="Data.Id.html" class="Module">Data.Id</a>
+
+<a id="192" class="Keyword">open</a> <a id="197" class="Keyword">import</a> <a id="204" href="Data.Word.Properties.html" class="Module">Data.Word.Properties</a>
+
+<a id="226" class="Keyword">instance</a>
+  <a id="word64-is-discrete"></a><a id="237" href="Data.Word.Instances.Discrete.html#237" class="Function">word64-is-discrete</a> <a id="256" class="Symbol">:</a> <a id="258" href="Correspondences.Discrete.html#408" class="Function">is-discrete</a> <a id="270" href="Agda.Builtin.Word.html#208" class="Postulate">Word64</a>
+  <a id="279" href="Data.Word.Instances.Discrete.html#237" class="Function">word64-is-discrete</a> <a id="298" class="Symbol">=</a>
+    <a id="304" href="Correspondences.Discrete.html#1272" class="Function">is-discrete-injection</a> <a id="326" class="Symbol">(</a><a id="327" href="Data.Word.Base.html#143" class="Primitive">word64→ℕ</a> <a id="336" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="338" href="Data.Word.Properties.html#291" class="Function">word64→ℕ-inj</a><a id="350" class="Symbol">)</a> <a id="352" href="Meta.Search.Discrete.html#1087" class="Macro">discrete!</a>
+</pre></body></html>

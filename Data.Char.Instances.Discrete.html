@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Char.Instances.Discrete</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Char.Instances.Discrete.html" class="Module">Data.Char.Instances.Discrete</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Meta.Search.Discrete.html" class="Module">Meta.Search.Discrete</a>
+
+<a id="131" class="Keyword">open</a> <a id="136" class="Keyword">import</a> <a id="143" href="Data.Id.html" class="Module">Data.Id</a>
+<a id="151" class="Keyword">open</a> <a id="156" class="Keyword">import</a> <a id="163" href="Data.Nat.Instances.Discrete.html" class="Module">Data.Nat.Instances.Discrete</a>
+
+<a id="192" class="Keyword">open</a> <a id="197" class="Keyword">import</a> <a id="204" href="Data.Char.Properties.html" class="Module">Data.Char.Properties</a>
+
+<a id="226" class="Keyword">instance</a>
+  <a id="char-is-discrete"></a><a id="237" href="Data.Char.Instances.Discrete.html#237" class="Function">char-is-discrete</a> <a id="254" class="Symbol">:</a> <a id="256" href="Correspondences.Discrete.html#408" class="Function">is-discrete</a> <a id="268" href="Agda.Builtin.Char.html#238" class="Postulate">Char</a>
+  <a id="275" href="Data.Char.Instances.Discrete.html#237" class="Function">char-is-discrete</a> <a id="292" class="Symbol">=</a> <a id="294" href="Correspondences.Discrete.html#1272" class="Function">is-discrete-injection</a> <a id="316" class="Symbol">(</a><a id="317" href="Data.Char.Base.html#495" class="Primitive">char→ℕ</a> <a id="324" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="326" href="Data.Char.Properties.html#287" class="Function">char→ℕ-inj</a><a id="336" class="Symbol">)</a> <a id="338" href="Meta.Search.Discrete.html#1087" class="Macro">discrete!</a>
+</pre></body></html>

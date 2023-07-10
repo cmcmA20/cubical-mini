@@ -4,50 +4,49 @@
 
 <a id="59" class="Keyword">open</a> <a id="64" class="Keyword">import</a> <a id="71" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 <a id="88" class="Keyword">open</a> <a id="93" class="Keyword">import</a> <a id="100" href="Foundations.Sigma.html" class="Module">Foundations.Sigma</a>
-<a id="118" class="Comment">-- open import Foundations.Erased</a>
 
-<a id="153" class="Keyword">open</a> <a id="158" class="Keyword">import</a> <a id="165" href="Meta.Search.HLevel.html" class="Module">Meta.Search.HLevel</a>
+<a id="119" class="Keyword">open</a> <a id="124" class="Keyword">import</a> <a id="131" href="Meta.Search.HLevel.html" class="Module">Meta.Search.HLevel</a>
 
-<a id="185" class="Keyword">open</a> <a id="190" class="Keyword">import</a> <a id="197" href="Structures.n-Type.html" class="Module">Structures.n-Type</a>
-<a id="215" class="Keyword">open</a> <a id="220" class="Keyword">import</a> <a id="227" href="Structures.FinSet.html" class="Module">Structures.FinSet</a>
+<a id="151" class="Keyword">open</a> <a id="156" class="Keyword">import</a> <a id="163" href="Structures.n-Type.html" class="Module">Structures.n-Type</a>
+<a id="181" class="Keyword">open</a> <a id="186" class="Keyword">import</a> <a id="193" href="Structures.FinSet.html" class="Module">Structures.FinSet</a>
 
-<a id="246" class="Keyword">open</a> <a id="251" class="Keyword">import</a> <a id="258" href="Correspondences.Decidable.html" class="Module">Correspondences.Decidable</a>
-<a id="284" class="Keyword">open</a> <a id="289" class="Keyword">import</a> <a id="296" href="Correspondences.Finite.Bishop.html" class="Module">Correspondences.Finite.Bishop</a>
+<a id="212" class="Keyword">open</a> <a id="217" class="Keyword">import</a> <a id="224" href="Correspondences.Decidable.html" class="Module">Correspondences.Decidable</a>
+<a id="250" class="Keyword">open</a> <a id="255" class="Keyword">import</a> <a id="262" href="Correspondences.Finite.Bishop.html" class="Module">Correspondences.Finite.Bishop</a>
 
-<a id="327" class="Keyword">open</a> <a id="332" class="Keyword">import</a> <a id="339" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a> <a id="354" class="Keyword">public</a>
-<a id="361" class="Keyword">open</a> <a id="366" class="Keyword">import</a> <a id="373" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
-<a id="387" class="Keyword">open</a> <a id="392" class="Keyword">import</a> <a id="399" href="Data.Bool.Instances.Finite.html" class="Module">Data.Bool.Instances.Finite</a>
-<a id="426" class="Keyword">open</a> <a id="431" class="Keyword">import</a> <a id="438" href="Data.Bool.Instances.Decidable.html" class="Module">Data.Bool.Instances.Decidable</a>
+<a id="293" class="Keyword">open</a> <a id="298" class="Keyword">import</a> <a id="305" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a> <a id="320" class="Keyword">public</a>
+<a id="327" class="Keyword">open</a> <a id="332" class="Keyword">import</a> <a id="339" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
+<a id="353" class="Keyword">open</a> <a id="358" class="Keyword">import</a> <a id="365" href="Data.Bool.Instances.Finite.html" class="Module">Data.Bool.Instances.Finite</a>
+<a id="392" class="Keyword">open</a> <a id="397" class="Keyword">import</a> <a id="404" href="Data.Bool.Instances.Discrete.html" class="Module">Data.Bool.Instances.Discrete</a>
 
-<a id="469" class="Keyword">import</a> <a id="476" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a> <a id="501" class="Symbol">as</a> <a id="504" class="Module">∥-∥₁</a>
-<a id="509" class="Keyword">open</a> <a id="514" href="Truncation.Propositional.html" class="Module">∥-∥₁</a>
+<a id="434" class="Keyword">import</a> <a id="441" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a> <a id="466" class="Symbol">as</a> <a id="469" class="Module">∥-∥₁</a>
+<a id="474" class="Keyword">open</a> <a id="479" href="Truncation.Propositional.html" class="Module">∥-∥₁</a>
 
-<a id="520" class="Comment">-- FinSet-Bool : FinSet 0ℓ</a>
-<a id="547" class="Comment">-- FinSet-Bool = fin-set! Bool</a>
+<a id="485" class="Comment">-- FinSet-Bool : FinSet 0ℓ</a>
+<a id="512" class="Comment">-- FinSet-Bool = fin-set! Bool</a>
 
-<a id="579" class="Comment">-- whew, painful</a>
-<a id="596" class="Comment">-- and-idem : ∀ x → x and x ＝ x</a>
-<a id="628" class="Comment">-- and-idem = witness (is-fin-set→exhaustible₁ {!!} {!!} )</a>
+<a id="544" class="Comment">-- whew, painful</a>
+<a id="561" class="Comment">-- and-idem : ∀ x → x and x ＝ x</a>
+<a id="593" class="Comment">-- and-idem = witness (is-fin-set→exhaustible₁ {!!} {!!} )</a>
 
-<a id="688" class="Comment">-- and-idem = witness $</a>
-<a id="712" class="Comment">--   is-fin-set→exhaustible₁ (FinSet-Bool .FinSet.has-is-fin-set)</a>
-<a id="778" class="Comment">--     {P = λ x → el! (x and x ＝ x)} ?</a>
-<a id="817" class="Comment">--         {P = λ x → el! (x and x ＝ x)} (λ x → (x and x) ≟ x)</a>
+<a id="653" class="Comment">-- and-idem = witness $</a>
+<a id="677" class="Comment">--   is-fin-set→exhaustible₁ (FinSet-Bool .FinSet.has-is-fin-set)</a>
+<a id="743" class="Comment">--     {P = λ x → el! (x and x ＝ x)} ?</a>
+<a id="782" class="Comment">--         {P = λ x → el! (x and x ＝ x)} (λ x → (x and x) ≟ x)</a>
 
-<a id="881" class="Comment">-- what : ∃[ b ꞉ Bool ] not b ＝ true</a>
-<a id="918" class="Comment">-- what = witness $</a>
-<a id="938" class="Comment">--   is-fin-set→omniscient₁ (FinSet-Bool .FinSet.has-is-fin-set)</a>
-<a id="1003" class="Comment">--     {P = λ x → el! (not x ＝ true)} (λ x → not x ≟ true)</a>
+<a id="846" class="Comment">-- what : ∃[ b ꞉ Bool ] not b ＝ true</a>
+<a id="883" class="Comment">-- what = witness $</a>
+<a id="903" class="Comment">--   is-fin-set→omniscient₁ (FinSet-Bool .FinSet.has-is-fin-set)</a>
+<a id="968" class="Comment">--     {P = λ x → el! (not x ＝ true)} (λ x → not x ≟ true)</a>
 
-<a id="1063" class="Comment">-- kek : Finite (Σ[ b ꞉ Bool ] not b ＝ b)</a>
-<a id="1105" class="Comment">-- kek = {!!}</a>
+<a id="1028" class="Comment">-- kek : Finite (Σ[ b ꞉ Bool ] not b ＝ b)</a>
+<a id="1070" class="Comment">-- kek = {!!}</a>
 
-<a id="1120" class="Comment">-- wow : ∃![ b ꞉ Bool ] not b ＝ b</a>
-<a id="1154" class="Comment">-- wow = let t = fin-set! (Σ[ b ꞉ Bool ] not b ＝ b)</a>
-<a id="1206" class="Comment">--   in {!!}</a>
+<a id="1085" class="Comment">-- wow : ∃![ b ꞉ Bool ] not b ＝ b</a>
+<a id="1119" class="Comment">-- wow = let t = fin-set! (Σ[ b ꞉ Bool ] not b ＝ b)</a>
+<a id="1171" class="Comment">--   in {!!}</a>
 
-<a id="1220" class="Comment">-- and-assoc : ∀ x y z → (x and y) and z ＝ x and (y and z)</a>
-<a id="1279" class="Comment">-- and-assoc =</a>
-<a id="1294" class="Comment">--   let t = is-fin-set→omniscient₁ (Bool-FinSet .FinSet.has-is-fin-set)</a>
-<a id="1367" class="Comment">--   in {!!}</a>
+<a id="1185" class="Comment">-- and-assoc : ∀ x y z → (x and y) and z ＝ x and (y and z)</a>
+<a id="1244" class="Comment">-- and-assoc =</a>
+<a id="1259" class="Comment">--   let t = is-fin-set→omniscient₁ (Bool-FinSet .FinSet.has-is-fin-set)</a>
+<a id="1332" class="Comment">--   in {!!}</a>
 </pre></body></html>
