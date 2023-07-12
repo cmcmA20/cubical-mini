@@ -2,49 +2,46 @@
 module Data.Bool.Properties where
 
 open import Foundations.Base
-open import Foundations.Sigma
+open import Foundations.Equiv
+open import Foundations.Pi
 
-open import Meta.Search.HLevel
+open import Meta.Search.Decidable
+open import Meta.Search.Discrete
+open import Meta.Search.Exhaustible
+open import Meta.Search.Finite.Bishop
+open import Meta.Search.Omniscient
 
-open import Structures.n-Type
-open import Structures.FinSet
-
-open import Correspondences.Decidable
 open import Correspondences.Finite.Bishop
+open import Correspondences.Finite.ManifestBishop
 
 open import Data.Bool.Base public
-open import Data.Dec.Base
 open import Data.Bool.Instances.Finite
 open import Data.Bool.Instances.Discrete
+open import Data.Dec as Dec
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
 
--- FinSet-Bool : FinSet 0ℓ
--- FinSet-Bool = fin-set! Bool
+instance
+  and-idem? : Dec (∀ x → x and x ＝ x)
+  and-idem? = Π-decision (λ x → (x and x) ≟ x) exhaust!
 
--- whew, painful
--- and-idem : ∀ x → x and x ＝ x
--- and-idem = witness (is-fin-set→exhaustible₁ {!!} {!!} )
+  and-comm? : Dec (∀ x y → x and y ＝ y and x)
+  and-comm? = Π-decision (λ x → Π-decision (λ y → (x and y) ≟ (y and x)) exhaust!) exhaust!
 
--- and-idem = witness $
---   is-fin-set→exhaustible₁ (FinSet-Bool .FinSet.has-is-fin-set)
---     {P = λ x → el! (x and x ＝ x)} ?
---         {P = λ x → el! (x and x ＝ x)} (λ x → (x and x) ≟ x)
+  test? : Dec (∃[ f ꞉ (Bool → Bool) ] f false ＝ f true)
+  test? = ∃-decision (λ f → f false ≟ f true) (is-fin-set→omniscient₁ (fun-is-fin-set bool-is-fin-set bool-is-fin-set))
 
--- what : ∃[ b ꞉ Bool ] not b ＝ true
--- what = witness $
---   is-fin-set→omniscient₁ (FinSet-Bool .FinSet.has-is-fin-set)
---     {P = λ x → el! (not x ＝ true)} (λ x → not x ≟ true)
+opaque
+  unfolding
+    is-discrete-β is-fin-set-β omniscient₁-β exhaustible-β omniscient₁→exhaustible
+    𝓑 is-fin-set→omniscient₁ 𝓑→omniscient₁ ∥-∥₁.rec
 
--- kek : Finite (Σ[ b ꞉ Bool ] not b ＝ b)
--- kek = {!!}
+  -- unfolding
+  --  _∙ₑ_ is-equiv-comp cardinality enumeration
 
--- wow : ∃![ b ꞉ Bool ] not b ＝ b
--- wow = let t = fin-set! (Σ[ b ꞉ Bool ] not b ＝ b)
---   in {!!}
+  and-idem : ∀ x → x and x ＝ x
+  and-idem = witness!
 
--- and-assoc : ∀ x y z → (x and y) and z ＝ x and (y and z)
--- and-assoc =
---   let t = is-fin-set→omniscient₁ (Bool-FinSet .FinSet.has-is-fin-set)
---   in {!!}
+  and-comm : ∀ x y → x and y ＝ y and x
+  and-comm = witness!

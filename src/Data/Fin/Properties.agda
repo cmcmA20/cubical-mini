@@ -18,7 +18,7 @@ private variable
   ℓ : Level
   @0 m n : ℕ
 
-cast : {m n : ℕ} → m ＝ n → Fin m → Fin n
+cast : {m n : ℕ} → (@0 p : m ＝ n) → Fin m → Fin n
 cast {suc m} {0}     p _        = absurd (suc≠zero p)
 cast {suc m} {suc n} _ fzero    = fzero
 cast {suc m} {suc n} p (fsuc k) = fsuc $ cast (suc-inj p) k

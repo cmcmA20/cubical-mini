@@ -10,7 +10,7 @@ private variable
   ℓ ℓ′ : Level
   A : Type ℓ
   B : Type ℓ′
-  m n : ℕ
+  @0 m n : ℕ
 
 infixr 5 _∷_
 data Vec (A : Type ℓ) : @0 ℕ → Type ℓ where

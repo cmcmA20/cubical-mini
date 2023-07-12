@@ -83,7 +83,3 @@ rec ifyes ifno (no ¬p) = ifno ¬p
 True : Dec P → Type
 True (false because _) = ⊥
 True (true  because _) = ⊤
-
--- TODO check if erasure is really beneficial here
-witness : (d : Dec P) → ⦃ ∥ True d ∥ᴱ ⦄ → P
-witness (yes p) = p

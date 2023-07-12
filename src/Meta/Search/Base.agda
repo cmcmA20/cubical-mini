@@ -494,7 +494,7 @@ search-tactic-worker {goal-name} td goal = do
   let delta = reverse-fast delta
   solved ← enter delta do
     goal′ ← new-meta $ compose-goal td lv ty
-    search td false lv 25 goal′
+    search td false lv 30 goal′
     pure goal′
   unify goal (leave delta solved)
   where

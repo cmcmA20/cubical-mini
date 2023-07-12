@@ -74,11 +74,11 @@ opaque
       pure $ is-discrete-embedding (equiv→embedding e) fin-is-discrete
 
     opaque
-      unfolding is-omniscient
-      is-fin-set→is-omniscient : is-fin-set A → is-omniscient {ℓ′ = ℓ′} A
-      is-fin-set→is-omniscient {A} (n , ∣aeq∣₁) {P} P? = ∥-∥₁.proj! do
+      unfolding Omniscient₁
+      is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ′ = ℓ′} A
+      is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} P? = ∥-∥₁.proj! do
         aeq ← ∣aeq∣₁
-        pure $ 𝓑→is-omniscient (n , aeq) P?
+        pure $ 𝓑→omniscient₁ (n , aeq) P?
 
 
 finite : ⦃ d : is-fin-set A ⦄ → is-fin-set A
@@ -94,7 +94,6 @@ opaque
     e ← e
     choose ← fin-choice sz λ x → k (is-equiv→inverse (e .snd) x)
     pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e .fst x))
-
 
 is-fin-set-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-fin-set A)
 is-fin-set-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-fin-set-is-prop
@@ -145,6 +144,15 @@ private
           ∙ₑ (_ , cast-is-equiv (ap (cardinality ∘ fam)
                     (sym $ aeq.η x)))
   pure $ fin ⦇ work ∙ₑ pure fs ⦈
+
+fun-is-fin-set
+  : is-fin-set A → is-fin-set B → is-fin-set (A → B)
+fun-is-fin-set afin bfin = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
+  ae ← enumeration afin
+  be ← enumeration bfin
+  let count = finite-pi-fin (cardinality afin) λ _ → bfin
+  eqv′ ← enumeration count
+  pure $ fin $ pure (Π-cod-≃ (λ _ → be) ∙ₑ function-≃ ae (be ₑ⁻¹) ∙ₑ eqv′)
 
 Π-is-fin-set
   : {P : A → Type ℓ′} → is-fin-set A → (∀ x → is-fin-set (P x)) → is-fin-set (∀ x → P x)

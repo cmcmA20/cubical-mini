@@ -5,8 +5,6 @@ open import Foundations.Base
 
 open import Meta.Search.HLevel
 
-open import Structures.n-Type
-
 open import Correspondences.Base public
 open import Correspondences.Decidable
 
@@ -14,28 +12,28 @@ open import Data.Dec.Base as Dec
 open import Data.Dec.Instances.HLevel
 
 private variable
-  ℓ ℓ′ ℓᵃ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
 
 opaque
-  is-exhaustible : {ℓ′ : Level} → Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
-  is-exhaustible {ℓ′} A =
-    {P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec (Π[ P ]ₙ)
+  Exhaustible : {ℓ′ : Level} → Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
+  Exhaustible {ℓ′} A =
+    {P : Pred ℓ′ A} → Decidable P → Dec (Π[ P ])
 
-  is-exhaustible-β : is-exhaustible A → {P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec Π[ P ]ₙ
-  is-exhaustible-β = id
+  exhaustible-β : Exhaustible A → {P : Pred ℓ′ A} → Decidable P → Dec Π[ P ]
+  exhaustible-β = id
 
-  is-exhaustible-η : ({P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec Π[ P ]ₙ) → is-exhaustible A
-  is-exhaustible-η = id
+  exhaustible-η : ({P : Pred ℓ′ A} → Decidable P → Dec Π[ P ]) → Exhaustible A
+  exhaustible-η = id
 
-  is-exhaustible-is-prop : is-prop (is-exhaustible {ℓ′ = ℓ′} A)
-  is-exhaustible-is-prop = hlevel!
-
-exhaust : ⦃ x : is-exhaustible {ℓ′ = ℓ′} A ⦄ → is-exhaustible A
+exhaust : ⦃ x : Exhaustible {ℓ′ = ℓ′} A ⦄ → Exhaustible A
 exhaust ⦃ x ⦄ = x
 
 opaque
-  unfolding is-exhaustible
-  lift-is-exhaustible
-    : is-exhaustible {ℓ′ = ℓ′} A → is-exhaustible (Lift ℓ A)
-  lift-is-exhaustible ex P? = Dec.map (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift) $ ex $ P? ∘ lift
+  unfolding Exhaustible
+  lift-exhaustible
+    : Exhaustible {ℓ′ = ℓ′} A → Exhaustible (Lift ℓ A)
+  lift-exhaustible ex P? = Dec.map (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift) $ ex $ P? ∘ lift
+
+Π-decision : {B : A → Type ℓᵇ} → Decidable B → Exhaustible {ℓ′ = ℓᵇ} A → Dec (Π[ a ꞉ A ] B a)
+Π-decision d ex = exhaustible-β ex d

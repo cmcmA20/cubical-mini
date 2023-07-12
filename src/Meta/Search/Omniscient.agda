@@ -11,9 +11,9 @@ open import Meta.Search.HLevel
 
 open import Correspondences.Omniscient
 open Correspondences.Omniscient public
-  using ( is-omniscient
-        ; is-omniscient-β ; is-omniscient-η
-        ; omni )
+  using ( Omniscient₁ ; omniscient₁-β ; omniscient₁-η
+        ; omni₁
+        ; ∃-decision ; omniscient₁→exhaustible )
 
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Instances.FromNat
@@ -29,28 +29,27 @@ private variable
   n : HLevel
 
 instance
-  Tactic-omni : Tactic-desc (quote is-omniscient) none
-  Tactic-omni .Tactic-desc.args-length = 3
-  Tactic-omni .Tactic-desc.goal-selector = 2
-  Tactic-omni .Tactic-desc.other-atoms = [ quote _≃_ ]
-  Tactic-omni .Tactic-desc.instance-helper = quote omni
+  Tactic-omni₁ : Tactic-desc (quote Omniscient₁) none
+  Tactic-omni₁ .Tactic-desc.args-length = 3
+  Tactic-omni₁ .Tactic-desc.goal-selector = 2
+  Tactic-omni₁ .Tactic-desc.other-atoms = [ quote _≃_ ]
+  Tactic-omni₁ .Tactic-desc.instance-helper = quote omni₁
 
-omni-tactic-worker = search-tactic-worker Tactic-omni
-macro omni! = omni-tactic-worker
+omni₁-tactic-worker = search-tactic-worker Tactic-omni₁
+macro omni₁! = omni₁-tactic-worker
 
 instance
-  decomp-omn→exh : goal-decomposition (quote is-exhaustible) A
-  decomp-omn→exh = decomp (quote is-omniscient→is-exhaustible) [ `search (quote is-omniscient) ]
-
--- is-fin-set→is-omniscient
+  decomp-omn₁→exh : goal-decomposition (quote Exhaustible) A
+  decomp-omn₁→exh = decomp (quote omniscient₁→exhaustible)
+    [ `search (quote Omniscient₁) ]
 
 -- TODO more decompositions
 
 -- Usage
 private
-  module _ ⦃ A-omn : is-omniscient {ℓ′ = ℓ′} A ⦄ where
-    _ : is-omniscient {ℓ′ = ℓ′} A
-    _ = omni!
+  module _ ⦃ A-omn : Omniscient₁ {ℓ′ = ℓ′} A ⦄ where
+    _ : Omniscient₁ {ℓ′ = ℓ′} A
+    _ = omni₁!
 
-    _ : is-exhaustible {ℓ′ = ℓ′} A
+    _ : Exhaustible {ℓ′ = ℓ′} A
     _ = exhaust!

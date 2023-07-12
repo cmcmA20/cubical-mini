@@ -62,15 +62,15 @@ fin-coproduct : {n m : ℕ}
               → Fin n ⊎ Fin m
               ≃ Fin (n + m)
 fin-coproduct {0} {m}  =
-  (Fin 0 ⊎ Fin m) ≃⟨ ⊎-ap-l fin-0-is-initial ⟩
-  (⊥ ⊎ Fin m)     ≃⟨ ⊎-zero-l ⟩
-  Fin m           ≃∎
+  Fin 0 ⊎ Fin m ≃⟨ ⊎-ap-l fin-0-is-initial ⟩
+  ⊥ ⊎ Fin m     ≃⟨ ⊎-zero-l ⟩
+  Fin m         ≃∎
 fin-coproduct {suc n} {m} =
-  (Fin (suc n) ⊎ Fin m) ≃⟨ ⊎-ap-l fin-suc ⟩
-  ((⊤ ⊎ Fin n) ⊎ Fin m) ≃⟨ ⊎-assoc ⟩
-  (⊤ ⊎ (Fin n ⊎ Fin m)) ≃⟨ ⊎-ap-r (fin-coproduct {n} {m}) ⟩
-  (⊤ ⊎ Fin (n + m))     ≃⟨ fin-suc ₑ⁻¹ ⟩
-  Fin (suc (n + m))     ≃∎
+  Fin (suc n) ⊎ Fin m ≃⟨ ⊎-ap-l fin-suc ⟩
+  (⊤ ⊎ Fin n) ⊎ Fin m ≃⟨ ⊎-assoc ⟩
+  ⊤ ⊎ Fin n ⊎ Fin m   ≃⟨ ⊎-ap-r (fin-coproduct {n} {m}) ⟩
+  ⊤ ⊎ Fin (n + m)     ≃⟨ fin-suc ₑ⁻¹ ⟩
+  Fin (suc (n + m))   ≃∎
 
 sum : ∀ n → (Fin n → ℕ) → ℕ
 sum zero    f = zero
@@ -104,12 +104,11 @@ fin-sum {suc n} B =
       f-iso .is-iso.linv (fsuc x , y) =
         Σ-pathP (ap (fsuc ∘ fst) (mrec.η _)) (ap snd (mrec.η _))
 
-
 fin-product : {n m : ℕ}
             → Fin n × Fin m
             ≃ Fin (n · m)
 fin-product {n} {m} =
-  (Fin n × Fin m)       ≃⟨ fin-sum (λ _ → m) ⟩
+  Fin n × Fin m         ≃⟨ fin-sum (λ _ → m) ⟩
   Fin (sum n (λ _ → m)) ≃⟨ cast (sum≡* n m) , cast-is-equiv _ ⟩
   Fin (n · m)           ≃∎
   where

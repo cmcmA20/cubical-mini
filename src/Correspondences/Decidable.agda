@@ -30,11 +30,11 @@ decide ⦃ d ⦄ = d
 ×-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ snd
 ×-decision (yes a) (yes b) .proof = ofʸ (a , b)
 
-→-decision : Dec A → Dec B → Dec (A → B)
-→-decision da db .does = not (da .does) or db .does
-→-decision (no ¬a) db .proof = ofʸ $ λ a → absurd (¬a a)
-→-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ (_$ a)
-→-decision (yes a) (yes b) .proof = ofʸ λ _ → b
+fun-decision : Dec A → Dec B → Dec (A → B)
+fun-decision da db .does = not (da .does) or db .does
+fun-decision (no ¬a) db .proof = ofʸ $ λ a → absurd (¬a a)
+fun-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ (_$ a)
+fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 
 ¬-decision : Dec A → Dec (¬ A)
 ¬-decision da .does = not (da .does)

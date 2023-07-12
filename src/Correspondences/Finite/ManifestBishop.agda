@@ -33,18 +33,18 @@ opaque
   𝓑-is-set = hlevel!
 
 opaque
-  unfolding 𝓑 is-omniscient
-  𝓑→is-omniscient : 𝓑 A → is-omniscient {ℓ′ = ℓ′} A
-  𝓑→is-omniscient {A} (n , aeq) {P} P? =
+  unfolding 𝓑 Omniscient₁
+  𝓑→omniscient₁ : 𝓑 A → Omniscient₁ {ℓ′ = ℓ′} A
+  𝓑→omniscient₁ {A} (n , aeq) {P} P? =
     Dec.map lemma₁ lemma₂ (any? P? xs) where
       module Ã = Equiv aeq
       module Ṽ = Equiv vec-fun-equiv
 
       xs : Vec A n
-      xs = Ṽ.inverse .fst $ Ã.inverse .fst
+      xs = Ṽ.from $ Ã.from
 
       lemma₁ : _
       lemma₁ (i , p) = ∣ lookup xs i , p ∣₁
 
       lemma₂ : _
-      lemma₂ ¬p = ∥-∥₁.rec! λ (a , pa) → ¬p $ Ã.to a , subst ⌞ P ⌟ₚ (sym (happly (Ṽ.ε _) _ ∙ Ã.η a)) pa
+      lemma₂ ¬p = ∥-∥₁.rec! λ (a , pa) → ¬p $ Ã.to a , subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η a)) pa

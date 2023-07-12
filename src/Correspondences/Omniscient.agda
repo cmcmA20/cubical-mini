@@ -5,8 +5,6 @@ open import Foundations.Base
 
 open import Meta.Search.HLevel
 
-open import Structures.n-Type
-
 open import Correspondences.Base public
 open import Correspondences.Classical
 open import Correspondences.Decidable
@@ -20,30 +18,30 @@ import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∥_∥₁; ∣_∣₁; ∃-syntax)
 
 private variable
-  ℓ ℓ′ : Level
-  A : Type ℓ
+  ℓ ℓ′ ℓᵃ ℓᵇ : Level
+  A : Type ℓᵃ
 
 opaque
-  is-omniscient : {ℓ′ : Level} → Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
-  is-omniscient {ℓ′} A = {P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec (∃[ a ꞉ A ] ⌞ P a ⌟)
+  Omniscient₁ : {ℓ′ : Level} → Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
+  Omniscient₁ {ℓ′} A = {P : Pred ℓ′ A} → Decidable P → Dec (∃[ a ꞉ A ] P a)
 
-  is-omniscient-β : is-omniscient A → {P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec (∃[ a ꞉ A ] ⌞ P a ⌟)
-  is-omniscient-β = id
+  omniscient₁-β : Omniscient₁ A → {P : Pred ℓ′ A} → Decidable P → Dec (∃[ a ꞉ A ] P a)
+  omniscient₁-β = id
 
-  is-omniscient-η : ({P : Pred₁ ℓ′ A} → Decidable ⌞ P ⌟ₚ → Dec (∃[ a ꞉ A ] ⌞ P a ⌟)) → is-omniscient A
-  is-omniscient-η = id
-
-  is-omniscient-is-prop : is-prop (is-omniscient {ℓ′ = ℓ′} A)
-  is-omniscient-is-prop = hlevel!
+  omniscient₁-η : ({P : Pred ℓ′ A} → Decidable P → Dec (∃[ a ꞉ A ] P a)) → Omniscient₁ A
+  omniscient₁-η = id
 
 
 opaque
-  unfolding is-omniscient is-exhaustible Essentially-classical n-Type-carrier
-  is-omniscient→is-exhaustible : is-omniscient {ℓ′ = ℓ′} A → is-exhaustible A
-  is-omniscient→is-exhaustible omn {P} P? = Dec.map
+  unfolding Omniscient₁ Exhaustible Essentially-classical n-Type-carrier
+  omniscient₁→exhaustible : Omniscient₁ {ℓ′ = ℓ′} A → Exhaustible A
+  omniscient₁→exhaustible omn {P} P? = Dec.map
     (λ ¬∃p x → dec→essentially-classical (P? x) $ ¬∃p ∘ ∣_∣₁ ∘ (x ,_))
     (λ ¬∃p ∀p → ¬∃p $ ∥-∥₁.rec! λ p → p .snd (∀p (p .fst)))
-    (¬-decision $ (omn {λ x → el! (¬ (P x .fst))}) $ ¬-decision ∘ P?)
+    (¬-decision $ omn $ ¬-decision ∘ P?)
 
-omni : ⦃ x : is-omniscient {ℓ′ = ℓ′} A ⦄ → is-omniscient A
-omni ⦃ x ⦄ = x
+omni₁ : ⦃ x : Omniscient₁ {ℓ′ = ℓ′} A ⦄ → Omniscient₁ A
+omni₁ ⦃ x ⦄ = x
+
+∃-decision : {B : A → Type ℓᵇ} → Decidable B → Omniscient₁ {ℓ′ = ℓᵇ} A → Dec (∃[ a ꞉ A ] B a)
+∃-decision d ex = omniscient₁-β ex d

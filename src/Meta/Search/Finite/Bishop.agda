@@ -55,6 +55,10 @@ instance
   decomp-fin-lift : goal-decomposition (quote is-fin-set) (Lift ℓ′ A)
   decomp-fin-lift = decomp (quote lift-is-fin-set) [ `search (quote lift-is-fin-set) ]
 
+  decomp-fin-fun : {B : Type ℓb} → goal-decomposition (quote is-fin-set) (A → B)
+  decomp-fin-fun = decomp (quote fun-is-fin-set)
+    [ `search (quote is-fin-set) , `search (quote is-fin-set) ]
+
   decomp-fin-Π : goal-decomposition (quote is-fin-set) (∀ a → B a)
   decomp-fin-Π = decomp (quote Π-is-fin-set)
     [ `search (quote is-fin-set) , `search-under 1 (quote is-fin-set) ]
@@ -67,8 +71,8 @@ instance
   decomp-fin-Σ = decomp (quote Σ-is-fin-set)
     [ `search (quote is-fin-set) , `search-under 1 (quote is-fin-set) ]
 
-  decomp-fin→omn : goal-decomposition (quote is-omniscient) A
-  decomp-fin→omn = decomp (quote is-fin-set→is-omniscient) [ `search (quote is-fin-set) ]
+  decomp-fin→omn₁ : goal-decomposition (quote Omniscient₁) A
+  decomp-fin→omn₁ = decomp (quote is-fin-set→omniscient₁) [ `search (quote is-fin-set) ]
 
   decomp-fin→dis : goal-decomposition (quote is-discrete) A
   decomp-fin→dis = decomp (quote is-fin-set→is-discrete) [ `search (quote is-fin-set) ]
@@ -93,8 +97,8 @@ private
     _ : is-fin-set (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
     _ = finite!
 
-    _ : is-omniscient {ℓ′ = ℓ′} (Π[ a ꞉ ⌞ A ⌟ ] ⌞ B a ⌟)
-    _ = omni!
+    _ : Omniscient₁ {ℓ′ = ℓ′} (Π[ a ꞉ ⌞ A ⌟ ] ⌞ B a ⌟)
+    _ = omni₁!
 
-    _ : is-exhaustible {ℓ′ = ℓ′} (⌞ A ⌟ × ⌞ A ⌟)
+    _ : Exhaustible {ℓ′ = ℓ′} (⌞ A ⌟ × ⌞ A ⌟)
     _ = exhaust!
