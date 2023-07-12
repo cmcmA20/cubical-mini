@@ -235,10 +235,10 @@ get-boundary tm = unapply-path tm >>= λ where
 debug! : ∀ {ℓ} {A : Type ℓ} → Term → TC A
 debug! tm = typeError ("[DEBUG]: " ∷ termErr tm ∷ [])
 
-quote-repr-macro : ∀ {ℓ} {A : Type ℓ} → A → Term →  TC ⊤
-quote-repr-macro a hole = do
+quote-repr-macro : Bool → ∀ {ℓ} {A : Type ℓ} → A → Term →  TC ⊤
+quote-repr-macro norm? a hole = do
   tm ← quoteTC a
-  repr ← quoteTC tm
+  repr ← (if norm? then normalise else pure) tm >>= quoteTC
   typeError $ "The term\n  "
     ∷ termErr tm
     ∷ "\nHas quoted representation\n  "
@@ -246,7 +246,10 @@ quote-repr-macro a hole = do
 
 macro
   quote-repr! : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′} → A → Term → TC ⊤
-  quote-repr! a = quote-repr-macro a
+  quote-repr! = quote-repr-macro false
+
+  quote-repr-norm! : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′} → A → Term → TC ⊤
+  quote-repr-norm! = quote-repr-macro true
 
 instance
   IsString-Error : IsString (List ErrorPart)
