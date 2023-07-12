@@ -4,10 +4,16 @@
 
 <a id="69" class="Keyword">open</a> <a id="74" class="Keyword">import</a> <a id="81" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="99" class="Keyword">open</a> <a id="104" class="Keyword">import</a> <a id="111" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
-<a id="125" class="Keyword">open</a> <a id="130" class="Keyword">import</a> <a id="137" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
+<a id="99" class="Keyword">open</a> <a id="104" class="Keyword">import</a> <a id="111" href="Meta.Search.Decidable.html" class="Module">Meta.Search.Decidable</a>
 
-<a id="154" class="Keyword">instance</a>
-  <a id="⊥-decision"></a><a id="165" href="Data.Empty.Instances.Decidable.html#165" class="Function">⊥-decision</a> <a id="176" class="Symbol">:</a> <a id="178" href="Data.Dec.Base.html#1365" class="Record">Dec</a> <a id="182" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
-  <a id="186" href="Data.Empty.Instances.Decidable.html#165" class="Function">⊥-decision</a> <a id="197" class="Symbol">=</a> <a id="199" href="Data.Dec.Base.html#1540" class="InductiveConstructor">no</a> <a id="202" href="Foundations.Pi.Base.html#722" class="Function">id</a>
+<a id="134" class="Keyword">open</a> <a id="139" class="Keyword">import</a> <a id="146" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
+<a id="160" class="Keyword">open</a> <a id="165" class="Keyword">import</a> <a id="172" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
+<a id="188" class="Keyword">open</a> <a id="193" class="Keyword">import</a> <a id="200" href="Data.List.Base.html" class="Module">Data.List.Base</a>
+
+<a id="⊥-decision"></a><a id="216" href="Data.Empty.Instances.Decidable.html#216" class="Function">⊥-decision</a> <a id="227" class="Symbol">:</a> <a id="229" href="Data.Dec.Base.html#1365" class="Record">Dec</a> <a id="233" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
+<a id="235" href="Data.Empty.Instances.Decidable.html#216" class="Function">⊥-decision</a> <a id="246" class="Symbol">=</a> <a id="248" href="Data.Dec.Base.html#1540" class="InductiveConstructor">no</a> <a id="251" href="Foundations.Pi.Base.html#722" class="Function">id</a>
+
+<a id="255" class="Keyword">instance</a>
+  <a id="decomp-dec-⊥"></a><a id="266" href="Data.Empty.Instances.Decidable.html#266" class="Function">decomp-dec-⊥</a> <a id="279" class="Symbol">:</a> <a id="281" href="Meta.Search.Base.html#2366" class="Datatype">goal-decomposition</a> <a id="300" class="Symbol">(</a><a id="301" class="Keyword">quote</a> <a id="307" href="Data.Dec.Base.html#1365" class="Record">Dec</a><a id="310" class="Symbol">)</a> <a id="312" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
+  <a id="316" href="Data.Empty.Instances.Decidable.html#266" class="Function">decomp-dec-⊥</a> <a id="329" class="Symbol">=</a> <a id="331" href="Meta.Search.Base.html#2511" class="InductiveConstructor">decomp</a> <a id="338" class="Symbol">(</a><a id="339" class="Keyword">quote</a> <a id="345" href="Data.Empty.Instances.Decidable.html#216" class="Function">⊥-decision</a><a id="355" class="Symbol">)</a> <a id="357" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a>
 </pre></body></html>
