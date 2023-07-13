@@ -15,6 +15,8 @@ open Structures.n-Type public
   using ( n-Type; el; n-Type-carrier; Underlying-n-Type
         ; Prop ; Set )
 
+open import Correspondences.Erased
+
 open import Data.Bool.Base
 open import Data.Fin.Base
 open import Data.List.Base
@@ -92,6 +94,10 @@ instance
   decomp-hlevel-impl-pi : goal-decomposition (quote is-of-hlevel) (∀ {a} → B a)
   decomp-hlevel-impl-pi = decomp (quote Π-is-of-hlevel-implicit) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
 
+  decomp-hlevel-erased : goal-decomposition (quote is-of-hlevel) ∥ A ∥ᴱ
+  decomp-hlevel-erased = decomp (quote ∥-∥ᴱ-is-of-hlevel)
+    [ `level-same , `search (quote is-of-hlevel) ]
+
   decomp-hlevel-equiv-right : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A ≃ B)
   decomp-hlevel-equiv-right = decomp (quote ≃-is-of-hlevel-right-suc) [ `level-minus 1 , `search (quote is-of-hlevel) ]
 
@@ -162,6 +168,9 @@ private
 
     -- this one uses `H-Level-nType` instance which is compile-time only
     @0 _ : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
+    _ = hlevel!
+
+    @0 _ : is-of-hlevel 3 ∥ ⌞ A ⌟ ∥ᴱ
     _ = hlevel!
 
     _ : ∀ n (x : n-Type ℓ n) → is-of-hlevel (2 + n) ⌞ x ⌟
