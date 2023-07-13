@@ -1,12 +1,12 @@
 {-# OPTIONS --safe #-}
-module Data.Fin.Instances.Finite where
+module Data.FinSub.Instances.Finite where
 
 open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Search.Finite.Bishop
 
-open import Data.FinSub.Base
+open import Data.FinSub.Path
 
 open import Truncation.Propositional.Base
 

@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 open import Foundations.Pi
 open import Foundations.Sigma
+open import Foundations.Univalence
 
 open import Meta.Bind
 open import Meta.Search.Discrete
@@ -18,10 +19,10 @@ open import Correspondences.Omniscient
 open import Data.Dec.Base as Dec
 open import Data.Dec.Instances.HLevel
 open import Data.Empty.Base
-open import Data.Fin.Base
-open import Data.Fin.Properties
-open import Data.Fin.Closure
-open import Data.Fin.Instances.Discrete
+open import Data.FinSub.Base
+open import Data.FinSub.Properties
+open import Data.FinSub.Closure
+open import Data.FinSub.Instances.Discrete
 open import Data.Nat.Instances.Discrete
 
 open import Functions.Embedding
@@ -98,7 +99,8 @@ opaque
 is-fin-set-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-fin-set A)
 is-fin-set-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-fin-set-is-prop
 
-private
+opaque
+  unfolding Fin
   finite-pi-fin
     : (n : ℕ) {P : Fin n → Type ℓ′}
     → (∀ x → is-fin-set (P x))
@@ -107,18 +109,18 @@ private
     go : Iso _ _
     go .fst _ = fzero
     go .snd .is-iso.inv _ ()
-    go .snd .is-iso.rinv fzero = refl
+    go .snd .is-iso.rinv (zero , _) = refl
     go .snd .is-iso.linv _ = fun-ext λ()
 
-  finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
+  finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
     e ← fin-choice (suc sz) (enumeration ∘ fam)
     let rest = finite-pi-fin sz (fam ∘ fsuc)
     cont ← enumeration rest
     let
       work =  fin-suc-universal {n = sz} {A = P}
            ∙ₑ Σ-ap (e fzero) (λ x → cont)
-           ∙ₑ fin-sum λ _ → cardinality rest
-    pure $ is-fin-set-η $ _ , pure work
+           ∙ₑ fin-sum {n = cardinality (fam fzero)} λ _ → cardinality rest
+    pure $ is-fin-set-η $ sum (cardinality _) _ , pure work
 
 
 ×-is-fin-set : is-fin-set A → is-fin-set B → is-fin-set (A × B)
@@ -141,8 +143,8 @@ private
     work = do
       t ← finite-choice afin $ enumeration ∘ fam
       pure $ Σ-ap aeq λ x → t x
-          ∙ₑ (_ , cast-is-equiv (ap (cardinality ∘ fam)
-                    (sym $ aeq.η x)))
+          ∙ₑ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
+
   pure $ fin ⦇ work ∙ₑ pure fs ⦈
 
 fun-is-fin-set

@@ -17,7 +17,7 @@ open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
 open import Data.Maybe.Base
 open import Data.Nat.Base
-open import Data.Vec.Operations
+open import Data.Vec.Operations.Inductive
 
 data Goal-strat : Type where
   none by-hlevel : Goal-strat

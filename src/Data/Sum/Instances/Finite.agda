@@ -7,7 +7,7 @@ open import Foundations.Equiv
 open import Meta.Bind
 open import Meta.Search.Finite.Bishop
 
-open import Data.Fin.Closure
+open import Data.FinSub.Closure
 open import Data.List.Base
 open import Data.Sum.Properties
 

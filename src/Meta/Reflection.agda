@@ -20,7 +20,7 @@ open import Data.List.Instances.Traverse
 open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Vec.Base
-open import Data.Vec.Operations
+open import Data.Vec.Operations.Inductive
 open import Data.String.Base
 
 open import Agda.Builtin.Reflection public

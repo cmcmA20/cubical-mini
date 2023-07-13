@@ -10,7 +10,7 @@ open import Data.Empty.Base
 open import Data.Fin.Base
 open import Data.Sum.Base
 open import Data.Sum.Instances.Decidable
-open import Data.Vec.Operations
+open import Data.Vec.Operations.Inductive
 
 private variable
   ℓ : Level

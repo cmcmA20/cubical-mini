@@ -5,7 +5,7 @@ open import Foundations.Base
 
 open import Meta.Literals.FromNat public
 
-open import Data.Nat.Order public
+open import Data.Nat.Order.Inductive public
 
 open import Data.Fin.Base
 

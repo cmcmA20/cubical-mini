@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Vec.Correspondences.Unary.Any where
+module Data.Vec.Correspondences.Unary.Any.Inductive where
 
 open import Foundations.Base
 
@@ -10,7 +10,7 @@ open import Correspondences.Decidable
 import      Data.Dec as Dec
 open Dec
 open import Data.Fin.Base
-open import Data.Vec.Operations
+open import Data.Vec.Operations.Inductive
 open import Data.Sum.Base
 open import Data.Sum.Instances.Decidable
 

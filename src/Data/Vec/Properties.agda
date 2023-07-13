@@ -15,7 +15,7 @@ open import Data.List.Base
 open import Data.List.Container
 open import Data.Nat.Path
 open import Data.Vec.Base public
-open import Data.Vec.Operations
+open import Data.Vec.Operations.Inductive
 
 private variable
   ℓ ℓ′ : Level

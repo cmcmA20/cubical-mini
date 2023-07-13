@@ -11,13 +11,12 @@ open import Correspondences.Omniscient
 
 open import Data.Empty.Base
 open import Data.Dec.Base as Dec
-open import Data.Fin.Base
-open import Data.Fin.Instances.Discrete
+open import Data.FinSub.Base
+open import Data.FinSub.Instances.Discrete
 open import Data.Nat
 open import Data.Vec.Base
-open import Data.Vec.Operations
-open import Data.Vec.Properties
-open import Data.Vec.Correspondences.Unary.Any
+open import Data.Vec.Operations.Computational
+open import Data.Vec.Correspondences.Unary.Any.Computational
 
 open import Truncation.Propositional as ∥-∥₁
 
@@ -33,7 +32,7 @@ opaque
   𝓑-is-set = hlevel!
 
 opaque
-  unfolding 𝓑 Omniscient₁
+  unfolding 𝓑 Omniscient₁ Fin lookup vec-fun-equiv
   𝓑→omniscient₁ : 𝓑 A → Omniscient₁ {ℓ′ = ℓ′} A
   𝓑→omniscient₁ {A} (n , aeq) {P} P? =
     Dec.map lemma₁ lemma₂ (any? P? xs) where

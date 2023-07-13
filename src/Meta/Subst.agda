@@ -12,7 +12,7 @@ open import Data.List.Instances.Bind
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Bind
 open import Data.Nat.Base
-open import Data.Nat.Order
+open import Data.Nat.Order.Inductive
 
 data Subst : Type where
   idₛ        : Subst

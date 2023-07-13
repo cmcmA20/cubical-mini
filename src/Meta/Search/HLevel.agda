@@ -94,6 +94,10 @@ instance
   decomp-hlevel-impl-pi : goal-decomposition (quote is-of-hlevel) (∀ {a} → B a)
   decomp-hlevel-impl-pi = decomp (quote Π-is-of-hlevel-implicit) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
 
+  decomp-hlevel-erased-prop : goal-decomposition (quote is-of-hlevel) ∥ A ∥ᴱ
+  decomp-hlevel-erased-prop = decomp (quote ∥-∥ᴱ-is-prop)
+    [ `search (quote is-of-hlevel) ]
+
   decomp-hlevel-erased : goal-decomposition (quote is-of-hlevel) ∥ A ∥ᴱ
   decomp-hlevel-erased = decomp (quote ∥-∥ᴱ-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) ]

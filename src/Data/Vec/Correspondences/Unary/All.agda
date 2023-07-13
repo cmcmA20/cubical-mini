@@ -12,7 +12,7 @@ open import Correspondences.Separated
 
 open import Data.Dec as Dec
 open import Data.Vec.Base
-open import Data.Vec.Correspondences.Unary.Any
+open import Data.Vec.Correspondences.Unary.Any.Inductive
 
 private variable
   ℓ ℓ′ : Level

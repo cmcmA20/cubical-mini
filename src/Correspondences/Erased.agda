@@ -63,7 +63,7 @@ opaque
   ∥-∥ᴱ-is-prop pr ∣ x ∣ᴱ ∣ y ∣ᴱ = ∣-∣ᴱ-cong ∣ pr x y ∣ᴱ
 
   ∥-∥ᴱ-is-set : @0 is-set A → is-set ∥ A ∥ᴱ
-  ∥-∥ᴱ-is-set se ∣ x ∣ᴱ ∣ y ∣ᴱ p q = ap ∣-∣ᴱ-cong $ ∣-∣ᴱ-cong ∣ se x y _ _ ∣ᴱ
+  ∥-∥ᴱ-is-set se ∣ x ∣ᴱ ∣ y ∣ᴱ _ _ = ap ∣-∣ᴱ-cong $ ∣-∣ᴱ-cong ∣ se x y _ _ ∣ᴱ
 
   @0 ∥-∥ᴱ-is-of-hlevel : (n : HLevel) → @0 is-of-hlevel n A → is-of-hlevel n ∥ A ∥ᴱ
   ∥-∥ᴱ-is-of-hlevel 0 = ∥-∥ᴱ-is-contr

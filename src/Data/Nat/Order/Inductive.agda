@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Nat.Order where
+module Data.Nat.Order.Inductive where
 
 open import Foundations.Base
 
@@ -62,6 +62,9 @@ opaque
 ≤-peel : suc m ≤ suc n → m ≤ n
 ≤-peel (s≤s p) = p
 
+≤-peel-unpeel : (p : suc m ≤ suc n) → s≤s (≤-peel p) ＝ p
+≤-peel-unpeel (s≤s _) = refl
+
 ≤-suc-r : m ≤ n → m ≤ suc n
 ≤-suc-r z≤      = z≤
 ≤-suc-r (s≤s p) = s≤s (≤-suc-r p)
@@ -83,6 +86,9 @@ instance
 
 ¬sucn≤n : ¬ (suc n ≤ n)
 ¬sucn≤n {(suc n)} (s≤s ord) = ¬sucn≤n ord
+
+¬sucn≤0 : ¬ (suc n ≤ 0)
+¬sucn≤0 {(suc n)} = λ ()
 
 ≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
 ≤-split m n with ≤-dec (suc m) n

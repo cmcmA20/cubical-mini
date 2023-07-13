@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.Vec.Operations where
+module Data.Vec.Operations.Inductive where
 
 open import Foundations.Base
 

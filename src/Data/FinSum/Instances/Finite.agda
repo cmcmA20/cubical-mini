@@ -9,6 +9,7 @@ open import Data.FinSum.Path
 
 open import Truncation.Propositional.Base
 
-instance
-  fin-is-fin-set : ∀ {n} → is-fin-set (Fin n)
-  fin-is-fin-set = fin ∣ sum-fin≃finⁱ ∣₁
+-- FIXME
+-- instance
+--   fin-is-fin-set : ∀ {n} → is-fin-set (Fin n)
+--   fin-is-fin-set = fin ∣ sum-fin≃finⁱ ∣₁

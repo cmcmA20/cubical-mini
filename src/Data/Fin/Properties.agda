@@ -8,7 +8,7 @@ open import Meta.Bind
 
 open import Data.Empty.Base
 open import Data.Nat.Path
-open import Data.Nat.Order
+open import Data.Nat.Order.Inductive
 import      Data.Sum.Base as ⊎
 open ⊎
 

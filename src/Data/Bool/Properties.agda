@@ -18,6 +18,10 @@ open import Data.Bool.Base public
 open import Data.Bool.Instances.Finite
 open import Data.Bool.Instances.Discrete
 open import Data.Dec as Dec
+open import Data.FinSub.Base as Fin
+open import Data.FinSub.Properties as Fin
+open import Data.FinSub.Closure as Fin
+open import Data.Vec.Correspondences.Unary.Any.Computational
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
@@ -30,18 +34,19 @@ instance
   and-comm? = Π-decision (λ x → Π-decision (λ y → (x and y) ≟ (y and x)) exhaust!) exhaust!
 
   test? : Dec (∃[ f ꞉ (Bool → Bool) ] f false ＝ f true)
-  test? = ∃-decision (λ f → f false ≟ f true) (is-fin-set→omniscient₁ (fun-is-fin-set bool-is-fin-set bool-is-fin-set))
+  test? = ∃-decision (λ f → f false ≟ f true) omni₁!
 
 opaque
   unfolding
     is-discrete-β is-fin-set-β omniscient₁-β exhaustible-β omniscient₁→exhaustible
-    𝓑 is-fin-set→omniscient₁ 𝓑→omniscient₁ ∥-∥₁.rec
-
-  -- unfolding
-  --  _∙ₑ_ is-equiv-comp cardinality enumeration
+    𝓑 is-fin-set→omniscient₁ 𝓑→omniscient₁ ∥-∥₁.rec Fin bool-is-fin-set any? finite-pi-fin
+    _∙ₑ_ fin-sum fin-suc-universal fin-choice
 
   and-idem : ∀ x → x and x ＝ x
   and-idem = witness!
 
   and-comm : ∀ x y → x and y ＝ y and x
   and-comm = witness!
+
+  test : ∃[ f ꞉ (Bool → Bool) ] f false ＝ f true
+  test = witness!
