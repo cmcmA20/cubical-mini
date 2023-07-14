@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.FinSub.Instances.Finite</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.FinSub.Instances.Finite.html" class="Module">Data.FinSub.Instances.Finite</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="96" class="Keyword">open</a> <a id="101" class="Keyword">import</a> <a id="108" href="Foundations.Equiv.html" class="Module">Foundations.Equiv</a>
+
+<a id="127" class="Keyword">open</a> <a id="132" class="Keyword">import</a> <a id="139" href="Meta.Search.Finite.Bishop.html" class="Module">Meta.Search.Finite.Bishop</a>
+
+<a id="166" class="Keyword">open</a> <a id="171" class="Keyword">import</a> <a id="178" href="Data.FinSub.Path.html" class="Module">Data.FinSub.Path</a>
+
+<a id="196" class="Keyword">open</a> <a id="201" class="Keyword">import</a> <a id="208" href="Truncation.Propositional.Base.html" class="Module">Truncation.Propositional.Base</a>
+
+<a id="239" class="Keyword">instance</a>
+  <a id="fin-is-fin-set"></a><a id="250" href="Data.FinSub.Instances.Finite.html#250" class="Function">fin-is-fin-set</a> <a id="265" class="Symbol">:</a> <a id="267" class="Symbol">∀</a> <a id="269" class="Symbol">{</a><a id="270" href="Data.FinSub.Instances.Finite.html#270" class="Bound">n</a><a id="271" class="Symbol">}</a> <a id="273" class="Symbol">→</a> <a id="275" href="Correspondences.Finite.Bishop.html#924" class="Function">is-fin-set</a> <a id="286" class="Symbol">(</a><a id="287" href="Data.FinSub.Base.html#341" class="Function">Fin</a> <a id="291" href="Data.FinSub.Instances.Finite.html#270" class="Bound">n</a><a id="292" class="Symbol">)</a>
+  <a id="296" href="Data.FinSub.Instances.Finite.html#250" class="Function">fin-is-fin-set</a> <a id="311" class="Symbol">=</a> <a id="313" href="Correspondences.Finite.Bishop.html#1187" class="Function">fin</a> <a id="317" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣</a> <a id="319" href="Foundations.Equiv.Base.html#1428" class="Function">idₑ</a> <a id="323" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣₁</a>
+</pre></body></html>
