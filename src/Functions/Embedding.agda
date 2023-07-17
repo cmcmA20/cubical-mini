@@ -112,7 +112,7 @@ subtype-classifier {ℓ} = map-classifier {ℓ = ℓ} is-prop
 module @0 subtype-classifier {ℓ} {B : Type ℓ} = Equiv (subtype-classifier {B = B})
 
 opaque
-  unfolding is-of-hlevel n-Type-carrier
+  unfolding is-of-hlevel
   subset-proj-embedding
     : ∀ {B : A → Type ℓ} → (∀ x → is-prop (B x))
     → is-embedding {A = Σ A B} fst

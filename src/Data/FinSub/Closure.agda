@@ -27,7 +27,7 @@ private variable
   @0 m n : ℕ
 
 opaque
-  unfolding Fin is-prop→pathP to-pathP index fzero fsuc
+  unfolding Fin
   fin-0-is-initial : Fin 0 ≃ ⊥
   fin-0-is-initial .fst ()
   fin-0-is-initial .snd .equiv-proof ()
@@ -93,7 +93,7 @@ sum zero    f = zero
 sum (suc n) f = f fzero + sum n (f ∘ fsuc)
 
 opaque
-  unfolding Fin _≤_
+  unfolding Fin
   fin-sum : {n : ℕ} (B : Fin n → ℕ)
           → Σ[ k ꞉ Fin n ] Fin (B k)
           ≃ Fin (sum n B)
@@ -124,14 +124,14 @@ opaque
           Σ-pathP (ap (fsuc ∘ fst) (mrec.η _)) (ap snd (mrec.η _))
 
 
-  fin-product : {n m : ℕ}
-              → Fin n × Fin m
-              ≃ Fin (n · m)
-  fin-product {n} {m} =
-    Fin n × Fin m         ≃⟨ fin-sum {n = n} (λ _ → m) ⟩
-    Fin (sum n (λ _ → m)) ≃⟨ path→equiv (ap (λ n → Fin n) (sum≡* n m))  ⟩
-    Fin (n · m)           ≃∎
-    where
-      sum≡* : ∀ n m → sum n (λ _ → m) ＝ n · m
-      sum≡* zero m = refl
-      sum≡* (suc n) m = ap (m +_) (sum≡* n m)
+fin-product : {n m : ℕ}
+            → Fin n × Fin m
+            ≃ Fin (n · m)
+fin-product {n} {m} =
+  Fin n × Fin m         ≃⟨ fin-sum {n = n} (λ _ → m) ⟩
+  Fin (sum n (λ _ → m)) ≃⟨ path→equiv (ap (λ n → Fin n) (sum≡* n m))  ⟩
+  Fin (n · m)           ≃∎
+  where
+    sum≡* : ∀ n m → sum n (λ _ → m) ＝ n · m
+    sum≡* zero m = refl
+    sum≡* (suc n) m = ap (m +_) (sum≡* n m)

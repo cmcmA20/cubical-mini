@@ -12,7 +12,7 @@ open import Meta.Search.Base public
 
 open import Structures.n-Type
 open Structures.n-Type public
-  using ( n-Type; el; n-Type-carrier; Underlying-n-Type
+  using ( n-Type; el; Underlying-n-Type
         ; Prop ; Set )
 
 open import Correspondences.Erased
@@ -37,6 +37,11 @@ instance
   Tactic-hlevel .Tactic-desc.args-length = 3
   Tactic-hlevel .Tactic-desc.goal-selector = fsuc (fsuc fzero)
   Tactic-hlevel .Tactic-desc.level-selector = fsuc fzero
+  Tactic-hlevel .Tactic-desc.aliases
+    = (quote is-contr , 0 , 2 , fsuc fzero)
+    ∷ (quote is-prop  , 1 , 2 , fsuc fzero)
+    ∷ (quote is-set   , 2 , 2 , fsuc fzero)
+    ∷ []
   Tactic-hlevel .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-hlevel .Tactic-desc.instance-helper = quote hlevel
   Tactic-hlevel .Tactic-desc.upwards-closure = just (quote is-of-hlevel-+)
@@ -133,23 +138,25 @@ instance
   decomp-hlevel-hlevel : goal-decomposition (quote is-of-hlevel) (is-of-hlevel n A)
   decomp-hlevel-hlevel = decomp (quote is-of-hlevel-is-of-hlevel-suc) [ `level-minus 1 ]
 
-  decomp-hlevel-is-equiv : {B : Type ℓ′} {f : A → B} → goal-decomposition (quote is-of-hlevel) (is-equiv f)
-  decomp-hlevel-is-equiv = decomp (quote is-equiv-is-of-hlevel) [ `level-minus 1 ]
+  -- decomp-hlevel-suc : goal-decomposition (quote is-of-hlevel) A
+  -- decomp-hlevel-suc = decomp (quote is-of-hlevel-suc) [ `level-minus 1 , `search (quote is-of-hlevel) ]
 
-  proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote n-Type-carrier) true
+  decomp-hlevel-is-equiv : {B : Type ℓ′} {f : A → B} → goal-decomposition (quote is-of-hlevel) (is-equiv f)
+  decomp-hlevel-is-equiv = decomp (quote is-equiv-is-of-hlevel) []
+
+  proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote n-Type.carrier) true
   proj-hlevel-n-type .Struct-proj-desc.struct-name = quote n-Type
   proj-hlevel-n-type .Struct-proj-desc.struct-args-length = 2
-  proj-hlevel-n-type .Struct-proj-desc.goal-projection = quote n-Type-carrier-is-tr
+  proj-hlevel-n-type .Struct-proj-desc.goal-projection = quote n-Type.carrier-is-tr
   proj-hlevel-n-type .Struct-proj-desc.projection-args-length = 3
   proj-hlevel-n-type .Struct-proj-desc.level-selector = fsuc fzero
   proj-hlevel-n-type .Struct-proj-desc.carrier-selector = fsuc (fsuc fzero)
 
-
 -- Usage
 private
-  module _ {A : n-Type ℓ 2} {B : ⌞ A ⌟ → n-Type ℓ 3} where
+  module _ {A : Set ℓ} {B : ⌞ A ⌟ → n-Type ℓ 3} where
     some-def = ⌞ A ⌟
-    _ : is-of-hlevel 2 (⌞ A ⌟ → ⌞ A ⌟)
+    _ : is-set (⌞ A ⌟ → ⌞ A ⌟)
     _ = hlevel!
 
     _ : is-of-hlevel 2 (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)

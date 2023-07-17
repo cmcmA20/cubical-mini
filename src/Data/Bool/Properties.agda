@@ -2,8 +2,7 @@
 module Data.Bool.Properties where
 
 open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.Pi
+open import Foundations.Univalence
 
 open import Meta.Search.Decidable
 open import Meta.Search.Discrete
@@ -16,11 +15,9 @@ open import Correspondences.Finite.ManifestBishop
 
 open import Data.Bool.Base public
 open import Data.Bool.Instances.Finite
-open import Data.Bool.Instances.Discrete
 open import Data.Dec as Dec
-open import Data.FinSub.Base as Fin
-open import Data.FinSub.Properties as Fin
-open import Data.FinSub.Closure as Fin
+open import Data.FinSub.Properties
+open import Data.FinSub.Closure
 open import Data.Vec.Correspondences.Unary.Any.Computational
 
 import Truncation.Propositional as ∥-∥₁
@@ -36,11 +33,14 @@ instance
   test? : Dec (∃[ f ꞉ (Bool → Bool) ] f false ＝ f true)
   test? = ∃-decision (λ f → f false ≟ f true) omni₁!
 
+  test₂? : Dec (((x , y) : Bool × Bool) → x and y ＝ y and x)
+  test₂? = Π-decision (λ (x , y) → (x and y) ≟ (y and x)) exhaust!
+
 opaque
   unfolding
     is-discrete-β is-fin-set-β omniscient₁-β exhaustible-β omniscient₁→exhaustible
-    𝓑 is-fin-set→omniscient₁ 𝓑→omniscient₁ ∥-∥₁.rec Fin bool-is-fin-set any? finite-pi-fin
-    _∙ₑ_ fin-sum fin-suc-universal fin-choice
+    𝓑 is-fin-set→omniscient₁ 𝓑→omniscient₁ bool-is-fin-set any? finite-pi-fin
+    fin-sum fin-suc-universal fin-choice
 
   and-idem : ∀ x → x and x ＝ x
   and-idem = witness!
@@ -50,3 +50,6 @@ opaque
 
   test : ∃[ f ꞉ (Bool → Bool) ] f false ＝ f true
   test = witness!
+
+  test₂ : ((x , y) : Bool × Bool) → x and y ＝ y and x
+  test₂ = witness!

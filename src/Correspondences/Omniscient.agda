@@ -33,7 +33,7 @@ opaque
 
 
 opaque
-  unfolding Omniscient₁ Exhaustible Essentially-classical n-Type-carrier
+  unfolding Omniscient₁ Exhaustible Essentially-classical
   omniscient₁→exhaustible : Omniscient₁ {ℓ′ = ℓ′} A → Exhaustible A
   omniscient₁→exhaustible omn {P} P? = Dec.map
     (λ ¬∃p x → dec→essentially-classical (P? x) $ ¬∃p ∘ ∣_∣₁ ∘ (x ,_))

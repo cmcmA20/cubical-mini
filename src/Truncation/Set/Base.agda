@@ -13,18 +13,16 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
-opaque
-  unfolding is-of-hlevel
-  rec : is-set B → (A → B) → ∥ A ∥₂ → B
-  rec _ f ∣ x ∣₂ = f x
-  rec B-set f (squash₂ x y p q i j) =
-    B-set (go x) (go y) (λ k → go (p k)) (λ k → go (q k)) i j where
-      go : ∥ _ ∥₂ → _
-      go = rec B-set f
+rec : is-set B → (A → B) → ∥ A ∥₂ → B
+rec _ f ∣ x ∣₂ = f x
+rec B-set f (squash₂ x y p q i j) =
+  is-set-β B-set (go x) (go y) (λ k → go (p k)) (λ k → go (q k)) i j where
+    go : ∥ _ ∥₂ → _
+    go = rec B-set f
 
-  instance
-    ∥-∥₂-is-set : is-set ∥ A ∥₂
-    ∥-∥₂-is-set = squash₂
+instance
+  ∥-∥₂-is-set : is-set ∥ A ∥₂
+  ∥-∥₂-is-set = is-set-η squash₂
 
 map : (A → B) → (∥ A ∥₂ → ∥ B ∥₂)
 map f = rec ∥-∥₂-is-set (∣_∣₂ ∘ f)

@@ -10,7 +10,7 @@ open import Meta.Reflection
 open import Data.Bool.Base as Bool
 open import Data.Empty.Base
 open import Data.Fin.Base
-open import Data.List.Base
+open import Data.List.Base as List
 open import Data.List.Operations
 open import Data.List.Instances.Foldable
 open import Data.List.Instances.FromProduct
@@ -54,14 +54,25 @@ dummy-level : Level-data goal-strat
 dummy-level {(none)} = tt
 dummy-level {(by-hlevel)} = unknown
 
+fixed-level : ℕ → Level-data goal-strat
+fixed-level {(none)} _ = tt
+fixed-level {(by-hlevel)} n = lit (nat n)
+
+Goal-data : Type
+Goal-data = Σ[ args-length ꞉ ℕ ] Selector args-length
+
 record Tactic-desc (goal-name : Name) (goal-strat : Goal-strat) : Type where
   field
-    args-length                    : ℕ
-    goal-selector                  : Selector args-length
-    level-selector                 : {w : goal-is-stratified goal-strat} → Selector args-length
-    other-atoms                    : List Name
-    instance-helper                : Name
-    upwards-closure                : {w : goal-is-stratified goal-strat} → Maybe Name
+    args-length : ℕ
+    goal-selector : Selector args-length
+    level-selector
+      : {w : goal-is-stratified goal-strat} → Selector args-length
+    aliases
+      : {w : goal-is-stratified goal-strat}
+      → List (Name × ℕ × Goal-data)
+    other-atoms : List Name
+    instance-helper : Name
+    upwards-closure : {w : goal-is-stratified goal-strat} → Maybe Name
     -- ^ it should have a following signature
     --   (h₀ h₁ : HLevel) → whatever h₀ A → whatever (h₁ + h₀) A
 
@@ -78,21 +89,27 @@ data Arg-spec : Goal-strat → Type where
 pattern `search sg  = `search-under 0 sg
 pattern `level-same = `level-minus 0
 
-data goal-decomposition {ℓ} (goal-name : Name) {goal-strat : Goal-strat} ⦃ @irr what : Tactic-desc goal-name goal-strat ⦄ (T : Type ℓ) : Type where
-  decomp : (search-lemma : Name) (arguments : List (Arg-spec goal-strat))
-         → goal-decomposition goal-name T
+data goal-decomposition
+  {ℓ} (goal-name : Name) {goal-strat : Goal-strat}
+  ⦃ @irr what : Tactic-desc goal-name goal-strat ⦄ (T : Type ℓ) : Type where
+    decomp : (search-lemma : Name) (arguments : List (Arg-spec goal-strat))
+           → goal-decomposition goal-name T
 
 private
   goal-is-native : Bool → Type
   goal-is-native = Bool.rec ⊤ ⊥
 
-record Struct-proj-desc (goal-name : Name) (goal-strat : Goal-strat) (carrier-name : Name) (goal-nat : Bool) : Type where
+record Struct-proj-desc
+  (goal-name : Name) (goal-strat : Goal-strat)
+  (carrier-name : Name) (goal-nat : Bool) : Type where
   field
     struct-name            : Name
     struct-args-length     : ℕ
     goal-projection        : Name
     projection-args-length : ℕ
-    level-selector         : {z : goal-is-native goal-nat} {w : goal-is-stratified goal-strat} → Selector struct-args-length
+    level-selector
+      : {z : goal-is-native goal-nat} {w : goal-is-stratified goal-strat}
+      → Selector struct-args-length
     carrier-selector       : Selector projection-args-length
 
 open Struct-proj-desc
@@ -124,19 +141,36 @@ private
     go {gs = by-hlevel} td xlv = replace (td .level-selector) (varg xlv)
     go {gs = none} _ _ = id
 
+  decompose-alias
+    : (actual : Name)
+      (target : Term)
+      (args : List (Arg Term))
+    → Name × ℕ × Goal-data
+    → TC (Level-data goal-strat × Term)
+  decompose-alias actual target args (alias-name , lv , alias-args-length , sel) = do
+    guard (actual name=? alias-name)
+    argsᵥ ← args-list→args-vec alias-args-length args
+    ty ← select-arg visible sel argsᵥ
+    pure $ fixed-level lv , ty
+
+  -- TODO refactor this abomination
   decompose-goal′ : Tactic-desc goal-name goal-strat → Term → TC (Level-data goal-strat × Term)
-  decompose-goal′ {goal-name} td ty = do
+  decompose-goal′ {goal-name} {goal-strat = none} td ty = do
     def actual-goal-name args ← pure ty where
       _ → backtrack [ "Goal type isn't an application of " , nameErr goal-name ]
     guard (actual-goal-name name=? goal-name)
     argsᵥ ← args-list→args-vec (td .args-length) args
     ty ← select-arg visible (td .goal-selector) argsᵥ
-    xlv ← go td argsᵥ
-    pure (xlv , ty)
-    where
-      go : ∀{gn gs} (td : Tactic-desc gn gs) → Vec _ (td .args-length) → TC (Level-data gs)
-      go {gs = by-hlevel} td args = select-arg visible (td .level-selector) args
-      go {gs = none} _ _ = pure tt
+    pure (tt , ty)
+  decompose-goal′ {goal-name} {goal-strat = by-hlevel} td ty = do
+    def actual-goal-name args ← pure ty where
+      _ → backtrack [ "Goal type isn't an application of " , nameErr goal-name ]
+    nondet (eff List) (td .aliases) (decompose-alias actual-goal-name ty args) <|> do
+      guard (actual-goal-name name=? goal-name)
+      argsᵥ ← args-list→args-vec (td .args-length) args
+      ty ← select-arg visible (td .goal-selector) argsᵥ
+      xlv ← select-arg visible (td .level-selector) argsᵥ
+      pure (xlv , ty)
 
   decompose-goal : Tactic-desc goal-name goal-strat → Term → TC (Level-data goal-strat × Term)
   decompose-goal td goal = do
@@ -372,7 +406,14 @@ private
       go-under ⊤ $ search next-td has-alts dummy-level fuel mv
 
 
-  use-decomp-hints : Tactic-desc goal-name goal-strat → ℕ → Level-data goal-strat × Term → Term → Term → List Term → TC (⊤ × Bool)
+  use-decomp-hints
+    : Tactic-desc goal-name goal-strat
+    → ℕ
+    → Level-data goal-strat × Term
+    → Term
+    → Term
+    → List Term
+    → TC (⊤ × Bool)
   use-decomp-hints _ 0 _ _ _ _ = typeError "use-decomp-hints: no fuel"
   use-decomp-hints {goal-name} {goal-strat} td (suc fuel) (lv , goal-ty) goal solved (c₁ ∷ cs) = do
     ty  ← inferType c₁

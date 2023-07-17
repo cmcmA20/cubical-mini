@@ -73,11 +73,9 @@ private
         i (k = i0) → θ₀ j (~ i)
         i (k = i1) → θ₁ j (~ i)
 
-opaque
-  unfolding is-of-hlevel
-  line→is-equiv : is-equiv f
-  line→is-equiv .equiv-proof y .fst = has-fib y
-  line→is-equiv .equiv-proof y .snd = fib-prop y _
+line→is-equiv : is-equiv f
+line→is-equiv .equiv-proof y .fst = has-fib y
+line→is-equiv .equiv-proof y .snd = is-prop-β (fib-prop y) _
 
 line→equiv : A ≃ B
 line→equiv .fst = f
