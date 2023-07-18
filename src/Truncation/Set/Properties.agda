@@ -59,9 +59,7 @@ proj!
   → ∥ A ∥₂ → A
 proj! {A-set} = rec A-set id
 
-opaque
-  unfolding rec
-  ∥-∥₂-idempotent : is-set A → is-equiv ∣_∣₂
-  ∥-∥₂-idempotent {A} A-set = is-iso→is-equiv $ iso (proj A-set) inc∘proj λ _ → refl where
-    inc∘proj : (x : ∥ A ∥₂) → ∣ proj A-set x ∣₂ ＝ x
-    inc∘proj = elim (λ _ → is-prop→is-set (squash₂ _ _)) λ _ → refl
+∥-∥₂-idempotent : is-set A → is-equiv ∣_∣₂
+∥-∥₂-idempotent {A} A-set = is-iso→is-equiv $ iso (proj A-set) inc∘proj λ _ → refl where
+  inc∘proj : (x : ∥ A ∥₂) → ∣ proj A-set x ∣₂ ＝ x
+  inc∘proj = elim! λ _ → refl

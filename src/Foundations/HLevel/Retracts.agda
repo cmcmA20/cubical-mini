@@ -162,5 +162,6 @@ opaque
   ≃-is-of-hlevel-right-suc (suc n) B-hl e =
     ≃-is-of-hlevel (suc (suc n)) (is-of-hlevel-≃ (suc (suc n)) e B-hl) B-hl e
 
-is-equiv-is-of-hlevel : {f : A → B} (n : HLevel) → is-of-hlevel (suc n) (is-equiv f)
-is-equiv-is-of-hlevel _ = is-prop→is-of-hlevel-suc (is-equiv-is-prop _)
+instance
+  is-equiv-is-of-hlevel : {f : A → B} {n : HLevel} → is-of-hlevel (suc n) (is-equiv f)
+  is-equiv-is-of-hlevel = is-prop→is-of-hlevel-suc (is-equiv-is-prop _)

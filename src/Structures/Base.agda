@@ -58,14 +58,12 @@ product-str-is-univalent {S} {T} {σ} {τ} θ₁ θ₂ {X , x , y} {Y , x′ , y
 product-action : Equiv-action S → Equiv-action T → Equiv-action (λ X → S X × T X)
 product-action actx acty eqv = Σ-ap (actx eqv) λ x → acty eqv
 
-opaque
-  unfolding _∙ₑ_
-  @0 product-action-is-transport
-    : {α : Equiv-action S} {β : Equiv-action T}
-    → is-transport-str α → is-transport-str β
-    → is-transport-str (product-action α β)
-  product-action-is-transport α-tr β-tr e s =
-   Σ-pathP (α-tr e (s .fst)) (β-tr e (s .snd))
+@0 product-action-is-transport
+  : {α : Equiv-action S} {β : Equiv-action T}
+  → is-transport-str α → is-transport-str β
+  → is-transport-str (product-action α β)
+product-action-is-transport α-tr β-tr e s =
+ Σ-pathP (α-tr e (s .fst)) (β-tr e (s .snd))
 
 
 Str-function-str : Structure ℓ₁ S → Structure ℓ₂ T → Structure _ (λ X → S X → T X)

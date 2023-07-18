@@ -88,15 +88,13 @@ _ ≃⟨⟩ e = e
 _≃∎ : (A : Type ℓ) → A ≃ A
 _ ≃∎ = idₑ
 
-opaque
-  unfolding is-of-hlevel
-  prop-extₑ : is-prop A → is-prop B
-            → (A → B) → (B → A)
-            → A ≃ B
-  prop-extₑ A-prop B-prop a→b b→a .fst = a→b
-  prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .fst = b→a y , B-prop _ _
-  prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
-    Σ-path (A-prop _ _) (is-prop→is-set B-prop _ _ _ _)
+prop-extₑ : is-prop A → is-prop B
+          → (A → B) → (B → A)
+          → A ≃ B
+prop-extₑ A-prop B-prop a→b b→a .fst = a→b
+prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .fst = b→a y , is-prop-β B-prop _ _
+prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
+  Σ-path (is-prop-β A-prop _ _) (is-set-β (is-prop→is-set B-prop) _ _ _ _)
 
 module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
 
@@ -109,17 +107,15 @@ lift-equiv = iso→equiv 𝔯 where
   𝔯 .snd .linv _ = refl
 
 -- TODO move to `Equiv.Groupoid` ?
-opaque
-  unfolding _∙ₑ_
-  ∙ₑ-id-l : (f : A ≃ B) → idₑ ∙ₑ f ＝ f
-  ∙ₑ-id-l f = equiv-ext refl
+∙ₑ-id-l : (f : A ≃ B) → idₑ ∙ₑ f ＝ f
+∙ₑ-id-l f = equiv-ext refl
 
-  ∙ₑ-id-r : (f : A ≃ B) → f ∙ₑ idₑ ＝ f
-  ∙ₑ-id-r f = equiv-ext refl
+∙ₑ-id-r : (f : A ≃ B) → f ∙ₑ idₑ ＝ f
+∙ₑ-id-r f = equiv-ext refl
 
-  ∙ₑ-assoc : (f : A ≃ B) (g : B ≃ C) (h : C ≃ D)
-           → f ∙ₑ (g ∙ₑ h) ＝ (f ∙ₑ g) ∙ₑ h
-  ∙ₑ-assoc f g h = equiv-ext refl
+∙ₑ-assoc : (f : A ≃ B) (g : B ≃ C) (h : C ≃ D)
+         → f ∙ₑ (g ∙ₑ h) ＝ (f ∙ₑ g) ∙ₑ h
+∙ₑ-assoc f g h = equiv-ext refl
 
 @0 ua-∙ₑ
   : {A B C : Type ℓ}
