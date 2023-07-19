@@ -403,6 +403,12 @@ opaque
   is-of-hlevel 1 A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
   is-of-hlevel (suc (suc h)) A = is-of-hlevel (suc h) on-paths-of A
 
+  is-of-hlevel-β : (n : HLevel) → is-of-hlevel (suc (suc n)) A → is-of-hlevel (suc n) on-paths-of A
+  is-of-hlevel-β _ = id
+
+  is-of-hlevel-η : (n : HLevel) → is-of-hlevel (suc n) on-paths-of A → is-of-hlevel (suc (suc n)) A
+  is-of-hlevel-η _ = id
+
 is-contr : Type ℓ → Type ℓ
 is-contr = is-of-hlevel 0
 

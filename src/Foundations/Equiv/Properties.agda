@@ -76,11 +76,14 @@ module Equiv (e : A ≃ B) where
   inverse = e ₑ⁻¹
 
 
-infixr 1.5 _≃⟨⟩_ _≃⟨_⟩_
+infixr 1.5 _≃⟨⟩_ _≃⟨_⟩_ _≃˘⟨_⟩_
 infix  1.9 _≃∎
 
 _≃⟨_⟩_ : (A : Type ℓ) → A ≃ B → B ≃ C → A ≃ C
 _ ≃⟨ u ⟩ v = u ∙ₑ v
+
+_≃˘⟨_⟩_ : (A : Type ℓ) → B ≃ A → B ≃ C → A ≃ C
+_ ≃˘⟨ u ⟩ v = (u ₑ⁻¹) ∙ₑ v
 
 _≃⟨⟩_ : (A : Type ℓ) → A ≃ B → A ≃ B
 _ ≃⟨⟩ e = e
