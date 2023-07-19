@@ -15,9 +15,8 @@ opaque
   ⊤-is-contr .fst = tt
   ⊤-is-contr .snd tt = refl
 
-instance
-  ⊤-is-of-hlevel : ∀ {n} → is-of-hlevel n ⊤
-  ⊤-is-of-hlevel = is-of-hlevel-+-left 0 _ ⊤-is-contr
+⊤-is-of-hlevel : (n : HLevel) → is-of-hlevel n ⊤
+⊤-is-of-hlevel n = is-of-hlevel-+-left 0 n ⊤-is-contr
 
 
 record ⊤ω : Typeω where

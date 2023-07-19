@@ -10,6 +10,7 @@ open import Meta.Search.HLevel
 open import Correspondences.Omniscient
 
 open import Data.Empty.Base
+open import Data.Empty.Instances.HLevel
 open import Data.Dec.Base as Dec
 open import Data.FinSub.Base
 open import Data.FinSub.Instances.Discrete

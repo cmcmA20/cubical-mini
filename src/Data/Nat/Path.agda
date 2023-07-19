@@ -42,6 +42,9 @@ module ℕ-path-code where
 ℕ-is-set : is-set ℕ
 ℕ-is-set = identity-system→hlevel 1 ℕ-path-code.ℕ-identity-system ℕ-path-code.code-is-prop
 
+ℕ-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) ℕ
+ℕ-is-of-hlevel n = is-of-hlevel-+-left 2 n ℕ-is-set
+
 suc≠zero : ¬ suc m ＝ 0
 suc≠zero p = transport (ap discrim p) tt
   where
