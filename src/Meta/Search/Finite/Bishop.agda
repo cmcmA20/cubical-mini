@@ -20,7 +20,7 @@ open import Correspondences.Finite.Bishop
 open Correspondences.Finite.Bishop public
   using ( is-fin-set ; is-fin-set-β ; is-fin-set-η
         ; fin ; cardinality ; enumeration
-        ; finite )
+        ; finite ; is-fin-set→omniscient₁ ; finite-pi-fin )
 open import Correspondences.Omniscient
 
 open import Data.Bool.Base
