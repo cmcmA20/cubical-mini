@@ -2,6 +2,8 @@
 module Data.Nat.Order.Inductive where
 
 open import Foundations.Base
+open import Foundations.Prim.Equiv
+open import Foundations.Equiv.Base
 
 open import Meta.Search.HLevel
 
@@ -11,6 +13,7 @@ open import Data.Sum.Base
 open import Data.Unit.Base
 
 open import Data.Nat.Base
+open import Data.Nat.Properties
 
 private variable
   m n k : ℕ
@@ -59,6 +62,10 @@ opaque
   ≤-is-prop z≤      z≤      = refl
   ≤-is-prop (s≤s p) (s≤s q) = ap s≤s (≤-is-prop p q)
 
+instance
+  ≤-is-of-hlevel : is-of-hlevel (suc k) (m ≤ n)
+  ≤-is-of-hlevel = is-prop→is-of-hlevel-suc ≤-is-prop
+
 ≤-peel : suc m ≤ suc n → m ≤ n
 ≤-peel (s≤s p) = p
 
@@ -72,9 +79,54 @@ opaque
 ≤-ascend : n ≤ suc n
 ≤-ascend = ≤-suc-r ≤-refl
 
-instance
-  ≤-is-of-hlevel : is-of-hlevel (suc k) (m ≤ n)
-  ≤-is-of-hlevel = is-prop→is-of-hlevel-suc ≤-is-prop
+<-weaken : (x y : ℕ) → x < y → x ≤ y
+<-weaken x (suc y) (s≤s prf) = ≤-suc-r prf
+
+<-trans : {x y z : ℕ} → x < y → y < z → x < z
+<-trans xy yz = ≤-trans xy (<-weaken _ _ yz)
+
+≤-+-l : (x y : ℕ) → x ≤ y + x
+≤-+-l zero    y = z≤
+≤-+-l (suc x) y = subst id (sym (ap (λ q → suc x ≤ q) (+-sucr y x))) (s≤s (≤-+-l x y))
+
+≤-weak-+l : (x y z : ℕ) → x ≤ z → x ≤ y + z
+≤-weak-+l x  zero   z prf = prf
+≤-weak-+l x (suc y) z prf = ≤-suc-r (≤-weak-+l x y z prf)
+
+≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
+≤-subst {a} {b} {c} {d} ab cd = subst id (ap₂ (_≤_) ab cd)
+
+≤-+l-≃ : {x y z : ℕ} → (y ≤ z) ≃ (x + y ≤ x + z)
+≤-+l-≃ {x} {y} {z} = prop-extₑ! (ff x y z) (gg x y z)
+  where
+  ff : (a b c : ℕ) → b ≤ c → a + b ≤ a + c
+  ff zero    b c prf = prf
+  ff (suc a) b c prf = s≤s (ff a b c prf)
+
+  gg : (a b c : ℕ) → a + b ≤ a + c → b ≤ c
+  gg  zero   b c prf = prf
+  gg (suc a) b c prf = gg a b c (≤-peel prf)
+
+≤-+r-≃ : {x y z : ℕ} → (x ≤ y) ≃ (x + z ≤ y + z)
+≤-+r-≃ {x} {y} {z} =
+  (≤-+l-≃ {x = z} {y = x} {z = y})
+  ∙ₑ prop-extₑ! (≤-subst (+-comm z x) (+-comm z y)) (≤-subst (+-comm x z) (+-comm y z))
+
+≤-cong-+ : (m n p q : ℕ) → m ≤ p → n ≤ q → m + n ≤ p + q
+≤-cong-+ zero    n  p      q prf1 prf2 = ≤-weak-+l n p q prf2
+≤-cong-+ (suc m) n (suc p) q prf1 prf2 = s≤s (≤-cong-+ m n p q (≤-peel prf1) prf2)
+
+<-+l-≃ : {x y z : ℕ} → (y < z) ≃ (x + y < x + z)
+<-+l-≃ {x} {y} {z} =
+  ≤-+l-≃ {x = x} {y = suc y} {z = z}
+  ∙ₑ prop-extₑ! (≤-subst (+-sucr x y) refl) (≤-subst (sym (+-sucr x y)) refl)
+
+<-+r-≃ : {x y z : ℕ} → (x < y) ≃ (x + z < y + z)
+<-+r-≃ {x} = ≤-+r-≃ {x = suc x}
+
+≤-·l : (a b c : ℕ) → b ≤ c → a · b ≤ a · c
+≤-·l  zero   b c prf = z≤
+≤-·l (suc a) b c prf = ≤-cong-+ b (a · b) c (a · c) prf (≤-·l a b c prf)
 
 ≤-dec : (m n : ℕ) → Dec (m ≤ n)
 ≤-dec zero zero = yes z≤
