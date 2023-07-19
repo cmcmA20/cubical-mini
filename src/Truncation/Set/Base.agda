@@ -24,6 +24,9 @@ instance
   ∥-∥₂-is-set : is-set ∥ A ∥₂
   ∥-∥₂-is-set = is-set-η squash₂
 
+∥-∥₂-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) ∥ A ∥₂
+∥-∥₂-is-of-hlevel n = is-of-hlevel-+-left 2 n ∥-∥₂-is-set
+
 map : (A → B) → (∥ A ∥₂ → ∥ B ∥₂)
 map f = rec ∥-∥₂-is-set (∣_∣₂ ∘ f)
 

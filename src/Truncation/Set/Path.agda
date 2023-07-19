@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
+{-# OPTIONS --safe #-}
 module Truncation.Set.Path where
 
 open import Foundations.Base

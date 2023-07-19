@@ -21,6 +21,10 @@ instance
   ∥-∥₁-is-prop : is-prop ∥ A ∥₁
   ∥-∥₁-is-prop = is-prop-η squash₁
 
+∥-∥₁-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) ∥ A ∥₁
+∥-∥₁-is-of-hlevel n = is-of-hlevel-+-left 1 n ∥-∥₁-is-prop
+
+
 map : (A → B) → (∥ A ∥₁ → ∥ B ∥₁)
 map f = rec ∥-∥₁-is-prop (∣_∣₁ ∘ f)
 

@@ -19,8 +19,8 @@ private variable
   D : Type d
 
 -- propositional version
-_∪_ : Type a → Type b → Type (a ⊔ b)
-A ∪ B = ∥ A ⊎ B ∥₁
+_⊎₁_ : Type a → Type b → Type (a ⊔ b)
+A ⊎₁ B = ∥ A ⊎ B ∥₁
 
 [_,_]ᵤ : (A → C) → (B → C) → (A ⊎ B) → C
 [ f , _ ]ᵤ (inl x) = f x

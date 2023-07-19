@@ -77,10 +77,10 @@ instance
   decomp-fin→dis : goal-decomposition (quote is-discrete) A
   decomp-fin→dis = decomp (quote is-fin-set→is-discrete) [ `search (quote is-fin-set) ]
 
-  proj-fin-finset : Struct-proj-desc (quote is-fin-set) none (quote FinSet-carrier) true
+  proj-fin-finset : Struct-proj-desc (quote is-fin-set) none (quote FinSet.carrier) true
   proj-fin-finset .Struct-proj-desc.struct-name = quote FinSet
   proj-fin-finset .Struct-proj-desc.struct-args-length = 1
-  proj-fin-finset .Struct-proj-desc.goal-projection = quote FinSet-carrier-is-fin-set
+  proj-fin-finset .Struct-proj-desc.goal-projection = quote FinSet.carrier-is-fin-set
   proj-fin-finset .Struct-proj-desc.projection-args-length = 2
   proj-fin-finset .Struct-proj-desc.carrier-selector = 1
 

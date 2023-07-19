@@ -2,10 +2,8 @@
 *~
 \.*#*
 \#*
-src/*/Everything.agda
+Everything.agda
 !src/Foundations/Everything.agda
-src/Data/*/Instances/Everything.agda
-src/Correspondences/*/*/Instances/Everything.agda
 dist-newstyle/
 _build/
 MAlonzo/
