@@ -36,9 +36,8 @@ opaque
   absurd-is-contr .fst ()
   absurd-is-contr .snd _ _ ()
 
-instance
-  ⊥-is-of-hlevel : is-of-hlevel (suc n) ⊥
-  ⊥-is-of-hlevel = is-prop→is-of-hlevel-suc ⊥-is-prop
+⊥-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) ⊥
+⊥-is-of-hlevel _ = is-prop→is-of-hlevel-suc ⊥-is-prop
 
 absurd-path : {@0 y : A} {@0 x : ⊥} → absurd x ＝ y
 absurd-path {x = ()}
@@ -66,6 +65,6 @@ opaque
   ¬-is-prop : is-prop (¬ A)
   ¬-is-prop ¬a₁ ¬a₂ i a = ⊥-ext {x = ¬a₁ a} {y = ¬a₂ a} i
 
-instance
-  ¬-is-of-hlevel : {A : Type ℓ} → is-of-hlevel (suc n) (¬ A)
-  ¬-is-of-hlevel = is-prop→is-of-hlevel-suc ¬-is-prop
+
+¬-is-of-hlevel : {A : Type ℓ} (n : HLevel) → is-of-hlevel (suc n) (¬ A)
+¬-is-of-hlevel _ = is-prop→is-of-hlevel-suc ¬-is-prop

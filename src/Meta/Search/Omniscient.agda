@@ -6,6 +6,7 @@ open import Foundations.Equiv
 
 open import Meta.Reflection
 open import Meta.Search.Base public
+open import Meta.Search.Decidable
 open import Meta.Search.Exhaustible
 open import Meta.Search.HLevel
 
@@ -15,9 +16,12 @@ open Correspondences.Omniscient public
         ; omni₁
         ; ∃-decision ; omniscient₁→exhaustible )
 
+open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Instances.FromNat
 open import Data.List.Instances.FromProduct
+
+open import Truncation.Propositional.Base
 
 private variable
   ℓ ℓ′ ℓa ℓb ℓc ℓd : Level
@@ -42,6 +46,9 @@ instance
   decomp-omn₁→exh : goal-decomposition (quote Exhaustible) A
   decomp-omn₁→exh = decomp (quote omniscient₁→exhaustible)
     [ `search (quote Omniscient₁) ]
+
+  decomp-dec-∃ : goal-decomposition (quote Dec) (∃[ a ꞉ A ] B a )
+  decomp-dec-∃ = decomp (quote ∃-decision) [ `search-under 1 (quote Dec) , `search (quote Omniscient₁) ]
 
 -- TODO more decompositions
 

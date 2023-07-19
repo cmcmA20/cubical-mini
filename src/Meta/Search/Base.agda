@@ -157,7 +157,9 @@ private
   decompose-goal′ : Tactic-desc goal-name goal-strat → Term → TC (Level-data goal-strat × Term)
   decompose-goal′ {goal-name} {goal-strat = none} td ty = do
     def actual-goal-name args ← pure ty where
-      _ → backtrack [ "Goal type isn't an application of " , nameErr goal-name ]
+      x → backtrack
+            [ "Goal type isn't an application of " , nameErr goal-name
+            , "\nIt's " , termErr x ]
     guard (actual-goal-name name=? goal-name)
     argsᵥ ← args-list→args-vec (td .args-length) args
     ty ← select-arg visible (td .goal-selector) argsᵥ

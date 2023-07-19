@@ -6,6 +6,7 @@ open import Foundations.Equiv
 
 open import Meta.Reflection
 open import Meta.Search.Base public
+open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
 open import Correspondences.Exhaustible
@@ -14,6 +15,7 @@ open Correspondences.Exhaustible public
         ; exhaust
         ; Π-decision )
 
+open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Instances.FromNat
 open import Data.List.Instances.FromProduct
@@ -40,6 +42,9 @@ macro exhaust! = exhaust-tactic-worker
 instance
   decomp-exh-lift : goal-decomposition (quote Exhaustible) (Lift ℓ′ A)
   decomp-exh-lift = decomp (quote lift-exhaustible) [ `search (quote Exhaustible) ]
+
+  decomp-dec-Π : goal-decomposition (quote Dec) (Π[ a ꞉ A ] B a )
+  decomp-dec-Π = decomp (quote Π-decision) [ `search-under 1 (quote Dec) , `search (quote Exhaustible) ]
 
 -- TODO more decompositions
 

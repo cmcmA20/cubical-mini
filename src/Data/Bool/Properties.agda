@@ -2,7 +2,6 @@
 module Data.Bool.Properties where
 
 open import Foundations.Base
-open import Foundations.Univalence
 
 open import Meta.Search.Decidable
 open import Meta.Search.Discrete
@@ -10,7 +9,6 @@ open import Meta.Search.Exhaustible
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Omniscient
 
-open import Correspondences.Finite.Bishop
 open import Correspondences.Finite.ManifestBishop
 
 open import Data.Bool.Base public
@@ -25,16 +23,16 @@ open ∥-∥₁
 
 instance
   and-idem? : Dec (∀ x → x and x ＝ x)
-  and-idem? = Π-decision (λ x → (x and x) ≟ x) exhaust!
+  and-idem? = decide!
 
   and-comm? : Dec (∀ x y → x and y ＝ y and x)
-  and-comm? = Π-decision (λ x → Π-decision (λ y → (x and y) ≟ (y and x)) exhaust!) exhaust!
+  and-comm? = decide!
 
   test? : Dec (∃[ f ꞉ (Bool → Bool) ] f false ＝ f true)
-  test? = ∃-decision (λ f → f false ≟ f true) omni₁!
+  test? = decide!
 
   test₂? : Dec (((x , y) : Bool × Bool) → x and y ＝ y and x)
-  test₂? = Π-decision (λ (x , y) → (x and y) ≟ (y and x)) exhaust!
+  test₂? = decide!
 
 opaque
   unfolding
@@ -42,7 +40,7 @@ opaque
     𝓑 is-fin-set→omniscient₁ 𝓑→omniscient₁ bool-is-fin-set any? finite-pi-fin
     fin-sum fin-suc-universal fin-choice
 
-  and-idem : ∀ x → x and x ＝ x
+  and-idem : (x : Bool) → x and x ＝ x
   and-idem = witness!
 
   and-comm : ∀ x y → x and y ＝ y and x

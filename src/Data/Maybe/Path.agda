@@ -9,6 +9,7 @@ open import Meta.Search.HLevel
 open import Data.Empty.Base
 open import Data.Sum.Path
 open import Data.Unit.Base
+open import Data.Unit.Instances.HLevel
 
 open import Data.Maybe.Base public
 

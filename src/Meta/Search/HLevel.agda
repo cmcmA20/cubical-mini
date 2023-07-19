@@ -17,6 +17,7 @@ open Structures.n-Type public
 
 open import Correspondences.Erased
 
+open import Data.Empty.Base
 open import Data.Bool.Base
 open import Data.Fin.Base
 open import Data.List.Base
@@ -42,7 +43,7 @@ instance
     ∷ (quote is-prop  , 1 , 2 , fsuc fzero)
     ∷ (quote is-set   , 2 , 2 , fsuc fzero)
     ∷ []
-  Tactic-hlevel .Tactic-desc.other-atoms = [ quote _≃_ ]
+  Tactic-hlevel .Tactic-desc.other-atoms = [ quote _≃_ , quote ¬_ ]
   Tactic-hlevel .Tactic-desc.instance-helper = quote hlevel
   Tactic-hlevel .Tactic-desc.upwards-closure = just (quote is-of-hlevel-+)
 

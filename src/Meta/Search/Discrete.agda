@@ -7,6 +7,7 @@ open import Foundations.Equiv
 open import Meta.Literals.FromProduct
 open import Meta.Reflection
 open import Meta.Search.Base public
+open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
 open import Correspondences.Discrete
@@ -40,6 +41,9 @@ macro discrete! = discrete-tactic-worker
 _≟_ : { @(tactic discrete-tactic-worker) di : is-discrete A } → (x y : A) → Dec (x ＝ y)
 _≟_ {di} = is-discrete-β di
 
+dec-helper : is-discrete A → (x y : A) → Dec (x ＝ y)
+dec-helper = is-discrete-β
+
 hedberg-helper : (n : HLevel) → is-discrete A → is-of-hlevel (2 + n) A
 hedberg-helper n di = is-of-hlevel-+-left 2 n (is-discrete→is-set di)
 
@@ -61,6 +65,9 @@ instance
 
   decomp-hlevel-dis : goal-decomposition (quote is-of-hlevel) (is-discrete A)
   decomp-hlevel-dis = decomp (quote is-discrete-is-of-hlevel) [ `level-minus 1 ]
+
+  decomp-dec-eq : {x y : A} → goal-decomposition (quote Dec) (x ＝ y)
+  decomp-dec-eq = decomp (quote dec-helper) [ `search (quote is-discrete) , `meta , `meta ]
 
 -- Usage
 private

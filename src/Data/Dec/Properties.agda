@@ -11,6 +11,7 @@ import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
 
 open import Data.Empty.Base
+open import Data.Empty.Instances.HLevel
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Instances.HLevel

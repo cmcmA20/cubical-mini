@@ -9,6 +9,7 @@ open import Meta.Search.HLevel
 open import Structures.IdentitySystem.Base
 
 open import Data.Empty.Base
+open import Data.Empty.Instances.HLevel
 
 open import Data.Sum.Base public
 

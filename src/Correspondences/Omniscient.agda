@@ -13,6 +13,7 @@ open import Correspondences.Exhaustible
 open import Data.Dec as Dec
 import Data.Empty.Base as ⊥
 open ⊥ using (¬_)
+open import Data.Empty.Instances.HLevel
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∥_∥₁; ∣_∣₁; ∃-syntax)
