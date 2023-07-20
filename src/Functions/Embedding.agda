@@ -6,7 +6,11 @@ open import Foundations.HLevel
 open import Foundations.Sigma
 open import Foundations.Univalence
 
+open import Meta.Search.HLevel
+
 open import Structures.n-Type
+
+open import Data.Unit.Instances.HLevel
 
 open import Functions.Equiv.Fibrewise
 
@@ -22,29 +26,25 @@ Injective f = ∀ {x y} → f x ＝ f y → x ＝ y
 _↣_ : Type ℓ → Type ℓ′ → Type _
 A ↣ B = Σ[ f ꞉ (A → B) ] Injective f
 
-opaque
-  unfolding is-of-hlevel
-  injective→has-prop-fibres
-    : is-set B → (f : A → B) → Injective f
-    → ∀ x → is-prop (fibre f x)
-  injective→has-prop-fibres bset f inj x (f*x , p) (f*x′ , q) =
-    Σ-prop-path (λ x → bset _ _) (inj (p ∙ sym q))
+injective→has-prop-fibres
+  : is-set B → (f : A → B) → Injective f
+  → ∀ x → is-prop (fibre f x)
+injective→has-prop-fibres B-set f inj x = is-prop-η λ (f*x , p) (f*x′ , q) →
+  Σ-prop-path! (inj (p ∙ sym q))
+  where instance _ = B-set
 
-  has-prop-fibres→injective
-    : (f : A → B) → (∀ x → is-prop (fibre f x))
-    → Injective f
-  has-prop-fibres→injective _ prop p = ap fst (prop _ (_ , p) (_ , refl))
+has-prop-fibres→injective
+  : (f : A → B) → (∀ x → is-prop (fibre f x))
+  → Injective f
+has-prop-fibres→injective _ prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl))
 
-opaque
-  unfolding is-of-hlevel
-  between-sets-injective≃has-prop-fibres
-    : is-set A → is-set B → (f : A → B)
-    → Injective f ≃ (∀ x → is-prop (fibre f x))
-  between-sets-injective≃has-prop-fibres A-set B-set f =
-    prop-extₑ (λ p q i x → A-set _ _ (p x) (q x) i)
-              (Π-is-of-hlevel 1 λ _ → is-prop-is-prop)
-              (injective→has-prop-fibres B-set f)
-              (has-prop-fibres→injective f)
+between-sets-injective≃has-prop-fibres
+  : is-set A → is-set B → (f : A → B)
+  → Injective f ≃ (∀ x → is-prop (fibre f x))
+between-sets-injective≃has-prop-fibres A-set B-set f =
+  prop-extₑ! (injective→has-prop-fibres B-set f)
+             (has-prop-fibres→injective f)
+  where instance _ = A-set
 
 is-embedding : (A → B) → Type _
 is-embedding f = ∀ x → is-prop (fibre f x)
@@ -105,60 +105,61 @@ opaque
 
 @0 subtype-classifier
   : {B : Type ℓ}
-  → (Σ[ A ꞉ Type ℓ ] (A ↪ B))
-  ≃ (B → Σ[ T ꞉ Type ℓ ] (is-prop T))
+  → Σ[ A ꞉ Type ℓ ] A ↪ B
+  ≃ (B → Σ[ T ꞉ Type ℓ ] is-prop T)
 subtype-classifier {ℓ} = map-classifier {ℓ = ℓ} is-prop
 
 module @0 subtype-classifier {ℓ} {B : Type ℓ} = Equiv (subtype-classifier {B = B})
 
-opaque
-  unfolding is-of-hlevel
-  subset-proj-embedding
-    : ∀ {B : A → Type ℓ} → (∀ x → is-prop (B x))
-    → is-embedding {A = Σ A B} fst
-  subset-proj-embedding {B} B-prop x = is-of-hlevel-≃ 1 (fibre-equiv B x) (B-prop _)
 
-  embedding→monic
-    : {A : Type ℓ} {B : Type ℓ′} {f : A → B}
-    → is-embedding f
-    → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ g ＝ f ∘ h → g ＝ h
-  embedding→monic {f} emb g h p =
-    fun-ext λ x → ap fst (emb _ (g x , refl) (h x , happly (sym p) x))
+subset-proj-embedding
+  : {B : A → Type ℓ}
+  → (∀ x → is-prop (B x))
+  → is-embedding {A = Σ A B} fst
+subset-proj-embedding {B} B-prop x = is-of-hlevel-≃ 1 (fibre-equiv B x) (B-prop _)
 
-  monic→is-embedding
-    : {A : Type ℓ} {B : Type ℓ′} {f : A → B}
-    → is-set B
-    → (∀ {C : Set ℓ″} (g h : ⌞ C ⌟ → A) → f ∘ g ＝ f ∘ h → g ＝ h)
-    → is-embedding f
-  monic→is-embedding {f} bset monic =
-    injective→has-prop-fibres bset _ λ {x} {y} p →
-      happly (monic {C = el {n = 2} (Lift _ ⊤) λ _ _ _ _ i j → _} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p))) _
+embedding→monic
+  : {A : Type ℓ} {B : Type ℓ′} {f : A → B}
+  → is-embedding f
+  → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ g ＝ f ∘ h → g ＝ h
+embedding→monic {f} emb g h p =
+  fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl) (h x , happly (sym p) x))
+
+monic→is-embedding
+  : {A : Type ℓ} {B : Type ℓ′} {f : A → B}
+  → is-set B
+  → (∀ {C : Set ℓ″} (g h : ⌞ C ⌟ → A) → f ∘ g ＝ f ∘ h → g ＝ h)
+  → is-embedding f
+monic→is-embedding {f} B-set monic =
+  injective→has-prop-fibres B-set _ λ {x} {y} p →
+    happly (monic {C = el! $ Lift _ ⊤} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p))) _
 
 
-  embedding-lemma : (∀ x → is-contr (fibre f (f x))) → is-embedding f
-  embedding-lemma {f} cffx y (x , p) q =
-    is-contr→is-prop (subst is-contr (ap (fibre f) p) (cffx x)) (x , p) q
+embedding-lemma : (∀ x → is-contr (fibre f (f x))) → is-embedding f
+embedding-lemma {f} cffx y = is-prop-η λ (x , p) q →
+  is-prop-β (is-contr→is-prop (subst is-contr (ap (fibre f) p) (cffx x))) (x , p) q
 
-  cancellable→embedding : (∀ {x y} → (f x ＝ f y) ≃ (x ＝ y)) → is-embedding f
-  cancellable→embedding eqv =
-    embedding-lemma λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → eqv)) $
-      (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
+cancellable→embedding : (∀ {x y} → (f x ＝ f y) ≃ (x ＝ y)) → is-embedding f
+cancellable→embedding eqv =
+  embedding-lemma λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → eqv)) $
+    is-contr-η $ (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
 
-  is-embedding→cancellable : is-embedding f → ∀ {x y} → is-equiv {B = f x ＝ f y} (ap f)
-  is-embedding→cancellable {f} emb = total→is-equiv {f = λ y p → ap {y = y} f p}
-    (is-contr→is-equiv
-      ((_ , refl) , λ (y , p) i → p i , λ j → p (i ∧ j))
-      ((_ , refl) , (is-of-hlevel-≃ 1 (Σ-ap-snd λ _ → sym-equiv) (emb _) _)))
+is-embedding→cancellable : is-embedding f → ∀ {x y} → is-equiv {B = f x ＝ f y} (ap f)
+is-embedding→cancellable {f} emb = total→is-equiv {f = λ y p → ap {y = y} f p}
+  (is-contr→is-equiv
+    (is-contr-η $ (_ , refl) , λ (y , p) i → p i , λ j → p (i ∧ j))
+    (is-contr-η $ (_ , refl) , is-prop-β (is-of-hlevel-≃ 1 (Σ-ap-snd (λ _ → sym-equiv)) (emb _)) _))
 
-  is-embedding→is-of-hlevel
-    : ∀ n → {f : A → B} → is-embedding f
-    → is-of-hlevel (suc n) B
-    → is-of-hlevel (suc n) A
-  is-embedding→is-of-hlevel n {f} emb a-hl = is-of-hlevel-≃ (suc n) (total-equiv f) $
-    Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-of-hlevel-suc (emb x)
 
-  is-equiv→is-embedding : is-equiv f → is-embedding f
-  is-equiv→is-embedding r y = is-contr→is-prop (r .equiv-proof y)
+is-embedding→is-of-hlevel
+  : ∀ n → {f : A → B} → is-embedding f
+  → is-of-hlevel (suc n) B
+  → is-of-hlevel (suc n) A
+is-embedding→is-of-hlevel n {f} emb a-hl = is-of-hlevel-≃ (suc n) (total-equiv f) $
+  Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-of-hlevel-suc (emb x)
+
+is-equiv→is-embedding : is-equiv f → is-embedding f
+is-equiv→is-embedding r y = is-contr→is-prop $ is-contr-η $ r .equiv-proof y
 
 equiv→embedding : A ≃ B → A ↪ B
 equiv→embedding (f , p) = f , is-equiv→is-embedding p
