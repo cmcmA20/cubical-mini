@@ -9,8 +9,9 @@ open import Foundations.Transport
 
 private variable
   ℓ ℓ′ ℓ″ : Level
-  A A′ : Type ℓ
-  B P Q : A → Type ℓ′
+  A : Type ℓ
+  A′ : Type ℓ′
+  B P Q : A → Type ℓ″
 
 -- Unique existence
 
@@ -123,8 +124,7 @@ open is-iso
   : (bp : ∀ x → is-prop (B x))
   → {x y : Σ _ B}
   → is-equiv (Σ-prop-path bp {x} {y})
-Σ-prop-path-is-equiv bp {x} {y} = is-iso→is-equiv isom where opaque
-  unfolding is-of-hlevel
+Σ-prop-path-is-equiv bp {x} {y} = is-iso→is-equiv isom where
   isom : is-iso _
   isom .inv = ap fst
   isom .linv p = refl
@@ -152,25 +152,23 @@ open is-iso
 -- Σ-prop-square Bprop {p} {q} {s} {r} sq i j .snd =
 --   is-prop→SquareP (λ i j → Bprop (sq i j))
 --     (ap snd p) (ap snd q) (ap snd s) (ap snd r) i j
-opaque
-  unfolding centre
-  Σ-contract-fst : (A-c : is-contr A) → (Σ[ x ꞉ A ] B x) ≃ B (centre A-c)
-  Σ-contract-fst {B} (centre , paths) = iso→equiv the-iso where
-    the-iso : Iso _ _
-    the-iso .fst (x , b) = subst B (sym $ paths x) b
-    the-iso .snd .inv = _ ,_
-    the-iso .snd .rinv b′
-      = sym $ subst-filler B refl b′
-      ∙ ap (λ f → subst B f b′) (is-of-hlevel-suc 0 (path-is-of-hlevel 0 (centre , paths)) _ _)
-    the-iso .snd .linv (x , b) = Σ-pathP (paths _) $ symP $ subst-filler B (sym $ paths _) b
+Σ-contract-fst : (A-c : is-contr A) → (Σ[ x ꞉ A ] B x) ≃ B (centre A-c)
+Σ-contract-fst {B} A-c = iso→equiv the-iso where
+  the-iso : Iso _ _
+  the-iso .fst (x , b) = subst B (sym $ paths A-c x) b
+  the-iso .snd .inv = _ ,_
+  the-iso .snd .rinv b′
+    = sym $ subst-filler B refl b′
+    ∙ ap (λ f → subst B f b′) (is-prop-β (is-contr→is-prop (path-is-of-hlevel 0 A-c)) _ _)
+  the-iso .snd .linv (x , b) = Σ-pathP (paths A-c _) $ symP $ subst-filler B (sym $ paths A-c _) b
 
-  Σ-contract-snd : (∀ x → is-contr (B x)) → Σ A B ≃ A
-  Σ-contract-snd B-contr = iso→equiv the-iso where
-    the-iso : Iso _ _
-    the-iso .fst (a , b) = a
-    the-iso .snd .inv x = x , B-contr _ .fst
-    the-iso .snd .rinv x = refl
-    the-iso .snd .linv (a , b) i = a , B-contr a .snd b i
+Σ-contract-snd : (∀ x → is-contr (B x)) → Σ A B ≃ A
+Σ-contract-snd B-contr = iso→equiv the-iso where
+  the-iso : Iso _ _
+  the-iso .fst (a , b) = a
+  the-iso .snd .inv x = x , centre (B-contr _)
+  the-iso .snd .rinv x = refl
+  the-iso .snd .linv (a , b) i = a , paths (B-contr a) b i
 
 Σ-map-snd : ({x : A} → P x → Q x) → Σ _ P → Σ _ Q
 Σ-map-snd f (x , y) = (x , f y)
@@ -195,16 +193,14 @@ infixr 4 _,ₚ_
 Σ-prop-pathP bp {x} {y} p i =
   p i , is-prop→pathP (λ i → bp i (p i)) (x .snd) (y .snd) i
 
-opaque
-  unfolding is-of-hlevel
-  Σ-inj-set
-    : ∀ {x y z}
-    → is-set A
-    → Path (Σ A B) (x , y) (x , z)
-    → y ＝ z
-  Σ-inj-set {B} {y} {z} A-set path =
-    subst (_＝ z) (ap (λ e → transport (ap B e) y) (A-set _ _ _ _) ∙ transport-refl y)
-      (from-pathP (ap snd path))
+Σ-inj-set
+  : ∀ {x y z}
+  → is-set A
+  → Path (Σ A B) (x , y) (x , z)
+  → y ＝ z
+Σ-inj-set {B} {y} {z} A-set path =
+  subst (_＝ z) (ap (λ e → transport (ap B e) y) (is-set-β A-set _ _ _ _) ∙ transport-refl y)
+    (from-pathP (ap snd path))
 
 Σ-swap
   : {B : Type ℓ′} {C : A → B → Type ℓ″}
