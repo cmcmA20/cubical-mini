@@ -2,7 +2,6 @@
 module Data.Nat.Order.Inductive where
 
 open import Foundations.Base
-open import Foundations.Prim.Equiv
 open import Foundations.Equiv.Base
 
 open import Meta.Search.HLevel
@@ -87,7 +86,7 @@ instance
 
 ≤-+-l : (x y : ℕ) → x ≤ y + x
 ≤-+-l zero    y = z≤
-≤-+-l (suc x) y = subst id (sym (ap (λ q → suc x ≤ q) (+-sucr y x))) (s≤s (≤-+-l x y))
+≤-+-l (suc x) y = transport (sym (ap (λ q → suc x ≤ q) (+-sucr y x))) (s≤s (≤-+-l x y))
 
 ≤-weak-+l : (x y z : ℕ) → x ≤ z → x ≤ y + z
 ≤-weak-+l x  zero   z prf = prf

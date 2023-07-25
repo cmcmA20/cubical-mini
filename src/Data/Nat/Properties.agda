@@ -3,9 +3,6 @@ module Data.Nat.Properties where
 
 open import Foundations.Base
 
-open import Data.Dec.Base
-open import Data.Id
-
 open import Data.Nat.Base public
 open import Data.Nat.Path
 
@@ -59,5 +56,3 @@ open import Data.Nat.Path
 ·-assoc : (x y z : ℕ) → x · (y · z) ＝ x · y · z
 ·-assoc  zero   y z = refl
 ·-assoc (suc x) y z = ap (λ q → y · z + q) (·-assoc x y z) ∙ sym (·-distrib-+r y _ _)
-
--- TODO
