@@ -75,7 +75,6 @@ prop!
 prop! {A} {aip} {x} {y} =
   is-prop→pathP (λ i → coe0→i (λ j → is-prop (A j)) i aip) x y
 
-
 instance
   decomp-hlevel-lift : goal-decomposition (quote is-of-hlevel) (Lift ℓ′ A)
   decomp-hlevel-lift = decomp (quote Lift-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) ]
