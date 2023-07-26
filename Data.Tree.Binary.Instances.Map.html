@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Tree.Binary.Instances.Map</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Tree.Binary.Instances.Map.html" class="Module">Data.Tree.Binary.Instances.Map</a> <a id="62" class="Keyword">where</a>
+
+<a id="69" class="Keyword">open</a> <a id="74" class="Keyword">import</a> <a id="81" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="99" class="Keyword">open</a> <a id="104" class="Keyword">import</a> <a id="111" href="Meta.Idiom.html" class="Module">Meta.Idiom</a>
+
+<a id="123" class="Keyword">open</a> <a id="128" class="Keyword">import</a> <a id="135" href="Data.Tree.Binary.Base.html" class="Module">Data.Tree.Binary.Base</a> <a id="157" class="Keyword">public</a>
+
+<a id="165" class="Keyword">private</a> <a id="173" class="Keyword">variable</a>
+  <a id="184" href="Data.Tree.Binary.Instances.Map.html#184" class="Generalizable">ℓ</a> <a id="186" class="Symbol">:</a> <a id="188" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="196" href="Data.Tree.Binary.Instances.Map.html#196" class="Generalizable">A</a> <a id="198" class="Symbol">:</a> <a id="200" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="205" href="Data.Tree.Binary.Instances.Map.html#184" class="Generalizable">ℓ</a>
+
+<a id="208" class="Keyword">instance</a>
+  <a id="Map-Tree"></a><a id="219" href="Data.Tree.Binary.Instances.Map.html#219" class="Function">Map-Tree</a> <a id="228" class="Symbol">:</a> <a id="230" href="Meta.Idiom.html#261" class="Record">Map</a> <a id="234" class="Symbol">(</a><a id="235" href="Meta.Idiom.html#181" class="InductiveConstructor">eff</a> <a id="239" href="Data.Tree.Binary.Base.html#95" class="Datatype">Tree</a><a id="243" class="Symbol">)</a>
+  <a id="247" href="Data.Tree.Binary.Instances.Map.html#219" class="Function">Map-Tree</a> <a id="256" class="Symbol">.</a><a id="257" href="Meta.Idiom.html#334" class="Field Operator">_&lt;$&gt;_</a> <a id="263" class="Symbol">=</a> <a id="265" href="Data.Tree.Binary.Base.html#814" class="Function">map</a>
+</pre></body></html>
