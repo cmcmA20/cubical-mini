@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Quotient.Set.Instances.HLevel</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Quotient.Set.Instances.HLevel.html" class="Module">Data.Quotient.Set.Instances.HLevel</a> <a id="66" class="Keyword">where</a>
+
+<a id="73" class="Keyword">open</a> <a id="78" class="Keyword">import</a> <a id="85" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="103" class="Keyword">open</a> <a id="108" class="Keyword">import</a> <a id="115" href="Meta.Search.HLevel.html" class="Module">Meta.Search.HLevel</a>
+
+<a id="135" class="Keyword">open</a> <a id="140" class="Keyword">import</a> <a id="147" href="Data.List.Base.html" class="Module">Data.List.Base</a>
+
+<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Data.Quotient.Set.Base.html" class="Module">Data.Quotient.Set.Base</a>
+
+<a id="199" class="Keyword">private</a> <a id="207" class="Keyword">variable</a>
+  <a id="218" href="Data.Quotient.Set.Instances.HLevel.html#218" class="Generalizable">ℓ</a> <a id="220" href="Data.Quotient.Set.Instances.HLevel.html#220" class="Generalizable">ℓ′</a> <a id="223" class="Symbol">:</a> <a id="225" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="233" href="Data.Quotient.Set.Instances.HLevel.html#233" class="Generalizable">A</a> <a id="235" class="Symbol">:</a> <a id="237" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="242" href="Data.Quotient.Set.Instances.HLevel.html#218" class="Generalizable">ℓ</a>
+  <a id="246" href="Data.Quotient.Set.Instances.HLevel.html#246" class="Generalizable">R</a> <a id="248" class="Symbol">:</a> <a id="250" href="Data.Quotient.Set.Instances.HLevel.html#233" class="Generalizable">A</a> <a id="252" class="Symbol">→</a> <a id="254" href="Data.Quotient.Set.Instances.HLevel.html#233" class="Generalizable">A</a> <a id="256" class="Symbol">→</a> <a id="258" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="263" href="Data.Quotient.Set.Instances.HLevel.html#220" class="Generalizable">ℓ′</a>
+
+<a id="267" class="Keyword">instance</a>
+  <a id="decomp-/₂"></a><a id="278" href="Data.Quotient.Set.Instances.HLevel.html#278" class="Function">decomp-/₂</a> <a id="288" class="Symbol">:</a> <a id="290" href="Meta.Search.Base.html#2564" class="Datatype">goal-decomposition</a> <a id="309" class="Symbol">(</a><a id="310" class="Keyword">quote</a> <a id="316" href="Foundations.Base.html#13058" class="Function">is-of-hlevel</a><a id="328" class="Symbol">)</a> <a id="330" class="Symbol">(</a><a id="331" href="Data.Quotient.Set.Instances.HLevel.html#233" class="Generalizable">A</a> <a id="333" href="Data.Quotient.Set.Base.html#127" class="Datatype Operator">/</a> <a id="335" href="Data.Quotient.Set.Instances.HLevel.html#246" class="Generalizable">R</a><a id="336" class="Symbol">)</a>
+  <a id="340" href="Data.Quotient.Set.Instances.HLevel.html#278" class="Function">decomp-/₂</a> <a id="350" class="Symbol">=</a> <a id="352" href="Meta.Search.Base.html#2715" class="InductiveConstructor">decomp</a> <a id="359" class="Symbol">(</a><a id="360" class="Keyword">quote</a> <a id="366" href="Data.Quotient.Set.Base.html#501" class="Function">/₂-is-of-hlevel</a><a id="381" class="Symbol">)</a> <a id="383" class="Symbol">(</a><a id="384" href="Meta.Search.Base.html#2331" class="InductiveConstructor">`level-minus</a> <a id="397" class="Number">2</a> <a id="399" href="Agda.Builtin.List.html#199" class="InductiveConstructor Operator">∷</a> <a id="401" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a><a id="403" class="Symbol">)</a>
+</pre></body></html>
