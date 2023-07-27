@@ -2,6 +2,7 @@
 module Correspondences.Base where
 
 open import Foundations.Base
+open import Foundations.Equiv
 
 open import Meta.Search.HLevel
 
@@ -36,9 +37,9 @@ n-Corr¹ = n-Corr 1
 n-Corr² = n-Corr 2
 n-Corr³ = n-Corr 3
 
-⌞_⌟ₚ : {ℓ ℓ′ : Level} {arity : ℕ} {n : HLevel} {A : Type ℓ} → n-Corr arity n ℓ′ A → Corr arity ℓ′ A
-⌞_⌟ₚ {arity = 0} C = ⌞ C ⌟
-⌞_⌟ₚ {arity = suc _} C a = ⌞ C a ⌟ₚ
+⌞_⌟ₙ : {ℓ ℓ′ : Level} {arity : ℕ} {n : HLevel} {A : Type ℓ} → n-Corr arity n ℓ′ A → Corr arity ℓ′ A
+⌞_⌟ₙ {arity = 0} C = ⌞ C ⌟
+⌞_⌟ₙ {arity = suc _} C a = ⌞ C a ⌟ₙ
 
 Rel
   : (arity : ℕ) (ℓ′ : Level)
@@ -72,7 +73,7 @@ P ⇒ Q = λ x → P x → Q x
 _⇒ₙ_ : n-Pred n ℓ′ A → n-Pred n ℓ″ A → n-Pred n _ A
 P ⇒ₙ Q = λ x → el! (⌞ P x ⌟ → ⌞ Q x ⌟)
 
-infix 10 Universal Universalₙ IUniversal IUniversalₙ
+infix 10 Universal IUniversal
 
 Universal : Pred ℓ′ A → _
 Universal {A} P = Π[ a ꞉ A ] P a
@@ -80,20 +81,33 @@ Universal {A} P = Π[ a ꞉ A ] P a
 
 syntax Universal P = Π[ P ]
 
-Universalₙ : n-Pred n ℓ′ A → _
-Universalₙ {A} P = Universal (⌞_⌟ ∘ P)
-{-# INLINE Universalₙ #-}
-
-syntax Universalₙ P = Π[ P ]ₙ
-
 IUniversal : Pred ℓ′ A → _
 IUniversal P = ∀{a} → P a
 {-# INLINE IUniversal #-}
 
 syntax IUniversal P = ∀[ P ]
 
-IUniversalₙ : n-Pred n ℓ′ A → _
-IUniversalₙ P = ∀{a} → ⌞ P a ⌟
-{-# INLINE IUniversalₙ #-}
 
-syntax IUniversalₙ P = ∀[ P ]ₙ
+-- Binary
+
+Reflexive : Corr 2 ℓ′ A → Type _
+Reflexive _~_ = ∀ {x} → x ~ x
+
+Symmetric : Corr 2 ℓ′ A → Type _
+Symmetric _~_ = ∀ {x y} → (x ~ y) → (y ~ x)
+
+Transitive : Corr 2 ℓ′ A → Type _
+Transitive _~_ = ∀ {x y z} → (x ~ y) → (y ~ z) → (x ~ z)
+
+record Equivalence (_~_ : Corr 2 ℓ′ A) : Type (level-of-type A ⊔ ℓ′) where
+  field
+    reflᶜ : Reflexive _~_
+    symᶜ  : Symmetric _~_
+    _∙ᶜ_  : Transitive _~_
+
+record is-congruence (_~_ : Corr 2 ℓ′ A) : Type (level-of-type A ⊔ ℓ′) where
+  constructor mk-congruence
+  field
+    has-is-prop     : ∀ x y → is-prop (x ~ y)
+    has-equivalence : Equivalence _~_
+  open Equivalence has-equivalence public

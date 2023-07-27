@@ -11,6 +11,7 @@ open import Agda.Builtin.Nat public
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ : Level
   A A′ : Type ℓ
+  B : A → Type ℓ′
   h h₁ h₂ : HLevel
 
 hlevel : (n : HLevel) ⦃ x : is-of-hlevel n A ⦄ → is-of-hlevel n A
@@ -155,6 +156,7 @@ opaque
   is-of-hlevel-is-of-hlevel-suc : (h₁ : HLevel) → is-of-hlevel (suc h₁) (is-of-hlevel h A)
   is-of-hlevel-is-of-hlevel-suc h₁ = is-of-hlevel-+-left 1 h₁ (is-of-hlevel-is-prop _)
 
+  -- note that it's shifted up by one
   is-of-hlevel-dep : HLevel → (A → Type ℓ′) → Type _
   is-of-hlevel-dep 0 B =
     ∀ {x y} (α : B x) (β : B y) (p : x ＝ y) → ＜ α ／ (λ i → B (p i)) ＼ β ＞
@@ -163,8 +165,7 @@ opaque
     → is-of-hlevel-dep {A = a₀ ＝ a₁} n (λ p → ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞)
 
   is-of-hlevel→is-of-hlevel-dep
-    : {B : A → Type ℓ′}
-    → (n : HLevel) → Π[ x ꞉ A ] is-of-hlevel (suc n) (B x)
+    : (n : HLevel) → Π[ x ꞉ A ] is-of-hlevel (suc n) (B x)
     → is-of-hlevel-dep n B
   is-of-hlevel→is-of-hlevel-dep 0 hl α β p = is-prop→pathP (λ i → hl (p i)) α β
   is-of-hlevel→is-of-hlevel-dep {A} {B} (suc n) hl {a₀} {a₁} b₀ b₁ =
@@ -183,7 +184,7 @@ opaque
     → (p : ＜ a ／ (λ j → B i0 j) ＼ c ＞)
     → (q : ＜ a ／ (λ i → B i i0) ＼ b ＞)
     → (r : ＜ b ／ (λ j → B i1 j) ＼ d ＞)
-    → (s : ＜ c ／(λ i → B i i1) ＼ d ＞)
+    → (s : ＜ c ／ (λ i → B i i1) ＼ d ＞)
     → SquareP B p q r s
   is-prop→squareP {B} B-pr {a} p q r s i j =
     hcomp (∂ j ∨ ∂ i) λ where
