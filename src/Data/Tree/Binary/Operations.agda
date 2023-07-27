@@ -2,22 +2,23 @@
 module Data.Tree.Binary.Operations where
 
 open import Foundations.Base
+
+open import Data.List.Base
 open import Data.Tree.Binary.Base
-open import Data.List
 
 private variable
   ℓ : Level
-  A : 𝒰 ℓ
+  A : Type ℓ
 
-to-list : Tree A → List A
-to-list  empty     = []
-to-list (leaf x)   = x ∷ []
-to-list (node l r) = to-list l ++ to-list r
+tree→list : Tree A → List A
+tree→list  empty     = []
+tree→list (leaf x)   = x ∷ []
+tree→list (node l r) = tree→list l ++ tree→list r
 
-from-list : List A → Tree A
-from-list []      = empty
-from-list (x ∷ l) = node (leaf x) (from-list l)
+list→tree : List A → Tree A
+list→tree []      = empty
+list→tree (x ∷ l) = node (leaf x) (list→tree l)
 
-to-from : (l : List A) → to-list (from-list l) ＝ l
-to-from []      = refl
-to-from (x ∷ l) = ap (x ∷_) (to-from l)
+list→tree→list : (l : List A) → tree→list (list→tree l) ＝ l
+list→tree→list []       = refl
+list→tree→list (x ∷ xs) = ap (x ∷_) (list→tree→list xs)
