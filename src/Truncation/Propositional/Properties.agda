@@ -62,7 +62,7 @@ elim₂! : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
        → {@(tactic hlevel-tactic-worker) P-prop : ∀ x y → is-prop (P x y)}
        → (∀ x y → P ∣ x ∣₁ ∣ y ∣₁)
        → ∀ x y → P x y
-elim₂! {A} {B} {P} {P-prop} = elim₂ P-prop
+elim₂! {P-prop} = elim₂ P-prop
 
 universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
 universal {B} {A} B-prop = iso→equiv $ inc′ , iso rec′ (λ _ → refl) beta where
