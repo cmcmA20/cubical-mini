@@ -38,18 +38,16 @@ import Meta.Everything
 -- I/O and related stuff.
 import System.Everything
 
+
+-- TODO
 -- Modalities.
 -- TODO import Modalities.Everything
 
--- TODO
 -- -- Category theory
--- import Cubical.Categories.Everything
---
--- -- Quotients
--- import Cubical.Quotients.Everything
---
+-- import Cat.Everything
+
 -- -- Homotopy theory
--- import Cubical.Homotopy.Everything
---
+-- import Homotopy.Everything
+
 -- -- Algebra library
--- import Cubical.Algebra.Everything
+-- import Algebra.Everything

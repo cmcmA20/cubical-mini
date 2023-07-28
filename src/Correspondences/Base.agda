@@ -105,9 +105,5 @@ record Equivalence (_~_ : Corr 2 ℓ′ A) : Type (level-of-type A ⊔ ℓ′) w
     symᶜ  : Symmetric _~_
     _∙ᶜ_  : Transitive _~_
 
-record is-congruence (_~_ : Corr 2 ℓ′ A) : Type (level-of-type A ⊔ ℓ′) where
-  constructor mk-congruence
-  field
-    has-is-prop     : ∀ x y → is-prop (x ~ y)
-    has-equivalence : Equivalence _~_
-  open Equivalence has-equivalence public
+is-congruence : (_~_ : Rel 2 ℓ′ A) → Type (level-of-type A ⊔ ℓ′)
+is-congruence _~_ = Equivalence ⌞ _~_ ⌟ₙ

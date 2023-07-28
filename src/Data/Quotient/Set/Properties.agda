@@ -9,16 +9,9 @@ open import Meta.Search.HLevel
 open import Structures.n-Type
 
 open import Correspondences.Base
-open import Correspondences.Decidable
-open import Correspondences.Discrete
 
-import Data.Empty.Base as ⊥
-open import Data.Empty.Instances.HLevel
-import Data.Dec.Base as Dec
-open Dec using (Dec)
-open import Data.Dec.Instances.HLevel
-import Data.Quotient.Type.Base as Q∞
-open import Data.Quotient.Set.Base
+-- import Data.Quotient.Type.Base as Q∞
+open import Data.Quotient.Set.Base public
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∃-syntax; ∥_∥₁ ; ∣_∣₁)
@@ -118,47 +111,33 @@ universal {B} {A} {R} B-set = iso→equiv $ inc , iso back (λ _ → refl) li wh
   li : _
   li f′ = fun-ext λ r → ∥-∥₁.rec! (λ (_ , p) → ap (back (inc f′)) (sym p) ∙ ap f′ p) (⦋-⦌-surjective r)
 
-module @0 _ {R : Corr 2 ℓ A} (congr : is-congruence R) where
-  private
-    open is-congruence congr
-    instance
-      R-prop : ∀{x y} → is-prop (R x y)
-      R-prop {x} {y} = has-is-prop x y
+module @0 _ {R : Rel 2 ℓ A} (congr : is-congruence R) where
+  open Equivalence congr
 
-  Code : A → A / R → Prop ℓ
-  Code x = elim! (λ y → el! (R x y)) λ y z r →
+  Code : A → A / ⌞ R ⌟ₙ → Prop ℓ
+  Code x = elim! (λ y → el! ⌞ R x y ⌟) λ y z r →
     n-ua $ prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r)
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
-  encode x y p = subst (λ z → ⌞ Code x z ⌟) p reflᶜ
+  encode x _ p = subst ⌞ Code x ⌟ₙ p reflᶜ
 
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
   decode = elim-prop! ∘ glue/
 
   effective : ⦋ x ⦌ ＝ ⦋ y ⦌
-            ≃ R x y
+            ≃ ⌞ R x y ⌟
   effective {x} {y} = prop-extₑ! (encode x ⦋ y ⦌) (decode x ⦋ y ⦌)
 
 @0 equivalence→effective₁
   : Equivalence R
   → ⦋ x ⦌ ＝ ⦋ y ⦌
   ≃ ∥ R x y ∥₁
-equivalence→effective₁ {R} R-equiv = effective (mk-congruence (λ _ _ → ∥-∥₁.∥-∥₁-is-prop) ∥R∥₁-equiv) where
-  open Equivalence R-equiv
-  ∥R∥₁-equiv : Equivalence (λ a b → ∥ R a b ∥₁)
-  ∥R∥₁-equiv .Equivalence.reflᶜ = ∣ reflᶜ ∣₁
-  ∥R∥₁-equiv .Equivalence.symᶜ = ∥-∥₁.map symᶜ
-  ∥R∥₁-equiv .Equivalence._∙ᶜ_ = ∥-∥₁.elim₂! λ a b → ∣ a ∙ᶜ b ∣₁
-
--- @0 what : Equivalence R → (∀ x y → Dec (R x y)) → is-discrete (A / R)
--- what {R} R-equiv d = is-discrete-η $ elim₂-prop! λ x y →
---   Dec.map (go x y) {!!} $ d′ x y
---   where
---     d′ : ∀ x y → Dec ∥ R x y ∥₁
---     d′ x y = Dec.map ∣_∣₁ (λ f → ∥-∥₁.rec! f) (d x y)
---     go : ∀ x y → ∥ R x y ∥₁ → ⦋ x ⦌ ＝ ⦋ y ⦌
---     go x y r = {!!}
---   -- Dec.map (λ r → {!!}) {!!} (Dec.map ∣_∣₁ (λ f → ∥-∥₁.rec! f) (d x y))
---   -- Dec.map {!!}
---   --         (λ f p → ⊥.absurd (f (effective (mk-congruence {!!}  R-equiv) .fst p)))
---   --         (d x y)
+equivalence→effective₁ {R} R-eq =
+  effective {R = ∥R∥₁} ∥R∥₁-c where
+  ∥R∥₁ : Rel 2 _ _
+  ∥R∥₁ x y = el! ∥ R x y ∥₁
+  open Equivalence R-eq
+  ∥R∥₁-c : is-congruence ∥R∥₁
+  ∥R∥₁-c .Equivalence.reflᶜ = ∣ reflᶜ ∣₁
+  ∥R∥₁-c .Equivalence.symᶜ = ∥-∥₁.map symᶜ
+  ∥R∥₁-c .Equivalence._∙ᶜ_ = ∥-∥₁.elim₂! λ a b → ∣ a ∙ᶜ b ∣₁
