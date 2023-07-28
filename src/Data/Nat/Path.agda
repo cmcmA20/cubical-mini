@@ -39,8 +39,9 @@ module ℕ-path-code where
   ℕ-identity-system : is-identity-system Code code-refl
   ℕ-identity-system = set-identity-system code-is-prop (decode _ _)
 
-ℕ-is-set : is-set ℕ
-ℕ-is-set = identity-system→hlevel 1 ℕ-path-code.ℕ-identity-system ℕ-path-code.code-is-prop
+instance
+  ℕ-is-set : is-set ℕ
+  ℕ-is-set = identity-system→hlevel 1 ℕ-path-code.ℕ-identity-system ℕ-path-code.code-is-prop
 
 ℕ-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) ℕ
 ℕ-is-of-hlevel n = is-of-hlevel-+-left 2 n ℕ-is-set

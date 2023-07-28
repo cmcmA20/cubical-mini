@@ -126,7 +126,12 @@ instance
 
   decomp-hlevel-path′ : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
   decomp-hlevel-path′ = decomp (quote path-is-of-hlevel′)
-    [ `level-same , `search (quote is-of-hlevel) , `meta , `meta ]
+    [ `level-suc , `search (quote is-of-hlevel) , `meta , `meta ]
+
+  decomp-hlevel-pathP′ : {F : I → Type ℓ} {a : F i0} {b : F i1}
+                       → goal-decomposition (quote is-of-hlevel) (PathP F a b)
+  decomp-hlevel-pathP′ = decomp (quote pathP-is-of-hlevel′)
+    [ `level-suc , `search (quote is-of-hlevel) , `meta , `meta ]
 
   decomp-hlevel-univalence : {A B : Type ℓ} → goal-decomposition (quote is-of-hlevel) (A ＝ B)
   decomp-hlevel-univalence = decomp (quote ＝-is-of-hlevel)
@@ -137,9 +142,6 @@ instance
 
   decomp-hlevel-hlevel : goal-decomposition (quote is-of-hlevel) (is-of-hlevel n A)
   decomp-hlevel-hlevel = decomp (quote is-of-hlevel-is-of-hlevel-suc) [ `level-minus 1 ]
-
-  -- decomp-hlevel-suc : goal-decomposition (quote is-of-hlevel) A
-  -- decomp-hlevel-suc = decomp (quote is-of-hlevel-suc) [ `level-minus 1 , `search (quote is-of-hlevel) ]
 
   decomp-hlevel-is-equiv : {B : Type ℓ′} {f : A → B} → goal-decomposition (quote is-of-hlevel) (is-equiv f)
   decomp-hlevel-is-equiv = decomp (quote is-equiv-is-of-hlevel) []

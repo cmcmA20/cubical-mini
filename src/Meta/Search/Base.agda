@@ -82,6 +82,7 @@ record Tactic-desc (goal-name : Name) (goal-strat : Goal-strat) : Type where
 open Tactic-desc
 
 data Arg-spec : Goal-strat → Type where
+  `level-suc    : Arg-spec by-hlevel
   `level-minus  : (n : ℕ) → Arg-spec by-hlevel
   `search-under : (n : ℕ) (subgoal : Name) → Arg-spec goal-strat
   `meta         : Arg-spec goal-strat
@@ -185,6 +186,10 @@ private
     just uc ← pure (td .upwards-closure) where
       _ → backtrack "Goal is not liftable"
     pure $ def uc (l₁ v∷ lit (nat l) v∷ tm v∷ [])
+
+  suc-term : Term → Term
+  suc-term (lit (nat n)) = lit (nat (suc n))
+  suc-term t = con (quote suc) (t v∷ [])
 
   pred-term : Term → Maybe Term
   pred-term (con (quote suc) (x v∷ [])) = just x
@@ -361,6 +366,7 @@ private
     cont
 
   gen-args (suc fuel) gs has-alts level goal defn (x ∷ args) accum cont with gs | x
+  ... | by-hlevel | `level-suc = gen-args fuel by-hlevel has-alts (suc-term level) goal defn args (level v∷ accum) cont
   ... | by-hlevel | `level-minus 0 = gen-args fuel by-hlevel has-alts level goal defn args (level v∷ accum) cont
   ... | by-hlevel | `level-minus n@(suc _) =
     do

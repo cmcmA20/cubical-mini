@@ -11,9 +11,10 @@ private variable
 
 opaque
   unfolding is-of-hlevel
-  ⊤-is-contr : is-contr ⊤
-  ⊤-is-contr .fst = tt
-  ⊤-is-contr .snd tt = refl
+  instance
+    ⊤-is-contr : is-contr ⊤
+    ⊤-is-contr .fst = tt
+    ⊤-is-contr .snd tt = refl
 
 ⊤-is-of-hlevel : (n : HLevel) → is-of-hlevel n ⊤
 ⊤-is-of-hlevel n = is-of-hlevel-+-left 0 n ⊤-is-contr

@@ -31,8 +31,9 @@ false≠true = ⊎-disjoint ∘ ap (bool-as-sum .fst)
 true≠false : ¬ true ＝ false
 true≠false = false≠true ∘ sym
 
-bool-is-set : is-set Bool
-bool-is-set = is-of-hlevel-≃ 2 bool-as-sum hlevel!
+instance
+  bool-is-set : is-set Bool
+  bool-is-set = is-of-hlevel-≃ 2 bool-as-sum hlevel!
 
 bool-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) Bool
 bool-is-of-hlevel n = is-of-hlevel-+-left 2 n bool-is-set

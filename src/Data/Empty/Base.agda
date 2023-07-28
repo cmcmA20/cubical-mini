@@ -29,8 +29,9 @@ elim ()
 
 opaque
   unfolding is-of-hlevel
-  ⊥-is-prop : is-prop ⊥
-  ⊥-is-prop ()
+  instance
+    ⊥-is-prop : is-prop ⊥
+    ⊥-is-prop ()
 
   absurd-is-contr : is-contr (⊥ → A)
   absurd-is-contr .fst ()
