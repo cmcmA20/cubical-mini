@@ -85,42 +85,43 @@ opaque
 finite : ⦃ d : is-fin-set A ⦄ → is-fin-set A
 finite ⦃ d ⦄ = d
 
-opaque
-  unfolding is-fin-set
-  finite-choice
-    : {P : A → Type ℓ′}
-    → is-fin-set A
-    → (∀ x → ∥ P x ∥₁) → ∥ (∀ x → P x) ∥₁
-  finite-choice {P} (sz , e) k = do
-    e ← e
-    choose ← fin-choice sz λ x → k (is-equiv→inverse (e .snd) x)
-    pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e .fst x))
+finite-choice
+  : {P : A → Type ℓ′}
+  → is-fin-set A
+  → (∀ x → ∥ P x ∥₁) → ∥ (∀ x → P x) ∥₁
+finite-choice {P} A-f k = do
+  e ← enumeration A-f
+  choose ← fin-choice (cardinality A-f) λ x → k (is-equiv→inverse (e .snd) x)
+  pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e .fst x))
 
 is-fin-set-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-fin-set A)
 is-fin-set-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-fin-set-is-prop
 
-opaque
-  unfolding Fin
-  finite-pi-fin
-    : (n : ℕ) {P : Fin n → Type ℓ′}
-    → (∀ x → is-fin-set (P x))
-    → is-fin-set ((x : Fin n) → P x)
-  finite-pi-fin zero fam = is-fin-set-η $ 1 , (pure $ iso→equiv go) where
-    go : Iso _ _
-    go .fst _ = fzero
-    go .snd .is-iso.inv _ ()
-    go .snd .is-iso.rinv (zero , _) = refl
-    go .snd .is-iso.linv _ = fun-ext λ()
+finite-pi-fin
+  : (n : ℕ) {P : Fin n → Type ℓ′}
+  → (∀ x → is-fin-set (P x))
+  → is-fin-set Π[ P ]
+finite-pi-fin 0 {P} fam = is-fin-set-η $ 1 , (pure $ iso→equiv $ ff , iso gg ri li) where
+  ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
+  ff _ = fzero
+  gg : _
+  gg _ f0 = absurd (fin-0-is-initial .fst f0)
+  opaque
+    unfolding Fin
+    ri : gg is-right-inverse-of ff
+    ri (0 , _) = refl
+    li : gg is-left-inverse-of ff
+    li _ = fun-ext λ ()
 
-  finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
-    e ← fin-choice (suc sz) (enumeration ∘ fam)
-    let rest = finite-pi-fin sz (fam ∘ fsuc)
-    cont ← enumeration rest
-    let
-      work =  fin-suc-universal {n = sz} {A = P}
-           ∙ₑ Σ-ap (e fzero) (λ x → cont)
-           ∙ₑ fin-sum {n = cardinality (fam fzero)} λ _ → cardinality rest
-    pure $ is-fin-set-η $ sum (cardinality _) _ , pure work
+finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
+  e ← fin-choice (suc sz) (enumeration ∘ fam)
+  let rest = finite-pi-fin sz (fam ∘ fsuc)
+  cont ← enumeration rest
+  let
+    work =  fin-suc-universal {n = sz} {A = P}
+         ∙ₑ Σ-ap (e fzero) (λ x → cont)
+         ∙ₑ fin-sum {n = cardinality (fam fzero)} λ _ → cardinality rest
+  pure $ is-fin-set-η $ sum (cardinality _) _ , pure work
 
 
 ×-is-fin-set : is-fin-set A → is-fin-set B → is-fin-set (A × B)

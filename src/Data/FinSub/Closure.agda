@@ -97,19 +97,19 @@ opaque
   fin-sum : {n : ℕ} (B : Fin n → ℕ)
           → Σ[ k ꞉ Fin n ] Fin (B k)
           ≃ Fin (sum n B)
-  fin-sum {0}     B .fst ()
-  fin-sum {0}     B .snd .equiv-proof ()
+  fin-sum {0} _ .fst ()
+  fin-sum {0} _ .snd .equiv-proof ()
   fin-sum {suc n} B =
     fin-coproduct {n = B fzero} .fst ∘ f ,
-    is-equiv-comp (is-iso→is-equiv f-iso) (fin-coproduct {n = B fzero} .snd)
+    is-equiv-comp (is-iso→is-equiv $ f-iso) (fin-coproduct {n = B fzero} .snd)
       where
         rec′ : Σ[ k ꞉ Fin n ] Fin (B (fsuc k)) ≃ Fin (sum n (B ∘ fsuc))
         rec′ = fin-sum {n = n} (B ∘ fsuc)
         module mrec = Equiv rec′
 
-        f : Σ _ (λ k → Fin (B k)) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
+        f : Σ[ k ꞉ Fin (suc n) ] Fin (B k) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
         f ((0 , _) , x) = inl x
-        f ((suc k , p) , y) = inr (rec′ .fst ((k , p) , y))
+        f ((suc k , p) , y) = inr (mrec.to ((k , p) , y))
 
         f-iso : is-iso f
         f-iso .is-iso.inv (inl x) = fzero , x

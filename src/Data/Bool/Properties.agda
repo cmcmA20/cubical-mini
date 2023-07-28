@@ -21,33 +21,33 @@ open import Data.Vec.Correspondences.Unary.Any.Computational
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
 
-instance
-  and-idem? : Dec (∀ x → x and x ＝ x)
-  and-idem? = decide!
+private
+  instance
+    and-idem? : Dec (∀ x → x and x ＝ x)
+    and-idem? = decide!
 
-  and-comm? : Dec (∀ x y → x and y ＝ y and x)
-  and-comm? = decide!
+    and-comm? : Dec (∀ x y → x and y ＝ y and x)
+    and-comm? = decide!
 
-  test? : Dec (∃[ f ꞉ (Bool → Bool) ] f false ＝ f true)
-  test? = decide!
+    test? : Dec (∃[ f ꞉ (Bool → Bool) ] f false ＝ f true)
+    test? = decide!
 
-  test₂? : Dec (((x , y) : Bool × Bool) → x and y ＝ y and x)
-  test₂? = decide!
+    test₂? : Dec (((x , y) : Bool × Bool) → x and y ＝ y and x)
+    test₂? = decide!
 
-opaque
-  unfolding
-    is-discrete-β is-fin-set-β omniscient₁-β exhaustible-β omniscient₁→exhaustible
-    𝓑 is-fin-set→omniscient₁ 𝓑→omniscient₁ bool-is-fin-set any? finite-pi-fin
-    fin-sum fin-suc-universal fin-choice
+  opaque
+    unfolding
+      is-discrete-β omniscient₁→exhaustible is-fin-set→omniscient₁ 𝓑→omniscient₁
+      bool-is-fin-set any? fin-sum fin-suc-universal fin-choice
 
-  and-idem : (x : Bool) → x and x ＝ x
-  and-idem = witness!
+    and-idem : (x : Bool) → x and x ＝ x
+    and-idem = witness!
 
-  and-comm : ∀ x y → x and y ＝ y and x
-  and-comm = witness!
+    and-comm : ∀ x y → x and y ＝ y and x
+    and-comm = witness!
 
-  test : ∃[ f ꞉ (Bool → Bool) ] f false ＝ f true
-  test = witness!
+    test : ∃[ f ꞉ (Bool → Bool) ] f false ＝ f true
+    test = witness!
 
-  test₂ : ((x , y) : Bool × Bool) → x and y ＝ y and x
-  test₂ = witness!
+    test₂ : ((x , y) : Bool × Bool) → x and y ＝ y and x
+    test₂ = witness!
