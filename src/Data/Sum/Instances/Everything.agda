@@ -5,3 +5,4 @@ open import Data.Sum.Instances.Decidable public
 open import Data.Sum.Instances.Discrete public
 open import Data.Sum.Instances.Finite public
 open import Data.Sum.Instances.HLevel public
+open import Data.Sum.Instances.Show public

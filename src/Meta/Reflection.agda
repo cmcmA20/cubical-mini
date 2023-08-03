@@ -278,15 +278,11 @@ unify-loudly a b = do
 
 print-depth : String → ℕ → ℕ → List ErrorPart → TC ⊤
 print-depth key level nesting es = debugPrint key level $
-  strErr (nest nesting ("[" <> show-ℕ nesting <> "]  ")) ∷ es
+  strErr (nest nesting ("[" ++ₛ show-ℕ nesting ++ₛ "]  ")) ∷ es
   where
-    _<>_ : String → String → String
-    _<>_ = concat-str
-    infixr 10 _<>_
-
     nest : ℕ → String → String
     nest zero s = s
-    nest (suc x) s = nest x (s <> "  ")
+    nest (suc x) s = nest x (s ++ₛ "  ")
 
 pattern nat-lit n =
   def (quote Number.fromNat) (_ ∷ _ ∷ _ ∷ lit (nat n) v∷ _)

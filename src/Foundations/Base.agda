@@ -1,3 +1,4 @@
+
 {-# OPTIONS --safe #-}
 module Foundations.Base where
 
@@ -703,3 +704,7 @@ it ⦃ (a) ⦄ = a
 
 _weakly-stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
 S weakly-stable A = S A → A
+
+-- Explicit type hint
+the : (A : Type ℓ) → A → A
+the _ a = a
