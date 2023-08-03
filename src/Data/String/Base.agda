@@ -7,6 +7,9 @@ open import Agda.Builtin.String public
     ( primStringUncons   to uncons
     ; primStringToList   to string→list
     ; primStringFromList to list→string
-    ; primStringAppend   to concat-str
     ; primShowString     to show-str
     ; primShowNat        to show-ℕ )
+
+infixr 5 _++ₛ_
+_++ₛ_ : String → String → String
+_++ₛ_ = Agda.Builtin.String.primStringAppend
