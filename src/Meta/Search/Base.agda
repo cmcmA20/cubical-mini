@@ -58,6 +58,10 @@ fixed-level : ℕ → Level-data goal-strat
 fixed-level {(none)} _ = tt
 fixed-level {(by-hlevel)} n = lit (nat n)
 
+level-term : Level-data goal-strat → Term
+level-term {(none)} _ = lit (string "dummy")
+level-term {(by-hlevel)} = id
+
 Goal-data : Type
 Goal-data = Σ[ args-length ꞉ ℕ ] Selector args-length
 
@@ -229,7 +233,7 @@ private
 
     ty ← reduce ty
 
-    def namen args ← returnTC ty
+    def namen args ← pure ty
       where what → backtrack [ "Thing isn't an application, it is " , termErr what ]
 
     argsᵥ ← args-list→args-vec (spd .projection-args-length) args
@@ -239,7 +243,7 @@ private
       go : ∀{gn gs gin} (td : Tactic-desc gn gs) (spd : Struct-proj-desc gn gs carrier-name gin) → Level-data gs → Term → TC ⊤
       go {gs = by-hlevel} {gin = true} td spd wanted-xlevel carrier-term = do
         debugPrint "tactic.search" 10
-          [ "Attempting to treat as " , nameErr (spd .struct-name) , " " , termErr wanted-xlevel ] -- FIXME error message
+          [ "Attempting to treat as " , nameErr (spd .struct-name) , " " , termErr wanted-xlevel ]
         actual-level ← inferType carrier-term >>= get-level-from-struct td spd
         debugPrint "tactic.search" 10
           [ "... but it's actually a(n) " , nameErr (spd .struct-name) , " " , termErr actual-level ]
@@ -247,7 +251,7 @@ private
         lv′ ← normalise actual-level
         lifting-loop 10000 td 0 (def (spd .goal-projection) (carrier-term v∷ [])) goal lv′ lv
         commitTC
-      go td spd _ carrier-term = do -- TODO check if it's ok
+      go td spd _ carrier-term = do -- seems like it is ok
         unify goal (def (spd .goal-projection) (carrier-term v∷ []))
         commitTC
 
@@ -297,7 +301,7 @@ private
     (solved , instances) ← runSpeculative do
       goal-strat-term ← quoteTC goal-strat >>= normalise
       solved@(meta mv _) ← new-meta (def (quote Struct-proj-desc) (lit (name goal-name) v∷ goal-strat-term v∷ lit (name qn) v∷ unknown v∷ []))
-        where _ → typeError [ "No projections found: " , termErr goal ] -- FIXME error message is too vague
+        where _ → typeError [ "No projections found for: " , termErr goal ]
 
       (x ∷ xs) ← getInstances mv
         where [] → pure ((unknown , []) , false)
@@ -357,7 +361,7 @@ private
       -- is done last).
     → TC ⊤              -- ^ Returns nada
   gen-args 0 _ _ _ _ _ _ _ _ = typeError "gen-args: no fuel"
-  gen-args fuel gs has-alts level goal defn [] accum cont = do
+  gen-args (suc fuel) gs has-alts level goal defn [] accum cont = do
     -- If we have no arguments to generate, then we can go ahead and
     -- use the accumulator as-is.
     unify goal (def defn (reverse-fast accum))
@@ -428,14 +432,13 @@ private
     c₁′ ← reduce c₁
     (remove-invisible c₁′ ty >>= λ where
       (con (quote decomp) (_ ∷ _ ∷ _ ∷ _ ∷ _ ∷ nm v∷ argspec v∷ [])) → do
-        -- debugPrint "tactic.search" 10
-        --   [ "Using " , termErr nm , " decomposition for:\n"
-        --   , termErr (def goal-name (lv v∷ goal-ty v∷ [])) ]
-        debugPrint "tactic.search" 10 [ "Using " , termErr nm , "decomposition for FIXME PLZ" ]
+        debugPrint "tactic.search" 10
+          [ "Using " , termErr nm , "decomposition for:\n"
+          , termErr (def goal-name $ level-term lv v∷ goal-ty v∷ []) ]
 
         nm′ ← unquoteTC nm
         argsp ← unquoteTC argspec
-        gen-args fuel goal-strat (not (length cs == 0)) lv goal nm′ argsp [] (returnTC tt)
+        gen-args fuel goal-strat (not (length cs == 0)) lv goal nm′ argsp [] (pure tt)
         unify solved c₁
 
         pure (tt , true)
