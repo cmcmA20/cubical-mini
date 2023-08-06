@@ -107,6 +107,10 @@ infer-hidden : (m : ℕ) → Vec (Arg Term) n → Vec (Arg Term) (m + n)
 infer-hidden 0 xs = xs
 infer-hidden (suc n) xs = harg unknown ∷ infer-hidden n xs
 
+infer-hidden′ : (m : ℕ) → List (Arg Term) → List (Arg Term)
+infer-hidden′ 0 xs = xs
+infer-hidden′ (suc n) xs = harg unknown ∷ infer-hidden′ n xs
+
 get-args : Term → List (Arg Term)
 get-args (var _ args) = args
 get-args (con _ args) = args
