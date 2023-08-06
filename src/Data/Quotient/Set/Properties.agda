@@ -111,11 +111,11 @@ universal {B} {A} {R} B-set = iso→equiv $ inc , iso back (λ _ → refl) li wh
   li : _
   li f′ = fun-ext λ r → ∥-∥₁.rec! (λ (_ , p) → ap (back (inc f′)) (sym p) ∙ ap f′ p) (⦋-⦌-surjective r)
 
-module @0 _ {R : Rel 2 ℓ A} (congr : is-congruence R) where
-  open Equivalence congr
+module @0 _ {R : Corr 2 ℓ A} (congr : is-congruence R) where
+  open is-congruence congr
 
-  Code : A → A / ⌞ R ⌟ₙ → Prop ℓ
-  Code x = elim! (λ y → el! ⌞ R x y ⌟) λ y z r →
+  Code : A → A / R → Prop ℓ
+  Code x = elim! (λ y → el! $ R x y) λ y z r →
     n-ua $ prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r)
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
@@ -124,20 +124,18 @@ module @0 _ {R : Rel 2 ℓ A} (congr : is-congruence R) where
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
   decode = elim-prop! ∘ glue/
 
-  effective : ⦋ x ⦌ ＝ ⦋ y ⦌
-            ≃ ⌞ R x y ⌟
-  effective {x} {y} = prop-extₑ! (encode x ⦋ y ⦌) (decode x ⦋ y ⦌)
+  effective : R x y
+            ≃ ⦋ x ⦌ ＝ ⦋ y ⦌
+  effective {x} {y} = prop-extₑ! (decode x ⦋ y ⦌) (encode x ⦋ y ⦌)
 
 @0 equivalence→effective₁
   : Equivalence R
-  → ⦋ x ⦌ ＝ ⦋ y ⦌
-  ≃ ∥ R x y ∥₁
-equivalence→effective₁ {R} R-eq =
-  effective {R = ∥R∥₁} ∥R∥₁-c where
-  ∥R∥₁ : Rel 2 _ _
-  ∥R∥₁ x y = el! ∥ R x y ∥₁
+  → ∥ R x y ∥₁
+  ≃ Path (A / λ x y → ∥ R x y ∥₁) ⦋ x ⦌ ⦋ y ⦌
+equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   open Equivalence R-eq
-  ∥R∥₁-c : is-congruence ∥R∥₁
-  ∥R∥₁-c .Equivalence.reflᶜ = ∣ reflᶜ ∣₁
-  ∥R∥₁-c .Equivalence.symᶜ = ∥-∥₁.map symᶜ
-  ∥R∥₁-c .Equivalence._∙ᶜ_ = ∥-∥₁.elim₂! λ a b → ∣ a ∙ᶜ b ∣₁
+  ∥R∥₁-c : is-congruence _
+  ∥R∥₁-c .is-congruence.equivalenceᶜ .reflᶜ = ∣ reflᶜ ∣₁
+  ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = ∥-∥₁.map symᶜ
+  ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim₂! λ a b → ∣ a ∙ᶜ b ∣₁
+  ∥R∥₁-c .is-congruence.has-propᶜ = hlevel!
