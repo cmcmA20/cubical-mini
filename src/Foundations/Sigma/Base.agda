@@ -30,6 +30,32 @@ infix 2 Σ-syntax′
 {-# INLINE Σ-syntax′ #-}
 syntax Σ-syntax′ (λ x → B) = Σ[ x ] B
 
+<_,_> : {C : ∀ {a} → B a → Type ℓ″}
+      → (f : (x : A) → B x)
+      → ((x : A) → C (f x))
+      → ((x : A) → Σ (B x) C)
+< f , g > x = (f x , g x)
+
+bimap : {P : A → Type ℓ″} {Q : ∀ {a} → P a → B a → Type ℓ‴}
+      → (f : (a : A) → B a)
+      → (∀ {a} (b : P a) → Q b (f a))
+      → ((a , b) : Σ A P)
+      → Σ (B a) (Q b)
+bimap f g (x , y) = f x , g y
+
+bimap-simple : {B : Type ℓ′} {P : A → Type ℓ″} {Q : B → Type ℓ‴}
+             → (f : A → B)
+             → (∀ {x} → P x → Q (f x))
+             → Σ A P → Σ B Q
+bimap-simple = bimap
+
+first : {B : Type ℓ′} {C : Type ℓ″} → (A → B) → A × C → B × C
+first f = bimap f (λ x → x)
+
+second : {C : A → Type ℓ‴} → (∀ {x} → B x → C x) → Σ A B → Σ A C
+second f = bimap (λ x → x) f
+
+
 _$₂_ : (f : (a : A) (b : B a) → C a b)
        (p : Σ[ x ꞉ A ] B x)
      → C (fst p) (snd p)
