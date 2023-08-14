@@ -93,7 +93,7 @@ instance
 ≤-weak-+l x (suc y) z prf = ≤-suc-r (≤-weak-+l x y z prf)
 
 ≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
-≤-subst {a} {b} {c} {d} ab cd = subst id (ap₂ (_≤_) ab cd)
+≤-subst ab cd = transport $ ap₂ (_≤_) ab cd
 
 ≤-+l-≃ : {x y z : ℕ} → (y ≤ z) ≃ (x + y ≤ x + z)
 ≤-+l-≃ {x} {y} {z} = prop-extₑ! (ff x y z) (gg x y z)

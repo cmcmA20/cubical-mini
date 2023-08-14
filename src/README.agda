@@ -35,6 +35,9 @@ import System.Everything
 -- Category theory
 import Categories.Everything
 
+-- Order theory
+import Order.Everything
+
 -- Function kinds.
 import Functions.Everything
 

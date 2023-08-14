@@ -68,16 +68,21 @@ opaque
   disjoint-⊎-is-prop Ap Bp notab (inr x)  (inl y)  = absurd (notab (y , x))
   disjoint-⊎-is-prop Ap Bp notab (inr y₁) (inr y₂) = ap inr (Bp y₁ y₂)
 
-contr-⊎-is-set
-  : is-contr A → is-contr B
+prop-⊎-is-set
+  : is-prop A → is-prop B
   → is-set (A ⊎ B)
-contr-⊎-is-set A-contr B-contr = identity-system→hlevel 1 ⊎-identity-system go where opaque
+prop-⊎-is-set A-prop B-prop = identity-system→hlevel 1 ⊎-identity-system go where opaque
   unfolding is-of-hlevel
   go : _
   go (inl x)  (inr y)  = Lift-is-of-hlevel 1 ⊥-is-prop
   go (inr y)  (inl x)  = Lift-is-of-hlevel 1 ⊥-is-prop
-  go (inl x₁) (inl x₂) = Lift-is-of-hlevel 1 $ is-contr→is-set A-contr _ _
-  go (inr y₁) (inr y₂) = Lift-is-of-hlevel 1 $ is-contr→is-set B-contr _ _
+  go (inl x₁) (inl x₂) = Lift-is-of-hlevel 1 $ is-prop→is-set A-prop _ _
+  go (inr y₁) (inr y₂) = Lift-is-of-hlevel 1 $ is-prop→is-set B-prop _ _
+
+contr-⊎-is-set
+  : is-contr A → is-contr B
+  → is-set (A ⊎ B)
+contr-⊎-is-set A-contr B-contr = prop-⊎-is-set (is-contr→is-prop A-contr) (is-contr→is-prop B-contr)
 
 inl-inj : {x y : A} → inl {B = B} x ＝ inl y → x ＝ y
 inl-inj {A} {x} path = ap f path where

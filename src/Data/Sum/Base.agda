@@ -19,6 +19,7 @@ private variable
   D : Type d
 
 -- propositional version
+infixr 3 _⊎₁_
 _⊎₁_ : Type a → Type b → Type (a ⊔ b)
 A ⊎₁ B = ∥ A ⊎ B ∥₁
 
