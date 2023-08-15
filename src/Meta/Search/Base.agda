@@ -382,7 +382,7 @@ private
       gen-args fuel by-hlevel has-alts level goal defn args (level′ v∷ accum) cont
     where
       monus : Term → ℕ → TC Term
-      monus (lit (nat n)) k = pure $ lit (nat (n - k))
+      monus (lit (nat n)) k = pure $ lit (nat (n ∸ k))
       monus tm zero = pure tm
       monus thezero@(con (quote zero) []) (suc it) = pure thezero
       monus (con (quote suc) (x v∷ [])) (suc it) = do

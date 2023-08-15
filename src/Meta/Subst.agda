@@ -45,7 +45,7 @@ raise-fromS : ℕ → ℕ → Subst
 raise-fromS n k = liftS n $ raiseS k
 
 singletonS : ℕ → Term → Subst
-singletonS n u = ((λ m → var m []) <$> count (n - 1)) ++# u ∷ₛ raiseS n where
+singletonS n u = ((λ m → var m []) <$> count (n ∸ 1)) ++# u ∷ₛ raiseS n where
   count : ℕ → List ℕ
   count zero = []
   count (suc n) = 0 ∷ (suc <$> count n)
@@ -78,13 +78,13 @@ lookup-tm (suc fuel) (wk n idₛ) i = pure $ var (i + n) []
 lookup-tm (suc fuel) (wk n ρ) i = lookup-tm fuel ρ i >>= subst-tm fuel (raiseS n)
 lookup-tm (suc fuel) (x ∷ₛ ρ) i with (i == 0)
 … | true  = pure x
-… | false = lookup-tm fuel ρ (i - 1)
-lookup-tm (suc fuel) (strengthen n ρ) i with (i <-internal n)
+… | false = lookup-tm fuel ρ (i ∸ 1)
+lookup-tm (suc fuel) (strengthen n ρ) i with (i <ᵇ n)
 … | true = nothing
-… | false = lookup-tm fuel ρ (i - n)
-lookup-tm (suc fuel) (lift n σ) i with (i <-internal n)
+… | false = lookup-tm fuel ρ (i ∸ n)
+lookup-tm (suc fuel) (lift n σ) i with (i <ᵇ n)
 … | true  = pure $ var i []
-… | false = lookup-tm fuel σ (i - n) >>= raise fuel n
+… | false = lookup-tm fuel σ (i ∸ n) >>= raise fuel n
 
 apply-tm 0 _ _ = nothing
 apply-tm (suc fuel) (var x args)      argu = pure $ var x (args ++ argu ∷ [])

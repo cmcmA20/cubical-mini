@@ -8,14 +8,14 @@ open import Agda.Builtin.Nat public
     ( zero
     ; suc
     ; _+_
-    ; _-_
     ; _==_
     ; div-helper
     ; mod-helper )
   renaming
     ( Nat to ℕ
+    ; _-_ to _∸_
     ; _*_ to _·_
-    ; _<_ to _<-internal_ )
+    ; _<_ to _<ᵇ_ )
 
 private variable
   ℓ : Level

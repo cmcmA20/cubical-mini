@@ -28,7 +28,7 @@ abstract-marker = go 0 where
   go k (var j args) = var j' <$> go* k args
     where
       j' : ℕ
-      j' with j <-internal k
+      j' with j <ᵇ k
       ... | false = suc j
       ... | true = j
   go k (con c args) = con c <$> go* k args
