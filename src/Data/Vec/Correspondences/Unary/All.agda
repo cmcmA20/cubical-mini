@@ -38,7 +38,7 @@ all-++-right : {xs : Vec A m} → All P (xs ++ ys) → All P ys
 all-++-right {xs = []}    ps       = ps
 all-++-right {xs = _ ∷ _} (_ ∷ ps) = all-++-right ps
 
-all? : Decidable P → Decidable (λ xs → All P {n = n} xs)
+all? : Decidable P → Decidable (λ (xs : Vec A n) → All P xs)
 all? P? []       = yes []
 all? P? (x ∷ xs) =
   Dec.map (λ { (px , ps) → px ∷ ps })

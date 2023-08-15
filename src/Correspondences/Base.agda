@@ -9,7 +9,7 @@ open import Meta.Search.HLevel
 open import Structures.n-Type
 
 open import Data.Nat.Base
-open import Data.Product.Base
+open import Data.Product.Base public
 
 Corr
   : (arity : ℕ) (ℓ′ : Level)
@@ -59,53 +59,62 @@ Pred₀ = n-Pred 0
 Pred₁ = n-Pred 1
 Pred₂ = n-Pred 2
 
-
--- Unary
-
 private variable
-  ℓ ℓ′ ℓ″ : Level
-  A : Type ℓ
+  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
+  C : Type ℓᶜ
   n : HLevel
-
-_⇒_ : Pred ℓ′ A → Pred ℓ″ A → Pred _ A
-P ⇒ Q = λ x → P x → Q x
-
-_⇒ₙ_ : n-Pred n ℓ′ A → n-Pred n ℓ″ A → n-Pred n _ A
-P ⇒ₙ Q = λ x → el! (⌞ P x ⌟ → ⌞ Q x ⌟)
+  arity : ℕ
 
 infix 10 Universal IUniversal
 
-Universal : Pred ℓ′ A → _
-Universal {A} P = Π[ a ꞉ A ] P a
+Universal : Corr arity ℓ A → Type (level-of-type A ⊔ ℓ)
+Universal {0} {A} P = Lift (level-of-type A) P
+Universal {1} {A} P = Π[ a ꞉ A ] P a
+Universal {suc (suc _)} {A} P = Π[ a ꞉ A ] Universal (P a)
 {-# INLINE Universal #-}
 
 syntax Universal P = Π[ P ]
 
-IUniversal : Pred ℓ′ A → _
-IUniversal P = ∀{a} → P a
+IUniversal : Corr arity ℓ A → Type (level-of-type A ⊔ ℓ)
+IUniversal {0} {A} P = Lift (level-of-type A) P
+IUniversal {1} {A} P = ∀{a} → P a
+IUniversal {suc (suc _)} {A} P = ∀{a} → IUniversal (P a)
 {-# INLINE IUniversal #-}
 
 syntax IUniversal P = ∀[ P ]
 
+_⇒_ : Corr arity ℓ A → Corr arity ℓ′ A → Corr arity (ℓ ⊔ ℓ′) A
+_⇒_ {0} P Q = P → Q
+_⇒_ {suc _} P Q = λ x → P x ⇒ Q x
+
+_⇒ₙ_ : n-Corr arity n ℓ A → n-Corr arity n ℓ′ A → n-Corr arity n (ℓ ⊔ ℓ′) A
+_⇒ₙ_ {0} P Q = el! (⌞ P ⌟ → ⌞ Q ⌟)
+_⇒ₙ_ {suc _} P Q = λ x → P x ⇒ₙ Q x
+
+-- Unary
+-- TODO nothing here
+
 
 -- Binary
 
-Reflexive : Corr 2 ℓ′ A → Type _
+Reflexive : Corr 2 ℓ A → Type _
 Reflexive _~_ = ∀ {x} → x ~ x
 
-Symmetric : Corr 2 ℓ′ A → Type _
+Symmetric : Corr 2 ℓ A → Type _
 Symmetric _~_ = ∀ {x y} → (x ~ y) → (y ~ x)
 
-Transitive : Corr 2 ℓ′ A → Type _
+Transitive : Corr 2 ℓ A → Type _
 Transitive _~_ = ∀ {x y z} → (x ~ y) → (y ~ z) → (x ~ z)
 
-record Equivalence (_~_ : Corr 2 ℓ′ A) : Type (level-of-type A ⊔ ℓ′) where
+record Equivalence (_~_ : Corr 2 ℓ A) : Type (level-of-type A ⊔ ℓ) where
   field
     reflᶜ : Reflexive _~_
     symᶜ  : Symmetric _~_
     _∙ᶜ_  : Transitive _~_
 
-record is-congruence (_~_ : Corr 2 ℓ′ A) : Type (level-of-type A ⊔ ℓ′) where
+record is-congruence (_~_ : Corr 2 ℓ A) : Type (level-of-type A ⊔ ℓ) where
   field
     equivalenceᶜ : Equivalence _~_
     instance

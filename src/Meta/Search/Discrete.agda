@@ -10,6 +10,7 @@ open import Meta.Search.Base public
 open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
+open import Correspondences.Decidable
 open import Correspondences.Discrete
 open Correspondences.Discrete public
   using ( is-discrete ; is-discrete-β ; is-discrete-η
@@ -38,10 +39,10 @@ instance
 discrete-tactic-worker = search-tactic-worker Tactic-discrete
 macro discrete! = discrete-tactic-worker
 
-_≟_ : { @(tactic discrete-tactic-worker) di : is-discrete A } → (x y : A) → Dec (x ＝ y)
+_≟_ : { @(tactic discrete-tactic-worker) di : is-discrete A } → Decidable (_＝_)
 _≟_ {di} = is-discrete-β di
 
-dec-helper : is-discrete A → (x y : A) → Dec (x ＝ y)
+dec-helper : is-discrete A → Decidable (_＝_)
 dec-helper = is-discrete-β
 
 hedberg-helper : (n : HLevel) → is-discrete A → is-of-hlevel (2 + n) A
@@ -71,7 +72,7 @@ instance
 
 -- Usage
 private
-  module _ ⦃ A-dis : is-discrete A ⦄ {B : A → Type ℓb} ⦃ B-dis : ∀{a} → is-discrete (B a) ⦄ where
+  module _ ⦃ A-dis : is-discrete A ⦄ {B : A → Type ℓb} ⦃ B-dis : ∀[ is-discrete ∘ⁿ B ] ⦄ where
     _ : is-discrete (A × A × A × A)
     _ = discrete!
 

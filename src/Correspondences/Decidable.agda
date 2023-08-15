@@ -42,7 +42,5 @@ fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 ¬-decision (no ¬a) .proof = ofʸ ¬a
 
 
--- Unary
-
-Decidable : Pred _ (Pred ℓ′ A)
-Decidable P = Π[ Dec ∘ P ]
+Decidable : Pred _ (Corr n ℓ′ A)
+Decidable P = Π[ Dec ∘ⁿ P ]

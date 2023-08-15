@@ -6,10 +6,11 @@ open import Foundations.Base
 open import Data.Nat.Base
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level
   n : ℕ
-  A : Type ℓ
-  B : Type ℓ′
+  A : Type ℓᵃ
+  B : Type ℓᵇ
+  C : Type ℓᶜ
 
 Levelₓ : Level → Level → ℕ → Level
 Levelₓ ℓ₁ ℓ₂ zero    = ℓ₂
@@ -18,6 +19,10 @@ Levelₓ ℓ₁ ℓ₂ (suc n) = ℓ₁ ⊔ (Levelₓ ℓ₁ ℓ₂ n)
 functionₓ : (n : ℕ) → Type ℓ → Type ℓ′ → Type (Levelₓ ℓ ℓ′ n)
 functionₓ zero    A B = B
 functionₓ (suc n) A B = A → functionₓ n A B
+
+_∘ⁿ_ : functionₓ 1 B C → functionₓ n A B → functionₓ n A C
+_∘ⁿ_ {n = 0} f P = f P
+_∘ⁿ_ {n = suc _} f P = λ x → f ∘ⁿ P x
 
 Vecₓ : Type ℓ → ℕ → Type ℓ
 Vecₓ A 0             = Lift _ ⊤
