@@ -69,3 +69,6 @@ opaque
 
 ¬-is-of-hlevel : {A : Type ℓ} (n : HLevel) → is-of-hlevel (suc n) (¬ A)
 ¬-is-of-hlevel _ = is-prop→is-of-hlevel-suc ¬-is-prop
+
+_≠_ : ∀ {ℓ} {A : Type ℓ} → A → A → Type ℓ
+x ≠ y = ¬ x ＝ y

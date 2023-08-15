@@ -91,7 +91,7 @@ inr-inj {B} {x} path = ap f path where
   f (inl _) = x
   f (inr b) = b
 
-⊎-disjoint : ¬ inl x ＝ inr y
+⊎-disjoint : inl x ≠ inr y
 ⊎-disjoint p = subst ⊎-discrim p tt
   where
   ⊎-discrim : A ⊎ B → Type

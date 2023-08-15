@@ -3,6 +3,9 @@ module Data.Nat.Base where
 
 open import Foundations.Base
 
+open import Data.Empty.Base using (⊥)
+open import Data.Unit.Base  using (⊤)
+
 open import Agda.Builtin.Nat public
   using
     ( zero
@@ -52,3 +55,7 @@ min (suc x) (suc y) = suc (min x y)
 pred : ℕ → ℕ
 pred zero    = zero
 pred (suc n) = n
+
+is-positive : ℕ → Type
+is-positive zero    = ⊥
+is-positive (suc _) = ⊤

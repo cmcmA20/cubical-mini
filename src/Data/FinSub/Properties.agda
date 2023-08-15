@@ -42,7 +42,7 @@ opaque
   inject : m ≤ n → Fin m → Fin n
   inject {m} p (k , ∣ q ∣ᴱ) = k , ∣ ≤-trans {suc k} {m} q p ∣ᴱ
 
-  fzero≠fsuc : {k : Fin m} → ¬ fzero ＝ fsuc k
+  fzero≠fsuc : {k : Fin m} → fzero ≠ fsuc k
   fzero≠fsuc {m} = suc≠zero ∘ sym ∘ ap (index {suc m})
 
   fsuc-inj : {k l : Fin m} → fsuc k ＝ fsuc l → k ＝ l

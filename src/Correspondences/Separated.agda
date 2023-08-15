@@ -30,7 +30,7 @@ opaque
 
 separated-identity-system
   : is-separated A
-  → is-identity-system (λ x y → ¬¬ (x ＝ y)) (λ _ k → k refl)
+  → is-identity-system (¬¬_ ∘ⁿ _＝_) (λ _ k → k refl)
 separated-identity-system A-sep =
   set-identity-system hlevel! $ essentially-classical-β $ is-separated-β A-sep _ _
 

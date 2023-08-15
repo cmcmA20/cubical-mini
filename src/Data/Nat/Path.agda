@@ -4,9 +4,12 @@ module Data.Nat.Path where
 open import Foundations.Base
 open import Foundations.HLevel
 
+open import Meta.Search.HLevel
+
 open import Structures.IdentitySystem.Base
 
 open import Data.Empty.Base
+open import Data.Unit.Instances.HLevel
 
 open import Data.Nat.Base public
 
@@ -30,11 +33,11 @@ module ℕ-path-code where
   decode zero    zero    _ = refl
   decode (suc m) (suc n) c = ap suc (decode m n c)
 
-  opaque
-    unfolding is-of-hlevel
-    code-is-prop : ∀ m n → is-prop (Code m n)
-    code-is-prop zero    zero    _ _ = refl
-    code-is-prop (suc m) (suc n) = code-is-prop m _
+  code-is-prop : ∀ m n → is-prop (Code m n)
+  code-is-prop 0       0       = hlevel!
+  code-is-prop 0       (suc _) = hlevel!
+  code-is-prop (suc _) 0       = hlevel!
+  code-is-prop (suc m) (suc _) = code-is-prop m _
 
   ℕ-identity-system : is-identity-system Code code-refl
   ℕ-identity-system = set-identity-system code-is-prop (decode _ _)
@@ -46,12 +49,8 @@ instance
 ℕ-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) ℕ
 ℕ-is-of-hlevel n = is-of-hlevel-+-left 2 n ℕ-is-set
 
-suc≠zero : ¬ suc m ＝ 0
-suc≠zero p = transport (ap discrim p) tt
-  where
-  discrim : ℕ → Type
-  discrim 0       = ⊥
-  discrim (suc _) = ⊤
+suc≠zero : suc m ≠ 0
+suc≠zero p = subst is-positive p tt
 
 suc-inj : suc m ＝ suc n → m ＝ n
 suc-inj = ap pred

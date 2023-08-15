@@ -29,10 +29,6 @@ opaque
   ≤-peel : suc m ≤ suc n → m ≤ n
   ≤-peel = id
 
-Positive : ℕ → Type
-Positive zero    = ⊥
-Positive (suc _) = ⊤
-
 _<_ : ℕ → ℕ → Type
 m < n = suc m ≤ n
 infix 3 _<_ _≤_

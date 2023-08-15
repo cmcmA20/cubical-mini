@@ -36,7 +36,7 @@ maybe-is-of-hlevel n Ahl =
   is-of-hlevel-≃ (2 + n) maybe-as-sum
     (⊎-is-of-hlevel n hlevel! Ahl)
 
-nothing≠just : ¬ nothing ＝ just x
+nothing≠just : nothing ≠ just x
 nothing≠just = ⊎-disjoint ∘ ap (maybe-as-sum .fst)
 
 just-inj : just x ＝ just y → x ＝ y
