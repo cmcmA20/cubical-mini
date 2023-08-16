@@ -58,6 +58,7 @@ n-Pred = n-Corr¹
 Pred₀ = n-Pred 0
 Pred₁ = n-Pred 1
 Pred₂ = n-Pred 2
+Pred₃ = n-Pred 3
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level

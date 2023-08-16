@@ -8,6 +8,7 @@ open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
 
+open import Data.Bool.Base
 open import Data.Empty.Base
 open import Data.Unit.Instances.HLevel
 
@@ -17,7 +18,7 @@ private variable
   m n : ℕ
 
 -- only to illustrate the method
-module ℕ-path-code where
+module ℕ-path-code-naive where
 
   Code : ℕ → ℕ → Type
   Code zero    zero    = ⊤
@@ -38,6 +39,30 @@ module ℕ-path-code where
   code-is-prop 0       (suc _) = hlevel!
   code-is-prop (suc _) 0       = hlevel!
   code-is-prop (suc m) (suc _) = code-is-prop m _
+
+  ℕ-identity-system : is-identity-system Code code-refl
+  ℕ-identity-system = set-identity-system code-is-prop (decode _ _)
+
+module ℕ-path-code where
+
+  Code : ℕ → ℕ → Type
+  Code m n = ⟦ m == n ⟧ᵇ
+
+  code-refl : (m : ℕ) → Code m m
+  code-refl 0       = tt
+  code-refl (suc m) = code-refl m
+
+  decode : ∀ m n → Code m n → m ＝ n
+  decode 0       0       _ = refl
+  decode 0       (suc n) p = absurd p
+  decode (suc m) 0       p = absurd p
+  decode (suc m) (suc n) = ap suc ∘ decode _ _
+
+  code-is-prop : ∀ m n → is-prop (Code m n)
+  code-is-prop 0       0       = hlevel!
+  code-is-prop 0       (suc n) = hlevel!
+  code-is-prop (suc m) 0       = hlevel!
+  code-is-prop (suc m) (suc n) = code-is-prop m _
 
   ℕ-identity-system : is-identity-system Code code-refl
   ℕ-identity-system = set-identity-system code-is-prop (decode _ _)
