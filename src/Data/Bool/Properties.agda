@@ -8,37 +8,38 @@ open import Meta.Search.Discrete
 open import Meta.Search.Exhaustible
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Omniscient
-
-open import Correspondences.Finite.ManifestBishop
+open import Meta.Witness
 
 open import Data.Bool.Base public
 open import Data.Bool.Instances.Finite
 open import Data.Dec as Dec
-open import Data.FinSub.Properties
-open import Data.FinSub.Closure
-open import Data.Vec.Correspondences.Unary.Any.Computational
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
 
 private
   instance
-    and-idem? : Dec (∀ x → x and x ＝ x)
+    and-idem? : Dec $ ∀ x → x and x ＝ x
     and-idem? = decide!
 
-    and-comm? : Dec (∀ x y → x and y ＝ y and x)
+    and-comm? : Dec $ ∀ x y → x and y ＝ y and x
     and-comm? = decide!
 
-    test? : Dec (∃[ f ꞉ (Bool → Bool) ] f false ＝ f true)
+    test? : Dec $ ∃[ f ꞉ (Bool → Bool) ] f false ＝ f true
     test? = decide!
 
     test₂? : Dec (((x , y) : Bool × Bool) → x and y ＝ y and x)
     test₂? = decide!
 
+    -- test₃? : Dec $
+    --   ∃[ f ꞉ (Bool → Bool → Bool) ]
+    --   ∃[ g ꞉ (Bool → Bool) ]
+    --   Π[ h ꞉ (Bool → Bool) ]
+    --     (f false true ＝ g true and h false)
+    -- test₃? = decide!
+
   opaque
-    unfolding
-      is-discrete-β omniscient₁→exhaustible is-fin-set→omniscient₁ 𝓑→omniscient₁
-      bool-is-fin-set any? fin-sum fin-suc-universal fin-choice
+    unfolding witness-opaque-marker bool-is-fin-set
 
     and-idem : (x : Bool) → x and x ＝ x
     and-idem = witness!
@@ -51,3 +52,11 @@ private
 
     test₂ : ((x , y) : Bool × Bool) → x and y ＝ y and x
     test₂ = witness!
+
+    -- slow, uncomment if needed
+    -- test₃ :
+    --   ∃[ f ꞉ (Bool → Bool → Bool) ]
+    --   ∃[ g ꞉ (Bool → Bool) ]
+    --   Π[ h ꞉ (Bool → Bool) ]
+    --     (f false true ＝ g true and h false)
+    -- test₃ = witness!

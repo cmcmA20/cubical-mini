@@ -44,10 +44,11 @@ fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 ¬-decision (no ¬a) .proof = ofʸ ¬a
 
 
+-- Decidability of a homogeneous predicate
 Decidable : Pred _ (Corr n ℓ A)
 Decidable P = Π[ Dec ∘ⁿ P ]
 
-
+-- Homogeneous decision procedure
 DProc
   : (arity : ℕ) (ℓ′ : Level)
     {ℓ : Level} (A : Type ℓ)
@@ -59,23 +60,14 @@ DProc¹ = DProc 1
 DProc² = DProc 2
 DProc³ = DProc 3
 
+-- Evidence of a (homogeneous) correspondence `P` being reflected by a decision procedure
 Reflects : Corr n ℓ A → DProc n ℓ A → Type (level-of-type A ⊔ ℓ)
-Reflects {n = 0}     {A} P f = Lift (level-of-type A) (Reflects¹ P f)
-Reflects {n = suc n} {A} P f = Π[ (λ (x : A) → Reflects (P x) (f x)) ]
+Reflects {n = 0}     {A} P d = Lift (level-of-type A) (Reflects¹ P d)
+Reflects {n = suc n} {A} P d = Π[ (λ (x : A) → Reflects (P x) (d x)) ]
 
-reflects→decidable : {A : Type ℓᵃ} {P : Corr n ℓ A} {Q : DProc n ℓ A} → Reflects P Q → Decidable P
-reflects→decidable {n = 0} (lift p) = lift (_ because p)
-reflects→decidable {n = 1} {Q} f x = Q x because lower (f x)
+reflects→decidable
+  : {A : Type ℓᵃ} {P : Corr n ℓ A} {d : DProc n ℓ A}
+  → Reflects P d → Decidable P
+reflects→decidable {n = 0} {d} p .lower = d because lower p
+reflects→decidable {n = 1} {d} f x = d x because lower (f x)
 reflects→decidable {n = suc (suc _)} f x = reflects→decidable (f x)
-
--- witness→decision : {A : Type ℓᵃ} {P : Corr n ℓ A} {Q : DProc n ℓ A} → Reflects P Q → Π[ P ⇒ ((_＝ true) ∘ⁿ Q) ]
--- witness→decision {n = 0} (lift (ofʸ p))  = lift λ _ → refl
--- witness→decision {n = 0} (lift (ofⁿ ¬p)) = lift λ p → absurd (¬p p)
--- witness→decision {n = 1} {A} f x = lower $ witness→decision {n = 0} {A = A} $ f x
--- witness→decision {n = suc (suc _)} f x = witness→decision (f x)
-
--- decision→witness : {A : Type ℓᵃ} {P : Corr n ℓ A} {Q : DProc n ℓ A} → Reflects P Q → Π[ ((_＝ true) ∘ⁿ Q) ⇒ P ]
--- decision→witness {n = 0} (lift (ofʸ p)) = lift λ _ → p
--- decision→witness {n = 0} (lift (ofⁿ ¬p)) = lift λ p → absurd (false≠true p)
--- decision→witness {n = 1} {A} f x = lower $ decision→witness {A = A} $ f x
--- decision→witness {n = suc (suc _)} f x = decision→witness (f x)

@@ -11,6 +11,8 @@ open import Structures.n-Type
 open import Data.Nat.Base
 open import Data.Product.Base public
 
+-- Homogeneous correspondences
+
 Corr
   : (arity : ℕ) (ℓ′ : Level)
     {ℓ : Level} (A : Type ℓ)
@@ -22,10 +24,12 @@ Corr¹ = Corr 1
 Corr² = Corr 2
 Corr³ = Corr 3
 
+-- Unary correspondence is called a predicate
 Pred : (ℓ′ : Level) {ℓ : Level} (A : Type ℓ) → Type (ℓ ⊔ ℓsuc ℓ′)
 Pred = Corr¹
 
 
+-- n-truncated homogeneous correspondence
 n-Corr
   : (arity : ℕ) (n : HLevel) (ℓ′ : Level)
     {ℓ : Level} (A : Type ℓ)
@@ -41,6 +45,7 @@ n-Corr³ = n-Corr 3
 ⌞_⌟ₙ {arity = 0} C = ⌞ C ⌟
 ⌞_⌟ₙ {arity = suc _} C a = ⌞ C a ⌟ₙ
 
+-- Propositionally valued correspondence is called a relation
 Rel
   : (arity : ℕ) (ℓ′ : Level)
     {ℓ : Level} (A : Type ℓ)
@@ -94,11 +99,8 @@ _⇒ₙ_ : n-Corr arity n ℓ A → n-Corr arity n ℓ′ A → n-Corr arity n (
 _⇒ₙ_ {0} P Q = el! (⌞ P ⌟ → ⌞ Q ⌟)
 _⇒ₙ_ {suc _} P Q = λ x → P x ⇒ₙ Q x
 
--- Unary
--- TODO nothing here
 
-
--- Binary
+-- Binary homogeneous correspondences
 
 Reflexive : Corr 2 ℓ A → Type _
 Reflexive _~_ = ∀ {x} → x ~ x
