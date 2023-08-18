@@ -12,7 +12,6 @@ open import Correspondences.Discrete
 open import Data.Empty.Base
 open import Data.Dec.Base as Dec
 open import Data.Dec.Instances.HLevel
-open import Data.List.Base
 
 open import Data.Quotient.Set.Properties
 
@@ -30,7 +29,7 @@ private variable
 
 -- TOOD honestly looks like a bad idea, it's impossible to reconstruct congruence proof
 -- without further automation
-open import Meta.Search.Discrete
-instance
-  decomp-dis-list : goal-decomposition (quote is-discrete) (A / R)
-  decomp-dis-list = decomp (quote /₂-is-discrete) (`meta ∷ `search-under 2 (quote Dec) ∷ [])
+-- open import Meta.Search.Discrete
+-- instance
+--   decomp-dis-list : goal-decomposition (quote is-discrete) (A / R)
+--   decomp-dis-list = decomp (quote /₂-is-discrete) (`meta ∷ `search-under 2 (quote Dec) ∷ [])

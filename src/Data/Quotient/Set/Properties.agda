@@ -10,7 +10,6 @@ open import Structures.n-Type
 
 open import Correspondences.Base
 
--- import Data.Quotient.Type.Base as Q∞
 open import Data.Quotient.Set.Base public
 
 import Truncation.Propositional as ∥-∥₁

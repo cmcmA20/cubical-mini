@@ -2,7 +2,6 @@
 module Structures.IdentitySystem.Strict where
 
 open import Foundations.Base
-open import Foundations.HLevel
 
 open import Meta.Marker
 open import Meta.Search.HLevel

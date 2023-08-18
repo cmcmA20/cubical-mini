@@ -7,8 +7,6 @@ open import Meta.Search.HLevel
 
 open import Correspondences.Base public
 
-open import Data.List.Base
-
 open import Truncation.Propositional
 
 private variable

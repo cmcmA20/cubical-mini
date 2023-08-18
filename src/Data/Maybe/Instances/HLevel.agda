@@ -5,8 +5,6 @@ open import Foundations.Base
 
 open import Meta.Search.HLevel
 
-open import Data.List.Base
-
 open import Data.Maybe.Path public
 
 instance

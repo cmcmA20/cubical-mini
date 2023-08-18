@@ -13,7 +13,7 @@ open import Data.Empty.Instances.HLevel
 open import Data.Nat.Base
 open import Data.Unit.Instances.HLevel
 
-open import Data.Tree.Binary.Base
+open import Data.Tree.Binary.Base public
 
 private variable
   ℓ ℓ′ : Level

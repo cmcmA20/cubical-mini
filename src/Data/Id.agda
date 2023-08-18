@@ -2,9 +2,8 @@
 module Data.Id where
 
 open import Foundations.Base
-open import Foundations.Transport
-open import Foundations.HLevel.Base
 open import Foundations.Equiv
+open import Foundations.Transport
 
 open import Meta.Search.HLevel
 

@@ -8,7 +8,6 @@ open import Meta.Search.HLevel
 
 open import Structures.n-Type
 
-open import Data.Nat.Base
 open import Data.Product.Base public
 
 -- Homogeneous correspondences

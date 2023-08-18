@@ -26,10 +26,6 @@ instance
   s≤s′ : ⦃ p : m ≤ n ⦄ → suc m ≤ suc n
   s≤s′ ⦃ p ⦄ = s≤s p
 
-Positive : ℕ → Type
-Positive zero    = ⊥
-Positive (suc _) = ⊤
-
 _<_ : ℕ → ℕ → Type
 m < n = suc m ≤ n
 infix 3 _<_ _≤_

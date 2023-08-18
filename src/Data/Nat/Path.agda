@@ -2,7 +2,6 @@
 module Data.Nat.Path where
 
 open import Foundations.Base
-open import Foundations.HLevel
 
 open import Meta.Search.HLevel
 
@@ -18,7 +17,7 @@ private variable
   m n : ℕ
 
 -- only to illustrate the method
-module ℕ-path-code-naive where
+module ℕ-path-code-naive where private
 
   Code : ℕ → ℕ → Type
   Code zero    zero    = ⊤

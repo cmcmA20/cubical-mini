@@ -20,7 +20,10 @@ open import Correspondences.Erased
 open import Data.Empty.Base
 open import Data.Bool.Base
 open import Data.Fin.Base
-open import Data.List.Base
+import Data.List.Base as List
+open List public
+  using ([] ; _∷_)
+open List
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
 
@@ -87,11 +90,11 @@ instance
     [ `level-same , `search (quote is-of-hlevel) , `search (quote is-of-hlevel) ]
 
   decomp-hlevel-pi³ : goal-decomposition (quote is-of-hlevel) (∀ a b c → D a b c)
-  decomp-hlevel-pi³ = decomp (quote Π₃-is-of-hlevel)
+  decomp-hlevel-pi³ = decomp (quote Π³-is-of-hlevel)
     [ `level-same , `search-under 3 (quote is-of-hlevel) ]
 
   decomp-hlevel-pi² : goal-decomposition (quote is-of-hlevel) (∀ a b → C a b)
-  decomp-hlevel-pi² = decomp (quote Π₂-is-of-hlevel) [ `level-same , `search-under 2 (quote is-of-hlevel) ]
+  decomp-hlevel-pi² = decomp (quote Π³-is-of-hlevel) [ `level-same , `search-under 2 (quote is-of-hlevel) ]
 
   decomp-hlevel-pi : goal-decomposition (quote is-of-hlevel) (∀ a → B a)
   decomp-hlevel-pi = decomp (quote Π-is-of-hlevel) [ `level-same , `search-under 1 (quote is-of-hlevel) ]

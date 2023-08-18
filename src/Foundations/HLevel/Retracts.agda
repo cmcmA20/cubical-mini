@@ -89,17 +89,17 @@ opaque
     (λ f {x} → f x) (λ f x → f) (λ _ → refl)
     (Π-is-of-hlevel h bhl)
 
-  Π₂-is-of-hlevel
+  Π²-is-of-hlevel
     : {B : A → Type ℓ′} {C : ∀ a → B a → Type ℓ″}
     → (n : HLevel) (Bhl : (x : A) (y : B x) → is-of-hlevel n (C x y))
     → is-of-hlevel n (∀ x y → C x y)
-  Π₂-is-of-hlevel n w = Π-is-of-hlevel n λ _ → Π-is-of-hlevel n (w _)
+  Π²-is-of-hlevel n w = Π-is-of-hlevel n λ _ → Π-is-of-hlevel n (w _)
 
-  Π₃-is-of-hlevel
+  Π³-is-of-hlevel
     : {B : A → Type ℓ′} {C : ∀ a → B a → Type ℓ″} {D : ∀ a b → C a b → Type ℓ‴}
     → (n : HLevel) (Bhl : (x : A) (y : B x) (z : C x y) → is-of-hlevel n (D x y z))
     → is-of-hlevel n (∀ x y z → D x y z)
-  Π₃-is-of-hlevel n w = Π-is-of-hlevel n λ _ → Π₂-is-of-hlevel n (w _)
+  Π³-is-of-hlevel n w = Π-is-of-hlevel n λ _ → Π²-is-of-hlevel n (w _)
 
   fun-is-of-hlevel
     : {B : Type ℓ′}

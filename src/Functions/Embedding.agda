@@ -2,7 +2,6 @@
 module Functions.Embedding where
 
 open import Foundations.Base
-open import Foundations.HLevel
 open import Foundations.Sigma
 open import Foundations.Univalence
 
