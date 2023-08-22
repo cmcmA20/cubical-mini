@@ -7,9 +7,10 @@ open import Foundations.HLevel
 open import Foundations.Isomorphism
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A B : Type ℓ
-  P Q : A → Type ℓ′
+  P : A → Type ℓ′
+  Q : A → Type ℓ″
   f : Π[ x ꞉ A ] (P x → Q x)
   x : A
   v : Q x
