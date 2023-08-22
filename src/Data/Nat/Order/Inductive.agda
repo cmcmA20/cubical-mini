@@ -82,8 +82,7 @@ instance
 <-trans xy yz = ≤-trans xy (<-weaken _ _ yz)
 
 <-weaken-0 : (x y : ℕ) → x < y → 0 < y
-<-weaken-0 zero    y xy = xy
-<-weaken-0 (suc x) y xy = <-weaken-0 x y (<-weaken (suc x) y xy)
+<-weaken-0 x (suc y) (s≤s xy) = s≤s z≤
 
 ≤-+-l : (x y : ℕ) → x ≤ y + x
 ≤-+-l zero    y = z≤
