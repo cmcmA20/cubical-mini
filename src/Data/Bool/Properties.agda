@@ -10,6 +10,7 @@ open import Meta.Search.Finite.Bishop
 open import Meta.Search.Omniscient
 open import Meta.Witness
 
+open import Data.Empty.Base
 open import Data.Bool.Base public
 open import Data.Bool.Instances.Finite
 open import Data.Dec as Dec
@@ -61,7 +62,19 @@ private
     --     (f false true ＝ g true and h false)
     -- test₃ = witness!
 
--- boolean disjunction
+-- negation
+
+not-involutive : ∀ x → not (not x) ＝ x
+not-involutive true  = refl
+not-involutive false = refl
+
+neq→not : ∀ x y → x ≠ y → x ＝ not y
+neq→not false false p = absurd (p refl)
+neq→not false true  _ = refl
+neq→not true  false _ = refl
+neq→not true  true  p = absurd (p refl)
+
+-- disjunction
 
 or-id-r : ∀ x → x or false ＝ x
 or-id-r false = refl
