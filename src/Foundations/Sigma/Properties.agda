@@ -8,7 +8,7 @@ open import Foundations.Isomorphism
 open import Foundations.Transport
 
 private variable
-  ℓ ℓ′ ℓ″ : Level
+  ℓ ℓ′ ℓ″ ℓ‴ : Level
   A : Type ℓ
   A′ : Type ℓ′
   B P Q : A → Type ℓ″
@@ -212,3 +212,11 @@ infixr 4 _,ₚ_
 ×-swap : {B : Type ℓ′} → (A × B) ≃ (B × A)
 ×-swap .fst (x , y) = y , x
 ×-swap .snd .equiv-proof = strict-contr-fibres _
+
+×-ap : {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
+     → A ≃ C → B ≃ D → A × B ≃ C × D
+×-ap ac bd = Σ-ap ac (λ _ → bd)
+
+×-path : {B : Type ℓ′} {a c : A} {b d : B}
+       → a ＝ c → b ＝ d → (a , b) ＝ (c , d)
+×-path ac bd i = (ac i , bd i)

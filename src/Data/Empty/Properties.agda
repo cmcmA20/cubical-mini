@@ -3,6 +3,7 @@ module Data.Empty.Properties where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Meta.Search.HLevel
 
 open import Data.Empty.Base
 
@@ -19,3 +20,6 @@ private variable
   𝔯 .snd .is-iso.inv  b = absurd (¬b b)
   𝔯 .snd .is-iso.rinv b = absurd (¬b b)
   𝔯 .snd .is-iso.linv a = absurd (¬a a)
+
+¬-≃ : (A → B) → (B → A) → (¬ A) ≃ (¬ B)
+¬-≃ ab ba = prop-extₑ! (λ na → na ∘ ba) λ nb → nb ∘ ab

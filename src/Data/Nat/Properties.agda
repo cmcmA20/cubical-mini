@@ -3,8 +3,12 @@ module Data.Nat.Properties where
 
 open import Foundations.Base
 
+open import Data.Empty.Base
+open import Data.Sum.Base
 open import Data.Nat.Base public
 open import Data.Nat.Path
+
+-- addition
 
 +-zeror : (x : ℕ) → x + 0 ＝ x
 +-zeror zero    = refl
@@ -34,9 +38,19 @@ open import Data.Nat.Path
                    ∙ ap (λ q → q + z) (+-comm x y)
                    ∙ sym (+-assoc y x _)
 
++-assoc-comm : (x y z : ℕ) → x + y + z ＝ x + z + y
++-assoc-comm x y z = sym (+-assoc x _ _) ∙ ap (λ q → x + q) (+-comm y z) ∙ +-assoc x _ _
+
+-- multiplication
+
 ·-zeror : (x : ℕ) → x · zero ＝ zero
 ·-zeror  zero   = refl
 ·-zeror (suc x) = ·-zeror x
+
+·-zero : (x y : ℕ) → x · y ＝ 0 → (x ＝ 0) ⊎ (y ＝ 0)
+·-zero  zero    _      _   = inl refl
+·-zero (suc _)  zero   _   = inr refl
+·-zero (suc x) (suc y) prf = absurd (suc≠zero prf)
 
 ·-sucr : (x y : ℕ) → x · suc y ＝ x + x · y
 ·-sucr  zero   y = refl
@@ -45,6 +59,12 @@ open import Data.Nat.Path
 ·-comm : (x y : ℕ) → x · y ＝ y · x
 ·-comm  zero   y = sym (·-zeror y)
 ·-comm (suc x) y = ap (λ z → y + z) (·-comm x _) ∙ sym (·-sucr y x)
+
+·-onel : (x : ℕ) → 1 · x ＝ x
+·-onel = +-zeror
+
+·-oner : (x : ℕ) → x · 1 ＝ x
+·-oner x = ·-comm x 1 ∙ ·-onel x
 
 ·-distrib-+r : (x y z : ℕ) → (x + y) · z ＝ x · z + y · z
 ·-distrib-+r  zero   y z = refl

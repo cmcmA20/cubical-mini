@@ -78,3 +78,7 @@ suc≠zero p = subst is-positive p tt
 
 suc-inj : suc m ＝ suc n → m ＝ n
 suc-inj = ap pred
+
+neq-suc-id : (n : ℕ) → n ≠ suc n
+neq-suc-id  zero   = suc≠zero ∘ sym
+neq-suc-id (suc n) = neq-suc-id n ∘ suc-inj

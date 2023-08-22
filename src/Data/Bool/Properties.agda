@@ -60,3 +60,25 @@ private
     --   Π[ h ꞉ (Bool → Bool) ]
     --     (f false true ＝ g true and h false)
     -- test₃ = witness!
+
+-- boolean disjunction
+
+or-id-r : ∀ x → x or false ＝ x
+or-id-r false = refl
+or-id-r true  = refl
+
+or-unit-r : ∀ x → x or true ＝ true
+or-unit-r false = refl
+or-unit-r true  = refl
+
+or-assoc : ∀ x y z → (x or y) or z ＝ x or y or z
+or-assoc false y z = refl
+or-assoc true  y z = refl
+
+or-comm : ∀ x y → x or y ＝ y or x
+or-comm x false = or-id-r x
+or-comm x true  = or-unit-r x
+
+or-idem : ∀ x → x or x ＝ x
+or-idem false = refl
+or-idem true  = refl

@@ -12,6 +12,7 @@ open import Data.Sum.Base
 open import Data.Unit.Base
 
 open import Data.Nat.Base
+open import Data.Nat.Path
 open import Data.Nat.Properties
 
 private variable
@@ -79,6 +80,10 @@ instance
 
 <-trans : {x y z : ℕ} → x < y → y < z → x < z
 <-trans xy yz = ≤-trans xy (<-weaken _ _ yz)
+
+<-weaken-0 : (x y : ℕ) → x < y → 0 < y
+<-weaken-0 zero    y xy = xy
+<-weaken-0 (suc x) y xy = <-weaken-0 x y (<-weaken (suc x) y xy)
 
 ≤-+-l : (x y : ℕ) → x ≤ y + x
 ≤-+-l zero    y = z≤
@@ -150,3 +155,58 @@ instance
   go (suc zero) zero p q    = absurd (q (s≤s z≤))
   go (suc (suc m)) zero p q = absurd (q (s≤s z≤))
   go (suc m) (suc n) p q    = ap suc (go m n (λ { a → p (s≤s a) }) λ { a → q (s≤s a) })
+
+≤→¬< : {x y : ℕ} → x ≤ y → ¬ (y < x)
+≤→¬< {0}     {y}      z≤       = ¬sucn≤0
+≤→¬< {suc x} {suc y} (s≤s prf) = ≤→¬< prf ∘ ≤-peel
+
+¬<→≤ : {x y : ℕ} → ¬ (y < x) → x ≤ y
+¬<→≤ {0}     {y}     ctra = z≤
+¬<→≤ {suc x} {0}     ctra = absurd (ctra (s≤s z≤))
+¬<→≤ {suc x} {suc y} ctra = s≤s (¬<→≤ (ctra ∘ s≤s))
+
+¬≤→< : {x y : ℕ} → ¬ (y ≤ x) → x < y
+¬≤→< ctra = ¬<→≤ (ctra ∘ ≤-peel)
+
+≤→<＝ : {x y : ℕ} → x ≤ y → (x < y) ⊎ (x ＝ y)
+≤→<＝ {x} {y} prf with (≤-split x y)
+... | inl p = inl p
+... | inr (inl p) = absurd (≤→¬< p (s≤s prf))
+... | inr (inr p) = inr p
+
+<→¬＝ : {x y : ℕ} → x < y → ¬ (x ＝ y)
+<→¬＝ {x} {y} xy eq = ¬sucn≤n (subst (λ q → q < y) eq xy)
+
+-- subtraction
+
+suc-pred : (n : ℕ) → 0 < n → n ＝ suc (pred n)
+suc-pred (suc n) n0 = refl
+
++-sub : (p q : ℕ) → q ≤ p → p ∸ q + q ＝ p
++-sub  p       zero   qp = +-zeror p
++-sub (suc p) (suc q) qp = +-sucr _ _ ∙ ap suc (+-sub p q (≤-peel qp))
+
+≤-sub-lr : (p q r : ℕ) → p ≤ q + r → p ∸ r ≤ q
+≤-sub-lr  p      q  zero   pqr = subst (λ x → p ≤ x) (+-zeror q) pqr
+≤-sub-lr  zero   q (suc r) pqr = z≤
+≤-sub-lr (suc p) q (suc r) pqr = ≤-sub-lr p q r (≤-peel (subst (λ x → suc p ≤ x) (+-sucr q r) pqr))
+
+<-sub-lr : (p q r : ℕ) → 0 < q → p < q + r → p ∸ r < q
+<-sub-lr p (suc q) r _ pqr = s≤s (≤-sub-lr p q r (≤-peel pqr))
+
+-- multiplication
+
+·-inj-r : (x y z : ℕ) → 0 < z → x · z ＝ y · z → x ＝ y
+·-inj-r zero y .(suc z) (s≤s {n = z} _) H with (·-zero y (suc z) (sym H))
+... | inl prf = sym prf
+... | inr prf = absurd (suc≠zero prf)
+·-inj-r (suc x) zero .(suc z) (s≤s {n = z} prf) H = absurd (suc≠zero H)
+·-inj-r (suc x) (suc y) .(suc z) (s≤s {n = z} prf) H =
+  ap suc $ ·-inj-r x y (suc z) (s≤s prf) (+-inj-l z (x · suc z) (y · suc z) (suc-inj H))
+
+·-inj-l : (x y z : ℕ) → 0 < x → x · y ＝ x · z → y ＝ z
+·-inj-l x y z x0 prf = ·-inj-r _ _ _ x0 (·-comm y x ∙ prf ∙ ·-comm x z)
+
+mul-<0 : (m n : ℕ) → (0 < m · n) → (0 < m) × (0 < n)
+mul-<0 (suc m)  zero   mn0 = absurd (¬sucn≤0 (subst (λ q → 0 < q) (·-zeror m) mn0))
+mul-<0 (suc m) (suc n) mn0 = (s≤s z≤) , (s≤s z≤)
