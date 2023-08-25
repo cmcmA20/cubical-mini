@@ -86,3 +86,6 @@ curry₂ f x y = f (x , y)
 curry₃ : (f : (p : Σ[ a ꞉ A ] Σ[ b ꞉ B a ] C a b) → D (p .fst) (p .snd .fst) (p .snd .snd))
          (x : A) (y : B x) (z : C x y) → D x y z
 curry₃ f x y z = f (x , y , z)
+
+uncurry : {B : 𝒰 ℓ} {C : 𝒰 ℓ′} (f : A → B → C) → A × B → C
+uncurry f (a , b) = f a b

@@ -46,7 +46,6 @@ module _ where
   (g ∘′ f) x = g (f x)
   {-# INLINE _∘′_ #-}
 
-
 -- dependent stuff
 
 module _ where

@@ -160,8 +160,6 @@ record _=>_ {C : Precategory oᶜ hᶜ}
   op .η = η
   op .is-natural x y f = sym (is-natural y x f)
 
-{-# INLINE NT #-}
-
 is-natural-transformation
   : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
   → (F G : Functor C D)

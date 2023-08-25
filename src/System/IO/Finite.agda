@@ -3,23 +3,26 @@ module System.IO.Finite where
 open import Foundations.Base
 
 open import Data.String.Base
+open import Data.List.Base
 
 open import Meta.Show
 
 open import System.IO.Base
 
 postulate
-  getLine     : IO′ String
-  readFile    : String → IO′ String
-  writeFile   : String → String → IO′ ⊤
-  appendFile  : String → String → IO′ ⊤
-  putStr      : String → IO′ ⊤
-  putStrLn    : String → IO′ ⊤
+  getLine     : IO String
+  readFile    : String → IO String
+  writeFile   : String → String → IO ⊤
+  appendFile  : String → String → IO ⊤
+  putStr      : String → IO ⊤
+  putStrLn    : String → IO ⊤
+  getCmdLine  : IO (List String)
 
-{-# FOREIGN GHC import qualified Data.Text    as T   #-}
-{-# FOREIGN GHC import qualified Data.Text.IO as TIO #-}
-{-# FOREIGN GHC import qualified System.IO           #-}
-{-# FOREIGN GHC import qualified Control.Exception   #-}
+{-# FOREIGN GHC import qualified Data.Text    as T        #-}
+{-# FOREIGN GHC import qualified Data.Text.IO as TIO      #-}
+{-# FOREIGN GHC import qualified System.IO                #-}
+{-# FOREIGN GHC import qualified Control.Exception        #-}
+{-# FOREIGN GHC import qualified System.Environment as SE #-}
 
 {-# FOREIGN GHC
 
@@ -34,34 +37,38 @@ postulate
 
 #-}
 
-{-# COMPILE GHC getLine    = TIO.getLine               #-}
-{-# COMPILE GHC readFile   = readFiniteFile            #-}
-{-# COMPILE GHC writeFile  = TIO.writeFile . T.unpack  #-}
-{-# COMPILE GHC appendFile = TIO.appendFile . T.unpack #-}
-{-# COMPILE GHC putStr     = TIO.putStr                #-}
-{-# COMPILE GHC putStrLn   = TIO.putStrLn              #-}
+{-# COMPILE GHC getLine    = TIO.getLine                  #-}
+{-# COMPILE GHC readFile   = readFiniteFile               #-}
+{-# COMPILE GHC writeFile  = TIO.writeFile . T.unpack     #-}
+{-# COMPILE GHC appendFile = TIO.appendFile . T.unpack    #-}
+{-# COMPILE GHC putStr     = TIO.putStr                   #-}
+{-# COMPILE GHC putStrLn   = TIO.putStrLn                 #-}
+{-# COMPILE GHC getCmdLine = (fmap T.pack) <$> SE.getArgs #-}
 
 private variable
   ℓ : Level
   A : Type ℓ
 
 get-line : IO String
-get-line = lift getLine
+get-line = getLine
 
 read-file : String → IO String
-read-file f = lift (readFile f)
+read-file f = readFile f
 
-write-file : String → String → IO (Lift ℓ ⊤)
-write-file f s = io-lift′ (writeFile f s)
+write-file : String → String → IO ⊤
+write-file f s = writeFile f s
 
-append-file : String → String → IO (Lift ℓ ⊤)
-append-file f s = io-lift′ (appendFile f s)
+append-file : String → String → IO ⊤
+append-file f s = appendFile f s
 
-put-str : String → IO (Lift ℓ ⊤)
-put-str s = io-lift′ (putStr s)
+put-str : String → IO ⊤
+put-str s = putStr s
 
-put-str-ln : String → IO (Lift ℓ ⊤)
-put-str-ln s = io-lift′ (putStrLn s)
+put-str-ln : String → IO ⊤
+put-str-ln s = putStrLn s
 
-print : ⦃ Show A ⦄ → A → IO (Lift ℓ ⊤)
+print : ⦃ Show A ⦄ → A → IO ⊤
 print x = put-str-ln (show x)
+
+get-cmd-line : IO (List String)
+get-cmd-line = getCmdLine
