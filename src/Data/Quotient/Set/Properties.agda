@@ -32,35 +32,35 @@ elim-prop!
   → Π[ q ꞉ A / R ] P q
 elim-prop! {P-prop} = elim-prop P-prop
 
-elim₂-prop
+elim²-prop
   : {P : A / R → B / S → Type ℓ}
     (P-prop : ∀ x y → is-prop (P x y))
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
-elim₂-prop {P} P-prop f = elim-prop! λ a → elim-prop! (f a)
+elim²-prop {P} P-prop f = elim-prop! λ a → elim-prop! (f a)
   where instance P-prop′ : ∀ {x y} → is-prop (P x y) ; P-prop′ = P-prop _ _
 
-elim₂-prop!
+elim²-prop!
   : {P : A / R → B / S → Type ℓ}
     {@(tactic hlevel-tactic-worker) P-prop : ∀ x y → is-prop (P x y)}
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
-elim₂-prop! {P} {P-prop} = elim₂-prop P-prop
+elim²-prop! {P} {P-prop} = elim²-prop P-prop
 
-elim₃-prop
+elim³-prop
   : {P : A / R → B / S → C / T → Type ℓ}
     (P-prop : ∀ x y z → is-prop (P x y z))
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
-elim₃-prop {P} P-prop f = elim-prop! λ a → elim-prop! λ b → elim-prop! (f a b)
+elim³-prop {P} P-prop f = elim-prop! λ a → elim-prop! λ b → elim-prop! (f a b)
   where instance P-prop′ : ∀ {x y z} → is-prop (P x y z) ; P-prop′ = P-prop _ _ _
 
-elim₃-prop!
+elim³-prop!
   : {P : A / R → B / S → C / T → Type ℓ}
     {@(tactic hlevel-tactic-worker) P-prop : ∀ x y z → is-prop (P x y z)}
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
-elim₃-prop! {P} {P-prop} = elim₃-prop P-prop
+elim³-prop! {P} {P-prop} = elim³-prop P-prop
 
 
 elim!
@@ -77,21 +77,21 @@ rec! : {@(tactic hlevel-tactic-worker) B-set : is-set B}
      → A / R → B
 rec! {B-set} = rec B-set
 
-rec₂ : is-set C
+rec² : is-set C
      → (f : A → B → C)
      → (∀ x y b → R x y → f x b ＝ f y b)
      → (∀ a x y → S x y → f a x ＝ f a y)
      → A / R → B / S → C
-rec₂ C-set f fa= fb= =
+rec² C-set f fa= fb= =
   rec! (λ a → rec! (f a) (fb= a)) λ a b r → fun-ext $ elim-prop! λ x → fa= a b x r
   where instance _ = C-set
 
-rec₂! : {@(tactic hlevel-tactic-worker) C-set : is-set C}
+rec²! : {@(tactic hlevel-tactic-worker) C-set : is-set C}
       → (f : A → B → C)
       → (∀ x y b → R x y → f x b ＝ f y b)
       → (∀ a x y → S x y → f a x ＝ f a y)
       → A / R → B / S → C
-rec₂! {C-set} = rec₂ C-set
+rec²! {C-set} = rec² C-set
 
 
 -- Actual properties
@@ -136,5 +136,5 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   ∥R∥₁-c : is-congruence _
   ∥R∥₁-c .is-congruence.equivalenceᶜ .reflᶜ = ∣ reflᶜ ∣₁
   ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = ∥-∥₁.map symᶜ
-  ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim₂! λ a b → ∣ a ∙ᶜ b ∣₁
+  ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim²! λ a b → ∣ a ∙ᶜ b ∣₁
   ∥R∥₁-c .is-congruence.has-propᶜ = hlevel!

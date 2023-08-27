@@ -14,31 +14,31 @@ private variable
   B : Type ℓ′
   C : Type ℓ″
 
-map₂ : (A → B → C) → ∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂
-map₂ f ∣ x ∣₂ ∣ y ∣₂ = ∣ f x y ∣₂
-map₂ f (squash₂ x y p q i j) b =
-  squash₂ (map₂ f x b) (map₂ f y b)
-          (λ k → map₂ f (p k) b)
-          (λ k → map₂ f (q k) b)
+map² : (A → B → C) → ∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂
+map² f ∣ x ∣₂ ∣ y ∣₂ = ∣ f x y ∣₂
+map² f (squash₂ x y p q i j) b =
+  squash₂ (map² f x b) (map² f y b)
+          (λ k → map² f (p k) b)
+          (λ k → map² f (q k) b)
           i j
-map₂ f a (squash₂ x y p q i j) =
-  squash₂ (map₂ f a x) (map₂ f a y)
-          (λ k → map₂ f a (p k))
-          (λ k → map₂ f a (q k))
+map² f a (squash₂ x y p q i j) =
+  squash₂ (map² f a x) (map² f a y)
+          (λ k → map² f a (p k))
+          (λ k → map² f a (q k))
           i j
 
-elim₂ : {C : ∥ A ∥₂ → ∥ B ∥₂ → Type ℓ″}
+elim² : {C : ∥ A ∥₂ → ∥ B ∥₂ → Type ℓ″}
       → (∀ x y → is-set (C x y))
       → (∀ x y → C ∣ x ∣₂ ∣ y ∣₂)
       → ∀ x y → C x y
-elim₂ B-set f = elim (λ x → Π-is-of-hlevel 2 (B-set x))
+elim² B-set f = elim (λ x → Π-is-of-hlevel 2 (B-set x))
   λ x → elim (B-set ∣ x ∣₂) (f x)
 
-elim₃ : {D : ∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂ → Type ℓ‴}
+elim³ : {D : ∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂ → Type ℓ‴}
       → (∀ x y z → is-set (D x y z))
       → (∀ x y z → D ∣ x ∣₂ ∣ y ∣₂ ∣ z ∣₂)
       → ∀ x y z → D x y z
-elim₃ B-set f = elim₂ (λ x y → Π-is-of-hlevel 2 (B-set x y))
+elim³ B-set f = elim² (λ x y → Π-is-of-hlevel 2 (B-set x y))
   λ x y → elim (B-set ∣ x ∣₂ ∣ y ∣₂) (f x y)
 
 rec!

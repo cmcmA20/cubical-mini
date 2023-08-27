@@ -24,7 +24,7 @@ private variable
   : (R-c : is-congruence R)
   → (∀ x y → Dec (R x y))
   → is-discrete (A / R)
-/₂-is-discrete R-c d = is-discrete-η $ elim₂-prop! λ x y →
+/₂-is-discrete R-c d = is-discrete-η $ elim²-prop! λ x y →
   Dec.map (glue/ _ _) (λ f p → absurd (f $ (effective R-c ₑ⁻¹) .fst p)) $ d x y
 
 -- TOOD honestly looks like a bad idea, it's impossible to reconstruct congruence proof

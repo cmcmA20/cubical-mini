@@ -61,23 +61,23 @@ open Dec public
 pattern yes p =  true because ofʸ  p
 pattern no ¬p = false because ofⁿ ¬p
 
-dec-elim : {C : Dec P → Type ℓ′}
+elim : {C : Dec P → Type ℓ′}
          → (( p :   P) → C (yes p))
          → ((¬p : ¬ P) → C (no ¬p))
          → (d : Dec P) → C d
-dec-elim y n (no ¬p) = n ¬p
-dec-elim y n (yes p) = y p
+elim y n (no ¬p) = n ¬p
+elim y n (yes p) = y p
 
-dec-elim₂ : {C : Dec P → Dec Q → Type ℓ″}
-          → (( p :   P) → ( q :   Q) → C (yes p) (yes q))
-          → (( p :   P) → (¬q : ¬ Q) → C (yes p) (no ¬q))
-          → ((¬p : ¬ P) → ( q :   Q) → C (no ¬p) (yes q))
-          → ((¬p : ¬ P) → (¬q : ¬ Q) → C (no ¬p) (no ¬q))
-          → (p : Dec P) → (q : Dec Q) → C p q
-dec-elim₂ yy yn ny nn (no ¬p) (no ¬q) = nn ¬p ¬q
-dec-elim₂ yy yn ny nn (no ¬p) (yes q) = ny ¬p q
-dec-elim₂ yy yn ny nn (yes p) (no ¬q) = yn p ¬q
-dec-elim₂ yy yn ny nn (yes p) (yes q) = yy p q
+elim² : {C : Dec P → Dec Q → Type ℓ″}
+      → (( p :   P) → ( q :   Q) → C (yes p) (yes q))
+      → (( p :   P) → (¬q : ¬ Q) → C (yes p) (no ¬q))
+      → ((¬p : ¬ P) → ( q :   Q) → C (no ¬p) (yes q))
+      → ((¬p : ¬ P) → (¬q : ¬ Q) → C (no ¬p) (no ¬q))
+      → (p : Dec P) → (q : Dec Q) → C p q
+elim² yy yn ny nn (no ¬p) (no ¬q) = nn ¬p ¬q
+elim² yy yn ny nn (no ¬p) (yes q) = ny ¬p q
+elim² yy yn ny nn (yes p) (no ¬q) = yn p ¬q
+elim² yy yn ny nn (yes p) (yes q) = yy p q
 
 map : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
 map to fro dec .does  = dec .does

@@ -107,18 +107,18 @@ instance
   gg (suc a) b c prf = gg a b c (≤-peel prf)
 
 ≤-+r-≃ : {x y z : ℕ} → (x ≤ y) ≃ (x + z ≤ y + z)
-≤-+r-≃ {x} {y} {z} =
-  (≤-+l-≃ {x = z} {y = x} {z = y})
-  ∙ₑ prop-extₑ! (≤-subst (+-comm z x) (+-comm z y)) (≤-subst (+-comm x z) (+-comm y z))
+≤-+r-≃ {x} {y} {z} = ≤-+l-≃ {x = z} ∙ₑ prop-extₑ!
+  (≤-subst (+-comm z x) (+-comm z y))
+  (≤-subst (+-comm x z) (+-comm y z))
 
 ≤-cong-+ : (m n p q : ℕ) → m ≤ p → n ≤ q → m + n ≤ p + q
 ≤-cong-+ zero    n  p      q prf1 prf2 = ≤-weak-+l n p q prf2
 ≤-cong-+ (suc m) n (suc p) q prf1 prf2 = s≤s (≤-cong-+ m n p q (≤-peel prf1) prf2)
 
 <-+l-≃ : {x y z : ℕ} → (y < z) ≃ (x + y < x + z)
-<-+l-≃ {x} {y} {z} =
-  ≤-+l-≃ {x = x} {y = suc y} {z = z}
-  ∙ₑ prop-extₑ! (≤-subst (+-sucr x y) refl) (≤-subst (sym (+-sucr x y)) refl)
+<-+l-≃ {x} {y} {z} = ≤-+l-≃ {x = x} ∙ₑ prop-extₑ!
+  (≤-subst (+-sucr x y) refl)
+  (≤-subst (sym (+-sucr x y)) refl)
 
 <-+r-≃ : {x y z : ℕ} → (x < y) ≃ (x + z < y + z)
 <-+r-≃ {x} = ≤-+r-≃ {x = suc x}
@@ -135,10 +135,10 @@ instance
 ... | yes x≤y = yes (s≤s x≤y)
 ... | no ¬x≤y = no (λ { (s≤s x≤y) → ¬x≤y x≤y })
 
-¬sucn≤n : ¬ (suc n ≤ n)
+¬sucn≤n : ¬ suc n ≤ n
 ¬sucn≤n {(suc n)} (s≤s ord) = ¬sucn≤n ord
 
-¬sucn≤0 : ¬ (suc n ≤ 0)
+¬sucn≤0 : ¬ suc n ≤ 0
 ¬sucn≤0 {(suc n)} = λ ()
 
 ≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
@@ -204,8 +204,8 @@ suc-pred (suc n) n0 = refl
   ap suc $ ·-inj-r x y (suc z) (s≤s prf) (+-inj-l z (x · suc z) (y · suc z) (suc-inj H))
 
 ·-inj-l : (x y z : ℕ) → 0 < x → x · y ＝ x · z → y ＝ z
-·-inj-l x y z x0 prf = ·-inj-r _ _ _ x0 (·-comm y x ∙ prf ∙ ·-comm x z)
+·-inj-l x y z 0<x p = ·-inj-r _ _ _ 0<x (·-comm y x ∙ p ∙ ·-comm x z)
 
 mul-<0 : (m n : ℕ) → (0 < m · n) → (0 < m) × (0 < n)
-mul-<0 (suc m)  zero   mn0 = absurd (¬sucn≤0 (subst (λ q → 0 < q) (·-zeror m) mn0))
-mul-<0 (suc m) (suc n) mn0 = (s≤s z≤) , (s≤s z≤)
+mul-<0 (suc m) zero    0<mn = absurd (¬sucn≤0 (subst (0 <_) (·-zeror m) 0<mn))
+mul-<0 (suc _) (suc _) _    = s≤s z≤ , s≤s z≤

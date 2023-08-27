@@ -45,7 +45,11 @@ open is-iso
        ≅ (x ＝ y))
   Σ-pathP-iso
 
-Σ-ap-snd : (Π[ x ꞉ A ] (P x ≃ Q x)) → Σ A P ≃ Σ A Q
+×-path : {B : Type ℓ′} {a c : A} {b d : B}
+       → a ＝ c → b ＝ d → (a , b) ＝ (c , d)
+×-path ac bd i = (ac i , bd i)
+
+Σ-ap-snd : Π[ x ꞉ A ] (P x ≃ Q x) → Σ A P ≃ Σ A Q
 Σ-ap-snd {A} {P} {Q} pointwise = iso→equiv morp where
   pwise : Π[ x ꞉ A ] (P x ≅ Q x)
   pwise x = _ , is-equiv→is-iso (pointwise x .snd)
@@ -98,19 +102,24 @@ open is-iso
         k (k = i0) → b
 
 Σ-ap : (e : A ≃ A′)
-     → (Π[ a ꞉ A ] (P a ≃ Q (e .fst a)))
+     → Π[ a ꞉ A ] (P a ≃ Q (e .fst a))
      → Σ A P ≃ Σ A′ Q
 Σ-ap e e′ = Σ-ap-snd e′ ∙ₑ Σ-ap-fst e
 
+×-ap : {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
+     → A ≃ C → B ≃ D → A × B ≃ C × D
+×-ap ac bd = Σ-ap ac (λ _ → bd)
+
 Σ-assoc : {B : A → Type ℓ′} {C : (a : A) → B a → Type ℓ″}
-        → (Σ[ x ꞉ A ] Σ[ y ꞉ B x ] C x y) ≃ (Σ[ x ꞉ Σ _ B ] (C (x .fst) (x .snd)))
+        → Σ[ x ꞉ A ] Σ[ y ꞉ B x ] C x y
+        ≃ Σ[ x ꞉ Σ _ B ] (C (x .fst) (x .snd))
 Σ-assoc .fst (x , y , z) = (x , y) , z
 Σ-assoc .snd .equiv-proof y .fst = strict-contr-fibres (λ { ((x , y) , z) → x , y , z}) y .fst
 Σ-assoc .snd .equiv-proof y .snd = strict-contr-fibres (λ { ((x , y) , z) → x , y , z}) y .snd
 
 Σ-Π-distrib : {B : A → Type ℓ′} {C : (x : A) → B x → Type ℓ″}
-            → (Π[ x ꞉ A ] (Σ[ y ꞉ B x ] C x y))
-            ≃ (Σ[ f ꞉ Π[ x ꞉ A ] B x ] Π[ x ꞉ A ] C x (f x))
+            → Π[ x ꞉ A ] (Σ[ y ꞉ B x ] C x y)
+            ≃ Σ[ f ꞉ Π[ x ꞉ A ] B x ] Π[ x ꞉ A ] C x (f x)
 Σ-Π-distrib .fst f = (λ x → f x .fst) , λ x → f x .snd
 Σ-Π-distrib .snd .equiv-proof y .fst = strict-contr-fibres (λ f x → f .fst x , f .snd x) y .fst
 Σ-Π-distrib .snd .equiv-proof y .snd = strict-contr-fibres (λ f x → f .fst x , f .snd x) y .snd
@@ -152,7 +161,7 @@ open is-iso
 -- Σ-prop-square Bprop {p} {q} {s} {r} sq i j .snd =
 --   is-prop→SquareP (λ i j → Bprop (sq i j))
 --     (ap snd p) (ap snd q) (ap snd s) (ap snd r) i j
-Σ-contract-fst : (A-c : is-contr A) → (Σ[ x ꞉ A ] B x) ≃ B (centre A-c)
+Σ-contract-fst : (A-c : is-contr A) → Σ[ x ꞉ A ] B x ≃ B (centre A-c)
 Σ-contract-fst {B} A-c = iso→equiv the-iso where
   the-iso : Iso _ _
   the-iso .fst (x , b) = subst B (sym $ paths A-c x) b
@@ -204,19 +213,11 @@ infixr 4 _,ₚ_
 
 Σ-swap
   : {B : Type ℓ′} {C : A → B → Type ℓ″}
-  → (Σ[ x ꞉ A ] Σ[ y ꞉ B ] C x y)
-  ≃ (Σ[ y ꞉ B ] Σ[ x ꞉ A ] C x y)
+  → Σ[ x ꞉ A ] Σ[ y ꞉ B ] C x y
+  ≃ Σ[ y ꞉ B ] Σ[ x ꞉ A ] C x y
 Σ-swap .fst (x , y , f) = y , x , f
 Σ-swap .snd .equiv-proof = strict-contr-fibres _
 
-×-swap : {B : Type ℓ′} → (A × B) ≃ (B × A)
+×-swap : {B : Type ℓ′} → A × B ≃ B × A
 ×-swap .fst (x , y) = y , x
 ×-swap .snd .equiv-proof = strict-contr-fibres _
-
-×-ap : {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
-     → A ≃ C → B ≃ D → A × B ≃ C × D
-×-ap ac bd = Σ-ap ac (λ _ → bd)
-
-×-path : {B : Type ℓ′} {a c : A} {b d : B}
-       → a ＝ c → b ＝ d → (a , b) ＝ (c , d)
-×-path ac bd i = (ac i , bd i)

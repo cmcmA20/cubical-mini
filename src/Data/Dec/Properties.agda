@@ -29,5 +29,6 @@ dec-∥-∥₁-equiv = prop-extₑ!
   (∥-∥₁.rec! $ Dec.map pure ∥-∥₁.rec!)
   (Dec.rec (yes <$>_) $ pure ∘ no ∘ _∘ pure)
 
-Dec-≃ : A ≃ B → Dec A ≃ Dec B
-Dec-≃ eqv = dec-as-sum ∙ₑ ⊎-ap-r eqv ∙ₑ ⊎-ap-l (¬-≃ (eqv .fst) ((eqv ₑ⁻¹) .fst)) ∙ₑ (dec-as-sum ₑ⁻¹)
+dec-≃ : A ≃ B → Dec A ≃ Dec B
+dec-≃ eqv = dec-as-sum ∙ₑ ⊎-ap (¬-≃ to from) eqv ∙ₑ (dec-as-sum ₑ⁻¹)
+  where open Equiv eqv

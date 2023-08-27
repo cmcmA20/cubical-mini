@@ -64,15 +64,15 @@ private
 
 -- negation
 
-not-involutive : ∀ x → not (not x) ＝ x
-not-involutive true  = refl
-not-involutive false = refl
+not-invol : ∀ x → not (not x) ＝ x
+not-invol true  = refl
+not-invol false = refl
 
-neq→not : ∀ x y → x ≠ y → x ＝ not y
-neq→not false false p = absurd (p refl)
-neq→not false true  _ = refl
-neq→not true  false _ = refl
-neq→not true  true  p = absurd (p refl)
+≠→=not : ∀ x y → x ≠ y → x ＝ not y
+≠→=not false false p = absurd (p refl)
+≠→=not false true  _ = refl
+≠→=not true  false _ = refl
+≠→=not true  true  p = absurd (p refl)
 
 -- disjunction
 
@@ -80,17 +80,17 @@ or-id-r : ∀ x → x or false ＝ x
 or-id-r false = refl
 or-id-r true  = refl
 
-or-unit-r : ∀ x → x or true ＝ true
-or-unit-r false = refl
-or-unit-r true  = refl
+or-absorb-r : ∀ x → x or true ＝ true
+or-absorb-r false = refl
+or-absorb-r true  = refl
 
 or-assoc : ∀ x y z → (x or y) or z ＝ x or y or z
-or-assoc false y z = refl
-or-assoc true  y z = refl
+or-assoc false _ _ = refl
+or-assoc true  _ _ = refl
 
 or-comm : ∀ x y → x or y ＝ y or x
 or-comm x false = or-id-r x
-or-comm x true  = or-unit-r x
+or-comm x true  = or-absorb-r x
 
 or-idem : ∀ x → x or x ＝ x
 or-idem false = refl

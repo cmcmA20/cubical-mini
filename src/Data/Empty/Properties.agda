@@ -22,4 +22,4 @@ private variable
   𝔯 .snd .is-iso.linv a = absurd (¬a a)
 
 ¬-≃ : (A → B) → (B → A) → (¬ A) ≃ (¬ B)
-¬-≃ ab ba = prop-extₑ! (λ na → na ∘ ba) λ nb → nb ∘ ab
+¬-≃ ab ba = prop-extₑ! (_∘ ba) (_∘ ab)
