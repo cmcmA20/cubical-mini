@@ -22,7 +22,7 @@ record is-partial-order {ℓ ℓ′} {A : Type ℓ}
     has-is-set : is-set A
     has-is-set = identity-system→hlevel 1
       {r = λ _ → ≤-refl , ≤-refl}
-      (set-identity-system hlevel! (≤-antisym $₂_))
+      (set-identity-system hlevel! (≤-antisym $²_))
       hlevel!
 
 

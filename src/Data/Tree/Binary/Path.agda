@@ -71,7 +71,7 @@ module tree-path-code {A : Type ℓ} where
   decode : Code xs ys → xs ＝ ys
   decode {xs = empty} {ys = empty} _ = refl
   decode {xs = leaf x} {ys = leaf y} = ap leaf
-  decode {xs = node xl xr} {ys = node yl yr} (p , q) = ap₂ node (decode p) (decode q)
+  decode {xs = node xl xr} {ys = node yl yr} (p , q) = ap² node (decode p) (decode q)
 
   code-refl-pathP : (c : Code xs ys) → ＜ code-refl xs ／ (λ i → Code xs (decode c i)) ＼ c ＞
   code-refl-pathP {xs = empty} {ys = empty} _ = refl

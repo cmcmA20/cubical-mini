@@ -21,7 +21,7 @@ vec-is-discrete {A} di = is-discrete-η go where
   go : ∀ {@0 n} → (xs ys : Vec A n) → Dec (xs ＝ ys)
   go []       []       = yes refl
   go (x ∷ xs) (y ∷ ys) = Dec.map
-    (λ (x=y , xs=ys) → ap₂ _∷_ x=y xs=ys)
+    (λ (x=y , xs=ys) → ap² _∷_ x=y xs=ys)
     (λ f p → f (ap head p , ap tail p))
     (×-decision (is-discrete-β di x y) $ go xs ys)
 

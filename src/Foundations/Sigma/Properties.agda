@@ -57,8 +57,8 @@ open is-iso
   morp : Σ _ P ≅ Σ _ Q
   morp .fst (i , x) = i , pointwise i .fst x
   morp .snd .inv (i , x) = i , pwise i .snd .inv x
-  morp .snd .rinv (i , x) = ap₂ _,_ refl (pwise i .snd .rinv _)
-  morp .snd .linv (i , x) = ap₂ _,_ refl (pwise i .snd .linv _)
+  morp .snd .rinv (i , x) = ap² _,_ refl (pwise i .snd .rinv _)
+  morp .snd .linv (i , x) = ap² _,_ refl (pwise i .snd .linv _)
 
 Σ-ap-fst : (e : A ≃ A′) → Σ A (B ∘ e .fst) ≃ Σ A′ B
 Σ-ap-fst {A} {A′} {B} e = intro , intro-is-equiv

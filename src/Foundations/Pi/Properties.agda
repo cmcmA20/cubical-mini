@@ -29,7 +29,7 @@ private variable
     .fst k x → k (e .fst x)
     .snd .is-iso.inv k x → subst P (ε x) (k (from x))
     .snd .is-iso.rinv k → fun-ext λ x →
-        ap₂ (subst P) (sym (zig x))
+        ap² (subst P) (sym (zig x))
           (sym (from-pathP (symP-from-goal (ap k (η x)))))
       ∙ transport⁻-transport (ap P (ap to (sym (η x)))) (k x)
     .snd .is-iso.linv k → fun-ext λ x →

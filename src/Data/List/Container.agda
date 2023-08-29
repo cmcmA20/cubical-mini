@@ -30,7 +30,7 @@ container→list′ : (n : ℕ) (f : Fin n → A) → Listⁱ A
 container→list′ 0       _ = []
 container→list′ (suc n) f = f fzero ∷ container→list′ n (f ∘ fsuc)
 
-list→container→list : (xs : Listⁱ A) → container→list′ $₂ (list→container xs) ＝ xs
+list→container→list : (xs : Listⁱ A) → container→list′ $² (list→container xs) ＝ xs
 list→container→list []       = refl
 list→container→list (x ∷ xs) = ap (x ∷_) (list→container→list xs)
 
@@ -44,4 +44,4 @@ container→list→container (suc n) f =
 
 list-container-equiv : Listⁱ A ≃ List A
 list-container-equiv =
-  iso→equiv (list→container , iso (container→list′ $₂_) (container→list→container $₂_) list→container→list)
+  iso→equiv (list→container , iso (container→list′ $²_) (container→list→container $²_) list→container→list)

@@ -82,7 +82,7 @@ opaque
   is-setⁱ→is-set A-setⁱ x y p q =
     let z = A-setⁱ x y (Id≃path.from p) (Id≃path.from q)
         w = apⁱ Id≃path.to z
-    in Id≃path.to (subst₂ _＝ⁱ_ (Id≃path.ε _) (Id≃path.ε _) w)
+    in Id≃path.to (subst² _＝ⁱ_ (Id≃path.ε _) (Id≃path.ε _) w)
 
 
 _on-pathsⁱ-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)

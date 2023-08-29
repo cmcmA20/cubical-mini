@@ -21,9 +21,12 @@ For naming conventions specific to the Algebra subfolder, see
   (for example `is-prop`).
 
 * Use abbreviations to avoid very long names, e.g.
+  - `id-l`/`id-r` = identity on the left/right
   - `comm` = commutative
   - `assoc` = associative
-  - `dist-r`/`dist-l` = distribute right/left
+  - `idem` = idempotent
+  - `absorp` = absorptive
+  - `dist-l`/`dist-r` = distribute left/right
   - `comp` = composition
   - `Cat` = category
   - `hom` = homomorphism
@@ -36,10 +39,15 @@ For naming conventions specific to the Algebra subfolder, see
 * Avoid referring to variable names in the names of definitions.
   For example, prefer `+-comm` to something like `m+n≡n+m`.
 
-* Use `Equiv` or `≃` to refer to equivalences of types or structures.
+* Numerical superscripts must be used only for arity specification.
+
+  Numerical subscripts should be preferred to indicate hlevel, but
+  can be used for other purposes if it improves readability.
+
+* Use `equiv` or `≃` to refer to equivalences of types or structures.
   Operators can use subscript `ₑ`.
 
-* Use `Iso` or `≅` to refer to isomorphisms of types or structures.
+* Use `iso` or `≅` to refer to isomorphisms of types or structures.
   Here an isomorphism is a function with a quasi-inverse, i.e. a
   quasi-equivalence in the sense of the HoTT Book.
   Operators can use subscript `ᵢ`.
@@ -54,15 +62,14 @@ For naming conventions specific to the Algebra subfolder, see
 
 * Prefer using `→` over `to`.
 
--- TODO what's the good alternative?
 * Results about `PathP` (path overs) should end with `P` (like
-  `compPathP`).
+  `compP`).
 
 * Type families valued in propositions, either defined as records,
   functions or as truncated inductive types, should start with the word
   `is`: `is-prop`, `is-set`, etc. Predicates should be written _after_
   what they apply to: `Nat-is-set`, `is-prop-is-prop`,
-  `is-hlevel-is-prop`. Record fields indicating the truth of a predicate
+  `is-of-hlevel-is-prop`. Record fields indicating the truth of a predicate
   should be prefixed `has-is-`, since Agda doesn't allow you to shadow
   globals with record fields.
 

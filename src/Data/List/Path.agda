@@ -47,7 +47,7 @@ module List-path-code where
 
   decode : Code xs ys → xs ＝ ys
   decode {xs = []}     {([])}   _       = refl
-  decode {xs = x ∷ xs} {y ∷ ys} (p , c) = ap₂ _∷_ p (decode c)
+  decode {xs = x ∷ xs} {y ∷ ys} (p , c) = ap² _∷_ p (decode c)
 
   code-refl-pathP : {xs ys : List A} (c : Code xs ys) → ＜ code-refl xs ／ (λ i → Code xs (decode c i)) ＼ c ＞
   code-refl-pathP {xs = []}     {([])}   (lift tt) = refl

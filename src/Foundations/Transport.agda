@@ -50,14 +50,14 @@ subst⁻-subst : (B : A → Type ℓ′) (p : x ＝ y)
 subst⁻-subst B p u = transport⁻-transport (ap B p) u
 
 
-subst₂ : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
+subst² : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
          (p : x ＝ y) (q : z ＝ w) → C x z → C y w
-subst₂ B p q = transport (λ i → B (p i) (q i))
+subst² B p q = transport (λ i → B (p i) (q i))
 
-subst₂-filler : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
+subst²-filler : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
                 (p : x ＝ y) (q : z ＝ w) (c : C x z)
-              → ＜ c ／ (λ i → C (p i) (q i)) ＼ subst₂ C p q c ＞
-subst₂-filler C p q = transport-filler (ap₂ C p q)
+              → ＜ c ／ (λ i → C (p i) (q i)) ＼ subst² C p q c ＞
+subst²-filler C p q = transport-filler (ap² C p q)
 
 subst-comp : (B : A → Type ℓ′)
            → (p : x ＝ y) (q : y ＝ z) (u : B x)

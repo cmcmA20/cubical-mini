@@ -54,7 +54,7 @@ fibre-paths {f} {y} {f1} {f2} =
            →  (subst (λ x → f x ＝ y) refl (f1 .snd) ＝ p′)
            ＝ (ap f refl ∙ p′ ＝ f1 .snd)
     helper p′ =
-      subst (λ x → f x ＝ y) refl (f1 .snd) ＝ p′ ＝⟨ ap₂ _＝_ (transport-refl _) refl ⟩
+      subst (λ x → f x ＝ y) refl (f1 .snd) ＝ p′ ＝⟨ ap² _＝_ (transport-refl _) refl ⟩
       (f1 .snd) ＝ p′                             ＝⟨ iso→path (sym , iso sym (λ x → refl) (λ x → refl)) ⟩
       ⌜ p′ ⌝ ＝ f1 .snd                           ＝˘⟨ ap¡ (∙-id-l _) ⟩
       refl ∙ p′ ＝ f1 .snd                        ＝⟨⟩
@@ -81,7 +81,7 @@ is-half-adjoint-equiv→is-equiv {A} {B} {f} (g , η , ε , zig) .equiv-proof y 
 
     path : ap f (ap g (sym p) ∙ η x) ∙ p ＝ ε y
     path =
-      ap f (ap g (sym p) ∙ η x) ∙ p                   ＝⟨ ap₂ _∙_ (ap-comp-∙ f (ap g (sym p)) (η x)) refl ∙ sym (∙-assoc _ _ _) ⟩
+      ap f (ap g (sym p) ∙ η x) ∙ p                   ＝⟨ ap² _∙_ (ap-comp-∙ f (ap g (sym p)) (η x)) refl ∙ sym (∙-assoc _ _ _) ⟩
       ap (λ x → f (g x)) (sym p) ∙ ⌜ ap f (η x) ⌝ ∙ p ＝⟨ ap! (zig _) ⟩ -- by the triangle identity
       ap (f ∘ g) (sym p) ∙ ⌜ ε (f x) ∙ p ⌝            ＝⟨ ap! (homotopy-natural ε p)  ⟩ -- by naturality of ε
       ap (f ∘ g) (sym p) ∙ ap (f ∘ g) p ∙ ε y         ＝⟨ ∙-assoc _ _ _ ⟩

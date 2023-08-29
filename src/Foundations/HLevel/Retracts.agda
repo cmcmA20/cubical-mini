@@ -54,9 +54,9 @@ opaque
       inv : sect is-left-inverse-of (ap g)
       inv path =
         sym (p x) ∙ ap f (ap g path) ∙ p y ∙ refl ＝⟨ ap (λ e → sym (p _) ∙ _ ∙ e) (∙-id-r (p _)) ⟩
-        sym (p x) ∙ ap f (ap g path) ∙ p y        ＝⟨ ap₂ _∙_ refl (sym (homotopy-natural p _)) ⟩
+        sym (p x) ∙ ap f (ap g path) ∙ p y        ＝⟨ ap² _∙_ refl (sym (homotopy-natural p _)) ⟩
         sym (p x) ∙ p x ∙ path                    ＝⟨ ∙-assoc _ _ _ ⟩
-        (sym (p x) ∙ p x) ∙ path                  ＝⟨ ap₂ _∙_ (∙-inv-l (p x)) refl ⟩
+        (sym (p x) ∙ p x) ∙ path                  ＝⟨ ap² _∙_ (∙-inv-l (p x)) refl ⟩
         refl ∙ path                               ＝⟨ ∙-id-l path ⟩
         path                                      ∎
 

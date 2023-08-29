@@ -71,7 +71,7 @@ open import Data.Nat.Path
 ·-distrib-+r (suc x) y z = ap (λ q → z + q) (·-distrib-+r x y z) ∙ +-assoc z (x · z) (y · z)
 
 ·-distrib-+l : (x y z : ℕ) → x · (y + z) ＝ x · y + x · z
-·-distrib-+l x y z = ·-comm x (y + z) ∙ ·-distrib-+r y z x ∙ ap₂ (_+_) (·-comm y x) (·-comm z x)
+·-distrib-+l x y z = ·-comm x (y + z) ∙ ·-distrib-+r y z x ∙ ap² (_+_) (·-comm y x) (·-comm z x)
 
 ·-assoc : (x y z : ℕ) → x · (y · z) ＝ x · y · z
 ·-assoc  zero   y z = refl

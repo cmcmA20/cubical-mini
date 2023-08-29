@@ -77,23 +77,23 @@ apP : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
 apP f p i = f i (p i)
 {-# INLINE apP #-}
 
-ap₂ : {C : Π[ a ꞉ A ] Π[ b ꞉ B a ] Type ℓ}
+ap² : {C : Π[ a ꞉ A ] Π[ b ꞉ B a ] Type ℓ}
       (f : Π[ a ꞉ A ] Π[ b ꞉ B a ] C a b)
       (p : x ＝ y) {u : B x} {v : B y}
       (q : ＜     u    ／ (λ i →          B (p i)) ＼        v ＞)
     →      ＜ f x u ／ (λ i    → C (p i) (q    i ))   ＼ f y v ＞
-ap₂ f p q i = f (p i) (q i)
-{-# INLINE ap₂ #-}
+ap² f p q i = f (p i) (q i)
+{-# INLINE ap² #-}
 
-apP₂ : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
+apP² : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
        {C : (i : I) → Π[ a ꞉ A i ] (B i a → Type ℓ″)}
        (f : (i : I) → Π[ a ꞉ A i ] Π[ b ꞉ B i a ] C i a b)
        {x : A i0} {y : A i1} {u : B i0 x} {v : B i1 y}
        (p : ＜      x         ／ (λ i →      A i)          ＼            y   ＞)
        (q : ＜        u    ／ (λ i    →            B i (p i)) ＼           v ＞)
      →      ＜ f i0 x u ／ (λ i       → C i (p i) (q      i ))   ＼ f i1 y v ＞
-apP₂ f p q i = f i (p i) (q i)
-{-# INLINE apP₂ #-}
+apP² f p q i = f i (p i) (q i)
+{-# INLINE apP² #-}
 
 {- Observe an "open box".
 

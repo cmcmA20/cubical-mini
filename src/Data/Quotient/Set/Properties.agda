@@ -106,7 +106,7 @@ universal {B} {A} {R} B-set = iso→equiv $ inc , iso back (λ _ → refl) li wh
   instance _ = B-set
   inc : (A / R → B) → Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b)
   inc f = f ∘ ⦋_⦌ , λ a b r i → f (glue/ a b r i)
-  back = rec! $₂_
+  back = rec! $²_
   li : _
   li f′ = fun-ext λ r → ∥-∥₁.rec! (λ (_ , p) → ap (back (inc f′)) (sym p) ∙ ap f′ p) (⦋-⦌-surjective r)
 
