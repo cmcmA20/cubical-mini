@@ -17,14 +17,14 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
-Vecₓ≃Vec : Vecₓ A n ≃ Vec A n
-Vecₓ≃Vec {A} = iso→equiv (f , iso g a→b→a b→a→b) where
-  f : Vecₓ A n → Vec A n
+HProduct≃Vec : HProduct n A ≃ Vec A n
+HProduct≃Vec {A} = iso→equiv (f , iso g a→b→a b→a→b) where
+  f : HProduct n A → Vec A n
   f {n = 0} _ = []
   f {n = 1} x = x ∷ []
   f {n = suc (suc n)} (x , xs) = x ∷ f xs
 
-  g : Vec A n → Vecₓ A n
+  g : Vec A n → HProduct n A
   g {n = 0} _       = lift tt
   g {n = 1} (x ∷ _) = x
   g {n = suc (suc n)} (x ∷ xs) = x , g xs
@@ -34,7 +34,7 @@ Vecₓ≃Vec {A} = iso→equiv (f , iso g a→b→a b→a→b) where
   a→b→a {n = 1} (x ∷ []) = refl
   a→b→a {n = suc (suc n)} (x ∷ xs) = ap (x ∷_) (a→b→a _)
 
-  b→a→b : (xs : Vecₓ A n) → g (f xs) ＝ xs
+  b→a→b : (xs : HProduct n A) → g (f xs) ＝ xs
   b→a→b {n = 0} _ = refl
   b→a→b {n = 1} _ = refl
   b→a→b {n = suc (suc n)} (x , xs) = ap (x ,_) (b→a→b xs)
@@ -42,9 +42,9 @@ Vecₓ≃Vec {A} = iso→equiv (f , iso g a→b→a b→a→b) where
 
 -- FIXME decomp
 instance
-  vecₓ-is-fin-set : {ℓ : Level} {A : Type ℓ} {n : ℕ}
-                  → ⦃ is-fin-set A ⦄ → is-fin-set (Vecₓ A n)
-  vecₓ-is-fin-set {A} {0} = lift-is-fin-set ⊤-is-fin-set
-  vecₓ-is-fin-set {A} {1} ⦃ (A-fin) ⦄ = A-fin
-  vecₓ-is-fin-set {A} {suc (suc n)} ⦃ (A-fin) ⦄ =
-    ×-is-fin-set A-fin (vecₓ-is-fin-set {A = A} {n = suc n} ⦃ A-fin ⦄)
+  hproduct-is-fin-set : {ℓ : Level} {A : Type ℓ} {n : ℕ}
+                  → ⦃ is-fin-set A ⦄ → is-fin-set (HProduct n A)
+  hproduct-is-fin-set {A} {0} = lift-is-fin-set ⊤-is-fin-set
+  hproduct-is-fin-set {A} {1} ⦃ (A-fin) ⦄ = A-fin
+  hproduct-is-fin-set {A} {suc (suc n)} ⦃ (A-fin) ⦄ =
+    ×-is-fin-set A-fin (hproduct-is-fin-set {A = A} {n = suc n} ⦃ A-fin ⦄)

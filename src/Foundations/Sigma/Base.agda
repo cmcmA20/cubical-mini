@@ -77,12 +77,12 @@ _$⁵_ : (f : (a : A) (b : B a) (c : C a b) (d : D a b c) (e : E a b c d) → F 
      → F (p .fst) (p .snd .fst) (p .snd .snd .fst) (p .snd .snd .snd .fst) (p .snd .snd .snd .snd)
 f $⁵ (x , y , z , w , u) = f x y z w u
 
--- note that `curry¹` is just `_$_`
+-- note that `curry¹` is just `_$_` again
 
-curry₂ : (f : (p : Σ[ a ꞉ A ] B a) → C (p .fst) (p .snd))
+curry² : (f : (p : Σ[ a ꞉ A ] B a) → C (p .fst) (p .snd))
          (x : A) (y : B x) → C x y
-curry₂ f x y = f (x , y)
+curry² f x y = f (x , y)
 
-curry₃ : (f : (p : Σ[ a ꞉ A ] Σ[ b ꞉ B a ] C a b) → D (p .fst) (p .snd .fst) (p .snd .snd))
+curry³ : (f : (p : Σ[ a ꞉ A ] Σ[ b ꞉ B a ] C a b) → D (p .fst) (p .snd .fst) (p .snd .snd))
          (x : A) (y : B x) (z : C x y) → D x y z
-curry₃ f x y z = f (x , y , z)
+curry³ f x y z = f (x , y , z)

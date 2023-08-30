@@ -14,7 +14,7 @@ private variable
 instance
   From-prod-List : From-product A (λ _ → List A)
   From-prod-List .From-product.from-prod = go where
-    go : ∀ n → Vecₓ A n → List A
+    go : ∀ n → HProduct n A → List A
     go zero xs                = []
     go (suc zero) xs          = xs ∷ []
     go (suc (suc n)) (x , xs) = x ∷ go (suc n) xs

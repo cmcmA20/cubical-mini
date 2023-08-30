@@ -46,14 +46,14 @@ fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 
 -- Decidability of a homogeneous predicate
 Decidable : Pred _ (Corr n ℓ A)
-Decidable P = Π[ Dec ∘ⁿ P ]
+Decidable P = Π[ hmapⁿ _ Dec P ]
 
 -- Homogeneous decision procedure
 DProc
   : (arity : ℕ) (ℓ′ : Level)
     {ℓ : Level} (A : Type ℓ)
-  → Type (Levelₓ ℓ 0ℓ arity)
-DProc arity ℓ′ A = functionₓ arity A Bool
+  → Type (ℓhsup arity ℓ 0ℓ)
+DProc arity ℓ′ A = hfunⁿ {n = arity} A Bool
 
 DProc⁰ = DProc 0
 DProc¹ = DProc 1

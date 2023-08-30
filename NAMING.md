@@ -28,6 +28,7 @@ For naming conventions specific to the Algebra subfolder, see
   - `absorp` = absorptive
   - `dist-l`/`dist-r` = distribute left/right
   - `comp` = composition
+  - `fun` = function
   - `Cat` = category
   - `hom` = homomorphism
 

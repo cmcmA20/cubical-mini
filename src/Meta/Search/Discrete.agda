@@ -72,7 +72,7 @@ instance
 
 -- Usage
 private
-  module _ ⦃ A-dis : is-discrete A ⦄ {B : A → Type ℓb} ⦃ B-dis : ∀[ is-discrete ∘ⁿ B ] ⦄ where
+  module _ ⦃ A-dis : is-discrete A ⦄ {B : A → Type ℓb} ⦃ B-dis : ∀[ hmapⁿ 1 is-discrete B ] ⦄ where
     _ : is-discrete (A × A × A × A)
     _ = discrete!
 

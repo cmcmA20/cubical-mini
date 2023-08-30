@@ -15,8 +15,8 @@ open import Data.Product.Base public
 Corr
   : (arity : ℕ) (ℓ′ : Level)
     {ℓ : Level} (A : Type ℓ)
-  → Type (Levelₓ ℓ (ℓsuc ℓ′) arity)
-Corr arity ℓ′ A = functionₓ arity A (Type ℓ′)
+  → Type (ℓhsup arity ℓ (ℓsuc ℓ′))
+Corr arity ℓ′ A = hfunⁿ {n = arity} A (Type ℓ′)
 
 Corr⁰ = Corr 0
 Corr¹ = Corr 1
@@ -32,8 +32,8 @@ Pred = Corr¹
 n-Corr
   : (arity : ℕ) (n : HLevel) (ℓ′ : Level)
     {ℓ : Level} (A : Type ℓ)
-  → Type (Levelₓ ℓ (ℓsuc ℓ′) arity)
-n-Corr arity n ℓ′ A = functionₓ arity A (n-Type ℓ′ n)
+  → Type (ℓhsup arity ℓ (ℓsuc ℓ′))
+n-Corr arity n ℓ′ A = hfunⁿ {n = arity} A (n-Type ℓ′ n)
 
 n-Corr⁰ = n-Corr 0
 n-Corr¹ = n-Corr 1
@@ -41,14 +41,14 @@ n-Corr² = n-Corr 2
 n-Corr³ = n-Corr 3
 
 ⌞_⌟ₙ : {ℓ ℓ′ : Level} {arity : ℕ} {n : HLevel} {A : Type ℓ} → n-Corr arity n ℓ′ A → Corr arity ℓ′ A
-⌞_⌟ₙ {arity = 0} C = ⌞ C ⌟
+⌞_⌟ₙ {arity = 0}     C   = ⌞ C ⌟
 ⌞_⌟ₙ {arity = suc _} C a = ⌞ C a ⌟ₙ
 
 -- Propositionally valued correspondence is called a relation
 Rel
   : (arity : ℕ) (ℓ′ : Level)
     {ℓ : Level} (A : Type ℓ)
-  → Type (Levelₓ ℓ (ℓsuc ℓ′) arity)
+  → Type (ℓhsup arity ℓ (ℓsuc ℓ′))
 Rel arity = n-Corr arity 1
 
 Rel⁰ = Rel 0
@@ -75,23 +75,23 @@ private variable
 infix 10 Universal IUniversal
 
 Universal : Corr arity ℓ A → Type (level-of-type A ⊔ ℓ)
-Universal {0} {A} P = Lift (level-of-type A) P
-Universal {1} {A} P = Π[ a ꞉ A ] P a
+Universal {0}           {A} P = Lift (level-of-type A) P
+Universal {1}           {A} P = Π[ a ꞉ A ] P a
 Universal {suc (suc _)} {A} P = Π[ a ꞉ A ] Universal (P a)
 {-# INLINE Universal #-}
 
 syntax Universal P = Π[ P ]
 
 IUniversal : Corr arity ℓ A → Type (level-of-type A ⊔ ℓ)
-IUniversal {0} {A} P = Lift (level-of-type A) P
-IUniversal {1} {A} P = ∀{a} → P a
+IUniversal {0}           {A} P = Lift (level-of-type A) P
+IUniversal {1}           {A} P = ∀{a} → P a
 IUniversal {suc (suc _)} {A} P = ∀{a} → IUniversal (P a)
 {-# INLINE IUniversal #-}
 
 syntax IUniversal P = ∀[ P ]
 
 _⇒_ : Corr arity ℓ A → Corr arity ℓ′ A → Corr arity (ℓ ⊔ ℓ′) A
-_⇒_ {0} P Q = P → Q
+_⇒_ {0}     P Q = P → Q
 _⇒_ {suc _} P Q = λ x → P x ⇒ Q x
 
 _⇒ₙ_ : n-Corr arity n ℓ A → n-Corr arity n ℓ′ A → n-Corr arity n (ℓ ⊔ ℓ′) A
