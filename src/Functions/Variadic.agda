@@ -22,10 +22,6 @@ Levels (suc (suc n)) = Level × Levels (suc n)
 ℓsup 1             l        = l
 ℓsup (suc (suc n)) (l , ls) = l ⊔ ℓsup _ ls
 
-ℓhsup : ℕ → Level → Level → Level
-ℓhsup 0       _  ℓ₂ = ℓ₂
-ℓhsup (suc n) ℓ₁ ℓ₂ = ℓ₁ ⊔ ℓhsup n ℓ₁ ℓ₂
-
 ℓreplicate : ∀ n → Level → Levels n
 ℓreplicate 0             _ = _
 ℓreplicate 1             ℓ = ℓ
@@ -43,13 +39,6 @@ Arrows (suc (suc n)) (A , As) B = A → Arrows _ As B
 
 funⁿ : ∀ {n ℓ ls} → Types n ls → Type ℓ → Type (ℓ ⊔ ℓsup n ls)
 funⁿ = Arrows _
-
-HArrows : (n : ℕ) → Type a → Type b → Type (ℓhsup n a b)
-HArrows 0       _ B = B
-HArrows (suc n) A B = A → HArrows n A B
-
-hfunⁿ : ∀ {n} → Type a → Type b → Type (ℓhsup n a b)
-hfunⁿ {n} = HArrows n
 
 infixr -1 _<$>ⁿ_
 _<$>ⁿ_ : (∀ {ℓ} → Type ℓ → Type ℓ)
@@ -72,27 +61,23 @@ _<$>ⁿ_ F {n = suc (suc n)} (A , As) = F A , (F <$>ⁿ As)
 ℓsmap f F (suc (suc n)) (A , As) = F A , ℓsmap f F _ As
 
 -- mapping under n arguments
-mapⁿ : ∀ n {ls} {as : Types n ls} → (B → C) → funⁿ as B → funⁿ as C
+mapⁿ : ∀ n {ls} {As : Types n ls} → (B → C) → funⁿ As B → funⁿ As C
 mapⁿ 0             f v = f v
 mapⁿ 1             f v x = f (v x)
 mapⁿ (suc (suc n)) f g = mapⁿ _ f ∘′ g
 
-hmapⁿ : (n : ℕ) → (B → C) → hfunⁿ {n = n} A B → hfunⁿ {n = n} A C
-hmapⁿ 0       f v = f v
-hmapⁿ (suc n) f g = hmapⁿ _ f ∘′ g
-
 -- compose function at the n-th position
 infix 1 _%=_⊢_
-_%=_⊢_ : ∀ n {ls} {as : Types n ls} → (A → B) → funⁿ as (B → C) → funⁿ as (A → C)
+_%=_⊢_ : ∀ n {ls} {As : Types n ls} → (A → B) → funⁿ As (B → C) → funⁿ As (A → C)
 n %= f ⊢ g = mapⁿ n (_∘′ f) g
 
 -- partially apply function at the n-th position
 infix 1 _∷=_⊢_
-_∷=_⊢_ : ∀ n {ls} {as : Types n ls} → A → funⁿ as (A → B) → funⁿ as B
+_∷=_⊢_ : ∀ n {ls} {As : Types n ls} → A → funⁿ As (A → B) → funⁿ As B
 n ∷= x ⊢ g = mapⁿ n (_$ x) g
 
 -- hole at the n-th position
-holeⁿ : ∀ n {ls} {as : Types n ls} → (A → funⁿ as B) → funⁿ as (A → B)
+holeⁿ : ∀ n {ls} {As : Types n ls} → (A → funⁿ As B) → funⁿ As (A → B)
 holeⁿ 0             f = f
 holeⁿ 1             f = flip f
 holeⁿ (suc (suc n)) f = holeⁿ _ ∘′ flip f
@@ -101,3 +86,19 @@ constⁿ : ∀ n {ls ℓ} {As : Types n ls} {B : Type ℓ} → B → funⁿ As B
 constⁿ 0             v = v
 constⁿ 1             v = λ _ → v
 constⁿ (suc (suc n)) v = λ _ → constⁿ _ v
+
+
+-- ℓhsup : ℕ → Level → Level → Level
+-- ℓhsup 0       _  ℓ₂ = ℓ₂
+-- ℓhsup (suc n) ℓ₁ ℓ₂ = ℓ₁ ⊔ ℓhsup n ℓ₁ ℓ₂
+
+-- HArrows : (n : ℕ) → Type a → Type b → Type (ℓhsup n a b)
+-- HArrows 0       _ B = B
+-- HArrows (suc n) A B = A → HArrows n A B
+
+-- hfunⁿ : ∀ {n} → Type a → Type b → Type (ℓhsup n a b)
+-- hfunⁿ {n} = HArrows n
+
+-- hmapⁿ : (n : ℕ) → (B → C) → hfunⁿ {n = n} A B → hfunⁿ {n = n} A C
+-- hmapⁿ 0       f v = f v
+-- hmapⁿ (suc n) f g = hmapⁿ _ f ∘′ g

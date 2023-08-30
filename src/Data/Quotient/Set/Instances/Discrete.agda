@@ -18,7 +18,7 @@ open import Data.Quotient.Set.Properties
 private variable
   ℓ ℓᵃ : Level
   A : Type ℓᵃ
-  R : Corr 2 ℓ A
+  R : Corr 2 ℓ (A , A)
 
 /₂-is-discrete
   : (R-c : is-congruence R)

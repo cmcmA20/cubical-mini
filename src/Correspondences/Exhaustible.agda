@@ -18,12 +18,12 @@ private variable
 opaque
   Exhaustible : {ℓ′ : Level} → Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
   Exhaustible {ℓ′} A =
-    {P : Pred ℓ′ A} → Decidable P → Dec Π[ P ]
+    {P : Pred ℓ′ A} → Decidable¹ P → Dec Π¹[ P ]
 
-  exhaustible-β : Exhaustible A → {P : Pred ℓ′ A} → Decidable P → Dec Π[ P ]
+  exhaustible-β : Exhaustible A → {P : Pred ℓ′ A} → Decidable¹ P → Dec Π¹[ P ]
   exhaustible-β = id
 
-  exhaustible-η : ({P : Pred ℓ′ A} → Decidable P → Dec Π[ P ]) → Exhaustible A
+  exhaustible-η : ({P : Pred ℓ′ A} → Decidable¹ P → Dec Π¹[ P ]) → Exhaustible A
   exhaustible-η = id
 
 exhaust : ⦃ x : Exhaustible {ℓ′ = ℓ′} A ⦄ → Exhaustible A
@@ -35,5 +35,5 @@ opaque
     : Exhaustible {ℓ′ = ℓ′} A → Exhaustible (Lift ℓ A)
   lift-exhaustible ex P? = Dec.map (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift) $ ex $ P? ∘ lift
 
-Π-decision : {B : A → Type ℓᵇ} → Decidable B → Exhaustible {ℓ′ = ℓᵇ} A → Dec Π[ B ]
+Π-decision : {B : A → Type ℓᵇ} → Decidable¹ B → Exhaustible {ℓ′ = ℓᵇ} A → Dec Π¹[ B ]
 Π-decision d ex = exhaustible-β ex d

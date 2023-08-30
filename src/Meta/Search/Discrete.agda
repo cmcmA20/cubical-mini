@@ -39,10 +39,10 @@ instance
 discrete-tactic-worker = search-tactic-worker Tactic-discrete
 macro discrete! = discrete-tactic-worker
 
-_≟_ : { @(tactic discrete-tactic-worker) di : is-discrete A } → Decidable (_＝_)
+_≟_ : { @(tactic discrete-tactic-worker) di : is-discrete A } → Decidable 2 (_＝_)
 _≟_ {di} = is-discrete-β di
 
-dec-helper : is-discrete A → Decidable (_＝_)
+dec-helper : is-discrete A → Decidable 2 (_＝_)
 dec-helper = is-discrete-β
 
 hedberg-helper : (n : HLevel) → is-discrete A → is-of-hlevel (2 + n) A
@@ -72,7 +72,7 @@ instance
 
 -- Usage
 private
-  module _ ⦃ A-dis : is-discrete A ⦄ {B : A → Type ℓb} ⦃ B-dis : ∀[ hmapⁿ 1 is-discrete B ] ⦄ where
+  module _ ⦃ A-dis : is-discrete A ⦄ {B : A → Type ℓb} ⦃ B-dis : ∀¹[ mapⁿ 1 is-discrete B ] ⦄ where
     _ : is-discrete (A × A × A × A)
     _ = discrete!
 

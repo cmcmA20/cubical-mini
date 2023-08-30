@@ -19,34 +19,34 @@ private variable
 -- there is a class of types that can be reflected in booleans
 module Reflects′ where
 
-  data Reflects¹ {ℓ} (P : Type ℓ) : Bool → Type ℓ where
-    ofʸ : ( p :   P) → Reflects¹ P true
-    ofⁿ : (¬p : ¬ P) → Reflects¹ P false
+  data Reflects⁰ {ℓ} (P : Type ℓ) : Bool → Type ℓ where
+    ofʸ : ( p :   P) → Reflects⁰ P true
+    ofⁿ : (¬p : ¬ P) → Reflects⁰ P false
 
-  of : if b then P else ¬ P → Reflects¹ P b
+  of : if b then P else ¬ P → Reflects⁰ P b
   of {b = false} ¬p = ofⁿ ¬p
   of {b = true }  p = ofʸ p
 
-  invert : Reflects¹ P b → if b then P else ¬ P
+  invert : Reflects⁰ P b → if b then P else ¬ P
   invert (ofʸ  p) = p
   invert (ofⁿ ¬p) = ¬p
 
-  ¬-reflects : Reflects¹ P b → Reflects¹ (¬ P) (not b)
+  ¬-reflects : Reflects⁰ P b → Reflects⁰ (¬ P) (not b)
   ¬-reflects (ofʸ  p) = ofⁿ (_$ p)
   ¬-reflects (ofⁿ ¬p) = ofʸ ¬p
 
-  reflects-det : Reflects¹ P a → Reflects¹ P b → a ＝ b
+  reflects-det : Reflects⁰ P a → Reflects⁰ P b → a ＝ b
   reflects-det (ofʸ  p) (ofʸ  p′) = refl
   reflects-det (ofʸ  p) (ofⁿ ¬p′) = ⊥.rec (¬p′ p)
   reflects-det (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec (¬p p′)
   reflects-det (ofⁿ ¬p) (ofⁿ ¬p′) = refl
 
-  map : (P → Q) → (¬ P → ¬ Q) → Reflects¹ P b → Reflects¹ Q b
+  map : (P → Q) → (¬ P → ¬ Q) → Reflects⁰ P b → Reflects⁰ Q b
   map to fro (ofʸ  p) = ofʸ (to p)
   map to fro (ofⁿ ¬p) = ofⁿ (fro ¬p)
 
 open Reflects′ public
-  using (Reflects¹; ofʸ; ofⁿ)
+  using (Reflects⁰; ofʸ; ofⁿ)
 
 
 -- witness of a predicate being (already) decided
@@ -55,7 +55,7 @@ record Dec {ℓ} (P : Type ℓ) : Type ℓ where
   constructor _because_
   field
     does  : Bool
-    proof : Reflects¹ P does
+    proof : Reflects⁰ P does
 open Dec public
 
 pattern yes p =  true because ofʸ  p

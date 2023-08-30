@@ -24,12 +24,12 @@ private variable
 
 opaque
   Omniscient₁ : {ℓ′ : Level} → Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
-  Omniscient₁ {ℓ′} A = {P : Pred ℓ′ A} → Decidable P → Dec (∃[ a ꞉ A ] P a)
+  Omniscient₁ {ℓ′} A = {P : Pred ℓ′ A} → Decidable¹ P → Dec (∃[ a ꞉ A ] P a)
 
-  omniscient₁-β : Omniscient₁ A → {P : Pred ℓ′ A} → Decidable P → Dec (∃[ a ꞉ A ] P a)
+  omniscient₁-β : Omniscient₁ A → {P : Pred ℓ′ A} → Decidable¹ P → Dec (∃[ a ꞉ A ] P a)
   omniscient₁-β = id
 
-  omniscient₁-η : ({P : Pred ℓ′ A} → Decidable P → Dec (∃[ a ꞉ A ] P a)) → Omniscient₁ A
+  omniscient₁-η : ({P : Pred ℓ′ A} → Decidable¹ P → Dec (∃[ a ꞉ A ] P a)) → Omniscient₁ A
   omniscient₁-η = id
 
 
@@ -44,5 +44,5 @@ opaque
 omni₁ : ⦃ x : Omniscient₁ {ℓ′ = ℓ′} A ⦄ → Omniscient₁ A
 omni₁ ⦃ x ⦄ = x
 
-∃-decision : {B : A → Type ℓᵇ} → Decidable B → Omniscient₁ {ℓ′ = ℓᵇ} A → Dec (∃[ a ꞉ A ] B a)
+∃-decision : {B : A → Type ℓᵇ} → Decidable¹ B → Omniscient₁ {ℓ′ = ℓᵇ} A → Dec (∃[ a ꞉ A ] B a)
 ∃-decision d ex = omniscient₁-β ex d

@@ -100,7 +100,7 @@ is-fin-set-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-fin-set-is-prop
 finite-pi-fin
   : (n : ℕ) {P : Fin n → Type ℓ′}
   → (∀ x → is-fin-set (P x))
-  → is-fin-set Π[ P ]
+  → is-fin-set Π¹[ P ]
 finite-pi-fin 0 {P} fam = is-fin-set-η $ 1 , (pure $ iso→equiv $ ff , iso gg ri li) where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
