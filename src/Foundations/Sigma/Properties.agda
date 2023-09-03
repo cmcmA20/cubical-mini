@@ -18,7 +18,7 @@ private variable
 ∃! : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 ∃! A B = is-contr (Σ[ a ꞉ A ] B a)
 
-infix 2 ∃!-syntax
+infixr 6 ∃!-syntax
 ∃!-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 ∃!-syntax = ∃!
 
@@ -29,7 +29,7 @@ open is-iso
 Σ-pathP-iso
   : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
     {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
-  → (Σ[ p ꞉ ＜ x .fst ／ A ＼ y .fst ＞ ] ＜ x .snd ／ (λ i → B i (p i)) ＼ y .snd ＞)
+  → Σ[ p ꞉ ＜ x .fst ／ A ＼ y .fst ＞ ] ＜ x .snd ／ (λ i → B i (p i)) ＼ y .snd ＞
   ≅ ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
 Σ-pathP-iso .fst (p , q) i = p i , q i
 Σ-pathP-iso .snd .inv p = (λ i → p i .fst) , (λ i → p i .snd)
@@ -38,7 +38,7 @@ open is-iso
 
 Σ-path-iso
   : {x y : Σ A B}
-  → (Σ[ p ꞉ x .fst ＝ y .fst ] (subst B p (x .snd) ＝ y .snd))
+  → Σ[ p ꞉ x .fst ＝ y .fst ] (subst B p (x .snd) ＝ y .snd)
   ≅ (x ＝ y)
 Σ-path-iso {B} {x} {y} = transport
   (λ i → (Σ[ p ꞉ x .fst ＝ y .fst ] (pathP＝path (λ j → B (p j)) (x .snd) (y .snd) i))
@@ -112,13 +112,13 @@ open is-iso
 
 Σ-assoc : {B : A → Type ℓ′} {C : (a : A) → B a → Type ℓ″}
         → Σ[ x ꞉ A ] Σ[ y ꞉ B x ] C x y
-        ≃ Σ[ x ꞉ Σ _ B ] (C (x .fst) (x .snd))
+        ≃ Σ[ (x , y) ꞉ Σ _ B ] C x y
 Σ-assoc .fst (x , y , z) = (x , y) , z
 Σ-assoc .snd .equiv-proof y .fst = strict-contr-fibres (λ { ((x , y) , z) → x , y , z}) y .fst
 Σ-assoc .snd .equiv-proof y .snd = strict-contr-fibres (λ { ((x , y) , z) → x , y , z}) y .snd
 
 Σ-Π-distrib : {B : A → Type ℓ′} {C : (x : A) → B x → Type ℓ″}
-            → Π[ x ꞉ A ] (Σ[ y ꞉ B x ] C x y)
+            → Π[ x ꞉ A ] Σ[ y ꞉ B x ] C x y
             ≃ Σ[ f ꞉ Π[ x ꞉ A ] B x ] Π[ x ꞉ A ] C x (f x)
 Σ-Π-distrib .fst f = (λ x → f x .fst) , λ x → f x .snd
 Σ-Π-distrib .snd .equiv-proof y .fst = strict-contr-fibres (λ f x → f .fst x , f .snd x) y .fst

@@ -13,8 +13,9 @@ private variable
   A B C D : Type ℓ
   P Q : A → Type ℓ′
 
-Π-cod-≃ : (Π[ x ꞉ A ] (P x ≃ Q x))
-        → (Π[ x ꞉ A ] P x) ≃ (Π[ x ꞉ A ] Q x)
+Π-cod-≃ : Π[ x ꞉ A ] (P x ≃ Q x)
+        → Π[ x ꞉ A ] P x
+        ≃ Π[ x ꞉ A ] Q x
 Π-cod-≃ k .fst f x = k x .fst (f x)
 Π-cod-≃ k .snd .equiv-proof f .fst .fst x   = equiv-centre (k x) (f x) .fst
 Π-cod-≃ k .snd .equiv-proof f .fst .snd i x = equiv-centre (k x) (f x) .snd i
@@ -23,7 +24,9 @@ private variable
 Π-cod-≃ k .snd .equiv-proof f .snd (g , p) i .snd j x =
   equiv-path (k x) (f x) (g x , λ k → p k x) i .snd j
 
-Π-dom-≃ : (e : B ≃ A) → (Π[ x ꞉ A ] P x) ≃ (Π[ x ꞉ B ] P (e .fst x))
+Π-dom-≃ : (e : B ≃ A)
+        → Π[ x ꞉ A ] P x
+        ≃ Π[ x ꞉ B ] P (e .fst x)
 Π-dom-≃ {P} e =
   iso→equiv λ where
     .fst k x → k (e .fst x)
@@ -37,7 +40,9 @@ private variable
       ∙ transport⁻-transport (sym (ap P (ε x))) _
   where open module e = Equiv e
 
-Π-impl-cod-≃ : (Π[ x ꞉ A ] (P x ≃ Q x)) → ({x : A} → P x) ≃ ({x : A} → Q x)
+Π-impl-cod-≃ : Π[ x ꞉ A ] (P x ≃ Q x)
+             → ∀[ x ꞉ A ] P x
+             ≃ ∀[ x ꞉ A ] Q x
 Π-impl-cod-≃ k .fst f {x} = k x .fst (f {x})
 Π-impl-cod-≃ k .snd .equiv-proof f .fst .fst {x}   = equiv-centre (k x) (f {x}) .fst
 Π-impl-cod-≃ k .snd .equiv-proof f .fst .snd i {x} = equiv-centre (k x) (f {x}) .snd i

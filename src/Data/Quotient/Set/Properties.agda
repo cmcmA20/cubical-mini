@@ -96,7 +96,7 @@ rec²! {C-set} = rec² C-set
 
 -- Actual properties
 
-⦋-⦌-surjective : (x : A / R) → ∃[ a ꞉ A ] ⦋ a ⦌ ＝ x
+⦋-⦌-surjective : (x : A / R) → ∃[ a ꞉ A ] (⦋ a ⦌ ＝ x)
 ⦋-⦌-surjective = elim-prop! λ a → ∣ a , refl ∣₁
 
 universal : is-set B

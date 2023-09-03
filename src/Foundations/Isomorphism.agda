@@ -34,7 +34,9 @@ is-iso-inv     r .linv = r .rinv
 
 Iso : Type ℓ → Type ℓ′ → Type _
 Iso A B = Σ (A → B) is-iso
+
 _≅_ = Iso
+infix 1 _≅_
 
 idᵢ : A ≅ A
 idᵢ = id , iso id (λ _ → refl) (λ _ → refl)

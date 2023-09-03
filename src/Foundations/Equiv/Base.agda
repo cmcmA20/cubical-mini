@@ -19,11 +19,11 @@ private variable
   f : A → B
 
 _is-left-inverse-of_ : (B → A) → (A → B) → Type _
-g is-left-inverse-of f = Π[ x ] (g (f x) ＝ x)
+g is-left-inverse-of f = Π[ x ꞉ _ ] (g (f x) ＝ x)
 retraction = _is-left-inverse-of_
 
 _is-right-inverse-of_ : (B → A) → (A → B) → Type _
-g is-right-inverse-of f = Π[ y ] (f (g y) ＝ y)
+g is-right-inverse-of f = Π[ y ꞉ _ ] (f (g y) ＝ y)
 section = _is-right-inverse-of_
 
 -- Helper function for constructing equivalences from pairs (f,g) that cancel each other up to definitional

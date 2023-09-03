@@ -57,7 +57,7 @@ recω-irr ()
 elimω : {@0 A : ⊥ω → Typeω} → (@0 x : ⊥ω) → A x
 elimω ()
 
-infix 0 ¬_
+infixr 0 ¬_
 ¬_ : Type ℓ → Type ℓ
 ¬ A = A → ⊥
 
@@ -70,5 +70,6 @@ opaque
 ¬-is-of-hlevel : {A : Type ℓ} (n : HLevel) → is-of-hlevel (suc n) (¬ A)
 ¬-is-of-hlevel _ = is-prop→is-of-hlevel-suc ¬-is-prop
 
+infix 4 _≠_
 _≠_ : ∀ {ℓ} {A : Type ℓ} → A → A → Type ℓ
 x ≠ y = ¬ x ＝ y

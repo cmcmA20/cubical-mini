@@ -44,7 +44,7 @@ is-iso→is-half-adjoint-equiv {A} {B} {f} iiso =
 @0 fibre-paths : {f : A → B} {y : B}
                → {f1 f2 : fibre f y}
                → (f1 ＝ f2)
-               ≃ (Σ[ γ ꞉ f1 .fst ＝ f2 .fst ] (ap f γ ∙ f2 .snd ＝ f1 .snd))
+               ≃ Σ[ γ ꞉ f1 .fst ＝ f2 .fst ] (ap f γ ∙ f2 .snd ＝ f1 .snd)
 fibre-paths {f} {y} {f1} {f2} =
   Path (fibre f y) f1 f2                                                          ≃⟨ iso→equiv Σ-path-iso ₑ⁻¹ ⟩
   (Σ[ γ ꞉ f1 .fst ＝ f2 .fst ] (subst (λ x₁ → f x₁ ＝ _) γ (f1 .snd) ＝ f2 .snd)) ≃⟨ Σ-ap-snd (λ x → path→equiv (lemma x)) ⟩

@@ -109,7 +109,7 @@ apP² f p q i = f i (p i) (q i)
 
 -- formal definition of an open box
 module _ {w x y z : A} {p : w ＝ x} {q : x ＝ y} {r : y ＝ z} where private
-  double-comp-tube : (i j : I) → Partial (~ i ∨ i ∨ ~ j) A
+  double-comp-tube : (i j : I) → Partial (∂ i ∨ ~ j) A
   double-comp-tube i j (i = i0) = sym p j
   double-comp-tube i j (i = i1) = r j
   double-comp-tube i j (j = i0) = q i
@@ -351,8 +351,8 @@ subst-refl = transport-refl
 
 fun-ext : {B : A → I → Type ℓ′}
           {f : Π[ a ꞉ A ] B a i0} {g : Π[ a ꞉ A ] B a i1}
-        → (Π[ a ꞉ A ] ＜ f a    ／                B a  ＼    g a ＞)
-        →             ＜ f   ／ (λ i → Π[ x ꞉ A ] B x i)  ＼ g   ＞
+        → Π[ a ꞉ A ] ＜ f a    ／                B a  ＼    g a ＞
+        →            ＜ f   ／ (λ i → Π[ x ꞉ A ] B x i)  ＼ g   ＞
 fun-ext p i x = p x i
 
 fun-ext-implicit : {B : A → I → Type ℓ′}
@@ -524,11 +524,11 @@ module _ {x : A}
     ΠQ : (y : A) → x ＝ y → _
     ΠQ y p = ∀ z q → Q y p z q
 
-  J₂ : {y : A} (p : x ＝ y) {z : P y p} (q : d y p ＝ z) → Q _ p _ q
-  J₂ p = J ΠQ (λ _ → J (Q x refl) r) p _
+  J² : {y : A} (p : x ＝ y) {z : P y p} (q : d y p ＝ z) → Q _ p _ q
+  J² p = J ΠQ (λ _ → J (Q x refl) r) p _
 
-  J₂-refl : J₂ refl refl ＝ r
-  J₂-refl = (λ i → J-refl ΠQ (λ _ → J (Q x refl) r) i _ refl) ∙ J-refl (Q x refl) _
+  J²-refl : J² refl refl ＝ r
+  J²-refl = (λ i → J-refl ΠQ (λ _ → J (Q x refl) r) i _ refl) ∙ J-refl (Q x refl) _
 
 -- A prefix operator version of J that is more suitable to be nested
 
@@ -605,12 +605,14 @@ module _ (A : I → Type ℓ) where
 -- Converting to and from a PathP
 
 pathP＝path : (P : I → Type ℓ) (p : P i0) (q : P i1)
-            → ＜ p ／ P ＼ q ＞ ＝ (transport (λ i → P i) p ＝ q)
+            →  ＜ p ／ P ＼ q ＞
+            ＝ (transport (λ i → P i) p ＝ q)
 pathP＝path P p q i =
   ＜ transport-filler (λ j → P j) p i ／ (λ j → P (i ∨ j)) ＼ q ＞
 
 pathP＝path⁻ : (P : I → Type ℓ) (p : P i0) (q : P i1)
-             → ＜ p ／ P ＼  q ＞ ＝ (p ＝ transport (λ i → P (~ i)) q)
+             →  ＜ p ／ P ＼  q ＞
+             ＝ (p ＝ transport (λ i → P (~ i)) q)
 pathP＝path⁻ P p q i =
   ＜ p ／ (λ j → P (~ i ∧ j)) ＼ transport-filler (λ j → P (~ j)) q i ＞
 
@@ -651,7 +653,7 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
     hcomp (∂ i ∨ ∂ j) λ where
       k (k = i0) →
           coei→1 A (j ∨ ~ i) $
-            transp (λ l → A (j ∨ (~ i ∧ l))) (i ∨ j) $
+            transp (λ l → A (j ∨ ~ i ∧ l)) (i ∨ j) $
                    coe0→i A j x
 
       k (j = i0) → slide (k ∨ ~ i)

@@ -6,20 +6,19 @@ open import Foundations.Prim.Type
 private variable
   ℓ ℓ′ ℓ″ : Level
 
-infix 6 Π-syntax
+infixr 6 Π-syntax
 Π-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 Π-syntax A B = (x : A) → B x
 {-# INLINE Π-syntax #-}
 
 syntax Π-syntax A (λ x → B) = Π[ x ꞉ A ] B
 
-infix 6 Π-syntax′
-Π-syntax′ : {A : Type ℓ} (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
-Π-syntax′ {A} = Π-syntax A
-{-# INLINE Π-syntax′ #-}
+infixr 6 ∀-syntax
+∀-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
+∀-syntax A B = {x : A} → B x
+{-# INLINE ∀-syntax #-}
 
-syntax Π-syntax′ (λ x → B) = Π[ x ] B
-
+syntax ∀-syntax A (λ x → B) = ∀[ x ꞉ A ] B
 
 -- non-dependent stuff
 
@@ -56,11 +55,12 @@ module _ where
     B : A → Type ℓ′
     C : (a : A) → B a → Type ℓ″
 
-  infixr -1 _$_ _&_
+  infixr -1 _$_
   _$_ : (f : (a : A) → B a) (x : A) → B x
   f $ a = f a
   {-# INLINE _$_ #-}
 
+  infixl -1 _&_
   _&_ : (x : A) (f : (a : A) → B a) → B x
   a & f = f a
   {-# INLINE _&_ #-}

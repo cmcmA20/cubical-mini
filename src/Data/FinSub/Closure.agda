@@ -58,10 +58,10 @@ opaque
     → Π[ x ꞉ Fin (suc n) ] A x
     ≃ A fzero × (∀ x → A (fsuc x))
   fin-suc-universal {n} {A} = iso→equiv $ ff , iso gg ri li where
-    ff : Π[ x ] A x → A fzero × (∀ x → A (fsuc x))
+    ff : Π[ x ꞉ _ ] A x → A fzero × (∀ x → A (fsuc x))
     ff f = f fzero , f ∘ fsuc
 
-    gg : A fzero × (∀ x → A (fsuc x)) → Π[ x ] A x
+    gg : A fzero × (∀ x → A (fsuc x)) → Π[ x ꞉ _ ] A x
     gg (z , f) (0 , _) = z
     gg (z , f) (suc k , ∣ p ∣ᴱ) = f $ k , ∣ p ∣ᴱ
 

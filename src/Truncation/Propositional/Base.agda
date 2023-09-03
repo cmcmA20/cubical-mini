@@ -47,7 +47,7 @@ elim P-prop incc (squash₁ x y i) =
 ∃ : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 ∃ A B = ∥ Σ[ a ꞉ A ] B a ∥₁
 
-infix 2 ∃-syntax
+infixr 6 ∃-syntax
 
 ∃-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 ∃-syntax = ∃

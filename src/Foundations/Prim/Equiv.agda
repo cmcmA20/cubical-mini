@@ -6,16 +6,13 @@ open import Foundations.Sigma.Base
 
 open import Agda.Builtin.Cubical.Equiv public
   using (equiv-proof)
-  renaming ( _≃_ to _≃′_
+  renaming ( _≃_           to infix 1 _≃_
            ; isEquiv       to is-equiv
            ; equivFun      to equiv-forward
            ; equivProof    to equiv-proof-fast
            ; pathToisEquiv to path→is-equiv-builtin
            ; pathToEquiv   to path→equiv-builtin
            )
-
-infix 1 _≃_
-_≃_ = _≃′_
 
 private variable ℓ ℓ′ : Level
 

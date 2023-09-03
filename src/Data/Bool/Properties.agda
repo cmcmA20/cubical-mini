@@ -26,7 +26,7 @@ private
     and-comm? : Dec $ ∀ x y → x and y ＝ y and x
     and-comm? = decide!
 
-    test? : Dec $ ∃[ f ꞉ (Bool → Bool) ] f false ＝ f true
+    test? : Dec $ ∃[ f ꞉ (Bool → Bool) ] (f false ＝ f true)
     test? = decide!
 
     test₂? : Dec (((x , y) : Bool × Bool) → x and y ＝ y and x)
@@ -48,7 +48,7 @@ private
     and-comm : ∀ x y → x and y ＝ y and x
     and-comm = witness!
 
-    test : ∃[ f ꞉ (Bool → Bool) ] f false ＝ f true
+    test : ∃[ f ꞉ (Bool → Bool) ] (f false ＝ f true)
     test = witness!
 
     test₂ : ((x , y) : Bool × Bool) → x and y ＝ y and x

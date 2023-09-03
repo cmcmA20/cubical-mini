@@ -27,26 +27,26 @@ A ↣ B = Σ[ f ꞉ (A → B) ] Injective f
 
 injective→has-prop-fibres
   : is-set B → (f : A → B) → Injective f
-  → ∀ x → is-prop (fibre f x)
+  → Π[ y ꞉ _ ] is-prop (fibre f y)
 injective→has-prop-fibres B-set f inj x = is-prop-η λ (f*x , p) (f*x′ , q) →
   Σ-prop-path! (inj (p ∙ sym q))
   where instance _ = B-set
 
 has-prop-fibres→injective
-  : (f : A → B) → (∀ x → is-prop (fibre f x))
+  : (f : A → B) → Π[ y ꞉ B ] is-prop (fibre f y)
   → Injective f
 has-prop-fibres→injective _ prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl))
 
 between-sets-injective≃has-prop-fibres
   : is-set A → is-set B → (f : A → B)
-  → Injective f ≃ (∀ x → is-prop (fibre f x))
+  → Injective f ≃ Π[ y ꞉ _ ] is-prop (fibre f y)
 between-sets-injective≃has-prop-fibres A-set B-set f =
   prop-extₑ! (injective→has-prop-fibres B-set f)
              (has-prop-fibres→injective f)
   where instance _ = A-set
 
 is-embedding : (A → B) → Type _
-is-embedding f = ∀ x → is-prop (fibre f x)
+is-embedding f = ∀ y → is-prop (fibre f y)
 
 _↪_ : Type ℓ → Type ℓ′ → Type _
 A ↪ B = Σ[ f ꞉ (A → B) ] is-embedding f
@@ -62,7 +62,7 @@ fibre-equiv B a = iso→equiv isom where
   isom .snd .is-iso.linv ((x , y) , p) i =
     (p (~ i) , coe1→i (λ j → B (p (~ i ∧ ~ j))) i y) , λ j → p (~ i ∨ j)
 
-total-equiv : (p : E → B) → E ≃ Σ B (fibre p)
+total-equiv : (p : E → B) → E ≃ Σ[ b ꞉ B ] fibre p b
 total-equiv p = iso→equiv isom where
   isom : Iso _ (Σ _ (fibre p))
   isom .fst x                   = p x , x , refl
@@ -73,7 +73,7 @@ total-equiv p = iso→equiv isom where
 opaque
   unfolding ua
   @0 fibration-equiv : ∀ {B : Type ℓ}
-                     → (Σ[ E ꞉ Type (ℓ ⊔ ℓ′) ] (E → B))
+                     → Σ[ E ꞉ Type (ℓ ⊔ ℓ′) ] (E → B)
                      ≃ (B → Type (ℓ ⊔ ℓ′))
   fibration-equiv {B} = iso→equiv isom where
     isom : Iso (Σ[ E ꞉ Type _ ] (E → B)) (B → Type _)

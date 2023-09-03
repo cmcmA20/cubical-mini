@@ -45,7 +45,7 @@ fin-suc = iso→equiv (f , iso g rinv linv) where
 
 fin-suc-universal
   : {A : Fin (suc n) → Type ℓ}
-  → Π[ x ] A x
+  → Π[ x ꞉ _ ] A x
   ≃ A fzero × (∀ x → A (fsuc x))
 fin-suc-universal = iso→equiv λ where
   .fst f → f fzero , (λ x → f (fsuc x))

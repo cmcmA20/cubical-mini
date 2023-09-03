@@ -18,7 +18,7 @@ private variable
   ℓ : Level
   A : Type ℓ
 
-infix 0 ¬¬_
+infixr 0 ¬¬_
 ¬¬_ : Type ℓ → Type ℓ
 ¬¬ A = ¬ ¬ A
 
