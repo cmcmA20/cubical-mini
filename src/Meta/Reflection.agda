@@ -127,15 +127,26 @@ _name=?_ : Name → Name → Bool
 x name=? y = primQNameEquality x y
 
 _visibility=?_ : Visibility → Visibility → Bool
-visible visibility=? visible = true
-hidden visibility=? hidden = true
+visible   visibility=? visible   = true
+hidden    visibility=? hidden    = true
 instance′ visibility=? instance′ = true
-_ visibility=? _ = false
+_         visibility=? _         = false
 
--- [TODO: Reed M, 06/05/2022] We don't actually use any fancy modalities
--- anywhere AFAICT, so let's ignore those.
+_relevance=?_ : Relevance → Relevance → Bool
+relevant   relevance=? relevant   = true
+irrelevant relevance=? irrelevant = true
+_          relevance=? _          = false
+
+_quantity=?_ : Quantity → Quantity → Bool
+quantity-0 quantity=? quantity-0 = true
+quantity-ω quantity=? quantity-ω = true
+_          quantity=? _          = false
+
+_modality=?_ : Modality → Modality → Bool
+modality r₁ q₁ modality=? modality r₂ q₂ = (r₁ relevance=? r₂) and (q₁ quantity=? q₂)
+
 _arg-info=?_ : ArgInfo → ArgInfo → Bool
-arg-info v₁ m₁ arg-info=? arg-info v₂ m₂ = (v₁ visibility=? v₂)
+arg-info v₁ m₁ arg-info=? arg-info v₂ m₂ = (v₁ visibility=? v₂) and (m₁ modality=? m₂)
 
 arg=? : ∀ {a} {A : Type a} → (A → A → Bool) → Arg A → Arg A → Bool
 arg=? eq=? (arg i₁ x) (arg i₂ y) = (i₁ arg-info=? i₂) and (eq=? x y)

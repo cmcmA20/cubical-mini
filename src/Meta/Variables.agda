@@ -73,7 +73,7 @@ private
   ... | nothing      | false = nothing
 
   fin-term : ℕ → Term
-  fin-term zero = con (quote fzero) (unknown h∷ [])
+  fin-term zero    = con (quote fzero) (unknown h∷ [])
   fin-term (suc n) = con (quote fsuc) (unknown h∷ fin-term n v∷ [])
 
   env-rec : (Mot : @0 ℕ → Type b)
@@ -93,17 +93,16 @@ private
 -- as a quoted term!
 bind-var : Variables A → Term → TC (Term × Variables A)
 bind-var vs tm with variables vs tm
-... | just v = do
-  returnTC (v , vs)
+... | just v = pure (v , vs)
 ... | nothing = do
   a ← unquoteTC tm
   let v = fin-term (nvars vs)
-  let vs′ = mk-variables (bound vs ▷ a)
+      vs′ = mk-variables (bound vs ▷ a)
                          (bind tm v (variables vs))
-  returnTC (v , vs′)
+  pure (v , vs′)
 
 environment : Variables A → TC (Term × Term)
 environment vs = do
   env ← quoteTC (reverse-env (bound vs))
   size ← quoteTC (nvars vs)
-  returnTC (size , env)
+  pure (size , env)

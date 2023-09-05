@@ -33,13 +33,13 @@ record→iso namen unfolded =
   go : List ArgInfo → Term → TC Term
   go acc (pi argu@(arg i argTy) (abs s ty)) = do
     r ← extendContext "arg" argu $ go (i ∷ acc) ty
-    returnTC $ pi (arg i' argTy) (abs s r)
+    pure $ pi (arg i' argTy) (abs s r)
     where
     i' = arg-info hidden (modality relevant quantity-ω)
   go acc (agda-sort _) = do
     let rec = def namen (makeArgs 0 [] acc)
     unfolded ← unfolded (implicitArgs 0 [] acc)
-    returnTC $ def (quote Iso) (rec v∷ unfolded v∷ [])
+    pure $ def (quote Iso) (rec v∷ unfolded v∷ [])
     where
       makeArgs : ℕ → List (Arg Term) → List ArgInfo → List (Arg Term)
       makeArgs n acc [] = acc
@@ -92,10 +92,10 @@ redo-undo-clauses = go where
       ∷ go xs
 
 pi-term→sigma : Term → TC Term
-pi-term→sigma (pi (arg _ x) (abs n (def n′ _))) = returnTC x
+pi-term→sigma (pi (arg _ x) (abs n (def n′ _))) = pure x
 pi-term→sigma (pi (arg _ x) (abs n y)) = do
   sig ← pi-term→sigma y
-  returnTC $ def (quote Σ) (x v∷ lam visible (abs n sig) v∷ [])
+  pure $ def (quote Σ) (x v∷ lam visible (abs n sig) v∷ [])
 pi-term→sigma _ = typeError (strErr "Not a record type constructor! " ∷ [])
 
 instantiate′ : Term → Term → Term
@@ -115,30 +115,30 @@ make-record-iso-sigma declare? getName `R = do
   ty ← record→iso `R λ args → do
     let con-ty = instantiate′ `R-ty con-ty
     `S ← pi-term→sigma con-ty
-    returnTC `S
+    pure `S
 
   nm ← getName
-  returnTC declare? >>= λ where
-    true → declareDef (argN nm) ty
-    false → returnTC tt
+  pure declare? >>= λ where
+    true  → declareDef (argN nm) ty
+    false → pure tt
 
   defineFun nm
     ( redo-clauses fields ++
       undo-clauses fields ++
       redo-undo-clauses fields ++
       undo-redo-clauses fields)
-  returnTC nm
+  pure nm
 
 
 declare-record-iso : Name → Name → TC ⊤
 declare-record-iso nm rec = do
-  make-record-iso-sigma true (returnTC nm) rec
-  returnTC tt
+  make-record-iso-sigma true (pure nm) rec
+  pure tt
 
 define-record-iso : Name → Name → TC ⊤
 define-record-iso nm rec = do
-  make-record-iso-sigma false (returnTC nm) rec
-  returnTC tt
+  make-record-iso-sigma false (pure nm) rec
+  pure tt
 
 
 -- Usage
