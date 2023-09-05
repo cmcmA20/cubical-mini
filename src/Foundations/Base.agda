@@ -41,15 +41,15 @@ Square : {a₀₀ a₀₁ : A} (p : a₀₀ ＝ a₀₁)
 Square p q r s = ＜ q ／ (λ j → p j ＝ r j) ＼ s ＞
 
 infix 0 Square-syntax
-Square-syntax : (d₁ d₂ d₃ d₄ d₅ : ⊤)
+Square-syntax : (d : ⊤)
                 (a₀₀ a₀₁ a₁₀ a₁₁ : A)
                 (p : a₀₀ ＝ a₀₁) (q : a₀₀ ＝ a₁₀)
                 (r : a₁₀ ＝ a₁₁) (s : a₀₁ ＝ a₁₁)
               → Type (level-of-type A)
-Square-syntax _ _ _ _ _ _ _ _ _ p q r s = Square p q r s
+Square-syntax _ _ _ _ _ p q r s = Square p q r s
 -- be not afraid
-syntax Square-syntax d₁ d₂ d₃ d₄ d₅ a₀₀ a₀₁ a₁₀ a₁₁ p q r s =
-  a₀₀  ̇ q  ̇ a₁₀ ┌─────────┐ d₁ │ d₂ │ p │ d₃ │ r │ d₄ │ d₅ └─────────┘ a₀₁  ̇ s  ̇ a₁₁
+syntax Square-syntax d a₀₀ a₀₁ a₁₀ a₁₁ p q r s =
+  a₀₀  ̇ q  ̇ a₁₀ ┌─  ̇ ─┐ p │ d │ r └─  ̇ ─┘ a₀₁  ̇ s  ̇ a₁₁
 
 -- symP infers the type of its argument from the type of its output
 symP : {A : I → Type ℓ} {x : A i1} {y : A i0}
@@ -139,13 +139,15 @@ opaque
     j (j = i0) → q i
 
   ∙∙-filler : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
-            →   x  ̇      q       ̇ y
-                    ┌─────────┐ _
-                    │    _    │
-            sym p   │    _    │   r
-                    │    _    │ _
-                    └─────────┘
-                w  ̇ p ∙∙ q ∙∙ r  ̇ z
+            →   x  ̇         q          ̇ y
+                    ┌─       ̇      ─┐
+
+
+            sym p   │       _       │   r
+
+
+                    └─       ̇      ─┘
+                w  ̇    p ∙∙ q ∙∙ r     ̇ z
   ∙∙-filler p q r k i =
     hfill (∂ i) k λ where
       j (i = i0) → p (~ j)
@@ -181,21 +183,21 @@ opaque
 
   ∙-filler : (p : x ＝ y) (q : y ＝ z)
            →  x  ̇      p       ̇ y
-                  ┌─────────┐ _
-                  │    _    │
+                  ┌─    ̇   ─┐
+
            refl   │    _    │   q
-                  │    _    │ _
-                  └─────────┘
+
+                  └─    ̇   ─┘
               x  ̇    p ∙ q     ̇ z
   ∙-filler p q = ∙∙-filler refl p q
 
   ∙-unique : {p : x ＝ y} {q : y ＝ z} (r : x ＝ z)
            →  x  ̇      p       ̇ y
-                  ┌─────────┐ _
-                  │    _    │
+                  ┌─    ̇   ─┐
+
            refl   │    _    │   q
-                  │    _    │ _
-                  └─────────┘
+
+                  └─    ̇   ─┘
               x  ̇      r       ̇ z
            → r ＝ p ∙ q
   ∙-unique {p} {q} r square i =
@@ -204,11 +206,11 @@ opaque
   -- It's easy to show that `p ∙ q` also has such a filler:
   ∙-filler′ : (p : x ＝ y) (q : y ＝ z)
             →  y  ̇      q       ̇ z
-                   ┌─────────┐ _
-                   │    _    │
+                   ┌─    ̇   ─┐
+
            sym p   │    _    │   refl
-                   │    _    │ _
-                   └─────────┘
+
+                   └─    ̇   ─┘
                x  ̇    p ∙ q     ̇ z
   ∙-filler′ p q j i = hcomp (∂ i ∨ ~ j) λ where
     k (i = i0) → p (~ j)

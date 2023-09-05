@@ -18,11 +18,11 @@ module _ where private
 
   ∙′-filler : (p : x ＝ y) (q : y ＝ z)
             →  y  ̇      q       ̇ z
-                   ┌─────────┐ _
-                   │    _    │
+                   ┌─    ̇   ─┐
+
            sym p   │    _    │   refl
-                   │    _    │ _
-                   └─────────┘
+
+                   └─    ̇   ─┘
                x  ̇    p ∙′ q    ̇ z
   ∙′-filler p q = ∙∙-filler p q refl
 
@@ -38,11 +38,11 @@ module _ where private
 
   ∙″-filler : (p : x ＝ y) (q : y ＝ z)
             →  y  ̇    refl      ̇ y
-                   ┌─────────┐ _
-                   │    _    │
+                   ┌─    ̇   ─┐
+
            sym p   │    _    │   q
-                   │    _    │ _
-                   └─────────┘
+
+                   └─    ̇   ─┘
                x  ̇    p ∙″ q    ̇ z
   ∙″-filler p q = ∙∙-filler p refl q
 
@@ -50,11 +50,11 @@ module _ where private
     unfolding _∙∙_∙∙_
     ∙-filler″ : (p : x ＝ y) (q : y ＝ z)
               →  y  ̇    refl      ̇ y
-                     ┌─────────┐ _
-                     │    _    │
+                     ┌─    ̇   ─┐
+
              sym p   │    _    │   q
-                     │    _    │ _
-                     └─────────┘
+
+                     └─    ̇   ─┘
                  x  ̇    p ∙ q     ̇ z
     ∙-filler″ {y} p q j i = hcomp (∂ i ∨ ~ j) λ where
       k (i = i0) → p (~ j)
