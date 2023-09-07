@@ -59,7 +59,7 @@ opaque
 
   is-fin-set-is-prop : is-prop (is-fin-set A)
   is-fin-set-is-prop = is-prop-η go where
-    go : _
+    go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
     go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim²!
       (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q)) ∣p∣₁ ∣q∣₁
 

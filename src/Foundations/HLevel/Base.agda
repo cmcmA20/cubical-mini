@@ -157,7 +157,7 @@ opaque
   is-of-hlevel-is-of-hlevel-suc h₁ = is-of-hlevel-+-left 1 h₁ (is-of-hlevel-is-prop _)
 
   -- note that it's shifted up by one
-  is-of-hlevel-dep : HLevel → (A → Type ℓ′) → Type _
+  is-of-hlevel-dep : HLevel → (A → Type ℓ′) → Type (level-of-type A ⊔ ℓ′)
   is-of-hlevel-dep 0 B =
     ∀ {x y} (α : B x) (β : B y) (p : x ＝ y) → ＜ α ／ (λ i → B (p i)) ＼ β ＞
   is-of-hlevel-dep (suc n) B =

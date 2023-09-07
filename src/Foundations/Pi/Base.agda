@@ -4,7 +4,7 @@ module Foundations.Pi.Base where
 open import Foundations.Prim.Type
 
 private variable
-  ℓ ℓ′ ℓ″ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level
 
 infixr 6 Π-syntax
 Π-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
@@ -24,9 +24,9 @@ syntax ∀-syntax A (λ x → B) = ∀[ x ꞉ A ] B
 
 module _ where
   private variable
-    A : Type ℓ
-    B : Type ℓ′
-    C : Type ℓ″
+    A : Type ℓᵃ
+    B : Type ℓᵇ
+    C : Type ℓᶜ
 
   flip : (A → B → C) → (B → A → C)
   flip f b a = f a b
@@ -51,9 +51,9 @@ module _ where
 module _ where
 
   private variable
-    A : Type ℓ
-    B : A → Type ℓ′
-    C : (a : A) → B a → Type ℓ″
+    A : Type ℓᵃ
+    B : A → Type ℓᵇ
+    C : (a : A) → B a → Type ℓᶜ
 
   infixr -1 _$_
   _$_ : (f : (a : A) → B a) (x : A) → B x
@@ -74,12 +74,12 @@ module _ where
   {-# INLINE _∘_ #-}
 
   infixr -1 _$ₛ_
-  _$ₛ_ : {B : A → SSet ℓ′}
+  _$ₛ_ : {B : A → SSet ℓᵇ}
          (f : (a : A) → B a) (x : A) → B x
   f $ₛ x = f x
   {-# INLINE _$ₛ_ #-}
 
-  case_return_of_ : (x : A) (B : A → Type ℓ′) (f : (a : A) → B a) → B x
+  case_return_of_ : (x : A) (B : A → Type ℓᵇ) (f : (a : A) → B a) → B x
   case x return P of f = f x
   {-# INLINE case_return_of_ #-}
 

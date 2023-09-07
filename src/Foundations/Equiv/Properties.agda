@@ -22,6 +22,28 @@ e ₑ⁻¹ = iso→equiv (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv�
 
 open is-iso
 
+infixr 30 _∙ₑ_
+_∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
+(f , fe) ∙ₑ (g , ge) = g ∘′ f , e where
+  fi = is-equiv→is-iso fe
+  f⁻¹ = fi .inv
+
+  gi = is-equiv→is-iso ge
+  g⁻¹ = gi .inv
+
+  opaque
+    right : (f⁻¹ ∘ g⁻¹) is-right-inverse-of (g ∘ f)
+    right _ = ap g (fi .rinv _) ∙ gi .rinv _
+
+    left : (f⁻¹ ∘ g⁻¹) is-left-inverse-of (g ∘ f)
+    left _ = ap f⁻¹ (gi .linv _) ∙ fi .linv _
+
+  e : is-equiv (g ∘′ f)
+  e = is-iso→is-equiv $ iso (f⁻¹ ∘ g⁻¹) right left
+
+is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
+is-equiv-comp fe ge = ((_ , fe) ∙ₑ (_ , ge)) .snd
+
 inv-equiv-is-equiv : is-equiv (λ (e : A ≃ B) → e ₑ⁻¹)
 inv-equiv-is-equiv = is-iso→is-equiv goal where
   goal : is-iso _ₑ⁻¹
@@ -43,15 +65,15 @@ opaque
   unfolding is-of-hlevel
   is-contr→is-equiv : is-contr A → is-contr B
                     → {f : A → B} → is-equiv f
-  is-contr→is-equiv contr-A contr-B = is-iso→is-equiv f-is-iso where
-    f-is-iso : is-iso _
+  is-contr→is-equiv contr-A contr-B {f} = is-iso→is-equiv f-is-iso where
+    f-is-iso : is-iso f
     f-is-iso .inv  _ = contr-A .fst
     f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
     f-is-iso .linv _ = is-contr→is-prop contr-A _ _
 
   is-contr→equiv : is-contr A → is-contr B → A ≃ B
-  is-contr→equiv contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
-    f-is-iso : is-iso _
+  is-contr→equiv {A} contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
+    f-is-iso : is-iso {A = A} (λ _ → contr-B .fst)
     f-is-iso .inv  _ = contr-A .fst
     f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
     f-is-iso .linv _ = is-contr→is-prop contr-A _ _
@@ -125,6 +147,6 @@ lift-equiv = iso→equiv 𝔯 where
     (f : A ≃ B) (g : B ≃ C)
   → ua (f ∙ₑ g) ＝ ua f ∙ ua g
 ua-∙ₑ {C} = equiv-J (λ B′ f → Π[ g ꞉ B′ ≃ C ] (ua (f ∙ₑ g) ＝ ua f ∙ ua g))
-  (λ g → cong ua (∙ₑ-id-l g)
-       ∙ sym (cong (_∙ ua g) ua-idₑ
+  (λ g → ap ua (∙ₑ-id-l g)
+       ∙ sym (ap (_∙ ua g) ua-idₑ
        ∙ ∙-elim-l refl))

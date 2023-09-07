@@ -19,7 +19,6 @@ infixr 30 _∙_
 infix  3 _∎
 infixr 2 _＝⟨_⟩_ _＝˘⟨_⟩_ _＝⟨⟩_
 infixr 2.5 _＝⟨_⟩＝⟨_⟩_
-infixl 4 _＝$_ _＝$S_
 
 -- Basic theory about paths. These proofs should typically be
 -- inlined. This module also makes equational reasoning work with
@@ -51,6 +50,12 @@ Square-syntax _ _ _ _ _ p q r s = Square p q r s
 syntax Square-syntax d a₀₀ a₀₁ a₁₀ a₁₁ p q r s =
   a₀₀  ̇ q  ̇ a₁₀ ┌─  ̇ ─┐ p │ d │ r └─  ̇ ─┘ a₀₁  ̇ s  ̇ a₁₁
 
+private variable
+  p : w ＝ x
+  q : x ＝ y
+  r : y ＝ z
+  s : w ＝ z
+
 -- symP infers the type of its argument from the type of its output
 symP : {A : I → Type ℓ} {x : A i1} {y : A i0}
        (p : ＜ x    ／ (λ i → A (~ i)) ＼    y ＞)
@@ -68,7 +73,6 @@ ap-simple : {B : Type ℓ′} (f : A → B)
 ap-simple f p i = f (p i)
 {-# INLINE ap-simple #-}
 
-ap = cong
 
 apP : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
       (f : (i : I) → Π[ a ꞉ A i ] B i a) {x : A i0} {y : A i1}
@@ -118,9 +122,9 @@ module _ {w x y z : A} {p : w ＝ x} {q : x ＝ y} {r : y ＝ z} where private
     in a cubical setting is double composition:
 
         i           x        q        y
-     ∙ —-- >            ┌────────→┐
-   j |                  │         │
-     v            p⁻¹   │         │   r
+     ∙ ---→             ┌────────→┐
+   j ∣                  │         │
+     ↓            p⁻¹   │         │   r
                         ↓         ↓
                         └ ─ ─ ─ -→┘
                     w   p ∙∙ q ∙∙ r   z
@@ -139,15 +143,13 @@ opaque
     j (j = i0) → q i
 
   ∙∙-filler : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
-            →   x  ̇         q          ̇ y
-                    ┌─       ̇      ─┐
+            →   x  ̇       q        ̇ y
+                    ┌─     ̇    ─┐
 
+            sym p   │     _     │   r
 
-            sym p   │       _       │   r
-
-
-                    └─       ̇      ─┘
-                w  ̇    p ∙∙ q ∙∙ r     ̇ z
+                    └─     ̇    ─┘
+                w  ̇  p ∙∙ q ∙∙ r   ̇ z
   ∙∙-filler p q r k i =
     hfill (∂ i) k λ where
       j (i = i0) → p (~ j)
@@ -158,53 +160,51 @@ opaque
   ∙∙-unique : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
             → (α β : Σ[ s ꞉ w ＝ z ] Square (sym p) q r s)
             → α ＝ β
-  ∙∙-unique p q r (α , α-fill) (β , β-fill) =
-    λ i → (λ j → square i j) , (λ j k → cube i j k)
-    where
+  ∙∙-unique p q r (α , α-fill) (β , β-fill) i =
+    (λ k → square i k) , (λ j k → cube i j k) where
       cube : (i j : I) → p (~ j) ＝ r j
       cube i j k = hfill (∂ i ∨ ∂ k) j λ where
-        l (i = i0) → α-fill l k
-        l (i = i1) → β-fill l k
-        l (k = i0) → p (~ l)
-        l (k = i1) → r l
-        l (l = i0) → q k
+        j (i = i0) → α-fill j k
+        j (i = i1) → β-fill j k
+        j (k = i0) → p (~ j)
+        j (k = i1) → r j
+        j (j = i0) → q k
 
       square : α ＝ β
-      square i j = cube i i1 j
+      square i k = cube i i1 k
 
   ∙∙-contract : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
               → (β : Σ[ s ꞉ w ＝ z ] Square (sym p) q r s)
               → (p ∙∙ q ∙∙ r , ∙∙-filler p q r) ＝ β
-  ∙∙-contract p q r β = ∙∙-unique p q r _ β
+  ∙∙-contract p q r = ∙∙-unique p q r _
 
-  -- For single homogenous path composition, we take `refl` as the left side:
+  -- For single homogenous path composition, we take `refl` as the top side:
   _∙_ : x ＝ y → y ＝ z → x ＝ z
-  p ∙ q = refl ∙∙ p ∙∙ q
+  p ∙ q = p ∙∙ refl ∙∙ q
 
   ∙-filler : (p : x ＝ y) (q : y ＝ z)
-           →  x  ̇      p       ̇ y
+           →  y  ̇    refl      ̇ y
                   ┌─    ̇   ─┐
 
-           refl   │    _    │   q
+          sym p   │    _    │   q
 
                   └─    ̇   ─┘
               x  ̇    p ∙ q     ̇ z
-  ∙-filler p q = ∙∙-filler refl p q
+  ∙-filler p = ∙∙-filler p refl
 
   ∙-unique : {p : x ＝ y} {q : y ＝ z} (r : x ＝ z)
-           →  x  ̇      p       ̇ y
+           →  y  ̇    refl      ̇ y
                   ┌─    ̇   ─┐
 
-           refl   │    _    │   q
+          sym p   │    _    │   q
 
                   └─    ̇   ─┘
               x  ̇      r       ̇ z
            → r ＝ p ∙ q
   ∙-unique {p} {q} r square i =
-    ∙∙-unique refl p q (_ , square) (_ , (∙-filler p q)) i .fst
+    ∙∙-unique p refl q (_ , square) (_ , (∙-filler p q)) i .fst
 
-  -- It's easy to show that `p ∙ q` also has such a filler:
-  ∙-filler′ : (p : x ＝ y) (q : y ＝ z)
+  ∙-filler-r : (p : x ＝ y) (q : y ＝ z)
             →  y  ̇      q       ̇ z
                    ┌─    ̇   ─┐
 
@@ -212,67 +212,32 @@ opaque
 
                    └─    ̇   ─┘
                x  ̇    p ∙ q     ̇ z
-  ∙-filler′ p q j i = hcomp (∂ i ∨ ~ j) λ where
-    k (i = i0) → p (~ j)
+  ∙-filler-r {y} p q j i = hcomp (∂ i ∨ ~ j) λ where
+    k (i = i0) → p (~ j ∨ ~ k)
     k (i = i1) → q k
     k (j = i0) → q (i ∧ k)
-    k (k = i0) → p (i ∨ ~ j)
+    k (k = i0) → y
+
+  ∙-filler-l : (p : x ＝ y) (q : y ＝ z)
+            →  x  ̇      p       ̇ y
+                   ┌─    ̇   ─┐
+
+            refl   │    _    │   q
+
+                   └─    ̇   ─┘
+               x  ̇    p ∙ q     ̇ z
+  ∙-filler-l p q j i = ∙-filler-r (sym q) (sym p) j (~ i)
 
   -- Double composition agrees with iterated single composition
   ∙∙＝∙ : (p : x ＝ y) (q : y ＝ z) (r : z ＝ w)
         → p ∙∙ q ∙∙ r ＝ p ∙ q ∙ r
-  ∙∙＝∙ p q r i j = hcomp (i ∨ ∂ j) λ where
-    k (i = i1) → ∙-filler′ p (q ∙ r) k j
-    k (j = i0) → p (~ k)
-    k (j = i1) → r (i ∨ k)
-    k (k = i0) → ∙-filler q r i j
+  ∙∙＝∙ p q r j i = hcomp (∂ i ∨ ∂ j) λ where
+      k (i = i0) → p (~ k)
+      k (i = i1) → ∙-filler-r q r j k
+      k (j = i0) → ∙∙-filler p q r k i
+      k (j = i1) → ∙-filler p (q ∙ r) k i
+      k (k = i0) → q (~ j ∧ i)
 
-
-  -- Heterogeneous path composition and its filler:
-
-  -- Composition in a family indexed by the interval
-  infixr 31 _◎_
-  _◎_
-    : {A : I → Type ℓ} {x : A i0} {y : A i1}
-      {B1 : Type ℓ} {B : A i1 ＝ B1} {z : B i1}
-    → ＜ x    ／ A ＼ y ＞ → ＜ y ／ (λ i → B i) ＼ z ＞
-    → ＜ x ／     (λ j → ((λ i → A i) ∙ B) j)       ＼ z ＞
-  _◎_ {A} {x} {B} p q i = comp (λ j → ∙-filler (λ i → A i) B j i) (∂ i) λ where
-    j (i = i0) → x
-    j (i = i1) → q j
-    j (j = i0) → p i
-
-  -- Composition in a family indexed by a type
-  infixr 32 _◎′_
-  _◎′_
-    : {B : A → Type ℓ′} {x′ : B x} {y′ : B y} {z′ : B z} {p : x ＝ y} {q : y ＝ z}
-      (P : ＜ x′    ／ (λ i → B (p i)) ＼ y′ ＞) (Q : ＜ y′ ／ (λ i → B (q i)) ＼ z′ ＞)
-    →      ＜ x′ ／                (λ i → B ((p ∙ q) i))                          ＼ z′ ＞
-  _◎′_ {B} {x′} {p} {q} P Q i = comp (λ j → B (∙-filler p q j i)) (∂ i) λ where
-    j (i = i0) → x′
-    j (i = i1) → Q j
-    j (j = i0) → P i
-
-  ◎-filler
-    : {A : I → Type ℓ} {x : A i0} {y : A i1} {Bi1 : Type ℓ} {B : A i1 ＝ Bi1} {z : B i1}
-      (p : ＜ x    ／ A     ＼    y ＞)
-      (q : ＜ y ／ (λ i → B i) ＼ z ＞)
-    → ＜ p ／ (λ j → PathP (λ k → (∙-filler (λ i → A i) B j k)) x (q j)) ＼ p ◎ q ＞
-  ◎-filler {A} {x} {y} {B} p q j i =
-    fill (λ j → ∙-filler (λ i → A i) B j i) (∂ i) j λ where
-      k (i = i0) → x
-      k (i = i1) → q k
-      k (k = i0) → p i
-
-  ◎′-filler
-    : {B : A → Type ℓ′} {x′ : B x} {y′ : B y} {z′ : B z} {p : x ＝ y} {q : y ＝ z}
-      (P : ＜ x′ ／ (λ i → B (p i)) ＼ y′ ＞) (Q : ＜ y′ ／ (λ i → B (q i)) ＼ z′ ＞)
-    → ＜ P ／ (λ j → PathP (λ i → B (∙-filler p q j i)) x′ (Q j)) ＼ _◎′_ {B = B} P Q ＞
-  ◎′-filler {B} {x′} {p} {q} P Q j i =
-    fill (λ j → B (∙-filler p q j i)) (∂ i) j λ where
-      k (i = i0) → x′
-      k (i = i1) → Q k
-      k (k = i0) → P i
 
 -- `ap` has good computational properties:
 module _ {B : Type ℓ′} {x y : A} where
@@ -291,9 +256,9 @@ module _ {B : Type ℓ′} {x y : A} where
 
   opaque
     ap-comp-∙ : (f : A → B) (p : x ＝ y) (q : y ＝ z) → ap f (p ∙ q) ＝ ap f p ∙ ap f q
-    ap-comp-∙ f p q i = ∙∙-unique refl (ap f p) (ap f q)
-      (ap f (p ∙ q)      , λ k j → f (∙-filler p q k j))
-      (ap f p ∙ ap f q   , ∙-filler _ _)
+    ap-comp-∙ f p q i = ∙∙-unique (ap f p) refl (ap f q)
+      (ap f (p ∙ q)    , λ k j → f (∙-filler p q k j))
+      (ap f p ∙ ap f q , ∙-filler _ _)
       i .fst
 
 
@@ -323,11 +288,6 @@ x ＝˘⟨ p ⟩ q = (sym p) ∙ q
 
 _∎ : (x : A) → x ＝ x
 _ ∎ = refl
-
-along : {A : I → Type ℓ} {x : A i0} {y : A i1}
-      → (i : I) → ＜ x ／ A ＼ y ＞
-      → A i
-along i p = p i
 
 
 -- Transport and subst
@@ -363,9 +323,6 @@ fun-ext-implicit : {B : A → I → Type ℓ′}
                  →            ＜ f  ／ (λ i → {x : A} → B x i) ＼ g     ＞
 fun-ext-implicit p i {x} = p {x} i
 
--- the inverse to `fun-ext`, converting paths between functions to homotopies;
--- `fun-ext⁻` is called `happly` and defined by path induction in the HoTT book
--- (see function 2.9.2 in section 2.9)
 fun-ext⁻ : {B : A → I → Type ℓ′}
            {f : Π[ a ꞉ A ] B a i0} {g : Π[ a ꞉ A ] B a i1}
          →            ＜ f      ／ (λ i → Π[ a ꞉ A ] B a i) ＼    g   ＞
@@ -373,7 +330,6 @@ fun-ext⁻ : {B : A → I → Type ℓ′}
 fun-ext⁻ eq x i = eq i x
 
 happly = fun-ext⁻
-_＝$_ = fun-ext⁻
 
 fun-ext-implicit⁻ : {B : A → I → Type ℓ′}
                     {f : {a : A} → B a i0} {g : {a : A} → B a i1}
@@ -387,7 +343,6 @@ fun-ext-simple⁻ : {B : I → Type ℓ′}
                 → Π[ x ꞉ A ] ＜ f x ／ (λ i    →            B i)    ＼ g x ＞
 fun-ext-simple⁻ eq x i = eq i x
 
-_＝$S_ = fun-ext-simple⁻
 happly-simple = fun-ext-simple⁻
 
 
@@ -399,10 +354,13 @@ HLevel = ℕ
 _on-paths-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
 S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)
 
+is-central : {A : Type ℓ} (c : A) → Type _
+is-central {A} c = Π[ x ꞉ A ] (c ＝ x)
+
 opaque
   is-of-hlevel : HLevel → Type ℓ → Type ℓ
-  is-of-hlevel 0 A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
-  is-of-hlevel 1 A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
+  is-of-hlevel 0 A = Σ[ x ꞉ A ] is-central x
+  is-of-hlevel 1 A = Π[ x ꞉ A ] is-central x
   is-of-hlevel (suc (suc h)) A = is-of-hlevel (suc h) on-paths-of A
 
   is-of-hlevel-β : (n : HLevel) → is-of-hlevel (suc (suc n)) A → is-of-hlevel (suc n) on-paths-of A
@@ -419,7 +377,7 @@ opaque
   centre : is-contr A → A
   centre = fst
 
-  paths : (A-c : is-contr A) → Π[ y ꞉ A ] (centre A-c ＝ y)
+  paths : (A-c : is-contr A) → is-central (centre A-c)
   paths = snd
 
   is-contr-β : is-contr A → Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
@@ -492,19 +450,19 @@ module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x refl) where opaque
 
   J : (p : x ＝ y) → P y p
   J {y} p = transport (λ i → P (path i .fst) (path i .snd)) d where
-    path : (x , refl) ＝ (y , p)
+    path : Path (Σ A λ t → x ＝ t) (x , refl) (y , p)
     path = singleton-is-contr (y , p) .snd _
 
   J-refl : J refl ＝ d
   J-refl = transport-refl d
 
   J-∙ : (p : x ＝ y) (q : y ＝ z)
-      → J (p ∙ q) ＝ transport (λ i → P (q i) (λ j → ∙-filler p q i j)) (J p)
+      → J (p ∙ q) ＝ transport (λ i → P (q i) (λ j → ∙-filler-l p q i j)) (J p)
   J-∙ p q k =
     transp
       (λ i → P (q (i ∨ ~ k))
-      (λ j → ∙-filler p q (i ∨ ~ k) j)) (~ k)
-      (J (λ j → ∙-filler p q (~ k) j))
+      (λ j → ∙-filler-l p q (i ∨ ~ k) j)) (~ k)
+      (J (λ j → ∙-filler-l p q (~ k) j))
 
 -- Multi-variable versions of J
 module _ {b : B x}
@@ -595,7 +553,7 @@ module _ (A : I → Type ℓ) where
     coei1→1 _ = refl
 
   coei→i : (i : I) (x : A i) → coe A i i x ＝ x
-  coei→i i x j = transp (λ _ → A i) (j ∨ i ∨ ~ i) x
+  coei→i i x j = transp (λ _ → A i) (j ∨ ∂ i) x
 
   coe-path : (p : (i : I) → A i) (i j : I) → coe A i j (p i) ＝ p j
   coe-path p i j k = transp
@@ -695,23 +653,13 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 
 opaque
   unfolding _∙∙_∙∙_
-  double-composite
-    : (p : x ＝ y) (q : y ＝ z) (r : z ＝ w)
-    → p ∙∙ q ∙∙ r ＝ p ∙ q ∙ r
-  double-composite p q r i j =
-    hcomp (i ∨ ∂ j) λ where
-      k (i = i1) → ∙-filler′ p (q ∙ r) k j
-      k (j = i0) → p (~ k)
-      k (j = i1) → r (i ∨ k)
-      k (k = i0) → ∙-filler q r i j
-
   transport-path : {x y x′ y′ : A}
                  → (p : x ＝ y)
                  → (left : x ＝ x′) (right : y ＝ y′)
                  → transport (λ i → left i ＝ right i) p ＝ sym left ∙ p ∙ right
-  transport-path {A} p left right = lemma ∙ double-composite _ _ _
+  transport-path {A} p left right = lemma ∙ ∙∙＝∙ _ _ _
     where
-    lemma : _ ＝ (sym left ∙∙ p ∙∙ right)
+    lemma : transport (λ i → left i ＝ right i) p ＝ sym left ∙∙ p ∙∙ right
     lemma i j = hcomp (~ i ∨ ∂ j) λ where
       k (k = i0) → transp (λ j → A) i (p j)
       k (i = i0) → hfill (∂ j) k λ where
@@ -728,7 +676,7 @@ subst-path-left : {x y x′ : A}
 subst-path-left {y} p left =
   subst (λ e → e ＝ y) left p     ＝⟨⟩
   transport (λ i → left i ＝ y) p ＝⟨ transport-path p left refl ⟩
-  sym left ∙ p ∙ refl             ＝⟨ ap (sym left ∙_) (sym (∙-filler _ _)) ⟩
+  sym left ∙ p ∙ refl             ＝⟨ ap (sym left ∙_) (sym (∙-filler-l _ _)) ⟩
   sym left ∙ p                    ∎
 
 subst-path-right : {x y y′ : A}
@@ -739,7 +687,7 @@ subst-path-right {x} p right =
   subst (λ e → x ＝ e) right p     ＝⟨⟩
   transport (λ i → x ＝ right i) p ＝⟨ transport-path p refl right ⟩
   sym refl ∙ p ∙ right             ＝⟨⟩
-  refl ∙ p ∙ right                 ＝⟨ sym (∙-filler′ _ _) ⟩
+  refl ∙ p ∙ right                 ＝⟨ sym (∙-filler-r _ _) ⟩
   p ∙ right                        ∎
 
 subst-path-both : {x x′ : A}

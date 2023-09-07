@@ -15,9 +15,9 @@ open import Agda.Builtin.Cubical.Glue
         )
 open import Agda.Builtin.Cubical.Glue public
   using ()
-  renaming ( prim^glue   to glue -- ∀ {ℓ ℓ′} {A : Type ℓ} {φ : I} {T : Partial φ (Type ℓ′)}
-                                 -- → {e : PartialP φ (λ o → T o ≃′ A)}
-                                 -- → PartialP φ T → A → primGlue A T e
+  renaming ( prim^glue to glue -- ∀ {ℓ ℓ′} {A : Type ℓ} {φ : I} {T : Partial φ (Type ℓ′)}
+                               -- → {e : PartialP φ (λ o → T o ≃′ A)}
+                               -- → PartialP φ T → A → primGlue A T e
            )
 
 -- TODO comment this out? it's not used anywhere

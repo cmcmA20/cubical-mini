@@ -6,12 +6,12 @@ open import Foundations.Prim.Type
 open import Agda.Builtin.Sigma public
 
 private variable
-  ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ ℓᶠ : Level
-  A : Type ℓ
-  B : A → Type ℓ′
-  C : (a : A) → B a → Type ℓ″
-  D : (a : A) (b : B a) → C a b → Type ℓ‴
-  E : (a : A) (b : B a) (c : C a b) → D a b c → Type ℓ⁗
+  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ ℓᵉ ℓᶠ : Level
+  A : Type ℓᵃ
+  B : A → Type ℓᵇ
+  C : (a : A) → B a → Type ℓᶜ
+  D : (a : A) (b : B a) → C a b → Type ℓᵈ
+  E : (a : A) (b : B a) (c : C a b) → D a b c → Type ℓᵉ
   F : (a : A) (b : B a) (c : C a b) (d : D a b c) → E a b c d → Type ℓᶠ
 
 infixr 6 Σ-syntax
@@ -24,29 +24,29 @@ infixr 8 _×_
 _×_ : (A : Type ℓ) (B : Type ℓ′) → Type (level-of-type A ⊔ level-of-type B)
 A × B = Σ[ _ ꞉ A ] B
 
-<_,_> : {C : ∀ {a} → B a → Type ℓ″}
+<_,_> : {C : ∀ {a} → B a → Type ℓᶜ}
       → (f : (x : A) → B x)
       → ((x : A) → C (f x))
       → ((x : A) → Σ (B x) C)
 < f , g > x = (f x , g x)
 
-bimap : {P : A → Type ℓ″} {Q : ∀ {a} → P a → B a → Type ℓ‴}
+bimap : {P : A → Type ℓ} {Q : ∀ {a} → P a → B a → Type ℓ′}
       → (f : (a : A) → B a)
       → (∀ {a} (b : P a) → Q b (f a))
       → ((a , b) : Σ A P)
       → Σ (B a) (Q b)
 bimap f g (x , y) = f x , g y
 
-bimap-simple : {B : Type ℓ′} {P : A → Type ℓ″} {Q : B → Type ℓ‴}
+bimap-simple : {B : Type ℓᵇ} {P : A → Type ℓ} {Q : B → Type ℓ′}
              → (f : A → B)
              → (∀ {x} → P x → Q (f x))
              → Σ A P → Σ B Q
 bimap-simple = bimap
 
-first : {B : Type ℓ′} {C : Type ℓ″} → (A → B) → A × C → B × C
+first : {C : Type ℓᶜ} → (f : (a : A) → B a) → ((a , _) : A × C) → B a × C
 first f = bimap f (λ x → x)
 
-second : {C : A → Type ℓ‴} → (∀ {x} → B x → C x) → Σ A B → Σ A C
+second : {C : A → Type ℓᶜ} → (∀ {x} → B x → C x) → Σ A B → Σ A C
 second f = bimap (λ x → x) f
 
 

@@ -25,7 +25,7 @@ transport⁻-transport p a i =
 
 transport-comp : (p : A ＝ B) (q : B ＝ C) (x : A)
                → transport (p ∙ q) x ＝ transport q (transport p x)
-transport-comp p q x i = transport (∙-filler′ p q (~ i)) (transport-filler-ext p i x)
+transport-comp p q x i = transport (∙-filler-r p q (~ i)) (transport-filler-ext p i x)
 
 transport-is-equiv : (p : A ＝ B) → is-equiv (transport p)
 transport-is-equiv p = line→is-equiv (λ i → p i)
@@ -63,7 +63,7 @@ subst-comp : (B : A → Type ℓ′)
            → (p : x ＝ y) (q : y ＝ z) (u : B x)
            → subst B (p ∙ q) u ＝ subst B q (subst B p u)
 subst-comp B p q Bx i =
-  transport (ap B (∙-filler′ p q (~ i))) (transport-filler-ext (ap B p) i Bx)
+  transport (ap B (∙-filler-r p q (~ i))) (transport-filler-ext (ap B p) i Bx)
 
 subst-equiv : (P : A → Type ℓ′) (p : x ＝ y) → P x ≃ P y
 subst-equiv P p = subst P p , transport-is-equiv (λ i → P (p i))

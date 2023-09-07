@@ -56,7 +56,7 @@ opaque
 
     rinv : ∀ {Y} → (inv {Y}) is-right-inverse-of n-ua
     rinv = J (λ y p → n-ua (inv p) ＝ p) path where
-      path : n-ua (inv {X} refl) ＝ refl
+      path : n-ua {X = X} (inv {X} refl) ＝ refl
       path i j .carrier = ua.ε refl i j
       path i j .carrier-is-tr = is-prop→squareP
         (λ i j → is-of-hlevel-is-prop
@@ -67,7 +67,7 @@ opaque
         (λ _ → carrier-is-tr X)
         i j
 
-    isic : is-iso n-ua
+    isic : is-iso (n-ua {X = X} {Y = Y})
     isic = iso inv rinv (linv {Y})
 
 opaque

@@ -46,10 +46,10 @@ opaque
     g : ⊤ ⊎ Fin n → Fin (suc n)
     g (inl _) = fzero
     g (inr x) = fsuc x
-    rinv : g is-right-inverse-of f
+    rinv : (g {n}) is-right-inverse-of f
     rinv (inl _) = refl
     rinv (inr x) = refl
-    linv : g is-left-inverse-of f
+    linv : (g {n}) is-left-inverse-of f
     linv (0 , _) = refl
     linv (suc _ , _) = refl
 

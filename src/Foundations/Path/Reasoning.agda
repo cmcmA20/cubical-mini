@@ -11,15 +11,7 @@ private variable
   p p′ q q′ r r′ s s′ t : x ＝ y
 
 opaque
-  unfolding _∙∙_∙∙_
-  ∙-filler″ : (p : x ＝ y) (q : y ＝ z)
-            → Square refl (sym p) (p ∙ q) q
-  ∙-filler″ {y} p q i j =
-    hcomp (∂ i ∨ ~ j) λ where
-      k (i = i0) → p (~ j)
-      k (i = i1) → q (j ∧ k)
-      k (j = i0) → y
-      k (k = i0) → p (i ∨ ~ j)
+  unfolding _∙_
 
   -- TODO draw this and reorder args
   pasteP
@@ -40,8 +32,8 @@ opaque
   ∙-id-comm : p ∙ refl ＝ refl ∙ p
   ∙-id-comm {p} i j =
     hcomp (∂ i ∨ ∂ j) λ where
-      k (i = i0) → ∙-filler  p refl k j
-      k (i = i1) → ∙-filler″ refl p j k
+      k (i = i0) → ∙-filler-l p refl k j
+      k (i = i1) → ∙-filler-l refl p k j
       k (j = i0) → p i0
       k (j = i1) → p (~ i ∨ k)
       k (k = i0) → p (~ i ∧ j)
@@ -53,10 +45,10 @@ opaque
 
 module _ (p＝refl : p ＝ refl) where opaque
   ∙-elim-l : p ∙ q ＝ q
-  ∙-elim-l {q} = sym $ paste (ap sym p＝refl) refl refl refl (∙-filler′ p q)
+  ∙-elim-l {q} = sym $ paste (ap sym p＝refl) refl refl refl (∙-filler-r p q)
 
   ∙-elim-r : q ∙ p ＝ q
-  ∙-elim-r {q} = sym $ paste refl refl p＝refl refl (∙-filler q p)
+  ∙-elim-r {q} = sym $ paste refl refl p＝refl refl (∙-filler-l q p)
 
   ∙-intro-l : q ＝ p ∙ q
   ∙-intro-l = sym ∙-elim-l
@@ -70,7 +62,7 @@ module _ (pq＝s : p ∙ q ＝ s) where opaque
   ∙-pull-l {r} = ∙-assoc p q r ∙ ap (_∙ r) pq＝s
 
   double-left : p ∙∙ q ∙∙ r ＝ s ∙ r
-  double-left {r} = double-composite p q r ∙ ∙-pull-l
+  double-left {r} = ∙∙＝∙ p q r ∙ ∙-pull-l
 
   ∙-pull-r : (r ∙ p) ∙ q ＝ r ∙ s
   ∙-pull-r {r} = sym (∙-assoc r p q) ∙ ap (r ∙_) pq＝s

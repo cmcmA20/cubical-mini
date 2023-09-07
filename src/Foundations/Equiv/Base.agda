@@ -29,10 +29,10 @@ section = _is-right-inverse-of_
 -- Helper function for constructing equivalences from pairs (f,g) that cancel each other up to definitional
 -- equality. For such (f,g), the result type simplifies to is-contr (fibre f b).
 strict-contr-fibres : (g : B → A) (b : B)
-                    → Σ[ t  ꞉ fibre f (f (g b)) ]
-                      Π[ t′ ꞉ fibre f       b   ]
-                      Path (fibre f (f (g b))) t (g (f (t′ .fst)) , ap (f ∘ g) (t′ .snd))
-strict-contr-fibres     g b .fst = g b , refl
+                    → Σ[ t        ꞉ fibre f (f (g b)) ]
+                      Π[ (y′ , q) ꞉ fibre f       b   ]
+                      Path (fibre f (f (g b))) t (g (f y′) , ap (f ∘ g) q)
+strict-contr-fibres     g b .fst           = g b , refl
 strict-contr-fibres {f} g b .snd (a , p) i = g (p (~ i)) , λ j → f (g (p (~ i ∨ j)))
 
 id-is-equiv : is-equiv (id {A = A})
@@ -73,7 +73,8 @@ is-equiv→unit : (eqv : is-equiv f) (x : A) → is-equiv→inverse eqv (f x) �
 is-equiv→unit {f} eqv x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
 
 is-equiv→zig : (eqv : is-equiv f) (x : A)
-             → ap f (is-equiv→unit eqv x) ＝ is-equiv→counit eqv (f x)
+             →  ap f (is-equiv→unit eqv x)
+             ＝ is-equiv→counit eqv (f x)
 is-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
    k (i = i0) → f (is-equiv→unit eqv x j)
    k (i = i1) → is-equiv→counit eqv (f x) (j ∨ ~ k)
@@ -82,61 +83,21 @@ is-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
    k (k = i0) → eqv .equiv-proof (f x) .snd (x , refl) j .snd i
 
 is-equiv→zag : (eqv : is-equiv f) (y : B)
-             → ap (is-equiv→inverse eqv) (is-equiv→counit eqv y) ＝ is-equiv→unit eqv (is-equiv→inverse eqv y)
+             →  ap (is-equiv→inverse eqv) (is-equiv→counit eqv y)
+             ＝ is-equiv→unit eqv (is-equiv→inverse eqv y)
 is-equiv→zag {B} {f} eqv b =
   subst (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
-  g : B → _
-  g = is-equiv→inverse eqv
-  ε : (y : B) → f (is-equiv→inverse eqv y) ＝ y
-  ε = is-equiv→counit eqv
-  η : (x : _) → is-equiv→inverse eqv (f x) ＝ x
-  η = is-equiv→unit eqv
+    g = is-equiv→inverse eqv
+    ε = is-equiv→counit eqv
+    η = is-equiv→unit eqv
 
-  helper : ∀ a → ap g (ε (f a)) ＝ η (g (f a))
-  helper a i j = hcomp (∂ i ∨ ∂ j) λ where
-    k (i = i0) → g (ε (f a) (j ∨ ~ k))
-    k (i = i1) → η (η a (~ k)) j
-    k (j = i0) → g (is-equiv→zig eqv a (~ i) (~ k))
-    k (j = i1) → η a (i ∧ ~ k)
-    k (k = i0) → η a (i ∧ j)
-
-infixr 30 _∙ₑ_
-_∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
-(u ∙ₑ (g , v)) .fst = g ∘ u .fst
-((f , u) ∙ₑ (g , v)) .snd .equiv-proof c = contr
-  where
-  contract-inv : (w : fibre g c) → equiv-centre (g , v) c ＝ w
-  contract-inv = equiv-path (g , v) c
-
-  θ : (a : _) (p : g (f a) ＝ c) → _
-  θ a p = ∙-filler (ap (is-equiv→inverse u ∘ fst) (contract-inv (_ , p))) (is-equiv→unit u a)
-
-  contr : Σ[ x ꞉ fibre (g ∘ f) c ] Π[ y ꞉ _ ] (x ＝ y)
-  contr .fst .fst = is-equiv→inverse u (is-equiv→inverse v c)
-  contr .fst .snd = ap g (is-equiv→counit u (is-equiv→inverse v c)) ∙ is-equiv→counit v c
-  contr .snd (a , p) = go where opaque
-    unfolding is-of-hlevel _∙_
-    go : contr .fst ＝ (a , p)
-    go i .fst = θ a p i1 i
-    go i .snd j = hcomp (i ∨ ∂ j) λ where
-      k (i = i1) → f-square k
-      k (j = i0) → g (f (θ a p k i))
-      k (j = i1) → contract-inv (_ , p) i .snd k
-      k (k = i0) → g (is-equiv→counit u (contract-inv (_ , p) i .fst) j)
-        where
-        f-square : I → _
-        f-square k = hcomp (∂ j ∨ ∂ k) λ where
-          l (j = i0) → g (f (is-equiv→unit u a k))
-          l (j = i1) → p (k ∧ l)
-          l (k = i0) → g (is-equiv→counit u (f a) j)
-          l (k = i1) → p (j ∧ l)
-          l (l = i0) → g (equiv-path (f , u) (f a) (a , refl) k .snd j)
-
-is-equiv-comp : {g : B → C}
-              → is-equiv f
-              → is-equiv g
-              → is-equiv (g ∘ f)
-is-equiv-comp {f} {g} r s = ((f , r) ∙ₑ (g , s)) .snd
+    helper : ∀ a → ap g (ε (f a)) ＝ η (g (f a))
+    helper a i j = hcomp (∂ i ∨ ∂ j) λ where
+      k (i = i0) → g (ε (f a) (j ∨ ~ k))
+      k (i = i1) → η (η a (~ k)) j
+      k (j = i0) → g (is-equiv→zig eqv a (~ i) (~ k))
+      k (j = i1) → η a (i ∧ ~ k)
+      k (k = i0) → η a (i ∧ j)
 
 
 -- this is the general form

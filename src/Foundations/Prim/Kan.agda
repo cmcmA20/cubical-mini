@@ -53,10 +53,10 @@ open import Agda.Builtin.Cubical.Path public
 
 infix 0 PathP-syntax
 PathP-syntax = PathP
-syntax PathP-syntax Ai A0 A1 = ＜ A0 ／ Ai ＼ A1 ＞
+syntax PathP-syntax Aᵢ A₀ A₁ = ＜ A₀ ／ Aᵢ ＼ A₁ ＞
 
 Path : (A : Type ℓ) → A → A → Type ℓ
-Path A A0 A1 = ＜ A0 ／ (λ _ → A) ＼ A1 ＞
+Path A A₀ A₁ = ＜ A₀ ／ (λ _ → A) ＼ A₁ ＞
 
 module _ {A : Type ℓ} where
   refl : {x : A} → x ＝ x
@@ -65,22 +65,22 @@ module _ {A : Type ℓ} where
   sym : {x y : A} → x ＝ y → y ＝ x
   sym p i = p (~ i)
 
-  cong : {B : A → Type ℓ′} {x y : A}
-         (f : (a : A) → B a)
-         (p : x         ＝              y)
-       → ＜ f x ／ (λ i → B (p i)) ＼ f y ＞
-  cong f p i = f (p i)
+  ap : {B : A → Type ℓ′} {x y : A}
+       (f : (a : A) → B a)
+       (p : x         ＝              y)
+     → ＜ f x ／ (λ i → B (p i)) ＼ f y ＞
+  ap f p i = f (p i)
 
 transport : {A B : Type ℓ} → A ＝ B → A → B
 transport p = transp (λ i → p i) i0
 
 hcomp-unique : {A : Type ℓ} (φ : I)
                (u : ∀ i → Partial (φ ∨ ~ i) A)
-             → (h2 : ∀ i → A [ _ ↦ (λ { (i = i0) → u i0 1=1
-                                      ; (φ = i1) → u i 1=1 }) ])
-             → hcomp φ u ＝ outS (h2 i1)
-hcomp-unique φ u h2 i =
+             → (h₂ : ∀ i → A [ _ ↦ (λ { (i = i0) → u i0 1=1
+                                      ; (φ = i1) → u i  1=1 }) ])
+             → hcomp φ u ＝ outS (h₂ i1)
+hcomp-unique φ u h₂ i =
   hcomp (φ ∨ i) λ where
     k (k = i0) → u i0 1=1
-    k (i = i1) → outS (h2 k)
+    k (i = i1) → outS (h₂ k)
     k (φ = i1) → u k 1=1

@@ -7,6 +7,20 @@ private variable
   ℓ : Level
   A : Type ℓ
 
+magic-square : {x y z : A} (p : x ＝ y) (q : y ＝ z) → Square p p q q
+magic-square p q j i = hcomp (∂ i ∨ ∂ j) λ where
+  k (i = i0) → p j
+  k (i = i1) → q (j ∧ k)
+  k (j = i0) → p i
+  k (j = i1) → q (i ∧ k)
+  k (k = i0) → p (i ∨ j)
+
+and-square : {x y : A} (p : x ＝ y) → Square refl refl p p
+and-square p j i = p (i ∧ j)
+
+or-square : {x y : A} (p : x ＝ y) → Square p p refl refl
+or-square p j i = p (i ∨ j)
+
 -- Higher cube types
 
 SquareP

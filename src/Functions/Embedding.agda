@@ -72,16 +72,18 @@ total-equiv p = iso→equiv isom where
 
 opaque
   unfolding ua
-  @0 fibration-equiv : ∀ {B : Type ℓ}
+  @0 fibration-equiv : {B : Type ℓ}
                      → Σ[ E ꞉ Type (ℓ ⊔ ℓ′) ] (E → B)
                      ≃ (B → Type (ℓ ⊔ ℓ′))
-  fibration-equiv {B} = iso→equiv isom where
-    isom : Iso (Σ[ E ꞉ Type _ ] (E → B)) (B → Type _)
+  fibration-equiv {ℓ′} {B} = iso→equiv isom where
+    isom : Σ[ E ꞉ Type (level-of-type B ⊔ ℓ′) ] (E → B) ≅ (B → Type (level-of-type B ⊔ ℓ′))
     isom .fst (E , p)       = fibre p
     isom .snd .is-iso.inv p⁻¹      = Σ _ p⁻¹ , fst
     isom .snd .is-iso.rinv prep i x = ua (fibre-equiv prep x) i
     isom .snd .is-iso.linv (E , p) i = ua e (~ i) , λ x → fst (ua-unglue e (~ i) x)
-      where e : _ ≃ _ ; e = total-equiv p
+      where
+      e : E ≃ Σ[ b ꞉ B ] fibre p b
+      e = total-equiv p
 
 _/[_]_ : (ℓ : Level) → (Type (ℓ ⊔ ℓ′) → Type ℓ″) → Type ℓ′ → Type _
 _/[_]_ {ℓ′} ℓ P B =

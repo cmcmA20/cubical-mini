@@ -28,13 +28,13 @@ record Lift {ℓ} ℓ′ (A : Type ℓ) : Type (ℓ ⊔ ℓ′) where
 open Lift public
 
 instance
-  Lift-inst : ∀ {ℓ ℓ′} {A : Type ℓ} → ⦃ A ⦄ → Lift ℓ′ A
-  Lift-inst ⦃ (a) ⦄ = lift a
+  lift-inst : ∀ {ℓ ℓ′} {A : Type ℓ} → ⦃ A ⦄ → Lift ℓ′ A
+  lift-inst ⦃ (a) ⦄ = lift a
 
 record Liftω {ℓ} (A : Type ℓ) : Typeω where
   constructor liftω
   field lower : A
 
 instance
-  Liftω-inst : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → Liftω A
-  Liftω-inst ⦃ (a) ⦄ = liftω a
+  liftω-inst : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → Liftω A
+  liftω-inst ⦃ (a) ⦄ = liftω a

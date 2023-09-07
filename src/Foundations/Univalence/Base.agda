@@ -83,13 +83,13 @@ opaque
   ua-β {A} {B} e x i = coe1→i (λ _ → B) i (e .fst x)
 
 @0 ua-η : (P : A ＝ B) → ua (path→equiv P) ＝ P
-ua-η = J (λ _ q → ua (path→equiv q) ＝ q) (cong ua path→equiv-refl ∙ ua-idₑ)
+ua-η = J (λ _ q → ua (path→equiv q) ＝ q) (ap ua path→equiv-refl ∙ ua-idₑ)
 
 opaque
   unfolding is-of-hlevel ua
   @0 Path≅Equiv : Iso (A ＝ B) (A ≃ B)
-  Path≅Equiv = path→equiv , r where
-    r : is-iso path→equiv
+  Path≅Equiv {A} {B} = path→equiv , r where
+    r : is-iso {A = A ＝ B} path→equiv
     r .is-iso.inv = ua
     r .is-iso.rinv (f , is-eqv) = Σ-path (fun-ext (ua-β (f , is-eqv)))
                                          (is-equiv-is-prop f _ _)

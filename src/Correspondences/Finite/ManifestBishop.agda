@@ -43,8 +43,8 @@ opaque
       xs : Vec A n
       xs = Ṽ.from $ Ã.from
 
-      lemma₁ : _
+      lemma₁ : Σ[ i ꞉ Fin n ] P (lookup xs i) → ∥ Σ[ a ꞉ A ] P a ∥₁
       lemma₁ (i , p) = ∣ lookup xs i , p ∣₁
 
-      lemma₂ : _
+      lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ ∥ Σ[ a ꞉ A ] P a ∥₁
       lemma₂ ¬p = ∥-∥₁.rec! λ (a , pa) → ¬p $ Ã.to a , subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η a)) pa

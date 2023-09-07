@@ -26,16 +26,16 @@ opaque
   Omniscient₁ : {ℓ′ : Level} → Type ℓ → Type (ℓ ⊔ ℓsuc ℓ′)
   Omniscient₁ {ℓ′} A = {P : Pred ℓ′ A} → Decidable¹ P → Dec (∃[ a ꞉ A ] P a)
 
-  omniscient₁-β : Omniscient₁ A → {P : Pred ℓ′ A} → Decidable¹ P → Dec (∃[ a ꞉ A ] P a)
+  omniscient₁-β : Omniscient₁ {ℓ′ = ℓ′} A → {P : Pred ℓ′ A} → Decidable¹ P → Dec (∃[ a ꞉ A ] P a)
   omniscient₁-β = id
 
-  omniscient₁-η : ({P : Pred ℓ′ A} → Decidable¹ P → Dec (∃[ a ꞉ A ] P a)) → Omniscient₁ A
+  omniscient₁-η : ({P : Pred ℓ′ A} → Decidable¹ P → Dec (∃[ a ꞉ A ] P a)) → Omniscient₁ {ℓ′ = ℓ′} A
   omniscient₁-η = id
 
 
 opaque
   unfolding Omniscient₁ Exhaustible Essentially-classical
-  omniscient₁→exhaustible : Omniscient₁ {ℓ′ = ℓ′} A → Exhaustible A
+  omniscient₁→exhaustible : Omniscient₁ {ℓ′ = ℓ′} A → Exhaustible {ℓ′ = ℓ′} A
   omniscient₁→exhaustible omn {P} P? = Dec.map
     (λ ¬∃p x → dec→essentially-classical (P? x) $ ¬∃p ∘ ∣_∣₁ ∘ (x ,_))
     (λ ¬∃p ∀p → ¬∃p $ ∥-∥₁.rec! λ p → p .snd (∀p (p .fst)))

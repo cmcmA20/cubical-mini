@@ -23,11 +23,8 @@ record
       : ∀ {a b} (p : R a b)
       → ＜ rfl a ／ (λ i → R a (to-path p i)) ＼ p ＞
 
-  opaque
-    unfolding is-of-hlevel
-    is-contr-ΣR : ∀ {a} → is-contr (Σ A (R a))
-    is-contr-ΣR .fst     = _ , rfl _
-    is-contr-ΣR .snd x i = to-path (x .snd) i , to-path-over (x .snd) i
+  is-contr-ΣR : ∀ {a} → is-contr (Σ A (R a))
+  is-contr-ΣR = is-contr-η $ (_ , rfl _) , λ x i → to-path (x .snd) i , to-path-over (x .snd) i
 
 open is-identity-system public
 
@@ -47,35 +44,31 @@ IdsJ
 IdsJ ids P pr s =
   transport (λ i → P (ids .to-path s i) (ids .to-path-over s i)) pr
 
-opaque
-  unfolding is-of-hlevel
-  IdsJ-refl
-    : {r : ∀ a → R a a} {x : A}
-    → (ids : is-identity-system R r)
-    → (P : ∀ b → R x b → Type ℓ″)
-    → (p : P x (r x))
-    → IdsJ ids P p (r x) ＝ p
-  IdsJ-refl {R} {r} {x} ids P p =
-    transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p ＝⟨⟩
-    subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p      ＝⟨ ap (λ e → subst P′ e p) lemma ⟩
-    subst P′ refl p                                                          ＝⟨ transport-refl p ⟩
-    p                                                                        ∎
-    where
-      P′ : Σ _ (R x) → Type _
-      P′ (b , r) = P b r
+IdsJ-refl
+  : {r : ∀ a → R a a} {x : A}
+  → (ids : is-identity-system R r)
+  → (P : ∀ b → R x b → Type ℓ″)
+  → (p : P x (r x))
+  → IdsJ ids P p (r x) ＝ p
+IdsJ-refl {R} {r} {x} ids P p =
+  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p ＝⟨⟩
+  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p      ＝⟨ ap (λ e → subst P′ e p) lemma ⟩
+  subst P′ refl p                                                          ＝⟨ transport-refl p ⟩
+  p                                                                        ∎
+  where
+    P′ : Σ _ (R x) → Type _
+    P′ (b , r) = P b r
 
-      lemma : Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x)) ＝ refl
-      lemma = is-contr→is-set (is-contr-ΣR ids) _ _ _ _
+    lemma : Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x)) ＝ refl
+    lemma = is-set-β (is-contr→is-set (is-contr-ΣR ids)) _ _ _ _
 
-  to-path-refl-coh
-    : {r : ∀ a → R a a}
-    → (ids : is-identity-system R r)
-    → ∀ x
-    → (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x))) ＝ refl
-  to-path-refl-coh {r} ids x =
-    is-contr→is-set (is-contr-ΣR ids) _ _
-      (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x)))
-      refl
+to-path-refl-coh
+  : {r : ∀ a → R a a}
+  → (ids : is-identity-system R r)
+  → ∀ x
+  → (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x))) ＝ refl
+to-path-refl-coh {r} ids x = is-set-β (is-contr→is-set (is-contr-ΣR ids)) _ _
+  (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x))) refl
 
 to-path-refl
   : {r : ∀ a → R a a} {x : A}
@@ -166,7 +159,7 @@ univalence-identity-system .to-path-over p =
   Σ-prop-pathP (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → path→ua-pathP p refl
 
 opaque
-  unfolding is-of-hlevel is-contr-ΣR
+  unfolding is-of-hlevel is-contr-η
   is-identity-system-is-prop
     : {R : A → A → Type ℓ′} {r : ∀ a → R a a}
     → is-prop (is-identity-system R r)

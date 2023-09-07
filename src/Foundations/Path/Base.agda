@@ -16,75 +16,44 @@ module _ where private
   _∙′_ : x ＝ y → y ＝ z → x ＝ z
   p ∙′ q = p ∙∙ q ∙∙ refl
 
-  ∙′-filler : (p : x ＝ y) (q : y ＝ z)
-            →  y  ̇      q       ̇ z
-                   ┌─    ̇   ─┐
+  ∙′-filler-r : (p : x ＝ y) (q : y ＝ z)
+              →  y  ̇      q       ̇ z
+                     ┌─    ̇   ─┐
 
-           sym p   │    _    │   refl
+             sym p   │    _    │   refl
 
-                   └─    ̇   ─┘
-               x  ̇    p ∙′ q    ̇ z
-  ∙′-filler p q = ∙∙-filler p q refl
+                     └─    ̇   ─┘
+                 x  ̇    p ∙′ q    ̇ z
+  ∙′-filler-r p q = ∙∙-filler p q refl
 
   -- From this, we can show that these two notions of composition are the same
   ∙＝∙′ : (p : x ＝ y) (q : y ＝ z) → p ∙ q ＝ p ∙′ q
-  ∙＝∙′ p q j = ∙∙-unique p q refl (p ∙ q , ∙-filler′ p q) (p ∙′ q , ∙′-filler p q) j .fst
+  ∙＝∙′ p q j = ∙∙-unique p q refl (p ∙ q , ∙-filler-r p q) (p ∙′ q , ∙′-filler-r p q) j .fst
 
-  -- We could define double composition with top side `refl`
-  -- Seems strange not to prefer this version
+  -- We could define double composition with left side `refl`
+  -- (classic cubical library way)
   infixr 30 _∙″_
   _∙″_ : x ＝ y → y ＝ z → x ＝ z
-  p ∙″ q = p ∙∙ refl ∙∙ q
+  p ∙″ q = refl ∙∙ p ∙∙ q
 
-  ∙″-filler : (p : x ＝ y) (q : y ＝ z)
-            →  y  ̇    refl      ̇ y
-                   ┌─    ̇   ─┐
-
-           sym p   │    _    │   q
-
-                   └─    ̇   ─┘
-               x  ̇    p ∙″ q    ̇ z
-  ∙″-filler p q = ∙∙-filler p refl q
-
-  opaque
-    unfolding _∙∙_∙∙_
-    ∙-filler″ : (p : x ＝ y) (q : y ＝ z)
-              →  y  ̇    refl      ̇ y
+  ∙″-filler-l : (p : x ＝ y) (q : y ＝ z)
+              →  x  ̇      p      ̇ y
                      ┌─    ̇   ─┐
 
-             sym p   │    _    │   q
+              refl   │    _    │   q
 
                      └─    ̇   ─┘
-                 x  ̇    p ∙ q     ̇ z
-    ∙-filler″ {y} p q j i = hcomp (∂ i ∨ ~ j) λ where
-      k (i = i0) → p (~ j)
-      k (i = i1) → q (j ∧ k)
-      k (j = i0) → y
-      k (k = i0) → p (i ∨ ~ j)
+                 x  ̇    p ∙″ q    ̇ z
+  ∙″-filler-l = ∙∙-filler refl
 
   ∙＝∙″ : (p : x ＝ y) (q : y ＝ z) → p ∙ q ＝ p ∙″ q
-  ∙＝∙″ p q j = ∙∙-unique p refl q (p ∙ q , ∙-filler″ p q) (p ∙″ q , ∙″-filler p q) j .fst
+  ∙＝∙″ p q j = ∙∙-unique refl p q (p ∙ q , ∙-filler-l p q) (p ∙″ q , ∙″-filler-l p q) j .fst
 
 
 opaque
-  unfolding _∙∙_∙∙_
-  invert-sides : (p : x ＝ y) (q : x ＝ z) → Square q p (sym p) (sym q)
-  invert-sides {x} p q i j = hcomp (∂ i ∨ ∂ j) λ where
-    k (i = i0) → p (k ∧ j)
-    k (i = i1) → q (k ∧ ~ j)
-    k (j = i0) → q (k ∧ i)
-    k (j = i1) → p (k ∧ ~ i)
-    k (k = i0) → x
-
-  sym-∙ : (p : x ＝ y) (q : y ＝ z)
-        → sym (p ∙ q) ＝ sym q ∙ sym p
-  sym-∙ {z} p q i j = sym-∙-filler j i i1
-    where
-    sym-∙-filler : I → I → I → _
-    sym-∙-filler i j k = hfill (∂ i) k λ where
-      l (i = i0) → q (l ∨ j)
-      l (i = i1) → p (~ l ∧ j)
-      l (l = i0) → invert-sides q (sym p) i j
+  unfolding _∙_
+  sym-∙ : (p : x ＝ y) (q : y ＝ z) → sym (p ∙ q) ＝ sym q ∙ sym p
+  sym-∙ p q _ j = (p ∙ q) (~ j)
 
 
   -- Whiskering a dependent path by a path
@@ -101,7 +70,7 @@ opaque
 
   double-whiskering-filler
     : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
-    → (p : a₀ ＝ a₀′) (pq : PathP A a₀′ a₁) (q : a₁ ＝ a₁′)
+    → (p : a₀ ＝ a₀′) (pq : ＜ a₀′ ／ A ＼ a₁ ＞) (q : a₁ ＝ a₁′)
     → ＜ pq ／ (λ i → ＜ p (~ i) ／ A ＼ q i ＞) ＼ p ◁ pq ▷ q ＞
   double-whiskering-filler p pq q k i = hfill (∂ i) k λ where
     j (i = i0) → p (~ j)
@@ -121,15 +90,42 @@ opaque
   p ▷ q  = refl ◁ p ▷ q
 
 
--- Horizontal composition of squares (along their second dimension)
+module _
+  {a₀₀ a₁₀ a₀₁ a₁₁ : A}
+  {p : a₀₀ ＝ a₀₁} {q : a₀₀ ＝ a₁₀} {r : a₁₀ ＝ a₁₁} {s : a₀₁ ＝ a₁₁} where opaque
 
--- infixr 30 _∙₂_
--- _∙₂_ :
---   {a₀₀ a₀₁ a₀₂ : A} {a₀₋ : a₀₀ ＝ a₀₁} {b₀₋ : a₀₁ ＝ a₀₂}
---   {a₁₀ a₁₁ a₁₂ : A} {a₁₋ : a₁₀ ＝ a₁₁} {b₁₋ : a₁₁ ＝ a₁₂}
---   {a₋₀ : a₀₀ ＝ a₁₀} {a₋₁ : a₀₁ ＝ a₁₁} {a₋₂ : a₀₂ ＝ a₁₂}
---   (p : Square a₀₋ a₁₋ a₋₀ a₋₁) (q : Square b₀₋ b₁₋ a₋₁ a₋₂)
---   → Square (a₀₋ ∙ b₀₋) (a₁₋ ∙ b₁₋) a₋₀ a₋₂
--- _∙₂_ = congP₂ (λ _ → _∙_)
+  -- Vertical composition of squares
+  infixr 30 _∙ᵥ_
+  _∙ᵥ_ : {a₀₂ a₁₂ : A} {t : a₀₁ ＝ a₀₂} {u : a₁₁ ＝ a₁₂} {v : a₀₂ ＝ a₁₂}
+       → Square p q r s → Square t s u v
+       → Square (p ∙ t) q (r ∙ u) v
+  _∙ᵥ_ {t} {u} α β j i = hcomp (∂ i ∨ ∂ j) λ where
+    k (i = i0) → ∙-filler p t k j
+    k (i = i1) → ∙-filler r u k j
+    k (j = i0) → α (~ k) i
+    k (j = i1) → β k i
+    k (k = i0) → s i
 
--- TODO add vertical composition
+  -- Horizontal composition of squares
+  infixr 30 _∙ₕ_
+  _∙ₕ_ : {a₂₀ a₂₁ : A} {t : a₁₀ ＝ a₂₀} {u : a₁₁ ＝ a₂₁} {v : a₂₀ ＝ a₂₁}
+       → Square p q r s → Square r t v u
+       → Square p (q ∙ t) v (s ∙ u)
+  _∙ₕ_ = apP² λ _ → _∙_
+
+
+-- opaque
+--   unfolding _∙_ _∙ᵥ_ _∙ₕ_
+--   square-eckmann-hilton
+--     : {a₀₀ a₀₁ a₀₂ a₁₀ a₁₁ a₁₂ a₂₀ a₂₁ a₂₂ : A}
+--       {p : a₀₀ ＝ a₀₁} {q : a₀₀ ＝ a₁₀} {r : a₁₀ ＝ a₁₁} {s : a₀₁ ＝ a₁₁} {α : Square p q r s}
+--       {t : a₁₀ ＝ a₂₀} {u : a₂₀ ＝ a₂₁} {v : a₁₁ ＝ a₂₁} {β : Square r t u v}
+--       {w : a₀₁ ＝ a₀₂} {y : a₁₁ ＝ a₁₂} {x : a₀₂ ＝ a₁₂} {γ : Square w s y x}
+--       {z : a₂₁ ＝ a₂₂} {o : a₁₂ ＝ a₂₂} {δ : Square y v z o}
+--     → (α ∙ₕ β) ∙ᵥ (γ ∙ₕ δ) ＝ (α ∙ᵥ γ) ∙ₕ (β ∙ᵥ δ)
+--   square-eckmann-hilton {p} {q} {r} {s} {α} {t} {β} {γ} {δ} i j k = hfill (∂ j ∨ ∂ k) (~ i) λ where
+--     l (j = i0) → {!!}
+--     l (j = i1) → {!!}
+--     l (k = i0) → {!!}
+--     l (k = i1) → {!!}
+--     l (l = i0) → {!!}
