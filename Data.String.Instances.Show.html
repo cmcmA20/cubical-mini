@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.String.Instances.Show</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.String.Instances.Show.html" class="Module">Data.String.Instances.Show</a> <a id="58" class="Keyword">where</a>
+
+<a id="65" class="Keyword">open</a> <a id="70" class="Keyword">import</a> <a id="77" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="95" class="Keyword">open</a> <a id="100" class="Keyword">import</a> <a id="107" href="Meta.Show.html" class="Module">Meta.Show</a>
+
+<a id="118" class="Keyword">open</a> <a id="123" class="Keyword">import</a> <a id="130" href="Data.String.Base.html" class="Module">Data.String.Base</a>
+
+<a id="148" class="Keyword">instance</a>
+  <a id="Show-string"></a><a id="159" href="Data.String.Instances.Show.html#159" class="Function">Show-string</a> <a id="171" class="Symbol">:</a> <a id="173" href="Meta.Show.html#175" class="Record">Show</a> <a id="178" href="Agda.Builtin.String.html#335" class="Postulate">String</a>
+  <a id="187" href="Data.String.Instances.Show.html#159" class="Function">Show-string</a> <a id="199" class="Symbol">.</a><a id="200" href="Meta.Show.html#224" class="Field">shows-prec</a> <a id="211" class="Symbol">_</a> <a id="213" class="Symbol">=</a> <a id="215" href="Data.String.Base.html#309" class="Primitive">show-string</a>
+
+<a id="228" href="Data.String.Instances.Show.html#228" class="Function">_</a> <a id="230" class="Symbol">:</a> <a id="232" href="Meta.Show.html#320" class="Function">show</a> <a id="237" class="String">&quot;key: \&quot;val\&quot;&quot;</a> <a id="252" href="Foundations.Prim.Kan.html#1272" class="Function Operator">＝</a> <a id="254" class="String">&quot;\&quot;key: \\\&quot;val\\\&quot;\&quot;&quot;</a>
+<a id="277" class="Symbol">_</a> <a id="279" class="Symbol">=</a> <a id="281" href="Foundations.Prim.Kan.html#1476" class="Function">refl</a>
+</pre></body></html>

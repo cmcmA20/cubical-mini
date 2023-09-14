@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Bool.Instances.Show</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Bool.Instances.Show.html" class="Module">Data.Bool.Instances.Show</a> <a id="56" class="Keyword">where</a>
+
+<a id="63" class="Keyword">open</a> <a id="68" class="Keyword">import</a> <a id="75" href="Meta.Show.html" class="Module">Meta.Show</a>
+
+<a id="86" class="Keyword">open</a> <a id="91" class="Keyword">import</a> <a id="98" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a>
+
+<a id="114" class="Keyword">instance</a>
+  <a id="Show-bool"></a><a id="125" href="Data.Bool.Instances.Show.html#125" class="Function">Show-bool</a> <a id="135" class="Symbol">:</a> <a id="137" href="Meta.Show.html#175" class="Record">Show</a> <a id="142" href="Agda.Builtin.Bool.html#173" class="Datatype">Bool</a>
+  <a id="149" href="Data.Bool.Instances.Show.html#125" class="Function">Show-bool</a> <a id="159" class="Symbol">.</a><a id="160" href="Meta.Show.html#224" class="Field">shows-prec</a> <a id="171" class="Symbol">_</a> <a id="173" href="Agda.Builtin.Bool.html#192" class="InductiveConstructor">false</a> <a id="179" class="Symbol">=</a> <a id="181" class="String">&quot;false&quot;</a>
+  <a id="191" href="Data.Bool.Instances.Show.html#125" class="Function">Show-bool</a> <a id="201" class="Symbol">.</a><a id="202" href="Meta.Show.html#224" class="Field">shows-prec</a> <a id="213" class="Symbol">_</a> <a id="215" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>  <a id="221" class="Symbol">=</a> <a id="223" class="String">&quot;true&quot;</a>
+</pre></body></html>

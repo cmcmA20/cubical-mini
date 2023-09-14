@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Char.Instances.Show</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Char.Instances.Show.html" class="Module">Data.Char.Instances.Show</a> <a id="56" class="Keyword">where</a>
+
+<a id="63" class="Keyword">open</a> <a id="68" class="Keyword">import</a> <a id="75" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="93" class="Keyword">open</a> <a id="98" class="Keyword">import</a> <a id="105" href="Meta.Show.html" class="Module">Meta.Show</a>
+
+<a id="116" class="Keyword">open</a> <a id="121" class="Keyword">import</a> <a id="128" href="Data.Char.Base.html" class="Module">Data.Char.Base</a>
+
+<a id="144" class="Keyword">instance</a>
+  <a id="Show-char"></a><a id="155" href="Data.Char.Instances.Show.html#155" class="Function">Show-char</a> <a id="165" class="Symbol">:</a> <a id="167" href="Meta.Show.html#175" class="Record">Show</a> <a id="172" href="Agda.Builtin.Char.html#238" class="Postulate">Char</a>
+  <a id="179" href="Data.Char.Instances.Show.html#155" class="Function">Show-char</a> <a id="189" class="Symbol">.</a><a id="190" href="Meta.Show.html#224" class="Field">shows-prec</a> <a id="201" class="Symbol">_</a> <a id="203" class="Symbol">=</a> <a id="205" href="Data.Char.Base.html#612" class="Primitive">show-char</a>
+
+<a id="216" href="Data.Char.Instances.Show.html#216" class="Function">_</a> <a id="218" class="Symbol">:</a> <a id="220" href="Meta.Show.html#320" class="Function">show</a> <a id="225" class="String">&#39;a&#39;</a> <a id="229" href="Foundations.Prim.Kan.html#1272" class="Function Operator">＝</a> <a id="231" class="String">&quot;&#39;a&#39;&quot;</a>
+<a id="237" class="Symbol">_</a> <a id="239" class="Symbol">=</a> <a id="241" href="Foundations.Prim.Kan.html#1476" class="Function">refl</a>
+</pre></body></html>
