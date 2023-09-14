@@ -32,10 +32,10 @@ import Data.Everything
 -- I/O and related stuff.
 import System.Everything
 
--- Category theory
+-- Category theory.
 import Categories.Everything
 
--- Order theory
+-- Order theory.
 import Order.Everything
 
 -- Function kinds.

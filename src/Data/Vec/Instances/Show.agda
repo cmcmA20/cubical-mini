@@ -5,32 +5,29 @@ open import Foundations.Base
 
 open import Meta.Show
 
-open import Data.Vec.Base
 open import Data.Nat.Base
-open import Data.String.Base
+open import Data.Vec.Base
 
-private
-  variable
-    @0 n : ℕ
-
-  show-impl : ∀ {ℓ} {A : Type ℓ} → ⦃ _ : Show A ⦄ → ℕ → Vec A n → String
-  show-impl _ [] = "[]"
-  show-impl n (x ∷ xs) =
-    show-parens (∷-prec <-internal n) $
-      shows-prec (suc ∷-prec) x ++ₛ " ∷ " ++ₛ show-impl (suc n) xs
-    where
-      ∷-prec = 5
+private variable
+  ℓ : Level
+  A : Type ℓ
+  @0 n : ℕ
 
 instance
-  show-vec : ∀ {ℓ} {A : Type ℓ} → ⦃ _ : Show A ⦄ → Show (Vec A n)
-  show-vec .shows-prec = show-impl
+  Show-vec : ⦃ Show A ⦄ → Show (Vec A n)
+  Show-vec .shows-prec = show-impl where
+    ∷-prec = 5
 
-private
-  module _ where
-    open import Data.Nat.Instances.Show
+    show-impl : ⦃ Show A ⦄ → ℕ → Vec A n → String
+    show-impl _ [] = "[]"
+    show-impl n (x ∷ xs) = show-parens (∷-prec <ᵇ n) $
+      shows-prec (suc ∷-prec) x ++ₛ " ∷ " ++ₛ show-impl (suc n) xs
 
-    _ : show (1 ∷ 2 ∷ 3 ∷ []) ＝ "1 ∷ 2 ∷ 3 ∷ []"
-    _ = refl
+private module _ where
+  open import Data.Nat.Instances.Show
 
-    _ : show ((1 ∷ []) ∷ (2 ∷ []) ∷ []) ＝ "(1 ∷ []) ∷ (2 ∷ []) ∷ []"
-    _ = refl
+  _ : show (1 ∷ 2 ∷ 3 ∷ []) ＝ "1 ∷ 2 ∷ 3 ∷ []"
+  _ = refl
+
+  _ : show ((1 ∷ []) ∷ (2 ∷ []) ∷ []) ＝ "(1 ∷ []) ∷ (2 ∷ []) ∷ []"
+  _ = refl

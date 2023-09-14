@@ -64,12 +64,9 @@ argN  = arg (arg-info visible (modality relevant quantity-ω))
 Fun : Type ℓ → Type ℓ′ → Type (ℓ ⊔ ℓ′)
 Fun A B = A → B
 
-id′ : (A : Type ℓ) → A → A
-id′ A x = x
-
 under-abs : Term → TC A → TC A
 under-abs (lam v (abs nm _)) m = extendContext nm (arg (arg-info v (modality relevant quantity-ω)) unknown) m
-under-abs (pi a (abs nm _)) m = extendContext nm a m
+under-abs (pi a (abs nm _))  m = extendContext nm a m
 under-abs _ m = m
 
 new-meta : Term → TC Term
@@ -281,7 +278,7 @@ print-depth key level nesting es = debugPrint key level $
   strErr (nest nesting ("[" ++ₛ show-ℕ nesting ++ₛ "]  ")) ∷ es
   where
     nest : ℕ → String → String
-    nest zero s = s
+    nest zero    s = s
     nest (suc x) s = nest x (s ++ₛ "  ")
 
 pattern nat-lit n =

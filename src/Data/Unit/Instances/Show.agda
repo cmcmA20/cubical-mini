@@ -6,5 +6,5 @@ open import Meta.Show
 open import Data.Unit.Base
 
 instance
-  show-unit : Show ⊤
-  show-unit .shows-prec _ tt = "tt"
+  Show-⊤ : Show ⊤
+  Show-⊤ .shows-prec _ _ = "tt"

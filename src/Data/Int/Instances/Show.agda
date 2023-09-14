@@ -3,8 +3,8 @@ module Data.Int.Instances.Show where
 
 open import Meta.Show
 
-open import Agda.Builtin.Int
+open import Data.Int.Base
 
 instance
-  show-int : Show Int
-  show-int .shows-prec _ = primShowInteger
+  Show-ℤ : Show ℤ
+  Show-ℤ .shows-prec _ = show-ℤ

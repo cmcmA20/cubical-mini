@@ -1,11 +1,12 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Instances.Show where
 
+open import Foundations.Base
+
 open import Meta.Show
 
-open import Agda.Builtin.String
-open import Data.Nat.Base
+open import Data.Fin.Base
 
 instance
-  show-nat : Show ℕ
-  show-nat .shows-prec _ = primShowNat
+  Show-fin : ∀ {@0 m} → Show (Fin m)
+  Show-fin .shows-prec _ = show-ℕ ∘ fin→ℕ

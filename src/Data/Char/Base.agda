@@ -22,4 +22,4 @@ open import Agda.Builtin.Char public
 
 open import Agda.Builtin.String public
   using ()
-  renaming ( primShowChar to char→string )
+  renaming ( primShowChar to show-char )

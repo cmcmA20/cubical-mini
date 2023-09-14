@@ -3,8 +3,8 @@ module Data.Float.Instances.Show where
 
 open import Meta.Show
 
-open import Agda.Builtin.Float
+open import Data.Float.Base
 
 instance
-  show-floatᵢ : Show Float
-  show-floatᵢ .shows-prec _ = primShowFloat
+  Show-float : Show Float
+  Show-float .shows-prec _ = show-float

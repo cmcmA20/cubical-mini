@@ -5,14 +5,11 @@ open import Foundations.Base
 
 open import Meta.Show
 
-open import Agda.Builtin.String
 open import Data.Char.Base
 
 instance
-  show-char : Show Char
-  show-char .shows-prec _ = primShowChar
+  Show-char : Show Char
+  Show-char .shows-prec _ = show-char
 
-private
-  module _ where
-    _ : show 'a' ＝ "'a'"
-    _ = refl
+_ : show 'a' ＝ "'a'"
+_ = refl

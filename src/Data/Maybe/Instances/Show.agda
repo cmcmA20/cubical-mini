@@ -10,15 +10,13 @@ open import Data.Nat.Base
 open import Data.String.Base
 
 instance
-  show-maybe : ∀ {ℓ} {A : Type ℓ} → ⦃ _ : Show A ⦄ → Show (Maybe A)
-  show-maybe .shows-prec _ nothing  =
-    "nothing"
-  show-maybe .shows-prec n (just v) =
-    show-parens (0 <-internal n) $ "just " ++ₛ shows-prec (suc n) v
+  Show-maybe : ∀ {ℓ} {A : Type ℓ} → ⦃ Show A ⦄ → Show (Maybe A)
+  Show-maybe .shows-prec _ nothing  = "nothing"
+  Show-maybe .shows-prec n (just v) =
+    show-parens (0 <ᵇ n) $ "just " ++ₛ shows-prec (suc n) v
 
-private
-  module _ where
-    open import Data.Nat.Instances.Show
+private module _ where
+  open import Data.Nat.Instances.Show
 
-    _ : show (just (just 2)) ＝ "just (just 2)"
-    _ = refl
+  _ : show (just (just 2)) ＝ "just (just 2)"
+  _ = refl

@@ -41,3 +41,7 @@ skip : Fin (suc n) → Fin n → Fin (suc n)
 skip fzero j = fsuc j
 skip (fsuc i) fzero = fzero
 skip (fsuc i) (fsuc j) = fsuc (skip i j)
+
+fin→ℕ : Fin n → ℕ
+fin→ℕ fzero    = 0
+fin→ℕ (fsuc k) = suc (fin→ℕ k)

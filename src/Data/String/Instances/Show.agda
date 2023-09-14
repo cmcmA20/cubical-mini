@@ -8,10 +8,8 @@ open import Meta.Show
 open import Data.String.Base
 
 instance
-  show-string : Show String
-  show-string .shows-prec _ = show-str
+  Show-string : Show String
+  Show-string .shows-prec _ = show-string
 
-private
-  module _ where
-    _ : show "abc" ＝ "\"abc\""
-    _ = refl
+_ : show "key: \"val\"" ＝ "\"key: \\\"val\\\"\""
+_ = refl
