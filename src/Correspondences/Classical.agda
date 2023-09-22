@@ -72,7 +72,7 @@ opaque
 --   LEM : Classically $ A ⊎ (¬ A)
 --   LEM = go where opaque
 --     unfolding Classically
---     go : _
+--     go : Classically $ A ⊎ (¬ A)
 --     go z = z $ inr $ z ∘ inl
 
 --   DNE : Classically (¬¬ A → A)

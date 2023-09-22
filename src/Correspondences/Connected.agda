@@ -38,7 +38,7 @@ is-connected-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-connected 
 is-connected-is-of-hlevel n = is-of-hlevel-+-left 1 n is-connected-is-prop
 
 instance
-  decomp-hlevel-conn : goal-decomposition (quote is-of-hlevel) ∥ is-connected A ∥₁
+  decomp-hlevel-conn : goal-decomposition (quote is-of-hlevel) (is-connected A)
   decomp-hlevel-conn = decomp (quote is-connected-is-of-hlevel) (`level-minus 1 ∷ [])
 
 
