@@ -73,12 +73,12 @@
 <a id="1672" class="Comment">--   LEM : Classically $ A ⊎ (¬ A)</a>
 <a id="1707" class="Comment">--   LEM = go where opaque</a>
 <a id="1734" class="Comment">--     unfolding Classically</a>
-<a id="1763" class="Comment">--     go : _</a>
-<a id="1777" class="Comment">--     go z = z $ inr $ z ∘ inl</a>
+<a id="1763" class="Comment">--     go : Classically $ A ⊎ (¬ A)</a>
+<a id="1799" class="Comment">--     go z = z $ inr $ z ∘ inl</a>
 
-<a id="1810" class="Comment">--   DNE : Classically (¬¬ A → A)</a>
-<a id="1844" class="Comment">--   DNE = do</a>
-<a id="1858" class="Comment">--     inl a ← LEM</a>
-<a id="1877" class="Comment">--       where inr a → pure $ λ ¬¬a → ⊥.rec (¬¬a a)</a>
-<a id="1929" class="Comment">--     pure λ _ → a</a>
+<a id="1832" class="Comment">--   DNE : Classically (¬¬ A → A)</a>
+<a id="1866" class="Comment">--   DNE = do</a>
+<a id="1880" class="Comment">--     inl a ← LEM</a>
+<a id="1899" class="Comment">--       where inr a → pure $ λ ¬¬a → ⊥.rec (¬¬a a)</a>
+<a id="1951" class="Comment">--     pure λ _ → a</a>
 </pre></body></html>
