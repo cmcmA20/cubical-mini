@@ -1,50 +1,74 @@
-
+{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
 module Algebra.Semiring where
 
 open import Foundations.Base
 
-open import Algebra.Monoid.Abelian
-open import Algebra.Monoid
+open import Meta.Record
+open import Meta.Search.HLevel
+open import Meta.SIP
+open import Meta.Underlying
+
+open import Algebra.Monoid.Commutative public
 
 private variable
   ℓ     : Level
-  A     : 𝒰 ℓ
-  x y z : A
+  A     : Type ℓ
+  e x y z u : A
+  _✦_ _✧_ : A → A → A
+
+Distrib-left : (_*_ _+_ : A → A → A) → _
+Distrib-left {A} _*_ _+_ = (x y z : A) → x * (y + z) ＝ (x * y) + (x * z)
+
+Distrib-right : (_*_ _+_ : A → A → A) → _
+Distrib-right {A} _*_ _+_ = (x y z : A) → (y + z) * x ＝ (y * x) + (z * x)
+
+Raw-∞-semiring-on : Type ℓ → Type ℓ
+Raw-∞-semiring-on X = X × (X → X → X) × X × (X → X → X)
+
+
+-- semirings (nonabsorptive)
 
 record is-semiring
-  {ℓ}
-  {R       : 𝒰 ℓ}
-  (𝟏 𝟎     : R)
-  (_*_ _+_ : R → R → R)
-           : 𝒰 ℓ
-    where
+  {A : Type ℓ} (0a : A) (_+_ : A → A → A)
+               (1a : A) (_*_ : A → A → A): Type ℓ where
+  no-eta-equality
+  field +-comm-monoid : is-comm-monoid 0a _+_
+  open is-comm-monoid +-comm-monoid public
+
+  field *-monoid : is-monoid 1a _*_
+  open is-monoid *-monoid hiding (has-is-of-hlevel) public
+
   field
-    +-is-abelian-monoid : is-abelian-monoid 𝟎 _+_
-    *-is-monoid         : is-monoid         𝟏 _*_
+    *-distrib-l : Distrib-left _*_ _+_
+    *-distrib-r : Distrib-right _*_ _+_
 
-    *-distributes-over-+-right : x * (y + z) ＝ (x * y) + (x * z)
-    *-distributes-over-+-left  : (y + z) * x ＝ (y * x) + (z * x)
+unquoteDecl is-semiring-iso = declare-record-iso is-semiring-iso (quote is-semiring)
 
-    𝟎-absorbs-right : 𝟎 * x ＝ 𝟎
-    𝟎-absorbs-left  : x * 𝟎 ＝ 𝟎
+instance
+  is-semiring-is-prop : is-prop (is-semiring e _✦_ u _✧_)
+  is-semiring-is-prop = is-prop-η λ x → let open is-semiring x in is-prop-β
+    (is-of-hlevel-≃ 1 (iso→equiv is-semiring-iso) hlevel!) x
 
-record Semiring-on {ℓ} (A : 𝒰 ℓ) : 𝒰 ℓ where
-  field
-    𝟏 𝟎             : A
-    _*_ _+_         : A → A → A
-    has-is-semiring : is-semiring 𝟏 𝟎 _*_ _+_
+Semiring-on : Type ℓ → Type ℓ
+Semiring-on X =
+  Σ[ (0a , _+_ , 1a , _*_) ꞉ X × (X → X → X) × X × (X → X → X) ] (is-semiring 0a _+_ 1a _*_)
 
-  infixl 20 _+_
-  infixl 30 _*_
+private
+  semiring-desc : Desc ℓ ℓ Raw-∞-semiring-on ℓ
+  semiring-desc .Desc.descriptor = auto-str-term!
+  semiring-desc .Desc.axioms _ = is-semiring $⁴_
+  semiring-desc .Desc.axioms-prop _ _ = is-semiring-is-prop
 
-  open is-semiring has-is-semiring public
+semiring-str : Structure ℓ _
+semiring-str = desc→structure semiring-desc
 
-Semiring : (ℓ : Level) → 𝒰 (ℓsuc ℓ)
-Semiring ℓ = Σ[ A ꞉ 𝒰 ℓ ] Semiring-on A
+@0 semiring-str-is-univalent : is-univalent (semiring-str {ℓ = ℓ})
+semiring-str-is-univalent = desc→is-univalent semiring-desc
 
-open import Meta.Underlying
+Semiring : (ℓ : Level) → Type (ℓsuc ℓ)
+Semiring ℓ = Σ[ X ꞉ Type ℓ ] Semiring-on X
 
--- instance
---   semiring-underlying : Underlying (Semiring ℓ)
---   semiring-underlying {ℓ} .Underlying.ℓ-underlying = ℓ
---   Underlying.⌞ semiring-underlying ⌟ = fst
+instance
+  Underlying-Semiring : Underlying (Semiring ℓ)
+  Underlying-Semiring {ℓ} .Underlying.ℓ-underlying = ℓ
+  Underlying-Semiring .⌞_⌟ = fst

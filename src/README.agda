@@ -35,6 +35,9 @@ import System.Everything
 -- Category theory.
 import Categories.Everything
 
+-- (Higher) algebra library.
+import Algebra.Everything
+
 -- Order theory.
 import Order.Everything
 
@@ -51,6 +54,3 @@ import Truncation.Everything
 
 -- -- Homotopy theory
 -- import Homotopy.Everything
-
--- -- Algebra library
--- import Algebra.Everything

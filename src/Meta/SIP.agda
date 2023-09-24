@@ -78,8 +78,8 @@ desc→family {S} desc X = Σ[ S ꞉ S X ] (desc .Desc.axioms _ S)
 desc→structure : ∀ {ax} → (S : Desc ℓ ℓ₁ S ax) → Structure _ (desc→family S)
 desc→structure desc = axiom-str (term→structure descriptor) axioms where open Desc desc
 
-@0 description→is-univalent : ∀ {ax} → (S : Desc ℓ ℓ₁ S ax) → is-univalent (desc→structure S)
-description→is-univalent desc =
+@0 desc→is-univalent : ∀ {ax} → (S : Desc ℓ ℓ₁ S ax) → is-univalent (desc→structure S)
+desc→is-univalent desc =
   axiom-str-univalent
     (term→structure descriptor) axioms
     (term→structure-is-univalent descriptor) (λ {X} {s} → axioms-prop X s)

@@ -8,7 +8,7 @@ open import Foundations.Isomorphism
 open import Foundations.Sigma.Properties
 open import Foundations.Transport
 
-open import Foundations.Univalence.Base
+open import Foundations.Univalence.Base public
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level

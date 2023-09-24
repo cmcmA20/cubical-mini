@@ -80,7 +80,6 @@ opaque
     isic : is-iso (n-ua {X = X} {Y = Y})
     isic = iso inv rinv (linv {Y})
 
-
 -- FIXME disgusting! rewrite it without resorting to direct cube manipulations
 opaque
   unfolding _∙_

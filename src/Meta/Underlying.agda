@@ -19,3 +19,9 @@ instance
     → Underlying (Σ A B)
   Underlying-Σ ⦃ ua ⦄ .Underlying.ℓ-underlying = ua .Underlying.ℓ-underlying
   Underlying-Σ .⌞_⌟ x = ⌞ x .fst ⌟
+
+  -- Underlying-Σ′
+  --   : ∀ {ℓ ℓ′} {B : Type ℓ → Type ℓ′}
+  --   → Underlying (Σ (Type ℓ) B)
+  -- Underlying-Σ′ {ℓ} .Underlying.ℓ-underlying = ℓ
+  -- Underlying-Σ′ .⌞_⌟ = fst
