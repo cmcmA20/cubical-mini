@@ -33,7 +33,7 @@ is-iso-inv     r .rinv = r .linv
 is-iso-inv     r .linv = r .rinv
 
 Iso : Type ℓ → Type ℓ′ → Type _
-Iso A B = Σ (A → B) is-iso
+Iso A B = Σ[ f ꞉ (A → B) ] is-iso f
 
 _≅_ = Iso
 infix 1 _≅_

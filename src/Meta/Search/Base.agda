@@ -89,10 +89,11 @@ data Arg-spec : Goal-strat → Type where
   `level-suc    : Arg-spec by-hlevel
   `level-minus  : (n : ℕ) → Arg-spec by-hlevel
   `search-under : (n : ℕ) (subgoal : Name) → Arg-spec goal-strat
-  `meta         : Arg-spec goal-strat
+  `term         : Term → Arg-spec goal-strat
 
 pattern `search sg  = `search-under 0 sg
 pattern `level-same = `level-minus 0
+pattern `meta       = `term unknown
 
 data goal-decomposition
   {ℓ} (goal-name : Name) {goal-strat : Goal-strat}
@@ -392,7 +393,7 @@ private
         debugPrint "tactic.search" 10 [ "Dunno how to take 1 from " , termErr tm ]
         typeError []
 
-  ... | gs | `meta = gen-args fuel gs has-alts level goal defn args (unknown v∷ accum) cont
+  ... | gs | `term t = gen-args fuel gs has-alts level goal defn args (t v∷ accum) cont
 
   ... | gs | `search-under under subgoal-name = do
     debugPrint "tactic.search" 10 [ "Going under " , termErr (lit (nat under)) ]

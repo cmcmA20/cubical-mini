@@ -4,10 +4,11 @@ module Foundations.HLevel.Retracts where
 open import Foundations.Base
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
-open import Foundations.Isomorphism
 open import Foundations.HLevel.Base
+open import Foundations.Isomorphism
 open import Foundations.Path.Groupoid
 open import Foundations.Sigma.Properties
+open import Foundations.Univalence.Base
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level
@@ -161,6 +162,9 @@ opaque
     where open Equiv e
   ≃-is-of-hlevel-right-suc (suc n) B-hl e =
     ≃-is-of-hlevel (suc (suc n)) (is-of-hlevel-≃ (suc (suc n)) e B-hl) B-hl e
+
+  @0 ＝-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
+  ＝-is-of-hlevel n Ahl Bhl = is-equiv→is-of-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
 
 instance
   is-equiv-is-of-hlevel : {f : A → B} {n : HLevel} → is-of-hlevel (suc n) (is-equiv f)

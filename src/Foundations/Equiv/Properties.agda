@@ -19,6 +19,7 @@ private variable
 
 _ₑ⁻¹ : A ≃ B → B ≃ A
 e ₑ⁻¹ = iso→equiv (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
+infix 90 _ₑ⁻¹
 
 open is-iso
 
@@ -124,29 +125,5 @@ prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
 module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
 
 lift-equiv : Lift ℓ′ A ≃ A
-lift-equiv = iso→equiv 𝔯 where
-  𝔯 : Iso _ _
-  𝔯 .fst = lower
-  𝔯 .snd .inv = lift
-  𝔯 .snd .rinv _ = refl
-  𝔯 .snd .linv _ = refl
-
--- TODO move to `Equiv.Groupoid` ?
-∙ₑ-id-l : (f : A ≃ B) → idₑ ∙ₑ f ＝ f
-∙ₑ-id-l f = equiv-ext refl
-
-∙ₑ-id-r : (f : A ≃ B) → f ∙ₑ idₑ ＝ f
-∙ₑ-id-r f = equiv-ext refl
-
-∙ₑ-assoc : (f : A ≃ B) (g : B ≃ C) (h : C ≃ D)
-         → f ∙ₑ (g ∙ₑ h) ＝ (f ∙ₑ g) ∙ₑ h
-∙ₑ-assoc f g h = equiv-ext refl
-
-@0 ua-∙ₑ
-  : {A B C : Type ℓ}
-    (f : A ≃ B) (g : B ≃ C)
-  → ua (f ∙ₑ g) ＝ ua f ∙ ua g
-ua-∙ₑ {C} = equiv-J (λ B′ f → Π[ g ꞉ B′ ≃ C ] (ua (f ∙ₑ g) ＝ ua f ∙ ua g))
-  (λ g → ap ua (∙ₑ-id-l g)
-       ∙ sym (ap (_∙ ua g) ua-idₑ
-       ∙ ∙-elim-l refl))
+lift-equiv .fst = lower
+lift-equiv .snd .equiv-proof = strict-contr-fibres lift

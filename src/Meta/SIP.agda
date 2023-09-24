@@ -3,7 +3,7 @@ module Meta.SIP where
 
 open import Foundations.Base
 open import Foundations.Equiv.Base
-open import Foundations.Univalence.SIP
+open import Foundations.Univalence.SIP public
 
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromString

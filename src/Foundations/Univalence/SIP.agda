@@ -72,14 +72,13 @@ preserves-id {ℓ} {S} act =
   : (σ : Equiv-action S)
   → preserves-id σ → is-transport-str σ
 preserves-id→is-transport-str {S} σ pres-id e s =
-  equiv-J (λ _ e → σ e .fst s ＝ subst S (ua e) s) lemma′ e
-  where
-  lemma′ : σ idₑ .fst s ＝ subst S (ua idₑ) s
-  lemma′ = sym $
-    subst S (ua idₑ) s ＝⟨ ap (λ p → subst S p s) ua-idₑ ⟩
-    transport refl s   ＝⟨ transport-refl _ ⟩
-    s                  ＝⟨ sym (pres-id s) ⟩
-    σ idₑ .fst s       ∎
+  Jₑ (λ _ e → σ e .fst s ＝ subst S (ua e) s) lemma′ e where
+    lemma′ : σ idₑ .fst s ＝ subst S (ua idₑ) s
+    lemma′ = sym $
+      subst S (ua idₑ) s ＝⟨ ap (λ p → subst S p s) ua-idₑ ⟩
+      transport refl s   ＝⟨ transport-refl _ ⟩
+      s                  ＝⟨ sym (pres-id s) ⟩
+      σ idₑ .fst s       ∎
 
 @0 sym-transport-str :
   (α : Equiv-action S) (τ : is-transport-str α)
