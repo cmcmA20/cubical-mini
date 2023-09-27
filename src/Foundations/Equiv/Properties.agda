@@ -55,12 +55,12 @@ inv-equiv-is-equiv = is-iso→is-equiv goal where
 is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
 is-equiv-inv fe = ((_ , fe) ₑ⁻¹) .snd
 
-@0 ap-≃ : (F : Type ℓ → Type ℓ′) → (A ≃ B) → F A ≃ F B
-ap-≃ F e = path→equiv (ap F (ua e))
+@0 apₑ : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
+apₑ F e = path→equiv (ap F (ua e))
 
-sym-equiv : (x ＝ y) ≃ (y ＝ x)
-sym-equiv .fst = sym
-sym-equiv .snd .equiv-proof = strict-contr-fibres sym
+sym-≃ : (x ＝ y) ≃ (y ＝ x)
+sym-≃ .fst = sym
+sym-≃ .snd .equiv-proof = strict-contr-fibres sym
 
 opaque
   unfolding is-of-hlevel
@@ -78,6 +78,32 @@ opaque
     f-is-iso .inv  _ = contr-A .fst
     f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
     f-is-iso .linv _ = is-contr→is-prop contr-A _ _
+
+is-equiv→pre-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = C → A} (f ∘_)
+is-equiv→pre-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
+  f-iso : is-iso f
+  f-iso = is-equiv→is-iso f-eqv
+
+  f⁻¹ : _
+  f⁻¹ = f-iso .is-iso.inv
+
+  isiso : is-iso (_∘_ f)
+  isiso .is-iso.inv f x = f⁻¹ (f x)
+  isiso .is-iso.rinv f = fun-ext λ _ → f-iso .is-iso.rinv _
+  isiso .is-iso.linv f = fun-ext λ _ → f-iso .is-iso.linv _
+
+is-equiv→post-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = B → C} (_∘ f)
+is-equiv→post-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
+  f-iso : is-iso f
+  f-iso = is-equiv→is-iso f-eqv
+
+  f⁻¹ : _
+  f⁻¹ = f-iso .is-iso.inv
+
+  isiso : is-iso _
+  isiso .is-iso.inv f x = f (f⁻¹ x)
+  isiso .is-iso.rinv f = fun-ext λ x → ap f (f-iso .is-iso.linv _)
+  isiso .is-iso.linv f = fun-ext λ x → ap f (f-iso .is-iso.rinv _)
 
 module Equiv (e : A ≃ B) where
   to = e .fst

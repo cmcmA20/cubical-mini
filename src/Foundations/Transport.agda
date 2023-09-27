@@ -46,7 +46,7 @@ subst⁻-filler : (B : A → Type ℓ′) (p : x ＝ y) (b : B y)
 subst⁻-filler B p = subst-filler B (sym p)
 
 subst⁻-subst : (B : A → Type ℓ′) (p : x ＝ y)
-            → (u : B x) → subst B (sym p) (subst B p u) ＝ u
+             → (u : B x) → subst B (sym p) (subst B p u) ＝ u
 subst⁻-subst B p u = transport⁻-transport (ap B p) u
 
 
@@ -60,10 +60,24 @@ subst²-filler : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
 subst²-filler C p q = transport-filler (ap² C p q)
 
 subst-comp : (B : A → Type ℓ′)
-           → (p : x ＝ y) (q : y ＝ z) (u : B x)
+             (p : x ＝ y) (q : y ＝ z) (u : B x)
            → subst B (p ∙ q) u ＝ subst B q (subst B p u)
 subst-comp B p q Bx i =
   transport (ap B (∙-filler-r p q (~ i))) (transport-filler-ext (ap B p) i Bx)
+
+subst-slice : (B : A → Type ℓ′) (C : A → Type ℓ″)
+              (F : ∀[ a ꞉ A ] (B a → C a))
+              (p : x ＝ y) (b : B x)
+            → subst C p (F b) ＝ F (subst B p b)
+subst-slice B C F p b i = (symP $ transport⁻-filler-ext $ ap C (sym p)) i $
+  F {p i} (transport-filler-ext (ap B p) i b)
+
+subst-slice-filler : (B : A → Type ℓ′) (C : A → Type ℓ″)
+                 (F : ∀[ a ꞉ A ] (B a → C a))
+                 (p : x ＝ y)
+               → ＜ F ／ (λ i → B (p i) → C (p i)) ＼ subst C p ∘ F ∘ subst B (sym p) ＞
+subst-slice-filler B C F p i b = transport-filler (ap C p)
+  (F (transport⁻-filler-ext (ap B p) i b)) i
 
 subst-equiv : (P : A → Type ℓ′) (p : x ＝ y) → P x ≃ P y
 subst-equiv P p = subst P p , transport-is-equiv (λ i → P (p i))

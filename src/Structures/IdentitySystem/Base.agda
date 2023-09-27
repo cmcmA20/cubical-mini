@@ -7,7 +7,6 @@ open import Foundations.Univalence
 
 open import Meta.Search.HLevel
 
-open import Functions.Embedding
 open import Functions.Equiv.Fibrewise
 
 record
@@ -23,8 +22,8 @@ record
       : ∀ {a b} (p : R a b)
       → ＜ rfl a ／ (λ i → R a (to-path p i)) ＼ p ＞
 
-  is-contr-ΣR : ∀ {a} → is-contr (Σ A (R a))
-  is-contr-ΣR = is-contr-η $ (_ , rfl _) , λ x i → to-path (x .snd) i , to-path-over (x .snd) i
+  ΣR-is-contr : ∀ {a} → is-contr (Σ A (R a))
+  ΣR-is-contr = is-contr-η $ (_ , rfl _) , λ x i → to-path (x .snd) i , to-path-over (x .snd) i
 
 open is-identity-system public
 
@@ -60,14 +59,14 @@ IdsJ-refl {R} {r} {x} ids P p =
     P′ (b , r) = P b r
 
     lemma : Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x)) ＝ refl
-    lemma = is-set-β (is-contr→is-set (is-contr-ΣR ids)) _ _ _ _
+    lemma = is-set-β (is-contr→is-set (ΣR-is-contr ids)) _ _ _ _
 
 to-path-refl-coh
   : {r : ∀ a → R a a}
   → (ids : is-identity-system R r)
   → ∀ x
   → (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x))) ＝ refl
-to-path-refl-coh {r} ids x = is-set-β (is-contr→is-set (is-contr-ΣR ids)) _ _
+to-path-refl-coh {r} ids x = is-set-β (is-contr→is-set (ΣR-is-contr ids)) _ _
   (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x))) refl
 
 to-path-refl
@@ -85,7 +84,7 @@ equiv-path→identity-system
 equiv-path→identity-system {R} {r} eqv pres′ = ids where opaque
   unfolding is-of-hlevel
   contract : ∀ {a} → is-contr (Σ _ (R a))
-  contract = is-of-hlevel-≃ 0 ((total (λ _ → eqv .fst) , is-equiv→total (eqv .snd)))
+  contract = is-of-hlevel-≃ 0 ((total (λ _ → eqv .fst) , fibrewise-is-equiv→total-is-equiv (eqv .snd)))
     (_ , singleton-is-prop)
 
   pres : ∀ {a} → eqv .fst (r a) ＝ refl
@@ -120,22 +119,7 @@ identity-system-gives-path {R} {r} ids =
           ∙ transport-refl _ )
 
 
-opaque
-  unfolding is-of-hlevel
-  pullback-identity-system
-    : {R : B → B → Type ℓ″} {r : ∀ b → R b b}
-      (ids : is-identity-system R r)
-      (f : A ↪ B)
-    → is-identity-system (λ x y → R (f .fst x) (f .fst y)) (λ _ → r _)
-  pullback-identity-system     ids f .to-path {a} {b} x = ap fst $
-    f .snd (f .fst b) (a , ids .to-path x) (b , refl)
-  pullback-identity-system {R} ids f .to-path-over {a} {b} p i =
-    comp
-      (λ j → R (f .fst a) (f .snd (f .fst b) (a , ids .to-path p) (b , refl) i .snd (~ j)))
-      (∂ i) λ where
-        k (i = i0) → ids .to-path-over p (~ k ∨ i)
-        k (i = i1) → p
-        k (k = i0) → ids .to-path-over p (~ k)
+
 
 module _
   {R S : A → A → Type ℓ′}
@@ -167,7 +151,7 @@ opaque
     retract→is-of-hlevel 1 from to cancel λ x y i a → is-contr-is-prop (x a) (y a) i
     where
       to : is-identity-system R r → ∀ x → is-contr (Σ A (R x))
-      to ids x = is-contr-ΣR ids
+      to ids x = ΣR-is-contr ids
 
       sys : ∀ (l : ∀ x → is-contr (Σ A (R x))) a b (s : R a b) (i j : I)
           → Partial (∂ i ∨ ~ j) (Σ A (R a))

@@ -4,6 +4,7 @@ module Functions.Equiv.Weak where
 open import Foundations.Base
 -- Weak equivalences are actually builtin in Agda
 open import Foundations.Equiv public
+open import Foundations.Sigma
 
 open import Meta.Bind
 open import Meta.Search.HLevel
