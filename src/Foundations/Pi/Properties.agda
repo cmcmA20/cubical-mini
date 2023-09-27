@@ -66,6 +66,12 @@ function-≃ dom rng = iso→equiv the-iso where
     fun-ext λ x → rng-iso .is-iso.linv _
                 ∙ ap f (dom-iso .is-iso.linv _)
 
+fun-ext-≃
+  : {f g : A → B}
+  → (f ＝ g) ≃ Π[ a ꞉ A ] (f a ＝ g a)
+fun-ext-≃ .fst = happly
+fun-ext-≃ .snd .equiv-proof = strict-contr-fibres fun-ext
+
 fun-ext-dep
   : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′} →  ∀ {f g}
   → ( ∀ {x₀ x₁} (p : ＜ x₀ ／ A ＼ x₁ ＞) → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )

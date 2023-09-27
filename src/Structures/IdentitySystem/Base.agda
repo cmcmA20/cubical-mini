@@ -123,7 +123,7 @@ identity-system-gives-path {R} {r} ids =
 opaque
   unfolding is-of-hlevel
   pullback-identity-system
-    : {R : B → B → Type ℓ″} {r : ∀ a → R a a}
+    : {R : B → B → Type ℓ″} {r : ∀ b → R b b}
       (ids : is-identity-system R r)
       (f : A ↪ B)
     → is-identity-system (λ x y → R (f .fst x) (f .fst y)) (λ _ → r _)

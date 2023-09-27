@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.HLevel.Base
 open import Foundations.Pi
 open import Foundations.Sigma
-open import Foundations.Univalence
+open import Foundations.Univalence public
 
 open import Data.Unit.Properties
 

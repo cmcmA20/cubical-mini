@@ -9,6 +9,7 @@ open import Foundations.Path
 open import Foundations.Sigma
 open import Foundations.Univalence
 
+open import Meta.Record
 open import Meta.Underlying public
 
 open import Structures.Base
@@ -26,6 +27,8 @@ record n-Type (ℓ : Level) (n : HLevel) : Type (ℓsuc ℓ) where
     carrier-is-tr : is-of-hlevel n carrier
 
 open n-Type
+
+unquoteDecl n-Type-iso = declare-record-iso n-Type-iso (quote n-Type)
 
 private variable
   X Y : n-Type ℓ n
@@ -113,11 +116,8 @@ Set ℓ = n-Type ℓ 2
 Grpd : ∀ ℓ → Type (ℓsuc ℓ)
 Grpd ℓ = n-Type ℓ 3
 
+
 -- module _ {ℓ : Level} {n : HLevel} where private
 --   open import Foundations.Univalence.SIP
 --   _ : n-Type ℓ n ≃ Type-with {S = is-of-hlevel n} (HomT→Str λ _ _ _ → ⊤)
---   _ = iso→equiv the-iso
---     where
---       open import Meta.Record
---       the-iso : Iso (n-Type ℓ n) (Σ[ T ꞉ Type ℓ ] is-of-hlevel n T)
---       unquoteDef the-iso = define-record-iso the-iso (quote n-Type)
+--   _ = iso→equiv n-Type-iso

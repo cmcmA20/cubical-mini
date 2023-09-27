@@ -29,13 +29,13 @@ opaque
   is-discrete-η = id
 
   opaque
-    unfolding is-separated
-    is-discrete→is-separated : is-discrete A → is-separated A
-    is-discrete→is-separated di _ _ = dec→essentially-classical (di _ _)
+    unfolding is-¬¬-separated
+    is-discrete→is-¬¬-separated : is-discrete A → is-¬¬-separated A
+    is-discrete→is-¬¬-separated di _ _ = dec→essentially-classical (di _ _)
 
 -- Hedberg
 is-discrete→is-set : is-discrete A → is-set A
-is-discrete→is-set = is-separated→is-set ∘ is-discrete→is-separated
+is-discrete→is-set = is-¬¬-separated→is-set ∘ is-discrete→is-¬¬-separated
 
 opaque
   unfolding is-of-hlevel is-discrete
