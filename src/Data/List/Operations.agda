@@ -22,3 +22,9 @@ all=? eq=? (x ∷ xs) (y ∷ ys) = (eq=? x y) and (all=? eq=? xs ys)
 length : List A → ℕ
 length []       = 0
 length (_ ∷ xs) = suc (length xs)
+
+filter : (A → Bool) → List A → List A
+filter p [] = []
+filter p (x ∷ xs) with p x
+filter p (x ∷ xs)    | true  = x ∷ filter p xs
+filter p (x ∷ xs)    | false = filter p xs

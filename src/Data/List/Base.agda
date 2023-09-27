@@ -44,6 +44,9 @@ _++_ : List A → List A → List A
 []       ++ ys = ys
 (x ∷ xs) ++ ys = x ∷ (xs ++ ys)
 
+concat : List (List A) → List A
+concat = fold-r (_++_) []
+
 reverse : List A → List A
 reverse []       = []
 reverse (x ∷ xs) = reverse xs ++ x ∷ []
