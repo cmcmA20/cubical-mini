@@ -54,7 +54,7 @@ is-discrete-injection (f , f-inj) B-dis = is-discrete-η λ x y →
 
 is-discrete-embedding : (A ↪ B) → is-discrete B → is-discrete A
 is-discrete-embedding (f , f-emb) =
-  is-discrete-injection (f , has-prop-fibres→injective f f-emb)
+  is-discrete-injection (f , is-embedding→injective f-emb)
 
 
 discrete : ⦃ d : is-discrete A ⦄ → is-discrete A

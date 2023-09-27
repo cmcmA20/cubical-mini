@@ -46,10 +46,10 @@ private variable
 @0 SIP : is-univalent σ → {X Y : Σ _ S}
        → (X ≃[ σ ] Y) ≃ (X ＝ Y)
 SIP {S} {σ} is-univ {X} {Y} =
-  X ≃[ σ ] Y                                                            ≃⟨⟩
-  (Σ[ e ꞉ X .fst ≃  Y .fst ] (σ .is-hom X Y e))                         ≃⟨ Σ-ap (ua , univalence⁻¹) is-univ ⟩
-  (Σ[ p ꞉ X .fst ＝ Y .fst ] ＜ X .snd ／ (λ i → S (p i)) ＼ Y .snd ＞) ≃⟨ iso→equiv Σ-pathP-iso ⟩
-  X ＝ Y                                                                ≃∎
+  X ≃[ σ ] Y                                                          ≃⟨⟩
+  Σ[ e ꞉ X .fst ≃  Y .fst ] (σ .is-hom X Y e)                         ≃⟨ Σ-ap (ua , univalence⁻¹) is-univ ⟩
+  Σ[ p ꞉ X .fst ＝ Y .fst ] ＜ X .snd ／ (λ i → S (p i)) ＼ Y .snd ＞ ≃⟨ iso→equiv Σ-pathP-iso ⟩
+  X ＝ Y                                                              ≃∎
 
 @0 sip : is-univalent σ → {X Y : Σ _ S} → (X ≃[ σ ] Y) → (X ＝ Y)
 sip is-univ = SIP is-univ .fst
@@ -80,9 +80,9 @@ preserves-id→is-transport-str {S} σ pres-id e s =
       s                  ＝⟨ sym (pres-id s) ⟩
       σ idₑ .fst s       ∎
 
-@0 sym-transport-str :
-  (α : Equiv-action S) (τ : is-transport-str α)
-  {X Y : Type ℓ} (e : X ≃ Y) (t : S Y)
+@0 sym-transport-str
+  : (α : Equiv-action S) (τ : is-transport-str α)
+    {X Y : Type ℓ} (e : X ≃ Y) (t : S Y)
   → is-equiv→inverse (α e .snd) t ＝ subst S (sym (ua e)) t
 sym-transport-str {S} α τ e t =
      sym (transport⁻-transport (ap S (ua e)) (from t))
@@ -94,6 +94,6 @@ sym-transport-str {S} α τ e t =
                              → is-transport-str a
                              → is-univalent (action→structure a)
 is-transport→is-univalent {S} act is-tr {X , s} {Y , t} eqv =
-  act eqv .fst s ＝ t             ≃⟨ path→equiv (ap (_＝ t) (is-tr eqv s)) ⟩
-  subst S (ua eqv) s ＝ t         ≃⟨ path→equiv (sym (pathP＝path (λ i → S (ua eqv i)) s t)) ⟩
-  PathP (λ i → S (ua eqv i)) s t  ≃∎
+  act eqv .fst s ＝ t                  ≃⟨ path→equiv (ap (_＝ t) (is-tr eqv s)) ⟩
+  subst S (ua eqv) s ＝ t              ≃⟨ path→equiv (sym (pathP＝path (λ i → S (ua eqv i)) s t)) ⟩
+  ＜ s ／ (λ i → S (ua eqv i)) ＼ t ＞ ≃∎

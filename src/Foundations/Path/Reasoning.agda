@@ -74,6 +74,9 @@ module _ (s＝pq : s ＝ p ∙ q) where opaque
   ∙-push-r : r ∙ s ＝ (r ∙ p) ∙ q
   ∙-push-r = sym (∙-pull-r (sym s＝pq))
 
+  double-right : r ∙∙ p ∙∙ q ＝ r ∙ s
+  double-right {r} = ∙∙＝∙ r p q ∙ ap (r ∙_) (sym s＝pq)
+
 module _ (pq=rs : p ∙ q ＝ r ∙ s) where opaque
   ∙-extend-l : p ∙ (q ∙ t) ＝ r ∙ (s ∙ t)
   ∙-extend-l {t} = ∙-assoc _ _ _ ∙∙ ap (_∙ t) pq=rs ∙∙ sym (∙-assoc _ _ _)

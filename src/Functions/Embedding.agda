@@ -2,22 +2,27 @@
 module Functions.Embedding where
 
 open import Foundations.Base
+open import Foundations.Pi
 open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Meta.Search.HLevel
 
+open import Structures.IdentitySystem.Base
 open import Structures.n-Type
 
 open import Data.Unit.Instances.HLevel
 
 open import Functions.Equiv.Fibrewise
+open import Functions.Equiv.HalfAdjoint
+open import Functions.Fibration
 
 private variable
   ℓ ℓ′ ℓ″ : Level
-  A E : Type ℓ
+  A : Type ℓ
   B : Type ℓ′
   f : A → B
+  C : Type ℓ″
 
 Injective : (A → B) → Type _
 Injective f = ∀ {x y} → f x ＝ f y → x ＝ y
@@ -25,84 +30,29 @@ Injective f = ∀ {x y} → f x ＝ f y → x ＝ y
 _↣_ : Type ℓ → Type ℓ′ → Type _
 A ↣ B = Σ[ f ꞉ (A → B) ] Injective f
 
-injective→has-prop-fibres
-  : is-set B → (f : A → B) → Injective f
-  → Π[ y ꞉ _ ] is-prop (fibre f y)
-injective→has-prop-fibres B-set f inj x = is-prop-η λ (f*x , p) (f*x′ , q) →
-  Σ-prop-path! (inj (p ∙ sym q))
-  where instance _ = B-set
-
-has-prop-fibres→injective
-  : (f : A → B) → Π[ y ꞉ B ] is-prop (fibre f y)
-  → Injective f
-has-prop-fibres→injective _ prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl))
-
-between-sets-injective≃has-prop-fibres
-  : is-set A → is-set B → (f : A → B)
-  → Injective f ≃ Π[ y ꞉ _ ] is-prop (fibre f y)
-between-sets-injective≃has-prop-fibres A-set B-set f =
-  prop-extₑ! (injective→has-prop-fibres B-set f)
-             (has-prop-fibres→injective f)
-  where instance _ = A-set
-
 is-embedding : (A → B) → Type _
 is-embedding f = ∀ y → is-prop (fibre f y)
 
 _↪_ : Type ℓ → Type ℓ′ → Type _
 A ↪ B = Σ[ f ꞉ (A → B) ] is-embedding f
 
+set-injective→is-embedding
+  : {f : A → B} → is-set B → Injective f
+  → is-embedding f
+set-injective→is-embedding B-set inj x = is-prop-η λ (f*x , p) (f*x′ , q) →
+  Σ-prop-path! (inj (p ∙ sym q)) where instance _ = B-set
 
-fibre-equiv : (B : A → Type ℓ′) (a : A)
-            → fibre fst a ≃ B a
-fibre-equiv B a = iso→equiv isom where
-  isom : Iso _ _
-  isom .fst ((x , y) , p) = subst B p y
-  isom .snd .is-iso.inv x        = (a , x) , refl
-  isom .snd .is-iso.rinv x i     = coe1→i (λ _ → B a) i x
-  isom .snd .is-iso.linv ((x , y) , p) i =
-    (p (~ i) , coe1→i (λ j → B (p (~ i ∧ ~ j))) i y) , λ j → p (~ i ∨ j)
+is-embedding→injective
+  : is-embedding f → Injective f
+is-embedding→injective prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl))
 
-total-equiv : (p : E → B) → E ≃ Σ[ b ꞉ B ] fibre p b
-total-equiv p = iso→equiv isom where
-  isom : Iso _ (Σ _ (fibre p))
-  isom .fst x                   = p x , x , refl
-  isom .snd .is-iso.inv (_ , x , _)    = x
-  isom .snd .is-iso.rinv (b , x , q) i = q i , x , λ j → q (i ∧ j)
-  isom .snd .is-iso.linv x             = refl
-
-opaque
-  unfolding ua
-  @0 fibration-equiv : {B : Type ℓ}
-                     → Σ[ E ꞉ Type (ℓ ⊔ ℓ′) ] (E → B)
-                     ≃ (B → Type (ℓ ⊔ ℓ′))
-  fibration-equiv {ℓ′} {B} = iso→equiv isom where
-    isom : Σ[ E ꞉ Type (level-of-type B ⊔ ℓ′) ] (E → B) ≅ (B → Type (level-of-type B ⊔ ℓ′))
-    isom .fst (E , p)       = fibre p
-    isom .snd .is-iso.inv p⁻¹      = Σ _ p⁻¹ , fst
-    isom .snd .is-iso.rinv prep i x = ua (fibre-equiv prep x) i
-    isom .snd .is-iso.linv (E , p) i = ua e (~ i) , λ x → fst (ua-unglue e (~ i) x)
-      where
-      e : E ≃ Σ[ b ꞉ B ] fibre p b
-      e = total-equiv p
-
-_/[_]_ : (ℓ : Level) → (Type (ℓ ⊔ ℓ′) → Type ℓ″) → Type ℓ′ → Type _
-_/[_]_ {ℓ′} ℓ P B =
-  Σ[ A ꞉ Type (ℓ ⊔ ℓ′) ]
-  Σ[ f ꞉ (A → B) ]
-  Π[ x ꞉ B ]
-  P (fibre f x)
-
-opaque
-  unfolding fibration-equiv
-  @0 map-classifier
-    : {ℓ : Level} {B : Type ℓ′} (P : Type (ℓ ⊔ ℓ′) → Type ℓ″)
-    → ℓ /[ P ] B
-    ≃ (B → Σ[ T ꞉ _ ] P T)
-  map-classifier {ℓ′} {ℓ} {B} P =
-    (Σ[ A ꞉ _ ] Σ[ f ꞉ _ ] Π[ x ꞉ B ] P (fibre f x)) ≃⟨ Σ-assoc ⟩
-    (Σ[ (_ , f) ꞉ _ ] Π[ y ꞉ B ] P (fibre f y))      ≃⟨ Σ-ap-fst (fibration-equiv {ℓ′} {ℓ}) ⟩
-    (Σ[ A ꞉ _ ] Π[ x ꞉ B ] P (A x))                  ≃⟨ Σ-Π-distrib ₑ⁻¹ ⟩
-    (B → Σ[ T ꞉ _ ] P T)                             ≃∎
+set-injective≃is-embedding
+  : {f : A → B} → is-set A → is-set B
+  → Injective f ≃ is-embedding f
+set-injective≃is-embedding A-set B-set =
+  prop-extₑ! (set-injective→is-embedding B-set)
+             (is-embedding→injective)
+  where instance _ = A-set
 
 @0 subtype-classifier
   : {B : Type ℓ}
@@ -113,44 +63,53 @@ subtype-classifier {ℓ} = map-classifier {ℓ = ℓ} is-prop
 module @0 subtype-classifier {ℓ} {B : Type ℓ} = Equiv (subtype-classifier {B = B})
 
 
-subset-proj-embedding
-  : {B : A → Type ℓ}
+subset-proj-is-embedding
+  : {B : A → Type ℓ′}
   → (∀ x → is-prop (B x))
-  → is-embedding {A = Σ A B} fst
-subset-proj-embedding {B} B-prop x = is-of-hlevel-≃ 1 (fibre-equiv B x) (B-prop _)
+  → is-embedding {A = Σ _ B} fst
+subset-proj-is-embedding {B} B-prop x = is-of-hlevel-≃ 1 (Σ-fibre-equiv B x) (B-prop _)
 
-embedding→monic
-  : {A : Type ℓ} {B : Type ℓ′} {f : A → B}
-  → is-embedding f
+is-embedding→monic
+  : {f : A → B} → is-embedding f
   → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ g ＝ f ∘ h → g ＝ h
-embedding→monic {f} emb g h p =
+is-embedding→monic {f} emb g h p =
   fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl) (h x , happly (sym p) x))
 
-monic→is-embedding
-  : {A : Type ℓ} {B : Type ℓ′} {f : A → B}
-  → is-set B
+set-monic→is-embedding
+  : {f : A → B} → is-set B
   → (∀ {C : Set ℓ″} (g h : ⌞ C ⌟ → A) → f ∘ g ＝ f ∘ h → g ＝ h)
   → is-embedding f
-monic→is-embedding {f} B-set monic =
-  injective→has-prop-fibres B-set _ λ {x} {y} p →
+set-monic→is-embedding {f} B-set monic =
+  set-injective→is-embedding B-set λ {x} {y} p →
     happly (monic {C = el! $ Lift _ ⊤} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p))) _
 
 
-embedding-lemma : (∀ x → is-contr (fibre f (f x))) → is-embedding f
-embedding-lemma {f} cffx y = is-prop-η λ (x , p) q →
+contr-preimage→is-embedding : (∀ x → is-contr (fibre f (f x))) → is-embedding f
+contr-preimage→is-embedding {f} cffx y = is-prop-η λ (x , p) q →
   is-prop-β (is-contr→is-prop (subst is-contr (ap (fibre f) p) (cffx x))) (x , p) q
 
-cancellable→embedding : (∀ {x y} → (f x ＝ f y) ≃ (x ＝ y)) → is-embedding f
-cancellable→embedding eqv =
-  embedding-lemma λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → eqv)) $
-    is-contr-η $ (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
+Cancellable : (A → B) → Type _
+Cancellable f = ∀ {x y} → (f x ＝ f y) ≃ (x ＝ y)
 
-is-embedding→cancellable : is-embedding f → ∀ {x y} → is-equiv {B = f x ＝ f y} (ap f)
-is-embedding→cancellable {f} emb = total→is-equiv {f = λ y p → ap {y = y} f p}
+is-equiv-on-paths : (A → B) → Type _
+is-equiv-on-paths f = ∀ {x y} → is-equiv {B = f x ＝ f y} (ap f)
+
+@0 is-equiv-on-paths→is-embedding : is-equiv-on-paths f → is-embedding f
+is-equiv-on-paths→is-embedding ep b = is-prop-η λ fib₁ fib₂ →
+  (fibre-equality≃fibre-on-paths ₑ⁻¹) .fst (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
+
+cancellable→is-embedding : Cancellable f → is-embedding f
+cancellable→is-embedding can = contr-preimage→is-embedding λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → can)) $
+  is-contr-η $ (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
+
+is-embedding→is-equiv-on-paths : is-embedding f → is-equiv-on-paths f
+is-embedding→is-equiv-on-paths {f} emb = total-is-equiv→fibrewise-is-equiv {f = λ y p → ap {y = y} f p}
   (is-contr→is-equiv
     (is-contr-η $ (_ , refl) , λ (y , p) i → p i , λ j → p (i ∧ j))
-    (is-contr-η $ (_ , refl) , is-prop-β (is-of-hlevel-≃ 1 (Σ-ap-snd (λ _ → sym-equiv)) (emb _)) _))
+    (is-contr-η $ (_ , refl) , is-prop-β (is-of-hlevel-≃ 1 (Σ-ap-snd (λ _ → sym-≃)) (emb _)) _))
 
+@0 is-embedding≃is-equiv-on-paths : is-embedding f ≃ is-equiv-on-paths f
+is-embedding≃is-equiv-on-paths = prop-extₑ! is-embedding→is-equiv-on-paths is-equiv-on-paths→is-embedding
 
 is-embedding→is-of-hlevel
   : ∀ n → {f : A → B} → is-embedding f
@@ -164,3 +123,48 @@ is-equiv→is-embedding r y = is-contr→is-prop $ is-contr-η $ r .equiv-proof 
 
 equiv→embedding : A ≃ B → A ↪ B
 equiv→embedding (f , p) = f , is-equiv→is-embedding p
+
+opaque
+  unfolding is-of-hlevel
+
+  pullback-identity-system
+    : {R : B → B → Type ℓ″} {r : ∀ b → R b b}
+      (ids : is-identity-system R r)
+      ((f , f-emb) : A ↪ B)
+    → is-identity-system (λ x y → R (f x) (f y)) (λ _ → r _)
+  pullback-identity-system     ids (f , f-emb) .to-path {a} {b} x = ap fst $
+    f-emb (f b) (a , ids .to-path x) (b , refl)
+  pullback-identity-system {R} ids (f , f-emb) .to-path-over {a} {b} p i =
+    comp
+      (λ j → R (f a) (f-emb (f b) (a , ids .to-path p) (b , refl) i .snd (~ j)))
+      (∂ i) λ where
+        k (i = i0) → ids .to-path-over p (~ k ∨ i)
+        k (i = i1) → p
+        k (k = i0) → ids .to-path-over p (~ k)
+
+
+-- -- seems like it's more suitable for subtypes and not for embeddings
+-- embedding-path-code : A ↪ B → A ↪ B → Type _
+-- embedding-path-code {B} (f , _) (g , _) =
+--   Π[ b ꞉ B ] (fibre f b → fibre g b) × (fibre g b → fibre f b)
+
+-- @0 lol : {A : Type ℓ} {B : Type ℓ′} (s t : A ↪ B) → embedding-path-code s t ≃ (s ＝ t)
+-- lol {A} {B} s@(f , f-emb) t@(g , g-emb) =
+--   embedding-path-code s t                                      ≃⟨⟩
+--   Π[ b ꞉ B ] (fibre f b → fibre g b) × (fibre g b → fibre f b)
+--     ≃⟨ Π-cod-≃ (λ b → iso→equiv ((λ x → prop-extₑ (f-emb _) (g-emb _) (fst x) (snd x)) , iso (λ x → (fst x) , Equiv.from x) (λ _ → Σ-prop-path! refl) (λ _ → Σ-prop-path (λ _ → fun-is-of-hlevel 1 (f-emb b)) refl))) ⟩
+--   Π[ b ꞉ B ] (fibre f b ≃ fibre g b)                           ≃⟨ Π-cod-≃ (λ _ → ua , univalence⁻¹) ⟩
+--   Π[ b ꞉ B ] (fibre f b ＝ fibre g b)                          ≃˘⟨ fun-ext-≃ ⟩
+--   fibre f ＝ fibre g                                           ≃⟨ {!!} ⟩
+--   f ＝ g                                                       ≃⟨ Σ-prop-path-≃ hlevel! ⟩
+--   (f , f-emb) ＝ (g , g-emb)                                   ≃∎
+
+-- emb-identity-system : is-identity-system {A = A ↪ B} embedding-path-code (λ _ _ → id , id)
+-- emb-identity-system .to-path {a = f , f-emb} {b = g , g-emb} p = Σ-prop-path! $ fun-ext λ a →
+--   {!!}
+-- emb-identity-system .to-path-over = {!!}
+
+--   let w = p (f a) .fst (a , refl)
+--       rh = is-prop-β (g-emb (f a)) w (w .fst , {!!})
+--   in {!!} ∙ {!!}
+-- emb-identity-system .to-path-over = {!!}

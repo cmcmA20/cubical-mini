@@ -51,6 +51,11 @@ private variable
 Π-impl-cod-≃ k .snd .equiv-proof f .snd (g , p) i .snd j {x} =
   equiv-path (k x) (f {x}) (g {x} , λ k → p k {x}) i .snd j
 
+Π-impl-Π-≃ : Π[ x ꞉ A ] P x
+           ≃ ∀[ x ꞉ A ] P x
+Π-impl-Π-≃ .fst f = f _
+Π-impl-Π-≃ .snd .equiv-proof = strict-contr-fibres λ p _ → p
+
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
 function-≃ dom rng = iso→equiv the-iso where
   rng-iso = is-equiv→is-iso (rng .snd)
