@@ -1,11 +1,11 @@
 NAMING
 ======
 
-This file provides a guide for how to name things. Note that many
-files in the library do not currently follow these guidelines.
+This file provides a guide for how to name things. Note that almost all
+files in the library currently follow these guidelines.
 
 For naming conventions specific to the Algebra subfolder, see
-[Algebra/NAMING.md](https://github.com/agda/cubical/blob/master/Cubical/Algebra/NAMING.md).
+[Algebra/NAMING.md](https://github.com/cmcmA20/cubical-mini/blob/master/src/Algebra/NAMING.md).
 
 * Use either descriptive names for universe levels or
   ```
@@ -83,7 +83,7 @@ For naming conventions specific to the Algebra subfolder, see
 
 * The `elim` and `rec` should be used as much as possible without
   renaming, but by importing and renaming the module.
-  For instance use `open import Cubical.Data.Empty as ⊥`
+  For instance use `open import Data.Empty as ⊥`
   then use `⊥.rec` or `⊥.elim` rather than doing
   `renaming (rec to rec-⊥)` and using `rec-⊥`.
 
