@@ -52,7 +52,7 @@ _ = refl
 Id≃path : (x ＝ⁱ y) ≃ (x ＝ y)
 Id≃path = identity-system-gives-path Id-identity-system
 
-module Id≃path {ℓ} {A : Type ℓ} = Ids (Id-identity-system {A = A})
+module Id≃path {ℓ} {A : Type ℓ} = IdS (Id-identity-system {A = A})
 
 
 is-of-hlevelⁱ : HLevel → Type ℓ → Type ℓ
