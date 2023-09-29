@@ -12,6 +12,8 @@ open import Structures.Fibration
 open import Structures.IdentitySystem
 open import Structures.n-Type
 
+open import Correspondences.Powerset
+
 open import Functions.Embedding
 
 private variable
@@ -21,10 +23,11 @@ private variable
 Subtype : (ℓ : Level) → Type ℓ → Type _
 Subtype ℓ T = Σ[ X ꞉ Type ℓ ] X ↪ T
 
--- observe that Subtype A ≃ (A → Prop _)
+@0 ℙ≃subtype : Subtype ℓ T ≃ ℙ T
+ℙ≃subtype = subtype-classifier ∙ₑ Π-cod-≃ λ _ → iso→equiv n-Type-iso ₑ⁻¹
+
 @0 subtype-is-set : is-set (Subtype ℓ T)
-subtype-is-set = is-of-hlevel-≃ 2
-  (subtype-classifier ∙ₑ Π-cod-≃ (λ _ → iso→equiv n-Type-iso ₑ⁻¹)) hlevel!
+subtype-is-set = is-of-hlevel-≃ 2 ℙ≃subtype hlevel!
 
 module Path where
 
