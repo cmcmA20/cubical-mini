@@ -40,6 +40,7 @@ open import Correspondences.Erased public
 open import Functions.Equiv.Fibrewise public
 open import Functions.Equiv.Weak      public
 open import Functions.Embedding       public
+open import Functions.Fibration       public
 
 import Truncation.Propositional
 module ∥-∥₁ = Truncation.Propositional
