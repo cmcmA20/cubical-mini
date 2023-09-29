@@ -141,30 +141,3 @@ opaque
         k (i = i0) → ids .to-path-over p (~ k ∨ i)
         k (i = i1) → p
         k (k = i0) → ids .to-path-over p (~ k)
-
-
--- -- seems like it's more suitable for subtypes and not for embeddings
--- embedding-path-code : A ↪ B → A ↪ B → Type _
--- embedding-path-code {B} (f , _) (g , _) =
---   Π[ b ꞉ B ] (fibre f b → fibre g b) × (fibre g b → fibre f b)
-
--- @0 lol : {A : Type ℓ} {B : Type ℓ′} (s t : A ↪ B) → embedding-path-code s t ≃ (s ＝ t)
--- lol {A} {B} s@(f , f-emb) t@(g , g-emb) =
---   embedding-path-code s t                                      ≃⟨⟩
---   Π[ b ꞉ B ] (fibre f b → fibre g b) × (fibre g b → fibre f b)
---     ≃⟨ Π-cod-≃ (λ b → iso→equiv ((λ x → prop-extₑ (f-emb _) (g-emb _) (fst x) (snd x)) , iso (λ x → (fst x) , Equiv.from x) (λ _ → Σ-prop-path! refl) (λ _ → Σ-prop-path (λ _ → fun-is-of-hlevel 1 (f-emb b)) refl))) ⟩
---   Π[ b ꞉ B ] (fibre f b ≃ fibre g b)                           ≃⟨ Π-cod-≃ (λ _ → ua , univalence⁻¹) ⟩
---   Π[ b ꞉ B ] (fibre f b ＝ fibre g b)                          ≃˘⟨ fun-ext-≃ ⟩
---   fibre f ＝ fibre g                                           ≃⟨ {!!} ⟩
---   f ＝ g                                                       ≃⟨ Σ-prop-path-≃ hlevel! ⟩
---   (f , f-emb) ＝ (g , g-emb)                                   ≃∎
-
--- emb-identity-system : is-identity-system {A = A ↪ B} embedding-path-code (λ _ _ → id , id)
--- emb-identity-system .to-path {a = f , f-emb} {b = g , g-emb} p = Σ-prop-path! $ fun-ext λ a →
---   {!!}
--- emb-identity-system .to-path-over = {!!}
-
---   let w = p (f a) .fst (a , refl)
---       rh = is-prop-β (g-emb (f a)) w (w .fst , {!!})
---   in {!!} ∙ {!!}
--- emb-identity-system .to-path-over = {!!}

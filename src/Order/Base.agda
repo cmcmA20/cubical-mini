@@ -20,7 +20,7 @@ record is-partial-order {ℓ ℓ′} {A : Type ℓ}
 
   instance
     has-is-set : is-set A
-    has-is-set = identity-system→hlevel 1
+    has-is-set = identity-system→is-of-hlevel 1
       {r = λ _ → ≤-refl , ≤-refl}
       (set-identity-system hlevel! (≤-antisym $²_))
       hlevel!

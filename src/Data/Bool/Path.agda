@@ -76,7 +76,7 @@ module bool-path-code where
 
 instance
   bool-is-set : is-set Bool
-  bool-is-set = identity-system→hlevel 1 bool-path-code.bool-identity-system bool-path-code.code-is-prop
+  bool-is-set = identity-system→is-of-hlevel 1 bool-path-code.bool-identity-system bool-path-code.code-is-prop
 
 bool-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) Bool
 bool-is-of-hlevel n = is-of-hlevel-+-left 2 n bool-is-set

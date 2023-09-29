@@ -2,6 +2,7 @@
 module Structures.IdentitySystem.Base where
 
 open import Foundations.Base
+  renaming (J to Jₜ ; J-refl to Jₜ-refl)
 open import Foundations.Sigma
 open import Foundations.Univalence
 
@@ -17,7 +18,7 @@ record
   where
   no-eta-equality
   field
-    to-path      : ∀ {a b} → R a b → a ＝ b
+    to-path : ∀ {a b} → R a b → a ＝ b
     to-path-over
       : ∀ {a b} (p : R a b)
       → ＜ rfl a ／ (λ i → R a (to-path p i)) ＼ p ＞
@@ -34,22 +35,22 @@ private variable
   B : Type ℓ′
   R : A → A → Type ℓ′
 
-IdsJ
+J
   : {r : ∀ a → R a a} {x : A}
   → is-identity-system R r
   → (P : ∀ b → R x b → Type ℓ″)
   → P x (r x)
   → ∀ {b} s → P b s
-IdsJ ids P pr s =
+J ids P pr s =
   transport (λ i → P (ids .to-path s i) (ids .to-path-over s i)) pr
 
-IdsJ-refl
+J-refl
   : {r : ∀ a → R a a} {x : A}
   → (ids : is-identity-system R r)
   → (P : ∀ b → R x b → Type ℓ″)
   → (p : P x (r x))
-  → IdsJ ids P p (r x) ＝ p
-IdsJ-refl {R} {r} {x} ids P p =
+  → J ids P p (r x) ＝ p
+J-refl {R} {r} {x} ids P p =
   transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p ＝⟨⟩
   subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p      ＝⟨ ap (λ e → subst P′ e p) lemma ⟩
   subst P′ refl p                                                          ＝⟨ transport-refl p ⟩
@@ -109,14 +110,14 @@ identity-system-gives-path {R} {r} ids =
     from {a} p = transport (λ i → R a (p i)) (r a)
 
     ri : ∀ {a b} → (from {a} {b}) is-right-inverse-of (ids .to-path)
-    ri = J (λ y p → ids .to-path (from p) ＝ p)
-           ( ap (ids .to-path) (transport-refl _)
-           ∙ to-path-refl ids)
+    ri = Jₜ (λ y p → ids .to-path (from p) ＝ p)
+            ( ap (ids .to-path) (transport-refl _)
+            ∙ to-path-refl ids)
 
     li : ∀ {a b} → (from {a} {b}) is-left-inverse-of (ids .to-path)
-    li = IdsJ ids (λ y p → from (ids .to-path p) ＝ p)
-          ( ap from (to-path-refl ids)
-          ∙ transport-refl _ )
+    li = J ids (λ y p → from (ids .to-path p) ＝ p)
+               ( ap from (to-path-refl ids)
+               ∙ transport-refl _ )
 
 
 
@@ -191,13 +192,13 @@ opaque
       cancel x i .to-path {a} {b} s j      = hcomp (∂ i ∨ ∂ j) (sys′ x a b s i j) .fst
       cancel x i .to-path-over {a} {b} s j = hcomp (∂ i ∨ ∂ j) (sys′ x a b s i j) .snd
 
-  identity-system→hlevel
+  identity-system→is-of-hlevel
     : (n : HLevel) {R : A → A → Type ℓ′} {r : ∀ x → R x x}
     → is-identity-system R r
     → (∀ x y → is-of-hlevel n (R x y))
     → is-of-hlevel (suc n) A
-  identity-system→hlevel zero ids hl x y = ids .to-path (hl _ _ .fst)
-  identity-system→hlevel (suc n) ids hl x y =
+  identity-system→is-of-hlevel zero ids hl x y = ids .to-path (hl _ _ .fst)
+  identity-system→is-of-hlevel (suc n) ids hl x y =
     is-of-hlevel-≃ (suc n) (identity-system-gives-path ids ₑ⁻¹) (hl x y)
 
 instance

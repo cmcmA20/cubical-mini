@@ -39,7 +39,7 @@ opaque
   set-identity-system hlevel! $ essentially-classical-β $ is-¬¬-separated-β A-sep _ _
 
 is-¬¬-separated→is-set : is-¬¬-separated A → is-set A
-is-¬¬-separated→is-set As = identity-system→hlevel _ (¬¬-separated-identity-system As) hlevel!
+is-¬¬-separated→is-set As = identity-system→is-of-hlevel _ (¬¬-separated-identity-system As) hlevel!
 
 opaque
   unfolding is-of-hlevel is-¬¬-separated
