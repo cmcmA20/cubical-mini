@@ -204,3 +204,95 @@ module Replacement
         (u , α) → Σ-pathP (quot (ls.from (sym (ap fst α)))) $
                           Σ-prop-square hlevel! $ commutes→square $
                             ap² _∙_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ sym (∙-id-l _)
+
+
+-- ????
+
+open import Foundations.Univalence
+@0 Code″ : {f : A → B} → (U V : Factorization f) → Type _
+Code″ {A} {B} {f} (X , (ρ₁ , _) , (ι₁ , _) , H₁) (Y , (ρ₂ , _) , (ι₂ , _) , H₂) =
+  Σ[ e ꞉ X ≃ Y ]
+  Σ[ ζ ꞉ ＜ ρ₁ ／ (λ i → A → ua e i) ＼ ρ₂ ＞ ]
+  Σ[ ξ ꞉ ＜ ι₁ ／ (λ i → ua e i → B) ＼ ι₂ ＞ ]
+  ＜ H₁ ／ (λ i → f ＝ ξ i ∘ ζ i) ＼ H₂ ＞
+
+
+Code′ : (U V : Factorization f) → Type _
+Code′ {f} (X , (ρ₁ , _) , (ι₁ , _) , H₁) (Y , (ρ₂ , _) , (ι₂ , _) , H₂) =
+  Σ[ e ꞉ X ≃ Y ]
+  Σ[ ζ ꞉ (e .fst ∘ ρ₁ ＝ ρ₂) ]
+  Σ[ ξ ꞉ (ι₁ ＝ ι₂ ∘ e .fst) ]
+  ＜ H₁ ／ (λ i → f ＝ (ap (_∘ ρ₁) ξ ∙ ap (ι₂ ∘_) ζ) i) ＼ H₂ ＞
+
+convertible
+  : (U@(X , (ρ₁ , _) , (ι₁ , _) , H₁) V@(Y , (ρ₂ , _) , (ι₂ , _) , H₂ ) : Factorization f) (e : X ≃ Y)
+    (ζ : e .fst ∘ ρ₁ ＝ ρ₂)
+    (ξ : ι₁ ＝ ι₂ ∘ e .fst)
+  → (H₁ ∙ ap (_∘ ρ₁) ξ ∙ ap (ι₂ ∘_) ζ ＝ H₂)
+  → ＜ H₁ ／ (λ i → f ＝ (ap (_∘ ρ₁) ξ ∙ ap (ι₂ ∘_) ζ) i) ＼ H₂ ＞
+convertible (X , (ρ₁ , _) , (ι₁ , _) , H₁) (Y , (ρ₂ , _) , (ι₂ , _) , H₂) e ζ ξ p = to-pathP $ subst-path-right _ _ ∙ p
+
+Code : (U V : Factorization f) → Type _
+Code (X , (ρ₁ , _) , (ι₁ , _) , H₁) (Y , (ρ₂ , _) , (ι₂ , _) , H₂) =
+  Σ[ e ꞉ X ≃ Y ]
+  Σ[ ζ ꞉ (e .fst ∘ ρ₁ ＝ ρ₂) ] -- (ι₂ ∘ e .fst) ∘ ρ₁ ＝ ι₂ ∘      ρ₂
+  Σ[ ξ ꞉ (ι₁ ＝ ι₂ ∘ e .fst) ] --      ι₁       ∘ ρ₁ ＝ ι₂ ∘ (e .fst ∘ ρ₁)
+  (H₁ ∙ ap (_∘ ρ₁) ξ ∙ ap (ι₂ ∘_) ζ ＝ H₂)
+
+open import Foundations.Sigma
+open import Foundations.Pi
+open import Meta.SIP
+open import Functions.Fibration
+open import Foundations.Transport
+opaque
+  @0 code≃path : {f : A → B} → (U V : Factorization f) → Code U V ≃ (U ＝ V)
+  code≃path {A} {f} U@(X , (ρ₁ , ρ₁-sur) , (ι₁ , ι₁-emb) , H₁) V@(Y , (ρ₂ , ρ₂-sur) , (ι₂ , ι₂-emb) , H₂) =
+    Code U V
+      ≃⟨⟩
+    Σ[ e ꞉ X ≃ Y ] Σ[ ζ ꞉ (e .fst ∘ ρ₁ ＝ ρ₂) ] Σ[ ξ ꞉ (ι₁ ＝ ι₂ ∘ e .fst) ] (H₁ ∙ ap (_∘ ρ₁) ξ ∙ ap (ι₂ ∘_) ζ ＝ H₂)
+      ≃⟨ Σ-ap {!!} {!!} ⟩
+    Σ[ q ꞉ (X , ρ₁ , ι₁) ＝ (Y , ρ₂ , ι₂) ] (subst (λ v → f ＝ v .snd .snd ∘ v .snd .fst) q H₁ ＝ H₂)
+      ≃⟨ iso→equiv Σ-path-iso ⟩
+    ((X , ρ₁ , ι₁) , H₁) ＝ ((Y , ρ₂ , ι₂) , H₂)
+      ≃⟨ Σ-prop-path-≃ hlevel! ⟩
+    (((X , ρ₁ , ι₁) , H₁) , ρ₁-sur , ι₁-emb) ＝ (((Y , ρ₂ , ι₂) , H₂) , ρ₂-sur , ι₂-emb)
+      ≃⟨ ap-≃ {!!} ⟩
+    (X , (ρ₁ , ρ₁-sur) , (ι₁ , ι₁-emb) , H₁) ＝ (Y , (ρ₂ , ρ₂-sur) , (ι₂ , ι₂-emb) , H₂)
+      ≃⟨⟩
+    U ＝ V
+      ≃∎
+
+@0 image-factorization-is-unique
+  : {A : Type ℓ} {C : Type ℓ′}
+  → Π[ f ꞉ (A → C) ] ∃![ B ꞉ Type (ℓ ⊔ ℓ′) ] f factors-through B
+image-factorization-is-unique {ℓ} {ℓ′} {A} {C} f = inhabited-prop-is-contr (Im f , image-factorization) $ is-prop-η uniq where
+    uniq : (U V : _) → U ＝ V
+    uniq (X , (ρ₁ , ρ₁-sur) , (ι₁ , ι₁-emb) , p) (Y , (ρ₂ , ρ₂-sur) , (ι₂ , ι₂-emb) , q) =
+      code≃path _ _ .fst $ e , {!!} , {!!} , {!!} where
+        -- TODO factor this out?
+        helper : ∀ {ℓ ℓ′ ℓ″} {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
+                 {ρ : A → B} {ι : B → C} → is-surjective ρ → is-embedding ι
+               → {c : C} → fibre ι c ≃ ∥ fibre (ι ∘ ρ) c ∥₁
+        helper {ρ} {ι} sur emb {c} =
+          fibre ι c
+            ≃˘⟨ Σ-contract-snd (λ _ → inhabited-prop-is-contr (sur _) hlevel!) ⟩
+          Σ[ w ꞉ fibre ι c ] ∥ fibre ρ (w .fst) ∥₁
+            ≃⟨ prop-extₑ fib-level hlevel! (λ x → map (x .fst ,_) (x .snd)) (rec fib-level (second ∣_∣₁)) ⟩
+          ∥ Σ[ w ꞉ fibre ι c ] fibre ρ (w .fst) ∥₁
+            ≃˘⟨ prop-extₑ! (map F.to) (map F.from) ⟩
+          ∥ fibre (ι ∘ ρ) c ∥₁ ≃∎
+            where
+            module F = Equiv fibre-comp
+            fib-level = Σ-is-of-hlevel 1 (emb c) hlevel!
+
+        E : Π[ c ꞉ C ] (fibre ι₁ c ≃ fibre ι₂ c)
+        E c = fibre ι₁ c              ≃⟨ helper ρ₁-sur ι₁-emb ⟩
+              ∥ fibre (ι₁ ∘ ρ₁) c ∥₁  ≃⟨ subst-equiv (λ φ → ∥ fibre φ c ∥₁) (sym p ∙ q) ⟩
+              ∥ fibre (ι₂ ∘ ρ₂) c ∥₁  ≃˘⟨ helper ρ₂-sur ι₂-emb ⟩
+              fibre ι₂ c              ≃∎
+
+        e : X ≃ Y
+        e = X                      ≃⟨ total-equiv ι₁ ⟩
+            Σ[ c ꞉ C ] fibre ι₁ c  ≃⟨ Σ-ap-snd E ⟩
+            Σ[ c ꞉ C ] fibre ι₂ c  ≃˘⟨ total-equiv ι₂ ⟩
+            Y                      ≃∎
