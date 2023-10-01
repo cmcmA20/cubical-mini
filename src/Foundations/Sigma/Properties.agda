@@ -11,7 +11,8 @@ private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level
   A : Type ℓ
   A′ : Type ℓ′
-  B P Q : A → Type ℓ″
+  B P : A → Type ℓ″
+  Q : A → Type ℓ‴
 
 -- Unique existence
 

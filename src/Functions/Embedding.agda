@@ -23,6 +23,7 @@ private variable
   B : Type ℓ′
   f : A → B
   C : Type ℓ″
+  g : B → C
 
 Injective : (A → B) → Type _
 Injective f = ∀ {x y} → f x ＝ f y → x ＝ y
@@ -70,7 +71,7 @@ subset-proj-is-embedding
 subset-proj-is-embedding {B} B-prop x = is-of-hlevel-≃ 1 (Σ-fibre-equiv B x) (B-prop _)
 
 is-embedding→monic
-  : {f : A → B} → is-embedding f
+  : is-embedding f
   → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ g ＝ f ∘ h → g ＝ h
 is-embedding→monic {f} emb g h p =
   fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl) (h x , happly (sym p) x))
@@ -84,10 +85,16 @@ set-monic→is-embedding {f} B-set monic =
     happly (monic {C = el! $ Lift _ ⊤} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p))) _
 
 
-contr-preimage→is-embedding : (∀ x → is-contr (fibre f (f x))) → is-embedding f
-contr-preimage→is-embedding {f} cffx y = is-prop-η λ (x , p) q →
-  is-prop-β (is-contr→is-prop (subst is-contr (ap (fibre f) p) (cffx x))) (x , p) q
+preimage-is-prop→is-embedding : (∀ x → is-prop (fibre f (f x))) → is-embedding f
+preimage-is-prop→is-embedding {f} pffx y = is-prop-η λ a →
+  is-prop-β (subst (λ φ → is-prop (fibre f φ)) (a .snd) (pffx (a .fst))) a
 
+preimage-is-contr→is-embedding : (∀ x → is-contr (fibre f (f x))) → is-embedding f
+preimage-is-contr→is-embedding cffx =
+ preimage-is-prop→is-embedding (is-contr→is-prop ∘ cffx)
+
+
+-- TODO isn't `ap f` unique?
 Cancellable : (A → B) → Type _
 Cancellable f = ∀ {x y} → (f x ＝ f y) ≃ (x ＝ y)
 
@@ -99,7 +106,7 @@ is-equiv-on-paths→is-embedding ep b = is-prop-η λ fib₁ fib₂ →
   (fibre-equality≃fibre-on-paths ₑ⁻¹) .fst (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
 
 cancellable→is-embedding : Cancellable f → is-embedding f
-cancellable→is-embedding can = contr-preimage→is-embedding λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → can)) $
+cancellable→is-embedding can = preimage-is-contr→is-embedding λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → can)) $
   is-contr-η $ (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
 
 is-embedding→is-equiv-on-paths : is-embedding f → is-equiv-on-paths f

@@ -7,12 +7,14 @@ open import Foundations.Sigma
 open import Foundations.Univalence
 
 private variable
-  ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᵉ ℓᵖ : Level
+  ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᶜ ℓᵉ ℓᵖ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
+  C : Type ℓᶜ
   E : Type ℓᵉ
   y : B
   f : A → B
+  g : B → C
 
 Σ-fibre-equiv : (B : A → Type ℓᵇ) (a : A)
               → fibre fst a ≃ B a
@@ -77,3 +79,18 @@ module @0 _ where
     → z ＝ z′
     ≃ fibre (ap f) (p ∙ sym p′)
   fibre-equality≃fibre-on-paths = fibre-paths ∙ₑ Σ-ap-snd (λ _ → tiltₑ)
+
+-- ultra fast
+fibre-comp : {c : C}
+           → fibre (g ∘ f) c
+           ≃ Σ[ w ꞉ fibre g c ] fibre f (w .fst)
+fibre-comp {g} {f} {c} = iso→equiv $ to , iso from ri li where
+  to : fibre (g ∘ f) c → Σ[ w ꞉ fibre g c ] fibre f (w .fst)
+  to (a , p) = (f a , p) , a , refl
+  from : Σ[ w ꞉ fibre g c ] fibre f (w .fst) → fibre (g ∘ f) c
+  from ((c′ , p) , a , q) = a , ap g q ∙ p
+  ri : from is-right-inverse-of to
+  ri ((c′ , p) , a , q) i =
+    (q i , ∙-filler-r (ap g q) p (~ i)) , a , λ j → q (i ∧ j)
+  li : from is-left-inverse-of to
+  li (a , p) i = a , ∙-filler-r refl p (~ i)

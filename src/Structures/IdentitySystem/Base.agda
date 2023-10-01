@@ -145,52 +145,53 @@ univalence-identity-system .to-path-over p =
 
 opaque
   unfolding is-of-hlevel is-contr-η
-  is-identity-system-is-prop
-    : {R : A → A → Type ℓ′} {r : ∀ a → R a a}
-    → is-prop (is-identity-system R r)
-  is-identity-system-is-prop {A} {R} {r} =
-    retract→is-of-hlevel 1 from to cancel λ x y i a → is-contr-is-prop (x a) (y a) i
-    where
-      to : is-identity-system R r → ∀ x → is-contr (Σ A (R x))
-      to ids x = ΣR-is-contr ids
+  instance
+    is-identity-system-is-prop
+      : {R : A → A → Type ℓ′} {r : ∀ a → R a a}
+      → is-prop (is-identity-system R r)
+    is-identity-system-is-prop {A} {R} {r} =
+      retract→is-of-hlevel 1 from to cancel λ x y i a → is-contr-is-prop (x a) (y a) i
+      where
+        to : is-identity-system R r → ∀ x → is-contr (Σ A (R x))
+        to ids x = ΣR-is-contr ids
 
-      sys : ∀ (l : ∀ x → is-contr (Σ A (R x))) a b (s : R a b) (i j : I)
-          → Partial (∂ i ∨ ~ j) (Σ A (R a))
-      sys l a b s i j (j = i0) = l a .fst
-      sys l a b s i j (i = i0) = l a .snd (a , r a) j
-      sys l a b s i j (i = i1) = l a .snd (b , s) j
+        sys : ∀ (l : ∀ x → is-contr (Σ A (R x))) a b (s : R a b) (i j : I)
+            → Partial (∂ i ∨ ~ j) (Σ A (R a))
+        sys l a b s i j (j = i0) = l a .fst
+        sys l a b s i j (i = i0) = l a .snd (a , r a) j
+        sys l a b s i j (i = i1) = l a .snd (b , s) j
 
-      from : (∀ x → is-contr (Σ A (R x))) → is-identity-system R r
-      from x .to-path      {a} {b} s i = hcomp (∂ i) (sys x a b s i) .fst
-      from x .to-path-over {a} {b} s i = hcomp (∂ i) (sys x a b s i) .snd
+        from : (∀ x → is-contr (Σ A (R x))) → is-identity-system R r
+        from x .to-path      {a} {b} s i = hcomp (∂ i) (sys x a b s i) .fst
+        from x .to-path-over {a} {b} s i = hcomp (∂ i) (sys x a b s i) .snd
 
-      square : ∀ (x : is-identity-system R r) a b (s : R a b)
-             → Square {A = Σ A (R a)}
-               (λ i → x .to-path (r a) i , x .to-path-over (r a) i)
-               (λ i → x .to-path s i , x .to-path-over s i)
-               refl
-               (λ i → x .to-path s i , x .to-path-over s i)
-      square x a b s i j = hcomp (∂ i ∨ ∂ j) λ where
-        k (k = i0) → x .to-path s j , x .to-path-over s j
-        k (i = i0) → x .to-path s j , x .to-path-over s j
-        k (i = i1) → x .to-path s j , x .to-path-over s j
-        k (j = i0) → to-path-refl-coh {R = R} {r = r} x a (~ k) i
-        k (j = i1) → b , s
+        square : ∀ (x : is-identity-system R r) a b (s : R a b)
+               → Square {A = Σ A (R a)}
+                 (λ i → x .to-path (r a) i , x .to-path-over (r a) i)
+                 (λ i → x .to-path s i , x .to-path-over s i)
+                 refl
+                 (λ i → x .to-path s i , x .to-path-over s i)
+        square x a b s i j = hcomp (∂ i ∨ ∂ j) λ where
+          k (k = i0) → x .to-path s j , x .to-path-over s j
+          k (i = i0) → x .to-path s j , x .to-path-over s j
+          k (i = i1) → x .to-path s j , x .to-path-over s j
+          k (j = i0) → to-path-refl-coh {R = R} {r = r} x a (~ k) i
+          k (j = i1) → b , s
 
-      sys′ : ∀ (x : is-identity-system R r) a b (s : R a b) i j k
-           → Partial (∂ i ∨ ∂ j ∨ ~ k) (Σ A (R a))
-      sys′ x a b s i j k (k = i0) = x .to-path (r a) i , x .to-path-over (r a) i
-      sys′ x a b s i j k (i = i0) = hfill (∂ j) k (sys (to x) a b s j)
-      sys′ x a b s i j k (i = i1) =
-          x .to-path (x .to-path-over s (k ∨ j)) (k ∧ j)
-        , x .to-path-over (x .to-path-over s (k ∨ j)) (k ∧ j)
-      sys′ x a b s i j k (j = i0) =
-          x .to-path (r a) (k ∨ i) , x .to-path-over (r a) (k ∨ i)
-      sys′ x a b s i j k (j = i1) = square x a b s i k
+        sys′ : ∀ (x : is-identity-system R r) a b (s : R a b) i j k
+             → Partial (∂ i ∨ ∂ j ∨ ~ k) (Σ A (R a))
+        sys′ x a b s i j k (k = i0) = x .to-path (r a) i , x .to-path-over (r a) i
+        sys′ x a b s i j k (i = i0) = hfill (∂ j) k (sys (to x) a b s j)
+        sys′ x a b s i j k (i = i1) =
+            x .to-path (x .to-path-over s (k ∨ j)) (k ∧ j)
+          , x .to-path-over (x .to-path-over s (k ∨ j)) (k ∧ j)
+        sys′ x a b s i j k (j = i0) =
+            x .to-path (r a) (k ∨ i) , x .to-path-over (r a) (k ∨ i)
+        sys′ x a b s i j k (j = i1) = square x a b s i k
 
-      cancel : from is-left-inverse-of to
-      cancel x i .to-path {a} {b} s j      = hcomp (∂ i ∨ ∂ j) (sys′ x a b s i j) .fst
-      cancel x i .to-path-over {a} {b} s j = hcomp (∂ i ∨ ∂ j) (sys′ x a b s i j) .snd
+        cancel : from is-left-inverse-of to
+        cancel x i .to-path {a} {b} s j      = hcomp (∂ i ∨ ∂ j) (sys′ x a b s i j) .fst
+        cancel x i .to-path-over {a} {b} s j = hcomp (∂ i ∨ ∂ j) (sys′ x a b s i j) .snd
 
   identity-system→is-of-hlevel
     : (n : HLevel) {R : A → A → Type ℓ′} {r : ∀ x → R x x}
@@ -201,11 +202,14 @@ opaque
   identity-system→is-of-hlevel (suc n) ids hl x y =
     is-of-hlevel-≃ (suc n) (identity-system-gives-path ids ₑ⁻¹) (hl x y)
 
+is-identity-system-is-of-hlevel
+  : {r : ∀ a → R a a} (n : HLevel)
+  → is-of-hlevel (suc n) (is-identity-system R r)
+is-identity-system-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-identity-system-is-prop
+
 instance
-  is-identity-system-is-of-hlevel
-    : {r : ∀ a → R a a} {n : HLevel}
-    → is-of-hlevel (suc n) (is-identity-system R r)
-  is-identity-system-is-of-hlevel = is-prop→is-of-hlevel-suc is-identity-system-is-prop
+  decomp-hlevel-identity-system : {r : ∀ a → R a a} → goal-decomposition (quote is-of-hlevel) (is-identity-system R r)
+  decomp-hlevel-identity-system = decomp (quote is-identity-system-is-of-hlevel) (`level-minus 1 ∷ [])
 
 set-identity-system
   : {r : ∀ x → R x x}

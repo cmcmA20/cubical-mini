@@ -2,10 +2,13 @@
 module Truncation.Propositional.Properties where
 
 open import Foundations.Base
-open import Foundations.Sigma
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
+
+open import Functions.Constant
+open import Functions.Embedding
+open import Functions.Surjection
 
 open import Truncation.Propositional.Base public
 
@@ -13,6 +16,7 @@ private variable
   ℓ ℓ′ ℓ″ : Level
   A : Type ℓ
   B : Type ℓ′
+  f : A → B
   C : Type ℓ″
 
 elim² : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
@@ -84,21 +88,46 @@ is-prop→equiv-∥-∥₁ A-prop = prop-extₑ! ∣_∣₁ proj!
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
 is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → is-of-hlevel-≃ 1 e hlevel!)
 
-image-lift : (f : A → B) → (A → image f)
-image-lift f x = f x , ∣ x , refl ∣₁
+corestriction : (f : A → B) → (A → Im f)
+corestriction f x = f x , ∣ x , refl ∣₁
+
+corestriction-is-surjective : is-surjective (corestriction f)
+corestriction-is-surjective (_ , p) = map (second Σ-prop-path!) p
+
+dom-is-set→image-is-set
+  : is-set B → {f : A → B} → is-set (Im f)
+dom-is-set→image-is-set B-set = Σ-is-of-hlevel 2 B-set λ _ → ∥-∥₁-is-of-hlevel 1
 
 is-constant→image-is-prop
-  : is-set B
-  → (f : A → B) → (∀ x y → f x ＝ f y) → is-prop (image f)
-is-constant→image-is-prop B-set f f-const = is-prop-η λ (a , x) (b , y) →
+  : is-set B → {f : A → B} → 2-Constant f → is-prop (Im f)
+is-constant→image-is-prop B-set {f} f-const = is-prop-η λ (a , x) (b , y) →
   Σ-prop-path! $ elim²! (λ { (f*a , p) (f*b , q) → sym p ∙∙ f-const f*a f*b ∙∙ q }) x y
   where instance _ = B-set
 
 -- TODO if codomain is an n-type, we should require f to be n-constant
 -- write a generic recursor
-rec-set : (f : A → B)
-        → (∀ x y → f x ＝ f y)
+rec-set : {f : A → B}
+        → 2-Constant f
         → is-set B
         → ∥ A ∥₁ → B
-rec-set {A} {B} f f-const B-set = fst ∘ elim
-  (λ _ → is-constant→image-is-prop B-set f f-const) (image-lift f)
+rec-set f-const B-set = fst ∘ elim
+  (λ _ → is-constant→image-is-prop B-set f-const) (corestriction _)
+
+Σ-∥-∥₁-over-prop
+  : {B : A → Type ℓ′} → is-prop A
+  → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∥ Σ[ a ꞉ A ] B a ∥₁
+Σ-∥-∥₁-over-prop A-prop = prop-extₑ!
+  (λ x → map (x .fst ,_) (x .snd))
+  (rec! (second ∣_∣₁)) where instance _ = A-prop
+
+
+_factors-through_
+  : (f : A → C) (B : Type (level-of-type A ⊔ level-of-type C)) → _
+_factors-through_ {A} {C} f B = Σ[ ρ ꞉ (A ↠ B) ] Σ[ ι ꞉ (B ↪ C) ] (f ＝ ι .fst ∘ ρ .fst)
+
+Factorization : (f : A → C) → _
+Factorization f = Σ[ M ꞉ Type _ ] f factors-through M
+
+image-factorization : f factors-through Im f
+image-factorization {f} =
+  (corestriction f , corestriction-is-surjective) , (fst , subset-proj-is-embedding hlevel!) , refl
