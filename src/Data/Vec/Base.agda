@@ -25,6 +25,13 @@ elim
 elim P p[] p∷ [] = p[]
 elim P p[] p∷ (x ∷ xs) = p∷ x xs (elim P p[] p∷ xs)
 
+rec
+  : {B : @0 ℕ → Type ℓ′}
+  → B 0
+  → (∀ {@0 n} (x : A) → B n → B (suc n))
+  → ∀ {@0 n} (xs : Vec A n) → B n
+rec {B} b[] b∷ = elim (λ {n} _ → B n) b[] (λ x _ → b∷ x)
+
 map : (A → B) → Vec A n → Vec B n
 map f [] = []
 map f (x ∷ xs) = f x ∷ map f xs

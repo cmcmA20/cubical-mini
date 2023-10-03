@@ -42,6 +42,9 @@ A ⊆ B = ∀[ (_∈ A) ⇒ (_∈ B) ]
 ℙ-ext {A = A} {B = B} A⊆B B⊆A = fun-ext λ _ →
   n-ua (prop-extₑ! A⊆B B⊆A)
 
+single : {@(tactic hlevel-tactic-worker) X-set : is-set X} → X → ℙ X
+single {X-set} x t = el (x ＝ t) (path-is-of-hlevel′ 1 X-set x t)
+
 infixr 22 _∩_
 _∩_ : ℙ X → ℙ X → ℙ X
 (A ∩ B) x = el! ((x ∈ A) × (x ∈ B))
@@ -55,3 +58,9 @@ _∪_ : ℙ X → ℙ X → ℙ X
 
 ⟘ : ℙ X
 ⟘ _ = el! (Lift _ ⊥)
+
+⟘-⊆ : {A : ℙ X} → ⟘ ⊆ A
+⟘-⊆ ()
+
+@0 ⊆-⟘→⟘ : {A : ℙ X} → A ⊆ ⟘ → A ＝ ⟘
+⊆-⟘→⟘ {A} p = ℙ-ext p (⟘-⊆ {A = A})
