@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
+{-# OPTIONS --safe #-}
 module Algebra.Semiring where
 
 open import Foundations.Base
@@ -6,7 +6,6 @@ open import Foundations.Base
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
-open import Meta.Underlying
 
 open import Algebra.Monoid.Commutative public
 
@@ -67,8 +66,3 @@ semiring-str-is-univalent = desc→is-univalent semiring-desc
 
 Semiring : (ℓ : Level) → Type (ℓsuc ℓ)
 Semiring ℓ = Σ[ X ꞉ Type ℓ ] Semiring-on X
-
-instance
-  Underlying-Semiring : Underlying (Semiring ℓ)
-  Underlying-Semiring {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Semiring .⌞_⌟ = fst

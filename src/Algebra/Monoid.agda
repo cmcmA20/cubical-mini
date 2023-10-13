@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
+{-# OPTIONS --safe #-}
 module Algebra.Monoid where
 
 open import Foundations.Base hiding (id)
@@ -7,7 +7,6 @@ open import Foundations.Equiv
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
-open import Meta.Underlying
 
 open import Algebra.Semigroup public
 
@@ -65,11 +64,6 @@ instance
 2-Monoid : (ℓ : Level) → Type (ℓsuc ℓ)
 2-Monoid ℓ = Σ[ X ꞉ Type ℓ ] 2-Monoid-on X
 
-instance
-  Underlying-2-Monoid : Underlying (2-Monoid ℓ)
-  Underlying-2-Monoid {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-2-Monoid .⌞_⌟ = fst
-
 
 -- monoids
 
@@ -106,11 +100,6 @@ monoid-str-is-univalent = desc→is-univalent monoid-desc
 
 Monoid : (ℓ : Level) → Type (ℓsuc ℓ)
 Monoid ℓ = Σ[ X ꞉ Type ℓ ] Monoid-on X
-
-instance
-  Underlying-Monoid : Underlying (Monoid ℓ)
-  Underlying-Monoid {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Monoid .⌞_⌟ = fst
 
 
 -- monoid theory

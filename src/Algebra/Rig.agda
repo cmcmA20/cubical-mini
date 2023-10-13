@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
+{-# OPTIONS --safe #-}
 module Algebra.Rig where
 
 open import Foundations.Base
@@ -6,7 +6,6 @@ open import Foundations.Base
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
-open import Meta.Underlying
 
 open import Algebra.Semiring public
 
@@ -60,8 +59,3 @@ rig-str-is-univalent = desc→is-univalent rig-desc
 
 Rig : (ℓ : Level) → Type (ℓsuc ℓ)
 Rig ℓ = Σ[ X ꞉ Type ℓ ] Rig-on X
-
-instance
-  Underlying-Rig : Underlying (Rig ℓ)
-  Underlying-Rig {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Rig .⌞_⌟ = fst

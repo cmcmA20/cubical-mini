@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
+{-# OPTIONS --safe #-}
 module Algebra.Semigroup where
 
 open import Foundations.Base
@@ -62,11 +62,6 @@ instance
 2-Semigroup : (ℓ : Level) → 𝒰 (ℓsuc ℓ)
 2-Semigroup ℓ = Σ[ X ꞉ Type ℓ ] 2-Semigroup-on X
 
-instance
-  Underlying-2-Semigroup : Underlying (2-Semigroup ℓ)
-  Underlying-2-Semigroup {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-2-Semigroup .⌞_⌟ = fst
-
 
 -- semigroups
 
@@ -123,11 +118,6 @@ semigroup-str-is-univalent = desc→is-univalent is-semigroup-desc
 
 Semigroup : (ℓ : Level) → 𝒰 (ℓsuc ℓ)
 Semigroup _ = Type-with semigroup-str
-
-instance
-  Underlying-Semigroup : Underlying (Semigroup ℓ)
-  Underlying-Semigroup {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Semigroup .⌞_⌟ = fst
 
 
 -- same as magma

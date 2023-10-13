@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
+{-# OPTIONS --safe #-}
 module Algebra.Monoid.Commutative where
 
 open import Foundations.Base hiding (id)
@@ -7,7 +7,6 @@ open import Meta.Marker
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
-open import Meta.Underlying
 
 open import Algebra.Monoid public
 
@@ -57,11 +56,6 @@ Braided-2-monoid-on X = Σ[ id ꞉ X ] Σ[ _⋆_ ꞉ (X → X → X) ] (braided-
 Braided-2-monoid : (ℓ : Level) → Type (ℓsuc ℓ)
 Braided-2-monoid ℓ = Σ[ X ꞉ Type ℓ ] Braided-2-monoid-on X
 
-instance
-  Underlying-Braided-2-monoid : Underlying (Braided-2-monoid ℓ)
-  Underlying-Braided-2-monoid {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Braided-2-monoid .⌞_⌟ = fst
-
 
 -- symmetric 2-monoids
 
@@ -91,11 +85,6 @@ Sym-2-monoid-on X = Σ[ id ꞉ X ] Σ[ _⋆_ ꞉ (X → X → X) ] (sym-2-monoid
 
 Sym-2-monoid : (ℓ : Level) → Type (ℓsuc ℓ)
 Sym-2-monoid ℓ = Σ[ X ꞉ Type ℓ ] Sym-2-monoid-on X
-
-instance
-  Underlying-Sym-2-monoid : Underlying (Sym-2-monoid ℓ)
-  Underlying-Sym-2-monoid {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Sym-2-monoid .⌞_⌟ = fst
 
 
 -- commutative monoids
@@ -131,11 +120,6 @@ comm-monoid-str-is-univalent = desc→is-univalent comm-monoid-desc
 
 Comm-monoid : (ℓ : Level) → Type (ℓsuc ℓ)
 Comm-monoid ℓ = Σ[ X ꞉ Type ℓ ] Comm-monoid-on X
-
-instance
-  Underlying-Comm-monoid : Underlying (Comm-monoid ℓ)
-  Underlying-Comm-monoid {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Comm-monoid .⌞_⌟ = fst
 
 
 -- abelian monoid theory

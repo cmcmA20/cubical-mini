@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
+{-# OPTIONS --safe #-}
 module Algebra.Magma where
 
 open import Foundations.Base
@@ -86,12 +86,6 @@ n-Magma _ n = Type-with (n-magma-str n)
 
 3-Magma : (ℓ : Level) → 𝒰 (ℓsuc ℓ)
 3-Magma ℓ = n-Magma ℓ 3
-
-instance
-  Underlying-n-Magma : Underlying (n-Magma ℓ n)
-  Underlying-n-Magma {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-n-Magma .⌞_⌟ = fst
-
 
 -- Observe that homomorphism of n-magmas is exactly
 -- binary operation preservation

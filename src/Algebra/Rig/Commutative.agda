@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --overlapping-instances --instance-search-depth=1 #-}
+{-# OPTIONS --safe #-}
 module Algebra.Rig.Commutative where
 
 open import Foundations.Base
@@ -6,7 +6,6 @@ open import Foundations.Base
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
-open import Meta.Underlying
 
 open import Algebra.Rig public
 
@@ -52,8 +51,3 @@ comm-rig-str-is-univalent = desc→is-univalent comm-rig-desc
 
 Comm-rig : (ℓ : Level) → Type (ℓsuc ℓ)
 Comm-rig ℓ = Σ[ X ꞉ Type ℓ ] Comm-rig-on X
-
-instance
-  Underlying-Comm-rig : Underlying (Comm-rig ℓ)
-  Underlying-Comm-rig {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-Comm-rig .⌞_⌟ = fst
