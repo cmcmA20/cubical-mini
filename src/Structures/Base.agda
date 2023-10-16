@@ -18,14 +18,14 @@ constant-str : (A : Type ℓ) → Structure {ℓ₁} ℓ (λ _ → A)
 constant-str T .is-hom (A , x) (B , y) f = x ＝ y
 
 constant-str-is-univalent : is-univalent (constant-str {ℓ₁ = ℓ₁} A)
-constant-str-is-univalent f = idₑ
+constant-str-is-univalent _ = idₑ
 
 constant-action : (A : Type ℓ) → Equiv-action {ℓ = ℓ₁} (λ X → A)
-constant-action A eqv = idₑ
+constant-action _ _ = idₑ
 
 constant-action-is-transport
   : is-transport-str {ℓ = ℓ₁} (constant-action A)
-constant-action-is-transport f s = sym (transport-refl _)
+constant-action-is-transport _ _ = sym (transport-refl _)
 
 
 pointed-str : Structure ℓ id
@@ -51,9 +51,9 @@ product-str S T .is-hom (A , x , y) (B , x′ , y′) f =
                             → is-univalent σ → is-univalent τ
                             → is-univalent (product-str σ τ)
 product-str-is-univalent {S} {T} {σ} {τ} θ₁ θ₂ {X , x , y} {Y , x′ , y′} f =
-  (σ .is-hom (X , x) (Y , x′) _ × τ .is-hom (X , y) (Y , y′) _) ≃⟨ Σ-ap (θ₁ f) (λ _ → θ₂ f) ⟩
-  (PathP _ _ _ × PathP _ _ _)                                   ≃⟨ iso→equiv Σ-pathP-iso ⟩
-  PathP (λ i → S (ua f i) × T (ua f i)) (x , y) (x′ , y′)       ≃∎
+  σ .is-hom (X , x) (Y , x′) f × τ .is-hom (X , y) (Y , y′) f               ≃⟨ ×-ap (θ₁ f) (θ₂ f) ⟩
+  ＜ x ／ (λ i → S (ua f i)) ＼ x′ ＞ × ＜ y ／ (λ i → T (ua f i)) ＼ y′ ＞  ≃⟨ iso→equiv Σ-pathP-iso ⟩
+  ＜ x , y ／ (λ i → S (ua f i) × T (ua f i)) ＼ x′ , y′ ＞                  ≃∎
 
 product-action : Equiv-action S → Equiv-action T → Equiv-action (λ X → S X × T X)
 product-action actx acty eqv = ×-ap (actx eqv) (acty eqv)
@@ -142,8 +142,8 @@ module _
       σ .is-hom (A , s) (B , t) f
         ≃⟨ univ f ⟩
       ＜ s ／ (λ i → S (ua f i)) ＼ t ＞
-        ≃⟨ Σ-contract-snd (λ x → pathP-is-of-hlevel 0 (b , (axioms-prop b))) ₑ⁻¹ ⟩
-      (Σ[ p ꞉ ＜ s ／ (λ i → S (ua f i)) ＼ t ＞ ] ＜ a ／ (λ i → axioms (ua f i) (p i)) ＼ b ＞)
+        ≃˘⟨ Σ-contract-snd (λ x → pathP-is-of-hlevel 0 (b , (axioms-prop b))) ⟩
+      Σ[ p ꞉ ＜ s ／ (λ i → S (ua f i)) ＼ t ＞ ] ＜ a ／ (λ i → axioms (ua f i) (p i)) ＼ b ＞
         ≃⟨ iso→equiv Σ-pathP-iso ⟩
       _
         ≃∎
@@ -155,4 +155,4 @@ module _
   → (A .fst , A .snd .fst) ≃[ σ ] B
   → axioms (B .fst) (B .snd)
 transfer-axioms {univ} {axioms} A B eqv =
-  subst (λ { (x , y) → axioms x y }) (sip univ eqv) (A .snd .snd)
+  subst (axioms $²_) (sip univ eqv) (A .snd .snd)
