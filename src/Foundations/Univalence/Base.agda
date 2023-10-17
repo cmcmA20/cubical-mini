@@ -145,6 +145,9 @@ module @0 _ where opaque
                → is-equiv (ap {x = x} {y = y} f)
 ap-is-equiv f eqv = Jₑ (λ B e → is-equiv (ap (e .fst))) id-is-equiv (f , eqv)
 
+@0 ap-≃ : {A B : Type ℓ} {x y : A} (e : A ≃ B) → (x ＝ y) ≃ (e .fst x ＝ e .fst y)
+ap-≃ e = ap _ , ap-is-equiv _ (e .snd)
+
 -- TODO worth fixing?
 -- opaque
 --   unfolding ua ua-unglue

@@ -42,7 +42,7 @@ record is-linear-order {ℓ ℓ′} {A : Type ℓ}
 
   instance
     has-is-set : is-set A
-    has-is-set = identity-system→hlevel 1
+    has-is-set = identity-system→is-of-hlevel 1
       {r = λ _ → [ <-irr , <-irr ]ᵤ}
       (set-identity-system hlevel! λ p → <-conn (p ∘ inl) (p ∘ inr))
       hlevel!

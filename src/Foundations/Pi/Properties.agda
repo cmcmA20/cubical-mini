@@ -51,6 +51,11 @@ private variable
 Π-impl-cod-≃ k .snd .equiv-proof f .snd (g , p) i .snd j {x} =
   equiv-path (k x) (f {x}) (g {x} , λ k → p k {x}) i .snd j
 
+Π-impl-Π-≃ : Π[ x ꞉ A ] P x
+           ≃ ∀[ x ꞉ A ] P x
+Π-impl-Π-≃ .fst f = f _
+Π-impl-Π-≃ .snd .equiv-proof = strict-contr-fibres λ p _ → p
+
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
 function-≃ dom rng = iso→equiv the-iso where
   rng-iso = is-equiv→is-iso (rng .snd)
@@ -65,6 +70,12 @@ function-≃ dom rng = iso→equiv the-iso where
   the-iso .snd .is-iso.linv f =
     fun-ext λ x → rng-iso .is-iso.linv _
                 ∙ ap f (dom-iso .is-iso.linv _)
+
+fun-ext-≃
+  : {f g : A → B}
+  → (f ＝ g) ≃ Π[ a ꞉ A ] (f a ＝ g a)
+fun-ext-≃ .fst = happly
+fun-ext-≃ .snd .equiv-proof = strict-contr-fibres fun-ext
 
 fun-ext-dep
   : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′} →  ∀ {f g}
@@ -99,29 +110,30 @@ fun-ext-dep-≃ {A} {B} {f} {g} = iso→equiv isom where
       lemi→i : ＜ coei→i A i (p i) ／ (λ m → lemi→j i m ＝ p i) ＼ refl ＞
       lemi→i m k = coei→i A i (p i) (m ∨ k)
 
-hetero-homotopy≃homotopy
-  : {A : I → Type ℓ} {B : (i : I) → Type ℓ′}
-    {f : A i0 → B i0} {g : A i1 → B i1}
-  → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
-  ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→equiv isom where opaque
+opaque
   unfolding singletonP-is-contr
-  open is-iso
-  isom : ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
-       ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-  isom .fst h x₀ = h (singletonP-is-contr A x₀ .fst .snd)
-  isom .snd .inv k {x₀} {x₁} p =
-    subst (λ fib → PathP B (f x₀) (g (fib .fst))) (singletonP-is-contr A x₀ .snd (x₁ , p)) (k x₀)
+  hetero-homotopy≃homotopy
+    : {A : I → Type ℓ} {B : (i : I) → Type ℓ′}
+      {f : A i0 → B i0} {g : A i1 → B i1}
+    → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
+    ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
+  hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→equiv isom where
+    open is-iso
+    isom : ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
+         ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
+    isom .fst h x₀ = h (singletonP-is-contr A x₀ .fst .snd)
+    isom .snd .inv k {x₀} {x₁} p =
+      subst (λ fib → PathP B (f x₀) (g (fib .fst))) (singletonP-is-contr A x₀ .snd (x₁ , p)) (k x₀)
 
-  isom .snd .rinv k = fun-ext λ x₀ →
-    ap (λ α → subst (λ fib → PathP B (f x₀) (g (fib .fst))) α (k x₀))
-      (is-prop→is-set (is-contr→is-prop $ singletonP-is-contr _ _) (singletonP-is-contr A x₀ .fst) _
-        (singletonP-is-contr A x₀ .snd (singletonP-is-contr A x₀ .fst))
-        refl)
-    ∙ transport-refl (k x₀)
+    isom .snd .rinv k = fun-ext λ x₀ →
+      ap (λ α → subst (λ fib → PathP B (f x₀) (g (fib .fst))) α (k x₀))
+        (is-prop→is-set (is-contr→is-prop $ singletonP-is-contr _ _) (singletonP-is-contr A x₀ .fst) _
+          (singletonP-is-contr A x₀ .snd (singletonP-is-contr A x₀ .fst))
+          refl)
+      ∙ transport-refl (k x₀)
 
-  isom .snd .linv h j {x₀} {x₁} p =
-    transp
-      (λ i → PathP B (f x₀) (g (singletonP-is-contr A x₀ .snd (x₁ , p) (i ∨ j) .fst)))
-      j
-      (h (singletonP-is-contr A x₀ .snd (x₁ , p) j .snd))
+    isom .snd .linv h j {x₀} {x₁} p =
+      transp
+        (λ i → PathP B (f x₀) (g (singletonP-is-contr A x₀ .snd (x₁ , p) (i ∨ j) .fst)))
+        j
+        (h (singletonP-is-contr A x₀ .snd (x₁ , p) j .snd))

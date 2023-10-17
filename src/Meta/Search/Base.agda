@@ -259,7 +259,7 @@ private
 
   compose-instance-helper : Tactic-desc goal-name goal-strat → Level-data goal-strat → Term
   compose-instance-helper {goal-strat = none} td _ = def (td .instance-helper) []
-  compose-instance-helper {goal-strat = by-hlevel} td lv = def (td .instance-helper) $ varg lv ∷ []
+  compose-instance-helper {goal-strat = by-hlevel} td lv = def (td .instance-helper) $ lv v∷ []
 
   use-instance-search : Tactic-desc goal-name goal-strat → Bool → Term → TC ⊤
   use-instance-search {goal-name} td has-alts goal = runSpeculative do
@@ -434,13 +434,13 @@ private
     (remove-invisible c₁′ ty >>= λ where
       (con (quote decomp) (_ ∷ _ ∷ _ ∷ _ ∷ _ ∷ nm v∷ argspec v∷ [])) → do
         debugPrint "tactic.search" 10
-          [ "Using " , termErr nm , "decomposition for:\n"
+          [ "Using " , termErr nm , " decomposition for:\n"
           , termErr (def goal-name $ level-term lv v∷ goal-ty v∷ []) ]
 
         nm′ ← unquoteTC nm
         argsp ← unquoteTC argspec
         gen-args fuel goal-strat (not (length cs == 0)) lv goal nm′ argsp [] (pure tt)
-        unify solved c₁
+        noConstraints $ unify solved c₁
 
         pure (tt , true)
 

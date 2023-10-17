@@ -40,11 +40,12 @@ open import Correspondences.Erased public
 open import Functions.Equiv.Fibrewise public
 open import Functions.Equiv.Weak      public
 open import Functions.Embedding       public
+open import Functions.Fibration       public
 
 import Truncation.Propositional
 module ∥-∥₁ = Truncation.Propositional
 open ∥-∥₁ public
-  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; image)
+  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; Im)
 
 import Truncation.Set
 module ∥-∥₂ = Truncation.Set

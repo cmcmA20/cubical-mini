@@ -68,7 +68,7 @@ module ℕ-path-code where
 
 instance
   ℕ-is-set : is-set ℕ
-  ℕ-is-set = identity-system→hlevel 1 ℕ-path-code.ℕ-identity-system ℕ-path-code.code-is-prop
+  ℕ-is-set = identity-system→is-of-hlevel 1 ℕ-path-code.ℕ-identity-system ℕ-path-code.code-is-prop
 
 ℕ-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) ℕ
 ℕ-is-of-hlevel n = is-of-hlevel-+-left 2 n ℕ-is-set

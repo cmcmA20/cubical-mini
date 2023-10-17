@@ -3,7 +3,7 @@ module Functions.Equiv.Biinv where
 
 open import Foundations.Base
 
-open import Foundations.Equiv.Base
+open import Foundations.Equiv
 open import Foundations.HLevel.Base
 open import Foundations.HLevel.Retracts
 open import Foundations.Isomorphism
@@ -21,32 +21,6 @@ rinv f = Σ[ h ꞉ (_ → _) ] (f ∘ h ＝ id)
 
 is-biinv : (A → B) → Type _
 is-biinv f = linv f × rinv f
-
-is-equiv→pre-is-equiv : is-equiv f → is-equiv {A = C → A} (f ∘_)
-is-equiv→pre-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
-  f-iso : is-iso f
-  f-iso = is-equiv→is-iso f-eqv
-
-  f⁻¹ : _
-  f⁻¹ = f-iso .is-iso.inv
-
-  isiso : is-iso (_∘_ f)
-  isiso .is-iso.inv f x = f⁻¹ (f x)
-  isiso .is-iso.rinv f = fun-ext λ x → f-iso .is-iso.rinv _
-  isiso .is-iso.linv f = fun-ext λ x → f-iso .is-iso.linv _
-
-is-equiv→post-is-equiv : is-equiv f → is-equiv {A = B → C} (_∘ f)
-is-equiv→post-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
-  f-iso : is-iso f
-  f-iso = is-equiv→is-iso f-eqv
-
-  f⁻¹ : _
-  f⁻¹ = f-iso .is-iso.inv
-
-  isiso : is-iso _
-  isiso .is-iso.inv f x = f (f⁻¹ x)
-  isiso .is-iso.rinv f = fun-ext λ x → ap f (f-iso .is-iso.linv _)
-  isiso .is-iso.linv f = fun-ext λ x → ap f (f-iso .is-iso.rinv _)
 
 opaque
   unfolding is-of-hlevel
@@ -80,8 +54,7 @@ is-biinv-is-prop {f} = contractible-if-inhabited contract where
   contract ibiinv =
     ×-is-of-hlevel 0 (is-iso→is-contr-linv iiso)
                      (is-iso→is-contr-rinv iiso)
-    where
-      iiso = is-biinv→is-iso ibiinv
+    where iiso = is-biinv→is-iso ibiinv
 
 is-iso→is-biinv : is-iso f → is-biinv f
 is-iso→is-biinv iiso .fst = iiso .is-iso.inv , fun-ext (iiso .is-iso.linv)

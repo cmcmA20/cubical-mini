@@ -30,87 +30,82 @@ data Str-term ℓ : (ℓ₁ : Level) → (Type ℓ → Type ℓ₁) → Typeω w
 
 infixr 30 _s→_ _s×_
 
-Term→structure : (s : Str-term ℓ ℓ₁ S) → Structure ℓ₁ S
-Term→action : (s : Str-term ℓ ℓ₁ S) → Equiv-action S
+term→structure : (s : Str-term ℓ ℓ₁ S) → Structure ℓ₁ S
+term→action : (s : Str-term ℓ ℓ₁ S) → Equiv-action S
 
-Term→structure (s-const x) = Constant-str x
-Term→structure s∙ = Pointed-str
-Term→structure (s s→ s₁) = Function-str (Term→action s) (Term→structure s₁)
-Term→structure (s s× s₁) = Product-str (Term→structure s) (Term→structure s₁)
+term→structure (s-const x) = constant-str x
+term→structure s∙ = pointed-str
+term→structure (s₁ s→ s₂) = function-str (term→action s₁) (term→structure s₂)
+term→structure (s₁ s× s₂) = product-str (term→structure s₁) (term→structure s₂)
 
-Term→action (s-const x₁) x = idₑ
-Term→action s∙ x = x
-Term→action (s s→ s₁) = function-action (Term→action s) (Term→action s₁)
-Term→action (s s× s₁) = product-action (Term→action s) (Term→action s₁)
+term→action (s-const x₁) x = idₑ
+term→action s∙ x = x
+term→action (s₁ s→ s₂) = function-action (term→action s₁) (term→action s₂)
+term→action (s₁ s× s₂) = product-action (term→action s₁) (term→action s₂)
 
-@0 Term→structure-is-univalent : (s : Str-term ℓ ℓ₁ S) → is-univalent (Term→structure s)
-@0 Term→action-is-transport : (s : Str-term ℓ ℓ₁ S) → is-transport-str (Term→action s)
+@0 term→structure-is-univalent : (s : Str-term ℓ ℓ₁ S) → is-univalent (term→structure s)
+@0 term→action-is-transport : (s : Str-term ℓ ℓ₁ S) → is-transport-str (term→action s)
 
-Term→structure-is-univalent (s-const x) = constant-str-is-univalent
-Term→structure-is-univalent s∙ = pointed-str-is-univalent
-Term→structure-is-univalent (s s→ s₁) =
+term→structure-is-univalent (s-const x) = constant-str-is-univalent
+term→structure-is-univalent s∙ = pointed-str-is-univalent
+term→structure-is-univalent (s₁ s→ s₂) =
   function-str-is-univalent
-    (Term→action s) (Term→action-is-transport s)
-    (Term→structure s₁) (Term→structure-is-univalent s₁)
-Term→structure-is-univalent (s s× s₁) =
-  product-str-is-univalent {σ = Term→structure s} {τ = Term→structure s₁}
-    (Term→structure-is-univalent s) (Term→structure-is-univalent s₁)
+    (term→action s₁) (term→action-is-transport s₁)
+    (term→structure s₂) (term→structure-is-univalent s₂)
+term→structure-is-univalent (s₁ s× s₂) =
+  product-str-is-univalent {σ = term→structure s₁} {τ = term→structure s₂}
+    (term→structure-is-univalent s₁) (term→structure-is-univalent s₂)
 
-Term→action-is-transport (s-const x) = constant-action-is-transport
-Term→action-is-transport s∙ = id-action-is-transport
-Term→action-is-transport (s s→ s₁) =
-  function-action-is-transport {α = Term→action s} {β = Term→action s₁}
-    (Term→action-is-transport s) (Term→action-is-transport s₁)
-Term→action-is-transport (s s× s₁) =
-  product-action-is-transport {α = Term→action s} {β = Term→action s₁}
-    (Term→action-is-transport s) (Term→action-is-transport s₁)
+term→action-is-transport (s-const x) = constant-action-is-transport
+term→action-is-transport s∙ = id-action-is-transport
+term→action-is-transport (s₁ s→ s₂) =
+  function-action-is-transport {α = term→action s₁} {β = term→action s₂}
+    (term→action-is-transport s₁) (term→action-is-transport s₂)
+term→action-is-transport (s₁ s× s₂) =
+  product-action-is-transport {α = term→action s₁} {β = term→action s₂}
+    (term→action-is-transport s₁) (term→action-is-transport s₂)
 
-record Str-desc ℓ ℓ₁ S ax : Typeω where
+record Desc ℓ ℓ₁ S ax : Typeω where
   field
     descriptor : Str-term ℓ ℓ₁ S
 
     axioms : ∀ X → S X → Type ax
     axioms-prop : ∀ X s → is-prop (axioms X s)
 
-Desc→Fam : ∀ {ax} → Str-desc ℓ ℓ₁ S ax → Type ℓ → Type (ℓ₁ ⊔ ax)
-Desc→Fam {S} desc X =
-  Σ[ S ꞉ S X ]
-    (desc .Str-desc.axioms _ S)
+desc→family : ∀ {ax} → Desc ℓ ℓ₁ S ax → Type ℓ → Type (ℓ₁ ⊔ ax)
+desc→family {S} desc X = Σ[ S ꞉ S X ] (desc .Desc.axioms _ S)
 
-Desc→Str : ∀ {ax} → (S : Str-desc ℓ ℓ₁ S ax) → Structure _ (Desc→Fam S)
-Desc→Str desc = Axiom-str (Term→structure descriptor) axioms
-  where open Str-desc desc
+desc→structure : ∀ {ax} → (S : Desc ℓ ℓ₁ S ax) → Structure _ (desc→family S)
+desc→structure desc = axiom-str (term→structure descriptor) axioms where open Desc desc
 
-@0 Desc→is-univalent : ∀ {ax} → (S : Str-desc ℓ ℓ₁ S ax) → is-univalent (Desc→Str S)
-Desc→is-univalent desc =
-  Axiom-str-univalent
-    (Term→structure descriptor) axioms
-    (Term→structure-is-univalent descriptor) (λ {X} {s} → axioms-prop X s)
-  where open Str-desc desc
+@0 desc→is-univalent : ∀ {ax} → (S : Desc ℓ ℓ₁ S ax) → is-univalent (desc→structure S)
+desc→is-univalent desc =
+  axiom-str-univalent
+    (term→structure descriptor) axioms
+    (term→structure-is-univalent descriptor) (λ {X} {s} → axioms-prop X s)
+  where open Desc desc
 
 
-makeAutoStr-term : ℕ → Term → TC ⊤
-makeAutoStr-term zero t = typeError (strErr "autoDesc ran out of fuel" ∷ [])
-makeAutoStr-term (suc n) t =
-  tryPoint
-    <|> tryBin (quote _s→_)
-    <|> tryBin (quote _s×_)
-    <|> useConst
+make-auto-str-term : ℕ → Term → TC ⊤
+make-auto-str-term zero t = typeError (strErr "autoDesc ran out of fuel" ∷ [])
+make-auto-str-term (suc n) t =
+  try-point
+    <|> try-bin (quote _s→_)
+    <|> try-bin (quote _s×_)
+    <|> use-const
   where
-    tryPoint = do
-      unify t (con (quote s∙) [])
+    try-point = unify t (con (quote s∙) [])
 
-    tryBin : Name → TC ⊤
-    tryBin namen = do
-      h1 ← new-meta unknown
-      h2 ← new-meta unknown
-      tt ← unify (con namen (h1 v∷ h2 v∷ [])) t
-      tt ← makeAutoStr-term n h1
-      makeAutoStr-term n h2
+    try-bin : Name → TC ⊤
+    try-bin namen = do
+      h₁ ← new-meta unknown
+      h₂ ← new-meta unknown
+      tt ← unify (con namen (h₁ v∷ h₂ v∷ [])) t
+      tt ← make-auto-str-term n h₁
+      make-auto-str-term n h₂
 
-    useConst = do
-      unify t (con (quote s-const) (unknown v∷ []))
+    use-const = unify t (con (quote s-const) (unknown v∷ []))
 
 macro
   auto-str-term! : Term → TC ⊤
-  auto-str-term! = makeAutoStr-term 100
+  auto-str-term! = make-auto-str-term 100

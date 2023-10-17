@@ -11,7 +11,8 @@ private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level
   A : Type ℓ
   A′ : Type ℓ′
-  B P Q : A → Type ℓ″
+  B P : A → Type ℓ″
+  Q : A → Type ℓ‴
 
 -- Unique existence
 
@@ -144,23 +145,22 @@ open is-iso
                                       {y = p k .snd})
                              refl refl j i
 
-Σ-prop-path-equiv : (∀ x → is-prop (B x))
-                  → {x y : Σ _ B}
-                  → (x .fst ＝ y .fst) ≃ (x ＝ y)
-Σ-prop-path-equiv bp = Σ-prop-path bp , Σ-prop-path-is-equiv bp
+Σ-prop-path-≃ : (∀ x → is-prop (B x))
+              → {x y : Σ _ B}
+              → (x .fst ＝ y .fst) ≃ (x ＝ y)
+Σ-prop-path-≃ bp = Σ-prop-path bp , Σ-prop-path-is-equiv bp
 
--- TODO
--- Σ-prop-square
---   : ∀ {ℓ ℓ'} {A : Type ℓ} {B : A → Type ℓ'}
---   → {w x y z : Σ _ B}
---   → (∀ x → is-prop (B x))
---   → {p : x ＝ w} {q : x ＝ y} {s : w ＝ z} {r : y ＝ z}
---   → Square (ap fst p) (ap fst q) (ap fst s) (ap fst r)
---   → Square p q s r
--- Σ-prop-square Bprop sq i j .fst = sq i j
--- Σ-prop-square Bprop {p} {q} {s} {r} sq i j .snd =
---   is-prop→SquareP (λ i j → Bprop (sq i j))
---     (ap snd p) (ap snd q) (ap snd s) (ap snd r) i j
+Σ-prop-square
+  : ∀ {ℓ ℓ'} {A : Type ℓ} {B : A → Type ℓ'}
+  → {w x y z : Σ _ B}
+  → (∀ x → is-prop (B x))
+  → {p : x ＝ w} {q : x ＝ y} {r : y ＝ z} {s : w ＝ z}
+  → Square (ap fst p) (ap fst q) (ap fst r) (ap fst s)
+  → Square p q r s
+Σ-prop-square B-prop sq i j .fst = sq i j
+Σ-prop-square B-prop {p} {q} {r} {s} sq i j .snd =
+  is-prop→squareP (λ i j → B-prop (sq i j)) (ap snd q) (ap snd p) (ap snd s) (ap snd r) i j
+
 Σ-contract-fst : (A-c : is-contr A) → Σ[ x ꞉ A ] B x ≃ B (centre A-c)
 Σ-contract-fst {B} A-c = iso→equiv the-iso where
   the-iso : Iso _ _

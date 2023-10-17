@@ -71,7 +71,7 @@ opaque
 prop-⊎-is-set
   : is-prop A → is-prop B
   → is-set (A ⊎ B)
-prop-⊎-is-set {A} {B} A-prop B-prop = identity-system→hlevel 1 ⊎-identity-system go where opaque
+prop-⊎-is-set {A} {B} A-prop B-prop = identity-system→is-of-hlevel 1 ⊎-identity-system go where opaque
   unfolding is-of-hlevel
   go : (x y : A ⊎ B) → is-prop (Code x y)
   go (inl x)  (inr y)  = Lift-is-of-hlevel 1 ⊥-is-prop

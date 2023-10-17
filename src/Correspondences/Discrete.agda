@@ -29,13 +29,13 @@ opaque
   is-discrete-η = id
 
   opaque
-    unfolding is-separated
-    is-discrete→is-separated : is-discrete A → is-separated A
-    is-discrete→is-separated di _ _ = dec→essentially-classical (di _ _)
+    unfolding is-¬¬-separated
+    is-discrete→is-¬¬-separated : is-discrete A → is-¬¬-separated A
+    is-discrete→is-¬¬-separated di _ _ = dec→essentially-classical (di _ _)
 
 -- Hedberg
 is-discrete→is-set : is-discrete A → is-set A
-is-discrete→is-set = is-separated→is-set ∘ is-discrete→is-separated
+is-discrete→is-set = is-¬¬-separated→is-set ∘ is-discrete→is-¬¬-separated
 
 opaque
   unfolding is-of-hlevel is-discrete
@@ -54,7 +54,7 @@ is-discrete-injection (f , f-inj) B-dis = is-discrete-η λ x y →
 
 is-discrete-embedding : (A ↪ B) → is-discrete B → is-discrete A
 is-discrete-embedding (f , f-emb) =
-  is-discrete-injection (f , has-prop-fibres→injective f f-emb)
+  is-discrete-injection (f , is-embedding→injective f-emb)
 
 
 discrete : ⦃ d : is-discrete A ⦄ → is-discrete A

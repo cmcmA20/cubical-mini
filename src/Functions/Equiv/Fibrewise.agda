@@ -2,28 +2,26 @@
 module Functions.Equiv.Fibrewise where
 
 open import Foundations.Base
-open import Foundations.Equiv.Base
-open import Foundations.HLevel
+open import Foundations.Equiv
 open import Foundations.Isomorphism
+
+open import Meta.Search.HLevel
 
 private variable
   ℓ ℓ′ ℓ″ : Level
-  A B : Type ℓ
+  A : Type ℓ
   P : A → Type ℓ′
   Q : A → Type ℓ″
   f : Π[ x ꞉ A ] (P x → Q x)
-  x : A
-  v : Q x
 
 total : Π[ x ꞉ A ] (P x → Q x)
       → Σ A P → Σ A Q
 total f (x , y) = x , f x y
 
-total-fibres : {f : Π[ a ꞉ A ] (P a → Q a)}
-               {x : A} {v : Q x}
-             → fibre (f x)          v
-             ≅ fibre (total f) (x , v)
-total-fibres {A} {Q} {f} = the-iso where opaque
+total-fibres-equiv : {x : A} {v : Q x}
+                   → fibre (f x)          v
+                   ≃ fibre (total f) (x , v)
+total-fibres-equiv {A} {Q} {f} = iso→equiv the-iso where opaque
   unfolding J
   open is-iso
 
@@ -47,19 +45,19 @@ total-fibres {A} {Q} {f} = the-iso where opaque
 
 opaque
   unfolding is-of-hlevel
-  total→is-equiv : {f : Π[ x ꞉ A ] (P x → Q x)}
-                 → is-equiv (total f)
-                 → ∀[ x ꞉ A ] is-equiv (f x)
-  total→is-equiv eqv {x} .equiv-proof y =
-    is-iso→is-of-hlevel 0 (total-fibres .snd .is-iso.inv)
-                          (is-iso-inv (total-fibres .snd))
-                          (eqv .equiv-proof (x , y))
+  total-is-equiv→fibrewise-is-equiv : is-equiv (total f)
+                                    → ∀[ x ꞉ A ] is-equiv (f x)
+  total-is-equiv→fibrewise-is-equiv eqv {x} .equiv-proof y = is-equiv→is-of-hlevel 0
+    from (inverse .snd) (eqv .equiv-proof (x , y))
+      where open Equiv total-fibres-equiv
 
-  is-equiv→total : {f : Π[ x ꞉ A ] (P x → Q x)}
-                 → ∀[ x ꞉ A ] is-equiv (f x)
-                 → is-equiv (total f)
-  is-equiv→total always-eqv .equiv-proof y =
-    is-iso→is-of-hlevel 0
-      (total-fibres .fst)
-      (total-fibres .snd)
-      (always-eqv .equiv-proof (y .snd))
+  fibrewise-is-equiv→total-is-equiv : ∀[ x ꞉ A ] is-equiv (f x)
+                                    → is-equiv (total f)
+  fibrewise-is-equiv→total-is-equiv always-eqv .equiv-proof y = is-equiv→is-of-hlevel 0
+    (total-fibres-equiv .fst) (total-fibres-equiv .snd)
+    (always-eqv .equiv-proof (y .snd))
+
+fibrewise-is-equiv≃total-is-equiv : ∀[ x ꞉ A ] is-equiv (f x)
+                                  ≃ is-equiv (total f)
+fibrewise-is-equiv≃total-is-equiv =
+  prop-extₑ! fibrewise-is-equiv→total-is-equiv total-is-equiv→fibrewise-is-equiv
