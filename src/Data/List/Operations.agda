@@ -23,6 +23,10 @@ length : List A → ℕ
 length []       = 0
 length (_ ∷ xs) = suc (length xs)
 
+replicate : ℕ → A → List A
+replicate 0 _       = []
+replicate (suc n) e = e ∷ replicate n e
+
 filter : (A → Bool) → List A → List A
 filter p [] = []
 filter p (x ∷ xs) with p x

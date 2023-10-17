@@ -53,3 +53,8 @@ reverse (x ∷ xs) = reverse xs ++ x ∷ []
 
 reverse-fast : List A → List A
 reverse-fast = fold-l (flip _∷_) []
+
+intersperse : A -> List A -> List A
+intersperse _ []       = []
+intersperse _ (x ∷ []) = x ∷ []
+intersperse s (x ∷ xs) = x ∷ s ∷ intersperse s xs
