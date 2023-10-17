@@ -11,7 +11,7 @@ open import Data.Bool.Base as Bool
 open import Data.Empty.Base
 open import Data.Fin.Base
 open import Data.List.Base as List
-open import Data.List.Operations
+open import Data.List.Operations using (length)
 open import Data.List.Instances.Foldable
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
