@@ -16,6 +16,7 @@ private variable
   ℓ ℓ′ : Level
   A : Type ℓ
   B : A → Type ℓ′
+  P : Type ℓ′
 
 instance
   Underlying-Σ : ⦃ ua : Underlying A ⦄ → Underlying (Σ A B)
@@ -32,6 +33,8 @@ instance
 
 
 infix 5 _∈_
-_∈_ : {A : Type ℓ} {P : Type ℓ′} ⦃ u : Underlying P ⦄
-    → A → (A → P) → Type _
+_∈_ : ⦃ u : Underlying P ⦄ → A → (A → P) → Type _
 x ∈ P = ⌞ P x ⌟
+
+_⊆_ : ⦃ u : Underlying P ⦄ → (A → P) → (A → P) → Type _
+U ⊆ V = {x : _} → x ∈ U → x ∈ V

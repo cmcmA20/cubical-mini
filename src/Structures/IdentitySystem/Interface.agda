@@ -9,7 +9,7 @@ open import Foundations.Equiv
 import Structures.IdentitySystem.Base as I
 open I public
   using ( is-identity-system ; to-path ; to-path-over ; to-path-refl ; identity-system-gives-path
-        ; identity-system→is-of-hlevel )
+        ; identity-system→is-of-hlevel ; transfer-identity-system )
 import Structures.IdentitySystem.Strict as IS
 open IS public
   using (set-identity-is-prop)
