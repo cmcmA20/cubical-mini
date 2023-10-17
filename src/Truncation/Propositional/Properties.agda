@@ -3,8 +3,13 @@ module Truncation.Propositional.Properties where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.Path
+open import Foundations.Sigma
+
 
 open import Meta.Search.HLevel
+
+open import Structures.IdentitySystem.Interface
 
 open import Functions.Constant
 open import Functions.Embedding
@@ -131,3 +136,71 @@ Factorization f = Σ[ M ꞉ Type _ ] f factors-through M
 image-factorization : f factors-through Im f
 image-factorization {f} =
   (corestriction f , corestriction-is-surjective) , (fst , subset-proj-is-embedding hlevel!) , refl
+
+
+-- TODO understand the details thoroughly + refactor, 1lab
+module Replacement
+  {ℓᵃ ℓᵗ ℓⁱ} {A : Type ℓᵃ} {T : Type ℓᵗ}
+  {_~_ : T → T → Type ℓⁱ} {rfl : ∀ x → x ~ x}
+  (locally-small : is-identity-system _~_ rfl)
+  (f : A → T)
+  where
+
+  private module ls = IdS locally-small
+
+  data Image : Type (ℓᵃ ⊔ ℓⁱ)
+  embed : Image → T
+
+  data Image where
+    ⦋_⦌   : A → Image
+    quot : ∀ {r r′} → embed r ~ embed r′ → r ＝ r′
+    coh  : ∀ r → quot (rfl (embed r)) ＝ refl
+
+  embed ⦋ x ⦌ = f x
+  embed (quot p i) = ls.to p i
+  embed (coh r i j) = ls.to-refl {a = embed r} i j
+
+  embed-is-embedding : is-embedding embed
+  embed-is-embedding = cancellable→is-embedding λ {x y} →
+    iso→equiv $ from , iso (ap embed) ri ls.ε where
+
+    from : ∀ {x y} → embed x ＝ embed y → x ＝ y
+    from p = quot (ls.from p)
+
+    ri : ∀ {x y} → (ap {x = x} {y = y} embed) is-right-inverse-of from
+    ri = J (λ _ p → from (ap embed p) ＝ p) (ap quot (transport-refl _) ∙ coh _)
+
+  elim-prop
+    : ∀ {ℓ′} {P : Image → Type ℓ′}
+    → (∀ x → is-prop (P x))
+    → (∀ x → P ⦋ x ⦌)
+    → ∀ x → P x
+  elim-prop P-prop p⦋⦌ ⦋ x ⦌ = p⦋⦌ x
+  elim-prop P-prop p⦋⦌ (quot {r = x} {r′ = y} p i) =
+    is-prop→pathP (λ i → P-prop (quot p i))
+      (elim-prop P-prop p⦋⦌ x)
+      (elim-prop P-prop p⦋⦌ y) i
+  elim-prop P-prop p⦋⦌ (coh r i j) =
+    is-prop→squareP (λ i j → P-prop (coh r i j))
+      (is-prop→pathP (λ i → P-prop _) _ _)
+      (λ _ → elim-prop P-prop p⦋⦌ r)
+      (λ _ → elim-prop P-prop p⦋⦌ r)
+      (λ _ → elim-prop P-prop p⦋⦌ r) i j
+
+  ⦋-⦌-is-surjective : is-surjective ⦋_⦌
+  ⦋-⦌-is-surjective = elim-prop hlevel! λ x → ∣ x , refl ∣₁
+
+  Image→Im : Image → Im f
+  Image→Im x .fst = embed x
+  Image→Im x .snd = elim-prop {P = λ y → ∥ fibre f (embed y) ∥₁}
+    hlevel! (λ y → ∣ y , refl ∣₁) x
+
+  Image≃Im : Image ≃ Im f
+  Image≃Im .fst = Image→Im
+  Image≃Im .snd .equiv-proof (x , p) = is-contr-β $ elim! {P = λ p → is-contr (fibre _ (x , p))}
+    (λ { (w , p) → J (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) p }) p where
+      go : (f⁻¹x : A) → is-contr _
+      go f⁻¹x = is-contr-η $ (⦋ f⁻¹x ⦌ , refl) , λ where
+        (u , α) → Σ-pathP (quot (ls.from (sym (ap fst α)))) $
+                          Σ-prop-square hlevel! $ commutes→square $
+                            ap² _∙_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ sym (∙-id-l _)

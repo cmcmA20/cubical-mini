@@ -24,10 +24,6 @@ private variable
 ℙ : Type ℓ → Type (ℓsuc ℓ)
 ℙ X = X → Prop _
 
-infix 5 _∈_
-_∈_ : X → ℙ X → Type _
-x ∈ A  = ⌞ A x ⌟
-
 subst-∈ : (A : ℙ X) → x ＝ y → x ∈ A → y ∈ A
 subst-∈ A = subst (_∈ A)
 

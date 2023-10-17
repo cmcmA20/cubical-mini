@@ -29,3 +29,9 @@ instance
   Underlying-Lift : ⦃ ua : Underlying A ⦄ → Underlying (Lift ℓ′ A)
   Underlying-Lift ⦃ ua ⦄ .Underlying.ℓ-underlying = ua .Underlying.ℓ-underlying
   Underlying-Lift .⌞_⌟ x = ⌞ x .lower ⌟
+
+
+infix 5 _∈_
+_∈_ : {A : Type ℓ} {P : Type ℓ′} ⦃ u : Underlying P ⦄
+    → A → (A → P) → Type _
+x ∈ P = ⌞ P x ⌟
