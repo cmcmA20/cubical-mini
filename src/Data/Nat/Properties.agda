@@ -76,3 +76,53 @@ open import Data.Nat.Path
 ·-assoc : (x y z : ℕ) → x · (y · z) ＝ x · y · z
 ·-assoc  zero   y z = refl
 ·-assoc (suc x) y z = ap (λ q → y · z + q) (·-assoc x y z) ∙ sym (·-distrib-+r y _ _)
+
+-- minimum
+
+min-zerol : (x : ℕ) → min 0 x ＝ 0
+min-zerol  zero   = refl
+min-zerol (suc _) = refl
+
+min-zeror : (x : ℕ) → min x 0 ＝ 0
+min-zeror  zero   = refl
+min-zeror (suc _) = refl
+
+min-comm : (x y : ℕ) → min x y ＝ min y x
+min-comm  zero    y      = min-zerol y ∙ sym (min-zeror y)
+min-comm (suc _)  zero   = refl
+min-comm (suc x) (suc y) = ap suc $ min-comm x y
+
+min-assoc : (x y z : ℕ) → min x (min y z) ＝ min (min x y) z
+min-assoc  zero    y       z      = min-zerol (min y z) ∙ sym (min-zerol z) ∙ ap (λ q → min q z) (sym $ min-zerol y)
+min-assoc (suc x)  zero    z      = ap (min (suc x)) (min-zerol z) ∙ sym (min-zerol z)
+min-assoc (suc x) (suc y)  zero   = refl
+min-assoc (suc x) (suc y) (suc z) = ap suc $ min-assoc x y z
+
+min-idem : (x : ℕ) → min x x ＝ x
+min-idem  zero   = refl
+min-idem (suc x) = ap suc $ min-idem x
+
+-- maximum
+
+max-zerol : (x : ℕ) → max 0 x ＝ x
+max-zerol  zero   = refl
+max-zerol (suc _) = refl
+
+max-zeror : (x : ℕ) → max x 0 ＝ x
+max-zeror  zero   = refl
+max-zeror (suc _) = refl
+
+max-comm : (x y : ℕ) → max x y ＝ max y x
+max-comm  zero    y      = max-zerol y ∙ sym (max-zeror y)
+max-comm (suc _)  zero   = refl
+max-comm (suc x) (suc y) = ap suc $ max-comm x y
+
+max-assoc : (x y z : ℕ) → max x (max y z) ＝ max (max x y) z
+max-assoc  zero    y       z      = max-zerol (max y z) ∙ ap (λ q → max q z) (sym $ max-zerol y)
+max-assoc (suc x)  zero    z      = ap (max (suc x)) (max-zerol z)
+max-assoc (suc x) (suc y)  zero   = refl
+max-assoc (suc x) (suc y) (suc z) = ap suc $ max-assoc x y z
+
+max-idem : (x : ℕ) → max x x ＝ x
+max-idem  zero   = refl
+max-idem (suc x) = ap suc $ max-idem x
