@@ -8,10 +8,10 @@ open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
 
-open import Data.Empty.Base
+open import Data.Empty.Base as ⊥
 open import Data.Unit.Instances.HLevel
 
-open import Data.Bool.Base public
+open import Data.Bool.Base as Bool public
 
 _==_ : Bool → Bool → Bool
 false == false = true
@@ -80,3 +80,7 @@ instance
 
 bool-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) Bool
 bool-is-of-hlevel n = is-of-hlevel-+-left 2 n bool-is-set
+
+⟦-⟧ᵇ≃true : {b : Bool} → ⟦ b ⟧ᵇ ≃ (b ＝ true)
+⟦-⟧ᵇ≃true {(false)} = prop-extₑ! (λ x → ⊥.rec x) false≠true
+⟦-⟧ᵇ≃true {(true)}  = prop-extₑ! (λ _ → refl) _

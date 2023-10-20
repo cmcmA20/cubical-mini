@@ -43,6 +43,11 @@ fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 ¬-decision (yes a) .proof = ofⁿ (_$ a)
 ¬-decision (no ¬a) .proof = ofʸ ¬a
 
+lift-decision : Dec A → Dec (Lift ℓ A)
+lift-decision da .does = da .does
+lift-decision (yes a) .proof = ofʸ (lift a)
+lift-decision (no ¬a) .proof = ofⁿ (¬a ∘ lower)
+
 
 -- Decidability of a predicate
 Decidable : (arity : ℕ) {ls : Levels arity} {As : Types arity ls} → Pred _ (Corr arity ℓ As)

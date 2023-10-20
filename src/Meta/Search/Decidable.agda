@@ -43,6 +43,9 @@ instance
   decomp-dec-fun : goal-decomposition (quote Dec) (A → B)
   decomp-dec-fun = decomp (quote fun-decision) [ `search (quote Dec) , `search (quote Dec) ]
 
+  decomp-dec-lift : goal-decomposition (quote Dec) (Lift ℓ A)
+  decomp-dec-lift = decomp (quote lift-decision) [ `search (quote Dec) ]
+
 
 -- Usage
 private

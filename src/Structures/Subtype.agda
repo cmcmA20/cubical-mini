@@ -12,7 +12,7 @@ open import Structures.Fibration
 open import Structures.IdentitySystem
 open import Structures.n-Type
 
-open import Correspondences.Powerset
+open import Correspondences.Powerset.Base
 
 open import Functions.Embedding
 

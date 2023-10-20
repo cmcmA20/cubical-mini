@@ -46,6 +46,9 @@ instance
   decomp-dec-Π : goal-decomposition (quote Dec) (Π[ a ꞉ A ] B a )
   decomp-dec-Π = decomp (quote Π-decision) [ `search-under 1 (quote Dec) , `search (quote Exhaustible) ]
 
+  decomp-dec-∀ : goal-decomposition (quote Dec) (∀[ a ꞉ A ] B a )
+  decomp-dec-∀ = decomp (quote ∀-decision) [ `search-under 1 (quote Dec) , `search (quote Exhaustible) ]
+
 -- TODO more decompositions
 
 -- Usage

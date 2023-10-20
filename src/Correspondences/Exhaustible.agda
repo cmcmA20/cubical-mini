@@ -37,3 +37,6 @@ opaque
 
 Π-decision : {B : A → Type ℓᵇ} → Decidable¹ B → Exhaustible {ℓ′ = ℓᵇ} A → Dec Π¹[ B ]
 Π-decision d ex = exhaustible-β ex d
+
+∀-decision : {B : A → Type ℓᵇ} → Decidable¹ B → Exhaustible {ℓ′ = ℓᵇ} A → Dec ∀¹[ B ]
+∀-decision d ex = map (λ f {x} → f x) (λ ¬b b → ¬b (λ _ → b)) $ Π-decision d ex

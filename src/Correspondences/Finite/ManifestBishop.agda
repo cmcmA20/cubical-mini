@@ -33,7 +33,7 @@ opaque
   𝓑-is-set = hlevel!
 
 opaque
-  unfolding 𝓑 Omniscient₁ Fin lookup vec-fun-equiv
+  unfolding 𝓑 Omniscient₁ vec-fun-equiv
   𝓑→omniscient₁ : 𝓑 A → Omniscient₁ {ℓ′ = ℓ′} A
   𝓑→omniscient₁ {A} (n , aeq) {P} P? =
     Dec.map lemma₁ lemma₂ (any? P? xs) where
@@ -44,7 +44,7 @@ opaque
       xs = Ṽ.from $ Ã.from
 
       lemma₁ : Σ[ i ꞉ Fin n ] P (lookup xs i) → ∥ Σ[ a ꞉ A ] P a ∥₁
-      lemma₁ (i , p) = ∣ lookup xs i , p ∣₁
+      lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) id
 
       lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ ∥ Σ[ a ꞉ A ] P a ∥₁
-      lemma₂ ¬p = ∥-∥₁.rec! λ (a , pa) → ¬p $ Ã.to a , subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η a)) pa
+      lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))

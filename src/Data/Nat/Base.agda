@@ -29,7 +29,10 @@ elim : (P : ℕ → Type ℓ)
      → ({n : ℕ} → P n → P (suc n))
      → (n : ℕ) → P n
 elim P pz ps zero    = pz
-elim P pz ps (suc n) = elim (λ z → P (suc z)) (ps pz) ps n
+elim P pz ps (suc n) = elim (P ∘ suc) (ps pz) ps n
+
+rec : A → (A → A) → ℕ → A
+rec z s = elim _ z s
 
 iter : ℕ → (A → A) → A → A
 iter zero    f = id

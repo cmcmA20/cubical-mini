@@ -91,7 +91,7 @@ fun-ext-dep-≃
 
   → ( {x₀ : A i0} {x₁ : A i1} (p : ＜ x₀ ／ A ＼ x₁ ＞)
     → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
-  ≃ ＜ f ／ (λ i → (x : A i) → B i x) ＼ g ＞
+  ≃ ＜ f ／ (λ i → Π[ x ꞉ A i ] B i x) ＼ g ＞
 fun-ext-dep-≃ {A} {B} {f} {g} = iso→equiv isom where
   open is-iso
   isom : Iso _ _

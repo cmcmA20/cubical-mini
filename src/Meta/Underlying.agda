@@ -3,6 +3,8 @@ module Meta.Underlying where
 
 open import Foundations.Base
 
+open import Data.Empty.Base
+
 record Underlying {ℓ} (T : Type ℓ) : Typeω where
   field
     ℓ-underlying : Level
@@ -35,6 +37,10 @@ instance
 infix 5 _∈_
 _∈_ : ⦃ u : Underlying P ⦄ → A → (A → P) → Type _
 x ∈ P = ⌞ P x ⌟
+
+infix 5 _∉_
+_∉_ : ⦃ u : Underlying P ⦄ → A → (A → P) → Type _
+x ∉ P = ¬ x ∈ P
 
 _⊆_ : ⦃ u : Underlying P ⦄ → (A → P) → (A → P) → Type _
 U ⊆ V = {x : _} → x ∈ U → x ∈ V

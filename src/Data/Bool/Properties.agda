@@ -35,7 +35,7 @@ private
     -- test₃? : Dec $
     --   ∃[ f ꞉ (Bool → Bool → Bool) ]
     --   ∃[ g ꞉ (Bool → Bool) ]
-    --   Π[ h ꞉ (Bool → Bool) ]
+    --   ∀[ h ꞉ (Bool → Bool) ]
     --     (f false true ＝ g true and h false)
     -- test₃? = decide!
 
@@ -58,7 +58,7 @@ private
     -- test₃ :
     --   ∃[ f ꞉ (Bool → Bool → Bool) ]
     --   ∃[ g ꞉ (Bool → Bool) ]
-    --   Π[ h ꞉ (Bool → Bool) ]
+    --   ∀[ h ꞉ (Bool → Bool) ]
     --     (f false true ＝ g true and h false)
     -- test₃ = witness!
 
