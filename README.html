@@ -3,56 +3,56 @@
 
 <a id="22" class="Comment">------------------------------------------------------------------------</a>
 <a id="95" class="Comment">-- A programmer&#39;s library for Cubical Agda</a>
-<a id="138" class="Comment">-----------------------------------------------------------------------</a>
+<a id="138" class="Comment">------------------------------------------------------------------------</a>
 
-<a id="211" class="Comment">-- Start here</a>
-<a id="225" class="Keyword">import</a> <a id="232" href="Prelude.html" class="Module">Prelude</a>
+<a id="212" class="Comment">-- Start here</a>
+<a id="226" class="Keyword">import</a> <a id="233" href="Prelude.html" class="Module">Prelude</a>
 
-<a id="241" class="Comment">------------------------------------------------------------------------</a>
-<a id="314" class="Comment">-- Module hierarchy</a>
-<a id="334" class="Comment">------------------------------------------------------------------------</a>
+<a id="242" class="Comment">------------------------------------------------------------------------</a>
+<a id="315" class="Comment">-- Module hierarchy</a>
+<a id="335" class="Comment">------------------------------------------------------------------------</a>
 
-<a id="408" class="Comment">-- Core definitions.</a>
-<a id="429" class="Keyword">import</a> <a id="436" href="Foundations.Everything.html" class="Module">Foundations.Everything</a>
+<a id="409" class="Comment">-- Core definitions.</a>
+<a id="430" class="Keyword">import</a> <a id="437" href="Foundations.Everything.html" class="Module">Foundations.Everything</a>
 
-<a id="460" class="Comment">-- Automating boring things.</a>
-<a id="489" class="Keyword">import</a> <a id="496" href="Meta.Everything.html" class="Module">Meta.Everything</a>
+<a id="461" class="Comment">-- Automating boring things.</a>
+<a id="490" class="Keyword">import</a> <a id="497" href="Meta.Everything.html" class="Module">Meta.Everything</a>
 
-<a id="513" class="Comment">-- (Univalently) structured types.</a>
-<a id="548" class="Keyword">import</a> <a id="555" href="Structures.Everything.html" class="Module">Structures.Everything</a>
+<a id="514" class="Comment">-- (Univalently) structured types.</a>
+<a id="549" class="Keyword">import</a> <a id="556" href="Structures.Everything.html" class="Module">Structures.Everything</a>
 
-<a id="578" class="Comment">-- Correspondences (proof-relevant relations).</a>
-<a id="625" class="Keyword">import</a> <a id="632" href="Correspondences.Everything.html" class="Module">Correspondences.Everything</a>
+<a id="579" class="Comment">-- Correspondences (proof-relevant relations).</a>
+<a id="626" class="Keyword">import</a> <a id="633" href="Correspondences.Everything.html" class="Module">Correspondences.Everything</a>
 
-<a id="660" class="Comment">-- Containers aka polynomial functors.</a>
-<a id="699" class="Keyword">import</a> <a id="706" href="Containers.Everything.html" class="Module">Containers.Everything</a>
+<a id="661" class="Comment">-- Containers aka polynomial functors.</a>
+<a id="700" class="Keyword">import</a> <a id="707" href="Containers.Everything.html" class="Module">Containers.Everything</a>
 
-<a id="729" class="Comment">-- Basic types and their properties.</a>
-<a id="766" class="Keyword">import</a> <a id="773" href="Data.Everything.html" class="Module">Data.Everything</a>
+<a id="730" class="Comment">-- Basic types and their properties.</a>
+<a id="767" class="Keyword">import</a> <a id="774" href="Data.Everything.html" class="Module">Data.Everything</a>
 
-<a id="790" class="Comment">-- I/O and related stuff.</a>
-<a id="816" class="Keyword">import</a> <a id="823" href="System.Everything.html" class="Module">System.Everything</a>
+<a id="791" class="Comment">-- I/O and related stuff.</a>
+<a id="817" class="Keyword">import</a> <a id="824" href="System.Everything.html" class="Module">System.Everything</a>
 
-<a id="842" class="Comment">-- Category theory.</a>
-<a id="862" class="Keyword">import</a> <a id="869" href="Categories.Everything.html" class="Module">Categories.Everything</a>
+<a id="843" class="Comment">-- Category theory.</a>
+<a id="863" class="Keyword">import</a> <a id="870" href="Categories.Everything.html" class="Module">Categories.Everything</a>
 
-<a id="892" class="Comment">-- (Higher) algebra library.</a>
-<a id="921" class="Keyword">import</a> <a id="928" href="Algebra.Everything.html" class="Module">Algebra.Everything</a>
+<a id="893" class="Comment">-- (Higher) algebra library.</a>
+<a id="922" class="Keyword">import</a> <a id="929" href="Algebra.Everything.html" class="Module">Algebra.Everything</a>
 
-<a id="948" class="Comment">-- Order theory.</a>
-<a id="965" class="Keyword">import</a> <a id="972" href="Order.Everything.html" class="Module">Order.Everything</a>
+<a id="949" class="Comment">-- Order theory.</a>
+<a id="966" class="Keyword">import</a> <a id="973" href="Order.Everything.html" class="Module">Order.Everything</a>
 
-<a id="990" class="Comment">-- Function kinds.</a>
-<a id="1009" class="Keyword">import</a> <a id="1016" href="Functions.Everything.html" class="Module">Functions.Everything</a>
+<a id="991" class="Comment">-- Function kinds.</a>
+<a id="1010" class="Keyword">import</a> <a id="1017" href="Functions.Everything.html" class="Module">Functions.Everything</a>
 
-<a id="1038" class="Comment">-- Homotopy level truncations.</a>
-<a id="1069" class="Keyword">import</a> <a id="1076" href="Truncation.Everything.html" class="Module">Truncation.Everything</a>
+<a id="1039" class="Comment">-- Homotopy level truncations.</a>
+<a id="1070" class="Keyword">import</a> <a id="1077" href="Truncation.Everything.html" class="Module">Truncation.Everything</a>
 
 
-<a id="1100" class="Comment">-- TODO</a>
-<a id="1108" class="Comment">-- Modalities.</a>
-<a id="1123" class="Comment">-- TODO import Modalities.Everything</a>
+<a id="1101" class="Comment">-- TODO</a>
+<a id="1109" class="Comment">-- Modalities.</a>
+<a id="1124" class="Comment">-- TODO import Modalities.Everything</a>
 
-<a id="1161" class="Comment">-- -- Homotopy theory</a>
-<a id="1183" class="Comment">-- import Homotopy.Everything</a>
+<a id="1162" class="Comment">-- -- Homotopy theory</a>
+<a id="1184" class="Comment">-- import Homotopy.Everything</a>
 </pre></body></html>
