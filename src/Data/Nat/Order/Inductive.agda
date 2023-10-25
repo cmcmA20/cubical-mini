@@ -86,7 +86,7 @@ instance
 
 ≤-+-l : (x y : ℕ) → x ≤ y + x
 ≤-+-l zero    y = z≤
-≤-+-l (suc x) y = transport (sym (ap (λ q → suc x ≤ q) (+-sucr y x))) (s≤s (≤-+-l x y))
+≤-+-l (suc x) y = transport (sym (ap (λ q → suc x ≤ q) (+-suc-r y x))) (s≤s (≤-+-l x y))
 
 ≤-weak-+l : (x y z : ℕ) → x ≤ z → x ≤ y + z
 ≤-weak-+l x  zero   z prf = prf
@@ -117,8 +117,8 @@ instance
 
 <-+l-≃ : {x y z : ℕ} → (y < z) ≃ (x + y < x + z)
 <-+l-≃ {x} {y} {z} = ≤-+l-≃ {x = x} ∙ₑ prop-extₑ!
-  (≤-subst (+-sucr x y) refl)
-  (≤-subst (sym (+-sucr x y)) refl)
+  (≤-subst (+-suc-r x y) refl)
+  (≤-subst (sym (+-suc-r x y)) refl)
 
 <-+r-≃ : {x y z : ℕ} → (x < y) ≃ (x + z < y + z)
 <-+r-≃ {x} = ≤-+r-≃ {x = suc x}
@@ -182,13 +182,13 @@ suc-pred : (n : ℕ) → 0 < n → n ＝ suc (pred n)
 suc-pred (suc n) n0 = refl
 
 +-sub : (p q : ℕ) → q ≤ p → p ∸ q + q ＝ p
-+-sub  p       zero   qp = +-zeror p
-+-sub (suc p) (suc q) qp = +-sucr _ _ ∙ ap suc (+-sub p q (≤-peel qp))
++-sub  p       zero   qp = +-zero-r p
++-sub (suc p) (suc q) qp = +-suc-r _ _ ∙ ap suc (+-sub p q (≤-peel qp))
 
 ≤-sub-lr : (p q r : ℕ) → p ≤ q + r → p ∸ r ≤ q
-≤-sub-lr  p      q  zero   pqr = subst (λ x → p ≤ x) (+-zeror q) pqr
+≤-sub-lr  p      q  zero   pqr = subst (λ x → p ≤ x) (+-zero-r q) pqr
 ≤-sub-lr  zero   q (suc r) pqr = z≤
-≤-sub-lr (suc p) q (suc r) pqr = ≤-sub-lr p q r (≤-peel (subst (λ x → suc p ≤ x) (+-sucr q r) pqr))
+≤-sub-lr (suc p) q (suc r) pqr = ≤-sub-lr p q r (≤-peel (subst (λ x → suc p ≤ x) (+-suc-r q r) pqr))
 
 <-sub-lr : (p q r : ℕ) → 0 < q → p < q + r → p ∸ r < q
 <-sub-lr p (suc q) r _ pqr = s≤s (≤-sub-lr p q r (≤-peel pqr))
@@ -207,5 +207,5 @@ suc-pred (suc n) n0 = refl
 ·-inj-l x y z 0<x p = ·-inj-r _ _ _ 0<x (·-comm y x ∙ p ∙ ·-comm x z)
 
 mul-<0 : (m n : ℕ) → (0 < m · n) → (0 < m) × (0 < n)
-mul-<0 (suc m) zero    0<mn = absurd (¬sucn≤0 (subst (0 <_) (·-zeror m) 0<mn))
+mul-<0 (suc m) zero    0<mn = absurd (¬sucn≤0 (subst (0 <_) (·-absorb-r m) 0<mn))
 mul-<0 (suc _) (suc _) _    = s≤s z≤ , s≤s z≤
