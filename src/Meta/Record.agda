@@ -31,11 +31,10 @@ record→iso namen unfolded =
   (inferType (def namen []) >>= normalise) >>= go []
   where
   go : List ArgInfo → Term → TC Term
-  go acc (pi argu@(arg i argTy) (abs s ty)) = do
+  go acc (pi argu@(arg i@(arg-info _ m) argTy) (abs s ty)) = do
     r ← extendContext "arg" argu $ go (i ∷ acc) ty
     pure $ pi (arg i' argTy) (abs s r)
-    where
-    i' = arg-info hidden (modality relevant quantity-ω)
+    where i' = arg-info hidden m
   go acc (agda-sort _) = do
     let rec = def namen (makeArgs 0 [] acc)
     unfolded ← unfolded (implicitArgs 0 [] acc)
