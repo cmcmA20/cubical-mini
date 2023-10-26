@@ -115,7 +115,7 @@ private
 comm-monoid-str : Structure ℓ _
 comm-monoid-str = desc→structure comm-monoid-desc
 
-@0 comm-monoid-str-is-univalent : is-univalent (comm-monoid-str {ℓ = ℓ})
+@0 comm-monoid-str-is-univalent : is-univalent (comm-monoid-str {ℓ})
 comm-monoid-str-is-univalent = desc→is-univalent comm-monoid-desc
 
 Comm-monoid : (ℓ : Level) → Type (ℓsuc ℓ)

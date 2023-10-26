@@ -95,7 +95,7 @@ private
 monoid-str : Structure ℓ _
 monoid-str = desc→structure monoid-desc
 
-@0 monoid-str-is-univalent : is-univalent (monoid-str {ℓ = ℓ})
+@0 monoid-str-is-univalent : is-univalent (monoid-str {ℓ})
 monoid-str-is-univalent = desc→is-univalent monoid-desc
 
 Monoid : (ℓ : Level) → Type (ℓsuc ℓ)

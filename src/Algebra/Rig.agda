@@ -23,16 +23,16 @@ Absorb-right {A} e _✧_ = Π[ x ꞉ A ] (x ✧ e ＝ e)
 
 -- rigs (absorptive semirings)
 
-record is-rig
-  {A : Type ℓ} (0a : A) (_+_ : A → A → A)
-               (1a : A) (_*_ : A → A → A): Type ℓ where
+record is-rig {A : Type ℓ}
+    (0a : A) (_+_ : A → A → A)
+    (1a : A) (_*_ : A → A → A) : Type ℓ where
   no-eta-equality
   field has-is-semiring : is-semiring 0a _+_ 1a _*_
   open is-semiring has-is-semiring public
 
   field
-    absorb-l : Absorb-left 0a _*_
-    absorb-r : Absorb-right 0a _*_
+    *-absorb-l : Absorb-left  0a _*_
+    *-absorb-r : Absorb-right 0a _*_
 
 unquoteDecl is-rig-iso = declare-record-iso is-rig-iso (quote is-rig)
 
@@ -54,7 +54,7 @@ private
 rig-str : Structure ℓ _
 rig-str = desc→structure rig-desc
 
-@0 rig-str-is-univalent : is-univalent (rig-str {ℓ = ℓ})
+@0 rig-str-is-univalent : is-univalent (rig-str {ℓ})
 rig-str-is-univalent = desc→is-univalent rig-desc
 
 Rig : (ℓ : Level) → Type (ℓsuc ℓ)

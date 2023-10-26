@@ -27,7 +27,7 @@ private
 ∞-magma-str : Structure ℓ ∞-Magma-on
 ∞-magma-str = term→structure ∞-magma-str-term
 
-@0 ∞-magma-str-is-univalent : is-univalent (∞-magma-str {ℓ = ℓ})
+@0 ∞-magma-str-is-univalent : is-univalent (∞-magma-str {ℓ})
 ∞-magma-str-is-univalent = term→structure-is-univalent ∞-magma-str-term
 
 ∞-Magma : (ℓ : Level) → 𝒰 (ℓsuc ℓ)
@@ -74,7 +74,7 @@ module _ (n : HLevel) where
   n-magma-str : Structure ℓ _
   n-magma-str = desc→structure n-magma-desc
 
-  @0 n-magma-str-is-univalent : is-univalent (n-magma-str {ℓ = ℓ})
+  @0 n-magma-str-is-univalent : is-univalent (n-magma-str {ℓ})
   n-magma-str-is-univalent = desc→is-univalent n-magma-desc
 
 

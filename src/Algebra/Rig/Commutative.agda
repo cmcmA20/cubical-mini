@@ -17,9 +17,9 @@ private variable
 
 -- commutative rigs
 
-record is-comm-rig
-  {A : Type ℓ} (0a : A) (_+_ : A → A → A)
-               (1a : A) (_*_ : A → A → A): Type ℓ where
+record is-comm-rig {A : Type ℓ}
+    (0a : A) (_+_ : A → A → A)
+    (1a : A) (_*_ : A → A → A) : Type ℓ where
   no-eta-equality
   field has-is-rig : is-rig 0a _+_ 1a _*_
   open is-rig has-is-rig public
@@ -46,7 +46,7 @@ private
 comm-rig-str : Structure ℓ _
 comm-rig-str = desc→structure comm-rig-desc
 
-@0 comm-rig-str-is-univalent : is-univalent (comm-rig-str {ℓ = ℓ})
+@0 comm-rig-str-is-univalent : is-univalent (comm-rig-str {ℓ})
 comm-rig-str-is-univalent = desc→is-univalent comm-rig-desc
 
 Comm-rig : (ℓ : Level) → Type (ℓsuc ℓ)

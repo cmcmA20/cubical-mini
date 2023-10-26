@@ -112,7 +112,7 @@ private
 semigroup-str : Structure ℓ _
 semigroup-str = desc→structure is-semigroup-desc
 
-@0 semigroup-str-is-univalent : is-univalent (semigroup-str {ℓ = ℓ})
+@0 semigroup-str-is-univalent : is-univalent (semigroup-str {ℓ})
 semigroup-str-is-univalent = desc→is-univalent is-semigroup-desc
 
 

@@ -27,19 +27,26 @@ Raw-∞-semiring-on X = X × (X → X → X) × X × (X → X → X)
 
 -- semirings (nonabsorptive)
 
-record is-semiring
-  {A : Type ℓ} (0a : A) (_+_ : A → A → A)
-               (1a : A) (_*_ : A → A → A): Type ℓ where
+record is-semiring {A : Type ℓ}
+    (0a : A) (_+_ : A → A → A)
+    (1a : A) (_*_ : A → A → A) : Type ℓ where
   no-eta-equality
   field +-comm-monoid : is-comm-monoid 0a _+_
   open is-comm-monoid +-comm-monoid public
+    renaming ( assoc to +-assoc
+             ; id-l  to +-id-l
+             ; id-r  to +-id-r
+             ; comm  to +-comm )
 
   field *-monoid : is-monoid 1a _*_
   open is-monoid *-monoid hiding (has-is-of-hlevel) public
+    renaming ( assoc to *-assoc
+             ; id-l  to *-id-l
+             ; id-r  to *-id-r )
 
   field
-    *-distrib-l : Distrib-left _*_ _+_
-    *-distrib-r : Distrib-right _*_ _+_
+    *-distrib-+-l : Distrib-left  _*_ _+_
+    *-distrib-+-r : Distrib-right _*_ _+_
 
 unquoteDecl is-semiring-iso = declare-record-iso is-semiring-iso (quote is-semiring)
 
@@ -61,7 +68,7 @@ private
 semiring-str : Structure ℓ _
 semiring-str = desc→structure semiring-desc
 
-@0 semiring-str-is-univalent : is-univalent (semiring-str {ℓ = ℓ})
+@0 semiring-str-is-univalent : is-univalent (semiring-str {ℓ})
 semiring-str-is-univalent = desc→is-univalent semiring-desc
 
 Semiring : (ℓ : Level) → Type (ℓsuc ℓ)
