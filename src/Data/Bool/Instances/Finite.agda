@@ -14,7 +14,7 @@ open import Data.Nat.Base
 open import Truncation.Propositional.Base
 
 bool-is-fin-set : is-fin-set Bool
-bool-is-fin-set = fin {n = 2} ∣ iso→equiv go ∣₁ where
+bool-is-fin-set = fin₁ ∣ iso→equiv go ∣₁ where
   go : Iso Bool (Fin 2)
   go .fst false = fzero
   go .fst true = fsuc fzero

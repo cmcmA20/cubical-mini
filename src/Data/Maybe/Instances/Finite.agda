@@ -21,9 +21,9 @@ private variable
   A : Type ℓ
 
 maybe-is-fin-set : is-fin-set A → is-fin-set (Maybe A)
-maybe-is-fin-set fi = fin do
-  aeq ← enumeration fi
-  ueq ← enumeration it
+maybe-is-fin-set fi = fin₁ do
+  aeq ← enumeration₁ fi
+  ueq ← enumeration₁ it
   pure $ maybe-as-sum ∙ₑ ⊎-ap ueq aeq ∙ₑ fin-coproduct
 
 instance

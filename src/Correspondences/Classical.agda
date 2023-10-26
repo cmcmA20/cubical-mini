@@ -52,18 +52,11 @@ opaque
     Bind-Classically ._>>=_ ¬¬a mf ¬b = ¬¬a $ λ a → mf a ¬b
 
 
-opaque
-  Essentially-classical : Type ℓ → Type ℓ
-  Essentially-classical = ¬¬_ weakly-stable_
+Essentially-classical : Type ℓ → Type ℓ
+Essentially-classical = ¬¬_ weakly-stable_
 
-  essentially-classical-β : Essentially-classical A → ¬¬_ weakly-stable A
-  essentially-classical-β = id
-
-  essentially-classical-η : ¬¬_ weakly-stable A → Essentially-classical A
-  essentially-classical-η = id
-
-  is-essentially-classical : Prop ℓ → Prop ℓ
-  is-essentially-classical A = el! (Essentially-classical ⌞ A ⌟)
+is-essentially-classical : Prop ℓ → Prop ℓ
+is-essentially-classical A = el! (Essentially-classical ⌞ A ⌟)
 
 -- Usage
 -- module _ where private

@@ -18,8 +18,8 @@ open Structures.FinSet public
 
 open import Correspondences.Finite.Bishop
 open Correspondences.Finite.Bishop public
-  using ( is-fin-set ; is-fin-set-β ; is-fin-set-η
-        ; fin ; cardinality ; enumeration
+  using ( is-fin-set
+        ; fin₁ ; cardinality ; enumeration₁
         ; finite ; is-fin-set→omniscient₁ ; finite-pi-fin )
 open import Correspondences.Omniscient
 
@@ -87,7 +87,7 @@ instance
 
 -- Usage
 private
-  module _ {A : FinSet ℓ} {B : ⌞ A ⌟ → FinSet ℓ′} where
+  module _ {A : FinSet ℓa} {B : ⌞ A ⌟ → FinSet ℓb} where
     _ : is-of-hlevel 3 (⌞ A ⌟ → ⌞ A ⌟)
     _ = hlevel!
 
@@ -97,8 +97,8 @@ private
     _ : is-fin-set (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
     _ = finite!
 
-    _ : Omniscient₁ {ℓ′ = ℓ′} (Π[ a ꞉ ⌞ A ⌟ ] ⌞ B a ⌟)
+    _ : Omniscient₁ {ℓ = ℓ} (Π[ a ꞉ ⌞ A ⌟ ] ⌞ B a ⌟)
     _ = omni₁!
 
-    _ : Exhaustible {ℓ′ = ℓ′} (⌞ A ⌟ × ⌞ A ⌟)
+    _ : Exhaustible {ℓ = ℓ} (⌞ A ⌟ × ⌞ A ⌟)
     _ = exhaust!

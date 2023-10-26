@@ -19,9 +19,9 @@ private variable
   B : Type ℓ′
 
 ⊎-is-fin-set : is-fin-set A → is-fin-set B → is-fin-set (A ⊎ B)
-⊎-is-fin-set afi bfi = fin do
-  aeq ← enumeration afi
-  beq ← enumeration bfi
+⊎-is-fin-set afi bfi = fin₁ do
+  aeq ← enumeration₁ afi
+  beq ← enumeration₁ bfi
   pure $ ⊎-ap aeq beq ∙ₑ fin-coproduct
 
 instance

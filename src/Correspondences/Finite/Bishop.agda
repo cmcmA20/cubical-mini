@@ -8,6 +8,7 @@ open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Meta.Bind
+open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
 
@@ -36,50 +37,36 @@ private variable
   P : A → Type ℓ′
   B : Type ℓ′
 
-opaque
-  is-fin-set : Type ℓ → Type ℓ
-  is-fin-set A = Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁
+record is-fin-set (A : Type ℓ) : Type ℓ where
+  no-eta-equality
+  constructor fin₁
+  field
+    { cardinality } : ℕ
+    enumeration₁    : ∥ A ≃ Fin cardinality ∥₁
 
-opaque
-  unfolding is-fin-set
-  is-fin-set-β : is-fin-set A → Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁
-  is-fin-set-β = id
+open is-fin-set public
 
-  is-fin-set-η : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁ → is-fin-set A
-  is-fin-set-η = id
+unquoteDecl is-fin-set-iso = declare-record-iso is-fin-set-iso (quote is-fin-set)
 
-  fin : {n : ℕ} → ∥ A ≃ Fin n ∥₁ → is-fin-set A
-  fin = _ ,_
+is-fin-set-is-prop : is-prop (is-fin-set A)
+is-fin-set-is-prop = is-of-hlevel-≃ _ (iso→equiv is-fin-set-iso) $ is-prop-η go where
+  go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
+  go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim²!
+    (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q)) ∣p∣₁ ∣q∣₁
 
-  cardinality : is-fin-set A → ℕ
-  cardinality = fst
+𝓑→is-fin-set : 𝓑 A → is-fin-set A
+𝓑→is-fin-set fi .cardinality = fi .cardinality
+𝓑→is-fin-set fi .enumeration₁ = ∣ fi .enumeration  ∣₁
 
-  enumeration : (A-f : is-fin-set A) → ∥ A ≃ Fin (cardinality A-f) ∥₁
-  enumeration = snd
+is-fin-set→is-discrete : is-fin-set A → is-discrete A
+is-fin-set→is-discrete fi = ∥-∥₁.proj! do
+  e ← fi .enumeration₁
+  pure $ is-discrete-embedding (equiv→embedding e) fin-is-discrete
 
-  is-fin-set-is-prop : is-prop (is-fin-set A)
-  is-fin-set-is-prop = is-prop-η go where
-    go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
-    go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim²!
-      (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q)) ∣p∣₁ ∣q∣₁
-
-  opaque
-    unfolding 𝓑
-
-    𝓑→is-fin-set : 𝓑 A → is-fin-set A
-    𝓑→is-fin-set (n , e) = n , ∣ e ∣₁
-
-    is-fin-set→is-discrete : is-fin-set A → is-discrete A
-    is-fin-set→is-discrete (_ , e) = ∥-∥₁.proj! do
-      e ← e
-      pure $ is-discrete-embedding (equiv→embedding e) fin-is-discrete
-
-    opaque
-      unfolding Omniscient₁
-      is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ′ = ℓ′} A
-      is-fin-set→omniscient₁ {A} (n , ∣aeq∣₁) {P} P? = ∥-∥₁.proj! do
-        aeq ← ∣aeq∣₁
-        pure $ 𝓑→omniscient₁ (n , aeq) P?
+is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ = ℓ′} A
+is-fin-set→omniscient₁ {A} fi .omniscient₁-β {P} P? = ∥-∥₁.proj! do
+  aeq ← fi .enumeration₁
+  pure $ 𝓑→omniscient₁ (fin aeq) .omniscient₁-β P?
 
 
 finite : ⦃ d : is-fin-set A ⦄ → is-fin-set A
@@ -90,7 +77,7 @@ finite-choice
   → is-fin-set A
   → (∀ x → ∥ P x ∥₁) → ∥ (∀ x → P x) ∥₁
 finite-choice {P} A-f k = do
-  e ← enumeration A-f
+  e ← enumeration₁ A-f
   choose ← fin-choice (cardinality A-f) λ x → k (is-equiv→inverse (e .snd) x)
   pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e .fst x))
 
@@ -101,7 +88,7 @@ finite-pi-fin
   : (n : ℕ) {P : Fin n → Type ℓ′}
   → (∀ x → is-fin-set (P x))
   → is-fin-set Π¹[ P ]
-finite-pi-fin 0 {P} fam = is-fin-set-η $ 1 , (pure $ iso→equiv $ ff , iso gg ri li) where
+finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
   gg : _
@@ -112,26 +99,26 @@ finite-pi-fin 0 {P} fam = is-fin-set-η $ 1 , (pure $ iso→equiv $ ff , iso gg 
   li _ = fun-ext λ ()
 
 finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
-  e ← fin-choice (suc sz) (enumeration ∘ fam)
+  e ← fin-choice (suc sz) (enumeration₁ ∘ fam)
   let rest = finite-pi-fin sz (fam ∘ fsuc)
-  cont ← enumeration rest
+  cont ← enumeration₁ rest
   let
     work =  fin-suc-universal {n = sz} {A = P}
          ∙ₑ Σ-ap (e fzero) (λ x → cont)
          ∙ₑ fin-sum {n = cardinality (fam fzero)} λ _ → cardinality rest
-  pure $ is-fin-set-η $ sum (cardinality _) _ , pure work
+  pure $ fin₁ $ pure work
 
 
 ×-is-fin-set : is-fin-set A → is-fin-set B → is-fin-set (A × B)
-×-is-fin-set afin bfin = fin do
-  aeq ← enumeration afin
-  beq ← enumeration bfin
-  pure $ Σ-ap aeq (λ _ → beq) ∙ₑ fin-product
+×-is-fin-set afin bfin = fin₁ do
+  aeq ← enumeration₁ afin
+  beq ← enumeration₁ bfin
+  pure $ ×-ap aeq beq ∙ₑ fin-product
 
 Σ-is-fin-set
   : is-fin-set A → (∀ x → is-fin-set (P x)) → is-fin-set (Σ A P)
 Σ-is-fin-set {A} {P} afin fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
-  aeq ← enumeration afin
+  aeq ← enumeration₁ afin
   let
     module aeq = Equiv aeq
     bc : (x : Fin (cardinality afin)) → ℕ
@@ -140,30 +127,30 @@ finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
     fs : (Σ _ λ x → Fin (bc x)) ≃ Fin (sum (cardinality afin) bc)
     fs = fin-sum bc
     work = do
-      t ← finite-choice afin $ enumeration ∘ fam
+      t ← finite-choice afin $ enumeration₁ ∘ fam
       pure $ Σ-ap aeq λ x → t x
           ∙ₑ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
 
-  pure $ fin ⦇ work ∙ₑ pure fs ⦈
+  pure $ fin₁ ⦇ work ∙ₑ pure fs ⦈
 
 fun-is-fin-set
   : is-fin-set A → is-fin-set B → is-fin-set (A → B)
 fun-is-fin-set afin bfin = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
-  ae ← enumeration afin
-  be ← enumeration bfin
+  ae ← enumeration₁ afin
+  be ← enumeration₁ bfin
   let count = finite-pi-fin (cardinality afin) λ _ → bfin
-  eqv′ ← enumeration count
-  pure $ fin $ pure (Π-cod-≃ (λ _ → be) ∙ₑ function-≃ ae (be ₑ⁻¹) ∙ₑ eqv′)
+  eqv′ ← enumeration₁ count
+  pure $ fin₁ $ pure (Π-cod-≃ (λ _ → be) ∙ₑ function-≃ ae (be ₑ⁻¹) ∙ₑ eqv′)
 
 Π-is-fin-set
   : {P : A → Type ℓ′} → is-fin-set A → (∀ x → is-fin-set (P x)) → is-fin-set (∀ x → P x)
 Π-is-fin-set afin fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
-  eqv ← enumeration afin
+  eqv ← enumeration₁ afin
   let count = finite-pi-fin (cardinality afin) λ x → fam $ is-equiv→inverse (eqv .snd) x
-  eqv′ ← enumeration count
-  pure $ fin $ pure $ Π-dom-≃ (eqv ₑ⁻¹) ∙ₑ eqv′
+  eqv′ ← enumeration₁ count
+  pure $ fin₁ $ pure $ Π-dom-≃ (eqv ₑ⁻¹) ∙ₑ eqv′
 
 lift-is-fin-set : is-fin-set A → is-fin-set (Lift ℓ′ A)
-lift-is-fin-set afin = fin do
-  aeq ← enumeration afin
+lift-is-fin-set afin = fin₁ do
+  aeq ← enumeration₁ afin
   pure $ lift-equiv ∙ₑ aeq

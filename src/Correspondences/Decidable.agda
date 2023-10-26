@@ -19,7 +19,7 @@ private variable
   n : HLevel
 
 dec→essentially-classical : Dec A → Essentially-classical A
-dec→essentially-classical = essentially-classical-η ∘ Dec.rec
+dec→essentially-classical = Dec.rec
   (λ a _ → a)
   (λ ¬a f → ⊥.rec (f ¬a))
 

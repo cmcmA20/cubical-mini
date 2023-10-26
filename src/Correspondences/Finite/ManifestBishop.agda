@@ -4,6 +4,7 @@ module Correspondences.Finite.ManifestBishop where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
 
@@ -25,26 +26,33 @@ private variable
   ℓ ℓ′ : Level
   A : Type ℓ
 
-opaque
-  𝓑 : Type ℓ → Type ℓ
-  𝓑 A = Σ[ n ꞉ ℕ ] (A ≃ Fin n)
+record 𝓑 (A : Type ℓ) : Type ℓ where
+  no-eta-equality
+  constructor fin
+  field
+    { cardinality } : ℕ
+    enumeration     : A ≃ Fin cardinality
 
-  𝓑-is-set : is-set (𝓑 A)
-  𝓑-is-set = hlevel!
+open 𝓑 public
 
-opaque
-  unfolding 𝓑 Omniscient₁
-  𝓑→omniscient₁ : 𝓑 A → Omniscient₁ {ℓ′ = ℓ′} A
-  𝓑→omniscient₁ {A} (n , aeq) {P} P? =
-    Dec.map lemma₁ lemma₂ (any? P? xs) where
-      module Ã = Equiv aeq
-      module Ṽ = Equiv vec-fun-equiv
+unquoteDecl 𝓑-iso = declare-record-iso 𝓑-iso (quote 𝓑)
 
-      xs : Vec A n
-      xs = Ṽ.from $ Ã.from
+𝓑-is-set : is-set (𝓑 A)
+𝓑-is-set = is-of-hlevel-≃ _ (iso→equiv 𝓑-iso) hlevel!
 
-      lemma₁ : Σ[ i ꞉ Fin n ] P (lookup xs i) → ∥ Σ[ a ꞉ A ] P a ∥₁
-      lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) id
+𝓑→omniscient₁ : 𝓑 A → Omniscient₁ {ℓ = ℓ′} A
+𝓑→omniscient₁ {A} fi .omniscient₁-β {P} P? =
+  Dec.map lemma₁ lemma₂ (any? P? xs) where
+    n = fi .cardinality
+    aeq = fi .enumeration
+    module Ã = Equiv aeq
+    module Ṽ = Equiv vec-fun-equiv
 
-      lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ ∥ Σ[ a ꞉ A ] P a ∥₁
-      lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))
+    xs : Vec A n
+    xs = Ṽ.from $ Ã.from
+
+    lemma₁ : Σ[ i ꞉ Fin n ] P (lookup xs i) → ∥ Σ[ a ꞉ A ] P a ∥₁
+    lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) id
+
+    lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ ∥ Σ[ a ꞉ A ] P a ∥₁
+    lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))

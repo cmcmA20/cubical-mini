@@ -12,4 +12,4 @@ open import Truncation.Propositional.Base
 
 instance
   fin-is-fin-set : ∀ {n} → is-fin-set (Fin n)
-  fin-is-fin-set = fin ∣ idₑ ∣₁
+  fin-is-fin-set = fin₁ ∣ idₑ ∣₁

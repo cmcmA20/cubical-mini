@@ -28,7 +28,7 @@ witness-macro strict? hole = do
   let prf = def (quote proof) (candidate v∷ [])
   true ← pure strict? where
     false → do
-      solution ← reduce $ def (quote Reflects′.invert) (prf v∷ [])
+      solution ← pure $ def (quote Reflects′.invert) (prf v∷ [])
       unify hole solution
   con (quote ofʸ) (_ ∷ _ ∷ solution v∷ []) ← reduce $ prf
     where x → typeError [ "Goal is actually false (" , termErr x , ")" ]
@@ -36,11 +36,3 @@ witness-macro strict? hole = do
 
 macro witness! = witness-macro false
 macro witness-strict! = witness-macro true
-
-opaque
-  unfolding
-    is-discrete-β omniscient₁→exhaustible is-fin-set→omniscient₁ 𝓑→omniscient₁
-
-    -- yes it's a kludge
-  witness-opaque-marker : ⊤
-  witness-opaque-marker = tt

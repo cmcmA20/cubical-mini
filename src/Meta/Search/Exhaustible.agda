@@ -53,6 +53,6 @@ instance
 
 -- Usage
 private
-  module _ ⦃ A-exh : Exhaustible {ℓ′ = ℓ′} A ⦄ where
-    _ : Exhaustible {ℓ′ = ℓ′} (Lift ℓ A)
+  module _ ⦃ A-exh : Exhaustible {ℓ = ℓ} A ⦄ where
+    _ : Exhaustible (Lift ℓ A)
     _ = exhaust!

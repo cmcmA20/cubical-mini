@@ -54,9 +54,9 @@ instance
 
 -- Usage
 private
-  module _ ⦃ A-omn : Omniscient₁ {ℓ′ = ℓ′} A ⦄ where
-    _ : Omniscient₁ {ℓ′ = ℓ′} A
+  module _ ⦃ A-omn : Omniscient₁ {ℓ = ℓ} A ⦄ where
+    _ : Omniscient₁ A
     _ = omni₁!
 
-    _ : Exhaustible {ℓ′ = ℓ′} A
+    _ : Exhaustible A
     _ = exhaust!

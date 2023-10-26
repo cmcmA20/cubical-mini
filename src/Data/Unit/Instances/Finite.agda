@@ -13,4 +13,4 @@ open import Truncation.Propositional.Base
 
 instance
   ⊤-is-fin-set : is-fin-set ⊤
-  ⊤-is-fin-set = fin ∣ (is-contr→equiv-⊤ fin-1-is-contr) ₑ⁻¹ ∣₁
+  ⊤-is-fin-set = fin₁ ∣ (is-contr→equiv-⊤ fin-1-is-contr) ₑ⁻¹ ∣₁

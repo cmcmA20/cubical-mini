@@ -58,13 +58,11 @@ private
   FinSet′ : (ℓ : Level) → Type (ℓsuc ℓ)
   FinSet′ _ = Type-with fin-set′-str
 
-  opaque
-    unfolding enumeration
-    @0 fin-set′-ext : {X Y : FinSet′ ℓ} → (X .snd .fst ＝ Y .snd .fst) → ∥ X ＝ Y ∥₁
-    fin-set′-ext {X} {Y} p = do
-      u ← enumeration (X .snd)
-      v ← enumeration (Y .snd)
-      pure $ sip fin-set-str-is-univalent (u ∙ₑ path→equiv (ap (λ n → Fin n) p) ∙ₑ v ₑ⁻¹ , p)
+  @0 fin-set′-ext : {X Y : FinSet′ ℓ} → (X .snd .fst ＝ Y .snd .fst) → ∥ X ＝ Y ∥₁
+  fin-set′-ext {X} {Y} p = do
+    u ← X .snd .snd
+    v ← Y .snd .snd
+    pure $ sip fin-set-str-is-univalent (u ∙ₑ path→equiv (ap (λ n → Fin n) p) ∙ₑ v ₑ⁻¹ , p)
 
   @0 ∥FinSet′∥₂≃ℕ : ∥ FinSet′ ℓ ∥₂ ≃ ℕ
   ∥FinSet′∥₂≃ℕ = iso→equiv $ to , iso from (λ _ → refl) li where
@@ -77,7 +75,5 @@ private
     li : from is-left-inverse-of to
     li = ∥-∥₂.elim! λ _ → ∥-∥₂-path.from (fin-set′-ext refl)
 
-opaque
-  unfolding cardinality
-  @0 ∥FinSet∥₂≃ℕ : ∥ FinSet ℓ ∥₂ ≃ ℕ
-  ∥FinSet∥₂≃ℕ = subst (λ X → ∥ X ∥₂ ≃ ℕ) (sym (ua (iso→equiv fin-set-iso))) ∥FinSet′∥₂≃ℕ
+@0 ∥FinSet∥₂≃ℕ : ∥ FinSet ℓ ∥₂ ≃ ℕ
+∥FinSet∥₂≃ℕ = apₑ ∥_∥₂ (iso→equiv fin-set-iso ∙ₑ Σ-ap-snd λ X → iso→equiv is-fin-set-iso) ∙ₑ ∥FinSet′∥₂≃ℕ
