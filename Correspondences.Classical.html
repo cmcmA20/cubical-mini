@@ -53,32 +53,25 @@
     <a id="1129" href="Correspondences.Classical.html#1083" class="Function">Bind-Classically</a> <a id="1146" class="Symbol">.</a><a id="1147" href="Meta.Bind.html#190" class="Field Operator">_&gt;&gt;=_</a> <a id="1153" href="Correspondences.Classical.html#1153" class="Bound">¬¬a</a> <a id="1157" href="Correspondences.Classical.html#1157" class="Bound">mf</a> <a id="1160" href="Correspondences.Classical.html#1160" class="Bound">¬b</a> <a id="1163" class="Symbol">=</a> <a id="1165" href="Correspondences.Classical.html#1153" class="Bound">¬¬a</a> <a id="1169" href="Foundations.Pi.Base.html#1019" class="Function Operator">$</a> <a id="1171" class="Symbol">λ</a> <a id="1173" href="Correspondences.Classical.html#1173" class="Bound">a</a> <a id="1175" class="Symbol">→</a> <a id="1177" href="Correspondences.Classical.html#1157" class="Bound">mf</a> <a id="1180" href="Correspondences.Classical.html#1173" class="Bound">a</a> <a id="1182" href="Correspondences.Classical.html#1160" class="Bound">¬b</a>
 
 
-<a id="1187" class="Keyword">opaque</a>
-  <a id="Essentially-classical"></a><a id="1196" href="Correspondences.Classical.html#1196" class="Function">Essentially-classical</a> <a id="1218" class="Symbol">:</a> <a id="1220" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="1225" href="Correspondences.Classical.html#373" class="Generalizable">ℓ</a> <a id="1227" class="Symbol">→</a> <a id="1229" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="1234" href="Correspondences.Classical.html#373" class="Generalizable">ℓ</a>
-  <a id="1238" href="Correspondences.Classical.html#1196" class="Function">Essentially-classical</a> <a id="1260" class="Symbol">=</a> <a id="1262" href="Correspondences.Classical.html#410" class="Function Operator">¬¬_</a> <a id="1266" href="Foundations.Base.html#21351" class="Function Operator">weakly-stable_</a>
+<a id="Essentially-classical"></a><a id="1187" href="Correspondences.Classical.html#1187" class="Function">Essentially-classical</a> <a id="1209" class="Symbol">:</a> <a id="1211" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="1216" href="Correspondences.Classical.html#373" class="Generalizable">ℓ</a> <a id="1218" class="Symbol">→</a> <a id="1220" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="1225" href="Correspondences.Classical.html#373" class="Generalizable">ℓ</a>
+<a id="1227" href="Correspondences.Classical.html#1187" class="Function">Essentially-classical</a> <a id="1249" class="Symbol">=</a> <a id="1251" href="Correspondences.Classical.html#410" class="Function Operator">¬¬_</a> <a id="1255" href="Foundations.Base.html#21351" class="Function Operator">weakly-stable_</a>
 
-  <a id="essentially-classical-β"></a><a id="1284" href="Correspondences.Classical.html#1284" class="Function">essentially-classical-β</a> <a id="1308" class="Symbol">:</a> <a id="1310" href="Correspondences.Classical.html#1196" class="Function">Essentially-classical</a> <a id="1332" href="Correspondences.Classical.html#385" class="Generalizable">A</a> <a id="1334" class="Symbol">→</a> <a id="1336" href="Correspondences.Classical.html#410" class="Function Operator">¬¬_</a> <a id="1340" href="Foundations.Base.html#21351" class="Function Operator">weakly-stable</a> <a id="1354" href="Correspondences.Classical.html#385" class="Generalizable">A</a>
-  <a id="1358" href="Correspondences.Classical.html#1284" class="Function">essentially-classical-β</a> <a id="1382" class="Symbol">=</a> <a id="1384" href="Foundations.Pi.Base.html#734" class="Function">id</a>
+<a id="is-essentially-classical"></a><a id="1271" href="Correspondences.Classical.html#1271" class="Function">is-essentially-classical</a> <a id="1296" class="Symbol">:</a> <a id="1298" href="Structures.n-Type.html#3637" class="Function">Prop</a> <a id="1303" href="Correspondences.Classical.html#373" class="Generalizable">ℓ</a> <a id="1305" class="Symbol">→</a> <a id="1307" href="Structures.n-Type.html#3637" class="Function">Prop</a> <a id="1312" href="Correspondences.Classical.html#373" class="Generalizable">ℓ</a>
+<a id="1314" href="Correspondences.Classical.html#1271" class="Function">is-essentially-classical</a> <a id="1339" href="Correspondences.Classical.html#1339" class="Bound">A</a> <a id="1341" class="Symbol">=</a> <a id="1343" href="Meta.Search.HLevel.html#1574" class="Function">el!</a> <a id="1347" class="Symbol">(</a><a id="1348" href="Correspondences.Classical.html#1187" class="Function">Essentially-classical</a> <a id="1370" href="Meta.Underlying.html#199" class="Field Operator">⌞</a> <a id="1372" href="Correspondences.Classical.html#1339" class="Bound">A</a> <a id="1374" href="Meta.Underlying.html#199" class="Field Operator">⌟</a><a id="1375" class="Symbol">)</a>
 
-  <a id="essentially-classical-η"></a><a id="1390" href="Correspondences.Classical.html#1390" class="Function">essentially-classical-η</a> <a id="1414" class="Symbol">:</a> <a id="1416" href="Correspondences.Classical.html#410" class="Function Operator">¬¬_</a> <a id="1420" href="Foundations.Base.html#21351" class="Function Operator">weakly-stable</a> <a id="1434" href="Correspondences.Classical.html#385" class="Generalizable">A</a> <a id="1436" class="Symbol">→</a> <a id="1438" href="Correspondences.Classical.html#1196" class="Function">Essentially-classical</a> <a id="1460" href="Correspondences.Classical.html#385" class="Generalizable">A</a>
-  <a id="1464" href="Correspondences.Classical.html#1390" class="Function">essentially-classical-η</a> <a id="1488" class="Symbol">=</a> <a id="1490" href="Foundations.Pi.Base.html#734" class="Function">id</a>
+<a id="1378" class="Comment">-- Usage</a>
+<a id="1387" class="Comment">-- module _ where private</a>
+<a id="1413" class="Comment">--   open import Data.Sum.Base</a>
 
-  <a id="is-essentially-classical"></a><a id="1496" href="Correspondences.Classical.html#1496" class="Function">is-essentially-classical</a> <a id="1521" class="Symbol">:</a> <a id="1523" href="Structures.n-Type.html#3637" class="Function">Prop</a> <a id="1528" href="Correspondences.Classical.html#373" class="Generalizable">ℓ</a> <a id="1530" class="Symbol">→</a> <a id="1532" href="Structures.n-Type.html#3637" class="Function">Prop</a> <a id="1537" href="Correspondences.Classical.html#373" class="Generalizable">ℓ</a>
-  <a id="1541" href="Correspondences.Classical.html#1496" class="Function">is-essentially-classical</a> <a id="1566" href="Correspondences.Classical.html#1566" class="Bound">A</a> <a id="1568" class="Symbol">=</a> <a id="1570" href="Meta.Search.HLevel.html#1574" class="Function">el!</a> <a id="1574" class="Symbol">(</a><a id="1575" href="Correspondences.Classical.html#1196" class="Function">Essentially-classical</a> <a id="1597" href="Meta.Underlying.html#199" class="Field Operator">⌞</a> <a id="1599" href="Correspondences.Classical.html#1566" class="Bound">A</a> <a id="1601" href="Meta.Underlying.html#199" class="Field Operator">⌟</a><a id="1602" class="Symbol">)</a>
+<a id="1445" class="Comment">--   LEM : Classically $ A ⊎ (¬ A)</a>
+<a id="1480" class="Comment">--   LEM = go where opaque</a>
+<a id="1507" class="Comment">--     unfolding Classically</a>
+<a id="1536" class="Comment">--     go : Classically $ A ⊎ (¬ A)</a>
+<a id="1572" class="Comment">--     go z = z $ inr $ z ∘ inl</a>
 
-<a id="1605" class="Comment">-- Usage</a>
-<a id="1614" class="Comment">-- module _ where private</a>
-<a id="1640" class="Comment">--   open import Data.Sum.Base</a>
-
-<a id="1672" class="Comment">--   LEM : Classically $ A ⊎ (¬ A)</a>
-<a id="1707" class="Comment">--   LEM = go where opaque</a>
-<a id="1734" class="Comment">--     unfolding Classically</a>
-<a id="1763" class="Comment">--     go : Classically $ A ⊎ (¬ A)</a>
-<a id="1799" class="Comment">--     go z = z $ inr $ z ∘ inl</a>
-
-<a id="1832" class="Comment">--   DNE : Classically (¬¬ A → A)</a>
-<a id="1866" class="Comment">--   DNE = do</a>
-<a id="1880" class="Comment">--     inl a ← LEM</a>
-<a id="1899" class="Comment">--       where inr a → pure $ λ ¬¬a → ⊥.rec (¬¬a a)</a>
-<a id="1951" class="Comment">--     pure λ _ → a</a>
+<a id="1605" class="Comment">--   DNE : Classically (¬¬ A → A)</a>
+<a id="1639" class="Comment">--   DNE = do</a>
+<a id="1653" class="Comment">--     inl a ← LEM</a>
+<a id="1672" class="Comment">--       where inr a → pure $ λ ¬¬a → ⊥.rec (¬¬a a)</a>
+<a id="1724" class="Comment">--     pure λ _ → a</a>
 </pre></body></html>
