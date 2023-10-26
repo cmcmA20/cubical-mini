@@ -26,48 +26,46 @@ private variable
   ℓ : Level
   @0 m n : ℕ
 
+open Fin
+
+fin-is-set : is-set (Fin n)
+fin-is-set {n} = is-of-hlevel-≃ 2 (iso→equiv fin-iso)
+  (Σ-is-of-hlevel 2 hlevel! λ z → is-prop→is-set (∥-∥ᴱ-is-prop (≤-is-prop {suc z} {n})))
+
+strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
+strengthen {0}     (mk-fin k {(b)})       = inl (mk-fin k {b})
+strengthen {suc n} (mk-fin 0)             = inl fzero
+strengthen {suc n} (mk-fin (suc k) {(b)}) = ⊎.map fsuc fsuc (strengthen (mk-fin k {b}))
+
+inject : m ≤ n → Fin m → Fin n
+inject {m} p (mk-fin k {∣ q ∣ᴱ}) = mk-fin k {∣ ≤-trans {suc k} {m} q p ∣ᴱ}
+
+fzero≠fsuc : {k : Fin m} → fzero ≠ fsuc k
+fzero≠fsuc = suc≠zero ∘ sym ∘ ap index
+
+fsuc-inj : {k l : Fin m} → fsuc k ＝ fsuc l → k ＝ l
+fsuc-inj {m} {k} = ap pred′ where
+  pred′ : Fin (suc m) → Fin m
+  pred′ (mk-fin 0)       = k
+  pred′ (mk-fin (suc k)) = mk-fin k
+
+fin-injective : {m n : ℕ} → Fin m ≃ Fin n → m ＝ n
+fin-injective f = finⁱ-injective $ (sub-fin≃finⁱ ₑ⁻¹) ∙ₑ f ∙ₑ sub-fin≃finⁱ
+
+fin-choice
+  : ∀ n {A : Fin n → Type ℓ} {M}
+      (let module M = Effect M)
+  → ⦃ Bind M ⦄
+  → (∀ x → M.₀ (A x)) → M.₀ (∀ x → A x)
+fin-choice 0 _ = pure λ()
+fin-choice (suc n) {A} k = do
+  azero ← k fzero
+  asuc  ← fin-choice n (k ∘ fsuc)
+  pure λ where
+    (mk-fin 0)       → azero
+    (mk-fin (suc k)) → asuc (mk-fin k)
+
 opaque
-  unfolding Fin index bound
-
-  fin-is-set : is-set (Fin n)
-  fin-is-set {n} = Σ-is-of-hlevel 2 hlevel! λ z → is-prop→is-set (∥-∥ᴱ-is-prop (≤-is-prop {suc z} {n}))
-
-  strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
-  strengthen (k , p) = go k p where
-    go : {n : ℕ} (k : ℕ) → ∥ k < suc n ∥ᴱ → Fin (suc n) ⊎ Fin n
-    go {0} k p = inl (k , p)
-    go {suc n} 0 _ = inl fzero
-    go {suc n} (suc k) ∣ p ∣ᴱ = ⊎.map fsuc fsuc $ go k ∣ p ∣ᴱ
-
-  inject : m ≤ n → Fin m → Fin n
-  inject {m} p (k , ∣ q ∣ᴱ) = k , ∣ ≤-trans {suc k} {m} q p ∣ᴱ
-
-  fzero≠fsuc : {k : Fin m} → fzero ≠ fsuc k
-  fzero≠fsuc {m} = suc≠zero ∘ sym ∘ ap (index {suc m})
-
-  fsuc-inj : {k l : Fin m} → fsuc k ＝ fsuc l → k ＝ l
-  fsuc-inj {m} {k} = ap pred′ where
-    pred′ : Fin (suc m) → Fin m
-    pred′ (0 , _) = k
-    pred′ (suc k , ∣ p ∣ᴱ) = k , ∣ p ∣ᴱ
-
-  fin-injective : {m n : ℕ} → Fin m ≃ Fin n → m ＝ n
-  fin-injective f = finⁱ-injective $ (sub-fin≃finⁱ ₑ⁻¹) ∙ₑ f ∙ₑ sub-fin≃finⁱ
-
-  fin-choice
-    : ∀ n {A : Fin n → Type ℓ} {M}
-        (let module M = Effect M)
-    → ⦃ Bind M ⦄
-    → (∀ x → M.₀ (A x)) → M.₀ (∀ x → A x)
-  fin-choice 0 _ = pure λ()
-  fin-choice (suc n) {A} k = do
-    azero ← k fzero
-    asuc  ← fin-choice n (k ∘ fsuc)
-    pure λ where
-      (0 , _) → azero
-      (suc k , ∣ p ∣ᴱ) → asuc $ k , ∣ p ∣ᴱ
-
-  opaque
-    unfolding is-prop→pathP
-    fin-ext-refl : {x : Fin n} → fin-ext {k₁ = x} refl ＝ refl {x = x}
-    fin-ext-refl {n} = fin-is-set {n} _ _ _ refl
+  unfolding is-prop→pathP
+  fin-ext-refl : {x : Fin n} → fin-ext refl ＝ refl {x = x}
+  fin-ext-refl = fin-is-set _ _ _ refl

@@ -2,7 +2,10 @@
 module Data.FinSub.Base where
 
 open import Foundations.Base
+open import Foundations.Equiv
 open import Foundations.Sigma
+
+open import Meta.Record
 
 open import Correspondences.Erased
 
@@ -15,38 +18,22 @@ private variable
   ℓ ℓ′ : Level
   @0 m n : ℕ
 
-opaque
-  unfolding _≤_
-  Fin : @0 ℕ → Type
-  Fin n = Σ[ k ꞉ ℕ ] ∥ k < n ∥ᴱ
+record Fin (@0 n : ℕ) : Type where
+  constructor mk-fin
+  field
+    index     : ℕ
+    { bound } : ∥ index < n ∥ᴱ
 
-  fin-β : Fin n → Σ[ k ꞉ ℕ ] ∥ k < n ∥ᴱ
-  fin-β = id
+open Fin
 
-  fin-η : Σ[ k ꞉ ℕ ] ∥ k < n ∥ᴱ → Fin n
-  fin-η = id
+unquoteDecl fin-iso = declare-record-iso fin-iso (quote Fin)
 
-  index : Fin n → ℕ
-  index = fst
+fzero : Fin (suc n)
+fzero = mk-fin 0
 
-  bound : (k : Fin n) → ∥ index k < n ∥ᴱ
-  bound = snd
+fsuc : Fin n → Fin (suc n)
+fsuc (mk-fin k {(b)}) = mk-fin (suc k) {b}
 
-  fzero : Fin (suc n)
-  fzero = 0 , ∣ tt ∣ᴱ
-
-  fsuc : Fin n → Fin (suc n)
-  fsuc (k , ∣ p ∣ᴱ) = suc k , ∣ p ∣ᴱ
-
-  fin-ext : {k₁ k₂ : Fin n} → index k₁ ＝ index k₂ → k₁ ＝ k₂
-  fin-ext {n} = Σ-prop-path $ λ z → ∥-∥ᴱ-is-prop (≤-is-prop {m = suc z} {n = n})
-
-  -- TODO feels clunky, how to improve it?
-  -- elim
-  --   : (P : ∀ {n} → Fin n → Type ℓ)
-  --   → (∀ {n} → P {suc n} fzero)
-  --   → (∀ {n} {fn : Fin n} → P fn → P (fsuc fn))
-  --   → {n : ℕ} (fn : Fin n) → P fn
-  -- elim P fz fs {0} (_ , ∣ p ∣ᴱ) = ⊥.absurd (¬sucn≤0 {n = 0} p)
-  -- elim P fz fs {suc n} (0 , _) = fz
-  -- elim P fz fs {suc n} (suc k , ∣ p ∣ᴱ) = fs $ elim P fz fs $ k , ∣ p ∣ᴱ
+fin-ext : {k₁ k₂ : Fin n} → k₁ .index ＝ k₂ .index → k₁ ＝ k₂
+fin-ext {n} = ap e.from ∘ Σ-prop-path (λ _ → ∥-∥ᴱ-is-prop (<-is-prop {n = n})) where
+  module e = Equiv (iso→equiv fin-iso)

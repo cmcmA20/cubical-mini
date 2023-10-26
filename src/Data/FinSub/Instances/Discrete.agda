@@ -16,7 +16,7 @@ private variable n : ℕ
 
 fin-is-discrete : is-discrete (Fin n)
 fin-is-discrete = is-discrete-η λ k l → Dec.map
-  fin-ext (λ k≠l p → k≠l (ap index p)) (index k ≟ index l)
+  fin-ext (λ k≠l p → k≠l (ap Fin.index p)) (Fin.index k ≟ Fin.index l)
 
 instance
   decomp-dis-fin : goal-decomposition (quote is-discrete) (Fin n)

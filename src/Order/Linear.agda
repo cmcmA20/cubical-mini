@@ -47,6 +47,7 @@ record is-linear-order {ℓ ℓ′} {A : Type ℓ}
       (set-identity-system hlevel! λ p → <-conn (p ∘ inl) (p ∘ inr))
       hlevel!
 
+unquoteDecl is-linear-order-iso = declare-record-iso is-linear-order-iso (quote is-linear-order)
 
 private variable
   ℓ ℓ′ : Level
@@ -54,11 +55,8 @@ private variable
   R : A → A → Type ℓ′
 
 is-linear-order-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (is-linear-order R)
-is-linear-order-is-of-hlevel n = is-of-hlevel-+-left 1 _ is-linear-order-is-prop where
-  unquoteDecl eqv = declare-record-iso eqv (quote is-linear-order)
-  is-linear-order-is-prop : is-prop (is-linear-order R)
-  is-linear-order-is-prop = is-prop-η λ x y →
-    let open is-linear-order x in is-prop-β (iso→is-of-hlevel 1 eqv hlevel!) x y
+is-linear-order-is-of-hlevel n = is-prop→is-of-hlevel-suc $ is-prop-η λ x →
+  let open is-linear-order x in is-prop-β (iso→is-of-hlevel 1 is-linear-order-iso hlevel!) x
 
 instance
   decomp-hlevel-lo

@@ -13,19 +13,17 @@ open import Data.Nat.Base
 
 open import Truncation.Propositional.Base
 
-opaque
-  unfolding Fin
-  bool-is-fin-set : is-fin-set Bool
-  bool-is-fin-set = fin {n = 2} ∣ iso→equiv go ∣₁ where
-    go : Iso Bool (Fin 2)
-    go .fst false = fzero
-    go .fst true = fsuc fzero
-    go .snd .is-iso.inv (0 , _) = false
-    go .snd .is-iso.inv (1 , _) = true
-    go .snd .is-iso.rinv (0 , _) = refl
-    go .snd .is-iso.rinv (1 , _) = refl
-    go .snd .is-iso.linv false = refl
-    go .snd .is-iso.linv true = refl
+bool-is-fin-set : is-fin-set Bool
+bool-is-fin-set = fin {n = 2} ∣ iso→equiv go ∣₁ where
+  go : Iso Bool (Fin 2)
+  go .fst false = fzero
+  go .fst true = fsuc fzero
+  go .snd .is-iso.inv (mk-fin 0) = false
+  go .snd .is-iso.inv (mk-fin 1) = true
+  go .snd .is-iso.rinv (mk-fin 0) = refl
+  go .snd .is-iso.rinv (mk-fin 1) = refl
+  go .snd .is-iso.linv false = refl
+  go .snd .is-iso.linv true = refl
 
 instance
   decomp-fin-bool : goal-decomposition (quote is-fin-set) Bool

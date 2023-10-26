@@ -26,52 +26,50 @@ private variable
   ℓ : Level
   @0 m n : ℕ
 
+fin-0-is-initial : Fin 0 ≃ ⊥
+fin-0-is-initial .fst ()
+fin-0-is-initial .snd .equiv-proof ()
+
 opaque
-  unfolding Fin
-  fin-0-is-initial : Fin 0 ≃ ⊥
-  fin-0-is-initial .fst ()
-  fin-0-is-initial .snd .equiv-proof ()
+  unfolding is-of-hlevel
+  fin-1-is-contr : is-contr (Fin 1)
+  fin-1-is-contr .fst = fzero
+  fin-1-is-contr .snd (mk-fin 0) = refl
 
-  opaque
-    unfolding is-of-hlevel
-    fin-1-is-contr : is-contr (Fin 1)
-    fin-1-is-contr .fst = fzero
-    fin-1-is-contr .snd (0 , _) = refl
+fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
+fin-suc = iso→equiv $ f , iso g rinv linv where
+  f : Fin (suc n) → ⊤ ⊎ Fin n
+  f (mk-fin 0)       = inl tt
+  f (mk-fin (suc k)) = inr (mk-fin k)
+  g : ⊤ ⊎ Fin n → Fin (suc n)
+  g (inl _) = fzero
+  g (inr x) = fsuc x
+  rinv : g is-right-inverse-of f
+  rinv (inl _) = refl
+  rinv (inr _) = refl
+  linv : g is-left-inverse-of f
+  linv (mk-fin 0)       = refl
+  linv (mk-fin (suc _)) = refl
 
-  fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
-  fin-suc = iso→equiv (f , iso g rinv linv) where
-    f : Fin (suc n) → ⊤ ⊎ Fin n
-    f (0 , _) = inl tt
-    f (suc k , ∣ p ∣ᴱ) = inr $ k , ∣ p ∣ᴱ
-    g : ⊤ ⊎ Fin n → Fin (suc n)
-    g (inl _) = fzero
-    g (inr x) = fsuc x
-    rinv : (g {n}) is-right-inverse-of f
-    rinv (inl _) = refl
-    rinv (inr x) = refl
-    linv : (g {n}) is-left-inverse-of f
-    linv (0 , _) = refl
-    linv (suc _ , _) = refl
+fin-suc-universal
+  : {n : ℕ} → {A : Fin (suc n) → Type ℓ}
+  → Π[ x ꞉ Fin (suc n) ] A x
+  ≃ A fzero × (∀ x → A (fsuc x))
+fin-suc-universal {n} {A} = iso→equiv $ ff , iso gg ri li where
+  ff : Π[ x ꞉ _ ] A x → A fzero × (∀ x → A (fsuc x))
+  ff f = f fzero , f ∘ fsuc
 
-  fin-suc-universal
-    : {n : ℕ} → {A : Fin (suc n) → Type ℓ}
-    → Π[ x ꞉ Fin (suc n) ] A x
-    ≃ A fzero × (∀ x → A (fsuc x))
-  fin-suc-universal {n} {A} = iso→equiv $ ff , iso gg ri li where
-    ff : Π[ x ꞉ _ ] A x → A fzero × (∀ x → A (fsuc x))
-    ff f = f fzero , f ∘ fsuc
+  gg : A fzero × (∀ x → A (fsuc x)) → Π[ x ꞉ _ ] A x
+  gg (z , f) (mk-fin 0)       = z
+  gg (z , f) (mk-fin (suc k)) = f (mk-fin k)
 
-    gg : A fzero × (∀ x → A (fsuc x)) → Π[ x ꞉ _ ] A x
-    gg (z , f) (0 , _) = z
-    gg (z , f) (suc k , ∣ p ∣ᴱ) = f $ k , ∣ p ∣ᴱ
+  ri : gg is-right-inverse-of ff
+  ri _ = refl
 
-    ri : gg is-right-inverse-of ff
-    ri _ = refl
-
-    li : gg is-left-inverse-of ff
-    li w = fun-ext λ where
-      (0 , ∣ p ∣ᴱ) → refl
-      (suc k , p) → refl
+  li : gg is-left-inverse-of ff
+  li w = fun-ext λ where
+    (mk-fin 0)       → refl
+    (mk-fin (suc k)) → refl
 
 
 fin-coproduct : {n m : ℕ}
@@ -92,36 +90,34 @@ sum : ∀ n → (Fin n → ℕ) → ℕ
 sum zero    f = zero
 sum (suc n) f = f fzero + sum n (f ∘ fsuc)
 
-opaque
-  unfolding Fin
-  fin-sum : {n : ℕ} (B : Fin n → ℕ)
-          → Σ[ k ꞉ Fin n ] Fin (B k)
-          ≃ Fin (sum n B)
-  fin-sum {0} _ .fst ()
-  fin-sum {0} _ .snd .equiv-proof ()
-  fin-sum {suc n} B =
-    fin-coproduct {n = B fzero} .fst ∘ f ,
-    is-equiv-comp (is-iso→is-equiv $ f-iso) (fin-coproduct {n = B fzero} .snd)
-      where
-        rec′ : Σ[ k ꞉ Fin n ] Fin (B (fsuc k)) ≃ Fin (sum n (B ∘ fsuc))
-        rec′ = fin-sum {n = n} (B ∘ fsuc)
-        module mrec = Equiv rec′
+fin-sum : {n : ℕ} (B : Fin n → ℕ)
+        → Σ[ k ꞉ Fin n ] Fin (B k)
+        ≃ Fin (sum n B)
+fin-sum {0} _ .fst ()
+fin-sum {0} _ .snd .equiv-proof ()
+fin-sum {suc n} B =
+  fin-coproduct {n = B fzero} .fst ∘ f ,
+  is-equiv-comp (is-iso→is-equiv $ f-iso) (fin-coproduct {n = B fzero} .snd)
+    where
+      rec′ : Σ[ k ꞉ Fin n ] Fin (B (fsuc k)) ≃ Fin (sum n (B ∘ fsuc))
+      rec′ = fin-sum {n = n} (B ∘ fsuc)
+      module mrec = Equiv rec′
 
-        f : Σ[ k ꞉ Fin (suc n) ] Fin (B k) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
-        f ((0 , _) , x) = inl x
-        f ((suc k , p) , y) = inr (mrec.to ((k , p) , y))
+      f : Σ[ k ꞉ Fin (suc n) ] Fin (B k) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
+      f (mk-fin 0       , x) = inl x
+      f (mk-fin (suc k) , y) = inr (mrec.to (mk-fin k , y))
 
-        f-iso : is-iso f
-        f-iso .is-iso.inv (inl x) = fzero , x
-        f-iso .is-iso.inv (inr x) with mrec.from x
-        ... | x , y = fsuc x , y
+      f-iso : is-iso f
+      f-iso .is-iso.inv (inl x) = fzero , x
+      f-iso .is-iso.inv (inr x) with mrec.from x
+      ... | x , y = fsuc x , y
 
-        f-iso .is-iso.rinv (inl x) = refl
-        f-iso .is-iso.rinv (inr x) = ap inr (mrec.ε _)
+      f-iso .is-iso.rinv (inl x) = refl
+      f-iso .is-iso.rinv (inr x) = ap inr (mrec.ε _)
 
-        f-iso .is-iso.linv ((zero , _) , _) = refl
-        f-iso .is-iso.linv ((suc k , p) , y) =
-          Σ-pathP (ap (fsuc ∘ fst) (mrec.η _)) (ap snd (mrec.η _))
+      f-iso .is-iso.linv (mk-fin 0       , _) = refl
+      f-iso .is-iso.linv (mk-fin (suc k) , s) =
+        Σ-pathP (ap (fsuc ∘ fst) (mrec.η _)) (ap snd (mrec.η _))
 
 
 fin-product : {n m : ℕ}

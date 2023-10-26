@@ -106,12 +106,10 @@ finite-pi-fin 0 {P} fam = is-fin-set-η $ 1 , (pure $ iso→equiv $ ff , iso gg 
   ff _ = fzero
   gg : _
   gg _ f0 = absurd (fin-0-is-initial .fst f0)
-  opaque
-    unfolding Fin
-    ri : gg is-right-inverse-of ff
-    ri (0 , _) = refl
-    li : gg is-left-inverse-of ff
-    li _ = fun-ext λ ()
+  ri : gg is-right-inverse-of ff
+  ri (mk-fin 0) = refl
+  li : gg is-left-inverse-of ff
+  li _ = fun-ext λ ()
 
 finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
   e ← fin-choice (suc sz) (enumeration ∘ fam)

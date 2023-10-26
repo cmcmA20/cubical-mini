@@ -33,7 +33,7 @@ opaque
   𝓑-is-set = hlevel!
 
 opaque
-  unfolding 𝓑 Omniscient₁ vec-fun-equiv
+  unfolding 𝓑 Omniscient₁
   𝓑→omniscient₁ : 𝓑 A → Omniscient₁ {ℓ′ = ℓ′} A
   𝓑→omniscient₁ {A} (n , aeq) {P} P? =
     Dec.map lemma₁ lemma₂ (any? P? xs) where

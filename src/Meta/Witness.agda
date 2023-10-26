@@ -40,7 +40,6 @@ macro witness-strict! = witness-macro true
 opaque
   unfolding
     is-discrete-β omniscient₁→exhaustible is-fin-set→omniscient₁ 𝓑→omniscient₁
-    any? fin-sum fin-suc-universal fin-choice
 
     -- yes it's a kludge
   witness-opaque-marker : ⊤

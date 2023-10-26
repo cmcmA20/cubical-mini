@@ -40,7 +40,7 @@ private
     -- test₃? = decide!
 
   opaque
-    unfolding witness-opaque-marker bool-is-fin-set
+    unfolding witness-opaque-marker
 
     and-idem : (x : Bool) → x and x ＝ x
     and-idem = witness!

@@ -25,6 +25,7 @@ record is-partial-order {ℓ ℓ′} {A : Type ℓ}
       (set-identity-system hlevel! (≤-antisym $²_))
       hlevel!
 
+unquoteDecl is-partial-order-iso = declare-record-iso is-partial-order-iso (quote is-partial-order)
 
 private variable
   ℓ ℓ′ : Level
@@ -32,11 +33,8 @@ private variable
   R : A → A → Type ℓ′
 
 is-partial-order-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (is-partial-order R)
-is-partial-order-is-of-hlevel n = is-of-hlevel-+-left 1 _ is-partial-order-is-prop where
-  private unquoteDecl eqv = declare-record-iso eqv (quote is-partial-order)
-  is-partial-order-is-prop : is-prop (is-partial-order R)
-  is-partial-order-is-prop = is-prop-η λ x y →
-    let open is-partial-order x in is-prop-β (iso→is-of-hlevel 1 eqv hlevel!) x y
+is-partial-order-is-of-hlevel n = is-prop→is-of-hlevel-suc $ is-prop-η λ x →
+  let open is-partial-order x in is-prop-β (iso→is-of-hlevel 1 is-partial-order-iso hlevel!) x
 
 instance
   decomp-hlevel-po

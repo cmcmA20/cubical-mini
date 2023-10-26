@@ -4,8 +4,10 @@ module Data.Nat.Order.Computational where
 open import Foundations.Base
 open import Foundations.HLevel
 
+open import Data.Bool.Base as Bool
 open import Data.Dec.Base
-open import Data.Empty.Base
+open import Data.Empty.Base as ⊥
+open import Data.Id
 open import Data.Sum.Base
 open import Data.Unit.Base
 
@@ -14,24 +16,25 @@ open import Data.Nat.Base
 private variable
   m n k : ℕ
 
-opaque
-  _≤_ : ℕ → ℕ → Type
-  zero  ≤ n = ⊤
-  suc m ≤ suc n = m ≤ n
-  suc m ≤ zero = ⊥
-
-  z≤ : 0 ≤ n
-  z≤ = tt
-
-  s≤s : m ≤ n → suc m ≤ suc n
-  s≤s = id
-
-  ≤-peel : suc m ≤ suc n → m ≤ n
-  ≤-peel = id
+infix 3 _<_ _≤ᵇ_ _≤_
 
 _<_ : ℕ → ℕ → Type
-m < n = suc m ≤ n
-infix 3 _<_ _≤_
+m < n = ⟦ m <ᵇ n ⟧ᵇ
+
+_≤ᵇ_ : ℕ → ℕ → Bool
+m ≤ᵇ n = m <ᵇ suc n
+
+_≤_ : ℕ → ℕ → Type
+m ≤ n = ⟦ m ≤ᵇ n ⟧ᵇ
+
+z≤ : 0 ≤ n
+z≤ = tt
+
+s≤s : m ≤ n → suc m ≤ suc n
+s≤s = id
+
+≤-peel : suc m ≤ suc n → m ≤ n
+≤-peel = id
 
 _≥_ : ℕ → ℕ → Type
 m ≥ n = n ≤ m
@@ -39,58 +42,62 @@ m ≥ n = n ≤ m
 _>_ : ℕ → ℕ → Type
 m > n = n < m
 
+
 -- Properties of order
 
+≤-refl : n ≤ n
+≤-refl {0}     = tt
+≤-refl {suc n} = ≤-refl {n}
+
+≤-trans : m ≤ n → n ≤ k → m ≤ k
+≤-trans {0}     {_}             _ _ = tt
+≤-trans {suc m} {suc n} {suc k} p q = ≤-trans {m} p q
+
+≤-antisym : m ≤ n → n ≤ m → m ＝ n
+≤-antisym {0}     {0}     _ _ = refl
+≤-antisym {suc m} {suc n} p q = ap suc (≤-antisym p q)
+
 opaque
-  unfolding _≤_
-  ≤-refl : n ≤ n
-  ≤-refl {0} = tt
-  ≤-refl {suc n} = ≤-refl {n}
+  unfolding is-of-hlevel
+  <-is-prop : is-prop (m < n)
+  <-is-prop {0}     {suc _} _ _ = refl
+  <-is-prop {suc m} {suc n} = <-is-prop {m} {n}
 
-  ≤-trans : m ≤ n → n ≤ k → m ≤ k
-  ≤-trans {0}     {_} _ _ = tt
-  ≤-trans {suc m} {suc n} {suc k} p q = ≤-trans {m = m} p q
+≤-is-prop : is-prop (m ≤ n)
+≤-is-prop {m} {n} = <-is-prop {m} {suc n}
 
-  ≤-antisym : m ≤ n → n ≤ m → m ＝ n
-  ≤-antisym {0} {0} _ _ = refl
-  ≤-antisym {suc m} {suc n} p q = ap suc (≤-antisym p q)
+≤-suc-r : m ≤ n → m ≤ suc n
+≤-suc-r {0}     {_}     _ = tt
+≤-suc-r {suc m} {suc n} p = ≤-suc-r {m} p
 
-  opaque
-    unfolding is-of-hlevel
-    ≤-is-prop : is-prop (m ≤ n)
-    ≤-is-prop {0} {_} _ _ = refl
-    ≤-is-prop {suc m} {suc n} p q = ≤-is-prop {m} p q
+≤-ascend : n ≤ suc n
+≤-ascend {n} = ≤-suc-r {n} (≤-refl {n})
 
-  ≤-suc-r : m ≤ n → m ≤ suc n
-  ≤-suc-r {0} {_} _ = tt
-  ≤-suc-r {suc m} {suc n} p = ≤-suc-r {m} p
+instance
+  <-is-of-hlevel : is-of-hlevel (suc k) (m < n)
+  <-is-of-hlevel {m} {n} = is-prop→is-of-hlevel-suc (<-is-prop {m} {n})
 
-  ≤-ascend : n ≤ suc n
-  ≤-ascend {n} = ≤-suc-r {m = n} (≤-refl {n})
+≤-dec : (m n : ℕ) → Dec (m ≤ n)
+≤-dec m n with m ≤ᵇ n
+... | false = no id
+... | true  = yes tt
 
-  instance
-    ≤-is-of-hlevel : is-of-hlevel (suc k) (m ≤ n)
-    ≤-is-of-hlevel {m} = is-prop→is-of-hlevel-suc (≤-is-prop {m = m})
+¬sucn≤n : ¬ suc n ≤ n
+¬sucn≤n {suc n} = ¬sucn≤n {n}
 
-  ≤-dec : (m n : ℕ) → Dec (m ≤ n)
-  ≤-dec zero _ = yes tt
-  ≤-dec (suc _) zero = no id
-  ≤-dec (suc m) (suc n) = ≤-dec m n
+¬sucn≤0 : ¬ suc n ≤ 0
+¬sucn≤0 {suc _} = λ ()
 
-  ¬sucn≤n : ¬ (suc n ≤ n)
-  ¬sucn≤n {suc n} p = ¬sucn≤n {n} p
-
-  ¬sucn≤0 : ¬ (suc n ≤ 0)
-  ¬sucn≤0 {(suc n)} = λ ()
-
-  ≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
-  ≤-split m n with ≤-dec (suc m) n
-  ... | yes m<n = inl m<n
-  ... | no  m≥n with ≤-dec (suc n) m
-  ... | yes n<m = inr $ inl n<m
-  ... | no  n≥m = inr $ inr (go m n m≥n n≥m) where
-    go : ∀ m n → ¬ (suc m ≤ n) → ¬ (suc n ≤ m) → m ＝ n
-    go zero zero _ _ = refl
-    go zero (suc n) p _ = absurd (p tt)
-    go (suc m) zero _ q = absurd (q tt)
+≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
+≤-split m n with m <ᵇ n in p
+... | true  = inl tt
+... | false with n <ᵇ m in q
+... | true  = inr $ inl tt
+... | false = inr $ inr $ go m n
+  (subst (Bool.elim _ _) $ Id≃path.to p)
+  (subst (Bool.elim _ _) $ Id≃path.to q) where
+    go : ∀ m n → ¬ (m < n) → ¬ (n < m) → m ＝ n
+    go 0       0       _ _ = refl
+    go 0       (suc _) p _ = ⊥.rec (p tt)
+    go (suc _) 0       _ q = ⊥.rec (q tt)
     go (suc m) (suc n) p q = ap suc $ go m n p q

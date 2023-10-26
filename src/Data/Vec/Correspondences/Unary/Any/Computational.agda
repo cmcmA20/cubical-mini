@@ -22,12 +22,12 @@ private variable
 Any : ∀ {a a′} {n} {A : Type a} (P : Pred a′ A) → Vec A n → Type _
 Any {n} P xs = Σ[ idx ꞉ Fin n ] P (lookup xs idx)
 
-opaque
-  unfolding Fin lookup
-  any? : {n : ℕ} → Decidable¹ P → Decidable¹ (λ (xs : Vec A n) → Any P xs)
-  any? {n = 0}     P? [] = no λ()
-  any? {n = suc n} P? (x ∷ xs) =
-    Dec.map [ (fzero ,_) , (λ { (i , q) → fsuc i , q }) ]ᵤ
-            (λ { ¬ps ((0 , _)  , p ) → ¬ps (inl p)
-               ; ¬ps ((suc i , _) , ps) → ¬ps (inr (_ , ps)) })
-            (⊎-decision (P? x) (any? P? xs))
+any? : {n : ℕ} → Decidable¹ P → Decidable¹ (λ (xs : Vec A n) → Any P xs)
+any? {n = 0}     P? []       = no λ()
+any? {n = suc n} P? (x ∷ xs) =
+  Dec.map [ (fzero ,_) , (λ { (i , q) → fsuc i , q }) ]ᵤ
+          go
+          (⊎-decision (P? x) (any? P? xs)) where
+            go : _
+            go ¬ps (mk-fin 0       , p)  = ¬ps (inl p)
+            go ¬ps (mk-fin (suc k) , ps) = ¬ps (inr (_ , ps))
