@@ -550,10 +550,3 @@ search-tactic-worker {goal-name} td goal = do
     search td false lv 50 goal′
     pure goal′
   unify goal (leave delta solved)
-  where
-    leave : Telescope → Term → Term
-    leave [] = id
-    leave ((na , arg as _) ∷ xs) = leave xs ∘ lam (arg-vis as) ∘ abs na
-    enter : Telescope → TC A → TC A
-    enter [] = id
-    enter ((na , ar) ∷ xs) = enter xs ∘ extendContext na ar

@@ -48,6 +48,9 @@ lift-decision da .does = da .does
 lift-decision (yes a) .proof = ofʸ (lift a)
 lift-decision (no ¬a) .proof = ofⁿ (¬a ∘ lower)
 
+universe-decision : Dec (Type ℓ)
+universe-decision = yes (Lift _ ⊤)
+
 
 -- Decidability of a predicate
 Decidable : (arity : ℕ) {ls : Levels arity} {As : Types arity ls} → Pred _ (Corr arity ℓ As)

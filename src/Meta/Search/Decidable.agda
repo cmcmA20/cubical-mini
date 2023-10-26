@@ -14,6 +14,7 @@ open Correspondences.Decidable public
 open import Data.Dec.Base
 open import Data.Empty.Base
 open import Data.Fin.Instances.FromNat
+open import Data.List.Base
 open import Data.List.Instances.FromProduct
 
 private variable
@@ -46,6 +47,8 @@ instance
   decomp-dec-lift : goal-decomposition (quote Dec) (Lift ℓ A)
   decomp-dec-lift = decomp (quote lift-decision) [ `search (quote Dec) ]
 
+  decomp-dec-uni : goal-decomposition (quote Dec) (Type ℓ)
+  decomp-dec-uni = decomp (quote universe-decision) []
 
 -- Usage
 private

@@ -2,14 +2,14 @@
 module Correspondences.Exhaustible where
 
 open import Foundations.Base
+open import Foundations.Pi
 
 open import Meta.Search.HLevel
 
 open import Correspondences.Base public
 open import Correspondences.Decidable
 
-open import Data.Dec.Base as Dec
-open import Data.Dec.Instances.HLevel
+open import Data.Dec as Dec
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level
@@ -33,4 +33,4 @@ lift-exhaustible ex .exhaustible-β P? = Dec.map (_∘ lower) (λ ¬f g → ¬f 
 Π-decision d ex = ex .exhaustible-β d
 
 ∀-decision : {B : A → Type ℓᵇ} → Decidable¹ B → Exhaustible A → Dec ∀¹[ B ]
-∀-decision d ex = map (λ f {x} → f x) (λ ¬b b → ¬b (λ _ → b)) $ Π-decision d ex
+∀-decision d ex = dec-≃ Π-impl-Π-≃ .fst (Π-decision d ex)

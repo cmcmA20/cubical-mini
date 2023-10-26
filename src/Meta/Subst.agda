@@ -24,12 +24,12 @@ data Subst : Type where
 infixr 20 _∷ₛ_
 
 wkS : ℕ → Subst → Subst
-wkS 0 ρ = ρ
+wkS 0 ρ        = ρ
 wkS n (wk x ρ) = wk (n + x) ρ
 wkS n ρ        = wk n ρ
 
 liftS : ℕ → Subst → Subst
-liftS 0 ρ       = ρ
+liftS 0 ρ          = ρ
 liftS n idₛ        = idₛ
 liftS n (lift k ρ) = lift (n + k) ρ
 liftS n ρ          = lift n ρ

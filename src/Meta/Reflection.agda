@@ -18,6 +18,7 @@ open import Data.List.Operations
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Traverse
 open import Data.Maybe.Base
+open import Data.Maybe.Instances.Idiom
 open import Data.Nat.Base
 open import Data.Vec.Base
 open import Data.Vec.Operations.Inductive
@@ -48,6 +49,7 @@ instance
 private variable
   ℓ ℓ′ : Level
   A : Type ℓ
+  B : Type ℓ′
   n : ℕ
 
 arg-vis : ArgInfo → Visibility
@@ -239,15 +241,13 @@ unapply-path tm = reduce tm >>= λ where
   _ → returnTC nothing
 
 get-boundary : Term → TC (Maybe (Term × Term))
-get-boundary tm = unapply-path tm >>= λ where
-  (just (_ , x , y)) → pure (just (x , y))
-  nothing            → pure nothing
+get-boundary tm = unapply-path tm >>= (pure ∘ (snd <$>_))
 
 
-debug! : ∀ {ℓ} {A : Type ℓ} → Term → TC A
+debug! : Term → TC A
 debug! tm = typeError ("[DEBUG]: " ∷ termErr tm ∷ [])
 
-quote-repr-macro : Bool → ∀ {ℓ} {A : Type ℓ} → A → Term →  TC ⊤
+quote-repr-macro : Bool → A → Term →  TC ⊤
 quote-repr-macro norm? a hole = do
   tm ← quoteTC a
   repr ← (if norm? then normalise else pure) tm >>= quoteTC
@@ -257,10 +257,10 @@ quote-repr-macro norm? a hole = do
     ∷ termErr repr ∷ []
 
 macro
-  quote-repr! : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′} → A → Term → TC ⊤
+  quote-repr! : {B : Type ℓ′} → A → Term → TC ⊤
   quote-repr! = quote-repr-macro false
 
-  quote-repr-norm! : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′} → A → Term → TC ⊤
+  quote-repr-norm! : {B : Type ℓ′} → A → Term → TC ⊤
   quote-repr-norm! = quote-repr-macro true
 
 instance
@@ -283,3 +283,24 @@ print-depth key level nesting es = debugPrint key level $
 
 pattern nat-lit n =
   def (quote Number.fromNat) (_ ∷ _ ∷ _ ∷ lit (nat n) v∷ _)
+
+
+-- working under lambda
+
+leave : Telescope → Term → Term
+leave [] = id
+leave ((na , arg as _) ∷ xs) = leave xs ∘ lam (arg-vis as) ∘ abs na
+
+enter : Telescope → TC A → TC A
+enter [] = id
+enter ((na , ar) ∷ xs) = enter xs ∘ extendContext na ar
+
+generalize : Telescope → Term → Term
+generalize [] = id
+generalize ((na , ar) ∷ tel) = pi ar ∘ abs na ∘ generalize tel
+
+instantiated-args : Telescope → List (Arg Type′)
+instantiated-args = go 0 where
+  go : ℕ → Telescope → List (Arg Type′)
+  go n [] = []
+  go n ((na , arg ai x) ∷ xs) = arg ai (var n []) ∷ go (suc n) xs
