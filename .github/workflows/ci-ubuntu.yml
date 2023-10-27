@@ -32,15 +32,8 @@ on:
 ##
 ########################################################################
 
-########################################################################
-## SETTINGS
-##
-## AGDA_BRANCH picks the branch of Agda to use to build the library.
-########################################################################
-
 env:
-  AGDA_BRANCH: master
-  GHC_VERSION: 9.6.1
+  GHC_VERSION: 9.6.3
   CABAL_VERSION: 3.10.1.0
   CABAL_INSTALL: cabal install --overwrite-policy=always --ghc-options='-O1 +RTS -M6G -RTS'
   CACHE_PATHS: |
@@ -53,6 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    strategy:
+      matrix:
+        agda_branch: [ release-2.6.4 ]
     steps:
       - name: Install cabal
         uses: haskell/actions/setup@v2
@@ -65,7 +61,7 @@ jobs:
         uses: octokit/request-action@v2.1.7
         id: agda-branch-commit-hash
         with:
-          route: GET /repos/agda/agda/branches/${{ env.AGDA_BRANCH }}
+          route: GET /repos/agda/agda/branches/${{ matrix.agda_branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -89,7 +85,7 @@ jobs:
       - name: Download and install Agda from github
         if: steps.cache-external-restore.outputs.cache-hit != 'true'
         run: |
-          git clone https://github.com/agda/agda --branch ${{ env.AGDA_BRANCH }} --depth=1
+          git clone https://github.com/agda/agda --branch ${{ matrix.agda_branch }} --depth=1
           cd agda
           mkdir -p doc
           touch doc/user-manual.pdf
