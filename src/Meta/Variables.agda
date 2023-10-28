@@ -6,7 +6,7 @@ open import Foundations.Base
 open import Meta.Reflection
 
 open import Data.Bool.Base
-open import Data.Fin.Base
+open import Data.FinSub.Base
 open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
@@ -73,8 +73,8 @@ private
   ... | nothing      | false = nothing
 
   fin-term : ℕ → Term
-  fin-term zero    = con (quote fzero) (unknown h∷ [])
-  fin-term (suc n) = con (quote fsuc) (unknown h∷ fin-term n v∷ [])
+  fin-term zero    = def (quote fzero) (unknown h∷ [])
+  fin-term (suc n) = def (quote fsuc) (unknown h∷ fin-term n v∷ [])
 
   env-rec : (Mot : @0 ℕ → Type b)
           → (∀ {n} → Mot n → A → Mot (suc n))

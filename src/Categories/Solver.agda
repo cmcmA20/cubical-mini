@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Meta.Category where
+module Categories.Solver where
 
 open import Foundations.Base hiding (id; _∘_)
 
@@ -82,7 +82,7 @@ module Reflection where
 
   build-expr : Term → Term
   build-expr “id” = con (quote NbE.`id) []
-  build-expr (“∘” f g) = con (quote NbE._`∘_) (build-expr f v∷ build-expr g v∷ [] )
+  build-expr (“∘” f g) = con (quote NbE._`∘_) (build-expr f v∷ build-expr g v∷ [])
   build-expr f = con (quote NbE._↑) (f v∷ [])
 
   dont-reduce : List Name
@@ -91,6 +91,7 @@ module Reflection where
   cat-solver : Term → Simple-solver
   cat-solver cat .Simple-solver.dont-reduce = dont-reduce
   cat-solver cat .Simple-solver.build-expr tm = pure $ build-expr tm
+  cat-solver cat .Simple-solver.strat = no
   cat-solver cat .Simple-solver.invoke-solver = “solve” cat
   cat-solver cat .Simple-solver.invoke-normaliser = “nf” cat
 
