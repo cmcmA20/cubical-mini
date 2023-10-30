@@ -6,9 +6,10 @@ open import Foundations.Base
 open import Agda.Builtin.List public
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ′′ : Level
   A : Type ℓ
   B : Type ℓ′
+  C : Type ℓ′′
 
 head : A → List A → A
 head def []      = def
@@ -58,3 +59,8 @@ intersperse : A -> List A -> List A
 intersperse _ []       = []
 intersperse _ (x ∷ []) = x ∷ []
 intersperse s (x ∷ xs) = x ∷ s ∷ intersperse s xs
+
+zip-with : (A → B → C) → List A → List B → List C
+zip-with f [] _  = []
+zip-with f _  [] = []
+zip-with f (a ∷ as) (b ∷ bs) = f a b ∷ zip-with f as bs

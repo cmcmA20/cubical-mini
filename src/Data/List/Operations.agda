@@ -32,3 +32,13 @@ filter p [] = []
 filter p (x ∷ xs) with p x
 filter p (x ∷ xs)    | true  = x ∷ filter p xs
 filter p (x ∷ xs)    | false = filter p xs
+
+drop : ℕ → List A → List A
+drop 0 = id
+drop (suc n) (x ∷ xs) = drop n xs
+drop _ _ = []
+
+take : ℕ → List A → List A
+take 0 _ = []
+take (suc n) (x ∷ xs) = x ∷ take n xs
+take _ _ = []
