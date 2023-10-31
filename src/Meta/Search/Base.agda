@@ -457,7 +457,7 @@ private
 
   -- TODO use name
   sort-decomps-by-generality : (gn : Name) → List Term → TC (List Term)
-  sort-decomps-by-generality gn = insertion-sort where
+  sort-decomps-by-generality gn = insertion-sort′ where
     _less-general-than_ : Term → Term → Bool
     meta _ _ less-general-than _ = false
     unknown  less-general-than _ = false
@@ -474,19 +474,20 @@ private
         _ → typeError "Panic: malformed decompositionss"
       pure (decomp-ty₁ less-general-than decomp-ty₂)
 
-    insert : Term → List Term → TC (List Term)
-    insert x [] = pure [ x ]
-    insert x (a ∷ as) = do
+    -- TODO use Data.List.Operations.insert
+    insert′ : Term → List Term → TC (List Term)
+    insert′ x [] = pure [ x ]
+    insert′ x (a ∷ as) = do
       false ← x decomp≤? a where
         true → pure (x ∷ a ∷ as)
-      as′ ← insert x as
+      as′ ← insert′ x as
       pure (a ∷ as′)
 
-    insertion-sort : List Term → TC (List Term)
-    insertion-sort [] = pure []
-    insertion-sort (a ∷ as) = do
-      as′ ← insertion-sort as
-      insert a as′
+    insertion-sort′ : List Term → TC (List Term)
+    insertion-sort′ [] = pure []
+    insertion-sort′ (a ∷ as) = do
+      as′ ← insertion-sort′ as
+      insert′ a as′
 
   use-hints : Tactic-desc goal-name goal-strat → ℕ → Term → TC ⊤
   use-hints _ 0 _ = typeError "use-hints: no fuel"

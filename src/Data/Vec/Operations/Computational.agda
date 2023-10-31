@@ -9,6 +9,7 @@ open import Correspondences.Erased
 open import Data.FinSub.Base
 open import Data.List.Base
 open import Data.List.Operations
+  hiding (lookup)
 
 open import Data.Vec.Base public
 

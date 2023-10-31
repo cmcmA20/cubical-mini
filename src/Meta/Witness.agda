@@ -16,14 +16,14 @@ witness-macro : Term → TC ⊤
 witness-macro (lam _ _) = commitTC -- Agda's too smart about unit type
 witness-macro hole = do
   ty ← (inferType hole >>= reduce) >>= wait-just-a-bit
-  debugPrint "tactic.witness" 20 [ "Goal type: " , termErr ty ]
-  ctx ← getContext
-  let ty′ = generalize ctx ty
-  debugPrint "tactic.witness" 20 [ "Generalized: " , termErr ty′ ]
+  debugPrint "tactic.witness" 20 [ "Goal: " , termErr ty ]
+  let supp = fv ty
+      ty′ = generalize supp ty
+  debugPrint "tactic.witness" 20 [ "Generalized goal: " , termErr ty′ ]
   candidate ← new-meta (def (quote Dec) (unknown h∷ ty′ v∷ []))
   decide-tactic-worker candidate
   let prf  = def (quote proof) (candidate v∷ [])
-      args = varg prf ∷ reverse-fast (instantiated-args ctx)
+      args = varg prf ∷ ((λ n → varg (var n [])) <$> supp)
   unify hole (def (quote Reflects′.invert) args)
 
 macro witness! = witness-macro

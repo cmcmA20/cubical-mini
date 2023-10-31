@@ -13,16 +13,17 @@ open import Meta.Alt      public
 open import Meta.Traverse public
 
 open import Data.Bool.Base
-open import Data.List.Base
-open import Data.List.Operations
+open import Data.List.Base as List
 open import Data.List.Instances.FromProduct
+open import Data.List.Instances.Idiom
 open import Data.List.Instances.Traverse
+open import Data.List.Operations as List
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Idiom
 open import Data.Nat.Base
+open import Data.String.Base
 open import Data.Vec.Base
 open import Data.Vec.Operations.Inductive
-open import Data.String.Base
 
 open import Agda.Builtin.Reflection public
   renaming (Type to Type′)
@@ -45,6 +46,9 @@ instance
   Alt-TC : Alt (eff TC)
   Alt-TC .Alt.fail′ xs = typeError [ strErr xs ]
   Alt-TC .Alt._<|>_ = catchTC
+
+  Map-Arg : Map (eff Arg)
+  Map-Arg .Map._<$>_ f (arg ai x) = arg ai (f x)
 
 private variable
   ℓ ℓ′ : Level
@@ -295,12 +299,46 @@ enter : Telescope → TC A → TC A
 enter [] = id
 enter ((na , ar) ∷ xs) = enter xs ∘ extendContext na ar
 
-generalize : Telescope → Term → Term
-generalize [] = id
-generalize ((na , ar) ∷ tel) = pi ar ∘ abs na ∘ generalize tel
 
-instantiated-args : Telescope → List (Arg Type′)
-instantiated-args = go 0 where
-  go : ℕ → Telescope → List (Arg Type′)
-  go n [] = []
-  go n ((na , arg ai x) ∷ xs) = arg ai (var n []) ∷ go (suc n) xs
+-- returns free variables as de Bruijn indices in the _current_ context
+fv : Term → List ℕ
+fv = nub-unsafe _==_ ∘ go 0 where
+  go : ℕ → Term → List ℕ
+  gos : ℕ → List (Arg Term) → List ℕ
+
+  go nbind (var v args) =
+    if nbind <ᵇ suc v
+       then insert (λ m n → not $ m <ᵇ n) (v ∸ nbind)
+       else id
+     $ gos nbind args
+  go nbind (con _ args) = gos nbind args
+  go nbind (def _ args) = gos nbind args
+  go nbind (lam _ (abs _ x)) = go (suc nbind) x
+  go nbind (pi (arg _ x) (abs _ y)) =
+    go nbind x List.++ go (suc nbind) y
+  go _   _ = []
+
+  gos _ [] = []
+  gos nbind (arg _ x ∷ xs) =
+    go nbind x List.++ gos nbind xs
+
+generalize : List ℕ → Term → Term
+generalize fvs = iter (length fvs) (pi (varg unknown) ∘ abs "x") ∘ go 0 where
+  len = length fvs
+
+  go : ℕ → Term → Term
+  gos : ℕ → List (Arg Term) → List (Arg Term)
+
+  go nbind (var v args) with nbind <ᵇ suc v
+  ... | false = var v $ gos nbind args
+  ... | true with List.lookup _==_ (v ∸ nbind) fvs
+  ... | nothing = unknown -- FIXME should not happen
+  ... | just ix = var (nbind + len ∸ suc ix) $ gos nbind args
+  go nbind (con c args) = con c (gos nbind args)
+  go nbind (def f args) = def f $ gos nbind args
+  go nbind (lam v (abs s x)) = lam v $ abs s $ go (suc nbind) x
+  go nbind (pi (arg ai x) (abs s y)) = pi (arg ai (go nbind x)) (abs s (go (suc nbind) y))
+  go _ t = t
+
+  gos _ [] = []
+  gos nbind (arg ai x ∷ xs) = arg ai (go nbind x) ∷ gos nbind xs

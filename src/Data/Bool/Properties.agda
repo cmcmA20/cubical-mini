@@ -14,24 +14,6 @@ open import Data.Empty.Base
 open import Data.Bool.Base public
 open import Data.Bool.Instances.Finite
 
--- Testing witness tactic
--- private module _ where
---   open import Truncation.Propositional
-
---   _ : ∀[ x ꞉ Bool ] ∀[ y ꞉ Bool ] ∃[ z ꞉ Bool ] (z ＝ x or y)
---   _ = witness!
-
---   _ : ∀[ x ꞉ Bool ] ∃[ f ꞉ (Bool → Bool → Bool) ] Π[ y ꞉ Bool ] (f x y ＝ not (f (not x) y))
---   _ = witness!
-
---   _ : ¬ ∃[ f ꞉ (Bool × Bool → Bool) ] Π[ x ꞉ Bool ] (f (x , false) ≠ f (x , false))
---   _ = witness!
-
---   module _ {r : Bool} where
---     _ : ∃[ x ꞉ Bool ] (x ＝ r)
---     _ = witness!
-
-
 -- conjunction
 
 and-idem : (x : Bool) → x and x ＝ x
@@ -66,3 +48,25 @@ or-comm = witness!
 
 or-idem : ∀ x → x or x ＝ x
 or-idem = witness!
+
+
+-- Testing witness tactic, uncomment if needed
+-- private module _ where
+--   open import Truncation.Propositional.Base
+
+--   _ : ∀[ x ꞉ Bool ] ∀[ y ꞉ Bool ] ∃[ z ꞉ Bool ] (z ＝ x or y)
+--   _ = witness!
+
+--   _ : ∀[ x ꞉ Bool ] ∃[ f ꞉ (Bool → Bool → Bool) ] Π[ y ꞉ Bool ] (f x y ＝ not (f (not x) y))
+--   _ = witness!
+
+--   _ : ¬ ∃[ f ꞉ (Bool × Bool → Bool) ] Π[ x ꞉ Bool ] (f (x , false) ≠ f (x , false))
+--   _ = witness!
+
+--   module _ {r : Bool} where
+--     _ : ∃[ x ꞉ Bool ] (x ＝ r)
+--     _ = witness!
+
+--   module _ {A : Type} {u : A} (a a′ : A) (z w r : Bool) (B : Type) {b c d e : B} where
+--     _ : ∃[ x ꞉ Bool ] (x ＝ z)
+--     _ = witness!
