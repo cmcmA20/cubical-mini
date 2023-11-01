@@ -112,8 +112,11 @@ module _ {ℓ} {A : Type ℓ} (solver : Variable-solver A) where
     just (lhs , rhs) ← get-boundary goal
       where nothing → print-boundary goal
     elhs , vs ← prepare lhs >>= build-expr empty-vars
+    debugPrint "tactic.solver.var" 10 [ "LHS: " , termErr elhs ]
     erhs , vs ← prepare rhs >>= build-expr vs
+    debugPrint "tactic.solver.var" 10 [ "RHS: " , termErr erhs ]
     size , env ← environment vs
+    debugPrint "tactic.solver.var" 10 [ "Env: " , termErr env ]
     (noConstraints $ unify hole $ invoke-solver elhs erhs env) <|>
       solver-failed elhs erhs
 
@@ -122,7 +125,9 @@ module _ {ℓ} {A : Type ℓ} (solver : Variable-solver A) where
     withNormalisation false $
     withReduceDefs (false , dont-reduce) $ do
     e , vs ← prepare tm >>= build-expr empty-vars
+    debugPrint "tactic.solver.var" 10 [ "Expression: " , termErr e ]
     size , env ← environment vs
+    debugPrint "tactic.solver.var" 10 [ "Env: " , termErr env ]
     soln ← reduce $ invoke-normaliser e env
     unify hole soln
 

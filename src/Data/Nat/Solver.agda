@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe -vtactic.solver.var:20 #-}
 module Data.Nat.Solver where
 
 open import Foundations.Base
@@ -28,7 +28,7 @@ private variable
 data Poly {ℓᵃ} (A : Type ℓᵃ) : ℕ → Type ℓᵃ where
   const : (c : A) → Poly A 0
   zerop : ∀ {n} → Poly A (suc n)
-  _*X+_ : ∀ {n} → (p : Poly A (suc n)) → (q : Poly A n) → Poly A (suc n)
+  _*X+_ : ∀ {n} (p : Poly A (suc n)) (q : Poly A n) → Poly A (suc n)
 
 infixl 2 _*X+_
 
@@ -295,6 +295,6 @@ macro
   nat! = mk-var-solver ℕ-solver
 
 private
-  wow-good-job : ∀ x y z
+  wow-good-job : ∀ y x z
                → (x + 5 + suc y) · z ＝ z · 5 + x · z + z + z · y
-  wow-good-job _ _ _ = nat!
+  wow-good-job x y z = nat!
