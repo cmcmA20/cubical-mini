@@ -208,15 +208,13 @@ module _ {C : Precategory oᶜ hᶜ}
   nat-is-set = iso→is-of-hlevel 2 eqv hlevel! where
     unquoteDecl eqv = declare-record-iso eqv (quote _=>_)
     instance
-      cs : ∀{x y} → is-set (C.Hom x y)
-      cs = C.Hom-set _ _
       ds : ∀{x y} → is-set (D.Hom x y)
       ds = D.Hom-set _ _
 
   nat-pathP : {F' G' : Functor C D}
             → (p : F ＝ F') (q : G ＝ G')
             → {a : F => G} {b : F' => G'}
-            → (∀ x → PathP _ (a .η x) (b .η x))
+            → (∀ x → ＜ a .η x ／ _ ＼ b .η x ＞)
             → PathP (λ i → p i => q i) a b
   nat-pathP p q path i .η x = path x i
   nat-pathP p q {a} {b} path i .is-natural x y f =

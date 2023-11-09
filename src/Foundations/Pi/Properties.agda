@@ -81,9 +81,8 @@ fun-ext-dep
   : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′} →  ∀ {f g}
   → ( ∀ {x₀ x₁} (p : ＜ x₀ ／ A ＼ x₁ ＞) → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   → ＜ f ／ (λ i → Π[ x ꞉ A i ] B i x) ＼ g ＞
-fun-ext-dep {A} {B} h i x =
-  transp (λ k → B i (coei→i A i x k)) (i ∨ ~ i)
-    (h (λ j → coe A i j x) i)
+fun-ext-dep {A} {B} h i x = coei→1 (λ j → B i (coei→i A i x j)) (i ∨ ~ i) $
+  h (λ j → coe A i j x) i
 
 fun-ext-dep-≃
   : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
@@ -99,10 +98,11 @@ fun-ext-dep-≃ {A} {B} {f} {g} = iso→equiv isom where
   isom .snd .is-iso.inv q p i = q i (p i)
 
   isom .snd .rinv q m i x =
-    transp (λ k → B i (coei→i A i x (k ∨ m))) (m ∨ i ∨ ~ i) (q i (coei→i A i x m))
+    coei→1 (λ k → B i (coei→i A i x (k ∨ m))) (m ∨ ∂ i) $
+      q i (coei→i A i x m)
 
   isom .snd .linv h m p i =
-    transp (λ k → B i (lemi→i m k)) (m ∨ i ∨ ~ i) (h (λ j → lemi→j j m) i)
+    coei→1 (λ k → B i (lemi→i m k)) (m ∨ ∂ i) $ h (λ j → lemi→j j m) i
     where
       lemi→j : ∀ j → coe A i j (p i) ＝ p j
       lemi→j j k = coe-path A (λ i → p i) i j k
@@ -119,21 +119,21 @@ opaque
     ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
   hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→equiv isom where
     open is-iso
+    c : {x₀ : A i0} → is-contr (SingletonP A x₀)
+    c {x₀} = singletonP-is-contr A x₀
+
     isom : ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
          ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-    isom .fst h x₀ = h (singletonP-is-contr A x₀ .fst .snd)
+    isom .fst h x₀ = h $ c .fst .snd
     isom .snd .inv k {x₀} {x₁} p =
-      subst (λ fib → PathP B (f x₀) (g (fib .fst))) (singletonP-is-contr A x₀ .snd (x₁ , p)) (k x₀)
+      subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) (c .snd (x₁ , p)) (k x₀)
 
     isom .snd .rinv k = fun-ext λ x₀ →
-      ap (λ α → subst (λ fib → PathP B (f x₀) (g (fib .fst))) α (k x₀))
-        (is-prop→is-set (is-contr→is-prop $ singletonP-is-contr _ _) (singletonP-is-contr A x₀ .fst) _
-          (singletonP-is-contr A x₀ .snd (singletonP-is-contr A x₀ .fst))
-          refl)
+      ap (λ α → subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) α (k x₀))
+        (is-prop→is-set (is-contr→is-prop c) (c .fst) (c .fst) (c .snd $ c .fst) refl)
       ∙ transport-refl (k x₀)
 
     isom .snd .linv h j {x₀} {x₁} p =
-      transp
-        (λ i → PathP B (f x₀) (g (singletonP-is-contr A x₀ .snd (x₁ , p) (i ∨ j) .fst)))
-        j
-        (h (singletonP-is-contr A x₀ .snd (x₁ , p) j .snd))
+      coei→1
+        (λ i → ＜ f x₀ ／ B ＼ g (c .snd (x₁ , p) (i ∨ j) .fst) ＞)
+        j $ h $ c .snd (x₁ , p) j .snd

@@ -99,6 +99,29 @@ is-equiv→zag {B} {f} eqv b =
       k (j = i1) → η a (i ∧ ~ k)
       k (k = i0) → η a (i ∧ j)
 
+module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where
+
+  private
+    L = P i0
+    R = P i1
+
+    g = coei→1 P
+
+  opaque
+    transport-line-is-equiv : ∀ i → is-equiv (g i)
+    transport-line-is-equiv i =
+      coe1→i (λ j → is-equiv (g j)) i id-is-equiv
+
+  transport-line-equiv : ∀ i → P i ≃ R
+  transport-line-equiv i .fst = g i
+  transport-line-equiv i .snd = transport-line-is-equiv i
+
+  line→is-equiv : is-equiv (g i0)
+  line→is-equiv = transport-line-is-equiv i0
+
+  line→equiv : L ≃ R
+  line→equiv = transport-line-equiv i0
+
 
 -- this is the general form
 _stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)

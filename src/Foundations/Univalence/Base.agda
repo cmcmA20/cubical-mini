@@ -3,7 +3,6 @@ module Foundations.Univalence.Base where
 
 open import Foundations.Base
 open import Foundations.Equiv.Base
-open import Foundations.Equiv.FromPath
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 
@@ -71,30 +70,31 @@ path→equiv : A ＝ B → A ≃ B
 path→equiv p = line→equiv (λ i → p i)
 
 path→equiv-refl : path→equiv (refl {x = A}) ＝ idₑ
-path→equiv-refl {A} = Σ-path (λ i x → coe1→i (λ i → A) i x)
-                             (is-prop→pathP (λ i → is-equiv-is-prop _) _ _)
+path→equiv-refl = equiv-ext $ fun-ext transport-refl
 
 opaque
-  unfolding ua
+  unfolding ua transport-line-is-equiv
   @0 ua-idₑ : ua idₑ ＝ refl {x = A}
   ua-idₑ {A} i j = Glue A {φ = i ∨ ∂ j} (λ _ → A , idₑ)
 
   ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e .fst x
-  ua-β {B} e x i = coe1→i (λ _ → B) i (e .fst x)
+  ua-β e x = transport-refl _
 
-@0 ua-η : (P : A ＝ B) → ua (path→equiv P) ＝ P
-ua-η = J (λ _ q → ua (path→equiv q) ＝ q) (ap ua path→equiv-refl ∙ ua-idₑ)
+  @0 ua-η : (p : A ＝ B) → ua (path→equiv p) ＝ p
+  ua-η {A} {B} p i j = Glue B ω where
+    ω : Partial (i ∨ ∂ j) (Σ[ T ꞉ Type (level-of-type B) ] (T ≃ B))
+    ω (i = i1) = p j , transport-line-equiv (λ k → p k) j
+    ω (j = i0) = A   , path→equiv p
+    ω (j = i1) = B   , idₑ
 
 module @0 _ where opaque
   unfolding is-of-hlevel ua
   path≅equiv : (A ＝ B) ≅ (A ≃ B)
   path≅equiv {A} {B} = path→equiv , r where
     r : is-iso {A = A ＝ B} path→equiv
-    r .is-iso.inv = ua
-    r .is-iso.rinv (f , is-eqv) = Σ-path (fun-ext (ua-β (f , is-eqv)))
-                                         (is-equiv-is-prop f _ _)
-    r .is-iso.linv = J (λ _ p → ua (path→equiv p) ＝ p)
-                       (ap ua path→equiv-refl ∙ ua-idₑ)
+    r .is-iso.inv  = ua
+    r .is-iso.rinv = equiv-ext ∘ fun-ext ∘ ua-β
+    r .is-iso.linv = ua-η
 
   univalence : is-equiv (path→equiv {A = A} {B = B})
   univalence = is-iso→is-equiv (path≅equiv .snd)

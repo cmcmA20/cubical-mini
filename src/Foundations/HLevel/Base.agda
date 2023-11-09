@@ -118,7 +118,7 @@ opaque
   pathP-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
                      → is-of-hlevel h (A i1)
                      → {x : A i0} {y : A i1}
-                     → is-of-hlevel h (PathP A x y)
+                     → is-of-hlevel h ＜ x ／ A ＼ y ＞
   pathP-is-of-hlevel {A} h ahl {x} {y} =
     subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel h ahl)
 
@@ -130,7 +130,7 @@ opaque
   pathP-is-of-hlevel′ : {A : I → Type ℓ} (h : HLevel)
                       → is-of-hlevel (suc h) (A i1)
                       → (x : A i0) (y : A i1)
-                      → is-of-hlevel h (PathP A x y)
+                      → is-of-hlevel h ＜ x ／ A ＼ y ＞
   pathP-is-of-hlevel′ {A} h ahl x y =
     subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel′ h ahl _ _)
 
@@ -199,7 +199,7 @@ opaque
 
   is-prop→pathP-is-contr
     : {A : I → Type ℓ} → ((i : I) → is-prop (A i))
-    → (x : A i0) (y : A i1) → is-contr (PathP A x y)
+    → (x : A i0) (y : A i1) → is-contr ＜ x ／ A ＼ y ＞
   is-prop→pathP-is-contr A-pr x y .fst = is-prop→pathP A-pr x y
   is-prop→pathP-is-contr A-pr x y .snd p =
     is-prop→squareP (λ _ → A-pr) _ refl p refl

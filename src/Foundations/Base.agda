@@ -291,16 +291,78 @@ _∎ : (x : A) → x ＝ x
 _ ∎ = refl
 
 
+-- Squeezing and spreading, coercions
+
+I-eq : I → I → I
+I-eq i j = (i ∧ j) ∨ (~ i ∧ ~ j)
+
+-- interval interpolation function
+I-interp : I → I → I → I
+I-interp t x y = (~ t ∧ x) ∨ (t ∧ y) ∨ (x ∧ y)
+
+module _ {ℓ̂ : I → Level} (A : (i : I) → Type (ℓ̂ i)) where
+  coe : (i j : I) → A i → A j
+  coe i j = transp (λ k → A (I-interp k i j)) (I-eq i j)
+
+  -- forward spread
+  coe0→i : (i : I) → A i0 → A i
+  coe0→i i = coe i0 i -- transp (λ j → A (i ∧ j)) (~ i)
+
+  -- backward spread
+  coe1→i : (i : I) → A i1 → A i
+  coe1→i i = coe i1 i -- transp (λ j → A (i ∨ ~ j)) i
+
+  -- backward squeeze
+  coei→0 : (i : I) → A i → A i0
+  coei→0 i = coe i i0  -- transp (λ j → A (i ∧ ~ j)) (~ i)
+
+  -- forward squeeze
+  coei→1 : (i : I) → A i → A i1
+  coei→1 i = coe i i1  -- transp (λ l → A (i ∨ l)) i
+
+module _ (A : I → Type ℓ) where
+  -- forward transport
+  coe0→1 : A i0 → A i1
+  coe0→1 = coei→1 A i0 -- transp (λ i → A i) i0
+
+  -- backward transport
+  coe1→0 : A i1 → A i0
+  coe1→0 = coei→0 A i1 -- transp (λ i → A (~ i)) i0
+
+  -- Observe the computational behaviour of `coe`!
+  private
+    coei0→0 : (a : A i0) → coei→0 A i0 a ＝ a
+    coei0→0 _ = refl
+
+    coei1→0 : (a : A i1) → coei→0 A i1 a ＝ coe1→0 a
+    coei1→0 _ = refl
+
+    coei0→1 : (a : A i0) → coei→1 A i0 a ＝ coe0→1 a
+    coei0→1 _ = refl
+
+    coei1→1 : (a : A i1) → coei→1 A i1 a ＝ a
+    coei1→1 _ = refl
+
+  coei→i : (i : I) (x : A i) → coe A i i x ＝ x
+  coei→i i x j = transp (λ _ → A i) (j ∨ ∂ i) x
+
+  coe-path : (p : (i : I) → A i) (i j : I) → coe A i j (p i) ＝ p j
+  coe-path p i j k = transp
+    (λ l → A (I-interp k (I-interp l i j) j))
+    (I-interp k (I-eq i j) i1)
+    (p (I-interp k i j))
+
+
 -- Transport and subst
 
 -- Transporting in a constant family is the identity function (up to a
 -- path). If we would have regularity this would be definitional.
 transport-refl : (x : A) → transport refl x ＝ x
-transport-refl {A} x i = transp (λ _ → A) i x
+transport-refl x i = coe1→i _ i x
 
 transport-filler : {A B : Type ℓ} (p : A ＝ B) (x : A)
                  → ＜ x ／ (λ i → p i) ＼ transport p x ＞
-transport-filler p x i = transp (λ j → p (i ∧ j)) (~ i) x
+transport-filler p x i = coe0→i (λ j → p j) i x
 
 -- We want B to be explicit in subst
 subst : (B : A → Type ℓ′) (p : x ＝ y) → B x → B y
@@ -501,68 +563,6 @@ module _ {P : ∀ y → x ＝ y → Type ℓ′} (d : P x refl) where
   infix 10 J>_
 
 
--- Squeezing and spreading, coercions
-
-I-eq : I → I → I
-I-eq i j = (i ∧ j) ∨ (~ i ∧ ~ j)
-
--- interval interpolation function
-I-interp : I → I → I → I
-I-interp t x y = (~ t ∧ x) ∨ (t ∧ y) ∨ (x ∧ y)
-
-module _ {ℓ^ : I → Level} (A : (i : I) → Type (ℓ^ i)) where
-  coe : (i j : I) → A i → A j
-  coe i j = transp (λ k → A (I-interp k i j)) (I-eq i j)
-
-  -- forward spread
-  coe0→i : (i : I) → A i0 → A i
-  coe0→i i = coe i0 i -- transp (λ j → A (i ∧ j)) (~ i)
-
-  -- backward spread
-  coe1→i : (i : I) → A i1 → A i
-  coe1→i i = coe i1 i -- transp (λ j → A (i ∨ ~ j)) i
-
-  -- backward squeeze
-  coei→0 : (i : I) → A i → A i0
-  coei→0 i = coe i i0  -- transp (λ j → A (i ∧ ~ j)) (~ i)
-
-  -- forward squeeze
-  coei→1 : (i : I) → A i → A i1
-  coei→1 i = coe i i1  -- transp (λ l → A (i ∨ l)) i
-
-module _ (A : I → Type ℓ) where
-  -- forward transport
-  coe0→1 : A i0 → A i1
-  coe0→1 = coei→1 A i0 -- transp (λ i → A i) i0
-
-  -- backward transport
-  coe1→0 : A i1 → A i0
-  coe1→0 = coei→0 A i1 -- transp (λ i → A (~ i)) i0
-
-  -- Observe the computational behaviour of `coe`!
-  private
-    coei0→0 : (a : A i0) → coei→0 A i0 a ＝ a
-    coei0→0 _ = refl
-
-    coei1→0 : (a : A i1) → coei→0 A i1 a ＝ coe1→0 a
-    coei1→0 _ = refl
-
-    coei0→1 : (a : A i0) → coei→1 A i0 a ＝ coe0→1 a
-    coei0→1 _ = refl
-
-    coei1→1 : (a : A i1) → coei→1 A i1 a ＝ a
-    coei1→1 _ = refl
-
-  coei→i : (i : I) (x : A i) → coe A i i x ＝ x
-  coei→i i x j = transp (λ _ → A i) (j ∨ ∂ i) x
-
-  coe-path : (p : (i : I) → A i) (i j : I) → coe A i j (p i) ＝ p j
-  coe-path p i j k = transp
-    (λ l → A (I-interp k (I-interp l i j) j))
-    (I-interp k (I-eq i j) i1)
-    (p (I-interp k i j))
-
-
 -- Converting to and from a PathP
 
 pathP＝path : (P : I → Type ℓ) (p : P i0) (q : P i1)
@@ -589,7 +589,7 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 
   -- from-pathP : ＜ x ／ A ＼ y ＞ → transport (λ i → A i) x ＝ y
   from-pathP : ＜ x ／ A ＼ y ＞ → coe0→1 A x ＝ y
-  from-pathP p i = transp (λ j → A (i ∨ j)) i (p i)
+  from-pathP p i = coei→1 A i (p i)
 
 module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
   unfolding to-pathP
@@ -600,22 +600,18 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
   from-pathP⁻ p = sym $ from-pathP (λ i → p (~ i))
 
   to-from-pathP : (p : ＜ x ／ A ＼ y ＞) → to-pathP (from-pathP p) ＝ p
-  to-from-pathP p i j = hcomp-unique (∂ j)
-    (λ { k (k = i0) → coe0→i A j x
-       ; k (j = i0) → x
-       ; k (j = i1) → coei→1 A k (p k)
-     })
-    (λ k → inS (transp (λ l → A (j ∧ (k ∨ l))) (~ j ∨ k) (p (j ∧ k))))
-    i
+  to-from-pathP p i j = hcomp (i ∨ ∂ j) λ where
+    k (i = i1) → transp (λ l → A (j ∧ (k ∨ l))) (~ j ∨ k) (p (j ∧ k)) -- TODO use `coe` ?
+    k (j = i0) → x
+    k (j = i1) → coei→1 A k (p k)
+    k (k = i0) → coe0→i A j x
 
   -- just pray
   from-to-pathP : (p : coe0→1 A x ＝ y) → from-pathP {A = A} (to-pathP p) ＝ p
   from-to-pathP p i j =
     hcomp (∂ i ∨ ∂ j) λ where
-      k (k = i0) →
-          coei→1 A (j ∨ ~ i) $
-            transp (λ l → A (j ∨ ~ i ∧ l)) (i ∨ j) $
-                   coe0→i A j x
+      k (k = i0) → coei→1 A (j ∨ ~ i) $
+        transp (λ l → A (j ∨ (~ i ∧ l))) (i ∨ j) $ coe0→i A j x -- TODO use `coe` ?
 
       k (j = i0) → slide (k ∨ ~ i)
       k (j = i1) → p k
@@ -662,13 +658,13 @@ opaque
     where
     lemma : transport (λ i → left i ＝ right i) p ＝ sym left ∙∙ p ∙∙ right
     lemma i j = hcomp (~ i ∨ ∂ j) λ where
-      k (k = i0) → transp (λ j → A) i (p j)
+      k (k = i0) → coei→1 (λ _ → A) i (p j)
       k (i = i0) → hfill (∂ j) k λ where
-        k (k = i0) → transp (λ i → A) i0 (p j)
-        k (j = i0) → transp (λ j → A) k (left k)
-        k (j = i1) → transp (λ j → A) k (right k)
-      k (j = i0) → transp (λ j → A) (k ∨ i) (left k)
-      k (j = i1) → transp (λ j → A) (k ∨ i) (right k)
+        k (k = i0) → coe0→1 (λ _ → A) (p j)
+        k (j = i0) → coei→1 (λ _ → A) k (left k)
+        k (j = i1) → coei→1 (λ _ → A) k (right k)
+      k (j = i0) → coei→1 (λ _ → A) (k ∨ i) (left k)
+      k (j = i1) → coei→1 (λ _ → A) (k ∨ i) (right k)
 
 subst-path-left : {x y x′ : A}
                 → (p : x ＝ y)

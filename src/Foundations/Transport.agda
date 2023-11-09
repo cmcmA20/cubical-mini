@@ -3,7 +3,6 @@ module Foundations.Transport where
 
 open import Foundations.Base
 open import Foundations.Equiv.Base
-open import Foundations.Equiv.FromPath
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -16,7 +15,7 @@ transport-filler-ext p i x = transport-filler p x i
 
 transport⁻-filler-ext : (p : A ＝ B)
                       → ＜ id ／ (λ i → p i → A) ＼ transport (sym p) ＞
-transport⁻-filler-ext p i x = transp (λ j → p (i ∧ ~ j)) (~ i) x
+transport⁻-filler-ext p i = coei→0 (λ j → p j) i
 
 transport⁻-transport : (p : A ＝ B) (a : A)
                      → transport (sym p) (transport p a) ＝ a

@@ -74,7 +74,7 @@ prop-extₑ! {aprop} {bprop} = prop-extₑ aprop bprop
 prop!
   : {A : I → Type ℓ} {@(tactic hlevel-tactic-worker) aip : is-prop (A i0)}
   → {x : A i0} {y : A i1}
-  → PathP A x y
+  → ＜ x ／ A ＼ y ＞
 prop! {A} {aip} {x} {y} =
   is-prop→pathP (λ i → coe0→i (λ j → is-prop (A j)) i aip) x y
 
@@ -136,7 +136,7 @@ instance
     [ `level-suc , `search (quote is-of-hlevel) , `meta , `meta ]
 
   decomp-hlevel-pathP′ : {F : I → Type ℓ} {a : F i0} {b : F i1}
-                       → goal-decomposition (quote is-of-hlevel) (PathP F a b)
+                       → goal-decomposition (quote is-of-hlevel) ＜ a ／ F ＼ b ＞
   decomp-hlevel-pathP′ = decomp (quote pathP-is-of-hlevel′)
     [ `level-suc , `search (quote is-of-hlevel) , `meta , `meta ]
 

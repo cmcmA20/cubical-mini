@@ -70,7 +70,7 @@ open is-iso
   intro-is-equiv : is-equiv intro
   intro-is-equiv .equiv-proof x = ctr , is-ctr where
     PB : ∀ {x y} → x ＝ y → B x → B y → Type _
-    PB p = PathP (λ i → B (p i))
+    PB p b₀ b₁ = ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞
 
     open Σ x renaming (fst to a′; snd to b)
     open Σ (e .snd .equiv-proof a′ .fst) renaming (fst to A-ctr; snd to α)

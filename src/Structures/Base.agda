@@ -90,7 +90,7 @@ function-str {S} act str .is-hom (A , f) (B , g) e =
   → is-univalent (function-str α τ)
 function-str-is-univalent {S} {T} α α-tr τ τ-univ {X , f} {Y , g} eqv =
   Π[ s ꞉ S X ] τ .is-hom (X , f s) (Y , _) eqv         ≃⟨ Π-cod-≃ (λ s → τ-univ eqv ∙ₑ path→equiv (ap (PathP (λ i → T (ua eqv i)) (f s) ∘ g) (α-tr _ _))) ⟩
-  Π[ s ꞉ S X ] ＜ f s ／ (λ i → T (ua eqv i)) ＼ _ ＞  ≃⟨ (hetero-homotopy≃homotopy ₑ⁻¹) ∙ₑ fun-ext-dep-≃ ⟩
+  Π[ s ꞉ S X ] ＜ f s ／ (λ i → T (ua eqv i)) ＼ _ ＞  ≃⟨ hetero-homotopy≃homotopy ₑ⁻¹ ∙ₑ fun-ext-dep-≃ ⟩
   _                                                    ≃∎
 
 function-action : Equiv-action S → Equiv-action T → Equiv-action (λ X → S X → T X)
