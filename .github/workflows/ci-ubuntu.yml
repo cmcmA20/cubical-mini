@@ -47,11 +47,12 @@ jobs:
     permissions:
       contents: write
     strategy:
+      fail-fast: false
       matrix:
         agda_branch: [ release-2.6.4 ]
     steps:
       - name: Install cabal
-        uses: haskell/actions/setup@v2
+        uses: haskell-actions/setup@v2
         with:
           ghc-version: ${{ env.GHC_VERSION }}
           cabal-version: ${{ env.CABAL_VERSION }}
@@ -115,7 +116,7 @@ jobs:
 
       # By default github actions do not pull the repo
       - name: Checkout cubical
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       ########################################################################
       ## TESTING
@@ -157,7 +158,8 @@ jobs:
       ########################################################################
 
       - name: Htmlize cubical
-        if: github.event_name == 'push' && github.ref_name == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
+        if: github.event_name == 'push' && github.ref_name == 'master'
+            && matrix.agda-branch == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
         run: |
           make listings \
             AGDA_EXEC='~/.cabal/bin/agda' \
@@ -165,7 +167,8 @@ jobs:
             EVERYTHINGS='cabal run Everythings'
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref_name == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
+        if: github.event_name == 'push' && github.ref_name == 'master'
+          && matrix.agda-branch == 'mater' && steps.cache-library-restore.outputs.cache-hit != 'true'
         uses: JamesIves/github-pages-deploy-action@4.1.8
         with:
           branch: gh-pages
