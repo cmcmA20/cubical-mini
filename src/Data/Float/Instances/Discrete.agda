@@ -5,7 +5,6 @@ open import Foundations.Base
 
 open import Meta.Search.Discrete
 
-open import Data.Id
 open import Data.List.Base
 open import Data.Maybe.Instances.Discrete
 open import Data.Word.Instances.Discrete

@@ -16,8 +16,8 @@ bool-is-discrete = is-discreteⁱ→is-discrete helper
   where
   helper : is-discreteⁱ Bool
   helper false false = yes reflⁱ
-  helper false true  = no λ{()}
-  helper true  false = no λ{()}
+  helper false true  = no λ()
+  helper true  false = no λ()
   helper true  true  = yes reflⁱ
 
 instance

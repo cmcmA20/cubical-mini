@@ -13,4 +13,4 @@ open import Agda.Builtin.Float.Properties public
   renaming (primFloatToWord64Injective to float→maybe-word64-injⁱ)
 
 float→maybe-word64-inj : {a b : Float} → float→maybe-word64 a ＝ float→maybe-word64 b → a ＝ b
-float→maybe-word64-inj p = Id≃path .fst (float→maybe-word64-injⁱ _ _ ((Id≃path ₑ⁻¹) .fst p))
+float→maybe-word64-inj = Id≃path.to ∘ float→maybe-word64-injⁱ _ _ ∘′ Id≃path.from

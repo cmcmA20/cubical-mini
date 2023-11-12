@@ -15,5 +15,4 @@ open import Agda.Builtin.Char.Properties public
 char→ℕ-inj
   : {c₁ c₂ : Char}
   → char→ℕ c₁ ＝ char→ℕ c₂ → c₁ ＝ c₂
-char→ℕ-inj p =
-  Id≃path .fst (char→ℕ-injⁱ _ _ ((Id≃path ₑ⁻¹) .fst p))
+char→ℕ-inj = Id≃path.to ∘ char→ℕ-injⁱ _ _ ∘′ Id≃path.from

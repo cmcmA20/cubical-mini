@@ -21,7 +21,7 @@ fin-is-discrete = is-discreteⁱ→is-discrete fin-is-discreteⁱ where
   fin-is-discreteⁱ (fsuc _) fzero    = no λ ()
   fin-is-discreteⁱ (fsuc k) (fsuc l) =
     Dec.map (apⁱ fsuc)
-            (λ { p reflⁱ → p reflⁱ })
+            (_∘ (λ { reflⁱ → reflⁱ }))
             (fin-is-discreteⁱ k l)
 
 instance

@@ -7,7 +7,7 @@ open import Foundations.HLevel
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base
 open import Data.Empty.Base as ⊥
-open import Data.Id
+open import Data.Id.Base
 open import Data.Sum.Base
 open import Data.Unit.Base
 
@@ -86,7 +86,7 @@ instance
 ¬sucn≤n {suc n} = ¬sucn≤n {n}
 
 ¬sucn≤0 : ¬ suc n ≤ 0
-¬sucn≤0 {suc _} = λ ()
+¬sucn≤0 {suc _} ()
 
 ≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
 ≤-split m n with m <ᵇ n in p
@@ -94,8 +94,8 @@ instance
 ... | false with n <ᵇ m in q
 ... | true  = inr $ inl tt
 ... | false = inr $ inr $ go m n
-  (subst (Bool.elim _ _) $ Id≃path.to p)
-  (subst (Bool.elim _ _) $ Id≃path.to q) where
+  (substⁱ (Bool.elim _ _) p)
+  (substⁱ (Bool.elim _ _) q) where
     go : ∀ m n → ¬ (m < n) → ¬ (n < m) → m ＝ n
     go 0       0       _ _ = refl
     go 0       (suc _) p _ = ⊥.rec (p tt)

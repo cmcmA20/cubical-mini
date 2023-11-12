@@ -20,7 +20,7 @@ open import Agda.Builtin.String.Properties public
     )
 
 string→list-inj : {s₁ s₂ : String} → string→list s₁ ＝ string→list s₂ → s₁ ＝ s₂
-string→list-inj p = Id≃path .fst (string→list-injⁱ _ _ ((Id≃path ₑ⁻¹) .fst p))
+string→list-inj = Id≃path.to ∘ string→list-injⁱ _ _ ∘′ Id≃path.from
 
 list→string-inj : {xs ys : List Char} → list→string xs ＝ list→string ys → xs ＝ ys
-list→string-inj p = Id≃path .fst (list→string-injⁱ _ _ ((Id≃path ₑ⁻¹) .fst p))
+list→string-inj = Id≃path.to ∘ list→string-injⁱ _ _ ∘′ Id≃path.from
