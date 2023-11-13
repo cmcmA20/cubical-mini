@@ -14,7 +14,7 @@ open import Data.Empty.Base
 open import Data.List.Base
 
 open import Data.Nat.Base
-open import Data.Nat.Path
+open import Data.Nat.Path as ℕ-path
 
 ==-refl-true : ∀ {m} → (m == m) ＝ true
 ==-refl-true {0} = refl
@@ -25,7 +25,7 @@ open import Data.Nat.Path
 ... | false , p = Reflects′.of $ subst (λ φ → if φ then m ＝ n else m ≠ n) (sym p)
   λ m=n → true≠false $ sym (==-refl-true {m}) ∙ subst (λ φ → (m == φ) ＝ false) (sym m=n) p
 ... | true  , p = Reflects′.of $ subst (λ φ → if φ then m ＝ n else m ≠ n) (sym p) $
-  ℕ-path-code.decode m n $ subst ⟦_⟧ᵇ (sym p) tt
+  ℕ-path.decode m n $ subst ⟦_⟧ᵇ (sym p) tt
 
 ℕ-is-discrete : is-discrete ℕ
 ℕ-is-discrete = is-discrete-η $ reflects→decidable {n = 2} ==-reflects

@@ -10,9 +10,7 @@ open import Meta.Search.HLevel
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁
 
-open import Data.Empty.Base
 open import Data.Empty.Properties
-open import Data.Empty.Instances.HLevel
 open import Data.Sum.Properties
 
 open import Data.Dec.Base as Dec

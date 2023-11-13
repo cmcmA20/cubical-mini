@@ -16,7 +16,7 @@ open import Data.Bool as Bool
 open import Data.Dec as Dec
 open import Data.Empty as ⊥
 open import Data.Sum.Base
-open import Data.Unit.Instances.HLevel
+open import Data.Unit.Base
 open import Data.Unit.Instances.Decidable
 
 open import Truncation.Propositional as ∥-∥₁

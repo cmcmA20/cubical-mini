@@ -16,6 +16,7 @@ private variable
   A : Type ℓ
   _✦_ : A → A → A
   x y z w : A
+  n : HLevel
 
 Associative : (_⋆_ : A → A → A) → Type _
 Associative {A} _⋆_ = (x y z : A) → x ⋆ (y ⋆ z) ＝ (x ⋆ y) ⋆ z
@@ -43,17 +44,13 @@ record 2-semigroup {A : Type ℓ} (_⋆_ : A → A → A) : Type ℓ where
 
 private unquoteDecl 2-semigroup-iso = declare-record-iso 2-semigroup-iso (quote 2-semigroup)
 
-instance
-  2-semigroup-is-set : is-set (2-semigroup _✦_)
-  2-semigroup-is-set = is-set-η λ x → let open 2-semigroup x in is-set-β
-    (is-of-hlevel-≃ 2 (iso→equiv 2-semigroup-iso) hlevel!) x
-
-2-semigroup-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) (2-semigroup _✦_)
-2-semigroup-is-of-hlevel n = is-of-hlevel-+-left 2 n 2-semigroup-is-set
+2-semigroup-is-set : is-set (2-semigroup _✦_)
+2-semigroup-is-set = is-set-η λ x → let open 2-semigroup x in is-set-β
+  (is-of-hlevel-≃ 2 (iso→equiv 2-semigroup-iso) hlevel!) x
 
 instance
-  decomp-hlevel-2-semigroup : goal-decomposition (quote is-of-hlevel) (2-semigroup _✦_)
-  decomp-hlevel-2-semigroup = decomp (quote 2-semigroup-is-of-hlevel) (`level-minus 2 ∷ [])
+  H-Level-2-semigroup : H-Level (2 + n) (2-semigroup _✦_)
+  H-Level-2-semigroup = hlevel-basic-instance 2 2-semigroup-is-set
 
 
 2-Semigroup-on : Type ℓ → Type ℓ
@@ -75,20 +72,22 @@ record is-semigroup {A : Type ℓ} (_⋆_ : A → A → A) : Type ℓ where
 
 unquoteDecl is-semigroup-iso = declare-record-iso is-semigroup-iso (quote is-semigroup)
 
-instance
-  is-semigroup-is-prop : is-prop (is-semigroup _✦_)
-  is-semigroup-is-prop = is-prop-η λ x → let open is-semigroup x in is-prop-β
-    (is-of-hlevel-≃ 1 (iso→equiv is-semigroup-iso) hlevel!) x
+is-semigroup-is-prop : is-prop (is-semigroup _✦_)
+is-semigroup-is-prop = is-prop-η λ x → let open is-semigroup x in is-prop-β
+  (is-of-hlevel-≃ 1 (iso→equiv is-semigroup-iso) hlevel!) x
 
-is-semigroup-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-semigroup _✦_)
-is-semigroup-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-semigroup-is-prop
+instance
+  H-Level-is-semigroup : H-Level (suc n) (is-semigroup _✦_)
+  H-Level-is-semigroup = hlevel-prop-instance is-semigroup-is-prop
+
 
 is-set→2-semigroup-is-prop : (A-set : is-set A) → is-prop (2-semigroup {A = A} _✦_)
-is-set→2-semigroup-is-prop A-set = is-of-hlevel-≃ 1 (iso→equiv 2-semigroup-iso) hlevel! where instance _ = A-set
+is-set→2-semigroup-is-prop A-set = is-of-hlevel-≃ 1 (iso→equiv 2-semigroup-iso) hlevel!
+  where instance _ = hlevel-basic-instance 2 A-set
 
 carrier-is-set→2-semigroup≃is-semigroup : (A-set : is-set A) → 2-semigroup {A = A} _✦_ ≃ is-semigroup _✦_
 carrier-is-set→2-semigroup≃is-semigroup {_✦_} A-set = prop-extₑ (is-set→2-semigroup-is-prop A-set) hlevel! to from where
-  instance _ = A-set
+  instance _ = hlevel-basic-instance 2 A-set
   to : 2-semigroup _✦_ → is-semigroup _✦_
   to 2-sg .is-semigroup.has-is-magma .is-n-magma.has-is-of-hlevel = A-set
   to 2-sg .is-semigroup.assoc = 2-semigroup.assoc 2-sg
@@ -97,10 +96,6 @@ carrier-is-set→2-semigroup≃is-semigroup {_✦_} A-set = prop-extₑ (is-set�
   from sg .2-semigroup.has-is-2-magma .is-n-magma.has-is-of-hlevel = is-of-hlevel-suc 2 A-set
   from sg .2-semigroup.assoc = is-semigroup.assoc sg
   from sg .2-semigroup.assoc-coh = prop!
-
-instance
-  decomp-hlevel-is-semigroup : goal-decomposition (quote is-of-hlevel) (is-semigroup _✦_)
-  decomp-hlevel-is-semigroup = decomp (quote is-semigroup-is-of-hlevel) (`level-minus 1 ∷ [])
 
 
 private

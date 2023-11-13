@@ -35,6 +35,7 @@ instance
   Tactic-discrete .Tactic-desc.goal-selector = 1
   Tactic-discrete .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-discrete .Tactic-desc.instance-helper = quote discrete
+  Tactic-discrete .Tactic-desc.instance-name = quote is-discrete -- TODO use real instance search
 
 discrete-tactic-worker = search-tactic-worker Tactic-discrete
 macro discrete! = discrete-tactic-worker

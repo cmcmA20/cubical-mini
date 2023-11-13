@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 open import Meta.Search.HLevel
 
-open import Data.Empty.Base
+open import Data.Empty.Base public
 
 private variable
   ℓ ℓ′ : Level

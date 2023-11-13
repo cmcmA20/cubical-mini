@@ -15,6 +15,7 @@ private variable
   A : Type ℓ
   e x y z : A
   _✦_ : A → A → A
+  n : HLevel
 
 Commutative : (_⋆_ : A → A → A) → Type _
 Commutative {A} _⋆_ = Π[ x ꞉ A ] Π[ y ꞉ A ] (y ⋆ x ＝ x ⋆ y)
@@ -38,10 +39,13 @@ record braided-2-monoid {A : Type ℓ} (id : A) (_⋆_ : A → A → A) : Type �
 
 unquoteDecl braided-2-monoid-iso = declare-record-iso braided-2-monoid-iso (quote braided-2-monoid)
 
+braided-2-monoid-is-set : is-set (braided-2-monoid e _✦_)
+braided-2-monoid-is-set = is-set-η λ x → let open braided-2-monoid x in is-set-β
+  (is-of-hlevel-≃ 2 (iso→equiv braided-2-monoid-iso) hlevel!) x
+
 instance
-  braided-2-monoid-is-set : is-set (braided-2-monoid e _✦_)
-  braided-2-monoid-is-set = is-set-η λ x → let open braided-2-monoid x in is-set-β
-    (is-of-hlevel-≃ 2 (iso→equiv braided-2-monoid-iso) hlevel!) x
+  H-Level-braided-2-monoid : H-Level (2 + n) (braided-2-monoid e _✦_)
+  H-Level-braided-2-monoid = hlevel-basic-instance 2 braided-2-monoid-is-set
 
 braided-2-monoid-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) (braided-2-monoid e _✦_)
 braided-2-monoid-is-of-hlevel n = is-of-hlevel-+-left 2 n braided-2-monoid-is-set
@@ -68,17 +72,13 @@ record sym-2-monoid {A : Type ℓ} (id : A) (_⋆_ : A → A → A) : Type ℓ w
 
 unquoteDecl sym-2-monoid-iso = declare-record-iso sym-2-monoid-iso (quote sym-2-monoid)
 
-instance
-  sym-2-monoid-is-set : is-set (sym-2-monoid e _✦_)
-  sym-2-monoid-is-set = is-set-η λ x → let open sym-2-monoid x in is-set-β
-    (is-of-hlevel-≃ 2 (iso→equiv sym-2-monoid-iso) hlevel!) x
-
-sym-2-monoid-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) (sym-2-monoid e _✦_)
-sym-2-monoid-is-of-hlevel n = is-of-hlevel-+-left 2 n sym-2-monoid-is-set
+sym-2-monoid-is-set : is-set (sym-2-monoid e _✦_)
+sym-2-monoid-is-set = is-set-η λ x → let open sym-2-monoid x in is-set-β
+  (is-of-hlevel-≃ 2 (iso→equiv sym-2-monoid-iso) hlevel!) x
 
 instance
-  decomp-hlevel-sym-2-monoid : goal-decomposition (quote is-of-hlevel) (sym-2-monoid e _✦_)
-  decomp-hlevel-sym-2-monoid = decomp (quote sym-2-monoid-is-of-hlevel) (`level-minus 2 ∷ [])
+  H-Level-sym-2-monoid : H-Level (2 + n) (sym-2-monoid e _✦_)
+  H-Level-sym-2-monoid = hlevel-basic-instance 2 sym-2-monoid-is-set
 
 Sym-2-monoid-on : Type ℓ → Type ℓ
 Sym-2-monoid-on X = Σ[ id ꞉ X ] Σ[ _⋆_ ꞉ (X → X → X) ] (sym-2-monoid id _⋆_)
@@ -98,10 +98,13 @@ record is-comm-monoid {A : Type ℓ} (id : A) (_⋆_ : A → A → A) : Type ℓ
 
 unquoteDecl is-comm-monoid-iso = declare-record-iso is-comm-monoid-iso (quote is-comm-monoid)
 
+is-comm-monoid-is-prop : is-prop (is-comm-monoid e _✦_)
+is-comm-monoid-is-prop = is-prop-η λ x → let open is-comm-monoid x in is-prop-β
+  (is-of-hlevel-≃ 1 (iso→equiv is-comm-monoid-iso) hlevel!) x
+
 instance
-  is-comm-monoid-is-prop : is-prop (is-comm-monoid e _✦_)
-  is-comm-monoid-is-prop = is-prop-η λ x → let open is-comm-monoid x in is-prop-β
-    (is-of-hlevel-≃ 1 (iso→equiv is-comm-monoid-iso) hlevel!) x
+  H-Level-is-comm-monoid : H-Level (suc n) (is-comm-monoid e _✦_)
+  H-Level-is-comm-monoid = hlevel-prop-instance is-comm-monoid-is-prop
 
 Comm-monoid-on : Type ℓ → Type ℓ
 Comm-monoid-on X = Σ[ (id , _⋆_) ꞉ X × (X → X → X) ] (is-comm-monoid id _⋆_)

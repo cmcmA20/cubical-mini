@@ -18,15 +18,11 @@ rec B-prop f ∣ x ∣₁ = f x
 rec B-prop f (squash₁ x y i) = is-prop-β B-prop (rec B-prop f x) (rec B-prop f y) i
 
 instance
-  ∥-∥₁-is-prop : is-prop ∥ A ∥₁
-  ∥-∥₁-is-prop = is-prop-η squash₁
-
-∥-∥₁-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) ∥ A ∥₁
-∥-∥₁-is-of-hlevel n = is-of-hlevel-+-left 1 n ∥-∥₁-is-prop
-
+  H-Level-∥-∥₁ : ∀ {n} → H-Level (suc n) ∥ A ∥₁
+  H-Level-∥-∥₁ = hlevel-prop-instance (is-prop-η squash₁)
 
 map : (A → B) → (∥ A ∥₁ → ∥ B ∥₁)
-map f = rec ∥-∥₁-is-prop (∣_∣₁ ∘ f)
+map f = rec (hlevel 1) (∣_∣₁ ∘ f)
 
 proj : (A-prop : is-prop A) → ∥ A ∥₁ → A
 proj A-prop = rec A-prop id

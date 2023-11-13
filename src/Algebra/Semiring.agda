@@ -14,6 +14,7 @@ private variable
   A     : Type ℓ
   e x y z u : A
   _✦_ _✧_ : A → A → A
+  n : HLevel
 
 Distrib-left : (_*_ _+_ : A → A → A) → _
 Distrib-left {A} _*_ _+_ = (x y z : A) → x * (y + z) ＝ (x * y) + (x * z)
@@ -39,7 +40,7 @@ record is-semiring {A : Type ℓ}
              ; comm  to +-comm )
 
   field *-monoid : is-monoid 1a _*_
-  open is-monoid *-monoid hiding (has-is-of-hlevel) public
+  open is-monoid *-monoid hiding (has-is-of-hlevel ; H-Level-magma-carrier) public
     renaming ( assoc to *-assoc
              ; id-l  to *-id-l
              ; id-r  to *-id-r )
@@ -50,10 +51,13 @@ record is-semiring {A : Type ℓ}
 
 unquoteDecl is-semiring-iso = declare-record-iso is-semiring-iso (quote is-semiring)
 
+is-semiring-is-prop : is-prop (is-semiring e _✦_ u _✧_)
+is-semiring-is-prop = is-prop-η λ x → let open is-semiring x in is-prop-β
+  (is-of-hlevel-≃ 1 (iso→equiv is-semiring-iso) hlevel!) x
+
 instance
-  is-semiring-is-prop : is-prop (is-semiring e _✦_ u _✧_)
-  is-semiring-is-prop = is-prop-η λ x → let open is-semiring x in is-prop-β
-    (is-of-hlevel-≃ 1 (iso→equiv is-semiring-iso) hlevel!) x
+  H-Level-is-semiring : H-Level (suc n) (is-semiring e _✦_ u _✧_)
+  H-Level-is-semiring = hlevel-prop-instance is-semiring-is-prop
 
 Semiring-on : Type ℓ → Type ℓ
 Semiring-on X =

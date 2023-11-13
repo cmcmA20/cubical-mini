@@ -2,6 +2,7 @@
 module Truncation.Propositional.Instances.Bind where
 
 open import Foundations.Base
+open import Foundations.HLevel
 
 open import Meta.Bind
 
@@ -10,4 +11,4 @@ open import Truncation.Propositional.Instances.Idiom public
 
 instance
   Bind-∥-∥₁ : Bind (eff ∥_∥₁)
-  Bind-∥-∥₁ .Bind._>>=_ ∣a∣₁ mf = rec ∥-∥₁-is-prop mf ∣a∣₁
+  Bind-∥-∥₁ .Bind._>>=_ ∣a∣₁ mf = rec (hlevel 1) mf ∣a∣₁

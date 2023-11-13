@@ -14,9 +14,6 @@ private variable
   B : A → Type ℓ′
   h h₁ h₂ : HLevel
 
-hlevel : (n : HLevel) ⦃ x : is-of-hlevel n A ⦄ → is-of-hlevel n A
-hlevel n ⦃ x ⦄ = x
-
 is-groupoid : Type ℓ → Type ℓ
 is-groupoid = is-of-hlevel 3
 
@@ -229,3 +226,28 @@ opaque
     → ＜ px ／ (λ i → P (q i)) ＼ py ＞
   is-set→cast-pathP {p} {q} P {px} {py} A-set =
     coe0→1 (λ j → ＜ px ／ (λ i → P (A-set _ _ p q j i)) ＼ py ＞)
+
+
+record H-Level (n : ℕ) (T : Type ℓ) : Type ℓ where
+  no-eta-equality
+  constructor hlevel-instance
+  field has-of-hlevel : is-of-hlevel n T
+{-# INLINE hlevel-instance #-}
+
+open H-Level
+
+hlevel : (n : HLevel) ⦃ x : H-Level n A ⦄ → is-of-hlevel n A
+hlevel n ⦃ x ⦄ = x .has-of-hlevel
+
+opaque
+  unfolding is-of-hlevel
+
+  H-Level-is-prop : is-prop (H-Level h A)
+  H-Level-is-prop x y i .has-of-hlevel =
+    is-of-hlevel-is-prop _ (x .has-of-hlevel) (y .has-of-hlevel) i
+
+  hlevel-basic-instance : ∀ n → is-of-hlevel n A → ∀ {k} → H-Level (n + k) A
+  hlevel-basic-instance n hl .has-of-hlevel = is-of-hlevel-+-left n _ hl
+
+  hlevel-prop-instance : is-prop A → H-Level (suc h) A
+  hlevel-prop-instance A-pr .has-of-hlevel = is-prop→is-of-hlevel-suc A-pr

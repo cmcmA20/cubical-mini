@@ -38,6 +38,7 @@ instance
   Tactic-omni₁ .Tactic-desc.goal-selector = 2
   Tactic-omni₁ .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-omni₁ .Tactic-desc.instance-helper = quote omni₁
+  Tactic-omni₁ .Tactic-desc.instance-name = quote Omniscient₁
 
 omni₁-tactic-worker = search-tactic-worker Tactic-omni₁
 macro omni₁! = omni₁-tactic-worker

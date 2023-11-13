@@ -41,6 +41,7 @@ instance
   Tactic-finite .Tactic-desc.goal-selector = 1
   Tactic-finite .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-finite .Tactic-desc.instance-helper = quote finite
+  Tactic-finite .Tactic-desc.instance-name = quote is-fin-set
 
 finite-tactic-worker = search-tactic-worker Tactic-finite
 macro finite! = finite-tactic-worker

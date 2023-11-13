@@ -24,14 +24,20 @@ open import Truncation.Propositional as ∥-∥₁
 -- ... | inl x≤y = yes x≤y
 -- ... | inr x₁ = no {!!}
 
+private variable n : HLevel
+
 record is-linear-order {ℓ ℓ′} {A : Type ℓ}
           (_<_ : A → A → Type ℓ′) : Type (ℓ ⊔ ℓ′) where
   no-eta-equality
   field
-    instance <-thin : ∀ {x y} → is-prop (x < y)
-    <-asym  : ∀ {x y} → x < y → ¬ y < x
-    <-cmp   : ∀ {x y z} → x < z → x < y ⊎₁ y < z
-    <-conn  : ∀ {x y} → ¬ x < y → ¬ y < x → x ＝ y
+    <-thin : ∀ {x y} → is-prop (x < y)
+    <-asym : ∀ {x y} → x < y → ¬ y < x
+    <-cmp  : ∀ {x y z} → x < z → x < y ⊎₁ y < z
+    <-conn : ∀ {x y} → ¬ x < y → ¬ y < x → x ＝ y
+
+  instance
+    H-Level-< : ∀ {x y} → H-Level (suc n) (x < y)
+    H-Level-< = hlevel-prop-instance <-thin
 
   <-irr : ∀ {x} → ¬ x < x
   <-irr p = <-asym p p
@@ -40,12 +46,15 @@ record is-linear-order {ℓ ℓ′} {A : Type ℓ}
   <-trans p = ∥-∥₁.proj! ∘ ∥-∥₁.map
     [ (λ s → absurd (<-asym p s)) , id ]ᵤ ∘ <-cmp
 
+  has-is-set : is-set A
+  has-is-set = identity-system→is-of-hlevel 1
+    {r = λ _ → [ <-irr , <-irr ]ᵤ}
+    (set-identity-system hlevel! λ p → <-conn (p ∘ inl) (p ∘ inr))
+    hlevel!
+
   instance
-    has-is-set : is-set A
-    has-is-set = identity-system→is-of-hlevel 1
-      {r = λ _ → [ <-irr , <-irr ]ᵤ}
-      (set-identity-system hlevel! λ p → <-conn (p ∘ inl) (p ∘ inr))
-      hlevel!
+    H-Level-lo-carrier : H-Level (2 + n) A
+    H-Level-lo-carrier = hlevel-basic-instance 2 has-is-set
 
 unquoteDecl is-linear-order-iso = declare-record-iso is-linear-order-iso (quote is-linear-order)
 
@@ -54,14 +63,13 @@ private variable
   A : Type ℓ
   R : A → A → Type ℓ′
 
-is-linear-order-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (is-linear-order R)
-is-linear-order-is-of-hlevel n = is-prop→is-of-hlevel-suc $ is-prop-η λ x →
+is-linear-order-is-of-hlevel : is-prop (is-linear-order R)
+is-linear-order-is-of-hlevel = is-prop-η λ x →
   let open is-linear-order x in is-prop-β (iso→is-of-hlevel 1 is-linear-order-iso hlevel!) x
 
 instance
-  decomp-hlevel-lo
-    : goal-decomposition (quote is-of-hlevel) (is-linear-order R)
-  decomp-hlevel-lo = decomp (quote is-linear-order-is-of-hlevel) (`level-minus 1 ∷ [])
+  H-Level-is-linear-order : H-Level (suc n) (is-linear-order R)
+  H-Level-is-linear-order = hlevel-prop-instance is-linear-order-is-of-hlevel
 
 
 record Loset-on {ℓ} ℓ′ (A : Type ℓ) : Type (ℓ ⊔ ℓsuc ℓ′) where

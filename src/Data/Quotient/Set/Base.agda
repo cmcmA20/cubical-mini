@@ -17,11 +17,8 @@ private variable
   R : A → A → Type ℓʳ
 
 instance
-  /₂-is-set : is-set (A / R)
-  /₂-is-set = is-set-η squash/
-
-/₂-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) (A / R)
-/₂-is-of-hlevel n = is-of-hlevel-+-left 2 n /₂-is-set
+  H-Level-/₂ : ∀ {n} → H-Level (2 + n) (A / R)
+  H-Level-/₂ = hlevel-basic-instance 2 $ is-set-η squash/
 
 elim-prop
   : (P-prop : Π[ x ꞉ A / R ] is-prop (P x))

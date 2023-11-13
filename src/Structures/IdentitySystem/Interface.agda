@@ -58,7 +58,6 @@ module IdSS
   K-refl : (P : R a a → Type ℓ″) (x : P (r a)) → K P x (r a) ＝ x
   K-refl = IS.K-refl ids set
 
-  -- TODO rename and fix signature
   instance
-    R-HLevel : ∀ {a b} {n} → is-of-hlevel (suc n) (R a b)
-    R-HLevel = is-prop→is-of-hlevel-suc (set-identity-is-prop ids set)
+    HLevel-R : ∀ {a b} {n} → H-Level (suc n) (R a b)
+    HLevel-R = hlevel-prop-instance (set-identity-is-prop ids set)

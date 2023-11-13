@@ -38,7 +38,9 @@ elim²-prop
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
 elim²-prop {P} P-prop f = elim-prop! λ a → elim-prop! (f a)
-  where instance P-prop′ : ∀ {x y} → is-prop (P x y) ; P-prop′ = P-prop _ _
+  where instance
+    P-prop′ : ∀ {x y} → H-Level 1 (P x y)
+    P-prop′ = hlevel-prop-instance (P-prop _ _)
 
 elim²-prop!
   : {P : A / R → B / S → Type ℓ}
@@ -52,8 +54,10 @@ elim³-prop
     (P-prop : ∀ x y z → is-prop (P x y z))
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
-elim³-prop {P} P-prop f = elim-prop! λ a → elim-prop! λ b → elim-prop! (f a b)
-  where instance P-prop′ : ∀ {x y z} → is-prop (P x y z) ; P-prop′ = P-prop _ _ _
+elim³-prop {P} P-prop f = elim²-prop! λ a b → elim-prop! (f a b)
+  where instance
+    P-prop′ : ∀ {x y z} → H-Level 1 (P x y z)
+    P-prop′ = hlevel-prop-instance (P-prop _ _ _)
 
 elim³-prop!
   : {P : A / R → B / S → C / T → Type ℓ}
@@ -84,7 +88,7 @@ rec² : is-set C
      → A / R → B / S → C
 rec² C-set f fa= fb= =
   rec! (λ a → rec! (f a) (fb= a)) λ a b r → fun-ext $ elim-prop! λ x → fa= a b x r
-  where instance _ = C-set
+  where instance _ = hlevel-basic-instance 2 C-set
 
 rec²! : {@(tactic hlevel-tactic-worker) C-set : is-set C}
       → (f : A → B → C)
@@ -103,7 +107,7 @@ universal : is-set B
           → (A / R → B)
           ≃ Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b)
 universal {B} {A} {R} B-set = iso→equiv $ inc , iso back (λ _ → refl) li where
-  instance _ = B-set
+  instance _ = hlevel-basic-instance 2 B-set
   inc : (A / R → B) → Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b)
   inc f = f ∘ ⦋_⦌ , λ a b r i → f (glue/ a b r i)
   back = rec! $²_
@@ -137,4 +141,4 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   ∥R∥₁-c .is-congruence.equivalenceᶜ .reflᶜ = ∣ reflᶜ ∣₁
   ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = ∥-∥₁.map symᶜ
   ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim²! λ a b → ∣ a ∙ᶜ b ∣₁
-  ∥R∥₁-c .is-congruence.has-propᶜ = hlevel!
+  ∥R∥₁-c .is-congruence.has-propᶜ .H-Level.has-of-hlevel = hlevel!

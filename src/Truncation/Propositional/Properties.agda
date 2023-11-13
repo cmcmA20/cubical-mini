@@ -75,7 +75,7 @@ elim²! {P-prop} = elim² P-prop
 
 universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
 universal {B} {A} B-prop = iso→equiv $ inc′ , iso rec′ (λ _ → refl) beta where
-  instance _ = B-prop
+  instance _ = hlevel-prop-instance B-prop
   inc′ : (x : ∥ A ∥₁ → B) → A → B
   inc′ f x = f ∣ x ∣₁
 
@@ -88,7 +88,7 @@ universal {B} {A} B-prop = iso→equiv $ inc′ , iso rec′ (λ _ → refl) bet
 
 is-prop→equiv-∥-∥₁ : is-prop A → A ≃ ∥ A ∥₁
 is-prop→equiv-∥-∥₁ A-prop = prop-extₑ! ∣_∣₁ proj!
-  where instance _ = A-prop
+  where instance _ = hlevel-prop-instance A-prop
 
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
 is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → is-of-hlevel-≃ 1 e hlevel!)
@@ -101,13 +101,14 @@ corestriction-is-surjective (_ , p) = map (second Σ-prop-path!) p
 
 dom-is-set→image-is-set
   : is-set B → {f : A → B} → is-set (Im f)
-dom-is-set→image-is-set B-set = Σ-is-of-hlevel 2 B-set λ _ → ∥-∥₁-is-of-hlevel 1
+dom-is-set→image-is-set B-set = hlevel!
+  where instance _ = hlevel-basic-instance 2 B-set
 
 is-constant→image-is-prop
   : is-set B → {f : A → B} → 2-Constant f → is-prop (Im f)
 is-constant→image-is-prop B-set {f} f-const = is-prop-η λ (a , x) (b , y) →
   Σ-prop-path! $ elim²! (λ { (f*a , p) (f*b , q) → sym p ∙∙ f-const f*a f*b ∙∙ q }) x y
-  where instance _ = B-set
+  where instance _ = hlevel-basic-instance 2 B-set
 
 -- TODO if codomain is an n-type, we should require f to be n-constant
 -- write a generic recursor
@@ -123,7 +124,7 @@ rec-set f-const B-set = fst ∘ elim
   → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∥ Σ[ a ꞉ A ] B a ∥₁
 Σ-∥-∥₁-over-prop A-prop = prop-extₑ!
   (λ x → map (x .fst ,_) (x .snd))
-  (rec! (second ∣_∣₁)) where instance _ = A-prop
+  (rec! (second ∣_∣₁)) where instance _ = hlevel-prop-instance A-prop
 
 
 _factors-through_

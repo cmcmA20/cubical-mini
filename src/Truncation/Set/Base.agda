@@ -21,14 +21,11 @@ rec B-set f (squash₂ x y p q i j) =
     go = rec B-set f
 
 instance
-  ∥-∥₂-is-set : is-set ∥ A ∥₂
-  ∥-∥₂-is-set = is-set-η squash₂
-
-∥-∥₂-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) ∥ A ∥₂
-∥-∥₂-is-of-hlevel n = is-of-hlevel-+-left 2 n ∥-∥₂-is-set
+  H-Level-∥-∥₂ : ∀ {n} → H-Level (2 + n) ∥ A ∥₂
+  H-Level-∥-∥₂ = hlevel-basic-instance 2 $ is-set-η squash₂
 
 map : (A → B) → (∥ A ∥₂ → ∥ B ∥₂)
-map f = rec ∥-∥₂-is-set (∣_∣₂ ∘ f)
+map f = rec (hlevel 2) (∣_∣₂ ∘ f)
 
 proj : (A-set : is-set A) → ∥ A ∥₂ → A
 proj A-set = rec A-set id

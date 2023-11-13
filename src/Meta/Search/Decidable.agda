@@ -29,6 +29,7 @@ instance
   Tactic-decide .Tactic-desc.goal-selector = 1
   Tactic-decide .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-decide .Tactic-desc.instance-helper = quote decide
+  Tactic-decide .Tactic-desc.instance-name = quote Dec
 
 decide-tactic-worker = search-tactic-worker Tactic-decide
 macro decide! = decide-tactic-worker

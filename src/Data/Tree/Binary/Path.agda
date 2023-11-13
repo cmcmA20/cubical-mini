@@ -9,9 +9,8 @@ open import Meta.Search.HLevel
 open import Structures.IdentitySystem
 
 open import Data.Empty.Base
-open import Data.Empty.Instances.HLevel
 open import Data.Nat.Base
-open import Data.Unit.Instances.HLevel
+open import Data.Unit.Base
 
 open import Data.Tree.Binary.Base public
 

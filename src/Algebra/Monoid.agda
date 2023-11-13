@@ -15,6 +15,7 @@ private variable
   A : Type ℓ
   e x y : A
   _✦_ : A → A → A
+  n : HLevel
 
 Unital-left : (id : A) (_⋆_ : A → A → A) → Type _
 Unital-left {A} id _⋆_ = Π[ x ꞉ A ] (id ⋆ x ＝ x)
@@ -46,17 +47,14 @@ record 2-monoid {A : Type ℓ} (id : A) (_⋆_ : A → A → A) : Type ℓ where
 
 unquoteDecl 2-monoid-iso = declare-record-iso 2-monoid-iso (quote 2-monoid)
 
-instance
-  2-monoid-is-set : is-set (2-monoid e _✦_)
-  2-monoid-is-set = is-set-η λ x → let open 2-monoid x in is-set-β
-    (is-of-hlevel-≃ 2 (iso→equiv 2-monoid-iso) hlevel!) x
-
-2-monoid-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) (2-monoid e _✦_)
-2-monoid-is-of-hlevel n = is-of-hlevel-+-left 2 n 2-monoid-is-set
+2-monoid-is-set : is-set (2-monoid e _✦_)
+2-monoid-is-set = is-set-η λ x → let open 2-monoid x in is-set-β
+  (is-of-hlevel-≃ 2 (iso→equiv 2-monoid-iso) hlevel!) x
 
 instance
-  decomp-hlevel-2-monoid : goal-decomposition (quote is-of-hlevel) (2-monoid e _✦_)
-  decomp-hlevel-2-monoid = decomp (quote 2-monoid-is-of-hlevel) (`level-minus 2 ∷ [])
+  H-Level-2-monoid : H-Level (2 + n) (2-monoid e _✦_)
+  H-Level-2-monoid = hlevel-basic-instance 2 2-monoid-is-set
+
 
 2-Monoid-on : Type ℓ → Type ℓ
 2-Monoid-on X = Σ[ id ꞉ X ] Σ[ _⋆_ ꞉ (X → X → X) ] (2-monoid id _⋆_)
@@ -78,10 +76,13 @@ record is-monoid {A : Type ℓ} (id : A) (_⋆_ : A → A → A) : Type ℓ wher
 
 unquoteDecl is-monoid-iso = declare-record-iso is-monoid-iso (quote is-monoid)
 
+is-monoid-is-prop : is-prop (is-monoid e _✦_)
+is-monoid-is-prop = is-prop-η λ x → let open is-monoid x in is-prop-β
+  (is-of-hlevel-≃ 1 (iso→equiv is-monoid-iso) hlevel!) x
+
 instance
-  is-monoid-is-prop : is-prop (is-monoid e _✦_)
-  is-monoid-is-prop = is-prop-η λ x → let open is-monoid x in is-prop-β
-    (is-of-hlevel-≃ 1 (iso→equiv is-monoid-iso) hlevel!) x
+  H-Level-is-monoid : H-Level (suc n) (is-monoid e _✦_)
+  H-Level-is-monoid = hlevel-prop-instance is-monoid-is-prop
 
 Monoid-on : Type ℓ → Type ℓ
 Monoid-on X = Σ[ (id , _⋆_) ꞉ X × (X → X → X) ] (is-monoid id _⋆_)

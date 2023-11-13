@@ -75,6 +75,7 @@ record Tactic-desc (goal-name : Name) (goal-strat : Goal-strat) : Type where
       : {w : goal-is-stratified goal-strat}
       → List (Name × ℕ × Goal-data)
     other-atoms : List Name
+    instance-name   : Name
     instance-helper : Name
     upwards-closure : {w : goal-is-stratified goal-strat} → Maybe Name
     -- ^ it should have a following signature
@@ -140,12 +141,19 @@ private
     ih ← args-list→args-vec dl xs
     pure $ x ∷ ih
 
-  compose-goal : Tactic-desc goal-name goal-strat → Level-data goal-strat → Term → Term
-  compose-goal {goal-name} td xlv ty = def goal-name $ vec→list (go td xlv base-args) .fst where
+  compose-solution : Tactic-desc goal-name goal-strat → Bool → Level-data goal-strat → Term → Term
+  compose-solution {goal-name} td instance? xlv ty = def target $ vec→list (go td xlv base-args) .fst where
+    target = if instance? then td .instance-name else goal-name
     base-args = replace (td .goal-selector) (varg ty) $ replicate (td .args-length) (harg Term.unknown)
     go : ∀{gn gs} (td : Tactic-desc gn gs) → Level-data gs → Vec _ (td .args-length) → Vec _ (td .args-length)
     go {gs = by-hlevel} td xlv = replace (td .level-selector) (varg xlv)
     go {gs = none} _ _ = id
+
+  compose-goal : Tactic-desc goal-name goal-strat → Level-data goal-strat → Term → Term
+  compose-goal td = compose-solution td false
+
+  compose-instance : Tactic-desc goal-name goal-strat → Level-data goal-strat → Term → Term
+  compose-instance td = compose-solution td true
 
   decompose-alias
     : (actual : Name)
@@ -259,13 +267,13 @@ private
 
   compose-instance-helper : Tactic-desc goal-name goal-strat → Level-data goal-strat → Term
   compose-instance-helper {goal-strat = none} td _ = def (td .instance-helper) []
-  compose-instance-helper {goal-strat = by-hlevel} td lv = def (td .instance-helper) $ lv v∷ []
+  compose-instance-helper {goal-strat = by-hlevel} td lv = def (td .instance-helper) $ unknown h∷ unknown h∷ lv v∷ []
 
   use-instance-search : Tactic-desc goal-name goal-strat → Bool → Term → TC ⊤
   use-instance-search {goal-name} td has-alts goal = runSpeculative do
     (lv , ty) ← decompose-goal td goal
     solved@(meta mv _) ←
-      new-meta (compose-goal td lv ty) where _ → backtrack []
+      new-meta (compose-instance td lv ty) where _ → backtrack []
     instances ← getInstances mv
 
     t ← quoteTC instances
@@ -278,7 +286,7 @@ private
       go = λ where
         (x ∷ []) → do
           unify solved x
-          withReduceDefs (false , td .instance-helper ∷ []) $ withReconstructed true $
+          withReduceDefs (false , td .instance-helper ∷ []) $
             unify goal (compose-instance-helper td lv)
           pure (tt , true)
 
@@ -428,7 +436,7 @@ private
     → List Term
     → TC (⊤ × Bool)
   use-decomp-hints _ 0 _ _ _ _ = typeError "use-decomp-hints: no fuel"
-  use-decomp-hints {goal-name} {goal-strat} td (suc fuel) (lv , goal-ty) goal solved (c₁ ∷ cs) = do
+  use-decomp-hints {goal-name} {goal-strat} td (suc fuel) (lv , goal-ty) goal solved (c₁ ∷ cs) = withReduceDefs (false , atoms td) do
     ty  ← inferType c₁
     c₁′ ← reduce c₁
     (remove-invisible c₁′ ty >>= λ where

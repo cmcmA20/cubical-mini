@@ -2,6 +2,7 @@
 module Truncation.Set.Instances.Idiom where
 
 open import Foundations.Base
+open import Foundations.HLevel
 
 open import Meta.Idiom
 
@@ -14,4 +15,4 @@ instance
   Idiom-∥-∥₂ : Idiom (eff ∥_∥₂)
   Idiom-∥-∥₂ .Idiom.pure = ∣_∣₂
   Idiom-∥-∥₂ .Idiom._<*>_ ∣f∣₂ ∣a∣₂ =
-    rec ∥-∥₂-is-set (λ f → map f ∣a∣₂) ∣f∣₂
+    rec (hlevel 2) (_<$> ∣a∣₂) ∣f∣₂

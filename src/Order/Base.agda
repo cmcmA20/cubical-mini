@@ -8,22 +8,31 @@ open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem
 
+private variable n : HLevel
 
 record is-partial-order {ℓ ℓ′} {A : Type ℓ}
           (_≤_ : A → A → Type ℓ′) : Type (ℓ ⊔ ℓ′) where
   no-eta-equality
   field
-    instance ≤-thin : ∀ {x y} → is-prop (x ≤ y)
+    ≤-thin    : ∀ {x y} → is-prop (x ≤ y)
     ≤-refl    : ∀ {x} → x ≤ x
     ≤-trans   : ∀ {x y z} → x ≤ y → y ≤ z → x ≤ z
     ≤-antisym : ∀ {x y} → x ≤ y → y ≤ x → x ＝ y
 
   instance
-    has-is-set : is-set A
-    has-is-set = identity-system→is-of-hlevel 1
-      {r = λ _ → ≤-refl , ≤-refl}
-      (set-identity-system hlevel! (≤-antisym $²_))
-      hlevel!
+    H-Level-≤-prop : ∀ {x y} → H-Level (suc n) (x ≤ y)
+    H-Level-≤-prop = hlevel-prop-instance ≤-thin
+
+  has-is-set : is-set A
+  has-is-set = identity-system→is-of-hlevel 1
+    {r = λ _ → ≤-refl , ≤-refl}
+    (set-identity-system hlevel! (≤-antisym $²_))
+    hlevel!
+
+  instance
+    H-Level-po-carrier : H-Level (2 + n) A
+    H-Level-po-carrier = hlevel-basic-instance 2 has-is-set
+
 
 unquoteDecl is-partial-order-iso = declare-record-iso is-partial-order-iso (quote is-partial-order)
 

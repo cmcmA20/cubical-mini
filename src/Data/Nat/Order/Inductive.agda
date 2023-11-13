@@ -59,8 +59,8 @@ opaque
   ≤-is-prop (s≤s p) (s≤s q) = ap s≤s (≤-is-prop p q)
 
 instance
-  ≤-is-of-hlevel : is-of-hlevel (suc k) (m ≤ n)
-  ≤-is-of-hlevel = is-prop→is-of-hlevel-suc ≤-is-prop
+  H-Level-≤ : H-Level (suc k) (m ≤ n)
+  H-Level-≤ = hlevel-prop-instance ≤-is-prop
 
 ≤-peel : suc m ≤ suc n → m ≤ n
 ≤-peel (s≤s p) = p

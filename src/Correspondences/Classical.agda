@@ -12,7 +12,6 @@ open import Correspondences.Base public
 
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
-open import Data.Empty.Instances.HLevel
 
 private variable
   ℓ : Level

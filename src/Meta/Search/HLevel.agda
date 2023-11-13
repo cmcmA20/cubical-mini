@@ -47,6 +47,7 @@ instance
     ∷ (quote is-set   , 2 , 2 , fsuc fzero)
     ∷ []
   Tactic-hlevel .Tactic-desc.other-atoms = [ quote _≃_ , quote ¬_ ]
+  Tactic-hlevel .Tactic-desc.instance-name = quote H-Level
   Tactic-hlevel .Tactic-desc.instance-helper = quote hlevel
   Tactic-hlevel .Tactic-desc.upwards-closure = just (quote is-of-hlevel-+)
 

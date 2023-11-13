@@ -11,7 +11,7 @@ open import Meta.Search.HLevel
 open import Structures.IdentitySystem.Base
 open import Structures.n-Type
 
-open import Data.Unit.Instances.HLevel
+open import Data.Unit.Base
 
 open import Functions.Equiv.Fibrewise
 open import Functions.Equiv.HalfAdjoint
@@ -41,7 +41,7 @@ set-injective→is-embedding
   : {f : A → B} → is-set B → Injective f
   → is-embedding f
 set-injective→is-embedding B-set inj x = is-prop-η λ (f*x , p) (f*x′ , q) →
-  Σ-prop-path! (inj (p ∙ sym q)) where instance _ = B-set
+  Σ-prop-path! (inj (p ∙ sym q)) where instance _ = hlevel-basic-instance 2 B-set
 
 is-embedding→injective
   : is-embedding f → Injective f
@@ -53,7 +53,7 @@ set-injective≃is-embedding
 set-injective≃is-embedding A-set B-set =
   prop-extₑ! (set-injective→is-embedding B-set)
              (is-embedding→injective)
-  where instance _ = A-set
+  where instance _ = hlevel-basic-instance 2 A-set
 
 @0 subtype-classifier
   : {B : Type ℓ}

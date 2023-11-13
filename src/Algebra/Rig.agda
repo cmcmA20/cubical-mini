@@ -14,6 +14,7 @@ private variable
   A     : Type ℓ
   e x y z u : A
   _✦_ _✧_ : A → A → A
+  n : HLevel
 
 Absorb-left : (e : A) (_✧_ : A → A → A) → _
 Absorb-left {A} e _✧_ = Π[ x ꞉ A ] (e ✧ x ＝ e)
@@ -36,10 +37,13 @@ record is-rig {A : Type ℓ}
 
 unquoteDecl is-rig-iso = declare-record-iso is-rig-iso (quote is-rig)
 
+is-rig-is-prop : is-prop (is-rig e _✦_ u _✧_)
+is-rig-is-prop = is-prop-η λ x → let open is-rig x in is-prop-β
+  (is-of-hlevel-≃ 1 (iso→equiv is-rig-iso) hlevel!) x
+
 instance
-  is-rig-is-prop : is-prop (is-rig e _✦_ u _✧_)
-  is-rig-is-prop = is-prop-η λ x → let open is-rig x in is-prop-β
-    (is-of-hlevel-≃ 1 (iso→equiv is-rig-iso) hlevel!) x
+  H-Level-is-rig : H-Level (suc n) (is-rig e _✦_ u _✧_)
+  H-Level-is-rig = hlevel-prop-instance is-rig-is-prop
 
 Rig-on : Type ℓ → Type ℓ
 Rig-on X =

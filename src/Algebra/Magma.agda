@@ -38,7 +38,12 @@ private
 
 record is-n-magma (n : HLevel) {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   no-eta-equality
-  field instance has-is-of-hlevel : is-of-hlevel n A
+  field has-is-of-hlevel : is-of-hlevel n A
+
+  instance
+    H-Level-magma-carrier : H-Level n A
+    H-Level-magma-carrier .H-Level.has-of-hlevel = has-is-of-hlevel
+
 
 unquoteDecl is-n-magma-iso = declare-record-iso is-n-magma-iso (quote is-n-magma)
 
@@ -50,16 +55,12 @@ is-magma = is-n-magma 2
 is-2-magma : (A → A → A) → Type _
 is-2-magma = is-n-magma 3
 
-instance
-  is-n-magma-is-prop : is-prop (is-n-magma n _✦_)
-  is-n-magma-is-prop = is-of-hlevel-≃ 1 (iso→equiv is-n-magma-iso) hlevel!
-
-is-n-magma-is-of-hlevel : (k : HLevel) → is-of-hlevel (suc k) (is-n-magma n _✦_)
-is-n-magma-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-n-magma-is-prop
+is-n-magma-is-prop : is-prop (is-n-magma n _✦_)
+is-n-magma-is-prop = is-of-hlevel-≃ 1 (iso→equiv is-n-magma-iso) hlevel!
 
 instance
-  decomp-hlevel-n-magma : goal-decomposition (quote is-of-hlevel) (is-n-magma n _✦_)
-  decomp-hlevel-n-magma = decomp (quote is-n-magma-is-of-hlevel ) (`level-minus 1 ∷ [])
+  H-Level-n-magma : ∀ {k} → H-Level (suc k) (is-n-magma n _✦_)
+  H-Level-n-magma = hlevel-prop-instance is-n-magma-is-prop
 
 module _ (n : HLevel) where
   n-Magma-on : Type ℓ → Type ℓ

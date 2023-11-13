@@ -30,17 +30,12 @@ opaque
   is-connected-η : ∥ A ∥₁ × (∥_∥₁ on-paths-of A) → is-connected A
   is-connected-η = id
 
-  instance
-    is-connected-is-prop : is-prop (is-connected A)
-    is-connected-is-prop = is-prop-η λ _ _ → prop!
-
-is-connected-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-connected A)
-is-connected-is-of-hlevel n = is-of-hlevel-+-left 1 n is-connected-is-prop
+  is-connected-is-prop : is-prop (is-connected A)
+  is-connected-is-prop = is-prop-η λ _ _ → prop!
 
 instance
-  decomp-hlevel-conn : goal-decomposition (quote is-of-hlevel) (is-connected A)
-  decomp-hlevel-conn = decomp (quote is-connected-is-of-hlevel) (`level-minus 1 ∷ [])
-
+  H-Level-conn : ∀ {n} → H-Level (suc n) (is-connected A)
+  H-Level-conn = hlevel-prop-instance is-connected-is-prop
 
 Connected-component : (c : A) → Type (level-of-type A)
 Connected-component {A} c = Σ[ a ꞉ A ] ∥ c ＝ a ∥₁

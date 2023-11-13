@@ -14,6 +14,7 @@ private variable
   A     : Type ℓ
   e x y z u : A
   _✦_ _✧_ : A → A → A
+  n : HLevel
 
 -- commutative rigs
 
@@ -28,10 +29,13 @@ record is-comm-rig {A : Type ℓ}
 
 unquoteDecl is-comm-rig-iso = declare-record-iso is-comm-rig-iso (quote is-comm-rig)
 
+is-comm-rig-is-prop : is-prop (is-comm-rig e _✦_ u _✧_)
+is-comm-rig-is-prop = is-prop-η λ x → let open is-comm-rig x in is-prop-β
+  (is-of-hlevel-≃ 1 (iso→equiv is-comm-rig-iso) hlevel!) x
+
 instance
-  is-comm-rig-is-prop : is-prop (is-comm-rig e _✦_ u _✧_)
-  is-comm-rig-is-prop = is-prop-η λ x → let open is-comm-rig x in is-prop-β
-    (is-of-hlevel-≃ 1 (iso→equiv is-comm-rig-iso) hlevel!) x
+  H-Level-is-comm-rig : H-Level (suc n) (is-comm-rig e _✦_ u _✧_)
+  H-Level-is-comm-rig = hlevel-prop-instance is-comm-rig-is-prop
 
 Comm-rig-on : Type ℓ → Type ℓ
 Comm-rig-on X =

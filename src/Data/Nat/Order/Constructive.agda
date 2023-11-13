@@ -5,6 +5,8 @@ open import Foundations.Base
 open import Foundations.HLevel
 open import Foundations.Sigma
 
+open import Meta.Search.HLevel
+
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Sum.Base
@@ -57,7 +59,7 @@ m > n = n < m
 opaque
   unfolding is-of-hlevel
   ≤-is-prop : is-prop (m ≤ n)
-  ≤-is-prop (_ , p) (_ , q) = Σ-prop-path (λ _ → ℕ-is-set _ _) (+-inj-l _ _ _ (p ∙ sym q))
+  ≤-is-prop (_ , p) (_ , q) = Σ-prop-path! (+-inj-l _ _ _ (p ∙ sym q))
 
 ≤-suc-r : m ≤ n → m ≤ suc n
 ≤-suc-r = bimap suc (λ p → +-suc-r _ _ ∙ ap suc p)
@@ -66,8 +68,8 @@ opaque
 ≤-ascend = 1 , +-suc-r _ _ ∙ ap suc (+-zero-r _)
 
 instance
-  ≤-is-of-hlevel : is-of-hlevel (suc k) (m ≤ n)
-  ≤-is-of-hlevel = is-prop→is-of-hlevel-suc ≤-is-prop
+  H-Level-≤ : H-Level (suc k) (m ≤ n)
+  H-Level-≤ = hlevel-prop-instance ≤-is-prop
 
 ≤-dec : (m n : ℕ) → Dec (m ≤ n)
 ≤-dec 0       _       = yes z≤
