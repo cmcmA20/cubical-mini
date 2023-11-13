@@ -49,7 +49,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        agda_branch: [ release-2.6.4 ]
+        agda_branch: [ master , release-2.6.4 ]
     steps:
       - name: Install cabal
         uses: haskell-actions/setup@v2
