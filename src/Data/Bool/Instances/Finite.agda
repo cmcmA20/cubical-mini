@@ -8,23 +8,18 @@ open import Meta.Search.Finite.Bishop
 
 open import Data.Bool.Base
 open import Data.FinSub.Base
-open import Data.List.Base
-open import Data.Nat.Base
 
 open import Truncation.Propositional.Base
 
-bool-is-fin-set : is-fin-set Bool
-bool-is-fin-set = fin₁ ∣ iso→equiv go ∣₁ where
-  go : Iso Bool (Fin 2)
-  go .fst false = fzero
-  go .fst true = fsuc fzero
-  go .snd .is-iso.inv (mk-fin 0) = false
-  go .snd .is-iso.inv (mk-fin 1) = true
-  go .snd .is-iso.rinv (mk-fin 0) = refl
-  go .snd .is-iso.rinv (mk-fin 1) = refl
-  go .snd .is-iso.linv false = refl
-  go .snd .is-iso.linv true = refl
-
 instance
-  decomp-fin-bool : goal-decomposition (quote is-fin-set) Bool
-  decomp-fin-bool = decomp (quote bool-is-fin-set) []
+  bool-is-fin-set : is-fin-set Bool
+  bool-is-fin-set = fin₁ ∣ iso→equiv go ∣₁ where
+    go : Bool ≅ Fin 2
+    go .fst false = fzero
+    go .fst true = fsuc fzero
+    go .snd .is-iso.inv (mk-fin 0) = false
+    go .snd .is-iso.inv (mk-fin 1) = true
+    go .snd .is-iso.rinv (mk-fin 0) = refl
+    go .snd .is-iso.rinv (mk-fin 1) = refl
+    go .snd .is-iso.linv false = refl
+    go .snd .is-iso.linv true = refl

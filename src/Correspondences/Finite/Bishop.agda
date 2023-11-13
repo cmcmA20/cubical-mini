@@ -17,8 +17,7 @@ open import Correspondences.Exhaustible
 open import Correspondences.Finite.ManifestBishop
 open import Correspondences.Omniscient
 
-open import Data.Dec.Base as Dec
-open import Data.Dec.Instances.HLevel
+open import Data.Dec.Path
 open import Data.Empty.Base
 open import Data.FinSub.Base
 open import Data.FinSub.Properties
@@ -48,11 +47,12 @@ open is-fin-set public
 
 unquoteDecl is-fin-set-iso = declare-record-iso is-fin-set-iso (quote is-fin-set)
 
-is-fin-set-is-prop : is-prop (is-fin-set A)
-is-fin-set-is-prop = is-of-hlevel-≃ _ (iso→equiv is-fin-set-iso) $ is-prop-η go where
-  go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
-  go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim²!
-    (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q)) ∣p∣₁ ∣q∣₁
+instance
+  H-Level-is-fin-set : ∀ {n} → H-Level (suc n) (is-fin-set A)
+  H-Level-is-fin-set = hlevel-prop-instance $ is-of-hlevel-≃ _ (iso→equiv is-fin-set-iso) $ is-prop-η go where
+    go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
+    go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim²!
+      (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q)) ∣p∣₁ ∣q∣₁
 
 𝓑→is-fin-set : 𝓑 A → is-fin-set A
 𝓑→is-fin-set fi .cardinality = fi .cardinality
@@ -81,9 +81,6 @@ finite-choice {P} A-f k = do
   choose ← fin-choice (cardinality A-f) λ x → k (is-equiv→inverse (e .snd) x)
   pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e .fst x))
 
-is-fin-set-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-fin-set A)
-is-fin-set-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-fin-set-is-prop
-
 finite-pi-fin
   : (n : ℕ) {P : Fin n → Type ℓ′}
   → (∀ x → is-fin-set (P x))
@@ -98,7 +95,7 @@ finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
   li : gg is-left-inverse-of ff
   li _ = fun-ext λ ()
 
-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
+finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
   e ← fin-choice (suc sz) (enumeration₁ ∘ fam)
   let rest = finite-pi-fin sz (fam ∘ fsuc)
   cont ← enumeration₁ rest
@@ -117,7 +114,7 @@ finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
 
 Σ-is-fin-set
   : is-fin-set A → (∀ x → is-fin-set (P x)) → is-fin-set (Σ A P)
-Σ-is-fin-set {A} {P} afin fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
+Σ-is-fin-set {A} {P} afin fam = ∥-∥₁.proj! do
   aeq ← enumeration₁ afin
   let
     module aeq = Equiv aeq
@@ -135,7 +132,7 @@ finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel 0) do
 
 fun-is-fin-set
   : is-fin-set A → is-fin-set B → is-fin-set (A → B)
-fun-is-fin-set afin bfin = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
+fun-is-fin-set afin bfin = ∥-∥₁.proj! do
   ae ← enumeration₁ afin
   be ← enumeration₁ bfin
   let count = finite-pi-fin (cardinality afin) λ _ → bfin
@@ -144,7 +141,7 @@ fun-is-fin-set afin bfin = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
 
 Π-is-fin-set
   : {P : A → Type ℓ′} → is-fin-set A → (∀ x → is-fin-set (P x)) → is-fin-set (∀ x → P x)
-Π-is-fin-set afin fam = ∥-∥₁.proj (is-fin-set-is-of-hlevel _) do
+Π-is-fin-set afin fam = ∥-∥₁.proj! do
   eqv ← enumeration₁ afin
   let count = finite-pi-fin (cardinality afin) λ x → fam $ is-equiv→inverse (eqv .snd) x
   eqv′ ← enumeration₁ count

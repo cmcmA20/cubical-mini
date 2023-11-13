@@ -102,3 +102,10 @@ tree-is-of-hlevel n A-hl = is-of-hlevel-η n λ _ _ →
   is-of-hlevel-≃ (suc n)
                  (identity-system-gives-path tree-identity-system ₑ⁻¹)
                  (code-is-of-hlevel A-hl)
+
+instance
+  decomp-hlevel-binary-tree
+    : ∀ {ℓ} {A : Type ℓ}
+    → goal-decomposition (quote is-of-hlevel) (Tree A)
+  decomp-hlevel-binary-tree = decomp (quote tree-is-of-hlevel)
+    (`level-minus 2 ∷ `search (quote is-of-hlevel) ∷ [])

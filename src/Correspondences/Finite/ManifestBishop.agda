@@ -36,8 +36,9 @@ open 𝓑 public
 
 unquoteDecl 𝓑-iso = declare-record-iso 𝓑-iso (quote 𝓑)
 
-𝓑-is-set : is-set (𝓑 A)
-𝓑-is-set = is-of-hlevel-≃ _ (iso→equiv 𝓑-iso) hlevel!
+instance
+  H-Level-𝓑 : ∀ {n} → H-Level (2 + n) (𝓑 A)
+  H-Level-𝓑 = hlevel-basic-instance 2 $ is-of-hlevel-≃ _ (iso→equiv 𝓑-iso) hlevel!
 
 𝓑→omniscient₁ : 𝓑 A → Omniscient₁ {ℓ = ℓ′} A
 𝓑→omniscient₁ {A} fi .omniscient₁-β {P} P? =

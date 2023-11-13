@@ -48,8 +48,6 @@ instance
   decomp-dec-lift : goal-decomposition (quote Dec) (Lift ℓ A)
   decomp-dec-lift = decomp (quote lift-decision) [ `search (quote Dec) ]
 
-  decomp-dec-uni : goal-decomposition (quote Dec) (Type ℓ)
-  decomp-dec-uni = decomp (quote universe-decision) []
 
 -- Usage
 private

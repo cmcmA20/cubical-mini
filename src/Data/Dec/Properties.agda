@@ -15,7 +15,6 @@ open import Data.Sum.Properties
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
-open import Data.Dec.Instances.HLevel
 
 private variable
   ℓ ℓ′ : Level

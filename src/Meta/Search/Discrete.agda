@@ -35,7 +35,7 @@ instance
   Tactic-discrete .Tactic-desc.goal-selector = 1
   Tactic-discrete .Tactic-desc.other-atoms = [ quote _≃_ ]
   Tactic-discrete .Tactic-desc.instance-helper = quote discrete
-  Tactic-discrete .Tactic-desc.instance-name = quote is-discrete -- TODO use real instance search
+  Tactic-discrete .Tactic-desc.instance-name = quote is-discrete
 
 discrete-tactic-worker = search-tactic-worker Tactic-discrete
 macro discrete! = discrete-tactic-worker
@@ -64,9 +64,6 @@ instance
   decomp-hlevel-hedberg : goal-decomposition (quote is-of-hlevel) A
   decomp-hlevel-hedberg = decomp (quote hedberg-helper)
     [ `level-minus 2 , `search (quote is-discrete) ]
-
-  decomp-hlevel-dis : goal-decomposition (quote is-of-hlevel) (is-discrete A)
-  decomp-hlevel-dis = decomp (quote is-discrete-is-of-hlevel) [ `level-minus 1 ]
 
   decomp-dec-eq : {x y : A} → goal-decomposition (quote Dec) (x ＝ y)
   decomp-dec-eq = decomp (quote dec-helper) [ `search (quote is-discrete) , `meta , `meta ]

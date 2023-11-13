@@ -60,6 +60,10 @@ opaque
        k (j = i1) → w
        k (k = i0) → p₂ w (i ∨ j)
 
+instance
+  H-Level-is-equiv : ∀ {n} → H-Level (suc n) (is-equiv f)
+  H-Level-is-equiv = hlevel-prop-instance (is-equiv-is-prop _)
+
 equiv-ext : {e₀ e₁ : A ≃ B} (h : e₀ .fst ＝ e₁ .fst) → e₀ ＝ e₁
 equiv-ext {e₀} {e₁} h i = h i , is-prop→pathP (λ i → is-equiv-is-prop (h i)) (e₀ .snd) (e₁ .snd) i
 

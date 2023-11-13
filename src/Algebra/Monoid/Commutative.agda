@@ -47,12 +47,6 @@ instance
   H-Level-braided-2-monoid : H-Level (2 + n) (braided-2-monoid e _✦_)
   H-Level-braided-2-monoid = hlevel-basic-instance 2 braided-2-monoid-is-set
 
-braided-2-monoid-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) (braided-2-monoid e _✦_)
-braided-2-monoid-is-of-hlevel n = is-of-hlevel-+-left 2 n braided-2-monoid-is-set
-
-instance
-  decomp-hlevel-braided-2-monoid : goal-decomposition (quote is-of-hlevel) (braided-2-monoid e _✦_)
-  decomp-hlevel-braided-2-monoid = decomp (quote braided-2-monoid-is-of-hlevel) (`level-minus 2 ∷ [])
 
 Braided-2-monoid-on : Type ℓ → Type ℓ
 Braided-2-monoid-on X = Σ[ id ꞉ X ] Σ[ _⋆_ ꞉ (X → X → X) ] (braided-2-monoid id _⋆_)

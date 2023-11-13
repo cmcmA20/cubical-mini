@@ -19,36 +19,32 @@ private variable
   x : A
   y : B
 
-module ⊎-path-code where
+Code : A ⊎ B → A ⊎ B → Type (level-of-type A ⊔ level-of-type B)
+Code {B} (inl x₁) (inl x₂) = Lift (level-of-type B) (x₁ ＝ x₂)
+Code     (inl _)  (inr _)  = Lift _ ⊥
+Code     (inr _)  (inl _)  = Lift _ ⊥
+Code {A} (inr y₁) (inr y₂) = Lift (level-of-type A) (y₁ ＝ y₂)
 
-  Code : A ⊎ B → A ⊎ B → Type (level-of-type A ⊔ level-of-type B)
-  Code {B} (inl x₁) (inl x₂) = Lift (level-of-type B) (x₁ ＝ x₂)
-  Code     (inl _)  (inr _)  = Lift _ ⊥
-  Code     (inr _)  (inl _)  = Lift _ ⊥
-  Code {A} (inr y₁) (inr y₂) = Lift (level-of-type A) (y₁ ＝ y₂)
+code-refl : (s : A ⊎ B) → Code s s
+code-refl (inl x) = lift refl
+code-refl (inr y) = lift refl
 
-  code-refl : (s : A ⊎ B) → Code s s
-  code-refl (inl x) = lift refl
-  code-refl (inr y) = lift refl
+identity-system : is-identity-system {A = A ⊎ B} Code code-refl
+identity-system .to-path {inl x₁} {inl x₂} c = ap inl (lower c)
+identity-system .to-path {inr y₁} {inr y₂} c = ap inr (lower c)
+identity-system .to-path-over {inl x₁} {inl x₂} (lift p) i = lift λ j → p (i ∧ j)
+identity-system .to-path-over {inr y₁} {inr y₂} (lift p) i = lift λ j → p (i ∧ j)
 
-  ⊎-identity-system : is-identity-system {A = A ⊎ B} Code code-refl
-  ⊎-identity-system .to-path {inl x₁} {inl x₂} c = ap inl (lower c)
-  ⊎-identity-system .to-path {inr y₁} {inr y₂} c = ap inr (lower c)
-  ⊎-identity-system .to-path-over {inl x₁} {inl x₂} (lift p) i = lift λ j → p (i ∧ j)
-  ⊎-identity-system .to-path-over {inr y₁} {inr y₂} (lift p) i = lift λ j → p (i ∧ j)
-
-  opaque
-    unfolding is-of-hlevel
-    code-is-of-hlevel : {s₁ s₂ : A ⊎ B} {n : HLevel}
-                      → is-of-hlevel (2 + n) A
-                      → is-of-hlevel (2 + n) B
-                      → is-of-hlevel (1 + n) (Code s₁ s₂)
-    code-is-of-hlevel {s₁ = inl x₁} {inl x₂} ahl bhl = Lift-is-of-hlevel _ (ahl x₁ x₂)
-    code-is-of-hlevel {s₁ = inl x}  {inr y}  ahl bhl = hlevel!
-    code-is-of-hlevel {s₁ = inr x}  {inl y}  ahl bhl = hlevel!
-    code-is-of-hlevel {s₁ = inr y₁} {inr y₂} ahl bhl = Lift-is-of-hlevel _ (bhl y₁ y₂)
-
-open ⊎-path-code
+opaque
+  unfolding is-of-hlevel
+  code-is-of-hlevel : {s₁ s₂ : A ⊎ B} {n : HLevel}
+                    → is-of-hlevel (2 + n) A
+                    → is-of-hlevel (2 + n) B
+                    → is-of-hlevel (1 + n) (Code s₁ s₂)
+  code-is-of-hlevel {s₁ = inl x₁} {inl x₂} ahl bhl = Lift-is-of-hlevel _ (ahl x₁ x₂)
+  code-is-of-hlevel {s₁ = inl x}  {inr y}  ahl bhl = hlevel!
+  code-is-of-hlevel {s₁ = inr x}  {inl y}  ahl bhl = hlevel!
+  code-is-of-hlevel {s₁ = inr y₁} {inr y₂} ahl bhl = Lift-is-of-hlevel _ (bhl y₁ y₂)
 
 opaque
   unfolding is-of-hlevel
@@ -57,7 +53,7 @@ opaque
                  → is-of-hlevel (2 + n) B
                  → is-of-hlevel (2 + n) (A ⊎ B)
   ⊎-is-of-hlevel n ahl bhl _ _ =
-    is-of-hlevel-≃ (1 + n) (identity-system-gives-path ⊎-identity-system ₑ⁻¹) (code-is-of-hlevel ahl bhl)
+    is-of-hlevel-≃ (1 + n) (identity-system-gives-path identity-system ₑ⁻¹) (code-is-of-hlevel ahl bhl)
 
   disjoint-⊎-is-prop
     : is-prop A → is-prop B → ¬ A × B
@@ -67,16 +63,17 @@ opaque
   disjoint-⊎-is-prop Ap Bp notab (inr x)  (inl y)  = absurd (notab (y , x))
   disjoint-⊎-is-prop Ap Bp notab (inr y₁) (inr y₂) = ap inr (Bp y₁ y₂)
 
-prop-⊎-is-set
-  : is-prop A → is-prop B
-  → is-set (A ⊎ B)
-prop-⊎-is-set {A} {B} A-prop B-prop = identity-system→is-of-hlevel 1 ⊎-identity-system go where opaque
+opaque
   unfolding is-of-hlevel
-  go : (x y : A ⊎ B) → is-prop (Code x y)
-  go (inl x)  (inr y)  = Lift-is-of-hlevel 1 ⊥-is-prop
-  go (inr y)  (inl x)  = Lift-is-of-hlevel 1 ⊥-is-prop
-  go (inl x₁) (inl x₂) = Lift-is-of-hlevel 1 $ is-prop→is-set A-prop _ _
-  go (inr y₁) (inr y₂) = Lift-is-of-hlevel 1 $ is-prop→is-set B-prop _ _
+  prop-⊎-is-set
+    : is-prop A → is-prop B
+    → is-set (A ⊎ B)
+  prop-⊎-is-set {A} {B} A-prop B-prop = identity-system→is-of-hlevel 1 identity-system go where
+    go : (x y : A ⊎ B) → is-prop (Code x y)
+    go (inl x)  (inr y)  = hlevel!
+    go (inr y)  (inl x)  = hlevel!
+    go (inl x₁) (inl x₂) = Lift-is-of-hlevel 1 $ is-prop→is-set A-prop _ _
+    go (inr y₁) (inr y₂) = Lift-is-of-hlevel 1 $ is-prop→is-set B-prop _ _
 
 contr-⊎-is-set
   : is-contr A → is-contr B
@@ -101,3 +98,10 @@ inr-inj {B} {x} path = ap f path where
   ⊎-discrim : A ⊎ B → Type
   ⊎-discrim (inl _) = ⊤
   ⊎-discrim (inr _) = ⊥
+
+instance
+  decomp-hlevel-⊎
+    : ∀ {a b} {A : Type a} {B : Type b}
+    → goal-decomposition (quote is-of-hlevel) (A ⊎ B)
+  decomp-hlevel-⊎ = decomp (quote ⊎-is-of-hlevel)
+    (`level-minus 2 ∷ `search (quote is-of-hlevel) ∷ `search (quote is-of-hlevel) ∷ [])

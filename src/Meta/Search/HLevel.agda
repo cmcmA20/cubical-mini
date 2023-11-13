@@ -144,12 +144,6 @@ instance
   decomp-hlevel-ntype : goal-decomposition (quote is-of-hlevel) (n-Type ℓ n)
   decomp-hlevel-ntype = decomp (quote n-Type-is-of-hlevel) [ `level-minus 1 ]
 
-  decomp-hlevel-hlevel : goal-decomposition (quote is-of-hlevel) (is-of-hlevel n A)
-  decomp-hlevel-hlevel = decomp (quote is-of-hlevel-is-of-hlevel-suc) [ `level-minus 1 ]
-
-  decomp-hlevel-is-equiv : {B : Type ℓ′} {f : A → B} → goal-decomposition (quote is-of-hlevel) (is-equiv f)
-  decomp-hlevel-is-equiv = decomp (quote is-equiv-is-of-hlevel) []
-
   proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote n-Type.carrier) true
   proj-hlevel-n-type .Struct-proj-desc.struct-name = quote n-Type
   proj-hlevel-n-type .Struct-proj-desc.struct-args-length = 2

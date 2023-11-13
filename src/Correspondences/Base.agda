@@ -176,5 +176,9 @@ record Equivalence (_~_ : Corr 2 ℓ (A , A)) : Type (level-of-type A ⊔ ℓ) w
 record is-congruence (_~_ : Corr 2 ℓ (A , A)) : Type (level-of-type A ⊔ ℓ) where
   field
     equivalenceᶜ : Equivalence _~_
-    instance has-propᶜ : ∀ {x y} → H-Level 1 (x ~ y)
+    has-propᶜ : ∀ {x y} → is-prop (x ~ y)
+
+  instance
+    H-Level-~ : ∀ {x y} → H-Level (suc n) (x ~ y)
+    H-Level-~ = hlevel-prop-instance has-propᶜ
   open Equivalence equivalenceᶜ public

@@ -41,14 +41,10 @@ private variable
   A : Type ℓ
   R : A → A → Type ℓ′
 
-is-partial-order-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (is-partial-order R)
-is-partial-order-is-of-hlevel n = is-prop→is-of-hlevel-suc $ is-prop-η λ x →
-  let open is-partial-order x in is-prop-β (iso→is-of-hlevel 1 is-partial-order-iso hlevel!) x
-
 instance
-  decomp-hlevel-po
-    : goal-decomposition (quote is-of-hlevel) (is-partial-order R)
-  decomp-hlevel-po = decomp (quote is-partial-order-is-of-hlevel) (`level-minus 1 ∷ [])
+  H-Level-is-partial-order : ∀ {n} → H-Level (suc n) (is-partial-order R)
+  H-Level-is-partial-order = hlevel-prop-instance $ is-prop-η λ x →
+    let open is-partial-order x in is-prop-β (iso→is-of-hlevel 1 is-partial-order-iso hlevel!) x
 
 
 record Poset-on {ℓ} ℓ′ (A : Type ℓ) : Type (ℓ ⊔ ℓsuc ℓ′) where

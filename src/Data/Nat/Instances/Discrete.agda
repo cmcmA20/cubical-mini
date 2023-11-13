@@ -11,9 +11,7 @@ open import Data.Bool.Path hiding (_==_)
 import Data.Dec.Base as Dec
 open Dec
 open import Data.Empty.Base
-open import Data.List.Base
 
-open import Data.Nat.Base
 open import Data.Nat.Path as ℕ-path
 
 ==-refl-true : ∀ {m} → (m == m) ＝ true
@@ -27,9 +25,6 @@ open import Data.Nat.Path as ℕ-path
 ... | true  , p = Reflects′.of $ subst (λ φ → if φ then m ＝ n else m ≠ n) (sym p) $
   ℕ-path.decode m n $ subst ⟦_⟧ᵇ (sym p) tt
 
-ℕ-is-discrete : is-discrete ℕ
-ℕ-is-discrete = is-discrete-η $ reflects→decidable {n = 2} ==-reflects
-
 instance
-  decomp-dis-ℕ : goal-decomposition (quote is-discrete) ℕ
-  decomp-dis-ℕ = decomp (quote ℕ-is-discrete) []
+  ℕ-is-discrete : is-discrete ℕ
+  ℕ-is-discrete = is-discrete-η $ reflects→decidable {n = 2} ==-reflects

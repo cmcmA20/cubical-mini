@@ -40,3 +40,10 @@ nothing≠just = ⊎-disjoint ∘ ap (maybe-as-sum .fst)
 
 just-inj : just x ＝ just y → x ＝ y
 just-inj = inr-inj ∘ ap (maybe-as-sum .fst)
+
+instance
+  decomp-hlevel-maybe
+    : ∀ {ℓ} {A : Type ℓ}
+    → goal-decomposition (quote is-of-hlevel) (Maybe A)
+  decomp-hlevel-maybe = decomp (quote maybe-is-of-hlevel)
+    (`level-minus 2 ∷ `search (quote is-of-hlevel) ∷ [])

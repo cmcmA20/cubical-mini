@@ -251,3 +251,7 @@ opaque
 
   hlevel-prop-instance : is-prop A → H-Level (suc h) A
   hlevel-prop-instance A-pr .has-of-hlevel = is-prop→is-of-hlevel-suc A-pr
+
+instance
+  H-Level-is-of-hlevel : H-Level (suc h) (is-of-hlevel h₁ A)
+  H-Level-is-of-hlevel = hlevel-prop-instance (is-of-hlevel-is-prop _)

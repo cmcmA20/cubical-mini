@@ -6,13 +6,9 @@ open import Foundations.Base
 open import Meta.Search.Discrete
 
 open import Data.Nat.Instances.Discrete
-open import Data.List.Base
 
 open import Data.Char.Properties
 
-char-is-discrete : is-discrete Char
-char-is-discrete = is-discrete-injection (char→ℕ , char→ℕ-inj) discrete!
-
 instance
-  decomp-dis-char : goal-decomposition (quote is-discrete) Char
-  decomp-dis-char = decomp (quote char-is-discrete) []
+  char-is-discrete : is-discrete Char
+  char-is-discrete = is-discrete-injection (char→ℕ , char→ℕ-inj) discrete!

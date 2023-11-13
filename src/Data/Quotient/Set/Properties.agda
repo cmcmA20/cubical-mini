@@ -9,6 +9,12 @@ open import Meta.Search.HLevel
 open import Structures.n-Type
 
 open import Correspondences.Base
+open import Correspondences.Discrete
+
+import Data.Empty.Base as ⊥
+import Data.Dec.Base as Dec
+open Dec using (Dec)
+import Data.Dec.Path
 
 open import Data.Quotient.Set.Base public
 
@@ -141,4 +147,11 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   ∥R∥₁-c .is-congruence.equivalenceᶜ .reflᶜ = ∣ reflᶜ ∣₁
   ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = ∥-∥₁.map symᶜ
   ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim²! λ a b → ∣ a ∙ᶜ b ∣₁
-  ∥R∥₁-c .is-congruence.has-propᶜ .H-Level.has-of-hlevel = hlevel!
+  ∥R∥₁-c .is-congruence.has-propᶜ = hlevel!
+
+/₂-is-discrete
+  : (R-c : is-congruence R)
+  → (∀ x y → Dec (R x y))
+  → is-discrete (A / R)
+/₂-is-discrete R-c d = is-discrete-η $ elim²-prop! λ x y →
+  Dec.map (glue/ _ _) (λ f p → ⊥.rec (f $ (effective R-c ₑ⁻¹) .fst p)) $ d x y

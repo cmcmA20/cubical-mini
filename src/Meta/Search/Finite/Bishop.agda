@@ -50,9 +50,6 @@ fin-set! : (A : Type ℓ) {@(tactic finite-tactic-worker) fi : is-fin-set A} →
 fin-set! A {fi} = fin-set A fi
 
 instance
-  decomp-hlevel-is-fin-set : goal-decomposition (quote is-of-hlevel) (is-fin-set A)
-  decomp-hlevel-is-fin-set = decomp (quote is-fin-set-is-of-hlevel) [ `level-minus 1 ]
-
   decomp-fin-lift : goal-decomposition (quote is-fin-set) (Lift ℓ′ A)
   decomp-fin-lift = decomp (quote lift-is-fin-set) [ `search (quote lift-is-fin-set) ]
 

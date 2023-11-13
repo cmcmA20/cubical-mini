@@ -38,8 +38,9 @@ opaque
   is-discrete-is-prop d₁ d₂ i .is-discrete-β _ _ =
     dec-is-of-hlevel 1 (is-discrete→is-set d₁ _ _) (d₁ .is-discrete-β _ _) (d₂ .is-discrete-β _ _) i
 
-is-discrete-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) (is-discrete A)
-is-discrete-is-of-hlevel _ = is-prop→is-of-hlevel-suc is-discrete-is-prop
+instance
+  H-Level-is-discrete : ∀ {n} → H-Level (suc n) (is-discrete A)
+  H-Level-is-discrete = hlevel-prop-instance is-discrete-is-prop
 
 is-discrete-injection : (A ↣ B) → is-discrete B → is-discrete A
 is-discrete-injection (f , f-inj) B-dis .is-discrete-β x y =

@@ -1,4 +1,4 @@
-{-# OPTIONS --safe -vtactic.solver.var:20 #-}
+{-# OPTIONS --safe #-}
 module Data.Nat.Solver where
 
 open import Foundations.Base

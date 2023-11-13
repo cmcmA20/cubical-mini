@@ -30,10 +30,7 @@ private variable
   A : Type ℓ
   R : A → A → Type ℓ′
 
-is-total-order-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (is-total-order R)
-is-total-order-is-of-hlevel n = is-prop→is-of-hlevel-suc $ is-prop-η λ x →
-  let open is-total-order x in is-prop-β (iso→is-of-hlevel 1 is-total-order-iso hlevel!) x
-
 instance
-  decomp-hlevel-to : goal-decomposition (quote is-of-hlevel) (is-total-order R)
-  decomp-hlevel-to = decomp (quote is-total-order-is-of-hlevel) (`level-minus 1 ∷ [])
+  H-Level-is-total-order : ∀ {n} → H-Level (suc n) (is-total-order R)
+  H-Level-is-total-order = hlevel-prop-instance $
+    is-of-hlevel-≃ 1 (iso→equiv is-total-order-iso) hlevel!
