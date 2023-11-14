@@ -7,11 +7,18 @@
 
 <a id="124" class="Keyword">open</a> <a id="129" class="Keyword">import</a> <a id="136" href="Meta.Search.Finite.Bishop.html" class="Module">Meta.Search.Finite.Bishop</a>
 
-<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Data.FinSub.Base.html" class="Module">Data.FinSub.Base</a>
+<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a>
+<a id="189" class="Keyword">open</a> <a id="194" class="Keyword">import</a> <a id="201" href="Data.FinSub.Base.html" class="Module">Data.FinSub.Base</a>
+<a id="218" class="Keyword">open</a> <a id="223" class="Keyword">import</a> <a id="230" href="Data.List.Base.html" class="Module">Data.List.Base</a>
 
-<a id="193" class="Keyword">open</a> <a id="198" class="Keyword">import</a> <a id="205" href="Truncation.Propositional.Base.html" class="Module">Truncation.Propositional.Base</a>
+<a id="246" class="Keyword">open</a> <a id="251" class="Keyword">import</a> <a id="258" href="Truncation.Propositional.Base.html" class="Module">Truncation.Propositional.Base</a>
 
-<a id="236" class="Keyword">instance</a>
-  <a id="fin-is-fin-set"></a><a id="247" href="Data.Fin.Instances.Finite.html#247" class="Function">fin-is-fin-set</a> <a id="262" class="Symbol">:</a> <a id="264" class="Symbol">∀</a> <a id="266" class="Symbol">{</a><a id="267" href="Data.Fin.Instances.Finite.html#267" class="Bound">n</a><a id="268" class="Symbol">}</a> <a id="270" class="Symbol">→</a> <a id="272" href="Correspondences.Finite.Bishop.html#946" class="Record">is-fin-set</a> <a id="283" class="Symbol">(</a><a id="284" href="Data.FinSub.Base.html#378" class="Record">Fin</a> <a id="288" href="Data.Fin.Instances.Finite.html#267" class="Bound">n</a><a id="289" class="Symbol">)</a>
-  <a id="293" href="Data.Fin.Instances.Finite.html#247" class="Function">fin-is-fin-set</a> <a id="308" class="Symbol">=</a> <a id="310" href="Correspondences.Finite.Bishop.html#1017" class="InductiveConstructor">fin₁</a> <a id="315" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣</a> <a id="317" href="Foundations.Equiv.Base.html#1443" class="Function">idₑ</a> <a id="321" href="Truncation.Propositional.Base.html#178" class="InductiveConstructor Operator">∣₁</a>
+<a id="289" class="Keyword">private</a> <a id="297" class="Keyword">variable</a> <a id="306" href="Data.Fin.Instances.Finite.html#306" class="Generalizable">n</a> <a id="308" class="Symbol">:</a> <a id="310" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+
+<a id="313" class="Keyword">instance</a>
+  <a id="fin-is-fin-set"></a><a id="324" href="Data.Fin.Instances.Finite.html#324" class="Function">fin-is-fin-set</a> <a id="339" class="Symbol">:</a> <a id="341" href="Correspondences.Finite.Bishop.html#901" class="Record">is-fin-set</a> <a id="352" class="Symbol">(</a><a id="353" href="Data.FinSub.Base.html#378" class="Record">Fin</a> <a id="357" href="Data.Fin.Instances.Finite.html#306" class="Generalizable">n</a><a id="358" class="Symbol">)</a>
+  <a id="362" href="Data.Fin.Instances.Finite.html#324" class="Function">fin-is-fin-set</a> <a id="377" class="Symbol">=</a> <a id="379" href="Correspondences.Finite.Bishop.html#972" class="InductiveConstructor">fin₁</a> <a id="384" href="Truncation.Propositional.Base.html#215" class="InductiveConstructor Operator">∣</a> <a id="386" href="Foundations.Equiv.Base.html#1443" class="Function">idₑ</a> <a id="390" href="Truncation.Propositional.Base.html#215" class="InductiveConstructor Operator">∣₁</a>
+
+  <a id="decomp-fin-fin"></a><a id="396" href="Data.Fin.Instances.Finite.html#396" class="Function">decomp-fin-fin</a> <a id="411" class="Symbol">:</a> <a id="413" href="Meta.Search.Base.html#2811" class="Datatype">goal-decomposition</a> <a id="432" class="Symbol">(</a><a id="433" class="Keyword">quote</a> <a id="439" href="Correspondences.Finite.Bishop.html#901" class="Record">is-fin-set</a><a id="449" class="Symbol">)</a> <a id="451" class="Symbol">(</a><a id="452" href="Data.FinSub.Base.html#378" class="Record">Fin</a> <a id="456" href="Data.Fin.Instances.Finite.html#306" class="Generalizable">n</a><a id="457" class="Symbol">)</a>
+  <a id="461" href="Data.Fin.Instances.Finite.html#396" class="Function">decomp-fin-fin</a> <a id="476" class="Symbol">=</a> <a id="478" href="Meta.Search.Base.html#2962" class="InductiveConstructor">decomp</a> <a id="485" class="Symbol">(</a><a id="486" class="Keyword">quote</a> <a id="492" href="Data.Fin.Instances.Finite.html#324" class="Function">fin-is-fin-set</a><a id="506" class="Symbol">)</a> <a id="508" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a>
 </pre></body></html>
