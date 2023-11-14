@@ -17,6 +17,13 @@ private variable
   A : Type ℓ
   x y : A
 
+∥-∥₂-is-of-hlevel : ∀ n → is-of-hlevel (2 + n) ∥ A ∥₂
+∥-∥₂-is-of-hlevel n = is-of-hlevel-+-left 2 n ∥-∥₂-is-set
+
+instance
+  decomp-hlevel-∥-∥₂ : goal-decomposition (quote is-of-hlevel) ∥ A ∥₂
+  decomp-hlevel-∥-∥₂ = decomp (quote ∥-∥₂-is-of-hlevel ) (`level-minus 2 ∷ [])
+
 @0 ∥-∥₂-path-equiv
   : {x y : A}
   → ∣ x ∣₂ ＝ ∣ y ∣₂

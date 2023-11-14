@@ -6,8 +6,12 @@ open import Foundations.Base
 open import Meta.Search.Discrete
 
 open import Data.Dec.Base
+open import Data.List.Base
 open import Data.Unit.Base public
 
 instance
   ⊤-is-discrete : is-discrete ⊤
   ⊤-is-discrete = is-discrete-η λ _ _ → yes refl
+
+  decomp-dis-⊤ : goal-decomposition (quote is-discrete) ⊤
+  decomp-dis-⊤ = decomp (quote ⊤-is-discrete) []

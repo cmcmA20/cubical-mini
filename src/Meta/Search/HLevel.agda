@@ -42,9 +42,10 @@ instance
   Tactic-hlevel .Tactic-desc.goal-selector = fsuc (fsuc fzero)
   Tactic-hlevel .Tactic-desc.level-selector = fsuc fzero
   Tactic-hlevel .Tactic-desc.aliases
-    = (quote is-contr , 0 , 2 , fsuc fzero)
-    ∷ (quote is-prop  , 1 , 2 , fsuc fzero)
-    ∷ (quote is-set   , 2 , 2 , fsuc fzero)
+    = (quote is-contr    , 0 , 2 , fsuc fzero)
+    ∷ (quote is-prop     , 1 , 2 , fsuc fzero)
+    ∷ (quote is-set      , 2 , 2 , fsuc fzero)
+    ∷ (quote is-groupoid , 3 , 2 , fsuc fzero)
     ∷ []
   Tactic-hlevel .Tactic-desc.other-atoms = [ quote _≃_ , quote ¬_ ]
   Tactic-hlevel .Tactic-desc.instance-name = quote H-Level

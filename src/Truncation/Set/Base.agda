@@ -2,7 +2,8 @@
 module Truncation.Set.Base where
 
 open import Foundations.Base
-open import Foundations.HLevel.Base
+
+open import Meta.Search.HLevel
 
 data ∥_∥₂ {ℓ} (A : Type ℓ) : Type ℓ where
   ∣_∣₂    : A → ∥ A ∥₂
@@ -19,6 +20,9 @@ rec B-set f (squash₂ x y p q i j) =
   is-set-β B-set (go x) (go y) (λ k → go (p k)) (λ k → go (q k)) i j where
     go : ∥ _ ∥₂ → _
     go = rec B-set f
+
+∥-∥₂-is-set : is-set ∥ A ∥₂
+∥-∥₂-is-set = is-set-η squash₂
 
 instance
   H-Level-∥-∥₂ : ∀ {n} → H-Level (2 + n) ∥ A ∥₂

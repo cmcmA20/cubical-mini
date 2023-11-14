@@ -2,7 +2,8 @@
 module Truncation.Propositional.Base where
 
 open import Foundations.Base
-open import Foundations.HLevel.Base
+
+open import Meta.Search.HLevel
 
 data ∥_∥₁ {ℓ} (A : Type ℓ) : Type ℓ where
   ∣_∣₁    : A → ∥ A ∥₁
@@ -17,9 +18,18 @@ rec : is-prop B → (A → B) → ∥ A ∥₁ → B
 rec B-prop f ∣ x ∣₁ = f x
 rec B-prop f (squash₁ x y i) = is-prop-β B-prop (rec B-prop f x) (rec B-prop f y) i
 
+∥-∥₁-is-prop : is-prop ∥ A ∥₁
+∥-∥₁-is-prop = is-prop-η squash₁
+
+∥-∥₁-is-of-hlevel : ∀ n → is-of-hlevel (suc n) ∥ A ∥₁
+∥-∥₁-is-of-hlevel n = is-prop→is-of-hlevel-suc ∥-∥₁-is-prop
+
 instance
   H-Level-∥-∥₁ : ∀ {n} → H-Level (suc n) ∥ A ∥₁
-  H-Level-∥-∥₁ = hlevel-prop-instance (is-prop-η squash₁)
+  H-Level-∥-∥₁ = hlevel-prop-instance ∥-∥₁-is-prop
+
+  decomp-hlevel-∥-∥₁ : goal-decomposition (quote is-of-hlevel) ∥ A ∥₁
+  decomp-hlevel-∥-∥₁ = decomp (quote ∥-∥₁-is-of-hlevel ) (`level-minus 1 ∷ [])
 
 map : (A → B) → (∥ A ∥₁ → ∥ B ∥₁)
 map f = rec (hlevel 1) (∣_∣₁ ∘ f)

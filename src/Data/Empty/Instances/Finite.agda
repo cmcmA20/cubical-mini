@@ -8,9 +8,13 @@ open import Meta.Search.Finite.Bishop
 
 open import Data.Empty.Base
 open import Data.FinSub.Closure
+open import Data.List.Base
 
 open import Truncation.Propositional.Base
 
 instance
   ⊥-is-fin-set : is-fin-set ⊥
   ⊥-is-fin-set = fin₁ ∣ fin-0-is-initial ₑ⁻¹ ∣₁
+
+  decomp-fin-⊥ : goal-decomposition (quote is-fin-set) ⊥
+  decomp-fin-⊥ = decomp (quote ⊥-is-fin-set) []

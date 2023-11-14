@@ -11,6 +11,7 @@ open import Data.Bool.Path hiding (_==_)
 import Data.Dec.Base as Dec
 open Dec
 open import Data.Empty.Base
+open import Data.List.Base
 
 open import Data.Nat.Path as ℕ-path
 
@@ -28,3 +29,6 @@ open import Data.Nat.Path as ℕ-path
 instance
   ℕ-is-discrete : is-discrete ℕ
   ℕ-is-discrete = is-discrete-η $ reflects→decidable {n = 2} ==-reflects
+
+  decomp-dis-ℕ : goal-decomposition (quote is-discrete) ℕ
+  decomp-dis-ℕ = decomp (quote ℕ-is-discrete ) []

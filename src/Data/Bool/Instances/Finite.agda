@@ -8,6 +8,7 @@ open import Meta.Search.Finite.Bishop
 
 open import Data.Bool.Base
 open import Data.FinSub.Base
+open import Data.List.Base
 
 open import Truncation.Propositional.Base
 
@@ -23,3 +24,6 @@ instance
     go .snd .is-iso.rinv (mk-fin 1) = refl
     go .snd .is-iso.linv false = refl
     go .snd .is-iso.linv true = refl
+
+  decomp-fin-bool : goal-decomposition (quote is-fin-set) Bool
+  decomp-fin-bool = decomp (quote bool-is-fin-set) []

@@ -24,7 +24,7 @@ list-is-discrete di = is-discrete-η go where
   go (x ∷ xs) (y ∷ ys) = Dec.map
     (λ (x=y , xs=ys) → ap² _∷_ x=y xs=ys)
     (λ f p → f (∷-head-inj p , ap tail p))
-    (×-decision (is-discrete-β di x y) $ go xs ys)
+    (×-decision (di .is-discrete-β x y) $ go xs ys)
 
 instance
   decomp-dis-list : goal-decomposition (quote is-discrete) (List A)

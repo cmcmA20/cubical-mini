@@ -46,9 +46,20 @@ code-is-prop true  true  = hlevel!
 identity-system : is-identity-system Code code-refl
 identity-system = set-identity-system code-is-prop (decode _ _)
 
+bool-is-set : is-set Bool
+bool-is-set = identity-system→is-of-hlevel 1 identity-system code-is-prop
+
 instance
   H-Level-Bool : ∀ {n} → H-Level (2 + n) Bool
-  H-Level-Bool = hlevel-basic-instance 2 $ identity-system→is-of-hlevel 1 identity-system code-is-prop
+  H-Level-Bool = hlevel-basic-instance 2 bool-is-set
+
+bool-is-of-hlevel : ∀ n → is-of-hlevel (2 + n) Bool
+bool-is-of-hlevel _ = hlevel _
+
+instance
+  decomp-hlevel-bool : goal-decomposition (quote is-of-hlevel) Bool
+  decomp-hlevel-bool = decomp (quote bool-is-of-hlevel) (`level-minus 2 ∷ [])
+
 
 ⟦-⟧ᵇ≃true : {b : Bool} → ⟦ b ⟧ᵇ ≃ (b ＝ true)
 ⟦-⟧ᵇ≃true {(false)} = prop-extₑ! (λ x → ⊥.rec x) false≠true

@@ -119,6 +119,12 @@ rec-set : {f : A → B}
 rec-set f-const B-set = fst ∘ elim
   (λ _ → is-constant→image-is-prop B-set f-const) (corestriction _)
 
+rec-set! : {f : A → B}
+         → 2-Constant f
+         → {@(tactic hlevel-tactic-worker) B-set : is-set B}
+         → ∥ A ∥₁ → B
+rec-set! f-const {B-set} = rec-set f-const B-set
+
 Σ-∥-∥₁-over-prop
   : {B : A → Type ℓ′} → is-prop A
   → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∥ Σ[ a ꞉ A ] B a ∥₁

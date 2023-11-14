@@ -2,7 +2,8 @@
 module Data.Quotient.Set.Base where
 
 open import Foundations.Base
-open import Foundations.HLevel
+
+open import Meta.Search.HLevel
 
 data _/_ {ℓ ℓ′} (A : Type ℓ) (R : A → A → Type ℓ′) : Type (ℓ ⊔ ℓ′) where
   ⦋_⦌      : (a : A) → A / R
@@ -16,9 +17,18 @@ private variable
   P : A → Type ℓᵖ
   R : A → A → Type ℓʳ
 
+/₂-is-set : is-set (A / R)
+/₂-is-set = is-set-η squash/
+
+/₂-is-of-hlevel : ∀ n → is-of-hlevel (2 + n) (A / R)
+/₂-is-of-hlevel n = is-of-hlevel-+-left 2 n /₂-is-set
+
 instance
   H-Level-/₂ : ∀ {n} → H-Level (2 + n) (A / R)
-  H-Level-/₂ = hlevel-basic-instance 2 $ is-set-η squash/
+  H-Level-/₂ = hlevel-basic-instance 2 /₂-is-set
+
+  decomp-hlevel-/₂ : goal-decomposition (quote is-of-hlevel) (A / R)
+  decomp-hlevel-/₂ = decomp (quote /₂-is-of-hlevel ) (`level-minus 2 ∷ [])
 
 elim-prop
   : (P-prop : Π[ x ꞉ A / R ] is-prop (P x))
