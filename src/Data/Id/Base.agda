@@ -5,9 +5,6 @@ open import Foundations.Base
 open import Foundations.Equiv
 open import Foundations.HLevel
 
-open import Structures.Base
-open import Structures.IdentitySystem
-
 open import Data.Dec.Base
 
 open import Agda.Builtin.Equality public

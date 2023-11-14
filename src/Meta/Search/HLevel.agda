@@ -19,7 +19,8 @@ open import Correspondences.Erased
 
 open import Data.Empty.Base
 open import Data.Bool.Base
-open import Data.Fin.Base
+open import Data.FinSub.Base
+open import Data.FinSub.Instances.FromNat
 import Data.List.Base as List
 open List public
   using ([] ; _∷_)
@@ -42,10 +43,10 @@ instance
   Tactic-hlevel .Tactic-desc.goal-selector = fsuc (fsuc fzero)
   Tactic-hlevel .Tactic-desc.level-selector = fsuc fzero
   Tactic-hlevel .Tactic-desc.aliases
-    = (quote is-contr    , 0 , 2 , fsuc fzero)
-    ∷ (quote is-prop     , 1 , 2 , fsuc fzero)
-    ∷ (quote is-set      , 2 , 2 , fsuc fzero)
-    ∷ (quote is-groupoid , 3 , 2 , fsuc fzero)
+    = (quote is-contr    , 0 , 2 , 1)
+    ∷ (quote is-prop     , 1 , 2 , 1)
+    ∷ (quote is-set      , 2 , 2 , 1)
+    ∷ (quote is-groupoid , 3 , 2 , 1)
     ∷ []
   Tactic-hlevel .Tactic-desc.other-atoms = [ quote _≃_ , quote ¬_ ]
   Tactic-hlevel .Tactic-desc.instance-name = quote H-Level
@@ -150,8 +151,8 @@ instance
   proj-hlevel-n-type .Struct-proj-desc.struct-args-length = 2
   proj-hlevel-n-type .Struct-proj-desc.goal-projection = quote n-Type.carrier-is-tr
   proj-hlevel-n-type .Struct-proj-desc.projection-args-length = 3
-  proj-hlevel-n-type .Struct-proj-desc.level-selector = fsuc fzero
-  proj-hlevel-n-type .Struct-proj-desc.carrier-selector = fsuc (fsuc fzero)
+  proj-hlevel-n-type .Struct-proj-desc.level-selector = 1
+  proj-hlevel-n-type .Struct-proj-desc.carrier-selector = 2
 
 -- Usage
 private

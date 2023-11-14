@@ -13,7 +13,7 @@ open Correspondences.Decidable public
 
 open import Data.Dec.Base
 open import Data.Empty.Base
-open import Data.Fin.Instances.FromNat
+open import Data.FinSub.Instances.FromNat
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 

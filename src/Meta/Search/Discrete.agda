@@ -17,7 +17,7 @@ open Correspondences.Discrete public
         ; is-discrete-injection ; is-discrete-embedding )
 
 open import Data.Dec.Base
-open import Data.Fin.Instances.FromNat
+open import Data.FinSub.Instances.FromNat
 open import Data.List.Instances.FromProduct
 
 private variable

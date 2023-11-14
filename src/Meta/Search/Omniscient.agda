@@ -18,7 +18,7 @@ open Correspondences.Omniscient public
 
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
-open import Data.Fin.Instances.FromNat
+open import Data.FinSub.Instances.FromNat
 open import Data.List.Instances.FromProduct
 
 open import Truncation.Propositional.Base

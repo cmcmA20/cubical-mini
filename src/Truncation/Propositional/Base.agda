@@ -5,6 +5,9 @@ open import Foundations.Base
 
 open import Meta.Search.HLevel
 
+open import Data.Sum.Base
+  using (_⊎_)
+
 data ∥_∥₁ {ℓ} (A : Type ℓ) : Type ℓ where
   ∣_∣₁    : A → ∥ A ∥₁
   squash₁ : (x y : ∥ A ∥₁) → x ＝ y
@@ -59,6 +62,12 @@ infixr 6 ∃-syntax
 ∃-syntax = ∃
 
 syntax ∃-syntax A (λ x → B) = ∃[ x ꞉ A ] B
+
+
+-- Mere disjunction
+infixr 7 _⊎₁_
+_⊎₁_ : Type ℓ → Type ℓ′ → Type (ℓ ⊔ ℓ′)
+A ⊎₁ B = ∥ A ⊎ B ∥₁
 
 
 Im : (A → B) → Type _

@@ -9,7 +9,7 @@ open import Meta.Reflection
 
 open import Data.Bool.Base as Bool
 open import Data.Empty.Base
-open import Data.Fin.Base
+open import Data.FinSub.Base
 open import Data.List.Base as List
 open import Data.List.Operations using (length)
 open import Data.List.Instances.Foldable
@@ -17,7 +17,7 @@ open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
 open import Data.Maybe.Base
 open import Data.Nat.Base
-open import Data.Vec.Operations.Inductive
+open import Data.Vec.Operations.Computational
 
 data Goal-strat : Type where
   none by-hlevel : Goal-strat

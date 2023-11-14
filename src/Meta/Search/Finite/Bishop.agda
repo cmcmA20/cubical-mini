@@ -25,7 +25,7 @@ open import Correspondences.Omniscient
 
 open import Data.Bool.Base
 open import Data.Empty.Base as ⊥
-open import Data.Fin.Instances.FromNat
+open import Data.FinSub.Instances.FromNat
 open import Data.List.Instances.FromProduct
 
 private variable

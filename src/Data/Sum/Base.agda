@@ -3,9 +3,6 @@ module Data.Sum.Base where
 
 open import Foundations.Base
 
-open import Truncation.Propositional.Base
-  using (∥_∥₁)
-
 infixr 7 _⊎_
 data _⊎_ {ℓ ℓ′} (A : Type ℓ) (B : Type ℓ′) : Type (ℓ ⊔ ℓ′) where
   inl : A → A ⊎ B
@@ -17,11 +14,6 @@ private variable
   B : Type b
   C : Type c
   D : Type d
-
--- propositional version
-infixr 7 _⊎₁_
-_⊎₁_ : Type a → Type b → Type (a ⊔ b)
-A ⊎₁ B = ∥ A ⊎ B ∥₁
 
 [_,_]ᵤ : (A → C) → (B → C) → (A ⊎ B) → C
 [ f , _ ]ᵤ (inl x) = f x
