@@ -44,10 +44,6 @@ opaque
   ⊥-is-prop : is-prop ⊥
   ⊥-is-prop ()
 
-  absurd-is-contr : is-contr (⊥ → A)
-  absurd-is-contr .fst ()
-  absurd-is-contr .snd _ _ ()
-
   ¬-is-prop : is-prop (¬ A)
   ¬-is-prop ¬a₁ ¬a₂ i a = ⊥-ext {x = ¬a₁ a} {y = ¬a₂ a} i
 
@@ -55,11 +51,14 @@ instance
   H-Level-⊥ : H-Level (suc n) ⊥
   H-Level-⊥ = hlevel-prop-instance ⊥-is-prop
 
-  H-Level-absurd : {A : Type ℓ} → H-Level n (⊥ → A)
-  H-Level-absurd = hlevel-basic-instance 0 absurd-is-contr
-
   H-Level-¬ : {A : Type ℓ} → H-Level (suc n) (¬ A)
   H-Level-¬ = hlevel-prop-instance ¬-is-prop
+
+⊥-is-of-hlevel : ∀ n → is-of-hlevel (suc n) ⊥
+⊥-is-of-hlevel _ = hlevel _
+
+¬-is-of-hlevel : {A : Type ℓ} → ∀ n → is-of-hlevel (suc n) (¬ A)
+¬-is-of-hlevel _ = hlevel _
 
 
 data ⊥ω : Typeω where

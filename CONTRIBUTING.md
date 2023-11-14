@@ -142,7 +142,7 @@ When preparing a PR here are some general guidelines:
 
   For every (inductive) data type check that it has a recursor (`rec`),
   dependent eliminator (`elim`), universal property for mapping out
-  (`universal`), path space characterization (`module path-code`) and useful
+  (`universal`), path space characterization (`module Path`) and useful
   instances.
 
 - Erase type indices if it's a well-known optimization. If needed, create

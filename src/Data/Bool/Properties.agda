@@ -2,6 +2,7 @@
 module Data.Bool.Properties where
 
 open import Foundations.Base
+open import Foundations.Equiv
 
 open import Meta.Search.Decidable
 open import Meta.Search.Discrete
@@ -11,8 +12,21 @@ open import Meta.Search.Omniscient
 open import Meta.Witness
 
 open import Data.Empty.Base
-open import Data.Bool.Base public
+open import Data.Bool.Base as Bool public
 open import Data.Bool.Instances.Finite
+
+private variable
+  ℓᵃ : Level
+  A : Type ℓᵃ
+
+universal : (Bool → A)
+          ≃ A × A
+universal = iso→equiv
+  $ (λ ch → ch true , ch false)
+  , iso (flip (Bool.rec fst snd))
+        (λ _ → refl)
+        (λ _ → fun-ext $ Bool.elim refl refl)
+
 
 -- conjunction
 
