@@ -158,8 +158,9 @@ jobs:
       ########################################################################
 
       - name: Htmlize cubical
-        if: github.event_name == 'push' && github.ref_name == 'master'
-            && matrix.agda-branch == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
+        if: |
+          github.event_name == 'push' && github.ref_name == 'master' &&
+          matrix.agda_branch == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
         run: |
           make listings \
             AGDA_EXEC='~/.cabal/bin/agda' \
@@ -167,8 +168,9 @@ jobs:
             EVERYTHINGS='cabal run Everythings'
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref_name == 'master'
-          && matrix.agda-branch == 'mater' && steps.cache-library-restore.outputs.cache-hit != 'true'
+        if: |
+          github.event_name == 'push' && github.ref_name == 'master' &&
+          matrix.agda_branch == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
         uses: JamesIves/github-pages-deploy-action@4.1.8
         with:
           branch: gh-pages
