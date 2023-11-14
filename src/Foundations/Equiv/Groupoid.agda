@@ -51,31 +51,3 @@ whisker-path-lₑ ac = iso→equiv $ sym ac ∙_ , iso (ac ∙_) (λ _ → ∙-c
 
 whisker-path-rₑ : (b ＝ c) → (a ＝ b) ≃ (a ＝ c)
 whisker-path-rₑ bc = iso→equiv $ _∙ bc , iso (_∙ sym bc) (λ _ → ∙-cancel-r _ _) (λ _ → ∙-cancel-r _ _)
-
-
---- TODO should probably move this to Foundations.Equiv.Reasoning or something
-
-module @0 _ where
-  private variable
-    ab : a ＝ b
-    ac : a ＝ c
-    bc : b ＝ c
-
-  ∙-flip-rₑ : ab ∙ bc ＝ ac
-            ≃ ab      ＝ ac ∙ sym bc
-  ∙-flip-rₑ {ab} {bc} {ac} =
-    ab ∙ bc            ＝ ac            ≃⟨ ap-≃ (whisker-path-rₑ _) ⟩
-    (ab ∙ bc) ∙ sym bc ＝ ac ∙ sym bc   ≃⟨ whisker-path-lₑ (∙-cancel-r′ (∙-inv-l _)) ⟩
-    ab                 ＝ ac ∙ sym bc   ≃∎
-
-  -- it could be defined using `flip-rₑ` but the chain would be longer
-  flip-lₑ : ab ∙ bc ＝ ac
-          ≃      bc ＝ sym ab ∙ ac
-  flip-lₑ {ab} {bc} {ac} =
-    ab ∙ bc          ＝ ac            ≃⟨ ap-≃ (whisker-path-lₑ _) ⟩
-    sym ab ∙ ab ∙ bc ＝ sym ab ∙ ac   ≃⟨ whisker-path-lₑ (∙-cancel-l′ (∙-inv-r _)) ⟩
-    bc               ＝ sym ab ∙ ac   ≃∎
-
-  tiltₑ : sym ab ∙ ac ＝ bc
-        ≃     ab      ＝ ac ∙ sym bc
-  tiltₑ = ∙-flip-rₑ ∙ₑ ap-≃ sym-≃ ∙ₑ whisker-path-rₑ (sym-∙ _ _)

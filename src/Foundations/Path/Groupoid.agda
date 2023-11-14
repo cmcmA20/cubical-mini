@@ -97,6 +97,12 @@ opaque
     ∙∙ ap (_∙ sym p) sq
     ∙∙ ∙-cancel-r r (sym p)
 
+  whisker-path-l : (x ＝ y) → (x ＝ z) ＝ (y ＝ z)
+  whisker-path-l {z} p i = p i ＝ z
+
+  whisker-path-r : (y ＝ z) → (x ＝ y) ＝ (x ＝ z)
+  whisker-path-r {x} q i = x ＝ q i
+
   homotopy-invert : {f : A → A}
                   → (H : Π[ x ꞉ A ] (f x ＝ x)) {x : A}
                   → H (f x) ＝ ap f (H x)

@@ -11,7 +11,6 @@ open import Data.Dec.Base
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
 
--- TODO do not generalize over unused variables
 witness-macro : Term → TC ⊤
 witness-macro (lam _ _) = commitTC -- Agda's too smart about unit type
 witness-macro hole = do
