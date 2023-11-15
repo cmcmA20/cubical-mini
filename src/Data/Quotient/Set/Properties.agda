@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
+open import Meta.Variadic
 
 open import Structures.n-Type
 
@@ -128,7 +129,7 @@ module @0 _ {R : Corr 2 ℓ (A , A)} (congr : is-congruence R) where
     n-ua $ prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r)
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
-  encode x _ p = subst ⌞ Code x ⌟¹ p reflᶜ
+  encode x _ p = subst ⌞ Code x ⌟ⁿ p reflᶜ
 
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
   decode = elim-prop! ∘ glue/

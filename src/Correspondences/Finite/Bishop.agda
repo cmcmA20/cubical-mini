@@ -11,6 +11,7 @@ open import Meta.Bind
 open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
+open import Meta.Variadic
 
 open import Correspondences.Discrete
 open import Correspondences.Exhaustible
@@ -84,7 +85,7 @@ finite-choice {P} A-f k = do
 finite-pi-fin
   : (n : ℕ) {P : Fin n → Type ℓ′}
   → (∀ x → is-fin-set (P x))
-  → is-fin-set Π¹[ P ]
+  → is-fin-set Π[ P ]
 finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero

@@ -200,17 +200,6 @@ private
       _ → backtrack "Goal is not liftable"
     pure $ def uc (l₁ v∷ lit (nat l) v∷ tm v∷ [])
 
-  suc-term : Term → Term
-  suc-term (lit (nat n)) = lit (nat (suc n))
-  suc-term t = con (quote suc) (t v∷ [])
-
-  pred-term : Term → Maybe Term
-  pred-term (con (quote suc) (x v∷ [])) = just x
-  pred-term (lit (nat n)) with n
-  ... | suc k = just (lit (nat k))
-  ... | _ = nothing
-  pred-term _ = nothing
-
   lifting-loop : (fuel : ℕ) → Tactic-desc goal-name by-hlevel → ℕ → Term → Term → Term → Term → TC ⊤
   lifting-loop zero       td _ _ _ _ _ = backtrack "Lifting loop ran out of fuel"
   lifting-loop (suc fuel) td it solution goal l₁ l₂ =

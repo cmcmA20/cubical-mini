@@ -19,7 +19,7 @@ open import Data.Nat.Path as ℕ-path
 ==-refl-true {0} = refl
 ==-refl-true {suc m} = ==-refl-true {m}
 
-==-reflects : Reflects² (_＝_) _==_
+==-reflects : Reflects (_＝_) _==_
 ==-reflects m n with inspect (m == n)
 ... | false , p = Reflects′.of $ subst (λ φ → if φ then m ＝ n else m ≠ n) (sym p)
   λ m=n → true≠false $ sym (==-refl-true {m}) ∙ subst (λ φ → (m == φ) ＝ false) (sym m=n) p

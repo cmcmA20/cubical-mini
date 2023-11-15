@@ -288,6 +288,20 @@ print-depth key level nesting es = debugPrint key level $
 pattern nat-lit n =
   def (quote Number.fromNat) (_ ∷ _ ∷ _ ∷ lit (nat n) v∷ _)
 
+suc-term : Term → Term
+suc-term (lit (nat n)) = lit (nat (suc n))
+suc-term t = con (quote suc) (t v∷ [])
+
+pred-term : Term → Maybe Term
+pred-term (con (quote suc) (x v∷ [])) = just x
+pred-term (lit (nat n)) with n
+... | suc k = just (lit (nat k))
+... | _ = nothing
+pred-term _ = nothing
+
+plus-term : Term → Term → Term
+plus-term (lit (nat m)) (lit (nat n)) = lit (nat (m + n))
+plus-term x y = def (quote _+_) (x v∷ y v∷ [])
 
 -- working under lambda
 
