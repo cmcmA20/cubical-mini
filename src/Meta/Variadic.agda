@@ -15,67 +15,64 @@ open import Data.List.Instances.FromProduct
 private variable
   ℓᵃ ℓ : Level
 
-get-arity-sig-type : Type′ → Term × Type′
-get-arity-sig-type = second (fold-r′ (λ x y → con (quote _,_) [ varg x , varg y ]) unknown) ∘ go where
-  fold-r′ : (Term → Term → Term) → Term → List Term → Term
-  fold-r′ _ x [] = x
-  fold-r′ f x (a ∷ []) = a
-  fold-r′ f x (a₁ ∷ a₂ ∷ as) = f a₁ (fold-r′ f x (a₂ ∷ as))
+-- returns reflected arity, tuple of argument types, level and result type
+get-arity-sig-lvl-type : Type′ → Term × Type′ × Type′ × Type′
+get-arity-sig-lvl-type t =
+  let ar , sig , lv , R = go t
+  in ar , list→tuple sig , lv , R where
+    fold-r′ : (Term → Term → Term) → Term → List Term → Term
+    fold-r′ _ x [] = x
+    fold-r′ f x (a ∷ []) = a
+    fold-r′ f x (a₁ ∷ a₂ ∷ as) = f a₁ (fold-r′ f x (a₂ ∷ as))
 
-  sig-go : Term → Term
-  sig-gos : List (Arg Term) → List (Arg Term)
+    list→tuple = fold-r′ (λ x y → con (quote _,_) [ varg x , varg y ]) unknown
 
-  -- variable references would be invalid in current context
-  -- so have to kill them and rely on unification
-  sig-go (var _ _) = unknown
-  sig-go (con c args) = con c (sig-gos args)
-  sig-go (def f args) = def f (sig-gos args)
-  sig-go (lam v (abs s x)) = lam v (abs s (sig-go x))
-  sig-go (pi (arg v a) (abs s b)) = pi (arg v (sig-go a)) (abs s (sig-go b))
-  sig-go x = x
+    clean-var : Term → Term
+    clean-vars : List (Arg Term) → List (Arg Term)
 
-  sig-gos [] = []
-  sig-gos (arg ai x ∷ xs) = arg ai (sig-go x) ∷ sig-gos xs
+    -- variable references would be invalid in current context
+    -- so have to kill them and rely on unification
+    clean-var (var _ _) = unknown
+    clean-var (con c args) = con c (clean-vars args)
+    clean-var (def f args) = def f (clean-vars args)
+    clean-var (lam v (abs s x)) = lam v (abs s (clean-var x))
+    clean-var (pi (arg v a) (abs s b)) = pi (arg v (clean-var a)) (abs s (clean-var b))
+    clean-var x = x
 
-  go : Term → Term × List Type′
-  go (def (quote Arrows) (ar v∷ l h∷ ls h∷ sig v∷ R v∷ [])) = ar , [ sig ]
-  go (pi (varg t) (abs _ x)) = bimap suc-term (sig-go t ∷_) $ go x
-  go (pi _        (abs _ x)) = go x
-  go _                       = lit (nat 0) , []
+    clean-vars [] = []
+    clean-vars (arg ai x ∷ xs) = arg ai (clean-var x) ∷ clean-vars xs
 
-carrier-macro : Term → Term → TC ⊤
-carrier-macro t hole = withReduceDefs (false , [ quote Arrows ]) do
-  ty ← inferType t >>= reduce
-  let ar , sig = get-arity-sig-type ty
-  unify hole $ def (quote Carrierⁿ)
-    [ harg unknown , harg ar
-    , harg unknown , harg unknown
-    , harg sig , varg t ]
+    go : Term → Term × List Type′ × Type′ × Type′
+    go (def (quote Arrows) (ar v∷ l h∷ ls h∷ sig v∷ R v∷ [])) = ar , [ sig ] , l , R
+    go (pi (varg t) (abs _ x)) =
+      let ar , sig , lv , R = go x
+      in suc-term ar , clean-var t ∷ sig , lv , R
+    go (pi _        (abs _ x)) = go x
+    go (agda-sort (lit l)) = lit (nat 0) , [] , lit (nat l) , agda-sort (lit l)
+    go x                   = lit (nat 0) , [] , unknown , clean-var x
 
 quantifier-macro : Name → Term → Term → TC ⊤
 quantifier-macro nam t hole = withReduceDefs (false , [ quote Arrows ]) do
   ty ← inferType t >>= reduce
   debugPrint "tactic.variadic" 20 ["Type hint: " , termErr ty ]
-  let ar , sig = get-arity-sig-type ty
+  let ar , sig , lv , r = get-arity-sig-lvl-type ty
   unify hole $ def nam $
-    [ harg ar , harg unknown
+    [ harg ar , harg lv
     , harg unknown , harg sig , varg t ]
 
 impl-macro : Term → Term → Term → TC ⊤
 impl-macro p q hole = withReduceDefs (false , [ quote Arrows ]) do
   pty ← inferType p >>= reduce
-  let par , psig = get-arity-sig-type pty
+  let par , psig , plv , pr = get-arity-sig-lvl-type pty
   unify hole $ def (quote Implⁿ)
-    [ harg par , harg unknown , harg unknown
+    [ harg par , harg plv , harg unknown
     , harg unknown , harg psig , varg p , varg q ]
 
 macro
-  ⌞_⌟ⁿ = carrier-macro
   Π[_] = quantifier-macro (quote Universalⁿ)
   ∀[_] = quantifier-macro (quote IUniversalⁿ)
   Σ[_] = quantifier-macro (quote Existentialⁿ)
-  ∃[_] = quantifier-macro (quote Existential₁ⁿ)
-  _⇒_ = impl-macro
+  _⇒_  = impl-macro
 
 -- bleb : {A : Type ℓᵃ} (P : n-Corr _ 2 ℓ (A , A , A)) → Corr³ ℓ (A , A , A)
 -- bleb {A} P = ⌞ P ⌟ⁿ

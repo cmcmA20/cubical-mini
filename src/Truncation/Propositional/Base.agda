@@ -63,6 +63,7 @@ infixr 6 ∃-syntax
 
 syntax ∃-syntax A (λ x → B) = ∃[ x ꞉ A ] B
 
+∃[_] = quantifier-macro (quote Existential₁ⁿ)
 
 -- Mere disjunction
 infixr 7 _⊎₁_

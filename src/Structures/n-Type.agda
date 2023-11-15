@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe -vtactic.variadic:20 #-}
 module Structures.n-Type where
 
 open import Foundations.Base
@@ -36,9 +36,9 @@ private variable
 instance
   Underlying-n-Type : Underlying (n-Type ℓ n)
   Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-n-Type .⌞_⌟ = carrier
+  Underlying-n-Type .⌞_⌟⁰ = carrier
 
-n-path : ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y
+n-path : ⌞ X ⌟⁰ ＝ ⌞ Y ⌟⁰ → X ＝ Y
 n-path f i .carrier = f i
 n-path {X} {Y} f i .carrier-is-tr =
   is-prop→pathP (λ i → is-of-hlevel-is-prop {A = f i} _) (X .carrier-is-tr) (Y .carrier-is-tr) i
@@ -51,14 +51,14 @@ n-path-refl {X} i j .carrier-is-tr = θ j i where
   θ : Square p refl refl refl
   θ = is-prop→squareP (λ _ _ → is-of-hlevel-is-prop _) _ _ _ _
 
-@0 n-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y
+@0 n-ua : ⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰ → X ＝ Y
 n-ua f = n-path (ua f)
 
 opaque
   unfolding univalence⁻¹
-  @0 n-univalence : (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
+  @0 n-univalence : (⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰) ≃ (X ＝ Y)
   n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where
-    inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
+    inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰
     inv p = path→equiv (ap carrier p)
 
     linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua
@@ -70,7 +70,7 @@ opaque
       path i j .carrier = ua.ε refl i j
       path i j .carrier-is-tr = is-prop→squareP
         (λ i j → is-of-hlevel-is-prop
-          {A = ua.ε {A = ⌞ X ⌟} refl i j } _)
+          {A = ua.ε {A = ⌞ X ⌟⁰} refl i j } _)
         (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (path→equiv refl) j)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
@@ -84,7 +84,7 @@ opaque
 opaque
   unfolding _∙_
   @0 n-path-∙ : {A B C : n-Type ℓ n}
-                (p : ⌞ A ⌟ ＝ ⌞ B ⌟) (q : ⌞ B ⌟ ＝ ⌞ C ⌟)
+                (p : ⌞ A ⌟⁰ ＝ ⌞ B ⌟⁰) (q : ⌞ B ⌟⁰ ＝ ⌞ C ⌟⁰)
               → n-path {X = A} {Y = C} (p ∙ q) ＝ n-path {Y = B} p ∙ n-path q
   n-path-∙ p q i j .carrier = (p ∙ q) j
   n-path-∙ {n} {A} {B} {C} p q j i .carrier-is-tr = θ i j where
@@ -94,7 +94,7 @@ opaque
     θ = is-set→squareP (λ _ _ → is-of-hlevel-is-of-hlevel-suc 1) _ _ _ _
 
 @0 n-ua-∙ₑ : {A B C : n-Type ℓ n}
-             (f : ⌞ A ⌟ ≃ ⌞ B ⌟) (g : ⌞ B ⌟ ≃ ⌞ C ⌟)
+             (f : ⌞ A ⌟⁰ ≃ ⌞ B ⌟⁰) (g : ⌞ B ⌟⁰ ≃ ⌞ C ⌟⁰)
            → n-ua {X = A} {Y = C} (f ∙ₑ g) ＝ n-ua {Y = B} f ∙ n-ua g
 n-ua-∙ₑ f g = ap n-path (ua-∙ₑ f g) ∙ n-path-∙ (ua f) (ua g)
 
@@ -116,7 +116,64 @@ Grpd : ∀ ℓ → Type (ℓsuc ℓ)
 Grpd ℓ = n-Type ℓ 3
 
 
+-- Testing
 -- module _ {ℓ : Level} {n : HLevel} where private
 --   open import Foundations.Univalence.SIP
 --   _ : n-Type ℓ n ≃ Type-with {S = is-of-hlevel n} (HomT→Str λ _ _ _ → ⊤)
 --   _ = iso→equiv n-Type-iso
+
+-- n-truncated correspondence
+n-Corr
+  : (arity : ℕ) (n : HLevel) (ℓ : Level)
+    {ls : Levels arity} (As : Types arity ls)
+  → Type (ℓsuc ℓ ⊔ ℓsup arity ls)
+n-Corr arity n ℓ As = Arrows arity As (n-Type ℓ n)
+
+n-Corr⁰ = n-Corr 0
+n-Corr¹ = n-Corr 1
+n-Corr² = n-Corr 2
+n-Corr³ = n-Corr 3
+n-Corr⁴ = n-Corr 4
+n-Corr⁵ = n-Corr 5
+
+
+-- Propositionally valued correspondence is called a relation
+Rel
+  : (arity : ℕ) (ℓ : Level)
+    {ls : Levels arity} (As : Types arity ls)
+  → Type (ℓsuc ℓ ⊔ ℓsup arity ls)
+Rel arity = n-Corr arity 1
+
+Rel⁰ = Rel 0
+Rel¹ = Rel 1
+Rel² = Rel 2
+Rel³ = Rel 3
+Rel⁴ = Rel 4
+Rel⁵ = Rel 5
+
+n-Pred : (n : HLevel) (ℓ′ : Level) {ℓ : Level} (A : Type ℓ) → Type (ℓ ⊔ ℓsuc ℓ′)
+n-Pred = n-Corr¹
+
+Pred₀ = n-Pred 0
+Pred₁ = n-Pred 1
+Pred₂ = n-Pred 2
+Pred₃ = n-Pred 3
+Pred₄ = n-Pred 4
+Pred₅ = n-Pred 5
+
+
+-- bleb : {A : Type ℓ′} (P : n-Corr _ 2 ℓ (A , A , A)) → Corr³ ℓ (A , A , A)
+-- bleb {A} P = ⌞ P ⌟
+
+-- ror : {A : Prop ℓ′} → Type ℓ′
+-- ror {A} = Carrierⁿ A
+
+-- wez : {A : n-Corr 0 1 ℓ′ (lift tt)} → Type ℓ′
+-- wez {A} = ⌞ A ⌟
+
+-- zez : {A : n-Corr 2 1 ℓ′ (Type , Type)} → Type ℓ′
+-- zez {A} = ⌞ A ⌟ ⊤ ⊤
+
+oru : {W : Set ℓ} → Type ℓ
+oru {ℓ} {W} = ⌞ W ⌟
+-- ⌞ W 2 ⌟
