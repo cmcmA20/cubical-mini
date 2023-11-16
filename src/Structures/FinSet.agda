@@ -39,7 +39,7 @@ unquoteDecl fin-set-iso = declare-record-iso fin-set-iso (quote FinSet)
 instance
   Underlying-FinSet : Underlying (FinSet ℓ)
   Underlying-FinSet {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-FinSet .⌞_⌟ = carrier
+  Underlying-FinSet .⌞_⌟⁰ = carrier
 
 
 -- have to go through sigmas

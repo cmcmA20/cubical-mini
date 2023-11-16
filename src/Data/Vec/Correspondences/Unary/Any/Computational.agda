@@ -4,6 +4,7 @@ module Data.Vec.Correspondences.Unary.Any.Computational where
 open import Foundations.Base
 
 open import Meta.Search.Decidable
+open import Meta.Variadic
 
 open import Correspondences.Decidable
 
@@ -17,13 +18,12 @@ open import Data.Sum.Instances.Decidable
 private variable
   a a′ : Level
   A : Type a
-  P : Pred a′ A
+  P : Pred A a′
 
-Any : ∀ {a a′} {n} {A : Type a} (P : Pred a′ A) → Vec A n → Type _
+Any : ∀ {a a′} {n} {A : Type a} (P : Pred A a′) → Vec A n → Type _
 Any {n} P xs = Σ[ idx ꞉ Fin n ] P (lookup xs idx)
 
--- FIXME `Decidable` on lambdas explodes spectacularly
-any? : {n : ℕ} → Decidable P → Decidableⁿ 1 (λ (xs : Vec A n) → Any P xs)
+any? : {n : ℕ} → Decidable P → Decidable (λ (xs : Vec A n) → Any P xs)
 any? {n = 0}     P? []       = no λ()
 any? {n = suc n} P? (x ∷ xs) =
   Dec.map [ (fzero ,_) , (λ { (i , q) → fsuc i , q }) ]ᵤ

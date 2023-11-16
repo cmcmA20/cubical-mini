@@ -19,7 +19,7 @@ private variable
 record Exhaustible {ℓ : Level} (A : Type ℓᵃ) : Type (ℓᵃ ⊔ ℓsuc ℓ) where
   no-eta-equality
   constructor exhaustible-η
-  field exhaustible-β : {P : Pred ℓ A} → Decidable P → Dec Π[ P ]
+  field exhaustible-β : {P : Pred A ℓ} → Decidable P → Dec Π[ P ]
 
 open Exhaustible public
 
@@ -30,8 +30,8 @@ lift-exhaustible : Exhaustible {ℓ = ℓ} A → Exhaustible (Lift ℓ A)
 lift-exhaustible ex .exhaustible-β P? = Dec.map (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift)
   (ex .exhaustible-β $ P? ∘ lift)
 
-Π-decision : {B : Pred ℓᵇ A} → Decidable B → Exhaustible A → Dec Π[ B ]
+Π-decision : {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec Π[ B ]
 Π-decision d ex = ex .exhaustible-β d
 
-∀-decision : {B : Pred ℓᵇ A} → Decidable B → Exhaustible A → Dec ∀[ B ]
+∀-decision : {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec ∀[ B ]
 ∀-decision d ex = dec-≃ Π-impl-Π-≃ .fst (Π-decision d ex)

@@ -10,11 +10,11 @@ open import Data.Dec as Dec
 private variable
   ℓ ℓ′ : Level
   A : Type ℓ
-  P Q R : Pred ℓ′ A
+  P Q R : Pred A ℓ′
   x : A
   @0 xs ys : List A
 
-data All {ℓ ℓ′} {A : Type ℓ} (P : Pred ℓ′ A) : @0 List A → Type (ℓ ⊔ ℓ′) where
+data All {ℓ ℓ′} {A : Type ℓ} (P : Pred A ℓ′) : @0 List A → Type (ℓ ⊔ ℓ′) where
   []  : All P []
   _∷_ : P x → All P xs → All P (x ∷ xs)
 
@@ -42,7 +42,7 @@ all-zipwith     f [] [] = []
 all-zipwith {P} f (p ∷ ps) (q ∷ qs) = f p q ∷ all-zipwith {P = P} f ps qs
 
 -- FIXME what's going on with n-ary macro
-all? : {A : Type ℓ} {P : Pred ℓ′ A} → Decidable P → Decidableⁿ 1 (λ (xs : List A) → All P xs)
+all? : {A : Type ℓ} {P : Pred A ℓ′} → Decidable P → Decidableⁿ 1 (λ (xs : List A) → All P xs)
 all? P? []       = yes []
 all? P? (x ∷ xs) =
   Dec.map (λ { (px , ps) → px ∷ ps })

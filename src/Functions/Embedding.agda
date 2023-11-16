@@ -7,6 +7,7 @@ open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Meta.Search.HLevel
+open import Meta.Variadic
 
 open import Structures.IdentitySystem.Base
 open import Structures.n-Type

@@ -74,7 +74,7 @@ finite : ⦃ d : is-fin-set A ⦄ → is-fin-set A
 finite ⦃ d ⦄ = d
 
 finite-choice
-  : {P : A → Type ℓ′}
+  : {P : Pred A ℓ′}
   → is-fin-set A
   → (∀ x → ∥ P x ∥₁) → ∥ (∀ x → P x) ∥₁
 finite-choice {P} A-f k = do
@@ -83,7 +83,7 @@ finite-choice {P} A-f k = do
   pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e .fst x))
 
 finite-pi-fin
-  : (n : ℕ) {P : Fin n → Type ℓ′}
+  : (n : ℕ) {P : Pred (Fin n) ℓ′}
   → (∀ x → is-fin-set (P x))
   → is-fin-set Π[ P ]
 finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where

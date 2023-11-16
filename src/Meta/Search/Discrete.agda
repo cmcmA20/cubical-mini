@@ -22,12 +22,12 @@ open import Data.FinSub.Instances.FromNat
 open import Data.List.Instances.FromProduct
 
 private variable
-  ℓ ℓ′ ℓa ℓb ℓc ℓd : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
   T : Type ℓ
-  A : Type ℓa
-  B : A → Type ℓb
-  C : (a : A) (b : B a) → Type ℓc
-  D : (a : A) (b : B a) (c : C a b) → Type ℓd
+  A : Type ℓᵃ
+  B : A → Type ℓᵇ
+  C : (a : A) (b : B a) → Type ℓᶜ
+  D : (a : A) (b : B a) (c : C a b) → Type ℓᵈ
   n : HLevel
 
 instance
@@ -54,7 +54,7 @@ instance
   decomp-dis-lift : goal-decomposition (quote is-discrete) (Lift ℓ′ A)
   decomp-dis-lift = decomp (quote lift-is-discrete) [ `search (quote is-discrete) ]
 
-  decomp-dis-× : {B : Type ℓb} → goal-decomposition (quote is-discrete) (A × B)
+  decomp-dis-× : {B : Type ℓᵇ} → goal-decomposition (quote is-discrete) (A × B)
   decomp-dis-× = decomp (quote ×-is-discrete)
     [ `search (quote is-discrete) , `search (quote is-discrete) ]
 
@@ -71,12 +71,12 @@ instance
 
 -- Usage
 private
-  module _ ⦃ A-dis : is-discrete A ⦄ {B : Pred ℓb A} ⦃ B-dis : ∀[ mapⁿ 1 is-discrete B ] ⦄ where
+  module _ ⦃ A-dis : is-discrete A ⦄ {B : Pred A ℓᵇ} ⦃ B-dis : ∀[ mapⁿ 1 is-discrete B ] ⦄ where
     _ : is-discrete (A × A × A × A)
     _ = discrete!
 
-    _ : is-discrete (Σ[ a ꞉ A ] B a × Lift ℓb A)
+    _ : is-discrete (Σ[ a ꞉ A ] B a × Lift ℓᵇ A)
     _ = discrete!
 
-    _ : is-set (Σ[ a ꞉ A ] B a ≃ Lift ℓb A)
+    _ : is-set (Σ[ a ꞉ A ] B a ≃ Lift ℓᵇ A)
     _ = hlevel!

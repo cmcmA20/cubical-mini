@@ -1,4 +1,4 @@
-{-# OPTIONS --safe -vtactic.variadic:20 #-}
+{-# OPTIONS --safe #-}
 module Structures.n-Type where
 
 open import Foundations.Base
@@ -11,6 +11,7 @@ open import Foundations.Univalence
 
 open import Meta.Record
 open import Meta.Underlying public
+open import Meta.Variadic
 
 open import Structures.Base
 
@@ -122,12 +123,12 @@ Grpd ℓ = n-Type ℓ 3
 --   _ : n-Type ℓ n ≃ Type-with {S = is-of-hlevel n} (HomT→Str λ _ _ _ → ⊤)
 --   _ = iso→equiv n-Type-iso
 
+
 -- n-truncated correspondence
 n-Corr
-  : (arity : ℕ) (n : HLevel) (ℓ : Level)
-    {ls : Levels arity} (As : Types arity ls)
+  : (arity : ℕ) (n : HLevel) {ls : Levels arity} (As : Types arity ls) (ℓ : Level)
   → Type (ℓsuc ℓ ⊔ ℓsup arity ls)
-n-Corr arity n ℓ As = Arrows arity As (n-Type ℓ n)
+n-Corr arity n As ℓ = SCorr arity As (n-Type ℓ n)
 
 n-Corr⁰ = n-Corr 0
 n-Corr¹ = n-Corr 1
@@ -139,8 +140,7 @@ n-Corr⁵ = n-Corr 5
 
 -- Propositionally valued correspondence is called a relation
 Rel
-  : (arity : ℕ) (ℓ : Level)
-    {ls : Levels arity} (As : Types arity ls)
+  : (arity : ℕ) {ls : Levels arity} (As : Types arity ls) (ℓ : Level)
   → Type (ℓsuc ℓ ⊔ ℓsup arity ls)
 Rel arity = n-Corr arity 1
 
@@ -151,7 +151,6 @@ Rel³ = Rel 3
 Rel⁴ = Rel 4
 Rel⁵ = Rel 5
 
-n-Pred : (n : HLevel) (ℓ′ : Level) {ℓ : Level} (A : Type ℓ) → Type (ℓ ⊔ ℓsuc ℓ′)
 n-Pred = n-Corr¹
 
 Pred₀ = n-Pred 0
@@ -162,18 +161,48 @@ Pred₄ = n-Pred 4
 Pred₅ = n-Pred 5
 
 
--- bleb : {A : Type ℓ′} (P : n-Corr _ 2 ℓ (A , A , A)) → Corr³ ℓ (A , A , A)
+-- XXX FIXME DELETE THIS
+
+-- open import Data.Bool.Base
+
+-- module bek
+--   {ℓᵃ : Level} {ℓᵇ : Level} {ℓ : Level}
+--   {A : Type ℓᵃ} {B : Type ℓᵇ}
+--   {P : n-Corr 3 2 (A , B , A) ℓ}
+--   {Q : Corr 3 (A , B , A) ℓ}
+--   where
+
+--   test₂ : Corr³ _ ℓ
+--   test₂ = ⌞ P ⌟
+
+--   lel : Π[ P ]
+--   lel x y z = {!!}
+
+  -- open import Truncation.Propositional.Base
+  -- kek : ∃[ ⌞ P ⌟ⁿ ⇒ Q ]
+  -- kek = ∣ {!!} , {!!} , {!!} , {!!} ∣₁
+
+-- bleb : {ℓᵃ : Level} {A : Type ℓᵃ} (P : n-Corr _ 2 (A , A , A) ℓ) → Corr³ (A , A , A) ℓ
 -- bleb {A} P = ⌞ P ⌟
 
--- ror : {A : Prop ℓ′} → Type ℓ′
--- ror {A} = Carrierⁿ A
+-- blob : {ℓ : Level} {A : Bool → Grpd ℓ} → Type ℓ
+-- -- blob : {A : Pred₃ Bool ℓ} → Type ℓ
+-- blob {A} = ⌞ A ⌟ true
 
--- wez : {A : n-Corr 0 1 ℓ′ (lift tt)} → Type ℓ′
+-- borr : {A : Set ℓ} → Type _
+-- borr {A} = ⌞ A ⌟
+
+-- lela : (P : Rel _ (Bool , Bool) 0ℓ) → Π[ P ]
+-- lela P x y = {!!}
+
+-- blebs : {A : Type ℓ′} (P : n-Corr _ 2 (A , A , A) ℓ) → Corr³ (A , A , A) ℓ
+-- blebs {A} P = ⌞ P ⌟
+
+-- ror : {A : Prop ℓ′} → Type ℓ′
+-- ror {A} = ⌞ A ⌟
+
+-- wez : {A : n-Corr 0 1 (lift tt) ℓ′} → Type ℓ′
 -- wez {A} = ⌞ A ⌟
 
--- zez : {A : n-Corr 2 1 ℓ′ (Type , Type)} → Type ℓ′
+-- zez : {A : n-Corr _ 1 (Type , Type) ℓ′} → Type ℓ′
 -- zez {A} = ⌞ A ⌟ ⊤ ⊤
-
-oru : {W : Set ℓ} → Type ℓ
-oru {ℓ} {W} = ⌞ W ⌟
--- ⌞ W 2 ⌟

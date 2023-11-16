@@ -1,4 +1,4 @@
-{-# OPTIONS --safe -vtactic.variadic:20 #-}
+{-# OPTIONS --safe #-}
 module Meta.Search.HLevel where
 
 open import Foundations.Base
@@ -9,6 +9,7 @@ open import Foundations.Sigma
 open import Meta.Literals.FromProduct
 open import Meta.Reflection
 open import Meta.Search.Base public
+open import Meta.Variadic
 
 open import Structures.n-Type
 open Structures.n-Type public
@@ -157,36 +158,34 @@ instance
 -- Usage
 private
   module _ {A : Set ℓ} {B : ⌞ A ⌟ → n-Type ℓ 3} where
-    some-def : Type ℓ
     some-def = ⌞ A ⌟
-    -- some-def = Carrierⁿ {arity = zero} {ls = tt} {As = lift tt} {ℓ = ℓsuc ℓ} {P = n-Type ℓ 2} A
-    -- _ : is-set (⌞ A ⌟ → ⌞ A ⌟)
-    -- _ = hlevel!
+    _ : is-set (⌞ A ⌟ → ⌞ A ⌟)
+    _ = hlevel!
 
-    -- _ : is-of-hlevel 2 (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
-    -- _ = hlevel!
+    _ : is-of-hlevel 2 (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
+    _ = hlevel!
 
-    -- _ : is-of-hlevel 3 (Σ some-def λ x → ⌞ B x ⌟)
-    -- _ = hlevel!
+    _ : is-of-hlevel 3 (Σ some-def λ x → ⌞ B x ⌟)
+    _ = hlevel!
 
-    -- _ : ∀ a → is-of-hlevel 5 (⌞ A ⌟ × ⌞ A ⌟ × (ℕ → ⌞ B a ⌟))
-    -- _ = hlevel!
+    _ : ∀ a → is-of-hlevel 5 (⌞ A ⌟ × ⌞ A ⌟ × (ℕ → ⌞ B a ⌟))
+    _ = hlevel!
 
-    -- _ : ∀ a → is-of-hlevel 3 (⌞ A ⌟ × ⌞ A ⌟ × (ℕ → ⌞ B a ⌟))
-    -- _ = hlevel!
+    _ : ∀ a → is-of-hlevel 3 (⌞ A ⌟ × ⌞ A ⌟ × (ℕ → ⌞ B a ⌟))
+    _ = hlevel!
 
-    -- _ : (w z : Term) (x : ℕ) (r : ⌞ A ⌟) → is-of-hlevel 2 ⌞ A ⌟
-    -- _ = hlevel!
+    _ : (w z : Term) (x : ℕ) (r : ⌞ A ⌟) → is-of-hlevel 2 ⌞ A ⌟
+    _ = hlevel!
 
-    -- _ : (a : ℕ) (x y : ⌞ A ⌟) → is-prop (x ＝ y)
-    -- _ = hlevel!
+    _ : (a : ℕ) (x y : ⌞ A ⌟) → is-prop (x ＝ y)
+    _ = hlevel!
 
-    -- -- this one uses `H-Level-nType` instance which is compile-time only
-    -- @0 _ : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
-    -- _ = hlevel!
+    -- this one uses `H-Level-nType` instance which is compile-time only
+    @0 _ : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
+    _ = hlevel!
 
-    -- @0 _ : is-of-hlevel 3 ∥ ⌞ A ⌟ ∥ᴱ
-    -- _ = hlevel!
+    @0 _ : is-of-hlevel 3 ∥ ⌞ A ⌟ ∥ᴱ
+    _ = hlevel!
 
-    -- _ : ∀ n (x : n-Type ℓ n) → is-of-hlevel (2 + n) ⌞ x ⌟
-    -- _ = λ n x → hlevel!
+    _ : ∀ n (x : n-Type ℓ n) → is-of-hlevel (2 + n) ⌞ x ⌟
+    _ = λ n x → hlevel!

@@ -6,7 +6,7 @@ open import Foundations.Equiv
 
 open import Meta.Bind
 open import Meta.Search.HLevel
-open import Meta.Underlying
+open import Meta.Variadic
 
 open import Correspondences.Base public
 
