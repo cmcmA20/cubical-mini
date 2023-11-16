@@ -87,6 +87,15 @@ Implⁿ {0}           P Q = ⌞ P ⌟⁰ → ⌞ Q ⌟⁰
 Implⁿ {1}           P Q = λ x → ⌞ P x ⌟⁰ → ⌞ Q x ⌟⁰
 Implⁿ {suc (suc _)} P Q = λ x → Implⁿ (P x) (Q x)
 
+Prodⁿ
+  : {arity : ℕ} {ls : Levels arity} {As : Types arity ls}
+    {ℓ  : Level} {U : Type ℓ } ⦃ u : Underlying U ⦄
+    {ℓ′ : Level} {V : Type ℓ′} ⦃ v : Underlying V ⦄
+  → SCorr arity As U → SCorr arity As V → Corr arity As (u .ℓ-underlying ⊔ v .ℓ-underlying)
+Prodⁿ {0}           P Q = ⌞ P ⌟⁰ × ⌞ Q ⌟⁰
+Prodⁿ {1}           P Q = λ x → ⌞ P x ⌟⁰ × ⌞ Q x ⌟⁰
+Prodⁿ {suc (suc _)} P Q = λ x → Prodⁿ (P x) (Q x)
+
 
 -- batshit insane garbage, beware
 
@@ -155,7 +164,7 @@ macro ⌞_⌟ = carrier-macro
 
 quantifier-macro : Name → Term → Term → TC ⊤
 quantifier-macro nam t hole = withReduceDefs (false , [ quote Arrows ]) do
-  ty ← inferType t >>= reduce
+  ty ← (inferType t >>= reduce) >>= wait-just-a-bit
   debugPrint "tactic.variadic" 20 ["Type hint: " , termErr ty ]
   let ar , sig , lv , r = get-arity-sig-lvl-type ty
   solved@(meta mv _) ← new-meta (def (quote Underlying) [ harg unknown , varg r ])
@@ -175,18 +184,15 @@ macro
   Σ[_] = quantifier-macro (quote Existentialⁿ)
 
 
-impl-macro : Term → Term → Term → TC ⊤
-impl-macro p q hole = withReduceDefs (false , [ quote Arrows ]) do
-  pty ← inferType p >>= reduce
+binop-macro : Name → Term → Term → Term → TC ⊤
+binop-macro nam p q hole = withReduceDefs (false , [ quote Arrows ]) do
+  pty ← (inferType p >>= reduce) >>= wait-just-a-bit
   debugPrint "tactic.variadic" 20 ["P type hint: " , termErr pty ]
-  qty ← inferType q >>= reduce
+  qty ← (inferType q >>= reduce) >>= wait-just-a-bit
   debugPrint "tactic.variadic" 20 ["Q type hint: " , termErr qty ]
   let par , psig , plv , pr = get-arity-sig-lvl-type pty
   let qar , qsig , qlv , qr = get-arity-sig-lvl-type qty
-  noConstraints do
-    unify par qar
-    unify psig qsig
-  debugPrint "tactic.variadic" 20 "P and Q unified successfully"
+  unify par qar
   psolved@(meta pmv _) ← new-meta (def (quote Underlying) [ harg plv , varg pr ])
     where _ → typeError [ "Could not get `Underlying` instances: " , termErr pr ]
   (pund ∷ []) ← getInstances pmv where
@@ -199,30 +205,12 @@ impl-macro p q hole = withReduceDefs (false , [ quote Arrows ]) do
     [] → typeError [ "No `Underlying `instances for ", termErr qr ]
     _  → typeError [ "Multiple `Underlying` instances for ", termErr qr ]
   unify qsolved qund
-  unify hole $ def (quote Implⁿ)
+  unify-loudly hole $ def nam
     [ harg par , harg unknown , harg psig
     , harg plv , harg pr , iarg pund
     , harg qlv , harg qr , iarg qund
     , varg p , varg q ]
 
-macro _⇒_  = impl-macro
-
--- bleb : {ℓᵃ : Level} {A : Type ℓᵃ} (P : n-Corr _ 2 ℓ (A , A , A)) → Corr³ ℓ (A , A , A)
--- bleb {A} P = ⌞ P ⌟ⁿ
-
--- module bek
---   {ℓᵃ : Level} {ℓ : Level}
---   {A : Type ℓᵃ} {B : Type ℓ}
---   {P : n-Corr 3 2 ℓ (A , B , A)}
---   {Q : Corr 3 ℓ (A , B , A)}
---   where
-
---   test₂ : Corr³ ℓ _
---   test₂ = ⌞ P ⌟ⁿ
-
---   lel : Π[ ⌞ P ⌟ⁿ ]
---   lel x y z = {!!}
-
---   open import Truncation.Propositional.Base
---   kek : ∃[ ⌞ P ⌟ⁿ ⇒ Q ]
---   kek = ∣ {!!} , {!!} , {!!} , {!!} ∣₁
+macro
+  _⇒_  = binop-macro (quote Implⁿ)
+  _××_  = binop-macro (quote Prodⁿ)
