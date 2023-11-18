@@ -31,7 +31,7 @@ is-complemented : (A : ℙ X) → Type _
 is-complemented {X} A = Σ[ A⁻¹ ꞉ ℙ X ] (A ∩ A⁻¹ ⊆ ⟘) × (⟙ ⊆ A ∪ A⁻¹)
 
 is-decidable-subset : (A : ℙ X) → Type (level-of-type X)
-is-decidable-subset A = Decidableⁿ 1 (_∈ A)
+is-decidable-subset A = Decidableⁿ {1} (_∈ A)
 
 is-complemented→is-decidable-subset : (A : ℙ X) → is-complemented A → is-decidable-subset A
 is-complemented→is-decidable-subset A (A⁻¹ , int , uni) x =

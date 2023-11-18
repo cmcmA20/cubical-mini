@@ -300,6 +300,10 @@ pred-term (lit (nat n)) with n
 pred-term _ = nothing
 
 plus-term : Term → Term → Term
+plus-term (nat-lit 0) (nat-lit n) = lit (nat n)
+plus-term (nat-lit m) (nat-lit 0) = lit (nat m)
+plus-term (lit (nat 0)) (lit (nat n)) = lit (nat n)
+plus-term (lit (nat m)) (lit (nat 0)) = lit (nat m)
 plus-term (lit (nat m)) (lit (nat n)) = lit (nat (m + n))
 plus-term x y = def (quote _+_) (x v∷ y v∷ [])
 

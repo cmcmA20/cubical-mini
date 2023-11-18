@@ -59,16 +59,15 @@ instance
 
 
 -- Decidability of a predicate
-Decidableⁿ : (arity : ℕ) {ls : Levels arity} {As : Types arity ls} {ℓ : Level} → Pred (Corr arity As ℓ) _
-Decidableⁿ arity P = Π[ mapⁿ arity Dec P ]
+Decidableⁿ : {arity : ℕ} {ls : Levels arity} {As : Types _ ls} {ℓ : Level} → Pred (Corr _ As ℓ) _
+Decidableⁿ {arity} P = Π[ mapⁿ arity Dec P ]
 
 macro
   Decidable : Term → Term → TC ⊤
-  Decidable t hole = withReduceDefs (false , [ quote Arrows ]) do
-    ty ← (inferType t >>= reduce) >>= wait-just-a-bit
-    let ar , sig , lv , r = get-arity-sig-lvl-type ty
+  Decidable t hole = do
+    ar , r ← variadic-worker t
     unify hole $ def (quote Decidableⁿ)
-      [ varg ar , harg unknown , harg unknown
+      [ harg ar , harg unknown , harg unknown
       , harg unknown , varg t ]
 
 
@@ -87,23 +86,22 @@ DProc⁴ = DProc 4
 DProc⁵ = DProc 5
 
 -- Evidence of a correspondence `P` being reflected by a decision procedure
-Reflectsⁿ : (arity : ℕ) {ls : Levels arity} {As : Types _ ls} {ℓ : Level} → Corr _ As ℓ → DProc _ As → Type (ℓ ⊔ ℓsup _ ls)
-Reflectsⁿ 0                           P d = Reflects⁰ P d
-Reflectsⁿ 1             {As = A}      P d = Π[ x ꞉ A ] Reflectsⁿ _ (P x) (d x)
-Reflectsⁿ (suc (suc _)) {As = A , As} P d = Π[ x ꞉ A ] Reflectsⁿ _ (P x) (d x)
+Reflectsⁿ : {arity : ℕ} {ls : Levels arity} {As : Types _ ls} {ℓ : Level} → Corr _ As ℓ → DProc _ As → Type (ℓ ⊔ ℓsup _ ls)
+Reflectsⁿ {0}                         P d = Reflects⁰ P d
+Reflectsⁿ {1}           {As = A}      P d = Π[ x ꞉ A ] Reflectsⁿ (P x) (d x)
+Reflectsⁿ {suc (suc _)} {As = A , As} P d = Π[ x ꞉ A ] Reflectsⁿ (P x) (d x)
 
 macro
   Reflects : Term → Term → Term → TC ⊤
-  Reflects c d hole = withReduceDefs (false , [ quote Arrows ]) do
-    cty ← inferType c >>= reduce
-    let ar , sig , lv , r = get-arity-sig-lvl-type cty
+  Reflects c d hole = do
+    car , cr ← variadic-worker c
     unify hole $ def (quote Reflectsⁿ)
-      [ varg ar , harg unknown , harg unknown
+      [ harg car , harg unknown , harg unknown
       , harg unknown , varg c , varg d ]
 
 reflects→decidable
-  : {ls : Levels n} {As : Types n ls} {P : Corr n As ℓ} {d : DProc n As}
+  : {arity : ℕ} {ls : Levels arity} {As : Types _ ls} {ℓ : Level} {P : Corr _ As ℓ} {d : DProc _ As}
   → Reflects P d → Decidable P
-reflects→decidable {n = 0}          {d} p   = d because p
-reflects→decidable {n = 1}          {d} f x = d x because f x
-reflects→decidable {n = suc (suc _)}    f x = reflects→decidable (f x)
+reflects→decidable {0}          {d} p   = d because p
+reflects→decidable {1}          {d} f x = d x because f x
+reflects→decidable {suc (suc _)}    f x = reflects→decidable (f x)

@@ -64,14 +64,12 @@ infixr 6 ∃-syntax
 
 syntax ∃-syntax A (λ x → B) = ∃[ x ꞉ A ] B
 
-Existential₁ⁿ
-  : {arity : ℕ} {ls : Levels arity} {As : Types arity ls}
-    {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
-  → SCorr arity As U → Type (u .ℓ-underlying ⊔ ℓsup arity ls)
+Existential₁ⁿ : Variadic-binding¹
 Existential₁ⁿ {0}                         P = ∥ ⌞ P ⌟⁰ ∥₁
 Existential₁ⁿ {1}           {As = A}      P = ∥ Σ[ a ꞉ A ] ⌞ P a ⌟⁰ ∥₁
 Existential₁ⁿ {suc (suc _)} {As = A , As} P = ∥ Σ[ a ꞉ A ] Existentialⁿ (P a) ∥₁
 
+infixr 6 ∃[_]
 macro ∃[_] = quantifier-macro (quote Existential₁ⁿ)
 
 

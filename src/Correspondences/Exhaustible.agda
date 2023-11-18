@@ -30,8 +30,8 @@ lift-exhaustible : Exhaustible {ℓ = ℓ} A → Exhaustible (Lift ℓ A)
 lift-exhaustible ex .exhaustible-β P? = Dec.map (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift)
   (ex .exhaustible-β $ P? ∘ lift)
 
-Π-decision : {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec Π[ B ]
+Π-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec Π[ B ]
 Π-decision d ex = ex .exhaustible-β d
 
-∀-decision : {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec ∀[ B ]
+∀-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec ∀[ B ]
 ∀-decision d ex = dec-≃ Π-impl-Π-≃ .fst (Π-decision d ex)

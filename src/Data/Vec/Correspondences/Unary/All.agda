@@ -40,7 +40,7 @@ all-++-right {xs = []}    ps       = ps
 all-++-right {xs = _ ∷ _} (_ ∷ ps) = all-++-right ps
 
 -- FIXME `Decidable` macro dies here, why?
-all? : Decidable P → Decidableⁿ 1 (λ (xs : Vec A n) → All P xs)
+all? : Decidable P → Decidableⁿ {1} (λ (xs : Vec A n) → All P xs)
 all? P? []       = yes []
 all? P? (x ∷ xs) =
   Dec.map (λ { (px , ps) → px ∷ ps })

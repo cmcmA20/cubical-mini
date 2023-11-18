@@ -38,5 +38,5 @@ omniscient₁→exhaustible omn .exhaustible-β {P} P? = Dec.map
 omni₁ : ⦃ x : Omniscient₁ {ℓ = ℓ} A ⦄ → Omniscient₁ A
 omni₁ ⦃ x ⦄ = x
 
-∃-decision : {B : Pred A ℓᵇ} → Decidable B → Omniscient₁ A → Dec ∃[ B ]
+∃-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Omniscient₁ A → Dec ∃[ B ]
 ∃-decision d ex = omniscient₁-β ex d

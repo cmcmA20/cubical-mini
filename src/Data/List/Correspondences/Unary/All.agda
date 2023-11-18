@@ -42,7 +42,7 @@ all-zipwith     f [] [] = []
 all-zipwith {P} f (p ∷ ps) (q ∷ qs) = f p q ∷ all-zipwith {P = P} f ps qs
 
 -- FIXME what's going on with n-ary macro
-all? : {A : Type ℓ} {P : Pred A ℓ′} → Decidable P → Decidableⁿ 1 (λ (xs : List A) → All P xs)
+all? : {ℓ ℓ′ : Level} {A : Type ℓ} {P : A → Type ℓ′} → Decidable P → Decidableⁿ {1} (λ (xs : List A) → All P xs)
 all? P? []       = yes []
 all? P? (x ∷ xs) =
   Dec.map (λ { (px , ps) → px ∷ ps })

@@ -33,6 +33,7 @@ open import Meta.Record     public
 open import Meta.SIP        public
 open import Meta.Underlying public
 open import Meta.Variadic   public
+open import Meta.Witness    public
 
 open import Structures.n-Type public
 
