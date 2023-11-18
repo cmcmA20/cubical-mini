@@ -84,3 +84,7 @@ or-idem = witness!
 --   module _ {A : Type} {u : A} (a a′ : A) (z w r : Bool) (B : Type) {b c d e : B} where
 --     _ : ∃[ x ꞉ Bool ] (x ＝ z)
 --     _ = witness!
+
+--     module _ {R : Type} {a u : Bool} {v : A} where
+--       _ : ∃[ x ꞉ Bool ] (x ＝ r or a)
+--       _ = witness!

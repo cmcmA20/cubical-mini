@@ -8,8 +8,11 @@ open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base as List
+open import Data.List.Operations
 open import Data.List.Instances.Bind
+open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
+open import Data.Maybe.Instances.Alt
 open import Data.Maybe.Instances.Bind
 open import Data.Nat.Base
 open import Data.Nat.Order.Inductive
@@ -44,11 +47,14 @@ raiseS n = wk n idₛ
 raise-fromS : ℕ → ℕ → Subst
 raise-fromS n k = liftS n $ raiseS k
 
+private
+  count : ℕ → ℕ → List ℕ
+  count _          0        = []
+  count 0          (suc to) = 0 ∷ (suc <$> count 0 to)
+  count (suc from) (suc to) = suc <$> count from to
+
 singletonS : ℕ → Term → Subst
-singletonS n u = ((λ m → var m []) <$> count (n ∸ 1)) ++# u ∷ₛ raiseS n where
-  count : ℕ → List ℕ
-  count zero = []
-  count (suc n) = 0 ∷ (suc <$> count n)
+singletonS n u = ((λ m → var m []) <$> count 0 (n ∸ 1)) ++# u ∷ₛ raiseS n
 
 
 subst-tm  : (fuel : ℕ) → Subst → Term → Maybe Term
@@ -122,3 +128,34 @@ subst-tm (suc fuel) ρ (agda-sort s) with s
 … | propLit n = pure (agda-sort (propLit n))
 … | inf n     = pure (agda-sort (inf n))
 … | unknown   = pure unknown
+
+
+-- very unsafe way to do this
+-- you should enforce that all the elements are unique
+Ren : Type
+Ren = List ℕ
+
+-- TODO refactor
+inverseR : Ren → Ren
+inverseR = go 0 ∘ insertion-sort (λ x y → x .fst <ᵇ suc (y .fst)) ∘ (λ vs → zip vs (count 0 (length vs))) where
+  zip : List ℕ → List ℕ → List (ℕ × ℕ)
+  zip []       _        = []
+  zip (_ ∷ _)  []       = []
+  zip (x ∷ xs) (y ∷ ys) = (x , y) ∷ zip xs ys
+
+  go : ℕ → List (ℕ × ℕ) → Ren
+  go n [] = []
+  go n ((k , v) ∷ ss) =
+    let ih = go (suc k) ss
+    in count n k ++ (v ∷ ih)
+
+ren→sub : Ren → Subst
+ren→sub vs = ((λ v → var v []) <$> vs) ++# idₛ
+
+rename-tm : (fuel : ℕ) → Ren → Term → Maybe Term
+rename-tm fuel = subst-tm fuel ∘ ren→sub
+
+generalize : List ℕ → Term → TC Term
+generalize fvs t = do
+  t′ ← maybe→alt $ rename-tm 1234567890 (inverseR fvs) t
+  pure $ iter (length fvs) (pi (varg unknown) ∘ abs "x") t′

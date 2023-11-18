@@ -299,46 +299,28 @@ enter : Telescope → TC A → TC A
 enter [] = id
 enter ((na , ar) ∷ xs) = enter xs ∘ extendContext na ar
 
-
 -- returns free variables as de Bruijn indices in the _current_ context
-fv : Term → List ℕ
-fv = nub-unsafe _==_ ∘ go 0 where
+-- same order as in input term, has duplicates
+fv-dup : Term → List ℕ
+fv-dup = go 0 where
   go : ℕ → Term → List ℕ
-  gos : ℕ → List (Arg Term) → List ℕ
+  go* : ℕ → List (Arg Term) → List ℕ
 
   go nbind (var v args) =
     if nbind <ᵇ suc v
-       then insert (λ m n → not $ m <ᵇ n) (v ∸ nbind)
+       then (v ∸ nbind) ∷_
        else id
-     $ gos nbind args
-  go nbind (con _ args) = gos nbind args
-  go nbind (def _ args) = gos nbind args
+     $ go* nbind args
+  go nbind (con _ args) = go* nbind args
+  go nbind (def _ args) = go* nbind args
   go nbind (lam _ (abs _ x)) = go (suc nbind) x
   go nbind (pi (arg _ x) (abs _ y)) =
     go nbind x List.++ go (suc nbind) y
   go _   _ = []
 
-  gos _ [] = []
-  gos nbind (arg _ x ∷ xs) =
-    go nbind x List.++ gos nbind xs
+  go* _ [] = []
+  go* nbind (arg _ x ∷ xs) =
+    go nbind x List.++ go* nbind xs
 
-generalize : List ℕ → Term → Term
-generalize fvs = iter (length fvs) (pi (varg unknown) ∘ abs "x") ∘ go 0 where
-  len = length fvs
-
-  go : ℕ → Term → Term
-  gos : ℕ → List (Arg Term) → List (Arg Term)
-
-  go nbind (var v args) with nbind <ᵇ suc v
-  ... | false = var v $ gos nbind args
-  ... | true with List.lookup _==_ (v ∸ nbind) fvs
-  ... | nothing = unknown -- FIXME should not happen
-  ... | just ix = var (nbind + len ∸ suc ix) $ gos nbind args
-  go nbind (con c args) = con c (gos nbind args)
-  go nbind (def f args) = def f $ gos nbind args
-  go nbind (lam v (abs s x)) = lam v $ abs s $ go (suc nbind) x
-  go nbind (pi (arg ai x) (abs s y)) = pi (arg ai (go nbind x)) (abs s (go (suc nbind) y))
-  go _ t = t
-
-  gos _ [] = []
-  gos nbind (arg ai x ∷ xs) = arg ai (go nbind x) ∷ gos nbind xs
+fv     = nub-slow _==_ ∘ fv-dup
+fv-ord = nub-unsafe _==_ ∘ insertion-sort (λ m n → m <ᵇ suc n) ∘ fv-dup
