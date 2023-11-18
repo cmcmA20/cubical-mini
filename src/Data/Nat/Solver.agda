@@ -265,6 +265,8 @@ private
     e₁ , vs ← build-expr vs t₁
     e₂ , vs ← build-expr vs t₂
     pure $ con (quote _‵·_) (unknown h∷ e₁ v∷ e₂ v∷ []) , vs
+  build-expr vs (def (quote ⌜_⌝) (_ h∷ _ h∷ tm v∷ [])) =
+    build-expr vs tm -- dirty!
   build-expr vs tm = do
     (v , vs′) ← bind-var vs tm
     pure $ con (quote ‵_) (v v∷ []) , vs′
@@ -297,4 +299,4 @@ macro
 private
   wow-good-job : ∀ y x z
                → (x + 5 + suc y) · z ＝ z · 5 + x · z + z + z · y
-  wow-good-job x y z = nat!
+  wow-good-job y x z = nat!

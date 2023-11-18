@@ -14,7 +14,7 @@ open import Data.Maybe.Base
 
 private variable
   ℓ : Level
-  A : Type ℓ
+  A T : Type ℓ
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -63,28 +63,34 @@ record Simple-solver : Type where
 
   prepare = prepare′ strat
 
+  withReduction : TC T → TC T
+  withReduction = withNormalisation false
+                ∘ withReduceDefs (false , dont-reduce)
+
 module _ (solver : Simple-solver) where
   open Simple-solver solver
 
   mk-simple-solver : Term → TC ⊤
-  mk-simple-solver hole = withNormalisation false $ withReduceDefs (false , dont-reduce) do
-      goal ← inferType hole >>= reduce
-      just (lhs , rhs) ← get-boundary goal where
-        nothing → print-boundary goal
-      elhs ← prepare lhs >>= build-expr
-      erhs ← prepare rhs >>= build-expr
-      noConstraints (unify hole $ invoke-solver elhs erhs)
-        <|> solver-failed elhs erhs
+  mk-simple-solver hole = withReduction do
+    goal ← inferType hole >>= reduce
+    just (lhs , rhs) ← get-boundary goal where
+      nothing → print-boundary goal
+    lhs ← wait-just-a-bit lhs
+    rhs ← wait-just-a-bit rhs
+    elhs ← prepare lhs >>= build-expr
+    erhs ← prepare rhs >>= build-expr
+    noConstraints (unify hole $ invoke-solver elhs erhs)
+      <|> solver-failed elhs erhs
 
   mk-simple-normalise : Term → Term → TC ⊤
-  mk-simple-normalise tm hole = withNormalisation false $ withReduceDefs (false , dont-reduce) do
-      e ← prepare tm >>= build-expr
-      unify hole $ invoke-normaliser e
+  mk-simple-normalise tm hole = withReduction do
+    e ← prepare tm >>= build-expr
+    unify hole $ invoke-normaliser e
 
   mk-simple-repr : Term → Term → TC ⊤
-  mk-simple-repr tm _ = withNormalisation false $ withReduceDefs (false , dont-reduce) do
-      repr ← prepare tm >>= build-expr
-      print-repr tm repr
+  mk-simple-repr tm _ = withReduction do
+    repr ← prepare tm >>= build-expr
+    print-repr tm repr
 
 
 --------------------------------------------------------------------------------
@@ -101,16 +107,20 @@ record Variable-solver {ℓ} (A : Type ℓ) : Type ℓ where
 
   prepare = prepare′ strat
 
+  withReduction : TC T → TC T
+  withReduction = withNormalisation false
+                ∘ withReduceDefs (false , dont-reduce)
+
 module _ {ℓ} {A : Type ℓ} (solver : Variable-solver A) where
   open Variable-solver solver
 
   mk-var-solver : Term → TC ⊤
-  mk-var-solver hole =
-    withNormalisation false $
-    withReduceDefs (false , dont-reduce) $ do
+  mk-var-solver hole = withReduction do
     goal ← inferType hole >>= reduce
     just (lhs , rhs) ← get-boundary goal
       where nothing → print-boundary goal
+    lhs ← wait-just-a-bit lhs
+    rhs ← wait-just-a-bit rhs
     elhs , vs ← prepare lhs >>= build-expr empty-vars
     debugPrint "tactic.solver.var" 10 [ "LHS: " , termErr elhs ]
     erhs , vs ← prepare rhs >>= build-expr vs
@@ -121,9 +131,7 @@ module _ {ℓ} {A : Type ℓ} (solver : Variable-solver A) where
       solver-failed elhs erhs
 
   mk-var-normalise : Term → Term → TC ⊤
-  mk-var-normalise tm hole =
-    withNormalisation false $
-    withReduceDefs (false , dont-reduce) $ do
+  mk-var-normalise tm hole = withReduction do
     e , vs ← prepare tm >>= build-expr empty-vars
     debugPrint "tactic.solver.var" 10 [ "Expression: " , termErr e ]
     size , env ← environment vs
@@ -132,9 +140,7 @@ module _ {ℓ} {A : Type ℓ} (solver : Variable-solver A) where
     unify hole soln
 
   mk-var-repr : Term → TC ⊤
-  mk-var-repr tm =
-    withNormalisation false $
-    withReduceDefs (false , dont-reduce) $ do
+  mk-var-repr tm = withReduction do
     repr , vs ← prepare tm >>= build-expr empty-vars
     size , env ← environment vs
     print-var-repr tm repr env
