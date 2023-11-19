@@ -108,7 +108,7 @@ _F∘_ {C} {D} {E} F G = comps
     F₁ : {x y : C.Ob} → C.Hom x y → E.Hom (F₀ x) (F₀ y)
     F₁ f = F.₁ (G.₁ f)
 
-    abstract
+    opaque
       F-id : {x : C.Ob} → F₁ (C.id {x}) ＝ E.id {F₀ x}
       F-id =
           F.₁ (G.₁ C.id) ＝⟨ ap F.₁ G.F-id ⟩

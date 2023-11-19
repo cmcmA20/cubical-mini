@@ -43,7 +43,7 @@ bimap-simple : {B : Type ℓᵇ} {P : A → Type ℓ} {Q : B → Type ℓ′}
              → Σ A P → Σ B Q
 bimap-simple = bimap
 
-first : {C : Type ℓᶜ} → (f : (a : A) → B a) → ((a , _) : A × C) → B a × C
+first : {C : A → Type ℓᶜ} → (f : (a : A) → B a) → ((a , _) : Σ A C) → B a × C a
 first f = bimap f (λ x → x)
 
 second : {C : A → Type ℓᶜ} → (∀ {x} → B x → C x) → Σ A B → Σ A C

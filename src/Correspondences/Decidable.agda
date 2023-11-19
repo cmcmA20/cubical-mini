@@ -4,6 +4,7 @@ module Correspondences.Decidable where
 open import Foundations.Base
 
 open import Meta.Reflection
+open import Meta.Subst
 open import Meta.Variadic
 
 open import Correspondences.Base public
@@ -15,6 +16,7 @@ open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
+open import Data.Maybe.Instances.Alt
 open import Data.Nat.Base
 
 private variable
@@ -59,17 +61,16 @@ instance
 
 
 -- Decidability of a generalized predicate
-Decidableⁿ
-  : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
-    {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
-  → Pred (SCorr _ As U) (u .ℓ-underlying ⊔ ℓsup _ ls)
+Decidableⁿ : Variadic-binding¹
 Decidableⁿ {arity} P = Π[ mapⁿ arity Dec ⌞ P ⌟ ]
 
 macro
   Decidable : Term → Term → TC ⊤
   Decidable t hole = do
-    ar , r ← variadic-worker t
+    ar , r , as ← variadic-worker t
     und ← variadic-instance-worker r
+    t ← maybe→alt $ apply-tm* full-tank t as
+    debugPrint "tactic.variadic" 20 [ "Given: " , termErr t ]
     unify hole $ def (quote Decidableⁿ)
       [ harg ar , harg unknown , harg unknown
       , harg unknown , harg unknown , iarg und
@@ -102,10 +103,12 @@ Reflectsⁿ {suc (suc _)} {As = A , As} P d = Π[ x ꞉ A ] Reflectsⁿ (P x) (d
 macro
   Reflects : Term → Term → Term → TC ⊤
   Reflects c d hole = do
-    car , r ← variadic-worker c
-    dar , _ ← variadic-worker d
+    car , r , cas ← variadic-worker c
+    dar , _ , das ← variadic-worker d
     unify car dar
     und ← variadic-instance-worker r
+    c ← maybe→alt $ apply-tm* full-tank c cas
+    d ← maybe→alt $ apply-tm* full-tank d das
     unify hole $ def (quote Reflectsⁿ)
       [ harg car , harg unknown , harg unknown
       , harg unknown , harg unknown , iarg und

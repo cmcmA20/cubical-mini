@@ -56,6 +56,9 @@ private variable
   B : Type ℓ′
   n : ℕ
 
+full-tank : ℕ
+full-tank = 1234567890
+
 arg-vis : ArgInfo → Visibility
 arg-vis (arg-info v _) = v
 
@@ -179,7 +182,7 @@ unknown term′=? t₂ = false
 _ term′=? _ = false
 
 _term=?_ : Term → Term → Bool
-_term=?_ = _term′=?_ {n = 1234567890} -- ;-)
+_term=?_ = _term′=?_ {n = full-tank}
 
 “refl” : Term
 “refl” = def (quote refl) []
@@ -299,13 +302,19 @@ pred-term (lit (nat n)) with n
 ... | _ = nothing
 pred-term _ = nothing
 
+private
+  _+′_ : ℕ → ℕ → ℕ
+  m     +′ 0     = m
+  0     +′ n     = n
+  suc m +′ suc n = suc (suc (m +′ n))
+
 plus-term : Term → Term → Term
 plus-term (nat-lit 0) (nat-lit n) = lit (nat n)
 plus-term (nat-lit m) (nat-lit 0) = lit (nat m)
 plus-term (lit (nat 0)) (lit (nat n)) = lit (nat n)
 plus-term (lit (nat m)) (lit (nat 0)) = lit (nat m)
 plus-term (lit (nat m)) (lit (nat n)) = lit (nat (m + n))
-plus-term x y = def (quote _+_) (x v∷ y v∷ [])
+plus-term x y = def (quote _+′_) (x v∷ y v∷ [])
 
 -- working under lambda
 
@@ -316,6 +325,13 @@ leave ((na , arg as _) ∷ xs) = leave xs ∘ lam (arg-vis as) ∘ abs na
 enter : Telescope → TC A → TC A
 enter [] = id
 enter ((na , ar) ∷ xs) = enter xs ∘ extendContext na ar
+
+
+strip-invisible : Term → Term × List ArgInfo
+strip-invisible (pi (varg a) b) = pi (varg a) b , []
+strip-invisible (pi (arg ai a) (abs s b)) =
+  second (ai ∷_) $ strip-invisible b
+strip-invisible t = t , []
 
 -- returns free variables as de Bruijn indices in the _current_ context
 -- same order as in input term, has duplicates
@@ -334,6 +350,8 @@ fv-dup = go 0 where
   go nbind (lam _ (abs _ x)) = go (suc nbind) x
   go nbind (pi (arg _ x) (abs _ y)) =
     go nbind x List.++ go (suc nbind) y
+  go nbind (agda-sort (set x)) = go nbind x
+  go nbind (agda-sort (prop x)) = go nbind x
   go _   _ = []
 
   go* _ [] = []

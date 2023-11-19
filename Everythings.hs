@@ -140,7 +140,7 @@ main = do
     "gen-public-except"  :ex_dirs -> genEverythings   True True base_dir (kek <$> (all_dirs \\ ex_dirs))
     ["check-README"] -> checkREADME base_dir
     ["get-imports-README"] -> do
-      imported <- filter (\fp -> head fp == "Everything")
+      imported <- filter (\fp -> listToMaybe fp == Just "Everything")
                     <$> getImported base_dir ["README"]
       putStrLn . unwords $ map (\fp -> showFP '/' fp ++ ".agda") imported
     "help":_ -> putStrLn helpText

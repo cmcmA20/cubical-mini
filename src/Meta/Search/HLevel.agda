@@ -41,8 +41,8 @@ private variable
 instance
   Tactic-hlevel : Tactic-desc (quote is-of-hlevel) by-hlevel
   Tactic-hlevel .Tactic-desc.args-length = 3
-  Tactic-hlevel .Tactic-desc.goal-selector = fsuc (fsuc fzero)
-  Tactic-hlevel .Tactic-desc.level-selector = fsuc fzero
+  Tactic-hlevel .Tactic-desc.goal-selector = 2
+  Tactic-hlevel .Tactic-desc.level-selector = 1
   Tactic-hlevel .Tactic-desc.aliases
     = (quote is-contr    , 0 , 2 , 1)
     ∷ (quote is-prop     , 1 , 2 , 1)
@@ -157,21 +157,21 @@ instance
 
 -- Usage
 private
-  module _ {A : Set ℓ} {B : ⌞ A ⌟ → n-Type ℓ 3} where
+  module _ {A : Set ℓ} {B : A →̇ n-Type ℓ 3} where
     some-def = ⌞ A ⌟
-    _ : is-set (⌞ A ⌟ → ⌞ A ⌟)
+    _ : is-set (A →̇ A)
     _ = hlevel!
 
-    _ : is-of-hlevel 2 (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
+    _ : is-of-hlevel 2 (A →̇ A →̇ A →̇ A)
     _ = hlevel!
 
-    _ : is-of-hlevel 3 (Σ some-def λ x → ⌞ B x ⌟)
+    _ : is-of-hlevel 3 Σ[ B ]
     _ = hlevel!
 
-    _ : ∀ a → is-of-hlevel 5 (⌞ A ⌟ × ⌞ A ⌟ × (ℕ → ⌞ B a ⌟))
+    _ : ∀ a → is-of-hlevel 5 (A ×̇ A ×̇ (ℕ →̇ B a))
     _ = hlevel!
 
-    _ : ∀ a → is-of-hlevel 3 (⌞ A ⌟ × ⌞ A ⌟ × (ℕ → ⌞ B a ⌟))
+    _ : ∀ a → is-of-hlevel 3 (A ×̇ A ×̇ (ℕ →̇ B a))
     _ = hlevel!
 
     _ : (w z : Term) (x : ℕ) (r : ⌞ A ⌟) → is-of-hlevel 2 ⌞ A ⌟

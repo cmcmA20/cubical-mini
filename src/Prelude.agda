@@ -47,7 +47,7 @@ open import Functions.Fibration       public
 import Truncation.Propositional
 module ∥-∥₁ = Truncation.Propositional
 open ∥-∥₁ public
-  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; ∃[_]; _⊎₁_; Im)
+  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; ∃[_]; _⊎₁_; fibre₁; Im)
 
 import Truncation.Set
 module ∥-∥₂ = Truncation.Set

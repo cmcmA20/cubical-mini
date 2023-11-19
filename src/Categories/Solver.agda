@@ -52,7 +52,7 @@ module NbE (Cat : Precategory o h) where
   eval-sound : (e : Expr A B) → nf e ＝ embed e
   eval-sound e = eval-sound-k e id ∙ idr _
 
-  abstract
+  opaque
     solve : (f g : Expr A B) → nf f ＝ nf g → embed f ＝ embed g
     solve f g p = sym (eval-sound f) ∙∙ p ∙∙ (eval-sound g)
 

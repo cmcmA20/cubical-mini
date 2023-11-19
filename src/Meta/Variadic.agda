@@ -5,11 +5,16 @@ module Meta.Variadic where
 open import Foundations.Base
 
 open import Meta.Reflection
+open import Meta.Subst
 open import Meta.Underlying public
 
 open import Data.Bool.Base
+open import Data.Empty.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
+open import Data.List.Instances.Idiom
+open import Data.List.Operations
+open import Data.Maybe.Instances.Alt
 open import Data.Nat.Base
 open import Data.Product.Base public
 
@@ -48,45 +53,52 @@ Pred = Corr¹
 Variadic¹ : Typeω
 Variadic¹ =
     {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
-    {ℓ  : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
+    {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
   → SCorr _ As U
   → Corr  _ As (u .ℓ-underlying)
 
-UnOpⁿ
+Lift-op¹⃑ⁿ
   : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
-    {ℓ  : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
-  → (Type (u .ℓ-underlying) → Type (u .ℓ-underlying))
+    {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
+  → ({ℓᵃ : Level} → Type ℓᵃ → Type ℓᵃ)
   → SCorr _ As U
   → Corr  _ As (u .ℓ-underlying)
-UnOpⁿ {0}           f P = f ⌞ P ⌟⁰
-UnOpⁿ {1}           f P = λ x → f ⌞ P x ⌟⁰
-UnOpⁿ {suc (suc _)} f P = λ x → UnOpⁿ f (P x)
+Lift-op¹⃑ⁿ {0}           f P = f ⌞ P ⌟⁰
+Lift-op¹⃑ⁿ {1}           f P = λ x → f ⌞ P x ⌟⁰
+Lift-op¹⃑ⁿ {suc (suc _)} f P = λ x → Lift-op¹⃑ⁿ f (P x)
 
 Carrierⁿ : Variadic¹
-Carrierⁿ = UnOpⁿ id
+Carrierⁿ = Lift-op¹⃑ⁿ id
+
+Negⁿ : Variadic¹
+Negⁿ = Lift-op¹⃑ⁿ ¬_
 
 
 Variadic-binding¹ : Typeω
 Variadic-binding¹ =
     {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
-    {ℓ  : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
+    {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
   → SCorr _ As U
   → Type (u .ℓ-underlying ⊔ ℓsup _ ls)
 
+Quantⁿ
+  : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+    {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
+  → (∀ {ℓᵃ ℓᵇ} (A : Type ℓᵃ) → (A → Type ℓᵇ) → Type (ℓᵃ ⊔ ℓᵇ))
+  → SCorr _ As U
+  → Type (u .ℓ-underlying ⊔ ℓsup _ ls)
+Quantⁿ {0}           Q T = ⌞ T ⌟⁰
+Quantⁿ {1}           Q T = Q _ λ x → ⌞ T x ⌟⁰
+Quantⁿ {suc (suc _)} Q T = Q _ λ x → Quantⁿ Q (T x)
+
 Universalⁿ : Variadic-binding¹
-Universalⁿ {0}                         P = ⌞ P ⌟⁰
-Universalⁿ {1}           {As = A}      P = Π[ a ꞉ A ] ⌞ P a ⌟⁰
-Universalⁿ {suc (suc _)} {As = A , As} P = Π[ a ꞉ A ] Universalⁿ (P a)
+Universalⁿ = Quantⁿ Π-syntax
 
 IUniversalⁿ : Variadic-binding¹
-IUniversalⁿ {0}                         P = ⌞ P ⌟⁰
-IUniversalⁿ {1}           {As = A}      P = ∀{a} → ⌞ P a ⌟⁰
-IUniversalⁿ {suc (suc _)} {As = A , As} P = ∀{a} → IUniversalⁿ (P a)
+IUniversalⁿ = Quantⁿ ∀-syntax
 
 Existentialⁿ : Variadic-binding¹
-Existentialⁿ {0}                         P = ⌞ P ⌟⁰
-Existentialⁿ {1}           {As = A}      P = Σ[ a ꞉ A ] ⌞ P a ⌟⁰
-Existentialⁿ {suc (suc _)} {As = A , As} P = Σ[ a ꞉ A ] Existentialⁿ (P a)
+Existentialⁿ = Quantⁿ Σ-syntax
 
 
 Variadic² : Typeω
@@ -97,36 +109,35 @@ Variadic² =
   → SCorr _ As U → SCorr _ As V
   → Corr  _ As (u .ℓ-underlying ⊔ v .ℓ-underlying)
 
-BinOpⁿ
+Lift-op²⃑ⁿ
   : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
     {ℓ  : Level} {U : Type ℓ } ⦃ u : Underlying U ⦄
     {ℓ′ : Level} {V : Type ℓ′} ⦃ v : Underlying V ⦄
-  → ( Type (u .ℓ-underlying) → Type (v .ℓ-underlying)
-    → Type (u .ℓ-underlying ⊔ v .ℓ-underlying) )
+  → (∀ {ℓᵃ ℓᵇ } → Type ℓᵃ → Type ℓᵇ → Type (ℓᵃ ⊔ ℓᵇ))
   → SCorr _ As U → SCorr _ As V
   → Corr  _ As (u .ℓ-underlying ⊔ v .ℓ-underlying)
-BinOpⁿ {0}           f P Q = f ⌞ P ⌟⁰ ⌞ Q ⌟⁰
-BinOpⁿ {1}           f P Q = λ x → f ⌞ P x ⌟⁰ ⌞ Q x ⌟⁰
-BinOpⁿ {suc (suc _)} f P Q = λ x → BinOpⁿ f (P x) (Q x)
+Lift-op²⃑ⁿ {0}           f P Q = f ⌞ P ⌟⁰ ⌞ Q ⌟⁰
+Lift-op²⃑ⁿ {1}           f P Q = λ x → f ⌞ P x ⌟⁰ ⌞ Q x ⌟⁰
+Lift-op²⃑ⁿ {suc (suc _)} f P Q = λ x → Lift-op²⃑ⁿ f (P x) (Q x)
 
 Implⁿ : Variadic²
-Implⁿ = BinOpⁿ λ A B → (A → B)
+Implⁿ = Lift-op²⃑ⁿ λ A B → (A → B)
 
 Prodⁿ : Variadic²
-Prodⁿ = BinOpⁿ _×_
+Prodⁿ = Lift-op²⃑ⁿ _×_
 
 
--- returns reflected arity, tuple of argument types, level and result type
-get-arity+type : Type′ → Term × Type′
-get-arity+type t = go 0 t where
-  clean-var : ℕ → Term → Term
+-- returns arity and codomain type
+get-arity+type : ℕ → Type′ → Term × Type′
+get-arity+type ninv = go 0 where
+  clean-var  : ℕ → Term → Term
   clean-vars : ℕ → List (Arg Term) → List (Arg Term)
 
   -- variable references would be invalid in current context
   clean-var nbind (var v args) =
-    if nbind <ᵇ suc v
-       then var (v ∸ nbind) (clean-vars nbind args)
-       else var v (clean-vars nbind args)
+    if v <ᵇ nbind
+       then var v (clean-vars nbind args)
+       else var (v ∸ nbind) (clean-vars nbind args)
   clean-var nbind (con c args) = con c (clean-vars nbind args)
   clean-var nbind (def f args) = def f (clean-vars nbind args)
   clean-var nbind (lam v (abs s x)) = lam v (abs s (clean-var (suc nbind) x))
@@ -139,30 +150,34 @@ get-arity+type t = go 0 t where
 
   go : ℕ → Term → Term × Type′
   go nbind (def (quote Arrows) (ar v∷ l h∷ ls h∷ sig v∷ R v∷ [])) =
-    let ar′ , R′ = go nbind R
-    in plus-term ar′ ar , clean-var nbind R′
-    -- ^ TODO swap arguments, use _+_ with better definitional equalities
-  go nbind (pi (varg t) (abs _ x)) =
-    let ar , R = go (suc nbind) x
-    in suc-term ar , clean-var nbind R
+    first (plus-term ar) $ go nbind R
+  go nbind (pi (varg t) (abs _ x)) = first suc-term $ go (suc nbind) x
   go nbind (pi _ (abs _ x)) = go (suc nbind) x
   go nbind (agda-sort (lit l)) = lit (nat 0) , agda-sort (lit l)
   go nbind (agda-sort (set r)) = lit (nat 0) , agda-sort (set (clean-var nbind r))
   go nbind x                   = lit (nat 0) , clean-var nbind x
 
--- returns inferred arity and result type
-variadic-worker : Term → TC (Term × Term)
+-- returns inferred arity , codomain type and list of arguments for application
+variadic-worker : Term → TC (Term × Term × List (Arg Term))
 variadic-worker t = do
   ty ← (inferType t >>= reduce) >>= wait-just-a-bit
   debugPrint "tactic.variadic" 20 [ "Given type: " , termErr ty ]
-  let ar , r = get-arity+type ty
-  -- r ← wait-just-a-bit r
+  let ty , invs = strip-invisible ty
+      ninv = length invs
+  ctx-len ← length <$> getContext
+  debugPrint "tactic.variadic" 20 [ "Ctx len: " , termErr (lit (nat ctx-len)) ]
+  let θ = drop (ctx-len ∸ ninv) $ count-from-to 0 ctx-len
+  debugPrint "tactic.variadic" 20 [ "Stripped type: " , termErr ty ]
+  ty ← maybe→alt (rename-tm full-tank θ ty)
+  let ar , r = get-arity+type ninv ty
   debugPrint "tactic.variadic" 20
-    [ "Inferred arity: " , termErr ar , "\n"
-    , "Last type: " , termErr r ]
+    [ "Invisible args prefix length: " , termErr (lit (nat ninv)) , "\n"
+    , "Stripped+substituted type: " , termErr ty , "\n"
+    , "Inferred arity: " , termErr ar , "\n"
+    , "Codomain: " , termErr r ]
   unify ty $ def (quote Arrows)
     [ varg ar , harg unknown , harg unknown , varg unknown , varg unknown ]
-  pure $ ar , r
+  pure $ ar , r , ((λ ai → arg ai unknown) <$> invs)
 
 -- returns underlying instance
 variadic-instance-worker : Term → TC Term
@@ -175,21 +190,28 @@ variadic-instance-worker r = do
   unify solved und
   pure und
 
-carrier-macro : Term → Term → TC ⊤
-carrier-macro t hole = do
-  ar , r ← variadic-worker t
+
+unop-macro : Name → Term → Term → TC ⊤
+unop-macro nam t hole = do
+  ar , r , as ← variadic-worker t
   und ← variadic-instance-worker r
-  unify hole $ def (quote Carrierⁿ)
+  t ← maybe→alt $ apply-tm* full-tank t as
+  unify hole $ def nam
     [ harg ar , harg unknown , harg unknown
     , harg unknown , harg unknown , iarg und
     , varg t ]
 
-macro ⌞_⌟ = carrier-macro
+infixr 0 ¬̇_
+macro
+  ⌞_⌟ = unop-macro (quote Carrierⁿ)
+  ¬̇_  = unop-macro (quote Negⁿ)
+
 
 quantifier-macro : Name → Term → Term → TC ⊤
 quantifier-macro nam t hole = do
-  ar , r ← variadic-worker t
+  ar , r , as ← variadic-worker t
   und ← variadic-instance-worker r
+  t ← maybe→alt $ apply-tm* full-tank t as
   unify hole $ def nam $
     [ harg ar , harg unknown , harg unknown
     , harg unknown , harg unknown , iarg und
@@ -204,11 +226,13 @@ macro
 
 binop-macro : Name → Term → Term → Term → TC ⊤
 binop-macro nam p q hole = do
-  par , pr ← variadic-worker p
-  qar , qr ← variadic-worker q
+  par , pr , pas ← variadic-worker p
+  qar , qr , qas ← variadic-worker q
   unify par qar
   pund ← variadic-instance-worker pr
   qund ← variadic-instance-worker qr
+  p ← maybe→alt $ apply-tm* full-tank p pas
+  q ← maybe→alt $ apply-tm* full-tank q qas
   unify hole $ def nam
     [ harg par , harg unknown , harg unknown
     , harg unknown , harg unknown , iarg pund
@@ -216,7 +240,7 @@ binop-macro nam p q hole = do
     , varg p , varg q ]
 
 infixr -1 _→̇_
-infixr 8 _×̇_
+infixr 8  _×̇_
 macro
   _→̇_ = binop-macro (quote Implⁿ)
   _×̇_ = binop-macro (quote Prodⁿ)

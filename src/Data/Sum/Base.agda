@@ -46,7 +46,7 @@ map-r f = map id f
 
 
 Sumⁿ : Variadic²
-Sumⁿ = BinOpⁿ _⊎_
+Sumⁿ = Lift-op²⃑ⁿ _⊎_
 
-infixr 10 _⊎̇_
+infixr 7 _⊎̇_
 macro _⊎̇_ = binop-macro (quote Sumⁿ)

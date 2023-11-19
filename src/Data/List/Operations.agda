@@ -4,11 +4,14 @@ module Data.List.Operations where
 
 open import Foundations.Base
 
+open import Meta.Idiom
+
 open import Data.Bool.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
 
 open import Data.List.Base
+open import Data.List.Instances.Idiom
 
 private variable
   ℓ : Level
@@ -74,3 +77,18 @@ lookup {A} eq=? t = go 0 where
   go _ [] = nothing
   go ix (x ∷ xs) =
     if eq=? t x then just ix else go (suc ix) xs
+
+take : ℕ → List A → List A
+take 0       _        = []
+take _       []       = []
+take (suc n) (x ∷ xs) = x ∷ take n xs
+
+drop : ℕ → List A → List A
+drop 0       xs       = xs
+drop _       []       = []
+drop (suc n) (x ∷ xs) = drop n xs
+
+count-from-to : ℕ → ℕ → List ℕ
+count-from-to _          0        = []
+count-from-to 0          (suc to) = 0 ∷ (suc <$> count-from-to 0 to)
+count-from-to (suc from) (suc to) = suc <$> count-from-to from to

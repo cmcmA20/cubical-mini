@@ -15,7 +15,6 @@ open import Data.Maybe.Base
 open import Data.Maybe.Instances.Alt
 open import Data.Maybe.Instances.Bind
 open import Data.Nat.Base
-open import Data.Nat.Order.Inductive
 
 data Subst : Type where
   idₛ        : Subst
@@ -47,14 +46,8 @@ raiseS n = wk n idₛ
 raise-fromS : ℕ → ℕ → Subst
 raise-fromS n k = liftS n $ raiseS k
 
-private
-  count : ℕ → ℕ → List ℕ
-  count _          0        = []
-  count 0          (suc to) = 0 ∷ (suc <$> count 0 to)
-  count (suc from) (suc to) = suc <$> count from to
-
 singletonS : ℕ → Term → Subst
-singletonS n u = ((λ m → var m []) <$> count 0 (n ∸ 1)) ++# u ∷ₛ raiseS n
+singletonS n u = ((λ m → var m []) <$> count-from-to 0 (n ∸ 1)) ++# u ∷ₛ raiseS n
 
 
 subst-tm  : (fuel : ℕ) → Subst → Term → Maybe Term
@@ -137,7 +130,7 @@ Ren = List ℕ
 
 -- TODO refactor
 inverseR : Ren → Ren
-inverseR = go 0 ∘ insertion-sort (λ x y → x .fst <ᵇ suc (y .fst)) ∘ (λ vs → zip vs (count 0 (length vs))) where
+inverseR = go 0 ∘ insertion-sort (λ x y → x .fst <ᵇ suc (y .fst)) ∘ (λ vs → zip vs (count-from-to 0 (length vs))) where
   zip : List ℕ → List ℕ → List (ℕ × ℕ)
   zip []       _        = []
   zip (_ ∷ _)  []       = []
@@ -147,7 +140,7 @@ inverseR = go 0 ∘ insertion-sort (λ x y → x .fst <ᵇ suc (y .fst)) ∘ (λ
   go n [] = []
   go n ((k , v) ∷ ss) =
     let ih = go (suc k) ss
-    in count n k ++ (v ∷ ih)
+    in count-from-to n k ++ (v ∷ ih)
 
 ren→sub : Ren → Subst
 ren→sub vs = ((λ v → var v []) <$> vs) ++# idₛ
@@ -157,5 +150,5 @@ rename-tm fuel = subst-tm fuel ∘ ren→sub
 
 generalize : List ℕ → Term → TC Term
 generalize fvs t = do
-  t′ ← maybe→alt $ rename-tm 1234567890 (inverseR fvs) t
+  t′ ← maybe→alt $ rename-tm full-tank (inverseR fvs) t
   pure $ iter (length fvs) (pi (varg unknown) ∘ abs "x") t′

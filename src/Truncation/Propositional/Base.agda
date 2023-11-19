@@ -65,9 +65,7 @@ infixr 6 ∃-syntax
 syntax ∃-syntax A (λ x → B) = ∃[ x ꞉ A ] B
 
 Existential₁ⁿ : Variadic-binding¹
-Existential₁ⁿ {0}                         P = ∥ ⌞ P ⌟⁰ ∥₁
-Existential₁ⁿ {1}           {As = A}      P = ∥ Σ[ a ꞉ A ] ⌞ P a ⌟⁰ ∥₁
-Existential₁ⁿ {suc (suc _)} {As = A , As} P = ∥ Σ[ a ꞉ A ] Existentialⁿ (P a) ∥₁
+Existential₁ⁿ = Quantⁿ ∃-syntax
 
 infixr 6 ∃[_]
 macro ∃[_] = quantifier-macro (quote Existential₁ⁿ)
@@ -79,5 +77,8 @@ _⊎₁_ : Type ℓ → Type ℓ′ → Type (ℓ ⊔ ℓ′)
 A ⊎₁ B = ∥ A ⊎ B ∥₁
 
 
+fibre₁ : {A : Type ℓ} {B : Type ℓ′} (f : A → B) (y : B) → Type (ℓ ⊔ ℓ′)
+fibre₁ f y = ∥ fibre f y ∥₁
+
 Im : (A → B) → Type _
-Im {A} {B} f = Σ[ b ꞉ B ] ∃[ a ꞉ A ] (f a ＝ b)
+Im f = Σ[ fibre₁ f ]
