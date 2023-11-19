@@ -32,6 +32,8 @@ open import Meta.Marker     public
 open import Meta.Record     public
 open import Meta.SIP        public
 open import Meta.Underlying public
+open import Meta.Variadic   public
+open import Meta.Witness    public
 
 open import Structures.n-Type public
 
@@ -45,7 +47,7 @@ open import Functions.Fibration       public
 import Truncation.Propositional
 module ∥-∥₁ = Truncation.Propositional
 open ∥-∥₁ public
-  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; _⊎₁_; Im)
+  using (∥_∥₁; ∣_∣₁; squash₁; ∃; ∃-syntax; ∃[_]; _⊎₁_; Im)
 
 import Truncation.Set
 module ∥-∥₂ = Truncation.Set

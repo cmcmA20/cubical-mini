@@ -5,6 +5,7 @@ open import Foundations.Base hiding (id ; _∘_)
 
 open import Meta.Record
 open import Meta.Search.HLevel
+open import Meta.Variadic
 
 open import Structures.n-Type
 

@@ -11,6 +11,7 @@ open import Meta.Search.Discrete
 open import Meta.Search.Exhaustible
 open import Meta.Search.HLevel
 open import Meta.Search.Omniscient
+open import Meta.Variadic
 
 open import Structures.FinSet
 open Structures.FinSet public

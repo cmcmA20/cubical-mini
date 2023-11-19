@@ -7,7 +7,7 @@ open import Foundations.Equiv
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
-open import Meta.Underlying
+open import Meta.Variadic
 
 open import Algebra.Magma public
 

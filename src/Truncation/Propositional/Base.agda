@@ -4,6 +4,7 @@ module Truncation.Propositional.Base where
 open import Foundations.Base
 
 open import Meta.Search.HLevel
+open import Meta.Variadic
 
 open import Data.Sum.Base
   using (_⊎_)
@@ -62,6 +63,14 @@ infixr 6 ∃-syntax
 ∃-syntax = ∃
 
 syntax ∃-syntax A (λ x → B) = ∃[ x ꞉ A ] B
+
+Existential₁ⁿ : Variadic-binding¹
+Existential₁ⁿ {0}                         P = ∥ ⌞ P ⌟⁰ ∥₁
+Existential₁ⁿ {1}           {As = A}      P = ∥ Σ[ a ꞉ A ] ⌞ P a ⌟⁰ ∥₁
+Existential₁ⁿ {suc (suc _)} {As = A , As} P = ∥ Σ[ a ꞉ A ] Existentialⁿ (P a) ∥₁
+
+infixr 6 ∃[_]
+macro ∃[_] = quantifier-macro (quote Existential₁ⁿ)
 
 
 -- Mere disjunction

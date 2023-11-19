@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
+open import Meta.Variadic
 
 open import Structures.n-Type
 
@@ -120,7 +121,7 @@ universal {B} {A} {R} B-set = iso→equiv $ inc , iso back (λ _ → refl) li wh
   li : _
   li f′ = fun-ext λ r → ∥-∥₁.rec! (λ (_ , p) → ap (back (inc f′)) (sym p) ∙ ap f′ p) (⦋-⦌-surjective r)
 
-module @0 _ {R : Corr 2 ℓ (A , A)} (congr : is-congruence R) where
+module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
   open is-congruence congr
 
   Code : A → A / R → Prop ℓ
@@ -128,7 +129,7 @@ module @0 _ {R : Corr 2 ℓ (A , A)} (congr : is-congruence R) where
     n-ua $ prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r)
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
-  encode x _ p = subst ⌞ Code x ⌟¹ p reflᶜ
+  encode x _ p = subst ⌞ Code x ⌟ p reflᶜ
 
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
   decode = elim-prop! ∘ glue/

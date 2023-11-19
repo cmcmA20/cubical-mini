@@ -2,10 +2,10 @@
 open import Foundations.Base
 open import Foundations.HLevel
 
-open import Correspondences.Base
+open import Meta.Variadic
 
 module Correspondences.Wellfounded
-  {ℓ ℓ′} {A : Type ℓ} (_<_ : Corr² ℓ′ (A , A))
+  {ℓ ℓ′} {A : Type ℓ} (_<_ : Corr² (A , A) ℓ′)
   where
 
 data Acc (x : A) : Type (ℓ ⊔ ℓ′) where

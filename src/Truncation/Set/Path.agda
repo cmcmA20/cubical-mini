@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
-open import Meta.Underlying
+open import Meta.Variadic
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∥_∥₁; ∣_∣₁)
