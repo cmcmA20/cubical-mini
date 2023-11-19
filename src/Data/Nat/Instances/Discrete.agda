@@ -4,6 +4,7 @@ module Data.Nat.Instances.Discrete where
 open import Foundations.Base
 
 open import Meta.Search.Discrete
+open import Meta.Underlying
 
 open import Correspondences.Decidable
 
@@ -28,7 +29,7 @@ open import Data.Nat.Path as ℕ-path
 
 instance
   ℕ-is-discrete : is-discrete ℕ
-  ℕ-is-discrete = is-discrete-η $ reflects→decidable {2} ==-reflects
+  ℕ-is-discrete .is-discrete-β = reflects→decidable {2} {U = Type} ==-reflects
 
   decomp-dis-ℕ : goal-decomposition (quote is-discrete) ℕ
   decomp-dis-ℕ = decomp (quote ℕ-is-discrete ) []

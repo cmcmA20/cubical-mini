@@ -1,4 +1,4 @@
-{-# OPTIONS --safe -vtactic.variadic:20 #-}
+{-# OPTIONS --safe #-}
 module Correspondences.Finite.Bishop where
 
 open import Foundations.Base

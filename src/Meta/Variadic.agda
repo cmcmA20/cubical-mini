@@ -71,7 +71,7 @@ Variadic-binding¹ =
     {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
     {ℓ  : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
   → SCorr _ As U
-  → Type (u .ℓ-underlying ⊔ ℓsup arity ls)
+  → Type (u .ℓ-underlying ⊔ ℓsup _ ls)
 
 Universalⁿ : Variadic-binding¹
 Universalⁿ {0}                         P = ⌞ P ⌟⁰
@@ -156,7 +156,7 @@ variadic-worker t = do
   ty ← (inferType t >>= reduce) >>= wait-just-a-bit
   debugPrint "tactic.variadic" 20 [ "Given type: " , termErr ty ]
   let ar , r = get-arity+type ty
-  r ← wait-just-a-bit r
+  -- r ← wait-just-a-bit r
   debugPrint "tactic.variadic" 20
     [ "Inferred arity: " , termErr ar , "\n"
     , "Last type: " , termErr r ]
