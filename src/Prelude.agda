@@ -28,12 +28,13 @@ open import Meta.Search.Finite.Bishop public
 open import Meta.Search.HLevel        public
 open import Meta.Search.Omniscient    public
 
-open import Meta.Marker     public
-open import Meta.Record     public
-open import Meta.SIP        public
-open import Meta.Underlying public
-open import Meta.Variadic   public
-open import Meta.Witness    public
+open import Meta.Extensionality public
+open import Meta.Marker         public
+open import Meta.Record         public
+open import Meta.SIP            public
+open import Meta.Underlying     public
+open import Meta.Variadic       public
+open import Meta.Witness        public
 
 open import Structures.n-Type public
 

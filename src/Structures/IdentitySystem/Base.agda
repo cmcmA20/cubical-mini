@@ -129,7 +129,7 @@ module _
   (eqv : ∀ x y → R x y ≃ S x y)
   (pres : ∀ x → eqv x x .fst (r x) ＝ s x)
   where
-  module e x y = Equiv (eqv x y)
+  private module e x y = Equiv (eqv x y)
   transfer-identity-system : is-identity-system S s
   transfer-identity-system .to-path sab = ids .to-path (e.from _ _ sab)
   transfer-identity-system .to-path-over {a} {b} p i = hcomp (∂ i) λ where
@@ -142,6 +142,10 @@ module _
 univalence-identity-system .to-path = ua
 univalence-identity-system .to-path-over p =
   Σ-prop-pathP (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → path→ua-pathP p refl
+
+path-identity-system : is-identity-system (Path A) (λ _ → refl)
+path-identity-system .to-path = id
+path-identity-system .to-path-over p i j = p (i ∧ j)
 
 opaque
   unfolding is-of-hlevel is-contr-η
