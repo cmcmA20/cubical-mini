@@ -7,7 +7,7 @@ open import Meta.Search.HLevel
 open import Meta.Variadic
 
 open import Data.Sum.Base
-  using (_⊎_)
+  using (_⊎_; Sumⁿ)
 
 data ∥_∥₁ {ℓ} (A : Type ℓ) : Type ℓ where
   ∣_∣₁    : A → ∥ A ∥₁
@@ -55,7 +55,7 @@ elim P-prop incc (squash₁ x y i) =
 -- Mere existence
 
 ∃ : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
-∃ A B = ∥ Σ[ a ꞉ A ] B a ∥₁
+∃ A B = ∥ Σ[ B ] ∥₁
 
 infixr 6 ∃-syntax
 
@@ -65,7 +65,7 @@ infixr 6 ∃-syntax
 syntax ∃-syntax A (λ x → B) = ∃[ x ꞉ A ] B
 
 Existential₁ⁿ : Variadic-binding¹
-Existential₁ⁿ = Quantⁿ ∃-syntax
+Existential₁ⁿ = ∥_∥₁ ∘ Existentialⁿ
 
 infixr 6 ∃[_]
 macro ∃[_] = quantifier-macro (quote Existential₁ⁿ)
@@ -74,11 +74,17 @@ macro ∃[_] = quantifier-macro (quote Existential₁ⁿ)
 -- Mere disjunction
 infixr 7 _⊎₁_
 _⊎₁_ : Type ℓ → Type ℓ′ → Type (ℓ ⊔ ℓ′)
-A ⊎₁ B = ∥ A ⊎ B ∥₁
+_⊎₁_ = mapⁿ 2 ∥_∥₁ _⊎_
+
+Sum₁ⁿ : Variadic²
+Sum₁ⁿ {arity} P Q = mapⁿ arity ∥_∥₁ (Sumⁿ P Q)
+
+infixr 7 _⊎̇₁_
+macro _⊎̇₁_ = binop-macro (quote Sum₁ⁿ)
 
 
 fibre₁ : {A : Type ℓ} {B : Type ℓ′} (f : A → B) (y : B) → Type (ℓ ⊔ ℓ′)
-fibre₁ f y = ∥ fibre f y ∥₁
+fibre₁ = mapⁿ 2 ∥_∥₁ fibre
 
 Im : (A → B) → Type _
 Im f = Σ[ fibre₁ f ]
