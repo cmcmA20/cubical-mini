@@ -9,7 +9,9 @@ open import Meta.Subst
 
 open import Data.Bool.Base
 open import Data.List.Base
+open import Data.List.Instances.FromProduct
 open import Data.Maybe.Instances.Alt
+
 
 {-
 A tactic for reducing "transport refl x" in other-wise normal terms. The
@@ -122,7 +124,7 @@ private
   -- then wrap it in a lambda. Nice!
   to-regularity-path : Regularity-precision → Term → TC Term
   to-regularity-path pre tm = do
-    tm ← maybe→alt (raise full-tank 1 tm) <?> "Failed to raise term in regularity tactic"
+    tm ← raiseTC 1 tm
     -- Since we'll be comparing terms, Agda really wants them to be
     -- well-scoped. Since we shifted eeeverything up by one, we have to
     -- grow the context, too.
@@ -184,12 +186,12 @@ module Regularity where
     reduct pres tm _ = do
       orig ← wait-for-type =<< normalise tm
       tm ← to-regularity-path pres orig
-      red ← maybe→alt (apply-tm full-tank tm (argN (con (quote i1) []))) >>= normalise
+      red ← applyTC tm (argN (con (quote i1) [])) >>= normalise
       `pres ← quoteTC pres
-      typeError $
-        "The term\n\n  " ∷ termErr orig ∷ "\n\nreduces modulo " ∷ termErr `pres ∷ " regularity to\n\n  "
-        ∷ termErr red
-        ∷ "\n"
+      typeError
+        [ "The term\n\n  " , termErr orig , "\n\nreduces modulo "
+        , termErr `pres , " regularity to\n\n  "
+        , termErr red , "\n" ]
 
 -- Test cases.
 module

@@ -12,9 +12,7 @@ open import Data.Bool.Base
 open import Data.Empty.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
-open import Data.List.Instances.Idiom
 open import Data.List.Operations
-open import Data.Maybe.Instances.Alt
 open import Data.Nat.Base
 open import Data.Product.Base public
 
@@ -157,8 +155,8 @@ get-arity+type ninv = go 0 where
   go nbind (agda-sort (set r)) = lit (nat 0) , agda-sort (set (clean-var nbind r))
   go nbind x                   = lit (nat 0) , clean-var nbind x
 
--- returns inferred arity , codomain type and list of arguments for application
-variadic-worker : Term → TC (Term × Term × List (Arg Term))
+-- returns inferred arity and codomain type
+variadic-worker : Term → TC (Term × Term)
 variadic-worker t = do
   ty ← (inferType t >>= reduce) >>= wait-just-a-bit
   debugPrint "tactic.variadic" 20 [ "Given type: " , termErr ty ]
@@ -168,7 +166,7 @@ variadic-worker t = do
   debugPrint "tactic.variadic" 20 [ "Ctx len: " , termErr (lit (nat ctx-len)) ]
   let θ = drop (ctx-len ∸ ninv) $ count-from-to 0 ctx-len
   debugPrint "tactic.variadic" 20 [ "Stripped type: " , termErr ty ]
-  ty ← maybe→alt (rename-tm full-tank θ ty)
+  ty ← renameTC θ ty
   let ar , r = get-arity+type ninv ty
   debugPrint "tactic.variadic" 20
     [ "Invisible args prefix length: " , termErr (lit (nat ninv)) , "\n"
@@ -177,7 +175,7 @@ variadic-worker t = do
     , "Codomain: " , termErr r ]
   unify ty $ def (quote Arrows)
     [ varg ar , harg unknown , harg unknown , varg unknown , varg unknown ]
-  pure $ ar , r , ((λ ai → arg ai unknown) <$> invs)
+  pure $ ar , r
 
 -- returns underlying instance
 variadic-instance-worker : Term → TC Term
@@ -193,9 +191,8 @@ variadic-instance-worker r = do
 
 unop-macro : Name → Term → Term → TC ⊤
 unop-macro nam t hole = do
-  ar , r , as ← variadic-worker t
+  ar , r ← variadic-worker t
   und ← variadic-instance-worker r
-  t ← maybe→alt $ apply-tm* full-tank t as
   unify hole $ def nam
     [ harg ar , harg unknown , harg unknown
     , harg unknown , harg unknown , iarg und
@@ -209,9 +206,8 @@ macro
 
 quantifier-macro : Name → Term → Term → TC ⊤
 quantifier-macro nam t hole = do
-  ar , r , as ← variadic-worker t
+  ar , r ← variadic-worker t
   und ← variadic-instance-worker r
-  t ← maybe→alt $ apply-tm* full-tank t as
   unify hole $ def nam $
     [ harg ar , harg unknown , harg unknown
     , harg unknown , harg unknown , iarg und
@@ -226,13 +222,11 @@ macro
 
 binop-macro : Name → Term → Term → Term → TC ⊤
 binop-macro nam p q hole = do
-  par , pr , pas ← variadic-worker p
-  qar , qr , qas ← variadic-worker q
+  par , pr ← variadic-worker p
+  qar , qr ← variadic-worker q
   unify par qar
   pund ← variadic-instance-worker pr
   qund ← variadic-instance-worker qr
-  p ← maybe→alt $ apply-tm* full-tank p pas
-  q ← maybe→alt $ apply-tm* full-tank q qas
   unify hole $ def nam
     [ harg par , harg unknown , harg unknown
     , harg unknown , harg unknown , iarg pund

@@ -122,6 +122,29 @@ subst-tm (suc fuel) ρ (agda-sort s) with s
 … | inf n     = pure (agda-sort (inf n))
 … | unknown   = pure unknown
 
+raiseTC : ℕ → Term → TC Term
+raiseTC n tm with raise full-tank n tm
+... | just x = pure x
+... | nothing = typeError [ "Failed to raise term " , termErr tm ]
+
+substTC : Subst → Term → TC Term
+substTC θ tm with subst-tm full-tank θ tm
+... | just x = pure x
+... | nothing =
+  typeError [ "Failed to substitute in term " , termErr tm ]
+
+applyTC : Term → Arg Term → TC Term
+applyTC f x with apply-tm full-tank f x
+applyTC _ x         | just r  = pure r
+applyTC f (arg _ x) | nothing =
+  typeError [ "Failed to apply function " , termErr f , " to argument " , termErr x ]
+
+apply*TC : Term → List (Arg Term) → TC Term
+apply*TC f x with apply-tm* full-tank f x
+apply*TC _ x         | just r  = pure r
+apply*TC f xs | nothing =
+  typeError [ "Failed to apply function " , termErr f , " to a list of arguments " ]
+
 
 -- very unsafe way to do this
 -- you should enforce that all the elements are unique
@@ -148,7 +171,12 @@ ren→sub vs = ((λ v → var v []) <$> vs) ++# idₛ
 rename-tm : (fuel : ℕ) → Ren → Term → Maybe Term
 rename-tm fuel = subst-tm fuel ∘ ren→sub
 
+renameTC : Ren → Term → TC Term
+renameTC vs tm with subst-tm full-tank (ren→sub vs) tm
+... | just x = pure x
+... | nothing = typeError [ "Failed to rename term " , termErr tm ]
+
 generalize : List ℕ → Term → TC Term
-generalize fvs t = do
-  t′ ← maybe→alt $ rename-tm full-tank (inverseR fvs) t
-  pure $ iter (length fvs) (pi (varg unknown) ∘ abs "x") t′
+generalize fvs t
+  =   iter (length fvs) (pi (varg unknown) ∘ abs "x")
+  <$> renameTC (inverseR fvs) t
