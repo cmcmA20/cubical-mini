@@ -13,6 +13,7 @@ open import Meta.Variadic
 open import Structures.IdentitySystem.Base
   hiding (J; J-refl)
   public
+open import Structures.n-Type
 
 open import Data.Bool.Base
 open import Data.List.Base
@@ -170,6 +171,17 @@ Extensional-≃ ⦃ sb ⦄ .reflᵉ (f , _) a = Extensional-→ ⦃ sb ⦄ .refl
 Extensional-≃ ⦃ sb ⦄ .idsᵉ .to-path = equiv-ext ∘ Extensional-→ ⦃ sb ⦄ .idsᵉ .to-path
 Extensional-≃ ⦃ sb ⦄ .idsᵉ .to-path-over = Extensional-→ ⦃ sb ⦄ .idsᵉ .to-path-over
 
+@0 Extensional-Type : Extensional (Type ℓ) ℓ
+Extensional-Type .Pathᵉ A B = A ≃ B
+Extensional-Type .reflᵉ _ = idₑ
+Extensional-Type .idsᵉ = univalence-identity-system
+
+@0 Extensional-n-Type : ∀ {n} → Extensional (n-Type ℓ n) ℓ
+Extensional-n-Type .Pathᵉ A B = Pathᵉ Extensional-Type ⌞ A ⌟ ⌞ B ⌟
+Extensional-n-Type .reflᵉ _ = idₑ
+Extensional-n-Type .idsᵉ .to-path = n-ua
+Extensional-n-Type .idsᵉ .to-path-over = Extensional-Type .idsᵉ .to-path-over
+
 instance
   extensionality-fun
     : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
@@ -190,6 +202,12 @@ instance
     : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
     → Extensionality (A × B)
   extensionality-× .Extensionality.lemma = quote Extensional-×
+
+  extensionality-type : Extensionality (Type ℓ)
+  extensionality-type .Extensionality.lemma = quote Extensional-Type
+
+  extensionality-n-type : ∀ {n} → Extensionality (n-Type ℓ n)
+  extensionality-n-type .Extensionality.lemma = quote Extensional-n-Type
 
 {-
 Actual user-facing entry point for the tactic: using the 'extensional'

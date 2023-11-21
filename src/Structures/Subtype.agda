@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Pi
 open import Foundations.Sigma
 
+open import Meta.Extensionality
 open import Meta.Search.HLevel
 open import Meta.SIP
 
@@ -56,3 +57,13 @@ module Path where
     go : {U V : Subtype ℓ T} → Code U V → U ＝ V
     go {V = _ , g , _} (e , p) = Σ-pathP (ua e) $ to-pathP⁻ $ Σ-prop-path! $ p ∙ fun-ext λ x →
        ap g (sym (ua-β e x)) ∙ sym (transport-refl _)
+
+
+@0 Extensional-Subtype : Extensional (Subtype ℓ T) ℓ
+Extensional-Subtype .Pathᵉ = Path.Code
+Extensional-Subtype .reflᵉ _ = idₑ , refl
+Extensional-Subtype .idsᵉ = Path.identity-system
+
+instance
+  extensionality-subtype : Extensionality (Subtype ℓ T)
+  extensionality-subtype .Extensionality.lemma = quote Extensional-Subtype

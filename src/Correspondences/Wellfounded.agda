@@ -2,6 +2,7 @@
 open import Foundations.Base
 open import Foundations.HLevel
 
+open import Meta.Extensionality
 open import Meta.Variadic
 
 module Correspondences.Wellfounded
@@ -33,8 +34,7 @@ opaque
   unfolding is-of-hlevel
   acc-is-prop : ∀ x → is-prop (Acc x)
   acc-is-prop x (acc s) (acc t) = ap acc $
-    fun-ext λ y → fun-ext λ y<x →
-    acc-is-prop y (s y y<x) (t y y<x)
+    ext λ y y<x → acc-is-prop y (s y y<x) (t y y<x)
 
 instance
   H-Level-acc : ∀ {x} {n} → H-Level (suc n) (Acc x)
