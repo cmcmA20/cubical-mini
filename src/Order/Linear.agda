@@ -13,17 +13,6 @@ open import Data.Sum.Base
 
 open import Truncation.Propositional as ∥-∥₁
 
--- move to `Meta.Ord`
--- data Tri {ℓ ℓ′} {A : Type ℓ} (_<_ : A → A → Type ℓ′) (x y : A) : Type (ℓ ⊔ ℓ′) where
---   lt : (  x < y) × (¬ x ＝ y) × (¬ y < x) → Tri _<_ x y
---   eq : (¬ x < y) × (  x ＝ y) × (¬ y < x) → Tri _<_ x y
---   gt : (¬ x < y) × (¬ x ＝ y) × (  y < x) → Tri _<_ x y
--- open import Data.Dec.Base
--- wrong : ∀ {ℓ ℓ′} {A : Type ℓ} {_≤_ : A → A → Type ℓ′} (≤-to : is-linear-order _≤_) {x y} → Dec (x ≤ y)
--- wrong ≤-to {x} {y} with is-linear-order.≤-total ≤-to {x} {y}
--- ... | inl x≤y = yes x≤y
--- ... | inr x₁ = no {!!}
-
 private variable n : HLevel
 
 record is-linear-order {ℓ ℓ′} {A : Type ℓ}

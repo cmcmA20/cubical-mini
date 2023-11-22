@@ -45,6 +45,18 @@ m > n = n < m
 
 -- Properties of order
 
+<-trans : m < n → n < k → m < k
+<-trans {0}     {suc n} {suc k} _ _ = tt
+<-trans {suc m} {suc n} {suc k} p q = <-trans {m} {n} {k} p q
+
+<-irr : ¬ m < m
+<-irr {suc m} = <-irr {m}
+
+<-asym : m < n → ¬ n < m
+<-asym {0}     {suc n} _ x = x
+<-asym {suc m} {suc n} p = <-asym {m} p
+
+
 ≤-refl : n ≤ n
 ≤-refl {0}     = tt
 ≤-refl {suc n} = ≤-refl {n}
