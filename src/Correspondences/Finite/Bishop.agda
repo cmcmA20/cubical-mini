@@ -80,7 +80,7 @@ finite-choice
 finite-choice {P} A-f k = do
   e ← enumeration₁ A-f
   choose ← fin-choice (cardinality A-f) λ x → k (is-equiv→inverse (e .snd) x)
-  pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e .fst x))
+  pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e # x))
 
 finite-pi-fin
   : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
@@ -90,7 +90,7 @@ finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
   gg : _
-  gg _ f0 = absurd (fin-0-is-initial .fst f0)
+  gg _ f0 = absurd (fin-0-is-initial # f0)
   ri : gg is-right-inverse-of ff
   ri (mk-fin 0) = refl
   li : gg is-left-inverse-of ff

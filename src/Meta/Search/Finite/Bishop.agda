@@ -86,18 +86,18 @@ instance
 
 -- Usage
 private
-  module _ {A : FinSet ℓa} {B : ⌞ A ⌟ → FinSet ℓb} where
-    _ : is-of-hlevel 3 (⌞ A ⌟ → ⌞ A ⌟)
+  module _ {A : FinSet ℓa} {B : A →̇ FinSet ℓb} where
+    _ : is-of-hlevel 3 (A →̇ A)
     _ = hlevel!
 
-    _ : is-discrete (⌞ A ⌟ × ⌞ A ⌟)
+    _ : is-discrete (A ×̇ A)
     _ = discrete!
 
-    _ : is-fin-set (⌞ A ⌟ → ⌞ A ⌟ → ⌞ A ⌟)
+    _ : is-fin-set (A →̇ A →̇ A)
     _ = finite!
 
-    _ : Omniscient₁ {ℓ = ℓ} (Π[ a ꞉ ⌞ A ⌟ ] ⌞ B a ⌟)
+    _ : Omniscient₁ {ℓ} Π[ B ]
     _ = omni₁!
 
-    _ : Exhaustible {ℓ = ℓ} (⌞ A ⌟ × ⌞ A ⌟)
+    _ : Exhaustible {ℓ} (A ×̇ A)
     _ = exhaust!

@@ -7,6 +7,7 @@ open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Meta.Search.HLevel
+open import Meta.Underlying
 
 open import Functions.Equiv.Fibrewise
 
@@ -85,14 +86,14 @@ equiv-path→identity-system
 equiv-path→identity-system {R} {r} eqv pres′ = ids where opaque
   unfolding is-of-hlevel
   contract : ∀ {a} → is-contr (Σ _ (R a))
-  contract = is-of-hlevel-≃ 0 ((total (λ _ → eqv .fst) , fibrewise-is-equiv→total-is-equiv (eqv .snd)))
+  contract = is-of-hlevel-≃ 0 ((total (λ _ → apply eqv) , fibrewise-is-equiv→total-is-equiv (eqv .snd)))
     (_ , singleton-is-prop)
 
-  pres : ∀ {a} → eqv .fst (r a) ＝ refl
+  pres : ∀ {a} → eqv # (r a) ＝ refl
   pres = Equiv.injective₂ (eqv ₑ⁻¹) (Equiv.η eqv _) (pres′ _)
 
   ids : is-identity-system R r
-  ids .to-path = eqv .fst
+  ids .to-path = apply eqv
   ids .to-path-over {a} {b} p i =
     is-prop→pathP
     (λ i → is-contr→is-prop (eqv .snd .equiv-proof λ j → eqv .fst p (i ∧ j)))

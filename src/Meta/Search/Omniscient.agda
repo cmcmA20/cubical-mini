@@ -9,6 +9,7 @@ open import Meta.Search.Base public
 open import Meta.Search.Decidable
 open import Meta.Search.Exhaustible
 open import Meta.Search.HLevel
+open import Meta.Variadic
 
 open import Correspondences.Omniscient
 open Correspondences.Omniscient public
@@ -48,14 +49,14 @@ instance
   decomp-omn₁→exh = decomp (quote omniscient₁→exhaustible)
     [ `search (quote Omniscient₁) ]
 
-  decomp-dec-∃ : goal-decomposition (quote Dec) (∃[ a ꞉ A ] B a )
+  decomp-dec-∃ : goal-decomposition (quote Dec) ∃[ B ]
   decomp-dec-∃ = decomp (quote ∃-decision) [ `search-under 1 (quote Dec) , `search (quote Omniscient₁) ]
 
 -- TODO more decompositions
 
 -- Usage
 private
-  module _ ⦃ A-omn : Omniscient₁ {ℓ = ℓ} A ⦄ where
+  module _ ⦃ A-omn : Omniscient₁ {ℓ} A ⦄ where
     _ : Omniscient₁ A
     _ = omni₁!
 

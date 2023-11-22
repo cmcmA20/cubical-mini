@@ -76,8 +76,8 @@ private
     _ : is-discrete (A × A × A × A)
     _ = discrete!
 
-    _ : is-discrete (Σ[ a ꞉ A ] B a × Lift ℓᵇ A)
+    _ : is-discrete (Σ[ B ] × Lift ℓᵇ A)
     _ = discrete!
 
-    _ : is-set (Σ[ a ꞉ A ] B a ≃ Lift ℓᵇ A)
+    _ : is-set (Σ[ B ] ≃ Lift ℓᵇ A)
     _ = hlevel!

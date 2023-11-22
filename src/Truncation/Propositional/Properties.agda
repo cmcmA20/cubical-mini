@@ -6,8 +6,8 @@ open import Foundations.Equiv
 open import Foundations.Path
 open import Foundations.Sigma
 
-
 open import Meta.Search.HLevel
+open import Meta.Underlying
 
 open import Structures.IdentitySystem.Interface
 
@@ -135,7 +135,7 @@ rec-set! f-const {B-set} = rec-set f-const B-set
 
 _factors-through_
   : (f : A → C) (B : Type (level-of-type A ⊔ level-of-type C)) → _
-_factors-through_ {A} {C} f B = Σ[ ρ ꞉ (A ↠ B) ] Σ[ ι ꞉ (B ↪ C) ] (f ＝ ι .fst ∘ ρ .fst)
+_factors-through_ {A} {C} f B = Σ[ ρ ꞉ (A ↠ B) ] Σ[ ι ꞉ (B ↪ C) ] (f ＝ apply ι ∘ apply ρ)
 
 Factorization : (f : A → C) → _
 Factorization f = Σ[ M ꞉ Type _ ] f factors-through M

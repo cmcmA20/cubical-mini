@@ -9,6 +9,7 @@ open import Foundations.Transport
 open import Foundations.Univalence.Base
 
 open import Meta.Marker
+open import Meta.Underlying
 
 open import Functions.Fibration
 
@@ -53,7 +54,7 @@ is-half-adjoint-equiv→is-equiv {f} (g , η , ε , zig) .equiv-proof y = fib , 
   fibre-paths′ = fibre-paths ∙ₑ Σ-ap-snd λ _ → flip-lₑ ∙ₑ sym-≃
 
   contract : (fib₂ : fibre f y) → fib ＝ fib₂
-  contract (x , p) = (fibre-paths′ ₑ⁻¹) .fst (x=gy , path) where
+  contract (x , p) = (fibre-paths′ ₑ⁻¹) # (x=gy , path) where
     x=gy = ap g (sym p) ∙ η x
 
     path : ap f (ap g (sym p) ∙ η x) ∙ p ＝ ε y

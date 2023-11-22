@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
+open import Meta.Underlying
 
 open import Truncation.Propositional.Base
 
@@ -29,6 +30,13 @@ is-surjective-is-prop = hlevel!
 
 _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f
+
+instance
+  Funlike-Split-surj : Funlike {A = Type ℓ} {B = Type ℓ′} _↠!_
+  Funlike-Split-surj = record { _#_ = fst }
+
+  Funlike-Surj : Funlike {A = Type ℓ} {B = Type ℓ′} _↠_
+  Funlike-Surj = record { _#_ = fst }
 
 is-left-inverse-of→is-surjective : f is-left-inverse-of g → is-surjective f
 is-left-inverse-of→is-surjective {g} s b = ∣ g b , s b ∣₁

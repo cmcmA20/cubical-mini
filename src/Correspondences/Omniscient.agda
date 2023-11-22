@@ -22,20 +22,20 @@ private variable
   ℓ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
 
-record Omniscient₁ {ℓ : Level} (A : Type ℓᵃ) : Type (ℓᵃ ⊔ ℓsuc ℓ) where
+record Omniscient₁ {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (ℓᵃ ⊔ ℓsuc ℓ) where
   no-eta-equality
   constructor omniscient₁-η
   field omniscient₁-β : {P : Pred A ℓ} → Decidable P → Dec ∃[ P ]
 
 open Omniscient₁ public
 
-omniscient₁→exhaustible : Omniscient₁ {ℓ = ℓ} A → Exhaustible {ℓ = ℓ} A
+omniscient₁→exhaustible : Omniscient₁ {ℓ} A → Exhaustible {ℓ} A
 omniscient₁→exhaustible omn .exhaustible-β {P} P? = Dec.map
   (λ ¬∃p x → dec→essentially-classical (P? x) $ ¬∃p ∘ ∣_∣₁ ∘ (x ,_))
   (λ ¬∃p ∀p → ¬∃p $ ∥-∥₁.rec! λ p → p .snd (∀p (p .fst)))
   (¬-decision $ omn .omniscient₁-β (¬-decision ∘ P?))
 
-omni₁ : ⦃ x : Omniscient₁ {ℓ = ℓ} A ⦄ → Omniscient₁ A
+omni₁ : ⦃ x : Omniscient₁ {ℓ} A ⦄ → Omniscient₁ A
 omni₁ ⦃ x ⦄ = x
 
 ∃-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Omniscient₁ A → Dec ∃[ B ]

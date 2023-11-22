@@ -38,6 +38,13 @@ is-embedding f = ∀ y → is-prop (fibre f y)
 _↪_ : Type ℓ → Type ℓ′ → Type _
 A ↪ B = Σ[ f ꞉ (A → B) ] is-embedding f
 
+instance
+  Funlike-Inj : Funlike {A = Type ℓ} {B = Type ℓ′} _↣_
+  Funlike-Inj = record { _#_ = fst }
+
+  Funlike-Emb : Funlike {A = Type ℓ} {B = Type ℓ′} _↪_
+  Funlike-Emb = record { _#_ = fst }
+
 set-injective→is-embedding
   : {f : A → B} → is-set B → Injective f
   → is-embedding f
@@ -104,7 +111,7 @@ is-equiv-on-paths f = ∀ {x y} → is-equiv {B = f x ＝ f y} (ap f)
 
 @0 is-equiv-on-paths→is-embedding : is-equiv-on-paths f → is-embedding f
 is-equiv-on-paths→is-embedding ep b = is-prop-η λ fib₁ fib₂ →
-  (fibre-equality≃fibre-on-paths ₑ⁻¹) .fst (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
+  (fibre-equality≃fibre-on-paths ₑ⁻¹) # (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
 
 cancellable→is-embedding : Cancellable f → is-embedding f
 cancellable→is-embedding can = preimage-is-contr→is-embedding λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → can)) $
@@ -136,10 +143,10 @@ opaque
   unfolding is-of-hlevel
 
   pullback-identity-system
-    : {R : B → B → Type ℓ″} {r : ∀ b → R b b}
+    : {A : Type ℓ} {B : Type ℓ′} {R : B → B → Type ℓ″} {r : ∀ b → R b b}
       (ids : is-identity-system R r)
-      ((f , f-emb) : A ↪ B)
-    → is-identity-system (λ x y → R (f x) (f y)) (λ _ → r _)
+      (f : A ↪ B)
+    → is-identity-system (λ (x y : A) → R (f # x) (f # y)) (λ _ → r _)
   pullback-identity-system     ids (f , f-emb) .to-path {a} {b} x = ap fst $
     f-emb (f b) (a , ids .to-path x) (b , refl)
   pullback-identity-system {R} ids (f , f-emb) .to-path-over {a} {b} p i =

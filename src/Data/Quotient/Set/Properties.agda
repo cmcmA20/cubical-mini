@@ -155,4 +155,4 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   → (∀ x y → Dec (R x y))
   → is-discrete (A / R)
 /₂-is-discrete R-c d = is-discrete-η $ elim²-prop! λ x y →
-  Dec.map (glue/ _ _) (λ f p → ⊥.rec (f $ (effective R-c ₑ⁻¹) .fst p)) $ d x y
+  Dec.map (glue/ _ _) (λ f p → ⊥.rec (f $ (effective R-c ₑ⁻¹) # p)) $ d x y

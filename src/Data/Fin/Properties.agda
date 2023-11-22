@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Bind
+open import Meta.Underlying
 
 open import Data.Empty.Base
 open import Data.Nat.Path
@@ -118,7 +119,7 @@ fin-injective : {m n : ℕ} → Fin m ≃ Fin n → m ＝ n
 fin-injective {0} {0}     _ = refl
 fin-injective {0} {suc n} f with is-equiv→inverse (f .snd) fzero
 ... | ()
-fin-injective {suc m} {0}     f with f .fst fzero
+fin-injective {suc m} {0}     f with f # fzero
 ... | ()
 fin-injective {suc m} {suc n} f = ap suc $ fin-injective (fin-peel f)
 

@@ -27,6 +27,7 @@ private variable
   A : Type ℓ
 
 record FinSet (ℓ : Level) : Type (ℓsuc ℓ) where
+  no-eta-equality
   constructor fin-set
   field
     carrier : Type ℓ

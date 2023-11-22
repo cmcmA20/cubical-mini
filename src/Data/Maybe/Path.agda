@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
+open import Meta.Underlying
 
 open import Data.Empty.Base
 open import Data.Sum.Path
@@ -36,10 +37,10 @@ maybe-is-of-hlevel n Ahl =
     (⊎-is-of-hlevel n hlevel! Ahl)
 
 nothing≠just : nothing ≠ just x
-nothing≠just = ⊎-disjoint ∘ ap (maybe-as-sum .fst)
+nothing≠just = ⊎-disjoint ∘ ap (maybe-as-sum #_)
 
 just-inj : just x ＝ just y → x ＝ y
-just-inj = inr-inj ∘ ap (maybe-as-sum .fst)
+just-inj = inr-inj ∘ ap (maybe-as-sum #_)
 
 instance
   decomp-hlevel-maybe

@@ -7,6 +7,8 @@ open import Foundations.Pi
 open import Foundations.Sigma
 open import Foundations.Univalence public
 
+open import Meta.Underlying
+
 open import Data.Unit.Properties
 
 private variable
@@ -29,7 +31,7 @@ constant-action-is-transport _ _ = sym (transport-refl _)
 
 
 pointed-str : Structure ℓ id
-pointed-str .is-hom (_ , x) (_ , y) f = f .fst x ＝ y
+pointed-str .is-hom (_ , x) (_ , y) f = f # x ＝ y
 
 @0 pointed-str-is-univalent : is-univalent (pointed-str {ℓ})
 pointed-str-is-univalent f = ua-pathP≃path _

@@ -8,6 +8,7 @@ open import Meta.Reflection
 open import Meta.Search.Base public
 open import Meta.Search.Decidable
 open import Meta.Search.HLevel
+open import Meta.Variadic
 
 open import Correspondences.Exhaustible
 open Correspondences.Exhaustible public
@@ -44,16 +45,16 @@ instance
   decomp-exh-lift : goal-decomposition (quote Exhaustible) (Lift ℓ′ A)
   decomp-exh-lift = decomp (quote lift-exhaustible) [ `search (quote Exhaustible) ]
 
-  decomp-dec-Π : goal-decomposition (quote Dec) (Π[ a ꞉ A ] B a)
+  decomp-dec-Π : goal-decomposition (quote Dec) Π[ B ]
   decomp-dec-Π = decomp (quote Π-decision) [ `search-under 1 (quote Dec) , `search (quote Exhaustible) ]
 
-  decomp-dec-∀ : goal-decomposition (quote Dec) (∀[ a ꞉ A ] B a)
+  decomp-dec-∀ : goal-decomposition (quote Dec) ∀[ B ]
   decomp-dec-∀ = decomp (quote ∀-decision) [ `search-under 1 (quote Dec) , `search (quote Exhaustible) ]
 
 -- TODO more decompositions
 
 -- Usage
 private
-  module _ ⦃ A-exh : Exhaustible {ℓ = ℓ} A ⦄ where
+  module _ ⦃ A-exh : Exhaustible {ℓ} A ⦄ where
     _ : Exhaustible (Lift ℓ A)
     _ = exhaust!
