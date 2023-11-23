@@ -4,6 +4,8 @@ module Correspondences.Discrete where
 open import Foundations.Base
 open import Foundations.HLevel.Base
 
+open import Meta.Variadic
+
 open import Correspondences.Base public
 open import Correspondences.Decidable
 open import Correspondences.Separated
@@ -57,9 +59,9 @@ discrete : ⦃ d : is-discrete A ⦄ → is-discrete A
 discrete ⦃ d ⦄ = d
 
 Σ-is-discrete
-  : {B : A → Type ℓ′}
-  → is-discrete A → (Π[ a ꞉ A ] is-discrete (B a))
-  → is-discrete (Σ[ a ꞉ A ] B a)
+  : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′}
+  → is-discrete A → Π[ is-discrete ∘ B ]
+  → is-discrete Σ[ B ]
 Σ-is-discrete {B} A-d B-d .is-discrete-β (a₁ , b₁) (a₂ , b₂) with A-d .is-discrete-β a₁ a₂
 ... | no  a₁≠a₂ = no $ a₁≠a₂ ∘ ap fst
 ... | yes a₁=a₂ with B-d _ .is-discrete-β (subst _ a₁=a₂ b₁) b₂

@@ -9,7 +9,8 @@ open import Meta.Search.Base public
 
 open import Correspondences.Decidable
 open Correspondences.Decidable public
-  using ( decide ; ×-decision ; fun-decision )
+  using ( Decidableⁿ; Decidable ; Reflectsⁿ ; Reflects
+        ; decide ; ×-decision ; fun-decision )
 
 open import Data.Dec.Base
 open import Data.Empty.Base
