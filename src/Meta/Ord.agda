@@ -16,9 +16,9 @@ open import Truncation.Propositional.Base
 
 
 data Tri {ℓo} {ℓ} {T : Type ℓ} (_<_ : T → T → Type ℓo) (x y : T) : Type (ℓ ⊔ ℓo) where
-  lt :   x < y → ¬ x ＝ y → ¬ y < x → Tri _<_ x y
-  eq : ¬ x < y →   x ＝ y → ¬ y < x → Tri _<_ x y
-  gt : ¬ x < y → ¬ x ＝ y →   y < x → Tri _<_ x y
+  lt : (x<y :   x < y) (x≠y : ¬ x ＝ y) (y≮x : ¬ y < x) → Tri _<_ x y
+  eq : (x≮y : ¬ x < y) (x=y :   x ＝ y) (y≮x : ¬ y < x) → Tri _<_ x y
+  gt : (x≮y : ¬ x < y) (x≠y : ¬ x ＝ y) (y<x :   y < x) → Tri _<_ x y
 
 record Ord {ℓ} (T : Type ℓ) : Typeω where
   no-eta-equality

@@ -7,9 +7,10 @@ open import Data.Nat.Base public
   using (ℕ; zero; suc; _+_)
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : Type ℓ
   B : Type ℓ′
+  C : Type ℓ″
   @0 m n : ℕ
 
 infixr 5 _∷_
@@ -33,7 +34,7 @@ rec
 rec {B} b[] b∷ = elim (λ {n} _ → B n) b[] (λ x _ → b∷ x)
 
 map : (A → B) → Vec A n → Vec B n
-map f [] = []
+map f []       = []
 map f (x ∷ xs) = f x ∷ map f xs
 
 replicate : (n : ℕ) → A → Vec A n
@@ -49,3 +50,7 @@ head (x ∷ _) = x
 
 tail : Vec A (suc n) → Vec A n
 tail (_ ∷ xs) = xs
+
+zip-with : (A → B → C) → Vec A n → Vec B n → Vec C n
+zip-with f []       []       = []
+zip-with f (x ∷ xs) (y ∷ ys) = f x y ∷ zip-with f xs ys

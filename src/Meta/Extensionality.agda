@@ -294,24 +294,3 @@ Pathᵉ-is-of-hlevel
 Pathᵉ-is-of-hlevel n sa hl =
   is-of-hlevel-≃ _ (identity-system-gives-path (sa .idsᵉ))
     ((path-is-of-hlevel′ _ hl _ _))
-
--- TODO use embeddings
-{-
-Convenient wrapper to define an Extensional instance if we're given
-an injection 'f : A → B' into a set. It would be possible to take an
-embedding into an arbitrary type, but that hasn't come up yet. The
-relation this equips A with is "equal under f".
--}
-injection→extensional!
-  : ∀ {ℓ ℓ′ ℓr} {A : Type ℓ} {B : Type ℓ′}
-  → {@(tactic hlevel-tactic-worker) sb : is-set B}
-  → {f : A → B}
-  → (∀ {x y} → f x ＝ f y → x ＝ y)
-  → Extensional B ℓr
-  → Extensional A ℓr
-injection→extensional! {sb = b-set} {f} inj ext .Pathᵉ x y = Pathᵉ ext (f x) (f y)
-injection→extensional! {sb = b-set} {f} inj ext .reflᵉ x = reflᵉ ext (f x)
-injection→extensional! {sb = b-set} {f} inj ext .idsᵉ =
-  set-identity-system
-    (λ x y → Pathᵉ-is-of-hlevel 1 ext b-set)
-    (λ p → inj (ext .idsᵉ .to-path p))

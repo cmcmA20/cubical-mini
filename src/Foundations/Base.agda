@@ -1,4 +1,3 @@
-
 {-# OPTIONS --safe #-}
 module Foundations.Base where
 
@@ -502,9 +501,6 @@ opaque
     k (i = i1) → p k
     k (k = i0) → a
 
-inspect : (x : A) → Singleton x
-inspect x = x , refl
-
 
 -- Path induction (J) and its computation rule
 
@@ -694,7 +690,8 @@ subst-path-both : {x x′ : A}
 subst-path-both p adj = transport-path p adj adj
 
 
--- TODO move somewhere?
+-- TODO move this section somewhere?
+
 it : ⦃ A ⦄ → A
 it ⦃ (a) ⦄ = a
 
@@ -704,3 +701,14 @@ S weakly-stable A = S A → A
 -- Explicit type hint
 the : (A : Type ℓ) → A → A
 the _ a = a
+
+inspect : (x : A) → Singleton x
+inspect x = x , refl
+
+record Recall {A : Type ℓ} {B : A → Type ℓ′}
+  (f : Π[ x ꞉ A ] B x) (x : A) (y : B x) : Type (ℓ ⊔ ℓ′) where
+  constructor ⟪_⟫
+  field eq : f x ＝ y
+
+recall : (f : Π[ x ꞉ A ] B x) (x : A) → Recall f x (f x)
+recall f x = ⟪ refl ⟫

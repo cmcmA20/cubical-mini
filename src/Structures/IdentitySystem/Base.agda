@@ -3,6 +3,7 @@ module Structures.IdentitySystem.Base where
 
 open import Foundations.Base
   renaming (J to Jₜ ; J-refl to Jₜ-refl)
+open import Foundations.Cubes
 open import Foundations.Sigma
 open import Foundations.Univalence
 
@@ -77,6 +78,12 @@ to-path-refl
   → ids .to-path (r x) ＝ refl
 to-path-refl {r} {x} ids = ap (ap fst) $ to-path-refl-coh ids x
 
+to-path-over-refl
+  : {A : Type ℓ} {R : A → A → Type ℓ′} {r : ∀ a → R a a} {x : A}
+  → (ids : is-identity-system R r)
+  → SquareP (λ i j → R x (to-path-refl ids i j))
+      (ids .to-path-over (r x)) refl refl refl
+to-path-over-refl {x} ids = ap (ap snd) $ to-path-refl-coh ids x
 
 equiv-path→identity-system
   : {r : ∀ a → R a a}

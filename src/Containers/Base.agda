@@ -49,8 +49,8 @@ record _⇒_ (C : Container s p) (C′ : Container s′ p′)
     shape    : Shape C → Shape C′
     position : ∀ {sh} → Position C′ (shape sh) → Position C sh
 
-  ⟪_⟫ : ⟦ C ⟧ X → ⟦ C′ ⟧ X
-  ⟪ x , g ⟫ = shape x , g ∘ position
+  ⟪_⟫→ : ⟦ C ⟧ X → ⟦ C′ ⟧ X
+  ⟪ x , g ⟫→ = shape x , g ∘ position
 
 open _⇒_ public
 
@@ -67,6 +67,6 @@ record _⊸_ (C : Container s p) (C′ : Container s′ p′)
   morphism .position = position⊸ .fst
 
   ⟪_⟫⊸ : ⟦ C ⟧ X → ⟦ C′ ⟧ X
-  ⟪_⟫⊸ = ⟪ morphism ⟫
+  ⟪_⟫⊸ = ⟪ morphism ⟫→
 
 open _⊸_ public using (shape⊸; position⊸; ⟪_⟫⊸)

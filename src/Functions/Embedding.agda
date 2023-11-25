@@ -6,6 +6,7 @@ open import Foundations.Pi
 open import Foundations.Sigma
 open import Foundations.Univalence
 
+open import Meta.Extensionality
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
@@ -86,7 +87,7 @@ is-embedding→monic {f} emb g h p =
 
 set-monic→is-embedding
   : {f : A → B} → is-set B
-  → (∀ {C : Set ℓ″} (g h : ⌞ C ⌟ → A) → f ∘ g ＝ f ∘ h → g ＝ h)
+  → (∀ {C : Set ℓ″} (g h : C →̇ A) → f ∘ g ＝ f ∘ h → g ＝ h)
   → is-embedding f
 set-monic→is-embedding {f} B-set monic =
   set-injective→is-embedding B-set λ {x} {y} p →
@@ -108,6 +109,9 @@ Cancellable f = ∀ {x y} → (f x ＝ f y) ≃ (x ＝ y)
 
 is-equiv-on-paths : (A → B) → Type _
 is-equiv-on-paths f = ∀ {x y} → is-equiv {B = f x ＝ f y} (ap f)
+
+is-equiv-on-paths→cancellable : is-equiv-on-paths f → Cancellable f
+is-equiv-on-paths→cancellable f-eop = _ , is-equiv-inv f-eop
 
 @0 is-equiv-on-paths→is-embedding : is-equiv-on-paths f → is-embedding f
 is-equiv-on-paths→is-embedding ep b = is-prop-η λ fib₁ fib₂ →
@@ -137,7 +141,13 @@ is-equiv→is-embedding : is-equiv f → is-embedding f
 is-equiv→is-embedding r y = is-contr→is-prop $ is-contr-η $ r .equiv-proof y
 
 equiv→embedding : A ≃ B → A ↪ B
-equiv→embedding (f , p) = f , is-equiv→is-embedding p
+equiv→embedding = second is-equiv→is-embedding
+
+is-iso→is-embedding : is-iso f → is-embedding f
+is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
+
+iso→embedding : A ≅ B → A ↪ B
+iso→embedding = second is-iso→is-embedding
 
 opaque
   unfolding is-of-hlevel
@@ -156,3 +166,20 @@ opaque
         k (i = i0) → ids .to-path-over p (~ k ∨ i)
         k (i = i1) → p
         k (k = i0) → ids .to-path-over p (~ k)
+
+embedding→extensional
+  : A ↪ B
+  → Extensional B ℓ″
+  → Extensional A ℓ″
+embedding→extensional f ext .Pathᵉ x y = Pathᵉ ext (f .fst x) (f .fst y)
+embedding→extensional f ext .reflᵉ x = reflᵉ ext (f .fst x)
+embedding→extensional f ext .idsᵉ = pullback-identity-system (ext .idsᵉ) f
+
+set-injective→extensional!
+  : {@(tactic hlevel-tactic-worker) B-set : is-set B}
+  → {f : A → B}
+  → Injective f
+  → Extensional B ℓ″
+  → Extensional A ℓ″
+set-injective→extensional! {B-set} {f} inj ext =
+  embedding→extensional (f , set-injective→is-embedding B-set inj) ext

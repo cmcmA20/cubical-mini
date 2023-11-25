@@ -9,7 +9,7 @@ open import Meta.Bind
 open import Meta.Search.Finite.Bishop
 
 open import Data.List.Base
-open import Data.Maybe.Path
+open import Data.Maybe.Properties
 open import Data.FinSub.Closure
 open import Data.Sum.Properties
 open import Data.Unit.Instances.Finite

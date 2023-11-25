@@ -27,3 +27,7 @@ map _ nothing  = nothing
 extend : Maybe A → (A → Maybe B) → Maybe B
 extend (just x) k = k x
 extend nothing  k = nothing
+
+from-just : A → Maybe A → A
+from-just def (just x) = x
+from-just def nothing  = def
