@@ -8,6 +8,7 @@ open import Meta.Underlying
 
 open import Correspondences.Decidable
 
+open import Data.Bool.Base as Bool
 open import Data.Bool.Path hiding (_==_)
 import Data.Dec.Base as Dec
 open Dec
@@ -21,11 +22,10 @@ open import Data.Nat.Path as ℕ-path
 ==-refl-true {suc m} = ==-refl-true {m}
 
 ==-reflects : Reflects (_＝_ {A = ℕ}) _==_
-==-reflects m n with inspect (m == n)
-... | false , p = Reflects′.of $ subst (λ φ → if φ then m ＝ n else m ≠ n) (sym p)
-  λ m=n → true≠false $ sym (==-refl-true {m}) ∙ subst (λ φ → (m == φ) ＝ false) (sym m=n) p
-... | true  , p = Reflects′.of $ subst (λ φ → if φ then m ＝ n else m ≠ n) (sym p) $
-  ℕ-path.decode m n $ subst ⟦_⟧ᵇ (sym p) tt
+==-reflects m n with m == n | recall (m ==_) n
+... | false | ⟪ p ⟫ = ofⁿ λ m=n →
+  true≠false (sym (==-refl-true {n}) ∙ subst (λ φ → (φ == n) ＝ false) m=n p)
+... | true  | ⟪ p ⟫ = ofʸ $ ℕ-path.decode m n $ subst (Bool.elim _ _) (sym p) tt
 
 instance
   ℕ-is-discrete : is-discrete ℕ

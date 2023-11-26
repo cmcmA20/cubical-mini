@@ -28,9 +28,13 @@ module _ where
     B : Type ℓᵇ
     C : Type ℓᶜ
 
-  flip : (A → B → C) → (B → A → C)
+  flip : {C : A → B → Type ℓᶜ} → (∀ a b → C a b) → (∀ b a → C a b)
   flip f b a = f a b
   {-# INLINE flip #-}
+
+  flip-simple : (A → B → C) → (B → A → C)
+  flip-simple f b a = f a b
+  {-# INLINE flip-simple #-}
 
   const : A → @0 B → A
   const x _ = x

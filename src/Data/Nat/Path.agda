@@ -60,6 +60,14 @@ zero≠suc = suc≠zero ∘ sym
 suc-inj : suc m ＝ suc n → m ＝ n
 suc-inj = ap pred
 
+id≠suc : m ≠ suc m
+id≠suc {0}     = zero≠suc
+id≠suc {suc _} = id≠suc ∘ suc-inj
+
 neq-suc-id : (n : ℕ) → n ≠ suc n
-neq-suc-id  zero   = zero≠suc
-neq-suc-id (suc n) = neq-suc-id n ∘ suc-inj
+neq-suc-id _ = id≠suc
+{-# WARNING_ON_USAGE neq-suc-id "DEPRECATED: Use `id≠suc`" #-}
+
+id≠plus-suc : n ≠ n + suc m
+id≠plus-suc {0}     = zero≠suc
+id≠plus-suc {suc n} = id≠plus-suc ∘ suc-inj
