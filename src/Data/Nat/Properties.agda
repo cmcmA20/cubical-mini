@@ -104,7 +104,6 @@ min-idem : (x : ℕ) → min x x ＝ x
 min-idem 0       = refl
 min-idem (suc x) = ap suc $ min-idem x
 
-
 -- maximum
 
 max-id-l : (x : ℕ) → max 0 x ＝ x
@@ -129,3 +128,17 @@ max-assoc (suc x) (suc y) (suc z) = ap suc $ max-assoc x y z
 max-idem : (x : ℕ) → max x x ＝ x
 max-idem 0       = refl
 max-idem (suc x) = ap suc $ max-idem x
+
+-- iteration
+
+iter-add : {ℓ : Level} {A : 𝒰 ℓ}
+          → (m n : ℕ) → (f : A → A) → (x : A)
+          → iter (m + n) f x ＝ iter m f (iter n f x)
+iter-add  zero   n f x = refl
+iter-add (suc m) n f x = ap f (iter-add m n f x)
+
+iter-mul : {ℓ : Level} {A : 𝒰 ℓ}
+          → (m n : ℕ) → (f : A → A) → (x : A)
+          → iter (m · n) f x ＝ iter m (iter n f) x
+iter-mul  zero   n f x = refl
+iter-mul (suc m) n f x = iter-add n (m · n) f x ∙ ap (iter n f) (iter-mul m n f x)
