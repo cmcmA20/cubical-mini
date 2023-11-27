@@ -4,10 +4,10 @@ module Structures.IdentitySystem.Base where
 open import Foundations.Base
   renaming (J to Jₜ ; J-refl to Jₜ-refl)
 open import Foundations.Cubes
+open import Foundations.HLevel
 open import Foundations.Sigma
 open import Foundations.Univalence
 
-open import Meta.Search.HLevel
 open import Meta.Underlying
 
 open import Functions.Equiv.Fibrewise

@@ -5,7 +5,6 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Bind
-open import Meta.Search.Discrete
 open import Meta.Search.HLevel
 
 open import Correspondences.Erased
@@ -13,9 +12,7 @@ open import Correspondences.Erased
 open import Data.Empty.Base
 open import Data.Nat.Order.Computational
 open import Data.Nat.Path
-open import Data.Nat.Instances.Discrete
-import      Data.Sum.Base as ⊎
-open ⊎
+open import Data.Sum.Base as ⊎
 
 open import Data.FinSub.Base public
 open import Data.Fin.Properties using ()

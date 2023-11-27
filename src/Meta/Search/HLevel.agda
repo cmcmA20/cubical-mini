@@ -28,6 +28,8 @@ open List public
 open List
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
+open import Data.Nat.Path
+open import Data.Unit.Base
 
 private variable
   ℓ ℓ′ ℓa ℓb ℓc ℓd : Level
@@ -146,6 +148,16 @@ instance
 
   decomp-hlevel-ntype : goal-decomposition (quote is-of-hlevel) (n-Type ℓ n)
   decomp-hlevel-ntype = decomp (quote n-Type-is-of-hlevel) [ `level-minus 1 ]
+
+
+  decomp-hlevel-ℕ : goal-decomposition (quote is-of-hlevel) ℕ
+  decomp-hlevel-ℕ = decomp (quote ℕ-is-of-hlevel) [ `level-minus 2 ]
+
+  decomp-hlevel-⊥ : goal-decomposition (quote is-of-hlevel) ⊥
+  decomp-hlevel-⊥ = decomp (quote ⊥-is-of-hlevel) [ `level-minus 1 ]
+
+  decomp-hlevel-⊤ : goal-decomposition (quote is-of-hlevel) ⊤
+  decomp-hlevel-⊤ = decomp (quote ⊤-is-of-hlevel) [ `level-same ]
 
   proj-hlevel-n-type : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote n-Type.carrier) true
   proj-hlevel-n-type .Struct-proj-desc.struct-name = quote n-Type

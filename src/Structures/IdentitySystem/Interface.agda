@@ -33,11 +33,14 @@ module
 
   module _ {a b} where open Equiv (identity-system-gives-path rr {a} {b}) public
 
-  to-refl : to-path rr (refl a) ＝ λ _ → a
-  to-refl = to-path-refl rr
+  decode = to
+  encode = from
 
-  from-refl : from (λ _ → a) ＝ refl a
-  from-refl = transport-refl (refl _)
+  decode-refl : decode (refl a) ＝ λ _ → a
+  decode-refl = to-path-refl rr
+
+  encode-refl : encode (λ _ → a) ＝ refl a
+  encode-refl = transport-refl (refl _)
 
   hlevel′ : ∀ n → (∀ x y → is-of-hlevel n (R x y)) → is-of-hlevel (suc n) A
   hlevel′ n = identity-system→is-of-hlevel n rr
@@ -57,6 +60,8 @@ module IdSS
 
   K-refl : (P : R a a → Type ℓ″) (x : P (r a)) → K P x (r a) ＝ x
   K-refl = IS.K-refl ids set
+
+  open IdS ids public
 
   instance
     HLevel-R : ∀ {a b} {n} → H-Level (suc n) (R a b)

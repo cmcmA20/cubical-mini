@@ -24,7 +24,6 @@ open import Data.FinSub.Base
 open import Data.FinSub.Properties
 open import Data.FinSub.Closure
 open import Data.FinSub.Instances.Discrete
-open import Data.Nat.Instances.Discrete
 
 open import Functions.Embedding
 

@@ -3,9 +3,10 @@ module Functions.Equiv.Fibrewise where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.HLevel
 open import Foundations.Isomorphism
 
-open import Meta.Search.HLevel
+-- Don't you ever try importing meta stuff here
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -60,4 +61,7 @@ opaque
 fibrewise-is-equiv≃total-is-equiv : ∀[ x ꞉ A ] is-equiv (f x)
                                   ≃ is-equiv (total f)
 fibrewise-is-equiv≃total-is-equiv =
-  prop-extₑ! fibrewise-is-equiv→total-is-equiv total-is-equiv→fibrewise-is-equiv
+  prop-extₑ (Π-is-of-hlevel-implicit 1 (λ _ → hlevel 1))
+            (hlevel 1)
+            fibrewise-is-equiv→total-is-equiv
+            total-is-equiv→fibrewise-is-equiv

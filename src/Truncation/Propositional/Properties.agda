@@ -164,15 +164,15 @@ module Replacement
     coh  : ∀ r → quot (rfl (embed r)) ＝ refl
 
   embed ⦋ x ⦌ = f x
-  embed (quot p i) = ls.to p i
-  embed (coh r i j) = ls.to-refl {a = embed r} i j
+  embed (quot p i) = ls.decode p i
+  embed (coh r i j) = ls.decode-refl {a = embed r} i j
 
   embed-is-embedding : is-embedding embed
   embed-is-embedding = cancellable→is-embedding λ {x y} →
     iso→equiv $ from , iso (ap embed) ri ls.ε where
 
     from : ∀ {x y} → embed x ＝ embed y → x ＝ y
-    from p = quot (ls.from p)
+    from p = quot (ls.encode p)
 
     ri : ∀ {x y} → (ap {x = x} {y = y} embed) is-right-inverse-of from
     ri = J (λ _ p → from (ap embed p) ＝ p) (ap quot (transport-refl _) ∙ coh _)
@@ -208,6 +208,6 @@ module Replacement
     (λ { (w , p) → J (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) p }) p where
       go : (f⁻¹x : A) → is-contr _
       go f⁻¹x = is-contr-η $ (⦋ f⁻¹x ⦌ , refl) , λ where
-        (u , α) → Σ-pathP (quot (ls.from (sym (ap fst α)))) $
+        (u , α) → Σ-pathP (quot (ls.encode (sym (ap fst α)))) $
                           Σ-prop-square hlevel! $ commutes→square $
                             ap² _∙_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ sym (∙-id-l _)
