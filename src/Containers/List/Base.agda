@@ -4,7 +4,7 @@ module Containers.List.Base where
 open import Foundations.Base
 
 open import Data.Nat.Base
-open import Data.FinSum.Base
+open import Data.Fin.Base
 
 open import Containers.Base public
 

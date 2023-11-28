@@ -43,4 +43,4 @@ dec-is-of-hlevel (suc (suc n)) A-hl =
 
 instance
   decomp-hlevel-dec : goal-decomposition (quote is-of-hlevel) (Dec A)
-  decomp-hlevel-dec = decomp (quote dec-is-of-hlevel) (`level-same ∷ `search (quote is-of-hlevel) ∷ [])
+  decomp-hlevel-dec = decomp (quote dec-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) ]

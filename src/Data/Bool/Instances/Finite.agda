@@ -7,7 +7,7 @@ open import Foundations.Equiv
 open import Meta.Search.Finite.Bishop
 
 open import Data.Bool.Base
-open import Data.FinSub.Base
+open import Data.Fin.Computational.Base
 open import Data.List.Base
 
 open import Truncation.Propositional.Base

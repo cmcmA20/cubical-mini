@@ -10,11 +10,11 @@ open import Meta.Underlying public
 
 open import Data.Bool.Base
 open import Data.Empty.Base
+open import Data.HVec.Base public
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.List.Operations
 open import Data.Nat.Base
-open import Data.Product.Base public
 
 -- Correspondence valued in arbitrary structure
 SCorr

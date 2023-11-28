@@ -33,7 +33,7 @@ instance
   H-Level-∥-∥₁ = hlevel-prop-instance ∥-∥₁-is-prop
 
   decomp-hlevel-∥-∥₁ : goal-decomposition (quote is-of-hlevel) ∥ A ∥₁
-  decomp-hlevel-∥-∥₁ = decomp (quote ∥-∥₁-is-of-hlevel ) (`level-minus 1 ∷ [])
+  decomp-hlevel-∥-∥₁ = decomp (quote ∥-∥₁-is-of-hlevel ) [ `level-minus 1 ]
 
 map : (A → B) → (∥ A ∥₁ → ∥ B ∥₁)
 map f = rec (hlevel 1) (∣_∣₁ ∘ f)

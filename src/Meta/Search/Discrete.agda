@@ -4,7 +4,6 @@ module Meta.Search.Discrete where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Literals.FromProduct
 open import Meta.Reflection
 open import Meta.Search.Base public
 open import Meta.Search.Decidable
@@ -18,8 +17,7 @@ open Correspondences.Discrete public
         ; is-discrete-injection ; is-discrete-embedding )
 
 open import Data.Dec.Base
-open import Data.FinSub.Instances.FromNat
-open import Data.List.Instances.FromProduct
+open import Data.Fin.Computational.Instances.FromNat
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level

@@ -14,9 +14,7 @@ open Correspondences.Decidable public
 
 open import Data.Dec.Base
 open import Data.Empty.Base
-open import Data.FinSub.Instances.FromNat
-open import Data.List.Base
-open import Data.List.Instances.FromProduct
+open import Data.Fin.Computational.Instances.FromNat
 
 private variable
   ℓ ℓ′ ℓa ℓb ℓc ℓd : Level

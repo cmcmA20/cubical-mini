@@ -12,12 +12,12 @@ open import Correspondences.Omniscient
 
 open import Data.Empty.Base
 open import Data.Dec.Base as Dec
-open import Data.FinSub.Base
-open import Data.FinSub.Instances.Discrete
+open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Instances.Discrete
 open import Data.Nat
-open import Data.Vec.Base
-open import Data.Vec.Operations.Computational
-open import Data.Vec.Correspondences.Unary.Any.Computational
+open import Data.Vec.Inductive.Base
+open import Data.Vec.Inductive.Operations.Computational
+open import Data.Vec.Inductive.Correspondences.Unary.Any.Computational
 
 open import Truncation.Propositional as ∥-∥₁
 

@@ -3,7 +3,10 @@ module Data.Tree.Binary.Operations where
 
 open import Foundations.Base
 
+open import Meta.Literals.FromProduct
+
 open import Data.List.Base
+open import Data.List.Instances.FromProduct
 open import Data.Tree.Binary.Base
 
 private variable
@@ -12,7 +15,7 @@ private variable
 
 tree→list : Tree A → List A
 tree→list  empty     = []
-tree→list (leaf x)   = x ∷ []
+tree→list (leaf x)   = [ x ]
 tree→list (node l r) = tree→list l ++ tree→list r
 
 list→tree : List A → Tree A

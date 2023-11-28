@@ -2,26 +2,26 @@
 module Data.Vec.Instances.Finite where
 
 open import Foundations.Base
-open import Foundations.Equiv
 
-open import Meta.Bind
 open import Meta.Search.Finite.Bishop
 
-open import Data.Product.Properties
-open import Data.Vec.Base
+open import Data.Nat.Base
+open import Data.Unit.Instances.Finite
 
-open import Truncation.Propositional
+open import Data.Vec.Base public
 
 private variable
-  ℓ : Level
-  A : Type ℓ
+  ℓ ℓ′ : Level
   n : ℕ
+  A : Type ℓ
+  B : Type ℓ′
 
--- TODO
--- vec-is-fin-set : is-fin-set A → is-fin-set (Vec A n)
--- vec-is-fin-set {n = 0} _ = fin {n = 0} ∣ {!!} ∣₁
--- vec-is-fin-set {n = 1} fi = {!!}
--- vec-is-fin-set {n = suc (suc n)} fi = fin do
---   let w = ×-is-fin-set fi (vec-is-fin-set {n = suc n} fi)
---   e ← enumeration w
---   pure ({!!} ∙ₑ e)
+vec-is-fin-set : is-fin-set A → is-fin-set (Vec A n)
+vec-is-fin-set {A} {0} _ = lift-is-fin-set ⊤-is-fin-set
+vec-is-fin-set {A} {1} A-fin = A-fin
+vec-is-fin-set {A} {suc (suc _)} A-fin =
+  ×-is-fin-set A-fin (vec-is-fin-set A-fin)
+
+instance
+  decomp-fin-vec : goal-decomposition (quote is-fin-set) (Vec A n)
+  decomp-fin-vec = decomp (quote vec-is-fin-set) [ `search (quote is-fin-set) ]

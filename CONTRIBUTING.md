@@ -152,6 +152,8 @@ When preparing a PR here are some general guidelines:
 - Create multiple representations of the same type and document what proofs
   are easy in this representation, and why.
 
-- Put equivalent representation of the same type in different folders.
-  The computational one should be default and have no suffix.
-  For example see `Fin` and `FinSum`.
+- Put equivalent representation of the same type in specific subfolders of the
+  original type.
+  Direct one should be default and have no suffix.
+  Computational and inductive must have a corresponding suffix.
+  For example see `Data.Fin` and `Data.Fin.Inductive`.

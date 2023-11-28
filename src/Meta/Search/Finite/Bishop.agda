@@ -4,7 +4,6 @@ module Meta.Search.Finite.Bishop where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Literals.FromProduct
 open import Meta.Reflection
 open import Meta.Search.Base public
 open import Meta.Search.Discrete
@@ -21,13 +20,14 @@ open import Correspondences.Finite.Bishop
 open Correspondences.Finite.Bishop public
   using ( is-fin-set
         ; fin₁ ; cardinality ; enumeration₁
-        ; finite ; is-fin-set→omniscient₁ ; finite-pi-fin )
+        ; finite ; is-fin-set→omniscient₁ ; finite-pi-fin
+        ; lift-is-fin-set ; ×-is-fin-set ; Π-is-fin-set
+        ; fun-is-fin-set ; Σ-is-fin-set ; is-fin-set-≃ )
 open import Correspondences.Omniscient
 
 open import Data.Bool.Base
 open import Data.Empty.Base as ⊥
-open import Data.FinSub.Instances.FromNat
-open import Data.List.Instances.FromProduct
+open import Data.Fin.Computational.Instances.FromNat
 
 private variable
   ℓ ℓ′ ℓa ℓb ℓc ℓd : Level

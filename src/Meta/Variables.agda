@@ -6,11 +6,11 @@ open import Foundations.Base
 open import Meta.Reflection
 
 open import Data.Bool.Base
-open import Data.FinSub.Base
+open import Data.Fin.Computational.Base
 open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
-open import Data.Vec.Base
+open import Data.Vec.Inductive.Base
 
 --------------------------------------------------------------------------------
 -- Variable Binding for Terms

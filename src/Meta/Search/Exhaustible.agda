@@ -18,8 +18,7 @@ open Correspondences.Exhaustible public
 
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
-open import Data.FinSub.Instances.FromNat
-open import Data.List.Instances.FromProduct
+open import Data.Fin.Computational.Instances.FromNat
 
 private variable
   ℓ ℓ′ ℓa ℓb ℓc ℓd : Level

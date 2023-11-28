@@ -20,10 +20,10 @@ open import Correspondences.Omniscient
 
 open import Data.Dec.Path
 open import Data.Empty.Base
-open import Data.FinSub.Base
-open import Data.FinSub.Properties
-open import Data.FinSub.Closure
-open import Data.FinSub.Instances.Discrete
+open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Properties
+open import Data.Fin.Computational.Closure
+open import Data.Fin.Computational.Instances.Discrete
 
 open import Functions.Embedding
 
@@ -151,3 +151,8 @@ lift-is-fin-set : is-fin-set A → is-fin-set (Lift ℓ′ A)
 lift-is-fin-set afin = fin₁ do
   aeq ← enumeration₁ afin
   pure $ lift-equiv ∙ₑ aeq
+
+is-fin-set-≃ : (B ≃ A) → is-fin-set A → is-fin-set B
+is-fin-set-≃ f afin = fin₁ do
+  aeq ← enumeration₁ afin
+  pure (f ∙ₑ aeq)

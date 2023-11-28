@@ -6,12 +6,14 @@ open import Foundations.Equiv.Base
 open import Foundations.Univalence.SIP public
 
 open import Meta.Literals.FromNat
+open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
 open import Meta.Reflection
 
 open import Structures.Base public
 
 open import Data.List.Base
+open import Data.List.Instances.FromProduct
 open import Data.Nat.Base
 
 
@@ -87,7 +89,7 @@ desc→is-univalent desc =
 
 
 make-auto-str-term : ℕ → Term → TC ⊤
-make-auto-str-term zero t = typeError (strErr "autoDesc ran out of fuel" ∷ [])
+make-auto-str-term zero t = typeError "autoDesc ran out of fuel"
 make-auto-str-term (suc n) t =
   try-point
     <|> try-bin (quote _s→_)

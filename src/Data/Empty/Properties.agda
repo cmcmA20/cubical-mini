@@ -31,7 +31,7 @@ absurd-is-of-hlevel n = hlevel n
 
 instance
   decomp-hlevel-absurd : goal-decomposition (quote is-of-hlevel) (⊥ → A)
-  decomp-hlevel-absurd = decomp (quote absurd-is-of-hlevel) (`level-same ∷ [])
+  decomp-hlevel-absurd = decomp (quote absurd-is-of-hlevel) [ `level-same ]
 
 universal : (⊥ → A) ≃ ⊤
 universal = _ , is-contr→is-equiv absurd-is-contr ⊤-is-contr

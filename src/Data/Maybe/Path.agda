@@ -52,7 +52,7 @@ instance
     : ∀ {ℓ} {A : Type ℓ}
     → goal-decomposition (quote is-of-hlevel) (Maybe A)
   decomp-hlevel-maybe = decomp (quote maybe-is-of-hlevel)
-    (`level-minus 2 ∷ `search (quote is-of-hlevel) ∷ [])
+    [ `level-minus 2 , `search (quote is-of-hlevel) ]
 
 
 is-just : Maybe A → Type

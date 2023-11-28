@@ -78,4 +78,4 @@ instance
     : ∀ {ℓ} {A : Type ℓ}
     → goal-decomposition (quote is-of-hlevel) (List A)
   decomp-hlevel-list = decomp (quote list-is-of-hlevel)
-    (`level-minus 2 ∷ `search (quote is-of-hlevel) ∷ [])
+    [ `level-minus 2 , `search (quote is-of-hlevel) ]

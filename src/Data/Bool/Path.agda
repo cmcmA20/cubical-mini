@@ -58,7 +58,7 @@ bool-is-of-hlevel _ = hlevel _
 
 instance
   decomp-hlevel-bool : goal-decomposition (quote is-of-hlevel) Bool
-  decomp-hlevel-bool = decomp (quote bool-is-of-hlevel) (`level-minus 2 ∷ [])
+  decomp-hlevel-bool = decomp (quote bool-is-of-hlevel) [ `level-minus 2 ]
 
 
 ⟦-⟧ᵇ≃true : {b : Bool} → ⟦ b ⟧ᵇ ≃ (b ＝ true)

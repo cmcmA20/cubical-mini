@@ -14,7 +14,6 @@ open import Data.Bool.Base
 open import Data.Bool.Path
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
-open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Nat.Base
 

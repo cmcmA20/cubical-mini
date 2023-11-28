@@ -22,7 +22,7 @@ private variable
 
 instance
   decomp-hlevel-∥-∥₂ : goal-decomposition (quote is-of-hlevel) ∥ A ∥₂
-  decomp-hlevel-∥-∥₂ = decomp (quote ∥-∥₂-is-of-hlevel ) (`level-minus 2 ∷ [])
+  decomp-hlevel-∥-∥₂ = decomp (quote ∥-∥₂-is-of-hlevel ) [ `level-minus 2 ]
 
 @0 ∥-∥₂-path-equiv
   : {x y : A}

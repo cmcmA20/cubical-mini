@@ -15,7 +15,7 @@ open import Structures.IdentitySystem.Interface
 
 open import Correspondences.Finite.Bishop
 
-open import Data.FinSub.Base
+open import Data.Fin.Computational.Base
 open import Data.Nat.Base
 open import Data.Nat.Path
 

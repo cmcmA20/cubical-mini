@@ -6,7 +6,6 @@ open import Foundations.Equiv
 
 open import Data.Bool.Base
 open import Data.Empty.Base
-open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Nat.Base
 

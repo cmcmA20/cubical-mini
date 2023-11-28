@@ -108,4 +108,4 @@ instance
     : ∀ {ℓ} {A : Type ℓ}
     → goal-decomposition (quote is-of-hlevel) (Tree A)
   decomp-hlevel-binary-tree = decomp (quote tree-is-of-hlevel)
-    (`level-minus 2 ∷ `search (quote is-of-hlevel) ∷ [])
+    [ `level-minus 2 , `search (quote is-of-hlevel) ]

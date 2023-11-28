@@ -28,7 +28,7 @@ instance
   H-Level-/₂ = hlevel-basic-instance 2 /₂-is-set
 
   decomp-hlevel-/₂ : goal-decomposition (quote is-of-hlevel) (A / R)
-  decomp-hlevel-/₂ = decomp (quote /₂-is-of-hlevel ) (`level-minus 2 ∷ [])
+  decomp-hlevel-/₂ = decomp (quote /₂-is-of-hlevel ) [ `level-minus 2 ]
 
 elim-prop
   : (P-prop : Π[ x ꞉ A / R ] is-prop (P x))

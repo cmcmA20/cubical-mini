@@ -17,7 +17,6 @@ open import Structures.n-Type
 
 open import Data.Bool.Base
 open import Data.List.Base
-open import Data.List.Instances.FromProduct
 
 
 record Extensional {ℓ} (A : Type ℓ) (ℓ-rel : Level) : Typeω where

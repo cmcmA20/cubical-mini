@@ -22,8 +22,8 @@ open import Data.Maybe.Base
 open import Data.Maybe.Instances.Idiom
 open import Data.Nat.Base
 open import Data.String.Base
-open import Data.Vec.Base
-open import Data.Vec.Operations.Inductive
+open import Data.Vec.Inductive.Base
+open import Data.Vec.Inductive.Operations
 
 open import Agda.Builtin.Reflection public
   renaming (Type to Type′)
@@ -252,16 +252,16 @@ get-boundary tm = unapply-path tm >>= (pure ∘ (snd <$>_))
 
 
 debug! : Term → TC A
-debug! tm = typeError ("[DEBUG]: " ∷ termErr tm ∷ [])
+debug! tm = typeError [ "[DEBUG]: " , termErr tm ]
 
 quote-repr-macro : Bool → A → Term →  TC ⊤
 quote-repr-macro norm? a hole = do
   tm ← quoteTC a
   repr ← (if norm? then normalise else pure) tm >>= quoteTC
-  typeError $ "The term\n  "
-    ∷ termErr tm
-    ∷ "\nHas quoted representation\n  "
-    ∷ termErr repr ∷ []
+  typeError [ "The term\n  "
+    , termErr tm
+    , "\nHas quoted representation\n  "
+    , termErr repr ]
 
 macro
   quote-repr! : {B : Type ℓ′} → A → Term → TC ⊤
@@ -277,7 +277,7 @@ instance
 
 unify-loudly : Term → Term → TC ⊤
 unify-loudly a b = do
-  debugPrint "tactic" 50 $ termErr a ∷ " =? " ∷ termErr b ∷ []
+  debugPrint "tactic" 50 [ termErr a , " =? " , termErr b ]
   unify a b
 
 print-depth : String → ℕ → ℕ → List ErrorPart → TC ⊤

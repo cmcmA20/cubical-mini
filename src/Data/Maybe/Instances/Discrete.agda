@@ -6,7 +6,6 @@ open import Foundations.Base
 open import Meta.Search.Discrete
 
 open import Data.Dec.Base as Dec
-open import Data.List.Base
 open import Data.Maybe.Path
 
 private variable
@@ -22,4 +21,4 @@ maybe-is-discrete di = is-discrete-η λ where
 
 instance
   decomp-dis-maybe : goal-decomposition (quote is-discrete) (Maybe A)
-  decomp-dis-maybe = decomp (quote maybe-is-discrete) (`search (quote is-discrete) ∷ [])
+  decomp-dis-maybe = decomp (quote maybe-is-discrete) [ `search (quote is-discrete) ]

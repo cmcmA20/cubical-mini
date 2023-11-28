@@ -20,13 +20,9 @@ open import Correspondences.Erased
 
 open import Data.Empty.Base
 open import Data.Bool.Base
-open import Data.FinSub.Base
-open import Data.FinSub.Instances.FromNat
-import Data.List.Base as List
-open List public
-  using ([] ; _∷_)
-open List
-open import Data.List.Instances.FromProduct
+open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Instances.FromNat
+open import Data.List.Base as List
 open import Data.Maybe.Base
 open import Data.Nat.Path
 open import Data.Unit.Base

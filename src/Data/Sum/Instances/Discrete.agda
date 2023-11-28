@@ -3,11 +3,9 @@ module Data.Sum.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Literals.FromProduct
 open import Meta.Search.Discrete
 
 open import Data.Dec.Base as Dec
-open import Data.List.Instances.FromProduct
 open import Data.Sum.Path public
 
 private variable

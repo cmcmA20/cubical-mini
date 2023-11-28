@@ -56,6 +56,8 @@ m > n = n < m
 <-asym {0}     {suc n} _ x = x
 <-asym {suc m} {suc n} p = <-asym {m} p
 
+<-peel : suc m < suc n → m < n
+<-peel = id
 
 ≤-refl : n ≤ n
 ≤-refl {0}     = tt

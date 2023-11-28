@@ -5,11 +5,13 @@ open import Foundations.Base
 open import Foundations.Isomorphism public
 
 open import Meta.Literals.FromNat
+open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
 open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base
+open import Data.List.Instances.FromProduct
 
 field-names→sigma : ∀ {ℓ} {A : Type ℓ} → List A → Term
 field-names→sigma [] = def (quote ⊤) []
@@ -24,7 +26,7 @@ field-names→paths : List (Arg Name) → Fields
 field-names→paths [] = []
 field-names→paths (arg _ nm ∷ []) = (nm , []) ∷ []
 field-names→paths (arg _ x ∷ xs) with field-names→paths xs
-... | fields = (x , quote fst ∷ []) ∷ map (λ (f , p) → f , quote snd ∷ p) fields
+... | fields = (x , [ quote fst ]) ∷ map (λ (f , p) → f , quote snd ∷ p) fields
 
 record→iso : Name → (List (Arg Term) → TC Term) → TC Term
 record→iso namen unfolded =
@@ -47,7 +49,7 @@ record→iso namen unfolded =
       implicitArgs : ℕ → List (Arg Term) → List ArgInfo → List (Arg Term)
       implicitArgs n acc [] = acc
       implicitArgs n acc (_ ∷ i) = implicitArgs (suc n) (var n [] h∷ acc) i
-  go _ _ = typeError (strErr "Not a record type name: " ∷ nameErr namen ∷ [])
+  go _ _ = typeError [ "Not a record type name: " , nameErr namen ]
 
 undo-clauses : Fields → List Clause
 undo-clauses = go where
@@ -95,7 +97,7 @@ pi-term→sigma (pi (arg _ x) (abs n (def n′ _))) = pure x
 pi-term→sigma (pi (arg _ x) (abs n y)) = do
   sig ← pi-term→sigma y
   pure $ def (quote Σ) (x v∷ lam visible (abs n sig) v∷ [])
-pi-term→sigma _ = typeError (strErr "Not a record type constructor! " ∷ [])
+pi-term→sigma _ = typeError "Not a record type constructor! "
 
 instantiate′ : Term → Term → Term
 instantiate′ (pi _ (abs _ xs)) (pi _ (abs _ b)) = instantiate′ xs b
@@ -105,7 +107,7 @@ instantiate′ _ tm = tm
 make-record-iso-sigma : Bool → TC Name → Name → TC Name
 make-record-iso-sigma declare? getName `R = do
   record-type `R-con fields ← getDefinition `R
-    where _ → typeError (nameErr `R ∷ strErr " is not a record type" ∷ [])
+    where _ → typeError [ nameErr `R , " is not a record type" ]
 
   let fields = field-names→paths fields
 

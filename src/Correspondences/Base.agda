@@ -7,7 +7,7 @@ open import Foundations.HLevel
 
 open import Meta.Variadic
 
-open import Data.Product.Base public
+open import Data.HVec.Base public
 
 private variable
   ℓ ℓᵃ : Level

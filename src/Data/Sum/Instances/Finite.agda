@@ -7,8 +7,7 @@ open import Foundations.Equiv
 open import Meta.Bind
 open import Meta.Search.Finite.Bishop
 
-open import Data.FinSub.Closure
-open import Data.List.Base
+open import Data.Fin.Computational.Closure
 open import Data.Sum.Properties
 
 open import Truncation.Propositional
@@ -27,4 +26,4 @@ private variable
 instance
   decomp-fin-⊎ : goal-decomposition (quote is-fin-set) (A ⊎ B)
   decomp-fin-⊎ = decomp (quote ⊎-is-fin-set)
-    (`search (quote is-fin-set) ∷ `search (quote is-fin-set) ∷ [])
+    [ `search (quote is-fin-set) , `search (quote is-fin-set) ]

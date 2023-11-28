@@ -3,12 +3,10 @@ module Data.Sum.Instances.Decidable where
 
 open import Foundations.Base
 
-open import Meta.Literals.FromProduct
 open import Meta.Search.Decidable
 
 open import Data.Bool.Base
 open import Data.Dec.Base as Dec
-open import Data.List.Instances.FromProduct
 open import Data.Sum.Base
 
 private variable

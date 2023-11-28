@@ -11,14 +11,13 @@ open import Meta.Solver
 open import Meta.Variables
 
 open import Data.Bool.Base
-open import Data.FinSub.Base
-open import Data.List.Base
+open import Data.Fin.Computational.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Nat.Properties
-open import Data.Vec.Base
-open import Data.Vec.Operations.Computational
+open import Data.Vec.Inductive.Base
+open import Data.Vec.Inductive.Operations.Computational
 
 private variable
   ℓᵃ : Level

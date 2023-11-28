@@ -3,45 +3,29 @@ module Data.Fin.Base where
 
 open import Foundations.Base
 
-open import Data.Nat.Base public
+open import Data.Nat.Base
   using (ℕ; zero; suc)
+open import Data.Empty.Base
+  using (⊥; absurd)
+open import Data.Maybe.Base
+  using (Maybe; nothing; just)
 
 private variable
   ℓ : Level
-  @0 m n : ℕ
+  m n : ℕ
 
-data Fin : @0 ℕ → Type where
-  fzero :         Fin (suc n)
-  fsuc  : Fin n → Fin (suc n)
+Fin : ℕ → Type
+Fin zero    = ⊥
+Fin (suc n) = Maybe (Fin n)
 
-weaken : Fin n → Fin (suc n)
-weaken fzero    = fzero
-weaken (fsuc k) = fsuc (weaken k)
+pattern fzero  = nothing
+pattern fsuc n = just n
 
 elim
-  : {P : ∀ {@0 n} → Fin n → Type ℓ}
-  → (∀ {@0 n} → P {suc n} fzero)
-  → (∀ {@0 n} (k : Fin n) → P k → P (fsuc k))
-  → ∀ {@0 n} (k : Fin n) → P k
-elim pfzero pfsuc fzero    = pfzero
-elim pfzero pfsuc (fsuc x) = pfsuc x (elim pfzero pfsuc x)
-
-rec : {A : Type ℓ}
-      (a₀ : A) (aₛ : ∀{@0 n} → Fin n → A → A)
-    → ∀ {@0 n} → Fin n → A
-rec a₀ = elim a₀
-
-squish : Fin n → Fin (suc n) → Fin n
-squish fzero fzero = fzero
-squish fzero (fsuc j) = j
-squish (fsuc i) fzero = fzero
-squish (fsuc i) (fsuc j) = fsuc (squish i j)
-
-skip : Fin (suc n) → Fin n → Fin (suc n)
-skip fzero j = fsuc j
-skip (fsuc i) fzero = fzero
-skip (fsuc i) (fsuc j) = fsuc (skip i j)
-
-fin→ℕ : Fin n → ℕ
-fin→ℕ fzero    = 0
-fin→ℕ (fsuc k) = suc (fin→ℕ k)
+  : (P : ∀ {n} → Fin n → Type ℓ)
+  → (∀ {n} → P {suc n} fzero)
+  → (∀ {n} {fn : Fin n} → P fn → P (fsuc fn))
+  → {n : ℕ} (fn : Fin n) → P fn
+elim P fz fs {(zero)} f0        = absurd f0
+elim P fz fs {suc k}  fzero     = fz
+elim P fz fs {suc k}  (fsuc fk) = fs (elim P fz fs fk)

@@ -8,7 +8,7 @@ open import Foundations.Sigma
 open import Data.List.Base
   renaming (List to Listⁱ)
 open import Data.Nat.Base
-open import Data.FinSum.Base
+open import Data.Fin.Base
 
 open import Containers.List.Base
 
