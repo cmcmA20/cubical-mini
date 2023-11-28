@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Fin.Computational.Instances.Finite</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Fin.Computational.Instances.Finite.html" class="Module">Data.Fin.Computational.Instances.Finite</a> <a id="71" class="Keyword">where</a>
+
+<a id="78" class="Keyword">open</a> <a id="83" class="Keyword">import</a> <a id="90" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="107" class="Keyword">open</a> <a id="112" class="Keyword">import</a> <a id="119" href="Foundations.Equiv.html" class="Module">Foundations.Equiv</a>
+
+<a id="138" class="Keyword">open</a> <a id="143" class="Keyword">import</a> <a id="150" href="Meta.Search.Finite.Bishop.html" class="Module">Meta.Search.Finite.Bishop</a>
+
+<a id="177" class="Keyword">open</a> <a id="182" class="Keyword">import</a> <a id="189" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a>
+<a id="203" class="Keyword">open</a> <a id="208" class="Keyword">import</a> <a id="215" href="Data.Fin.Computational.Path.html" class="Module">Data.Fin.Computational.Path</a>
+<a id="243" class="Keyword">open</a> <a id="248" class="Keyword">import</a> <a id="255" href="Data.List.Base.html" class="Module">Data.List.Base</a>
+
+<a id="271" class="Keyword">open</a> <a id="276" class="Keyword">import</a> <a id="283" href="Truncation.Propositional.Base.html" class="Module">Truncation.Propositional.Base</a>
+
+<a id="314" class="Keyword">private</a> <a id="322" class="Keyword">variable</a> <a id="331" href="Data.Fin.Computational.Instances.Finite.html#331" class="Generalizable">n</a> <a id="333" class="Symbol">:</a> <a id="335" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+
+<a id="338" class="Keyword">instance</a>
+  <a id="fin-is-fin-set"></a><a id="349" href="Data.Fin.Computational.Instances.Finite.html#349" class="Function">fin-is-fin-set</a> <a id="364" class="Symbol">:</a> <a id="366" href="Correspondences.Finite.Bishop.html#931" class="Record">is-fin-set</a> <a id="377" class="Symbol">(</a><a id="378" href="Data.Fin.Computational.Base.html#359" class="Record">Fin</a> <a id="382" href="Data.Fin.Computational.Instances.Finite.html#331" class="Generalizable">n</a><a id="383" class="Symbol">)</a>
+  <a id="387" href="Data.Fin.Computational.Instances.Finite.html#349" class="Function">fin-is-fin-set</a> <a id="402" class="Symbol">=</a> <a id="404" href="Correspondences.Finite.Bishop.html#1002" class="InductiveConstructor">fin₁</a> <a id="409" href="Truncation.Propositional.Base.html#247" class="InductiveConstructor Operator">∣</a> <a id="411" href="Foundations.Equiv.Base.html#1443" class="Function">idₑ</a> <a id="415" href="Truncation.Propositional.Base.html#247" class="InductiveConstructor Operator">∣₁</a>
+
+  <a id="decomp-fin-fin"></a><a id="421" href="Data.Fin.Computational.Instances.Finite.html#421" class="Function">decomp-fin-fin</a> <a id="436" class="Symbol">:</a> <a id="438" href="Meta.Search.Base.html#2884" class="Datatype">goal-decomposition</a> <a id="457" class="Symbol">(</a><a id="458" class="Keyword">quote</a> <a id="464" href="Correspondences.Finite.Bishop.html#931" class="Record">is-fin-set</a><a id="474" class="Symbol">)</a> <a id="476" class="Symbol">(</a><a id="477" href="Data.Fin.Computational.Base.html#359" class="Record">Fin</a> <a id="481" href="Data.Fin.Computational.Instances.Finite.html#331" class="Generalizable">n</a><a id="482" class="Symbol">)</a>
+  <a id="486" href="Data.Fin.Computational.Instances.Finite.html#421" class="Function">decomp-fin-fin</a> <a id="501" class="Symbol">=</a> <a id="503" href="Meta.Search.Base.html#3035" class="InductiveConstructor">decomp</a> <a id="510" class="Symbol">(</a><a id="511" class="Keyword">quote</a> <a id="517" href="Data.Fin.Computational.Instances.Finite.html#349" class="Function">fin-is-fin-set</a><a id="531" class="Symbol">)</a> <a id="533" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a>
+</pre></body></html>

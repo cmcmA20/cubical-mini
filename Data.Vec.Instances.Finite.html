@@ -3,27 +3,27 @@
 <a id="24" class="Keyword">module</a> <a id="31" href="Data.Vec.Instances.Finite.html" class="Module">Data.Vec.Instances.Finite</a> <a id="57" class="Keyword">where</a>
 
 <a id="64" class="Keyword">open</a> <a id="69" class="Keyword">import</a> <a id="76" href="Foundations.Base.html" class="Module">Foundations.Base</a>
-<a id="93" class="Keyword">open</a> <a id="98" class="Keyword">import</a> <a id="105" href="Foundations.Equiv.html" class="Module">Foundations.Equiv</a>
 
-<a id="124" class="Keyword">open</a> <a id="129" class="Keyword">import</a> <a id="136" href="Meta.Bind.html" class="Module">Meta.Bind</a>
-<a id="146" class="Keyword">open</a> <a id="151" class="Keyword">import</a> <a id="158" href="Meta.Search.Finite.Bishop.html" class="Module">Meta.Search.Finite.Bishop</a>
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Meta.Search.Finite.Bishop.html" class="Module">Meta.Search.Finite.Bishop</a>
 
-<a id="185" class="Keyword">open</a> <a id="190" class="Keyword">import</a> <a id="197" href="Data.Product.Properties.html" class="Module">Data.Product.Properties</a>
-<a id="221" class="Keyword">open</a> <a id="226" class="Keyword">import</a> <a id="233" href="Data.Vec.Base.html" class="Module">Data.Vec.Base</a>
+<a id="133" class="Keyword">open</a> <a id="138" class="Keyword">import</a> <a id="145" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a>
+<a id="159" class="Keyword">open</a> <a id="164" class="Keyword">import</a> <a id="171" href="Data.Unit.Instances.Finite.html" class="Module">Data.Unit.Instances.Finite</a>
 
-<a id="248" class="Keyword">open</a> <a id="253" class="Keyword">import</a> <a id="260" href="Truncation.Propositional.html" class="Module">Truncation.Propositional</a>
+<a id="199" class="Keyword">open</a> <a id="204" class="Keyword">import</a> <a id="211" href="Data.Vec.Base.html" class="Module">Data.Vec.Base</a> <a id="225" class="Keyword">public</a>
 
-<a id="286" class="Keyword">private</a> <a id="294" class="Keyword">variable</a>
-  <a id="305" href="Data.Vec.Instances.Finite.html#305" class="Generalizable">ℓ</a> <a id="307" class="Symbol">:</a> <a id="309" href="Agda.Primitive.html#742" class="Postulate">Level</a>
-  <a id="317" href="Data.Vec.Instances.Finite.html#317" class="Generalizable">A</a> <a id="319" class="Symbol">:</a> <a id="321" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="326" href="Data.Vec.Instances.Finite.html#305" class="Generalizable">ℓ</a>
-  <a id="330" href="Data.Vec.Instances.Finite.html#330" class="Generalizable">n</a> <a id="332" class="Symbol">:</a> <a id="334" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+<a id="233" class="Keyword">private</a> <a id="241" class="Keyword">variable</a>
+  <a id="252" href="Data.Vec.Instances.Finite.html#252" class="Generalizable">ℓ</a> <a id="254" href="Data.Vec.Instances.Finite.html#254" class="Generalizable">ℓ′</a> <a id="257" class="Symbol">:</a> <a id="259" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="267" href="Data.Vec.Instances.Finite.html#267" class="Generalizable">n</a> <a id="269" class="Symbol">:</a> <a id="271" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+  <a id="275" href="Data.Vec.Instances.Finite.html#275" class="Generalizable">A</a> <a id="277" class="Symbol">:</a> <a id="279" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="284" href="Data.Vec.Instances.Finite.html#252" class="Generalizable">ℓ</a>
+  <a id="288" href="Data.Vec.Instances.Finite.html#288" class="Generalizable">B</a> <a id="290" class="Symbol">:</a> <a id="292" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="297" href="Data.Vec.Instances.Finite.html#254" class="Generalizable">ℓ′</a>
 
-<a id="337" class="Comment">-- TODO</a>
-<a id="345" class="Comment">-- vec-is-fin-set : is-fin-set A → is-fin-set (Vec A n)</a>
-<a id="401" class="Comment">-- vec-is-fin-set {n = 0} _ = fin {n = 0} ∣ {!!} ∣₁</a>
-<a id="453" class="Comment">-- vec-is-fin-set {n = 1} fi = {!!}</a>
-<a id="489" class="Comment">-- vec-is-fin-set {n = suc (suc n)} fi = fin do</a>
-<a id="537" class="Comment">--   let w = ×-is-fin-set fi (vec-is-fin-set {n = suc n} fi)</a>
-<a id="598" class="Comment">--   e ← enumeration w</a>
-<a id="621" class="Comment">--   pure ({!!} ∙ₑ e)</a>
+<a id="vec-is-fin-set"></a><a id="301" href="Data.Vec.Instances.Finite.html#301" class="Function">vec-is-fin-set</a> <a id="316" class="Symbol">:</a> <a id="318" href="Correspondences.Finite.Bishop.html#931" class="Record">is-fin-set</a> <a id="329" href="Data.Vec.Instances.Finite.html#275" class="Generalizable">A</a> <a id="331" class="Symbol">→</a> <a id="333" href="Correspondences.Finite.Bishop.html#931" class="Record">is-fin-set</a> <a id="344" class="Symbol">(</a><a id="345" href="Data.Vec.Base.html#109" class="Function">Vec</a> <a id="349" href="Data.Vec.Instances.Finite.html#275" class="Generalizable">A</a> <a id="351" href="Data.Vec.Instances.Finite.html#267" class="Generalizable">n</a><a id="352" class="Symbol">)</a>
+<a id="354" href="Data.Vec.Instances.Finite.html#301" class="Function">vec-is-fin-set</a> <a id="369" class="Symbol">{</a><a id="370" href="Data.Vec.Instances.Finite.html#370" class="Bound">A</a><a id="371" class="Symbol">}</a> <a id="373" class="Symbol">{</a><a id="374" class="Number">0</a><a id="375" class="Symbol">}</a> <a id="377" class="Symbol">_</a> <a id="379" class="Symbol">=</a> <a id="381" href="Correspondences.Finite.Bishop.html#4591" class="Function">lift-is-fin-set</a> <a id="397" href="Data.Unit.Instances.Finite.html#322" class="Function">⊤-is-fin-set</a>
+<a id="410" href="Data.Vec.Instances.Finite.html#301" class="Function">vec-is-fin-set</a> <a id="425" class="Symbol">{</a><a id="426" href="Data.Vec.Instances.Finite.html#426" class="Bound">A</a><a id="427" class="Symbol">}</a> <a id="429" class="Symbol">{</a><a id="430" class="Number">1</a><a id="431" class="Symbol">}</a> <a id="433" href="Data.Vec.Instances.Finite.html#433" class="Bound">A-fin</a> <a id="439" class="Symbol">=</a> <a id="441" href="Data.Vec.Instances.Finite.html#433" class="Bound">A-fin</a>
+<a id="447" href="Data.Vec.Instances.Finite.html#301" class="Function">vec-is-fin-set</a> <a id="462" class="Symbol">{</a><a id="463" href="Data.Vec.Instances.Finite.html#463" class="Bound">A</a><a id="464" class="Symbol">}</a> <a id="466" class="Symbol">{</a><a id="467" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="471" class="Symbol">(</a><a id="472" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="476" class="Symbol">_)}</a> <a id="480" href="Data.Vec.Instances.Finite.html#480" class="Bound">A-fin</a> <a id="486" class="Symbol">=</a>
+  <a id="490" href="Correspondences.Finite.Bishop.html#3183" class="Function">×-is-fin-set</a> <a id="503" href="Data.Vec.Instances.Finite.html#480" class="Bound">A-fin</a> <a id="509" class="Symbol">(</a><a id="510" href="Data.Vec.Instances.Finite.html#301" class="Function">vec-is-fin-set</a> <a id="525" href="Data.Vec.Instances.Finite.html#480" class="Bound">A-fin</a><a id="530" class="Symbol">)</a>
+
+<a id="533" class="Keyword">instance</a>
+  <a id="decomp-fin-vec"></a><a id="544" href="Data.Vec.Instances.Finite.html#544" class="Function">decomp-fin-vec</a> <a id="559" class="Symbol">:</a> <a id="561" href="Meta.Search.Base.html#2884" class="Datatype">goal-decomposition</a> <a id="580" class="Symbol">(</a><a id="581" class="Keyword">quote</a> <a id="587" href="Correspondences.Finite.Bishop.html#931" class="Record">is-fin-set</a><a id="597" class="Symbol">)</a> <a id="599" class="Symbol">(</a><a id="600" href="Data.Vec.Base.html#109" class="Function">Vec</a> <a id="604" href="Data.Vec.Instances.Finite.html#275" class="Generalizable">A</a> <a id="606" href="Data.Vec.Instances.Finite.html#267" class="Generalizable">n</a><a id="607" class="Symbol">)</a>
+  <a id="611" href="Data.Vec.Instances.Finite.html#544" class="Function">decomp-fin-vec</a> <a id="626" class="Symbol">=</a> <a id="628" href="Meta.Search.Base.html#3035" class="InductiveConstructor">decomp</a> <a id="635" class="Symbol">(</a><a id="636" class="Keyword">quote</a> <a id="642" href="Data.Vec.Instances.Finite.html#301" class="Function">vec-is-fin-set</a><a id="656" class="Symbol">)</a> <a id="658" href="Meta.Literals.FromProduct.html#366" class="Function Operator">[</a> <a id="660" href="Meta.Search.Base.html#2772" class="InductiveConstructor">`search</a> <a id="668" class="Symbol">(</a><a id="669" class="Keyword">quote</a> <a id="675" href="Correspondences.Finite.Bishop.html#931" class="Record">is-fin-set</a><a id="685" class="Symbol">)</a> <a id="687" href="Meta.Literals.FromProduct.html#366" class="Function Operator">]</a>
 </pre></body></html>
