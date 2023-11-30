@@ -11,8 +11,7 @@ open import Structures.IdentitySystem.Interface
 open import Correspondences.Decidable
 
 open import Data.Bool.Base as Bool
-import Data.Dec.Base as Dec
-open Dec
+open import Data.Dec.Base as Dec
 open import Data.List.Base
 
 open import Data.Nat.Path as ℕ-path

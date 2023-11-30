@@ -8,8 +8,7 @@ open import Meta.Variadic
 
 open import Correspondences.Decidable
 
-import      Data.Dec as Dec
-open Dec
+open import Data.Dec as Dec
 open import Data.Fin.Computational.Base
 open import Data.Vec.Inductive.Operations.Computational
 open import Data.Sum.Base

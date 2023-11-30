@@ -5,10 +5,10 @@ open import Foundations.Base
 
 open import Correspondences.Erased
 
-import Data.Bool.Base as Bool
-open Bool using (Bool; false; true; not; if_then_else_; ⟦_⟧ᵇ)
-import      Data.Empty.Base as ⊥
-open ⊥ using (⊥; ¬_)
+open import Data.Bool.Base as Bool
+  using (Bool; false; true; not; if_then_else_; ⟦_⟧ᵇ)
+open import Data.Empty.Base as ⊥
+  using (⊥; ¬_)
 
 private variable
   ℓ ℓ′ ℓ″ : Level

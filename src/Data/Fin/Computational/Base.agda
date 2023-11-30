@@ -9,8 +9,9 @@ open import Meta.Record
 open import Correspondences.Erased
 
 import Data.Empty.Base as ⊥
+open import Data.Fin.Interface
 open import Data.Nat.Base
-  using (ℕ; zero; suc)
+  using (ℕ; zero; suc ; pred)
 open import Data.Nat.Order.Computational
 
 private variable
@@ -32,6 +33,12 @@ fzero = mk-fin 0
 
 fsuc : Fin n → Fin (suc n)
 fsuc (mk-fin k {(b)}) = mk-fin (suc k) {b}
+
+-- -- TODO damn eliminators got hands
+-- impl : FinI Fin
+-- impl .FinI.fzero = fzero
+-- impl .FinI.fsuc = fsuc
+-- impl .FinI.elim P fz fs = {!!}
 
 module _ where
   open import Data.Fin.Base

@@ -14,8 +14,8 @@ open import Meta.Regularity
 
 open import Correspondences.Erased
 
-import      Data.Empty.Base as ⊥
-open ⊥ using (⊥)
+open import Data.Empty.Base as ⊥
+  using (⊥)
 open import Data.Nat.Base
 open import Data.Nat.Order.Computational
 open import Data.Sum.Properties

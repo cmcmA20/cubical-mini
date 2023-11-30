@@ -7,8 +7,8 @@ open import Foundations.Equiv
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
-import Truncation.Propositional as ∥-∥₁
-open ∥-∥₁ using (∥_∥₁; ∣_∣₁)
+open import Truncation.Propositional as ∥-∥₁
+  using (∥_∥₁; ∣_∣₁)
 open import Truncation.Set.Base public
 open import Truncation.Set.Properties
 

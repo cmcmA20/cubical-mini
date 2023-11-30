@@ -4,8 +4,8 @@ module Data.Fin.Inductive.Closure where
 open import Foundations.Base
 open import Foundations.Equiv
 
-import      Data.Empty.Base as ⊥
-open ⊥ using (⊥)
+open import Data.Empty.Base as ⊥
+  using (⊥)
 open import Data.Nat.Base
 open import Data.Sum.Properties
 

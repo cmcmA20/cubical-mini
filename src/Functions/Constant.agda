@@ -10,6 +10,9 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
+Constant : (A → B) → Type _
+Constant {A} {B} f = Σ[ b ꞉ B ] Π[ a ꞉ A ] (f a ＝ b)
+
 2-Constant : (A → B) → Type _
 2-Constant f = ∀ x y → f x ＝ f y
 

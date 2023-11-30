@@ -13,8 +13,8 @@ open import Correspondences.Base
 open import Correspondences.Discrete
 
 import Data.Empty.Base as ⊥
-import Data.Dec.Base as Dec
-open Dec using (Dec)
+open import Data.Dec.Base as Dec
+  using (Dec)
 import Data.Dec.Path
 
 open import Data.Quotient.Set.Base public

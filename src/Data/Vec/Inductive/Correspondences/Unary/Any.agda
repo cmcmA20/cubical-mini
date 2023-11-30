@@ -9,8 +9,7 @@ open import Meta.Variadic
 
 open import Correspondences.Decidable
 
-import      Data.Dec as Dec
-open Dec
+open import Data.Dec as Dec
 open import Data.Fin.Inductive.Base
 open import Data.Fin.Inductive.Instances.Discrete
 open import Data.Vec.Inductive.Instances.Idiom

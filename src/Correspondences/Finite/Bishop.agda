@@ -27,8 +27,7 @@ open import Data.Fin.Computational.Instances.Discrete
 
 open import Functions.Embedding
 
-import Truncation.Propositional as ∥-∥₁
-open ∥-∥₁
+open import Truncation.Propositional as ∥-∥₁
 
 private variable
   ℓ ℓ′ : Level

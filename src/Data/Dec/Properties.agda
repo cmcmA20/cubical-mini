@@ -7,8 +7,7 @@ open import Foundations.Equiv
 open import Meta.Idiom
 open import Meta.Search.HLevel
 
-import Truncation.Propositional as ∥-∥₁
-open ∥-∥₁
+open import Truncation.Propositional as ∥-∥₁
 
 open import Data.Empty.Properties
 open import Data.Sum.Properties

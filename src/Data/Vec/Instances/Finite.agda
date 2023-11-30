@@ -18,8 +18,7 @@ private variable
 
 vec-is-fin-set : is-fin-set A → is-fin-set (Vec A n)
 vec-is-fin-set {A} {0} _ = lift-is-fin-set ⊤-is-fin-set
-vec-is-fin-set {A} {1} A-fin = A-fin
-vec-is-fin-set {A} {suc (suc _)} A-fin =
+vec-is-fin-set {A} {suc _} A-fin =
   ×-is-fin-set A-fin (vec-is-fin-set A-fin)
 
 instance

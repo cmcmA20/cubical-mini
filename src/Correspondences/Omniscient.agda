@@ -12,11 +12,11 @@ open import Correspondences.Decidable
 open import Correspondences.Exhaustible
 
 open import Data.Dec as Dec
-import Data.Empty.Base as ⊥
-open ⊥ using (¬_)
+open import Data.Empty.Base as ⊥
+  using (¬_)
 
-import Truncation.Propositional as ∥-∥₁
-open ∥-∥₁ using (∥_∥₁; ∣_∣₁; ∃-syntax; ∃[_])
+open import Truncation.Propositional as ∥-∥₁
+  using (∥_∥₁; ∣_∣₁; ∃-syntax; ∃[_])
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level

@@ -13,12 +13,27 @@ infixr 6 Π-syntax
 
 syntax Π-syntax A (λ x → B) = Π[ x ꞉ A ] B
 
+infixr 6 Πᴱ-syntax
+Πᴱ-syntax : (A : Type ℓ) (B : @0 A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
+Πᴱ-syntax A B = (@0 x : A) → B x
+{-# INLINE Πᴱ-syntax #-}
+
+syntax Πᴱ-syntax A (λ x → B) = Πᴱ[ x ꞉ A ] B
+
 infixr 6 ∀-syntax
 ∀-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 ∀-syntax A B = {x : A} → B x
 {-# INLINE ∀-syntax #-}
 
 syntax ∀-syntax A (λ x → B) = ∀[ x ꞉ A ] B
+
+infixr 6 ∀ᴱ-syntax
+∀ᴱ-syntax : (A : Type ℓ) (B : @0 A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
+∀ᴱ-syntax A B = {@0 x : A} → B x
+{-# INLINE ∀ᴱ-syntax #-}
+
+syntax ∀ᴱ-syntax A (λ x → B) = ∀ᴱ[ x ꞉ A ] B
+
 
 -- non-dependent stuff
 

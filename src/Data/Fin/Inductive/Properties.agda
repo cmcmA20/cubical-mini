@@ -10,8 +10,7 @@ open import Meta.Underlying
 open import Data.Empty.Base
 open import Data.Nat.Path
 open import Data.Nat.Order.Inductive
-import      Data.Sum.Base as ⊎
-open ⊎
+open import Data.Sum.Base as ⊎
 
 open import Data.Fin.Inductive.Base public
 

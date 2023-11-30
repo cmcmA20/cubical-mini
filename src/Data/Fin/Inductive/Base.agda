@@ -4,7 +4,8 @@ module Data.Fin.Inductive.Base where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Data.Nat.Base public
+open import Data.Fin.Interface
+open import Data.Nat.Base as ℕ public
   using (ℕ; zero; suc)
 
 private variable
@@ -20,17 +21,24 @@ weaken fzero    = fzero
 weaken (fsuc k) = fsuc (weaken k)
 
 elim
-  : {P : ∀ {@0 n} → Fin n → Type ℓ}
-  → (∀ {@0 n} → P {suc n} fzero)
-  → (∀ {@0 n} (k : Fin n) → P k → P (fsuc k))
-  → ∀ {@0 n} (k : Fin n) → P k
-elim pfzero pfsuc fzero    = pfzero
-elim pfzero pfsuc (fsuc x) = pfsuc x (elim pfzero pfsuc x)
+  : (P : ∀ᴱ[ n ꞉ ℕ ] (Fin n → Type ℓ))
+  → (∀ᴱ[ n ꞉ ℕ ] P {suc n} fzero)
+  → (∀ᴱ[ n ꞉ ℕ ] ∀[ k ꞉ Fin n ] (P k → P (fsuc k)))
+  → ∀ᴱ[ n ꞉ ℕ ] Π[ k ꞉ Fin n ] P k
+elim P pfzero pfsuc fzero    = pfzero
+elim P pfzero pfsuc (fsuc x) = pfsuc (elim P pfzero pfsuc x)
 
-rec : {A : Type ℓ}
-      (a₀ : A) (aₛ : ∀{@0 n} → Fin n → A → A)
-    → ∀ {@0 n} → Fin n → A
-rec a₀ = elim a₀
+fpred : Fin (suc (suc n)) → Fin (suc n)
+fpred fzero = fzero
+fpred (fsuc k) = k
+
+impl : FinI Fin
+impl .FinI.fzero = fzero
+impl .FinI.fsuc = fsuc
+impl .FinI.elim P pz ps = elim P pz ps
+impl .FinI.fpred = fpred
+
+rec = FinI.rec impl
 
 squish : Fin n → Fin (suc n) → Fin n
 squish fzero    fzero    = fzero
