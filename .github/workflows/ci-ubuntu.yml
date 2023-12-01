@@ -12,20 +12,20 @@ on:
 ########################################################################
 ## CONFIGURATION
 ##
-## See SETTINGS for the most important configuration variable: AGDA_BRANCH.
-## It has to be defined as a build step because it is potentially branch
+## See SETTINGS for the most important configuration variable: `agda-tag`.
+## It has to be defined as a build step because it is potentially tag
 ## dependent.
 ##
 ## As for the rest:
 ##
-## Basically do not touch GHC_VERSION and CABAL_VERSION as long as
+## Basically do not touch `ghc-version` and `cabal-version` as long as
 ## they aren't a problem in the build. If you have time to waste, it
 ## could be worth investigating whether newer versions of ghc produce
 ## more efficient Agda executable and could cut down the build time.
 ## Just be aware that actions are flaky and small variations are to be
 ## expected.
 ##
-## The CABAL_INSTALL variable only passes `-O1` optimisations to ghc
+## The `cabal-install` variable only passes `-O1` optimisations to ghc
 ## because github actions cannot currently handle a build using `-O2`.
 ## To be experimented with again in the future to see if things have
 ## gotten better.
@@ -33,10 +33,10 @@ on:
 ########################################################################
 
 env:
-  GHC_VERSION: 9.6.3
-  CABAL_VERSION: 3.10.1.0
-  CABAL_INSTALL: cabal install --overwrite-policy=always --ghc-options='-O1 +RTS -M6G -RTS'
-  CACHE_PATHS: |
+  ghc-version: 9.6.3
+  cabal-version: 3.10.1.0
+  cabal-install: cabal install --overwrite-policy=always --ghc-options='-O1 +RTS -M6G -RTS'
+  cache-paths: |
     ~/.cabal/packages
     ~/.cabal/store
     ~/.cabal/bin
@@ -49,20 +49,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        agda_branch: [ master , release-2.6.4.1 ]
+        agda-tag: [ nightly , v2.6.4.1 ]
     steps:
       - name: Install cabal
         uses: haskell-actions/setup@v2
         with:
-          ghc-version: ${{ env.GHC_VERSION }}
-          cabal-version: ${{ env.CABAL_VERSION }}
+          ghc-version: ${{ env.ghc-version }}
+          cabal-version: ${{ env.cabal-version }}
           cabal-update: true
 
-      - name: Get latest commit hash on AGDA_BRANCH
+      - name: Get latest commit hash on agda-tag
         uses: octokit/request-action@v2.1.7
-        id: agda-branch-commit-hash
+        id: agda-tag-commit-hash
         with:
-          route: GET /repos/agda/agda/branches/${{ matrix.agda_branch }}
+          route: GET /repos/agda/agda/git/ref/tags/${{ matrix.agda-tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -74,10 +74,10 @@ jobs:
         uses: actions/cache/restore@v3
         id: cache-external-restore
         with:
-          path: ${{ env.CACHE_PATHS }}
-          key: ${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}
+          path: ${{ env.cache-paths }}
+          key: ${{ runner.os }}-${{ env.ghc-version }}-${{ env.cabal-version }}-${{ env.agda-tag-hash }}
         env:
-          AGDA_BRANCH_HASH: ${{ fromJson(steps.agda-branch-commit-hash.outputs.data).commit.sha }}
+          agda-tag-hash: ${{ fromJson(steps.agda-tag-commit-hash.outputs.data).sha }}
 
       ########################################################################
       ## INSTALLATION STEPS
@@ -86,11 +86,11 @@ jobs:
       - name: Download and install Agda from github
         if: steps.cache-external-restore.outputs.cache-hit != 'true'
         run: |
-          git clone https://github.com/agda/agda --branch ${{ matrix.agda_branch }} --depth=1
+          git clone https://github.com/agda/agda --branch ${{ matrix.agda-tag }} --depth=1
           cd agda
           mkdir -p doc
           touch doc/user-manual.pdf
-          ${{ env.CABAL_INSTALL }}
+          ${{ env.cabal-install }}
           cd ..
           rm -rf agda
 
@@ -99,7 +99,7 @@ jobs:
         run: |
           git clone https://github.com/agda/fix-whitespace --depth=1
           cd fix-whitespace
-          ${{ env.CABAL_INSTALL }} fix-whitespace.cabal
+          ${{ env.cabal-install }} fix-whitespace.cabal
           cd ..
 
       - name: Save external dependencies cache
@@ -107,7 +107,7 @@ jobs:
         uses: actions/cache/save@v3
         id: cache-external-save
         with:
-          path: ${{ env.CACHE_PATHS }}
+          path: ${{ env.cache-paths }}
           key: ${{ steps.cache-external-restore.outputs.cache-primary-key }}
 
       ########################################################################
@@ -128,11 +128,11 @@ jobs:
         with:
           path: ./_build
           key:
-            library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-${{ hashFiles('src/**', 'cubical-mini.agda-lib') }}
+            library-${{ runner.os }}-${{ env.ghc-version }}-${{ env.cabal-version }}-${{ env.agda-tag-hash }}-${{ hashFiles('src/**', 'cubical-mini.agda-lib') }}
           restore-keys: |
-            library-${{ runner.os }}-${{ env.GHC_VERSION }}-${{ env.CABAL_VERSION }}-${{ env.AGDA_BRANCH_HASH }}-
+            library-${{ runner.os }}-${{ env.ghc-version }}-${{ env.cabal-version }}-${{ env.agda-tag-hash }}-
         env:
-          AGDA_BRANCH_HASH: ${{ fromJson(steps.agda-branch-commit-hash.outputs.data).commit.sha }}
+          agda-tag-hash: ${{ fromJson(steps.agda-tag-commit-hash.outputs.data).sha }}
 
       - name: Put cabal programs in PATH
         run: echo "~/.cabal/bin" >> $GITHUB_PATH
@@ -160,7 +160,7 @@ jobs:
       - name: Htmlize cubical
         if: |
           github.event_name == 'push' && github.ref_name == 'master' &&
-          matrix.agda_branch == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
+          matrix.agda-tag == 'nightly' && steps.cache-library-restore.outputs.cache-hit != 'true'
         run: |
           make listings \
             AGDA_EXEC='~/.cabal/bin/agda' \
@@ -170,7 +170,7 @@ jobs:
       - name: Deploy to GitHub Pages
         if: |
           github.event_name == 'push' && github.ref_name == 'master' &&
-          matrix.agda_branch == 'master' && steps.cache-library-restore.outputs.cache-hit != 'true'
+          matrix.agda-tag == 'nightly' && steps.cache-library-restore.outputs.cache-hit != 'true'
         uses: JamesIves/github-pages-deploy-action@4.1.8
         with:
           branch: gh-pages
