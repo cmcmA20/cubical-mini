@@ -42,11 +42,11 @@ private
   Selector = Fin
 
 select-arg : Visibility → {@0 m : ℕ} → Selector m → Vec (Arg Term) m → TC Term
-select-arg vis idx args = do
-  vis-arg v x ← pure $ lookup args idx where
-    _ → typeError "Bad argument selector"
-  guard (v visibility=? vis)
-  pure x
+select-arg vis idx args = case lookup args idx of λ where
+  (vis-arg v x) → do
+    guard (v visibility=? vis)
+    pure x
+  _ → typeError "Bad argument selector"
 
 Level-data : Goal-strat → Type
 Level-data = goal-strat-rec Term ⊤
@@ -132,6 +132,24 @@ backtrack : List ErrorPart → TC A
 backtrack note = do
   debugPrint "tactic.search" 10 $ "Backtracking search... " ∷ note
   typeError $ "Search hit a dead-end: " ∷ note
+
+wait-for-principal-arg : Term → TC ⊤
+wait-for-principal-arg t = go t where
+  go : Term → TC ⊤
+  go* : List (Arg Term) → TC ⊤
+
+  go mv@(meta m _) = do
+      debugPrint "tactic.search" 30
+        [ "wait-for-principal-arg: blocking on meta " , termErr mv
+        , " in principal arguments of\n  " , termErr t
+        ]
+      blockOnMeta m
+  go (def d ds) = go* ds
+  go _          = pure tt
+
+  go* (arg (arg-info visible _) t ∷ as) = go t
+  go* (_ ∷ as)                          = go* as
+  go* []                                = pure tt
 
 private
   args-list→args-vec : (desired-length : ℕ) → List (Arg Term) → TC (Vec (Arg Term) desired-length)
@@ -291,7 +309,7 @@ private
   use-projections : Tactic-desc goal-name goal-strat → Term → TC ⊤
   use-projections {goal-name} {goal-strat} td goal = do
     def qn _ ← (snd <$> decompose-goal td goal) >>= reduce
-      where _ → backtrack "Term is not headed by a definition; ignoring projections."
+      where tm → backtrack [ "Term " , termErr tm , " is not headed by a definition; ignoring projections." ]
 
     go-alt ← inferType goal
     debugPrint "tactic.search" 20
@@ -457,12 +475,7 @@ private
   use-hints _ 0 _ = typeError "use-hints: no fuel"
   use-hints {goal-name} td (suc fuel) goal = runSpeculative do
     (lv , ty) ← decompose-goal td goal
-    pure ty >>= λ where
-      (meta m _) → do
-        debugPrint "tactic.search" 10
-          "Type under goal is metavariable, blocking to avoid infinite loop"
-        blockOnMeta m
-      _ → pure tt
+    wait-for-principal-arg ty
 
     solved@(meta mv _) ← new-meta (def (quote goal-decomposition) (lit (name goal-name) v∷ ty v∷ []))
       where _ → typeError [ termErr ty ]
