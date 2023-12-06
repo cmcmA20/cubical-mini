@@ -35,45 +35,45 @@ private variable
   P : A → Type ℓ′
   B : Type ℓ′
 
-record is-fin-set (A : Type ℓ) : Type ℓ where
+record is-bishop-finite (A : Type ℓ) : Type ℓ where
   no-eta-equality
   constructor fin₁
   field
     { cardinality } : ℕ
     enumeration₁    : ∥ A ≃ Fin cardinality ∥₁
 
-open is-fin-set public
+open is-bishop-finite public
 
-unquoteDecl is-fin-set-iso = declare-record-iso is-fin-set-iso (quote is-fin-set)
+unquoteDecl is-bishop-finite-iso = declare-record-iso is-bishop-finite-iso (quote is-bishop-finite)
 
 instance
-  H-Level-is-fin-set : ∀ {n} → H-Level (suc n) (is-fin-set A)
-  H-Level-is-fin-set = hlevel-prop-instance $ is-of-hlevel-≃ _ (iso→equiv is-fin-set-iso) $ is-prop-η go where
+  H-Level-is-bishop-finite : ∀ {n} → H-Level (suc n) (is-bishop-finite A)
+  H-Level-is-bishop-finite = hlevel-prop-instance $ is-of-hlevel-≃ _ (iso→equiv is-bishop-finite-iso) $ is-prop-η go where
     go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
     go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim²!
       (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q)) ∣p∣₁ ∣q∣₁
 
-𝓑→is-fin-set : 𝓑 A → is-fin-set A
-𝓑→is-fin-set fi .cardinality = fi .cardinality
-𝓑→is-fin-set fi .enumeration₁ = ∣ fi .enumeration  ∣₁
+manifest-bishop-finite→is-bishop-finite : Manifest-bishop-finite A → is-bishop-finite A
+manifest-bishop-finite→is-bishop-finite fi .cardinality = fi .cardinality
+manifest-bishop-finite→is-bishop-finite fi .enumeration₁ = ∣ fi .enumeration  ∣₁
 
-is-fin-set→is-discrete : is-fin-set A → is-discrete A
-is-fin-set→is-discrete fi = ∥-∥₁.proj! do
+is-bishop-finite→is-discrete : is-bishop-finite A → is-discrete A
+is-bishop-finite→is-discrete fi = ∥-∥₁.proj! do
   e ← fi .enumeration₁
   pure $ is-discrete-embedding (equiv→embedding e) fin-is-discrete
 
-is-fin-set→omniscient₁ : is-fin-set A → Omniscient₁ {ℓ = ℓ′} A
-is-fin-set→omniscient₁ {A} fi .omniscient₁-β {P} P? = ∥-∥₁.proj! do
+is-bishop-finite→omniscient₁ : is-bishop-finite A → Omniscient₁ {ℓ = ℓ′} A
+is-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? = ∥-∥₁.proj! do
   aeq ← fi .enumeration₁
-  pure $ 𝓑→omniscient₁ (fin aeq) .omniscient₁-β P?
+  pure $ manifest-bishop-finite→omniscient₁ (fin aeq) .omniscient₁-β P?
 
 
-finite : ⦃ d : is-fin-set A ⦄ → is-fin-set A
-finite ⦃ d ⦄ = d
+bishop-finite : ⦃ d : is-bishop-finite A ⦄ → is-bishop-finite A
+bishop-finite ⦃ d ⦄ = d
 
 finite-choice
   : {P : Pred A ℓ′}
-  → is-fin-set A
+  → is-bishop-finite A
   → (∀ x → ∥ P x ∥₁) → ∥ (∀ x → P x) ∥₁
 finite-choice {P} A-f k = do
   e ← enumeration₁ A-f
@@ -82,8 +82,8 @@ finite-choice {P} A-f k = do
 
 finite-pi-fin
   : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
-  → (∀ x → is-fin-set (P x))
-  → is-fin-set Π[ P ]
+  → (∀ x → is-bishop-finite (P x))
+  → is-bishop-finite Π[ P ]
 finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
@@ -105,15 +105,15 @@ finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
   pure $ fin₁ $ pure work
 
 
-×-is-fin-set : is-fin-set A → is-fin-set B → is-fin-set (A × B)
-×-is-fin-set afin bfin = fin₁ do
+×-is-bishop-finite : is-bishop-finite A → is-bishop-finite B → is-bishop-finite (A × B)
+×-is-bishop-finite afin bfin = fin₁ do
   aeq ← enumeration₁ afin
   beq ← enumeration₁ bfin
   pure $ ×-ap aeq beq ∙ₑ fin-product
 
-Σ-is-fin-set
-  : is-fin-set A → (∀ x → is-fin-set (P x)) → is-fin-set (Σ A P)
-Σ-is-fin-set {A} {P} afin fam = ∥-∥₁.proj! do
+Σ-is-bishop-finite
+  : is-bishop-finite A → (∀ x → is-bishop-finite (P x)) → is-bishop-finite (Σ A P)
+Σ-is-bishop-finite {A} {P} afin fam = ∥-∥₁.proj! do
   aeq ← enumeration₁ afin
   let
     module aeq = Equiv aeq
@@ -129,29 +129,29 @@ finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
 
   pure $ fin₁ ⦇ work ∙ₑ pure fs ⦈
 
-fun-is-fin-set
-  : is-fin-set A → is-fin-set B → is-fin-set (A → B)
-fun-is-fin-set afin bfin = ∥-∥₁.proj! do
+fun-is-bishop-finite
+  : is-bishop-finite A → is-bishop-finite B → is-bishop-finite (A → B)
+fun-is-bishop-finite afin bfin = ∥-∥₁.proj! do
   ae ← enumeration₁ afin
   be ← enumeration₁ bfin
   let count = finite-pi-fin (cardinality afin) λ _ → bfin
   eqv′ ← enumeration₁ count
   pure $ fin₁ $ pure (Π-cod-≃ (λ _ → be) ∙ₑ function-≃ ae (be ₑ⁻¹) ∙ₑ eqv′)
 
-Π-is-fin-set
-  : {P : A → Type ℓ′} → is-fin-set A → (∀ x → is-fin-set (P x)) → is-fin-set (∀ x → P x)
-Π-is-fin-set afin fam = ∥-∥₁.proj! do
+Π-is-bishop-finite
+  : {P : A → Type ℓ′} → is-bishop-finite A → (∀ x → is-bishop-finite (P x)) → is-bishop-finite (∀ x → P x)
+Π-is-bishop-finite afin fam = ∥-∥₁.proj! do
   eqv ← enumeration₁ afin
   let count = finite-pi-fin (cardinality afin) λ x → fam $ is-equiv→inverse (eqv .snd) x
   eqv′ ← enumeration₁ count
   pure $ fin₁ $ pure $ Π-dom-≃ (eqv ₑ⁻¹) ∙ₑ eqv′
 
-lift-is-fin-set : is-fin-set A → is-fin-set (Lift ℓ′ A)
-lift-is-fin-set afin = fin₁ do
+lift-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Lift ℓ′ A)
+lift-is-bishop-finite afin = fin₁ do
   aeq ← enumeration₁ afin
   pure $ lift-equiv ∙ₑ aeq
 
-is-fin-set-≃ : (B ≃ A) → is-fin-set A → is-fin-set B
-is-fin-set-≃ f afin = fin₁ do
+is-bishop-finite-≃ : (B ≃ A) → is-bishop-finite A → is-bishop-finite B
+is-bishop-finite-≃ f afin = fin₁ do
   aeq ← enumeration₁ afin
   pure (f ∙ₑ aeq)

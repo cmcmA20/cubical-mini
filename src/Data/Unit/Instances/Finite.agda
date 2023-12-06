@@ -13,8 +13,8 @@ open import Data.Unit.Properties
 open import Truncation.Propositional.Base
 
 instance
-  ⊤-is-fin-set : is-fin-set ⊤
-  ⊤-is-fin-set = fin₁ ∣ (is-contr→equiv-⊤ fin-1-is-contr) ₑ⁻¹ ∣₁
+  ⊤-is-bishop-finite : is-bishop-finite ⊤
+  ⊤-is-bishop-finite = fin₁ ∣ (is-contr→equiv-⊤ fin-1-is-contr) ₑ⁻¹ ∣₁
 
-  decomp-fin-⊤ : goal-decomposition (quote is-fin-set) ⊤
-  decomp-fin-⊤ = decomp (quote ⊤-is-fin-set) []
+  decomp-fin-⊤ : goal-decomposition (quote is-bishop-finite) ⊤
+  decomp-fin-⊤ = decomp (quote ⊤-is-bishop-finite) []

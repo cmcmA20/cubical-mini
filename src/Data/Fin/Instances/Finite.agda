@@ -13,9 +13,9 @@ open import Data.Nat.Base
 private variable n : ℕ
 
 instance
-  fin-is-fin-set : is-fin-set (Fin n)
-  fin-is-fin-set {0}     = ⊥-is-fin-set
-  fin-is-fin-set {suc _} = maybe-is-fin-set fin-is-fin-set
+  fin-is-bishop-finite : is-bishop-finite (Fin n)
+  fin-is-bishop-finite {0}     = ⊥-is-bishop-finite
+  fin-is-bishop-finite {suc _} = maybe-is-bishop-finite fin-is-bishop-finite
 
-  decomp-fin-fin : goal-decomposition (quote is-fin-set) (Fin n)
-  decomp-fin-fin = decomp (quote fin-is-fin-set) []
+  decomp-fin-fin : goal-decomposition (quote is-bishop-finite) (Fin n)
+  decomp-fin-fin = decomp (quote fin-is-bishop-finite) []

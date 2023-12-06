@@ -9,7 +9,7 @@ open import Meta.Search.Finite.Bishop
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Instances.Finite
   using ()
-  renaming (vec-is-fin-set to vec-is-fin-setᵈ)
+  renaming (vec-is-bishop-finite to vec-is-bishop-finiteᵈ)
 
 open import Truncation.Propositional
 
@@ -18,9 +18,9 @@ private variable
   A : Type ℓ
   n : ℕ
 
-vec-is-fin-set : is-fin-set A → is-fin-set (Vec A n)
-vec-is-fin-set = is-fin-set-≃ (default≃inductive ₑ⁻¹) ∘ vec-is-fin-setᵈ
+vec-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Vec A n)
+vec-is-bishop-finite = is-bishop-finite-≃ (default≃inductive ₑ⁻¹) ∘ vec-is-bishop-finiteᵈ
 
 instance
-  decomp-fin-vec : goal-decomposition (quote is-fin-set) (Vec A n)
-  decomp-fin-vec = decomp (quote vec-is-fin-set) [ `search (quote is-fin-set) ]
+  decomp-fin-vec : goal-decomposition (quote is-bishop-finite) (Vec A n)
+  decomp-fin-vec = decomp (quote vec-is-bishop-finite) [ `search (quote is-bishop-finite) ]

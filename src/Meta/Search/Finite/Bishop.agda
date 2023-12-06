@@ -18,11 +18,11 @@ open Structures.FinSet public
 
 open import Correspondences.Finite.Bishop
 open Correspondences.Finite.Bishop public
-  using ( is-fin-set
+  using ( is-bishop-finite
         ; fin₁ ; cardinality ; enumeration₁
-        ; finite ; is-fin-set→omniscient₁ ; finite-pi-fin
-        ; lift-is-fin-set ; ×-is-fin-set ; Π-is-fin-set
-        ; fun-is-fin-set ; Σ-is-fin-set ; is-fin-set-≃ )
+        ; bishop-finite ; is-bishop-finite→omniscient₁ ; finite-pi-fin
+        ; lift-is-bishop-finite ; ×-is-bishop-finite ; Π-is-bishop-finite
+        ; fun-is-bishop-finite ; Σ-is-bishop-finite ; is-bishop-finite-≃ )
 open import Correspondences.Omniscient
 
 open import Data.Bool.Base
@@ -37,49 +37,49 @@ private variable
   n : HLevel
 
 instance
-  Tactic-finite : Tactic-desc (quote is-fin-set) none
+  Tactic-finite : Tactic-desc (quote is-bishop-finite) none
   Tactic-finite .Tactic-desc.args-length = 2
   Tactic-finite .Tactic-desc.goal-selector = 1
   Tactic-finite .Tactic-desc.other-atoms = [ quote _≃_ ]
-  Tactic-finite .Tactic-desc.instance-helper = quote finite
-  Tactic-finite .Tactic-desc.instance-name = quote is-fin-set
+  Tactic-finite .Tactic-desc.instance-helper = quote bishop-finite
+  Tactic-finite .Tactic-desc.instance-name = quote is-bishop-finite
 
 finite-tactic-worker = search-tactic-worker Tactic-finite
 macro finite! = finite-tactic-worker
 
-fin-set! : (A : Type ℓ) {@(tactic finite-tactic-worker) fi : is-fin-set A} → FinSet ℓ
+fin-set! : (A : Type ℓ) {@(tactic finite-tactic-worker) fi : is-bishop-finite A} → FinSet ℓ
 fin-set! A {fi} = fin-set A fi
 
 instance
-  decomp-fin-lift : goal-decomposition (quote is-fin-set) (Lift ℓ′ A)
-  decomp-fin-lift = decomp (quote lift-is-fin-set) [ `search (quote lift-is-fin-set) ]
+  decomp-fin-lift : goal-decomposition (quote is-bishop-finite) (Lift ℓ′ A)
+  decomp-fin-lift = decomp (quote lift-is-bishop-finite) [ `search (quote lift-is-bishop-finite) ]
 
-  decomp-fin-fun : {B : Type ℓb} → goal-decomposition (quote is-fin-set) (A → B)
-  decomp-fin-fun = decomp (quote fun-is-fin-set)
-    [ `search (quote is-fin-set) , `search (quote is-fin-set) ]
+  decomp-fin-fun : {B : Type ℓb} → goal-decomposition (quote is-bishop-finite) (A → B)
+  decomp-fin-fun = decomp (quote fun-is-bishop-finite)
+    [ `search (quote is-bishop-finite) , `search (quote is-bishop-finite) ]
 
-  decomp-fin-Π : goal-decomposition (quote is-fin-set) (∀ a → B a)
-  decomp-fin-Π = decomp (quote Π-is-fin-set)
-    [ `search (quote is-fin-set) , `search-under 1 (quote is-fin-set) ]
+  decomp-fin-Π : goal-decomposition (quote is-bishop-finite) (∀ a → B a)
+  decomp-fin-Π = decomp (quote Π-is-bishop-finite)
+    [ `search (quote is-bishop-finite) , `search-under 1 (quote is-bishop-finite) ]
 
-  decomp-fin-× : {B : Type ℓb} → goal-decomposition (quote is-fin-set) (A × B)
-  decomp-fin-× = decomp (quote ×-is-fin-set)
-    [ `search (quote is-fin-set) , `search (quote is-fin-set) ]
+  decomp-fin-× : {B : Type ℓb} → goal-decomposition (quote is-bishop-finite) (A × B)
+  decomp-fin-× = decomp (quote ×-is-bishop-finite)
+    [ `search (quote is-bishop-finite) , `search (quote is-bishop-finite) ]
 
-  decomp-fin-Σ : goal-decomposition (quote is-fin-set) (Σ A B)
-  decomp-fin-Σ = decomp (quote Σ-is-fin-set)
-    [ `search (quote is-fin-set) , `search-under 1 (quote is-fin-set) ]
+  decomp-fin-Σ : goal-decomposition (quote is-bishop-finite) (Σ A B)
+  decomp-fin-Σ = decomp (quote Σ-is-bishop-finite)
+    [ `search (quote is-bishop-finite) , `search-under 1 (quote is-bishop-finite) ]
 
   decomp-fin→omn₁ : goal-decomposition (quote Omniscient₁) A
-  decomp-fin→omn₁ = decomp (quote is-fin-set→omniscient₁) [ `search (quote is-fin-set) ]
+  decomp-fin→omn₁ = decomp (quote is-bishop-finite→omniscient₁) [ `search (quote is-bishop-finite) ]
 
   decomp-fin→dis : goal-decomposition (quote is-discrete) A
-  decomp-fin→dis = decomp (quote is-fin-set→is-discrete) [ `search (quote is-fin-set) ]
+  decomp-fin→dis = decomp (quote is-bishop-finite→is-discrete) [ `search (quote is-bishop-finite) ]
 
-  proj-fin-finset : Struct-proj-desc (quote is-fin-set) none (quote FinSet.carrier) true
+  proj-fin-finset : Struct-proj-desc (quote is-bishop-finite) none (quote FinSet.carrier) true
   proj-fin-finset .Struct-proj-desc.struct-name = quote FinSet
   proj-fin-finset .Struct-proj-desc.struct-args-length = 1
-  proj-fin-finset .Struct-proj-desc.goal-projection = quote FinSet.carrier-is-fin-set
+  proj-fin-finset .Struct-proj-desc.goal-projection = quote FinSet.has-is-bishop-finite
   proj-fin-finset .Struct-proj-desc.projection-args-length = 2
   proj-fin-finset .Struct-proj-desc.carrier-selector = 1
 
@@ -93,7 +93,7 @@ private
     _ : is-discrete (A ×̇ A)
     _ = discrete!
 
-    _ : is-fin-set (A →̇ A →̇ A)
+    _ : is-bishop-finite (A →̇ A →̇ A)
     _ = finite!
 
     _ : Omniscient₁ {ℓ} Π[ B ]

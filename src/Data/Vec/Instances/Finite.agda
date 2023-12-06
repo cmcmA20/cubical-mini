@@ -16,11 +16,11 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
-vec-is-fin-set : is-fin-set A → is-fin-set (Vec A n)
-vec-is-fin-set {A} {0} _ = lift-is-fin-set ⊤-is-fin-set
-vec-is-fin-set {A} {suc _} A-fin =
-  ×-is-fin-set A-fin (vec-is-fin-set A-fin)
+vec-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Vec A n)
+vec-is-bishop-finite {A} {0} _ = lift-is-bishop-finite ⊤-is-bishop-finite
+vec-is-bishop-finite {A} {suc _} A-fin =
+  ×-is-bishop-finite A-fin (vec-is-bishop-finite A-fin)
 
 instance
-  decomp-fin-vec : goal-decomposition (quote is-fin-set) (Vec A n)
-  decomp-fin-vec = decomp (quote vec-is-fin-set) [ `search (quote is-fin-set) ]
+  decomp-fin-vec : goal-decomposition (quote is-bishop-finite) (Vec A n)
+  decomp-fin-vec = decomp (quote vec-is-bishop-finite) [ `search (quote is-bishop-finite) ]

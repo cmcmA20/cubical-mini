@@ -15,8 +15,8 @@ open import Truncation.Propositional.Base
 private variable n : ℕ
 
 instance
-  fin-is-fin-set : is-fin-set (Fin n)
-  fin-is-fin-set = fin₁ ∣ idₑ ∣₁
+  fin-is-bishop-finite : is-bishop-finite (Fin n)
+  fin-is-bishop-finite = fin₁ ∣ idₑ ∣₁
 
-  decomp-fin-fin : goal-decomposition (quote is-fin-set) (Fin n)
-  decomp-fin-fin = decomp (quote fin-is-fin-set) []
+  decomp-fin-fin : goal-decomposition (quote is-bishop-finite) (Fin n)
+  decomp-fin-fin = decomp (quote fin-is-bishop-finite) []

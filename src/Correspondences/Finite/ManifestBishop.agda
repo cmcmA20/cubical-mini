@@ -25,23 +25,23 @@ private variable
   ℓ ℓ′ : Level
   A : Type ℓ
 
-record 𝓑 (A : Type ℓ) : Type ℓ where
+record Manifest-bishop-finite (A : Type ℓ) : Type ℓ where
   no-eta-equality
   constructor fin
   field
     { cardinality } : ℕ
     enumeration     : A ≃ Fin cardinality
 
-open 𝓑 public
+open Manifest-bishop-finite public
 
-unquoteDecl 𝓑-iso = declare-record-iso 𝓑-iso (quote 𝓑)
+unquoteDecl manifest-bishop-finite-iso = declare-record-iso manifest-bishop-finite-iso (quote Manifest-bishop-finite)
 
 instance
-  H-Level-𝓑 : ∀ {n} → H-Level (2 + n) (𝓑 A)
-  H-Level-𝓑 = hlevel-basic-instance 2 $ is-of-hlevel-≃ _ (iso→equiv 𝓑-iso) hlevel!
+  H-Level-is-manifest-bishop-finite : ∀ {n} → H-Level (2 + n) (Manifest-bishop-finite A)
+  H-Level-is-manifest-bishop-finite = hlevel-basic-instance 2 $ is-of-hlevel-≃ _ (iso→equiv manifest-bishop-finite-iso) hlevel!
 
-𝓑→omniscient₁ : 𝓑 A → Omniscient₁ {ℓ = ℓ′} A
-𝓑→omniscient₁ {A} fi .omniscient₁-β {P} P? =
+manifest-bishop-finite→omniscient₁ : Manifest-bishop-finite A → Omniscient₁ {ℓ = ℓ′} A
+manifest-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? =
   Dec.map lemma₁ lemma₂ (any? P? xs) where
     n = fi .cardinality
     aeq = fi .enumeration

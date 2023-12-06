@@ -17,13 +17,13 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
-⊎-is-fin-set : is-fin-set A → is-fin-set B → is-fin-set (A ⊎ B)
-⊎-is-fin-set afi bfi = fin₁ do
+⊎-is-bishop-finite : is-bishop-finite A → is-bishop-finite B → is-bishop-finite (A ⊎ B)
+⊎-is-bishop-finite afi bfi = fin₁ do
   aeq ← enumeration₁ afi
   beq ← enumeration₁ bfi
   pure $ ⊎-ap aeq beq ∙ₑ fin-coproduct
 
 instance
-  decomp-fin-⊎ : goal-decomposition (quote is-fin-set) (A ⊎ B)
-  decomp-fin-⊎ = decomp (quote ⊎-is-fin-set)
-    [ `search (quote is-fin-set) , `search (quote is-fin-set) ]
+  decomp-fin-⊎ : goal-decomposition (quote is-bishop-finite) (A ⊎ B)
+  decomp-fin-⊎ = decomp (quote ⊎-is-bishop-finite)
+    [ `search (quote is-bishop-finite) , `search (quote is-bishop-finite) ]

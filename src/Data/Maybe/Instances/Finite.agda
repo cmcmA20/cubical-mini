@@ -18,12 +18,12 @@ private variable
   ℓ : Level
   A : Type ℓ
 
-maybe-is-fin-set : is-fin-set A → is-fin-set (Maybe A)
-maybe-is-fin-set fi = fin₁ do
+maybe-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Maybe A)
+maybe-is-bishop-finite fi = fin₁ do
   aeq ← enumeration₁ fi
   ueq ← enumeration₁ it
   pure $ maybe-as-sum ∙ₑ ⊎-ap ueq aeq ∙ₑ fin-coproduct
 
 instance
-  decomp-fin-maybe : goal-decomposition (quote is-fin-set) (Maybe A)
-  decomp-fin-maybe = decomp (quote maybe-is-fin-set) [ `search (quote is-fin-set) ]
+  decomp-fin-maybe : goal-decomposition (quote is-bishop-finite) (Maybe A)
+  decomp-fin-maybe = decomp (quote maybe-is-bishop-finite) [ `search (quote is-bishop-finite) ]

@@ -13,8 +13,8 @@ open import Data.List.Base
 open import Truncation.Propositional.Base
 
 instance
-  bool-is-fin-set : is-fin-set Bool
-  bool-is-fin-set = fin₁ ∣ iso→equiv go ∣₁ where
+  bool-is-bishop-finite : is-bishop-finite Bool
+  bool-is-bishop-finite = fin₁ ∣ iso→equiv go ∣₁ where
     go : Bool ≅ Fin 2
     go .fst false = fzero
     go .fst true = fsuc fzero
@@ -25,5 +25,5 @@ instance
     go .snd .is-iso.linv false = refl
     go .snd .is-iso.linv true = refl
 
-  decomp-fin-bool : goal-decomposition (quote is-fin-set) Bool
-  decomp-fin-bool = decomp (quote bool-is-fin-set) []
+  decomp-fin-bool : goal-decomposition (quote is-bishop-finite) Bool
+  decomp-fin-bool = decomp (quote bool-is-bishop-finite) []
