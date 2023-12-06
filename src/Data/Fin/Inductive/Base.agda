@@ -7,6 +7,7 @@ open import Foundations.Equiv
 open import Data.Fin.Interface
 open import Data.Nat.Base as ℕ public
   using (ℕ; zero; suc)
+open import Data.Sum.Base
 
 private variable
   ℓ : Level
@@ -20,6 +21,11 @@ weaken : Fin n → Fin (suc n)
 weaken fzero    = fzero
 weaken (fsuc k) = fsuc (weaken k)
 
+fsplit : ∀[ n ꞉ ℕ ] Π[ k ꞉ Fin (suc n) ]
+         (k ＝ fzero) ⊎ (Σ[ k′ ꞉ Fin n ] (k ＝ fsuc k′))
+fsplit fzero = inl refl
+fsplit (fsuc k) = inr (k , refl)
+
 elim
   : (P : ∀ᴱ[ n ꞉ ℕ ] (Fin n → Type ℓ))
   → (∀ᴱ[ n ꞉ ℕ ] P {suc n} fzero)
@@ -28,15 +34,11 @@ elim
 elim P pfzero pfsuc fzero    = pfzero
 elim P pfzero pfsuc (fsuc x) = pfsuc (elim P pfzero pfsuc x)
 
-fpred : Fin (suc (suc n)) → Fin (suc n)
-fpred fzero = fzero
-fpred (fsuc k) = k
-
 impl : FinI Fin
 impl .FinI.fzero = fzero
 impl .FinI.fsuc = fsuc
+impl .FinI.fsplit = fsplit
 impl .FinI.elim P pz ps = elim P pz ps
-impl .FinI.fpred = fpred
 
 rec = FinI.rec impl
 

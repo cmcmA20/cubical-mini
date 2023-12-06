@@ -7,7 +7,7 @@ open import Meta.Search.HLevel
 open import Meta.Variadic
 
 open import Data.Sum.Base
-  using (_⊎_; Sumⁿ)
+  using (_⊎_)
 
 data ∥_∥₁ {ℓ} (A : Type ℓ) : Type ℓ where
   ∣_∣₁    : A → ∥ A ∥₁

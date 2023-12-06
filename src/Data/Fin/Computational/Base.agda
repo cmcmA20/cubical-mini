@@ -13,6 +13,7 @@ open import Data.Fin.Interface
 open import Data.Nat.Base
   using (ℕ; zero; suc ; pred)
 open import Data.Nat.Order.Computational
+open import Data.Sum.Base
 
 private variable
   ℓ ℓ′ : Level
@@ -34,11 +35,29 @@ fzero = mk-fin 0
 fsuc : Fin n → Fin (suc n)
 fsuc (mk-fin k {(b)}) = mk-fin (suc k) {b}
 
--- -- TODO damn eliminators got hands
--- impl : FinI Fin
--- impl .FinI.fzero = fzero
--- impl .FinI.fsuc = fsuc
--- impl .FinI.elim P fz fs = {!!}
+fsplit
+  : (k : Fin (suc n))
+  → (k ＝ fzero) ⊎ (Σ[ l ꞉ Fin n ] (k ＝ fsuc l))
+fsplit (mk-fin zero) = inl refl
+fsplit (mk-fin (suc k) {(b)}) = inr ((mk-fin k {b}) , refl)
+
+-- TODO can be strengthened
+elim  : Π[ P ꞉ ∀ᴱ[ n ꞉ ℕ ] (Fin n → Type ℓ′) ]
+        Π[ fz ꞉ ∀ᴱ[ n ꞉ ℕ ] P {suc n} fzero ]
+        Π[ fs ꞉ ∀ᴱ[ n ꞉ ℕ ] ∀[ k ꞉ Fin n ] (P k → P (fsuc k)) ]
+        ∀[ n ꞉ ℕ ] Π[ k ꞉ Fin n ] P k
+elim P fz fs {x = suc n} k with fsplit k
+... | inl p = subst P (sym p) fz
+... | inr (l , p) = subst P (sym p) (fs (elim P fz fs l))
+
+fpred : Fin (suc (suc n)) → Fin (suc n)
+fpred = [ (λ _ → fzero) , fst ]ᵤ ∘ fsplit
+
+impl : FinI Fin
+impl .FinI.fzero = fzero
+impl .FinI.fsuc = fsuc
+impl .FinI.fsplit = fsplit
+impl .FinI.elim = elim
 
 module _ where
   open import Data.Fin.Base

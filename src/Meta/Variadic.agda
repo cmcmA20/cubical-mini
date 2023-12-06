@@ -15,6 +15,7 @@ open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.List.Operations
 open import Data.Nat.Base
+open import Data.Sum.Base
 
 -- Correspondence valued in arbitrary structure
 SCorr
@@ -123,6 +124,9 @@ Implⁿ = Lift-op²⃑ⁿ λ A B → (A → B)
 
 Prodⁿ : Variadic²
 Prodⁿ = Lift-op²⃑ⁿ _×_
+
+Sumⁿ : Variadic²
+Sumⁿ = Lift-op²⃑ⁿ _⊎_
 
 
 -- returns arity and codomain type
@@ -235,6 +239,8 @@ binop-macro nam p q hole = do
 
 infixr -1 _→̇_
 infixr 8  _×̇_
+infixr 7  _⊎̇_
 macro
   _→̇_ = binop-macro (quote Implⁿ)
   _×̇_ = binop-macro (quote Prodⁿ)
+  _⊎̇_ = binop-macro (quote Sumⁿ)

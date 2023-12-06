@@ -3,8 +3,6 @@ module Data.Sum.Base where
 
 open import Foundations.Base
 
-open import Meta.Variadic
-
 infixr 7 _⊎_
 data _⊎_ {ℓ ℓ′} (A : Type ℓ) (B : Type ℓ′) : Type (ℓ ⊔ ℓ′) where
   inl : A → A ⊎ B
@@ -43,10 +41,3 @@ map-l f = map f id
 
 map-r : (B → C) → A ⊎ B → A ⊎ C
 map-r f = map id f
-
-
-Sumⁿ : Variadic²
-Sumⁿ = Lift-op²⃑ⁿ _⊎_
-
-infixr 7 _⊎̇_
-macro _⊎̇_ = binop-macro (quote Sumⁿ)
