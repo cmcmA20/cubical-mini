@@ -38,5 +38,37 @@ omniscient₁→exhaustible omn .exhaustible-β {P} P? = Dec.map
 omni₁ : ⦃ x : Omniscient₁ {ℓ} A ⦄ → Omniscient₁ A
 omni₁ ⦃ x ⦄ = x
 
+lift-omniscient₁ : Omniscient₁ {ℓ} A → Omniscient₁ (Lift ℓ A)
+lift-omniscient₁ omn .omniscient₁-β P? = Dec.map
+  (∥-∥₁.map (bimap lift id))
+  (λ x y → ∥-∥₁.rec! (λ z → x ∣ bimap lower id z ∣₁) y)
+  (omn .omniscient₁-β $ P? ∘ lift)
+
 ∃-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Omniscient₁ A → Dec ∃[ B ]
 ∃-decision d ex = omniscient₁-β ex d
+
+
+record Omniscient {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (ℓᵃ ⊔ ℓsuc ℓ) where
+  no-eta-equality
+  constructor omniscient-η
+  field omniscient-β : {P : Pred A ℓ} → Decidable P → Dec Σ[ P ]
+
+open Omniscient public
+
+omniscient→omniscient₁ : Omniscient {ℓ} A → Omniscient₁ {ℓ} A
+omniscient→omniscient₁ omn .omniscient₁-β d = Dec.map
+  ∣_∣₁
+  ∥-∥₁.rec!
+  (omniscient-β omn d)
+
+omni : ⦃ x : Omniscient {ℓ} A ⦄ → Omniscient A
+omni ⦃ x ⦄ = x
+
+lift-omniscient : Omniscient {ℓ} A → Omniscient {ℓ} (Lift ℓ A)
+lift-omniscient omn .omniscient-β P? = Dec.map
+  (bimap lift id)
+  (_∘ bimap lower id)
+  (omn .omniscient-β $ P? ∘ lift)
+
+Σ-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Omniscient A → Dec Σ[ B ]
+Σ-decision d ex = omniscient-β ex d
