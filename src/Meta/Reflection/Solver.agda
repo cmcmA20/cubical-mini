@@ -1,11 +1,11 @@
 {-# OPTIONS --safe #-}
-module Meta.Solver where
+module Meta.Reflection.Solver where
 
 open import Foundations.Base
 
 open import Meta.Literals.FromString
-open import Meta.Variables
-open import Meta.Reflection
+open import Meta.Reflection.Base
+open import Meta.Reflection.Variables
 
 open import Data.Bool.Base
 open import Data.List.Base
@@ -20,23 +20,23 @@ private variable
 -- Helpers
 
 solver-failed : Term → Term → TC A
-solver-failed lhs rhs = typeError
+solver-failed lhs rhs = type-error
   [ "Could not equate the following expressions:\n  "
   , termErr lhs , "\nAnd\n  " , termErr rhs ]
 
 print-repr : Term → Term → TC A
-print-repr tm repr = typeError
+print-repr tm repr = type-error
   [ "The expression\n  " , termErr tm
   , "\nIs represented by the expression\n  " , termErr repr ]
 
 print-var-repr : Term → Term → Term → TC A
-print-var-repr tm repr env = typeError
+print-var-repr tm repr env = type-error
   [ "The expression\n  " , termErr tm
   , "\nIs represented by the expression\n  " , termErr repr
   , "\nIn the environment\n  " , termErr env ]
 
 print-boundary : Term → TC A
-print-boundary goal = typeError [ "Can't determine boundary: " , termErr goal ]
+print-boundary goal = type-error [ "Can't determine boundary: " , termErr goal ]
 
 
 data Reduction-strategy : Type where
@@ -64,22 +64,22 @@ record Simple-solver : Type where
   prepare = prepare′ strat
 
   withReduction : TC T → TC T
-  withReduction = withNormalisation false
-                ∘ withReduceDefs (false , dont-reduce)
+  withReduction = with-normalisation false
+                ∘ with-reduce-defs (false , dont-reduce)
 
 module _ (solver : Simple-solver) where
   open Simple-solver solver
 
   mk-simple-solver : Term → TC ⊤
   mk-simple-solver hole = withReduction do
-    goal ← inferType hole >>= reduce
+    goal ← infer-type hole >>= reduce
     just (lhs , rhs) ← get-boundary goal where
       nothing → print-boundary goal
     lhs ← wait-just-a-bit lhs
     rhs ← wait-just-a-bit rhs
     elhs ← prepare lhs >>= build-expr
     erhs ← prepare rhs >>= build-expr
-    noConstraints (unify hole $ invoke-solver elhs erhs)
+    no-constraints (unify hole $ invoke-solver elhs erhs)
       <|> solver-failed elhs erhs
 
   mk-simple-normalise : Term → Term → TC ⊤
@@ -108,34 +108,34 @@ record Variable-solver {ℓ} (A : Type ℓ) : Type ℓ where
   prepare = prepare′ strat
 
   withReduction : TC T → TC T
-  withReduction = withNormalisation false
-                ∘ withReduceDefs (false , dont-reduce)
+  withReduction = with-normalisation false
+                ∘ with-reduce-defs (false , dont-reduce)
 
 module _ {ℓ} {A : Type ℓ} (solver : Variable-solver A) where
   open Variable-solver solver
 
   mk-var-solver : Term → TC ⊤
   mk-var-solver hole = withReduction do
-    goal ← inferType hole >>= reduce
+    goal ← infer-type hole >>= reduce
     just (lhs , rhs) ← get-boundary goal
       where nothing → print-boundary goal
     lhs ← wait-just-a-bit lhs
     rhs ← wait-just-a-bit rhs
     elhs , vs ← prepare lhs >>= build-expr empty-vars
-    debugPrint "tactic.solver.var" 10 [ "LHS: " , termErr elhs ]
+    debug-print "tactic.solver.var" 10 [ "LHS: " , termErr elhs ]
     erhs , vs ← prepare rhs >>= build-expr vs
-    debugPrint "tactic.solver.var" 10 [ "RHS: " , termErr erhs ]
+    debug-print "tactic.solver.var" 10 [ "RHS: " , termErr erhs ]
     size , env ← environment vs
-    debugPrint "tactic.solver.var" 10 [ "Env: " , termErr env ]
-    (noConstraints $ unify hole $ invoke-solver elhs erhs env) <|>
+    debug-print "tactic.solver.var" 10 [ "Env: " , termErr env ]
+    (no-constraints $ unify hole $ invoke-solver elhs erhs env) <|>
       solver-failed elhs erhs
 
   mk-var-normalise : Term → Term → TC ⊤
   mk-var-normalise tm hole = withReduction do
     e , vs ← prepare tm >>= build-expr empty-vars
-    debugPrint "tactic.solver.var" 10 [ "Expression: " , termErr e ]
+    debug-print "tactic.solver.var" 10 [ "Expression: " , termErr e ]
     size , env ← environment vs
-    debugPrint "tactic.solver.var" 10 [ "Env: " , termErr env ]
+    debug-print "tactic.solver.var" 10 [ "Env: " , termErr env ]
     soln ← reduce $ invoke-normaliser e env
     unify hole soln
 

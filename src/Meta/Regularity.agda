@@ -4,8 +4,8 @@ module Meta.Regularity where
 open import Foundations.Base
 
 open import Meta.Alt
-open import Meta.Reflection
-open import Meta.Subst
+open import Meta.Reflection.Base
+open import Meta.Reflection.Subst
 
 open import Data.Bool.Base
 open import Data.List.Base
@@ -78,7 +78,7 @@ private
     -- functions, so that the transport will have more arguments? No:
     -- The term is in normal form.
     (do
-      debugPrint "tactic.regularity" 10 $ "Checking regularity of " ∷ termErr tm ∷ []
+      debug-print "tactic.regularity" 10 $ "Checking regularity of " ∷ termErr tm ∷ []
       let φ′ = def (quote _∨_) (φ v∷ var n [] v∷ [])
       let tm′ = def (quote transp) (ℓ h∷ Al v∷ φ′ v∷ x v∷ [])
       -- We simply ask Agda to check that the newly constructed term `transp Al (φ ∨ i) x`
@@ -86,10 +86,10 @@ private
       -- If it isn't, we backtrack and leave the term unchanged.
       -- Note that if Al itself contains constant transports, we have already processed those,
       -- so they reduce away when (i = i1).
-      checkType tm′ unknown -- inferType doesn't trigger the constancy check https://github.com/agda/agda/issues/6585
+      check-type tm′ unknown -- inferType doesn't trigger the constancy check https://github.com/agda/agda/issues/6585
       pure tm′) <|>
     (do
-      debugPrint "tactic.regularity" 10 $ "NOT a (transport refl): " ∷ termErr tm ∷ []
+      debug-print "tactic.regularity" 10 $ "NOT a (transport refl): " ∷ termErr tm ∷ []
       pure tm)
   refl-transport _ tm = pure tm
 
@@ -104,7 +104,7 @@ private
     as ← go* pre n args
     refl-transport n (def f as)
   go pre k t@(lam v (abs nm b)) = lam v ∘ abs nm <$> under-abs t (go pre (suc k) b)
-  go pre n (pat-lam cs args) = typeError $ "regularity: Can not deal with pattern lambdas" -- TODO can we do something about this?
+  go pre n (pat-lam cs args) = type-error $ "regularity: Can not deal with pattern lambdas" -- TODO can we do something about this?
   go pre n t@(pi (arg i a) (abs nm b)) = do
     a ← go pre n a
     b ← under-abs t (go pre (suc n) b)
@@ -128,9 +128,7 @@ private
     -- Since we'll be comparing terms, Agda really wants them to be
     -- well-scoped. Since we shifted eeeverything up by one, we have to
     -- grow the context, too.
-    tm ← runSpeculative $ extendContext "i" (argN (quoteTerm I)) do
-      tm ← go pre 0 tm
-      pure (tm , false)
+    tm ← resetting $ extend-context "i" (argN (quoteTerm I)) $ go pre 0 tm
     pure $ vlam "i" tm
 
   -- Extend a path x ＝ y to a path x′ ＝ y′, where x′ --> x and y′ --> y
@@ -143,12 +141,12 @@ private
     → Term
     → TC ⊤
   regular!-worker {x = x} {y} pre p goal = do
-    gt ← inferType goal
+    gt ← infer-type goal
     `x ← quoteTC x
     `y ← quoteTC y
     `p ← quoteTC p
-    just (_ , l , r) ← unapply-path =<< inferType goal
-      where _ → typeError []
+    just (_ , l , r) ← unapply-path =<< infer-type goal
+      where _ → type-error []
     l ← normalise =<< wait-for-type l
     r ← normalise =<< wait-for-type r
     reg ← to-regularity-path pre l
@@ -166,8 +164,8 @@ module Regularity where
   macro
     reduce! : Term → TC ⊤
     reduce! goal = do
-      just (_ , l , r) ← unapply-path =<< inferType goal
-        where _ → typeError []
+      just (_ , l , r) ← unapply-path =<< infer-type goal
+        where _ → type-error []
       reg ← to-regularity-path precise =<< (wait-for-type =<< normalise l)
       unify-loudly goal reg
 
@@ -188,7 +186,7 @@ module Regularity where
       tm ← to-regularity-path pres orig
       red ← applyTC tm (argN (con (quote i1) [])) >>= normalise
       `pres ← quoteTC pres
-      typeError
+      type-error
         [ "The term\n\n  " , termErr orig , "\n\nreduces modulo "
         , termErr `pres , " regularity to\n\n  "
         , termErr red , "\n" ]

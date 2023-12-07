@@ -1,10 +1,10 @@
 {-# OPTIONS --safe #-}
-module Meta.Subst where
+module Meta.Reflection.Subst where
 
 open import Foundations.Base
 
 open import Meta.Bind
-open import Meta.Reflection
+open import Meta.Reflection.Base
 
 open import Data.Bool.Base
 open import Data.List.Base as List
@@ -125,25 +125,25 @@ subst-tm (suc fuel) ρ (agda-sort s) with s
 raiseTC : ℕ → Term → TC Term
 raiseTC n tm with raise full-tank n tm
 ... | just x = pure x
-... | nothing = typeError [ "Failed to raise term " , termErr tm ]
+... | nothing = type-error [ "Failed to raise term " , termErr tm ]
 
 substTC : Subst → Term → TC Term
 substTC θ tm with subst-tm full-tank θ tm
 ... | just x = pure x
 ... | nothing =
-  typeError [ "Failed to substitute in term " , termErr tm ]
+  type-error [ "Failed to substitute in term " , termErr tm ]
 
 applyTC : Term → Arg Term → TC Term
 applyTC f x with apply-tm full-tank f x
 applyTC _ x         | just r  = pure r
 applyTC f (arg _ x) | nothing =
-  typeError [ "Failed to apply function " , termErr f , " to argument " , termErr x ]
+  type-error [ "Failed to apply function " , termErr f , " to argument " , termErr x ]
 
 apply*TC : Term → List (Arg Term) → TC Term
 apply*TC f x with apply-tm* full-tank f x
 apply*TC _ x         | just r  = pure r
 apply*TC f xs | nothing =
-  typeError [ "Failed to apply function " , termErr f , " to a list of arguments " ]
+  type-error [ "Failed to apply function " , termErr f , " to a list of arguments " ]
 
 
 -- very unsafe way to do this
@@ -174,7 +174,7 @@ rename-tm fuel = subst-tm fuel ∘ ren→sub
 renameTC : Ren → Term → TC Term
 renameTC vs tm with subst-tm full-tank (ren→sub vs) tm
 ... | just x = pure x
-... | nothing = typeError [ "Failed to rename term " , termErr tm ]
+... | nothing = type-error [ "Failed to rename term " , termErr tm ]
 
 generalize : List ℕ → Term → TC Term
 generalize fvs t

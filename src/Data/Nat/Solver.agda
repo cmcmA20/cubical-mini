@@ -7,8 +7,6 @@ open import Foundations.Base
 open import Meta.Literals.FromNat
 open import Meta.Marker
 open import Meta.Reflection
-open import Meta.Solver
-open import Meta.Variables
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base

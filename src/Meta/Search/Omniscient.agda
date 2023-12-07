@@ -4,7 +4,7 @@ module Meta.Search.Omniscient where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Reflection
+open import Meta.Reflection.Base
 open import Meta.Search.Base public
 open import Meta.Search.Decidable
 open import Meta.Search.Exhaustible

@@ -5,9 +5,9 @@ open import Foundations.Base
 open import Foundations.Equiv
 open import Foundations.Sigma
 
-open import Meta.Reflection
+open import Meta.Reflection.Base
+open import Meta.Reflection.Subst
 open import Meta.Search.HLevel
-open import Meta.Subst
 open import Meta.Variadic
 
 open import Structures.IdentitySystem.Base
@@ -47,29 +47,29 @@ find-extensionality tm = do
   -- picked because the type is meta-headed.
   tm ← reduce =<< wait-for-type tm
   let search = def (quote Extensionality) [ argN tm ]
-  debugPrint "tactic.extensionality" 10 [ "find-extensionality goal:\n  " , termErr search ]
+  debug-print "tactic.extensionality" 10 [ "find-extensionality goal:\n  " , termErr search ]
 
-  runSpeculative do
+  resetting do
     (mv , _) ← new-meta′ search
-    soln ← getInstances mv >>= λ where
+    soln ← get-instances mv >>= λ where
       -- In a throw-away TC context, look for solutions to 'Extensionality'
       -- tm, and choose the first instance if any are available.
       (x ∷ _) → do
         it ← unquoteTC {A = Name} =<< normalise (def (quote Extensionality.lemma) (argN x ∷ []))
-        debugPrint "tactic.extensionality" 10 (" ⇒ found lemma " ∷ termErr (def it []) ∷ [])
+        debug-print "tactic.extensionality" 10 (" ⇒ found lemma " ∷ termErr (def it []) ∷ [])
         pure (def it [])
 
       -- If nothing more specific is available, use paths.
       [] → do
-        debugPrint "tactic.extensionality" 10 " ⇒ using default"
+        debug-print "tactic.extensionality" 10 " ⇒ using default"
         pure (def (quote Extensional-default) [])
-    pure (soln , false)
+    pure soln
 
 -- Entry point for getting hold of an 'Extensional' instance:
 extensional : (A : Type ℓ) → Term → TC ⊤
 extensional A goal = do
   `A ← quoteTC A
-  checkType goal (def (quote Extensional) [ argN `A , argN unknown ])
+  check-type goal (def (quote Extensional) [ argN `A , argN unknown ])
   unify goal =<< find-extensionality `A
 
 {-
@@ -90,7 +90,7 @@ extensionalᶠ : {A : Type ℓ} → A → Term → TC ⊤
 extensionalᶠ {A} fun goal = ⦇ wrap (quoteTC A) (quoteTC fun) ⦈ >>= id where
   work : Term → Term → TC Term
   work (pi dom@(arg ai _) (abs nm cod)) tm = do
-    prf ← extendContext nm dom do
+    prf ← extend-context nm dom do
       tm ← raiseTC 1 tm
       tm ← applyTC tm (arg ai (var 0 []))
       work cod tm
@@ -100,7 +100,7 @@ extensionalᶠ {A} fun goal = ⦇ wrap (quoteTC A) (quoteTC fun) ⦈ >>= id wher
   wrap : Term → Term → TC ⊤
   wrap t fn = do
     t ← wait-for-type t
-    debugPrint "tactic.extensionality" 10
+    debug-print "tactic.extensionality" 10
       [ "extensionalᶠ goal:\n  " , termErr fn , "\nof type\n  " , termErr t ]
     prf ← work t fn
     unify goal prf
@@ -251,14 +251,14 @@ private
       `r ← wait-for-type =<< quoteωTC r
       ty ← quoteTC (Pathᵉ r x y)
       `x ← quoteTC x
-      `refl ← checkType (def (quote reflᵉ) [ argN `r , argN `x ]) ty
+      `refl ← check-type (def (quote reflᵉ) [ argN `r , argN `x ]) ty
         <|> error
       unify goal `refl
 
     error = do
       `x ← quoteTC x
       `y ← quoteTC y
-      typeError
+      type-error
         [ "trivial! failed: the values\n  "
         , termErr `x , "\nand\n  " , termErr `y
         , "\nare not extensionally equal by refl." ]

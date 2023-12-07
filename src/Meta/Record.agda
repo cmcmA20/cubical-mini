@@ -7,7 +7,7 @@ open import Foundations.Isomorphism public
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
-open import Meta.Reflection
+open import Meta.Reflection.Base
 
 open import Data.Bool.Base
 open import Data.List.Base
@@ -30,11 +30,11 @@ field-names→paths (arg _ x ∷ xs) with field-names→paths xs
 
 record→iso : Name → (List (Arg Term) → TC Term) → TC Term
 record→iso namen unfolded =
-  (inferType (def namen []) >>= normalise) >>= go []
+  (infer-type (def namen []) >>= normalise) >>= go []
   where
   go : List ArgInfo → Term → TC Term
   go acc (pi argu@(arg i@(arg-info _ m) argTy) (abs s ty)) = do
-    r ← extendContext "arg" argu $ go (i ∷ acc) ty
+    r ← extend-context "arg" argu $ go (i ∷ acc) ty
     pure $ pi (arg i' argTy) (abs s r)
     where i' = arg-info hidden m
   go acc (agda-sort _) = do
@@ -49,7 +49,7 @@ record→iso namen unfolded =
       implicitArgs : ℕ → List (Arg Term) → List ArgInfo → List (Arg Term)
       implicitArgs n acc [] = acc
       implicitArgs n acc (_ ∷ i) = implicitArgs (suc n) (var n [] h∷ acc) i
-  go _ _ = typeError [ "Not a record type name: " , nameErr namen ]
+  go _ _ = type-error [ "Not a record type name: " , nameErr namen ]
 
 undo-clauses : Fields → List Clause
 undo-clauses = go where
@@ -97,7 +97,7 @@ pi-term→sigma (pi (arg _ x) (abs n (def n′ _))) = pure x
 pi-term→sigma (pi (arg _ x) (abs n y)) = do
   sig ← pi-term→sigma y
   pure $ def (quote Σ) (x v∷ lam visible (abs n sig) v∷ [])
-pi-term→sigma _ = typeError "Not a record type constructor! "
+pi-term→sigma _ = type-error "Not a record type constructor! "
 
 instantiate′ : Term → Term → Term
 instantiate′ (pi _ (abs _ xs)) (pi _ (abs _ b)) = instantiate′ xs b
@@ -106,13 +106,13 @@ instantiate′ _ tm = tm
 
 make-record-iso-sigma : Bool → TC Name → Name → TC Name
 make-record-iso-sigma declare? getName `R = do
-  record-type `R-con fields ← getDefinition `R
-    where _ → typeError [ nameErr `R , " is not a record type" ]
+  record-type `R-con fields ← get-definition `R
+    where _ → type-error [ nameErr `R , " is not a record type" ]
 
   let fields = field-names→paths fields
 
-  `R-ty ← getType `R
-  con-ty ← getType `R-con
+  `R-ty ← get-type `R
+  con-ty ← get-type `R-con
   ty ← record→iso `R λ args → do
     let con-ty = instantiate′ `R-ty con-ty
     `S ← pi-term→sigma con-ty
@@ -120,10 +120,10 @@ make-record-iso-sigma declare? getName `R = do
 
   nm ← getName
   pure declare? >>= λ where
-    true  → declareDef (argN nm) ty
+    true  → declare-def (argN nm) ty
     false → pure tt
 
-  defineFun nm
+  define-function nm
     ( redo-clauses fields ++
       undo-clauses fields ++
       redo-undo-clauses fields ++

@@ -7,7 +7,7 @@ open import Foundations.HLevel public
 open import Foundations.Sigma
 
 open import Meta.Literals.FromProduct
-open import Meta.Reflection
+open import Meta.Reflection.Base
 open import Meta.Search.Base public
 open import Meta.Variadic
 

@@ -3,8 +3,8 @@ module Categories.Solver where
 
 open import Foundations.Base hiding (id; _∘_)
 
-open import Meta.Reflection
-open import Meta.Solver
+open import Meta.Reflection.Base
+open import Meta.Reflection.Solver
 
 open import Categories.Base
 

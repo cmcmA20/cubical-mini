@@ -3,8 +3,8 @@ module Correspondences.Decidable where
 
 open import Foundations.Base
 
-open import Meta.Reflection
-open import Meta.Subst
+open import Meta.Reflection.Base
+open import Meta.Reflection.Subst
 open import Meta.Variadic
 
 open import Correspondences.Base public

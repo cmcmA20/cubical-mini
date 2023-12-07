@@ -4,7 +4,7 @@ module Meta.Search.Decidable where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Reflection
+open import Meta.Reflection.Base
 open import Meta.Search.Base public
 
 open import Correspondences.Decidable

@@ -1,9 +1,9 @@
 {-# OPTIONS --safe #-}
-module Meta.Variables where
+module Meta.Reflection.Variables where
 
 open import Foundations.Base
 
-open import Meta.Reflection
+open import Meta.Reflection.Base
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base

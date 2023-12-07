@@ -6,7 +6,7 @@ open import Foundations.Base
 
 open import Meta.Foldable
 open import Meta.Literals.FromProduct public
-open import Meta.Reflection
+open import Meta.Reflection.Base
 
 open import Data.Bool.Base as Bool
 open import Data.Empty.Base
@@ -46,7 +46,7 @@ select-arg vis idx args = case lookup args idx of λ where
   (vis-arg v x) → do
     guard (v visibility=? vis)
     pure x
-  _ → typeError "Bad argument selector"
+  _ → type-error "Bad argument selector"
 
 Level-data : Goal-strat → Type
 Level-data = goal-strat-rec Term ⊤
@@ -130,8 +130,8 @@ private variable
 
 backtrack : List ErrorPart → TC A
 backtrack note = do
-  debugPrint "tactic.search" 10 $ "Backtracking search... " ∷ note
-  typeError $ "Search hit a dead-end: " ∷ note
+  debug-print "tactic.search" 10 $ "Backtracking search... " ∷ note
+  type-error $ "Search hit a dead-end: " ∷ note
 
 wait-for-principal-arg : Term → TC ⊤
 wait-for-principal-arg t = go t where
@@ -139,11 +139,11 @@ wait-for-principal-arg t = go t where
   go* : List (Arg Term) → TC ⊤
 
   go mv@(meta m _) = do
-      debugPrint "tactic.search" 30
+      debug-print "tactic.search" 30
         [ "wait-for-principal-arg: blocking on meta " , termErr mv
         , " in principal arguments of\n  " , termErr t
         ]
-      blockOnMeta m
+      block-on-meta m
   go (def d ds) = go* ds
   go _          = pure tt
 
@@ -209,7 +209,7 @@ private
 
   decompose-goal : Tactic-desc goal-name goal-strat → Term → TC (Level-data goal-strat × Term)
   decompose-goal td goal = do
-    ty ← withReduceDefs (false , atoms td) $ inferType goal >>= reduce
+    ty ← with-reduce-defs (false , atoms td) $ infer-type goal >>= reduce
     decompose-goal′ td ty
 
   lift-sol : Tactic-desc goal-name by-hlevel → Term → Term → ℕ → TC Term
@@ -230,7 +230,7 @@ private
       let's-hope : TC ⊤
       let's-hope = do
         final-solution ← lift-sol td solution l₁ it
-        debugPrint "tactic.search" 30
+        debug-print "tactic.search" 30
           [ "Lifting loop: Trying " , termErr final-solution , " for level " , termErr l₂ ]
         unify goal final-solution
 
@@ -259,10 +259,10 @@ private
     where
       go : ∀{gn gs gin} (td : Tactic-desc gn gs) (spd : Struct-proj-desc gn gs carrier-name gin) → Level-data gs → Term → TC ⊤
       go {gs = by-hlevel} {gin = true} td spd wanted-xlevel carrier-term = do
-        debugPrint "tactic.search" 10
+        debug-print "tactic.search" 10
           [ "Attempting to treat as " , nameErr (spd .struct-name) , " " , termErr wanted-xlevel ]
-        actual-level ← inferType carrier-term >>= get-level-from-struct td spd
-        debugPrint "tactic.search" 10
+        actual-level ← infer-type carrier-term >>= get-level-from-struct td spd
+        debug-print "tactic.search" 10
           [ "... but it's actually a(n) " , nameErr (spd .struct-name) , " " , termErr actual-level ]
         lv ← normalise wanted-xlevel
         lv′ ← normalise actual-level
@@ -278,14 +278,14 @@ private
   compose-instance-helper {goal-strat = by-hlevel} td lv = def (td .instance-helper) $ unknown h∷ unknown h∷ lv v∷ []
 
   use-instance-search : Tactic-desc goal-name goal-strat → Bool → Term → TC ⊤
-  use-instance-search {goal-name} td has-alts goal = runSpeculative do
+  use-instance-search {goal-name} td has-alts goal = run-speculative do
     (lv , ty) ← decompose-goal td goal
     solved@(meta mv _) ←
       new-meta (compose-instance td lv ty) where _ → backtrack []
-    instances ← getInstances mv
+    instances ← get-instances mv
 
     t ← quoteTC instances
-    debugPrint "tactic.search" 10
+    debug-print "tactic.search" 10
       [ "Using instance search for\n" , termErr ty
       , "\nFound candidates\n "       , termErr t ]
 
@@ -294,7 +294,7 @@ private
       go = λ where
         (x ∷ []) → do
           unify solved x
-          withReduceDefs (false , td .instance-helper ∷ []) $
+          with-reduce-defs (false , td .instance-helper ∷ []) $
             unify goal (compose-instance-helper td lv)
           pure (tt , true)
 
@@ -311,27 +311,27 @@ private
     def qn _ ← (snd <$> decompose-goal td goal) >>= reduce
       where tm → backtrack [ "Term " , termErr tm , " is not headed by a definition; ignoring projections." ]
 
-    go-alt ← inferType goal
-    debugPrint "tactic.search" 20
+    go-alt ← infer-type goal
+    debug-print "tactic.search" 20
       [ "Will attempt to use projections for goal\n" , termErr go-alt ]
 
-    (solved , instances) ← runSpeculative do
+    (solved , instances) ← run-speculative do
       goal-strat-term ← quoteTC goal-strat >>= normalise
       solved@(meta mv _) ← new-meta (def (quote Struct-proj-desc) (lit (name goal-name) v∷ goal-strat-term v∷ lit (name qn) v∷ unknown v∷ []))
-        where _ → typeError [ "No projections found for: " , termErr goal ]
+        where _ → type-error [ "No projections found for: " , termErr goal ]
 
-      (x ∷ xs) ← getInstances mv
+      (x ∷ xs) ← get-instances mv
         where [] → pure ((unknown , []) , false)
 
       pure ((solved , x ∷ xs) , true)
 
     nondet (eff List) instances λ a → do
-      ty ← withReduceDefs (false , atoms td) (inferType goal >>= reduce)
-      debugPrint "tactic.search" 20 $
+      ty ← with-reduce-defs (false , atoms td) (infer-type goal >>= reduce)
+      debug-print "tactic.search" 20 $
         "Outer type: " ∷ termErr ty ∷ []
-      projection-type ← inferType a
-      def _ (_ ∷ _ ∷ _ ∷ goal-nat-term v∷ []) ← inferType a where
-        _ → typeError "Sorry, this shouldn't have happened"
+      projection-type ← infer-type a
+      def _ (_ ∷ _ ∷ _ ∷ goal-nat-term v∷ []) ← infer-type a where
+        _ → type-error "Sorry, this shouldn't have happened"
       goal-nat ← unquoteTC {A = Bool} goal-nat-term
       projection ← unquoteTC {A = Struct-proj-desc goal-name goal-strat qn goal-nat} a
       treat-as-structured-type td projection goal
@@ -354,7 +354,7 @@ private
     rest ← extend-n n
     lift mv ← rest (Lift _ Term) $ lift <$> new-meta unknown
     let domain = arg (arg-info visible (modality relevant quantity-ω)) mv
-    pure λ a k → rest a $ extendContext "a" domain $ k
+    pure λ a k → rest a $ extend-context "a" domain $ k
 
   search : Tactic-desc goal-name goal-strat → Bool → Level-data goal-strat → (fuel : ℕ) → Term → TC ⊤
 
@@ -377,12 +377,12 @@ private
       -- arguments are built) and accumulator (searching recursively
       -- is done last).
     → TC ⊤              -- ^ Returns nada
-  gen-args 0 _ _ _ _ _ _ _ _ = typeError "gen-args: no fuel"
+  gen-args 0 _ _ _ _ _ _ _ _ = type-error "gen-args: no fuel"
   gen-args (suc fuel) gs has-alts level goal defn [] accum cont = do
     -- If we have no arguments to generate, then we can go ahead and
     -- use the accumulator as-is.
     unify goal (def defn (reverse-fast accum))
-    debugPrint "tactic.search" 10
+    debug-print "tactic.search" 10
       [ "Committed to solution: " , termErr (def defn (reverse accum)) ]
     cont
 
@@ -392,7 +392,7 @@ private
   ... | by-hlevel | `level-minus n@(suc _) =
     do
       level ← normalise level
-      debugPrint "tactic.search" 10
+      debug-print "tactic.search" 10
         [ "Hint demands offset, performing symbolic monus, subtracting from\n"
         , termErr level ]
       level′ ← monus level n
@@ -406,30 +406,30 @@ private
         x ← reduce x
         monus x it
       monus tm (suc it) = do
-        debugPrint "tactic.search" 10 [ "Dunno how to take 1 from " , termErr tm ]
-        typeError []
+        debug-print "tactic.search" 10 [ "Dunno how to take 1 from " , termErr tm ]
+        type-error []
 
   ... | gs | `term t = gen-args fuel gs has-alts level goal defn args (t v∷ accum) cont
 
   ... | gs | `search-under under subgoal-name = do
-    debugPrint "tactic.search" 10 [ "Going under " , termErr (lit (nat under)) ]
+    debug-print "tactic.search" 10 [ "Going under " , termErr (lit (nat under)) ]
     go-under ← extend-n under
     mv ← go-under Term do
-      debugPrint "tactic.search" 10 "In extended context"
+      debug-print "tactic.search" 10 "In extended context"
       new-meta unknown
-    debugPrint "tactic.search" 10 [ "Metavariable: " , termErr (wrap-lams under mv) ]
+    debug-print "tactic.search" 10 [ "Metavariable: " , termErr (wrap-lams under mv) ]
     gen-args fuel gs has-alts level goal defn args (wrap-lams under mv v∷ accum) do
       cont
       tactic-instance ← do
         solved@(meta mv′ _) ← new-meta (def (quote Tactic-desc) (lit (name subgoal-name) v∷ unknown v∷ []))
-          where _ → typeError [ "Could not get tactic instances:" , termErr goal ]
-        (ti ∷ []) ← getInstances mv′ where
-          [] → typeError [ "No tactic found for the goal " , termErr goal ]
-          _  → typeError [ "Multiple tactics for the same goal " , termErr goal ]
+          where _ → type-error [ "Could not get tactic instances:" , termErr goal ]
+        (ti ∷ []) ← get-instances mv′ where
+          [] → type-error [ "No tactic found for the goal " , termErr goal ]
+          _  → type-error [ "Multiple tactics for the same goal " , termErr goal ]
         unify solved ti
         pure ti
-      def _ (_ ∷ subgoal-strat-term v∷ []) ← inferType tactic-instance where
-        _ → typeError "Sorry, this shouldn't have happened"
+      def _ (_ ∷ subgoal-strat-term v∷ []) ← infer-type tactic-instance where
+        _ → type-error "Sorry, this shouldn't have happened"
       subgoal-strat ← unquoteTC {A = Goal-strat} subgoal-strat-term
       next-td ← unquoteTC {A = Tactic-desc subgoal-name subgoal-strat} tactic-instance
       go-under ⊤ $ search next-td has-alts dummy-level fuel mv
@@ -443,20 +443,20 @@ private
     → Term
     → List Term
     → TC (⊤ × Bool)
-  use-decomp-hints _ 0 _ _ _ _ = typeError "use-decomp-hints: no fuel"
-  use-decomp-hints {goal-name} {goal-strat} td (suc fuel) (lv , goal-ty) goal solved (c₁ ∷ cs) = withReduceDefs (false , atoms td) do
-    ty  ← inferType c₁
+  use-decomp-hints _ 0 _ _ _ _ = type-error "use-decomp-hints: no fuel"
+  use-decomp-hints {goal-name} {goal-strat} td (suc fuel) (lv , goal-ty) goal solved (c₁ ∷ cs) = with-reduce-defs (false , atoms td) do
+    ty  ← infer-type c₁
     c₁′ ← reduce c₁
     (remove-invisible c₁′ ty >>= λ where
       (con (quote decomp) (_ ∷ _ ∷ _ ∷ _ ∷ _ ∷ nm v∷ argspec v∷ [])) → do
-        debugPrint "tactic.search" 10
+        debug-print "tactic.search" 10
           [ "Using " , termErr nm , " decomposition for:\n"
           , termErr (def goal-name $ level-term lv v∷ goal-ty v∷ []) ]
 
         nm′ ← unquoteTC nm
         argsp ← unquoteTC argspec
         gen-args fuel goal-strat (not (length cs == 0)) lv goal nm′ argsp [] (pure tt)
-        noConstraints $ unify solved c₁
+        no-constraints $ unify solved c₁
 
         pure (tt , true)
 
@@ -472,17 +472,17 @@ private
   drop-pis x = x
 
   use-hints : Tactic-desc goal-name goal-strat → ℕ → Term → TC ⊤
-  use-hints _ 0 _ = typeError "use-hints: no fuel"
-  use-hints {goal-name} td (suc fuel) goal = runSpeculative do
+  use-hints _ 0 _ = type-error "use-hints: no fuel"
+  use-hints {goal-name} td (suc fuel) goal = run-speculative do
     (lv , ty) ← decompose-goal td goal
     wait-for-principal-arg ty
 
     solved@(meta mv _) ← new-meta (def (quote goal-decomposition) (lit (name goal-name) v∷ ty v∷ []))
-      where _ → typeError [ termErr ty ]
-    decomp-instances ← getInstances mv
+      where _ → type-error [ termErr ty ]
+    decomp-instances ← get-instances mv
 
     t ← quoteTC decomp-instances >>= normalise
-    debugPrint "tactic.search" 10
+    debug-print "tactic.search" 10
       [ "Finding decompositions for\n" , termErr ty
       , "\nFound candidates\n "        , termErr t ]
 
@@ -494,14 +494,14 @@ private
     =   use-projections td goal
     <|> use-hints td fuel goal
     <|> use-instance-search td has-alts goal
-    <|> typeError "Search failed!"
+    <|> type-error "Search failed!"
 
 
   decompose-goal-top
     : Tactic-desc goal-name goal-strat → Term → TC (Level-data goal-strat × Term × Telescope)
   decompose-goal-top td goal = do
-      ty ← withReduceDefs (false , atoms td) $
-        (inferType goal >>= reduce) >>= wait-just-a-bit
+      ty ← with-reduce-defs (false , atoms td) $
+        (infer-type goal >>= reduce) >>= wait-just-a-bit
       go ty
     where
       go : Term → TC _
@@ -515,10 +515,10 @@ private
 -- this is the way
 search-tactic-worker : Tactic-desc goal-name goal-strat → Term → TC ⊤
 search-tactic-worker {goal-name} td goal = do
-  ty ← withReduceDefs (false , atoms td) $ inferType goal >>= reduce
-  debugPrint "tactic.search" 10 [ "Target type: " , termErr ty ]
+  ty ← with-reduce-defs (false , atoms td) $ infer-type goal >>= reduce
+  debug-print "tactic.search" 10 [ "Target type: " , termErr ty ]
   (lv , ty , delta) ← decompose-goal-top td goal
-    <|> typeError
+    <|> type-error
       [ "Goal type is not of the form ‶" , nameErr goal-name , "″:\n"
       , termErr ty ]
 

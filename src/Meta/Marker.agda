@@ -3,7 +3,7 @@ module Meta.Marker where
 
 open import Foundations.Base
 
-open import Meta.Reflection
+open import Meta.Reflection.Base
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
@@ -17,6 +17,7 @@ open import Data.Nat.Base
 private variable
   ℓ : Level
   A : Type ℓ
+  x y : A
 
 ⌜_⌝ : A → A
 ⌜ x ⌝ = x
@@ -64,39 +65,39 @@ macro
   -- Generalised ap. Automatically generates the function to apply to by
   -- abstracting over any markers in the LEFT ENDPOINT of the path. Use
   -- with _≡⟨_⟩_.
-  ap! : ∀ {ℓ} {A : Type ℓ} {x y : A} → x ＝ y → Term → TC ⊤
+  ap! : x ＝ y → Term → TC ⊤
   ap! path goal = do
-    goalt ← inferType goal
+    goalt ← infer-type goal
     just (l , r) ← get-boundary goalt
-      where nothing → typeError [ "ap!: Goal type "
-                                , termErr goalt
-                                , " is not a path type" ]
+      where nothing → type-error [ "ap!: Goal type "
+                                 , termErr goalt
+                                 , " is not a path type" ]
     just l′ ← pure (abstract-marker l)
-      where _ → typeError [ "Failed to abstract over marker in term " , termErr l ]
+      where _ → type-error [ "Failed to abstract over marker in term " , termErr l ]
     let dm = lam visible (abs "x" l′)
     path′ ← quoteTC path
-    debugPrint "1lab.marked-ap" 10 [ "original term " , termErr l ]
-    debugPrint "1lab.marked-ap" 10 [ "abstracted term " , termErr dm ]
+    debug-print "tactic.marked-ap" 10 [ "original term " , termErr l ]
+    debug-print "tactic.marked-ap" 10 [ "abstracted term " , termErr dm ]
     unify goal (def (quote ap) (dm v∷ path′ v∷ []))
 
   -- Generalised ap. Automatically generates the function to apply to by
   -- abstracting over any markers in the RIGHT ENDPOINT of the path. Use
   -- with _≡˘⟨_⟩_.
-  ap¡ : ∀ {ℓ} {A : Type ℓ} {x y : A} → x ＝ y → Term → TC ⊤
+  ap¡ : x ＝ y → Term → TC ⊤
   ap¡ path goal = do
-    goalt ← inferType goal
+    goalt ← infer-type goal
     just (l , r) ← get-boundary goalt
-      where nothing → typeError [ "ap¡: Goal type "
-                                , termErr goalt
-                                , " is not a path type" ]
+      where nothing → type-error [ "ap¡: Goal type "
+                                 , termErr goalt
+                                 , " is not a path type" ]
     just r′ ← pure (abstract-marker r)
-      where _ → typeError [ "Failed to abstract over marker in term " , termErr r ]
+      where _ → type-error [ "Failed to abstract over marker in term " , termErr r ]
     path′ ← quoteTC path
     unify goal $
       def (quote ap) (lam visible (abs "x" r′) v∷ path′ v∷ [])
 
 -- Usage
-module _ {ℓ} {A : Type ℓ} {x y : A} {p : x ＝ y} {f : A → (A → A) → A} where
+module _ {x y : A} {p : x ＝ y} {f : A → (A → A) → A} where
   private
     q : f x (λ y → x) ＝ f y (λ z → y)
     q =

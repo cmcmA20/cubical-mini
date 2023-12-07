@@ -4,8 +4,8 @@ module Meta.Variadic where
 
 open import Foundations.Base
 
-open import Meta.Reflection
-open import Meta.Subst
+open import Meta.Reflection.Base
+open import Meta.Reflection.Subst
 open import Meta.Underlying public
 
 open import Data.Bool.Base
@@ -162,17 +162,17 @@ get-arity+type ninv = go 0 where
 -- returns inferred arity and codomain type
 variadic-worker : Term → TC (Term × Term)
 variadic-worker t = do
-  ty ← (inferType t >>= reduce) >>= wait-just-a-bit
-  debugPrint "tactic.variadic" 20 [ "Given type: " , termErr ty ]
+  ty ← (infer-type t >>= reduce) >>= wait-just-a-bit
+  debug-print "tactic.variadic" 20 [ "Given type: " , termErr ty ]
   let ty , invs = strip-invisible ty
       ninv = length invs
   ctx-len ← length <$> getContext
-  debugPrint "tactic.variadic" 20 [ "Ctx len: " , termErr (lit (nat ctx-len)) ]
+  debug-print "tactic.variadic" 20 [ "Ctx len: " , termErr (lit (nat ctx-len)) ]
   let θ = drop (ctx-len ∸ ninv) $ count-from-to 0 ctx-len
-  debugPrint "tactic.variadic" 20 [ "Stripped type: " , termErr ty ]
+  debug-print "tactic.variadic" 20 [ "Stripped type: " , termErr ty ]
   ty ← renameTC θ ty
   let ar , r = get-arity+type ninv ty
-  debugPrint "tactic.variadic" 20
+  debug-print "tactic.variadic" 20
     [ "Invisible args prefix length: " , termErr (lit (nat ninv)) , "\n"
     , "Stripped+substituted type: " , termErr ty , "\n"
     , "Inferred arity: " , termErr ar , "\n"
@@ -185,10 +185,10 @@ variadic-worker t = do
 variadic-instance-worker : Term → TC Term
 variadic-instance-worker r = do
   solved@(meta mv _) ← new-meta (def (quote Underlying) [ harg unknown , varg r ])
-    where _ → typeError [ "Could not get `Underlying` instances: " , termErr r ]
-  (und ∷ []) ← getInstances mv where
-    [] → typeError [ "No `Underlying `instances for ", termErr r ]
-    _  → typeError [ "Multiple `Underlying` instances for ", termErr r ]
+    where _ → type-error [ "Could not get `Underlying` instances: " , termErr r ]
+  (und ∷ []) ← get-instances mv where
+    [] → type-error [ "No `Underlying `instances for ", termErr r ]
+    _  → type-error [ "Multiple `Underlying` instances for ", termErr r ]
   unify solved und
   pure und
 

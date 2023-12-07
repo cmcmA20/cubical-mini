@@ -8,7 +8,7 @@ open import Foundations.Univalence.SIP public
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
-open import Meta.Reflection
+open import Meta.Reflection.Base
 
 open import Structures.Base public
 
@@ -89,7 +89,7 @@ desc→is-univalent desc =
 
 
 make-auto-str-term : ℕ → Term → TC ⊤
-make-auto-str-term zero t = typeError "autoDesc ran out of fuel"
+make-auto-str-term zero t = type-error "autoDesc ran out of fuel"
 make-auto-str-term (suc n) t =
   try-point
     <|> try-bin (quote _s→_)
