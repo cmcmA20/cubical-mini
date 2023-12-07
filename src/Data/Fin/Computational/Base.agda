@@ -59,6 +59,9 @@ impl .FinI.fsuc = fsuc
 impl .FinI.fsplit = fsplit
 impl .FinI.elim = elim
 
+fin→ℕ : Fin n → ℕ
+fin→ℕ (mk-fin k) = k
+
 module _ where
   open import Data.Fin.Base
     renaming (Fin to Finᵈ; fzero to fzeroᵈ; fsuc to fsucᵈ)

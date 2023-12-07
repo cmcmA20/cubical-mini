@@ -8,6 +8,7 @@ open import Meta.Search.Decidable
 open import Meta.Search.Discrete
 open import Meta.Search.Exhaustible
 open import Meta.Search.Finite.Bishop
+open import Meta.Search.Finite.ManifestBishop
 open import Meta.Search.Omniscient
 open import Meta.Witness
 

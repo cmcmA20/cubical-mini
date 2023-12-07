@@ -80,11 +80,11 @@ finite-choice {P} A-f k = do
   choose ← fin-choice (cardinality A-f) λ x → k (is-equiv→inverse (e .snd) x)
   pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e # x))
 
-finite-pi-fin
+bishop-finite-pi-fin
   : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
   → (∀ x → is-bishop-finite (P x))
   → is-bishop-finite Π[ P ]
-finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
+bishop-finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
   gg : _
@@ -94,9 +94,9 @@ finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
   li : gg is-left-inverse-of ff
   li _ = fun-ext λ ()
 
-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
+bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
   e ← fin-choice (suc sz) (enumeration₁ ∘ fam)
-  let rest = finite-pi-fin sz (fam ∘ fsuc)
+  let rest = bishop-finite-pi-fin sz (fam ∘ fsuc)
   cont ← enumeration₁ rest
   let
     work =  fin-suc-universal {n = sz} {A = P}
@@ -134,7 +134,7 @@ fun-is-bishop-finite
 fun-is-bishop-finite afin bfin = ∥-∥₁.proj! do
   ae ← enumeration₁ afin
   be ← enumeration₁ bfin
-  let count = finite-pi-fin (cardinality afin) λ _ → bfin
+  let count = bishop-finite-pi-fin (cardinality afin) λ _ → bfin
   eqv′ ← enumeration₁ count
   pure $ fin₁ $ pure (Π-cod-≃ (λ _ → be) ∙ₑ function-≃ ae (be ₑ⁻¹) ∙ₑ eqv′)
 
@@ -142,7 +142,7 @@ fun-is-bishop-finite afin bfin = ∥-∥₁.proj! do
   : {P : A → Type ℓ′} → is-bishop-finite A → (∀ x → is-bishop-finite (P x)) → is-bishop-finite (∀ x → P x)
 Π-is-bishop-finite afin fam = ∥-∥₁.proj! do
   eqv ← enumeration₁ afin
-  let count = finite-pi-fin (cardinality afin) λ x → fam $ is-equiv→inverse (eqv .snd) x
+  let count = bishop-finite-pi-fin (cardinality afin) λ x → fam $ is-equiv→inverse (eqv .snd) x
   eqv′ ← enumeration₁ count
   pure $ fin₁ $ pure $ Π-dom-≃ (eqv ₑ⁻¹) ∙ₑ eqv′
 
