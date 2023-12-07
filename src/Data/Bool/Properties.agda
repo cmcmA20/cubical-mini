@@ -31,12 +31,23 @@ universal = iso→equiv
 
 -- conjunction
 
-and-idem : (x : Bool) → x and x ＝ x
+and-id-r : ∀ x → x and true ＝ x
+and-id-r = witness!
+
+and-absorb-r : ∀ x → x and false ＝ false
+and-absorb-r = witness!
+
+and-assoc : ∀ x y z → (x and y) and z ＝ x and y and z
+and-assoc = witness!
+
+and-idem : ∀ x → x and x ＝ x
 and-idem = witness!
 
 and-comm : ∀ x y → x and y ＝ y and x
 and-comm = witness!
 
+and-compl : ∀ x → x and not x ＝ false
+and-compl = witness!
 
 -- negation
 
@@ -45,7 +56,6 @@ not-invol = witness!
 
 ≠→=not : ∀ x y → x ≠ y → x ＝ not y
 ≠→=not = witness!
-
 
 -- disjunction
 
@@ -64,6 +74,8 @@ or-comm = witness!
 or-idem : ∀ x → x or x ＝ x
 or-idem = witness!
 
+or-compl : ∀ x → x or not x ＝ true
+or-compl = witness!
 
 -- Testing witness tactic, uncomment if needed
 -- private module _ where
