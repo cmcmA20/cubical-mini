@@ -5,10 +5,11 @@ open import Data.String.Base
 open import Data.Unit.Base
 
 open import Agda.Builtin.FromString public
-  using ( IsString )
-  renaming ( fromString to from-string )
+  using ()
+  renaming ( IsString to From-string
+           ; fromString to from-string )
 
 instance
-  IsString-String : IsString String
-  IsString-String .IsString.Constraint _ = ⊤
-  IsString-String .IsString.fromString s = s
+  From-string-String : From-string String
+  From-string-String .From-string.Constraint _ = ⊤
+  From-string-String .from-string s = s

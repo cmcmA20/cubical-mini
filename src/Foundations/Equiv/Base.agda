@@ -125,8 +125,3 @@ module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where
 
   line→equiv : L ≃ R
   line→equiv = transport-line-equiv i0
-
-
--- this is the general form
-_stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
-S stable A = A ≃ S A

@@ -7,7 +7,7 @@ open import Foundations.Pi
 open import Foundations.Sigma
 open import Foundations.Univalence
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel

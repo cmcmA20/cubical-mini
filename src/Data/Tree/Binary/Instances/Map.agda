@@ -3,9 +3,9 @@ module Data.Tree.Binary.Instances.Map where
 
 open import Foundations.Base
 
-open import Meta.Idiom
+open import Meta.Effect.Idiom
 
-open import Data.Tree.Binary.Base public
+open import Data.Tree.Binary.Base as Tree public
 
 private variable
   ℓ : Level
@@ -13,4 +13,4 @@ private variable
 
 instance
   Map-Tree : Map (eff Tree)
-  Map-Tree ._<$>_ = map
+  Map-Tree .Map.map = Tree.map

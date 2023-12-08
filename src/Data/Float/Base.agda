@@ -5,25 +5,25 @@ open import Agda.Builtin.Float public
   using ( Float )
   renaming
     ( -- Relations
-      primFloatInequality     to float-inequality       -- Float → Float → Bool
-    ; primFloatEquality       to float-equality         -- Float → Float → Bool
-    ; primFloatLess           to float-less             -- Float → Float → Bool
-    ; primFloatIsInfinite     to float-is-infinite      -- Float → Bool
-    ; primFloatIsNaN          to float-is-NaN           -- Float → Bool
-    ; primFloatIsNegativeZero to float-is-negative-zero -- Float → Bool
-    ; primFloatIsSafeInteger  to float-is-safe-integer  -- Float → Bool
+      primFloatInequality     to _≠?_                   -- Float → Float → Bool
+    ; primFloatEquality       to _==_                   -- Float → Float → Bool
+    ; primFloatLess           to _<ᵇ_                   -- Float → Float → Bool
+    ; primFloatIsInfinite     to is-infinite?           -- Float → Bool
+    ; primFloatIsNaN          to is-NaN?                -- Float → Bool
+    ; primFloatIsNegativeZero to is-negative-zero?      -- Float → Bool
+    ; primFloatIsSafeInteger  to is-safe-integer?       -- Float → Bool
       -- Conversions
     ; primFloatToWord64 to float→maybe-word64 -- Float → Maybe Word64
-    ; primNatToFloat    to ℕ→float      -- ℕ → Float
-    ; primIntToFloat    to ℤ→float      -- ℤ → Float
-    ; primFloatRound    to float-round     -- Float → Maybe ℤ
-    ; primFloatFloor    to float-floor     -- Float → Maybe ℤ
-    ; primFloatCeiling  to float-ceil      -- Float → Maybe ℤ
-    ; primFloatToRatio  to float-to-ratio  -- Float → Int × Int
-    ; primRatioToFloat  to ratio-to-float  -- ℤ → ℤ → Float
-    ; primFloatDecode   to float-decode    -- Float → Maybe (ℤ × ℤ)
-    ; primFloatEncode   to float-encode    -- ℤ → ℤ → Maybe Float
-    ; primShowFloat     to show-float      -- Float → String
+    ; primNatToFloat    to ℕ→float            -- ℕ → Float
+    ; primIntToFloat    to ℤ→float            -- ℤ → Float
+    ; primFloatRound    to round              -- Float → Maybe ℤ
+    ; primFloatFloor    to floor              -- Float → Maybe ℤ
+    ; primFloatCeiling  to ceil               -- Float → Maybe ℤ
+    ; primFloatToRatio  to float→ratio        -- Float → Int × Int
+    ; primRatioToFloat  to ratio→float        -- ℤ → ℤ → Float
+    ; primFloatDecode   to decode-float       -- Float → Maybe (ℤ × ℤ)
+    ; primFloatEncode   to encode-float       -- ℤ → ℤ → Maybe Float
+    ; primShowFloat     to show-float         -- Float → String
       -- Operations
     ; primFloatPlus   to float-plus   -- Float → Float → Float
     ; primFloatMinus  to float-minus  -- Float → Float → Float

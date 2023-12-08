@@ -7,5 +7,7 @@ open import Data.Bool.Base
 
 instance
   Show-bool : Show Bool
-  Show-bool .shows-prec _ false = "false"
-  Show-bool .shows-prec _ true  = "true"
+  Show-bool = default-show go where
+    go : Bool → _
+    go false = "false"
+    go true  = "true"

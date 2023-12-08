@@ -35,7 +35,7 @@ universal = iso→equiv the-iso where
   g-iso = is-equiv→is-iso g-eqv
 
   cong′ : Iso _ _
-  cong′ .fst = map f g
+  cong′ .fst = dmap f g
   cong′ .snd .is-iso.inv  (inl x) = inl (f-iso .is-iso.inv x)
   cong′ .snd .is-iso.inv  (inr x) = inr (g-iso .is-iso.inv x)
   cong′ .snd .is-iso.rinv (inl x) = ap inl (f-iso .is-iso.rinv x)

@@ -4,14 +4,12 @@ module Truncation.Propositional.Instances.Idiom where
 open import Foundations.Base
 open import Foundations.HLevel
 
-open import Meta.Idiom
+open import Meta.Effect.Idiom
 
 open import Truncation.Propositional.Base
+open import Truncation.Propositional.Instances.Map public
 
 instance
-  Map-∥-∥₁ : Map (eff ∥_∥₁)
-  Map-∥-∥₁ .Map._<$>_ = map
-
   Idiom-∥-∥₁ : Idiom (eff ∥_∥₁)
   Idiom-∥-∥₁ .Idiom.pure = ∣_∣₁
   Idiom-∥-∥₁ .Idiom._<*>_ ∣f∣₁ ∣a∣₁ =

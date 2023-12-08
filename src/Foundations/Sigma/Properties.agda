@@ -182,15 +182,7 @@ open is-iso
 Σ-map-snd : ({x : A} → P x → Q x) → Σ _ P → Σ _ Q
 Σ-map-snd f (x , y) = (x , f y)
 
-Σ-pathP-dep
-  : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
-  → {x : Σ _ (B i0)} {y : Σ _ (B i1)}
-  → (p : ＜ x .fst ／ A ＼ y .fst ＞)
-  → ＜ x .snd ／ (λ i → B i (p i)) ＼ y .snd ＞
-  → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
-Σ-pathP-dep p q i = p i , q i
-
-_,ₚ_ = Σ-pathP-dep
+_,ₚ_ = Σ-pathP
 infixr 4 _,ₚ_
 
 Σ-prop-pathP

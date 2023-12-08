@@ -4,7 +4,7 @@ module Data.Sum.Instances.Finite where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Finite.ManifestBishop
 

@@ -5,10 +5,11 @@ open import Data.Nat.Base
 open import Data.Unit.Base
 
 open import Agda.Builtin.FromNat public
-  using ( Number )
-  renaming ( fromNat to from-ℕ )
+  using ()
+  renaming ( Number to From-ℕ
+           ; fromNat to from-ℕ )
 
 instance
-  Number-ℕ : Number ℕ
-  Number-ℕ .Number.Constraint _ = ⊤
-  Number-ℕ .Number.fromNat n = n
+  From-ℕ-ℕ : From-ℕ ℕ
+  From-ℕ-ℕ .From-ℕ.Constraint _ = ⊤
+  From-ℕ-ℕ .from-ℕ n = n

@@ -4,16 +4,25 @@ module Meta.Record where
 open import Foundations.Base
 open import Foundations.Isomorphism public
 
+open import Meta.Append
+open import Meta.Effect.Foldable
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
 open import Meta.Reflection.Base
 
 open import Data.Bool.Base
-open import Data.List.Base
+open import Data.List.Base as List
+open import Data.List.Instances.Append
+open import Data.List.Instances.Foldable
 open import Data.List.Instances.FromProduct
+open import Data.List.Instances.Map
 
-field-names→sigma : ∀ {ℓ} {A : Type ℓ} → List A → Term
+private variable
+  ℓ : Level
+  A : Type ℓ
+
+field-names→sigma : List A → Term
 field-names→sigma [] = def (quote ⊤) []
 field-names→sigma (_ ∷ []) = unknown
 field-names→sigma (_ ∷ xs) =
@@ -25,8 +34,8 @@ Fields = List (Name × List Name)
 field-names→paths : List (Arg Name) → Fields
 field-names→paths [] = []
 field-names→paths (arg _ nm ∷ []) = (nm , []) ∷ []
-field-names→paths (arg _ x ∷ xs) with field-names→paths xs
-... | fields = (x , [ quote fst ]) ∷ map (λ (f , p) → f , quote snd ∷ p) fields
+field-names→paths (arg _ x ∷ (y ∷ ys)) with field-names→paths (y ∷ ys)
+... | fields = (x , [ quote fst ]) ∷ map (second (quote snd ∷_)) fields
 
 record→iso : Name → (List (Arg Term) → TC Term) → TC Term
 record→iso namen unfolded =
@@ -35,8 +44,7 @@ record→iso namen unfolded =
   go : List ArgInfo → Term → TC Term
   go acc (pi argu@(arg i@(arg-info _ m) argTy) (abs s ty)) = do
     r ← extend-context "arg" argu $ go (i ∷ acc) ty
-    pure $ pi (arg i' argTy) (abs s r)
-    where i' = arg-info hidden m
+    pure $ pi (arg (arg-info hidden m) argTy) (abs s r)
   go acc (agda-sort _) = do
     let rec = def namen (makeArgs 0 [] acc)
     unfolded ← unfolded (implicitArgs 0 [] acc)
@@ -51,46 +59,35 @@ record→iso namen unfolded =
       implicitArgs n acc (_ ∷ i) = implicitArgs (suc n) (var n [] h∷ acc) i
   go _ _ = type-error [ "Not a record type name: " , nameErr namen ]
 
-undo-clauses : Fields → List Clause
-undo-clauses = go where
-  go : List (Name × List Name) → List Clause
-  go [] = []
-  go ((r-field , sel-path) ∷ xs) =
-    clause (("sig" , argN unknown) ∷ [])
-           (argN (proj (quote snd)) ∷ argN (proj (quote is-iso.inv)) ∷ argN (var 0) ∷ argN (proj r-field) ∷ [])
-           (fold-r (λ n t → def n (t v∷ [])) (var 0 []) (reverse-fast sel-path))
-      ∷ go xs
+undo-clause : Name × List Name → Clause
+undo-clause (r-field , sel-path) = clause
+  (("sig" , argN unknown) ∷ [])
+  [ argN (proj (quote snd))
+  , argN (proj (quote is-iso.inv))
+  , argN (var 0)
+  , argN (proj r-field)
+  ]
+  (fold-r (λ n t → def n (t v∷ [])) (var 0 []) (reverse sel-path))
 
-redo-clauses : Fields → List Clause
-redo-clauses = go where
-  go : List (Name × List Name) → List Clause
-  go [] = []
-  go ((r-field , sel-path) ∷ xs) =
-    clause (("rec" , argN unknown) ∷ [])
-           (argN (proj (quote fst)) ∷ argN (var 0) ∷ map (argN ∘ proj) sel-path)
-           (def r-field (var 0 [] v∷ []))
-      ∷ go xs
+redo-clause : Name × List Name → Clause
+redo-clause (r-field , sel-path) = clause
+  (("rec" , argN unknown) ∷ [])
+  (argN (proj (quote fst)) ∷ argN (var 0) ∷ map (argN ∘ proj) sel-path)
+  (def r-field (var 0 [] v∷ []))
 
-undo-redo-clauses : Fields → List Clause
-undo-redo-clauses = go where
-  go : Fields → List Clause
-  go [] = []
-  go ((r-field , _) ∷ xs) =
-    clause (("sig" , argN unknown) ∷ ("i" , argN (quoteTerm I)) ∷ [])
-           ( argN (proj (quote snd)) ∷ argN (proj (quote is-iso.linv))
-           ∷ argN (var 1) ∷ argN (var 0) ∷ argN (proj r-field) ∷ [])
-           (def r-field (var 1 [] v∷ []))
-      ∷ go xs
+undo-redo-clause : Name × List Name → Clause
+undo-redo-clause ((r-field , _)) = clause
+  (("sig" , argN unknown) ∷ ("i" , argN (quoteTerm I)) ∷ [])
+  ( argN (proj (quote snd)) ∷ argN (proj (quote is-iso.linv))
+  ∷ argN (var 1) ∷ argN (var 0) ∷ argN (proj r-field) ∷ [])
+  (def r-field (var 1 [] v∷ []))
 
-redo-undo-clauses : Fields → List Clause
-redo-undo-clauses = go where
-  go : List (Name × List Name) → List Clause
-  go [] = []
-  go ((r-field , sel-path) ∷ xs) =
-    clause (("rec" , argN unknown) ∷ ("i" , argN (quoteTerm I)) ∷ [])
-           (argN (proj (quote snd)) ∷ argN (proj (quote is-iso.rinv)) ∷ argN (var 1) ∷ argN (var 0) ∷ map (argN ∘ proj) sel-path)
-           (fold-r (λ n t → def n (t v∷ [])) (var 1 []) (reverse-fast sel-path))
-      ∷ go xs
+redo-undo-clause : Name × List Name → Clause
+redo-undo-clause (r-field , sel-path) = clause
+  (("rec" , argN unknown) ∷ ("i" , argN (quoteTerm I)) ∷ [])
+  (  [ argN (proj (quote snd)) , argN (proj (quote is-iso.rinv)) , argN (var 1) , argN (var 0) ]
+  <> map (argN ∘ proj) sel-path)
+  (fold-r (λ n t → def n (t v∷ [])) (var 1 []) (reverse sel-path))
 
 pi-term→sigma : Term → TC Term
 pi-term→sigma (pi (arg _ x) (abs n (def n′ _))) = pure x
@@ -124,10 +121,10 @@ make-record-iso-sigma declare? getName `R = do
     false → pure tt
 
   define-function nm
-    ( redo-clauses fields ++
-      undo-clauses fields ++
-      redo-undo-clauses fields ++
-      undo-redo-clauses fields)
+    ( map redo-clause fields <>
+      map undo-clause fields <>
+      map redo-undo-clause fields <>
+      map undo-redo-clause fields)
   pure nm
 
 

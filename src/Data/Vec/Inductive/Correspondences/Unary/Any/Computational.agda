@@ -26,9 +26,9 @@ Any {n} P xs = Σ[ idx ꞉ Fin n ] P (lookup xs idx)
 any? : Decidable P → Decidable (λ (xs : Vec A n) → Any P xs)
 any? {n = 0}     P? []       = no λ()
 any? {n = suc n} P? (x ∷ xs) =
-  Dec.map [ (fzero ,_) , bimap fsuc id ]ᵤ
-          go
-          (⊎-decision (P? x) (any? P? xs)) where
-            go : _
-            go ¬ps (mk-fin 0       , p)  = ¬ps (inl p)
-            go ¬ps (mk-fin (suc k) , ps) = ¬ps (inr (_ , ps))
+  Dec.dmap [ (fzero ,_) , bimap fsuc id ]ᵤ
+           go
+           (⊎-decision (P? x) (any? P? xs)) where
+             go : _
+             go ¬ps (mk-fin 0       , p)  = ¬ps (inl p)
+             go ¬ps (mk-fin (suc k) , ps) = ¬ps (inr (_ , ps))

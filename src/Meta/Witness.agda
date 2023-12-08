@@ -9,6 +9,7 @@ open import Meta.Reflection.Subst
 open import Meta.Search.Decidable
 
 open import Data.Dec.Base
+open import Data.List.Base
 open import Data.List.Instances.Idiom
 
 witness-macro : Term → TC ⊤

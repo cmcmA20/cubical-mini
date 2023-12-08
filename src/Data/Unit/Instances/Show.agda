@@ -7,4 +7,4 @@ open import Data.Unit.Base
 
 instance
   Show-⊤ : Show ⊤
-  Show-⊤ .shows-prec _ _ = "tt"
+  Show-⊤ = default-show (λ _ → "tt")

@@ -21,9 +21,9 @@ instance
     fin-is-discreteⁱ fzero    (fsuc _) = no λ ()
     fin-is-discreteⁱ (fsuc _) fzero    = no λ ()
     fin-is-discreteⁱ (fsuc k) (fsuc l) =
-      Dec.map (apⁱ fsuc)
-              (_∘ (λ { reflⁱ → reflⁱ }))
-              (fin-is-discreteⁱ k l)
+      Dec.dmap (apⁱ fsuc)
+               (_∘ (λ { reflⁱ → reflⁱ }))
+               (fin-is-discreteⁱ k l)
 
   decomp-dis-fin : goal-decomposition (quote is-discrete) (Fin n)
   decomp-dis-fin = decomp (quote fin-is-discrete) []

@@ -35,9 +35,6 @@ instance
   decomp-hlevel-∥-∥₁ : goal-decomposition (quote is-of-hlevel) ∥ A ∥₁
   decomp-hlevel-∥-∥₁ = decomp (quote ∥-∥₁-is-of-hlevel ) [ `level-minus 1 ]
 
-map : (A → B) → (∥ A ∥₁ → ∥ B ∥₁)
-map f = rec (hlevel 1) (∣_∣₁ ∘ f)
-
 proj : (A-prop : is-prop A) → ∥ A ∥₁ → A
 proj A-prop = rec A-prop id
 

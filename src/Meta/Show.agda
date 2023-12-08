@@ -3,27 +3,47 @@ module Meta.Show where
 
 open import Foundations.Base
 
+open import Meta.Append
+open import Meta.Literals.FromString
+open import Meta.Reflection.Base
+  using (Name; Precedence; show-name)
+
 open import Data.Bool.Base
 open import Data.Nat.Base
 open import Data.String.Base public
+open import Data.String.Instances.Append
+
+record ShowS : Type where
+  constructor showS
+  field unshowS : String → String
+
+instance
+  From-string-ShowS : From-string ShowS
+  From-string-ShowS .From-string.Constraint _ = ⊤
+  From-string-ShowS .from-string s = showS (s <>_)
+
+  Append-ShowS : Append ShowS
+  Append-ShowS .Append.mempty                     = showS id
+  Append-ShowS .Append._<>_ (showS k₁) (showS k₂) = showS (k₁ ∘ k₂)
+
 
 record Show {ℓ} (T : Type ℓ) : Type ℓ where
   field
-    shows-prec : ℕ → T → String
-    -- ^ take care, nesting depth _increases_ in recursive calls
-
-  show : T → String
-  show = shows-prec 0
+    shows-prec : Precedence → T → ShowS
+    show       : T → String
 
 open Show ⦃ ... ⦄ public
 
+default-show : ∀ {ℓ} {A : Type ℓ} → (A → String) → Show A
+default-show s .shows-prec _ x = from-string (s x)
+default-show s .show = s
+
 -- A common helper for implementing Show instances
-show-parens : Bool → String → String
-show-parens true  s = "(" ++ₛ s ++ₛ ")"
+show-parens : Bool → ShowS → ShowS
+show-parens true  s = "(" <> s <> ")"
 show-parens false s = s
 
+
 instance
-  Show-Σ : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′}
-         → ⦃ Show A ⦄ → ⦃ ∀ {a} → Show (B a) ⦄ → Show (Σ[ a ꞉ A ] B a)
-  Show-Σ .shows-prec n (a , b) = show-parens (0 <ᵇ n) $
-    shows-prec (suc n) a ++ₛ " , " ++ₛ shows-prec n b
+  Show-Name : Show Name
+  Show-Name = default-show show-name

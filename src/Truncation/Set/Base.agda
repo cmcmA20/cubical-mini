@@ -28,9 +28,6 @@ instance
   H-Level-∥-∥₂ : ∀ {n} → H-Level (2 + n) ∥ A ∥₂
   H-Level-∥-∥₂ = hlevel-basic-instance 2 $ is-set-η squash₂
 
-map : (A → B) → (∥ A ∥₂ → ∥ B ∥₂)
-map f = rec (hlevel 2) (∣_∣₂ ∘ f)
-
 proj : (A-set : is-set A) → ∥ A ∥₂ → A
 proj A-set = rec A-set id
 

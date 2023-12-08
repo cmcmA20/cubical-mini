@@ -4,7 +4,7 @@ module Data.List.Operations where
 
 open import Foundations.Base
 
-open import Meta.Idiom
+open import Meta.Effect.Idiom
 
 open import Data.Bool.Base
 open import Data.Maybe.Base
@@ -14,8 +14,9 @@ open import Data.List.Base
 open import Data.List.Instances.Idiom
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ : Level
   A : Type ℓ
+  B : Type ℓ′
 
 all=? : (A → A → Bool) → List A → List A → Bool
 all=? eq=? [] [] = true
@@ -92,3 +93,13 @@ count-from-to : ℕ → ℕ → List ℕ
 count-from-to _          0        = []
 count-from-to 0          (suc to) = 0 ∷ (suc <$> count-from-to 0 to)
 count-from-to (suc from) (suc to) = suc <$> count-from-to from to
+
+map-up : (ℕ → A → B) → ℕ → List A → List B
+map-up _ _ []       = []
+map-up f n (x ∷ xs) = f n x ∷ map-up f (suc n) xs
+
+span : (p : A → Bool) → List A → List A × List A
+span p [] = [] , []
+span p (x ∷ xs) with p x
+... | true  = first (x ∷_) (span p xs)
+... | false = [] , x ∷ xs

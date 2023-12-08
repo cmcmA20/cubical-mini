@@ -46,9 +46,9 @@ instance
 
 is-discrete-injection : (A ↣ B) → is-discrete B → is-discrete A
 is-discrete-injection (f , f-inj) B-dis .is-discrete-β x y =
-  Dec.map f-inj
-          (_∘ ap f)
-          (B-dis .is-discrete-β (f x) (f y))
+  Dec.dmap f-inj
+           (_∘ ap f)
+           (B-dis .is-discrete-β (f x) (f y))
 
 is-discrete-embedding : (A ↪ B) → is-discrete B → is-discrete A
 is-discrete-embedding (f , f-emb) =
@@ -81,4 +81,4 @@ discrete ⦃ d ⦄ = d
 
 lift-is-discrete : is-discrete A → is-discrete (Lift ℓ A)
 lift-is-discrete di .is-discrete-β (lift x) (lift y) =
-  Dec.map (ap lift) (_∘ ap lower) (is-discrete-β di x y)
+  Dec.dmap (ap lift) (_∘ ap lower) (is-discrete-β di x y)

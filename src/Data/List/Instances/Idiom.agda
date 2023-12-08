@@ -3,18 +3,16 @@ module Data.List.Instances.Idiom where
 
 open import Foundations.Base
 
-open import Meta.Idiom
+open import Meta.Effect.Idiom
 
-open import Data.List.Base public
+open import Data.List.Base
+open import Data.List.Instances.Map public
 
 private variable
   ℓ : Level
   A : Type ℓ
 
 instance
-  Map-List : Map (eff List)
-  Map-List .Map._<$>_ = map
-
   Idiom-List : Idiom (eff List)
   Idiom-List .Idiom.pure = _∷ []
   Idiom-List .Idiom._<*>_ = go where

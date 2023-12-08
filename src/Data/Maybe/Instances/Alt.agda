@@ -3,17 +3,23 @@ module Data.Maybe.Instances.Alt where
 
 open import Foundations.Base
 
-open import Meta.Alt
+open import Meta.Effect.Alt
 
-open import Data.Maybe.Base public
+open import Data.Maybe.Base
 
-maybe→alt : ∀ {M : Effect} {ℓ} {A : Type ℓ}
-          → ⦃ _ : Alt M ⦄ ⦃ _ : Idiom M ⦄ → Maybe A → M .Effect.₀ A
+private variable
+  ℓ : Level
+  A : Type ℓ
+  M : Effect
+
+maybe→alt : (let module M = Effect M)
+            ⦃ _ : Alt M ⦄ ⦃ _ : Idiom M ⦄
+          → Maybe A → M.₀ A
 maybe→alt (just x) = pure x
 maybe→alt nothing  = fail
 
 instance
   Alt-Maybe : Alt (eff Maybe)
-  Alt-Maybe .Alt.fail′ _ = nothing
-  Alt-Maybe .Alt._<|>_ (just x) y = just x
-  Alt-Maybe .Alt._<|>_ nothing y = y
+  Alt-Maybe .Alt.fail = nothing
+  Alt-Maybe .Alt._<|>_ (just x) _ = just x
+  Alt-Maybe .Alt._<|>_ nothing  y = y

@@ -10,9 +10,9 @@ open import Data.Nat.Order.Inductive public
 open import Data.Fin.Inductive.Base
 
 instance
-  Number-Fin : ∀ {n} → Number (Fin n)
-  Number-Fin {n} .Number.Constraint m = m < n
-  Number-Fin {n} .from-ℕ m ⦃ (e) ⦄ = go m n e where
+  From-ℕ-Fin : ∀ {n} → From-ℕ (Fin n)
+  From-ℕ-Fin {n} .From-ℕ.Constraint m = m < n
+  From-ℕ-Fin {n} .from-ℕ m ⦃ (e) ⦄ = go m n e where
     go : ∀ k n → k < n → Fin n
     go zero    (suc n) _       = fzero
     go (suc k) (suc n) (s≤s e) = fsuc (go k n e)

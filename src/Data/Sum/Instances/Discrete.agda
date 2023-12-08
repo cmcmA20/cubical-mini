@@ -15,10 +15,10 @@ private variable
 
 ⊎-is-discrete : is-discrete A → is-discrete B → is-discrete (A ⊎ B)
 ⊎-is-discrete A-di B-di = is-discrete-η λ where
-  (inl a₁) (inl a₂) → Dec.map (ap inl) (_∘ inl-inj) $ is-discrete-β A-di a₁ a₂
+  (inl a₁) (inl a₂) → Dec.dmap (ap inl) (_∘ inl-inj) $ is-discrete-β A-di a₁ a₂
   (inl _)  (inr _)  → no ⊎-disjoint
   (inr _)  (inl _)  → no $ ⊎-disjoint ∘ sym
-  (inr b₁) (inr b₂) → Dec.map (ap inr) (_∘ inr-inj) (is-discrete-β B-di b₁ b₂)
+  (inr b₁) (inr b₂) → Dec.dmap (ap inr) (_∘ inr-inj) (is-discrete-β B-di b₁ b₂)
 
 instance
   decomp-dis-⊎ : goal-decomposition (quote is-discrete) (A ⊎ B)

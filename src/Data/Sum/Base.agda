@@ -32,12 +32,12 @@ private variable
 []ᵤ-η (inl x) = refl
 []ᵤ-η (inr x) = refl
 
-map : (A → C) → (B → D) → A ⊎ B → C ⊎ D
-map f g (inl a) = inl (f a)
-map f g (inr b) = inr (g b)
+dmap : (A → C) → (B → D) → A ⊎ B → C ⊎ D
+dmap f g (inl a) = inl (f a)
+dmap f g (inr b) = inr (g b)
 
 map-l : (A → C) → A ⊎ B → C ⊎ B
-map-l f = map f id
+map-l f = dmap f id
 
 map-r : (B → C) → A ⊎ B → A ⊎ C
-map-r f = map id f
+map-r f = dmap id f

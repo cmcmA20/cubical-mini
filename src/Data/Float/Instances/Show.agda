@@ -7,4 +7,4 @@ open import Data.Float.Base
 
 instance
   Show-float : Show Float
-  Show-float .shows-prec _ = show-float
+  Show-float = default-show show-float

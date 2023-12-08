@@ -4,7 +4,7 @@ module Data.Dec.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Idiom
+open import Meta.Effect.Idiom
 open import Meta.Search.HLevel
 
 open import Truncation.Propositional as ∥-∥₁
@@ -22,7 +22,7 @@ private variable
 
 dec-∥-∥₁-equiv : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
 dec-∥-∥₁-equiv = prop-extₑ!
-  (∥-∥₁.rec! $ Dec.map pure ∥-∥₁.rec!)
+  (∥-∥₁.rec! $ Dec.dmap pure ∥-∥₁.rec!)
   (Dec.rec (yes <$>_) $ pure ∘ no ∘ _∘ pure)
 
 dec-≃ : A ≃ B → Dec A ≃ Dec B

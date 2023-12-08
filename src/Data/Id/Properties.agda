@@ -46,6 +46,6 @@ opaque
 
 is-discreteⁱ→is-discrete : is-discreteⁱ A → is-discrete A
 is-discreteⁱ→is-discrete d .is-discrete-β x y =
-  Dec.map Id≃path.to
-          (_∘ Id≃path.from)
-          (d x y)
+  Dec.dmap Id≃path.to
+           (_∘ Id≃path.from)
+           (d x y)

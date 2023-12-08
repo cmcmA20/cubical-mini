@@ -629,10 +629,12 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 
 
 -- Sigma path space
-Σ-pathP : {x y : Σ A B}
-          (p :              x .fst ＝ y .fst                 )
-        →   ＜ x .snd ／     (λ i → B (p i))    ＼ y .snd ＞
-        →      x                   ＝              y
+Σ-pathP
+  : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
+  → {x : Σ _ (B i0)} {y : Σ _ (B i1)}
+  → (p : ＜ x .fst ／ A ＼ y .fst ＞)
+  → ＜ x .snd ／ (λ i → B i (p i)) ＼ y .snd ＞
+  → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
 Σ-pathP p q i = p i , q i
 
 Σ-path : {x y : Σ A B}
@@ -692,11 +694,8 @@ subst-path-both p adj = transport-path p adj adj
 
 -- TODO move this section somewhere?
 
-it : ⦃ A ⦄ → A
-it ⦃ (a) ⦄ = a
-
-_weakly-stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
-S weakly-stable A = S A → A
+by-instance : ⦃ A ⦄ → A
+by-instance ⦃ (a) ⦄ = a
 
 -- Explicit type hint
 the : (A : Type ℓ) → A → A

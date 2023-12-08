@@ -3,6 +3,7 @@ module Order.Linear where
 
 open import Foundations.Base
 
+open import Meta.Effect.Map
 open import Meta.Record
 open import Meta.Search.HLevel
 
@@ -32,7 +33,7 @@ record is-linear-order {ℓ ℓ′} {A : Type ℓ}
   <-irr p = <-asym p p
 
   <-trans : ∀ {x y z} → x < y → y < z → x < z
-  <-trans p = ∥-∥₁.proj! ∘ ∥-∥₁.map
+  <-trans p = ∥-∥₁.proj! ∘ map
     [ (λ s → absurd (<-asym p s)) , id ]ᵤ ∘ <-cmp
 
   has-is-set : is-set A

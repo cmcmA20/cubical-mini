@@ -4,7 +4,7 @@ module Data.Fin.Inductive.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 open import Meta.Underlying
 
 open import Data.Empty.Base
@@ -39,7 +39,7 @@ cast-equiv p = cast p , cast-is-equiv p
 
 strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
 strengthen fzero            = inl fzero
-strengthen {suc n} (fsuc x) = ⊎.map fsuc fsuc $ strengthen x
+strengthen {suc n} (fsuc x) = ⊎.dmap fsuc fsuc $ strengthen x
 
 inject : m ≤ n → Fin m → Fin n
 inject (s≤s _)  fzero    = fzero

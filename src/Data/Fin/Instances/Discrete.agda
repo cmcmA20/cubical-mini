@@ -20,7 +20,7 @@ instance
   fin-is-discrete {suc _} .is-discrete-β fzero    (fsuc l) = no nothing≠just
   fin-is-discrete {suc _} .is-discrete-β (fsuc k) fzero    = no just≠nothing
   fin-is-discrete {suc _} .is-discrete-β (fsuc k) (fsuc l) =
-    Dec.map (ap fsuc) (_∘ just-inj) (fin-is-discrete .is-discrete-β k l)
+    Dec.dmap (ap fsuc) (_∘ just-inj) (fin-is-discrete .is-discrete-β k l)
 
   decomp-dis-fin : goal-decomposition (quote is-discrete) (Fin n)
   decomp-dis-fin = decomp (quote fin-is-discrete) []

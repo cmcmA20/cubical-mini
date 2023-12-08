@@ -4,7 +4,7 @@ module Correspondences.Classical where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
@@ -41,7 +41,7 @@ opaque
   unfolding is-classical
   instance
     Map-Classically : Map (eff Classically)
-    Map-Classically ._<$>_ f ¬¬a ¬b = ¬¬a $ ¬b ∘ f
+    Map-Classically .Map.map f ¬¬a ¬b = ¬¬a $ ¬b ∘ f
 
     Idiom-Classically : Idiom (eff Classically)
     Idiom-Classically .pure = _&_

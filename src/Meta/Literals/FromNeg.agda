@@ -2,5 +2,6 @@
 module Meta.Literals.FromNeg where
 
 open import Agda.Builtin.FromNeg public
-  using ( Negative )
-  renaming ( fromNeg to from-neg )
+  using ()
+  renaming ( Negative to From-neg
+           ; fromNeg to from-neg )

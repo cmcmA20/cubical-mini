@@ -1,9 +1,9 @@
 {-# OPTIONS --safe #-}
-module Data.Vec.Inductive.Instances.Traverse where
+module Data.Vec.Inductive.Instances.Traversable where
 
 open import Foundations.Base
 
-open import Meta.Traverse
+open import Meta.Effect.Traversable
 
 open import Data.Nat.Base
 
@@ -15,9 +15,9 @@ private variable
   n : ℕ
 
 instance
-  Traverse-Vec : Traverse (eff (λ T → Vec T n))
-  Traverse-Vec .Traverse.traverse {M} {a} {b} = go where
+  Traversable-Vec : Traversable (eff (λ T → Vec T n))
+  Traversable-Vec .traverse {M} {A} {B} = go where
     private module M = Effect M
-    go : {n : ℕ} → (a → M.₀ b) → Vec a n → M.₀ (Vec b n)
+    go : (A → M.₀ B) → Vec A n → M.₀ (Vec B n)
     go {(zero)} f []       = pure []
     go {suc n}  f (x ∷ xs) = ⦇ f x ∷ go f xs ⦈

@@ -50,9 +50,9 @@ all-tail (_ ∷ us) = us
 all? : Decidable P → Decidableⁿ {1} (λ (xs : Vec A n) → All P xs)
 all? P? []       = yes []
 all? P? (x ∷ xs) =
-  Dec.map (λ { (px , ps) → px ∷ ps })
-          (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
-          (×-decision (P? x) (all? P? xs))
+  Dec.dmap (λ { (px , ps) → px ∷ ps })
+           (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
+           (×-decision (P? x) (all? P? xs))
 
 
 instance
@@ -60,7 +60,7 @@ instance
                   ⦃ di : ∀ {x} → is-discrete (P x) ⦄
                   → is-discrete (All P xs)
   all-is-discrete {xs = []} .is-discrete-β [] [] = yes refl
-  all-is-discrete {P} {xs = xs@(_ ∷ _)} ⦃ di ⦄ .is-discrete-β (u ∷ us) (v ∷ vs) = Dec.map
+  all-is-discrete {P} {xs = xs@(_ ∷ _)} ⦃ di ⦄ .is-discrete-β (u ∷ us) (v ∷ vs) = Dec.dmap
     (λ (p , q) → ap² {C = λ _ _ → All P xs} _∷_ p q)
     (λ f p → f (ap all-head p , ap all-tail p))
     (×-decision (di .is-discrete-β u v)

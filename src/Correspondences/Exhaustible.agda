@@ -27,7 +27,7 @@ exhaust : ⦃ x : Exhaustible {ℓ} A ⦄ → Exhaustible A
 exhaust ⦃ x ⦄ = x
 
 lift-exhaustible : Exhaustible {ℓ} A → Exhaustible (Lift ℓ A)
-lift-exhaustible ex .exhaustible-β P? = Dec.map (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift)
+lift-exhaustible ex .exhaustible-β P? = Dec.dmap (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift)
   (ex .exhaustible-β $ P? ∘ lift)
 
 Π-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec Π[ B ]

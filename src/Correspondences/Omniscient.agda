@@ -3,6 +3,7 @@ module Correspondences.Omniscient where
 
 open import Foundations.Base
 
+open import Meta.Effect.Map
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
@@ -30,7 +31,7 @@ record Omniscient₁ {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (�
 open Omniscient₁ public
 
 omniscient₁→exhaustible : Omniscient₁ {ℓ} A → Exhaustible {ℓ} A
-omniscient₁→exhaustible omn .exhaustible-β {P} P? = Dec.map
+omniscient₁→exhaustible omn .exhaustible-β {P} P? = Dec.dmap
   (λ ¬∃p x → dec→essentially-classical (P? x) $ ¬∃p ∘ ∣_∣₁ ∘ (x ,_))
   (λ ¬∃p ∀p → ¬∃p $ ∥-∥₁.rec! λ p → p .snd (∀p (p .fst)))
   (¬-decision $ omn .omniscient₁-β (¬-decision ∘ P?))
@@ -39,8 +40,8 @@ omni₁ : ⦃ x : Omniscient₁ {ℓ} A ⦄ → Omniscient₁ A
 omni₁ ⦃ x ⦄ = x
 
 lift-omniscient₁ : Omniscient₁ {ℓ} A → Omniscient₁ (Lift ℓ A)
-lift-omniscient₁ omn .omniscient₁-β P? = Dec.map
-  (∥-∥₁.map (bimap lift id))
+lift-omniscient₁ omn .omniscient₁-β P? = Dec.dmap
+  (map (bimap lift id))
   (λ x y → ∥-∥₁.rec! (λ z → x ∣ bimap lower id z ∣₁) y)
   (omn .omniscient₁-β $ P? ∘ lift)
 
@@ -56,7 +57,7 @@ record Omniscient {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (ℓ�
 open Omniscient public
 
 omniscient→omniscient₁ : Omniscient {ℓ} A → Omniscient₁ {ℓ} A
-omniscient→omniscient₁ omn .omniscient₁-β d = Dec.map
+omniscient→omniscient₁ omn .omniscient₁-β d = Dec.dmap
   ∣_∣₁
   ∥-∥₁.rec!
   (omniscient-β omn d)
@@ -65,7 +66,7 @@ omni : ⦃ x : Omniscient {ℓ} A ⦄ → Omniscient A
 omni ⦃ x ⦄ = x
 
 lift-omniscient : Omniscient {ℓ} A → Omniscient {ℓ} (Lift ℓ A)
-lift-omniscient omn .omniscient-β P? = Dec.map
+lift-omniscient omn .omniscient-β P? = Dec.dmap
   (bimap lift id)
   (_∘ bimap lower id)
   (omn .omniscient-β $ P? ∘ lift)

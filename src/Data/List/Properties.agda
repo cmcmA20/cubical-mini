@@ -3,15 +3,14 @@ module Data.List.Properties where
 
 open import Foundations.Base
 
+open import Meta.Effect.Map
+
 open import Data.List.Base public
+open import Data.List.Instances.Map
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ : Level
   A : Type ℓᵃ
-  B : Type ℓᵇ
-  C : Type ℓᶜ
-  f : A → B
-  g : B → C
 
 map-id : map {A = A} id ＝ id
 map-id = fun-ext go where
@@ -19,12 +18,14 @@ map-id = fun-ext go where
   go [] = refl
   go (x ∷ xs) = ap (x ∷_) (go xs)
 
-map-++ : (f : A → B) (xs ys : List A)
+map-++ : {A : Type ℓᵃ} {B : Type ℓᵇ} (f : A → B) (xs ys : List A)
        → map f (xs ++ ys) ＝ map f xs ++ map f ys
 map-++ f []       ys = refl
 map-++ f (x ∷ xs) ys = ap (f x ∷_) (map-++ f xs ys)
 
-map-comp : map (g ∘ f) ＝ map g ∘ map f
+map-comp : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+           {g : B → C} {f : A → B}
+         → map (g ∘ f) ＝ map g ∘ map f
 map-comp = fun-ext go where
   go : _
   go [] = refl

@@ -17,7 +17,7 @@ maybe-is-discrete di = is-discrete-η λ where
   nothing  nothing → yes refl
   nothing  (just _) → no nothing≠just
   (just _) nothing → no $ nothing≠just ∘ sym
-  (just x) (just y) → Dec.map (ap just) (_∘ just-inj) (is-discrete-β di x y)
+  (just x) (just y) → Dec.dmap (ap just) (_∘ just-inj) (is-discrete-β di x y)
 
 instance
   decomp-dis-maybe : goal-decomposition (quote is-discrete) (Maybe A)

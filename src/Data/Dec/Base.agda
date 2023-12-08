@@ -41,9 +41,9 @@ module Reflects′ where
   reflects-det (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec (¬p p′)
   reflects-det (ofⁿ ¬p) (ofⁿ ¬p′) = refl
 
-  map : (P → Q) → (¬ P → ¬ Q) → Reflects⁰ P b → Reflects⁰ Q b
-  map to fro (ofʸ  p) = ofʸ (to p)
-  map to fro (ofⁿ ¬p) = ofⁿ (fro ¬p)
+  dmap : (P → Q) → (¬ P → ¬ Q) → Reflects⁰ P b → Reflects⁰ Q b
+  dmap to fro (ofʸ  p) = ofʸ (to p)
+  dmap to fro (ofⁿ ¬p) = ofⁿ (fro ¬p)
 
 open Reflects′ public
   using (Reflects⁰; ofʸ; ofⁿ)
@@ -79,9 +79,9 @@ elim² yy yn ny nn (no ¬p) (yes q) = ny ¬p q
 elim² yy yn ny nn (yes p) (no ¬q) = yn p ¬q
 elim² yy yn ny nn (yes p) (yes q) = yy p q
 
-map : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
-map to fro dec .does  = dec .does
-map to fro dec .proof = Reflects′.map to fro (dec .proof)
+dmap : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
+dmap to fro dec .does  = dec .does
+dmap to fro dec .proof = Reflects′.dmap to fro (dec .proof)
 
 recover : Dec P → ∥ P ∥ᴱ → P
 recover (yes p) _  = p

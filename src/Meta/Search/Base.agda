@@ -4,7 +4,7 @@ module Meta.Search.Base where
 
 open import Foundations.Base
 
-open import Meta.Foldable
+open import Meta.Effect.Foldable
 open import Meta.Literals.FromProduct public
 open import Meta.Reflection.Base
 
@@ -280,8 +280,7 @@ private
   use-instance-search : Tactic-desc goal-name goal-strat → Bool → Term → TC ⊤
   use-instance-search {goal-name} td has-alts goal = run-speculative do
     (lv , ty) ← decompose-goal td goal
-    solved@(meta mv _) ←
-      new-meta (compose-instance td lv ty) where _ → backtrack []
+    (mv , solved) ← new-meta′ (compose-instance td lv ty) <|> backtrack []
     instances ← get-instances mv
 
     t ← quoteTC instances
@@ -317,8 +316,8 @@ private
 
     (solved , instances) ← run-speculative do
       goal-strat-term ← quoteTC goal-strat >>= normalise
-      solved@(meta mv _) ← new-meta (def (quote Struct-proj-desc) (lit (name goal-name) v∷ goal-strat-term v∷ lit (name qn) v∷ unknown v∷ []))
-        where _ → type-error [ "No projections found for: " , termErr goal ]
+      (mv , solved) ← new-meta′ (def (quote Struct-proj-desc) (lit (name goal-name) v∷ goal-strat-term v∷ lit (name qn) v∷ unknown v∷ []))
+        <|> type-error [ "No projections found for: " , termErr goal ]
 
       (x ∷ xs) ← get-instances mv
         where [] → pure ((unknown , []) , false)
@@ -477,8 +476,7 @@ private
     (lv , ty) ← decompose-goal td goal
     wait-for-principal-arg ty
 
-    solved@(meta mv _) ← new-meta (def (quote goal-decomposition) (lit (name goal-name) v∷ ty v∷ []))
-      where _ → type-error [ termErr ty ]
+    (mv , solved) ← new-meta′ (def (quote goal-decomposition) (lit (name goal-name) v∷ ty v∷ []))
     decomp-instances ← get-instances mv
 
     t ← quoteTC decomp-instances >>= normalise

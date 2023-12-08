@@ -4,7 +4,7 @@ module Data.Fin.Computational.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 open import Meta.Search.HLevel
 
 open import Correspondences.Erased
@@ -33,7 +33,7 @@ fin-is-set {n} = is-of-hlevel-≃ 2 (iso→equiv fin-iso)
 strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
 strengthen {0}     (mk-fin k {(b)})       = inl (mk-fin k {b})
 strengthen {suc n} (mk-fin 0)             = inl fzero
-strengthen {suc n} (mk-fin (suc k) {(b)}) = ⊎.map fsuc fsuc (strengthen (mk-fin k {b}))
+strengthen {suc n} (mk-fin (suc k) {(b)}) = ⊎.dmap fsuc fsuc (strengthen (mk-fin k {b}))
 
 inject : m ≤ n → Fin m → Fin n
 inject {m} p (mk-fin k {∣ q ∣ᴱ}) = mk-fin k {∣ ≤-trans {suc k} {m} q p ∣ᴱ}

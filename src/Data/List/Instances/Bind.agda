@@ -3,8 +3,9 @@ module Data.List.Instances.Bind where
 
 open import Foundations.Base
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 
+open import Data.List.Base
 open import Data.List.Instances.Idiom public
 
 instance

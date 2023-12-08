@@ -26,18 +26,13 @@ elim
 elim P p[] p∷ []       = p[]
 elim P p[] p∷ (x ∷ xs) = p∷ x xs (elim P p[] p∷ xs)
 
--- rec
-fold-r : (A → B → B) → B → List A → B
-fold-r _ x []       = x
-fold-r f x (a ∷ as) = f a (fold-r f x as)
+rec : (A → B → B) → B → List A → B
+rec _ x []       = x
+rec f x (a ∷ as) = f a (rec f x as)
 
 fold-l : (B → A → B) → B → List A → B
 fold-l f x []       = x
 fold-l f x (a ∷ as) = fold-l f (f x a) as
-
-map : (A → B) → List A → List B
-map f []       = []
-map f (x ∷ xs) = f x ∷ map f xs
 
 infixr 5 _++_
 _++_ : List A → List A → List A
@@ -45,7 +40,7 @@ _++_ : List A → List A → List A
 (x ∷ xs) ++ ys = x ∷ (xs ++ ys)
 
 concat : List (List A) → List A
-concat = fold-r (_++_) []
+concat = rec (_++_) []
 
 reverse : List A → List A
 reverse []       = []
@@ -58,3 +53,8 @@ intersperse : A -> List A -> List A
 intersperse _ []       = []
 intersperse _ (x ∷ []) = x ∷ []
 intersperse s (x ∷ xs) = x ∷ s ∷ intersperse s xs
+
+intercalate : (x : A) (xs : List A) → List A
+intercalate x []           = []
+intercalate x (y ∷ [])     = y ∷ []
+intercalate x (y ∷ z ∷ xs) = y ∷ x ∷ intercalate x (z ∷ xs)

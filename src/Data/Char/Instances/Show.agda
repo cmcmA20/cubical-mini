@@ -9,7 +9,7 @@ open import Data.Char.Base
 
 instance
   Show-char : Show Char
-  Show-char .shows-prec _ = show-char
+  Show-char = default-show show-char
 
 _ : show 'a' ＝ "'a'"
 _ = refl

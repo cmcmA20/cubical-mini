@@ -21,7 +21,7 @@ list-is-discrete di = is-discrete-η go where
   go []       []       = yes refl
   go []       (_ ∷ _)  = no $ ∷≠[] ∘ sym
   go (_ ∷ _)  []       = no ∷≠[]
-  go (x ∷ xs) (y ∷ ys) = Dec.map
+  go (x ∷ xs) (y ∷ ys) = Dec.dmap
     (λ (x=y , xs=ys) → ap² _∷_ x=y xs=ys)
     (λ f p → f (∷-head-inj p , ap tail p))
     (×-decision (di .is-discrete-β x y) $ go xs ys)

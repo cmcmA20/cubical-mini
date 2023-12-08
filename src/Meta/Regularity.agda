@@ -3,13 +3,14 @@ module Meta.Regularity where
 
 open import Foundations.Base
 
-open import Meta.Alt
+open import Meta.Effect.Alt
 open import Meta.Reflection.Base
 open import Meta.Reflection.Subst
 
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
+open import Data.Maybe.Base
 open import Data.Maybe.Instances.Alt
 
 

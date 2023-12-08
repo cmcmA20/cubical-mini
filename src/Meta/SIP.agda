@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv.Base
 open import Foundations.Univalence.SIP public
 
+open import Meta.Effect.Alt
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString

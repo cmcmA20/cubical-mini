@@ -25,9 +25,7 @@ true≠false : true ≠ false
 true≠false = false≠true ∘ sym
 
 Code : Bool → Bool → Type
-Code false false = ⊤
-Code true  true  = ⊤
-Code _     _     = ⊥
+Code b₁ b₂ = ⟦ b₁ == b₂ ⟧ᵇ
 
 code-refl : (b : Bool) → Code b b
 code-refl false = tt
@@ -60,7 +58,16 @@ instance
   decomp-hlevel-bool : goal-decomposition (quote is-of-hlevel) Bool
   decomp-hlevel-bool = decomp (quote bool-is-of-hlevel) [ `level-minus 2 ]
 
+private variable b : Bool
 
-⟦-⟧ᵇ≃true : {b : Bool} → ⟦ b ⟧ᵇ ≃ (b ＝ true)
-⟦-⟧ᵇ≃true {(false)} = prop-extₑ! (λ x → ⊥.rec x) false≠true
-⟦-⟧ᵇ≃true {(true)}  = prop-extₑ! (λ _ → refl) _
+⟦-⟧ᵇ≃true : ⟦ b ⟧ᵇ ≃ (b ＝ true)
+⟦-⟧ᵇ≃true = go ∙ₑ identity-system-gives-path identity-system where
+  go : ⟦ b ⟧ᵇ ≃ ⟦ b == true ⟧ᵇ
+  go {(false)} = prop-extₑ! id id
+  go {(true)}  = prop-extₑ! id id
+
+¬⟦-⟧ᵇ≃false : (¬ ⟦ b ⟧ᵇ) ≃ (b ＝ false)
+¬⟦-⟧ᵇ≃false = go ∙ₑ identity-system-gives-path identity-system where
+  go : (¬ ⟦ b ⟧ᵇ) ≃ ⟦ b == false ⟧ᵇ
+  go {(false)} = prop-extₑ! _ λ _ → id
+  go {(true)}  = prop-extₑ! (λ f → f _) (λ f _ → f)

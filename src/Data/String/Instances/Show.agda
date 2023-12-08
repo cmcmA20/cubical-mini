@@ -9,7 +9,7 @@ open import Data.String.Base
 
 instance
   Show-string : Show String
-  Show-string .shows-prec _ = show-string
+  Show-string = default-show show-string
 
 _ : show "key: \"val\"" ＝ "\"key: \\\"val\\\"\""
 _ = refl

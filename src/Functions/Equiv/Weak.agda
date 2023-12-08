@@ -6,7 +6,7 @@ open import Foundations.Base
 open import Foundations.Equiv public
 open import Foundations.Sigma
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 open import Meta.Search.HLevel
 
 open import Functions.Embedding

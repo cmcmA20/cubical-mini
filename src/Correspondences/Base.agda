@@ -10,9 +10,17 @@ open import Meta.Variadic
 open import Data.HVec.Base public
 
 private variable
-  ℓ ℓᵃ : Level
+  ℓ ℓ′ ℓᵃ : Level
   A : Type ℓᵃ
   n : HLevel
+
+-- this is the general form
+_stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S stable A = A ≃ S A
+
+_weakly-stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S weakly-stable A = S A → A
+
 
 -- Binary homogeneous correspondences
 

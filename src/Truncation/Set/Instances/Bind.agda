@@ -4,7 +4,7 @@ module Truncation.Set.Instances.Bind where
 open import Foundations.Base
 open import Foundations.HLevel
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 
 open import Truncation.Set.Base
 open import Truncation.Set.Instances.Idiom public

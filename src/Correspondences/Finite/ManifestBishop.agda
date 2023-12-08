@@ -54,7 +54,7 @@ manifest-bishop-finite ⦃ d ⦄ = d
 
 manifest-bishop-finite→omniscient₁ : Manifest-bishop-finite A → Omniscient₁ {ℓ} A
 manifest-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? =
-  Dec.map lemma₁ lemma₂ (any? P? xs) where
+  Dec.dmap lemma₁ lemma₂ (any? P? xs) where
     n = fi .cardinality
     aeq = fi .enumeration
     module Ã = Equiv aeq

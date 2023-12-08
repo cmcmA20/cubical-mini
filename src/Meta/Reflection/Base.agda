@@ -7,16 +7,24 @@ open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromString  public
 open import Meta.Literals.FromProduct public
 
-open import Meta.Idiom    public
-open import Meta.Bind     public
-open import Meta.Alt      public
-open import Meta.Traverse public
+open import Meta.Append
+open import Meta.Effect.Map
+open import Meta.Effect.Idiom
+open import Meta.Effect.Bind        public
+open import Meta.Effect.Alt
+open import Meta.Effect.Traversable
 
 open import Data.Bool.Base
+open import Data.Empty.Base
+open import Data.Float.Base
+  using (float-plus)
+  renaming (_<ᵇ_ to _f<ᵇ_)
+open import Data.Float.Instances.FromNat
 open import Data.List.Base as List
+open import Data.List.Instances.Append
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
-open import Data.List.Instances.Traverse
+open import Data.List.Instances.Traversable
 open import Data.List.Operations as List
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Idiom
@@ -41,7 +49,7 @@ open import Agda.Builtin.Reflection public
            ; getDefinition to get-definition
            ; isMacro to is-macro?
            ; typeError to type-error
-           ; formatErrorParts to format-eror-parts
+           ; formatErrorParts to format-error-parts
            ; debugPrint to debug-print
            ; withNormalisation to with-normalisation
            ; askNormalisation to ask-normalisation
@@ -55,15 +63,17 @@ open import Agda.Builtin.Reflection public
            ; runSpeculative to run-speculative
            ; getInstances to get-instances
            ; blockOnMeta to block-on-meta
+           ; primShowQName to show-name
+           ; primQNameFixity to name→fixity
            )
 
 instance
-  String-ErrorPart : IsString ErrorPart
-  String-ErrorPart .IsString.Constraint _ = ⊤
-  String-ErrorPart .IsString.fromString s = strErr s
+  From-string-ErrorPart : From-string ErrorPart
+  From-string-ErrorPart .From-string.Constraint _ = ⊤
+  From-string-ErrorPart .from-string s = strErr s
 
   Map-TC : Map (eff TC)
-  Map-TC .Map._<$>_ f x = bindTC x λ x → returnTC (f x)
+  Map-TC .Map.map f x = bindTC x λ x → returnTC (f x)
 
   Idiom-TC : Idiom (eff TC)
   Idiom-TC .Idiom.pure = returnTC
@@ -73,11 +83,11 @@ instance
   Bind-TC .Bind._>>=_ = bindTC
 
   Alt-TC : Alt (eff TC)
-  Alt-TC .Alt.fail′ xs = type-error [ strErr xs ]
+  Alt-TC .Alt.fail = type-error []
   Alt-TC .Alt._<|>_ = catchTC
 
   Map-Arg : Map (eff Arg)
-  Map-Arg .Map._<$>_ f (arg ai x) = arg ai (f x)
+  Map-Arg .Map.map f (arg ai x) = arg ai (f x)
 
 private variable
   ℓ ℓ′ : Level
@@ -88,14 +98,33 @@ private variable
 full-tank : ℕ
 full-tank = 1234567890
 
+with-full-tank : (ℕ → A) → A
+with-full-tank f = f full-tank
+
 arg-vis : ArgInfo → Visibility
 arg-vis (arg-info v _) = v
 
 arg-modality : ArgInfo → Modality
 arg-modality (arg-info _ m) = m
 
-Fun : Type ℓ → Type ℓ′ → Type (ℓ ⊔ ℓ′)
+suc-precedence : Precedence → Precedence
+suc-precedence (related x) = related (float-plus x 1)
+suc-precedence unrelated   = unrelated
+
+prec-parens : Precedence → Precedence → Bool
+prec-parens (related x) (related y) = y f<ᵇ x
+prec-parens unrelated   (related y) = true
+prec-parens (related x) unrelated   = false
+prec-parens unrelated   unrelated   = true
+
+Fun : ∀{ℓ ℓ′} → Type ℓ → Type ℓ′ → Type (ℓ ⊔ ℓ′)
 Fun A B = A → B
+
+unarg : Arg A → A
+unarg (arg _ x) = x
+
+unai : Arg A → ArgInfo
+unai (arg i _) = i
 
 under-abs : Term → TC A → TC A
 under-abs (lam v (abs nm _)) m = extend-context nm (arg (arg-info v (modality relevant quantity-ω)) unknown) m
@@ -138,8 +167,9 @@ pattern _i∷_ t xs = iarg t ∷ xs
 
 infixr 30 _v∷_ _h∷_ _hm∷_ _i∷_
 
-argH0 argH argN : A → Arg A
+argH0 argH argI argN : A → Arg A
 argH  = arg (arg-info hidden default-modality)
+argI  = arg (arg-info instance′ default-modality)
 argH0 = arg (arg-info hidden erased-modality)
 argN  = vis-arg visible
 
@@ -227,6 +257,15 @@ _term=?_ = _term′=?_ {n = full-tank}
 resetting : TC A → TC A
 resetting k = run-speculative ((_, false) <$> k)
 
+pi-view : Term → Telescope × Term
+pi-view (pi a (abs n b)) with pi-view b
+... | tele , t = ((n , a) ∷ tele) , t
+pi-view t = [] , t
+
+unpi-view : Telescope → Term → Term
+unpi-view []            k = k
+unpi-view ((n , a) ∷ t) k = pi a (abs n (unpi-view t k))
+
 wait-for-args : List (Arg Term) → TC (List (Arg Term))
 wait-for-type : Term → TC Term
 
@@ -309,9 +348,9 @@ macro
   quote-repr-norm! = quote-repr-macro true
 
 instance
-  IsString-Error : IsString (List ErrorPart)
-  IsString-Error .IsString.Constraint _ = ⊤
-  IsString-Error .from-string s = from-string s ∷ []
+  From-string-Error : From-string (List ErrorPart)
+  From-string-Error .From-string.Constraint _ = ⊤
+  From-string-Error .from-string s = from-string s ∷ []
 
 unify-loudly : Term → Term → TC ⊤
 unify-loudly a b = do
@@ -327,7 +366,7 @@ print-depth key level nesting es = debug-print key level $
     nest (suc x) s = nest x (s ++ₛ "  ")
 
 pattern nat-lit n =
-  def (quote Number.fromNat) (_ ∷ _ ∷ _ ∷ lit (nat n) v∷ _)
+  def (quote From-ℕ.fromNat) (_ ∷ _ ∷ _ ∷ lit (nat n) v∷ _)
 
 suc-term : Term → Term
 suc-term (lit (nat n)) = lit (nat (suc n))
@@ -339,6 +378,14 @@ pred-term (lit (nat n)) with n
 ... | suc k = just (lit (nat k))
 ... | _ = nothing
 pred-term _ = nothing
+
+list-term : List Term → Term
+list-term []       = con (quote List.[]) []
+list-term (x ∷ xs) = con (quote List._∷_) (argN x ∷ argN (list-term xs) ∷ [])
+
+list-pattern : List (Arg Pattern) → Pattern
+list-pattern []       = con (quote List.[]) []
+list-pattern (x ∷ xs) = con (quote List._∷_) (x ∷ argN (list-pattern xs) ∷ [])
 
 private
   _+′_ : ℕ → ℕ → ℕ
@@ -398,3 +445,64 @@ fv-dup = go 0 where
 
 fv     = nub-slow _==_ ∘ fv-dup
 fv-ord = nub-unsafe _==_ ∘ insertion-sort (λ m n → m <ᵇ suc n) ∘ fv-dup
+
+
+-- Notation class for the reflected in reflected syntax which have a
+-- notion of neutrals, for which application is cheap. This is used to
+-- support the _##_ family of operators.
+record Has-neutrals {ℓ} (A : Type ℓ) : Type (ℓsuc ℓ) where
+  field
+    neutral : A → Type ℓ
+    applyⁿᵉ : (d : A) ⦃ _ : neutral d ⦄ (arg : List (Arg A)) → A
+
+open Has-neutrals ⦃ ... ⦄ using (applyⁿᵉ) public
+
+module _ {ℓ} {A : Type ℓ} ⦃ a : Has-neutrals A ⦄ (d : A) ⦃ _ : Has-neutrals.neutral a d ⦄ where
+  infixl 20 _##_ _##ₙ_ _##ᵢ_ _##ₕ_
+
+  -- Apply a neutral to an argument with specified information.
+  _##_ : (arg : Arg A) → A
+  _##_ x = Has-neutrals.applyⁿᵉ a d (x ∷ [])
+
+-- Apply a neutral to an argument with the default information.
+  _##ₙ_ : (arg : A) → A
+  _##ₙ_ x = _##_ (argN x)
+
+  -- Apply a neutral to a hidden argument with the default modality.
+  _##ₕ_ : (arg : A) → A
+  _##ₕ_ x = _##_ (argH x)
+
+  -- Apply a neutral to an instance argument with the default modality.
+  _##ᵢ_ : (arg : A) → A
+  _##ᵢ_ x = _##_ (argI x)
+
+instance
+  Has-neutrals-Term : Has-neutrals Term
+  Has-neutrals-Term = record { neutral = neutral ; applyⁿᵉ = apply } where
+    neutral : Term → Type
+    neutral (def _ _)     = ⊤
+    neutral (con _ _)     = ⊤
+    neutral (meta _ _)    = ⊤
+    neutral (var _ _)     = ⊤
+    neutral (pat-lam _ _) = ⊤
+    neutral _             = ⊥
+
+    apply : (d : Term) ⦃ _ : neutral d ⦄ (arg : List (Arg Term)) → Term
+    apply (def v as)      a = def v  (as <> a)
+    apply (con v as)      a = con v  (as <> a)
+    apply (meta m as)     a = meta m (as <> a)
+    apply (var v as)      a = var v  (as <> a)
+    apply (pat-lam cs as) a = pat-lam cs (as <> a)
+
+  Has-neutrals-Pattern : Has-neutrals Pattern
+  Has-neutrals-Pattern = record { neutral = neutral ; applyⁿᵉ = apply } where
+    neutral : Pattern → Type
+    neutral (con _ _) = ⊤
+    neutral _ = ⊥
+
+    apply : (d : Pattern) ⦃ _ : neutral d ⦄ (arg : List (Arg Pattern)) → Pattern
+    apply (con c ps) a = con c (ps <> a)
+
+pattern con₀ v = con v []
+pattern def₀ v = def v []
+pattern var₀ v = var v []

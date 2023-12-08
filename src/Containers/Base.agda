@@ -4,7 +4,7 @@ module Containers.Base where
 open import Foundations.Base
 open import Foundations.Equiv.Base
 
-open import Meta.Idiom
+open import Meta.Effect.Idiom
 
 infix 5 _▶_
 record Container (s p : Level) : Type (ℓsuc (s ⊔ p)) where
@@ -32,13 +32,12 @@ _∈!_ : {S : Type s} {P : S → Type p}
      → X → ⟦ S ▶ P ⟧ X → Type (level-of-type X ⊔ p)
 x ∈! xs = is-contr (x ∈ xs)
 
-map : {C : Container s p} {X : Type ℓ} {Y : Type ℓ′}
-    → (X → Y) → ⟦ C ⟧ X → ⟦ C ⟧ Y
-map f (x , g) = x , f ∘ g
-
 instance
   Map-Container : ∀ {s p} {C : Container s p} → Map (eff ⟦ C ⟧)
-  Map-Container .Map._<$>_ = map
+  Map-Container .Map.map = go where
+    go : {C : Container s p} {X : Type ℓ} {Y : Type ℓ′}
+       → (X → Y) → ⟦ C ⟧ X → ⟦ C ⟧ Y
+    go f (x , g) = x , f ∘ g
 
 
 -- container morphism

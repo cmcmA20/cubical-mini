@@ -3,20 +3,14 @@ module Data.Sum.Instances.Show where
 
 open import Foundations.Base
 
-open import Meta.Show
+open import Meta.Deriving.Show
 
 open import Data.Nat.Base
 open import Data.String.Base
 open import Data.Sum.Base
 
 instance
-  Show-⊎
-    : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
-    → ⦃ Show A ⦄ → ⦃ Show B ⦄ → Show (A ⊎ B)
-  Show-⊎ .shows-prec n (inl a) =
-    show-parens (0 <ᵇ n) $ "inl " ++ₛ shows-prec (suc n) a
-  Show-⊎ .shows-prec n (inr b) =
-    show-parens (0 <ᵇ n) $ "inr " ++ₛ shows-prec (suc n) b
+  unquoteDecl Show-⊎ = derive-show Show-⊎ (quote _⊎_)
 
 private module _ where
   open import Data.Nat.Instances.Show

@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.HLevel
 open import Foundations.Univalence
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 
 record ∥_∥ᴱ {ℓ} (@0 A : Type ℓ) : Type ℓ where
   constructor ∣_∣ᴱ
@@ -41,7 +41,7 @@ substᴱ B p = transport (λ i → B (p i))
 --       do we need modality polymorphism?
 instance
   Map-∥-∥ᴱ : Map (eff λ T → ∥ T ∥ᴱ)
-  Map-∥-∥ᴱ ._<$>_ f ∣ a ∣ᴱ = ∣ f a ∣ᴱ
+  Map-∥-∥ᴱ .map f ∣ a ∣ᴱ = ∣ f a ∣ᴱ
 
   Idiom-∥-∥ᴱ : Idiom (eff λ T → ∥ T ∥ᴱ)
   Idiom-∥-∥ᴱ .pure a = ∣ a ∣ᴱ

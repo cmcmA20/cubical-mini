@@ -4,6 +4,7 @@ module Data.Quotient.Set.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Effect.Map
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
@@ -146,7 +147,7 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   open Equivalence R-eq
   ∥R∥₁-c : is-congruence _
   ∥R∥₁-c .is-congruence.equivalenceᶜ .reflᶜ = ∣ reflᶜ ∣₁
-  ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = ∥-∥₁.map symᶜ
+  ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = map symᶜ
   ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim²! λ a b → ∣ a ∙ᶜ b ∣₁
   ∥R∥₁-c .is-congruence.has-propᶜ = hlevel!
 
@@ -155,4 +156,4 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   → (∀ x y → Dec (R x y))
   → is-discrete (A / R)
 /₂-is-discrete R-c d = is-discrete-η $ elim²-prop! λ x y →
-  Dec.map (glue/ _ _) (λ f p → ⊥.rec (f $ (effective R-c ₑ⁻¹) # p)) $ d x y
+  Dec.dmap (glue/ _ _) (λ f p → ⊥.rec (f $ (effective R-c ₑ⁻¹) # p)) $ d x y

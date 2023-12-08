@@ -9,4 +9,4 @@ open import Data.Fin.Inductive.Base
 
 instance
   Show-fin : ∀ {@0 m} → Show (Fin m)
-  Show-fin .shows-prec _ = show-ℕ ∘ fin→ℕ
+  Show-fin = default-show (show-ℕ ∘ fin→ℕ)

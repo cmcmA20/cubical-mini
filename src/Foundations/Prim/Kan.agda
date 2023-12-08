@@ -16,8 +16,10 @@ open import Agda.Primitive.Cubical public
 private variable
   ℓ ℓ′ : Level
   ℓ^ : I → Level
+  A : Type ℓ
+  B : A → Type ℓ′
 
-hcomp : {A : Type ℓ} (φ : I)
+hcomp : (φ : I)
       → (u : (i : I) → Partial (φ ∨ ~ i) A)
       → A
 hcomp φ u = primHComp (λ j .o → u j (is1-left φ (~ j) o)) (u i0 1=1)
@@ -30,7 +32,7 @@ comp : (A : (i : I) → Type (ℓ^ i)) (φ : I)
      → A i1
 comp A φ u = primComp A (λ j .o → u j (is1-left φ (~ j) o)) (u i0 1=1)
 
-hfill : {A : Type ℓ} (φ : I) → I
+hfill : (φ : I) → I
       → ((i : I) → Partial (φ ∨ ~ i) A)
       → A
 hfill φ i u =
@@ -58,23 +60,22 @@ syntax PathP-syntax Aᵢ A₀ A₁ = ＜ A₀ ／ Aᵢ ＼ A₁ ＞
 Path : (A : Type ℓ) → A → A → Type ℓ
 Path A A₀ A₁ = ＜ A₀ ／ (λ _ → A) ＼ A₁ ＞
 
-module _ {A : Type ℓ} where
-  refl : {x : A} → x ＝ x
-  refl {x} _ = x
+refl : {x : A} → x ＝ x
+refl {x} _ = x
 
-  sym : {x y : A} → x ＝ y → y ＝ x
-  sym p i = p (~ i)
+sym : {x y : A} → x ＝ y → y ＝ x
+sym p i = p (~ i)
 
-  ap : {B : A → Type ℓ′} {x y : A}
-       (f : (a : A) → B a)
-       (p : x         ＝              y)
-     → ＜ f x ／ (λ i → B (p i)) ＼ f y ＞
-  ap f p i = f (p i)
+ap : {x y : A}
+     (f : (a : A) → B a)
+     (p : x         ＝              y)
+   → ＜ f x ／ (λ i → B (p i)) ＼ f y ＞
+ap f p i = f (p i)
 
 transport : {A B : Type ℓ} → A ＝ B → A → B
 transport p = transp (λ i → p i) i0
 
-hcomp-unique : {A : Type ℓ} (φ : I)
+hcomp-unique : (φ : I)
                (u : ∀ i → Partial (φ ∨ ~ i) A)
              → (h₂ : ∀ i → A [ _ ↦ (λ { (i = i0) → u i0 1=1
                                       ; (φ = i1) → u i  1=1 }) ])
@@ -84,3 +85,11 @@ hcomp-unique φ u h₂ i =
     k (k = i0) → u i0 1=1
     k (i = i1) → outS (h₂ k)
     k (φ = i1) → u k 1=1
+
+caseⁱ_of_ : {B : Type ℓ′} (x : A) → ((y : A) → x ＝ y → B) → B
+caseⁱ x of f = f x (λ i → x)
+{-# INLINE caseⁱ_of_ #-}
+
+caseⁱ_return_of_ : (x : A) (P : A → Type ℓ′) → ((y : A) → x ＝ y → P y) → P x
+caseⁱ x return P of f = f x (λ i → x)
+{-# INLINE caseⁱ_return_of_ #-}

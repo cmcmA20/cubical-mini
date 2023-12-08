@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Sigma
 open import Foundations.Univalence
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP

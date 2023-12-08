@@ -6,6 +6,7 @@ open import Foundations.Equiv
 open import Foundations.Path
 open import Foundations.Sigma
 
+open import Meta.Effect.Map
 open import Meta.Search.HLevel
 open import Meta.Underlying
 
@@ -16,6 +17,7 @@ open import Functions.Embedding
 open import Functions.Surjection
 
 open import Truncation.Propositional.Base public
+open import Truncation.Propositional.Instances.Map
 
 private variable
   ℓ ℓ′ ℓ″ : Level

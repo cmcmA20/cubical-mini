@@ -4,7 +4,7 @@ module Data.Maybe.Instances.Finite where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Finite.ManifestBishop
 
@@ -21,7 +21,7 @@ private variable
 
 maybe-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Maybe A)
 maybe-manifest-bishop-finite fi = fin $
-  maybe-as-sum ∙ₑ ⊎-ap (enumeration it) (enumeration fi) ∙ₑ fin-coproduct
+  maybe-as-sum ∙ₑ ⊎-ap (enumeration by-instance) (enumeration fi) ∙ₑ fin-coproduct
 
 maybe-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Maybe A)
 maybe-is-bishop-finite fi = fin₁ do

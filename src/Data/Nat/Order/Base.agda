@@ -213,7 +213,7 @@ module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
 <-reflects _       0       = ofⁿ ≮z
 <-reflects 0       (suc _) = ofʸ z<s
 <-reflects (suc m) (suc n) =
-  Reflects′.map s<s (_∘ <-peel) $ <-reflects m n
+  Reflects′.dmap s<s (_∘ <-peel) $ <-reflects m n
 
 <-dec : Decidable _<_
 <-dec = reflects→decidable {2} {P = _<_} <-reflects
@@ -222,7 +222,7 @@ module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
 ≤-reflects 0       _       = ofʸ z≤
 ≤-reflects (suc _) 0       = ofⁿ s≰z
 ≤-reflects (suc m) (suc n) =
-  Reflects′.map s≤s (_∘ ≤-peel) $ ≤-reflects m n
+  Reflects′.dmap s≤s (_∘ ≤-peel) $ ≤-reflects m n
 
 ≤-dec : Decidable _≤_
 ≤-dec = reflects→decidable {2} {P = _≤_} ≤-reflects

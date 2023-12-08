@@ -11,6 +11,7 @@ open import Meta.Literals.FromString
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
+open import Data.Maybe.Base
 open import Data.Maybe.Instances.Bind
 open import Data.Nat.Base
 

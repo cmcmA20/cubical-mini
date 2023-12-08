@@ -3,8 +3,9 @@ module Data.Maybe.Instances.Bind where
 
 open import Foundations.Base
 
-open import Meta.Bind
+open import Meta.Effect.Bind
 
+open import Data.Maybe.Base
 open import Data.Maybe.Instances.Idiom public
 
 instance

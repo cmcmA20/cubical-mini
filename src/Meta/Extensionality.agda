@@ -5,7 +5,9 @@ open import Foundations.Base
 open import Foundations.Equiv
 open import Foundations.Sigma
 
+open import Meta.Effect.Alt
 open import Meta.Reflection.Base
+open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
 open import Meta.Search.HLevel
 open import Meta.Variadic
@@ -17,6 +19,7 @@ open import Structures.n-Type
 
 open import Data.Bool.Base
 open import Data.List.Base
+open import Data.Maybe.Instances.Alt
 
 
 record Extensional {ℓ} (A : Type ℓ) (ℓ-rel : Level) : Typeω where
@@ -46,24 +49,19 @@ find-extensionality tm = do
   -- situation where the default instance (or an incorrect instance!) is
   -- picked because the type is meta-headed.
   tm ← reduce =<< wait-for-type tm
-  let search = def (quote Extensionality) [ argN tm ]
+  let search = it Extensionality ##ₙ tm
   debug-print "tactic.extensionality" 10 [ "find-extensionality goal:\n  " , termErr search ]
 
   resetting do
     (mv , _) ← new-meta′ search
-    soln ← get-instances mv >>= λ where
-      -- In a throw-away TC context, look for solutions to 'Extensionality'
-      -- tm, and choose the first instance if any are available.
+    get-instances mv >>= λ where
       (x ∷ _) → do
-        it ← unquoteTC {A = Name} =<< normalise (def (quote Extensionality.lemma) (argN x ∷ []))
-        debug-print "tactic.extensionality" 10 (" ⇒ found lemma " ∷ termErr (def it []) ∷ [])
-        pure (def it [])
-
-      -- If nothing more specific is available, use paths.
+        t ← unquoteTC {A = Name} =<< normalise (it Extensionality.lemma ##ₙ x)
+        debug-print "tactic.extensionality" 10 (" ⇒ found lemma " ∷ nameErr t ∷ [])
+        pure (def₀ t)
       [] → do
         debug-print "tactic.extensionality" 10 " ⇒ using default"
-        pure (def (quote Extensional-default) [])
-    pure soln
+        pure (it Extensional-default)
 
 -- Entry point for getting hold of an 'Extensional' instance:
 extensional : (A : Type ℓ) → Term → TC ⊤
@@ -91,8 +89,7 @@ extensionalᶠ {A} fun goal = ⦇ wrap (quoteTC A) (quoteTC fun) ⦈ >>= id wher
   work : Term → Term → TC Term
   work (pi dom@(arg ai _) (abs nm cod)) tm = do
     prf ← extend-context nm dom do
-      tm ← raiseTC 1 tm
-      tm ← applyTC tm (arg ai (var 0 []))
+      tm ← maybe→alt $ raise 1 tm <#> arg ai (var₀ 0)
       work cod tm
     pure (lam (arg-vis ai) (abs nm prf))
   work _ tm = find-extensionality tm
@@ -159,7 +156,7 @@ Extensional-× ⦃ sa ⦄ ⦃ sb ⦄ .idsᵉ .to-path (p , q) = ap² _,_
   (sa .idsᵉ .to-path p)
   (sb .idsᵉ .to-path q)
 Extensional-× ⦃ sa ⦄ ⦃ sb ⦄ .idsᵉ .to-path-over (p , q) =
-  Σ-pathP-dep (sa .idsᵉ .to-path-over p) (sb .idsᵉ .to-path-over q)
+  Σ-pathP (sa .idsᵉ .to-path-over p) (sb .idsᵉ .to-path-over q)
 
 Extensional-≃
   : ∀ {ℓ ℓ′ ℓr} {A : Type ℓ} {B : Type ℓ′}

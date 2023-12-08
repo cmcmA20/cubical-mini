@@ -17,10 +17,9 @@ open import Data.Empty.Base
 open import Data.Fin.Computational.Instances.FromNat
 
 private variable
-  ℓ ℓ′ ℓa ℓb ℓc ℓd : Level
-  T : Type ℓ
-  A : Type ℓa
-  B : Type ℓb
+  ℓ ℓᵃ ℓᵇ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
 
 instance
   Tactic-decide : Tactic-desc (quote Dec) none
@@ -32,6 +31,16 @@ instance
 
 decide-tactic-worker = search-tactic-worker Tactic-decide
 macro decide! = decide-tactic-worker
+
+caseᵈ_of_ : (A : Type ℓᵃ) { @(tactic decide-tactic-worker) d : Dec A }
+          → (Dec A → B) → B
+caseᵈ_of_ A {d} f = f d
+{-# INLINE caseᵈ_of_ #-}
+
+caseᵈ_return_of_ : (A : Type ℓ) { @(tactic decide-tactic-worker) d : Dec A }
+                   (B : Dec A → Type ℓ) → (∀ x → B x) → B d
+caseᵈ_return_of_ A {d} B f = f d
+{-# INLINE caseᵈ_return_of_ #-}
 
 instance
   decomp-dec-× : goal-decomposition (quote Dec) (A × B)
