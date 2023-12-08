@@ -9,10 +9,12 @@ open import Meta.Effect.Bind
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
-open import Meta.Underlying public
+open import Meta.Variadic
 
 open import Structures.IdentitySystem.Interface
+open import Structures.n-Type
 
+open import Correspondences.Discrete
 open import Correspondences.Finite.Bishop
 
 open import Data.Fin.Computational.Base
@@ -42,6 +44,21 @@ instance
   Underlying-FinSet {ℓ} .Underlying.ℓ-underlying = ℓ
   Underlying-FinSet .⌞_⌟⁰ = carrier
 
+@0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
+FinSet-is-groupoid = is-of-hlevel-≃ 3 go hlevel! where
+  go = FinSet _
+         ≃⟨ iso→equiv fin-set-iso ⟩
+       Σ[ X ꞉ Type _ ] is-bishop-finite X
+         ≃⟨ Σ-ap-snd (λ _ → prop-extₑ! < is-discrete→is-set ∘ is-bishop-finite→is-discrete , id > snd) ⟩
+       Σ[ X ꞉ Type _ ] is-set X × is-bishop-finite X
+         ≃⟨ Σ-assoc ⟩
+       Σ[ U ꞉ Σ[ X ꞉ Type _ ] is-set X ] is-bishop-finite (U .fst)
+         ≃˘⟨ Σ-ap-fst (iso→equiv n-Type-iso) ⟩
+       Σ[ X ꞉ Set _ ] is-bishop-finite ⌞ X ⌟ ≃∎
+
+instance
+  @0 H-Level-FinSet : ∀ {n} → H-Level (3 + n) (FinSet ℓ)
+  H-Level-FinSet = hlevel-basic-instance 3 FinSet-is-groupoid
 
 -- have to go through sigmas
 private

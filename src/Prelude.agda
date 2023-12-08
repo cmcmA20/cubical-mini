@@ -16,6 +16,7 @@ open import Meta.Effect.Idiom       public
 open import Meta.Effect.Map         public
 open import Meta.Effect.Traversable public
 
+open import Meta.Append               public
 open import Meta.Literals.FromProduct public
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromNeg     public
@@ -23,13 +24,15 @@ open import Meta.Literals.FromString  public
 open import Meta.Ord                  public
 open import Meta.Show                 public
 
-open import Meta.Search.Decidable     public
-open import Meta.Search.Discrete      public
-open import Meta.Search.Exhaustible   public
-open import Meta.Search.Finite.Bishop public
-open import Meta.Search.HLevel        public
-open import Meta.Search.Omniscient    public
+open import Meta.Search.Decidable             public
+open import Meta.Search.Discrete              public
+open import Meta.Search.Exhaustible           public
+open import Meta.Search.Finite.Bishop         public
+open import Meta.Search.Finite.ManifestBishop public
+open import Meta.Search.HLevel                public
+open import Meta.Search.Omniscient            public
 
+open import Meta.Deriving.Show  public
 open import Meta.Extensionality public
 open import Meta.Marker         public
 open import Meta.Record         public
