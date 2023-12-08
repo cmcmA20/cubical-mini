@@ -4,11 +4,12 @@
 
 <a id="64" class="Keyword">open</a> <a id="69" class="Keyword">import</a> <a id="76" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Meta.Bind.html" class="Module">Meta.Bind</a>
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Meta.Effect.Bind.html" class="Module">Meta.Effect.Bind</a>
 
-<a id="117" class="Keyword">open</a> <a id="122" class="Keyword">import</a> <a id="129" href="Data.Maybe.Instances.Idiom.html" class="Module">Data.Maybe.Instances.Idiom</a> <a id="156" class="Keyword">public</a>
+<a id="124" class="Keyword">open</a> <a id="129" class="Keyword">import</a> <a id="136" href="Data.Maybe.Base.html" class="Module">Data.Maybe.Base</a>
+<a id="152" class="Keyword">open</a> <a id="157" class="Keyword">import</a> <a id="164" href="Data.Maybe.Instances.Idiom.html" class="Module">Data.Maybe.Instances.Idiom</a> <a id="191" class="Keyword">public</a>
 
-<a id="164" class="Keyword">instance</a>
-  <a id="Bind-Maybe"></a><a id="175" href="Data.Maybe.Instances.Bind.html#175" class="Function">Bind-Maybe</a> <a id="186" class="Symbol">:</a> <a id="188" href="Meta.Bind.html#116" class="Record">Bind</a> <a id="193" class="Symbol">(</a><a id="194" href="Meta.Idiom.html#181" class="InductiveConstructor">eff</a> <a id="198" href="Agda.Builtin.Maybe.html#135" class="Datatype">Maybe</a><a id="203" class="Symbol">)</a>
-  <a id="207" href="Data.Maybe.Instances.Bind.html#175" class="Function">Bind-Maybe</a> <a id="218" class="Symbol">.</a><a id="219" href="Meta.Bind.html#190" class="Field Operator">Bind._&gt;&gt;=_</a> <a id="230" class="Symbol">=</a> <a id="232" href="Data.Maybe.Base.html#507" class="Function">extend</a>
+<a id="199" class="Keyword">instance</a>
+  <a id="Bind-Maybe"></a><a id="210" href="Data.Maybe.Instances.Bind.html#210" class="Function">Bind-Maybe</a> <a id="221" class="Symbol">:</a> <a id="223" href="Meta.Effect.Bind.html#190" class="Record">Bind</a> <a id="228" class="Symbol">(</a><a id="229" href="Meta.Effect.Map.html#186" class="InductiveConstructor">eff</a> <a id="233" href="Agda.Builtin.Maybe.html#135" class="Datatype">Maybe</a><a id="238" class="Symbol">)</a>
+  <a id="242" href="Data.Maybe.Instances.Bind.html#210" class="Function">Bind-Maybe</a> <a id="253" class="Symbol">.</a><a id="254" href="Meta.Effect.Bind.html#264" class="Field Operator">Bind._&gt;&gt;=_</a> <a id="265" class="Symbol">=</a> <a id="267" href="Data.Maybe.Base.html#419" class="Function">extend</a>
 </pre></body></html>

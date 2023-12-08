@@ -4,15 +4,15 @@
 
 <a id="69" class="Keyword">open</a> <a id="74" class="Keyword">import</a> <a id="81" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="99" class="Keyword">open</a> <a id="104" class="Keyword">import</a> <a id="111" href="Meta.Idiom.html" class="Module">Meta.Idiom</a>
+<a id="99" class="Keyword">open</a> <a id="104" class="Keyword">import</a> <a id="111" href="Meta.Effect.Idiom.html" class="Module">Meta.Effect.Idiom</a>
 
-<a id="123" class="Keyword">open</a> <a id="128" class="Keyword">import</a> <a id="135" href="Data.Tree.Binary.Base.html" class="Module">Data.Tree.Binary.Base</a> <a id="157" class="Keyword">public</a>
+<a id="130" class="Keyword">open</a> <a id="135" class="Keyword">import</a> <a id="142" href="Data.Tree.Binary.Base.html" class="Module">Data.Tree.Binary.Base</a> <a id="164" class="Symbol">as</a> <a id="167" class="Module">Tree</a> <a id="172" class="Keyword">public</a>
 
-<a id="165" class="Keyword">private</a> <a id="173" class="Keyword">variable</a>
-  <a id="184" href="Data.Tree.Binary.Instances.Map.html#184" class="Generalizable">ℓ</a> <a id="186" class="Symbol">:</a> <a id="188" href="Agda.Primitive.html#742" class="Postulate">Level</a>
-  <a id="196" href="Data.Tree.Binary.Instances.Map.html#196" class="Generalizable">A</a> <a id="198" class="Symbol">:</a> <a id="200" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="205" href="Data.Tree.Binary.Instances.Map.html#184" class="Generalizable">ℓ</a>
+<a id="180" class="Keyword">private</a> <a id="188" class="Keyword">variable</a>
+  <a id="199" href="Data.Tree.Binary.Instances.Map.html#199" class="Generalizable">ℓ</a> <a id="201" class="Symbol">:</a> <a id="203" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="211" href="Data.Tree.Binary.Instances.Map.html#211" class="Generalizable">A</a> <a id="213" class="Symbol">:</a> <a id="215" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="220" href="Data.Tree.Binary.Instances.Map.html#199" class="Generalizable">ℓ</a>
 
-<a id="208" class="Keyword">instance</a>
-  <a id="Map-Tree"></a><a id="219" href="Data.Tree.Binary.Instances.Map.html#219" class="Function">Map-Tree</a> <a id="228" class="Symbol">:</a> <a id="230" href="Meta.Idiom.html#261" class="Record">Map</a> <a id="234" class="Symbol">(</a><a id="235" href="Meta.Idiom.html#181" class="InductiveConstructor">eff</a> <a id="239" href="Data.Tree.Binary.Base.html#95" class="Datatype">Tree</a><a id="243" class="Symbol">)</a>
-  <a id="247" href="Data.Tree.Binary.Instances.Map.html#219" class="Function">Map-Tree</a> <a id="256" class="Symbol">.</a><a id="257" href="Meta.Idiom.html#334" class="Field Operator">_&lt;$&gt;_</a> <a id="263" class="Symbol">=</a> <a id="265" href="Data.Tree.Binary.Base.html#814" class="Function">map</a>
+<a id="223" class="Keyword">instance</a>
+  <a id="Map-Tree"></a><a id="234" href="Data.Tree.Binary.Instances.Map.html#234" class="Function">Map-Tree</a> <a id="243" class="Symbol">:</a> <a id="245" href="Meta.Effect.Map.html#266" class="Record">Map</a> <a id="249" class="Symbol">(</a><a id="250" href="Meta.Effect.Map.html#186" class="InductiveConstructor">eff</a> <a id="254" href="Data.Tree.Binary.Base.html#95" class="Datatype">Tree</a><a id="258" class="Symbol">)</a>
+  <a id="262" href="Data.Tree.Binary.Instances.Map.html#234" class="Function">Map-Tree</a> <a id="271" class="Symbol">.</a><a id="272" href="Meta.Effect.Map.html#339" class="Field">Map.map</a> <a id="280" class="Symbol">=</a> <a id="282" href="Data.Tree.Binary.Base.html#814" class="Function">Tree.map</a>
 </pre></body></html>
