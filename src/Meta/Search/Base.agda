@@ -12,13 +12,13 @@ open import Data.Bool.Base as Bool
 open import Data.Empty.Base
 open import Data.Fin.Computational.Base
 open import Data.List.Base as List
-open import Data.List.Operations using (length)
+open import Data.List.Operations as List
 open import Data.List.Instances.Foldable
 open import Data.List.Instances.FromProduct public
 open import Data.List.Instances.Idiom
 open import Data.Maybe.Base
 open import Data.Nat.Base
-open import Data.Vec.Inductive.Operations.Computational
+open import Data.Vec.Inductive.Operations.Computational as Vec
 
 data Goal-strat : Type where
   none by-hlevel : Goal-strat
@@ -42,7 +42,7 @@ private
   Selector = Fin
 
 select-arg : Visibility → {@0 m : ℕ} → Selector m → Vec (Arg Term) m → TC Term
-select-arg vis idx args = case lookup args idx of λ where
+select-arg vis idx args = case Vec.lookup args idx of λ where
   (vis-arg v x) → do
     guard (v visibility=? vis)
     pure x
@@ -163,7 +163,7 @@ private
   compose-solution : Tactic-desc goal-name goal-strat → Bool → Level-data goal-strat → Term → Term
   compose-solution {goal-name} td instance? xlv ty = def target $ vec→list (go td xlv base-args) .fst where
     target = if instance? then td .instance-name else goal-name
-    base-args = replace (td .goal-selector) (varg ty) $ replicate (td .args-length) (harg Term.unknown)
+    base-args = replace (td .goal-selector) (varg ty) $ Vec.replicate (td .args-length) (harg Term.unknown)
     go : ∀{gn gs} (td : Tactic-desc gn gs) → Level-data gs → Vec _ (td .args-length) → Vec _ (td .args-length)
     go {gs = by-hlevel} td xlv = replace (td .level-selector) (varg xlv)
     go {gs = none} _ _ = id
@@ -380,9 +380,9 @@ private
   gen-args (suc fuel) gs has-alts level goal defn [] accum cont = do
     -- If we have no arguments to generate, then we can go ahead and
     -- use the accumulator as-is.
-    unify goal (def defn (reverse-fast accum))
+    unify goal (def defn (List.reverse-fast accum))
     debug-print "tactic.search" 10
-      [ "Committed to solution: " , termErr (def defn (reverse accum)) ]
+      [ "Committed to solution: " , termErr (def defn (List.reverse-fast accum)) ]
     cont
 
   gen-args (suc fuel) gs has-alts level goal defn (x ∷ args) accum cont with gs | x
@@ -520,7 +520,7 @@ search-tactic-worker {goal-name} td goal = do
       [ "Goal type is not of the form ‶" , nameErr goal-name , "″:\n"
       , termErr ty ]
 
-  let delta = reverse-fast delta
+  let delta = List.reverse-fast delta
   solved ← enter delta do
     goal′ ← new-meta $ compose-goal td lv ty
     search td false lv 50 goal′

@@ -3,9 +3,9 @@ module Data.Tree.Binary.Instances.Map where
 
 open import Foundations.Base
 
-open import Meta.Effect.Idiom
+open import Meta.Effect.Map
 
-open import Data.Tree.Binary.Base as Tree public
+open import Data.Tree.Binary.Base
 
 private variable
   ℓ : Level
@@ -13,4 +13,8 @@ private variable
 
 instance
   Map-Tree : Map (eff Tree)
-  Map-Tree .Map.map = Tree.map
+  Map-Tree .map {A} {B} = go where
+    go : (A → B) → Tree A → Tree B
+    go _ empty = empty
+    go f (leaf x) = leaf (f x)
+    go f (node l r) = node (go f l) (go f r)

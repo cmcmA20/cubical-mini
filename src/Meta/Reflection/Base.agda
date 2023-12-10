@@ -73,21 +73,21 @@ instance
   From-string-ErrorPart .from-string s = strErr s
 
   Map-TC : Map (eff TC)
-  Map-TC .Map.map f x = bindTC x λ x → returnTC (f x)
+  Map-TC .map f x = bindTC x λ x → returnTC (f x)
 
   Idiom-TC : Idiom (eff TC)
-  Idiom-TC .Idiom.pure = returnTC
-  Idiom-TC .Idiom._<*>_ f g = bindTC f λ f → bindTC g λ g → pure (f g)
+  Idiom-TC .pure = returnTC
+  Idiom-TC ._<*>_ f g = bindTC f λ f → bindTC g λ g → pure (f g)
 
   Bind-TC : Bind (eff TC)
-  Bind-TC .Bind._>>=_ = bindTC
+  Bind-TC ._>>=_ = bindTC
 
   Alt-TC : Alt (eff TC)
-  Alt-TC .Alt.fail = type-error []
-  Alt-TC .Alt._<|>_ = catchTC
+  Alt-TC .fail  = type-error []
+  Alt-TC ._<|>_ = catchTC
 
   Map-Arg : Map (eff Arg)
-  Map-Arg .Map.map f (arg ai x) = arg ai (f x)
+  Map-Arg .map f (arg ai x) = arg ai (f x)
 
 private variable
   ℓ ℓ′ : Level

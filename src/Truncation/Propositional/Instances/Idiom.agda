@@ -11,6 +11,6 @@ open import Truncation.Propositional.Instances.Map public
 
 instance
   Idiom-∥-∥₁ : Idiom (eff ∥_∥₁)
-  Idiom-∥-∥₁ .Idiom.pure = ∣_∣₁
-  Idiom-∥-∥₁ .Idiom._<*>_ ∣f∣₁ ∣a∣₁ =
+  Idiom-∥-∥₁ .pure = ∣_∣₁
+  Idiom-∥-∥₁ ._<*>_ ∣f∣₁ ∣a∣₁ =
     rec (hlevel 1) (_<$> ∣a∣₁) ∣f∣₁

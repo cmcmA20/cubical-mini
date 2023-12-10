@@ -3,7 +3,12 @@ module Data.HVec.Base where
 
 open import Foundations.Base
 
-open import Data.Nat.Base
+open import Meta.Effect.Foldable
+
+-- yes, it's the right one
+open import Data.Vec.Ergonomic.Base
+open import Data.Vec.Ergonomic.Instances.Foldable
+open import Data.Vec.Ergonomic.Instances.Map
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level
@@ -12,23 +17,23 @@ private variable
   B : Type ℓᵇ
   C : Type ℓᶜ
 
-Vec′ : Type ℓ → (n : ℕ) → Type ℓ
-Vec′ _ 0 = Lift _ ⊤
-Vec′ A 1 = A
-Vec′ A (suc (suc n)) = A × Vec′ A (suc n)
-
 Levels : ℕ → Type
-Levels = Vec′ Level
+Levels = Vec Level
 
 ℓsup : ∀ n → Levels n → Level
-ℓsup 0 _ = 0ℓ
-ℓsup 1 l = l
-ℓsup (suc (suc n)) (l , ls) = l ⊔ ℓsup _ ls
+ℓsup _ = fold-r _⊔_ 0ℓ
 
+-- n-tuple of possibly different type universes
 Types : ∀ n (ls : Levels n) → Type (ℓsuc (ℓsup n ls))
 Types 0             _        = Lift _ ⊤
 Types 1             l        = Type l
 Types (suc (suc n)) (l , ls) = Type l × Types _ ls
+
+-- n-tuple of possibly different types
+HVec : ∀ n {ls} → Types n ls → Type (ℓsup n ls)
+HVec 0             _        = ⊤
+HVec 1             A        = A
+HVec (suc (suc n)) (A , As) = A × HVec (suc n) As
 
 Arrows : ∀ n {ℓ ls} → Types n ls → Type ℓ → Type (ℓ ⊔ ℓsup n ls)
 Arrows 0             _        B = B
@@ -46,14 +51,12 @@ _<$>ⁿ_ F {n = 1}           A        = A
 _<$>ⁿ_ F {n = suc (suc n)} (A , As) = F A , (F <$>ⁿ As)
 
 ℓmap : (Level → Level) → ∀ n → Levels n → Levels n
-ℓmap f 0             _        = _
-ℓmap f 1             l        = f l
-ℓmap f (suc (suc n)) (l , ls) = f l , ℓmap f _ ls
+ℓmap f _ = map f
 
 ℓsmap : (f : Level → Level)
       → (∀ {ℓ} → Type ℓ → Type (f ℓ))
       → ∀ n {ls}
-      → Types n ls → Types n (ℓmap f n ls)
+      → Types n ls → Types n (ℓmap f _ ls)
 ℓsmap _ _ 0             _        = _
 ℓsmap _ F 1             A        = F A
 ℓsmap f F (suc (suc n)) (A , As) = F A , ℓsmap f F _ As
@@ -84,11 +87,6 @@ constⁿ : ∀ n {ls ℓ} {As : Types n ls} {B : Type ℓ} → B → funⁿ As B
 constⁿ 0             v = v
 constⁿ 1             v = λ _ → v
 constⁿ (suc (suc n)) v = λ _ → constⁿ _ v
-
-HVec : ∀ n {ls} → Types n ls → Type (ℓsup n ls)
-HVec 0             _        = ⊤
-HVec 1             A        = A
-HVec (suc (suc n)) (A , As) = A × HVec (suc n) As
 
 -- rec
 uncurryⁿ : ∀ n {ls} {As : Types n ls} → funⁿ As B → HVec n As → B

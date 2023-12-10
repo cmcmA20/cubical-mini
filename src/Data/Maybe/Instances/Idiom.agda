@@ -10,6 +10,6 @@ open import Data.Maybe.Instances.Map public
 
 instance
   Idiom-Maybe : Idiom (eff Maybe)
-  Idiom-Maybe .Idiom.pure = just
-  Idiom-Maybe .Idiom._<*>_ (just f) (just x) = just (f x)
-  Idiom-Maybe .Idiom._<*>_ _ _ = nothing
+  Idiom-Maybe .pure = just
+  Idiom-Maybe ._<*>_ (just f) (just x) = just (f x)
+  Idiom-Maybe ._<*>_ _ _ = nothing

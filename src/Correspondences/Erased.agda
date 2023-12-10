@@ -36,7 +36,6 @@ substᴱ : (B : @0 A → Type ℓ′) (@0 p : x ＝ y) → B x → B y
 substᴱ B p = transport (λ i → B (p i))
 -- substᴱ B p = subst (λ z → B (z .erased)) ([]ᴱ-cong [ p ]ᴱ)
 
-
 -- FIXME doesn't work as intended
 --       do we need modality polymorphism?
 instance

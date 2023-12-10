@@ -13,5 +13,5 @@ private variable
 
 instance
   Append-List : Append (List A)
-  Append-List .Append.mempty = []
-  Append-List .Append._<>_ = _++_
+  Append-List .mempty = []
+  Append-List ._<>_ = _++_

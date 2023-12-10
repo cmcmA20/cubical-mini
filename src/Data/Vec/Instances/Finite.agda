@@ -17,6 +17,10 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
+-- NB: vector definition is transparent, so these instances won't ever
+-- be selected by instance search, they are used to easily transfer finiteness
+-- between different vector implementations
+
 vec-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Vec A n)
 vec-manifest-bishop-finite {A} {0} _ = manifest-bishop-finite!
 vec-manifest-bishop-finite {A} {suc _} A-fin =

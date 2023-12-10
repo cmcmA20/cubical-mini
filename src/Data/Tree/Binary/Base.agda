@@ -31,8 +31,3 @@ rec : (empty* : B)
       (node* : B → B → B)
     → Π[ t ꞉ Tree A ] B
 rec empty* leaf* node* = elim empty* leaf* node*
-
-map : (A → B) → Tree A → Tree B
-map _ empty = empty
-map f (leaf x) = leaf (f x)
-map f (node l r) = node (map f l) (map f r)

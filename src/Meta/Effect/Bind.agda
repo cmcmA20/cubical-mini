@@ -6,9 +6,9 @@ open import Foundations.Base
 open import Meta.Effect.Idiom public
 
 private variable
-  ℓ ℓ′ : Level
-  A : Type ℓ
-  B : Type ℓ′
+  ℓᵃ ℓᵇ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
 
 record Bind (M : Effect) : Typeω where
   private module M = Effect M

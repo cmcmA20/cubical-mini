@@ -41,7 +41,7 @@ opaque
   unfolding is-classical
   instance
     Map-Classically : Map (eff Classically)
-    Map-Classically .Map.map f ¬¬a ¬b = ¬¬a $ ¬b ∘ f
+    Map-Classically .map f ¬¬a ¬b = ¬¬a $ ¬b ∘ f
 
     Idiom-Classically : Idiom (eff Classically)
     Idiom-Classically .pure = _&_

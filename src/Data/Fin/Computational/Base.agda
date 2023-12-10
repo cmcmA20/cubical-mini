@@ -38,26 +38,41 @@ fsuc (mk-fin k {(b)}) = mk-fin (suc k) {b}
 fsplit
   : (k : Fin (suc n))
   → (k ＝ fzero) ⊎ (Σ[ l ꞉ Fin n ] (k ＝ fsuc l))
-fsplit (mk-fin zero) = inl refl
-fsplit (mk-fin (suc k) {(b)}) = inr ((mk-fin k {b}) , refl)
+fsplit (mk-fin 0)       = inl refl
+fsplit (mk-fin (suc k)) = inr (mk-fin k , refl)
 
--- TODO can be strengthened
+-- TODO mmm noice
+-- elim  : Π[ P ꞉ ∀ᴱ[ n ꞉ ℕ ] (Fin n → Type ℓ′) ]
+--         Π[ fz ꞉ ∀ᴱ[ n ꞉ ℕ ] P {suc n} fzero ]
+--         Π[ fs ꞉ ∀ᴱ[ n ꞉ ℕ ] ∀[ k ꞉ Fin n ] (P k → P (fsuc k)) ]
+--         ∀ᴱ[ n ꞉ ℕ ] Π[ k ꞉ Fin n ] P k
+-- elim P fz fs {x = n} (mk-fin 0 {∣ b ∣ᴱ}) =
+--   let @0 p : _
+--       p = <→s {n = n} b
+--       @0 n′ : ℕ
+--       n′ = p .fst
+--       @0 q : n ＝ suc n′
+--       q = p .snd
+--   in substᴱ {A = Σ[ m ꞉ ℕ ] Fin m × ∥ 0 < m ∥ᴱ}
+--             {x = suc n′ , fzero , ∣ z≤ {n′} ∣ᴱ}
+--             {y = n , (substᴱ Fin (sym q) fzero) , ∣ b ∣ᴱ}
+--             (λ x → P {x .fst} (mk-fin 0 {∣ erased (x .snd .snd) ∣ᴱ}))
+--             (Σ-path (sym q) $ ×-path refl (is-prop-β (∥-∥ᴱ-is-prop (<-is-prop {0} {n})) _ _)) fz
+-- elim P fz fs {x = n} (mk-fin (suc k) {∣ b ∣ᴱ}) = {!!}
+
 elim  : Π[ P ꞉ ∀ᴱ[ n ꞉ ℕ ] (Fin n → Type ℓ′) ]
         Π[ fz ꞉ ∀ᴱ[ n ꞉ ℕ ] P {suc n} fzero ]
         Π[ fs ꞉ ∀ᴱ[ n ꞉ ℕ ] ∀[ k ꞉ Fin n ] (P k → P (fsuc k)) ]
         ∀[ n ꞉ ℕ ] Π[ k ꞉ Fin n ] P k
-elim P fz fs {x = suc n} k with fsplit k
-... | inl p = subst P (sym p) fz
-... | inr (l , p) = subst P (sym p) (fs (elim P fz fs l))
+elim P fz fs {x = suc n} (mk-fin 0) = fz
+elim P fz fs {x = suc n} (mk-fin (suc k)) = fs (elim P fz fs (mk-fin k))
 
-fpred : Fin (suc (suc n)) → Fin (suc n)
-fpred = [ (λ _ → fzero) , fst ]ᵤ ∘ fsplit
-
-impl : FinI Fin
-impl .FinI.fzero = fzero
-impl .FinI.fsuc = fsuc
-impl .FinI.fsplit = fsplit
-impl .FinI.elim = elim
+-- TODO wait for the right eliminator
+-- impl : FinIᴱ Fin
+-- impl .FinIᴱ.fzero = fzero
+-- impl .FinIᴱ.fsuc = fsuc
+-- impl .FinIᴱ.fsplit = fsplit
+-- impl .FinIᴱ.elim = elim
 
 fin→ℕ : Fin n → ℕ
 fin→ℕ (mk-fin k) = k

@@ -9,7 +9,7 @@ open import Data.Maybe.Base as Maybe
 
 instance
   Map-Maybe : Map (eff Maybe)
-  Map-Maybe .Map.map {A} {B} = go where
+  Map-Maybe .map {A} {B} = go where
     go : (A → B) → Maybe A → Maybe B
     go f (just x) = just (f x)
     go _ nothing  = nothing

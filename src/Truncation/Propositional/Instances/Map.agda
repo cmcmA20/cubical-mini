@@ -10,6 +10,4 @@ open import Truncation.Propositional.Base
 
 instance
   Map-∥-∥₁ : Map (eff ∥_∥₁)
-  Map-∥-∥₁ .Map.map {A} {B} = go where
-    go : (A → B) → (∥ A ∥₁ → ∥ B ∥₁)
-    go f = rec (hlevel 1) (∣_∣₁ ∘ f)
+  Map-∥-∥₁ .map f = rec (hlevel 1) (∣_∣₁ ∘ f)

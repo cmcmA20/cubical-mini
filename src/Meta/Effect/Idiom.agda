@@ -8,9 +8,11 @@ open import Meta.Effect.Map public
 open import Data.Bool.Base
 
 private variable
-  ℓ ℓ′ : Level
-  A : Type ℓ
-  B : Type ℓ′
+  ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
+  C : Type ℓᶜ
+  D : Type ℓᵈ
 
 record Idiom (M : Effect) : Typeω where
   private module M = Effect M
@@ -32,3 +34,9 @@ module _ {M : Effect} (let module M = Effect M) ⦃ app : Idiom M ⦄ where
   unless : Bool → M.₀ ⊤ → M.₀ ⊤
   unless false t = t
   unless true  _ = pure tt
+
+  map² : (A → B → C) → M.₀ A → M.₀ B → M.₀ C
+  map² f x y = ⦇ f x y ⦈
+
+  map³ : (A → B → C → D) → M.₀ A → M.₀ B → M.₀ C → M.₀ D
+  map³ f x y z = ⦇ f x y z ⦈

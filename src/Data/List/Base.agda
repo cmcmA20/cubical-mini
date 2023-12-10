@@ -26,9 +26,9 @@ elim
 elim P p[] p∷ []       = p[]
 elim P p[] p∷ (x ∷ xs) = p∷ x xs (elim P p[] p∷ xs)
 
-rec : (A → B → B) → B → List A → B
-rec _ x []       = x
-rec f x (a ∷ as) = f a (rec f x as)
+rec : B → (A → B → B) → List A → B
+rec x _ []       = x
+rec x f (a ∷ as) = f a (rec x f as)
 
 fold-l : (B → A → B) → B → List A → B
 fold-l f x []       = x
@@ -40,7 +40,7 @@ _++_ : List A → List A → List A
 (x ∷ xs) ++ ys = x ∷ (xs ++ ys)
 
 concat : List (List A) → List A
-concat = rec (_++_) []
+concat = rec [] (_++_)
 
 reverse : List A → List A
 reverse []       = []

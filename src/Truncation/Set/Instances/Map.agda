@@ -10,6 +10,4 @@ open import Truncation.Set.Base
 
 instance
   Map-∥-∥₂ : Map (eff ∥_∥₂)
-  Map-∥-∥₂ .Map.map {A} {B} = go where
-    go : (A → B) → (∥ A ∥₂ → ∥ B ∥₂)
-    go f = rec (hlevel 2) (∣_∣₂ ∘ f)
+  Map-∥-∥₂ .map f = rec (hlevel 2) (∣_∣₂ ∘ f)

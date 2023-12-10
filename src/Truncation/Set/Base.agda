@@ -10,9 +10,9 @@ data ∥_∥₂ {ℓ} (A : Type ℓ) : Type ℓ where
   squash₂ : (x y : ∥ A ∥₂) (p q : x ＝ y) → p ＝ q
 
 private variable
-  ℓ ℓ′ : Level
-  A : Type ℓ
-  B : Type ℓ′
+  ℓ ℓᵃ ℓᵇ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
 
 rec : is-set B → (A → B) → ∥ A ∥₂ → B
 rec _ f ∣ x ∣₂ = f x
@@ -31,7 +31,7 @@ instance
 proj : (A-set : is-set A) → ∥ A ∥₂ → A
 proj A-set = rec A-set id
 
-elim : {P : ∥ A ∥₂ → Type ℓ′}
+elim : {P : ∥ A ∥₂ → Type ℓ}
      → Π[ x ꞉ ∥ A ∥₂ ] is-set (P x)
      → Π[ x ꞉   A    ] P ∣ x ∣₂
      → Π[ x ꞉ ∥ A ∥₂ ] P   x

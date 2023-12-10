@@ -59,6 +59,10 @@ m > n = n < m
 <-peel : suc m < suc n → m < n
 <-peel = id
 
+<-suc-r : m < n → m < suc n
+<-suc-r {0}             p = _
+<-suc-r {suc m} {suc _} p = <-suc-r {m} p
+
 <→s : m < n → Σ[ k ꞉ ℕ ] (n ＝ suc k)
 <→s {m} {suc n} p = n , refl
 

@@ -14,8 +14,8 @@ private variable
 
 instance
   Idiom-List : Idiom (eff List)
-  Idiom-List .Idiom.pure = _∷ []
-  Idiom-List .Idiom._<*>_ = go where
-    go : List (_ → _) → List _ → List _
+  Idiom-List .pure = _∷ []
+  Idiom-List ._<*>_ {A} {B} = go where
+    go : List (A → B) → List A → List B
     go (f ∷ fs) (x ∷ xs) = f x ∷ go fs xs
     go _        _        = []

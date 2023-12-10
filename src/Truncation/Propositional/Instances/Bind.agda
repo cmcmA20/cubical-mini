@@ -11,4 +11,4 @@ open import Truncation.Propositional.Instances.Idiom public
 
 instance
   Bind-∥-∥₁ : Bind (eff ∥_∥₁)
-  Bind-∥-∥₁ .Bind._>>=_ ∣a∣₁ mf = rec (hlevel 1) mf ∣a∣₁
+  Bind-∥-∥₁ ._>>=_ = flip $ rec $ hlevel 1

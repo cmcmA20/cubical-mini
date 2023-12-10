@@ -5,8 +5,9 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Data.Fin.Interface
-open import Data.Nat.Base as ℕ public
+open import Data.Nat.Base as ℕ
   using (ℕ; zero; suc)
+  public
 open import Data.Sum.Base
 
 private variable
@@ -21,9 +22,9 @@ weaken : Fin n → Fin (suc n)
 weaken fzero    = fzero
 weaken (fsuc k) = fsuc (weaken k)
 
-fsplit : ∀[ n ꞉ ℕ ] Π[ k ꞉ Fin (suc n) ]
+fsplit : ∀ᴱ[ n ꞉ ℕ ] Π[ k ꞉ Fin (suc n) ]
          (k ＝ fzero) ⊎ (Σ[ k′ ꞉ Fin n ] (k ＝ fsuc k′))
-fsplit fzero = inl refl
+fsplit fzero    = inl refl
 fsplit (fsuc k) = inr (k , refl)
 
 elim
@@ -31,16 +32,16 @@ elim
   → (∀ᴱ[ n ꞉ ℕ ] P {suc n} fzero)
   → (∀ᴱ[ n ꞉ ℕ ] ∀[ k ꞉ Fin n ] (P k → P (fsuc k)))
   → ∀ᴱ[ n ꞉ ℕ ] Π[ k ꞉ Fin n ] P k
-elim P pfzero pfsuc fzero    = pfzero
-elim P pfzero pfsuc (fsuc x) = pfsuc (elim P pfzero pfsuc x)
+elim _ fz _  fzero    = fz
+elim P fz fs (fsuc k) = fs (elim P fz fs k)
 
-impl : FinI Fin
-impl .FinI.fzero = fzero
-impl .FinI.fsuc = fsuc
-impl .FinI.fsplit = fsplit
-impl .FinI.elim P pz ps = elim P pz ps
+impl : FinIᴱ Fin
+impl .FinIᴱ.fzero = fzero
+impl .FinIᴱ.fsuc = fsuc
+impl .FinIᴱ.fsplit = fsplit
+impl .FinIᴱ.elim = elim
 
-rec = FinI.rec impl
+rec = FinIᴱ.rec impl
 
 squish : Fin n → Fin (suc n) → Fin n
 squish fzero    fzero    = fzero

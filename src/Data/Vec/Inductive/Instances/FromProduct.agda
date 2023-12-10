@@ -12,9 +12,9 @@ private variable
   A : Type ℓ
 
 instance
-  From-prod-Vec : From-product A (Vec A)
-  From-prod-Vec .From-product.from-prod = go where
-    go : ∀ n → HProduct A n → Vec A n
-    go zero xs                = []
-    go (suc zero) xs          = xs ∷ []
+  From-prod-Vec : From-product A (λ n → Vec A n)
+  From-prod-Vec .from-prod = go where
+    go : ∀ n → Product A n → Vec A n
+    go 0 _ = []
+    go 1 x = x ∷ []
     go (suc (suc n)) (x , xs) = x ∷ go (suc n) xs

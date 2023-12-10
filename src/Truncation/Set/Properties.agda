@@ -9,32 +9,19 @@ open import Meta.Search.HLevel
 open import Truncation.Set.Base public
 
 private variable
-  ℓ ℓ′ ℓ″ ℓ‴ : Level
-  A : Type ℓ
-  B : Type ℓ′
-  C : Type ℓ″
+  ℓ ℓᵃ ℓᵇ ℓᶜ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
+  C : Type ℓᶜ
 
-map² : (A → B → C) → ∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂
-map² f ∣ x ∣₂ ∣ y ∣₂ = ∣ f x y ∣₂
-map² f (squash₂ x y p q i j) b =
-  squash₂ (map² f x b) (map² f y b)
-          (λ k → map² f (p k) b)
-          (λ k → map² f (q k) b)
-          i j
-map² f a (squash₂ x y p q i j) =
-  squash₂ (map² f a x) (map² f a y)
-          (λ k → map² f a (p k))
-          (λ k → map² f a (q k))
-          i j
-
-elim² : {C : ∥ A ∥₂ → ∥ B ∥₂ → Type ℓ″}
+elim² : {C : ∥ A ∥₂ → ∥ B ∥₂ → Type ℓ}
       → (∀ x y → is-set (C x y))
       → (∀ x y → C ∣ x ∣₂ ∣ y ∣₂)
       → ∀ x y → C x y
 elim² B-set f = elim (λ x → Π-is-of-hlevel 2 (B-set x))
   λ x → elim (B-set ∣ x ∣₂) (f x)
 
-elim³ : {D : ∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂ → Type ℓ‴}
+elim³ : {D : ∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂ → Type ℓ}
       → (∀ x y z → is-set (D x y z))
       → (∀ x y z → D ∣ x ∣₂ ∣ y ∣₂ ∣ z ∣₂)
       → ∀ x y z → D x y z
@@ -48,7 +35,7 @@ rec!
 rec! {B-set} = elim (λ _ → B-set)
 
 elim!
-  : {P : ∥ A ∥₂ → Type ℓ′}
+  : {P : ∥ A ∥₂ → Type ℓ}
     {@(tactic hlevel-tactic-worker) P-set : ∀{a} → is-set (P a)}
   → Π[ a ꞉ A ] P ∣ a ∣₂
   → (x : ∥ A ∥₂) → P x

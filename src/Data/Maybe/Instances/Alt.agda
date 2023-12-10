@@ -20,6 +20,6 @@ maybe→alt nothing  = fail
 
 instance
   Alt-Maybe : Alt (eff Maybe)
-  Alt-Maybe .Alt.fail = nothing
-  Alt-Maybe .Alt._<|>_ (just x) _ = just x
-  Alt-Maybe .Alt._<|>_ nothing  y = y
+  Alt-Maybe .fail = nothing
+  Alt-Maybe ._<|>_ (just x) _ = just x
+  Alt-Maybe ._<|>_ nothing  y = y

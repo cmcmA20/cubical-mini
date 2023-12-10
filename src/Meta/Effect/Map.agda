@@ -4,15 +4,16 @@ module Meta.Effect.Map where
 open import Foundations.Base
 
 private variable
-  ℓ ℓ′ : Level
-  A : Type ℓ
-  B : Type ℓ′
+  ℓ ℓᵃ ℓᵇ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
 
 record Effect : Typeω where
   constructor eff
   field
     {adj} : Level → Level
     ₀     : Type ℓ → Type (adj ℓ)
+
 
 record Map (M : Effect) : Typeω where
   private module M = Effect M

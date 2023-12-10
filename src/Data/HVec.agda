@@ -2,4 +2,4 @@
 module Data.HVec where
 
 open import Data.HVec.Base       public
--- open import Data.HVec.Properties public
+open import Data.HVec.Properties public

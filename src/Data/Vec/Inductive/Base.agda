@@ -4,8 +4,9 @@ module Data.Vec.Inductive.Base where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Data.Nat.Base public
+open import Data.Nat.Base
   using (ℕ; zero; suc; _+_)
+  public
 open import Data.Vec.Interface
 
 private variable
@@ -28,19 +29,15 @@ elim
 elim P p[] p∷ []       = p[]
 elim P p[] p∷ (x ∷ xs) = p∷ (elim P p[] p∷ xs)
 
-impl : VecI Vec
-impl .VecI.[] = []
-impl .VecI._∷_ = _∷_
-impl .VecI.elim P p[] p∷ = elim P p[] p∷
+impl : VecIᴱ Vec
+impl .VecIᴱ.[] = []
+impl .VecIᴱ._∷_ = _∷_
+impl .VecIᴱ.elim = elim
 
-rec = VecI.rec impl
-
-map : (A → B) → Vec A n → Vec B n
-map f []       = []
-map f (x ∷ xs) = f x ∷ map f xs
+rec = VecIᴱ.rec impl
 
 replicate : (n : ℕ) → A → Vec A n
-replicate zero    x = []
+replicate 0       x = []
 replicate (suc n) x = x ∷ replicate n x
 
 _++_ : Vec A m → Vec A n → Vec A (m + n)

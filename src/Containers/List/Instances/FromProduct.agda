@@ -17,7 +17,7 @@ instance
   From-prod-ListC : From-product A (λ _ → ⟦ ListC ⟧ A)
   From-prod-ListC .From-product.from-prod = go
     where
-    go : (n : ℕ) → HProduct _ n → ⟦ ListC ⟧ _
+    go : (n : ℕ) → Product _ n → ⟦ ListC ⟧ _
     go 0 _ = 0 , λ ()
     go 1 x = 1 , λ _ → x
     go (suc (suc n)) (x , xs) with go (suc n) xs

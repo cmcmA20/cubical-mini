@@ -10,4 +10,4 @@ open import Data.Maybe.Instances.Idiom public
 
 instance
   Bind-Maybe : Bind (eff Maybe)
-  Bind-Maybe .Bind._>>=_ = extend
+  Bind-Maybe ._>>=_ = extend
