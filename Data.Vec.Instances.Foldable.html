@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Vec.Instances.Foldable</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Vec.Instances.Foldable.html" class="Module">Data.Vec.Instances.Foldable</a> <a id="59" class="Keyword">where</a>
+
+<a id="66" class="Keyword">open</a> <a id="71" class="Keyword">import</a> <a id="78" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="96" class="Keyword">open</a> <a id="101" class="Keyword">import</a> <a id="108" href="Meta.Effect.Foldable.html" class="Module">Meta.Effect.Foldable</a>
+
+<a id="130" class="Keyword">open</a> <a id="135" class="Keyword">import</a> <a id="142" href="Data.Vec.Base.html" class="Module">Data.Vec.Base</a>
+
+<a id="157" class="Keyword">instance</a>
+  <a id="Foldable-Vec"></a><a id="168" href="Data.Vec.Instances.Foldable.html#168" class="Function">Foldable-Vec</a> <a id="181" class="Symbol">:</a> <a id="183" class="Symbol">∀{</a><a id="185" href="Data.Vec.Instances.Foldable.html#185" class="Bound">n</a><a id="186" class="Symbol">}</a> <a id="188" class="Symbol">→</a> <a id="190" href="Meta.Effect.Foldable.html#192" class="Record">Foldable</a> <a id="199" class="Symbol">(</a><a id="200" href="Meta.Effect.Map.html#190" class="InductiveConstructor">eff</a> <a id="204" class="Symbol">λ</a> <a id="206" href="Data.Vec.Instances.Foldable.html#206" class="Bound">T</a> <a id="208" class="Symbol">→</a> <a id="210" href="Data.Vec.Base.html#236" class="Function">Vec</a> <a id="214" href="Data.Vec.Instances.Foldable.html#206" class="Bound">T</a> <a id="216" href="Data.Vec.Instances.Foldable.html#185" class="Bound">n</a><a id="217" class="Symbol">)</a>
+  <a id="221" href="Data.Vec.Instances.Foldable.html#168" class="Function">Foldable-Vec</a> <a id="234" class="Symbol">.</a><a id="235" href="Meta.Effect.Foldable.html#270" class="Field">fold-r</a> <a id="242" href="Data.Vec.Instances.Foldable.html#242" class="Bound">f</a> <a id="244" href="Data.Vec.Instances.Foldable.html#244" class="Bound">z</a> <a id="246" class="Symbol">=</a> <a id="248" href="Data.Vec.Base.html#724" class="Function">rec</a> <a id="252" href="Data.Vec.Instances.Foldable.html#244" class="Bound">z</a> <a id="254" href="Data.Vec.Instances.Foldable.html#242" class="Bound">f</a>
+</pre></body></html>

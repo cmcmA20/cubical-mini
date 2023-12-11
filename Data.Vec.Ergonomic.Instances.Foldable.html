@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Vec.Ergonomic.Instances.Foldable</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Vec.Ergonomic.Instances.Foldable.html" class="Module">Data.Vec.Ergonomic.Instances.Foldable</a> <a id="69" class="Keyword">where</a>
+
+<a id="76" class="Keyword">open</a> <a id="81" class="Keyword">import</a> <a id="88" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="106" class="Keyword">open</a> <a id="111" class="Keyword">import</a> <a id="118" href="Meta.Effect.Foldable.html" class="Module">Meta.Effect.Foldable</a>
+
+<a id="140" class="Keyword">open</a> <a id="145" class="Keyword">import</a> <a id="152" href="Data.Vec.Ergonomic.Base.html" class="Module">Data.Vec.Ergonomic.Base</a>
+
+<a id="177" class="Keyword">instance</a>
+  <a id="Foldable-Vec"></a><a id="188" href="Data.Vec.Ergonomic.Instances.Foldable.html#188" class="Function">Foldable-Vec</a> <a id="201" class="Symbol">:</a> <a id="203" class="Symbol">∀{</a><a id="205" href="Data.Vec.Ergonomic.Instances.Foldable.html#205" class="Bound">n</a><a id="206" class="Symbol">}</a> <a id="208" class="Symbol">→</a> <a id="210" href="Meta.Effect.Foldable.html#192" class="Record">Foldable</a> <a id="219" class="Symbol">(</a><a id="220" href="Meta.Effect.Map.html#190" class="InductiveConstructor">eff</a> <a id="224" class="Symbol">λ</a> <a id="226" href="Data.Vec.Ergonomic.Instances.Foldable.html#226" class="Bound">T</a> <a id="228" class="Symbol">→</a> <a id="230" href="Data.Vec.Ergonomic.Base.html#246" class="Function">Vec</a> <a id="234" href="Data.Vec.Ergonomic.Instances.Foldable.html#226" class="Bound">T</a> <a id="236" href="Data.Vec.Ergonomic.Instances.Foldable.html#205" class="Bound">n</a><a id="237" class="Symbol">)</a>
+  <a id="241" href="Data.Vec.Ergonomic.Instances.Foldable.html#188" class="Function">Foldable-Vec</a> <a id="254" class="Symbol">.</a><a id="255" href="Meta.Effect.Foldable.html#270" class="Field">fold-r</a> <a id="262" href="Data.Vec.Ergonomic.Instances.Foldable.html#262" class="Bound">f</a> <a id="264" href="Data.Vec.Ergonomic.Instances.Foldable.html#264" class="Bound">z</a> <a id="266" class="Symbol">=</a> <a id="268" href="Data.Vec.Ergonomic.Base.html#837" class="Function">rec</a> <a id="272" href="Data.Vec.Ergonomic.Instances.Foldable.html#264" class="Bound">z</a> <a id="274" href="Data.Vec.Ergonomic.Instances.Foldable.html#262" class="Bound">f</a>
+</pre></body></html>

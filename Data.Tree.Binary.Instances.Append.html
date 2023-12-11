@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Tree.Binary.Instances.Append</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Tree.Binary.Instances.Append.html" class="Module">Data.Tree.Binary.Instances.Append</a> <a id="65" class="Keyword">where</a>
+
+<a id="72" class="Keyword">open</a> <a id="77" class="Keyword">import</a> <a id="84" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="102" class="Keyword">open</a> <a id="107" class="Keyword">import</a> <a id="114" href="Meta.Append.html" class="Module">Meta.Append</a>
+
+<a id="127" class="Keyword">open</a> <a id="132" class="Keyword">import</a> <a id="139" href="Data.Tree.Binary.Base.html" class="Module">Data.Tree.Binary.Base</a>
+
+<a id="162" class="Keyword">private</a> <a id="170" class="Keyword">variable</a>
+  <a id="181" href="Data.Tree.Binary.Instances.Append.html#181" class="Generalizable">ℓ</a> <a id="183" class="Symbol">:</a> <a id="185" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="193" href="Data.Tree.Binary.Instances.Append.html#193" class="Generalizable">A</a> <a id="195" class="Symbol">:</a> <a id="197" href="Foundations.Prim.Type.html#295" class="Primitive">Type</a> <a id="202" href="Data.Tree.Binary.Instances.Append.html#181" class="Generalizable">ℓ</a>
+
+<a id="205" class="Keyword">instance</a>
+  <a id="Append-Tree"></a><a id="216" href="Data.Tree.Binary.Instances.Append.html#216" class="Function">Append-Tree</a> <a id="228" class="Symbol">:</a> <a id="230" href="Meta.Append.html#105" class="Record">Append</a> <a id="237" class="Symbol">(</a><a id="238" href="Data.Tree.Binary.Base.html#95" class="Datatype">Tree</a> <a id="243" href="Data.Tree.Binary.Instances.Append.html#193" class="Generalizable">A</a><a id="244" class="Symbol">)</a>
+  <a id="248" href="Data.Tree.Binary.Instances.Append.html#216" class="Function">Append-Tree</a> <a id="260" class="Symbol">.</a><a id="261" href="Meta.Append.html#173" class="Field">mempty</a> <a id="268" class="Symbol">=</a> <a id="270" href="Data.Tree.Binary.Base.html#128" class="InductiveConstructor">empty</a>
+  <a id="278" href="Data.Tree.Binary.Instances.Append.html#216" class="Function">Append-Tree</a> <a id="290" class="Symbol">.</a><a id="291" href="Meta.Append.html#188" class="Field Operator">_&lt;&gt;_</a>   <a id="298" class="Symbol">=</a> <a id="300" href="Data.Tree.Binary.Base.html#166" class="InductiveConstructor">node</a>
+</pre></body></html>
