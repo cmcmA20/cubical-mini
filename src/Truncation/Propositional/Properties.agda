@@ -147,7 +147,6 @@ image-factorization {f} =
   (corestriction f , corestriction-is-surjective) , (fst , subset-proj-is-embedding hlevel!) , refl
 
 
--- TODO understand the details thoroughly + refactor, 1lab
 module Replacement
   {ℓᵃ ℓᵗ ℓⁱ} {A : Type ℓᵃ} {T : Type ℓᵗ}
   {_~_ : T → T → Type ℓⁱ} {rfl : ∀ x → x ~ x}
@@ -160,24 +159,21 @@ module Replacement
   data Image : Type (ℓᵃ ⊔ ℓⁱ)
   embed : Image → T
 
+  -- HIRTs are coherent by definition in this sense
+  -- https://homotopytypetheory.org/2014/06/08/hiru-tdd/
   data Image where
     ⦋_⦌   : A → Image
     quot : ∀ {r r′} → embed r ~ embed r′ → r ＝ r′
-    coh  : ∀ r → quot (rfl (embed r)) ＝ refl
 
   embed ⦋ x ⦌ = f x
   embed (quot p i) = ls.decode p i
-  embed (coh r i j) = ls.decode-refl {a = embed r} i j
 
   embed-is-embedding : is-embedding embed
-  embed-is-embedding = cancellable→is-embedding λ {x y} →
-    iso→equiv $ from , iso (ap embed) ri ls.ε where
-
-    from : ∀ {x y} → embed x ＝ embed y → x ＝ y
-    from p = quot (ls.encode p)
-
-    ri : ∀ {x y} → (ap {x = x} {y = y} embed) is-right-inverse-of from
-    ri = J (λ _ p → from (ap embed p) ＝ p) (ap quot (transport-refl _) ∙ coh _)
+  embed-is-embedding = (preimage-is-prop→is-embedding ∘ (is-prop-η ∘_)) go where
+    go : _
+    go t (x , p) (y , q) = Σ-pathP (quot (ls.from (p ∙ sym q))) (commutes→square coh) where opaque
+      coh : ls.to (ls.from (p ∙ sym q)) ∙ q ＝ p ∙ refl
+      coh = ap (_∙ q) (ls.ε (p ∙ sym q)) ∙ ∙-cancel-r p q ∙ sym (∙-id-r p)
 
   elim-prop
     : ∀ {ℓ′} {P : Image → Type ℓ′}
@@ -189,12 +185,6 @@ module Replacement
     is-prop→pathP (λ i → P-prop (quot p i))
       (elim-prop P-prop p⦋⦌ x)
       (elim-prop P-prop p⦋⦌ y) i
-  elim-prop P-prop p⦋⦌ (coh r i j) =
-    is-prop→squareP (λ i j → P-prop (coh r i j))
-      (is-prop→pathP (λ i → P-prop _) _ _)
-      (λ _ → elim-prop P-prop p⦋⦌ r)
-      (λ _ → elim-prop P-prop p⦋⦌ r)
-      (λ _ → elim-prop P-prop p⦋⦌ r) i j
 
   ⦋-⦌-is-surjective : is-surjective ⦋_⦌
   ⦋-⦌-is-surjective = elim-prop hlevel! λ x → ∣ x , refl ∣₁

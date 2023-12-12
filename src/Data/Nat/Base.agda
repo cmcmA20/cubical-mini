@@ -59,6 +59,10 @@ pred : ℕ → ℕ
 pred zero    = zero
 pred (suc n) = n
 
+is-zero : ℕ → Type
+is-zero 0       = ⊤
+is-zero (suc _) = ⊥
+
 is-positive : ℕ → Type
 is-positive zero    = ⊥
 is-positive (suc _) = ⊤

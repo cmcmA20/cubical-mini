@@ -7,12 +7,7 @@ open import Meta.Deriving.Show
 
 open import Data.List.Base
 
-private variable
-  ℓ : Level
-  A : Type ℓ
-
-instance
-  unquoteDecl Show-List = derive-show Show-List (quote List)
+instance unquoteDecl Show-List = derive-show Show-List (quote List)
 
 private module _ where
   open import Data.Nat.Instances.Show

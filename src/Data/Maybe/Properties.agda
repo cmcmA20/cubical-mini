@@ -4,11 +4,22 @@ module Data.Maybe.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Variadic
+
+open import Correspondences.Decidable
+
+open import Data.Dec.Base
 open import Data.Maybe.Base public
+open import Data.Maybe.Path
 open import Data.Sum.Base
 open import Data.Unit.Base
 
-maybe-as-sum : ∀{ℓ} {A : Type ℓ} → Maybe A ≃ (⊤ ⊎ A)
+private variable
+  ℓ : Level
+  A : Type ℓ
+  x : Maybe A
+
+maybe-as-sum : Maybe A ≃ (⊤ ⊎ A)
 maybe-as-sum = iso→equiv 𝔯
   where
   𝔯 : Iso _ _
@@ -20,3 +31,12 @@ maybe-as-sum = iso→equiv 𝔯
   𝔯 .snd .is-iso.rinv (inr _) = refl
   𝔯 .snd .is-iso.linv (just _) = refl
   𝔯 .snd .is-iso.linv nothing  = refl
+
+instance
+  is-nothing-decision : Decidable (is-nothing x)
+  is-nothing-decision {x = nothing} = yes tt
+  is-nothing-decision {x = just _}  = no id
+
+  is-just-decision : Decidable (is-just x)
+  is-just-decision {x = nothing} = no id
+  is-just-decision {x = just _}  = yes tt

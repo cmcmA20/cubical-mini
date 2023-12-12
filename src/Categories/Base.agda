@@ -139,9 +139,9 @@ Functor.F-∘ Id _ _ = refl
 
 -- Natural transformations
 
-record _=>_ {C : Precategory oᶜ hᶜ}
-            {D : Precategory oᵈ hᵈ}
-            (F G : Functor C D)
+record _⇒_ {C : Precategory oᶜ hᶜ}
+           {D : Precategory oᵈ hᵈ}
+           (F G : Functor C D)
       : Type (oᶜ ⊔ hᶜ ⊔ hᵈ)
   where
   no-eta-equality
@@ -153,11 +153,11 @@ record _=>_ {C : Precategory oᶜ hᶜ}
     module C = Precategory C
 
   field
-    η : (x : _) → D.Hom (F.₀ x) (G.₀ x)
-    is-natural : (x y : _) (f : C.Hom x y)
+    η : ∀ x → D.Hom (F.₀ x) (G.₀ x)
+    is-natural : ∀ x y → (f : C.Hom x y)
                → η y D.∘ F.₁ f ＝ G.₁ f D.∘ η x
 
-  op : Functor.op G => Functor.op F
+  op : Functor.op G ⇒ Functor.op F
   op .η = η
   op .is-natural x y f = sym (is-natural y x f)
 
@@ -186,12 +186,12 @@ module _ where
 
   const-nt : {C : Precategory oᶜ hᶜ} {D : Precategory oᶜ hᵈ}
            → {x y : Ob D} → Hom D x y
-           → Const {C = C} {D = D} x => Const {C = C} {D = D} y
-  const-nt f ._=>_.η _ = f
-  const-nt {D} f ._=>_.is-natural _ _ _ = idr D _ ∙ sym (idl D _)
+           → Const {C = C} {D = D} x ⇒ Const {C = C} {D = D} y
+  const-nt f ._⇒_.η _ = f
+  const-nt {D} f ._⇒_.is-natural _ _ _ = idr D _ ∙ sym (idl D _)
 
 infixr 30 _F∘_
-infix 20 _=>_
+infix 20 _⇒_
 
 module _ {C : Precategory oᶜ hᶜ}
          {D : Precategory oᶜ hᵈ}
@@ -203,20 +203,20 @@ module _ {C : Precategory oᶜ hᶜ}
     module C = Precategory C
 
   open Functor
-  open _=>_
+  open _⇒_
 
-  nat-is-set : is-set (F => G)
+  nat-is-set : is-set (F ⇒ G)
   nat-is-set = iso→is-of-hlevel 2 eqv hlevel! where
-    unquoteDecl eqv = declare-record-iso eqv (quote _=>_)
+    unquoteDecl eqv = declare-record-iso eqv (quote _⇒_)
     instance
       ds : ∀{x y} → H-Level 2 (D.Hom x y)
       ds = hlevel-basic-instance 2 $ D.Hom-set _ _
 
   nat-pathP : {F' G' : Functor C D}
             → (p : F ＝ F') (q : G ＝ G')
-            → {a : F => G} {b : F' => G'}
+            → {a : F ⇒ G} {b : F' ⇒ G'}
             → (∀ x → ＜ a .η x ／ _ ＼ b .η x ＞)
-            → PathP (λ i → p i => q i) a b
+            → PathP (λ i → p i ⇒ q i) a b
   nat-pathP p q path i .η x = path x i
   nat-pathP p q {a} {b} path i .is-natural x y f =
     is-prop→pathP
@@ -225,17 +225,17 @@ module _ {C : Precategory oᶜ hᶜ}
       (a .is-natural x y f)
       (b .is-natural x y f) i
 
-  nat-path : {a b : F => G}
+  nat-path : {a b : F ⇒ G}
            → ((x : _) → a .η x ＝ b .η x)
            → a ＝ b
   nat-path = nat-pathP refl refl
 
-  _ηₚ_ : ∀ {a b : F => G} → a ＝ b → ∀ x → a .η x ＝ b .η x
+  _ηₚ_ : ∀ {a b : F ⇒ G} → a ＝ b → ∀ x → a .η x ＝ b .η x
   p ηₚ x = ap (λ e → e .η x) p
 
   _ηᵈ_ : ∀ {F' G' : Functor C D} {p : F ＝ F'} {q : G ＝ G'}
-       → {a : F => G} {b : F' => G'}
-       →                      ＜ a ／ (λ i → p i => q i) ＼ b ＞
+       → {a : F ⇒ G} {b : F' ⇒ G'}
+       →                      ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
        → ∀ x → ＜ a .η x ／ (λ i → D.Hom (p i .F₀ x) (q i .F₀ x)) ＼ b .η x ＞
   p ηᵈ x = apP (λ i e → e .η x) p
 

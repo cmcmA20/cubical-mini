@@ -55,14 +55,6 @@ instance
     [ `level-minus 2 , `search (quote is-of-hlevel) ]
 
 
-is-just : Maybe A → Type
-is-just (just _) = ⊤
-is-just nothing  = ⊥
-
-is-nothing : Maybe A → Type
-is-nothing (just _) = ⊥
-is-nothing nothing  = ⊤
-
 nothing≠just : nothing ≠ just x
 nothing≠just p = subst is-nothing p tt
 

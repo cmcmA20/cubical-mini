@@ -3,10 +3,17 @@ module Data.Nat.Properties where
 
 open import Foundations.Base
 
+open import Meta.Variadic
+
+open import Correspondences.Decidable
+
+open import Data.Dec.Base
 open import Data.Empty.Base
 open import Data.Sum.Base
 open import Data.Nat.Base public
 open import Data.Nat.Path
+
+private variable n : ℕ
 
 -- addition
 
@@ -142,3 +149,13 @@ iter-mul : {ℓ : Level} {A : 𝒰 ℓ}
           → iter (m · n) f x ＝ iter m (iter n f) x
 iter-mul  zero   n f x = refl
 iter-mul (suc m) n f x = iter-add n (m · n) f x ∙ ap (iter n f) (iter-mul m n f x)
+
+
+instance
+  is-zero-decision : Decidable (is-zero n)
+  is-zero-decision {0}     = yes tt
+  is-zero-decision {suc _} = no id
+
+  is-positive-decision : Decidable (is-positive n)
+  is-positive-decision {0}     = no id
+  is-positive-decision {suc _} = yes tt

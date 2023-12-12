@@ -3,6 +3,9 @@ module Data.Maybe.Base where
 
 open import Foundations.Base
 
+open import Data.Empty.Base using (⊥)
+open import Data.Unit.Base using (⊤)
+
 open import Agda.Builtin.Maybe public
 
 private variable
@@ -27,3 +30,11 @@ extend nothing  k = nothing
 from-just : A → Maybe A → A
 from-just def (just x) = x
 from-just def nothing  = def
+
+is-nothing : Maybe A → Type
+is-nothing (just _) = ⊥
+is-nothing nothing  = ⊤
+
+is-just : Maybe A → Type
+is-just (just _) = ⊤
+is-just nothing  = ⊥
