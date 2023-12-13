@@ -5,6 +5,7 @@ open import Foundations.Base
 
 open import Meta.Extensionality
 
+open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
 
 Extensional-Fin : ∀ {@0 n} → Extensional (Fin n) 0ℓ

@@ -10,7 +10,7 @@ open import Structures.IdentitySystem.Base
 
 open import Data.Empty.Base
 
-open import Data.Sum.Base public
+open import Data.Sum.Base
 
 private variable
   a b : Level

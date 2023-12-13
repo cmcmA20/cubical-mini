@@ -10,6 +10,7 @@ open import Data.List.Base
 open import Data.Nat.Base
 open import Data.Nat.Instances.Discrete
 
+open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
 
 private variable @0 n : ℕ

@@ -6,6 +6,7 @@ open import Foundations.Base
 open import Meta.Search.Discrete
 
 open import Data.Dec.Base as Dec
+open import Data.Maybe.Base
 open import Data.Maybe.Path
 
 private variable

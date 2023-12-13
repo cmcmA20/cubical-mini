@@ -7,9 +7,10 @@ open import Foundations.Equiv
 open import Meta.Search.HLevel
 
 open import Data.Empty.Base
+open import Data.Sum.Base
 open import Data.Sum.Path
 
-open import Data.Dec.Base public
+open import Data.Dec.Base
 
 private variable
   ℓ : Level

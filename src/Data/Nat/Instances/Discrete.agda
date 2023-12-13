@@ -14,6 +14,7 @@ open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec
 open import Data.List.Base
 
+open import Data.Nat.Base
 open import Data.Nat.Path as ℕ-path
 
 private module ℕIS = IdSS ℕ-path.identity-system ℕ-is-set

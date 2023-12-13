@@ -13,7 +13,7 @@ open import Functions.Embedding
 open import Data.Empty.Base
 open import Data.Unit.Base
 
-open import Data.Maybe.Base public
+open import Data.Maybe.Base
 
 private variable
   ℓ : Level

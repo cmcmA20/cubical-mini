@@ -11,7 +11,7 @@ open import Structures.IdentitySystem.Base
 open import Data.Empty.Base as ⊥
 open import Data.Unit.Base as ⊤
 
-open import Data.Bool.Base as Bool public
+open import Data.Bool.Base
 
 _==_ : Bool → Bool → Bool
 false == false = true

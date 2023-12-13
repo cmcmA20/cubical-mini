@@ -11,7 +11,7 @@ open import Structures.IdentitySystem.Base
 open import Data.Empty
 open import Data.Unit
 
-open import Data.List.Base public
+open import Data.List.Base
 
 private variable
   ℓ ℓ′ : Level

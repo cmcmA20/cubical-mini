@@ -6,7 +6,8 @@ open import Foundations.Base
 open import Meta.Search.Discrete
 
 open import Data.Dec.Base as Dec
-open import Data.Sum.Path public
+open import Data.Sum.Base
+open import Data.Sum.Path
 
 private variable
   ℓ ℓ′ : Level

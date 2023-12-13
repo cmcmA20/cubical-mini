@@ -6,24 +6,27 @@ open import Foundations.Base
 open import Meta.Search.HLevel
 
 open import Data.Nat.Base
+open import Data.Maybe.Base
+  using ()
+  renaming ( is-just    to is-fsuc
+           ; is-nothing to is-fzero)
+  public
 open import Data.Maybe.Path using (maybe-is-of-hlevel)
 open import Data.Maybe.Path
-  public
   using ( Code
         ; code-refl
         ; identity-system
         ; code-is-of-hlevel
         )
-  renaming ( is-just           to is-fsuc
-           ; is-nothing        to is-fzero
-           ; nothing≠just      to fzero≠fsuc
+  renaming ( nothing≠just      to fzero≠fsuc
            ; just≠nothing      to fsuc≠fzero
            ; just-inj          to fsuc-inj
            ; just-cancellable  to fsuc-cancellable
            ; just-is-embedding to fsuc-is-embedding
            )
+  public
 
-open import Data.Fin.Base public
+open import Data.Fin.Base
 
 private variable
   n : ℕ

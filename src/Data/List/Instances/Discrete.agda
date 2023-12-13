@@ -8,6 +8,7 @@ open import Meta.Search.Discrete
 open import Correspondences.Decidable
 
 open import Data.Dec.Base as Dec
+open import Data.List.Base
 open import Data.List.Path
 
 private variable

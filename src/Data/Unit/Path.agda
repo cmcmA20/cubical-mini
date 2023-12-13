@@ -4,7 +4,7 @@ module Data.Unit.Path where
 open import Foundations.Base
 open import Foundations.Equiv.Base
 
-open import Data.Unit.Base public
+open import Data.Unit.Base
 
 ⊤-path : (x y : ⊤) → (x ＝ y) ≃ ⊤
 ⊤-path _ _ .fst _ = tt

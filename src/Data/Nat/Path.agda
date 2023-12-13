@@ -11,7 +11,7 @@ open import Data.Dec.Base as Dec
 open import Data.Empty.Base
 open import Data.Unit.Base
 
-open import Data.Nat.Base public
+open import Data.Nat.Base
 
 private variable
   m n : ℕ

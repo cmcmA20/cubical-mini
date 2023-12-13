@@ -7,6 +7,7 @@ open import Foundations.Equiv
 open import Meta.Search.Finite.ManifestBishop
 
 open import Data.Nat.Base
+open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
 open import Data.List.Base
 

@@ -12,7 +12,7 @@ open import Data.Empty.Base
 open import Data.Nat.Base
 open import Data.Unit.Base
 
-open import Data.Tree.Binary.Base public
+open import Data.Tree.Binary.Base
 
 private variable
   ℓ ℓ′ : Level
@@ -71,14 +71,13 @@ decode {xs = empty} {ys = empty} _ = refl
 decode {xs = leaf x} {ys = leaf y} = ap leaf
 decode {xs = node xl xr} {ys = node yl yr} (p , q) = ap² node (decode p) (decode q)
 
-code-refl-pathP : {xs ys : Tree A} (c : Code xs ys) → ＜ code-refl xs ／ (λ i → Code xs (decode c i)) ＼ c ＞
-code-refl-pathP {xs = empty} {ys = empty} _ = refl
-code-refl-pathP {xs = leaf x} {leaf y} p i j = p (i ∧ j)
-code-refl-pathP {xs = node xl xr} {ys = node yl yr} (cl , cr) i = code-refl-pathP cl i , code-refl-pathP cr i
-
 identity-system : is-identity-system {A = Tree A} Code code-refl
 identity-system .to-path      = decode
-identity-system .to-path-over = code-refl-pathP
+identity-system .to-path-over = code-refl-pathP where
+  code-refl-pathP : {xs ys : Tree A} (c : Code xs ys) → ＜ code-refl xs ／ (λ i → Code xs (decode c i)) ＼ c ＞
+  code-refl-pathP {xs = empty} {ys = empty} _ = refl
+  code-refl-pathP {xs = leaf x} {leaf y} p i j = p (i ∧ j)
+  code-refl-pathP {xs = node xl xr} {ys = node yl yr} (cl , cr) i = code-refl-pathP cl i , code-refl-pathP cr i
 
 code-is-of-hlevel : is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code {A = A} xs ys)
 code-is-of-hlevel {xs = empty} {ys = empty} = hlevel!

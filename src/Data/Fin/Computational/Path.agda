@@ -10,7 +10,7 @@ open import Correspondences.Erased
 open import Data.Nat.Base using (ℕ)
 open import Data.Nat.Order.Computational
 
-open import Data.Fin.Computational.Base public
+open import Data.Fin.Computational.Base
 
 private variable @0 n : ℕ
 
