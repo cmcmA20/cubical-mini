@@ -29,6 +29,11 @@ private variable
 
 open Precategory
 
+instance
+  Underlying-precat : Underlying (Precategory o h)
+  Underlying-precat {o} .Underlying.ℓ-underlying = o
+  Underlying-precat .Underlying.⌞_⌟⁰ = Ob
+
 infixl 60 _ᵒᵖ
 _ᵒᵖ : Precategory o h → Precategory o h
 (C ᵒᵖ) .Ob = Ob C
