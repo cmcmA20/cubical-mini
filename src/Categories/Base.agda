@@ -17,10 +17,10 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     Ob  : Type o
     Hom : Ob → Ob → Type h
     Hom-set : (x y : Ob) → is-set (Hom x y)
-    id  : ∀ {x} → Hom x x
-    _∘_ : ∀ {x y z} → Hom y z → Hom x y → Hom x z
-    idl : ∀ {x y} (f : Hom x y) → id ∘ f ＝ f
-    idr : ∀ {x y} (f : Hom x y) → f ∘ id ＝ f
+    id   : ∀ {x} → Hom x x
+    _∘_  : ∀ {x y z} → Hom y z → Hom x y → Hom x z
+    id-l : ∀ {x y} (f : Hom x y) → id ∘ f ＝ f
+    id-r : ∀ {x y} (f : Hom x y) → f ∘ id ＝ f
     assoc : ∀ {w x y z} (f : Hom y z) (g : Hom x y) (h : Hom w x)
           → f ∘ (g ∘ h) ＝ (f ∘ g) ∘ h
 
@@ -41,8 +41,8 @@ _ᵒᵖ : Precategory o h → Precategory o h
 (C ᵒᵖ) .Hom-set x y = Hom-set C y x
 (C ᵒᵖ) .id = id C
 (C ᵒᵖ) ._∘_ f g = C ._∘_ g f
-(C ᵒᵖ) .idl x = C .idr x
-(C ᵒᵖ) .idr x = C .idl x
+(C ᵒᵖ) .id-l x = C .id-r x
+(C ᵒᵖ) .id-r x = C .id-l x
 (C ᵒᵖ) .assoc f g h i = assoc C h g f (~ i)
 
 precat-double-dual : {C : Precategory oᶜ hᶜ} → C ᵒᵖ ᵒᵖ ＝ C
@@ -54,8 +54,8 @@ Sets _ .Hom A B = ⌞ A ⌟ → ⌞ B ⌟
 Sets _ .Hom-set _ = hlevel!
 Sets _ .id x = x
 Sets _ ._∘_ f g x = f (g x)
-Sets _ .idl _ = refl
-Sets _ .idr _ = refl
+Sets _ .id-l _ = refl
+Sets _ .id-r _ = refl
 Sets _ .assoc _ _ _ = refl
 
 
@@ -187,13 +187,13 @@ module _ where
   Const {D} x .F₀ _ = x
   Const {D} x .F₁ _ = id D
   Const {D} x .F-id = refl
-  Const {D} x .F-∘ _ _ = sym (idr D _)
+  Const {D} x .F-∘ _ _ = sym (id-r D _)
 
   const-nt : {C : Precategory oᶜ hᶜ} {D : Precategory oᶜ hᵈ}
            → {x y : Ob D} → Hom D x y
            → Const {C = C} {D = D} x ⇒ Const {C = C} {D = D} y
   const-nt f ._⇒_.η _ = f
-  const-nt {D} f ._⇒_.is-natural _ _ _ = idr D _ ∙ sym (idl D _)
+  const-nt {D} f ._⇒_.is-natural _ _ _ = id-r D _ ∙ sym (id-l D _)
 
 infixr 30 _F∘_
 infix 20 _⇒_

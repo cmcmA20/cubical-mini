@@ -28,3 +28,5 @@ dec-∥-∥₁-equiv = prop-extₑ!
 dec-≃ : A ≃ B → Dec A ≃ Dec B
 dec-≃ eqv = dec-as-sum ∙ₑ ⊎-ap (¬-≃ to from) eqv ∙ₑ (dec-as-sum ₑ⁻¹)
   where open Equiv eqv
+
+module dec-≃ {ℓ} {ℓ′} {A} {B} e = Equiv (dec-≃ {ℓ} {ℓ′} {A} {B} e)

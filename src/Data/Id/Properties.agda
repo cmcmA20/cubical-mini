@@ -49,3 +49,9 @@ is-discreteⁱ→is-discrete d .is-discrete-β x y =
   Dec.dmap Id≃path.to
            (_∘ Id≃path.from)
            (d x y)
+
+is-discrete→is-discreteⁱ : is-discrete A → is-discreteⁱ A
+is-discrete→is-discreteⁱ d x y =
+  Dec.dmap Id≃path.from
+           (_∘ Id≃path.to)
+           (d .is-discrete-β x y)

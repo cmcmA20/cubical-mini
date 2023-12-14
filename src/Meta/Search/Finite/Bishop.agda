@@ -26,6 +26,7 @@ open import Correspondences.Finite.ManifestBishop
 open import Correspondences.Omniscient
 
 open import Data.Bool.Base
+open import Data.Dec.Base
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Computational.Instances.FromNat
 
@@ -69,6 +70,14 @@ instance
   decomp-fin₁-Σ = decomp (quote Σ-is-bishop-finite)
     [ `search (quote is-bishop-finite) , `search-under 1 (quote is-bishop-finite) ]
 
+  -- decomp-dec-prop→fin₁ : goal-decomposition (quote is-bishop-finite) A
+  -- decomp-dec-prop→fin₁ = decomp (quote decidable-prop→is-bishop-finite)
+  --   [ `search (quote is-of-hlevel) , `search (quote Dec) ]
+
+  decomp-fin₁→pathP : ∀ {A : I → Type ℓ} {x y} → goal-decomposition (quote is-bishop-finite) ＜ x ／ A ＼ y ＞
+  decomp-fin₁→pathP = decomp (quote pathP-is-bishop-finite)
+    [ `search (quote is-bishop-finite) , `meta , `meta ]
+
   decomp-fin₁→omn₁ : goal-decomposition (quote Omniscient₁) A
   decomp-fin₁→omn₁ = decomp (quote is-bishop-finite→omniscient₁) [ `search (quote is-bishop-finite) ]
 
@@ -103,3 +112,6 @@ private
 
     _ : Exhaustible {ℓ} (A ×̇ A)
     _ = exhaust!
+
+    _ : ∀{x y : ⌞ A ⌟} → is-bishop-finite (x ＝ y)
+    _ = bishop-finite!

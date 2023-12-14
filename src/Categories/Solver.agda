@@ -41,7 +41,7 @@ module NbE (Cat : Precategory o h) where
   nf e = eval e id
 
   eval-sound-k : (e : Expr B C) (f : Hom A B) → eval e f ＝ embed e ∘ f
-  eval-sound-k `id f = sym (idl _) -- f ＝ id ∘ f
+  eval-sound-k `id f = sym (id-l _) -- f ＝ id ∘ f
   eval-sound-k (f `∘ g) h =
     eval f (eval g h)       ＝⟨ eval-sound-k f _ ⟩
     embed f ∘ eval g h      ＝⟨ ap (embed f ∘_) (eval-sound-k g _) ⟩
@@ -50,7 +50,7 @@ module NbE (Cat : Precategory o h) where
   eval-sound-k (x ↑) f = refl -- x ∘ f ＝ x ∘ f
 
   eval-sound : (e : Expr A B) → nf e ＝ embed e
-  eval-sound e = eval-sound-k e id ∙ idr _
+  eval-sound e = eval-sound-k e id ∙ id-r _
 
   opaque
     solve : (f g : Expr A B) → nf f ＝ nf g → embed f ＝ embed g

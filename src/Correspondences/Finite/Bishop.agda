@@ -18,8 +18,10 @@ open import Correspondences.Exhaustible
 open import Correspondences.Finite.ManifestBishop
 open import Correspondences.Omniscient
 
+open import Data.Dec.Base as Dec
 open import Data.Dec.Path
 open import Data.Empty.Base
+open import Data.Empty.Properties
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Properties
 open import Data.Fin.Computational.Closure
@@ -150,6 +152,19 @@ lift-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Lift ℓ′ A)
 lift-is-bishop-finite afin = fin₁ do
   aeq ← enumeration₁ afin
   pure $ lift-equiv ∙ₑ aeq
+
+decidable-prop→is-bishop-finite : is-prop A → Dec A → is-bishop-finite A
+decidable-prop→is-bishop-finite A-prop (yes a) = fin₁ $ pure $
+  is-contr→equiv (inhabited-prop-is-contr a A-prop) fin-1-is-contr
+decidable-prop→is-bishop-finite A-prop (no ¬a) = fin₁ $ pure $ ¬-extₑ ¬a id ∙ₑ fin-0-is-initial ₑ⁻¹
+
+is-discrete→path-is-bishop-finite : is-discrete A → {x y : A} → is-bishop-finite (x ＝ y)
+is-discrete→path-is-bishop-finite d = decidable-prop→is-bishop-finite hlevel! (d .is-discrete-β _ _)
+  where instance _ = d
+
+pathP-is-bishop-finite : ∀ {A :  I → Type ℓ} → is-bishop-finite (A i1) → ∀ x y → is-bishop-finite ＜ x ／ A ＼ y ＞
+pathP-is-bishop-finite f _ _ = subst is-bishop-finite (sym $ pathP＝path _ _ _) $
+  is-discrete→path-is-bishop-finite (is-bishop-finite→is-discrete f)
 
 is-bishop-finite-≃ : (B ≃ A) → is-bishop-finite A → is-bishop-finite B
 is-bishop-finite-≃ f afin = fin₁ do
