@@ -192,5 +192,4 @@ derive-show nm dat = do
   define-function work =<< traverse show-clause cons
 
 
-instance
-  unquoteDecl Show-Σ = derive-show Show-Σ (quote Σ)
+instance unquoteDecl Show-Σ = derive-show Show-Σ (quote Σ)

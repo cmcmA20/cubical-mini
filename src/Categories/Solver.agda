@@ -3,6 +3,7 @@ module Categories.Solver where
 
 open import Foundations.Base hiding (id; _∘_)
 
+open import Meta.Marker
 open import Meta.Reflection.Base
 open import Meta.Reflection.Solver
 
@@ -83,6 +84,7 @@ module Reflection where
   build-expr : Term → Term
   build-expr “id” = con (quote NbE.`id) []
   build-expr (“∘” f g) = con (quote NbE._`∘_) (build-expr f v∷ build-expr g v∷ [])
+  build-expr (def (quote ⌜_⌝) (_ h∷ _ h∷ tm v∷ [])) = build-expr tm
   build-expr f = con (quote NbE._↑) (f v∷ [])
 
   dont-reduce : List Name

@@ -14,4 +14,6 @@ open import Categories.Solver
   hiding (module NbE; module Reflection)
   public
 
--- TODO other reexports
+-- TODO univalent cats
+
+open import Categories.Morphism.Extensionality public

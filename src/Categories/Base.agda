@@ -24,6 +24,24 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     assoc : ∀ {w x y z} (f : Hom y z) (g : Hom x y) (h : Hom w x)
           → f ∘ (g ∘ h) ＝ (f ∘ g) ∘ h
 
+  Mor : Type (o ⊔ h)
+  Mor = Σ[ a ꞉ Ob ] Σ[ b ꞉ Ob ] Hom a b
+
+  Hom→Mor : ∀{a b} → Hom a b → Mor
+  Hom→Mor f = _ , _ , f
+
+  Mor-path : {f g : Mor}
+           → (p : f .fst ＝ g .fst)
+           → (q : f .snd .fst ＝ g .snd .fst)
+           → PathP (λ i → Hom (p i) (q i)) (f .snd .snd) (g .snd .snd)
+           → f ＝ g
+  Mor-path p q r i = p i , q i , r i
+
+  instance
+    H-Level-Hom : ∀ {x y} {k} → H-Level (2 + k) (Hom x y)
+    H-Level-Hom = hlevel-basic-instance 2 (Hom-set _ _)
+
+
 private variable
   o h oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
 
