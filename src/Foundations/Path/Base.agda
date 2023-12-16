@@ -90,6 +90,19 @@ opaque
   p ▷ q  = refl ◁ p ▷ q
 
 
+opaque
+  unfolding _∙_
+  infixr 30 _∙ᴾ_
+  _∙ᴾ_ : {B : A → Type ℓ′} {x y z : A} {x′ : B x} {y′ : B y} {z′ : B z} {p : x ＝ y} {q : y ＝ z}
+       → ＜ x′ ／ (λ i → B (p i)) ＼ y′ ＞
+       → ＜ y′ ／ (λ i → B (q i)) ＼ z′ ＞
+       → ＜ x′ ／ (λ i → B ((p ∙ q) i)) ＼ z′ ＞
+  _∙ᴾ_ {B} {y} {x′} {y′} {p} {q} p′ q′ i =
+    comp (λ j → B (∙-filler p q j i)) (∂ i) λ where
+      j (i = i0) → p′ (~ j)
+      j (i = i1) → q′ j
+      j (j = i0) → y′
+
 module _
   {a₀₀ a₁₀ a₀₁ a₁₁ : A}
   {p : a₀₀ ＝ a₀₁} {q : a₀₀ ＝ a₁₀} {r : a₁₀ ＝ a₁₁} {s : a₀₁ ＝ a₁₁} where opaque
@@ -112,7 +125,6 @@ module _
        → Square p q r s → Square r t v u
        → Square p (q ∙ t) v (s ∙ u)
   _∙ₕ_ = apP² λ _ → _∙_
-
 
 -- opaque
 --   unfolding _∙_ _∙ᵥ_ _∙ₕ_

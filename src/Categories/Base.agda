@@ -2,12 +2,17 @@
 module Categories.Base where
 
 open import Foundations.Base hiding (id ; _∘_)
+open import Foundations.Equiv
 
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
 open import Structures.n-Type
+
+open import Functions.Embedding using (Injective)
+
+open import Truncation.Propositional.Base
 
 record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
   -- no-eta-equality
@@ -43,7 +48,9 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
 
 
 private variable
-  o h oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
+  o h o′ h′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
+  C : Precategory oᶜ hᵈ
+  D : Precategory oᵈ hᵈ
 
 open Precategory
 
@@ -114,9 +121,9 @@ functor-double-dual {F} i .Functor.F₁ = F .Functor.F₁
 functor-double-dual {F} i .Functor.F-id = F .Functor.F-id
 functor-double-dual {F} i .Functor.F-∘ = F .Functor.F-∘
 
-_F∘_ : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {E : Precategory oᵉ hᵉ}
+_∘ᶠ_ : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {E : Precategory oᵉ hᵉ}
      → Functor D E → Functor C D → Functor C E
-_F∘_ {C} {D} {E} F G = comps
+_∘ᶠ_ {C} {D} {E} F G = comps
   module F∘ where
     module C = Precategory C
     module D = Precategory D
@@ -151,13 +158,37 @@ _F∘_ {C} {D} {E} F G = comps
     comps .Functor.F-id = F-id
     comps .Functor.F-∘ = F-∘
 
-{-# DISPLAY F∘.comps F G = F F∘ G #-}
+{-# DISPLAY F∘.comps F G = F ∘ᶠ G #-}
 
 Id : {C : Precategory oᶜ hᶜ} → Functor C C
 Functor.F₀ Id x = x
 Functor.F₁ Id f = f
 Functor.F-id Id = refl
 Functor.F-∘ Id _ _ = refl
+
+
+-- basic properties of functors
+
+is-full : Functor C D → Type _
+is-full {C} {D} F =
+    {x y : C.Ob} (g : D.Hom (F.₀ x) (F.₀ y))
+  → ∃[ f ꞉ C.Hom x y ] (F.₁ f ＝ g)
+    where
+      module C = Precategory C
+      module D = Precategory D
+      module F = Functor F
+
+is-faithful : Functor C D → Type _
+is-faithful {C} F = {x y : C.Ob} → Injective (F.₁ {x} {y})
+  where
+    module C = Precategory C
+    module F = Functor F
+
+is-fully-faithful : Functor C D → Type _
+is-fully-faithful {C} F = {x y : C.Ob} → is-equiv (F.₁ {x} {y})
+  where
+    module C = Precategory C
+    module F = Functor F
 
 
 -- Natural transformations
@@ -213,7 +244,7 @@ module _ where
   const-nt f ._⇒_.η _ = f
   const-nt {D} f ._⇒_.is-natural _ _ _ = id-r D _ ∙ sym (id-l D _)
 
-infixr 30 _F∘_
+infixr 30 _∘ᶠ_
 infix 20 _⇒_
 
 module _ {C : Precategory oᶜ hᶜ}
