@@ -2,7 +2,7 @@
 module Algebra.Rig.Commutative.Category where
 
 open import Algebra.Rig.Commutative
-open import Algebra.Rig.Category using (Rig-structure; Rigs)
+open import Algebra.Rig.Category.Base using (Rig-structure; Rigs)
 
 open import Categories.Displayed.Univalence.Thin
 open import Categories.Prelude

@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Algebra.Rig.Category where
+module Algebra.Rig.Category.Base where
 
 open import Algebra.Rig
 open import Algebra.Semiring.Category using (Semiring-structure; Semirings)
@@ -22,6 +22,9 @@ Rig-structure ℓ .id-hom-unique p _ = Equiv.injective
 
 Rigs : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Rigs ℓ = Structured-objects (Rig-structure ℓ)
+
+Rig : ∀ ℓ → 𝒰 (ℓsuc ℓ)
+Rig ℓ = Precategory.Ob (Rigs ℓ)
 
 private variable ℓ : Level
 
