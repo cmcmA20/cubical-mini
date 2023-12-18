@@ -84,9 +84,7 @@ module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure �
     extensionality-hom = record { lemma = quote Extensional-Hom }
 
     Funlike-Hom : Funlike So.Hom
-    Funlike-Hom = record
-      { _#_ = Total-hom.hom
-      }
+    Funlike-Hom = record { _#_ = Total-hom.hom }
 
   Homomorphism-path
     : {x y : So.Ob} {f g : So.Hom x y}
@@ -99,6 +97,7 @@ module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure �
     → (∀ {x y} (p : f # x ＝ f # y) → x ＝ y)
     → Som.is-monic f
   Homomorphism-monic f wit g h p = Homomorphism-path λ x → wit (happly (ap hom p) x)
+
 
 record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin-structure ℓ′ S) : Type (ℓsuc ℓ ⊔ o′ ⊔ ℓ′) where
   field
