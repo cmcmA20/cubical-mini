@@ -31,6 +31,9 @@ Semiring-structure ℓ .id-hom-unique p q = Equiv.injective
 Semirings : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Semirings ℓ = Structured-objects (Semiring-structure ℓ)
 
+Semiring : ∀ ℓ → 𝒰 (ℓsuc ℓ)
+Semiring ℓ = Precategory.Ob (Semirings ℓ)
+
 private variable ℓ : Level
 
 instance
