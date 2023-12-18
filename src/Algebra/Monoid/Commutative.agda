@@ -6,87 +6,26 @@ open import Foundations.Base hiding (id)
 open import Meta.Marker
 open import Meta.Record
 open import Meta.Search.HLevel
-open import Meta.SIP
+open import Meta.Variadic
 
 open import Algebra.Monoid public
 
 private variable
   ℓ : Level
-  A : Type ℓ
+  A : 𝒰 ℓ
   e x y z : A
   _✦_ : A → A → A
   n : HLevel
 
-Commutative : (_⋆_ : A → A → A) → Type _
+Commutative : (_⋆_ : A → A → A) → 𝒰 _
 Commutative {A} _⋆_ = Π[ x ꞉ A ] Π[ y ꞉ A ] (y ⋆ x ＝ x ⋆ y)
-
-Wild-braided∞-monoid-on : Type ℓ → Type ℓ
-Wild-braided∞-monoid-on X = Σ[ id ꞉ X ] Σ[ _⋆_ ꞉ (X → X → X) ]
-  (Associative _⋆_ × Unital-left id _⋆_ × Unital-right id _⋆_ × Commutative _⋆_)
-
-
--- (braided?) 2-monoids
-
-record braided-2-monoid {A : Type ℓ} (id : A) (_⋆_ : A → A → A) : Type ℓ where
-  no-eta-equality
-  field has-2-monoid : 2-monoid id _⋆_
-  open 2-monoid has-2-monoid public
-
-  field
-    braiding     : Commutative _⋆_
-    braiding-coh :  assoc y z x ∙ braiding x (y ⋆ z) ∙ assoc x y z
-                 ＝ ap (y ⋆_) (braiding x z) ∙ assoc y x z ∙ ap (_⋆ z) (braiding x y)
-
-unquoteDecl braided-2-monoid-iso = declare-record-iso braided-2-monoid-iso (quote braided-2-monoid)
-
-braided-2-monoid-is-set : is-set (braided-2-monoid e _✦_)
-braided-2-monoid-is-set = is-set-η λ x → let open braided-2-monoid x in is-set-β
-  (is-of-hlevel-≃ 2 (iso→equiv braided-2-monoid-iso) hlevel!) x
-
-instance
-  H-Level-braided-2-monoid : H-Level (2 + n) (braided-2-monoid e _✦_)
-  H-Level-braided-2-monoid = hlevel-basic-instance 2 braided-2-monoid-is-set
-
-
-Braided-2-monoid-on : Type ℓ → Type ℓ
-Braided-2-monoid-on X = Σ[ id ꞉ X ] Σ[ _⋆_ ꞉ (X → X → X) ] (braided-2-monoid id _⋆_)
-
-Braided-2-monoid : (ℓ : Level) → Type (ℓsuc ℓ)
-Braided-2-monoid ℓ = Σ[ X ꞉ Type ℓ ] Braided-2-monoid-on X
-
-
--- symmetric 2-monoids
-
-record sym-2-monoid {A : Type ℓ} (id : A) (_⋆_ : A → A → A) : Type ℓ where
-  no-eta-equality
-  field has-braided-2-monoid : braided-2-monoid id _⋆_
-  open braided-2-monoid has-braided-2-monoid public
-
-  field braiding-sym : braiding x y ∙ braiding y x ＝ refl
-
-unquoteDecl sym-2-monoid-iso = declare-record-iso sym-2-monoid-iso (quote sym-2-monoid)
-
-sym-2-monoid-is-set : is-set (sym-2-monoid e _✦_)
-sym-2-monoid-is-set = is-set-η λ x → let open sym-2-monoid x in is-set-β
-  (is-of-hlevel-≃ 2 (iso→equiv sym-2-monoid-iso) hlevel!) x
-
-instance
-  H-Level-sym-2-monoid : H-Level (2 + n) (sym-2-monoid e _✦_)
-  H-Level-sym-2-monoid = hlevel-basic-instance 2 sym-2-monoid-is-set
-
-Sym-2-monoid-on : Type ℓ → Type ℓ
-Sym-2-monoid-on X = Σ[ id ꞉ X ] Σ[ _⋆_ ꞉ (X → X → X) ] (sym-2-monoid id _⋆_)
-
-Sym-2-monoid : (ℓ : Level) → Type (ℓsuc ℓ)
-Sym-2-monoid ℓ = Σ[ X ꞉ Type ℓ ] Sym-2-monoid-on X
-
 
 -- commutative monoids
 
-record is-comm-monoid {A : Type ℓ} (id : A) (_⋆_ : A → A → A) : Type ℓ where
+record is-comm-monoid {A : 𝒰 ℓ} (id : A) (_⋆_ : A → A → A) : 𝒰 ℓ where
   no-eta-equality
-  field has-is-monoid : is-monoid id _⋆_
-  open is-monoid has-is-monoid public
+  field has-monoid : is-monoid id _⋆_
+  open is-monoid has-monoid public
 
   field comm : Commutative _⋆_
 
@@ -100,32 +39,58 @@ instance
   H-Level-is-comm-monoid : H-Level (suc n) (is-comm-monoid e _✦_)
   H-Level-is-comm-monoid = hlevel-prop-instance is-comm-monoid-is-prop
 
-Comm-monoid-on : Type ℓ → Type ℓ
-Comm-monoid-on X = Σ[ (id , _⋆_) ꞉ X × (X → X → X) ] (is-comm-monoid id _⋆_)
+record CMonoid-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
+  no-eta-equality
+  field
+    id  : X
+    _⋆_ : X → X → X
+    has-comm-monoid : is-comm-monoid id _⋆_
 
-private
-  comm-monoid-desc : Desc ℓ ℓ Raw-∞-monoid-on ℓ
-  comm-monoid-desc .Desc.descriptor = auto-str-term!
-  comm-monoid-desc .Desc.axioms _ = is-comm-monoid $²_
-  comm-monoid-desc .Desc.axioms-prop _ _ = is-comm-monoid-is-prop
+  open is-comm-monoid has-comm-monoid public
+  infixr 20 _⋆_
 
-comm-monoid-str : Structure ℓ _
-comm-monoid-str = desc→structure comm-monoid-desc
+unquoteDecl cmonoid-on-iso = declare-record-iso cmonoid-on-iso (quote CMonoid-on)
 
-@0 comm-monoid-str-is-univalent : is-univalent (comm-monoid-str {ℓ})
-comm-monoid-str-is-univalent = desc→is-univalent comm-monoid-desc
 
-Comm-monoid : (ℓ : Level) → Type (ℓsuc ℓ)
-Comm-monoid ℓ = Σ[ X ꞉ Type ℓ ] Comm-monoid-on X
+comm-monoid→monoid : ∀[ CMonoid-on {ℓ} →̇ Monoid-on {ℓ} ]
+comm-monoid→monoid M .Monoid-on.id = M .CMonoid-on.id
+comm-monoid→monoid M .Monoid-on._⋆_ = M .CMonoid-on._⋆_
+comm-monoid→monoid M .Monoid-on.has-monoid =
+  M .CMonoid-on.has-comm-monoid .is-comm-monoid.has-monoid
+
+
+record make-comm-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
+  no-eta-equality
+  field
+    monoid-is-set : is-set X
+    id  : X
+    _⋆_ : X → X → X
+    id-l : Unital-left  id _⋆_
+    id-r : Unital-right id _⋆_
+    assoc : Associative _⋆_
+    comm  : Commutative _⋆_
+
+  to-comm-monoid-on : CMonoid-on X
+  to-comm-monoid-on .CMonoid-on.id = id
+  to-comm-monoid-on .CMonoid-on._⋆_ = _⋆_
+  to-comm-monoid-on .CMonoid-on.has-comm-monoid .is-comm-monoid.has-monoid
+    .is-monoid.has-semigroup .is-semigroup.has-magma
+    .is-n-magma.has-is-of-hlevel = monoid-is-set
+  to-comm-monoid-on .CMonoid-on.has-comm-monoid .is-comm-monoid.has-monoid
+    .is-monoid.has-semigroup .is-semigroup.assoc = assoc
+  to-comm-monoid-on .CMonoid-on.has-comm-monoid .is-comm-monoid.has-monoid
+    .is-monoid.id-l = id-l
+  to-comm-monoid-on .CMonoid-on.has-comm-monoid .is-comm-monoid.has-monoid
+    .is-monoid.id-r = id-r
+  to-comm-monoid-on .CMonoid-on.has-comm-monoid .is-comm-monoid.comm = comm
+
+open make-comm-monoid using (to-comm-monoid-on) public
 
 
 -- abelian monoid theory
 
-module _ {A* : Comm-monoid-on A} where
-  private
-    _⋆_ = A* .fst .snd
-    id = A* .fst .fst
-    open is-comm-monoid (A* .snd)
+module _ {M : CMonoid-on A} where
+  open CMonoid-on M
 
   exchange : (x ⋆ y) ⋆ z ＝ (x ⋆ z) ⋆ y
   exchange {x} {y} {z} =

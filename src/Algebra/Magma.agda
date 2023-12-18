@@ -1,38 +1,41 @@
 {-# OPTIONS --safe #-}
 module Algebra.Magma where
 
-open import Foundations.Base
-open import Foundations.Equiv
-
-open import Meta.Record
-open import Meta.SIP
-open import Meta.Search.HLevel
-open import Meta.Variadic
-
-open import Structures.n-Type
+open import Prelude
 
 private variable
-  ℓ : Level
-  A : Type ℓ
+  ℓ ℓ′ : Level
+  A : 𝒰 ℓ
+  B : 𝒰 ℓ′
   _✦_ : A → A → A
+  n : HLevel
 
 -- untruncated magmas
 
-∞-Magma-on : Type ℓ → Type ℓ
-∞-Magma-on X = X → X → X
+record ∞-Magma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
+  no-eta-equality
+  field _⋆_ : X → X → X
+  infixr 20 _⋆_
 
-private
-  ∞-magma-str-term : Str-term ℓ ℓ ∞-Magma-on
-  ∞-magma-str-term = auto-str-term!
+record ∞-magma-hom
+  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+  (M : ∞-Magma-on A) (M′ : ∞-Magma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
+  where
+    private
+      module A = ∞-Magma-on M
+      module B = ∞-Magma-on M′
 
-∞-magma-str : Structure ℓ ∞-Magma-on
-∞-magma-str = term→structure ∞-magma-str-term
+    field
+      pres-⋆ : (x y : A) → e (x A.⋆ y) ＝ e x B.⋆ e y
 
-@0 ∞-magma-str-is-univalent : is-univalent (∞-magma-str {ℓ})
-∞-magma-str-is-univalent = term→structure-is-univalent ∞-magma-str-term
+∞-Magma[_⇒_]
+  : (A : Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (B : Σ[ X ꞉ 𝒰 ℓ′ ] ∞-Magma-on X) → 𝒰 (ℓ ⊔ ℓ′)
+∞-Magma[ A ⇒ B ] = Σ[ f ꞉ A →̇ B ] ∞-magma-hom (A .snd) (B .snd) f
 
-∞-Magma : (ℓ : Level) → 𝒰 (ℓsuc ℓ)
-∞-Magma _ = Type-with ∞-magma-str
+∞-Magma≃
+  : (A : Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (B : Σ[ X ꞉ 𝒰 ℓ′ ] ∞-Magma-on X)
+    (e : ⌞ A ⌟ ≃ ⌞ B ⌟) → 𝒰 (ℓ ⊔ ℓ′)
+∞-Magma≃ A B (f , _) = ∞-magma-hom (A .snd) (B .snd) f
 
 
 -- n-truncated magmas
@@ -48,54 +51,52 @@ record is-n-magma (n : HLevel) {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ
 
 unquoteDecl is-n-magma-iso = declare-record-iso is-n-magma-iso (quote is-n-magma)
 
-private variable n : HLevel
-
-is-magma : (A → A → A) → Type _
+is-magma is-2-magma : (A → A → A) → 𝒰 _
 is-magma = is-n-magma 2
-
-is-2-magma : (A → A → A) → Type _
 is-2-magma = is-n-magma 3
 
 is-n-magma-is-prop : is-prop (is-n-magma n _✦_)
-is-n-magma-is-prop = is-of-hlevel-≃ 1 (iso→equiv is-n-magma-iso) hlevel!
+is-n-magma-is-prop = iso→is-of-hlevel 1 is-n-magma-iso hlevel!
 
 instance
   H-Level-n-magma : ∀ {k} → H-Level (suc k) (is-n-magma n _✦_)
   H-Level-n-magma = hlevel-prop-instance is-n-magma-is-prop
 
 module _ (n : HLevel) where
-  n-Magma-on : Type ℓ → Type ℓ
-  n-Magma-on X = Σ[ _⋆_ ꞉ (X → X → X) ] (is-n-magma n _⋆_)
+  record n-Magma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
+    no-eta-equality
+    field
+      _⋆_ : X → X → X
+      has-n-magma : is-n-magma n _⋆_
 
-  private
-    n-magma-desc : Desc ℓ ℓ ∞-Magma-on ℓ
-    n-magma-desc .Desc.descriptor = auto-str-term!
-    n-magma-desc .Desc.axioms _ = is-n-magma n
-    n-magma-desc .Desc.axioms-prop _ _ = is-n-magma-is-prop
+    open is-n-magma has-n-magma public
+    infixr 20 _⋆_
 
-  n-magma-str : Structure ℓ _
-  n-magma-str = desc→structure n-magma-desc
+  unquoteDecl n-magma-on-iso = declare-record-iso n-magma-on-iso (quote n-Magma-on)
 
-  @0 n-magma-str-is-univalent : is-univalent (n-magma-str {ℓ})
-  n-magma-str-is-univalent = desc→is-univalent n-magma-desc
+  record n-Magma-hom
+    {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+    (M : n-Magma-on A) (M′ : n-Magma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
+    where
+      private
+        module A = n-Magma-on M
+        module B = n-Magma-on M′
+
+      field
+        pres-⋆ : (x y : A) → e (x A.⋆ y) ＝ e x B.⋆ e y
+
+  unquoteDecl n-magma-hom-iso = declare-record-iso n-magma-hom-iso (quote n-Magma-hom)
+
+n-magma-hom-is-of-hlevel : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
+                         → is-of-hlevel n (n-Magma-hom (suc n) M M′ f)
+n-magma-hom-is-of-hlevel {M′} = iso→is-of-hlevel _ (n-magma-hom-iso _) hlevel! where
+  open n-Magma-on M′
+
+instance
+  H-Level-magma-hom : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
+                    → H-Level n (n-Magma-hom (suc n) M M′ f)
+  H-Level-magma-hom .H-Level.has-of-hlevel = n-magma-hom-is-of-hlevel
 
 
-n-Magma : (ℓ : Level) (n : HLevel) → 𝒰 (ℓsuc ℓ)
-n-Magma _ n = Type-with (n-magma-str n)
-
-2-Magma : (ℓ : Level) → 𝒰 (ℓsuc ℓ)
-2-Magma ℓ = n-Magma ℓ 2
-
-3-Magma : (ℓ : Level) → 𝒰 (ℓsuc ℓ)
-3-Magma ℓ = n-Magma ℓ 3
-
--- Observe that homomorphism of n-magmas is exactly
--- binary operation preservation
-module _ {A* B* : n-Magma ℓ n} {e : ⌞ A* ⌟ ≃ ⌞ B* ⌟} where private
-  _⋆_ = A* .snd .fst
-  _☆_ = B* .snd .fst
-  module e = Equiv e
-
-  _ :  n-magma-str n .is-hom A* B* e
-    ＝ Π[ x ꞉ ⌞ A* ⌟ ] Π[ y ꞉ ⌞ A* ⌟ ] (e.to (x ⋆ y) ＝ e.to x ☆ e.to y)
-  _ = refl
+Magma-on = n-Magma-on 2
+2-Magma-on = n-Magma-on 3
