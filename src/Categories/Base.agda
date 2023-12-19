@@ -75,7 +75,7 @@ precat-double-dual = refl
 
 Sets : (o : Level) → Precategory (ℓsuc o) o
 Sets o .Ob = Set o
-Sets _ .Hom A B = ⌞ A ⌟ → ⌞ B ⌟
+Sets _ .Hom A B = A →̇ B
 Sets _ .Hom-set _ = hlevel!
 Sets _ .id x = x
 Sets _ ._∘_ f g x = f (g x)

@@ -9,6 +9,9 @@ open import Prelude
            ; iso→path  to isoₜ→path
            ; iso→equiv to isoₜ→equiv
            )
+  hiding ( Tactic-bishop-finite
+         ; Tactic-discrete
+         ; Tactic-manifest-bishop-finite)
   public
 
 open import Categories.Base public
