@@ -91,9 +91,11 @@ Magma-on = n-Magma-on 2
 2-Magma-on = n-Magma-on 3
 
 -- TODO generalize
-magma-on-is-set : is-set (Magma-on A)
-magma-on-is-set = iso→is-of-hlevel _ (n-magma-on-iso _) $ is-set-η λ (_ , x) _ _ _ →
-  let open is-n-magma x in prop!
+opaque
+  unfolding is-of-hlevel
+  magma-on-is-set : is-set (Magma-on A)
+  magma-on-is-set = iso→is-of-hlevel 2 (n-magma-on-iso _) $ λ (_ , x) _ _ _ →
+    let open is-n-magma x in prop!
 
 n-magma-hom-is-of-hlevel : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
                          → is-of-hlevel n (n-Magma-hom (suc n) M M′ f)

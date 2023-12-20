@@ -27,7 +27,6 @@ open import Correspondences.Omniscient
 
 open import Data.Bool.Base
 open import Data.Empty.Base as ⊥
-open import Data.Fin.Computational.Instances.FromNat
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level

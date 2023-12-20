@@ -4,6 +4,7 @@ module Categories.Base where
 open import Foundations.Base hiding (id ; _∘_)
 open import Foundations.Equiv
 
+open import Meta.Literals.FromNat
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.Variadic
@@ -42,9 +43,12 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
            → f ＝ g
   Mor-path p q r i = p i , q i , r i
 
+  hom-set′ : ∀ {x y} → is-set (Hom x y)
+  hom-set′ = Hom-set _ _
+
   instance
     H-Level-Hom : ∀ {x y} {k} → H-Level (2 + k) (Hom x y)
-    H-Level-Hom = hlevel-basic-instance 2 (Hom-set _ _)
+    H-Level-Hom = hlevel-basic-instance 2 hom-set′
 
 
 private variable
@@ -58,6 +62,14 @@ instance
   Underlying-precat : Underlying (Precategory o h)
   Underlying-precat {o} .Underlying.ℓ-underlying = o
   Underlying-precat .Underlying.⌞_⌟⁰ = Ob
+
+  proj-hlevel-precat-hom : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote Hom) false
+  proj-hlevel-precat-hom .Struct-proj-desc.struct-name = quote Precategory
+  proj-hlevel-precat-hom .Struct-proj-desc.struct-args-length = 2
+  proj-hlevel-precat-hom .Struct-proj-desc.goal-projection = quote hom-set′
+  proj-hlevel-precat-hom .Struct-proj-desc.projection-args-length = 5
+  proj-hlevel-precat-hom .Struct-proj-desc.level-selector = inl 2
+  proj-hlevel-precat-hom .Struct-proj-desc.carrier-selector = 2
 
 infixl 60 _ᵒᵖ
 _ᵒᵖ : Precategory o h → Precategory o h

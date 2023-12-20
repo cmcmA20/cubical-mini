@@ -9,6 +9,8 @@ is-initial : Ob → Type _
 is-initial ob = ∀ x → is-contr (Hom ob x)
 
 record Initial : Type (o ⊔ h) where
+  no-eta-equality
+  constructor mk-initial
   field
     bot  : Ob
     has⊥ : is-initial bot

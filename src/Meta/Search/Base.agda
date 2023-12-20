@@ -5,19 +5,30 @@ module Meta.Search.Base where
 open import Foundations.Base
 
 open import Meta.Effect.Foldable
-open import Meta.Literals.FromProduct public
+open import Meta.Literals.FromProduct
+  public
 open import Meta.Reflection.Base
 
 open import Data.Bool.Base as Bool
+open import Data.Bool.Base
+  using (false; true)
+  public
 open import Data.Empty.Base
 open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Instances.FromNat
+  public
 open import Data.List.Base as List
 open import Data.List.Operations as List
 open import Data.List.Instances.Foldable
-open import Data.List.Instances.FromProduct public
+open import Data.List.Instances.FromProduct
+  public
 open import Data.List.Instances.Idiom
 open import Data.Maybe.Base
 open import Data.Nat.Base
+open import Data.Sum.Base
+open import Data.Sum.Base
+  using (inl; inr)
+  public
 open import Data.Vec.Inductive.Operations.Computational as Vec
 
 data Goal-strat : Type where
@@ -116,8 +127,8 @@ record Struct-proj-desc
     goal-projection        : Name
     projection-args-length : ℕ
     level-selector
-      : {z : goal-is-native goal-nat} {w : goal-is-stratified goal-strat}
-      → Selector struct-args-length
+      : {w : goal-is-stratified goal-strat}
+      → ℕ ⊎ Selector struct-args-length
     carrier-selector       : Selector projection-args-length
 
 open Struct-proj-desc
@@ -241,7 +252,7 @@ private
       _ → backtrack [ "Structure type isn't an application of " , nameErr goal-name ]
     guard (actual-goal-name name=? (spd .struct-name))
     argsᵥ ← args-list→args-vec (spd .struct-args-length) args
-    lv ← select-arg visible (spd .level-selector) argsᵥ
+    lv ← [ (λ n → pure (lit (nat n))) , (λ s → select-arg visible s argsᵥ) ]ᵤ (spd .level-selector)
     normalise lv
 
   treat-as-structured-type : Tactic-desc goal-name goal-strat → Struct-proj-desc goal-name goal-strat carrier-name goal-nat → Term → TC ⊤

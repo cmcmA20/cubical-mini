@@ -6,6 +6,7 @@ open import Algebra.Semiring.Category using (Semiring-structure; Semirings)
 
 open import Categories.Displayed.Univalence.Thin
 open import Categories.Prelude
+import Categories.Morphism
 
 open Semiring-hom
 open Rig-on
@@ -16,6 +17,8 @@ Rig-structure ℓ = Full-substructure ℓ Rig-on Semiring-on
 
 Rigs : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Rigs ℓ = Structured-objects (Rig-structure ℓ)
+
+module Rigs {ℓ} = Categories.Morphism (Rigs ℓ)
 
 Rig : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 Rig ℓ = Precategory.Ob (Rigs ℓ)

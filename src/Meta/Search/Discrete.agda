@@ -17,7 +17,6 @@ open Correspondences.Discrete public
         ; is-discrete-injection ; is-discrete-embedding )
 
 open import Data.Dec.Base
-open import Data.Fin.Computational.Instances.FromNat
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level

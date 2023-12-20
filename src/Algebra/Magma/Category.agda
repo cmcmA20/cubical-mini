@@ -5,6 +5,7 @@ open import Algebra.Magma
 
 open import Categories.Prelude
 open import Categories.Displayed.Univalence.Thin
+import Categories.Morphism
 
 open n-Magma-on
 open n-Magma-hom
@@ -20,13 +21,16 @@ Magma-structure ℓ .id-hom-unique p _ = Equiv.injective
 Magmas : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Magmas ℓ = Structured-objects (Magma-structure ℓ)
 
+module Magmas {ℓ} = Categories.Morphism (Magmas ℓ)
+
+Magma : ∀ ℓ → 𝒰 (ℓsuc ℓ)
+Magma ℓ = Precategory.Ob (Magmas ℓ)
+
 private variable ℓ : Level
 
 -- TODO univalent version
 -- Magmas-is-category : ∀ {ℓ} → is-category (Magmas ℓ)
 -- Magmas-is-category = Structured-objects-is-category (Magma-structure _)
-
--- module Magmas {ℓ} = Category (Magmas ℓ)
 
 instance
   Magmas-equational : is-equational (Magma-structure ℓ)

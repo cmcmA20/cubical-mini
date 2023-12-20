@@ -20,11 +20,10 @@ open import Correspondences.Erased
 
 open import Data.Empty.Base
 open import Data.Bool.Base
-open import Data.Fin.Computational.Base
-open import Data.Fin.Computational.Instances.FromNat
 open import Data.List.Base as List
 open import Data.Maybe.Base
 open import Data.Nat.Path
+open import Data.Sum.Base
 open import Data.Unit.Base
 
 private variable
@@ -160,7 +159,7 @@ instance
   proj-hlevel-n-type .Struct-proj-desc.struct-args-length = 2
   proj-hlevel-n-type .Struct-proj-desc.goal-projection = quote n-Type.carrier-is-tr
   proj-hlevel-n-type .Struct-proj-desc.projection-args-length = 3
-  proj-hlevel-n-type .Struct-proj-desc.level-selector = 1
+  proj-hlevel-n-type .Struct-proj-desc.level-selector = inr 1
   proj-hlevel-n-type .Struct-proj-desc.carrier-selector = 2
 
 -- Usage
