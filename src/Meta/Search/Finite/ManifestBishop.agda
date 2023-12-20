@@ -13,7 +13,7 @@ open import Meta.Search.Omniscient
 open import Meta.Variadic
 
 open import Structures.FinOrd public
-  using (FinOrd; fin-ord)
+  using ( FinOrd; fin-ord ; Underlying-FinOrd ; H-Level-FinOrd )
 
 open import Correspondences.Finite.ManifestBishop public
   using ( Manifest-bishop-finite ; fin ; cardinality ; enumeration

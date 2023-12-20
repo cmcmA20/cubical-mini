@@ -1,12 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Rig.Commutative where
 
-open import Foundations.Base
-
-open import Meta.Record
-open import Meta.Search.HLevel
-  hiding (_+_)
-open import Meta.Variadic
+open import Categories.Prelude hiding (_+_)
 
 open import Algebra.Rig public
 
@@ -31,9 +26,11 @@ record is-comm-rig {A : 𝒰 ℓ}
 
 unquoteDecl is-comm-rig-iso = declare-record-iso is-comm-rig-iso (quote is-comm-rig)
 
-is-comm-rig-is-prop : is-prop (is-comm-rig e u _✦_ _✧_)
-is-comm-rig-is-prop = is-prop-η λ x → let open is-comm-rig x in is-prop-β
-  (is-of-hlevel-≃ 1 (iso→equiv is-comm-rig-iso) hlevel!) x
+opaque
+  unfolding is-of-hlevel
+  is-comm-rig-is-prop : is-prop (is-comm-rig e u _✦_ _✧_)
+  is-comm-rig-is-prop R = iso→is-of-hlevel 1 is-comm-rig-iso hlevel! R where
+    open is-comm-rig R
 
 instance
   H-Level-is-comm-rig : H-Level (suc n) (is-comm-rig e u _✦_ _✧_)
@@ -53,13 +50,25 @@ record CRig-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 
 unquoteDecl crig-on-iso = declare-record-iso crig-on-iso (quote CRig-on)
 
-comm-rig→rig : ∀[ CRig-on {ℓ} →̇ Rig-on {ℓ} ]
-comm-rig→rig R .Rig-on.nil = R .CRig-on.nil
-comm-rig→rig R .Rig-on.unit = R .CRig-on.unit
-comm-rig→rig R .Rig-on._+_ = R .CRig-on._+_
-comm-rig→rig R .Rig-on._·_ = R .CRig-on._·_
-comm-rig→rig R .Rig-on.has-rig =
+comm-rig-on↪rig-on : CRig-on A ↪ₜ Rig-on A
+comm-rig-on↪rig-on .fst R .Rig-on.nil = R .CRig-on.nil
+comm-rig-on↪rig-on .fst R .Rig-on.unit = R .CRig-on.unit
+comm-rig-on↪rig-on .fst R .Rig-on._+_ = R .CRig-on._+_
+comm-rig-on↪rig-on .fst R .Rig-on._·_ = R .CRig-on._·_
+comm-rig-on↪rig-on .fst R .Rig-on.has-rig =
   R .CRig-on.has-comm-rig .is-comm-rig.has-rig
+comm-rig-on↪rig-on .snd = set-injective→is-embedding hlevel! λ p →
+  Equiv.injective (isoₜ→equiv crig-on-iso) $
+    Σ-pathP (ap Rig-on.nil p) $ Σ-pathP (ap Rig-on.unit p) $
+    Σ-pathP (ap Rig-on._+_ p) $ Σ-pathP (ap Rig-on._·_ p) prop!
+
+comm-rig-on-is-set : is-set (CRig-on A)
+comm-rig-on-is-set = is-embedding→is-of-hlevel 1 (comm-rig-on↪rig-on .snd) hlevel!
+
+instance
+  H-Level-comm-rig-on : H-Level (suc (suc n)) (CRig-on A)
+  H-Level-comm-rig-on = hlevel-basic-instance 2 comm-rig-on-is-set
+
 
 record make-comm-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   no-eta-equality
@@ -80,41 +89,32 @@ record make-comm-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     ·-absorb-l : Absorb-left  nil _·_
     ·-absorb-r : Absorb-right nil _·_
 
+  to-is-comm-rig : is-comm-rig nil unit _+_ _·_
+  to-is-comm-rig .is-comm-rig.has-rig = to-is-rig go where
+    go : make-rig X
+    go .make-rig.rig-is-set = comm-rig-is-set
+    go .make-rig.nil = nil
+    go .make-rig.unit = unit
+    go .make-rig._+_ = _+_
+    go .make-rig._·_ = _·_
+    go .make-rig.+-id-l = +-id-l
+    go .make-rig.+-id-r = +-id-r
+    go .make-rig.+-assoc = +-assoc
+    go .make-rig.+-comm = +-comm
+    go .make-rig.·-id-l = ·-id-l
+    go .make-rig.·-id-r = ·-id-r
+    go .make-rig.·-assoc = ·-assoc
+    go .make-rig.·-distrib-+-l = ·-distrib-+-l
+    go .make-rig.·-distrib-+-r = ·-distrib-+-r
+    go .make-rig.·-absorb-l = ·-absorb-l
+    go .make-rig.·-absorb-r = ·-absorb-r
+  to-is-comm-rig .is-comm-rig.·-comm = ·-comm
+
   to-comm-rig-on : CRig-on X
   to-comm-rig-on .CRig-on.nil = nil
   to-comm-rig-on .CRig-on.unit = unit
   to-comm-rig-on .CRig-on._+_ = _+_
   to-comm-rig-on .CRig-on._·_ = _·_
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.+-comm-monoid .is-comm-monoid.has-monoid
-    .is-monoid.has-semigroup .is-semigroup.has-magma
-    .is-n-magma.has-is-of-hlevel = comm-rig-is-set
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.+-comm-monoid .is-comm-monoid.has-monoid
-    .is-monoid.has-semigroup .is-semigroup.assoc = +-assoc
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.+-comm-monoid .is-comm-monoid.has-monoid .is-monoid.id-l = +-id-l
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.+-comm-monoid .is-comm-monoid.has-monoid .is-monoid.id-r = +-id-r
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.+-comm-monoid .is-comm-monoid.comm = +-comm
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.·-monoid .is-monoid.has-semigroup
-    .is-semigroup.has-magma .is-n-magma.has-is-of-hlevel = comm-rig-is-set
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.·-monoid .is-monoid.has-semigroup .is-semigroup.assoc = ·-assoc
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.·-monoid .is-monoid.id-l = ·-id-l
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.·-monoid .is-monoid.id-r = ·-id-r
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.·-distrib-+-l = ·-distrib-+-l
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.has-semiring
-    .is-semiring.·-distrib-+-r = ·-distrib-+-r
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.·-absorb-l =
-    ·-absorb-l
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.has-rig .is-rig.·-absorb-r =
-    ·-absorb-r
-  to-comm-rig-on .CRig-on.has-comm-rig .is-comm-rig.·-comm = ·-comm
+  to-comm-rig-on .CRig-on.has-comm-rig = to-is-comm-rig
 
-open make-comm-rig using (to-comm-rig-on) public
+open make-comm-rig using (to-is-comm-rig ; to-comm-rig-on) public

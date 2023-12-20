@@ -52,7 +52,7 @@ module _ {o ℓ} {C : Precategory o ℓ} where
   skeletal+category→gaunt skel _   .is-gaunt.has-strict   = is-skeletal→is-strict _ skel
 
   skeletal-category≃gaunt
-    : is-skeletal C × is-category C
+    : is-skeletal C ×ₜ is-category C
     ≃ is-gaunt C
   skeletal-category≃gaunt = prop-extₑ!
       (skeletal+category→gaunt $²_)

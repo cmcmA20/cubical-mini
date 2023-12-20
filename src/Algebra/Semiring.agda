@@ -1,11 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Semiring where
 
-open import Foundations.Base
-
-open import Meta.Record
-open import Meta.Search.HLevel
-  hiding (_+_)
+open import Categories.Prelude hiding (_+_)
 
 open import Algebra.Monoid.Commutative public
 
@@ -49,9 +45,11 @@ record is-semiring {A : 𝒰 ℓ}
 
 unquoteDecl is-semiring-iso = declare-record-iso is-semiring-iso (quote is-semiring)
 
-is-semiring-is-prop : is-prop (is-semiring e u _✦_ _✧_)
-is-semiring-is-prop = is-prop-η λ x → let open is-semiring x in is-prop-β
-  (is-of-hlevel-≃ 1 (iso→equiv is-semiring-iso) hlevel!) x
+opaque
+  unfolding is-of-hlevel
+  is-semiring-is-prop : is-prop (is-semiring e u _✦_ _✧_)
+  is-semiring-is-prop S = iso→is-of-hlevel 1 is-semiring-iso hlevel! S where
+    open is-semiring S
 
 instance
   H-Level-is-semiring : H-Level (suc n) (is-semiring e u _✦_ _✧_)
@@ -70,6 +68,10 @@ record Semiring-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   infixr 30 _·_
 
 unquoteDecl semiring-on-iso = declare-record-iso semiring-on-iso (quote Semiring-on)
+
+semiring-on-is-set : is-set (Semiring-on A)
+semiring-on-is-set = iso→is-of-hlevel _ semiring-on-iso $ is-set-η λ (_ , _ , _ , _ , x) _ _ _ →
+  let open is-semiring x in prop!
 
 
 record Semiring-hom
@@ -94,6 +96,9 @@ semiring-hom-is-prop {M′} = iso→is-of-hlevel _ semiring-hom-iso hlevel! wher
   open Semiring-on M′
 
 instance
+  H-Level-semiring-on : H-Level (suc (suc n)) (Semiring-on A)
+  H-Level-semiring-on = hlevel-basic-instance 2 semiring-on-is-set
+
   H-Level-semiring-hom : ∀ {M : Semiring-on A} {M′ : Semiring-on B} {f}
                        → H-Level (suc n) (Semiring-hom M M′ f)
   H-Level-semiring-hom = hlevel-prop-instance semiring-hom-is-prop
@@ -115,32 +120,32 @@ record make-semiring {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     ·-distrib-+-l : Distrib-left  _·_ _+_
     ·-distrib-+-r : Distrib-right _·_ _+_
 
+  to-is-semiring : is-semiring nil unit _+_ _·_
+  to-is-semiring .is-semiring.+-comm-monoid = to-is-comm-monoid go where
+    go : make-comm-monoid X
+    go .make-comm-monoid.monoid-is-set = semiring-is-set
+    go .make-comm-monoid.id = nil
+    go .make-comm-monoid._⋆_ = _+_
+    go .make-comm-monoid.id-l = +-id-l
+    go .make-comm-monoid.id-r = +-id-r
+    go .make-comm-monoid.assoc = +-assoc
+    go .make-comm-monoid.comm = +-comm
+  to-is-semiring .is-semiring.·-monoid = to-is-monoid go where
+    go : make-monoid X
+    go .make-monoid.monoid-is-set = semiring-is-set
+    go .make-monoid.id = unit
+    go .make-monoid._⋆_ = _·_
+    go .make-monoid.id-l = ·-id-l
+    go .make-monoid.id-r = ·-id-r
+    go .make-monoid.assoc = ·-assoc
+  to-is-semiring .is-semiring.·-distrib-+-l = ·-distrib-+-l
+  to-is-semiring .is-semiring.·-distrib-+-r = ·-distrib-+-r
+
   to-semiring-on : Semiring-on X
   to-semiring-on .Semiring-on.nil = nil
   to-semiring-on .Semiring-on.unit = unit
   to-semiring-on .Semiring-on._+_ = _+_
   to-semiring-on .Semiring-on._·_ = _·_
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.has-monoid .is-monoid.has-semigroup
-    .is-semigroup.has-magma .is-n-magma.has-is-of-hlevel = semiring-is-set
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.has-monoid .is-monoid.has-semigroup .is-semigroup.assoc = +-assoc
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.has-monoid .is-monoid.id-l = +-id-l
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.has-monoid .is-monoid.id-r = +-id-r
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.comm = +-comm
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.·-monoid
-    .is-monoid.has-semigroup .is-semigroup.has-magma
-    .is-n-magma.has-is-of-hlevel = semiring-is-set
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.·-monoid
-    .is-monoid.has-semigroup .is-semigroup.assoc = ·-assoc
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.·-monoid
-    .is-monoid.id-l = ·-id-l
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.·-monoid
-    .is-monoid.id-r = ·-id-r
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.·-distrib-+-l = ·-distrib-+-l
-  to-semiring-on .Semiring-on.has-semiring .is-semiring.·-distrib-+-r = ·-distrib-+-r
+  to-semiring-on .Semiring-on.has-semiring = to-is-semiring
 
-open make-semiring using (to-semiring-on) public
+open make-semiring using (to-is-semiring ; to-semiring-on) public

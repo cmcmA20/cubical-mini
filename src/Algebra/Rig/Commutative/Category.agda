@@ -11,15 +11,8 @@ open Semiring-hom
 open CRig-on
 
 CRig-structure : ∀ ℓ → Thin-structure ℓ CRig-on
-CRig-structure ℓ .is-hom f A B =
-  el! (Semiring-hom (rig→semiring (comm-rig→rig A))
-                    (rig→semiring (comm-rig→rig B)) f)
-CRig-structure ℓ .id-is-hom = Rig-structure ℓ .id-is-hom
-CRig-structure ℓ .∘-is-hom = Rig-structure ℓ .∘-is-hom
-CRig-structure ℓ .id-hom-unique p _ = Equiv.injective
-  (isoₜ→equiv crig-on-iso) $ Σ-pathP (p .pres-0) $
-    Σ-pathP (p .pres-1) $ Σ-pathP (ext (p .pres-+)) $
-      Σ-prop-pathP hlevel! (ext (p .pres-·))
+CRig-structure ℓ = Full-substructure ℓ CRig-on Rig-on
+  (λ _ → comm-rig-on↪rig-on) (Rig-structure ℓ)
 
 CRigs : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 CRigs ℓ = Structured-objects (CRig-structure ℓ)
@@ -37,7 +30,7 @@ Forget : Functor (CRigs ℓ) (Sets ℓ)
 Forget = Forget-structure (CRig-structure _)
 
 Forget-comm : Functor (CRigs ℓ) (Rigs ℓ)
-Forget-comm .Functor.F₀ = second comm-rig→rig
+Forget-comm .Functor.F₀ = second (comm-rig-on↪rig-on #_)
 Forget-comm .Functor.F₁ f .hom x = f # x
 Forget-comm .Functor.F₁ f .preserves = f .preserves
 Forget-comm .Functor.F-id = refl

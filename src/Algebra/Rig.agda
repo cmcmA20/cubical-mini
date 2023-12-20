@@ -1,12 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Rig where
 
-open import Foundations.Base
-
-open import Meta.Record
-open import Meta.Search.HLevel
-  hiding (_+_)
-open import Meta.Variadic
+open import Categories.Prelude hiding (_+_)
 
 open import Algebra.Semiring public
 
@@ -39,9 +34,11 @@ record is-rig {A : 𝒰 ℓ}
 
 unquoteDecl is-rig-iso = declare-record-iso is-rig-iso (quote is-rig)
 
-is-rig-is-prop : is-prop (is-rig e u _✦_ _✧_)
-is-rig-is-prop = is-prop-η λ x → let open is-rig x in is-prop-β
-  (is-of-hlevel-≃ 1 (iso→equiv is-rig-iso) hlevel!) x
+opaque
+  unfolding is-of-hlevel
+  is-rig-is-prop : is-prop (is-rig e u _✦_ _✧_)
+  is-rig-is-prop R = iso→is-of-hlevel 1 is-rig-iso hlevel! R where
+    open is-rig R
 
 instance
   H-Level-is-rig : H-Level (suc n) (is-rig e u _✦_ _✧_)
@@ -62,13 +59,24 @@ record Rig-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 unquoteDecl rig-on-iso = declare-record-iso rig-on-iso (quote Rig-on)
 
 
-rig→semiring : ∀[ Rig-on {ℓ} →̇ Semiring-on {ℓ} ]
-rig→semiring R .Semiring-on.nil = R .Rig-on.nil
-rig→semiring R .Semiring-on.unit = R .Rig-on.unit
-rig→semiring R .Semiring-on._+_ = R .Rig-on._+_
-rig→semiring R .Semiring-on._·_ = R .Rig-on._·_
-rig→semiring R .Semiring-on.has-semiring =
+rig-on↪semiring-on : Rig-on A ↪ₜ Semiring-on A
+rig-on↪semiring-on .fst R .Semiring-on.nil = R .Rig-on.nil
+rig-on↪semiring-on .fst R .Semiring-on.unit = R .Rig-on.unit
+rig-on↪semiring-on .fst R .Semiring-on._+_ = R .Rig-on._+_
+rig-on↪semiring-on .fst R .Semiring-on._·_ = R .Rig-on._·_
+rig-on↪semiring-on .fst R .Semiring-on.has-semiring =
   R .Rig-on.has-rig .is-rig.has-semiring
+rig-on↪semiring-on .snd = set-injective→is-embedding hlevel! λ p →
+  Equiv.injective (isoₜ→equiv rig-on-iso) $
+    Σ-pathP (ap Semiring-on.nil p) $ Σ-pathP (ap Semiring-on.unit p) $
+    Σ-pathP (ap Semiring-on._+_ p) $ Σ-pathP (ap Semiring-on._·_ p) prop!
+
+rig-on-is-set : is-set (Rig-on A)
+rig-on-is-set = is-embedding→is-of-hlevel 1 (rig-on↪semiring-on .snd) hlevel!
+
+instance
+  H-Level-rig-on : H-Level (suc (suc n)) (Rig-on A)
+  H-Level-rig-on = hlevel-basic-instance 2 rig-on-is-set
 
 
 record make-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -89,37 +97,31 @@ record make-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     ·-absorb-l : Absorb-left  nil _·_
     ·-absorb-r : Absorb-right nil _·_
 
-  -- what an abomination
+  to-is-rig : is-rig nil unit _+_ _·_
+  to-is-rig .is-rig.has-semiring = to-is-semiring go where
+    go : make-semiring X
+    go .make-semiring.semiring-is-set = rig-is-set
+    go .make-semiring.nil = nil
+    go .make-semiring.unit = unit
+    go .make-semiring._+_ = _+_
+    go .make-semiring._·_ = _·_
+    go .make-semiring.+-id-l = +-id-l
+    go .make-semiring.+-id-r = +-id-r
+    go .make-semiring.+-assoc = +-assoc
+    go .make-semiring.+-comm = +-comm
+    go .make-semiring.·-id-l = ·-id-l
+    go .make-semiring.·-id-r = ·-id-r
+    go .make-semiring.·-assoc = ·-assoc
+    go .make-semiring.·-distrib-+-l = ·-distrib-+-l
+    go .make-semiring.·-distrib-+-r = ·-distrib-+-r
+  to-is-rig .is-rig.·-absorb-l = ·-absorb-l
+  to-is-rig .is-rig.·-absorb-r = ·-absorb-r
+
   to-rig-on : Rig-on X
   to-rig-on .Rig-on.nil = nil
   to-rig-on .Rig-on.unit = unit
   to-rig-on .Rig-on._+_ = _+_
   to-rig-on .Rig-on._·_ = _·_
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.has-monoid .is-monoid.has-semigroup
-    .is-semigroup.has-magma .is-n-magma.has-is-of-hlevel = rig-is-set
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.has-monoid .is-monoid.has-semigroup .is-semigroup.assoc = +-assoc
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.has-monoid .is-monoid.id-l = +-id-l
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.has-monoid .is-monoid.id-r = +-id-r
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.+-comm-monoid
-    .is-comm-monoid.comm = +-comm
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.·-monoid
-    .is-monoid.has-semigroup .is-semigroup.has-magma
-    .is-n-magma.has-is-of-hlevel = rig-is-set
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.·-monoid
-    .is-monoid.has-semigroup .is-semigroup.assoc = ·-assoc
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.·-monoid
-    .is-monoid.id-l = ·-id-l
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.·-monoid
-    .is-monoid.id-r = ·-id-r
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.·-distrib-+-l =
-    ·-distrib-+-l
-  to-rig-on .Rig-on.has-rig .is-rig.has-semiring .is-semiring.·-distrib-+-r =
-    ·-distrib-+-r
-  to-rig-on .Rig-on.has-rig .is-rig.·-absorb-l = ·-absorb-l
-  to-rig-on .Rig-on.has-rig .is-rig.·-absorb-r = ·-absorb-r
+  to-rig-on .Rig-on.has-rig = to-is-rig
 
-open make-rig using (to-rig-on) public
+open make-rig using (to-is-rig ; to-rig-on) public

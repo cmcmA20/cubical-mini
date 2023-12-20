@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Magma where
 
-open import Prelude
+open import Categories.Prelude
 
 private variable
   ℓ ℓ′ : Level
@@ -87,16 +87,23 @@ module _ (n : HLevel) where
 
   unquoteDecl n-magma-hom-iso = declare-record-iso n-magma-hom-iso (quote n-Magma-hom)
 
+Magma-on = n-Magma-on 2
+2-Magma-on = n-Magma-on 3
+
+-- TODO generalize
+magma-on-is-set : is-set (Magma-on A)
+magma-on-is-set = iso→is-of-hlevel _ (n-magma-on-iso _) $ is-set-η λ (_ , x) _ _ _ →
+  let open is-n-magma x in prop!
+
 n-magma-hom-is-of-hlevel : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
                          → is-of-hlevel n (n-Magma-hom (suc n) M M′ f)
 n-magma-hom-is-of-hlevel {M′} = iso→is-of-hlevel _ (n-magma-hom-iso _) hlevel! where
   open n-Magma-on M′
 
 instance
-  H-Level-magma-hom : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
-                    → H-Level n (n-Magma-hom (suc n) M M′ f)
-  H-Level-magma-hom .H-Level.has-of-hlevel = n-magma-hom-is-of-hlevel
+  H-Level-magma-on : H-Level (2 + n) (Magma-on A)
+  H-Level-magma-on = hlevel-basic-instance 2 magma-on-is-set
 
-
-Magma-on = n-Magma-on 2
-2-Magma-on = n-Magma-on 3
+  H-Level-n-magma-hom : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
+                      → H-Level n (n-Magma-hom (suc n) M M′ f)
+  H-Level-n-magma-hom .H-Level.has-of-hlevel = n-magma-hom-is-of-hlevel

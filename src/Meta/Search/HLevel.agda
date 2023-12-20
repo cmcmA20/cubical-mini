@@ -14,7 +14,7 @@ open import Meta.Variadic
 open import Structures.n-Type
 open Structures.n-Type public
   using ( n-Type; el; Underlying-n-Type
-        ; Prop ; Set )
+        ; Prop ; Set ; Grpd )
 
 open import Correspondences.Erased
 

@@ -14,7 +14,7 @@ open import Meta.Variadic
 
 open import Structures.FinSet
 open Structures.FinSet public
-  using (FinSet; fin-set)
+  using ( FinSet; fin-set ; Underlying-FinSet ; H-Level-FinSet )
 
 open import Correspondences.Finite.Bishop
 open Correspondences.Finite.Bishop public

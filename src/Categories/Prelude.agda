@@ -6,9 +6,11 @@ open import Prelude
            ; id        to idₜ
            ; _≅_       to _≅ₜ_
            ; _↪_       to _↪ₜ_
+           ; _×_       to _×ₜ_
            ; iso→path  to isoₜ→path
            ; iso→equiv to isoₜ→equiv
            )
+  -- FIXME remove after fixing search tactic
   hiding ( Tactic-bishop-finite
          ; Tactic-discrete
          ; Tactic-manifest-bishop-finite)

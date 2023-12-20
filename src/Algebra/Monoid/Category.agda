@@ -36,7 +36,7 @@ Forget : Functor (Monoids ℓ) (Sets ℓ)
 Forget = Forget-structure (Monoid-structure _)
 
 Forget-neutral : Functor (Monoids ℓ) (Semigroups ℓ)
-Forget-neutral .Functor.F₀ = second monoid→semigroup
+Forget-neutral .Functor.F₀ = second monoid-on→semigroup-on
 Forget-neutral .Functor.F₁ f .hom x = f # x
 Forget-neutral .Functor.F₁ f .preserves .n-Magma-hom.pres-⋆ =
   f .preserves .pres-⋆

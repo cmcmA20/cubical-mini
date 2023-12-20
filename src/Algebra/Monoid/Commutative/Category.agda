@@ -11,13 +11,8 @@ open Monoid-hom
 open CMonoid-on
 
 CMonoid-structure : ∀ ℓ → Thin-structure ℓ CMonoid-on
-CMonoid-structure ℓ .is-hom f A B =
-  el! (Monoid-hom (comm-monoid→monoid A) (comm-monoid→monoid B) f)
-CMonoid-structure ℓ .id-is-hom = Monoid-structure ℓ .id-is-hom
-CMonoid-structure ℓ .∘-is-hom = Monoid-structure ℓ .∘-is-hom
-CMonoid-structure ℓ .id-hom-unique p _ = Equiv.injective
-  (isoₜ→equiv cmonoid-on-iso) $ Σ-pathP (ext (p .pres-id)) $
-    Σ-prop-pathP hlevel! (ext (p .pres-⋆))
+CMonoid-structure ℓ = Full-substructure ℓ CMonoid-on Monoid-on
+  (λ _ → comm-monoid-on↪monoid-on) (Monoid-structure ℓ)
 
 CMonoids : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 CMonoids ℓ = Structured-objects (CMonoid-structure ℓ)
@@ -33,7 +28,7 @@ Forget : Functor (CMonoids ℓ) (Sets ℓ)
 Forget = Forget-structure (CMonoid-structure _)
 
 Forget-comm : Functor (CMonoids ℓ) (Monoids ℓ)
-Forget-comm .Functor.F₀ = second comm-monoid→monoid
+Forget-comm .Functor.F₀ = second (comm-monoid-on↪monoid-on #_)
 Forget-comm .Functor.F₁ f .hom x = f # x
 Forget-comm .Functor.F₁ f .preserves = f .preserves
 Forget-comm .Functor.F-id = refl
