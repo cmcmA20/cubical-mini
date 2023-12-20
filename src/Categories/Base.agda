@@ -126,6 +126,8 @@ record Functor
   F-id op    = F-id
   F-∘ op f g = F-∘ g f
 
+unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
+
 functor-double-dual : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {F : Functor C D}
                     → Functor.op (Functor.op F) ＝ F
 functor-double-dual {F} i .Functor.F₀ = F .Functor.F₀
