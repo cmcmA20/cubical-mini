@@ -6,6 +6,7 @@ open import Algebra.Semigroup.Category using (Semigroups)
 
 open import Categories.Displayed.Univalence.Thin
 open import Categories.Prelude
+import Categories.Morphism
 
 open Monoid-hom
 open Monoid-on
@@ -24,6 +25,11 @@ Monoid-structure ℓ .id-hom-unique p q = Equiv.injective
 
 Monoids : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Monoids ℓ = Structured-objects (Monoid-structure ℓ)
+
+module Monoids {ℓ} = Categories.Morphism (Monoids ℓ)
+
+Monoid : ∀ ℓ → 𝒰 (ℓsuc ℓ)
+Monoid ℓ = Precategory.Ob (Monoids ℓ)
 
 private variable ℓ : Level
 

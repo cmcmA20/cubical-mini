@@ -24,7 +24,6 @@ open import Data.Dec.Base as Dec
 open import Data.Dec.Path
 open import Data.Dec.Properties
 open import Data.Empty.Base as ⊥
-open import Data.Fin.Computational.Instances.FromNat
 
 open import Truncation.Propositional.Base as ∥-∥₁
 

@@ -6,8 +6,6 @@ open import Foundations.Base
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
 
-open import Order.Linear
-
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Sum.Base
@@ -38,27 +36,6 @@ open Ord using (<-thin; <-trans)
 private variable
   ℓ : Level
   T : Type ℓ
-
-ord→is-linear-order : ⦃ ord : Ord T ⦄ → is-linear-order _<_
-ord→is-linear-order ⦃ ord ⦄ .is-linear-order.<-thin = ord .<-thin
-ord→is-linear-order .is-linear-order.<-asym {x} {y} p q with x ≤? y
-... | lt x<y x≠y y≮x = y≮x q
-... | eq x≮y x=y y≮x = y≮x q
-... | gt x≮y x≠y y<x = x≮y p
-ord→is-linear-order .is-linear-order.<-cmp {x} {y} x<z with x ≤? y
-... | lt x<y x≠y y≮x = ∣ inl x<y ∣₁
-ord→is-linear-order .is-linear-order.<-cmp {x} {y} {z} x<z | eq x≮y x=y y≮x with y ≤? z
-... | lt y<z y≠z z≮y = ∣ inr y<z ∣₁
-... | eq y≮z y=z z≮y = ⊥.rec (y≮z (subst (_< z) x=y x<z))
-... | gt y≮z y≠z z<y = ∣ inr (subst (_< z) x=y x<z) ∣₁
-ord→is-linear-order ⦃ ord ⦄  .is-linear-order.<-cmp {x} {y} {z} x<z | gt x≮y x≠y y<x with y ≤? z
-... | lt y<z y≠z z≮y = ∣ inr y<z ∣₁
-... | eq y≮z y=z z≮y = ⊥.rec (x≮y (subst (x <_) (sym y=z) x<z))
-... | gt y≮z y≠z z<y = ⊥.rec (y≮z (ord .<-trans y<x x<z))
-ord→is-linear-order .is-linear-order.<-conn {x} {y} y≮x x≮y with x ≤? y
-... | lt x<y  x≠y y≮′x = ⊥.rec (y≮x x<y)
-... | eq x≮′y x=y y≮′x = x=y
-... | gt x≮′y x≠y y<x  = ⊥.rec (x≮y y<x)
 
 instance
   ord→is-discrete : ⦃ ord : Ord T ⦄ → is-discrete T

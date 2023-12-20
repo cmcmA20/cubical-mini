@@ -27,11 +27,6 @@ private variable
 is-monic : Hom a b → Type _
 is-monic {a} f = ∀ {c} → (g h : Hom c a) → f ∘ g ＝ f ∘ h → g ＝ h
 
-opaque
-  unfolding is-of-hlevel
-  is-monic-is-prop : (f : Hom a b) → is-prop (is-monic f)
-  is-monic-is-prop f x y i g h p = Hom-set _ _ _ _ (x g h p) (y g h p) i
-
 record _↪_ (a b : Ob) : Type (o ⊔ h) where
   field
     mor   : Hom a b
@@ -53,11 +48,6 @@ instance
 
 is-epic : Hom a b → Type _
 is-epic {b} f = ∀ {c} → (g h : Hom b c) → g ∘ f ＝ h ∘ f → g ＝ h
-
-opaque
-  unfolding is-of-hlevel
-  is-epic-is-prop : (f : Hom a b) → is-prop (is-epic f)
-  is-epic-is-prop f x y i g h p = Hom-set _ _ _ _ (x g h p) (y g h p) i
 
 record _↠_ (a b : Ob) : Type (o ⊔ h) where
   field
@@ -153,13 +143,6 @@ epic-precomp-embedding epic =
 _section-of_ : (s : Hom b a) (r : Hom a b) → Type _
 s section-of r = r ∘ s ＝ id
 
-opaque
-  unfolding is-of-hlevel
-  section-of-is-prop
-    : {s : Hom b a} {r : Hom a b}
-    → is-prop (s section-of r)
-  section-of-is-prop = Hom-set _ _ _ _
-
 record has-section (r : Hom a b) : Type h where
   constructor make-section
   field
@@ -222,13 +205,6 @@ instance
 
 _retract-of_ : (r : Hom a b) (s : Hom b a) → Type _
 r retract-of s = r ∘ s ＝ id
-
-opaque
-  unfolding is-of-hlevel
-  retract-of-is-prop
-    : {s : Hom b a} {r : Hom a b}
-    → is-prop (r retract-of s)
-  retract-of-is-prop = Hom-set _ _ _ _
 
 record has-retract (s : Hom b a) : Type h where
   constructor make-retract
@@ -374,8 +350,8 @@ instance
 
 opaque
   unfolding is-of-hlevel
-  is-invertible-is-prop : ∀ {f : Hom a b} → is-prop (is-invertible f)
-  is-invertible-is-prop {a = a} {b = b} {f = f} g h = p where
+  is-invertible-is-prop : {f : Hom a b} → is-prop (is-invertible f)
+  is-invertible-is-prop {a} {b} {f} g h = p where
     module g = is-invertible g
     module h = is-invertible h
 

@@ -6,6 +6,7 @@ open import Algebra.Monoid.Commutative
 
 open import Categories.Displayed.Univalence.Thin
 open import Categories.Prelude
+import Categories.Morphism
 
 open Monoid-hom
 open CMonoid-on
@@ -16,6 +17,11 @@ CMonoid-structure ℓ = Full-substructure ℓ CMonoid-on Monoid-on
 
 CMonoids : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 CMonoids ℓ = Structured-objects (CMonoid-structure ℓ)
+
+module CMonoids {ℓ} = Categories.Morphism (CMonoids ℓ)
+
+CMonoid : ∀ ℓ → 𝒰 (ℓsuc ℓ)
+CMonoid ℓ = Precategory.Ob (CMonoids ℓ)
 
 private variable ℓ : Level
 

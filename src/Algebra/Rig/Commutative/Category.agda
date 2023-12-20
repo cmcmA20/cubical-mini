@@ -6,6 +6,7 @@ open import Algebra.Rig.Category.Base using (Rig-structure; Rigs)
 
 open import Categories.Displayed.Univalence.Thin
 open import Categories.Prelude
+import Categories.Morphism
 
 open Semiring-hom
 open CRig-on
@@ -16,6 +17,11 @@ CRig-structure ℓ = Full-substructure ℓ CRig-on Rig-on
 
 CRigs : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 CRigs ℓ = Structured-objects (CRig-structure ℓ)
+
+module CRigs {ℓ} = Categories.Morphism (CRigs ℓ)
+
+CRig : ∀ ℓ → 𝒰 (ℓsuc ℓ)
+CRig ℓ = Precategory.Ob (CRigs ℓ)
 
 private variable ℓ : Level
 

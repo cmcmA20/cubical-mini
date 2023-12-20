@@ -6,6 +6,7 @@ open import Algebra.Semigroup
 
 open import Categories.Displayed.Univalence.Thin
 open import Categories.Prelude
+import Categories.Morphism
 
 open n-Magma-hom
 open Semigroup-on
@@ -16,6 +17,11 @@ Semigroup-structure ℓ = Full-substructure ℓ Semigroup-on Magma-on
 
 Semigroups : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Semigroups ℓ = Structured-objects (Semigroup-structure ℓ)
+
+module Semigroups {ℓ} = Categories.Morphism (Semigroups ℓ)
+
+Semigroup : ∀ ℓ → 𝒰 (ℓsuc ℓ)
+Semigroup ℓ = Precategory.Ob (Semigroups ℓ)
 
 private variable ℓ : Level
 
