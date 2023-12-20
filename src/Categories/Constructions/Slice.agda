@@ -15,6 +15,8 @@ record /-Obj (c : Ob) : Type (o ⊔ ℓ) where
 
 open /-Obj using (domain)
 
+unquoteDecl /-Obj-iso = declare-record-iso /-Obj-iso (quote /-Obj)
+
 private variable
   a a′ b b′ x y : /-Obj c
 
