@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Algebra.Rig.Category.Initial {ℓ} where
+module Algebra.Rig.Category.Initial where
 
 open import Algebra.Rig
 open import Algebra.Rig.Category.Base
@@ -9,6 +9,8 @@ open import Categories.Displayed.Univalence.Thin
 open import Categories.Prelude
 
 open import Data.Nat as ℕ
+
+private variable ℓ : Level
 
 ℕᵣ : Rig ℓ
 ℕᵣ = el! (Lift _ ℕ) , to-rig-on go where
@@ -31,7 +33,7 @@ open import Data.Nat as ℕ
   go .make-rig.·-absorb-r (lift m) = ap lift (·-absorb-r m)
 
 ℕ-is-initial : is-initial (Rigs ℓ) ℕᵣ
-ℕ-is-initial R = is-contr-η $ ℕ→R , λ x → ext (uniq x ∘ₜ lower) where
+ℕ-is-initial {ℓ} R = is-contr-η $ ℕ→R , λ x → ext (uniq x ∘ₜ lower) where
   module R = Rig-on (R .snd)
 
   f : ℕ →̇ R
