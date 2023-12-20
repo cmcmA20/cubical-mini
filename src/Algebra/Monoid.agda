@@ -1,12 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Monoid where
 
-open import Foundations.Base
-  renaming (id to idₜ)
-
-open import Meta.Record
-open import Meta.Search.HLevel
-open import Meta.Variadic
+open import Categories.Prelude
 
 open import Algebra.Semigroup public
 
@@ -37,9 +32,11 @@ record is-monoid {A : 𝒰 ℓ} (id : A) (_⋆_ : A → A → A) : 𝒰 ℓ wher
 
 unquoteDecl is-monoid-iso = declare-record-iso is-monoid-iso (quote is-monoid)
 
-is-monoid-is-prop : is-prop (is-monoid e _✦_)
-is-monoid-is-prop = is-prop-η λ x → let open is-monoid x in is-prop-β
-  (is-of-hlevel-≃ 1 (iso→equiv is-monoid-iso) hlevel!) x
+opaque
+  unfolding is-of-hlevel
+  is-monoid-is-prop : is-prop (is-monoid e _✦_)
+  is-monoid-is-prop M = iso→is-of-hlevel 1 is-monoid-iso hlevel! M where
+    open is-monoid M
 
 instance
   H-Level-is-monoid : H-Level (suc n) (is-monoid e _✦_)
@@ -57,6 +54,11 @@ record Monoid-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   infixr 20 _⋆_
 
 unquoteDecl monoid-on-iso = declare-record-iso monoid-on-iso (quote Monoid-on)
+
+monoid-on-is-set : is-set (Monoid-on A)
+monoid-on-is-set = iso→is-of-hlevel _ monoid-on-iso $ is-set-η λ (_ , _ , x) _ _ _ →
+  let open is-monoid x in prop!
+
 
 record Monoid-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
@@ -78,15 +80,18 @@ monoid-hom-is-prop {M′} = iso→is-of-hlevel _ monoid-hom-iso hlevel! where
   open Monoid-on M′
 
 instance
+  H-Level-monoid-on : H-Level (2 + n) (Monoid-on A)
+  H-Level-monoid-on = hlevel-basic-instance 2 monoid-on-is-set
+
   H-Level-monoid-hom : ∀ {M : Monoid-on A} {M′ : Monoid-on B} {f}
                      → H-Level (suc n) (Monoid-hom M M′ f)
   H-Level-monoid-hom = hlevel-prop-instance monoid-hom-is-prop
 
-
-monoid→semigroup : ∀[ Monoid-on {ℓ} →̇ Semigroup-on {ℓ} ]
-monoid→semigroup M .Semigroup-on._⋆_ = M .Monoid-on._⋆_
-monoid→semigroup M .Semigroup-on.has-semigroup =
+monoid-on→semigroup-on : ∀[ Monoid-on {ℓ} →̇ Semigroup-on {ℓ} ]
+monoid-on→semigroup-on M .Semigroup-on._⋆_ = M .Monoid-on._⋆_
+monoid-on→semigroup-on M .Semigroup-on.has-semigroup =
   M .Monoid-on.has-monoid .is-monoid.has-semigroup
+
 
 record make-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   no-eta-equality
@@ -98,16 +103,21 @@ record make-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     id-r : Unital-right id _⋆_
     assoc : Associative _⋆_
 
+  to-is-monoid : is-monoid id _⋆_
+  to-is-monoid .is-monoid.has-semigroup = to-is-semigroup sg where
+    sg : make-semigroup X
+    sg .make-semigroup.semigroup-is-set = monoid-is-set
+    sg .make-semigroup._⋆_ = _⋆_
+    sg .make-semigroup.assoc = assoc
+  to-is-monoid .is-monoid.id-l = id-l
+  to-is-monoid .is-monoid.id-r = id-r
+
   to-monoid-on : Monoid-on X
   to-monoid-on .Monoid-on.id = id
   to-monoid-on .Monoid-on._⋆_ = _⋆_
-  to-monoid-on .Monoid-on.has-monoid .is-monoid.has-semigroup
-    .is-semigroup.has-magma .is-n-magma.has-is-of-hlevel = monoid-is-set
-  to-monoid-on .Monoid-on.has-monoid .is-monoid.has-semigroup .is-semigroup.assoc = assoc
-  to-monoid-on .Monoid-on.has-monoid .is-monoid.id-l = id-l
-  to-monoid-on .Monoid-on.has-monoid .is-monoid.id-r = id-r
+  to-monoid-on .Monoid-on.has-monoid = to-is-monoid
 
-open make-monoid using (to-monoid-on) public
+open make-monoid using (to-is-monoid ; to-monoid-on) public
 
 
 -- monoid theory
