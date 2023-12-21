@@ -64,6 +64,7 @@ record Monoid-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
   (M : Monoid-on A) (M′ : Monoid-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
   where
+    no-eta-equality
     private
       module A = Monoid-on M
       module B = Monoid-on M′

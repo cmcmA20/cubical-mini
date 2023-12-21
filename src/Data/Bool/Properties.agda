@@ -3,6 +3,7 @@ module Data.Bool.Properties where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.Transport
 
 open import Meta.Search.Decidable
 open import Meta.Search.Discrete
@@ -10,11 +11,13 @@ open import Meta.Search.Exhaustible
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Finite.ManifestBishop
 open import Meta.Search.Omniscient
+open import Meta.Underlying
 open import Meta.Witness
 
-open import Data.Empty.Base
+open import Data.Empty.Base as ⊥
 open import Data.Bool.Base as Bool public
 open import Data.Bool.Instances.Finite
+open import Data.Bool.Instances.Underlying
 
 private variable
   ℓᵃ : Level
@@ -28,6 +31,16 @@ universal = iso→equiv
         (λ _ → refl)
         (λ _ → fun-ext $ Bool.elim refl refl)
 
+boolean-pred-ext : (f g : A → Bool) → f ⊆ g → g ⊆ f → f ＝ g
+boolean-pred-ext f g p q i a with f a | recall f a | g a | recall g a
+... | false | ⟪ _ ⟫ | false | ⟪ _ ⟫ = false
+... | false | ⟪ u ⟫ | true  | ⟪ v ⟫ =
+  let q′ = subst² (λ φ ψ → ⟦ φ ⟧ᵇ → ⟦ ψ ⟧ᵇ) v u (q {a})
+  in ⊥.rec {A = false ＝ true} (q′ tt) i
+... | true  | ⟪ u ⟫ | false | ⟪ v ⟫ =
+  let p′ = subst² (λ φ ψ → ⟦ φ ⟧ᵇ → ⟦ ψ ⟧ᵇ) u v (p {a})
+  in ⊥.rec {A = true ＝ false} (p′ tt) i
+... | true  | ⟪ _ ⟫ | true  | ⟪ _ ⟫ = true
 
 -- conjunction
 

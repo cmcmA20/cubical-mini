@@ -21,6 +21,7 @@ record ∞-magma-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
   (M : ∞-Magma-on A) (M′ : ∞-Magma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
   where
+    no-eta-equality
     private
       module A = ∞-Magma-on M
       module B = ∞-Magma-on M′
@@ -78,6 +79,7 @@ module _ (n : HLevel) where
     {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
     (M : n-Magma-on A) (M′ : n-Magma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
     where
+      no-eta-equality
       private
         module A = n-Magma-on M
         module B = n-Magma-on M′

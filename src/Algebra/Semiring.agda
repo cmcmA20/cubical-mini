@@ -4,6 +4,8 @@ module Algebra.Semiring where
 open import Categories.Prelude hiding (_+_)
 
 open import Algebra.Monoid.Commutative public
+open import Algebra.Monoid.Category
+open import Algebra.Monoid.Commutative.Category
 
 private variable
   ℓ ℓ′ : Level
@@ -78,6 +80,7 @@ record Semiring-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
   (M : Semiring-on A) (M′ : Semiring-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
   where
+    no-eta-equality
     private
       module A = Semiring-on M
       module B = Semiring-on M′
@@ -102,6 +105,29 @@ instance
   H-Level-semiring-hom : ∀ {M : Semiring-on A} {M′ : Semiring-on B} {f}
                        → H-Level (suc n) (Semiring-hom M M′ f)
   H-Level-semiring-hom = hlevel-prop-instance semiring-hom-is-prop
+
+semiring-on→additive-comm-monoid-on : ∀[ Semiring-on {ℓ} →̇ CMonoid-on {ℓ} ]
+semiring-on→additive-comm-monoid-on S = to-comm-monoid-on go where
+  open Semiring-on S
+  go : make-comm-monoid _
+  go .make-comm-monoid.monoid-is-set = hlevel!
+  go .make-comm-monoid.id = nil
+  go .make-comm-monoid._⋆_ = _+_
+  go .make-comm-monoid.id-l = +-id-l
+  go .make-comm-monoid.id-r = +-id-r
+  go .make-comm-monoid.assoc = +-assoc
+  go .make-comm-monoid.comm = +-comm
+
+semiring-on→multiplicative-monoid-on : ∀[ Semiring-on {ℓ} →̇ Monoid-on {ℓ} ]
+semiring-on→multiplicative-monoid-on S = to-monoid-on go where
+  open Semiring-on S
+  go : make-monoid _
+  go .make-monoid.monoid-is-set = hlevel!
+  go .make-monoid.id = unit
+  go .make-monoid._⋆_ = _·_
+  go .make-monoid.id-l = ·-id-l
+  go .make-monoid.id-r = ·-id-r
+  go .make-monoid.assoc = ·-assoc
 
 
 record make-semiring {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

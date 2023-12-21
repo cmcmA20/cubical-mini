@@ -11,7 +11,7 @@ open import Structures.IdentitySystem.Base
 open import Data.Empty.Base as ⊥
 open import Data.Unit.Base as ⊤
 
-open import Data.Bool.Base
+open import Data.Bool.Base as Bool
 
 _==_ : Bool → Bool → Bool
 false == false = true
@@ -44,6 +44,11 @@ code-is-prop true  true  = hlevel!
 identity-system : is-identity-system Code code-refl
 identity-system = set-identity-system code-is-prop (decode _ _)
 
+private variable
+  ℓ : Level
+  b b₁ b₂ : Bool
+  n : HLevel
+
 bool-is-set : is-set Bool
 bool-is-set = identity-system→is-of-hlevel 1 identity-system code-is-prop
 
@@ -58,7 +63,11 @@ instance
   decomp-hlevel-bool : goal-decomposition (quote is-of-hlevel) Bool
   decomp-hlevel-bool = decomp (quote bool-is-of-hlevel) [ `level-minus 2 ]
 
-private variable b : Bool
+⟦-⟧ᵇ-inj : ⟦ b₁ ⟧ᵇ ≃ ⟦ b₂ ⟧ᵇ → b₁ ＝ b₂
+⟦-⟧ᵇ-inj {(false)} {(false)} _ = refl
+⟦-⟧ᵇ-inj {(false)} {(true)}  f = ⊥.rec ((f ₑ⁻¹) .fst tt)
+⟦-⟧ᵇ-inj {(true)}  {(false)} f = ⊥.rec (f .fst tt)
+⟦-⟧ᵇ-inj {(true)}  {(true)}  _ = refl
 
 ⟦-⟧ᵇ≃true : ⟦ b ⟧ᵇ ≃ (b ＝ true)
 ⟦-⟧ᵇ≃true = go ∙ₑ identity-system-gives-path identity-system where

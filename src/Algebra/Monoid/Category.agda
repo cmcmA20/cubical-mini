@@ -46,8 +46,8 @@ Forget-neutral .Functor.F₀ = second monoid-on→semigroup-on
 Forget-neutral .Functor.F₁ f .hom x = f # x
 Forget-neutral .Functor.F₁ f .preserves .n-Magma-hom.pres-⋆ =
   f .preserves .pres-⋆
-Forget-neutral .Functor.F-id = refl
-Forget-neutral .Functor.F-∘ _ _ = refl
+Forget-neutral .Functor.F-id = trivial!
+Forget-neutral .Functor.F-∘ _ _ = trivial!
 
 forget-neutral-is-faithful : is-faithful (Forget-neutral {ℓ})
 forget-neutral-is-faithful p =

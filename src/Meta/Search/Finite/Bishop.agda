@@ -19,7 +19,8 @@ open Structures.FinSet public
 open import Correspondences.Finite.Bishop
 open Correspondences.Finite.Bishop public
   using ( is-bishop-finite ; fin₁ ; cardinality ; enumeration₁
-        ; bishop-finite ; is-bishop-finite→omniscient₁
+        ; bishop-finite ; H-Level-is-bishop-finite
+        ; is-bishop-finite→omniscient₁
         ; lift-is-bishop-finite ; ×-is-bishop-finite ; Π-is-bishop-finite
         ; fun-is-bishop-finite ; Σ-is-bishop-finite ; is-bishop-finite-≃ )
 open import Correspondences.Finite.ManifestBishop

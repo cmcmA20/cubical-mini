@@ -11,6 +11,8 @@ open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
 open import Meta.Reflection.Base
 
+open import Correspondences.Erased
+
 open import Data.Bool.Base
 open import Data.List.Base as List
 open import Data.List.Instances.Append
@@ -191,3 +193,13 @@ private
   -- see agda/cubical issue #995
   foo-iso : Iso Foo ({A : Bar} → Baz A)
   unquoteDef foo-iso = define-record-iso foo-iso (quote Foo)
+
+
+  -- also works with erased record arguments
+  -- (but not erased fields, so you have to wrap them)
+  record Zooz (@0 n : ℕ) : Type where
+    field
+      foo : ℕ
+      bar : ∥ ℕ ∥ᴱ
+
+  unquoteDecl zooz-iso = declare-record-iso zooz-iso (quote Zooz)
