@@ -2,6 +2,8 @@
 module Structures.FinOrd where
 
 open import Foundations.Base
+open import Foundations.HLevel
+open import Foundations.Erased
 open import Foundations.Sigma
 open import Foundations.Univalence
 
@@ -34,15 +36,15 @@ instance
   Underlying-FinOrd {ℓ} .Underlying.ℓ-underlying = ℓ
   Underlying-FinOrd .⌞_⌟⁰ = carrier
 
-@0 FinOrd≃ℕ : FinOrd ℓ ≃ ℕ
-FinOrd≃ℕ {ℓ} =
-  FinOrd ℓ                                       ≃⟨ iso→equiv fin-ord-iso ⟩
-  Σ[ X ꞉ 𝒰 ℓ ] Manifest-bishop-finite X         ≃⟨ Σ-ap-snd (λ _ → iso→equiv manifest-bishop-finite-iso) ⟩
-  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (X ≃ Fin n)           ≃⟨ Σ-ap-snd (λ _ → Σ-ap-snd λ _ → inv-≃ ∙ₑ whisker-lₑ (lift-equiv ₑ⁻¹)) ⟩
-  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (Lift ℓ (Fin n) ≃ X)  ≃⟨ Σ-swap ⟩
-  Σ[ n ꞉ ℕ ] Σ[ X ꞉ 𝒰 ℓ ] (Lift ℓ (Fin n) ≃ X)  ≃⟨ Σ-contract-snd (λ _ → equiv-is-contr _) ⟩
-  ℕ                                              ≃∎
+FinOrd≃ᴱℕ : FinOrd ℓ ≃ᴱ ℕ
+FinOrd≃ᴱℕ {ℓ} =
+  FinOrd ℓ                                       ≃ᴱ⟨ ≃→≃ᴱ (iso→equiv fin-ord-iso) ⟩
+  Σ[ X ꞉ 𝒰 ℓ ] Manifest-bishop-finite X         ≃ᴱ⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → iso→equiv manifest-bishop-finite-iso)) ⟩
+  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (X ≃ Fin n)           ≃ᴱ⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → Σ-ap-snd λ _ → inv-≃ ∙ₑ whisker-lₑ (lift-equiv ₑ⁻¹))) ⟩
+  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (Lift ℓ (Fin n) ≃ X)  ≃ᴱ⟨ ≃→≃ᴱ Σ-swap ⟩
+  Σ[ n ꞉ ℕ ] Σ[ X ꞉ 𝒰 ℓ ] (Lift ℓ (Fin n) ≃ X)  ≃ᴱ⟨ Σ-contract-sndᴱ (λ n → equiv-is-contrᴱ _) ⟩
+  ℕ                                              ≃ᴱ∎
 
 instance
   @0 H-Level-FinOrd : ∀ {n} → H-Level (2 + n) (FinOrd ℓ)
-  H-Level-FinOrd = hlevel-basic-instance 2 (is-of-hlevel-≃ 2 FinOrd≃ℕ hlevel!)
+  H-Level-FinOrd = hlevel-basic-instance 2 (is-of-hlevel-≃ 2 (equivᴱ≃equiv # FinOrd≃ᴱℕ) hlevel!)

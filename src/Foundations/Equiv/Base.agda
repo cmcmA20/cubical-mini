@@ -18,13 +18,6 @@ private variable
   C : Type ℓ″
   f : A → B
 
-_≃ᴱ_ : (A : Type ℓ) (B : Type ℓ′) → Type _
-A ≃ᴱ B = Σ[ f ꞉ (A → B) ] is-equivᴱ f
-
-is-equivᴱ→inverse : {A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B} → is-equivᴱ f → (B → A)
-is-equivᴱ→inverse eqv y = eqv y .fst .fst
-
-
 _is-left-inverse-of_ : (B → A) → (A → B) → Type _
 g is-left-inverse-of f = Π[ x ꞉ _ ] (g (f x) ＝ x)
 retraction = _is-left-inverse-of_
@@ -113,6 +106,23 @@ is-equiv→zag {B} {f} eqv b =
 @0 erased≃id : Erased A ≃ A
 erased≃id .fst = erased
 erased≃id .snd .equiv-proof = strict-contr-fibres (λ a → erase a)
+
+_≃ᴱ_ : (A : Type ℓ) (B : Type ℓ′) → Type _
+A ≃ᴱ B = Σ[ f ꞉ (A → B) ] is-equivᴱ f
+
+is-equivᴱ→inverse : {A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B} → is-equivᴱ f → (B → A)
+is-equivᴱ→inverse eqv y = eqv y .fst .fst
+
+is-equivᴱ→counit
+  : {A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B}
+    (eqv : is-equivᴱ f) (y : B) → Erased (f (is-equivᴱ→inverse eqv y) ＝ y)
+is-equivᴱ→counit eqv y = eqv y .fst .snd
+
+is-equivᴱ→unit
+  : {@0 A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B}
+    (eqv : is-equivᴱ f) (@0 x : A) → Erased (is-equivᴱ→inverse eqv (f x) ＝ x)
+is-equivᴱ→unit {f} eqv x .erased i = eqv (f x) .snd .erased (x , erase refl) i .fst
+
 
 module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where
 
