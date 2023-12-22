@@ -4,8 +4,6 @@ module Data.Vec.Inductive.Operations.Computational where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Correspondences.Erased
-
 open import Data.Fin.Computational.Base
 open import Data.List.Base
 open import Data.List.Operations
@@ -30,11 +28,11 @@ replace : Fin n → A → Vec A n → Vec A n
 replace (mk-fin 0)             y (_ ∷ xs) = y ∷ xs
 replace (mk-fin (suc k) {(b)}) y (x ∷ xs) = x ∷ replace (mk-fin k {b}) y xs
 
-vec→list : Vec A n → Σ[ xs ꞉ List A ] ∥ length xs ＝ n ∥ᴱ
-vec→list [] = [] , ∣ refl ∣ᴱ
+vec→list : Vec A n → Σ[ xs ꞉ List A ] Erased (length xs ＝ n)
+vec→list [] = [] , erase refl
 vec→list (x ∷ xs) =
-  let xs′ , ∣ p ∣ᴱ = vec→list xs
-  in x ∷ xs′ , ∣ ap suc p ∣ᴱ
+  let xs′ , erase p = vec→list xs
+  in x ∷ xs′ , erase (ap suc p)
 
 list→vec : (xs : List A) → Σ[ len ꞉ ℕ ] Vec A len × (length xs ＝ len)
 list→vec [] = 0 , [] , refl

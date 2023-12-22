@@ -419,6 +419,13 @@ S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)
 is-central : {A : Type ℓ} (c : A) → Type _
 is-central {A} c = Π[ x ꞉ A ] (c ＝ x)
 
+is-of-hlevelᴱ : HLevel → Type ℓ → Type ℓ
+is-of-hlevelᴱ 0       A = is-contrᴱ A
+is-of-hlevelᴱ (suc h) A = is-of-hlevelᴱ h on-paths-of A
+
+is-propᴱ : Type ℓ → Type ℓ
+is-propᴱ = is-of-hlevelᴱ 1
+
 opaque
   is-of-hlevel : HLevel → Type ℓ → Type ℓ
   is-of-hlevel 0 A = Σ[ x ꞉ A ] is-central x

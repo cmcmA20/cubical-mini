@@ -6,8 +6,6 @@ open import Foundations.Equiv
 
 open import Meta.Record
 
-open import Correspondences.Erased
-
 import Data.Empty.Base as ⊥
 open import Data.Fin.Interface
 open import Data.Nat.Base
@@ -23,7 +21,7 @@ record Fin (@0 n : ℕ) : Type where
   constructor mk-fin
   field
     index     : ℕ
-    { bound } : ∥ index < n ∥ᴱ
+    { bound } : Erased (index < n)
 
 open Fin
 

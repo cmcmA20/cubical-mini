@@ -3,8 +3,6 @@ module Data.Dec.Base where
 
 open import Foundations.Base
 
-open import Correspondences.Erased
-
 open import Data.Bool.Base as Bool
   using (Bool; false; true; not; if_then_else_; ⟦_⟧ᵇ)
 open import Data.Empty.Base as ⊥
@@ -83,9 +81,9 @@ dmap : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
 dmap to fro dec .does  = dec .does
 dmap to fro dec .proof = Reflects′.dmap to fro (dec .proof)
 
-recover : Dec P → ∥ P ∥ᴱ → P
+recover : Dec P → Recomputable P
 recover (yes p) _  = p
-recover (no ¬p) ∣ 0p ∣ᴱ = ⊥.rec (¬p 0p)
+recover (no ¬p) (erase 0p) = ⊥.rec (¬p 0p)
 
 recover′ : Dec P → @irr P → P
 recover′ (yes p) _ = p

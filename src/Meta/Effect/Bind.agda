@@ -23,3 +23,8 @@ record Bind (M : Effect) : Typeω where
   _=<<_ f x = x >>= f
 
 open Bind ⦃ ... ⦄ public
+
+
+instance
+  Bind-Erased : Bind (eff λ T → Erased T)
+  Bind-Erased ._>>=_ (erase x) mf .erased = mf x .erased

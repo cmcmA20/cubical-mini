@@ -3,6 +3,7 @@ module Meta.Search.HLevel where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.Erased
 open import Foundations.HLevel public
 open import Foundations.Sigma
 
@@ -15,8 +16,6 @@ open import Structures.n-Type
 open Structures.n-Type public
   using ( n-Type; el; Underlying-n-Type
         ; Prop ; Set ; Grpd )
-
-open import Correspondences.Erased
 
 open import Data.Empty.Base
 open import Data.Bool.Base
@@ -103,12 +102,8 @@ instance
   decomp-hlevel-impl-pi : goal-decomposition (quote is-of-hlevel) (∀ {a} → B a)
   decomp-hlevel-impl-pi = decomp (quote Π-is-of-hlevel-implicit) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
 
-  decomp-hlevel-erased-prop : goal-decomposition (quote is-of-hlevel) ∥ A ∥ᴱ
-  decomp-hlevel-erased-prop = decomp (quote ∥-∥ᴱ-is-prop)
-    [ `search (quote is-of-hlevel) ]
-
-  decomp-hlevel-erased : goal-decomposition (quote is-of-hlevel) ∥ A ∥ᴱ
-  decomp-hlevel-erased = decomp (quote ∥-∥ᴱ-is-of-hlevel)
+  decomp-hlevel-erased : goal-decomposition (quote is-of-hlevel) (Erased A)
+  decomp-hlevel-erased = decomp (quote erased-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) ]
 
   decomp-hlevel-equiv-right : {B : Type ℓb} → goal-decomposition (quote is-of-hlevel) (A ≃ B)
@@ -191,7 +186,7 @@ private
     @0 _ : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
     _ = hlevel!
 
-    @0 _ : is-of-hlevel 3 ∥ ⌞ A ⌟ ∥ᴱ
+    _ : is-of-hlevel 3 (Erased ⌞ A ⌟)
     _ = hlevel!
 
     _ : ∀ n (x : n-Type ℓ n) → is-of-hlevel (2 + n) ⌞ x ⌟

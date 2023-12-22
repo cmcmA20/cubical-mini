@@ -42,3 +42,8 @@ module _ {M N : Effect} (let module M = Effect M; module N = Effect N)
 
   _<<&>>_ : M.₀ (N.₀ A) → (A → B) → M.₀ (N.₀ B)
   x <<&>> f = f <<$>> x
+
+
+instance
+  Map-Erased : Map (eff λ T → Erased T)
+  Map-Erased .map f (erase x) .erased = f x

@@ -93,3 +93,34 @@ caseⁱ x of f = f x (λ i → x)
 caseⁱ_return_of_ : (x : A) (P : A → Type ℓ′) → ((y : A) → x ＝ y → P y) → P x
 caseⁱ x return P of f = f x (λ i → x)
 {-# INLINE caseⁱ_return_of_ #-}
+
+
+congPᴱ
+  : {@0 A : Type ℓ} {@0 x y : A} {@0 p : x ＝ y}
+    {@0 B : A → Type ℓ′} {@0 b₁ : B x} {@0 b₂ : B y}
+  → Erased ＜ b₁ ／ (λ i → B (p i)) ＼ b₂ ＞
+  → ＜ erase b₁ ／ (λ i → Erased (B (p i))) ＼ erase b₂ ＞
+congPᴱ q i = erase (q .erased i)
+
+congᴱ
+  : {@0 A : Type ℓ} {@0 x y : A}
+  → Erased (x ＝ y)
+  → erase x ＝ erase y
+congᴱ p i = erase (p .erased i)
+
+uncongPᴱ
+  : {@0 A : Type ℓ} {@0 x y : A} {@0 p : x ＝ y}
+    {@0 B : A → Type ℓ′} {@0 b₁ : B x} {@0 b₂ : B y}
+  → ＜ erase b₁ ／ (λ i → Erased (B (p i))) ＼ erase b₂ ＞
+  → Erased ＜ b₁ ／ (λ i → B (p i)) ＼ b₂ ＞
+uncongPᴱ p .erased i = p i .erased
+
+uncongᴱ : {@0 A : Type ℓ} {@0 x y : A}
+        → erase x ＝ erase y
+        → Erased (x ＝ y)
+uncongᴱ p .erased i = p i .erased
+
+substᴱ
+  : {@0 A : Type ℓ} (B : @0 A → Type ℓ′)
+    {@0 x y : A} (p : Erased (x ＝ y)) → B x → B y
+substᴱ B p b = transport (λ i → B (p .erased i)) b

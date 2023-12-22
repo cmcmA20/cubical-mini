@@ -11,8 +11,6 @@ open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
 open import Meta.Reflection.Base
 
-open import Correspondences.Erased
-
 open import Data.Bool.Base
 open import Data.List.Base as List
 open import Data.List.Instances.Append
@@ -200,6 +198,6 @@ private
   record Zooz (@0 n : ℕ) : Type where
     field
       foo : ℕ
-      bar : ∥ ℕ ∥ᴱ
+      bar : Erased ℕ
 
   unquoteDecl zooz-iso = declare-record-iso zooz-iso (quote Zooz)

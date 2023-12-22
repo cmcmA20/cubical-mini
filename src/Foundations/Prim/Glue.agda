@@ -27,7 +27,7 @@ module _ where
           ; prim^unglueU
           ; primFaceForall )
   open import Agda.Builtin.Cubical.HCompU public
-    using ( transpProof )
+    renaming ( transpProof to transp-proof-builtin )
 
 private variable ℓ ℓ′ : Level
 

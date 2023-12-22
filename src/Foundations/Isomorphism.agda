@@ -11,6 +11,11 @@ private variable
   C : Type ℓ″
   f : A → B
 
+is-isoᴱ : (f : A → B) → Type _
+is-isoᴱ {A} {B} f = Σ[ inv ꞉ (B → A) ]
+  ( Erased (inv is-right-inverse-of f)
+  × Erased (inv is-left-inverse-of  f) )
+
 record is-iso (f : A → B) : Type (level-of-type A ⊔ level-of-type B) where
   no-eta-equality
   constructor iso
@@ -67,59 +72,60 @@ module _ {f : A → B} (r : is-iso f) where
                          ; rinv to u
                          ; linv to v
                          )
-  private module _ (y : B) (x₀ x₁ : A) (p₀ : f x₀ ＝ y) (p₁ : f x₁ ＝ y) where
+  module _ (y : B) (x₀ x₁ : A) (p₀ : f x₀ ＝ y) (p₁ : f x₁ ＝ y) where
 
-    π₀ : g y ＝ x₀
-    π₀ i = hcomp (∂ i) λ where
-      k (i = i0) → g y
-      k (i = i1) → v x₀ k
-      k (k = i0) → g (p₀ (~ i))
+    private
+      π₀ : g y ＝ x₀
+      π₀ i = hcomp (∂ i) λ where
+        k (i = i0) → g y
+        k (i = i1) → v x₀ k
+        k (k = i0) → g (p₀ (~ i))
 
-    θ₀ : Square (ap g (sym p₀)) refl π₀ (v x₀)
-    θ₀ i j = hfill (∂ i) j λ where
-      k (i = i0) → g y
-      k (i = i1) → v x₀ k
-      k (k = i0) → g (p₀ (~ i))
+      θ₀ : Square (ap g (sym p₀)) refl π₀ (v x₀)
+      θ₀ i j = hfill (∂ i) j λ where
+        k (i = i0) → g y
+        k (i = i1) → v x₀ k
+        k (k = i0) → g (p₀ (~ i))
 
-    π₁ : g y ＝ x₁
-    π₁ i = hcomp (∂ i) λ where
-      j (i = i0) → g y
-      j (i = i1) → v x₁ j
-      j (j = i0) → g (p₁ (~ i))
+      π₁ : g y ＝ x₁
+      π₁ i = hcomp (∂ i) λ where
+        j (i = i0) → g y
+        j (i = i1) → v x₁ j
+        j (j = i0) → g (p₁ (~ i))
 
-    θ₁ : Square (ap g (sym p₁)) refl π₁ (v x₁)
-    θ₁ i j = hfill (∂ i) j λ where
-      j (i = i0) → g y
-      j (i = i1) → v x₁ j
-      j (j = i0) → g (p₁ (~ i))
+      θ₁ : Square (ap g (sym p₁)) refl π₁ (v x₁)
+      θ₁ i j = hfill (∂ i) j λ where
+        j (i = i0) → g y
+        j (i = i1) → v x₁ j
+        j (j = i0) → g (p₁ (~ i))
 
-    π : x₀ ＝ x₁
-    π i = hcomp (∂ i) λ where
-      j (j = i0) → g y
-      j (i = i0) → π₀ j
-      j (i = i1) → π₁ j
+      π : x₀ ＝ x₁
+      π i = hcomp (∂ i) λ where
+        j (j = i0) → g y
+        j (i = i0) → π₀ j
+        j (i = i1) → π₁ j
 
-    θ : Square refl π₀ π π₁
-    θ i j = hfill (∂ i) j λ where
-      k (i = i1) → π₁ k
-      k (i = i0) → π₀ k
-      k (k = i0) → g y
+      θ : Square refl π₀ π π₁
+      θ i j = hfill (∂ i) j λ where
+        k (i = i1) → π₁ k
+        k (i = i0) → π₀ k
+        k (k = i0) → g y
 
-    ι : Square (ap (g ∘ f) π) (ap g p₀) refl (ap g p₁)
-    ι i j = hcomp (∂ i ∨ ∂ j) λ where
-      k (k = i0) → θ i (~ j)
-      k (i = i0) → θ₀ (~ j) (~ k)
-      k (i = i1) → θ₁ (~ j) (~ k)
-      k (j = i0) → v (π i) (~ k)
-      k (j = i1) → g y
+      ι : Square (ap (g ∘ f) π) (ap g p₀) refl (ap g p₁)
+      ι i j = hcomp (∂ i ∨ ∂ j) λ where
+        k (k = i0) → θ i (~ j)
+        k (i = i0) → θ₀ (~ j) (~ k)
+        k (i = i1) → θ₁ (~ j) (~ k)
+        k (j = i0) → v (π i) (~ k)
+        k (j = i1) → g y
 
-    sq₁ : Square (ap f π) p₀ refl p₁
-    sq₁ i j = hcomp (∂ i ∨ ∂ j) λ where
-       k (i = i0) → u (p₀ j) k
-       k (i = i1) → u (p₁ j) k
-       k (j = i0) → u (f (π i)) k
-       k (j = i1) → u y k
-       k (k = i0) → f (ι i j)
+      sq₁ : Square (ap f π) p₀ refl p₁
+      sq₁ i j = hcomp (∂ i ∨ ∂ j) λ where
+         k (i = i0) → u (p₀ j) k
+         k (i = i1) → u (p₁ j) k
+         k (j = i0) → u (f (π i)) k
+         k (j = i1) → u y k
+         k (k = i0) → f (ι i j)
 
     is-iso→fibre-is-prop : (x₀ , p₀) ＝ (x₁ , p₁)
     is-iso→fibre-is-prop i .fst = π i

@@ -1,6 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Sigma.Base where
 
+open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 
 open import Agda.Builtin.Sigma public
@@ -80,3 +81,7 @@ curry² f x y = f (x , y)
 curry³ : (f : (p : Σ[ a ꞉ A ] Σ[ b ꞉ B a ] C a b) → D (p .fst) (p .snd .fst) (p .snd .snd))
          (x : A) (y : B x) (z : C x y) → D x y z
 curry³ f x y z = f (x , y , z)
+
+
+fibreᴱ : {A  : Type ℓᵃ} {@0 B : Type ℓᵇ} (f : A → B) (@0 y : B) → Type _
+fibreᴱ {A} f y = Σ[ x ꞉ A ] Erased (f x ＝ y)

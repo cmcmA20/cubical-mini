@@ -12,8 +12,6 @@ open import Meta.Marker
 open import Meta.Search.HLevel
 open import Meta.Regularity
 
-open import Correspondences.Erased
-
 open import Data.Empty.Base as ⊥
   using (⊥)
 open import Data.Nat.Base
