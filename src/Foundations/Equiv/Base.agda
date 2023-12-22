@@ -21,6 +21,10 @@ private variable
 _≃ᴱ_ : (A : Type ℓ) (B : Type ℓ′) → Type _
 A ≃ᴱ B = Σ[ f ꞉ (A → B) ] is-equivᴱ f
 
+is-equivᴱ→inverse : {A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B} → is-equivᴱ f → (B → A)
+is-equivᴱ→inverse eqv y = eqv y .fst .fst
+
+
 _is-left-inverse-of_ : (B → A) → (A → B) → Type _
 g is-left-inverse-of f = Π[ x ꞉ _ ] (g (f x) ＝ x)
 retraction = _is-left-inverse-of_

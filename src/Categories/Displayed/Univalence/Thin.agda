@@ -32,7 +32,7 @@ record
 
     id-hom-unique
       : ∀ {x} {s t : S x}
-      → ⌞ is-hom idₜ s t ⌟ → ⌞ is-hom idₜ t s ⌟ → s ＝ t
+      → ⌞ is-hom idₜ s t ⌟ → ⌞ is-hom idₜ t s ⌟ → Erased (s ＝ t)
 
 open Thin-structure public
 
@@ -107,17 +107,17 @@ record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin
     module So = Precategory (Structured-objects spec)
     module Som = Categories.Morphism (Structured-objects spec)
 
-  @0 ∫-Path
+  ∫-Path
     : ∀ {a b : So.Ob}
     → (f : So.Hom a b)
     → is-equiv (f #_)
-    → a ＝ b
-  ∫-Path {a} {b} f eqv = Σ-pathP (n-ua (f .hom , eqv)) $
+    → Erased (a ＝ b)
+  ∫-Path {a} {b} f eqv = erase (Σ-pathP (n-ua (f .hom , eqv)) $
     Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e .fst) (a .snd) st ⌟ → PathP (λ i → S (ua e i)) (a .snd) st)
       (λ st pres → to-pathP (ap (λ e → subst S e (a .snd)) ua-idₑ
                 ∙∙ transport-refl _
-                ∙∙ spec .id-hom-unique pres (invert-id-hom pres)))
-      (f .hom , eqv) (b .snd) (f .preserves)
+                ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
+      (f .hom , eqv) (b .snd) (f .preserves))
 
 open is-equational public
 
@@ -130,5 +130,5 @@ Full-substructure _ R S embed Sst .is-hom f x y =
   Sst .is-hom f (embed _ .fst x) (embed _ .fst y)
 Full-substructure _ R S embed Sst .id-is-hom = Sst .id-is-hom
 Full-substructure _ R S embed Sst .∘-is-hom = Sst .∘-is-hom
-Full-substructure _ R S embed Sst .id-hom-unique α β =
-  is-embedding→injective (embed _ .snd) (Sst .id-hom-unique α β)
+Full-substructure _ R S embed Sst .id-hom-unique α β .erased =
+  is-embedding→injective (embed _ .snd) (Sst .id-hom-unique α β .erased)
