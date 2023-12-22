@@ -7,8 +7,6 @@ open import Foundations.Equiv
 open import Meta.Effect.Bind
 open import Meta.Search.HLevel
 
-open import Correspondences.Erased
-
 open import Data.Empty.Base
 open import Data.Nat.Order.Computational
 open import Data.Nat.Path
@@ -28,7 +26,7 @@ open Fin
 
 fin-is-set : is-set (Fin n)
 fin-is-set {n} = is-of-hlevel-≃ 2 (iso→equiv fin-iso)
-  (Σ-is-of-hlevel 2 hlevel! λ z → is-prop→is-set (∥-∥ᴱ-is-prop (≤-is-prop {suc z} {n})))
+  (Σ-is-of-hlevel 2 hlevel! λ z → is-prop→is-set (erased-is-prop (≤-is-prop {suc z} {n})))
 
 strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
 strengthen {0}     (mk-fin k {(b)})       = inl (mk-fin k {b})
@@ -36,7 +34,7 @@ strengthen {suc n} (mk-fin 0)             = inl fzero
 strengthen {suc n} (mk-fin (suc k) {(b)}) = ⊎.dmap fsuc fsuc (strengthen (mk-fin k {b}))
 
 inject : m ≤ n → Fin m → Fin n
-inject {m} p (mk-fin k {∣ q ∣ᴱ}) = mk-fin k {∣ ≤-trans {suc k} {m} q p ∣ᴱ}
+inject {m} p (mk-fin k {erase q}) = mk-fin k {erase (≤-trans {suc k} {m} q p)}
 
 fzero≠fsuc : {k : Fin m} → fzero ≠ fsuc k
 fzero≠fsuc = suc≠zero ∘ sym ∘ ap index

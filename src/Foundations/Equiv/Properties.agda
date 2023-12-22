@@ -156,3 +156,5 @@ module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
 lift-equiv : Lift ℓ′ A ≃ A
 lift-equiv .fst = lower
 lift-equiv .snd .equiv-proof = strict-contr-fibres lift
+
+module @0 erased≃id {ℓ} {A} = Equiv (erased≃id {ℓ} {A})

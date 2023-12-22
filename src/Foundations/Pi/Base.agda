@@ -1,7 +1,9 @@
 {-# OPTIONS --safe #-}
 module Foundations.Pi.Base where
 
+open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
+open import Foundations.Sigma.Base
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level
@@ -105,3 +107,10 @@ module _ where
   case_of_ : (x : A) (f : (a : A) → B a) → B x
   case x of f = f x
   {-# INLINE case_of_ #-}
+
+
+is-contrᴱ : ∀ {ℓ} → Type ℓ → Type ℓ
+is-contrᴱ A = Σ[ x ꞉ A ] Erased (Π[ y ꞉ A ] (x ＝ y))
+
+is-equivᴱ : {A : Type ℓ} {B : Type ℓ′} (f : A → B) → Type _
+is-equivᴱ {B} f = Π[ b ꞉ B ] is-contrᴱ (fibreᴱ f b)

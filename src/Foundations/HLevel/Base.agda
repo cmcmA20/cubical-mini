@@ -255,3 +255,13 @@ opaque
 instance
   H-Level-is-of-hlevel : H-Level (suc h) (is-of-hlevel h₁ A)
   H-Level-is-of-hlevel = hlevel-prop-instance (is-of-hlevel-is-prop _)
+
+opaque
+  unfolding is-of-hlevel
+
+  erased-is-contr : {@0 A : Type ℓ} → @0 is-contr A → is-contr (Erased A)
+  erased-is-contr (centre , paths) = erase centre , λ where
+    (erase x) → congᴱ $ erase (paths x)
+
+  erased-is-prop : {@0 A : Type ℓ} → @0 is-prop A → is-prop (Erased A)
+  erased-is-prop pr (erase x) (erase y) = congᴱ $ erase (pr x y)

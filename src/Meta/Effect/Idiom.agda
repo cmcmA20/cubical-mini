@@ -40,3 +40,8 @@ module _ {M : Effect} (let module M = Effect M) ⦃ app : Idiom M ⦄ where
 
   map³ : (A → B → C → D) → M.₀ A → M.₀ B → M.₀ C → M.₀ D
   map³ f x y z = ⦇ f x y z ⦈
+
+instance
+  Idiom-Erased : Idiom (eff λ T → Erased T)
+  Idiom-Erased .pure x = erase x
+  Idiom-Erased ._<*>_ (erase f) (erase x) .erased = f x

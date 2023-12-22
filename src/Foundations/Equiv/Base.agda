@@ -18,6 +18,9 @@ private variable
   C : Type ℓ″
   f : A → B
 
+_≃ᴱ_ : (A : Type ℓ) (B : Type ℓ′) → Type _
+A ≃ᴱ B = Σ[ f ꞉ (A → B) ] is-equivᴱ f
+
 _is-left-inverse-of_ : (B → A) → (A → B) → Type _
 g is-left-inverse-of f = Π[ x ꞉ _ ] (g (f x) ＝ x)
 retraction = _is-left-inverse-of_
@@ -102,6 +105,10 @@ is-equiv→zag {B} {f} eqv b =
       k (j = i0) → g (is-equiv→zig eqv a (~ i) (~ k))
       k (j = i1) → η a (i ∧ ~ k)
       k (k = i0) → η a (i ∧ j)
+
+@0 erased≃id : Erased A ≃ A
+erased≃id .fst = erased
+erased≃id .snd .equiv-proof = strict-contr-fibres (λ a → erase a)
 
 module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where
 
