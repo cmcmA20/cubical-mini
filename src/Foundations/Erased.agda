@@ -8,11 +8,12 @@ open import Foundations.Pi
 open import Foundations.Sigma
 
 private variable
-  ℓᵃ ℓᵇ : Level
-  A : Type ℓᵃ
-  B : Type ℓᵇ
+  ℓᵃ ℓᵇ ℓᶜ : Level
+  @0 A : Type ℓᵃ
+  @0 B : Type ℓᵇ
+  @0 C : Type ℓᶜ
 
-@0 fibreᴱ≃fibre : {f : A → B} {y : B} → fibreᴱ f y ≃ fibre f y
+@0 fibreᴱ≃fibre : {@0 f : A → B} {@0 y : B} → fibreᴱ f y ≃ fibre f y
 fibreᴱ≃fibre = Σ-ap-snd λ _ → erased≃id
 
 opaque
@@ -45,7 +46,7 @@ opaque
 @0 equivᴱ≃equiv : (A ≃ᴱ B) ≃ (A ≃ B)
 equivᴱ≃equiv = Σ-ap-snd λ _ → is-equivᴱ≃is-equiv
 
-@0 is-isoᴱ≃is-iso : {f : A → B} → is-isoᴱ f ≃ is-iso f
+@0 is-isoᴱ≃is-iso : {@0 f : A → B} → is-isoᴱ f ≃ is-iso f
 is-isoᴱ≃is-iso = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ₑ iso→equiv λ where
   .fst → iso $³_
   .snd .is-iso.inv isi → is-iso.inv isi , is-iso.rinv isi , is-iso.linv isi
@@ -54,7 +55,7 @@ is-isoᴱ≃is-iso = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ₑ i
   .snd .is-iso.rinv isi _ .is-iso.linv x → isi .is-iso.linv x
   .snd .is-iso.linv x _ → x
 
-is-isoᴱ→is-equivᴱ : {f : A → B} → is-isoᴱ f → is-equivᴱ f
+is-isoᴱ→is-equivᴱ : {@0 f : A → B} → is-isoᴱ f → is-equivᴱ f
 is-isoᴱ→is-equivᴱ {f} (inv , erase ri , erase li) y = (inv y , erase (eqv y .fst .snd)) , erase go where
   @0 eqv : _
   eqv = is-iso→is-equiv (iso inv ri li) .equiv-proof
@@ -76,3 +77,23 @@ opaque
   erased-is-of-hlevel 1 = erased-is-prop
   erased-is-of-hlevel (suc (suc n)) hl (erase x) (erase y) = is-of-hlevel-≃ (suc n)
     erased-path.inverse (erased-is-of-hlevel (suc n) (hl x y))
+
+-- awful notation
+infixr 30 _∙ᴱₑ_
+_∙ᴱₑ_ : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ B → B ≃ᴱ C → A ≃ᴱ C
+(f , fe) ∙ᴱₑ (g , ge) = g ∘ f , e where
+  fi = is-equivᴱ→is-isoᴱ fe
+  f⁻¹ = fi .fst
+
+  gi = is-equivᴱ→is-isoᴱ ge
+  g⁻¹ = gi .fst
+
+  opaque
+    @0 right : (f⁻¹ ∘ g⁻¹) is-right-inverse-of (g ∘ f)
+    right _ = ap g (fi .snd .fst .erased _) ∙ gi .snd .fst .erased _
+
+    @0 left : (f⁻¹ ∘ g⁻¹) is-left-inverse-of (g ∘ f)
+    left _ = ap f⁻¹ (gi .snd .snd .erased _) ∙ fi .snd .snd .erased _
+
+  e : is-equivᴱ (g ∘′ f)
+  e = is-isoᴱ→is-equivᴱ $ (f⁻¹ ∘ g⁻¹) , erase right , erase left

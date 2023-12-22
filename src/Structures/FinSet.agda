@@ -2,6 +2,7 @@
 module Structures.FinSet where
 
 open import Foundations.Base
+open import Foundations.Erased
 open import Foundations.Sigma
 open import Foundations.Univalence
 
@@ -82,16 +83,13 @@ private
     v ← Y .snd .snd
     pure $ sip fin-set-str-is-univalent (u ∙ₑ path→equiv (ap (λ n → Fin n) p) ∙ₑ v ₑ⁻¹ , p)
 
-  @0 ∥FinSet′∥₂≃ℕ : ∥ FinSet′ ℓ ∥₂ ≃ ℕ
-  ∥FinSet′∥₂≃ℕ = iso→equiv $ to , iso from (λ _ → refl) li where
-    to : _
-    to = ∥-∥₂.rec! (fst ∘ snd)
+  ∥FinSet′∥₂≃ᴱℕ : ∥ FinSet′ ℓ ∥₂ ≃ᴱ ℕ
+  ∥FinSet′∥₂≃ᴱℕ = (∥-∥₂.rec! (fst ∘ snd)) , is-isoᴱ→is-equivᴱ
+    ( (λ n → pure $ Lift _ (Fin n) , n , pure lift-equiv)
+    , erase (λ _ → refl)
+    , erase (∥-∥₂.elim! (λ X → ∥-∥₂-path.from (fin-set′-ext refl))) )
 
-    from : _
-    from n = ∣ Lift _ (Fin n) , n , ∣ lift-equiv ∣₁ ∣₂
-
-    li : from is-left-inverse-of to
-    li = ∥-∥₂.elim! λ _ → ∥-∥₂-path.from (fin-set′-ext refl)
-
-@0 ∥FinSet∥₂≃ℕ : ∥ FinSet ℓ ∥₂ ≃ ℕ
-∥FinSet∥₂≃ℕ = apₑ ∥_∥₂ (iso→equiv fin-set-iso ∙ₑ Σ-ap-snd λ X → iso→equiv is-bishop-finite-iso) ∙ₑ ∥FinSet′∥₂≃ℕ
+∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
+∥FinSet∥₂≃ᴱℕ =
+      ∥-∥₂-≃ᴱ (iso→equiv fin-set-iso ∙ₑ Σ-ap-snd λ _ → iso→equiv is-bishop-finite-iso)
+  ∙ᴱₑ ∥FinSet′∥₂≃ᴱℕ

@@ -19,7 +19,7 @@ Monoid-structure ℓ .∘-is-hom f g p q .pres-id =
   ap f (q .pres-id) ∙ p .pres-id
 Monoid-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =
   ap f (q .pres-⋆ _ _) ∙ p .pres-⋆ _ _
-Monoid-structure ℓ .id-hom-unique p q = Equiv.injective
+Monoid-structure ℓ .id-hom-unique p q = pure $ Equiv.injective
   (isoₜ→equiv monoid-on-iso) $ Σ-pathP (p .pres-id) $
     Σ-prop-pathP hlevel! (ext (p .pres-⋆))
 

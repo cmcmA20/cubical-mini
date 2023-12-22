@@ -16,6 +16,12 @@ is-isoᴱ {A} {B} f = Σ[ inv ꞉ (B → A) ]
   ( Erased (inv is-right-inverse-of f)
   × Erased (inv is-left-inverse-of  f) )
 
+is-equivᴱ→is-isoᴱ : is-equivᴱ f → is-isoᴱ f
+is-equivᴱ→is-isoᴱ {f} eqv = is-equivᴱ→inverse eqv
+                          , erase (λ y → eqv y .fst .snd .erased)
+                          , erase (λ x i → eqv (f x) .snd .erased (x , erase refl) i .fst)
+
+
 record is-iso (f : A → B) : Type (level-of-type A ⊔ level-of-type B) where
   no-eta-equality
   constructor iso

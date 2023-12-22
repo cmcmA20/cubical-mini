@@ -3,18 +3,22 @@ module Truncation.Set.Path where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.Erased
 
+open import Meta.Effect.Map
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
 open import Truncation.Propositional as ∥-∥₁
   using (∥_∥₁; ∣_∣₁)
 open import Truncation.Set.Base public
+open import Truncation.Set.Instances.Map
 open import Truncation.Set.Properties
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ : Level
   A : Type ℓ
+  B : Type ℓ′
   x y : A
 
 ∥-∥₂-is-of-hlevel : ∀ n → is-of-hlevel (2 + n) ∥ A ∥₂
@@ -40,3 +44,10 @@ instance
 
 module @0 ∥-∥₂-path {ℓ} {A : Type ℓ} {x} {y} =
   Equiv (∥-∥₂-path-equiv {A = A} {x = x} {y = y})
+
+∥-∥₂-≃ᴱ : A ≃ B → ∥ A ∥₂ ≃ᴱ ∥ B ∥₂
+∥-∥₂-≃ᴱ e = map e.to , is-isoᴱ→is-equivᴱ
+  ( map e.from
+  , erase (elim! λ x → ∥-∥₂-path.from ∣ e.ε _ ∣₁)
+  , erase (elim! λ x → ∥-∥₂-path.from ∣ e.η _ ∣₁))
+    where module e = Equiv e
