@@ -3,6 +3,7 @@ module Foundations.Erased where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.Univalence
 open import Foundations.HLevel
 open import Foundations.Pi
 open import Foundations.Sigma
@@ -18,6 +19,9 @@ fibreᴱ≃fibre = Σ-ap-snd λ _ → erased≃id
 
 opaque
   unfolding is-of-hlevel
+
+  is-contr→is-contrᴱ : is-contr A → is-contrᴱ A
+  is-contr→is-contrᴱ (c , p) = (c , erase p)
 
   @0 is-of-hlevelᴱ≃is-of-hlevel : {n : HLevel} → is-of-hlevelᴱ n A ≃ is-of-hlevel n A
   is-of-hlevelᴱ≃is-of-hlevel {n = 0} = Σ-ap-snd λ _ → erased≃id
@@ -97,3 +101,57 @@ _∙ᴱₑ_ : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ
 
   e : is-equivᴱ (g ∘′ f)
   e = is-isoᴱ→is-equivᴱ $ (f⁻¹ ∘ g⁻¹) , erase right , erase left
+
+
+fibre→fibreᴱ : {A : Type ℓᵃ} {B : Type ℓᵇ} {f : A → B} {y : B} → fibre f y → fibreᴱ f y
+fibre→fibreᴱ = second (λ x → erase x)
+
+is-equiv→is-equivᴱ : {A : Type ℓᵃ} {B : Type ℓᵇ} {f : A → B} → is-equiv f → is-equivᴱ f
+is-equiv→is-equivᴱ fe y .fst = fibre→fibreᴱ $ fe .equiv-proof y .fst
+is-equiv→is-equivᴱ fe y .snd .erased (c , erase p) i
+  = fe .equiv-proof y .snd (c , p) i .fst
+  , erase (fe .equiv-proof y .snd (c , p) i .snd)
+
+≃→≃ᴱ : {A : Type ℓᵃ} {B : Type ℓᵇ} → A ≃ B → A ≃ᴱ B
+≃→≃ᴱ = second is-equiv→is-equivᴱ
+
+_ᴱₑ⁻¹ : {A : Type ℓᵃ} {B : Type ℓᵇ} → A ≃ᴱ B → B ≃ᴱ A
+e ᴱₑ⁻¹ = is-equivᴱ→inverse (e .snd) , is-isoᴱ→is-equivᴱ
+  ( e .fst
+  , erase (λ x → is-equivᴱ→unit (e .snd) x .erased)
+  , erase λ x → is-equivᴱ→counit (e .snd) x .erased )
+infix 90 _ᴱₑ⁻¹
+
+infixr 1.5 _≃ᴱ⟨⟩_ _≃ᴱ⟨_⟩_ _≃ᴱ˘⟨_⟩_
+infix  1.9 _≃ᴱ∎
+
+_≃ᴱ⟨_⟩_ : (A : Type ℓᵃ) {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ B → B ≃ᴱ C → A ≃ᴱ C
+_ ≃ᴱ⟨ u ⟩ v = u ∙ᴱₑ v
+
+_≃ᴱ˘⟨_⟩_ : (A : Type ℓᵃ) {B : Type ℓᵇ} {C : Type ℓᶜ} → B ≃ᴱ A → B ≃ᴱ C → A ≃ᴱ C
+_ ≃ᴱ˘⟨ u ⟩ v = (u ᴱₑ⁻¹) ∙ᴱₑ v
+
+_≃ᴱ⟨⟩_ : (A : Type ℓᵃ) → A ≃ᴱ B → A ≃ᴱ B
+_ ≃ᴱ⟨⟩ e = e
+
+_≃ᴱ∎ : (A : Type ℓᵃ) → A ≃ᴱ A
+_ ≃ᴱ∎ = ≃→≃ᴱ idₑ
+
+Σ-contract-sndᴱ
+  : {A : Type ℓᵃ} {B : A → Type ℓᵇ}
+  → (∀ x → is-contrᴱ (B x)) → Σ A B ≃ᴱ A
+Σ-contract-sndᴱ B-contr = fst , is-isoᴱ→is-equivᴱ
+  ( (λ x → x , B-contr x .fst)
+  , erase (λ _ → refl)
+  , erase λ (a , b) i → a , B-contr a .snd .erased b i )
+
+opaque
+  unfolding is-of-hlevel ua
+  equiv-is-contrᴱ : (A : Type ℓᵃ) → is-contrᴱ (Σ[ B ꞉ Type ℓᵃ ] (A ≃ B))
+  equiv-is-contrᴱ A .fst = A , idₑ
+  equiv-is-contrᴱ A .snd .erased (B , A≃B) i = ua A≃B i , p i , q i where
+    p : ＜ id ／ (λ i → A → ua A≃B i) ＼ A≃B .fst ＞
+    p i x = outS (ua-glue A≃B i (λ { (i = i0) → x }) (inS (A≃B .fst x)))
+
+    q : ＜ id-is-equiv ／ (λ i → is-equiv (p i)) ＼ A≃B .snd ＞
+    q = is-prop→pathP (λ i → is-equiv-is-prop (p i)) _ _

@@ -126,8 +126,8 @@ module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
   open is-congruence congr
 
   Code : A → A / R → Prop ℓ
-  Code x = elim! (λ y → el! $ R x y) λ y z r →
-    n-ua $ prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r)
+  Code x = elim! (λ y → el! $ R x y) (λ y z r →
+    n-ua $ prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r) )
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
   encode x _ p = subst ⌞ Code x ⌟ p reflᶜ
