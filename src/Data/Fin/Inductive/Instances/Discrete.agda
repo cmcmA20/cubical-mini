@@ -6,7 +6,7 @@ open import Foundations.Base
 open import Meta.Search.Discrete
 
 open import Data.Dec.Base as Dec
-open import Data.Id
+open import Data.Id.Inductive
 open import Data.List.Base
 
 open import Data.Fin.Inductive.Base

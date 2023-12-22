@@ -4,7 +4,7 @@ module Data.Word.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Data.Id
+open import Data.Id.Inductive
 
 open import Data.Word.Base public
 

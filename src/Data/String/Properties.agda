@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Data.Char.Base
-open import Data.Id
+open import Data.Id.Inductive
 open import Data.List.Base
 
 open import Data.String.Base public

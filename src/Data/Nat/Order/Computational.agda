@@ -7,7 +7,7 @@ open import Foundations.HLevel
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base
 open import Data.Empty.Base as ⊥
-open import Data.Id.Base
+open import Data.Id.Inductive.Base
 open import Data.Sum.Base
 open import Data.Unit.Base
 

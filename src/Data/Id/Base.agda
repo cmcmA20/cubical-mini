@@ -2,55 +2,41 @@
 module Data.Id.Base where
 
 open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.HLevel
 
 open import Data.Dec.Base
 
-open import Agda.Builtin.Equality public
-  using ()
-  renaming ( _≡_  to _＝ⁱ_
-           ; refl to reflⁱ )
+-- Martin Escardo's equality
+_＝ˢ_ : ∀{ℓ} {A : 𝒰 ℓ} (x y : A) → 𝒰 ℓ
+x ＝ˢ y = (z : _) → z ＝ x → z ＝ y
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ : Level
-  A : Type ℓᵃ
-  B : Type ℓᵇ
+  A : 𝒰 ℓᵃ
+  B : 𝒰 ℓᵇ
   x y z : A
 
-apⁱ : (f : A → B) → x ＝ⁱ y → f x ＝ⁱ f y
-apⁱ f reflⁱ = reflⁱ
+reflˢ : x ＝ˢ x
+reflˢ _ = id
 
-symⁱ : x ＝ⁱ y → y ＝ⁱ x
-symⁱ reflⁱ = reflⁱ
+symˢ : x ＝ˢ y → y ＝ˢ x
+symˢ p _ q = q ∙ sym (p _ refl)
 
-_∙ⁱ_ : x ＝ⁱ y → y ＝ⁱ z → x ＝ⁱ z
-reflⁱ ∙ⁱ reflⁱ = reflⁱ
+infixr 30 _∙ˢ_
+_∙ˢ_ : x ＝ˢ y → y ＝ˢ z → x ＝ˢ z
+(p ∙ˢ q) _ = q _ ∘ p _
 
-transportⁱ : A ＝ⁱ B → A → B
-transportⁱ reflⁱ = id
+transportˢ : A ＝ˢ B → A → B
+transportˢ p = transport (p _ refl)
 
-substⁱ : (P : A → Type ℓ)
-       → x ＝ⁱ y → P x → P y
-substⁱ P = transportⁱ ∘ apⁱ P
+apˢ : (f : A → B) → x ＝ˢ y → f x ＝ˢ f y
+apˢ f p _ q = q ∙ ap f (p _ refl)
 
+substˢ : (P : A → Type ℓ)
+       → x ＝ˢ y → P x → P y
+substˢ P = transportˢ ∘ apˢ P
 
-is-of-hlevelⁱ : HLevel → Type ℓ → Type ℓ
-is-of-hlevelⁱ 0 A = Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
-is-of-hlevelⁱ 1 A = Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ⁱ y)
-is-of-hlevelⁱ (suc (suc h)) A = Π[ x ꞉ A ] Π[ y ꞉ A ] is-of-hlevelⁱ (suc h) (x ＝ⁱ y)
+_on-pathsˢ-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S on-pathsˢ-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ˢ a′)
 
-is-contrⁱ : Type ℓ → Type ℓ
-is-contrⁱ = is-of-hlevelⁱ 0
-
-is-propⁱ : Type ℓ → Type ℓ
-is-propⁱ = is-of-hlevelⁱ 1
-
-is-setⁱ : Type ℓ → Type ℓ
-is-setⁱ = is-of-hlevelⁱ 2
-
-_on-pathsⁱ-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
-S on-pathsⁱ-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ⁱ a′)
-
-is-discreteⁱ : Type ℓ → Type ℓ
-is-discreteⁱ = Dec on-pathsⁱ-of_
+is-discreteˢ : Type ℓ → Type ℓ
+is-discreteˢ = Dec on-pathsˢ-of_
