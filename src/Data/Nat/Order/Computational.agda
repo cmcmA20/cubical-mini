@@ -119,6 +119,6 @@ instance
   (substⁱ (Bool.elim _ _) q) where
     go : ∀ m n → ¬ (m < n) → ¬ (n < m) → m ＝ n
     go 0       0       _ _ = refl
-    go 0       (suc _) p _ = ⊥.rec (p tt)
-    go (suc _) 0       _ q = ⊥.rec (q tt)
+    go 0       (suc _) p _ = ⊥.rec $ᴱ p tt
+    go (suc _) 0       _ q = ⊥.rec $ᴱ q tt
     go (suc m) (suc n) p q = ap suc $ go m n p q

@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
+open import Meta.Underlying
 
 open import Structures.IdentitySystem.Base
 
@@ -65,8 +66,8 @@ instance
 
 ⟦-⟧ᵇ-inj : ⟦ b₁ ⟧ᵇ ≃ ⟦ b₂ ⟧ᵇ → b₁ ＝ b₂
 ⟦-⟧ᵇ-inj {(false)} {(false)} _ = refl
-⟦-⟧ᵇ-inj {(false)} {(true)}  f = ⊥.rec ((f ₑ⁻¹) .fst tt)
-⟦-⟧ᵇ-inj {(true)}  {(false)} f = ⊥.rec (f .fst tt)
+⟦-⟧ᵇ-inj {(false)} {(true)}  f = ⊥.rec $ᴱ (f ₑ⁻¹) # tt
+⟦-⟧ᵇ-inj {(true)}  {(false)} f = ⊥.rec $ᴱ f # tt
 ⟦-⟧ᵇ-inj {(true)}  {(true)}  _ = refl
 
 ⟦-⟧ᵇ≃true : ⟦ b ⟧ᵇ ≃ (b ＝ true)

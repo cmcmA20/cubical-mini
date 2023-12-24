@@ -8,6 +8,7 @@ open import Meta.Search.HLevel
 open import Meta.Variadic
 
 open import Correspondences.Decidable
+open import Correspondences.Wellfounded
 
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
@@ -103,8 +104,8 @@ opaque
   ≤-antisym : m ≤ n → n ≤ m → m ＝ n
   ≤-antisym (0      , p) (_      , _) = sym (+-zero-r _) ∙ p
   ≤-antisym (suc _  , _) (0      , q) = sym q ∙ +-zero-r _
-  ≤-antisym {m} (suc δ₁ , p) (suc δ₂ , q) = ⊥.rec (suc≠zero {m = δ₁ + suc δ₂} $ +-inj-l m _ _ $
-       +-assoc m _ _  ∙ subst (λ φ → φ + suc δ₂ ＝ m) (sym p) q ∙ nat!)
+  ≤-antisym {m} (suc δ₁ , p) (suc δ₂ , q) = ⊥.rec $ᴱ suc≠zero {m = δ₁ + suc δ₂} $ +-inj-l m _ _ $
+       +-assoc m _ _  ∙ subst (λ φ → φ + suc δ₂ ＝ m) (sym p) q ∙ nat!
 
   ≤-suc-r : m ≤ n → m ≤ suc n
   ≤-suc-r = bimap suc λ p → nat! ∙ ap suc p
@@ -185,11 +186,11 @@ opaque
 
 ≯→≤ : ∀[ _≯_ →̇ _≤_ ]
 ≯→≤ {0}     {_}     _ = z≤
-≯→≤ {suc _} {0}     f = ⊥.rec (f z<s)
+≯→≤ {suc _} {0}     f = ⊥.rec $ᴱ f z<s
 ≯→≤ {suc _} {suc _} f = s≤s $ ≯→≤ (f ∘ s<s)
 
 ≱→< : ∀[ _≱_ →̇ _<_ ]
-≱→< {_}     {0}     f = ⊥.rec (f z≤)
+≱→< {_}     {0}     f = ⊥.rec $ᴱ f z≤
 ≱→< {0}     {suc _} _ = z<s
 ≱→< {suc m} {suc n} f = s<s $ ≱→< (f ∘ s≤s)
 
@@ -234,3 +235,13 @@ module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
 ... | no  m≮n with <-dec n m
 ... | yes n<m = inr $ inl n<m
 ... | no  n≮m = inr $ inr $ ≤-antisym (≤≃≯.from n≮m) (≤≃≯.from m≮n)
+
+opaque
+  unfolding _<_
+  <-wf : Wf _<_
+  <-wf n = go n n ≤-refl where
+    go : (x y : ℕ) → .(y ≤ x) → Acc _<_ y
+    go x       0       _ = acc $ λ _ <z → ⊥.rec $ᴱ ≮z <z
+    go 0       (suc y) w = ⊥.rec′ (s≰z w)
+    go (suc x) (suc y) w = acc λ x′ w′ →
+      go x x′ (≤-trans (≤-peel w′) (≤-peel w))

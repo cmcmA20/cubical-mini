@@ -76,10 +76,14 @@ module _ where
     B : A → Type ℓᵇ
     C : (a : A) → B a → Type ℓᶜ
 
-  infixr -1 _$_
+  infixr -1 _$_ _$ᴱ_
   _$_ : (f : (a : A) → B a) (x : A) → B x
   f $ a = f a
   {-# INLINE _$_ #-}
+
+  _$ᴱ_ : (f : (@0 a : A) → B a) (@0 x : A) → B x
+  f $ᴱ a = f a
+  {-# INLINE _$ᴱ_ #-}
 
   infixl -1 _&_
   _&_ : (x : A) (f : (a : A) → B a) → B x

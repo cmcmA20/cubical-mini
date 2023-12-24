@@ -35,8 +35,8 @@ module Reflects′ where
 
   reflects-det : Reflects⁰ P a → Reflects⁰ P b → a ＝ b
   reflects-det (ofʸ  p) (ofʸ  p′) = refl
-  reflects-det (ofʸ  p) (ofⁿ ¬p′) = ⊥.rec (¬p′ p)
-  reflects-det (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec (¬p p′)
+  reflects-det (ofʸ  p) (ofⁿ ¬p′) = ⊥.rec $ᴱ ¬p′ p
+  reflects-det (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec $ᴱ ¬p p′
   reflects-det (ofⁿ ¬p) (ofⁿ ¬p′) = refl
 
   dmap : (P → Q) → (¬ P → ¬ Q) → Reflects⁰ P b → Reflects⁰ Q b

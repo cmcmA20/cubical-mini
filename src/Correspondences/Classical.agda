@@ -70,5 +70,5 @@ is-essentially-classical A = el! (Essentially-classical ⌞ A ⌟)
 --   DNE : Classically (¬¬ A → A)
 --   DNE = do
 --     inl a ← LEM
---       where inr a → pure $ λ ¬¬a → ⊥.rec (¬¬a a)
+--       where inr a → pure $ λ ¬¬a → ⊥.rec $ᴱ ¬¬a a
 --     pure λ _ → a

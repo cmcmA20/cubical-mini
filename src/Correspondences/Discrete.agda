@@ -2,6 +2,7 @@
 module Correspondences.Discrete where
 
 open import Foundations.Base
+open import Foundations.Equiv
 open import Foundations.HLevel.Base
 
 open import Meta.Variadic
@@ -12,6 +13,7 @@ open import Correspondences.Separated
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
+open import Data.Dec.Properties
 
 open import Functions.Embedding
 
@@ -82,3 +84,6 @@ discrete ⦃ d ⦄ = d
 lift-is-discrete : is-discrete A → is-discrete (Lift ℓ A)
 lift-is-discrete di .is-discrete-β (lift x) (lift y) =
   Dec.dmap (ap lift) (_∘ ap lower) (is-discrete-β di x y)
+
+is-discrete-≃ : (B ≃ A) → is-discrete A → is-discrete B
+is-discrete-≃ = is-discrete-embedding ∘ equiv→embedding

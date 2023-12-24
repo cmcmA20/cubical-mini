@@ -26,7 +26,7 @@ private variable
 dec→essentially-classical : Dec A → Essentially-classical A
 dec→essentially-classical = Dec.rec
   (λ a _ → a)
-  (λ ¬a f → ⊥.rec (f ¬a))
+  (λ ¬a f → ⊥.rec $ᴱ f ¬a)
 
 decide : ⦃ d : Dec A ⦄ → Dec A
 decide ⦃ d ⦄ = d
@@ -39,7 +39,7 @@ decide ⦃ d ⦄ = d
 
 fun-decision : Dec A → Dec B → Dec (A → B)
 fun-decision da db .does = not (da .does) or db .does
-fun-decision (no ¬a) db .proof = ofʸ $ λ a → ⊥.rec (¬a a)
+fun-decision (no ¬a) db .proof = ofʸ $ λ a → ⊥.rec $ᴱ ¬a a
 fun-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ (_$ a)
 fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 
