@@ -139,6 +139,17 @@ or-idem = witness!
 or-compl : ∀ x → x or not x ＝ true
 or-compl = witness!
 
+-- xor
+
+⊕-assoc : ∀ x y z → (x ⊕ y) ⊕ z ＝ x ⊕ y ⊕ z
+⊕-assoc = witness!
+
+and-distrib-⊕-l : ∀ x y z → x and (y ⊕ z) ＝ (x and y) ⊕ (x and z)
+and-distrib-⊕-l = witness!
+
+and-distrib-⊕-r : ∀ x y z → (x ⊕ y) and z ＝ (x and z) ⊕ (y and z)
+and-distrib-⊕-r = witness!
+
 -- Testing witness tactic, uncomment if needed
 -- private module _ where
 --   open import Truncation.Propositional.Base
