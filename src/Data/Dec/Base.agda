@@ -8,44 +8,15 @@ open import Data.Bool.Base as Bool
 open import Data.Empty.Base as ⊥
   using (⊥; ¬_)
 
+open import Data.Reflects.Base as Reflects
+  using (Reflects⁰; ofⁿ; ofʸ)
+  public
+
 private variable
   ℓ ℓ′ ℓ″ : Level
   P : Type ℓ
   Q : Type ℓ′
   a b : Bool
-
--- there is a class of types that can be reflected in booleans
-module Reflects′ where
-
-  data Reflects⁰ {ℓ} (P : Type ℓ) : Bool → Type ℓ where
-    ofʸ : ( p :   P) → Reflects⁰ P true
-    ofⁿ : (¬p : ¬ P) → Reflects⁰ P false
-
-  of : if b then P else ¬ P → Reflects⁰ P b
-  of {b = false} ¬p = ofⁿ ¬p
-  of {b = true }  p = ofʸ p
-
-  invert : Reflects⁰ P b → if b then P else ¬ P
-  invert (ofʸ  p) = p
-  invert (ofⁿ ¬p) = ¬p
-
-  ¬-reflects : Reflects⁰ P b → Reflects⁰ (¬ P) (not b)
-  ¬-reflects (ofʸ  p) = ofⁿ (_$ p)
-  ¬-reflects (ofⁿ ¬p) = ofʸ ¬p
-
-  reflects-det : Reflects⁰ P a → Reflects⁰ P b → a ＝ b
-  reflects-det (ofʸ  p) (ofʸ  p′) = refl
-  reflects-det (ofʸ  p) (ofⁿ ¬p′) = ⊥.rec $ᴱ ¬p′ p
-  reflects-det (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec $ᴱ ¬p p′
-  reflects-det (ofⁿ ¬p) (ofⁿ ¬p′) = refl
-
-  dmap : (P → Q) → (¬ P → ¬ Q) → Reflects⁰ P b → Reflects⁰ Q b
-  dmap to fro (ofʸ  p) = ofʸ (to p)
-  dmap to fro (ofⁿ ¬p) = ofⁿ (fro ¬p)
-
-open Reflects′ public
-  using (Reflects⁰; ofʸ; ofⁿ)
-
 
 -- witness of a predicate being (already) decided
 infix 2 _because_
@@ -79,7 +50,7 @@ elim² yy yn ny nn (yes p) (yes q) = yy p q
 
 dmap : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
 dmap to fro dec .does  = dec .does
-dmap to fro dec .proof = Reflects′.dmap to fro (dec .proof)
+dmap to fro dec .proof = Reflects.dmap to fro (dec .proof)
 
 recover : Dec P → Recomputable P
 recover (yes p) _  = p

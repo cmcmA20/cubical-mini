@@ -10,18 +10,23 @@ open import Meta.Search.Discrete
 open import Meta.Search.Exhaustible
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Finite.ManifestBishop
+open import Meta.Search.HLevel
 open import Meta.Search.Omniscient
 open import Meta.Underlying
 open import Meta.Witness
 
 open import Data.Empty.Base as ⊥
 open import Data.Bool.Base as Bool public
+open import Data.Bool.Path
 open import Data.Bool.Instances.Finite
 open import Data.Bool.Instances.Underlying
+open import Data.Sum.Base
+open import Data.Sum.Path
 
 private variable
   ℓᵃ : Level
   A : Type ℓᵃ
+  x y : Bool
 
 universal : (Bool → A)
           ≃ A × A
@@ -41,6 +46,50 @@ boolean-pred-ext f g p q i a with f a | recall f a | g a | recall g a
   let p′ = subst² (λ φ ψ → ⟦ φ ⟧ᵇ → ⟦ ψ ⟧ᵇ) u v (p {a})
   in ⊥.rec {A = true ＝ false} (p′ tt) i
 ... | true  | ⟪ _ ⟫ | true  | ⟪ _ ⟫ = true
+
+-- FIXME very slow hlevel inference
+or-true-≃
+  : (x or y ＝ true)
+  ≃ ( ((x ＝ true ) × (y ＝ false))
+  ⊎   ((x ＝ false) × (y ＝ true ))
+  ⊎   ((x ＝ true ) × (y ＝ true )) )
+or-true-≃ = prop-extₑ (helper _ _) go to from where
+  to : (x or y ＝ true) → (((x ＝ true) × (y ＝ false)) ⊎ ((x ＝ false) × (y ＝ true)) ⊎ ((x ＝ true) × (y ＝ true)))
+  to {(false)} {(false)} p = ⊥.rec $ᴱ false≠true p
+  to {(false)} {(true)}  _ = inr (inl (refl , refl))
+  to {(true)}  {(false)} _ = inl (refl , refl)
+  to {(true)}  {(true)}  _ = inr (inr (refl , refl))
+
+  from : (((x ＝ true) × (y ＝ false)) ⊎ ((x ＝ false) × (y ＝ true)) ⊎ ((x ＝ true) × (y ＝ true))) → (x or y ＝ true)
+  from {(false)} {(false)}   = [ fst , [ snd , snd ]ᵤ ]ᵤ
+  from {(false)} {(true)}  _ = refl
+  from {(true)}            _ = refl
+
+  helper = path-is-of-hlevel′ 1 bool-is-set
+
+  go : is-prop ((x ＝ true) × (y ＝ false) ⊎ (x ＝ false) × (y ＝ true) ⊎ (x ＝ true) × (y ＝ true))
+  go {x} {y} = disjoint-⊎-is-prop (×-is-of-hlevel 1 (helper _ _) (helper _ _))
+                                  (disjoint-⊎-is-prop (×-is-of-hlevel 1 (helper _ _) (helper _ _))
+                                                      (×-is-of-hlevel 1 (helper _ _) (helper _ _))
+                                     λ z → false≠true (sym (z .fst .fst) ∙ z .snd .fst))
+    λ z → [ (λ w → false≠true (sym (w .fst) ∙ z .fst .fst)) , (λ w → false≠true (sym (z .fst .snd) ∙ w .snd)) ]ᵤ (z .snd)
+
+module or-true-≃ {x} {y} = Equiv (or-true-≃ {x} {y})
+
+-- FIXME very slow hlevel inference
+and-true-≃ : (x and y ＝ true) ≃ ((x ＝ true) × (y ＝ true))
+and-true-≃ = prop-extₑ (go _ _) (×-is-of-hlevel 1 (go _ _) (go _ _)) to from where
+  go = path-is-of-hlevel′ 1 bool-is-set
+
+  to : x and y ＝ true → (x ＝ true) × (y ＝ true)
+  to {(false)} p = ⊥.rec $ᴱ false≠true p
+  to {(true)}  p = refl , p
+
+  from : (x ＝ true) × (y ＝ true) → x and y ＝ true
+  from {(false)} p = p .fst
+  from {(true)}  p = p .snd
+
+module and-true-≃ {x} {y} = Equiv (and-true-≃ {x} {y})
 
 -- conjunction
 

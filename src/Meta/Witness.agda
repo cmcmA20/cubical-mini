@@ -11,6 +11,7 @@ open import Meta.Search.Decidable
 open import Data.Dec.Base
 open import Data.List.Base
 open import Data.List.Instances.Idiom
+open import Data.Reflects.Base
 
 witness-macro : Term → TC ⊤
 witness-macro (lam _ _) = commitTC -- Agda's too smart about unit type
@@ -24,6 +25,6 @@ witness-macro hole = do
   decide-tactic-worker candidate
   let prf  = def (quote proof) (candidate v∷ [])
       args = varg prf ∷ reverse-fast ((λ n → varg (var n [])) <$> supp)
-  unify hole (def (quote Reflects′.invert) args)
+  unify hole (def (quote invert) args)
 
 macro witness! = witness-macro

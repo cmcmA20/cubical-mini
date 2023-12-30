@@ -115,8 +115,8 @@ instance
 ... | false with n <ᵇ m in q
 ... | true  = inr $ inl tt
 ... | false = inr $ inr $ go m n
-  (substⁱ (Bool.elim _ _) p)
-  (substⁱ (Bool.elim _ _) q) where
+  (substⁱ ⟦_⟧ᵇ p)
+  (substⁱ ⟦_⟧ᵇ q) where
     go : ∀ m n → ¬ (m < n) → ¬ (n < m) → m ＝ n
     go 0       0       _ _ = refl
     go 0       (suc _) p _ = ⊥.rec $ᴱ p tt

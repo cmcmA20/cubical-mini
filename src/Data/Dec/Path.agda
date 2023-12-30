@@ -40,7 +40,7 @@ dec-is-of-hlevel 0 = dec-contr
 dec-is-of-hlevel 1 A-hl =
   is-of-hlevel-≃ 1 dec-as-sum (disjoint-⊎-is-prop hlevel! A-hl (λ f → f .fst (f .snd)))
 dec-is-of-hlevel (suc (suc n)) A-hl =
-  is-of-hlevel-≃ (suc (suc n)) dec-as-sum (⊎-is-of-hlevel n hlevel! A-hl)
+ is-of-hlevel-≃ (suc (suc n)) dec-as-sum (⊎-is-of-hlevel n hlevel! A-hl)
 
 instance
   decomp-hlevel-dec : goal-decomposition (quote is-of-hlevel) (Dec A)

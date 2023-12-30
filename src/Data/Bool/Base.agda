@@ -41,7 +41,9 @@ true  ⊕ x = not x
 
 infix 0 if_then_else_
 if_then_else_ : Bool → A → A → A
-if b then tr else fa = rec tr fa b
+if false then _  else fa = fa
+if true  then tr else _  = tr
+-- if b then tr else fa = rec tr fa b
 
 ⟦_⟧ᵇ : Bool → Type
 ⟦ b ⟧ᵇ = if b then ⊤ else ⊥

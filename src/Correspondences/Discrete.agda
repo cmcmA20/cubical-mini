@@ -5,15 +5,20 @@ open import Foundations.Base
 open import Foundations.Equiv
 open import Foundations.HLevel.Base
 
+open import Meta.Search.HLevel
 open import Meta.Variadic
 
 open import Correspondences.Base public
 open import Correspondences.Decidable
 open import Correspondences.Separated
 
+
+open import Data.Bool.Base
+open import Data.Bool.Path
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
 open import Data.Dec.Properties
+open import Data.Empty.Base as ⊥
 
 open import Functions.Embedding
 
@@ -45,6 +50,21 @@ opaque
 instance
   H-Level-is-discrete : ∀ {n} → H-Level (suc n) (is-discrete A)
   H-Level-is-discrete = hlevel-prop-instance is-discrete-is-prop
+
+-- TODO generalize to Reflectsⁿ
+is-discrete→path≃equals-true : (d : is-discrete A) (x y : A) → (x ＝ y) ≃ (d .is-discrete-β x y .does ＝ true)
+is-discrete→path≃equals-true d x y = prop-extₑ (path-is-of-hlevel′ 1 (is-discrete→is-set d) x y) hlevel! to from where
+  to : ∀ {x y} → x ＝ y → d .is-discrete-β x y .does ＝ true
+  to {x} {y} p with d .is-discrete-β x y
+  ... | no ¬p = ⊥.rec (¬p p)
+  ... | yes _ = refl
+
+  from : ∀ {x y} → d .is-discrete-β x y .does ＝ true → x ＝ y
+  from {x} {y} prf with d .is-discrete-β x y
+  ... | no ¬p = ⊥.rec (false≠true prf)
+  ... | yes p = p
+
+module is-discrete→path≃equals-true {ℓ} {A} d {x y} = Equiv (is-discrete→path≃equals-true {ℓ} {A} d x y)
 
 is-discrete-injection : (A ↣ B) → is-discrete B → is-discrete A
 is-discrete-injection (f , f-inj) B-dis .is-discrete-β x y =

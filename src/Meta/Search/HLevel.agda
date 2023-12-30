@@ -157,6 +157,15 @@ instance
   proj-hlevel-n-type .Struct-proj-desc.level-selector = inr 1
   proj-hlevel-n-type .Struct-proj-desc.carrier-selector = 2
 
+-- TODO where to move this shit
+corr→is-of-hlevelⁿ
+  : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+    {ℓ : Level} {h : HLevel} {P : n-Corr _ h As ℓ}
+  → Π[ mapⁿ arity (is-of-hlevel h) ⌞ P ⌟ ]
+corr→is-of-hlevelⁿ {0} = hlevel!
+corr→is-of-hlevelⁿ {1} _ = hlevel!
+corr→is-of-hlevelⁿ {suc (suc arity)} _ = corr→is-of-hlevelⁿ {suc arity}
+
 -- Usage
 private
   module _ {A : Set ℓ} {B : A →̇ n-Type ℓ 3} where
