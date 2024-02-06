@@ -140,28 +140,39 @@
 <a id="or-compl"></a><a id="4202" href="Data.Bool.Properties.html#4202" class="Function">or-compl</a> <a id="4211" class="Symbol">:</a> <a id="4213" class="Symbol">∀</a> <a id="4215" href="Data.Bool.Properties.html#4215" class="Bound">x</a> <a id="4217" class="Symbol">→</a> <a id="4219" href="Data.Bool.Properties.html#4215" class="Bound">x</a> <a id="4221" href="Data.Bool.Base.html#453" class="Function Operator">or</a> <a id="4224" href="Data.Bool.Base.html#386" class="Function">not</a> <a id="4228" href="Data.Bool.Properties.html#4215" class="Bound">x</a> <a id="4230" href="Foundations.Prim.Kan.html#1277" class="Function Operator">＝</a> <a id="4232" href="Agda.Builtin.Bool.html#198" class="InductiveConstructor">true</a>
 <a id="4237" href="Data.Bool.Properties.html#4202" class="Function">or-compl</a> <a id="4246" class="Symbol">=</a> <a id="4248" href="Meta.Witness.html#955" class="Macro">witness!</a>
 
-<a id="4258" class="Comment">-- Testing witness tactic, uncomment if needed</a>
-<a id="4305" class="Comment">-- private module _ where</a>
-<a id="4331" class="Comment">--   open import Truncation.Propositional.Base</a>
+<a id="4258" class="Comment">-- xor</a>
 
-<a id="4379" class="Comment">--   _ : ∀[ x ꞉ Bool ] ∀[ y ꞉ Bool ] ∃[ z ꞉ Bool ] (z ＝ x or y)</a>
-<a id="4443" class="Comment">--   _ = witness!</a>
+<a id="⊕-assoc"></a><a id="4266" href="Data.Bool.Properties.html#4266" class="Function">⊕-assoc</a> <a id="4274" class="Symbol">:</a> <a id="4276" class="Symbol">∀</a> <a id="4278" href="Data.Bool.Properties.html#4278" class="Bound">x</a> <a id="4280" href="Data.Bool.Properties.html#4280" class="Bound">y</a> <a id="4282" href="Data.Bool.Properties.html#4282" class="Bound">z</a> <a id="4284" class="Symbol">→</a> <a id="4286" class="Symbol">(</a><a id="4287" href="Data.Bool.Properties.html#4278" class="Bound">x</a> <a id="4289" href="Data.Bool.Base.html#629" class="Function Operator">⊕</a> <a id="4291" href="Data.Bool.Properties.html#4280" class="Bound">y</a><a id="4292" class="Symbol">)</a> <a id="4294" href="Data.Bool.Base.html#629" class="Function Operator">⊕</a> <a id="4296" href="Data.Bool.Properties.html#4282" class="Bound">z</a> <a id="4298" href="Foundations.Prim.Kan.html#1277" class="Function Operator">＝</a> <a id="4300" href="Data.Bool.Properties.html#4278" class="Bound">x</a> <a id="4302" href="Data.Bool.Base.html#629" class="Function Operator">⊕</a> <a id="4304" href="Data.Bool.Properties.html#4280" class="Bound">y</a> <a id="4306" href="Data.Bool.Base.html#629" class="Function Operator">⊕</a> <a id="4308" href="Data.Bool.Properties.html#4282" class="Bound">z</a>
+<a id="4310" href="Data.Bool.Properties.html#4266" class="Function">⊕-assoc</a> <a id="4318" class="Symbol">=</a> <a id="4320" href="Meta.Witness.html#955" class="Macro">witness!</a>
 
-<a id="4462" class="Comment">--   _ : ∀[ x ꞉ Bool ] ∃[ f ꞉ (Bool → Bool → Bool) ] Π[ y ꞉ Bool ] (f x y ＝ not (f (not x) y))</a>
-<a id="4557" class="Comment">--   _ = witness!</a>
+<a id="and-distrib-⊕-l"></a><a id="4330" href="Data.Bool.Properties.html#4330" class="Function">and-distrib-⊕-l</a> <a id="4346" class="Symbol">:</a> <a id="4348" class="Symbol">∀</a> <a id="4350" href="Data.Bool.Properties.html#4350" class="Bound">x</a> <a id="4352" href="Data.Bool.Properties.html#4352" class="Bound">y</a> <a id="4354" href="Data.Bool.Properties.html#4354" class="Bound">z</a> <a id="4356" class="Symbol">→</a> <a id="4358" href="Data.Bool.Properties.html#4350" class="Bound">x</a> <a id="4360" href="Data.Bool.Base.html#528" class="Function Operator">and</a> <a id="4364" class="Symbol">(</a><a id="4365" href="Data.Bool.Properties.html#4352" class="Bound">y</a> <a id="4367" href="Data.Bool.Base.html#629" class="Function Operator">⊕</a> <a id="4369" href="Data.Bool.Properties.html#4354" class="Bound">z</a><a id="4370" class="Symbol">)</a> <a id="4372" href="Foundations.Prim.Kan.html#1277" class="Function Operator">＝</a> <a id="4374" class="Symbol">(</a><a id="4375" href="Data.Bool.Properties.html#4350" class="Bound">x</a> <a id="4377" href="Data.Bool.Base.html#528" class="Function Operator">and</a> <a id="4381" href="Data.Bool.Properties.html#4352" class="Bound">y</a><a id="4382" class="Symbol">)</a> <a id="4384" href="Data.Bool.Base.html#629" class="Function Operator">⊕</a> <a id="4386" class="Symbol">(</a><a id="4387" href="Data.Bool.Properties.html#4350" class="Bound">x</a> <a id="4389" href="Data.Bool.Base.html#528" class="Function Operator">and</a> <a id="4393" href="Data.Bool.Properties.html#4354" class="Bound">z</a><a id="4394" class="Symbol">)</a>
+<a id="4396" href="Data.Bool.Properties.html#4330" class="Function">and-distrib-⊕-l</a> <a id="4412" class="Symbol">=</a> <a id="4414" href="Meta.Witness.html#955" class="Macro">witness!</a>
 
-<a id="4576" class="Comment">--   _ : ¬ ∃[ f ꞉ (Bool × Bool → Bool) ] Π[ x ꞉ Bool ] (f (x , false) ≠ f (x , false))</a>
-<a id="4663" class="Comment">--   _ = witness!</a>
+<a id="and-distrib-⊕-r"></a><a id="4424" href="Data.Bool.Properties.html#4424" class="Function">and-distrib-⊕-r</a> <a id="4440" class="Symbol">:</a> <a id="4442" class="Symbol">∀</a> <a id="4444" href="Data.Bool.Properties.html#4444" class="Bound">x</a> <a id="4446" href="Data.Bool.Properties.html#4446" class="Bound">y</a> <a id="4448" href="Data.Bool.Properties.html#4448" class="Bound">z</a> <a id="4450" class="Symbol">→</a> <a id="4452" class="Symbol">(</a><a id="4453" href="Data.Bool.Properties.html#4444" class="Bound">x</a> <a id="4455" href="Data.Bool.Base.html#629" class="Function Operator">⊕</a> <a id="4457" href="Data.Bool.Properties.html#4446" class="Bound">y</a><a id="4458" class="Symbol">)</a> <a id="4460" href="Data.Bool.Base.html#528" class="Function Operator">and</a> <a id="4464" href="Data.Bool.Properties.html#4448" class="Bound">z</a> <a id="4466" href="Foundations.Prim.Kan.html#1277" class="Function Operator">＝</a> <a id="4468" class="Symbol">(</a><a id="4469" href="Data.Bool.Properties.html#4444" class="Bound">x</a> <a id="4471" href="Data.Bool.Base.html#528" class="Function Operator">and</a> <a id="4475" href="Data.Bool.Properties.html#4448" class="Bound">z</a><a id="4476" class="Symbol">)</a> <a id="4478" href="Data.Bool.Base.html#629" class="Function Operator">⊕</a> <a id="4480" class="Symbol">(</a><a id="4481" href="Data.Bool.Properties.html#4446" class="Bound">y</a> <a id="4483" href="Data.Bool.Base.html#528" class="Function Operator">and</a> <a id="4487" href="Data.Bool.Properties.html#4448" class="Bound">z</a><a id="4488" class="Symbol">)</a>
+<a id="4490" href="Data.Bool.Properties.html#4424" class="Function">and-distrib-⊕-r</a> <a id="4506" class="Symbol">=</a> <a id="4508" href="Meta.Witness.html#955" class="Macro">witness!</a>
 
-<a id="4682" class="Comment">--   module _ {r : Bool} where</a>
-<a id="4713" class="Comment">--     _ : ∃[ x ꞉ Bool ] (x ＝ r)</a>
-<a id="4746" class="Comment">--     _ = witness!</a>
+<a id="4518" class="Comment">-- Testing witness tactic, uncomment if needed</a>
+<a id="4565" class="Comment">-- private module _ where</a>
+<a id="4591" class="Comment">--   open import Truncation.Propositional.Base</a>
 
-<a id="4767" class="Comment">--   module _ {A : Type} {u : A} (a a′ : A) (z w r : Bool) (B : Type) {b c d e : B} where</a>
-<a id="4857" class="Comment">--     _ : ∃[ x ꞉ Bool ] (x ＝ z)</a>
-<a id="4890" class="Comment">--     _ = witness!</a>
+<a id="4639" class="Comment">--   _ : ∀[ x ꞉ Bool ] ∀[ y ꞉ Bool ] ∃[ z ꞉ Bool ] (z ＝ x or y)</a>
+<a id="4703" class="Comment">--   _ = witness!</a>
 
-<a id="4911" class="Comment">--     module _ {R : Type} {a u : Bool} {v : A} where</a>
-<a id="4965" class="Comment">--       _ : ∃[ x ꞉ Bool ] (x ＝ r or a)</a>
-<a id="5005" class="Comment">--       _ = witness!</a>
+<a id="4722" class="Comment">--   _ : ∀[ x ꞉ Bool ] ∃[ f ꞉ (Bool → Bool → Bool) ] Π[ y ꞉ Bool ] (f x y ＝ not (f (not x) y))</a>
+<a id="4817" class="Comment">--   _ = witness!</a>
+
+<a id="4836" class="Comment">--   _ : ¬ ∃[ f ꞉ (Bool × Bool → Bool) ] Π[ x ꞉ Bool ] (f (x , false) ≠ f (x , false))</a>
+<a id="4923" class="Comment">--   _ = witness!</a>
+
+<a id="4942" class="Comment">--   module _ {r : Bool} where</a>
+<a id="4973" class="Comment">--     _ : ∃[ x ꞉ Bool ] (x ＝ r)</a>
+<a id="5006" class="Comment">--     _ = witness!</a>
+
+<a id="5027" class="Comment">--   module _ {A : Type} {u : A} (a a′ : A) (z w r : Bool) (B : Type) {b c d e : B} where</a>
+<a id="5117" class="Comment">--     _ : ∃[ x ꞉ Bool ] (x ＝ z)</a>
+<a id="5150" class="Comment">--     _ = witness!</a>
+
+<a id="5171" class="Comment">--     module _ {R : Type} {a u : Bool} {v : A} where</a>
+<a id="5225" class="Comment">--       _ : ∃[ x ꞉ Bool ] (x ＝ r or a)</a>
+<a id="5265" class="Comment">--       _ = witness!</a>
 </pre></body></html>
