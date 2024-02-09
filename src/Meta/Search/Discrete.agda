@@ -48,6 +48,13 @@ dec-helper = is-discrete-β
 hedberg-helper : (n : HLevel) → is-discrete A → is-of-hlevel (2 + n) A
 hedberg-helper n di = is-of-hlevel-+-left 2 n (is-discrete→is-set di)
 
+discrete-reflects : {ℓ : Level} {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
+                  → {x y : A}
+                  → Reflects (x ＝ y) ⌊ x ≟ y ⌋
+discrete-reflects {x} {y} with x ≟ y
+... | yes e = ofʸ e
+... | no ne = ofⁿ ne
+
 instance
   decomp-dis-lift : goal-decomposition (quote is-discrete) (Lift ℓ′ A)
   decomp-dis-lift = decomp (quote lift-is-discrete) [ `search (quote is-discrete) ]

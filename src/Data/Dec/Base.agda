@@ -31,9 +31,9 @@ pattern yes p =  true because ofʸ  p
 pattern no ¬p = false because ofⁿ ¬p
 
 elim : {C : Dec P → Type ℓ′}
-         → (( p :   P) → C (yes p))
-         → ((¬p : ¬ P) → C (no ¬p))
-         → (d : Dec P) → C d
+     → (( p :   P) → C (yes p))
+     → ((¬p : ¬ P) → C (no ¬p))
+     → (d : Dec P) → C d
 elim y n (no ¬p) = n ¬p
 elim y n (yes p) = y p
 
@@ -61,8 +61,7 @@ recover′ (yes p) _ = p
 recover′ (no ¬p) p = ⊥.rec′ (¬p p)
 
 rec : (P → Q) → (¬ P → Q) → Dec P → Q
-rec ifyes ifno (yes p) = ifyes p
-rec ifyes ifno (no ¬p) = ifno ¬p
+rec {Q} = elim {C = λ _ → Q}
 
 ⌊_⌋ : Dec P → Bool
 ⌊ b because _ ⌋ = b

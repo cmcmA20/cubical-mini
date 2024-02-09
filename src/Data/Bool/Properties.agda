@@ -20,7 +20,8 @@ open import Data.Bool.Base as Bool public
 open import Data.Bool.Path
 open import Data.Bool.Instances.Finite
 open import Data.Bool.Instances.Underlying
-open import Data.Sum.Base
+open import Data.Dec.Base as Dec
+open import Data.Sum.Base as Sum
 open import Data.Sum.Path
 
 private variable
@@ -91,7 +92,28 @@ and-true-≃ = prop-extₑ (go _ _) (×-is-of-hlevel 1 (go _ _) (go _ _)) to fro
 
 module and-true-≃ {x} {y} = Equiv (and-true-≃ {x} {y})
 
+reflects-id : ∀ {x} → Reflects (⟦ x ⟧ᵇ) x
+reflects-id {(false)} = ofⁿ id
+reflects-id {(true)}  = ofʸ tt
+
+-- negation
+
+reflects-not : ∀ {x} → Reflects (¬ ⟦ x ⟧ᵇ) (not x)
+reflects-not {(false)} = ofʸ id
+reflects-not {(true)}  = ofⁿ (_$ tt)
+
+not-invol : ∀ x → not (not x) ＝ x
+not-invol = witness!
+
+≠→=not : ∀ x y → x ≠ y → x ＝ not y
+≠→=not = witness!
+
 -- conjunction
+
+reflects-and : ∀ {x y} → Reflects (⟦ x ⟧ᵇ × ⟦ y ⟧ᵇ) (x and y)
+reflects-and {x = false}            = ofⁿ fst
+reflects-and {x = true} {y = false} = ofⁿ snd
+reflects-and {x = true} {y = true}  = ofʸ (tt , tt)
 
 and-id-r : ∀ x → x and true ＝ x
 and-id-r = witness!
@@ -111,15 +133,13 @@ and-comm = witness!
 and-compl : ∀ x → x and not x ＝ false
 and-compl = witness!
 
--- negation
-
-not-invol : ∀ x → not (not x) ＝ x
-not-invol = witness!
-
-≠→=not : ∀ x y → x ≠ y → x ＝ not y
-≠→=not = witness!
-
 -- disjunction
+
+-- TODO reflection to a These structure
+reflects-or : ∀ {x y} → Reflects (⟦ x ⟧ᵇ ⊎ ⟦ y ⟧ᵇ) (x or y)
+reflects-or {x = false} {y = false} = ofⁿ [ id , id ]ᵤ
+reflects-or {x = false} {y = true}  = ofʸ (inr tt)
+reflects-or {x = true}              = ofʸ (inl tt)
 
 or-id-r : ∀ x → x or false ＝ x
 or-id-r = witness!
@@ -143,6 +163,14 @@ or-compl = witness!
 
 ⊕-assoc : ∀ x y z → (x ⊕ y) ⊕ z ＝ x ⊕ y ⊕ z
 ⊕-assoc = witness!
+
+-- distributivity
+
+and-distrib-or-l : ∀ x y z → x and (y or z) ＝ (x and y) or (x and z)
+and-distrib-or-l = witness!
+
+and-distrib-or-r : ∀ x y z → (x or y) and z ＝ (x and z) or (y and z)
+and-distrib-or-r = witness!
 
 and-distrib-⊕-l : ∀ x y z → x and (y ⊕ z) ＝ (x and y) ⊕ (x and z)
 and-distrib-⊕-l = witness!
