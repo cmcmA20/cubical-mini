@@ -14,7 +14,7 @@ open Correspondences.Discrete public
   using ( is-discrete ; is-discrete-β ; is-discrete-η
         ; is-discrete-injection ; is-discrete-embedding )
 
-open import Data.Dec.Base
+open import Data.Dec.Base as Dec
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
@@ -45,6 +45,13 @@ dec-helper = is-discrete-β
 
 hedberg-helper : (n : HLevel) → is-discrete A → is-of-hlevel (2 + n) A
 hedberg-helper n di = is-of-hlevel-+-left 2 n (is-discrete→is-set di)
+
+discrete-reflects : {ℓ : Level} {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
+                  → {x y : A}
+                  → Reflects (x ＝ y) ⌊ x ≟ y ⌋
+discrete-reflects {x} {y} =
+  Dec.elim {C = λ d → Reflects (x ＝ y) ⌊ d ⌋} ofʸ ofⁿ (x ≟ y)
+
 
 instance
   decomp-dis-lift : goal-decomposition (quote is-discrete) (Lift ℓ′ A)
