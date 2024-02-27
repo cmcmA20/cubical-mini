@@ -4,6 +4,8 @@ module Data.Fin.Inductive.Closure where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Groupoid
+
 open import Data.Empty.Base as ⊥
   using (⊥)
 open import Data.Nat.Base
@@ -69,7 +71,7 @@ fin-coproduct {suc n} {m} =
   Fin (suc n) ⊎ Fin m ≃⟨ ⊎-ap-l fin-suc ⟩
   (⊤ ⊎ Fin n) ⊎ Fin m ≃⟨ ⊎-assoc ⟩
   ⊤ ⊎ Fin n ⊎ Fin m   ≃⟨ ⊎-ap-r (fin-coproduct {n} {m}) ⟩
-  ⊤ ⊎ Fin (n + m)     ≃⟨ fin-suc ₑ⁻¹ ⟩
+  ⊤ ⊎ Fin (n + m)     ≃⟨ fin-suc ⁻¹ ⟩
   Fin (suc (n + m))   ≃∎
 
 sum : ∀ n → (Fin n → ℕ) → ℕ

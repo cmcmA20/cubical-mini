@@ -4,6 +4,7 @@ module Data.Vec.Inductive.Instances.Finite where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Finite.ManifestBishop
 
@@ -21,10 +22,10 @@ private variable
   n : ℕ
 
 vec-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Vec A n)
-vec-manifest-bishop-finite = manifest-bishop-finite-≃ (default≃inductive ₑ⁻¹) ∘ vec-manifest-bishop-finiteᵈ
+vec-manifest-bishop-finite = manifest-bishop-finite-≃ (default≃inductive ⁻¹) ∘ vec-manifest-bishop-finiteᵈ
 
 vec-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Vec A n)
-vec-is-bishop-finite = is-bishop-finite-≃ (default≃inductive ₑ⁻¹) ∘ vec-is-bishop-finiteᵈ
+vec-is-bishop-finite = is-bishop-finite-≃ (default≃inductive ⁻¹) ∘ vec-is-bishop-finiteᵈ
 
 instance
   decomp-fin-vec : goal-decomposition (quote Manifest-bishop-finite) (Vec A n)

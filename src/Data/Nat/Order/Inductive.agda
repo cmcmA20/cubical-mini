@@ -1,9 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Order.Inductive where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Data.Dec.Base
@@ -107,7 +108,7 @@ instance
   gg (suc a) b c prf = gg a b c (≤-peel prf)
 
 ≤-+r-≃ : {x y z : ℕ} → (x ≤ y) ≃ (x + z ≤ y + z)
-≤-+r-≃ {x} {y} {z} = ≤-+l-≃ {x = z} ∙ₑ prop-extₑ!
+≤-+r-≃ {x} {y} {z} = ≤-+l-≃ {x = z} ∙ prop-extₑ!
   (≤-subst (+-comm z x) (+-comm z y))
   (≤-subst (+-comm x z) (+-comm y z))
 
@@ -116,7 +117,7 @@ instance
 ≤-cong-+ (suc m) n (suc p) q prf1 prf2 = s≤s (≤-cong-+ m n p q (≤-peel prf1) prf2)
 
 <-+l-≃ : {x y z : ℕ} → (y < z) ≃ (x + y < x + z)
-<-+l-≃ {x} {y} {z} = ≤-+l-≃ {x = x} ∙ₑ prop-extₑ!
+<-+l-≃ {x} {y} {z} = ≤-+l-≃ {x = x} ∙ prop-extₑ!
   (≤-subst (+-suc-r x y) refl)
   (≤-subst (sym (+-suc-r x y)) refl)
 

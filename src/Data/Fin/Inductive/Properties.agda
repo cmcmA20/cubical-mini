@@ -1,9 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Inductive.Properties where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Effect.Bind
 open import Meta.Underlying
 
@@ -60,7 +61,7 @@ fsuc-inj {k} = ap pred′ where
 fin-peel : Fin (suc m) ≃ Fin (suc n) → Fin m ≃ Fin n
 fin-peel {m} {n} sm≃sn = iso→equiv $ m→n , iso n→m b→a→b a→b→a where
   sn≃sm : Fin (suc n) ≃ Fin (suc m)
-  sn≃sm = sm≃sn ₑ⁻¹
+  sn≃sm = sm≃sn ⁻¹
   module sm≃sn = Equiv sm≃sn
   module sn≃sm = Equiv sn≃sm
 

@@ -4,6 +4,7 @@ module Data.Maybe.Path where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem
@@ -65,7 +66,7 @@ just-inj : just x ＝ just y → x ＝ y
 just-inj {x} = ap (from-just x)
 
 just-cancellable : Cancellable {A = A} just
-just-cancellable = identity-system-gives-path identity-system ₑ⁻¹
+just-cancellable = identity-system-gives-path identity-system ⁻¹
 
 just-is-embedding : is-embedding {A = A} just
 just-is-embedding = cancellable→is-embedding just-cancellable

@@ -4,6 +4,8 @@ module Data.Sum.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Groupoid
+
 open import Data.Empty.Base
 
 open import Data.Sum.Base public
@@ -44,10 +46,10 @@ universal = iso→equiv the-iso where
   cong′ .snd .is-iso.linv (inr x) = ap inr (g-iso .is-iso.linv x)
 
 ⊎-ap-l : A ≃ B → (A ⊎ C) ≃ (B ⊎ C)
-⊎-ap-l f = ⊎-ap f idₑ
+⊎-ap-l f = ⊎-ap f refl!
 
 ⊎-ap-r : B ≃ C → (A ⊎ B) ≃ (A ⊎ C)
-⊎-ap-r f = ⊎-ap idₑ f
+⊎-ap-r f = ⊎-ap refl! f
 
 ⊎-comm : (A ⊎ B) ≃ (B ⊎ A)
 ⊎-comm = iso→equiv i where

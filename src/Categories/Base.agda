@@ -1,9 +1,10 @@
 {-# OPTIONS --safe #-}
 module Categories.Base where
 
-open import Foundations.Base hiding (id ; _∘_)
+open import Foundations.Base hiding (id ; _∘_ ; _∙_)
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Literals.FromNat
 open import Meta.Record
 open import Meta.Search.HLevel
@@ -227,7 +228,7 @@ record _⇒_ {C : Precategory oᶜ hᶜ}
 
   op : Functor.op G ⇒ Functor.op F
   op .η = η
-  op .is-natural x y f = sym (is-natural y x f)
+  op .is-natural x y f = is-natural y x f ⁻¹
 
 {-# INLINE NT #-}
 
@@ -250,13 +251,13 @@ module _ where
   Const {D} x .F₀ _ = x
   Const {D} x .F₁ _ = id D
   Const {D} x .F-id = refl
-  Const {D} x .F-∘ _ _ = sym (id-r D _)
+  Const {D} x .F-∘ _ _ = id-r D _ ⁻¹
 
   const-nt : {C : Precategory oᶜ hᶜ} {D : Precategory oᶜ hᵈ}
            → {x y : Ob D} → Hom D x y
            → Const {C = C} {D = D} x ⇒ Const {C = C} {D = D} y
   const-nt f ._⇒_.η _ = f
-  const-nt {D} f ._⇒_.is-natural _ _ _ = id-r D _ ∙ sym (id-l D _)
+  const-nt {D} f ._⇒_.is-natural _ _ _ = id-r D _ ∙ id-l D _ ⁻¹
 
 infixr 30 _∘ᶠ_
 infix 20 _⇒_

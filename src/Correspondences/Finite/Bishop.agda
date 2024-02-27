@@ -1,13 +1,14 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Finite.Bishop where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 open import Foundations.Pi
 open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Meta.Effect.Bind
+open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
@@ -53,7 +54,7 @@ instance
   H-Level-is-bishop-finite = hlevel-prop-instance $ is-of-hlevel-≃ _ (iso→equiv is-bishop-finite-iso) $ is-prop-η go where
     go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
     go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim²!
-      (λ p q → fin-injective ((p ₑ⁻¹) ∙ₑ q)) ∣p∣₁ ∣q∣₁
+      (λ p q → fin-injective (p ⁻¹ ∙ q)) ∣p∣₁ ∣q∣₁
 
 manifest-bishop-finite→is-bishop-finite : Manifest-bishop-finite A → is-bishop-finite A
 manifest-bishop-finite→is-bishop-finite fi .cardinality = fi .cardinality
@@ -101,9 +102,9 @@ bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
   let rest = bishop-finite-pi-fin sz (fam ∘ fsuc)
   cont ← enumeration₁ rest
   let
-    work =  fin-suc-universal {n = sz} {A = P}
-         ∙ₑ Σ-ap (e fzero) (λ x → cont)
-         ∙ₑ fin-sum {n = cardinality (fam fzero)} λ _ → cardinality rest
+    work = fin-suc-universal {n = sz} {A = P}
+         ∙ Σ-ap (e fzero) (λ x → cont)
+         ∙ fin-sum {n = cardinality (fam fzero)} λ _ → cardinality rest
   pure $ fin₁ $ pure work
 
 
@@ -111,7 +112,7 @@ bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
 ×-is-bishop-finite afin bfin = fin₁ do
   aeq ← enumeration₁ afin
   beq ← enumeration₁ bfin
-  pure $ ×-ap aeq beq ∙ₑ fin-product
+  pure $ ×-ap aeq beq ∙ fin-product
 
 Σ-is-bishop-finite
   : is-bishop-finite A → (∀ x → is-bishop-finite (P x)) → is-bishop-finite (Σ A P)
@@ -127,7 +128,7 @@ bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
     work = do
       t ← finite-choice afin $ enumeration₁ ∘ fam
       pure $ Σ-ap aeq λ x → t x
-          ∙ₑ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
+           ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
 
   pure $ fin₁ ⦇ work ∙ₑ pure fs ⦈
 
@@ -138,25 +139,25 @@ fun-is-bishop-finite afin bfin = ∥-∥₁.proj! do
   be ← enumeration₁ bfin
   let count = bishop-finite-pi-fin (cardinality afin) λ _ → bfin
   eqv′ ← enumeration₁ count
-  pure $ fin₁ $ pure (Π-cod-≃ (λ _ → be) ∙ₑ function-≃ ae (be ₑ⁻¹) ∙ₑ eqv′)
+  pure $ fin₁ $ pure $ Π-cod-≃ (λ _ → be) ∙ function-≃ ae (be ⁻¹) ∙ eqv′
 
 Π-is-bishop-finite
   : {P : A → Type ℓ′} → is-bishop-finite A → (∀ x → is-bishop-finite (P x)) → is-bishop-finite (∀ x → P x)
 Π-is-bishop-finite afin fam = ∥-∥₁.proj! do
   eqv ← enumeration₁ afin
-  let count = bishop-finite-pi-fin (cardinality afin) λ x → fam $ is-equiv→inverse (eqv .snd) x
+  let count = bishop-finite-pi-fin (cardinality afin) (λ x → fam $ (eqv ⁻¹) # x)
   eqv′ ← enumeration₁ count
-  pure $ fin₁ $ pure $ Π-dom-≃ (eqv ₑ⁻¹) ∙ₑ eqv′
+  pure $ fin₁ $ pure $ Π-dom-≃ (eqv ⁻¹) ∙ eqv′
 
 lift-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Lift ℓ′ A)
 lift-is-bishop-finite afin = fin₁ do
   aeq ← enumeration₁ afin
-  pure $ lift-equiv ∙ₑ aeq
+  pure $ lift-equiv ∙ aeq
 
 decidable-prop→is-bishop-finite : is-prop A → Dec A → is-bishop-finite A
 decidable-prop→is-bishop-finite A-prop (yes a) = fin₁ $ pure $
   is-contr→equiv (inhabited-prop-is-contr a A-prop) fin-1-is-contr
-decidable-prop→is-bishop-finite A-prop (no ¬a) = fin₁ $ pure $ ¬-extₑ ¬a id ∙ₑ fin-0-is-initial ₑ⁻¹
+decidable-prop→is-bishop-finite A-prop (no ¬a) = fin₁ $ pure $ ¬-extₑ ¬a id ∙ fin-0-is-initial ⁻¹
 
 is-discrete→path-is-bishop-finite : is-discrete A → {x y : A} → is-bishop-finite (x ＝ y)
 is-discrete→path-is-bishop-finite d = decidable-prop→is-bishop-finite hlevel! (d .is-discrete-β _ _)
@@ -169,4 +170,4 @@ pathP-is-bishop-finite f _ _ = subst is-bishop-finite (sym $ pathP＝path _ _ _)
 is-bishop-finite-≃ : (B ≃ A) → is-bishop-finite A → is-bishop-finite B
 is-bishop-finite-≃ f afin = fin₁ do
   aeq ← enumeration₁ afin
-  pure (f ∙ₑ aeq)
+  pure $ f ∙ aeq

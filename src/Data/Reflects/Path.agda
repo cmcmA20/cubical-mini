@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
 module Data.Reflects.Path where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 open import Foundations.HLevel
 
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
@@ -51,7 +52,7 @@ opaque
   reflects-is-of-hlevel 0 hl (ofʸ p) (ofʸ p′) = ap ofʸ (hl p p′)
   reflects-is-of-hlevel 0 _  (ofⁿ _) (ofⁿ _)  = ap ofⁿ prop!
   reflects-is-of-hlevel (suc n) hl _ _ = is-of-hlevel-≃ (1 + n)
-    (identity-system-gives-path identity-system ₑ⁻¹) $ code-is-of-hlevel hl
+    (identity-system-gives-path identity-system ⁻¹) $ code-is-of-hlevel hl
 
 ofʸ-inj : ∀ {x y : P} → ofʸ x ＝ ofʸ y → x ＝ y
 ofʸ-inj = ap invert-true

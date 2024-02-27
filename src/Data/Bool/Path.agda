@@ -1,9 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Bool.Path where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 open import Meta.Underlying
 
@@ -66,18 +67,18 @@ instance
 
 ⟦-⟧ᵇ-inj : ⟦ b₁ ⟧ᵇ ≃ ⟦ b₂ ⟧ᵇ → b₁ ＝ b₂
 ⟦-⟧ᵇ-inj {(false)} {(false)} _ = refl
-⟦-⟧ᵇ-inj {(false)} {(true)}  f = ⊥.rec $ᴱ (f ₑ⁻¹) # tt
+⟦-⟧ᵇ-inj {(false)} {(true)}  f = ⊥.rec $ᴱ (f ⁻¹) # tt
 ⟦-⟧ᵇ-inj {(true)}  {(false)} f = ⊥.rec $ᴱ f # tt
 ⟦-⟧ᵇ-inj {(true)}  {(true)}  _ = refl
 
 ⟦-⟧ᵇ≃true : ⟦ b ⟧ᵇ ≃ (b ＝ true)
-⟦-⟧ᵇ≃true = go ∙ₑ identity-system-gives-path identity-system where
+⟦-⟧ᵇ≃true = go ∙ identity-system-gives-path identity-system where
   go : ⟦ b ⟧ᵇ ≃ ⟦ b == true ⟧ᵇ
   go {(false)} = prop-extₑ! id id
   go {(true)}  = prop-extₑ! id id
 
 ¬⟦-⟧ᵇ≃false : (¬ ⟦ b ⟧ᵇ) ≃ (b ＝ false)
-¬⟦-⟧ᵇ≃false = go ∙ₑ identity-system-gives-path identity-system where
+¬⟦-⟧ᵇ≃false = go ∙ identity-system-gives-path identity-system where
   go : (¬ ⟦ b ⟧ᵇ) ≃ ⟦ b == false ⟧ᵇ
   go {(false)} = prop-extₑ! _ λ _ → id
   go {(true)}  = prop-extₑ! (λ f → f _) (λ f _ → f)

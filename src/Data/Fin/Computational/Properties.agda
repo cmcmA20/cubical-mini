@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Computational.Properties where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
 open import Meta.Effect.Bind
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Data.Empty.Base
@@ -47,9 +48,9 @@ fsuc-inj {m} {k} = ap pred′ where
 
 -- TODO too clunky, refactor this
 fin-injective : {m n : ℕ} → Fin m ≃ Fin n → m ＝ n
-fin-injective f = finⁱ-injective $ sub-fin≃finⁱ ₑ⁻¹ ∙ₑ f ∙ₑ sub-fin≃finⁱ where
+fin-injective f = finⁱ-injective $ sub-fin≃finⁱ ⁻¹ ∙ f ∙ sub-fin≃finⁱ where
   sub-fin≃finⁱ : ∀ {n} → Fin n ≃ _
-  sub-fin≃finⁱ = default≃computational ₑ⁻¹ ∙ₑ default≃inductive
+  sub-fin≃finⁱ = default≃computational ⁻¹ ∙ default≃inductive
 
 fin-choice
   : ∀ n {A : Fin n → Type ℓ} {M}

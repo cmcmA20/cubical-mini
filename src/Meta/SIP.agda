@@ -6,6 +6,7 @@ open import Foundations.Equiv.Base
 open import Foundations.Univalence.SIP public
 
 open import Meta.Effect.Alt
+open import Meta.Groupoid
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
@@ -41,7 +42,7 @@ term→structure s∙ = pointed-str
 term→structure (s₁ s→ s₂) = function-str (term→action s₁) (term→structure s₂)
 term→structure (s₁ s× s₂) = product-str (term→structure s₁) (term→structure s₂)
 
-term→action (s-const x₁) x = idₑ
+term→action (s-const x₁) x = refl!
 term→action s∙ x = x
 term→action (s₁ s→ s₂) = function-action (term→action s₁) (term→action s₂)
 term→action (s₁ s× s₂) = product-action (term→action s₁) (term→action s₂)

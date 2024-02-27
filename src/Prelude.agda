@@ -3,9 +3,11 @@
 module Prelude where
 
 open import Foundations.Base       public
+  renaming (_∙_ to _∙ₚ_ ; _∘′_ to _∘ₜ′_)
 open import Foundations.Erased     public
 open import Foundations.Path       public
 open import Foundations.Pi         public
+  hiding (_∘′_)
 open import Foundations.Sigma      public
 open import Foundations.Transport  public
 open import Foundations.Univalence public
@@ -18,6 +20,7 @@ open import Meta.Effect.Map         public
 open import Meta.Effect.Traversable public
 
 open import Meta.Append               public
+open import Meta.Groupoid             public
 open import Meta.Literals.FromProduct public
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromNeg     public

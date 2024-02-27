@@ -1,9 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Sum.Path where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
@@ -53,7 +54,7 @@ opaque
                  → is-of-hlevel (2 + n) B
                  → is-of-hlevel (2 + n) (A ⊎ B)
   ⊎-is-of-hlevel n ahl bhl _ _ =
-    is-of-hlevel-≃ (1 + n) (identity-system-gives-path identity-system ₑ⁻¹) (code-is-of-hlevel ahl bhl)
+    is-of-hlevel-≃ (1 + n) (identity-system-gives-path identity-system ⁻¹) (code-is-of-hlevel ahl bhl)
 
   disjoint-⊎-is-prop
     : is-prop A → is-prop B → ¬ A × B

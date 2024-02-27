@@ -4,6 +4,7 @@ module Data.List.Path where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
@@ -70,7 +71,7 @@ opaque
                     → is-of-hlevel (2 + n) (List A)
   list-is-of-hlevel n A-hl _ _ =
     is-of-hlevel-≃ (1 + n)
-                   (identity-system-gives-path identity-system ₑ⁻¹)
+                   (identity-system-gives-path identity-system ⁻¹)
                    (code-is-of-hlevel A-hl)
 
 instance

@@ -1,12 +1,13 @@
 {-# OPTIONS --safe #-}
 module Structures.FinOrd where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.HLevel
 open import Foundations.Erased
 open import Foundations.Sigma
 open import Foundations.Univalence
 
+open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.Underlying
@@ -40,7 +41,7 @@ FinOrd≃ᴱℕ : FinOrd ℓ ≃ᴱ ℕ
 FinOrd≃ᴱℕ {ℓ} =
   FinOrd ℓ                                       ≃ᴱ⟨ ≃→≃ᴱ (iso→equiv fin-ord-iso) ⟩
   Σ[ X ꞉ 𝒰 ℓ ] Manifest-bishop-finite X         ≃ᴱ⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → iso→equiv manifest-bishop-finite-iso)) ⟩
-  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (X ≃ Fin n)           ≃ᴱ⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → Σ-ap-snd λ _ → inv-≃ ∙ₑ whisker-lₑ (lift-equiv ₑ⁻¹))) ⟩
+  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (X ≃ Fin n)           ≃ᴱ⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → Σ-ap-snd λ _ → inv-≃ ∙ whisker-lₑ (lift-equiv ⁻¹))) ⟩
   Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (Lift ℓ (Fin n) ≃ X)  ≃ᴱ⟨ ≃→≃ᴱ Σ-swap ⟩
   Σ[ n ꞉ ℕ ] Σ[ X ꞉ 𝒰 ℓ ] (Lift ℓ (Fin n) ≃ X)  ≃ᴱ⟨ Σ-contract-sndᴱ (λ n → equiv-is-contrᴱ _) ⟩
   ℕ                                              ≃ᴱ∎

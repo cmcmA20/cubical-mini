@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
 module Data.Dec.Properties where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
 open import Meta.Effect.Idiom
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Truncation.Propositional as ∥-∥₁
@@ -26,7 +27,7 @@ dec-∥-∥₁-equiv = prop-extₑ!
   (Dec.rec (yes <$>_) $ pure ∘ no ∘ _∘ pure)
 
 dec-≃ : A ≃ B → Dec A ≃ Dec B
-dec-≃ eqv = dec-as-sum ∙ₑ ⊎-ap (¬-≃ to from) eqv ∙ₑ (dec-as-sum ₑ⁻¹)
+dec-≃ eqv = dec-as-sum ∙ ⊎-ap (¬-≃ to from) eqv ∙ (dec-as-sum ⁻¹)
   where open Equiv eqv
 
 module dec-≃ {ℓ} {ℓ′} {A} {B} e = Equiv (dec-≃ {ℓ} {ℓ′} {A} {B} e)

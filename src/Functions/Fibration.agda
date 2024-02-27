@@ -1,10 +1,12 @@
 {-# OPTIONS --safe #-}
 module Functions.Fibration where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 open import Foundations.Sigma
 open import Foundations.Univalence
+
+open import Meta.Groupoid
 
 private variable
   ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᶜ ℓᵉ ℓᵖ : Level
@@ -78,7 +80,7 @@ module @0 _ where
     : {z@(_ , p) z′@(_ , p′) : fibre f y}
     → z ＝ z′
     ≃ fibre (ap f) (p ∙ sym p′)
-  fibre-equality≃fibre-on-paths = fibre-paths ∙ₑ Σ-ap-snd (λ _ → tiltₑ)
+  fibre-equality≃fibre-on-paths = fibre-paths ∙ Σ-ap-snd (λ _ → tiltₑ)
 
 -- ultra fast
 fibre-comp : {c : C}

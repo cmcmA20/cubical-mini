@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
 module Data.Quotient.Set.Properties where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
 open import Meta.Effect.Map
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
@@ -156,4 +157,4 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   → (∀ x y → Dec (R x y))
   → is-discrete (A / R)
 /₂-is-discrete R-c d = is-discrete-η $ elim²-prop! λ x y →
-  Dec.dmap (glue/ _ _) (λ f p → ⊥.rec $ᴱ f $ (effective R-c ₑ⁻¹) # p) $ d x y
+  Dec.dmap (glue/ _ _) (λ f p → ⊥.rec $ᴱ f $ (effective R-c ⁻¹) # p) $ d x y

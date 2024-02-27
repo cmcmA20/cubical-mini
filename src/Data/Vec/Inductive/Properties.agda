@@ -1,10 +1,12 @@
 {-# OPTIONS --safe #-}
 module Data.Vec.Inductive.Properties where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 open import Foundations.Sigma
 open import Foundations.Pi
+
+open import Meta.Groupoid
 
 open import Data.Empty.Base
 open import Data.Fin.Inductive.Base as Fin
@@ -41,5 +43,5 @@ vec-fun-equiv = iso→equiv (lookup , iso tabulate lemma₁ lemma₂) where
 
 list≃vec : Listⁱ A ≃ Σ[ n ꞉ ℕ ] Vec A n
 list≃vec
-  =  list-container-equiv
-  ∙ₑ Σ-ap-snd (λ _ → (vec-fun-equiv ∙ₑ Π-dom-≃ Fin.default≃inductive) ₑ⁻¹)
+  = list-container-equiv
+  ∙ Σ-ap-snd (λ _ → (vec-fun-equiv ∙ Π-dom-≃ Fin.default≃inductive) ⁻¹)

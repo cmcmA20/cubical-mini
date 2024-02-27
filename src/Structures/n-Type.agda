@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Structures.n-Type where
 
-open import Foundations.Base
+open import Foundations.Base renaming (_∙_ to _∙ₚ_)
 open import Foundations.Cubes
 open import Foundations.Equiv
 open import Foundations.HLevel
@@ -9,6 +9,7 @@ open import Foundations.Path
 open import Foundations.Sigma
 open import Foundations.Univalence
 
+open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Underlying public
 open import Meta.Variadic
@@ -83,7 +84,7 @@ opaque
 
 -- FIXME disgusting! rewrite it without resorting to direct cube manipulations
 opaque
-  unfolding _∙_
+  unfolding _∙ₚ_
   @0 n-path-∙ : {A B C : n-Type ℓ n}
                 (p : ⌞ A ⌟⁰ ＝ ⌞ B ⌟⁰) (q : ⌞ B ⌟⁰ ＝ ⌞ C ⌟⁰)
               → n-path {X = A} {Y = C} (p ∙ q) ＝ n-path {Y = B} p ∙ n-path q
@@ -96,7 +97,7 @@ opaque
 
 @0 n-ua-∙ₑ : {A B C : n-Type ℓ n}
              (f : ⌞ A ⌟⁰ ≃ ⌞ B ⌟⁰) (g : ⌞ B ⌟⁰ ≃ ⌞ C ⌟⁰)
-           → n-ua {X = A} {Y = C} (f ∙ₑ g) ＝ n-ua {Y = B} f ∙ n-ua g
+           → n-ua {X = A} {Y = C} (f ∙ g) ＝ n-ua {Y = B} f ∙ n-ua g
 n-ua-∙ₑ f g = ap n-path (ua-∙ₑ f g) ∙ n-path-∙ (ua f) (ua g)
 
 opaque
@@ -105,7 +106,7 @@ opaque
   n-Type-is-of-hlevel zero X Y = n-ua
     ((λ _ → carrier-is-tr Y .fst) , is-contr→is-equiv (X .carrier-is-tr) (Y .carrier-is-tr))
   n-Type-is-of-hlevel (suc n) X Y =
-    is-of-hlevel-≃ (suc n) (n-univalence ₑ⁻¹) (≃-is-of-hlevel (suc n) (X .carrier-is-tr) (Y .carrier-is-tr))
+    is-of-hlevel-≃ (suc n) (n-univalence ⁻¹) (≃-is-of-hlevel (suc n) (X .carrier-is-tr) (Y .carrier-is-tr))
 
 Prop : ∀ ℓ → Type (ℓsuc ℓ)
 Prop ℓ = n-Type ℓ 1

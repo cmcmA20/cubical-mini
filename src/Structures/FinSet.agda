@@ -1,12 +1,13 @@
 {-# OPTIONS --safe #-}
 module Structures.FinSet where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Erased
 open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Meta.Effect.Bind
+open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
@@ -81,7 +82,7 @@ private
   fin-set′-ext {X} {Y} p = do
     u ← X .snd .snd
     v ← Y .snd .snd
-    pure $ sip fin-set-str-is-univalent (u ∙ₑ path→equiv (ap (λ n → Fin n) p) ∙ₑ v ₑ⁻¹ , p)
+    pure $ sip fin-set-str-is-univalent (u ∙ path→equiv (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
 
   ∥FinSet′∥₂≃ᴱℕ : ∥ FinSet′ ℓ ∥₂ ≃ᴱ ℕ
   ∥FinSet′∥₂≃ᴱℕ = (∥-∥₂.rec! (fst ∘ snd)) , is-isoᴱ→is-equivᴱ
@@ -90,6 +91,6 @@ private
     , erase (∥-∥₂.elim! (λ X → ∥-∥₂-path.from (fin-set′-ext refl))) )
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
-∥FinSet∥₂≃ᴱℕ =
-      ∥-∥₂-≃ᴱ (iso→equiv fin-set-iso ∙ₑ Σ-ap-snd λ _ → iso→equiv is-bishop-finite-iso)
-  ∙ᴱₑ ∥FinSet′∥₂≃ᴱℕ
+∥FinSet∥₂≃ᴱℕ
+  = ∥-∥₂-≃ᴱ (iso→equiv fin-set-iso ∙ Σ-ap-snd λ _ → iso→equiv is-bishop-finite-iso)
+  ∙ ∥FinSet′∥₂≃ᴱℕ

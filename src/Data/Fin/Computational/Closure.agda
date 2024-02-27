@@ -8,6 +8,7 @@ open import Foundations.Path
 open import Foundations.Transport
 open import Foundations.Univalence
 
+open import Meta.Groupoid
 open import Meta.Marker
 open import Meta.Search.HLevel
 open import Meta.Regularity
@@ -81,7 +82,7 @@ fin-coproduct {suc n} {m} =
   Fin (suc n) ⊎ Fin m ≃⟨ ⊎-ap-l fin-suc ⟩
   (⊤ ⊎ Fin n) ⊎ Fin m ≃⟨ ⊎-assoc ⟩
   ⊤ ⊎ Fin n ⊎ Fin m   ≃⟨ ⊎-ap-r (fin-coproduct {n} {m}) ⟩
-  ⊤ ⊎ Fin (n + m)     ≃⟨ fin-suc ₑ⁻¹ ⟩
+  ⊤ ⊎ Fin (n + m)     ≃⟨ fin-suc ⁻¹ ⟩
   Fin (suc (n + m))   ≃∎
 
 sum : ∀ n → (Fin n → ℕ) → ℕ

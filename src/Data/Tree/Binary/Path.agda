@@ -1,9 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Tree.Binary.Path where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem
@@ -96,7 +97,7 @@ tree-is-of-hlevel : (n : HLevel)
                   → is-of-hlevel (2 + n) (Tree A)
 tree-is-of-hlevel n A-hl = is-of-hlevel-η n λ _ _ →
   is-of-hlevel-≃ (suc n)
-                 (identity-system-gives-path identity-system ₑ⁻¹)
+                 (identity-system-gives-path identity-system ⁻¹)
                  (code-is-of-hlevel A-hl)
 
 instance

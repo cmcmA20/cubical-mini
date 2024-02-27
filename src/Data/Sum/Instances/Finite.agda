@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
 module Data.Sum.Instances.Finite where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Equiv
 
 open import Meta.Effect.Bind
+open import Meta.Groupoid
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Finite.ManifestBishop
 
@@ -19,13 +20,13 @@ private variable
   B : Type ℓ′
 
 ⊎-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite B → Manifest-bishop-finite (A ⊎ B)
-⊎-manifest-bishop-finite afi bfi = fin $ ⊎-ap (enumeration afi) (enumeration bfi) ∙ₑ fin-coproduct
+⊎-manifest-bishop-finite afi bfi = fin $ ⊎-ap (enumeration afi) (enumeration bfi) ∙ fin-coproduct
 
 ⊎-is-bishop-finite : is-bishop-finite A → is-bishop-finite B → is-bishop-finite (A ⊎ B)
 ⊎-is-bishop-finite afi bfi = fin₁ do
   aeq ← enumeration₁ afi
   beq ← enumeration₁ bfi
-  pure $ ⊎-ap aeq beq ∙ₑ fin-coproduct
+  pure $ ⊎-ap aeq beq ∙ fin-coproduct
 
 instance
   decomp-fin-⊎ : goal-decomposition (quote Manifest-bishop-finite) (A ⊎ B)

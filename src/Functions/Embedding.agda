@@ -1,12 +1,13 @@
 {-# OPTIONS --safe #-}
 module Functions.Embedding where
 
-open import Foundations.Base
+open import Foundations.Base hiding (_∙_)
 open import Foundations.Pi
 open import Foundations.Sigma
 open import Foundations.Univalence
 
 open import Meta.Extensionality
+open import Meta.Groupoid
 open import Meta.Search.HLevel
 open import Meta.Variadic
 
@@ -115,7 +116,7 @@ is-equiv-on-paths→cancellable f-eop = _ , is-equiv-inv f-eop
 
 @0 is-equiv-on-paths→is-embedding : is-equiv-on-paths f → is-embedding f
 is-equiv-on-paths→is-embedding ep b = is-prop-η λ fib₁ fib₂ →
-  (fibre-equality≃fibre-on-paths ₑ⁻¹) # (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
+  (fibre-equality≃fibre-on-paths ⁻¹) # (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
 
 cancellable→is-embedding : Cancellable f → is-embedding f
 cancellable→is-embedding can = preimage-is-contr→is-embedding λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → can)) $
@@ -148,6 +149,20 @@ is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
 
 iso→embedding : A ≅ B → A ↪ B
 iso→embedding = second is-iso→is-embedding
+
+instance
+  Refl-Inj : Refl large _↣_
+  Refl-Inj .reflₐ = id , id
+
+  Refl-Emb : Refl large _↪_
+  Refl-Emb .reflₐ = id , is-equiv→is-embedding id-is-equiv
+
+  Compose-Inj : Compose large _↣_
+  Compose-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ f , f-inj ∘ g-inj
+
+  Compose-Emb : Compose large _↪_
+  Compose-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
+    is-of-hlevel-≃ 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
 
 opaque
   unfolding is-of-hlevel
