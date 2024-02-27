@@ -20,6 +20,7 @@ open import Data.Bool.Base as Bool public
 open import Data.Bool.Path
 open import Data.Bool.Instances.Finite
 open import Data.Bool.Instances.Underlying
+open import Data.Maybe.Base
 open import Data.Sum.Base
 open import Data.Sum.Path
 
@@ -35,6 +36,24 @@ universal = iso→equiv
   , iso (flip (Bool.rec fst snd))
         (λ _ → refl)
         (λ _ → fun-ext $ Bool.elim refl refl)
+
+bool≃maybe⊤ : Bool ≃ Maybe ⊤
+bool≃maybe⊤ = iso→equiv $ to , iso from ri li where
+  to : Bool → Maybe ⊤
+  to false = nothing
+  to true  = just tt
+
+  from : Maybe ⊤ → Bool
+  from (just _) = true
+  from nothing  = false
+
+  ri : from is-right-inverse-of to
+  ri (just _) = refl
+  ri nothing  = refl
+
+  li : from is-left-inverse-of to
+  li false = refl
+  li true  = refl
 
 boolean-pred-ext : (f g : A → Bool) → f ⊆ g → g ⊆ f → f ＝ g
 boolean-pred-ext f g p q i a with f a | recall f a | g a | recall g a
