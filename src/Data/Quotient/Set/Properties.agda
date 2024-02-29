@@ -1,7 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Quotient.Set.Properties where
 
-open import Foundations.Base hiding (_∙_)
+open import Foundations.Base
+  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 
 open import Meta.Effect.Map
@@ -22,7 +23,7 @@ import Data.Dec.Path
 open import Data.Quotient.Set.Base public
 
 import Truncation.Propositional as ∥-∥₁
-open ∥-∥₁ using (∃-syntax; ∥_∥₁ ; ∣_∣₁)
+open ∥-∥₁ using (∃-syntax-und; ∥_∥₁ ; ∣_∣₁)
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ ℓᵖ ℓʳ ℓˢ ℓᵗ ℓ : Level
@@ -36,13 +37,16 @@ private variable
   T : C → C → Type ℓᵗ
 
 elim-prop!
-  : {@(tactic hlevel-tactic-worker) P-prop : Π[ x ꞉ A / R ] is-prop (P x)}
+  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓᵖ}
+    {@(tactic hlevel-tactic-worker) P-prop : Π[ x ꞉ A / R ] is-prop (P x)}
     (f : Π[ a ꞉ A ] P ⦋ a ⦌)
   → Π[ q ꞉ A / R ] P q
 elim-prop! {P-prop} = elim-prop P-prop
 
 elim²-prop
-  : {P : A / R → B / S → Type ℓ}
+  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
+    {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
+    {P : A / R → B / S → Type ℓ}
     (P-prop : ∀ x y → is-prop (P x y))
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
@@ -52,14 +56,19 @@ elim²-prop {P} P-prop f = elim-prop! λ a → elim-prop! (f a)
     P-prop′ = hlevel-prop-instance (P-prop _ _)
 
 elim²-prop!
-  : {P : A / R → B / S → Type ℓ}
+  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
+    {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
+    {P : A / R → B / S → Type ℓ}
     {@(tactic hlevel-tactic-worker) P-prop : ∀ x y → is-prop (P x y)}
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
 elim²-prop! {P} {P-prop} = elim²-prop P-prop
 
 elim³-prop
-  : {P : A / R → B / S → C / T → Type ℓ}
+  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
+    {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
+    {C : Type ℓᶜ} {T : C → C → Type ℓᵗ}
+    {P : A / R → B / S → C / T → Type ℓ}
     (P-prop : ∀ x y z → is-prop (P x y z))
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
@@ -69,7 +78,10 @@ elim³-prop {P} P-prop f = elim²-prop! λ a b → elim-prop! (f a b)
     P-prop′ = hlevel-prop-instance (P-prop _ _ _)
 
 elim³-prop!
-  : {P : A / R → B / S → C / T → Type ℓ}
+  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
+    {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
+    {C : Type ℓᶜ} {T : C → C → Type ℓᵗ}
+    {P : A / R → B / S → C / T → Type ℓ}
     {@(tactic hlevel-tactic-worker) P-prop : ∀ x y z → is-prop (P x y z)}
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
@@ -77,7 +89,8 @@ elim³-prop! {P} {P-prop} = elim³-prop P-prop
 
 
 elim!
-  : {@(tactic hlevel-tactic-worker) P-set : Π[ x ꞉ A / R ] is-set (P x)}
+  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓᵖ}
+    {@(tactic hlevel-tactic-worker) P-set : Π[ x ꞉ A / R ] is-set (P x)}
     (f : Π[ a ꞉ A ] P ⦋ a ⦌)
   → (∀ a b (r : R a b) → ＜ f a ／ (λ i → P (glue/ a b r i)) ＼ f b ＞)
   → Π[ q ꞉ A / R ] P q
@@ -109,7 +122,8 @@ rec²! {C-set} = rec² C-set
 
 -- Actual properties
 
-⦋-⦌-surjective : (x : A / R) → ∃[ a ꞉ A ] (⦋ a ⦌ ＝ x)
+⦋-⦌-surjective : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
+                (x : A / R) → ∃[ a ꞉ A ] (⦋ a ⦌ ＝ x)
 ⦋-⦌-surjective = elim-prop! λ a → ∣ a , refl ∣₁
 
 universal : is-set B

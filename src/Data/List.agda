@@ -2,6 +2,7 @@
 module Data.List where
 
 open import Data.List.Base       public
+open import Data.List.Membership public
 open import Data.List.Operations public
 import Data.List.Path
 open module Path = Data.List.Path

@@ -1,9 +1,12 @@
 {-# OPTIONS --safe #-}
 module Functions.Embedding where
 
-open import Foundations.Base hiding (_∙_)
+open import Foundations.Base
+  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Pi
+  hiding (Π-syntax; ∀-syntax)
 open import Foundations.Sigma
+  hiding (Σ-syntax)
 open import Foundations.Univalence
 
 open import Meta.Extensionality

@@ -2,6 +2,7 @@
 module Data.Nat.Order.Base where
 
 open import Foundations.Base
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel

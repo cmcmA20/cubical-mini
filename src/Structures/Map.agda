@@ -2,6 +2,8 @@
 module Structures.Map where
 
 open import Foundations.Base
+
+open import Meta.Membership
 open import Meta.Record
 
 open import Data.Empty.Base
@@ -36,5 +38,9 @@ module _ {ℓᵏ ℓᵛ ℓ} (K : 𝒰 ℓᵏ) (V : 𝒰 ℓᵛ) (M : 𝒰 ℓ) 
       remove-remove    : Erased $ᴱ remove (remove m k₁) k₂ ＝ remove (remove m k₂) k₁
       remove-insert    : lookup m k ＝ nothing
                        → Erased $ᴱ remove (insert m k v) k ＝ m
+
+    instance
+      Membership-map : Membership K M ℓᵛ
+      Membership-map ._∈_ k m = Σ[ v ꞉ _ ] (lookup m k ＝ just v)
 
 unquoteDecl MapI-iso = declare-record-iso MapI-iso (quote MapI)

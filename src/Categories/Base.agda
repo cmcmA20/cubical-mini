@@ -1,7 +1,9 @@
 {-# OPTIONS --safe #-}
 module Categories.Base where
 
-open import Foundations.Base hiding (id ; _∘_ ; _∙_)
+open import Foundations.Base
+  hiding ( id ; _∘_ ; _∙_
+         ; Σ-syntax; Π-syntax; ∀-syntax )
 open import Foundations.Equiv
 
 open import Meta.Extensionality

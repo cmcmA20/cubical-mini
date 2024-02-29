@@ -2,6 +2,7 @@
 module Data.Vec.Inductive.Correspondences.Unary.Any.Computational where
 
 open import Foundations.Base
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 
 open import Meta.Search.Decidable
 open import Meta.Variadic

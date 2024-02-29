@@ -3,6 +3,8 @@
 module Structures.Set where
 
 open import Foundations.Base
+
+open import Meta.Membership
 open import Meta.Record
 
 open import Data.Bool.Base
@@ -33,5 +35,9 @@ module _ {ℓᵃ ℓ} (A : 𝒰 ℓᵃ) (S : 𝒰 ℓ) where
       remove-remove : Erased $ᴱ remove (remove s x) y ＝ remove (remove s y) x
       remove-insert : lookup s x ＝ false
                     → Erased $ᴱ remove (insert s x) x ＝ s
+
+    instance
+      Membership-set : Membership A S 0ℓ
+      Membership-set ._∈_ a s = lookup s a ＝ true
 
 unquoteDecl SetI-iso = declare-record-iso SetI-iso (quote SetI)

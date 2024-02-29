@@ -2,6 +2,7 @@
 module Truncation.Propositional.Base where
 
 open import Foundations.Base
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 
 open import Meta.Search.HLevel
 open import Meta.Variadic
@@ -38,7 +39,7 @@ instance
 proj : (A-prop : is-prop A) → ∥ A ∥₁ → A
 proj A-prop = rec A-prop id
 
-elim : {P : ∥ A ∥₁ → Type ℓ′}
+elim : {A : Type ℓ} {P : ∥ A ∥₁ → Type ℓ′}
      → Π[ x ꞉ ∥ A ∥₁ ] is-prop (P x)
      → Π[ x ꞉   A    ] P ∣ x ∣₁
      → Π[ x ꞉ ∥ A ∥₁ ] P   x
@@ -54,12 +55,14 @@ elim P-prop incc (squash₁ x y i) =
 ∃ : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 ∃ A B = ∥ Σ[ B ] ∥₁
 
-infixr 6 ∃-syntax
+infixr 6 ∃-syntax-und
 
-∃-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
-∃-syntax = ∃
+∃-syntax-und
+  : ⦃ _ : Underlying A ⦄ (X : A) (F : ⌞ X ⌟⁰ → Type ℓ′)
+  → Type _
+∃-syntax-und X F = ∃ ⌞ X ⌟⁰ F
 
-syntax ∃-syntax A (λ x → B) = ∃[ x ꞉ A ] B
+syntax ∃-syntax-und X (λ x → F) = ∃[ x ꞉ X ] F
 
 Existential₁ⁿ : Variadic-binding¹
 Existential₁ⁿ = ∥_∥₁ ∘ Existentialⁿ

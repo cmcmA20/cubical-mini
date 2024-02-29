@@ -4,11 +4,13 @@ module Prelude where
 
 open import Foundations.Base       public
   renaming (_∙_ to _∙ₚ_ ; _∘′_ to _∘ₜ′_)
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Erased     public
 open import Foundations.Path       public
 open import Foundations.Pi         public
-  hiding (_∘′_)
+  hiding (_∘′_; Π-syntax; ∀-syntax)
 open import Foundations.Sigma      public
+  hiding (Σ-syntax)
 open import Foundations.Transport  public
 open import Foundations.Univalence public
 
@@ -25,6 +27,7 @@ open import Meta.Literals.FromProduct public
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromNeg     public
 open import Meta.Literals.FromString  public
+open import Meta.Membership           public
 open import Meta.Ord                  public
 open import Meta.Show                 public
 
@@ -56,7 +59,7 @@ import Truncation.Propositional
 module ∥-∥₁ = Truncation.Propositional
 open ∥-∥₁ public
   using ( ∥_∥₁ ; ∣_∣₁ ; squash₁
-        ; ∃ ; ∃-syntax ; ∃[_]
+        ; ∃ ; ∃-syntax-und ; ∃[_]
         ; _⊎₁_ ; _⊎̇₁_
         ; fibre₁ ; Im )
 

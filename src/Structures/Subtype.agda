@@ -1,9 +1,13 @@
 {-# OPTIONS --safe #-}
 module Structures.Subtype where
 
-open import Foundations.Base hiding (_∙_)
+open import Foundations.Base
+  hiding (_∙_)
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Pi
+  hiding (Π-syntax; ∀-syntax)
 open import Foundations.Sigma
+  hiding (Σ-syntax)
 
 open import Meta.Extensionality
 open import Meta.Groupoid

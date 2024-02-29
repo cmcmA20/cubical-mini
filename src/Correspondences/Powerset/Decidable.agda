@@ -2,8 +2,10 @@
 module Correspondences.Powerset.Decidable where
 
 open import Foundations.Base
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 
+open import Meta.Membership
 open import Meta.Search.Decidable
 open import Meta.Search.HLevel
 
@@ -31,7 +33,7 @@ is-complemented : (A : ℙ X) → Type _
 is-complemented {X} A = Σ[ A⁻¹ ꞉ ℙ X ] (A ∩ A⁻¹ ⊆ ⟘) × (⟙ ⊆ A ∪ A⁻¹)
 
 is-decidable-subset : (A : ℙ X) → Type (level-of-type X)
-is-decidable-subset A = Decidableⁿ {1} (_∈ A)
+is-decidable-subset {X} A = Decidableⁿ {1} (λ (x : X) → x ∈ A)
 
 is-complemented→is-decidable-subset : (A : ℙ X) → is-complemented A → is-decidable-subset A
 is-complemented→is-decidable-subset A (A⁻¹ , int , uni) x =

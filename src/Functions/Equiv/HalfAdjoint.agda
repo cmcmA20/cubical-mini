@@ -1,10 +1,13 @@
 {-# OPTIONS --safe #-}
 module Functions.Equiv.HalfAdjoint where
 
-open import Foundations.Base renaming (_∙_ to _∙ₚ_)
+open import Foundations.Base
+  renaming (_∙_ to _∙ₚ_)
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 open import Foundations.Path
 open import Foundations.Sigma
+  hiding (Σ-syntax)
 open import Foundations.Transport
 open import Foundations.Univalence.Base
 

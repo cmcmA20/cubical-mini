@@ -17,7 +17,7 @@ open import Data.Empty.Base as ⊥
   using (¬_)
 
 open import Truncation.Propositional as ∥-∥₁
-  using (∥_∥₁; ∣_∣₁; ∃-syntax; ∃[_])
+  using (∥_∥₁; ∣_∣₁; ∃-syntax-und; ∃[_])
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level

@@ -2,6 +2,7 @@
 module Functions.Surjection where
 
 open import Foundations.Base
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
@@ -17,13 +18,13 @@ private variable
   g : B → A
 
 Split-surjective : (A → B) → Type _
-Split-surjective f = Π[ y ꞉ _ ] fibre f y
+Split-surjective {B} f = Π[ y ꞉ B ] fibre f y
 
 _↠!_ : Type ℓ → Type ℓ′ → Type _
 A ↠! B = Σ[ f ꞉ (A → B) ] Split-surjective f
 
 is-surjective : (A → B) → Type _
-is-surjective f = Π[ y ꞉ _ ] ∥ fibre f y ∥₁
+is-surjective {B} f = Π[ y ꞉ B ] ∥ fibre f y ∥₁
 
 is-surjective-is-prop : is-prop (is-surjective f)
 is-surjective-is-prop = hlevel!

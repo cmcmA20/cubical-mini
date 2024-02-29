@@ -2,6 +2,7 @@
 module Structures.Fibration where
 
 open import Foundations.Base
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 
 open import Meta.SIP
 open import Meta.Underlying

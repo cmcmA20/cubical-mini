@@ -1,10 +1,13 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Finite.ManifestBishop where
 
-open import Foundations.Base hiding (_∙_; _∘′_)
+open import Foundations.Base
+  hiding (_∙_; _∘′_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
-open import Foundations.Pi hiding (_∘′_)
+open import Foundations.Pi
+  hiding (_∘′_; Π-syntax; ∀-syntax)
 open import Foundations.Sigma
+  hiding (Σ-syntax)
 open import Foundations.Univalence
 
 open import Meta.Groupoid

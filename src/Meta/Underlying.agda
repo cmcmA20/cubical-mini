@@ -38,18 +38,6 @@ instance
   Underlying-Lift .⌞_⌟⁰ x = ⌞ x .lower ⌟⁰
 
 
-infix 5 _∈_
-_∈_ : ⦃ u : Underlying P ⦄ → A → (A → P) → Type _
-x ∈ P = ⌞ P x ⌟⁰
-
-infix 5 _∉_
-_∉_ : ⦃ u : Underlying P ⦄ → A → (A → P) → Type _
-x ∉ P = ¬ x ∈ P
-
-_⊆_ : ⦃ u : Underlying P ⦄ → (A → P) → (A → P) → Type _
-U ⊆ V = {x : _} → x ∈ U → x ∈ V
-
-
 -- Notation class for type families which are "function-like"
 -- Looks like it's dependent now
 record
@@ -91,7 +79,7 @@ instance
   Funlike-Iso : {A : Type ℓ} {B : Type ℓ′} → Funlike (Iso A B) A (λ _ → B)
   Funlike-Iso ._#_ = fst
 
-  Funlike-Π : {A : Type ℓ} {B : A → Type ℓ′} → Funlike (Π[ a ꞉ A ] B a) A B
+  Funlike-Π : {A : Type ℓ} {B : A → Type ℓ′} → Funlike ((a : A) → B a) A B
   Funlike-Π ._#_ = id
 
   Funlike-Homotopy
@@ -108,3 +96,25 @@ _ʻ_
   → F → (x : A) → ⦃ _ : Underlying (B x) ⦄
   → Type _
 F ʻ x = ⌞ F # x ⌟⁰
+
+
+infixr 6 Σ-syntax-und
+Σ-syntax-und
+  : ⦃ _ : Underlying A ⦄ (X : A) (F : ⌞ X ⌟⁰ → Type ℓ′)
+  → Type _
+Σ-syntax-und X F = Σ ⌞ X ⌟⁰ F
+syntax Σ-syntax-und X (λ x → F) = Σ[ x ꞉ X ] F
+
+infixr 6 Π-syntax-und
+Π-syntax-und
+  : ⦃ _ : Underlying A ⦄ (X : A) (F : ⌞ X ⌟⁰ → Type ℓ′)
+  → Type _
+Π-syntax-und X F = (x : ⌞ X ⌟⁰) → F x
+syntax Π-syntax-und X (λ x → F) = Π[ x ꞉ X ] F
+
+infixr 6 ∀-syntax-und
+∀-syntax-und
+  : ⦃ _ : Underlying A ⦄ (X : A) (F : ⌞ X ⌟⁰ → Type ℓ′)
+  → Type _
+∀-syntax-und X F = {x : ⌞ X ⌟⁰} → F x
+syntax ∀-syntax-und X (λ x → F) = ∀[ x ꞉ X ] F

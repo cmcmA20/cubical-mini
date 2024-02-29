@@ -28,7 +28,7 @@ record Supported {ℓ} (X : 𝒰 ℓ) : 𝒰 (ℓᵃ ⊔ ℓ) where
   no-eta-equality
   field
     support : X → A →̇ Bool
-    support-is-finite : Π[ x ꞉ X ] is-bishop-finite (Σ[ a ꞉ ⌞ A ⌟ ] ⟦ support x a ⟧ᵇ)
+    support-is-finite : Π[ x ꞉ X ] is-bishop-finite (Σ[ a ꞉ A ] ⟦ support x a ⟧ᵇ)
 
 open Supported
 

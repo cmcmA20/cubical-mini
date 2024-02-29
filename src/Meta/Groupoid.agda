@@ -8,6 +8,7 @@ open import Foundations.Erased
 open import Meta.Effect.Alt
 open import Meta.Reflection.Base
 
+open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 
@@ -57,8 +58,8 @@ try-sized s r hole = do
 
 private
   refl-macro : Term → TC ⊤
-  refl-macro hole = do
-    ty ← (infer-type hole) >>= wait-just-a-bit
+  refl-macro hole = with-reduce-defs (false , [ quote _＝_ , quote _≃_ , quote Iso , quote _≅_ ]) do
+    ty ← (infer-type hole >>= reduce) >>= wait-just-a-bit
     debug-print "tactic.id" 20 [ "Goal: " , termErr ty ]
     def r (_ h∷ _ h∷ _ v∷ _ v∷ []) ← pure ty
       where t → type-error [ "Target is not an application of a binary relation: " , termErr t ]

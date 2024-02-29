@@ -3,6 +3,7 @@ module Correspondences.Powerset.Base where
 
 open import Foundations.Base
 
+open import Meta.Membership
 open import Meta.Search.HLevel
 
 open import Structures.n-Type
@@ -25,7 +26,7 @@ private variable
 
 private variable A B : ℙ X
 
-subst-∈ : (A : ℙ X) → x ＝ y → x ∈ A → y ∈ A
+subst-∈ : (A : ℙ X) → {x y : X} → x ＝ y → x ∈ A → y ∈ A
 subst-∈ A = subst (_∈ A)
 
 ⊆-refl : (A : ℙ X) → A ⊆ A

@@ -1,9 +1,11 @@
 {-# OPTIONS --safe #-}
 module Structures.FinSet where
 
-open import Foundations.Base hiding (_∙_)
+open import Foundations.Base
+  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Erased
 open import Foundations.Sigma
+  hiding (Σ-syntax)
 open import Foundations.Univalence
 
 open import Meta.Effect.Bind

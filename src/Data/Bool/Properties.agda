@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv
 open import Foundations.Transport
 
+open import Meta.Membership
 open import Meta.Search.Decidable
 open import Meta.Search.Discrete
 open import Meta.Search.Exhaustible

@@ -2,9 +2,11 @@
 module Truncation.Propositional.Properties where
 
 open import Foundations.Base
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 open import Foundations.Path
 open import Foundations.Sigma
+  hiding (Σ-syntax)
 
 open import Meta.Effect.Map
 open import Meta.Search.HLevel
@@ -58,7 +60,7 @@ rec²! : {@(tactic hlevel-tactic-worker) C-prop : is-prop C}
 rec²! {C-prop} = rec² C-prop
 
 elim!
-  : {P : ∥ A ∥₁ → Type ℓ′}
+  : {A : Type ℓ} {P : ∥ A ∥₁ → Type ℓ′}
     {@(tactic hlevel-tactic-worker) P-prop : ∀{a} → is-prop (P a)}
   → Π[ a ꞉ A ] P ∣ a ∣₁
   → (x : ∥ A ∥₁) → P x
@@ -128,7 +130,7 @@ rec-set! : {f : A → B}
 rec-set! f-const {B-set} = rec-set f-const B-set
 
 Σ-∥-∥₁-over-prop
-  : {B : A → Type ℓ′} → is-prop A
+  : {A : Type ℓ} {B : A → Type ℓ′} → is-prop A
   → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∥ Σ[ a ꞉ A ] B a ∥₁
 Σ-∥-∥₁-over-prop A-prop = prop-extₑ!
   (λ x → map (x .fst ,_) (x .snd))

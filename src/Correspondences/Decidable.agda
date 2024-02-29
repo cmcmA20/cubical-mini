@@ -2,6 +2,7 @@
 module Correspondences.Decidable where
 
 open import Foundations.Base
+  hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Sigma
 
 open import Meta.Reflection.Base
