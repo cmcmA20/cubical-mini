@@ -262,9 +262,34 @@ pi-view (pi a (abs n b)) with pi-view b
 ... | tele , t = ((n , a) ∷ tele) , t
 pi-view t = [] , t
 
+pi-impl-view : Term → Telescope × Term
+pi-impl-view t@(pi (arg (arg-info visible _) _) _) = [] , t
+pi-impl-view (pi a (abs n b)) with pi-impl-view b
+... | tele , t = ((n , a) ∷ tele) , t
+pi-impl-view t = [] , t
+
 unpi-view : Telescope → Term → Term
 unpi-view []            k = k
 unpi-view ((n , a) ∷ t) k = pi a (abs n (unpi-view t k))
+
+tel→lam : Telescope → Term → Term
+tel→lam []                                t = t
+tel→lam ((n , arg (arg-info v _) _) ∷ ts) t = lam v (abs n (tel→lam ts t))
+
+tel→pats : ℕ → Telescope → List (Arg Pattern)
+tel→pats skip [] = []
+tel→pats skip ((_ , arg ai _) ∷ tel) = arg ai (var (skip + length tel)) ∷ tel→pats skip tel
+
+tel→args : ℕ → Telescope → List (Arg Term)
+tel→args = with-full-tank worker where
+  worker : (fuel : ℕ) → ℕ → Telescope → List (Arg Term)
+  worker 0 _ _ = []
+  worker (suc fuel) skip [] = []
+  worker (suc fuel) skip ((_ , arg ai t) ∷ tel) = arg ai
+    (tel→lam imp (var (skip + length tel + length imp) (worker fuel 0 imp)))
+    ∷ worker fuel skip tel
+    where
+      imp = pi-impl-view t .fst
 
 wait-for-args : List (Arg Term) → TC (List (Arg Term))
 wait-for-type : Term → TC Term

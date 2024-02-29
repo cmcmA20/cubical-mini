@@ -35,7 +35,7 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
     go .make-rig.·-absorb-r (lift m) = ap lift (·-absorb-r m)
 
   ℕ-is-initial : is-initial (Rigs ℓ) ℕᵣ
-  ℕ-is-initial {ℓ} R = is-contr-η $ ℕ→R , λ x → ext (uniq x ∘ₜ lower) where
+  ℕ-is-initial {ℓ} R = is-contr-η $ ℕ→R , λ x → ext $ uniq x where
     module R = Rig-on (R .snd)
 
     f : ℕ →̇ R

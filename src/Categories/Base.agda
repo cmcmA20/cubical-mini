@@ -4,6 +4,7 @@ module Categories.Base where
 open import Foundations.Base hiding (id ; _∘_ ; _∙_)
 open import Foundations.Equiv
 
+open import Meta.Extensionality
 open import Meta.Groupoid
 open import Meta.Literals.FromNat
 open import Meta.Record
@@ -53,7 +54,7 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
 
 
 private variable
-  o h o′ h′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
+  o h ℓ o′ h′ ℓ′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
   C : Precategory oᶜ hᵈ
   D : Precategory oᵈ hᵈ
 
@@ -128,6 +129,12 @@ record Functor
   F-∘ op f g = F-∘ g f
 
 unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
+
+instance
+  Funlike-Functor
+    : ∀ {o ℓ o' ℓ'} {C : Precategory o ℓ} {D : Precategory o' ℓ'}
+    → Funlike (Functor C D) ⌞ C ⌟ (λ _ → ⌞ D ⌟)
+  Funlike-Functor ._#_ = Functor.₀
 
 functor-double-dual : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {F : Functor C D}
                     → Functor.op (Functor.op F) ＝ F
@@ -232,6 +239,12 @@ record _⇒_ {C : Precategory oᶜ hᶜ}
 
 {-# INLINE NT #-}
 
+instance
+  Funlike-natural-transformation
+    : {C : Precategory o ℓ} {D : Precategory o′ ℓ′} {F G : Functor C D}
+    → Funlike (F ⇒ G) ⌞ C ⌟ (λ x → D .Precategory.Hom (F # x) (G # x))
+  Funlike-natural-transformation ._#_ = _⇒_.η
+
 is-natural-transformation
   : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
   → (F G : Functor C D)
@@ -309,3 +322,22 @@ module _ {C : Precategory oᶜ hᶜ}
   p ηᵈ x = apP (λ i e → e .η x) p
 
   infixl 45 _ηₚ_
+
+  Extensional-natural-transformation
+    : ∀ {ℓr}
+    → {@(tactic extensionalᶠ {A = ⌞ C ⌟ → Type _} (λ x → D .Hom (F # x) (G # x)))
+        sa : ∀ x → Extensional (D .Hom (F # x) (G # x)) ℓr}
+    → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
+  Extensional-natural-transformation {sa} .Pathᵉ f g = ∀ i → Pathᵉ (sa i) (f .η i) (g .η i)
+  Extensional-natural-transformation {sa} .reflᵉ x i = reflᵉ (sa i) (x .η i)
+  Extensional-natural-transformation {sa} .idsᵉ .to-path x = nat-pathP _ _ λ i →
+    sa _ .idsᵉ .to-path (x i)
+  Extensional-natural-transformation {sa} .idsᵉ .to-path-over h =
+    is-prop→pathP
+      (λ i → Π-is-of-hlevel 1
+        λ _ → is-of-hlevel-≃ 1 (identity-system-gives-path (sa _ .idsᵉ)) (is-prop-η $ is-set-β (D .Hom-set _ _) _ _))
+      _ _
+
+  instance
+    extensionality-natural-transformation : Extensionality (F ⇒ G)
+    extensionality-natural-transformation = record { lemma = quote Extensional-natural-transformation }

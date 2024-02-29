@@ -41,11 +41,11 @@ _↪_ : Type ℓ → Type ℓ′ → Type _
 A ↪ B = Σ[ f ꞉ (A → B) ] is-embedding f
 
 instance
-  Funlike-Inj : Funlike {A = Type ℓ} {B = Type ℓ′} _↣_
-  Funlike-Inj = record { _#_ = fst }
+  Funlike-Inj : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ↣ B) A (λ _ → B)
+  Funlike-Inj ._#_ = fst
 
-  Funlike-Emb : Funlike {A = Type ℓ} {B = Type ℓ′} _↪_
-  Funlike-Emb = record { _#_ = fst }
+  Funlike-Emb : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ↪ B) A (λ _ → B)
+  Funlike-Emb ._#_ = fst
 
 set-injective→is-embedding
   : {f : A → B} → is-set B → Injective f
@@ -198,3 +198,10 @@ set-injective→extensional!
   → Extensional A ℓ″
 set-injective→extensional! {B-set} {f} inj ext =
   embedding→extensional (f , set-injective→is-embedding B-set inj) ext
+
+Σ-prop→extensional
+  : {A : Type ℓ} {B : A → Type ℓ′}
+  → (∀ x → is-prop (B x))
+  → Extensional A ℓ″
+  → Extensional (Σ A B) ℓ″
+Σ-prop→extensional B-prop = embedding→extensional (fst , subset-proj-is-embedding B-prop)

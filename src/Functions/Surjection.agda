@@ -32,11 +32,11 @@ _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f
 
 instance
-  Funlike-Split-surj : Funlike {A = Type ℓ} {B = Type ℓ′} _↠!_
-  Funlike-Split-surj = record { _#_ = fst }
+  Funlike-Split-surj : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ↠! B) A (λ _ → B)
+  Funlike-Split-surj ._#_ = fst
 
-  Funlike-Surj : Funlike {A = Type ℓ} {B = Type ℓ′} _↠_
-  Funlike-Surj = record { _#_ = fst }
+  Funlike-Surj : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ↠ B) A (λ _ → B)
+  Funlike-Surj ._#_ = fst
 
 is-left-inverse-of→is-surjective : f is-left-inverse-of g → is-surjective f
 is-left-inverse-of→is-surjective {g} s b = ∣ g b , s b ∣₁

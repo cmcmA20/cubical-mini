@@ -139,11 +139,29 @@ Extensional-Π ⦃ sb ⦄ .reflᵉ f x = reflᵉ sb (f x)
 Extensional-Π ⦃ sb ⦄ .idsᵉ .to-path h = fun-ext λ i → sb .idsᵉ .to-path (h i)
 Extensional-Π ⦃ sb ⦄ .idsᵉ .to-path-over h = fun-ext λ i → sb .idsᵉ .to-path-over (h i)
 
+Extensional-∀
+  : ∀ {ℓ ℓ′ ℓr} {A : Type ℓ} {B : A → Type ℓ′}
+  → ⦃ sb : ∀ {x} → Extensional (B x) ℓr ⦄
+  → Extensional ∀[ B ] (ℓ ⊔ ℓr)
+Extensional-∀ ⦃ sb ⦄ .Pathᵉ f g = ∀ {x} → Pathᵉ sb (f {x}) (g {x})
+Extensional-∀ ⦃ sb ⦄ .reflᵉ f = reflᵉ sb f
+Extensional-∀ ⦃ sb ⦄ .idsᵉ .to-path h i {x} = sb .idsᵉ .to-path (h {x}) i
+Extensional-∀ ⦃ sb ⦄ .idsᵉ .to-path-over h i {x} = sb .idsᵉ .to-path-over (h {x}) i
+
 Extensional-→
   : ∀ {ℓ ℓ′ ℓr} {A : Type ℓ} {B : Type ℓ′}
   → ⦃ sb : Extensional B ℓr ⦄
   → Extensional (A → B) (ℓ ⊔ ℓr)
 Extensional-→ ⦃ sb ⦄ = Extensional-Π ⦃ λ {_} → sb ⦄
+
+Extensional-uncurry
+  : ∀ {ℓ ℓ′ ℓ″ ℓr} {A : Type ℓ} {B : A → Type ℓ′} {C : Type ℓ″}
+  → ⦃ sb : Extensional ((x : A) → B x → C) ℓr ⦄
+  → Extensional (Σ A B → C) ℓr
+Extensional-uncurry ⦃ sb ⦄ .Pathᵉ f g = sb .Pathᵉ (curry² f) (curry² g)
+Extensional-uncurry ⦃ sb ⦄ .reflᵉ f = sb .reflᵉ (curry² f)
+Extensional-uncurry ⦃ sb = sb ⦄ .idsᵉ .to-path h i (a , b) = sb .idsᵉ .to-path h i a b
+Extensional-uncurry ⦃ sb = sb ⦄ .idsᵉ .to-path-over h = sb .idsᵉ .to-path-over h
 
 Extensional-×
   : ∀ {ℓ ℓ′ ℓr ℓs} {A : Type ℓ} {B : Type ℓ′}
@@ -158,14 +176,14 @@ Extensional-× ⦃ sa ⦄ ⦃ sb ⦄ .idsᵉ .to-path (p , q) = ap² _,_
 Extensional-× ⦃ sa ⦄ ⦃ sb ⦄ .idsᵉ .to-path-over (p , q) =
   Σ-pathP (sa .idsᵉ .to-path-over p) (sb .idsᵉ .to-path-over q)
 
-Extensional-≃
-  : ∀ {ℓ ℓ′ ℓr} {A : Type ℓ} {B : Type ℓ′}
-  → ⦃ sb : Extensional B ℓr ⦄
-  → Extensional (A ≃ B) (ℓ ⊔ ℓr)
-Extensional-≃ .Pathᵉ (f₁ , _) (f₂ , _) = Pathᵉ Extensional-→ f₁ f₂
-Extensional-≃ ⦃ sb ⦄ .reflᵉ (f , _) a = Extensional-→ ⦃ sb ⦄ .reflᵉ f a
-Extensional-≃ ⦃ sb ⦄ .idsᵉ .to-path = equiv-ext ∘ Extensional-→ ⦃ sb ⦄ .idsᵉ .to-path
-Extensional-≃ ⦃ sb ⦄ .idsᵉ .to-path-over = Extensional-→ ⦃ sb ⦄ .idsᵉ .to-path-over
+Extensional-lift-map
+  : ∀ {ℓ ℓ′ ℓ″ ℓr} {A : Type ℓ} {B : Type ℓ″}
+  → ⦃ sa : Extensional (A → B) ℓr ⦄
+  → Extensional (Lift ℓ′ A → B) ℓr
+Extensional-lift-map ⦃ sa ⦄ .Pathᵉ f g = sa .Pathᵉ (f ∘ lift) (g ∘ lift)
+Extensional-lift-map ⦃ sa ⦄ .reflᵉ x = sa .reflᵉ (x ∘ lift)
+Extensional-lift-map ⦃ sa ⦄ .idsᵉ .to-path h i (lift x) = sa .idsᵉ .to-path h i x
+Extensional-lift-map ⦃ sa ⦄ .idsᵉ .to-path-over h = sa .idsᵉ  .to-path-over h
 
 @0 Extensional-Type : Extensional (Type ℓ) ℓ
 Extensional-Type .Pathᵉ A B = A ≃ B
@@ -184,15 +202,25 @@ instance
     → Extensionality (A → B)
   extensionality-fun .Extensionality.lemma = quote Extensional-→
 
-  extensionality-equiv
-    : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
-    → Extensionality (A ≃ B)
-  extensionality-equiv .Extensionality.lemma = quote Extensional-≃
+  extensionality-uncurry
+    : ∀ {ℓ ℓ′ ℓ″} {A : Type ℓ} {B : A → Type ℓ′} {C : Type ℓ″}
+    → Extensionality (Σ A B → C)
+  extensionality-uncurry .Extensionality.lemma = quote Extensional-uncurry
+
+  extensionality-lift-map
+    : ∀ {ℓ ℓ′ ℓ″} {A : Type ℓ} {B : Type ℓ″}
+    → Extensionality (Lift ℓ′ A → B)
+  extensionality-lift-map .Extensionality.lemma = quote Extensional-lift-map
 
   extensionality-Π
     : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′}
     → Extensionality Π[ B ]
   extensionality-Π .Extensionality.lemma = quote Extensional-Π
+
+  extensionality-∀
+    : ∀ {ℓ ℓ′} {A : Type ℓ} {B : A → Type ℓ′}
+    → Extensionality ∀[ B ]
+  extensionality-∀ .Extensionality.lemma = quote Extensional-∀
 
   extensionality-×
     : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
@@ -248,8 +276,7 @@ private
       `r ← wait-for-type =<< quoteωTC r
       ty ← quoteTC (Pathᵉ r x y)
       `x ← quoteTC x
-      `refl ← check-type (def (quote reflᵉ) [ argN `r , argN `x ]) ty
-        <|> error
+      `refl ← check-type (it reflᵉ ##ₙ `r ##ₙ `x) ty <|> error
       unify goal `refl
 
     error = do
@@ -281,6 +308,17 @@ opaque
     → {@(tactic trivial-worker r x y) p : Pathᵉ r x y}
     → x ＝ y
   trivial! ⦃ r ⦄ {p} = r .idsᵉ .to-path p
+
+  unext : ∀ {ℓ ℓr} {A : Type ℓ} ⦃ e : Extensional A ℓr ⦄ {x y : A} → x ＝ y → e .Pathᵉ x y
+  unext ⦃ e ⦄ {x = x} p = transport (λ i → e .Pathᵉ x (p i)) (e .reflᵉ x)
+
+macro
+  reext!
+    : ∀ {ℓ ℓr} {A : Type ℓ} ⦃ ea : Extensional A ℓr ⦄ {x y : A}
+    → x ＝ y → Term → TC ⊤
+  reext! p goal = do
+    `p ← quoteTC p
+    unify goal (def (quote ext) [ argN (def (quote unext) [ argN `p ]) ])
 
 Pathᵉ-is-of-hlevel
   : ∀ {ℓ ℓr} {A : Type ℓ} n (sa : Extensional A ℓr)

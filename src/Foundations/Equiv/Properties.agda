@@ -127,6 +127,12 @@ module Equiv (e : A ≃ B) where
   inverse : B ≃ A
   inverse = e ₑ⁻¹
 
+  adjunct-l : ∀ {x y} → to x ＝ y → x ＝ from y
+  adjunct-l p = sym (η _) ∙ ap from p
+
+  adjunct-r : ∀ {x y} → x ＝ from y → to x ＝ y
+  adjunct-r p = ap to p ∙ ε _
+
 
 infixr 1.5 _≃⟨⟩_ _≃⟨_⟩_ _≃˘⟨_⟩_
 infix  1.9 _≃∎

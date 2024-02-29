@@ -43,9 +43,8 @@ lift-disc₂ _ .F-id = refl
 lift-disc₂ f .F-∘  = flip (ap-comp-∙ f)
 
 instance
-  Funlike-disc₂ : Funlike {A = Set ℓ} {B = Set ℓ′} (λ x y → Functor (Disc₂ x) (Disc₂ y))
-  Funlike-disc₂ = record { _#_ = F₀ }
-
+  Funlike-disc₂ : {A : Set ℓ} {B : Set ℓ′} → Funlike (Functor (Disc₂ A) (Disc₂ B)) ⌞ A ⌟ (λ _ → ⌞ B ⌟)
+  Funlike-disc₂ ._#_ = F₀
 
 Codisc : Type ℓ → Precategory ℓ ℓ′
 Codisc A .Ob = A

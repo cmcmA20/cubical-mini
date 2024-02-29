@@ -50,20 +50,12 @@ _⊆_ : ⦃ u : Underlying P ⦄ → (A → P) → (A → P) → Type _
 U ⊆ V = {x : _} → x ∈ U → x ∈ V
 
 
--- Notation class for type families which are "function-like" (always
--- nondependent)
+-- Notation class for type families which are "function-like"
+-- Looks like it's dependent now
 record
-  Funlike {ℓ ℓ′ ℓ″} {A : Type ℓ} {B : Type ℓ′} (F : A → B → Type ℓ″) : Typeω where
+  Funlike {ℓ ℓ′ ℓ″} (A : Type ℓ) (Arg : Type ℓ′) (F : Arg → Type ℓ″) : Type (ℓ ⊔ ℓ′ ⊔ ℓ″) where
   infixl 999 _#_
-
-  field
-    -- The domain and codomain of F must both support an underlying-type
-    -- projection, which is determined by the F.
-    overlap ⦃ au ⦄ : Underlying A
-    overlap ⦃ bu ⦄ : Underlying B
-
-    -- The underlying function (infix).
-    _#_ : ∀ {A B} → F A B → ⌞ A ⌟⁰ → ⌞ B ⌟⁰
+  field _#_ : A → (x : Arg) → F x
 
 open Funlike ⦃ ... ⦄ using (_#_) public
 {-# DISPLAY Funlike._#_ p f x = f # x #-}
@@ -73,24 +65,46 @@ open Funlike ⦃ ... ⦄ using (_#_) public
 -- "mutually blocks" the Funlike instance meta. Use the prefix version
 -- instead.
 apply
-  : {A : Type ℓ} {B : Type ℓ′ } {F : A → B → Type ℓ″}
-  → ⦃ _ : Funlike F ⦄
-  → ∀ {a b} → F a b → ⌞ a ⌟⁰ → ⌞ b ⌟⁰
+  : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
+  → ⦃ _ : Funlike F A B ⦄
+  → F → (x : A) → B x
 apply = _#_
+
+ap#
+  : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
+  → ⦃ _ : Funlike F A B ⦄
+  → (f : F) {x y : A} (p : x ＝ y)
+  → ＜ f # x ／ (λ i → B (p i)) ＼ f # y ＞
+ap# f = ap (apply f)
 
 -- Generalised happly.
 _#ₚ_
-  : ∀ {ℓ ℓ' ℓ''} {A : Type ℓ} {B : Type ℓ'} {F : A → B → Type ℓ''}
-  → ⦃ _ : Funlike F ⦄
-  → {a : A} {b : B} {f g : F a b} → f ＝ g → ∀ (x : ⌞ a ⌟⁰) → f # x ＝ g # x
+  : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
+  → ⦃ _ : Funlike F A B ⦄
+  → {f g : F} → f ＝ g → (x : A) → f # x ＝ g # x
 f #ₚ x = ap² _#_ f refl
 
 instance
-  Funlike-Fun : Funlike {A = Type ℓ} {B = Type ℓ′} (λ x y → x → y)
-  Funlike-Fun = record { _#_ = _$_ }
+  Funlike-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ≃ B) A (λ _ → B)
+  Funlike-≃ ._#_ = fst
 
-  Funlike-≃ : Funlike {A = Type ℓ} {B = Type ℓ′} _≃_
-  Funlike-≃ = record { _#_ = fst }
+  Funlike-Iso : {A : Type ℓ} {B : Type ℓ′} → Funlike (Iso A B) A (λ _ → B)
+  Funlike-Iso ._#_ = fst
 
-  Funlike-Iso : Funlike {A = Type ℓ} {B = Type ℓ′} Iso
-  Funlike-Iso = record { _#_ = fst }
+  Funlike-Π : {A : Type ℓ} {B : A → Type ℓ′} → Funlike (Π[ a ꞉ A ] B a) A B
+  Funlike-Π ._#_ = id
+
+  Funlike-Homotopy
+    : {A : Type ℓ} {B : A → Type ℓ′} {f g : ∀ x → B x}
+    → Funlike (f ＝ g) A (λ x → f x ＝ g x)
+  Funlike-Homotopy ._#_ = happly
+
+
+-- Generalised "sections" (e.g. of a presheaf) notation.
+infix 999 _ʻ_
+_ʻ_
+  : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
+  → ⦃ _ : Funlike F A B ⦄
+  → F → (x : A) → ⦃ _ : Underlying (B x) ⦄
+  → Type _
+F ʻ x = ⌞ F # x ⌟⁰

@@ -83,7 +83,7 @@ module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure �
     extensionality-hom : ∀ {a b} → Extensionality (So.Hom a b)
     extensionality-hom = record { lemma = quote Extensional-Hom }
 
-    Funlike-Hom : Funlike So.Hom
+    Funlike-Hom : ∀ {a b} → Funlike (So.Hom a b) ⌞ a ⌟ (λ _ → ⌞ b ⌟)
     Funlike-Hom = record { _#_ = Total-hom.hom }
 
   Homomorphism-path

@@ -88,8 +88,8 @@ instance
   H-Level-Monotone : ∀ {n} → H-Level (2 + n) (Monotone P Q)
   H-Level-Monotone = hlevel-basic-instance 2 monotone-is-set
 
-  Funlike-Monotone : Funlike (Monotone {o} {o′} {ℓ} {ℓ′})
-  Funlike-Monotone = record { _#_ = hom }
+  Funlike-Monotone : Funlike (Monotone P Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
+  Funlike-Monotone ._#_ = hom
 
 monotone-pathP
   : {P : I → Poset o ℓ} {Q : I → Poset o′ ℓ′}
