@@ -43,15 +43,15 @@ bit-compl : ∀ x → bit x + bit (not x) ＝ 1
 bit-compl false = refl
 bit-compl true  = refl
 
-odd-+ : ∀ m n → odd (m + n) ＝ odd m ⊕ odd n
+odd-+ : ∀ m n → odd (m + n) ＝ odd m xor odd n
 odd-+  zero   n = refl
-odd-+ (suc m) n = ap not (odd-+ m n) ∙ sym (⊕-assoc true (odd m) (odd n))
+odd-+ (suc m) n = ap not (odd-+ m n) ∙ sym (xor-assoc true (odd m) (odd n))
 
 odd-· : ∀ m n → odd (m · n) ＝ odd m and odd n
 odd-·  zero   n = refl
 odd-· (suc m) n = odd-+ n (m · n)
-                ∙ ap (odd n ⊕_) (odd-· m n)
-                ∙ sym (and-distrib-⊕-r true (odd m) (odd n))
+                ∙ ap (odd n xor_) (odd-· m n)
+                ∙ sym (and-distrib-xor-r true (odd m) (odd n))
 
 +-×2 : ∀ n → n ×2 ＝ n + n
 +-×2  zero   = refl

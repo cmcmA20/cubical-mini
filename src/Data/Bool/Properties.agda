@@ -161,14 +161,14 @@ or-compl = witness!
 
 -- xor
 
-⊕-assoc : ∀ x y z → (x ⊕ y) ⊕ z ＝ x ⊕ y ⊕ z
-⊕-assoc = witness!
+xor-assoc : ∀ x y z → (x xor y) xor z ＝ x xor y xor z
+xor-assoc = witness!
 
-and-distrib-⊕-l : ∀ x y z → x and (y ⊕ z) ＝ (x and y) ⊕ (x and z)
-and-distrib-⊕-l = witness!
+and-distrib-xor-l : ∀ x y z → x and (y xor z) ＝ (x and y) xor (x and z)
+and-distrib-xor-l = witness!
 
-and-distrib-⊕-r : ∀ x y z → (x ⊕ y) and z ＝ (x and z) ⊕ (y and z)
-and-distrib-⊕-r = witness!
+and-distrib-xor-r : ∀ x y z → (x xor y) and z ＝ (x and z) xor (y and z)
+and-distrib-xor-r = witness!
 
 -- Testing witness tactic, uncomment if needed
 -- private module _ where

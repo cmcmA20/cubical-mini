@@ -23,21 +23,31 @@ not : Bool → Bool
 not true = false
 not false = true
 
-infixr 5 _or_
+infixr 5 _or_ _xor_
 _or_ : Bool → Bool → Bool
 false or x = x
 true  or _ = true
 
-infixr 6 _and_
+infixr 6 _and_ _implies_ _equals_
 _and_ : Bool → Bool → Bool
 false and _ = false
 true  and x = x
 
--- xor / mod-2 addition
+_xor_ : Bool → Bool → Bool
+false xor x = x
+true  xor x = not x
+
+_equals_ : Bool → Bool → Bool
+false equals y = not y
+true  equals y = y
+
+_implies_ : Bool → Bool → Bool
+true implies false = false
+_    implies _     = true
+
 infixr 5 _⊕_
-_⊕_ : Bool → Bool → Bool
-false ⊕ x = x
-true  ⊕ x = not x
+_⊕_ = _xor_
+{-# WARNING_ON_USAGE _⊕_ "Use `_xor_` instead" #-}
 
 infix 0 if_then_else_
 if_then_else_ : Bool → A → A → A
