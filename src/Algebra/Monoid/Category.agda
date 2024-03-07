@@ -1,6 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Monoid.Category where
 
+open import Algebra.Magma.Unital.Category using (UMagmas)
 open import Algebra.Monoid
 open import Algebra.Semigroup.Category using (Semigroups)
 
@@ -51,3 +52,17 @@ Forget-unit .Functor.F-∘ _ _ = trivial!
 
 forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
 forget-unit-is-faithful p = ext (p #ₚ_)
+
+
+Forget-assoc : Functor (Monoids ℓ) (UMagmas ℓ)
+Forget-assoc .Functor.F₀ = second (monoid-on↪unital-magma-on #_)
+Forget-assoc .Functor.F₁ f .hom = f #_
+Forget-assoc .Functor.F₁ f .preserves .UMagma-hom.pres-id =
+  f .preserves .pres-id
+Forget-assoc .Functor.F₁ f .preserves .UMagma-hom.pres-⋆ =
+  f .preserves .pres-⋆
+Forget-assoc .Functor.F-id = trivial!
+Forget-assoc .Functor.F-∘ _ _ = trivial!
+
+forget-assoc-is-faithful : is-faithful (Forget-assoc {ℓ})
+forget-assoc-is-faithful p = ext (p #ₚ_)

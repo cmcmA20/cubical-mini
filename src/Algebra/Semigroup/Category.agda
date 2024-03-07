@@ -34,11 +34,10 @@ Forget = Forget-structure (Semigroup-structure _)
 
 Forget-assoc : Functor (Semigroups ℓ) (Magmas ℓ)
 Forget-assoc .Functor.F₀ = second (semigroup-on↪magma-on #_)
-Forget-assoc .Functor.F₁ f .hom x = f # x
+Forget-assoc .Functor.F₁ f .hom = f #_
 Forget-assoc .Functor.F₁ f .preserves = f .preserves
 Forget-assoc .Functor.F-id = refl
 Forget-assoc .Functor.F-∘ _ _ = refl
 
 forget-assoc-is-faithful : is-faithful (Forget-assoc {ℓ})
-forget-assoc-is-faithful p i .hom = p i .hom
-forget-assoc-is-faithful p i .preserves = p i .preserves
+forget-assoc-is-faithful p = ext (p #ₚ_)

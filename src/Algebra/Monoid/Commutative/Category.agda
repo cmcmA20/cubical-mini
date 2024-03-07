@@ -41,5 +41,4 @@ Forget-comm .Functor.F-id = refl
 Forget-comm .Functor.F-∘ _ _ = refl
 
 forget-comm-is-faithful : is-faithful (Forget-comm {ℓ})
-forget-comm-is-faithful p i .hom = p i .hom
-forget-comm-is-faithful p i .preserves = p i .preserves
+forget-comm-is-faithful p = ext (p #ₚ_)

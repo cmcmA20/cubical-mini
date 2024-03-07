@@ -68,8 +68,8 @@ rig-on↪semiring-on .fst R .Semiring-on.has-semiring =
   R .Rig-on.has-rig .is-rig.has-semiring
 rig-on↪semiring-on .snd = set-injective→is-embedding hlevel! λ p →
   Equiv.injective (isoₜ→equiv rig-on-iso) $
-    Σ-pathP (ap Semiring-on.nil p) $ Σ-pathP (ap Semiring-on.unit p) $
-    Σ-pathP (ap Semiring-on._+_ p) $ Σ-pathP (ap Semiring-on._·_ p) prop!
+    ap Semiring-on.nil p ,ₚ ap Semiring-on.unit p ,ₚ ap Semiring-on._+_ p
+      ,ₚ ap Semiring-on._·_ p ,ₚ prop!
 
 rig-on-is-set : is-set (Rig-on A)
 rig-on-is-set = is-embedding→is-of-hlevel 1 (rig-on↪semiring-on .snd) hlevel!

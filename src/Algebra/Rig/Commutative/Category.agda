@@ -37,11 +37,10 @@ Forget = Forget-structure (CRig-structure _)
 
 Forget-comm : Functor (CRigs ℓ) (Rigs ℓ)
 Forget-comm .Functor.F₀ = second (comm-rig-on↪rig-on #_)
-Forget-comm .Functor.F₁ f .hom x = f # x
+Forget-comm .Functor.F₁ f .hom = f #_
 Forget-comm .Functor.F₁ f .preserves = f .preserves
 Forget-comm .Functor.F-id = refl
 Forget-comm .Functor.F-∘ _ _ = refl
 
 forget-comm-is-faithful : is-faithful (Forget-comm {ℓ})
-forget-comm-is-faithful p i .hom = p i .hom
-forget-comm-is-faithful p i .preserves = p i .preserves
+forget-comm-is-faithful p = ext (p #ₚ_)

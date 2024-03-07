@@ -81,9 +81,19 @@ record Group-hom
 
     field pres-⋆  : (x y : A) → e (x A.⋆ y) ＝ e x B.⋆ e y
 
-    -- TODO and `pres-inv` too
-    -- pres-id : e A.id ＝ B.id
-    -- pres-id = {!!}
+    pres-id : e A.id ＝ B.id
+    pres-id =
+      e A.id                                        ＝˘⟨ B.id-r _ ⟩
+      e A.id B.⋆ ⌜ B.id ⌝                           ＝˘⟨ ap¡ (B.inverse-r _) ⟩
+      e A.id B.⋆ (e A.id B.⋆ B.inverse (e A.id))    ＝⟨ B.assoc _ _ _ ⟩
+      ⌜ e A.id B.⋆ e A.id ⌝ B.⋆ B.inverse (e A.id)  ＝⟨ ap! (sym (pres-⋆ _ _) ∙ ap e (A.id-l _)) ⟩
+      e A.id B.⋆ B.inverse (e A.id)                 ＝⟨ B.inverse-r _ ⟩
+      B.id                                          ∎
+
+    pres-inv : ∀ x → e (A.inverse x) ＝ B.inverse (e x)
+    pres-inv x = monoid-inverse-unique {IM = B.has-monoid} (e x) _ _
+      (sym (pres-⋆ _ _) ∙∙ ap e (A.inverse-l _) ∙∙ pres-id)
+      (B.inverse-r _)
 
 unquoteDecl group-hom-iso = declare-record-iso group-hom-iso (quote Group-hom)
 
@@ -100,11 +110,13 @@ instance
                      → H-Level (suc n) (Group-hom M M′ f)
   H-Level-group-hom = hlevel-prop-instance group-hom-is-prop
 
--- TODO embedding of groups into monoids
--- monoid-on→semigroup-on : ∀[ Monoid-on {ℓ} →̇ Semigroup-on {ℓ} ]
--- monoid-on→semigroup-on M .Semigroup-on._⋆_ = M .Monoid-on._⋆_
--- monoid-on→semigroup-on M .Semigroup-on.has-semigroup =
---   M .Monoid-on.has-monoid .is-monoid.has-semigroup
+group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A
+group-on↪monoid-on .fst G .Monoid-on.id = G .Group-on.id
+group-on↪monoid-on .fst G .Monoid-on._⋆_ = G .Group-on._⋆_
+group-on↪monoid-on .fst G .Monoid-on.has-monoid = G .Group-on.has-monoid
+group-on↪monoid-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
+  Equiv.injective (isoₜ→equiv group-on-iso) $
+    ap Monoid-on._⋆_ p ,ₚ prop!
 
 
 record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -118,25 +130,24 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     inverse-l : Inverse-left id _⋆_ inverse
     assoc     : Associative _⋆_
 
-  private
-    inverse-r : Inverse-right id _⋆_ inverse
-    inverse-r x =
-      x ⋆ inverse x                                          ＝˘⟨ id-l _ ⟩
-      ⌜ id ⌝ ⋆ (x ⋆ inverse x)                               ＝˘⟨ ap¡ (inverse-l _) ⟩
-      (inverse (inverse x) ⋆ inverse x) ⋆ (x ⋆ inverse x)    ＝˘⟨ assoc _ _ _ ⟩
-      inverse (inverse x) ⋆ ⌜ inverse x ⋆ (x ⋆ inverse x) ⌝  ＝⟨ ap! (assoc _ _ _) ⟩
-      inverse (inverse x) ⋆ (⌜ inverse x ⋆ x ⌝ ⋆ inverse x)  ＝⟨ ap! (inverse-l _) ⟩
-      inverse (inverse x) ⋆ ⌜ id ⋆ inverse x ⌝               ＝⟨ ap! (id-l _) ⟩
-      inverse (inverse x) ⋆ inverse x                        ＝⟨ inverse-l _ ⟩
-      id                                                     ∎
+  inverse-r : Inverse-right id _⋆_ inverse
+  inverse-r x =
+    x ⋆ inverse x                                          ＝˘⟨ id-l _ ⟩
+    ⌜ id ⌝ ⋆ (x ⋆ inverse x)                               ＝˘⟨ ap¡ (inverse-l _) ⟩
+    (inverse (inverse x) ⋆ inverse x) ⋆ (x ⋆ inverse x)    ＝˘⟨ assoc _ _ _ ⟩
+    inverse (inverse x) ⋆ ⌜ inverse x ⋆ (x ⋆ inverse x) ⌝  ＝⟨ ap! (assoc _ _ _) ⟩
+    inverse (inverse x) ⋆ (⌜ inverse x ⋆ x ⌝ ⋆ inverse x)  ＝⟨ ap! (inverse-l _) ⟩
+    inverse (inverse x) ⋆ ⌜ id ⋆ inverse x ⌝               ＝⟨ ap! (id-l _) ⟩
+    inverse (inverse x) ⋆ inverse x                        ＝⟨ inverse-l _ ⟩
+    id                                                     ∎
 
-    id-r : Unital-right id _⋆_
-    id-r x =
-      x ⋆ ⌜ id ⌝             ＝˘⟨ ap¡ (inverse-l _) ⟩
-      x ⋆ (inverse x ⋆ x)    ＝⟨ assoc _ _ _ ⟩
-      ⌜ x ⋆ inverse x ⌝ ⋆ x  ＝⟨ ap! (inverse-r _) ⟩
-      id ⋆ x                 ＝⟨ id-l _ ⟩
-      x                      ∎
+  id-r : Unital-right id _⋆_
+  id-r x =
+    x ⋆ ⌜ id ⌝             ＝˘⟨ ap¡ (inverse-l _) ⟩
+    x ⋆ (inverse x ⋆ x)    ＝⟨ assoc _ _ _ ⟩
+    ⌜ x ⋆ inverse x ⌝ ⋆ x  ＝⟨ ap! (inverse-r _) ⟩
+    id ⋆ x                 ＝⟨ id-l _ ⟩
+    x                      ∎
 
   to-is-group : is-group _⋆_
   to-is-group .is-group.has-monoid = to-is-monoid m where

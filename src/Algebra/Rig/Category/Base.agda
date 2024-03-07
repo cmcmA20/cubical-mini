@@ -37,11 +37,10 @@ Forget = Forget-structure (Rig-structure _)
 
 Forget-absorb : Functor (Rigs ℓ) (Semirings ℓ)
 Forget-absorb .Functor.F₀ = second (rig-on↪semiring-on #_)
-Forget-absorb .Functor.F₁ f .hom x = f # x
+Forget-absorb .Functor.F₁ f .hom = f #_
 Forget-absorb .Functor.F₁ f .preserves = f .preserves
 Forget-absorb .Functor.F-id = refl
 Forget-absorb .Functor.F-∘ _ _ = refl
 
 forget-absorb-is-faithful : is-faithful (Forget-absorb {ℓ})
-forget-absorb-is-faithful p i .hom = p i .hom
-forget-absorb-is-faithful p i .preserves = p i .preserves
+forget-absorb-is-faithful p = ext (p #ₚ_)
