@@ -41,14 +41,13 @@ instance
 Forget : Functor (Monoids ℓ) (Sets ℓ)
 Forget = Forget-structure (Monoid-structure _)
 
-Forget-neutral : Functor (Monoids ℓ) (Semigroups ℓ)
-Forget-neutral .Functor.F₀ = second monoid-on→semigroup-on
-Forget-neutral .Functor.F₁ f .hom x = f # x
-Forget-neutral .Functor.F₁ f .preserves .n-Magma-hom.pres-⋆ =
+Forget-unit : Functor (Monoids ℓ) (Semigroups ℓ)
+Forget-unit .Functor.F₀ = second (monoid-on↪semigroup-on #_)
+Forget-unit .Functor.F₁ f .hom x = f # x
+Forget-unit .Functor.F₁ f .preserves .n-Magma-hom.pres-⋆ =
   f .preserves .pres-⋆
-Forget-neutral .Functor.F-id = trivial!
-Forget-neutral .Functor.F-∘ _ _ = trivial!
+Forget-unit .Functor.F-id = trivial!
+Forget-unit .Functor.F-∘ _ _ = trivial!
 
-forget-neutral-is-faithful : is-faithful (Forget-neutral {ℓ})
-forget-neutral-is-faithful p =
-  total-hom-path (Thin-structure-over _) (ext (p #ₚ_)) prop!
+forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
+forget-unit-is-faithful p = ext (p #ₚ_)

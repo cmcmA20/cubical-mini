@@ -33,13 +33,15 @@ record is-semiring {A : 𝒰 ℓ}
     renaming ( assoc to +-assoc
              ; id-l  to +-id-l
              ; id-r  to +-id-r
-             ; comm  to +-comm )
+             ; comm  to +-comm
+             ; has-unital-magma to has-unital-magma-+)
 
   field ·-monoid : is-monoid 1a _·_
   open is-monoid ·-monoid hiding (has-is-of-hlevel ; H-Level-magma-carrier) public
     renaming ( assoc to ·-assoc
              ; id-l  to ·-id-l
-             ; id-r  to ·-id-r )
+             ; id-r  to ·-id-r
+             ; has-unital-magma to has-unital-magma-·)
 
   field
     ·-distrib-+-l : Distrib-left  _·_ _+_

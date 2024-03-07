@@ -3,6 +3,7 @@ module Algebra.Monoid where
 
 open import Categories.Prelude
 
+open import Algebra.Magma.Unital public
 open import Algebra.Semigroup public
 
 private variable
@@ -13,11 +14,11 @@ private variable
   _✦_ : A → A → A
   n : HLevel
 
-Unital-left : (id : A) (_⋆_ : A → A → A) → 𝒰 _
-Unital-left {A} id _⋆_ = Π[ x ꞉ A ] (id ⋆ x ＝ x)
+Inverse-left : (id : A) (_⋆_ : A → A → A) (inv : A → A) → 𝒰 _
+Inverse-left {A} id _⋆_ inv = Π[ x ꞉ A ] (inv x ⋆ x ＝ id)
 
-Unital-right : (id : A) (_⋆_ : A → A → A) → 𝒰 _
-Unital-right {A} id _⋆_ = Π[ x ꞉ A ] (x ⋆ id ＝ x)
+Inverse-right : (id : A) (_⋆_ : A → A → A) (inv : A → A) → 𝒰 _
+Inverse-right {A} id _⋆_ inv = Π[ x ꞉ A ] (x ⋆ inv x ＝ id)
 
 -- monoids
 
@@ -30,6 +31,11 @@ record is-monoid {A : 𝒰 ℓ} (id : A) (_⋆_ : A → A → A) : 𝒰 ℓ wher
     id-l : Unital-left  id _⋆_
     id-r : Unital-right id _⋆_
 
+  has-unital-magma : is-unital-magma id _⋆_
+  has-unital-magma .is-unital-magma.has-magma = has-magma
+  has-unital-magma .is-unital-magma.id-l = id-l
+  has-unital-magma .is-unital-magma.id-r = id-r
+
 unquoteDecl is-monoid-iso = declare-record-iso is-monoid-iso (quote is-monoid)
 
 opaque
@@ -41,6 +47,17 @@ opaque
 instance
   H-Level-is-monoid : H-Level (suc n) (is-monoid e _✦_)
   H-Level-is-monoid = hlevel-prop-instance is-monoid-is-prop
+
+module _ {id : A} {IM : is-monoid id _✦_} where
+  open is-monoid IM
+  monoid-inverse-unique : (e x y : A) → x ✦ e ＝ id → e ✦ y ＝ id → x ＝ y
+  monoid-inverse-unique e x y p q =
+    x              ＝˘⟨ id-r _ ⟩
+    x ✦ ⌜ id ⌝     ＝˘⟨ ap¡ q ⟩
+    x ✦ (e ✦ y)    ＝⟨ assoc _ _ _ ⟩
+    ⌜ x ✦ e ⌝ ✦ y  ＝⟨ ap! p ⟩
+    id ✦ y         ＝⟨ id-l _ ⟩
+    y              ∎
 
 
 record Monoid-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -88,10 +105,30 @@ instance
                      → H-Level (suc n) (Monoid-hom M M′ f)
   H-Level-monoid-hom = hlevel-prop-instance monoid-hom-is-prop
 
-monoid-on→semigroup-on : ∀[ Monoid-on {ℓ} →̇ Semigroup-on {ℓ} ]
-monoid-on→semigroup-on M .Semigroup-on._⋆_ = M .Monoid-on._⋆_
-monoid-on→semigroup-on M .Semigroup-on.has-semigroup =
+monoid-on↪semigroup-on : Monoid-on A ↪ₜ Semigroup-on A
+monoid-on↪semigroup-on .fst M .Semigroup-on._⋆_ = M .Monoid-on._⋆_
+monoid-on↪semigroup-on .fst M .Semigroup-on.has-semigroup =
   M .Monoid-on.has-monoid .is-monoid.has-semigroup
+monoid-on↪semigroup-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
+  Equiv.injective (isoₜ→equiv monoid-on-iso) $
+    let u = ap Semigroup-on._⋆_ p
+        v = identity-unique (Monoid-on.id x) (Monoid-on.id y)
+              (Monoid-on.has-unital-magma x)
+              (subst (is-unital-magma _) (sym u) (Monoid-on.has-unital-magma y))
+    in v ,ₚ u ,ₚ prop!
+
+-- TODO abstract this proof pattern
+monoid-on↪unital-magma-on : Monoid-on A ↪ₜ UMagma-on A
+monoid-on↪unital-magma-on .fst M .UMagma-on.id = M .Monoid-on.id
+monoid-on↪unital-magma-on .fst M .UMagma-on._⋆_ = M .Monoid-on._⋆_
+monoid-on↪unital-magma-on .fst M .UMagma-on.has-unital-magma = Monoid-on.has-unital-magma M
+monoid-on↪unital-magma-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
+  Equiv.injective (isoₜ→equiv monoid-on-iso) $
+    let u = ap UMagma-on._⋆_ p
+        v = identity-unique (Monoid-on.id x) (Monoid-on.id y)
+              (Monoid-on.has-unital-magma x)
+              (subst (is-unital-magma _) (sym u) (Monoid-on.has-unital-magma y))
+    in v ,ₚ u ,ₚ prop!
 
 
 record make-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
