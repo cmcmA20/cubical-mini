@@ -192,8 +192,8 @@ private
     _ = hlevel!
 
     -- this one uses `H-Level-nType` instance which is compile-time only
-    @0 _ : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
-    _ = hlevel!
+    _ : Erased (∀ n → is-of-hlevel (suc n) (n-Type ℓ n))
+    _ = erase hlevel!
 
     _ : is-of-hlevel 3 (Erased ⌞ A ⌟)
     _ = hlevel!

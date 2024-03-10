@@ -51,7 +51,8 @@ unquoteDecl manifest-bishop-finite-iso = declare-record-iso manifest-bishop-fini
 
 instance
   H-Level-is-manifest-bishop-finite : ∀ {n} → H-Level (2 + n) (Manifest-bishop-finite A)
-  H-Level-is-manifest-bishop-finite = hlevel-basic-instance 2 $ is-of-hlevel-≃ _ (iso→equiv manifest-bishop-finite-iso) hlevel!
+  H-Level-is-manifest-bishop-finite = hlevel-basic-instance 2 $ is-of-hlevel-≃ 2 (iso→equiv manifest-bishop-finite-iso)
+    (Σ-is-of-hlevel _ (ℕ-is-of-hlevel _) (λ _ → hlevel!))
 
 manifest-bishop-finite : ⦃ d : Manifest-bishop-finite A ⦄ → Manifest-bishop-finite A
 manifest-bishop-finite ⦃ d ⦄ = d

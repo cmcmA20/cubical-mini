@@ -90,7 +90,7 @@ is-embedding→monic {f} emb g h p =
   fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl) (h x , happly (sym p) x))
 
 set-monic→is-embedding
-  : {f : A → B} → is-set B
+  : {A : Type ℓ} {B : Type ℓ′} {f : A → B} → is-set B
   → (∀ {C : Set ℓ″} (g h : C →̇ A) → f ∘ g ＝ f ∘ h → g ＝ h)
   → is-embedding f
 set-monic→is-embedding {f} B-set monic =
