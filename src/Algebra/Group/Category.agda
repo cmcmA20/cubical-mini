@@ -48,3 +48,7 @@ Forget-inverse .Functor.F-∘ _ _ = trivial!
 
 forget-inverse-is-faithful : is-faithful (Forget-inverse {ℓ})
 forget-inverse-is-faithful p = ext (p #ₚ_)
+
+
+Sym : (X : Set ℓ) → Group ℓ
+Sym X = el! (⌞ X ⌟ ≃ ⌞ X ⌟) , Sym-on X

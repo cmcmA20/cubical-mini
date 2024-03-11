@@ -177,3 +177,14 @@ module _ {M : Monoid-on A} where
   iter-unique : (n : ℕ) → iter-l n x ＝ iter-r n x
   iter-unique 0       = refl
   iter-unique (suc n) = ap (_⋆ _) (iter-unique n) ∙ sym (iter-comm n)
+
+Endo-on : (X : Set ℓ) → Monoid-on (X →̇ X)
+Endo-on X = to-monoid-on go where
+  open make-monoid
+  go : make-monoid (X →̇ X)
+  go .monoid-is-set = hlevel!
+  go .id = idₜ
+  go ._⋆_ f g = f ∘′ g
+  go .id-l _ = refl
+  go .id-r _ = refl
+  go .assoc _ _ _ = refl

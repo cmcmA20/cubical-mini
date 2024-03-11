@@ -66,3 +66,7 @@ Forget-assoc .Functor.F-∘ _ _ = trivial!
 
 forget-assoc-is-faithful : is-faithful (Forget-assoc {ℓ})
 forget-assoc-is-faithful p = ext (p #ₚ_)
+
+
+Endo : (X : Set ℓ) → Monoid ℓ
+Endo X = el! (X →̇ X) , Endo-on X

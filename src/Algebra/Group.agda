@@ -168,3 +168,19 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   to-group-on .Group-on.has-group = to-is-group
 
 open make-group using (to-is-group ; to-group-on) public
+
+
+-- group theory
+
+Sym-on : (X : Set ℓ) → Group-on (⌞ X ⌟ ≃ ⌞ X ⌟)
+Sym-on X = to-group-on go where
+  open make-group
+  go : make-group (⌞ X ⌟ ≃ ⌞ X ⌟)
+  go .group-is-set = hlevel!
+  go .id = refl!
+  go ._⋆_ f g = g ∙ f
+  go .inverse f = f ⁻¹
+  go .id-l _ = trivial!
+  go .inverse-l f = ext η
+    where open Equiv f
+  go .assoc _ _ _ = trivial!
