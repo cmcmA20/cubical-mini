@@ -1,9 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Quotient.Set.Properties where
 
-open import Foundations.Base
-  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Effect.Map
 open import Meta.Groupoid
@@ -124,18 +122,18 @@ rec²! {C-set} = rec² C-set
 
 ⦋-⦌-surjective : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
                 (x : A / R) → ∃[ a ꞉ A ] (⦋ a ⦌ ＝ x)
-⦋-⦌-surjective = elim-prop! λ a → ∣ a , refl ∣₁
+⦋-⦌-surjective = elim-prop! λ a → ∣ a , refl! ∣₁
 
 universal : is-set B
           → (A / R → B)
           ≃ Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b)
-universal {B} {A} {R} B-set = iso→equiv $ inc , iso back (λ _ → refl) li where
+universal {B} {A} {R} B-set = iso→equiv $ inc , iso back (λ _ → refl!) li where
   instance _ = hlevel-basic-instance 2 B-set
   inc : (A / R → B) → Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b)
-  inc f = f ∘ ⦋_⦌ , λ a b r i → f (glue/ a b r i)
-  back = rec! $²_
+  inc f = f ∘ₜ ⦋_⦌ , λ a b r i → f (glue/ a b r i)
+  back = rec! $ₜ²_
   li : _
-  li f′ = fun-ext λ r → ∥-∥₁.rec! (λ (_ , p) → ap (back (inc f′)) (sym p) ∙ ap f′ p) (⦋-⦌-surjective r)
+  li f′ = fun-ext λ r → ∥-∥₁.rec! (λ (_ , p) → ap (back (inc f′)) p ⁻¹ ∙ ap f′ p) (⦋-⦌-surjective r)
 
 module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
   open is-congruence congr
@@ -148,7 +146,7 @@ module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
   encode x _ p = subst ⌞ Code x ⌟ p reflᶜ
 
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
-  decode = elim-prop! ∘ glue/
+  decode = elim-prop! ∘ₜ glue/
 
   effective : R x y
             ≃ ⦋ x ⦌ ＝ ⦋ y ⦌
@@ -171,4 +169,4 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   → (∀ x y → Dec (R x y))
   → is-discrete (A / R)
 /₂-is-discrete R-c d = is-discrete-η $ elim²-prop! λ x y →
-  Dec.dmap (glue/ _ _) (λ f p → ⊥.rec $ᴱ f $ (effective R-c ⁻¹) # p) $ d x y
+  Dec.dmap (glue/ _ _) (λ f p → ⊥.rec $ f $ effective R-c ⁻¹ $ p) $ d x y

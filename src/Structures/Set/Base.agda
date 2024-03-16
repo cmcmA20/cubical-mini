@@ -2,7 +2,7 @@
 -- This is a programmer's set (like in OCaml), not a mathematician's one
 module Structures.Set.Base where
 
-open import Foundations.Base
+open import Meta.Prelude
 
 open import Meta.Membership
 open import Meta.Record
@@ -22,19 +22,19 @@ module _ {ℓᵃ ℓ} (A : 𝒰 ℓᵃ) (S : 𝒰 ℓ) where
       lookup : S → A → Bool
       insert remove : S → A → S
 
-      lookup-empty  : Erased $ᴱ lookup empty x ＝ false
-      lookup-insert : Erased $ᴱ lookup (insert s x) x ＝ true
-      lookup-remove : Erased $ᴱ lookup (remove s x) x ＝ false
+      lookup-empty  : Erased $ lookup empty x ＝ false
+      lookup-insert : Erased $ lookup (insert s x) x ＝ true
+      lookup-remove : Erased $ lookup (remove s x) x ＝ false
       insert-nop    : lookup s x ＝ true
-                    → Erased $ᴱ insert s x ＝ s
-      insert-insert : Erased $ᴱ insert (insert s x) y ＝ insert (insert s y) x
+                    → Erased $ insert s x ＝ s
+      insert-insert : Erased $ insert (insert s x) y ＝ insert (insert s y) x
       insert-remove : lookup s x ＝ true
-                    → Erased $ᴱ insert (remove s x) x ＝ s
+                    → Erased $ insert (remove s x) x ＝ s
       remove-nop    : lookup s x ＝ false
-                    → Erased $ᴱ remove s x ＝ s
-      remove-remove : Erased $ᴱ remove (remove s x) y ＝ remove (remove s y) x
+                    → Erased $ remove s x ＝ s
+      remove-remove : Erased $ remove (remove s x) y ＝ remove (remove s y) x
       remove-insert : lookup s x ＝ false
-                    → Erased $ᴱ remove (insert s x) x ＝ s
+                    → Erased $ remove (insert s x) x ＝ s
 
     instance
       Membership-set : Membership A S 0ℓ

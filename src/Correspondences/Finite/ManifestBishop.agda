@@ -1,20 +1,11 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Finite.ManifestBishop where
 
-open import Foundations.Base
-  hiding (_∙_; _∘′_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Equiv
-open import Foundations.Pi
-  hiding (_∘′_; Π-syntax; ∀-syntax)
-open import Foundations.Sigma
-  hiding (Σ-syntax)
-open import Foundations.Univalence
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Omniscient
 
@@ -69,13 +60,13 @@ manifest-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? =
     xs = Ṽ.from $ Ã.from
 
     lemma₁ : Σ[ i ꞉ Fin n ] P (lookup xs i) → ∥ Σ[ a ꞉ A ] P a ∥₁
-    lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) id
+    lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) idₜ
 
     lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ ∥ Σ[ a ꞉ A ] P a ∥₁
     lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘′ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))
 
 lift-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Lift ℓ A)
-lift-manifest-bishop-finite afin = fin $ lift-equiv ∙ (enumeration afin)
+lift-manifest-bishop-finite afin = fin $ lift-equiv ∙ enumeration afin
 
 ×-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite B → Manifest-bishop-finite (A × B)
 ×-manifest-bishop-finite afin bfin = fin $ ×-ap (enumeration afin) (enumeration bfin) ∙ fin-product
@@ -91,15 +82,15 @@ finite-pi-fin 0 {P} fam = fin $ iso→equiv $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
   gg : _
-  gg _ f0 = absurd (fin-0-is-initial # f0)
+  gg _ f0 = absurd $ fin-0-is-initial $ f0
   ri : gg is-right-inverse-of ff
-  ri (mk-fin 0) = refl
+  ri (mk-fin 0) = reflₚ
   li : gg is-left-inverse-of ff
   li _ = fun-ext λ ()
 
 finite-pi-fin (suc sz) {P} fam =
-  let e = enumeration ∘ fam
-      rest = finite-pi-fin sz (fam ∘ fsuc)
+  let e = enumeration ∘ₜ fam
+      rest = finite-pi-fin sz (fam ∘ₜ fsuc)
       cont = enumeration rest
   in fin $ fin-suc-universal ∙ ×-ap (e fzero) cont ∙ fin-sum λ _ → cardinality rest
 
@@ -108,9 +99,9 @@ finite-pi-fin (suc sz) {P} fam =
 Σ-manifest-bishop-finite {A} {P} afin fam =
   let aeq = enumeration afin
       module aeq = Equiv aeq
-      fs = fin-sum $ cardinality ∘ fam ∘ aeq.from
-      work = Σ-ap aeq λ x → enumeration (fam x) ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
-  in fin (work ∙ fs)
+      fs = fin-sum $ cardinality ∘ₜ fam ∘ₜ aeq.from
+      work = Σ-ap aeq λ x → enumeration (fam x) ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ₜ fam) (sym (aeq.η x))))
+  in fin $ work ∙ fs
 
 fun-manifest-bishop-finite
   : Manifest-bishop-finite A → Manifest-bishop-finite B → Manifest-bishop-finite (A → B)
@@ -125,7 +116,7 @@ fun-manifest-bishop-finite afin bfin =
 Π-manifest-bishop-finite afin fam =
   let e = enumeration afin
       module e = Equiv e
-      count = finite-pi-fin (cardinality afin) (fam ∘ e.from)
+      count = finite-pi-fin (cardinality afin) (fam ∘ₜ e.from)
   in fin $ Π-dom-≃ e.inverse ∙ enumeration count
 
 manifest-bishop-finite-≃ : (B ≃ A) → Manifest-bishop-finite A → Manifest-bishop-finite B

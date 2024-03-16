@@ -2,6 +2,7 @@
 module Correspondences.Classical where
 
 open import Foundations.Base
+  hiding (_$_)
 open import Foundations.Equiv
 
 open import Meta.Effect.Bind

@@ -1,12 +1,9 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Order.Base where
 
-open import Foundations.Base
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Decidable
 open import Correspondences.Wellfounded
@@ -62,7 +59,7 @@ opaque
   unfolding _≤_ is-of-hlevel
 
   ≤-is-prop : is-prop (m ≤ n)
-  ≤-is-prop (_ , p) (_ , q) = Σ-prop-path! (+-inj-l _ _ _ (p ∙ sym q))
+  ≤-is-prop (_ , p) (_ , q) = Σ-prop-path! (+-inj-l _ _ _ (p ∙ q ⁻¹))
 
   <-is-prop : is-prop (m < n)
   <-is-prop = ≤-is-prop
@@ -87,7 +84,7 @@ opaque
   unfolding _≤_
 
   z≤ : 0 ≤ n
-  z≤ = _ , refl
+  z≤ = _ , reflₚ
 
   s≤s : m ≤ n → suc m ≤ suc n
   s≤s = second (ap suc)
@@ -106,8 +103,8 @@ opaque
   ≤-antisym : m ≤ n → n ≤ m → m ＝ n
   ≤-antisym (0      , p) (_      , _) = sym (+-zero-r _) ∙ p
   ≤-antisym (suc _  , _) (0      , q) = sym q ∙ +-zero-r _
-  ≤-antisym {m} (suc δ₁ , p) (suc δ₂ , q) = ⊥.rec $ᴱ suc≠zero {m = δ₁ + suc δ₂} $ +-inj-l m _ _ $
-       +-assoc m _ _  ∙ subst (λ φ → φ + suc δ₂ ＝ m) (sym p) q ∙ nat!
+  ≤-antisym {m} (suc δ₁ , p) (suc δ₂ , q) = ⊥.rec $ suc≠zero {m = δ₁ + suc δ₂} $ +-inj-l m _ 0 $
+       +-assoc m (suc δ₁) (suc δ₂) ∙ subst (λ φ → φ + suc δ₂ ＝ m) (sym p) q ∙ nat!
 
   ≤-suc-r : m ≤ n → m ≤ suc n
   ≤-suc-r = bimap suc λ p → nat! ∙ ap suc p
@@ -119,7 +116,7 @@ opaque
   suc≰id (k , p) = id≠plus-suc {m = k} (sym p ∙ nat!)
 
   s≰z : suc n ≰ 0
-  s≰z = suc≠zero ∘ snd
+  s≰z = suc≠zero ∘ₜ snd
 
 
 -- Properties of strict order
@@ -128,7 +125,7 @@ opaque
   unfolding _<_
 
   <-irr : n ≮ n
-  <-irr = (λ p → id≠plus-suc (sym p ∙ nat!)) ∘ snd
+  <-irr = (λ p → id≠plus-suc (sym p ∙ nat!)) ∘ₜ snd
 
   s<s : m < n → suc m < suc n
   s<s = s≤s
@@ -142,8 +139,8 @@ opaque
     , nat! ∙ subst (λ φ → suc (φ + δ₂) ＝ _) (sym p) q
 
   <-asym : ∀[ _<_ →̇ _≯_ ]
-  <-asym (δ₁ , p) (δ₂ , q) = id≠plus-suc {m = 1 + δ₂ + δ₁}
-    (sym (subst (λ φ → suc (φ + δ₁) ＝ _) (sym q) p) ∙ nat!)
+  <-asym {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {n = n} {m = 1 + δ₂ + δ₁}
+    (subst (λ φ → suc (φ + δ₁) ＝ n) (symₚ q) p ⁻¹ ∙ nat!)
 
   <-suc-r : m < n → m < suc n
   <-suc-r = ≤-suc-r
@@ -158,7 +155,7 @@ opaque
   ≮z = s≰z
 
   z<s : 0 < suc n
-  z<s = _ , refl
+  z<s = _ , reflₚ
 
 
 -- Conversion
@@ -172,8 +169,8 @@ opaque
   <→≠ m<n m=n = <-irr (subst (_ <_) (sym m=n) m<n)
 
   ≤→≯ : ∀[ _≤_ →̇ _≯_ ]
-  ≤→≯ (δ₁ , p) (δ₂ , q) = id≠plus-suc {_} {δ₁ + δ₂} $
-    (sym $ subst (λ φ → suc (φ + δ₂) ＝ _) (sym p) q) ∙ nat!
+  ≤→≯ {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {m} {δ₁ + δ₂} $
+    subst (λ φ → suc (φ + δ₂) ＝ m) (symₚ p) q ⁻¹ ∙ nat!
 
   ≤→<⊎= : ∀[ _≤_ →̇ _<_ ⊎̇ _＝_ {A = ℕ} ]
   ≤→<⊎= (0     , p) = inr $ nat! ∙ p
@@ -188,13 +185,13 @@ opaque
 
 ≯→≤ : ∀[ _≯_ →̇ _≤_ ]
 ≯→≤ {0}     {_}     _ = z≤
-≯→≤ {suc _} {0}     f = ⊥.rec $ᴱ f z<s
-≯→≤ {suc _} {suc _} f = s≤s $ ≯→≤ (f ∘ s<s)
+≯→≤ {suc _} {0}     f = ⊥.rec $ f z<s
+≯→≤ {suc _} {suc _} f = s≤s $ ≯→≤ (f ∘ₜ s<s)
 
 ≱→< : ∀[ _≱_ →̇ _<_ ]
-≱→< {_}     {0}     f = ⊥.rec $ᴱ f z≤
+≱→< {_}     {0}     f = ⊥.rec $ f z≤
 ≱→< {0}     {suc _} _ = z<s
-≱→< {suc m} {suc n} f = s<s $ ≱→< (f ∘ s≤s)
+≱→< {suc m} {suc n} f = s<s $ ≱→< (f ∘ₜ s≤s)
 
 ≤≃≯ : (m ≤ n) ≃ (m ≯ n)
 ≤≃≯ = prop-extₑ! ≤→≯ ≯→≤
@@ -203,7 +200,7 @@ opaque
 <≃≱ = prop-extₑ! <→≱ ≱→<
 
 ≤≃<⊎= : (m ≤ n) ≃ ((m < n) ⊎ (m ＝ n))
-≤≃<⊎= = prop-extₑ hlevel! (disjoint-⊎-is-prop hlevel! hlevel! (<→≠ $²_)) ≤→<⊎= <⊎=→≤
+≤≃<⊎= = prop-extₑ hlevel! (disjoint-⊎-is-prop hlevel! hlevel! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
 
 module ≤≃≯   {m} {n} = Equiv (≤≃≯   {m} {n})
 module <≃≱   {m} {n} = Equiv (<≃≱   {m} {n})
@@ -216,7 +213,7 @@ module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
 <-reflects _       0       = ofⁿ ≮z
 <-reflects 0       (suc _) = ofʸ z<s
 <-reflects (suc m) (suc n) =
-  Reflects.dmap s<s (_∘ <-peel) $ <-reflects m n
+  Reflects.dmap s<s (_∘ₜ <-peel) $ <-reflects m n
 
 <-dec : Decidable _<_
 <-dec = reflects→decidable {2} {P = _<_} <-reflects
@@ -225,7 +222,7 @@ module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
 ≤-reflects 0       _       = ofʸ z≤
 ≤-reflects (suc _) 0       = ofⁿ s≰z
 ≤-reflects (suc m) (suc n) =
-  Reflects.dmap s≤s (_∘ ≤-peel) $ ≤-reflects m n
+  Reflects.dmap s≤s (_∘ₜ ≤-peel) $ ≤-reflects m n
 
 ≤-dec : Decidable _≤_
 ≤-dec = reflects→decidable {2} {P = _≤_} ≤-reflects
@@ -243,7 +240,7 @@ opaque
   <-wf : Wf _<_
   <-wf n = go n n ≤-refl where
     go : (x y : ℕ) → .(y ≤ x) → Acc _<_ y
-    go x       0       _ = acc $ λ _ <z → ⊥.rec $ᴱ ≮z <z
+    go x       0       _ = acc $ λ _ <z → ⊥.rec $ ≮z <z
     go 0       (suc y) w = ⊥.rec′ (s≰z w)
     go (suc x) (suc y) w = acc λ x′ w′ →
       go x x′ (≤-trans (≤-peel w′) (≤-peel w))

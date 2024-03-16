@@ -26,7 +26,7 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     ob-is-set : is-set Ob
     ob-is-set = identity-system→is-of-hlevel 1
       {r = λ _ → ≤-refl , ≤-refl}
-      (set-identity-system hlevel! (≤-antisym $²_))
+      (set-identity-system hlevel! (≤-antisym $ₜ²_))
       hlevel!
 
     ≤-refl′ : ∀ {x y} → x ＝ y → x ≤ y
@@ -88,13 +88,13 @@ instance
   H-Level-Monotone : ∀ {n} → H-Level (2 + n) (Monotone P Q)
   H-Level-Monotone = hlevel-basic-instance 2 monotone-is-set
 
-  Funlike-Monotone : Funlike (Monotone P Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
+  Funlike-Monotone : Funlike ur (Monotone P Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
   Funlike-Monotone ._#_ = hom
 
 monotone-pathP
   : {P : I → Poset o ℓ} {Q : I → Poset o′ ℓ′}
   → {f : Monotone (P i0) (Q i0)} {g : Monotone (P i1) (Q i1)}
-  → ＜ apply f ／ (λ i → ⌞ P i ⌟ → ⌞ Q i ⌟) ＼ apply g ＞
+  → ＜ f $_ ／ (λ i → ⌞ P i ⌟ → ⌞ Q i ⌟) ＼ g $_ ＞
   → ＜ f ／ (λ i → Monotone (P i) (Q i)) ＼ g ＞
 monotone-pathP q i .hom a = q i a
 monotone-pathP {P} {Q} {f} {g} q i .Monotone.pres-≤ {x} {y} α =
@@ -121,8 +121,8 @@ idₘ .hom    x   = x
 idₘ .pres-≤ x≤y = x≤y
 
 _∘ₘ_ : Monotone Q R → Monotone P Q → Monotone P R
-(f ∘ₘ g) .hom    x   = f # (g # x)
-(f ∘ₘ g) .pres-≤ x≤y = f .pres-≤ (g .pres-≤ x≤y)
+(f ∘ₘ g) .hom    x   = f $ g $ x
+(f ∘ₘ g) .pres-≤ x≤y = f .pres-≤ $ g .pres-≤ x≤y
 
 Posets : (o ℓ : Level) → Precategory (ℓsuc o ⊔ ℓsuc ℓ) (o ⊔ ℓ)
 Posets o ℓ .Precategory.Ob = Poset o ℓ
@@ -140,8 +140,8 @@ module Posets {o ℓ} = Categories.Morphism (Posets o ℓ)
 Forget-poset : ∀ {o ℓ} → Functor (Posets o ℓ) (Sets o)
 Forget-poset .Functor.F₀ P = el! ⌞ P ⌟
 Forget-poset .Functor.F₁ = hom
-Forget-poset .Functor.F-id = refl
-Forget-poset .Functor.F-∘ _ _ = refl
+Forget-poset .Functor.F-id = reflₚ
+Forget-poset .Functor.F-∘ _ _ = reflₚ
 
 _ᵒᵖᵖ : Poset o ℓ → Poset o ℓ
 (P ᵒᵖᵖ) .Poset.Ob = Poset.Ob P

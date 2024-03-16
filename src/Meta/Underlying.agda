@@ -1,8 +1,10 @@
 {-# OPTIONS --safe #-}
 module Meta.Underlying where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Foundations.Prelude
+  hiding (_$_; _&_)
+
+open import Meta.Reflection.Base
 
 open import Data.Bool.Base
 open import Data.Empty.Base
@@ -12,7 +14,7 @@ open import Data.Nat.Base
 record Underlying {ℓ} (T : Type ℓ) : Typeω where
   field
     ℓ-underlying : Level
-    ⌞_⌟⁰          : T → Type ℓ-underlying
+    ⌞_⌟⁰         : T → Type ℓ-underlying
 
 open Underlying ⦃ ... ⦄ public
 
@@ -38,53 +40,72 @@ instance
   Underlying-Lift .⌞_⌟⁰ x = ⌞ x .lower ⌟⁰
 
 
+data Modality′ : Type where
+  cirr rirr ur : Modality′
+  -- ^ compiletime irrelevant
+  --   runtime irrelevant
+  --   unrestricted
+
+MFun : (m : Modality′) {ℓ ℓ′ : Level} (A : Type ℓ) (B : Type ℓ′) → Type (ℓ ⊔ ℓ′)
+MFun cirr A B = @irr A → B
+MFun rirr A B = @0   A → B
+MFun ur   A B =      A → B
+
+MApp : (m : Modality′) {ℓ ℓ′ : Level} (A : Type ℓ) (B : MFun m A (Type ℓ′)) → Type (ℓ ⊔ ℓ′)
+MApp cirr A B = (@irr x : A) → B x
+MApp rirr A B = (@0   x : A) → B x
+MApp ur   A B = (     x : A) → B x
+
 -- Notation class for type families which are "function-like"
 -- Looks like it's dependent now
 record
-  Funlike {ℓ ℓ′ ℓ″} (A : Type ℓ) (Arg : Type ℓ′) (F : Arg → Type ℓ″) : Type (ℓ ⊔ ℓ′ ⊔ ℓ″) where
+  Funlike (m : Modality′) {ℓ ℓ′ ℓ″}
+    (A : Type ℓ) (Arg : Type ℓ′) (F : MFun m Arg (Type ℓ″)) : Type (ℓ ⊔ ℓ′ ⊔ ℓ″) where
   infixl 999 _#_
-  field _#_ : A → (x : Arg) → F x
+  field _#_ : A → MApp m Arg F
 
-open Funlike ⦃ ... ⦄ using (_#_) public
+  infixr -1 _$_
+  _$_ = _#_
+
+open Funlike ⦃ ... ⦄ public
 {-# DISPLAY Funlike._#_ p f x = f # x #-}
 
--- Sections of the _#_ operator tend to be badly-behaved since they
--- introduce an argument x : ⌞ ?0 ⌟ whose Underlying instance meta
--- "mutually blocks" the Funlike instance meta. Use the prefix version
--- instead.
-apply
+ap$
   : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
-  → ⦃ _ : Funlike F A B ⦄
-  → F → (x : A) → B x
-apply = _#_
-
-ap#
-  : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
-  → ⦃ _ : Funlike F A B ⦄
+  → ⦃ _ : Funlike ur F A B ⦄
   → (f : F) {x y : A} (p : x ＝ y)
-  → ＜ f # x ／ (λ i → B (p i)) ＼ f # y ＞
-ap# f = ap (apply f)
+  → ＜ f $ x ／ (λ i → B (p i)) ＼ f $ y ＞
+ap$ f = ap (f $_)
 
 -- Generalised happly.
-_#ₚ_
+_$ₚ_
   : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
-  → ⦃ _ : Funlike F A B ⦄
+  → ⦃ _ : Funlike ur F A B ⦄
   → {f g : F} → f ＝ g → (x : A) → f # x ＝ g # x
-f #ₚ x = ap² _#_ f refl
+f $ₚ x = ap² _$_ f refl
 
 instance
-  Funlike-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ≃ B) A (λ _ → B)
+  Funlike-Erased-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ≃ᴱ B) A (λ _ → B)
+  Funlike-Erased-≃ ._#_ = fst
+
+  Funlike-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ≃ B) A (λ _ → B)
   Funlike-≃ ._#_ = fst
 
-  Funlike-Iso : {A : Type ℓ} {B : Type ℓ′} → Funlike (Iso A B) A (λ _ → B)
+  Funlike-Iso : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (Iso A B) A (λ _ → B)
   Funlike-Iso ._#_ = fst
 
-  Funlike-Π : {A : Type ℓ} {B : A → Type ℓ′} → Funlike ((a : A) → B a) A B
+  Funlike-Irr-Π : {A : Type ℓ} {B : @irr A → Type ℓ′} → Funlike cirr ((@irr a : A) → B a) A B
+  Funlike-Irr-Π ._#_ = id
+
+  Funlike-Erased-Π : {@0 A : Type ℓ} {B : @0 A → Type ℓ′} → Funlike rirr ((@0 a : A) → B a) A B
+  Funlike-Erased-Π ._#_ = id
+
+  Funlike-Π : {A : Type ℓ} {B : A → Type ℓ′} → Funlike ur ((a : A) → B a) A B
   Funlike-Π ._#_ = id
 
   Funlike-Homotopy
     : {A : Type ℓ} {B : A → Type ℓ′} {f g : ∀ x → B x}
-    → Funlike (f ＝ g) A (λ x → f x ＝ g x)
+    → Funlike ur (f ＝ g) A (λ x → f x ＝ g x)
   Funlike-Homotopy ._#_ = happly
 
 
@@ -92,10 +113,10 @@ instance
 infix 999 _ʻ_
 _ʻ_
   : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
-  → ⦃ _ : Funlike F A B ⦄
+  → ⦃ _ : Funlike ur F A B ⦄
   → F → (x : A) → ⦃ _ : Underlying (B x) ⦄
   → Type _
-F ʻ x = ⌞ F # x ⌟⁰
+F ʻ x = ⌞ F $ x ⌟⁰
 
 
 infixr 6 Σ-syntax-und

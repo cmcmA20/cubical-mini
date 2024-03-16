@@ -2,7 +2,9 @@
 module Correspondences.Exhaustible where
 
 open import Foundations.Base
+  hiding (_$_)
 open import Foundations.Pi
+  hiding (_$_)
 
 open import Meta.Search.HLevel
 open import Meta.Variadic
@@ -34,4 +36,4 @@ lift-exhaustible ex .exhaustible-β P? = Dec.dmap (_∘ lower) (λ ¬f g → ¬f
 Π-decision d ex = ex .exhaustible-β d
 
 ∀-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec ∀[ B ]
-∀-decision d ex = dec-≃ Π-impl-Π-≃ # Π-decision d ex
+∀-decision d ex = dec-≃ Π-impl-Π-≃ $ Π-decision d ex

@@ -1,9 +1,12 @@
 {-# OPTIONS --safe #-}
 module Meta.Groupoid where
 
-open import Foundations.Base renaming (_∙_ to _∙ₚ_; _∘′_ to _∘′ₜ_)
-open import Foundations.Equiv
-open import Foundations.Erased
+open import Foundations.Prelude
+  renaming ( _∙_ to _∙ₚ_
+           ; sym to symₚ
+           ; refl to reflₚ
+           ; _∘′_ to _∘′ₜ_
+           )
 
 open import Meta.Effect.Alt
 open import Meta.Reflection.Base
@@ -34,7 +37,7 @@ open Refl ⦃ ... ⦄ public
 
 instance
   Refl-path : Refl small _＝_
-  Refl-path .reflₐ = refl
+  Refl-path .reflₐ = reflₚ
 
   Refl-Fun : Refl large (λ {ℓ} {ℓ′} (A : 𝒰 ℓ) (B : 𝒰 ℓ′) → A → B)
   Refl-Fun .reflₐ = id
@@ -118,11 +121,13 @@ record Invertible (s : Size) (_~_ : Relₛ² s) : 𝒰ω where
   infix 90 _⁻¹
   field _⁻¹  : Inverseₛ  s _~_
 
+  sym = _⁻¹
+
 open Invertible ⦃ ... ⦄ public
 
 instance
   Inv-path : Invertible small _＝_
-  Inv-path ._⁻¹ = sym
+  Inv-path ._⁻¹ = symₚ
 
   Inv-≃ : Invertible large _≃_
   Inv-≃ ._⁻¹ = _ₑ⁻¹

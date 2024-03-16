@@ -2,7 +2,7 @@
 module Categories.Base where
 
 open import Foundations.Base
-  hiding ( id ; _∘_ ; _∙_
+  hiding ( id ; _$_; _∘_ ; _∙_
          ; Σ-syntax; Π-syntax; ∀-syntax )
 open import Foundations.Equiv
 
@@ -135,7 +135,7 @@ unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
 instance
   Funlike-Functor
     : ∀ {o ℓ o' ℓ'} {C : Precategory o ℓ} {D : Precategory o' ℓ'}
-    → Funlike (Functor C D) ⌞ C ⌟ (λ _ → ⌞ D ⌟)
+    → Funlike ur (Functor C D) ⌞ C ⌟ (λ _ → ⌞ D ⌟)
   Funlike-Functor ._#_ = Functor.₀
 
 functor-double-dual : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {F : Functor C D}
@@ -244,7 +244,7 @@ record _⇒_ {C : Precategory oᶜ hᶜ}
 instance
   Funlike-natural-transformation
     : {C : Precategory o ℓ} {D : Precategory o′ ℓ′} {F G : Functor C D}
-    → Funlike (F ⇒ G) ⌞ C ⌟ (λ x → D .Precategory.Hom (F # x) (G # x))
+    → Funlike ur (F ⇒ G) ⌞ C ⌟ (λ x → D .Precategory.Hom (F $ x) (G $ x))
   Funlike-natural-transformation ._#_ = _⇒_.η
 
 is-natural-transformation
@@ -327,8 +327,8 @@ module _ {C : Precategory oᶜ hᶜ}
 
   Extensional-natural-transformation
     : ∀ {ℓr}
-    → {@(tactic extensionalᶠ {A = ⌞ C ⌟ → Type _} (λ x → D .Hom (F # x) (G # x)))
-        sa : ∀ x → Extensional (D .Hom (F # x) (G # x)) ℓr}
+    → {@(tactic extensionalᶠ {A = ⌞ C ⌟ → Type _} (λ x → D .Hom (F $ x) (G $ x)))
+        sa : ∀ x → Extensional (D .Hom (F $ x) (G $ x)) ℓr}
     → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
   Extensional-natural-transformation {sa} .Pathᵉ f g = ∀ i → Pathᵉ (sa i) (f .η i) (g .η i)
   Extensional-natural-transformation {sa} .reflᵉ x i = reflᵉ (sa i) (x .η i)

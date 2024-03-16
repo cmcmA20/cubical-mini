@@ -2,7 +2,7 @@
 module Functions.Equiv.HalfAdjoint where
 
 open import Foundations.Base
-  renaming (_∙_ to _∙ₚ_)
+  renaming (_∙_ to _∙ₚ_ ; _$_ to _$ₜ_)
   hiding (Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 open import Foundations.Path
@@ -58,7 +58,7 @@ is-half-adjoint-equiv→is-equiv {f} (g , η , ε , zig) .equiv-proof y = fib , 
   fibre-paths′ = fibre-paths ∙ Σ-ap-snd λ _ → flip-lₑ ∙ sym-≃
 
   contract : (fib₂ : fibre f y) → fib ＝ fib₂
-  contract (x , p) = (fibre-paths′ ⁻¹) # (x=gy , path) where
+  contract (x , p) = fibre-paths′ ⁻¹ $ (x=gy , path) where
     x=gy = ap g (p ⁻¹) ∙ η x
 
     path : ap f (ap g (p ⁻¹) ∙ η x) ∙ p ＝ ε y

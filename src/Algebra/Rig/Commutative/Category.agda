@@ -27,20 +27,20 @@ private variable ℓ : Level
 
 instance
   CRigs-equational : is-equational (Rig-structure ℓ)
-  CRigs-equational .invert-id-hom p .pres-0 = sym (p .pres-0)
-  CRigs-equational .invert-id-hom p .pres-1 = sym (p .pres-1)
-  CRigs-equational .invert-id-hom p .pres-+ _ _ = sym (p .pres-+ _ _)
-  CRigs-equational .invert-id-hom p .pres-· _ _ = sym (p .pres-· _ _)
+  CRigs-equational .invert-id-hom p .pres-0 = p .pres-0 ⁻¹
+  CRigs-equational .invert-id-hom p .pres-1 = p .pres-1 ⁻¹
+  CRigs-equational .invert-id-hom p .pres-+ _ _ = p .pres-+ _ _ ⁻¹
+  CRigs-equational .invert-id-hom p .pres-· _ _ = p .pres-· _ _ ⁻¹
 
 Forget : Functor (CRigs ℓ) (Sets ℓ)
 Forget = Forget-structure (CRig-structure _)
 
 Forget-comm : Functor (CRigs ℓ) (Rigs ℓ)
-Forget-comm .Functor.F₀ = second (comm-rig-on↪rig-on #_)
-Forget-comm .Functor.F₁ f .hom = f #_
+Forget-comm .Functor.F₀ = second (comm-rig-on↪rig-on $_)
+Forget-comm .Functor.F₁ f .hom = f $_
 Forget-comm .Functor.F₁ f .preserves = f .preserves
-Forget-comm .Functor.F-id = refl
-Forget-comm .Functor.F-∘ _ _ = refl
+Forget-comm .Functor.F-id = reflₚ
+Forget-comm .Functor.F-∘ _ _ = reflₚ
 
 forget-comm-is-faithful : is-faithful (Forget-comm {ℓ})
-forget-comm-is-faithful p = ext (p #ₚ_)
+forget-comm-is-faithful p = ext $ p $ₚ_

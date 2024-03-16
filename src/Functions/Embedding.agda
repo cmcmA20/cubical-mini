@@ -1,18 +1,10 @@
 {-# OPTIONS --safe #-}
 module Functions.Embedding where
 
-open import Foundations.Base
-  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Pi
-  hiding (Π-syntax; ∀-syntax)
-open import Foundations.Sigma
-  hiding (Σ-syntax)
-open import Foundations.Univalence
+open import Meta.Prelude
 
 open import Meta.Extensionality
-open import Meta.Groupoid
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Structures.IdentitySystem.Base
 open import Structures.n-Type
@@ -44,21 +36,21 @@ _↪_ : Type ℓ → Type ℓ′ → Type _
 A ↪ B = Σ[ f ꞉ (A → B) ] is-embedding f
 
 instance
-  Funlike-Inj : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ↣ B) A (λ _ → B)
+  Funlike-Inj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↣ B) A (λ _ → B)
   Funlike-Inj ._#_ = fst
 
-  Funlike-Emb : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ↪ B) A (λ _ → B)
+  Funlike-Emb : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↪ B) A (λ _ → B)
   Funlike-Emb ._#_ = fst
 
 set-injective→is-embedding
   : {f : A → B} → is-set B → Injective f
   → is-embedding f
 set-injective→is-embedding B-set inj x = is-prop-η λ (f*x , p) (f*x′ , q) →
-  Σ-prop-path! (inj (p ∙ sym q)) where instance _ = hlevel-basic-instance 2 B-set
+  Σ-prop-path! (inj (p ∙ q ⁻¹)) where instance _ = hlevel-basic-instance 2 B-set
 
 is-embedding→injective
   : is-embedding f → Injective f
-is-embedding→injective prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl))
+is-embedding→injective prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl!))
 
 set-injective≃is-embedding
   : {f : A → B} → is-set A → is-set B
@@ -85,17 +77,17 @@ subset-proj-is-embedding {B} B-prop x = is-of-hlevel-≃ 1 (Σ-fibre-equiv B x) 
 
 is-embedding→monic
   : is-embedding f
-  → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ g ＝ f ∘ h → g ＝ h
+  → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ₜ g ＝ f ∘ₜ h → g ＝ h
 is-embedding→monic {f} emb g h p =
-  fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl) (h x , happly (sym p) x))
+  fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl!) (h x , p ⁻¹ $ₚ x))
 
 set-monic→is-embedding
   : {A : Type ℓ} {B : Type ℓ′} {f : A → B} → is-set B
-  → (∀ {C : Set ℓ″} (g h : C →̇ A) → f ∘ g ＝ f ∘ h → g ＝ h)
+  → (∀ {C : Set ℓ″} (g h : C →̇ A) → f ∘′ g ＝ f ∘′ h → g ＝ h)
   → is-embedding f
 set-monic→is-embedding {f} B-set monic =
   set-injective→is-embedding B-set λ {x} {y} p →
-    happly (monic {C = el! $ Lift _ ⊤} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p))) _
+    monic {C = el! $ Lift _ ⊤} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p)) $ₚ _
 
 
 preimage-is-prop→is-embedding : (∀ x → is-prop (fibre f (f x))) → is-embedding f
@@ -104,7 +96,7 @@ preimage-is-prop→is-embedding {f} pffx y = is-prop-η λ a →
 
 preimage-is-contr→is-embedding : (∀ x → is-contr (fibre f (f x))) → is-embedding f
 preimage-is-contr→is-embedding cffx =
- preimage-is-prop→is-embedding (is-contr→is-prop ∘ cffx)
+ preimage-is-prop→is-embedding (is-contr→is-prop ∘ₜ cffx)
 
 
 -- TODO isn't `ap f` unique?
@@ -119,17 +111,17 @@ is-equiv-on-paths→cancellable f-eop = _ , is-equiv-inv f-eop
 
 @0 is-equiv-on-paths→is-embedding : is-equiv-on-paths f → is-embedding f
 is-equiv-on-paths→is-embedding ep b = is-prop-η λ fib₁ fib₂ →
-  (fibre-equality≃fibre-on-paths ⁻¹) # (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
+  fibre-equality≃fibre-on-paths ⁻¹ $ (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
 
 cancellable→is-embedding : Cancellable f → is-embedding f
 cancellable→is-embedding can = preimage-is-contr→is-embedding λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → can)) $
-  is-contr-η $ (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
+  is-contr-η $ (x , reflₚ) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
 
 is-embedding→is-equiv-on-paths : is-embedding f → is-equiv-on-paths f
 is-embedding→is-equiv-on-paths {f} emb = total-is-equiv→fibrewise-is-equiv {f = λ y p → ap {y = y} f p}
   (is-contr→is-equiv
-    (is-contr-η $ (_ , refl) , λ (y , p) i → p i , λ j → p (i ∧ j))
-    (is-contr-η $ (_ , refl) , is-prop-β (is-of-hlevel-≃ 1 (Σ-ap-snd (λ _ → sym-≃)) (emb _)) _))
+    (is-contr-η $ (_ , reflₚ) , λ (y , p) i → p i , λ j → p (i ∧ j))
+    (is-contr-η $ (_ , reflₚ) , is-prop-β (is-of-hlevel-≃ 1 (Σ-ap-snd (λ _ → sym-≃)) (emb _)) _))
 
 @0 is-embedding≃is-equiv-on-paths : is-embedding f ≃ is-equiv-on-paths f
 is-embedding≃is-equiv-on-paths = prop-extₑ! is-embedding→is-equiv-on-paths is-equiv-on-paths→is-embedding
@@ -148,24 +140,24 @@ equiv→embedding : A ≃ B → A ↪ B
 equiv→embedding = second is-equiv→is-embedding
 
 is-iso→is-embedding : is-iso f → is-embedding f
-is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
+is-iso→is-embedding = is-equiv→is-embedding ∘ₜ is-iso→is-equiv
 
 iso→embedding : A ≅ B → A ↪ B
 iso→embedding = second is-iso→is-embedding
 
 instance
   Refl-Inj : Refl large _↣_
-  Refl-Inj .reflₐ = id , id
+  Refl-Inj .reflₐ = idₜ , idₜ
 
   Refl-Emb : Refl large _↪_
-  Refl-Emb .reflₐ = id , is-equiv→is-embedding id-is-equiv
+  Refl-Emb .reflₐ = idₜ , is-equiv→is-embedding id-is-equiv
 
   Compose-Inj : Compose large _↣_
-  Compose-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ f , f-inj ∘ g-inj
+  Compose-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ₜ f , f-inj ∘ₜ g-inj
 
   Compose-Emb : Compose large _↪_
-  Compose-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
-    is-of-hlevel-≃ 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
+  Compose-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ₜ f , λ c →
+    is-of-hlevel-≃ 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ₜ fst))
 
 opaque
   unfolding is-of-hlevel
@@ -174,12 +166,12 @@ opaque
     : {A : Type ℓ} {B : Type ℓ′} {R : B → B → Type ℓ″} {r : ∀ b → R b b}
       (ids : is-identity-system R r)
       (f : A ↪ B)
-    → is-identity-system (λ (x y : A) → R (f # x) (f # y)) (λ _ → r _)
+    → is-identity-system (λ (x y : A) → R (f $ x) (f $ y)) (λ _ → r _)
   pullback-identity-system     ids (f , f-emb) .to-path {a} {b} x = ap fst $
-    f-emb (f b) (a , ids .to-path x) (b , refl)
+    f-emb (f b) (a , ids .to-path x) (b , reflₚ)
   pullback-identity-system {R} ids (f , f-emb) .to-path-over {a} {b} p i =
     comp
-      (λ j → R (f a) (f-emb (f b) (a , ids .to-path p) (b , refl) i .snd (~ j)))
+      (λ j → R (f a) (f-emb (f b) (a , ids .to-path p) (b , reflₚ) i .snd (~ j)))
       (∂ i) λ where
         k (i = i0) → ids .to-path-over p (~ k ∨ i)
         k (i = i1) → p
@@ -189,8 +181,8 @@ embedding→extensional
   : A ↪ B
   → Extensional B ℓ″
   → Extensional A ℓ″
-embedding→extensional f ext .Pathᵉ x y = Pathᵉ ext (f .fst x) (f .fst y)
-embedding→extensional f ext .reflᵉ x = reflᵉ ext (f .fst x)
+embedding→extensional f ext .Pathᵉ x y = Pathᵉ ext (f $ x) (f $ y)
+embedding→extensional f ext .reflᵉ x = reflᵉ ext (f $ x)
 embedding→extensional f ext .idsᵉ = pullback-identity-system (ext .idsᵉ) f
 
 set-injective→extensional!

@@ -1,9 +1,7 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Decidable where
 
-open import Foundations.Base
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Sigma
+open import Meta.Prelude
 
 open import Meta.Reflection.Base
 open import Meta.Reflection.Subst
@@ -33,21 +31,21 @@ private variable
 dec→essentially-classical : Dec A → Essentially-classical A
 dec→essentially-classical = Dec.rec
   (λ a _ → a)
-  (λ ¬a f → ⊥.rec $ᴱ f ¬a)
+  (λ ¬a f → ⊥.rec $ f ¬a)
 
 decide : ⦃ d : Dec A ⦄ → Dec A
 decide ⦃ d ⦄ = d
 
 ×-decision : Dec A → Dec B → Dec (A × B)
 ×-decision da db .does = da .does and db .does
-×-decision (no ¬a) db .proof = ofⁿ $ ¬a ∘ fst
-×-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ snd
+×-decision (no ¬a) db .proof = ofⁿ $ ¬a ∘′ fst
+×-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘′ snd
 ×-decision (yes a) (yes b) .proof = ofʸ (a , b)
 
 fun-decision : Dec A → Dec B → Dec (A → B)
 fun-decision da db .does = not (da .does) or db .does
-fun-decision (no ¬a) db .proof = ofʸ $ λ a → ⊥.rec $ᴱ ¬a a
-fun-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ (_$ a)
+fun-decision (no ¬a) db .proof = ofʸ $ λ a → ⊥.rec $ ¬a a
+fun-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘′ (_$ a)
 fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 
 ¬-decision : Dec A → Dec (¬ A)
@@ -58,7 +56,7 @@ fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 lift-decision : Dec A → Dec (Lift ℓ A)
 lift-decision da .does = da .does
 lift-decision (yes a) .proof = ofʸ (lift a)
-lift-decision (no ¬a) .proof = ofⁿ (¬a ∘ lower)
+lift-decision (no ¬a) .proof = ofⁿ (¬a ∘′ lower)
 
 instance
   universe-decision : Dec (Type ℓ)
@@ -154,10 +152,10 @@ opaque
     → Decidable P → ∃![ d ꞉ DProc _ As ] Reflects P d
   decidable₁→reflects! {0} p =
       (p .does , p .proof)
-    , λ z → Σ-prop-path! (sym (reflects-bool-inj (z .snd) (p .proof)))
+    , λ z → Σ-prop-path! $ reflects-bool-inj (z .snd) (p .proof) ⁻¹
   decidable₁→reflects! {1} f =
-      (does ∘ f  , proof ∘ f)
-    , λ z → Σ-prop-path! (fun-ext (λ x → sym (reflects-bool-inj (z .snd x) (f x .proof))))
+      (does ∘ₜ f  , proof ∘ₜ f)
+    , λ z → Σ-prop-path! $ fun-ext λ x → reflects-bool-inj (z .snd x) (f x .proof) ⁻¹
   decidable₁→reflects! {suc (suc arity)} {As} {ℓ} {P} f =
     let ih = decidable₁→reflects!
     in ((λ x → ih (f x) .fst .fst) , λ x → ih (f x) .fst .snd)

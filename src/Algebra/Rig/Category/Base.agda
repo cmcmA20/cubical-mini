@@ -27,20 +27,20 @@ private variable ℓ : Level
 
 instance
   Rigs-equational : is-equational (Rig-structure ℓ)
-  Rigs-equational .invert-id-hom p .pres-0 = sym (p .pres-0)
-  Rigs-equational .invert-id-hom p .pres-1 = sym (p .pres-1)
-  Rigs-equational .invert-id-hom p .pres-+ _ _ = sym (p .pres-+ _ _)
-  Rigs-equational .invert-id-hom p .pres-· _ _ = sym (p .pres-· _ _)
+  Rigs-equational .invert-id-hom p .pres-0 = p .pres-0 ⁻¹
+  Rigs-equational .invert-id-hom p .pres-1 = p .pres-1 ⁻¹
+  Rigs-equational .invert-id-hom p .pres-+ _ _ = p .pres-+ _ _ ⁻¹
+  Rigs-equational .invert-id-hom p .pres-· _ _ = p .pres-· _ _ ⁻¹
 
 Forget : Functor (Rigs ℓ) (Sets ℓ)
 Forget = Forget-structure (Rig-structure _)
 
 Forget-absorb : Functor (Rigs ℓ) (Semirings ℓ)
-Forget-absorb .Functor.F₀ = second (rig-on↪semiring-on #_)
-Forget-absorb .Functor.F₁ f .hom = f #_
+Forget-absorb .Functor.F₀ = second (rig-on↪semiring-on $_)
+Forget-absorb .Functor.F₁ f .hom = f $_
 Forget-absorb .Functor.F₁ f .preserves = f .preserves
-Forget-absorb .Functor.F-id = refl
-Forget-absorb .Functor.F-∘ _ _ = refl
+Forget-absorb .Functor.F-id = reflₚ
+Forget-absorb .Functor.F-∘ _ _ = reflₚ
 
 forget-absorb-is-faithful : is-faithful (Forget-absorb {ℓ})
-forget-absorb-is-faithful p = ext (p #ₚ_)
+forget-absorb-is-faithful p = ext $ p $ₚ_

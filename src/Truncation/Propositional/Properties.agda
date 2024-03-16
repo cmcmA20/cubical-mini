@@ -2,7 +2,7 @@
 module Truncation.Propositional.Properties where
 
 open import Foundations.Base
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
+  hiding (_$_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 open import Foundations.Path
 open import Foundations.Sigma
@@ -139,7 +139,7 @@ rec-set! f-const {B-set} = rec-set f-const B-set
 
 _factors-through_
   : (f : A → C) (B : Type (level-of-type A ⊔ level-of-type C)) → _
-_factors-through_ {A} {C} f B = Σ[ ρ ꞉ (A ↠ B) ] Σ[ ι ꞉ (B ↪ C) ] (f ＝ apply ι ∘ apply ρ)
+_factors-through_ {A} {C} f B = Σ[ ρ ꞉ (A ↠ B) ] Σ[ ι ꞉ (B ↪ C) ] (f ＝ (ι $_) ∘ (ρ $_))
 
 Factorization : (f : A → C) → _
 Factorization f = Σ[ M ꞉ Type _ ] f factors-through M

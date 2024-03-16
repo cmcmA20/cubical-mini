@@ -2,6 +2,7 @@
 module Meta.Search.Omniscient where
 
 open import Foundations.Base
+  hiding (_$_)
 open import Foundations.Equiv
 
 open import Meta.Groupoid
@@ -77,7 +78,7 @@ omni-prop-helper : ∀{ℓa ℓb} {A : Type ℓa} {B : A → Type ℓb}
                  → Omniscient₁ A
                  → Dec Σ[ B ]
 omni-prop-helper ΣAB-prop d omn₁ =
-  ∥-∥₁.proj (dec-is-of-hlevel 1 ΣAB-prop) $ (dec-∥-∥₁-equiv ⁻¹) # ∃-decision d omn₁
+  ∥-∥₁.proj (dec-is-of-hlevel 1 ΣAB-prop) $ dec-∥-∥₁-equiv ⁻¹ $ ∃-decision d omn₁
 
 instance
   decomp-omn-lift : goal-decomposition (quote Omniscient) (Lift ℓ′ A)

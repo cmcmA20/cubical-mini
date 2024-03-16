@@ -27,17 +27,17 @@ private variable ℓ : Level
 
 instance
   AGroups-equational : is-equational (AGroup-structure ℓ)
-  AGroups-equational .invert-id-hom p .pres-⋆ _ _ = sym (p .pres-⋆ _ _)
+  AGroups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
 Forget : Functor (AGroups ℓ) (Sets ℓ)
 Forget = Forget-structure (AGroup-structure _)
 
 Forget-comm : Functor (AGroups ℓ) (Groups ℓ)
-Forget-comm .Functor.F₀ = second (abelian-group-on↪group-on #_)
-Forget-comm .Functor.F₁ f .hom = f #_
+Forget-comm .Functor.F₀ = second (abelian-group-on↪group-on $_)
+Forget-comm .Functor.F₁ f .hom = f $_
 Forget-comm .Functor.F₁ f .preserves = f .preserves
-Forget-comm .Functor.F-id = refl
-Forget-comm .Functor.F-∘ _ _ = refl
+Forget-comm .Functor.F-id = reflₚ
+Forget-comm .Functor.F-∘ _ _ = reflₚ
 
 forget-comm-is-faithful : is-faithful (Forget-comm {ℓ})
-forget-comm-is-faithful p = ext (p #ₚ_)
+forget-comm-is-faithful p = ext $ p $ₚ_

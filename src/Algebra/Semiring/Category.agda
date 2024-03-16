@@ -12,10 +12,10 @@ open Semiring-on
 
 Semiring-structure : ∀ ℓ → Thin-structure ℓ Semiring-on
 Semiring-structure ℓ .is-hom f A B = el! (Semiring-hom A B f)
-Semiring-structure ℓ .id-is-hom .pres-0 = refl
-Semiring-structure ℓ .id-is-hom .pres-1 = refl
-Semiring-structure ℓ .id-is-hom .pres-+ _ _ = refl
-Semiring-structure ℓ .id-is-hom .pres-· _ _ = refl
+Semiring-structure ℓ .id-is-hom .pres-0 = reflₚ
+Semiring-structure ℓ .id-is-hom .pres-1 = reflₚ
+Semiring-structure ℓ .id-is-hom .pres-+ _ _ = reflₚ
+Semiring-structure ℓ .id-is-hom .pres-· _ _ = reflₚ
 Semiring-structure ℓ .∘-is-hom f g p q .pres-0 =
   ap f (q .pres-0) ∙ p .pres-0
 Semiring-structure ℓ .∘-is-hom f g p q .pres-1 =

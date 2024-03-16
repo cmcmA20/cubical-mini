@@ -1,7 +1,9 @@
 {-# OPTIONS --safe #-}
 module Structures.n-Type where
 
-open import Foundations.Base renaming (_∙_ to _∙ₚ_)
+open import Foundations.Base
+  renaming ( _∙_ to _∙ₚ_
+           ; _$_ to _$ₜ_ )
 open import Foundations.Cubes
 open import Foundations.Equiv
 open import Foundations.HLevel

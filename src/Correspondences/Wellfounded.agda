@@ -1,5 +1,6 @@
 {-# OPTIONS --safe #-}
 open import Foundations.Base
+  hiding (_$_)
 open import Meta.Variadic
 
 module Correspondences.Wellfounded

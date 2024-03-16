@@ -27,17 +27,17 @@ private variable ℓ : Level
 
 instance
   Semigroups-equational : is-equational (Semigroup-structure ℓ)
-  Semigroups-equational .invert-id-hom p .pres-⋆ _ _ = sym (p .pres-⋆ _ _)
+  Semigroups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
 Forget : Functor (Semigroups ℓ) (Sets ℓ)
 Forget = Forget-structure (Semigroup-structure _)
 
 Forget-assoc : Functor (Semigroups ℓ) (Magmas ℓ)
-Forget-assoc .Functor.F₀ = second (semigroup-on↪magma-on #_)
-Forget-assoc .Functor.F₁ f .hom = f #_
+Forget-assoc .Functor.F₀ = second (semigroup-on↪magma-on $_)
+Forget-assoc .Functor.F₁ f .hom = f $_
 Forget-assoc .Functor.F₁ f .preserves = f .preserves
-Forget-assoc .Functor.F-id = refl
-Forget-assoc .Functor.F-∘ _ _ = refl
+Forget-assoc .Functor.F-id = reflₚ
+Forget-assoc .Functor.F-∘ _ _ = reflₚ
 
 forget-assoc-is-faithful : is-faithful (Forget-assoc {ℓ})
-forget-assoc-is-faithful p = ext (p #ₚ_)
+forget-assoc-is-faithful p = ext $ p $ₚ_

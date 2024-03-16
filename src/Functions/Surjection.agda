@@ -1,8 +1,8 @@
 {-# OPTIONS --safe #-}
 module Functions.Surjection where
 
-open import Foundations.Base
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
+open import Foundations.Prelude
+  hiding (_$_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Equiv
 
 open import Meta.Search.HLevel
@@ -33,10 +33,10 @@ _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f
 
 instance
-  Funlike-Split-surj : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ↠! B) A (λ _ → B)
+  Funlike-Split-surj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↠! B) A (λ _ → B)
   Funlike-Split-surj ._#_ = fst
 
-  Funlike-Surj : {A : Type ℓ} {B : Type ℓ′} → Funlike (A ↠ B) A (λ _ → B)
+  Funlike-Surj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↠ B) A (λ _ → B)
   Funlike-Surj ._#_ = fst
 
 is-left-inverse-of→is-surjective : f is-left-inverse-of g → is-surjective f

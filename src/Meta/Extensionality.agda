@@ -2,6 +2,7 @@
 module Meta.Extensionality where
 
 open import Foundations.Base
+  hiding (_$_)
 open import Foundations.Equiv
 open import Foundations.Sigma
 

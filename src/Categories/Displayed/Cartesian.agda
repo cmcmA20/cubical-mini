@@ -39,7 +39,7 @@ record is-cartesian {a b} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
              → (h′ : Hom[ k ] u′ b′)
              → universal′ p h′ ＝[ q ] universal′ r h′
   universalP {u} p q r h′ i =
-    universal′ (is-set→squareP (λ _ _ → Hom-set u b) (ap (f ∘_) q) p r refl i) h′
+    universal′ (is-set→squareP (λ _ _ → Hom-set u b) (ap (f ∘_) q) p r reflₚ i) h′
 
   uniqueP : {m₁ m₂ : Hom u a} {k : Hom u b}
           → (p : f ∘ m₁ ＝ k) (q : m₁ ＝ m₂) (r : f ∘ m₂ ＝ k)
@@ -74,7 +74,7 @@ record is-cartesian {a b} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
     → (h′ : Hom[ id ] x′ a′)
     → f′ ∘ᵈ h′ ＝[ id-r _ ] g′
     → h′ ＝ universalV g′
-  uniqueV h′ p = uniqueP (id-r f) refl (id-r f) h′ p
+  uniqueV h′ p = uniqueP (id-r f) reflₚ (id-r f) h′ p
 
   uniqueV²
     : ∀ {x′} {g′ : Hom[ f ] x′ b′}
@@ -83,7 +83,7 @@ record is-cartesian {a b} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
     → f′ ∘ᵈ h″ ＝[ id-r _ ] g′
     → h′ ＝ h″
   uniqueV² h′ h″ p q =
-    uniqueP² (id-r f) refl (id-r f) h′ h″ p q
+    uniqueP² (id-r f) reflₚ (id-r f) h′ h″ p q
 
 
 opaque
@@ -101,10 +101,10 @@ opaque
         (ap (f′ ∘ᵈ_) (cart′ .unique _ _))
         (cart .commutes m h′)
         (cart′ .commutes m h′)
-        refl i
+        reflₚ i
     worker i .unique m′ p =
       is-set→squareP (λ _ _ → Hom[ _ ]-set _ _)
-        refl
+        reflₚ
         (cart .unique m′ p)
         (cart′ .unique m′ p)
         (cart′ .unique _ _) i

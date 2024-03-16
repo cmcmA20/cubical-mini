@@ -2,6 +2,7 @@
 module Data.Nat.Instances.Discrete where
 
 open import Foundations.Base
+  hiding (_$_)
 
 open import Meta.Search.Discrete
 open import Meta.Underlying

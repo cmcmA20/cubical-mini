@@ -28,10 +28,10 @@ all-split {xs = x ∷ xs} (p ∷ ps) =
   let xps , yps = all-split {xs = xs} ps in (p ∷ xps) , yps
 
 all-++-left : {xs : List A} → All P (xs ++ ys) → All P xs
-all-++-left = fst ∘ all-split
+all-++-left = fst ∘ₜ all-split
 
 all-++-right : {xs : List A} → All P (xs ++ ys) → All P ys
-all-++-right = snd ∘ all-split
+all-++-right = snd ∘ₜ all-split
 
 all-map : {@0 xs : List A} → ({@0 x : A} -> P x -> Q x) -> All P xs -> All Q xs
 all-map     f []       = []
@@ -45,6 +45,6 @@ all-zipwith {P} f (p ∷ ps) (q ∷ qs) = f p q ∷ all-zipwith {P = P} f ps qs
 all? : {ℓ ℓ′ : Level} {A : Type ℓ} {P : A → Type ℓ′} → Decidable P → Decidableⁿ {1} (λ (xs : List A) → All P xs)
 all? P? []       = yes []
 all? P? (x ∷ xs) =
-  Dec.dmap (_∷_ $²_)
+  Dec.dmap (_∷_ $ₜ²_)
            (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
            (×-decision (P? x) (all? P? xs))

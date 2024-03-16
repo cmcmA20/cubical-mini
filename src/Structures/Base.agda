@@ -2,10 +2,10 @@
 module Structures.Base where
 
 open import Foundations.Base
-  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
+  hiding (_∙_; _$_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.HLevel.Base
 open import Foundations.Pi
-  hiding (Π-syntax; ∀-syntax)
+  hiding (_$_; Π-syntax; ∀-syntax)
 open import Foundations.Sigma
   hiding (Σ-syntax)
 open import Foundations.Univalence public
@@ -35,7 +35,7 @@ constant-action-is-transport _ _ = transport-refl _ ⁻¹
 
 
 pointed-str : Structure ℓ id
-pointed-str .is-hom (_ , x) (_ , y) f = f # x ＝ y
+pointed-str .is-hom (_ , x) (_ , y) f = (f $ x) ＝ y
 
 @0 pointed-str-is-univalent : is-univalent (pointed-str {ℓ})
 pointed-str-is-univalent f = ua-pathP≃path _

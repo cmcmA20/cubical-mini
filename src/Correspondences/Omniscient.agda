@@ -2,6 +2,7 @@
 module Correspondences.Omniscient where
 
 open import Foundations.Base
+  hiding (_$_)
 
 open import Meta.Effect.Map
 open import Meta.Search.HLevel

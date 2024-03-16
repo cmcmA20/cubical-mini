@@ -22,7 +22,7 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
     go .make-rig.unit = lift 1
     go .make-rig._+_ (lift m) (lift n) = lift (m + n)
     go .make-rig._·_ (lift m) (lift n) = lift (m · n)
-    go .make-rig.+-id-l _ = refl
+    go .make-rig.+-id-l _ = reflₚ
     go .make-rig.+-id-r (lift m) = ap lift (+-zero-r m)
     go .make-rig.+-assoc (lift m) (lift n) (lift k) = ap lift (+-assoc m n k)
     go .make-rig.+-comm (lift m) (lift n) = ap lift (+-comm n m)
@@ -31,7 +31,7 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
     go .make-rig.·-assoc (lift m) (lift n) (lift k) = ap lift (·-assoc m n k)
     go .make-rig.·-distrib-+-l (lift m) (lift n) (lift k) = ap lift (·-distrib-+-l m n k)
     go .make-rig.·-distrib-+-r (lift m) (lift n) (lift k) = ap lift (·-distrib-+-r n k m)
-    go .make-rig.·-absorb-l _ = refl
+    go .make-rig.·-absorb-l _ = reflₚ
     go .make-rig.·-absorb-r (lift m) = ap lift (·-absorb-r m)
 
   ℕ-is-initial : is-initial (Rigs ℓ) ℕᵣ
@@ -45,7 +45,7 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
 
     f-suc  : ∀ n → f (suc n) ＝ R.unit R.+ f n
     f-suc 0       = sym (R.+-id-r _)
-    f-suc (suc _) = refl
+    f-suc (suc _) = reflₚ
 
     f-plus : ∀ m n → f (m + n) ＝ f m R.+ f n
     f-plus 0       _ = sym (R.+-id-l _)
@@ -68,8 +68,8 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
 
     ℕ→R : Rigs.Hom ℕᵣ R
     ℕ→R .hom (lift m) = f m
-    ℕ→R .preserves .Semiring-hom.pres-0 = refl
-    ℕ→R .preserves .Semiring-hom.pres-1 = refl
+    ℕ→R .preserves .Semiring-hom.pres-0 = reflₚ
+    ℕ→R .preserves .Semiring-hom.pres-1 = reflₚ
     ℕ→R .preserves .Semiring-hom.pres-+ (lift m) (lift n) = f-plus m n
     ℕ→R .preserves .Semiring-hom.pres-· (lift m) (lift n) = f-mul m n
 

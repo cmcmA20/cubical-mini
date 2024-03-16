@@ -64,8 +64,8 @@ total-hom-pathp _ _ _ s i .preserves = s i
 πᶠ : Functor ∫ B
 πᶠ .Functor.F₀ = fst
 πᶠ .Functor.F₁ = Total-hom.hom
-πᶠ .Functor.F-id = refl
-πᶠ .Functor.F-∘ f g = refl
+πᶠ .Functor.F-id = refl!
+πᶠ .Functor.F-∘ f g = refl!
 
 private module ∫E = Categories.Morphism ∫
 

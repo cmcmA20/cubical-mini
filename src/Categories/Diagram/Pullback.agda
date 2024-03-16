@@ -41,7 +41,7 @@ record is-pullback {P} (p₁ : Hom P X) (f : Hom X Z) (p₂ : Hom P Y) (g : Hom 
     .is-iso.inv (f , g , α) → universal α
     .is-iso.rinv x → Σ-pathP p₁∘universal $
       Σ-prop-pathP (λ _ _ → path-is-of-hlevel′ 1 hlevel! _ _) p₂∘universal
-    .is-iso.linv _ → sym (unique refl refl)
+    .is-iso.linv _ → sym (unique reflₚ reflₚ)
 
 
 record Pullback {X Y Z} (f : Hom X Z) (g : Hom Y Z) : Type (ℓ ⊔ ℓ′) where

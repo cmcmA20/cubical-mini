@@ -2,7 +2,7 @@
 module Structures.FinOrd where
 
 open import Foundations.Base
-  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
+  hiding (_$_; _∙_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.HLevel
 open import Foundations.Erased
 open import Foundations.Sigma
@@ -50,4 +50,4 @@ FinOrd≃ᴱℕ {ℓ} =
 
 instance
   @0 H-Level-FinOrd : ∀ {n} → H-Level (2 + n) (FinOrd ℓ)
-  H-Level-FinOrd = hlevel-basic-instance 2 (is-of-hlevel-≃ 2 (equivᴱ≃equiv # FinOrd≃ᴱℕ) hlevel!)
+  H-Level-FinOrd = hlevel-basic-instance 2 $ is-of-hlevel-≃ 2 (equivᴱ≃equiv $ FinOrd≃ᴱℕ) hlevel!

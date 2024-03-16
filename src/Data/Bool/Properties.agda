@@ -1,9 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Bool.Properties where
 
-open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.Transport
+open import Meta.Prelude
 
 open import Meta.Membership
 open import Meta.Search.Decidable
@@ -13,7 +11,6 @@ open import Meta.Search.Finite.Bishop
 open import Meta.Search.Finite.ManifestBishop
 open import Meta.Search.HLevel
 open import Meta.Search.Omniscient
-open import Meta.Underlying
 open import Meta.Witness
 
 open import Data.Empty.Base as ⊥
@@ -35,8 +32,8 @@ universal : (Bool → A)
 universal = iso→equiv
   $ (λ ch → ch true , ch false)
   , iso (flip (Bool.rec fst snd))
-        (λ _ → refl)
-        (λ _ → fun-ext $ Bool.elim refl refl)
+        (λ _ → refl!)
+        (λ _ → fun-ext $ Bool.elim reflₚ reflₚ)
 
 bool≃maybe⊤ : Bool ≃ Maybe ⊤
 bool≃maybe⊤ = iso→equiv $ to , iso from ri li where
@@ -49,12 +46,12 @@ bool≃maybe⊤ = iso→equiv $ to , iso from ri li where
   from nothing  = false
 
   ri : from is-right-inverse-of to
-  ri (just _) = refl
-  ri nothing  = refl
+  ri (just _) = refl!
+  ri nothing  = refl!
 
   li : from is-left-inverse-of to
-  li false = refl
-  li true  = refl
+  li false = refl!
+  li true  = refl!
 
 boolean-pred-ext : (f g : A → Bool) → f ⊆ g → g ⊆ f → f ＝ g
 boolean-pred-ext f g p q i a with f a | recall f a | g a | recall g a
@@ -75,15 +72,15 @@ or-true-≃
   ⊎   ((x ＝ true ) × (y ＝ true )) )
 or-true-≃ = prop-extₑ (helper _ _) go to from where
   to : (x or y ＝ true) → (((x ＝ true) × (y ＝ false)) ⊎ ((x ＝ false) × (y ＝ true)) ⊎ ((x ＝ true) × (y ＝ true)))
-  to {(false)} {(false)} p = ⊥.rec $ᴱ false≠true p
-  to {(false)} {(true)}  _ = inr (inl (refl , refl))
-  to {(true)}  {(false)} _ = inl (refl , refl)
-  to {(true)}  {(true)}  _ = inr (inr (refl , refl))
+  to {(false)} {(false)} p = ⊥.rec $ false≠true p
+  to {(false)} {(true)}  _ = inr (inl (refl! , refl!))
+  to {(true)}  {(false)} _ = inl (refl! , refl!)
+  to {(true)}  {(true)}  _ = inr (inr (refl! , refl!))
 
   from : (((x ＝ true) × (y ＝ false)) ⊎ ((x ＝ false) × (y ＝ true)) ⊎ ((x ＝ true) × (y ＝ true))) → (x or y ＝ true)
   from {(false)} {(false)}   = [ fst , [ snd , snd ]ᵤ ]ᵤ
-  from {(false)} {(true)}  _ = refl
-  from {(true)}            _ = refl
+  from {(false)} {(true)}  _ = refl!
+  from {(true)}            _ = refl!
 
   helper = path-is-of-hlevel′ 1 bool-is-set
 
@@ -91,8 +88,8 @@ or-true-≃ = prop-extₑ (helper _ _) go to from where
   go {x} {y} = disjoint-⊎-is-prop (×-is-of-hlevel 1 (helper _ _) (helper _ _))
                                   (disjoint-⊎-is-prop (×-is-of-hlevel 1 (helper _ _) (helper _ _))
                                                       (×-is-of-hlevel 1 (helper _ _) (helper _ _))
-                                     λ z → false≠true (sym (z .fst .fst) ∙ z .snd .fst))
-    λ z → [ (λ w → false≠true (sym (w .fst) ∙ z .fst .fst)) , (λ w → false≠true (sym (z .fst .snd) ∙ w .snd)) ]ᵤ (z .snd)
+                                     λ z → false≠true (z .fst .fst ⁻¹ ∙ z .snd .fst))
+    λ z → [ (λ w → false≠true (w .fst ⁻¹ ∙ z .fst .fst)) , (λ w → false≠true (z .fst .snd ⁻¹ ∙ w .snd)) ]ᵤ (z .snd)
 
 module or-true-≃ {x} {y} = Equiv (or-true-≃ {x} {y})
 
@@ -102,8 +99,8 @@ and-true-≃ = prop-extₑ (go _ _) (×-is-of-hlevel 1 (go _ _) (go _ _)) to fro
   go = path-is-of-hlevel′ 1 bool-is-set
 
   to : x and y ＝ true → (x ＝ true) × (y ＝ true)
-  to {(false)} p = ⊥.rec $ᴱ false≠true p
-  to {(true)}  p = refl , p
+  to {(false)} p = ⊥.rec $ false≠true p
+  to {(true)}  p = refl! , p
 
   from : (x ＝ true) × (y ＝ true) → x and y ＝ true
   from {(false)} p = p .fst

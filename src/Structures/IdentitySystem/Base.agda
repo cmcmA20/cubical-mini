@@ -1,12 +1,9 @@
 {-# OPTIONS --safe #-}
 module Structures.IdentitySystem.Base where
 
-open import Foundations.Base
-  renaming (J to Jₜ ; J-refl to Jₜ-refl; _∙_ to _∙ₚ_)
+open import Foundations.Prelude
+  renaming (J to Jₜ ; J-refl to Jₜ-refl; _∙_ to _∙ₚ_; _$_ to _$ₜ_)
 open import Foundations.Cubes
-open import Foundations.HLevel
-open import Foundations.Sigma
-open import Foundations.Univalence
 
 open import Meta.Groupoid
 open import Meta.Underlying
@@ -87,21 +84,21 @@ to-path-over-refl
 to-path-over-refl {x} ids = ap (ap snd) $ to-path-refl-coh ids x
 
 equiv-path→identity-system
-  : {r : ∀ a → R a a}
+  : {r : (a : A) → R a a}
   → (eqv : ∀ {a b} → R a b ≃ (a ＝ b))
   → (∀ a → Equiv.from eqv refl ＝ r a)
   → is-identity-system R r
-equiv-path→identity-system {R} {r} eqv pres′ = ids where opaque
+equiv-path→identity-system {A} {R} {r} eqv pres′ = ids where opaque
   unfolding is-of-hlevel
   contract : ∀ {a} → is-contr (Σ _ (R a))
-  contract = is-of-hlevel-≃ 0 ((total (λ _ → apply eqv) , fibrewise-is-equiv→total-is-equiv (eqv .snd)))
+  contract = is-of-hlevel-≃ 0 ((total (λ _ → eqv $_) , fibrewise-is-equiv→total-is-equiv (eqv .snd)))
     (_ , singleton-is-prop)
 
-  pres : ∀ {a} → eqv # (r a) ＝ refl
+  pres : {a : A} → eqv # r a ＝ refl
   pres = Equiv.injective₂ (eqv ⁻¹) (Equiv.η eqv _) (pres′ _)
 
   ids : is-identity-system R r
-  ids .to-path = apply eqv
+  ids .to-path = eqv $_
   ids .to-path-over {a} {b} p i =
     is-prop→pathP
     (λ i → is-contr→is-prop (eqv .snd .equiv-proof λ j → eqv .fst p (i ∧ j)))
@@ -136,7 +133,7 @@ module _
   {r : ∀ a → R a a} {s : ∀ a → S a a}
   (ids : is-identity-system R r)
   (eqv : ∀ x y → R x y ≃ S x y)
-  (pres : ∀ x → eqv x x .fst (r x) ＝ s x)
+  (pres : ∀ x → eqv x x # r x ＝ s x)
   where
   private module e x y = Equiv (eqv x y)
   transfer-identity-system : is-identity-system S s

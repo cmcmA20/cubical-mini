@@ -2,7 +2,7 @@
 module Structures.FinSet where
 
 open import Foundations.Base
-  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
+  hiding (_$_; _∙_; Σ-syntax; Π-syntax; ∀-syntax)
 open import Foundations.Erased
 open import Foundations.Sigma
   hiding (Σ-syntax)

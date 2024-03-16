@@ -2,6 +2,7 @@
 module Data.Nat.Properties where
 
 open import Foundations.Base
+  hiding (_$_)
 
 open import Meta.Variadic
 

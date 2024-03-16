@@ -1,11 +1,9 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Computational.Properties where
 
-open import Foundations.Base hiding (_∙_)
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Effect.Bind
-open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Data.Empty.Base
@@ -38,7 +36,7 @@ inject : m ≤ n → Fin m → Fin n
 inject {m} p (mk-fin k {erase q}) = mk-fin k {erase (≤-trans {suc k} {m} q p)}
 
 fzero≠fsuc : {k : Fin m} → fzero ≠ fsuc k
-fzero≠fsuc = suc≠zero ∘ sym ∘ ap index
+fzero≠fsuc = suc≠zero ∘ₜ symₚ ∘ₜ ap index
 
 fsuc-inj : {k l : Fin m} → fsuc k ＝ fsuc l → k ＝ l
 fsuc-inj {m} {k} = ap pred′ where
@@ -60,12 +58,7 @@ fin-choice
 fin-choice 0 _ = pure λ()
 fin-choice (suc n) {A} k = do
   azero ← k fzero
-  asuc  ← fin-choice n (k ∘ fsuc)
+  asuc  ← fin-choice n (k ∘ₜ fsuc)
   pure λ where
     (mk-fin 0)       → azero
     (mk-fin (suc k)) → asuc (mk-fin k)
-
-opaque
-  unfolding is-prop→pathP
-  fin-ext-refl : {x : Fin n} → fin-ext refl ＝ refl {x = x}
-  fin-ext-refl = fin-is-set _ _ _ refl
