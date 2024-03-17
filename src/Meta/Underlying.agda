@@ -2,7 +2,7 @@
 module Meta.Underlying where
 
 open import Foundations.Prelude
-  hiding (_$_; _&_)
+  hiding (_$_)
 
 open import Meta.Reflection.Base
 

@@ -1,11 +1,9 @@
 {-# OPTIONS --safe #-}
 module Structures.Fibration where
 
-open import Foundations.Base
-  hiding (_$_; Σ-syntax; Π-syntax; ∀-syntax)
+open import Meta.Prelude
 
 open import Meta.SIP
-open import Meta.Underlying
 
 module _ {ℓᵇ} (B : Type ℓᵇ) (ℓ : Level) where
   -- `X` is fibered over `B`

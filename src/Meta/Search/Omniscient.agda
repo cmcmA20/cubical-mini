@@ -1,17 +1,13 @@
 {-# OPTIONS --safe #-}
 module Meta.Search.Omniscient where
 
-open import Foundations.Base
-  hiding (_$_)
-open import Foundations.Equiv
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Reflection.Base
 open import Meta.Search.Base public
 open import Meta.Search.Decidable
 open import Meta.Search.Exhaustible
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Omniscient
 open Correspondences.Omniscient public

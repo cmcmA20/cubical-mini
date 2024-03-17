@@ -347,7 +347,7 @@ unapply-path tm = reduce tm >>= λ where
       ]
     unify red ty
     pure (just (domain , x , y))
-  _ → returnTC nothing
+  _ → pure nothing
 
 get-boundary : Term → TC (Maybe (Term × Term))
 get-boundary tm = unapply-path tm >>= (pure ∘ (snd <$>_))

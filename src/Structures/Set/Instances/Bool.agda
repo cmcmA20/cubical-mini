@@ -24,7 +24,7 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     empty _ = false
 
     lookup : S → A → Bool
-    lookup = idₜ
+    lookup = id
 
     insert : S → A → S
     insert s x a with x ≟ a
@@ -37,17 +37,17 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     ... | no  _ = s a
 
     lookup-empty : Erased $ lookup empty x ＝ false
-    lookup-empty .erased = refl!
+    lookup-empty .erased = refl
 
     lookup-insert : Erased $ lookup (insert s x) x ＝ true
     lookup-insert {x} .erased with x ≟ x
-    ... | yes _   = reflₚ
-    ... | no  x≠x = ⊥.rec $ x≠x reflₚ
+    ... | yes _   = refl
+    ... | no  x≠x = ⊥.rec $ x≠x refl
 
     lookup-remove : Erased $ lookup (remove s x) x ＝ false
     lookup-remove {x} .erased with x ≟ x
-    ... | yes _   = reflₚ
-    ... | no  x≠x = ⊥.rec $ x≠x reflₚ
+    ... | yes _   = refl
+    ... | no  x≠x = ⊥.rec $ x≠x refl
 
     insert-nop    : lookup s x ＝ true
                   → Erased $ insert s x ＝ s

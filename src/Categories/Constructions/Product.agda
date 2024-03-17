@@ -32,14 +32,14 @@ open Functor
 Fst : Functor (C × D) C
 Fst .F₀ = fst
 Fst .F₁ = fst
-Fst .F-id = reflₚ
-Fst .F-∘ _ _ = reflₚ
+Fst .F-id = refl
+Fst .F-∘ _ _ = refl
 
 Snd : Functor (C × D) D
 Snd .F₀ = snd
 Snd .F₁ = snd
-Snd .F-id = reflₚ
-Snd .F-∘ _ _ = reflₚ
+Snd .F-id = refl
+Snd .F-∘ _ _ = refl
 
 Cat⟨_,_⟩ : Functor E C → Functor E D → Functor E (C × D)
 Cat⟨ F , G ⟩ .F₀ = < F .F₀ , G .F₀ >

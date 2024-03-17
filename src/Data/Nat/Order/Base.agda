@@ -84,7 +84,7 @@ opaque
   unfolding _≤_
 
   z≤ : 0 ≤ n
-  z≤ = _ , reflₚ
+  z≤ = _ , refl
 
   s≤s : m ≤ n → suc m ≤ suc n
   s≤s = second (ap suc)
@@ -116,7 +116,7 @@ opaque
   suc≰id (k , p) = id≠plus-suc {m = k} (sym p ∙ nat!)
 
   s≰z : suc n ≰ 0
-  s≰z = suc≠zero ∘ₜ snd
+  s≰z = suc≠zero ∘ snd
 
 
 -- Properties of strict order
@@ -125,7 +125,7 @@ opaque
   unfolding _<_
 
   <-irr : n ≮ n
-  <-irr = (λ p → id≠plus-suc (sym p ∙ nat!)) ∘ₜ snd
+  <-irr = (λ p → id≠plus-suc (sym p ∙ nat!)) ∘ snd
 
   s<s : m < n → suc m < suc n
   s<s = s≤s
@@ -155,7 +155,7 @@ opaque
   ≮z = s≰z
 
   z<s : 0 < suc n
-  z<s = _ , reflₚ
+  z<s = _ , refl
 
 
 -- Conversion
@@ -186,12 +186,12 @@ opaque
 ≯→≤ : ∀[ _≯_ →̇ _≤_ ]
 ≯→≤ {0}     {_}     _ = z≤
 ≯→≤ {suc _} {0}     f = ⊥.rec $ f z<s
-≯→≤ {suc _} {suc _} f = s≤s $ ≯→≤ (f ∘ₜ s<s)
+≯→≤ {suc _} {suc _} f = s≤s $ ≯→≤ (f ∘ s<s)
 
 ≱→< : ∀[ _≱_ →̇ _<_ ]
 ≱→< {_}     {0}     f = ⊥.rec $ f z≤
 ≱→< {0}     {suc _} _ = z<s
-≱→< {suc m} {suc n} f = s<s $ ≱→< (f ∘ₜ s≤s)
+≱→< {suc m} {suc n} f = s<s $ ≱→< (f ∘ s≤s)
 
 ≤≃≯ : (m ≤ n) ≃ (m ≯ n)
 ≤≃≯ = prop-extₑ! ≤→≯ ≯→≤
@@ -213,7 +213,7 @@ module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
 <-reflects _       0       = ofⁿ ≮z
 <-reflects 0       (suc _) = ofʸ z<s
 <-reflects (suc m) (suc n) =
-  Reflects.dmap s<s (_∘ₜ <-peel) $ <-reflects m n
+  Reflects.dmap s<s (_∘ <-peel) $ <-reflects m n
 
 <-dec : Decidable _<_
 <-dec = reflects→decidable {2} {P = _<_} <-reflects
@@ -222,7 +222,7 @@ module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
 ≤-reflects 0       _       = ofʸ z≤
 ≤-reflects (suc _) 0       = ofⁿ s≰z
 ≤-reflects (suc m) (suc n) =
-  Reflects.dmap s≤s (_∘ₜ ≤-peel) $ ≤-reflects m n
+  Reflects.dmap s≤s (_∘ ≤-peel) $ ≤-reflects m n
 
 ≤-dec : Decidable _≤_
 ≤-dec = reflects→decidable {2} {P = _≤_} ≤-reflects

@@ -1,13 +1,9 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Discrete where
 
-open import Foundations.Base
-  hiding (_$_)
-open import Foundations.Equiv
-open import Foundations.HLevel.Base
+open import Meta.Prelude
 
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Base public
 open import Correspondences.Decidable
@@ -57,12 +53,12 @@ is-discrete→path≃equals-true : (d : is-discrete A) (x y : A) → (x ＝ y) �
 is-discrete→path≃equals-true d x y = prop-extₑ (path-is-of-hlevel′ 1 (is-discrete→is-set d) x y) hlevel! to from where
   to : ∀ {x y} → x ＝ y → d .is-discrete-β x y .does ＝ true
   to {x} {y} p with d .is-discrete-β x y
-  ... | no ¬p = ⊥.rec (¬p p)
+  ... | no ¬p = ⊥.rec $ ¬p p
   ... | yes _ = refl
 
   from : ∀ {x y} → d .is-discrete-β x y .does ＝ true → x ＝ y
   from {x} {y} prf with d .is-discrete-β x y
-  ... | no ¬p = ⊥.rec (false≠true prf)
+  ... | no ¬p = ⊥.rec $ false≠true prf
   ... | yes p = p
 
 module is-discrete→path≃equals-true {ℓ} {A} d {x y} = Equiv (is-discrete→path≃equals-true {ℓ} {A} d x y)
@@ -100,7 +96,7 @@ discrete ⦃ d ⦄ = d
 ... | no  a₁≠a₂ = no $ a₁≠a₂ ∘ ap fst
 ... | yes a₁=a₂ with B-d .is-discrete-β b₁ b₂
 ... | no  b₁≠b₂ = no $ b₁≠b₂ ∘ ap snd
-... | yes b₁=b₂ = yes $ Σ-pathP a₁=a₂ b₁=b₂
+... | yes b₁=b₂ = yes $ a₁=a₂ ,ₚ b₁=b₂
 
 lift-is-discrete : is-discrete A → is-discrete (Lift ℓ A)
 lift-is-discrete di .is-discrete-β (lift x) (lift y) =

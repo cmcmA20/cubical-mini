@@ -1,10 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Sum.Properties where
 
-open import Foundations.Base
-open import Foundations.Equiv
-
-open import Meta.Groupoid
+open import Meta.Prelude
 
 open import Data.Empty.Base
 
@@ -17,7 +14,8 @@ private variable
   C : Type c
   D : Type d
 
-universal : {C : A ⊎ B → Type c}
+universal : {A : Type a} {B : Type b}
+            {C : A ⊎ B → Type c}
           → (Π[ x ꞉ A ⊎ B ] C x)
           ≃ ( (Π[ x ꞉ A ] C (inl x))
             × (Π[ y ꞉ B ] C (inr y))
@@ -46,10 +44,10 @@ universal = iso→equiv the-iso where
   cong′ .snd .is-iso.linv (inr x) = ap inr (g-iso .is-iso.linv x)
 
 ⊎-ap-l : A ≃ B → (A ⊎ C) ≃ (B ⊎ C)
-⊎-ap-l f = ⊎-ap f refl!
+⊎-ap-l f = ⊎-ap f refl
 
 ⊎-ap-r : B ≃ C → (A ⊎ B) ≃ (A ⊎ C)
-⊎-ap-r f = ⊎-ap refl! f
+⊎-ap-r f = ⊎-ap refl f
 
 ⊎-comm : (A ⊎ B) ≃ (B ⊎ A)
 ⊎-comm = iso→equiv i where

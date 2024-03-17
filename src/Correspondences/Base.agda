@@ -1,11 +1,7 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Base where
 
-open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.HLevel
-
-open import Meta.Variadic
+open import Meta.Prelude
 
 open import Data.HVec.Base public
 

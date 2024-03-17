@@ -1,17 +1,13 @@
 {-# OPTIONS --safe #-}
 module Meta.Extensionality where
 
-open import Foundations.Base
-  hiding (_$_)
-open import Foundations.Equiv
-open import Foundations.Sigma
+open import Meta.Prelude
 
 open import Meta.Effect.Alt
 open import Meta.Reflection.Base
 open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Structures.IdentitySystem.Base
   hiding (J; J-refl)
@@ -175,7 +171,7 @@ Extensional-× ⦃ sa ⦄ ⦃ sb ⦄ .idsᵉ .to-path (p , q) = ap² _,_
   (sa .idsᵉ .to-path p)
   (sb .idsᵉ .to-path q)
 Extensional-× ⦃ sa ⦄ ⦃ sb ⦄ .idsᵉ .to-path-over (p , q) =
-  Σ-pathP (sa .idsᵉ .to-path-over p) (sb .idsᵉ .to-path-over q)
+  sa .idsᵉ .to-path-over p ,ₚ sb .idsᵉ .to-path-over q
 
 Extensional-lift-map
   : ∀ {ℓ ℓ′ ℓ″ ℓr} {A : Type ℓ} {B : Type ℓ″}

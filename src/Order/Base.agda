@@ -140,8 +140,8 @@ module Posets {o ℓ} = Categories.Morphism (Posets o ℓ)
 Forget-poset : ∀ {o ℓ} → Functor (Posets o ℓ) (Sets o)
 Forget-poset .Functor.F₀ P = el! ⌞ P ⌟
 Forget-poset .Functor.F₁ = hom
-Forget-poset .Functor.F-id = reflₚ
-Forget-poset .Functor.F-∘ _ _ = reflₚ
+Forget-poset .Functor.F-id = refl
+Forget-poset .Functor.F-∘ _ _ = refl
 
 _ᵒᵖᵖ : Poset o ℓ → Poset o ℓ
 (P ᵒᵖᵖ) .Poset.Ob = Poset.Ob P

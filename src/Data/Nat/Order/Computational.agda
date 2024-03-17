@@ -30,10 +30,10 @@ z≤ : 0 ≤ n
 z≤ = tt
 
 s≤s : m ≤ n → suc m ≤ suc n
-s≤s = idₜ
+s≤s = refl
 
 ≤-peel : suc m ≤ suc n → m ≤ n
-≤-peel = idₜ
+≤-peel = refl
 
 _≥_ : ℕ → ℕ → Type
 m ≥ n = n ≤ m
@@ -56,14 +56,14 @@ m > n = n < m
 <-asym {suc m} {suc n} p = <-asym {m} p
 
 <-peel : suc m < suc n → m < n
-<-peel = idₜ
+<-peel = refl
 
 <-suc-r : m < n → m < suc n
 <-suc-r {0}             p = _
 <-suc-r {suc m} {suc _} p = <-suc-r {m} p
 
 <→s : m < n → Σ[ k ꞉ ℕ ] (n ＝ suc k)
-<→s {m} {suc n} p = n , refl!
+<→s {m} {suc n} p = n , refl
 
 ≤-refl : n ≤ n
 ≤-refl {0}     = tt
@@ -74,13 +74,13 @@ m > n = n < m
 ≤-trans {suc m} {suc n} {suc k} p q = ≤-trans {m} p q
 
 ≤-antisym : m ≤ n → n ≤ m → m ＝ n
-≤-antisym {0}     {0}     _ _ = refl!
+≤-antisym {0}     {0}     _ _ = refl
 ≤-antisym {suc m} {suc n} p q = ap suc (≤-antisym p q)
 
 opaque
   unfolding is-of-hlevel
   <-is-prop : is-prop (m < n)
-  <-is-prop {0}     {suc _} _ _ = refl!
+  <-is-prop {0}     {suc _} _ _ = refl
   <-is-prop {suc m} {suc n} = <-is-prop {m} {n}
 
 ≤-is-prop : is-prop (m ≤ n)
@@ -99,7 +99,7 @@ instance
 
 ≤-dec : (m n : ℕ) → Dec (m ≤ n)
 ≤-dec m n with m ≤ᵇ n
-... | false = no idₜ
+... | false = no  refl
 ... | true  = yes tt
 
 ¬sucn≤n : ¬ suc n ≤ n
@@ -117,7 +117,7 @@ instance
   (substⁱ ⟦_⟧ᵇ p)
   (substⁱ ⟦_⟧ᵇ q) where
     go : ∀ m n → ¬ (m < n) → ¬ (n < m) → m ＝ n
-    go 0       0       _ _ = refl!
+    go 0       0       _ _ = refl
     go 0       (suc _) p _ = ⊥.rec $ p tt
     go (suc _) 0       _ q = ⊥.rec $ q tt
     go (suc m) (suc n) p q = ap suc $ go m n p q

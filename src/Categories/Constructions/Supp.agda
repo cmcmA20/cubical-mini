@@ -53,7 +53,7 @@ instance
 
 Supported-structure : ∀ ℓ → Thin-structure {ℓ} (ℓ ⊔ ℓᵃ) Supported
 Supported-structure ℓ .is-hom f X Y = el! (Supported-hom X Y f)
-Supported-structure _ .id-is-hom .sub-supp _ = idₜ
+Supported-structure _ .id-is-hom .sub-supp _ = refl
 Supported-structure _ .∘-is-hom f g p q .sub-supp x = q .sub-supp x ∘ₜ p .sub-supp _
 Supported-structure _ .id-hom-unique {s} {t} p q = pure $ Equiv.injective
   (isoₜ→equiv supported-iso) $ Σ-prop-path hlevel! $ ext $ λ x a →

@@ -13,8 +13,8 @@ open UMagma-hom
 
 UMagma-structure : ∀ ℓ → Thin-structure ℓ UMagma-on
 UMagma-structure ℓ .is-hom f A B = el! (UMagma-hom A B f)
-UMagma-structure ℓ .id-is-hom .pres-id = reflₚ
-UMagma-structure ℓ .id-is-hom .pres-⋆ _ _ = reflₚ
+UMagma-structure ℓ .id-is-hom .pres-id = refl
+UMagma-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 UMagma-structure ℓ .∘-is-hom f g p q .pres-id =
   ap f (q .pres-id) ∙ p .pres-id
 UMagma-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =

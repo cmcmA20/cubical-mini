@@ -175,5 +175,5 @@ module _ {M : Monoid-on A} where
   iter-comm (suc n) = ap (_ ⋆_) (iter-comm n) ∙ assoc _ _ _
 
   iter-unique : (n : ℕ) → iter-l n x ＝ iter-r n x
-  iter-unique 0       = refl!
+  iter-unique 0       = refl
   iter-unique (suc n) = ap (_⋆ _) (iter-unique n) ∙ iter-comm n ⁻¹

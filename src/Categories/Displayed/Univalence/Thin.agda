@@ -88,13 +88,13 @@ module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure �
 
   Homomorphism-path
     : {x y : So.Ob} {f g : So.Hom x y}
-    → (∀ x → (f $ x) ＝ (g $ x))
+    → (∀ x → f # x ＝ g # x)
     → f ＝ g
   Homomorphism-path h = Structured-hom-path spec (fun-ext h)
 
   Homomorphism-monic
     : ∀ {x y : So.Ob} (f : So.Hom x y)
-    → (∀ {x y} (p : (f $ x) ＝ (f $ y)) → x ＝ y)
+    → (∀ {x y} (p : f # x ＝ f # y) → x ＝ y)
     → Som.is-monic f
   Homomorphism-monic f wit g h p = Homomorphism-path λ x → wit (ap hom p $ₚ x)
 
@@ -112,12 +112,14 @@ record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin
     → (f : So.Hom a b)
     → is-equiv (f $_)
     → Erased (a ＝ b)
-  ∫-Path {a} {b} f eqv = erase (Σ-pathP (n-ua (f .hom , eqv)) $
-    Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e .fst) (a .snd) st ⌟ → PathP (λ i → S (ua e i)) (a .snd) st)
-      (λ st pres → to-pathP (ap (λ e → subst S e (a .snd)) ua-idₑ
-                ∙∙ transport-refl _
-                ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
-      (f .hom , eqv) (b .snd) (f .preserves))
+  ∫-Path {a} {b} f eqv .erased
+    =  n-ua (f .hom , eqv)
+    ,ₚ Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e .fst) (a .snd) st ⌟
+                        → ＜ a .snd ／ (λ i → S (ua e i)) ＼ st ＞)
+        (λ st pres → to-pathP (ap (λ e → subst S e (a .snd)) ua-idₑ
+                  ∙∙ transport-refl _
+                  ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
+        (f .hom , eqv) (b .snd) (f .preserves)
 
 open is-equational public
 

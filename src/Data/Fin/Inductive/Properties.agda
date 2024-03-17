@@ -1,14 +1,9 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Inductive.Properties where
 
-open import Foundations.Base
-  renaming (_$_ to _$ₜ_)
-  hiding (_∙_)
-open import Foundations.Equiv
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Effect.Bind
-open import Meta.Underlying
 
 open import Data.Empty.Base as ⊥
 open import Data.Nat.Path
@@ -27,9 +22,9 @@ cast {suc m} {suc n} _ fzero    = fzero
 cast {suc m} {suc n} p (fsuc k) = fsuc $ cast (suc-inj p) k
 
 cast-is-equiv : {m n : ℕ} (p : m ＝ n) → is-equiv (cast p)
-cast-is-equiv = J (λ _ p → is-equiv (cast p)) cast-refl-is-equiv
+cast-is-equiv = Jₜ (λ _ p → is-equiv (cast p)) cast-refl-is-equiv
   where
-    id=cast-refl : {n : ℕ} → id ＝ cast (λ _ → n)
+    id=cast-refl : {n : ℕ} → refl ＝ cast (λ _ → n)
     id=cast-refl {0}     _ ()
     id=cast-refl {suc n} _ fzero    = fzero
     id=cast-refl {suc n} i (fsuc k) = fsuc $ id=cast-refl i k

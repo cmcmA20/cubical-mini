@@ -25,14 +25,14 @@ Code nothing  nothing  = Lift _ ⊤
 Code _        _        = Lift _ ⊥
 
 code-refl : (x : Maybe A) → Code x x
-code-refl (just _) = reflₚ
+code-refl (just _) = refl
 code-refl nothing  = _
 
 identity-system : is-identity-system {A = Maybe A} Code code-refl
 identity-system .to-path {just x}    {just y}    c = ap just c
-identity-system .to-path {(nothing)} {(nothing)} _ = reflₚ
+identity-system .to-path {(nothing)} {(nothing)} _ = refl
 identity-system .to-path-over {just x}    {just y}    p i j = p (i ∧ j)
-identity-system .to-path-over {(nothing)} {(nothing)} _ = reflₚ
+identity-system .to-path-over {(nothing)} {(nothing)} _ = refl
 
 code-is-of-hlevel : {x y : Maybe A} {n : HLevel}
                   → is-of-hlevel (2 + n) A
@@ -58,7 +58,7 @@ nothing≠just : nothing ≠ just x
 nothing≠just p = subst is-nothing p tt
 
 just≠nothing : just x ≠ nothing
-just≠nothing = nothing≠just ∘ₜ symₚ
+just≠nothing = nothing≠just ∘ symₚ
 
 just-inj : just x ＝ just y → x ＝ y
 just-inj {x} = ap (from-just x)

@@ -35,9 +35,9 @@ module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
       : ∀ {x} {A : Ob[ x ]} (B : Ob[ x ]) (f : A ≅↓ B)
       → Path (Σ _ ((x , A) ∫E.≅_)) ((x , A) , ∫E.id-iso)
           ((x , B) , piece-together B.id-iso f)
-    contract-vertical-iso {x} {A} B f =
-      Σ-pathP (λ i → x , pair i .fst)
-        (∫E.≅-pathP reflₚ _ (total-hom-pathp E _ _ reflₚ λ i → pair i .snd .toᵈ))
+    contract-vertical-iso {x} {A} B f
+      =  (λ i → x , pair i .fst)
+      ,ₚ (∫E.≅-pathP refl _ (total-hom-pathp E _ _ refl λ i → pair i .snd .toᵈ))
       where
         pair = is-prop-β (disp-c B.id-iso A)
           (A , id-iso↓)

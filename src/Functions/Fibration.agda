@@ -18,7 +18,7 @@ private variable
 Σ-fibre-equiv B a = iso→equiv isom where
   isom : _ ≅ _
   isom .fst ((_ , y) , p) = subst B p y
-  isom .snd .is-iso.inv x       = (a , x) , reflₚ
+  isom .snd .is-iso.inv x       = (a , x) , refl
   isom .snd .is-iso.rinv _      = transport-refl _
   isom .snd .is-iso.linv ((_ , y) , p) i =
     (p (~ i) , coe1→i (λ j → B (p (~ i ∧ ~ j))) i y) , λ j → p (~ i ∨ j)
@@ -28,10 +28,10 @@ total-equiv
     (p : E → B) → E ≃ Σ[ b ꞉ B ] fibre p b
 total-equiv p = iso→equiv isom where
   isom : _ ≅ (Σ _ (fibre p))
-  isom .fst x                   = p x , x , reflₚ
+  isom .fst x                   = p x , x , refl
   isom .snd .is-iso.inv (_ , x , _)    = x
   isom .snd .is-iso.rinv (_ , x , q) i = q i , x , λ j → q (i ∧ j)
-  isom .snd .is-iso.linv _             = reflₚ
+  isom .snd .is-iso.linv _             = refl
 
 _/[_]_ : (ℓ : Level) → (Type (ℓ ⊔ ℓ′) → Type ℓ″) → Type ℓ′ → Type (ℓsuc (ℓ ⊔ ℓ′) ⊔ ℓ″ )
 _/[_]_ {ℓ′} ℓ P B =
@@ -45,7 +45,7 @@ fibre-paths : {z@(a , p) z′@(a′ , p′) : fibre f y}
             ≃ Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)
 fibre-paths {f} {y} {z = a , p} {z′ = a′ , p′} =
   (a , p) ＝ (a′ , p′)                                ≃˘⟨ iso→equiv Σ-path-iso ⟩
-  Σ[ q ꞉ a ＝ a′ ] (subst (λ v → f v ＝ y) q p ＝ p′) ≃⟨ Σ-ap-snd (whisker-path-lₑ ∘ₜ subst-path-left p ∘ₜ ap f) ⟩
+  Σ[ q ꞉ a ＝ a′ ] (subst (λ v → f v ＝ y) q p ＝ p′) ≃⟨ Σ-ap-snd (whisker-path-lₑ ∘ subst-path-left p ∘ ap f) ⟩
   Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)           ≃∎
 
 module @0 _ where
@@ -84,15 +84,15 @@ module @0 _ where
 -- ultra fast
 fibre-comp : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
              {g : B → C} {f : A → B} {c : C}
-           → fibre (g ∘ₜ f) c
+           → fibre (g ∘ f) c
            ≃ Σ[ w ꞉ fibre g c ] fibre f (w .fst)
 fibre-comp {g} {f} {c} = iso→equiv $ to , iso from ri li where
-  to : fibre (g ∘ₜ f) c → Σ[ w ꞉ fibre g c ] fibre f (w .fst)
-  to (a , p) = (f a , p) , a , reflₚ
-  from : Σ[ w ꞉ fibre g c ] fibre f (w .fst) → fibre (g ∘ₜ f) c
+  to : fibre (g ∘ f) c → Σ[ w ꞉ fibre g c ] fibre f (w .fst)
+  to (a , p) = (f a , p) , a , refl
+  from : Σ[ w ꞉ fibre g c ] fibre f (w .fst) → fibre (g ∘ f) c
   from ((c′ , p) , a , q) = a , ap g q ∙ p
   ri : from is-right-inverse-of to
   ri ((c′ , p) , a , q) i =
     (q i , ∙-filler-r (ap g q) p (~ i)) , a , λ j → q (i ∧ j)
   li : from is-left-inverse-of to
-  li (a , p) i = a , ∙-filler-r reflₚ p (~ i)
+  li (a , p) i = a , ∙-filler-r refl p (~ i)

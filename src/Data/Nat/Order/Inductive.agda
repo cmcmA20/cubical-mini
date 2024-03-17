@@ -3,7 +3,6 @@ module Data.Nat.Order.Inductive where
 
 open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Data.Dec.Base
@@ -49,13 +48,13 @@ m > n = n < m
 ≤-trans (s≤s p) (s≤s q) = s≤s (≤-trans p q)
 
 ≤-antisym : m ≤ n → n ≤ m → m ＝ n
-≤-antisym z≤      z≤      = reflₚ
+≤-antisym z≤      z≤      = refl
 ≤-antisym (s≤s p) (s≤s q) = ap suc (≤-antisym p q)
 
 opaque
   unfolding is-of-hlevel
   ≤-is-prop : is-prop (m ≤ n)
-  ≤-is-prop z≤      z≤      = reflₚ
+  ≤-is-prop z≤      z≤      = refl
   ≤-is-prop (s≤s p) (s≤s q) = ap s≤s (≤-is-prop p q)
 
 instance
@@ -66,7 +65,7 @@ instance
 ≤-peel (s≤s p) = p
 
 ≤-peel-unpeel : (p : suc m ≤ suc n) → s≤s (≤-peel p) ＝ p
-≤-peel-unpeel (s≤s _) = refl!
+≤-peel-unpeel (s≤s _) = refl
 
 ≤-suc-r : m ≤ n → m ≤ suc n
 ≤-suc-r z≤      = z≤
@@ -117,8 +116,8 @@ instance
 
 <-+l-≃ : {x y z : ℕ} → (y < z) ≃ (x + y < x + z)
 <-+l-≃ {x} {y} {z} = ≤-+l-≃ {x = x} ∙ prop-extₑ!
-  (≤-subst (+-suc-r x y) reflₚ)
-  (≤-subst (sym (+-suc-r x y)) reflₚ)
+  (≤-subst (+-suc-r x y) refl)
+  (≤-subst (sym (+-suc-r x y)) refl)
 
 <-+r-≃ : {x y z : ℕ} → (x < y) ≃ (x + z < y + z)
 <-+r-≃ {x} = ≤-+r-≃ {x = suc x}
@@ -148,7 +147,7 @@ instance
 ≤-split m n | no m≥n | yes n<m = inr (inl n<m)
 ≤-split m n | no m≥n | no n≥m  = inr (inr (go m n m≥n n≥m)) where
   go : ∀ m n → ¬ (suc m ≤ n) → ¬ (suc n ≤ m) → m ＝ n
-  go zero zero p q          = refl!
+  go zero zero p q          = refl
   go zero (suc zero) p q    = absurd $ p $ s≤s z≤
   go zero (suc (suc n)) p q = absurd $ p $ s≤s z≤
   go (suc zero) zero p q    = absurd $ q $ s≤s z≤
@@ -157,15 +156,15 @@ instance
 
 ≤→¬< : {x y : ℕ} → x ≤ y → ¬ (y < x)
 ≤→¬< {0}     {y}      z≤       = ¬sucn≤0
-≤→¬< {suc x} {suc y} (s≤s prf) = ≤→¬< prf ∘ₜ ≤-peel
+≤→¬< {suc x} {suc y} (s≤s prf) = ≤→¬< prf ∘ ≤-peel
 
 ¬<→≤ : {x y : ℕ} → ¬ (y < x) → x ≤ y
 ¬<→≤ {0}     {y}     ctra = z≤
 ¬<→≤ {suc x} {0}     ctra = absurd $ ctra $ s≤s z≤
-¬<→≤ {suc x} {suc y} ctra = s≤s $ ¬<→≤ $ ctra ∘ₜ s≤s
+¬<→≤ {suc x} {suc y} ctra = s≤s $ ¬<→≤ $ ctra ∘ s≤s
 
 ¬≤→< : {x y : ℕ} → ¬ (y ≤ x) → x < y
-¬≤→< ctra = ¬<→≤ (ctra ∘ₜ ≤-peel)
+¬≤→< ctra = ¬<→≤ (ctra ∘ ≤-peel)
 
 ≤→<＝ : {x y : ℕ} → x ≤ y → (x < y) ⊎ (x ＝ y)
 ≤→<＝ {x} {y} prf with ≤-split x y
@@ -179,7 +178,7 @@ instance
 -- subtraction
 
 suc-pred : (n : ℕ) → 0 < n → n ＝ suc (pred n)
-suc-pred (suc n) n0 = reflₚ
+suc-pred (suc n) n0 = refl
 
 +-sub : (p q : ℕ) → q ≤ p → p ∸ q + q ＝ p
 +-sub  p       zero   qp = +-zero-r p

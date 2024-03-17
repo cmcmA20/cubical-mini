@@ -1,12 +1,9 @@
 {-# OPTIONS --safe #-}
 module Structures.IdentitySystem.Base where
 
-open import Foundations.Prelude
-  renaming (J to Jₜ ; J-refl to Jₜ-refl; _∙_ to _∙ₚ_; _$_ to _$ₜ_)
-open import Foundations.Cubes
+open import Meta.Prelude
 
-open import Meta.Groupoid
-open import Meta.Underlying
+open import Foundations.Cubes
 
 open import Functions.Equiv.Fibrewise
 
@@ -51,27 +48,29 @@ J-refl
   → (p : P x (r x))
   → J ids P p (r x) ＝ p
 J-refl {R} {r} {x} ids P p =
-  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p ＝⟨⟩
-  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p      ＝⟨ ap (λ e → subst P′ e p) lemma ⟩
-  subst P′ refl p                                                          ＝⟨ transport-refl p ⟩
-  p                                                                        ∎
+  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p  ＝⟨⟩
+  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p       ＝⟨ ap (λ e → subst P′ e p) lemma ⟩
+  subst P′ refl p                                                           ＝⟨ transport-refl p ⟩
+  p                                                                         ∎
   where
     P′ : Σ _ (R x) → Type _
     P′ (b , r) = P b r
 
-    lemma : Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x)) ＝ refl
+    lemma : (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) ＝ refl
     lemma = is-set-β (is-contr→is-set (ΣR-is-contr ids)) _ _ _ _
 
 to-path-refl-coh
-  : {r : ∀ a → R a a}
+  : {A : Type ℓ} {R : A → A → Type ℓ′}
+    {r : (a : A) → R a a}
   → (ids : is-identity-system R r)
   → ∀ x
-  → (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x))) ＝ refl
+  → (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) ＝ refl
 to-path-refl-coh {r} ids x = is-set-β (is-contr→is-set (ΣR-is-contr ids)) _ _
-  (Σ-pathP (ids .to-path (r x)) (ids .to-path-over (r x))) refl
+  (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) refl
 
 to-path-refl
-  : {r : ∀ a → R a a} {x : A}
+  : {A : Type ℓ} {R : A → A → Type ℓ′}
+    {r : (a : A) → R a a} {x : A}
   → (ids : is-identity-system R r)
   → ids .to-path (r x) ＝ refl
 to-path-refl {r} {x} ids = ap (ap fst) $ to-path-refl-coh ids x
@@ -84,7 +83,8 @@ to-path-over-refl
 to-path-over-refl {x} ids = ap (ap snd) $ to-path-refl-coh ids x
 
 equiv-path→identity-system
-  : {r : (a : A) → R a a}
+  : {A : Type ℓ} {R : A → A → Type ℓ′}
+    {r : (a : A) → R a a}
   → (eqv : ∀ {a b} → R a b ≃ (a ＝ b))
   → (∀ a → Equiv.from eqv refl ＝ r a)
   → is-identity-system R r
@@ -144,12 +144,12 @@ module _
     j (j = i0) → e.to _ _ (ids .to-path-over (e.from _ _ p) i)
 
 @0 univalence-identity-system
-  : is-identity-system {A = Type ℓ} _≃_ (λ _ → refl!)
+  : is-identity-system {A = Type ℓ} _≃_ (λ _ → refl)
 univalence-identity-system .to-path = ua
 univalence-identity-system .to-path-over p =
   Σ-prop-pathP (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → path→ua-pathP p refl
 
-path-identity-system : is-identity-system (Path A) (λ _ → refl)
+path-identity-system : {A : Type ℓ} → is-identity-system (Path A) (λ _ → refl)
 path-identity-system .to-path = id
 path-identity-system .to-path-over p i j = p (i ∧ j)
 

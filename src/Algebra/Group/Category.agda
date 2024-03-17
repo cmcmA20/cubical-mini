@@ -13,7 +13,7 @@ open Group-on
 
 Group-structure : ∀ ℓ → Thin-structure ℓ Group-on
 Group-structure ℓ .is-hom f A B = el! (Group-hom A B f)
-Group-structure ℓ .id-is-hom .pres-⋆ _ _ = reflₚ
+Group-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 Group-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =
   ap f (q .pres-⋆ _ _) ∙ p .pres-⋆ _ _
 Group-structure ℓ .id-hom-unique p q .erased = Equiv.injective

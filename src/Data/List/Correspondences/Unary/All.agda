@@ -28,10 +28,10 @@ all-split {xs = x ∷ xs} (p ∷ ps) =
   let xps , yps = all-split {xs = xs} ps in (p ∷ xps) , yps
 
 all-++-left : {xs : List A} → All P (xs ++ ys) → All P xs
-all-++-left = fst ∘ₜ all-split
+all-++-left = fst ∘ all-split
 
 all-++-right : {xs : List A} → All P (xs ++ ys) → All P ys
-all-++-right = snd ∘ₜ all-split
+all-++-right = snd ∘ all-split
 
 all-map : {@0 xs : List A} → ({@0 x : A} -> P x -> Q x) -> All P xs -> All Q xs
 all-map     f []       = []

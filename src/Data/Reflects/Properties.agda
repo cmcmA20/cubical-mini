@@ -22,10 +22,10 @@ private variable
 ¬-reflects (ofⁿ ¬p) = ofʸ ¬p
 
 reflects-bool-inj : Reflects⁰ P a → Reflects⁰ P b → a ＝ b
-reflects-bool-inj (ofʸ  p) (ofʸ  p′) = refl!
+reflects-bool-inj (ofʸ  p) (ofʸ  p′) = refl
 reflects-bool-inj (ofʸ  p) (ofⁿ ¬p′) = ⊥.rec $ ¬p′ p
 reflects-bool-inj (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec $ ¬p p′
-reflects-bool-inj (ofⁿ ¬p) (ofⁿ ¬p′) = refl!
+reflects-bool-inj (ofⁿ ¬p) (ofⁿ ¬p′) = refl
 
 reflects-injₑ
   : is-prop P → is-prop Q

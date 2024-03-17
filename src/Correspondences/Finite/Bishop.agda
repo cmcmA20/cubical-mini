@@ -4,11 +4,9 @@ module Correspondences.Finite.Bishop where
 open import Meta.Prelude
 
 open import Meta.Effect.Bind
-open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Discrete
 open import Correspondences.Exhaustible
@@ -89,13 +87,13 @@ bishop-finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li
   gg : _
   gg _ f0 = absurd (fin-0-is-initial $ f0)
   ri : gg is-right-inverse-of ff
-  ri (mk-fin 0) = reflₚ
+  ri (mk-fin 0) = refl
   li : gg is-left-inverse-of ff
   li _ = fun-ext λ ()
 
 bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
-  e ← fin-choice (suc sz) (enumeration₁ ∘ₜ fam)
-  let rest = bishop-finite-pi-fin sz (fam ∘ₜ fsuc)
+  e ← fin-choice (suc sz) (enumeration₁ ∘ fam)
+  let rest = bishop-finite-pi-fin sz (fam ∘ fsuc)
   cont ← enumeration₁ rest
   let
     work = fin-suc-universal {n = sz} {A = P}
@@ -117,14 +115,14 @@ bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
   let
     module aeq = Equiv aeq
     bc : (x : Fin (cardinality afin)) → ℕ
-    bc = cardinality ∘ₜ fam ∘ₜ aeq.from
+    bc = cardinality ∘ fam ∘ aeq.from
 
     fs : (Σ _ λ x → Fin (bc x)) ≃ Fin (sum (cardinality afin) bc)
     fs = fin-sum bc
     work = do
-      t ← finite-choice afin $ enumeration₁ ∘ₜ fam
+      t ← finite-choice afin $ enumeration₁ ∘ fam
       pure $ Σ-ap aeq λ x → t x
-           ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ₜ fam) (sym (aeq.η x))))
+           ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
 
   pure $ fin₁ ⦇ work ∙ₑ pure fs ⦈
 
@@ -153,7 +151,7 @@ lift-is-bishop-finite afin = fin₁ do
 decidable-prop→is-bishop-finite : is-prop A → Dec A → is-bishop-finite A
 decidable-prop→is-bishop-finite A-prop (yes a) = fin₁ $ pure $
   is-contr→equiv (inhabited-prop-is-contr a A-prop) fin-1-is-contr
-decidable-prop→is-bishop-finite A-prop (no ¬a) = fin₁ $ pure $ ¬-extₑ ¬a idₜ ∙ fin-0-is-initial ⁻¹
+decidable-prop→is-bishop-finite A-prop (no ¬a) = fin₁ $ pure $ ¬-extₑ ¬a refl ∙ fin-0-is-initial ⁻¹
 
 is-discrete→path-is-bishop-finite : is-discrete A → {x y : A} → is-bishop-finite (x ＝ y)
 is-discrete→path-is-bishop-finite d = decidable-prop→is-bishop-finite hlevel! (d .is-discrete-β _ _)

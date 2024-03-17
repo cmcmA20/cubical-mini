@@ -1,13 +1,10 @@
 {-# OPTIONS --safe #-}
 module Truncation.Set.Path where
 
-open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.Erased
+open import Meta.Prelude
 
 open import Meta.Effect.Map
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Truncation.Propositional as ∥-∥₁
   using (∥_∥₁; ∣_∣₁)
@@ -37,7 +34,7 @@ instance
   code x = elim! (λ y → el! ∥ x ＝ y ∥₁)
 
   encode : ∀ x y → ∣ x ∣₂ ＝ y → ⌞ code x y ⌟
-  encode x y = J (λ y p → ⌞ code x y ⌟ ) ∣ refl ∣₁
+  encode x y = Jₜ (λ y p → ⌞ code x y ⌟ ) ∣ refl ∣₁
 
   decode : ∀ x y → ⌞ code x y ⌟ → ∣ x ∣₂ ＝ y
   decode x = elim! (λ _ → ∥-∥₁.rec! (ap ∣_∣₂))

@@ -1,13 +1,9 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Exhaustible where
 
-open import Foundations.Base
-  hiding (_$_)
-open import Foundations.Pi
-  hiding (_$_)
+open import Meta.Prelude
 
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Base public
 open import Correspondences.Decidable

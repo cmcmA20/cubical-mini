@@ -2,7 +2,7 @@
 module Categories.Univalent where
 
 open import Prelude
-  hiding (_≅_; iso→path)
+  hiding (_∘_; _≅_; id; iso→path)
 
 open import Structures.IdentitySystem.Interface
 
@@ -91,15 +91,15 @@ module _ {o h} (C : Precategory o h) where
     → h ∘ path→iso p .from ＝ h′
     → ＜ h ／ (λ i → Hom (p i) b) ＼ h′ ＞
   Hom-pathP-refl-l prf =
-    Hom-pathP (ap² _∘_ (transport-refl id) reflₚ ∙∙ id-l _ ∙∙ prf)
+    Hom-pathP (ap² _∘_ (transport-refl id) refl ∙∙ id-l _ ∙∙ prf)
 
   Hom-pathP-refl-r
     : {q : b ＝ d} {h : Hom a b} {h′ : Hom a d}
     → path→iso q .to ∘ h ＝ h′
     → ＜ h ／ (λ i → Hom a (q i)) ＼ h′ ＞
   Hom-pathP-refl-r {q} prf =
-    Hom-pathP (ap (path→iso q .to ∘_) (ap² _∘_ reflₚ (transport-refl _))
-            ∙∙ ap² _∘_ reflₚ (id-r _)
+    Hom-pathP (ap (path→iso q .to ∘_) (ap² _∘_ refl (transport-refl _))
+            ∙∙ ap² _∘_ refl (id-r _)
             ∙∙ prf)
 
 
@@ -116,14 +116,14 @@ module Univalent {o h} {C : Precategory o h} (r : is-category C) where
     → h ∘ p .from ＝ h′
     → ＜ h ／ (λ i → Hom (iso→path p i) b) ＼ h′ ＞
   Hom-pathP-refl-l-iso prf =
-    Hom-pathP-refl-l C (ap² _∘_ reflₚ (ap from (iso→path→iso _)) ∙ prf)
+    Hom-pathP-refl-l C (ap² _∘_ refl (ap from (iso→path→iso _)) ∙ prf)
 
   Hom-pathP-refl-r-iso
     : {q : b ≅ d} {h : Hom a b} {h′ : Hom a d}
     → q .to ∘ h ＝ h′
     → ＜ h ／ (λ i → Hom a (iso→path q i)) ＼ h′ ＞
   Hom-pathP-refl-r-iso prf =
-    Hom-pathP-refl-r C (ap² _∘_ (ap to (iso→path→iso _)) reflₚ ∙ prf)
+    Hom-pathP-refl-r C (ap² _∘_ (ap to (iso→path→iso _)) refl ∙ prf)
 
   Hom-pathP-iso
     : {p : a ≅ d} {q : b ≅ e} {h : Hom a b} {h′ : Hom d e}
@@ -131,5 +131,5 @@ module Univalent {o h} {C : Precategory o h} (r : is-category C) where
     → ＜ h ／ (λ i → Hom (iso→path p i) (iso→path q i)) ＼ h′ ＞
   Hom-pathP-iso {p} {q} {h} {h′} prf =
     Hom-pathP C (ap² _∘_ (ap to (iso→path→iso _))
-                (ap² _∘_ reflₚ (ap from (iso→path→iso _)))
+                (ap² _∘_ refl (ap from (iso→path→iso _)))
               ∙ prf)

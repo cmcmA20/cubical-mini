@@ -1,10 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Sum.Path where
 
-open import Foundations.Base hiding (_∙_)
-open import Foundations.Equiv
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
@@ -60,8 +58,8 @@ opaque
     : is-prop A → is-prop B → ¬ A × B
     → is-prop (A ⊎ B)
   disjoint-⊎-is-prop Ap Bp notab (inl x₁) (inl x₂) = ap inl (Ap x₁ x₂)
-  disjoint-⊎-is-prop Ap Bp notab (inl x)  (inr y)  = absurd (notab (x , y))
-  disjoint-⊎-is-prop Ap Bp notab (inr x)  (inl y)  = absurd (notab (y , x))
+  disjoint-⊎-is-prop Ap Bp notab (inl x)  (inr y)  = absurd $ notab (x , y)
+  disjoint-⊎-is-prop Ap Bp notab (inr x)  (inl y)  = absurd $ notab (y , x)
   disjoint-⊎-is-prop Ap Bp notab (inr y₁) (inr y₂) = ap inr (Bp y₁ y₂)
 
 opaque

@@ -1,10 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Inductive.Closure where
 
-open import Foundations.Base
-open import Foundations.Equiv
-
-open import Meta.Groupoid
+open import Meta.Prelude
 
 open import Data.Empty.Base as ⊥
   using (⊥)
@@ -47,7 +44,7 @@ fin-suc = iso→equiv (f , iso g rinv linv) where
 
 fin-suc-universal
   : {A : Fin (suc n) → Type ℓ}
-  → Π[ x ꞉ _ ] A x
+  → Π[ x ꞉ Fin _ ] A x
   ≃ A fzero × (∀ x → A (fsuc x))
 fin-suc-universal = iso→equiv λ where
   .fst f → f fzero , (λ x → f (fsuc x))
@@ -103,8 +100,9 @@ fin-sum {suc n} B =
       f-iso .is-iso.rinv (inr x) = ap inr (mrec.ε _)
 
       f-iso .is-iso.linv (fzero  , _) = refl
-      f-iso .is-iso.linv (fsuc x , y) =
-        Σ-pathP (ap (fsuc ∘ fst) (mrec.η _)) (ap snd (mrec.η _))
+      f-iso .is-iso.linv (fsuc x , y)
+        =  ap (fsuc ∘ fst) (mrec.η _)
+        ,ₚ ap snd (mrec.η _)
 
 fin-product : {n m : ℕ}
             → Fin n × Fin m
@@ -115,5 +113,5 @@ fin-product {n} {m} =
   Fin (n · m)           ≃∎
   where
     sum≡* : ∀ n m → sum n (λ _ → m) ＝ n · m
-    sum≡* zero m = refl
+    sum≡* 0       m = refl
     sum≡* (suc n) m = ap (m +_) (sum≡* n m)

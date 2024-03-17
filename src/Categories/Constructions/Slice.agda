@@ -55,7 +55,7 @@ Extensional-/-Hom
   : ∀ {ℓr} ⦃ sa : Extensional (Hom (a .domain) (b .domain)) ℓr ⦄
   → Extensional (/-Hom {c} a b) ℓr
 Extensional-/-Hom ⦃ sa ⦄ = set-injective→extensional!
-  (/-Hom-pathP reflₚ reflₚ) sa
+  (/-Hom-pathP refl refl) sa
 
 instance
   extensionality-/-hom : Extensionality (/-Hom {c} a b)

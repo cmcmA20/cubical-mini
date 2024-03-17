@@ -36,8 +36,8 @@ Forget-comm : Functor (AGroups ℓ) (Groups ℓ)
 Forget-comm .Functor.F₀ = second (abelian-group-on↪group-on $_)
 Forget-comm .Functor.F₁ f .hom = f $_
 Forget-comm .Functor.F₁ f .preserves = f .preserves
-Forget-comm .Functor.F-id = reflₚ
-Forget-comm .Functor.F-∘ _ _ = reflₚ
+Forget-comm .Functor.F-id = refl
+Forget-comm .Functor.F-∘ _ _ = refl
 
 forget-comm-is-faithful : is-faithful (Forget-comm {ℓ})
 forget-comm-is-faithful p = ext $ p $ₚ_

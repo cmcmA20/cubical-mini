@@ -1,12 +1,9 @@
 {-# OPTIONS --safe #-}
 module Functions.Surjection where
 
-open import Foundations.Prelude
-  hiding (_$_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Search.HLevel
-open import Meta.Underlying
 
 open import Truncation.Propositional.Base
 

@@ -1,12 +1,10 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Omniscient where
 
-open import Foundations.Base
-  hiding (_$_)
+open import Meta.Prelude
 
 open import Meta.Effect.Map
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Base public
 open import Correspondences.Classical
@@ -42,8 +40,8 @@ omni₁ ⦃ x ⦄ = x
 
 lift-omniscient₁ : Omniscient₁ {ℓ} A → Omniscient₁ (Lift ℓ A)
 lift-omniscient₁ omn .omniscient₁-β P? = Dec.dmap
-  (map (bimap lift id))
-  (λ x y → ∥-∥₁.rec! (λ z → x ∣ bimap lower id z ∣₁) y)
+  (map (bimap lift refl))
+  (λ x y → ∥-∥₁.rec! (λ z → x ∣ bimap lower refl z ∣₁) y)
   (omn .omniscient₁-β $ P? ∘ lift)
 
 ∃-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Omniscient₁ A → Dec ∃[ B ]
@@ -68,8 +66,8 @@ omni ⦃ x ⦄ = x
 
 lift-omniscient : Omniscient {ℓ} A → Omniscient {ℓ} (Lift ℓ A)
 lift-omniscient omn .omniscient-β P? = Dec.dmap
-  (bimap lift id)
-  (_∘ bimap lower id)
+  (bimap lift refl)
+  (_∘ bimap lower refl)
   (omn .omniscient-β $ P? ∘ lift)
 
 Σ-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Omniscient A → Dec Σ[ B ]

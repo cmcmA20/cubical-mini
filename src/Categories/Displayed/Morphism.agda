@@ -81,10 +81,10 @@ opaque
     → is-prop (Inverses[ inv ] f′ g′)
   Inverses[]-are-prop inv f′ g′ inv[] inv[]′ i .Inverses[_].inv-lᵈ =
     is-set→squareP (λ i j → Hom[ Inverses.inv-l inv j ]-set _ _)
-      reflₚ (Inverses[_].inv-lᵈ inv[]) (Inverses[_].inv-lᵈ inv[]′) reflₚ i
+      refl (Inverses[_].inv-lᵈ inv[]) (Inverses[_].inv-lᵈ inv[]′) refl i
   Inverses[]-are-prop inv f′ g′ inv[] inv[]′ i .Inverses[_].inv-rᵈ =
     is-set→squareP (λ i j → Hom[ Inverses.inv-r inv j ]-set _ _)
-      reflₚ (Inverses[_].inv-rᵈ inv[]) (Inverses[_].inv-rᵈ inv[]′) reflₚ i
+      refl (Inverses[_].inv-rᵈ inv[]) (Inverses[_].inv-rᵈ inv[]′) refl i
 
   -- TODO
   -- is-invertible[]-is-prop

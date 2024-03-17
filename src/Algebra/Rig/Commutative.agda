@@ -59,8 +59,7 @@ comm-rig-on↪rig-on .fst R .Rig-on.has-rig =
   R .CRig-on.has-comm-rig .is-comm-rig.has-rig
 comm-rig-on↪rig-on .snd = set-injective→is-embedding hlevel! λ p →
   Equiv.injective (isoₜ→equiv crig-on-iso) $
-    Σ-pathP (ap Rig-on.nil p) $ Σ-pathP (ap Rig-on.unit p) $
-    Σ-pathP (ap Rig-on._+_ p) $ Σ-pathP (ap Rig-on._·_ p) prop!
+    ap Rig-on.nil p ,ₚ ap Rig-on.unit p ,ₚ ap Rig-on._+_ p ,ₚ ap Rig-on._·_ p ,ₚ prop!
 
 comm-rig-on-is-set : is-set (CRig-on A)
 comm-rig-on-is-set = is-embedding→is-of-hlevel 1 (comm-rig-on↪rig-on .snd) hlevel!

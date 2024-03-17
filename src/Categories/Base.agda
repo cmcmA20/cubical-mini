@@ -1,17 +1,13 @@
 {-# OPTIONS --safe #-}
 module Categories.Base where
 
-open import Foundations.Base
-  hiding ( id ; _$_; _∘_ ; _∙_
-         ; Σ-syntax; Π-syntax; ∀-syntax )
-open import Foundations.Equiv
+open import Meta.Prelude
+  hiding (id ; _∘_)
 
 open import Meta.Extensionality
-open import Meta.Groupoid
 open import Meta.Literals.FromNat
 open import Meta.Record
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Structures.n-Type
 

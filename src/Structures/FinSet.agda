@@ -1,19 +1,12 @@
 {-# OPTIONS --safe #-}
 module Structures.FinSet where
 
-open import Foundations.Base
-  hiding (_$_; _∙_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Erased
-open import Foundations.Sigma
-  hiding (Σ-syntax)
-open import Foundations.Univalence
+open import Meta.Prelude
 
 open import Meta.Effect.Bind
-open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.HLevel
 open import Meta.SIP
-open import Meta.Variadic
 
 open import Structures.IdentitySystem.Interface
 open import Structures.n-Type

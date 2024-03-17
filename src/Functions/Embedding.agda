@@ -50,7 +50,7 @@ set-injective→is-embedding B-set inj x = is-prop-η λ (f*x , p) (f*x′ , q) 
 
 is-embedding→injective
   : is-embedding f → Injective f
-is-embedding→injective prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl!))
+is-embedding→injective prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl))
 
 set-injective≃is-embedding
   : {f : A → B} → is-set A → is-set B
@@ -77,9 +77,9 @@ subset-proj-is-embedding {B} B-prop x = is-of-hlevel-≃ 1 (Σ-fibre-equiv B x) 
 
 is-embedding→monic
   : is-embedding f
-  → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ₜ g ＝ f ∘ₜ h → g ＝ h
+  → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ g ＝ f ∘ h → g ＝ h
 is-embedding→monic {f} emb g h p =
-  fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl!) (h x , p ⁻¹ $ₚ x))
+  fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl) (h x , p ⁻¹ $ₚ x))
 
 set-monic→is-embedding
   : {A : Type ℓ} {B : Type ℓ′} {f : A → B} → is-set B
@@ -96,7 +96,7 @@ preimage-is-prop→is-embedding {f} pffx y = is-prop-η λ a →
 
 preimage-is-contr→is-embedding : (∀ x → is-contr (fibre f (f x))) → is-embedding f
 preimage-is-contr→is-embedding cffx =
- preimage-is-prop→is-embedding (is-contr→is-prop ∘ₜ cffx)
+ preimage-is-prop→is-embedding (is-contr→is-prop ∘ cffx)
 
 
 -- TODO isn't `ap f` unique?
@@ -140,24 +140,24 @@ equiv→embedding : A ≃ B → A ↪ B
 equiv→embedding = second is-equiv→is-embedding
 
 is-iso→is-embedding : is-iso f → is-embedding f
-is-iso→is-embedding = is-equiv→is-embedding ∘ₜ is-iso→is-equiv
+is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
 
 iso→embedding : A ≅ B → A ↪ B
 iso→embedding = second is-iso→is-embedding
 
 instance
   Refl-Inj : Refl large _↣_
-  Refl-Inj .reflₐ = idₜ , idₜ
+  Refl-Inj .refl′ = id , id
 
   Refl-Emb : Refl large _↪_
-  Refl-Emb .reflₐ = idₜ , is-equiv→is-embedding id-is-equiv
+  Refl-Emb .refl′ = id , is-equiv→is-embedding id-is-equiv
 
   Compose-Inj : Compose large _↣_
-  Compose-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ₜ f , f-inj ∘ₜ g-inj
+  Compose-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ f , f-inj ∘ g-inj
 
   Compose-Emb : Compose large _↪_
-  Compose-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ₜ f , λ c →
-    is-of-hlevel-≃ 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ₜ fst))
+  Compose-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
+    is-of-hlevel-≃ 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
 
 opaque
   unfolding is-of-hlevel
@@ -168,10 +168,10 @@ opaque
       (f : A ↪ B)
     → is-identity-system (λ (x y : A) → R (f $ x) (f $ y)) (λ _ → r _)
   pullback-identity-system     ids (f , f-emb) .to-path {a} {b} x = ap fst $
-    f-emb (f b) (a , ids .to-path x) (b , reflₚ)
+    f-emb (f b) (a , ids .to-path x) (b , refl)
   pullback-identity-system {R} ids (f , f-emb) .to-path-over {a} {b} p i =
     comp
-      (λ j → R (f a) (f-emb (f b) (a , ids .to-path p) (b , reflₚ) i .snd (~ j)))
+      (λ j → R (f a) (f-emb (f b) (a , ids .to-path p) (b , refl) i .snd (~ j)))
       (∂ i) λ where
         k (i = i0) → ids .to-path-over p (~ k ∨ i)
         k (i = i1) → p

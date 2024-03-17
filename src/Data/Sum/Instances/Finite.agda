@@ -1,11 +1,9 @@
 {-# OPTIONS --safe #-}
 module Data.Sum.Instances.Finite where
 
-open import Foundations.Base hiding (_∙_)
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Effect.Bind
-open import Meta.Groupoid
 open import Meta.Search.Finite.Bishop
 open import Meta.Search.Finite.ManifestBishop
 

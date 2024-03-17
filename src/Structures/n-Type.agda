@@ -1,20 +1,11 @@
 {-# OPTIONS --safe #-}
 module Structures.n-Type where
 
-open import Foundations.Base
-  renaming ( _∙_ to _∙ₚ_
-           ; _$_ to _$ₜ_ )
-open import Foundations.Cubes
-open import Foundations.Equiv
-open import Foundations.HLevel
-open import Foundations.Path
-open import Foundations.Sigma
-open import Foundations.Univalence
+open import Meta.Prelude
 
-open import Meta.Groupoid
+open import Foundations.Cubes
+
 open import Meta.Record
-open import Meta.Underlying public
-open import Meta.Variadic
 
 open import Structures.Base
 
@@ -48,7 +39,7 @@ n-path {X} {Y} f i .carrier-is-tr =
   is-prop→pathP (λ i → is-of-hlevel-is-prop {A = f i} _) (X .carrier-is-tr) (Y .carrier-is-tr) i
 
 -- FIXME rewrite without cubes
-n-path-refl : n-path {X = X} refl ＝ refl
+n-path-refl : {X : n-Type ℓ n} → n-path {X = X} refl ＝ refl
 n-path-refl {X} _ _ .carrier = X .carrier
 n-path-refl {X} i j .carrier-is-tr = θ j i where
   p = is-prop→pathP (λ _ → is-of-hlevel-is-prop _) (X .carrier-is-tr) _
@@ -69,7 +60,7 @@ opaque
     linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
 
     rinv : ∀ {Y} → (inv {Y}) is-right-inverse-of n-ua
-    rinv = J (λ y p → n-ua (inv p) ＝ p) path where
+    rinv = Jₜ (λ y p → n-ua (inv p) ＝ p) path where
       path : n-ua {X = X} (inv {X} refl) ＝ refl
       path i j .carrier = ua.ε refl i j
       path i j .carrier-is-tr = is-prop→squareP

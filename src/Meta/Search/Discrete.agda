@@ -1,14 +1,12 @@
 {-# OPTIONS --safe #-}
 module Meta.Search.Discrete where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Reflection.Base
 open import Meta.Search.Base public
 open import Meta.Search.Decidable
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Decidable
 open import Correspondences.Discrete

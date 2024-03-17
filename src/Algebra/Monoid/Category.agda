@@ -14,15 +14,14 @@ open Monoid-on
 
 Monoid-structure : ∀ ℓ → Thin-structure ℓ Monoid-on
 Monoid-structure ℓ .is-hom f A B = el! (Monoid-hom A B f)
-Monoid-structure ℓ .id-is-hom .pres-id = reflₚ
-Monoid-structure ℓ .id-is-hom .pres-⋆ _ _ = reflₚ
+Monoid-structure ℓ .id-is-hom .pres-id = refl
+Monoid-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 Monoid-structure ℓ .∘-is-hom f g p q .pres-id =
   ap f (q .pres-id) ∙ p .pres-id
 Monoid-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =
   ap f (q .pres-⋆ _ _) ∙ p .pres-⋆ _ _
 Monoid-structure ℓ .id-hom-unique p q = pure $ Equiv.injective
-  (isoₜ→equiv monoid-on-iso) $ Σ-pathP (p .pres-id) $
-    Σ-prop-pathP hlevel! (ext (p .pres-⋆))
+  (isoₜ→equiv monoid-on-iso) $ p .pres-id ,ₚ Σ-prop-pathP hlevel! (ext $ p .pres-⋆)
 
 Monoids : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Monoids ℓ = Structured-objects (Monoid-structure ℓ)

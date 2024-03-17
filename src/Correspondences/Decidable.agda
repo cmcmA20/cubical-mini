@@ -6,7 +6,6 @@ open import Meta.Prelude
 open import Meta.Reflection.Base
 open import Meta.Reflection.Subst
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Structures.n-Type
 
@@ -154,7 +153,7 @@ opaque
       (p .does , p .proof)
     , λ z → Σ-prop-path! $ reflects-bool-inj (z .snd) (p .proof) ⁻¹
   decidable₁→reflects! {1} f =
-      (does ∘ₜ f  , proof ∘ₜ f)
+      (does ∘ f  , proof ∘ f)
     , λ z → Σ-prop-path! $ fun-ext λ x → reflects-bool-inj (z .snd x) (f x .proof) ⁻¹
   decidable₁→reflects! {suc (suc arity)} {As} {ℓ} {P} f =
     let ih = decidable₁→reflects!

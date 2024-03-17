@@ -1,11 +1,9 @@
 {-# OPTIONS --safe #-}
 module Truncation.Propositional.Base where
 
-open import Foundations.Base
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
+open import Meta.Prelude
 
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Data.Sum.Base
   using (_⊎_)

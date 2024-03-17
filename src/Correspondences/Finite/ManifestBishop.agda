@@ -60,7 +60,7 @@ manifest-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? =
     xs = Ṽ.from $ Ã.from
 
     lemma₁ : Σ[ i ꞉ Fin n ] P (lookup xs i) → ∥ Σ[ a ꞉ A ] P a ∥₁
-    lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) idₜ
+    lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) refl
 
     lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ ∥ Σ[ a ꞉ A ] P a ∥₁
     lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘′ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))
@@ -84,13 +84,13 @@ finite-pi-fin 0 {P} fam = fin $ iso→equiv $ ff , iso gg ri li where
   gg : _
   gg _ f0 = absurd $ fin-0-is-initial $ f0
   ri : gg is-right-inverse-of ff
-  ri (mk-fin 0) = reflₚ
+  ri (mk-fin 0) = refl
   li : gg is-left-inverse-of ff
   li _ = fun-ext λ ()
 
 finite-pi-fin (suc sz) {P} fam =
-  let e = enumeration ∘ₜ fam
-      rest = finite-pi-fin sz (fam ∘ₜ fsuc)
+  let e = enumeration ∘ fam
+      rest = finite-pi-fin sz (fam ∘ fsuc)
       cont = enumeration rest
   in fin $ fin-suc-universal ∙ ×-ap (e fzero) cont ∙ fin-sum λ _ → cardinality rest
 
@@ -99,8 +99,8 @@ finite-pi-fin (suc sz) {P} fam =
 Σ-manifest-bishop-finite {A} {P} afin fam =
   let aeq = enumeration afin
       module aeq = Equiv aeq
-      fs = fin-sum $ cardinality ∘ₜ fam ∘ₜ aeq.from
-      work = Σ-ap aeq λ x → enumeration (fam x) ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ₜ fam) (sym (aeq.η x))))
+      fs = fin-sum $ cardinality ∘ fam ∘ aeq.from
+      work = Σ-ap aeq λ x → enumeration (fam x) ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
   in fin $ work ∙ fs
 
 fun-manifest-bishop-finite
@@ -116,7 +116,7 @@ fun-manifest-bishop-finite afin bfin =
 Π-manifest-bishop-finite afin fam =
   let e = enumeration afin
       module e = Equiv e
-      count = finite-pi-fin (cardinality afin) (fam ∘ₜ e.from)
+      count = finite-pi-fin (cardinality afin) (fam ∘ e.from)
   in fin $ Π-dom-≃ e.inverse ∙ enumeration count
 
 manifest-bishop-finite-≃ : (B ≃ A) → Manifest-bishop-finite A → Manifest-bishop-finite B

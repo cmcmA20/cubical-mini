@@ -1,19 +1,9 @@
 {-# OPTIONS --safe #-}
 module Functions.Equiv.HalfAdjoint where
 
-open import Foundations.Base
-  renaming (_∙_ to _∙ₚ_ ; _$_ to _$ₜ_)
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Equiv
-open import Foundations.Path
-open import Foundations.Sigma
-  hiding (Σ-syntax)
-open import Foundations.Transport
-open import Foundations.Univalence.Base
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Marker
-open import Meta.Underlying
 
 open import Functions.Fibration
 
@@ -40,11 +30,11 @@ is-iso→is-half-adjoint-equiv {f} iiso =
 
     zig : (x : _) → ε′ (f x) ＝ ap f (η x)
     zig x =
-      ε′ (f x)                                                  ＝⟨⟩
-      ε (f (g (f x))) ⁻¹ ∙ₚ ap f ⌜ η (g (f x)) ⌝ ∙ₚ ε (f x)     ＝⟨ ap! (homotopy-invert η) ⟩
-      ε (f (g (f x))) ⁻¹ ∙ₚ ⌜ ap (f ∘ g ∘ f) (η x) ∙ ε (f x) ⌝  ＝˘⟨ ap¡ (homotopy-natural ε (ap f (η x))) ⟩
-      ε (f (g (f x))) ⁻¹ ∙ ε (f (g (f x))) ∙ ap f (η x)         ＝⟨ ∙-cancel-l (ε (f (g (f x)))) (ap f (η x)) ⟩
-      ap f (η x)                                                ∎
+      ε′ (f x)                                                    ＝⟨⟩
+      ε (f (g (f x))) ⁻¹ ∙ₚ ap f ⌜ η (g (f x)) ⌝ ∙ₚ ε (f x)       ＝⟨ ap! (homotopy-invert η) ⟩
+      ε (f (g (f x))) ⁻¹ ∙ₚ ⌜ ap (f ∘ g ∘ f) (η x) ∙ ε (f x) ⌝    ＝˘⟨ ap¡ (homotopy-natural ε (ap f (η x))) ⟩
+      ε (f (g (f x))) ⁻¹ ∙ ε (f (g (f x))) ∙ ap f (η x)           ＝⟨ ∙-cancel-l (ε (f (g (f x)))) (ap f (η x)) ⟩
+      ap f (η x)                                                  ∎
 
 
 @0 is-half-adjoint-equiv→is-equiv : is-half-adjoint-equiv f → is-equiv f
@@ -70,7 +60,7 @@ is-half-adjoint-equiv→is-equiv {f} (g , η , ε , zig) .equiv-proof y = fib , 
       ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ∙ ε y         ＝⟨ ∙-assoc _ _ _ ⟩
       ⌜ ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ⌝ ∙ₚ ε y    ＝˘⟨ ap¡ (ap-comp-∙ (f ∘ g) (p ⁻¹) p) ⟩
       ap (f ∘ g) ⌜ p ⁻¹ ∙ p ⌝ ∙ₚ ε y                 ＝⟨ ap! (∙-inv-r _) ⟩
-      ap (f ∘ g) refl ∙ ε y                          ＝⟨⟩
+      ap (f ∘ g) reflₚ ∙ ε y                         ＝⟨⟩
       refl ∙ ε y                                     ＝⟨ ∙-id-l (ε y) ⟩
       ε y                                            ∎
 

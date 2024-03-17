@@ -16,11 +16,11 @@ Disc : is-groupoid A → Precategory _ _
 Disc {A} _ .Ob = A
 Disc _ .Hom = _＝_
 Disc A-is-grp .Hom-set = path-is-of-hlevel′ 2 A-is-grp
-Disc _ .id = reflₚ
-Disc _ ._∘_ = flip _∙ₚ_
+Disc _ .id = refl
+Disc _ ._∘_ f g = f ∘′ g
 Disc _ .id-r = ∙-id-l
 Disc _ .id-l = ∙-id-r
-Disc _ .assoc _ _ _ = symₚ $ ∙-assoc _ _ _
+Disc _ .assoc _ _ _ = ∙-assoc _ _ _ ⁻¹
 
 Disc! : (A : Type ℓ) {@(tactic hlevel-tactic-worker) A-is-grp : is-groupoid A}
       → Precategory ℓ ℓ
@@ -39,7 +39,7 @@ lift-disc₂
   → Functor (Disc₂ A) (Disc₂ B)
 lift-disc₂ f .F₀   = f
 lift-disc₂ f .F₁   = ap f
-lift-disc₂ _ .F-id = reflₚ
+lift-disc₂ _ .F-id = refl
 lift-disc₂ f .F-∘  = flip (ap-comp-∙ f)
 
 instance
@@ -52,8 +52,8 @@ Codisc _ .Hom _ _ = Lift _ ⊤
 Codisc _ .Hom-set = hlevel!
 Codisc _ .id = _
 Codisc _ ._∘_ _ _ = _
-Codisc _ .id-l _ = reflₚ
-Codisc _ .id-r _ = reflₚ
-Codisc _ .assoc _ _ _ = reflₚ
+Codisc _ .id-l _ = refl
+Codisc _ .id-r _ = refl
+Codisc _ .assoc _ _ _ = refl
 
 -- TODO diagrams

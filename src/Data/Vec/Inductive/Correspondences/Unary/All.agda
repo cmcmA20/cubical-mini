@@ -1,12 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Vec.Inductive.Correspondences.Unary.All where
 
-open import Foundations.Base
+open import Meta.Prelude
 
 open import Meta.Search.Decidable
 open import Meta.Search.Discrete
-
-open import Meta.Variadic
 
 open import Structures.Base
 

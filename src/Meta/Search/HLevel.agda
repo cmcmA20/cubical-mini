@@ -1,16 +1,13 @@
 {-# OPTIONS --safe #-}
 module Meta.Search.HLevel where
 
-open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.Erased
+open import Meta.Prelude
+
 open import Foundations.HLevel public
-open import Foundations.Sigma
 
 open import Meta.Literals.FromProduct
 open import Meta.Reflection.Base
 open import Meta.Search.Base public
-open import Meta.Variadic
 
 open import Structures.n-Type
 open Structures.n-Type public

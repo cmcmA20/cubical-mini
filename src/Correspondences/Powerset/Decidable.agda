@@ -57,7 +57,7 @@ decidable-subobject-classifier {X} = iso→equiv $ to , iso (λ pr x → from pr
                             (λ x∉A → false , prop-extₑ! (⊥.rec $_) x∉A) (d x)
 
   ri : _
-  ri A = Σ-prop-path! (ℙ-ext (from A _ .snd .fst ∘ₜ lower) (lift ∘ₜ Equiv.from (from A _ .snd)))
+  ri A = Σ-prop-path! (ℙ-ext (from A _ .snd .fst ∘ lower) (lift ∘ Equiv.from (from A _ .snd)))
 
   li : _
-  li ch = fun-ext λ x → Bool.elim {P = λ p → from (to λ _ → p) x .fst ＝ p} refl! refl! (ch x)
+  li ch = fun-ext λ x → Bool.elim {P = λ p → from (to λ _ → p) x .fst ＝ p} refl refl (ch x)

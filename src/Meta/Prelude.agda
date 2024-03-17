@@ -8,10 +8,7 @@ open import Foundations.Prelude
            ; _$³_ to _$ₜ³_
            ; _$⁴_ to _$ₜ⁴_
            ; _$⁵_ to _$ₜ⁵_
-           ; _&_  to _&ₜ_
-           ; _∘_  to _∘ₜ_
            ; _∘′_ to _∘ₜ′_
-           ; id   to idₜ
 
            ; _∙_  to _∙ₚ_
            ; sym  to symₚ
