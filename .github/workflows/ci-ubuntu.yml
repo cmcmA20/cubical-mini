@@ -33,8 +33,8 @@ on:
 ########################################################################
 
 env:
-  ghc-version: 9.6.3
-  cabal-version: 3.10.1.0
+  ghc-version: 9.8.2
+  cabal-version: 3.10.2.1
   cabal-install: cabal install --overwrite-policy=always --ghc-options='-O1 +RTS -M6G -RTS'
   cache-paths: |
     ~/.cabal/packages
@@ -59,7 +59,7 @@ jobs:
           cabal-update: true
 
       - name: Get latest commit hash on agda-tag
-        uses: octokit/request-action@v2.1.7
+        uses: octokit/request-action@v2.2.0
         id: agda-tag-commit-hash
         with:
           route: GET /repos/agda/agda/git/ref/tags/${{ matrix.agda-tag }}
@@ -71,13 +71,13 @@ jobs:
       # library files if absolutely necessary i.e. if we change either the
       # version of Agda, ghc, or cabal that we want to use for the build.
       - name: Restore external dependencies cache
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         id: cache-external-restore
         with:
           path: ${{ env.cache-paths }}
           key: ${{ runner.os }}-${{ env.ghc-version }}-${{ env.cabal-version }}-${{ env.agda-tag-hash }}
         env:
-          agda-tag-hash: ${{ fromJson(steps.agda-tag-commit-hash.outputs.data).sha }}
+          agda-tag-hash: ${{ fromJson(steps.agda-tag-commit-hash.outputs.data).object.sha }}
 
       ########################################################################
       ## INSTALLATION STEPS
@@ -104,7 +104,7 @@ jobs:
 
       - name: Save external dependencies cache
         if: steps.cache-external-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         id: cache-external-save
         with:
           path: ${{ env.cache-paths }}
@@ -123,7 +123,7 @@ jobs:
       ########################################################################
 
       - name: Restore library cache
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         id: cache-library-restore
         with:
           path: ./_build
@@ -132,7 +132,7 @@ jobs:
           restore-keys: |
             library-${{ runner.os }}-${{ env.ghc-version }}-${{ env.cabal-version }}-${{ env.agda-tag-hash }}-
         env:
-          agda-tag-hash: ${{ fromJson(steps.agda-tag-commit-hash.outputs.data).sha }}
+          agda-tag-hash: ${{ fromJson(steps.agda-tag-commit-hash.outputs.data).object.sha }}
 
       - name: Put cabal programs in PATH
         run: echo "~/.cabal/bin" >> $GITHUB_PATH
@@ -147,7 +147,7 @@ jobs:
 
       - name: Save library cache
         if: steps.cache-library-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         id: cache-library-save
         with:
           path: ./_build
@@ -171,7 +171,7 @@ jobs:
         if: |
           github.event_name == 'push' && github.ref_name == 'master' &&
           matrix.agda-tag == 'nightly' && steps.cache-library-restore.outputs.cache-hit != 'true'
-        uses: JamesIves/github-pages-deploy-action@4.1.8
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
           folder: html
