@@ -3,18 +3,18 @@
 <a id="24" class="Keyword">module</a> <a id="31" href="Categories.Prelude.html" class="Module">Categories.Prelude</a> <a id="50" class="Keyword">where</a>
 
 <a id="57" class="Keyword">open</a> <a id="62" class="Keyword">import</a> <a id="69" href="Prelude.html" class="Module">Prelude</a>
-  <a id="79" class="Keyword">renaming</a> <a id="88" class="Symbol">(</a> <a id="90" href="Foundations.Pi.Base.html#1871" class="Function Operator">_∘_</a>       <a id="100" class="Symbol">to</a> <a id="103" class="Function Operator">_∘ₜ_</a>
-           <a id="119" class="Symbol">;</a> <a id="121" href="Foundations.Pi.Base.html#1307" class="Function">id</a>        <a id="131" class="Symbol">to</a> <a id="134" class="Function">idₜ</a>
-           <a id="149" class="Symbol">;</a> <a id="151" href="Foundations.Isomorphism.html#1296" class="Function Operator">_≅_</a>       <a id="161" class="Symbol">to</a> <a id="164" class="Function Operator">_≅ₜ_</a>
-           <a id="180" class="Symbol">;</a> <a id="182" href="Functions.Embedding.html#923" class="Function Operator">_↪_</a>       <a id="192" class="Symbol">to</a> <a id="195" class="Function Operator">_↪ₜ_</a>
-           <a id="211" class="Symbol">;</a> <a id="213" href="Foundations.Sigma.Base.html#621" class="Function Operator">_×_</a>       <a id="223" class="Symbol">to</a> <a id="226" class="Function Operator">_×ₜ_</a>
+  <a id="79" class="Keyword">renaming</a> <a id="88" class="Symbol">(</a> <a id="90" href="Foundations.Isomorphism.html#1296" class="Function Operator">_≅_</a>       <a id="100" class="Symbol">to</a> <a id="103" class="Function Operator">_≅ₜ_</a>
+           <a id="119" class="Symbol">;</a> <a id="121" href="Functions.Embedding.html#680" class="Function Operator">_↪_</a>       <a id="131" class="Symbol">to</a> <a id="134" class="Function Operator">_↪ₜ_</a>
+           <a id="150" class="Symbol">;</a> <a id="152" href="Foundations.Sigma.Base.html#621" class="Function Operator">_×_</a>       <a id="162" class="Symbol">to</a> <a id="165" class="Function Operator">_×ₜ_</a>
+           <a id="181" class="Symbol">;</a> <a id="183" href="Foundations.Pi.Base.html#1950" class="Function Operator">_∘_</a>       <a id="193" class="Symbol">to</a> <a id="196" class="Function Operator">_∘ₜ_</a>
+           <a id="212" class="Symbol">;</a> <a id="214" href="Foundations.Pi.Base.html#1307" class="Function">id</a>        <a id="224" class="Symbol">to</a> <a id="227" class="Function">idₜ</a>
            <a id="242" class="Symbol">;</a> <a id="244" href="Foundations.Univalence.Base.html#2330" class="Function">iso→path</a>  <a id="254" class="Symbol">to</a> <a id="257" class="Function">isoₜ→path</a>
            <a id="278" class="Symbol">;</a> <a id="280" href="Foundations.Isomorphism.html#4349" class="Function">iso→equiv</a> <a id="290" class="Symbol">to</a> <a id="293" class="Function">isoₜ→equiv</a>
            <a id="315" class="Symbol">)</a>
   <a id="319" class="Comment">-- FIXME remove after fixing search tactic</a>
-  <a id="364" class="Keyword">hiding</a> <a id="371" class="Symbol">(</a> <a id="373" href="Meta.Search.Finite.Bishop.html#1136" class="Function">Tactic-bishop-finite</a>
-         <a id="403" class="Symbol">;</a> <a id="405" href="Meta.Search.Discrete.html#726" class="Function">Tactic-discrete</a>
-         <a id="430" class="Symbol">;</a> <a id="432" href="Meta.Search.Finite.ManifestBishop.html#1099" class="Function">Tactic-manifest-bishop-finite</a><a id="461" class="Symbol">)</a>
+  <a id="364" class="Keyword">hiding</a> <a id="371" class="Symbol">(</a> <a id="373" href="Meta.Search.Finite.Bishop.html#1076" class="Function">Tactic-bishop-finite</a>
+         <a id="403" class="Symbol">;</a> <a id="405" href="Meta.Search.Discrete.html#666" class="Function">Tactic-discrete</a>
+         <a id="430" class="Symbol">;</a> <a id="432" href="Meta.Search.Finite.ManifestBishop.html#1039" class="Function">Tactic-manifest-bishop-finite</a><a id="461" class="Symbol">)</a>
   <a id="465" class="Keyword">public</a>
 
 <a id="473" class="Keyword">open</a> <a id="478" class="Keyword">import</a> <a id="485" href="Categories.Base.html" class="Module">Categories.Base</a> <a id="501" class="Keyword">public</a>
@@ -23,8 +23,8 @@
   <a id="584" class="Keyword">public</a>
 <a id="591" class="Keyword">open</a> <a id="596" class="Keyword">import</a> <a id="603" href="Categories.Univalent.html" class="Module">Categories.Univalent</a>
   <a id="626" class="Keyword">using</a> <a id="632" class="Symbol">(</a> <a id="634" href="Categories.Univalent.html#301" class="Function">is-category</a> <a id="646" class="Symbol">;</a> <a id="648" href="Categories.Univalent.html#429" class="Function">path→iso</a> <a id="657" class="Symbol">;</a> <a id="659" href="Categories.Univalent.html#2087" class="Function">Hom-pathP</a>
-        <a id="677" class="Symbol">;</a> <a id="679" href="Categories.Univalent.html#1356" class="Function">Hom-transport</a> <a id="693" class="Symbol">;</a> <a id="695" href="Categories.Univalent.html#2995" class="Function">Hom-pathP-refl-l</a> <a id="712" class="Symbol">;</a> <a id="714" href="Categories.Univalent.html#3224" class="Function">Hom-pathP-refl-r</a>
-        <a id="739" class="Symbol">;</a> <a id="741" class="Keyword">module</a> <a id="748" href="Categories.Univalent.html#3547" class="Module">Univalent</a> <a id="758" class="Symbol">)</a>
+        <a id="677" class="Symbol">;</a> <a id="679" href="Categories.Univalent.html#1356" class="Function">Hom-transport</a> <a id="693" class="Symbol">;</a> <a id="695" href="Categories.Univalent.html#2997" class="Function">Hom-pathP-refl-l</a> <a id="712" class="Symbol">;</a> <a id="714" href="Categories.Univalent.html#3226" class="Function">Hom-pathP-refl-r</a>
+        <a id="739" class="Symbol">;</a> <a id="741" class="Keyword">module</a> <a id="748" href="Categories.Univalent.html#3549" class="Module">Univalent</a> <a id="758" class="Symbol">)</a>
   <a id="762" class="Keyword">public</a>
 
 <a id="770" class="Keyword">open</a> <a id="775" class="Keyword">import</a> <a id="782" href="Categories.Morphism.Extensionality.html" class="Module">Categories.Morphism.Extensionality</a> <a id="817" class="Keyword">public</a>
