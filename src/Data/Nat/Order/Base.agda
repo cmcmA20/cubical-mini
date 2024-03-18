@@ -96,9 +96,9 @@ opaque
   ≤-refl = 0 , nat!
 
   ≤-trans : m ≤ n → n ≤ k → m ≤ k
-  ≤-trans (δ₁ , p) (δ₂ , q)
+  ≤-trans {k} (δ₁ , p) (δ₂ , q)
     = δ₁ + δ₂
-    , nat! ∙ subst (λ φ → φ + δ₂ ＝ _) (sym p) q
+    , nat! ∙ subst (λ φ → φ + δ₂ ＝ k) (symₚ p) q
 
   ≤-antisym : m ≤ n → n ≤ m → m ＝ n
   ≤-antisym (0      , p) (_      , _) = sym (+-zero-r _) ∙ p
@@ -136,7 +136,7 @@ opaque
   <-trans : m < n → n < k → m < k
   <-trans (δ₁ , p) (δ₂ , q)
     = suc (δ₁ + δ₂)
-    , nat! ∙ subst (λ φ → suc (φ + δ₂) ＝ _) (sym p) q
+    , nat! ∙ subst (λ φ → suc (φ + δ₂) ＝ _) (symₚ p) q
 
   <-asym : ∀[ _<_ →̇ _≯_ ]
   <-asym {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {n = n} {m = 1 + δ₂ + δ₁}
