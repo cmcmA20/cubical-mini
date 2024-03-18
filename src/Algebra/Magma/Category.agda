@@ -34,7 +34,7 @@ private variable ℓ : Level
 
 instance
   Magmas-equational : is-equational (Magma-structure ℓ)
-  Magmas-equational .invert-id-hom p .pres-⋆ _ _ = sym (p .pres-⋆ _ _)
+  Magmas-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
 Forget : Functor (Magmas ℓ) (Sets ℓ)
 Forget = Forget-structure (Magma-structure _)

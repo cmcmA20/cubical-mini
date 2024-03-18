@@ -2,17 +2,7 @@
 -- The toolset of a civilized man.
 module Prelude where
 
-open import Foundations.Base       public
-  renaming (_∙_ to _∙ₚ_ ; _∘′_ to _∘ₜ′_)
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Erased     public
-open import Foundations.Path       public
-open import Foundations.Pi         public
-  hiding (_∘′_; Π-syntax; ∀-syntax)
-open import Foundations.Sigma      public
-  hiding (Σ-syntax)
-open import Foundations.Transport  public
-open import Foundations.Univalence public
+open import Meta.Prelude public
 
 open import Meta.Effect.Alt         public
 open import Meta.Effect.Bind        public
@@ -22,7 +12,6 @@ open import Meta.Effect.Map         public
 open import Meta.Effect.Traversable public
 
 open import Meta.Append               public
-open import Meta.Groupoid             public
 open import Meta.Literals.FromProduct public
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromNeg     public
@@ -44,9 +33,6 @@ open import Meta.Extensionality public
 open import Meta.Marker         public
 open import Meta.Record         public
 open import Meta.SIP            public
-open import Meta.Underlying     public
-open import Meta.Variadic       public
-open import Meta.Witness        public
 
 open import Structures.n-Type public
 

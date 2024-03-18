@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.HVec.Properties where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
 -- yes, it's the right one
 open import Data.Vec.Ergonomic.Base
@@ -28,11 +27,11 @@ vec-of-types≃types _ = iso→equiv $ to , iso from ri li where
   ri : ∀ {n} (xs : Types n (replicate n ℓ)) → to (from xs) ＝ xs
   ri {n = 0} _ = refl
   ri {n = 1} _ = refl
-  ri {n = suc (suc _)} (_ , xs) = Σ-pathP refl (ri xs)
+  ri {n = suc (suc _)} (_ , xs) = refl ,ₚ ri xs
 
   li : ∀ {n} (xs : Vec (Type ℓ) n) → from (to xs) ＝ xs
   li {n = 0} _ = refl
   li {n = 1} _ = refl
-  li {n = suc (suc _)} (_ , xs) = Σ-pathP refl (li xs)
+  li {n = suc (suc _)} (_ , xs) = refl ,ₚ li xs
 
 module vec-of-types≃types {n} {ℓ} = Equiv (vec-of-types≃types {ℓ} n)

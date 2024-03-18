@@ -1,10 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.List.Path where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base

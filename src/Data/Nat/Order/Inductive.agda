@@ -1,10 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Order.Inductive where
 
-open import Foundations.Base hiding (_∙_)
-open import Foundations.Equiv
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Data.Dec.Base
@@ -150,11 +148,11 @@ instance
 ≤-split m n | no m≥n | no n≥m  = inr (inr (go m n m≥n n≥m)) where
   go : ∀ m n → ¬ (suc m ≤ n) → ¬ (suc n ≤ m) → m ＝ n
   go zero zero p q          = refl
-  go zero (suc zero) p q    = absurd (p (s≤s z≤))
-  go zero (suc (suc n)) p q = absurd (p (s≤s z≤))
-  go (suc zero) zero p q    = absurd (q (s≤s z≤))
-  go (suc (suc m)) zero p q = absurd (q (s≤s z≤))
-  go (suc m) (suc n) p q    = ap suc (go m n (λ { a → p (s≤s a) }) λ { a → q (s≤s a) })
+  go zero (suc zero) p q    = absurd $ p $ s≤s z≤
+  go zero (suc (suc n)) p q = absurd $ p $ s≤s z≤
+  go (suc zero) zero p q    = absurd $ q $ s≤s z≤
+  go (suc (suc m)) zero p q = absurd $ q $ s≤s z≤
+  go (suc m) (suc n) p q    = ap suc $ go m n (p ∘′ s≤s) (q ∘′ s≤s)
 
 ≤→¬< : {x y : ℕ} → x ≤ y → ¬ (y < x)
 ≤→¬< {0}     {y}      z≤       = ¬sucn≤0
@@ -162,20 +160,20 @@ instance
 
 ¬<→≤ : {x y : ℕ} → ¬ (y < x) → x ≤ y
 ¬<→≤ {0}     {y}     ctra = z≤
-¬<→≤ {suc x} {0}     ctra = absurd (ctra (s≤s z≤))
-¬<→≤ {suc x} {suc y} ctra = s≤s (¬<→≤ (ctra ∘ s≤s))
+¬<→≤ {suc x} {0}     ctra = absurd $ ctra $ s≤s z≤
+¬<→≤ {suc x} {suc y} ctra = s≤s $ ¬<→≤ $ ctra ∘ s≤s
 
 ¬≤→< : {x y : ℕ} → ¬ (y ≤ x) → x < y
 ¬≤→< ctra = ¬<→≤ (ctra ∘ ≤-peel)
 
 ≤→<＝ : {x y : ℕ} → x ≤ y → (x < y) ⊎ (x ＝ y)
-≤→<＝ {x} {y} prf with (≤-split x y)
+≤→<＝ {x} {y} prf with ≤-split x y
 ... | inl p = inl p
-... | inr (inl p) = absurd (≤→¬< p (s≤s prf))
+... | inr (inl p) = absurd $ ≤→¬< p $ s≤s prf
 ... | inr (inr p) = inr p
 
 <→¬＝ : {x y : ℕ} → x < y → ¬ (x ＝ y)
-<→¬＝ {x} {y} xy eq = ¬sucn≤n (subst (λ q → q < y) eq xy)
+<→¬＝ {x} {y} xy eq = ¬sucn≤n (subst (_< y) eq xy)
 
 -- subtraction
 

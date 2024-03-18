@@ -27,18 +27,18 @@ private variable ℓ : Level
 
 instance
   CMonoids-equational : is-equational (CMonoid-structure ℓ)
-  CMonoids-equational .invert-id-hom p .pres-id = sym (p .pres-id)
-  CMonoids-equational .invert-id-hom p .pres-⋆ _ _ = sym (p .pres-⋆ _ _)
+  CMonoids-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
+  CMonoids-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
 Forget : Functor (CMonoids ℓ) (Sets ℓ)
 Forget = Forget-structure (CMonoid-structure _)
 
 Forget-comm : Functor (CMonoids ℓ) (Monoids ℓ)
-Forget-comm .Functor.F₀ = second (comm-monoid-on↪monoid-on #_)
-Forget-comm .Functor.F₁ f .hom x = f # x
+Forget-comm .Functor.F₀ = second (comm-monoid-on↪monoid-on $_)
+Forget-comm .Functor.F₁ f .hom x = f $ x
 Forget-comm .Functor.F₁ f .preserves = f .preserves
 Forget-comm .Functor.F-id = refl
 Forget-comm .Functor.F-∘ _ _ = refl
 
 forget-comm-is-faithful : is-faithful (Forget-comm {ℓ})
-forget-comm-is-faithful p = ext (p #ₚ_)
+forget-comm-is-faithful p = ext $ p $ₚ_

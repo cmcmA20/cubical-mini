@@ -1,10 +1,9 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Instances.Discrete where
 
-open import Foundations.Base
+open import Meta.Prelude
 
 open import Meta.Search.Discrete
-open import Meta.Underlying
 
 open import Structures.IdentitySystem.Interface
 

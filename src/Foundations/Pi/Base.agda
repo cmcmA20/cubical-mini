@@ -84,6 +84,7 @@ module _ where
   _$ᴱ_ : (f : (@0 a : A) → B a) (@0 x : A) → B x
   f $ᴱ a = f a
   {-# INLINE _$ᴱ_ #-}
+  {-# WARNING_ON_USAGE _$ᴱ_ "Use polymorphic `_$_` from `Meta.Underlying`" #-}
 
   infixl -1 _&_
   _&_ : (x : A) (f : (a : A) → B a) → B x

@@ -55,7 +55,7 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     : is-skeletal C ×ₜ is-category C
     ≃ is-gaunt C
   skeletal-category≃gaunt = prop-extₑ!
-      (skeletal+category→gaunt $²_)
+      (skeletal+category→gaunt $ₜ²_)
       < is-gaunt→is-skeletal , has-category >
     where open is-gaunt
 

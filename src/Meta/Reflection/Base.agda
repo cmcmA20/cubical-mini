@@ -95,6 +95,9 @@ private variable
   B : Type ℓ′
   n : ℕ
 
+Fun : {ℓ ℓ′ : Level} (A : Type ℓ) (B : Type ℓ′) → Type (ℓ ⊔ ℓ′)
+Fun A B = A → B
+
 full-tank : ℕ
 full-tank = 1234567890
 
@@ -116,9 +119,6 @@ prec-parens (related x) (related y) = y f<ᵇ x
 prec-parens unrelated   (related y) = true
 prec-parens (related x) unrelated   = false
 prec-parens unrelated   unrelated   = true
-
-Fun : ∀{ℓ ℓ′} → Type ℓ → Type ℓ′ → Type (ℓ ⊔ ℓ′)
-Fun A B = A → B
 
 unarg : Arg A → A
 unarg (arg _ x) = x
@@ -347,7 +347,7 @@ unapply-path tm = reduce tm >>= λ where
       ]
     unify red ty
     pure (just (domain , x , y))
-  _ → returnTC nothing
+  _ → pure nothing
 
 get-boundary : Term → TC (Maybe (Term × Term))
 get-boundary tm = unapply-path tm >>= (pure ∘ (snd <$>_))

@@ -1,18 +1,10 @@
 {-# OPTIONS --safe #-}
 module Structures.FinOrd where
 
-open import Foundations.Base
-  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.HLevel
-open import Foundations.Erased
-open import Foundations.Sigma
-  hiding (Σ-syntax)
-open import Foundations.Univalence
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.HLevel
-open import Meta.Underlying
 
 open import Correspondences.Finite.ManifestBishop
 
@@ -50,4 +42,4 @@ FinOrd≃ᴱℕ {ℓ} =
 
 instance
   @0 H-Level-FinOrd : ∀ {n} → H-Level (2 + n) (FinOrd ℓ)
-  H-Level-FinOrd = hlevel-basic-instance 2 (is-of-hlevel-≃ 2 (equivᴱ≃equiv # FinOrd≃ᴱℕ) hlevel!)
+  H-Level-FinOrd = hlevel-basic-instance 2 $ is-of-hlevel-≃ 2 (equivᴱ≃equiv $ FinOrd≃ᴱℕ) hlevel!

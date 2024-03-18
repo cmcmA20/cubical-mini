@@ -1,14 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Computational.Closure where
 
-open import Foundations.Base
-open import Foundations.Sigma
-open import Foundations.Equiv
-open import Foundations.Path
-open import Foundations.Transport
-open import Foundations.Univalence
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Marker
 open import Meta.Search.HLevel
 open import Meta.Regularity
@@ -55,10 +49,10 @@ fin-suc-universal
   → Π[ x ꞉ Fin (suc n) ] A x
   ≃ A fzero × (∀ x → A (fsuc x))
 fin-suc-universal {n} {A} = iso→equiv $ ff , iso gg ri li where
-  ff : Π[ x ꞉ _ ] A x → A fzero × (∀ x → A (fsuc x))
+  ff : Π[ x ꞉ Fin _ ] A x → A fzero × (∀ x → A (fsuc x))
   ff f = f fzero , f ∘ fsuc
 
-  gg : A fzero × (∀ x → A (fsuc x)) → Π[ x ꞉ _ ] A x
+  gg : A fzero × (∀ x → A (fsuc x)) → Π[ x ꞉ Fin _ ] A x
   gg (z , f) (mk-fin 0)       = z
   gg (z , f) (mk-fin (suc k)) = f (mk-fin k)
 
@@ -115,8 +109,9 @@ fin-sum {suc n} B =
       f-iso .is-iso.rinv (inr x) = ap inr (mrec.ε _)
 
       f-iso .is-iso.linv (mk-fin 0       , _) = refl
-      f-iso .is-iso.linv (mk-fin (suc k) , s) =
-        Σ-pathP (ap (fsuc ∘ fst) (mrec.η _)) (ap snd (mrec.η _))
+      f-iso .is-iso.linv (mk-fin (suc k) , s)
+        =  ap (fsuc ∘ fst) (mrec.η _)
+        ,ₚ ap snd (mrec.η _)
 
 
 fin-product : {n m : ℕ}
@@ -128,5 +123,5 @@ fin-product {n} {m} =
   Fin (n · m)           ≃∎
   where
     sum≡* : ∀ n m → sum n (λ _ → m) ＝ n · m
-    sum≡* zero m = refl
+    sum≡* 0       m = refl
     sum≡* (suc n) m = ap (m +_) (sum≡* n m)

@@ -45,6 +45,6 @@ all-zipwith {P} f (p ∷ ps) (q ∷ qs) = f p q ∷ all-zipwith {P = P} f ps qs
 all? : {ℓ ℓ′ : Level} {A : Type ℓ} {P : A → Type ℓ′} → Decidable P → Decidableⁿ {1} (λ (xs : List A) → All P xs)
 all? P? []       = yes []
 all? P? (x ∷ xs) =
-  Dec.dmap (_∷_ $²_)
+  Dec.dmap (_∷_ $ₜ²_)
            (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
            (×-decision (P? x) (all? P? xs))

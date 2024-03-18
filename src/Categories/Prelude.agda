@@ -2,11 +2,11 @@
 module Categories.Prelude where
 
 open import Prelude
-  renaming ( _∘_       to _∘ₜ_
-           ; id        to idₜ
-           ; _≅_       to _≅ₜ_
+  renaming ( _≅_       to _≅ₜ_
            ; _↪_       to _↪ₜ_
            ; _×_       to _×ₜ_
+           ; _∘_       to _∘ₜ_
+           ; id        to idₜ
            ; iso→path  to isoₜ→path
            ; iso→equiv to isoₜ→equiv
            )

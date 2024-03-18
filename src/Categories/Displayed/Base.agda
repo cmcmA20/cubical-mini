@@ -1,10 +1,9 @@
 {-# OPTIONS --safe #-}
 module Categories.Displayed.Base where
 
-open import Foundations.Base
-  hiding (id; _∘_)
-open import Foundations.HLevel
-open import Foundations.Path
+open import Meta.Prelude
+  hiding (_∘_; id)
+
 open import Categories.Base
 
 record Displayed {o ℓ} (B : Precategory o ℓ)

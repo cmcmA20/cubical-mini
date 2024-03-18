@@ -1,17 +1,7 @@
 {-# OPTIONS --safe #-}
 module Structures.Base where
 
-open import Foundations.Base
-  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.HLevel.Base
-open import Foundations.Pi
-  hiding (Π-syntax; ∀-syntax)
-open import Foundations.Sigma
-  hiding (Σ-syntax)
-open import Foundations.Univalence public
-
-open import Meta.Groupoid
-open import Meta.Underlying
+open import Meta.Prelude
 
 open import Data.Unit.Properties
 
@@ -24,10 +14,10 @@ constant-str : (A : Type ℓ) → Structure {ℓ₁} ℓ (λ _ → A)
 constant-str T .is-hom (A , x) (B , y) f = x ＝ y
 
 constant-str-is-univalent : is-univalent (constant-str {ℓ₁ = ℓ₁} A)
-constant-str-is-univalent _ = refl!
+constant-str-is-univalent _ = refl
 
 constant-action : (A : Type ℓ) → Equiv-action {ℓ = ℓ₁} (λ X → A)
-constant-action _ _ = refl!
+constant-action _ _ = refl
 
 constant-action-is-transport
   : is-transport-str {ℓ = ℓ₁} (constant-action A)
@@ -68,8 +58,7 @@ product-action actx acty eqv = ×-ap (actx eqv) (acty eqv)
   : {α : Equiv-action S} {β : Equiv-action T}
   → is-transport-str α → is-transport-str β
   → is-transport-str (product-action α β)
-product-action-is-transport α-tr β-tr e s =
- Σ-pathP (α-tr e (s .fst)) (β-tr e (s .snd))
+product-action-is-transport α-tr β-tr e s = α-tr e (s .fst) ,ₚ β-tr e (s .snd)
 
 
 -- naive one, do not use
@@ -161,4 +150,4 @@ module _
   → (A .fst , A .snd .fst) ≃[ σ ] B
   → axioms (B .fst) (B .snd)
 transfer-axioms {univ} {axioms} A B eqv =
-  subst (axioms $²_) (sip univ eqv) (A .snd .snd)
+  subst (axioms $ₜ²_) (sip univ eqv) (A .snd .snd)

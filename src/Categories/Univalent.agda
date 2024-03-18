@@ -2,7 +2,7 @@
 module Categories.Univalent where
 
 open import Prelude
-  hiding (id; _∘_; _≅_; iso→path)
+  hiding (_∘_; _≅_; id; iso→path)
 
 open import Structures.IdentitySystem.Interface
 
@@ -78,13 +78,13 @@ module _ {o h} (C : Precategory o h) where
     : (q : a ＝ b)
     → transport (λ i → Hom a (q i)) id ＝ path→iso q .to
   Hom-transport-refl-l-id p =
-    Hom-transport-id refl p ∙ ap (path→iso p .to ∘_) (transport-refl _) ∙ id-r _
+    Hom-transport-id reflₚ p ∙ ap (path→iso p .to ∘_) (transport-refl _) ∙ id-r _
 
   Hom-transport-refl-r-id
     : (p : a ＝ b)
     → transport (λ i → Hom (p i) a) id ＝ path→iso p .from
   Hom-transport-refl-r-id p =
-    Hom-transport-id p refl ∙ ap (_∘ path→iso p .from) (transport-refl _) ∙ id-l _
+    Hom-transport-id p reflₚ ∙ ap (_∘ path→iso p .from) (transport-refl _) ∙ id-l _
 
   Hom-pathP-refl-l
     : {p : a ＝ d} {h : Hom a b} {h′ : Hom d b}

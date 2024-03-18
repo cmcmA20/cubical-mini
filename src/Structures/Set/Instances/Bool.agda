@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Structures.Set.Instances.Bool where
 
-open import Foundations.Base
+open import Meta.Prelude
 
 open import Meta.Search.Discrete
 
@@ -36,26 +36,26 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     ... | yes _ = false
     ... | no  _ = s a
 
-    lookup-empty : Erased $ᴱ lookup empty x ＝ false
+    lookup-empty : Erased $ lookup empty x ＝ false
     lookup-empty .erased = refl
 
-    lookup-insert : Erased $ᴱ lookup (insert s x) x ＝ true
+    lookup-insert : Erased $ lookup (insert s x) x ＝ true
     lookup-insert {x} .erased with x ≟ x
     ... | yes _   = refl
-    ... | no  x≠x = ⊥.rec (x≠x refl)
+    ... | no  x≠x = ⊥.rec $ x≠x refl
 
-    lookup-remove : Erased $ᴱ lookup (remove s x) x ＝ false
+    lookup-remove : Erased $ lookup (remove s x) x ＝ false
     lookup-remove {x} .erased with x ≟ x
     ... | yes _   = refl
-    ... | no  x≠x = ⊥.rec (x≠x refl)
+    ... | no  x≠x = ⊥.rec $ x≠x refl
 
     insert-nop    : lookup s x ＝ true
-                  → Erased $ᴱ insert s x ＝ s
+                  → Erased $ insert s x ＝ s
     insert-nop {s} {x} p .erased i a with x ≟ a
-    ... | yes x=a = (sym p ∙ ap s x=a) i
+    ... | yes x=a = (p ⁻¹ ∙ ap s x=a) i
     ... | no  _   = s a
 
-    insert-insert : Erased $ᴱ insert (insert s x) y ＝ insert (insert s y) x
+    insert-insert : Erased $ insert (insert s x) y ＝ insert (insert s y) x
     insert-insert {s} {x} {y} .erased i a with x ≟ a
     insert-insert {s} {x} {y} .erased i a | yes x=a with y ≟ a
     ... | yes _   = true
@@ -70,20 +70,20 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
 
 
     insert-remove : lookup s x ＝ true
-                  → Erased $ᴱ insert (remove s x) x ＝ s
+                  → Erased $ insert (remove s x) x ＝ s
     insert-remove {s} {x} p .erased i a with x ≟ a
-    ... | yes x=a = (sym p ∙ ap s x=a ) i
+    ... | yes x=a = (p ⁻¹ ∙ ap s x=a ) i
     ... | no  x≠a with x ≟ a
     ... | yes x=a = ⊥.rec {A = false ＝ s a} (x≠a x=a) i
     ... | no  x≠a = s a
 
     remove-nop    : lookup s x ＝ false
-                  → Erased $ᴱ remove s x ＝ s
+                  → Erased $ remove s x ＝ s
     remove-nop {s} {x} p .erased i a with x ≟ a
-    ... | yes x=a = (sym p ∙ ap s x=a) i
+    ... | yes x=a = (p ⁻¹ ∙ ap s x=a) i
     ... | no  x≠a = s a
 
-    remove-remove : Erased $ᴱ remove (remove s x) y ＝ remove (remove s y) x
+    remove-remove : Erased $ remove (remove s x) y ＝ remove (remove s y) x
     remove-remove {s} {x} {y} .erased i a with x ≟ a
     remove-remove {s} {x} {y} .erased i a | yes x=a with y ≟ a
     ... | yes _ = false
@@ -97,9 +97,9 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     ... | no  _ = s a
 
     remove-insert : lookup s x ＝ false
-                  → Erased $ᴱ remove (insert s x) x ＝ s
+                  → Erased $ remove (insert s x) x ＝ s
     remove-insert {s} {x} p .erased i a with x ≟ a
-    ... | yes x=a = (sym p ∙ ap s x=a ) i
+    ... | yes x=a = (p ⁻¹ ∙ ap s x=a ) i
     ... | no  x≠a with x ≟ a
     ... | yes x=a = ⊥.rec {A = true ＝ s a} (x≠a x=a) i
     ... | no  _ = s a

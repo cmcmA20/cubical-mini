@@ -1,14 +1,11 @@
 {-# OPTIONS --safe #-}
-open import Foundations.Base
-open import Meta.Variadic
+open import Meta.Prelude
 
 module Correspondences.Wellfounded
   {ℓ ℓ′} {A : Type ℓ} (_<_ : Corr² (A , A) ℓ′)
   where
 
 open import Meta.Extensionality
-
-open import Foundations.HLevel
 
 data Acc (x : A) : Type (ℓ ⊔ ℓ′) where
   acc : (∀ y → y < x → Acc y) → Acc x

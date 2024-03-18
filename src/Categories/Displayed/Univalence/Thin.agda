@@ -83,8 +83,8 @@ module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure �
     extensionality-hom : ∀ {a b} → Extensionality (So.Hom a b)
     extensionality-hom = record { lemma = quote Extensional-Hom }
 
-    Funlike-Hom : ∀ {a b} → Funlike (So.Hom a b) ⌞ a ⌟ (λ _ → ⌞ b ⌟)
-    Funlike-Hom = record { _#_ = Total-hom.hom }
+    Funlike-Hom : ∀ {a b} → Funlike ur (So.Hom a b) ⌞ a ⌟ (λ _ → ⌞ b ⌟)
+    Funlike-Hom ._#_ = Total-hom.hom
 
   Homomorphism-path
     : {x y : So.Ob} {f g : So.Hom x y}
@@ -96,7 +96,7 @@ module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure �
     : ∀ {x y : So.Ob} (f : So.Hom x y)
     → (∀ {x y} (p : f # x ＝ f # y) → x ＝ y)
     → Som.is-monic f
-  Homomorphism-monic f wit g h p = Homomorphism-path λ x → wit (happly (ap hom p) x)
+  Homomorphism-monic f wit g h p = Homomorphism-path λ x → wit (ap hom p $ₚ x)
 
 
 record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin-structure ℓ′ S) : Type (ℓsuc ℓ ⊔ o′ ⊔ ℓ′) where
@@ -110,14 +110,16 @@ record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin
   ∫-Path
     : ∀ {a b : So.Ob}
     → (f : So.Hom a b)
-    → is-equiv (f #_)
+    → is-equiv (f $_)
     → Erased (a ＝ b)
-  ∫-Path {a} {b} f eqv = erase (Σ-pathP (n-ua (f .hom , eqv)) $
-    Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e .fst) (a .snd) st ⌟ → PathP (λ i → S (ua e i)) (a .snd) st)
-      (λ st pres → to-pathP (ap (λ e → subst S e (a .snd)) ua-idₑ
-                ∙∙ transport-refl _
-                ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
-      (f .hom , eqv) (b .snd) (f .preserves))
+  ∫-Path {a} {b} f eqv .erased
+    =  n-ua (f .hom , eqv)
+    ,ₚ Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e .fst) (a .snd) st ⌟
+                        → ＜ a .snd ／ (λ i → S (ua e i)) ＼ st ＞)
+        (λ st pres → to-pathP (ap (λ e → subst S e (a .snd)) ua-idₑ
+                  ∙∙ transport-refl _
+                  ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
+        (f .hom , eqv) (b .snd) (f .preserves)
 
 open is-equational public
 

@@ -1,10 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Maybe.Properties where
 
-open import Foundations.Base
-open import Foundations.Equiv
-
-open import Meta.Variadic
+open import Meta.Prelude
 
 open import Correspondences.Decidable
 
@@ -35,8 +32,8 @@ maybe-as-sum = iso→equiv 𝔯
 instance
   is-nothing-decision : Decidable (is-nothing x)
   is-nothing-decision {x = nothing} = yes tt
-  is-nothing-decision {x = just _}  = no id
+  is-nothing-decision {x = just _}  = no  refl
 
   is-just-decision : Decidable (is-just x)
-  is-just-decision {x = nothing} = no id
+  is-just-decision {x = nothing} = no  refl
   is-just-decision {x = just _}  = yes tt

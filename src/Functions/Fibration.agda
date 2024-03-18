@@ -1,12 +1,7 @@
 {-# OPTIONS --safe #-}
 module Functions.Fibration where
 
-open import Foundations.Base hiding (_∙_)
-open import Foundations.Equiv
-open import Foundations.Sigma
-open import Foundations.Univalence
-
-open import Meta.Groupoid
+open import Meta.Prelude
 
 private variable
   ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᶜ ℓᵉ ℓᵖ : Level
@@ -28,7 +23,9 @@ private variable
   isom .snd .is-iso.linv ((_ , y) , p) i =
     (p (~ i) , coe1→i (λ j → B (p (~ i ∧ ~ j))) i y) , λ j → p (~ i ∨ j)
 
-total-equiv : (p : E → B) → E ≃ Σ[ b ꞉ B ] fibre p b
+total-equiv
+  : {E : Type ℓᵉ} {B : Type ℓᵇ}
+    (p : E → B) → E ≃ Σ[ b ꞉ B ] fibre p b
 total-equiv p = iso→equiv isom where
   isom : _ ≅ (Σ _ (fibre p))
   isom .fst x                   = p x , x , refl
@@ -54,8 +51,9 @@ fibre-paths {f} {y} {z = a , p} {z′ = a′ , p′} =
 module @0 _ where
   opaque
     unfolding ua
-    fibration-equiv : Σ[ E ꞉ Type (level-of-type B ⊔ ℓ) ] (E → B)
-                    ≃ (B → Type (level-of-type B ⊔ ℓ))
+    fibration-equiv : {B : Type ℓᵇ} {ℓ : Level}
+                    → Σ[ E ꞉ Type (ℓᵇ ⊔ ℓ) ] (E → B)
+                    ≃ (B → Type (ℓᵇ ⊔ ℓ))
     fibration-equiv {B} {ℓ} = iso→equiv isom where
       isom : Σ[ E ꞉ Type (level-of-type B ⊔ ℓ) ] (E → B) ≅ (B → Type (level-of-type B ⊔ ℓ))
       isom .fst (E , p)       = fibre p
@@ -67,14 +65,15 @@ module @0 _ where
         e = total-equiv p
 
     map-classifier
-      : (P : Type (ℓ ⊔ level-of-type B) → Type ℓᵖ)
+      : {ℓ ℓᵇ : Level} {B : Type ℓᵇ}
+        (P : Type (ℓ ⊔ ℓᵇ) → Type ℓᵖ)
       → ℓ /[ P ] B
-      ≃ (B → Σ[ T ꞉ Type (ℓ ⊔ level-of-type B) ] P T)
-    map-classifier {ℓ} {B} P =
-      Σ[ A ꞉ _ ] Σ[ f ꞉ _ ] Π[ x ꞉ B ] P (fibre f x) ≃⟨ Σ-assoc ⟩
-      Σ[ (_ , f) ꞉ _ ] Π[ y ꞉ B ] P (fibre f y)      ≃⟨ Σ-ap-fst (fibration-equiv {ℓ = ℓ}) ⟩
-      Σ[ A ꞉ _ ] Π[ x ꞉ B ] P (A x)                  ≃˘⟨ Σ-Π-distrib ⟩
-      (B → Σ[ T ꞉ _ ] P T)                           ≃∎
+      ≃ (B → Σ[ T ꞉ Type (ℓ ⊔ ℓᵇ) ] P T)
+    map-classifier {ℓ} {ℓᵇ} {B} P =
+      Σ[ A ꞉ Type (ℓ ⊔ ℓᵇ) ] Σ[ f ꞉ (A → B) ] Π[ x ꞉ B ] P (fibre f x)        ≃⟨ Σ-assoc ⟩
+      Σ[ (A , f) ꞉ Σ[ A ꞉ Type (ℓ ⊔ ℓᵇ) ] (A → B) ] Π[ y ꞉ B ] P (fibre f y)  ≃⟨ Σ-ap-fst (fibration-equiv {ℓ = ℓ}) ⟩
+      Σ[ A ꞉ (B → Type (ℓ ⊔ ℓᵇ)) ] Π[ x ꞉ B ] P (A x)                         ≃˘⟨ Σ-Π-distrib ⟩
+      (B → Σ[ T ꞉ Type (ℓ ⊔ ℓᵇ) ] P T)                                        ≃∎
 
   fibre-equality≃fibre-on-paths
     : {z@(_ , p) z′@(_ , p′) : fibre f y}
@@ -83,7 +82,8 @@ module @0 _ where
   fibre-equality≃fibre-on-paths = fibre-paths ∙ Σ-ap-snd (λ _ → tiltₑ)
 
 -- ultra fast
-fibre-comp : {c : C}
+fibre-comp : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+             {g : B → C} {f : A → B} {c : C}
            → fibre (g ∘ f) c
            ≃ Σ[ w ꞉ fibre g c ] fibre f (w .fst)
 fibre-comp {g} {f} {c} = iso→equiv $ to , iso from ri li where

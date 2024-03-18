@@ -1,12 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Vec.Inductive.Properties where
 
-open import Foundations.Base hiding (_∙_)
-open import Foundations.Equiv
-open import Foundations.Sigma
-open import Foundations.Pi
-
-open import Meta.Groupoid
+open import Meta.Prelude
 
 open import Data.Empty.Base
 open import Data.Fin.Inductive.Base as Fin
@@ -25,8 +20,8 @@ private variable
 
 cast : m ＝ n → Vec A m → Vec A n
 cast {0}     {0}     _ xs = xs
-cast {0}     {suc n} p = absurd (suc≠zero (sym p))
-cast {suc m} {0}     p = absurd (suc≠zero p)
+cast {0}     {suc n} p = absurd $ suc≠zero $ p ⁻¹
+cast {suc m} {0}     p = absurd $ suc≠zero $ p
 cast {suc m} {suc n} p (x ∷ xs) = x ∷ cast (suc-inj p) xs
 
 vec-fun-equiv : Vec A n ≃ (Fin n → A)
@@ -35,7 +30,7 @@ vec-fun-equiv = iso→equiv (lookup , iso tabulate lemma₁ lemma₂) where
   lemma₁ {0}     _ = fun-ext λ()
   lemma₁ {suc n} f = fun-ext λ where
     fzero    → refl
-    (fsuc k) → happly (lemma₁ _) k
+    (fsuc k) → lemma₁ _ $ₚ k
 
   lemma₂ : Π[ xs ꞉ Vec A n ] (tabulate (lookup xs) ＝ xs)
   lemma₂ {n = 0}     []       = refl

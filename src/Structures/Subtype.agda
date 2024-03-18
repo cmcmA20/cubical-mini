@@ -1,16 +1,9 @@
 {-# OPTIONS --safe #-}
 module Structures.Subtype where
 
-open import Foundations.Base
-  hiding (_∙_)
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Pi
-  hiding (Π-syntax; ∀-syntax)
-open import Foundations.Sigma
-  hiding (Σ-syntax)
+open import Meta.Prelude
 
 open import Meta.Extensionality
-open import Meta.Groupoid
 open import Meta.Search.HLevel
 open import Meta.SIP
 
@@ -43,12 +36,12 @@ instance
 module Path where
 
   Code : Subtype ℓ T → Subtype ℓ T → Type _
-  Code (X , f , _) (Y , g , _) = Σ[ e ꞉ X ≃ Y ] Π[ x ꞉ X ] (f x ＝ g (e # x))
+  Code (X , f , _) (Y , g , _) = Σ[ e ꞉ X ≃ Y ] Π[ x ꞉ X ] (f x ＝ g (e $ x))
 
   @0 code≃path : (U V : Subtype ℓ T) → Code U V ≃ (U ＝ V)
   code≃path U@(X , f , f-emb) V@(Y , g , g-emb) =
     Code U V                                      ≃⟨⟩
-    Σ[ e ꞉ X ≃ Y ] Π[ x ꞉ X ] (f x ＝ g (e # x))  ≃⟨ SIP (fibration-str-is-univalent _ _) ⟩
+    Σ[ e ꞉ X ≃ Y ] Π[ x ꞉ X ] (f x ＝ g (e $ x))  ≃⟨ SIP (fibration-str-is-univalent _ _) ⟩
     (X , f) ＝ (Y , g)                            ≃⟨ Σ-prop-path-≃ hlevel! ⟩
     ((X , f) , f-emb) ＝ ((Y , g) , g-emb)        ≃˘⟨ ap-≃ Σ-assoc ⟩
     U ＝ V                                        ≃∎
@@ -56,16 +49,17 @@ module Path where
   @0 code-is-prop : (U V : Subtype ℓ T) → is-prop (Code U V)
   code-is-prop U V = is-of-hlevel-≃ 1 (code≃path U V) (path-is-of-hlevel′ 1 subtype-is-set U V)
 
-  @0 identity-system : ∀{ℓ} {T : 𝒰 ℓ} → is-identity-system {A = Subtype ℓ T} Code (λ _ → refl! , λ _ → refl)
+  @0 identity-system : ∀{ℓ} {T : 𝒰 ℓ} → is-identity-system {A = Subtype ℓ T} Code (λ _ → refl , λ _ → refl)
   identity-system = set-identity-system code-is-prop go where
     go : {U V : Subtype ℓ T} → Code U V → U ＝ V
-    go {V = _ , g , _} (e , p) = Σ-pathP (ua e) $ to-pathP⁻ $ Σ-prop-path! $ fun-ext λ x →
-      p x ∙ ap g (sym (ua-β e x)) ∙ sym (transport-refl _)
+    go {V = _ , g , _} (e , p)
+      =  ua e
+      ,ₚ to-pathP⁻ (Σ-prop-path! $ fun-ext λ x → p x ∙ (transport-refl _ ∙ ap g (ua-β e x)) ⁻¹)
 
 
 @0 Extensional-Subtype : Extensional (Subtype ℓ T) ℓ
 Extensional-Subtype .Pathᵉ = Path.Code
-Extensional-Subtype .reflᵉ _ = refl! , λ _ → refl!
+Extensional-Subtype .reflᵉ _ = refl , λ _ → refl
 Extensional-Subtype .idsᵉ = Path.identity-system
 
 instance

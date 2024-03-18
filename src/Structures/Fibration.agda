@@ -1,11 +1,9 @@
 {-# OPTIONS --safe #-}
 module Structures.Fibration where
 
-open import Foundations.Base
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
+open import Meta.Prelude
 
 open import Meta.SIP
-open import Meta.Underlying
 
 module _ {ℓᵇ} (B : Type ℓᵇ) (ℓ : Level) where
   -- `X` is fibered over `B`
@@ -27,5 +25,5 @@ module _ {ℓᵇ} (B : Type ℓᵇ) (ℓ : Level) where
 
   @0 _ : {U@(X , f) V@(Y , g) : Fibration} {e : X ≃ Y}
        →  fibration-str .is-hom U V e
-       ＝ Π[ x ꞉ X ] (f x ＝ g (e # x))
+       ＝ Π[ x ꞉ X ] (f x ＝ g (e $ x))
   _ = refl

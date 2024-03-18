@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Powerset.Base where
 
-open import Foundations.Base
+open import Meta.Prelude
 
 open import Meta.Membership
 open import Meta.Search.HLevel
@@ -30,7 +30,7 @@ subst-∈ : (A : ℙ X) {x y : X} → x ＝ y → x ∈ A → y ∈ A
 subst-∈ A = subst (_∈ A)
 
 ⊆-refl : (A : ℙ X) → A ⊆ A
-⊆-refl _ = id
+⊆-refl _ = refl
 
 @0 ℙ-ext : A ⊆ B → B ⊆ A → A ＝ B
 ℙ-ext A⊆B B⊆A = fun-ext λ _ → n-ua (prop-extₑ! A⊆B B⊆A)

@@ -1,11 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Reflects.Path where
 
-open import Foundations.Base hiding (_∙_)
-open import Foundations.Equiv
-open import Foundations.HLevel
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
@@ -32,7 +29,7 @@ code-refl (ofⁿ _) = lift tt
 
 identity-system : is-identity-system {A = Reflects⁰ P a} Code code-refl
 identity-system .to-path {ofʸ _}  {ofʸ _} = ap ofʸ
-identity-system .to-path {ofⁿ ¬p} {ofⁿ ¬p′} _ = ap ofⁿ (fun-ext (λ p → ⊥.rec (¬p p)))
+identity-system .to-path {ofⁿ ¬p} {ofⁿ ¬p′} _ = ap ofⁿ $ fun-ext $ λ p → ⊥.rec $ ¬p p
 identity-system .to-path-over {ofʸ p} {ofʸ p′} c i j = c (i ∧ j)
 identity-system .to-path-over {ofⁿ ¬p} {ofⁿ ¬p′} _ = refl
 

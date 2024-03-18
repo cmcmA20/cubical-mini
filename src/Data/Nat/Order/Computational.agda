@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Order.Computational where
 
-open import Foundations.Base
-open import Foundations.HLevel
+open import Meta.Prelude
 
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base
@@ -31,10 +30,10 @@ z≤ : 0 ≤ n
 z≤ = tt
 
 s≤s : m ≤ n → suc m ≤ suc n
-s≤s = id
+s≤s = refl
 
 ≤-peel : suc m ≤ suc n → m ≤ n
-≤-peel = id
+≤-peel = refl
 
 _≥_ : ℕ → ℕ → Type
 m ≥ n = n ≤ m
@@ -57,7 +56,7 @@ m > n = n < m
 <-asym {suc m} {suc n} p = <-asym {m} p
 
 <-peel : suc m < suc n → m < n
-<-peel = id
+<-peel = refl
 
 <-suc-r : m < n → m < suc n
 <-suc-r {0}             p = _
@@ -100,7 +99,7 @@ instance
 
 ≤-dec : (m n : ℕ) → Dec (m ≤ n)
 ≤-dec m n with m ≤ᵇ n
-... | false = no id
+... | false = no  refl
 ... | true  = yes tt
 
 ¬sucn≤n : ¬ suc n ≤ n
@@ -119,6 +118,6 @@ instance
   (substⁱ ⟦_⟧ᵇ q) where
     go : ∀ m n → ¬ (m < n) → ¬ (n < m) → m ＝ n
     go 0       0       _ _ = refl
-    go 0       (suc _) p _ = ⊥.rec $ᴱ p tt
-    go (suc _) 0       _ q = ⊥.rec $ᴱ q tt
+    go 0       (suc _) p _ = ⊥.rec $ p tt
+    go (suc _) 0       _ q = ⊥.rec $ q tt
     go (suc m) (suc n) p q = ap suc $ go m n p q

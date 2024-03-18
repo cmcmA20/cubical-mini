@@ -1,12 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Vec.Inductive.Correspondences.Unary.Any where
 
-open import Foundations.Base
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
+open import Meta.Prelude
 
 open import Meta.Effect.Idiom
 open import Meta.Search.Discrete
-open import Meta.Variadic
 
 open import Correspondences.Decidable
 

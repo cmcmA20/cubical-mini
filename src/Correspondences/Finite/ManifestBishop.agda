@@ -1,20 +1,11 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Finite.ManifestBishop where
 
-open import Foundations.Base
-  hiding (_∙_; _∘′_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Equiv
-open import Foundations.Pi
-  hiding (_∘′_; Π-syntax; ∀-syntax)
-open import Foundations.Sigma
-  hiding (Σ-syntax)
-open import Foundations.Univalence
+open import Meta.Prelude
 
-open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Omniscient
 
@@ -69,13 +60,13 @@ manifest-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? =
     xs = Ṽ.from $ Ã.from
 
     lemma₁ : Σ[ i ꞉ Fin n ] P (lookup xs i) → ∥ Σ[ a ꞉ A ] P a ∥₁
-    lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) id
+    lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) refl
 
     lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ ∥ Σ[ a ꞉ A ] P a ∥₁
     lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘′ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))
 
 lift-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Lift ℓ A)
-lift-manifest-bishop-finite afin = fin $ lift-equiv ∙ (enumeration afin)
+lift-manifest-bishop-finite afin = fin $ lift-equiv ∙ enumeration afin
 
 ×-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite B → Manifest-bishop-finite (A × B)
 ×-manifest-bishop-finite afin bfin = fin $ ×-ap (enumeration afin) (enumeration bfin) ∙ fin-product
@@ -91,7 +82,7 @@ finite-pi-fin 0 {P} fam = fin $ iso→equiv $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
   gg : _
-  gg _ f0 = absurd (fin-0-is-initial # f0)
+  gg _ f0 = absurd $ fin-0-is-initial $ f0
   ri : gg is-right-inverse-of ff
   ri (mk-fin 0) = refl
   li : gg is-left-inverse-of ff
@@ -110,7 +101,7 @@ finite-pi-fin (suc sz) {P} fam =
       module aeq = Equiv aeq
       fs = fin-sum $ cardinality ∘ fam ∘ aeq.from
       work = Σ-ap aeq λ x → enumeration (fam x) ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
-  in fin (work ∙ fs)
+  in fin $ work ∙ fs
 
 fun-manifest-bishop-finite
   : Manifest-bishop-finite A → Manifest-bishop-finite B → Manifest-bishop-finite (A → B)

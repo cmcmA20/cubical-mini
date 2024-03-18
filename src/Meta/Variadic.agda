@@ -3,6 +3,7 @@
 module Meta.Variadic where
 
 open import Foundations.Base
+  hiding (_$_)
 
 open import Meta.Reflection.Base
 open import Meta.Reflection.Subst

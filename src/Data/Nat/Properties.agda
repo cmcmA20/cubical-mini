@@ -1,9 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Properties where
 
-open import Foundations.Base
-
-open import Meta.Variadic
+open import Meta.Prelude
 
 open import Correspondences.Decidable
 
@@ -102,7 +100,7 @@ min-comm (suc _) 0       = refl
 min-comm (suc x) (suc y) = ap suc $ min-comm x y
 
 min-assoc : (x y z : ℕ) → min x (min y z) ＝ min (min x y) z
-min-assoc 0       y       z       = min-absorb-l (min y z) ∙ sym (min-absorb-l z) ∙ ap (λ q → min q z) (sym $ min-absorb-l y)
+min-assoc 0       y       z       = min-absorb-l (min y z) ∙ sym (min-absorb-l z) ∙ ap (λ q → min q z) (min-absorb-l y ⁻¹)
 min-assoc (suc x) 0       z       = ap (min (suc x)) (min-absorb-l z) ∙ sym (min-absorb-l z)
 min-assoc (suc _) (suc _) 0       = refl
 min-assoc (suc x) (suc y) (suc z) = ap suc $ min-assoc x y z
@@ -127,7 +125,7 @@ max-comm (suc _) 0       = refl
 max-comm (suc x) (suc y) = ap suc $ max-comm x y
 
 max-assoc : (x y z : ℕ) → max x (max y z) ＝ max (max x y) z
-max-assoc 0       y       z       = max-id-l (max y z) ∙ ap (λ q → max q z) (sym $ max-id-l y)
+max-assoc 0       y       z       = max-id-l (max y z) ∙ ap (λ q → max q z) (max-id-l y ⁻¹)
 max-assoc (suc x) 0       z       = ap (max (suc x)) (max-id-l z)
 max-assoc (suc x) (suc y) 0       = refl
 max-assoc (suc x) (suc y) (suc z) = ap suc $ max-assoc x y z
@@ -139,14 +137,14 @@ max-idem (suc x) = ap suc $ max-idem x
 -- iteration
 
 iter-add : {ℓ : Level} {A : 𝒰 ℓ}
-          → (m n : ℕ) → (f : A → A) → (x : A)
-          → iter (m + n) f x ＝ iter m f (iter n f x)
+         → (m n : ℕ) → (f : A → A) → (x : A)
+         → iter (m + n) f x ＝ iter m f (iter n f x)
 iter-add  zero   n f x = refl
 iter-add (suc m) n f x = ap f (iter-add m n f x)
 
 iter-mul : {ℓ : Level} {A : 𝒰 ℓ}
-          → (m n : ℕ) → (f : A → A) → (x : A)
-          → iter (m · n) f x ＝ iter m (iter n f) x
+         → (m n : ℕ) → (f : A → A) → (x : A)
+         → iter (m · n) f x ＝ iter m (iter n f) x
 iter-mul  zero   n f x = refl
 iter-mul (suc m) n f x = iter-add n (m · n) f x ∙ ap (iter n f) (iter-mul m n f x)
 
@@ -154,8 +152,8 @@ iter-mul (suc m) n f x = iter-add n (m · n) f x ∙ ap (iter n f) (iter-mul m n
 instance
   is-zero-decision : Decidable (is-zero n)
   is-zero-decision {0}     = yes tt
-  is-zero-decision {suc _} = no id
+  is-zero-decision {suc _} = no  refl
 
   is-positive-decision : Decidable (is-positive n)
-  is-positive-decision {0}     = no id
+  is-positive-decision {0}     = no  refl
   is-positive-decision {suc _} = yes tt

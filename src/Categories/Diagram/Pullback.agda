@@ -39,9 +39,9 @@ record is-pullback {P} (p₁ : Hom P X) (f : Hom X Z) (p₂ : Hom P Y) (g : Hom 
   pullback-univ .fst h = p₁ ∘ h , p₂ ∘ h , cat! C ∙ ap (_∘ h) square ∙ cat! C
   pullback-univ .snd = is-iso→is-equiv λ where
     .is-iso.inv (f , g , α) → universal α
-    .is-iso.rinv x → Σ-pathP p₁∘universal $
-      Σ-prop-pathP (λ _ _ → path-is-of-hlevel′ 1 hlevel! _ _) p₂∘universal
-    .is-iso.linv _ → sym (unique refl refl)
+    .is-iso.rinv x → p₁∘universal
+      ,ₚ Σ-prop-pathP (λ _ _ → path-is-of-hlevel′ 1 hlevel! _ _) p₂∘universal
+    .is-iso.linv _ → unique refl refl ⁻¹
 
 
 record Pullback {X Y Z} (f : Hom X Z) (g : Hom Y Z) : Type (ℓ ⊔ ℓ′) where

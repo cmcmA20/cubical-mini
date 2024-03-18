@@ -1,12 +1,10 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Classical where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Effect.Bind
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Base public
 
@@ -26,10 +24,10 @@ opaque
   is-classical = ¬¬_
 
   is-classical-β : is-classical A → ¬¬ A
-  is-classical-β = id
+  is-classical-β = refl
 
   is-classical-η : ¬¬ A → is-classical A
-  is-classical-η = id
+  is-classical-η = refl
 
   is-classical-is-prop : is-prop (is-classical A)
   is-classical-is-prop = hlevel!

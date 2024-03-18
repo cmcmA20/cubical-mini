@@ -35,18 +35,18 @@ private variable ℓ : Level
 
 instance
   UMagmas-equational : is-equational (UMagma-structure ℓ)
-  UMagmas-equational .invert-id-hom p .pres-id = sym (p .pres-id)
-  UMagmas-equational .invert-id-hom p .pres-⋆ _ _ = sym (p .pres-⋆ _ _)
+  UMagmas-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
+  UMagmas-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
 Forget : Functor (UMagmas ℓ) (Sets ℓ)
 Forget = Forget-structure (UMagma-structure _)
 
 Forget-unit : Functor (UMagmas ℓ) (Magmas ℓ)
-Forget-unit .Functor.F₀ = second (unital-magma-on↪magma-on #_)
-Forget-unit .Functor.F₁ f .hom x = f # x
+Forget-unit .Functor.F₀ = second (unital-magma-on↪magma-on $_)
+Forget-unit .Functor.F₁ f .hom x = f $ x
 Forget-unit .Functor.F₁ f .preserves .pres-⋆ = f .preserves .pres-⋆
 Forget-unit .Functor.F-id = trivial!
 Forget-unit .Functor.F-∘ _ _ = trivial!
 
 forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
-forget-unit-is-faithful p = ext (p #ₚ_)
+forget-unit-is-faithful p = ext $ p $ₚ_

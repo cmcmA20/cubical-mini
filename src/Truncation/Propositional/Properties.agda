@@ -1,16 +1,10 @@
 {-# OPTIONS --safe #-}
 module Truncation.Propositional.Properties where
 
-open import Foundations.Base
-  hiding (Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Equiv
-open import Foundations.Path
-open import Foundations.Sigma
-  hiding (Σ-syntax)
+open import Meta.Prelude
 
 open import Meta.Effect.Map
 open import Meta.Search.HLevel
-open import Meta.Underlying
 
 open import Structures.IdentitySystem.Interface
 
@@ -139,7 +133,7 @@ rec-set! f-const {B-set} = rec-set f-const B-set
 
 _factors-through_
   : (f : A → C) (B : Type (level-of-type A ⊔ level-of-type C)) → _
-_factors-through_ {A} {C} f B = Σ[ ρ ꞉ (A ↠ B) ] Σ[ ι ꞉ (B ↪ C) ] (f ＝ apply ι ∘ apply ρ)
+_factors-through_ {A} {C} f B = Σ[ ρ ꞉ (A ↠ B) ] Σ[ ι ꞉ (B ↪ C) ] (f ＝ ι #_ ∘ ρ #_)
 
 Factorization : (f : A → C) → _
 Factorization f = Σ[ M ꞉ Type _ ] f factors-through M
@@ -172,10 +166,10 @@ module Replacement
 
   embed-is-embedding : is-embedding embed
   embed-is-embedding = (preimage-is-prop→is-embedding ∘ (is-prop-η ∘_)) go where
-    go : _
-    go t (x , p) (y , q) = Σ-pathP (quot (ls.from (p ∙ sym q))) (commutes→square coh) where opaque
-      coh : ls.to (ls.from (p ∙ sym q)) ∙ q ＝ p ∙ refl
-      coh = ap (_∙ q) (ls.ε (p ∙ sym q)) ∙ ∙-cancel-r p q ∙ sym (∙-id-r p)
+    go : (t : Image) (u v : Σ[ z ꞉ Image ] (embed z ＝ embed t)) → u ＝ v
+    go t (x , p) (y , q) = quot (ls.from (p ∙ q ⁻¹)) ,ₚ commutes→square coh where opaque
+      coh : ls.to (ls.from (p ∙ q ⁻¹)) ∙ q ＝ p ∙ refl
+      coh = ap (_∙ q) (ls.ε (p ∙ q ⁻¹)) ∙ ∙-cancel-r p q ∙ ∙-id-r p ⁻¹
 
   elim-prop
     : ∀ {ℓ′} {P : Image → Type ℓ′}
@@ -199,9 +193,9 @@ module Replacement
   Image≃Im : Image ≃ Im f
   Image≃Im .fst = Image→Im
   Image≃Im .snd .equiv-proof (x , p) = is-contr-β $ elim! {P = λ p → is-contr (fibre _ (x , p))}
-    (λ { (w , p) → J (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) p }) p where
+    (λ { (w , p) → Jₜ (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) p }) p where
       go : (f⁻¹x : A) → is-contr _
       go f⁻¹x = is-contr-η $ (⦋ f⁻¹x ⦌ , refl) , λ where
-        (u , α) → Σ-pathP (quot (ls.encode (sym (ap fst α)))) $
+        (u , α) → Σ-pathP (quot (ls.encode (ap fst α ⁻¹))) $
                           Σ-prop-square hlevel! $ commutes→square $
-                            ap² _∙_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ sym (∙-id-l _)
+                            ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹

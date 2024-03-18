@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Meta.Search.Finite.Bishop where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Reflection.Base
 open import Meta.Search.Base public
@@ -10,7 +9,6 @@ open import Meta.Search.Discrete
 open import Meta.Search.Exhaustible
 open import Meta.Search.HLevel
 open import Meta.Search.Omniscient
-open import Meta.Variadic
 
 open import Structures.FinSet
 open Structures.FinSet public

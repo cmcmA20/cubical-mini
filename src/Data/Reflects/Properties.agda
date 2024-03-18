@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Reflects.Properties where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Search.HLevel
 
@@ -24,8 +23,8 @@ private variable
 
 reflects-bool-inj : Reflects⁰ P a → Reflects⁰ P b → a ＝ b
 reflects-bool-inj (ofʸ  p) (ofʸ  p′) = refl
-reflects-bool-inj (ofʸ  p) (ofⁿ ¬p′) = ⊥.rec $ᴱ ¬p′ p
-reflects-bool-inj (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec $ᴱ ¬p p′
+reflects-bool-inj (ofʸ  p) (ofⁿ ¬p′) = ⊥.rec $ ¬p′ p
+reflects-bool-inj (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec $ ¬p p′
 reflects-bool-inj (ofⁿ ¬p) (ofⁿ ¬p′) = refl
 
 reflects-injₑ

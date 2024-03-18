@@ -56,7 +56,7 @@ comm-monoid-on↪monoid-on .fst M .Monoid-on.has-monoid =
   M .CMonoid-on.has-comm-monoid .is-comm-monoid.has-monoid
 comm-monoid-on↪monoid-on .snd = set-injective→is-embedding hlevel! λ p →
   Equiv.injective (isoₜ→equiv cmonoid-on-iso) $
-    Σ-pathP (ap Monoid-on.id p) $ Σ-pathP (ap Monoid-on._⋆_ p) prop!
+    ap Monoid-on.id p ,ₚ ap Monoid-on._⋆_ p ,ₚ prop!
 
 
 record make-comm-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

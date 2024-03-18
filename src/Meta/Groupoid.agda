@@ -1,16 +1,21 @@
 {-# OPTIONS --safe #-}
 module Meta.Groupoid where
 
-open import Foundations.Base renaming (_∙_ to _∙ₚ_; _∘′_ to _∘′ₜ_)
-open import Foundations.Equiv
-open import Foundations.Erased
+open import Foundations.Prelude
+  renaming ( _∙_  to _∙ₚ_
+           ; _∘′_ to _∘′ₜ_
+           ; refl to reflₚ
+           ; sym  to symₚ
+           )
 
 open import Meta.Effect.Alt
 open import Meta.Reflection.Base
+open import Meta.Reflection.Signature
 
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
+open import Data.Maybe.Base
 
 data Size : 𝒰 where
   small large : Size
@@ -28,44 +33,63 @@ Neutralₛ large _~_ = ∀ {ℓ}            {A : 𝒰 ℓ} → A ~ A
 
 record Refl (s : Size) (_~_ : Relₛ² s) : 𝒰ω where
   no-eta-equality
-  field reflₐ : Neutralₛ s _~_
+  field refl′ : Neutralₛ s _~_
 
 open Refl ⦃ ... ⦄ public
 
 instance
   Refl-path : Refl small _＝_
-  Refl-path .reflₐ = refl
+  Refl-path .refl′ = reflₚ
 
-  Refl-Fun : Refl large (λ {ℓ} {ℓ′} (A : 𝒰 ℓ) (B : 𝒰 ℓ′) → A → B)
-  Refl-Fun .reflₐ = id
+  Refl-Fun : Refl large Fun
+  Refl-Fun .refl′ = id
 
   Refl-≃ : Refl large _≃_
-  Refl-≃ .reflₐ = idₑ
+  Refl-≃ .refl′ = idₑ
 
+  -- FIXME
   Refl-≃ᴱ : Refl large _≃ᴱ_
-  Refl-≃ᴱ .reflₐ = ≃→≃ᴱ idₑ
+  Refl-≃ᴱ .refl′ = ≃→≃ᴱ idₑ
 
   Refl-iso : Refl large _≅_
-  Refl-iso .reflₐ = idᵢ
-
-try-sized : Term → Name → Term → TC ⊤
-try-sized s r hole = do
-  (mv , sol) ← new-meta′ (def (quote Refl) (s v∷ def r [] v∷ []))
-  (`cmp ∷ _) ← get-instances mv
-    where _ → type-error [ "No (or too many) instances" ]
-  unify sol `cmp
-  unify hole $ (def (quote reflₐ) $ s h∷ def r [] h∷ sol i∷ [] )
+  Refl-iso .refl′ = idᵢ
 
 private
-  refl-macro : Term → TC ⊤
-  refl-macro hole = with-reduce-defs (false , [ quote _＝_ , quote _≃_ , quote Iso , quote _≅_ ]) do
-    ty ← (infer-type hole >>= reduce) >>= wait-just-a-bit
-    debug-print "tactic.id" 20 [ "Goal: " , termErr ty ]
-    def r (_ h∷ _ h∷ _ v∷ _ v∷ []) ← pure ty
-      where t → type-error [ "Target is not an application of a binary relation: " , termErr t ]
-    try-sized (con (quote small) []) r hole <|> try-sized (con (quote large) []) r hole
 
-macro refl! = refl-macro
+  try-sized : Term → Term → Term → TC ⊤
+  try-sized s r hole = do
+    (mv , sol) ← new-meta′ $ it Refl ##ₙ s ##ₙ r
+    (`cmp ∷ _) ← get-instances mv
+      where _ → type-error [ "No (or too many) instances" ]
+    unify sol `cmp
+    unify hole $ it refl′ ##ₕ s ##ₕ r ##ᵢ sol
+
+  decompose-as-path : Term → TC Term
+  decompose-as-path (def (quote PathP) (l h∷ T v∷ _ v∷ _ v∷ [])) = do
+    pure $ it _＝_
+  decompose-as-path (def (quote _＝_) (l h∷ T h∷ _ v∷ _ v∷ [])) = do
+    pure $ it _＝_
+  decompose-as-path t = type-error [ "Target is not a path: " , termErr t ]
+
+  decompose-as-fun : Term → TC Term
+  decompose-as-fun t@(pi (varg x) (abs _ _)) = do
+    unify t $ it Fun ##ₙ x ##ₙ x
+    pure $ it Fun
+  decompose-as-fun t = type-error [ "Target is not a function: " , termErr t ]
+
+  decompose-as-other : Term → TC Term
+  decompose-as-other (def r (_ h∷ _ h∷ _ v∷ _ v∷ [])) = pure $ def r []
+  decompose-as-other t =
+    type-error [ "Target is not an application of a binary relation: " , termErr t ]
+
+  refl-macro : Term → TC ⊤
+  refl-macro hole = with-reduce-defs (false , [ quote _≃_ , quote Iso , quote _≅_ ]) do
+    ty ← (infer-type hole >>= reduce) >>= wait-just-a-bit
+    debug-print "tactic.groupoid" 20 [ "Goal: " , termErr ty ]
+    r ← decompose-as-path ty <|> decompose-as-fun ty <|> decompose-as-other ty
+    try-sized (it small) r hole <|> try-sized (it large) r hole
+
+macro refl = refl-macro
 
 
 Concatₛ : (s : Size) → Relₛ² s → 𝒰ω
@@ -118,11 +142,13 @@ record Invertible (s : Size) (_~_ : Relₛ² s) : 𝒰ω where
   infix 90 _⁻¹
   field _⁻¹  : Inverseₛ  s _~_
 
+  sym = _⁻¹
+
 open Invertible ⦃ ... ⦄ public
 
 instance
   Inv-path : Invertible small _＝_
-  Inv-path ._⁻¹ = sym
+  Inv-path ._⁻¹ = symₚ
 
   Inv-≃ : Invertible large _≃_
   Inv-≃ ._⁻¹ = _ₑ⁻¹

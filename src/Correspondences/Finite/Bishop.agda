@@ -1,21 +1,12 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Finite.Bishop where
 
-open import Foundations.Base
-  hiding (_∙_; Σ-syntax; Π-syntax; ∀-syntax)
-open import Foundations.Equiv
-open import Foundations.Pi
-  hiding (Π-syntax; ∀-syntax)
-open import Foundations.Sigma
-  hiding (Σ-syntax)
-open import Foundations.Univalence
+open import Meta.Prelude
 
 open import Meta.Effect.Bind
-open import Meta.Groupoid
 open import Meta.Record
 open import Meta.Search.Discrete
 open import Meta.Search.HLevel
-open import Meta.Variadic
 
 open import Correspondences.Discrete
 open import Correspondences.Exhaustible
@@ -84,7 +75,7 @@ finite-choice
 finite-choice {P} A-f k = do
   e ← enumeration₁ A-f
   choose ← fin-choice (cardinality A-f) λ x → k (is-equiv→inverse (e .snd) x)
-  pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e # x))
+  pure $ λ x → subst P (is-equiv→unit (e .snd) x) (choose (e $ x))
 
 bishop-finite-pi-fin
   : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
@@ -94,7 +85,7 @@ bishop-finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
   gg : _
-  gg _ f0 = absurd (fin-0-is-initial # f0)
+  gg _ f0 = absurd (fin-0-is-initial $ f0)
   ri : gg is-right-inverse-of ff
   ri (mk-fin 0) = refl
   li : gg is-left-inverse-of ff
@@ -148,7 +139,7 @@ fun-is-bishop-finite afin bfin = ∥-∥₁.proj! do
   : {P : A → Type ℓ′} → is-bishop-finite A → (∀ x → is-bishop-finite (P x)) → is-bishop-finite (∀ x → P x)
 Π-is-bishop-finite afin fam = ∥-∥₁.proj! do
   eqv ← enumeration₁ afin
-  let count = bishop-finite-pi-fin (cardinality afin) (λ x → fam $ (eqv ⁻¹) # x)
+  let count = bishop-finite-pi-fin (cardinality afin) (λ x → fam $ eqv ⁻¹ $ x)
   eqv′ ← enumeration₁ count
   pure $ fin₁ $ pure $ Π-dom-≃ (eqv ⁻¹) ∙ eqv′
 
@@ -160,14 +151,14 @@ lift-is-bishop-finite afin = fin₁ do
 decidable-prop→is-bishop-finite : is-prop A → Dec A → is-bishop-finite A
 decidable-prop→is-bishop-finite A-prop (yes a) = fin₁ $ pure $
   is-contr→equiv (inhabited-prop-is-contr a A-prop) fin-1-is-contr
-decidable-prop→is-bishop-finite A-prop (no ¬a) = fin₁ $ pure $ ¬-extₑ ¬a id ∙ fin-0-is-initial ⁻¹
+decidable-prop→is-bishop-finite A-prop (no ¬a) = fin₁ $ pure $ ¬-extₑ ¬a refl ∙ fin-0-is-initial ⁻¹
 
 is-discrete→path-is-bishop-finite : is-discrete A → {x y : A} → is-bishop-finite (x ＝ y)
 is-discrete→path-is-bishop-finite d = decidable-prop→is-bishop-finite hlevel! (d .is-discrete-β _ _)
   where instance _ = d
 
 pathP-is-bishop-finite : ∀ {A :  I → Type ℓ} → is-bishop-finite (A i1) → ∀ x y → is-bishop-finite ＜ x ／ A ＼ y ＞
-pathP-is-bishop-finite f _ _ = subst is-bishop-finite (sym $ pathP＝path _ _ _) $
+pathP-is-bishop-finite f _ _ = subst is-bishop-finite (symₚ $ pathP＝path _ _ _) $
   is-discrete→path-is-bishop-finite (is-bishop-finite→is-discrete f)
 
 is-bishop-finite-≃ : (B ≃ A) → is-bishop-finite A → is-bishop-finite B

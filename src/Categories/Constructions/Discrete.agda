@@ -17,10 +17,10 @@ Disc {A} _ .Ob = A
 Disc _ .Hom = _＝_
 Disc A-is-grp .Hom-set = path-is-of-hlevel′ 2 A-is-grp
 Disc _ .id = refl
-Disc _ ._∘_ = flip _∙ₚ_
+Disc _ ._∘_ f g = f ∘′ g
 Disc _ .id-r = ∙-id-l
 Disc _ .id-l = ∙-id-r
-Disc _ .assoc _ _ _ = sym $ ∙-assoc _ _ _
+Disc _ .assoc _ _ _ = ∙-assoc _ _ _ ⁻¹
 
 Disc! : (A : Type ℓ) {@(tactic hlevel-tactic-worker) A-is-grp : is-groupoid A}
       → Precategory ℓ ℓ
@@ -43,7 +43,7 @@ lift-disc₂ _ .F-id = refl
 lift-disc₂ f .F-∘  = flip (ap-comp-∙ f)
 
 instance
-  Funlike-disc₂ : {A : Set ℓ} {B : Set ℓ′} → Funlike (Functor (Disc₂ A) (Disc₂ B)) ⌞ A ⌟ (λ _ → ⌞ B ⌟)
+  Funlike-disc₂ : {A : Set ℓ} {B : Set ℓ′} → Funlike ur (Functor (Disc₂ A) (Disc₂ B)) ⌞ A ⌟ (λ _ → ⌞ B ⌟)
   Funlike-disc₂ ._#_ = F₀
 
 Codisc : Type ℓ → Precategory ℓ ℓ′
