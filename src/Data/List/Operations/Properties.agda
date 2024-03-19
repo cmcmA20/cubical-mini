@@ -9,6 +9,7 @@ open import Data.Bool.Base as Bool
 open import Data.Bool.Properties
 open import Data.Sum.Base as Sum
 open import Data.Dec.Base as Dec
+open import Data.Reflects.Base as Reflects
 open import Data.List.Base as List
 open import Data.List.Properties
 open import Data.List.Operations
@@ -48,7 +49,7 @@ reflects-all : ∀ (p : A → Bool) xs
 reflects-all p []       = ofʸ []
 reflects-all p (x ∷ xs) with p x | recall p x
 ... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → subst ⟦_⟧ᵇ e a)
-... | true  | ⟪ e ⟫ = Reflects′.dmap (λ a → (subst ⟦_⟧ᵇ (sym e) tt) ∷ a)
+... | true  | ⟪ e ⟫ = Reflects.dmap (λ a → (subst ⟦_⟧ᵇ (sym e) tt) ∷ a)
                        (λ ne → λ where (px ∷ a) → ne a)
                        (reflects-all p xs)
 
@@ -78,7 +79,7 @@ reflects-all-dis : ⦃ A-dis : is-discrete A ⦄
                  → ∀ (p : A → Bool) xs
                  → Reflects⁰ (∀ x → ⟦ elem= x xs ⟧ᵇ → ⟦ p x ⟧ᵇ) (all p xs)
 reflects-all-dis p xs =
-  Reflects′.dmap
+  Reflects.dmap
     (all-elem (⟦_⟧ᵇ ∘ p) xs)
     (λ na e → na (elem-all (⟦_⟧ᵇ ∘ p) xs e))
     (reflects-all p xs)
