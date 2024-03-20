@@ -33,11 +33,11 @@ all-++-left = fst ∘ all-split
 all-++-right : {xs : List A} → All P (xs ++ ys) → All P ys
 all-++-right = snd ∘ all-split
 
-all-map : {@0 xs : List A} → ({@0 x : A} -> P x -> Q x) -> All P xs -> All Q xs
+all-map : {@0 xs : List A} → ({@0 x : A} → P x → Q x) → All P xs → All Q xs
 all-map     f []       = []
 all-map {P} f (p ∷ ps) = f p ∷ all-map {P = P} f ps
 
-all-zipwith : {@0 xs : List A} → ({@0 x : A} -> P x -> Q x → R x) -> All P xs -> All Q xs -> All R xs
+all-zipwith : {@0 xs : List A} → ({@0 x : A} → P x → Q x → R x) → All P xs → All Q xs → All R xs
 all-zipwith     f [] [] = []
 all-zipwith {P} f (p ∷ ps) (q ∷ qs) = f p q ∷ all-zipwith {P = P} f ps qs
 

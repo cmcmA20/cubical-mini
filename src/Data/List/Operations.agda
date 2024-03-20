@@ -10,13 +10,23 @@ open import Data.Bool.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
 
-open import Data.List.Base
+open import Data.List.Base as List
 open import Data.List.Instances.Idiom
 
 private variable
   ℓ ℓ′ : Level
   A : Type ℓ
   B : Type ℓ′
+
+snoc : List A → A → List A
+snoc []      x = x ∷ []
+snoc (y ∷ l) x = y ∷ snoc l x
+
+any : (A → Bool) → List A → Bool
+any p = List.rec false _or_ ∘ map p
+
+all : (A → Bool) → List A → Bool
+all p = List.rec true _and_ ∘ map p
 
 all=? : (A → A → Bool) → List A → List A → Bool
 all=? eq=? [] [] = true
@@ -99,7 +109,7 @@ map-up _ _ []       = []
 map-up f n (x ∷ xs) = f n x ∷ map-up f (suc n) xs
 
 span : (p : A → Bool) → List A → List A × List A
-span p [] = [] , []
-span p (x ∷ xs) with p x
-... | true  = first (x ∷_) (span p xs)
-... | false = [] , x ∷ xs
+span p []       = [] , []
+span p (x ∷ xs) =
+  if p x then first (x ∷_) (span p xs)
+         else [] , x ∷ xs
