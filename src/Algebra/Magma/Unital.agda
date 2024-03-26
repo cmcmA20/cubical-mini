@@ -21,52 +21,46 @@ Unital-right {A} id _⋆_ = Π[ x ꞉ A ] (x ⋆ id ＝ x)
 
 -- unital magmas
 
-record is-unital-magma {A : 𝒰 ℓ} (id : A) (_⋆_ : A → A → A) : 𝒰 ℓ where
+record is-unital-magma {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   no-eta-equality
   field has-magma : is-magma _⋆_
   open is-n-magma has-magma public
 
   field
+    id   : A
     id-l : Unital-left  id _⋆_
     id-r : Unital-right id _⋆_
 
 unquoteDecl is-unital-magma-iso = declare-record-iso is-unital-magma-iso (quote is-unital-magma)
 
+module _ where
+  open is-unital-magma
+
+  identity-unique
+    : (M M′ : is-unital-magma _✦_)
+    → M .id ＝ M′ .id
+  identity-unique {_✦_} M M′ =
+    M .id           ＝˘⟨ is-unital-magma.id-r M′ _ ⟩
+    M .id ✦ M′ .id  ＝⟨ is-unital-magma.id-l M _ ⟩
+    M′ .id          ∎
+
 opaque
   unfolding is-of-hlevel
-  is-unital-magma-is-prop : is-prop (is-unital-magma e _✦_)
-  is-unital-magma-is-prop C = iso→is-of-hlevel 1 is-unital-magma-iso hlevel! C where
-    open is-unital-magma C
+  is-unital-magma-is-prop : is-prop (is-unital-magma _✦_)
+  is-unital-magma-is-prop C C′ = Equiv.injective (isoₜ→equiv is-unital-magma-iso) $
+    prop! ,ₚ identity-unique C C′ ,ₚ prop!
+    where open is-unital-magma C
 
 instance
-  H-Level-is-unital-magma : H-Level (suc n) (is-unital-magma e _✦_)
+  H-Level-is-unital-magma : H-Level (suc n) (is-unital-magma _✦_)
   H-Level-is-unital-magma = hlevel-prop-instance is-unital-magma-is-prop
-
-identity-unique
-  : (e e′ : A)
-  → is-unital-magma e _✦_
-  → is-unital-magma e′ _✦_
-  → e ＝ e′
-identity-unique {_✦_} e e′ u u′ =
-  e       ＝˘⟨ is-unital-magma.id-r u′ e ⟩
-  e ✦ e′  ＝⟨ is-unital-magma.id-l u e′ ⟩
-  e′      ∎
-
-opaque
-  unfolding is-of-hlevel
-  has-identity-is-prop
-    : {A : 𝒰 ℓ} {_✦_ : A → A → A}
-    → is-magma _✦_
-    → is-prop (Σ[ id ꞉ A ] is-unital-magma id _✦_)
-  has-identity-is-prop m u u′ = Σ-prop-path! (identity-unique _ _ (u .snd) (u′ .snd))
 
 
 record UMagma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   no-eta-equality
   field
-    id  : X
     _⋆_ : X → X → X
-    has-unital-magma : is-unital-magma id _⋆_
+    has-unital-magma : is-unital-magma _⋆_
 
   open is-unital-magma has-unital-magma public
   infixr 20 _⋆_
@@ -74,9 +68,8 @@ record UMagma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 unquoteDecl umagma-on-iso = declare-record-iso umagma-on-iso (quote UMagma-on)
 
 umagma-on-is-set : is-set (UMagma-on A)
-umagma-on-is-set = iso→is-of-hlevel _ umagma-on-iso $ is-set-η λ (_ , _ , x) _ _ _ →
+umagma-on-is-set = iso→is-of-hlevel _ umagma-on-iso $ is-set-η λ (_ , x) _ _ _ →
   let open is-unital-magma x in prop!
-
 
 record UMagma-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
@@ -109,13 +102,8 @@ instance
 unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A
 unital-magma-on↪magma-on .fst M .n-Magma-on._⋆_ = M .UMagma-on._⋆_
 unital-magma-on↪magma-on .fst M .n-Magma-on.has-n-magma = M .UMagma-on.has-magma
-unital-magma-on↪magma-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
-  Equiv.injective (isoₜ→equiv umagma-on-iso) $
-    let u = ap n-Magma-on._⋆_ p
-        v = identity-unique (UMagma-on.id x) (UMagma-on.id y)
-              (UMagma-on.has-unital-magma x)
-              (subst (is-unital-magma _) (sym u) (UMagma-on.has-unital-magma y))
-    in v ,ₚ u ,ₚ prop!
+unital-magma-on↪magma-on .snd = set-injective→is-embedding hlevel! λ p →
+  Equiv.injective (isoₜ→equiv umagma-on-iso) $ ap n-Magma-on._⋆_ p ,ₚ prop!
 
 
 record make-unital-magma {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -127,14 +115,14 @@ record make-unital-magma {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     id-l  : Unital-left  id _⋆_
     id-r  : Unital-right id _⋆_
 
-  to-is-unital-magma : is-unital-magma id _⋆_
+  to-is-unital-magma : is-unital-magma _⋆_
   to-is-unital-magma .is-unital-magma.has-magma .is-n-magma.has-is-of-hlevel =
     unital-magma-is-set
+  to-is-unital-magma .is-unital-magma.id = id
   to-is-unital-magma .is-unital-magma.id-l = id-l
   to-is-unital-magma .is-unital-magma.id-r = id-r
 
   to-unital-magma-on : UMagma-on X
-  to-unital-magma-on .UMagma-on.id = id
   to-unital-magma-on .UMagma-on._⋆_ = _⋆_
   to-unital-magma-on .UMagma-on.has-unital-magma = to-is-unital-magma
 

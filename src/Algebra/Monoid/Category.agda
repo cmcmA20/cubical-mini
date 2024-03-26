@@ -20,8 +20,8 @@ Monoid-structure ℓ .∘-is-hom f g p q .pres-id =
   ap f (q .pres-id) ∙ p .pres-id
 Monoid-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =
   ap f (q .pres-⋆ _ _) ∙ p .pres-⋆ _ _
-Monoid-structure ℓ .id-hom-unique p q = pure $ Equiv.injective
-  (isoₜ→equiv monoid-on-iso) $ p .pres-id ,ₚ Σ-prop-pathP hlevel! (ext $ p .pres-⋆)
+Monoid-structure ℓ .id-hom-unique p q .erased = Equiv.injective
+  (isoₜ→equiv monoid-on-iso) $ Σ-prop-path! $ ext (p .pres-⋆)
 
 Monoids : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Monoids ℓ = Structured-objects (Monoid-structure ℓ)

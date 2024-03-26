@@ -18,9 +18,8 @@ private variable
 record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   no-eta-equality
   field
-    id : A
     inverse : A → A
-    has-monoid : is-monoid id _⋆_
+    has-monoid : is-monoid _⋆_
   open is-monoid has-monoid public
 
   field
@@ -32,17 +31,17 @@ unquoteDecl is-group-iso = declare-record-iso is-group-iso (quote is-group)
 opaque
   unfolding is-of-hlevel
   is-group-is-prop : {_✦_ : A → A → A} → is-prop (is-group _✦_)
-  is-group-is-prop {A} {_✦_} M N = Equiv.injective (isoₜ→equiv is-group-iso) $
-     u ,ₚ fun-ext (λ a → monoid-inverse-unique {IM = M .is-group.has-monoid} a _ _
-            (M .is-group.inverse-l a) (N .is-group.inverse-r a ∙ sym u)) ,ₚ prop!
-     where
-       u : M .is-group.id ＝ N .is-group.id
-       u = identity-unique _ _
-             (is-monoid.has-unital-magma (M .is-group.has-monoid))
-             (is-monoid.has-unital-magma (N .is-group.has-monoid))
-       instance
-         A-set : H-Level 2 A
-         A-set = hlevel-basic-instance 2 (M .is-group.has-is-of-hlevel)
+  is-group-is-prop {A} {_✦_} M N = Equiv.injective (isoₜ→equiv is-group-iso)
+    $  fun-ext (λ a → monoid-inverse-unique {IM = M .is-group.has-monoid} a _ _
+         (M .is-group.inverse-l a) (N .is-group.inverse-r a ∙ sym u))
+    ,ₚ prop!
+    where
+      u : M .is-group.id ＝ N .is-group.id
+      u = identity-unique (is-monoid.has-unital-magma (M .is-group.has-monoid))
+                          (is-monoid.has-unital-magma (N .is-group.has-monoid))
+      instance
+        A-set : H-Level 2 A
+        A-set = hlevel-basic-instance 2 (M .is-group.has-is-of-hlevel)
 
 instance
   H-Level-is-group : H-Level (suc n) (is-group _✦_)
@@ -107,11 +106,10 @@ instance
   H-Level-group-on = hlevel-basic-instance 2 group-on-is-set
 
   H-Level-group-hom : ∀ {M : Group-on A} {M′ : Group-on B} {f}
-                     → H-Level (suc n) (Group-hom M M′ f)
+                    → H-Level (suc n) (Group-hom M M′ f)
   H-Level-group-hom = hlevel-prop-instance group-hom-is-prop
 
 group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A
-group-on↪monoid-on .fst G .Monoid-on.id = G .Group-on.id
 group-on↪monoid-on .fst G .Monoid-on._⋆_ = G .Group-on._⋆_
 group-on↪monoid-on .fst G .Monoid-on.has-monoid = G .Group-on.has-monoid
 group-on↪monoid-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
@@ -153,12 +151,11 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   to-is-group .is-group.has-monoid = to-is-monoid m where
     m : make-monoid X
     m .make-monoid.monoid-is-set = group-is-set
-    m .make-monoid.id = is-group.id to-is-group
+    m .make-monoid.id = id
     m .make-monoid._⋆_ = _⋆_
-    m .make-monoid.id-l x i = id-l x i
-    m .make-monoid.id-r x i = id-r x i
+    m .make-monoid.id-l = id-l
+    m .make-monoid.id-r = id-r
     m .make-monoid.assoc = assoc
-  to-is-group .is-group.id = id
   to-is-group .is-group.inverse = inverse
   to-is-group .is-group.inverse-l = inverse-l
   to-is-group .is-group.inverse-r = inverse-r
