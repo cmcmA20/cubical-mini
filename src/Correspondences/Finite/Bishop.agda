@@ -99,7 +99,7 @@ bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
     work = fin-suc-universal {n = sz} {A = P}
          ∙ Σ-ap (e fzero) (λ x → cont)
          ∙ fin-sum {n = cardinality (fam fzero)} λ _ → cardinality rest
-  pure $ fin₁ $ pure work
+  pure $ fin₁ {cardinality = sum (cardinality (fam fzero)) (λ _ → cardinality rest)} $ pure work
 
 
 ×-is-bishop-finite : is-bishop-finite A → is-bishop-finite B → is-bishop-finite (A × B)

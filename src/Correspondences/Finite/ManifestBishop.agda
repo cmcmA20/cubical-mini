@@ -92,7 +92,8 @@ finite-pi-fin (suc sz) {P} fam =
   let e = enumeration ∘ fam
       rest = finite-pi-fin sz (fam ∘ fsuc)
       cont = enumeration rest
-  in fin $ fin-suc-universal ∙ ×-ap (e fzero) cont ∙ fin-sum λ _ → cardinality rest
+  in fin {cardinality = sum (fam fzero .cardinality) (λ _ → rest .cardinality)}
+       $ fin-suc-universal ∙ ×-ap (e fzero) cont ∙ fin-sum λ _ → cardinality rest
 
 Σ-manifest-bishop-finite
   : Manifest-bishop-finite A → (∀ x → Manifest-bishop-finite (P x)) → Manifest-bishop-finite (Σ A P)

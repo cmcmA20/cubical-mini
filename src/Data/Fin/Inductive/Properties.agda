@@ -77,36 +77,36 @@ fin-peel {m} {n} sm≃sn = iso→equiv $ m→n , iso n→m b→a→b a→b→a w
   ... | fzero , q = absurd $ fzero≠fsuc $ sn≃sm.injective₂ q p
 
   a→b→a : ∀ a → n→m (m→n a) ＝ a
-  a→b→a a with inspect $ sm≃sn.to $ fsuc a
-  a→b→a a | fsuc x , p′ with inspect $ sn≃sm.to $ fsuc x
+  a→b→a a with inspect (sm≃sn.to (fsuc a))
+  a→b→a a | fsuc x , p′ with inspect (sn≃sm.to (fsuc x))
   a→b→a a | fsuc x , p′ | fsuc y , q′ =
     fsuc-inj $ q′ ⁻¹ ∙ ap sn≃sm.to (p′ ⁻¹) ∙ sm≃sn.η _
   a→b→a a | fsuc x , p′ | fzero , q′ = absurd contra where
     r = sm≃sn.injective₂ p′ $ sm≃sn.ε $ fsuc x
     contra = fzero≠fsuc $ (r ∙ q′) ⁻¹
-  a→b→a a | fzero , p′ with inspect $ sm≃sn.to fzero
-  a→b→a a | fzero , p′ | fsuc x , q′ with inspect $ sn≃sm.to $ fsuc x
+  a→b→a a | fzero , p′ with inspect (sm≃sn.to fzero)
+  a→b→a a | fzero , p′ | fsuc x , q′ with inspect (sn≃sm.to (fsuc x))
   a→b→a a | fzero , p′ | fsuc x , q′ | fsuc y , r′ =
     absurd $ fzero≠fsuc $ sm≃sn.η fzero ⁻¹ ∙ ap sn≃sm.to q′ ∙ r′
-  a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ with inspect $ sn≃sm.to fzero
+  a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ with inspect (sn≃sm.to fzero)
   a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ | fsuc z , s =
     fsuc-inj $ s ⁻¹ ∙ ap sn≃sm.to (p′ ⁻¹) ∙ sm≃sn.η (fsuc a)
   a→b→a a | fzero , p′ | fsuc x , q′ | fzero , r′ | fzero , s = absurd-path
   a→b→a a | fzero , p′ | fzero , q′ = absurd $ fzero≠fsuc $ sm≃sn.injective₂ q′ p′
 
   b→a→b : ∀ b → m→n (n→m b) ＝ b
-  b→a→b b with inspect $ sn≃sm.to $ fsuc b
-  b→a→b b | fsuc x , p′ with inspect $ sm≃sn.to $ fsuc x
+  b→a→b b with inspect (sn≃sm.to (fsuc b))
+  b→a→b b | fsuc x , p′ with inspect (sm≃sn.to (fsuc x))
   b→a→b b | fsuc x , p′ | fsuc y , q′ =
     fsuc-inj $ (ap sm≃sn.to p′ ∙ q′) ⁻¹ ∙ sn≃sm.η _
   b→a→b b | fsuc x , p′ | fzero , q′ = absurd contra where
     r = sn≃sm.injective₂ p′ $ sn≃sm.ε $ fsuc x
     contra = fzero≠fsuc $ (r ∙ q′) ⁻¹
-  b→a→b b | fzero , p′ with inspect $ sn≃sm.to fzero
-  b→a→b b | fzero , p′ | fsuc x , q′ with inspect $ sm≃sn.to $ fsuc x
+  b→a→b b | fzero , p′ with inspect (sn≃sm.to fzero)
+  b→a→b b | fzero , p′ | fsuc x , q′ with inspect (sm≃sn.to (fsuc x))
   b→a→b b | fzero , p′ | fsuc x , q′ | fsuc y , r′  =
     absurd $ fzero≠fsuc $ sn≃sm.η _ ⁻¹ ∙ ap sm≃sn.to q′ ∙ r′
-  b→a→b b | fzero , p′ | fsuc x , q′ | fzero , r′ with inspect $ sm≃sn.to fzero
+  b→a→b b | fzero , p′ | fsuc x , q′ | fzero , r′ with inspect (sm≃sn.to fzero)
   b→a→b a | fzero , p′ | fsuc x , q′ | fzero , r′ | fsuc z , s =
     fsuc-inj $ (ap sm≃sn.to p′ ∙ s) ⁻¹ ∙ sn≃sm.η (fsuc a)
   b→a→b a | fzero , p′ | fsuc x , q′ | fzero , r′ | fzero , s = absurd-path
