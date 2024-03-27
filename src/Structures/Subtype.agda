@@ -4,6 +4,7 @@ module Structures.Subtype where
 open import Meta.Prelude
 
 open import Meta.Extensionality
+open import Meta.Membership
 open import Meta.Search.HLevel
 open import Meta.SIP
 
@@ -20,6 +21,7 @@ private variable
   T : Type ℓᵗ
   n : HLevel
 
+-- TODO refactor as a record
 Subtype : (ℓ : Level) → Type ℓ → Type _
 Subtype ℓ T = Σ[ X ꞉ Type ℓ ] X ↪ T
 
@@ -65,3 +67,12 @@ Extensional-Subtype .idsᵉ = Path.identity-system
 instance
   extensionality-subtype : Extensionality (Subtype ℓ T)
   extensionality-subtype .Extensionality.lemma = quote Extensional-Subtype
+
+  membership-subtype : ∀{ℓ} {A : Type ℓ} → Membership A (Subtype ℓ A) ℓ
+  membership-subtype .Membership._∈_ x (A′ , e) = fibre {A = A′} (e $_) x
+
+opaque
+  unfolding is-of-hlevel
+  subtype-membership-is-prop
+    : ∀ {ℓ} {A : Type ℓ} {P : Subtype ℓ A} {x : A} → is-prop (x ∈ P)
+  subtype-membership-is-prop {P = A′ , e} {x} = e .snd x
