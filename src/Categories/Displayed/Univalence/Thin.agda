@@ -23,7 +23,7 @@ record
   no-eta-equality
   field
     is-hom    : ∀ {x y : 𝒰 ℓ} → (x → y) → S x → S y → Prop ℓ′
-    id-is-hom : ∀ {x} {s : S x} → ⌞ is-hom idₜ s s ⌟
+    id-is-hom : ∀ {x} {s : S x} → ⌞ is-hom refl s s ⌟
 
     ∘-is-hom  :
       ∀ {x y z} {s t u} (f : y → z) (g : x → y)
@@ -32,7 +32,7 @@ record
 
     id-hom-unique
       : ∀ {x} {s t : S x}
-      → ⌞ is-hom idₜ s t ⌟ → ⌞ is-hom idₜ t s ⌟ → Erased (s ＝ t)
+      → ⌞ is-hom refl s t ⌟ → ⌞ is-hom refl t s ⌟ → Erased (s ＝ t)
 
 open Thin-structure public
 
@@ -74,34 +74,25 @@ module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure �
     module So = Precategory (Structured-objects spec)
     module Som = Categories.Morphism (Structured-objects spec)
 
-  Extensional-Hom
-    : ∀ {a b ℓʳ} ⦃ sa : Extensional (⌞ a ⌟ → ⌞ b ⌟) ℓʳ ⦄
-    → Extensional (So.Hom a b) ℓʳ
-  Extensional-Hom ⦃ sa ⦄ = set-injective→extensional! (Structured-hom-path spec) sa
-
   instance
-    extensionality-hom : ∀ {a b} → Extensionality (So.Hom a b)
-    extensionality-hom = record { lemma = quote Extensional-Hom }
+    Extensional-Hom
+      : ∀ {a b ℓʳ} ⦃ sa : Extensional (⌞ a ⌟ → ⌞ b ⌟) ℓʳ ⦄
+      → Extensional (So.Hom a b) ℓʳ
+    Extensional-Hom ⦃ sa ⦄ = set-injective→extensional! (Structured-hom-path spec) sa
 
     Funlike-Hom : ∀ {a b} → Funlike ur (So.Hom a b) ⌞ a ⌟ (λ _ → ⌞ b ⌟)
     Funlike-Hom ._#_ = Total-hom.hom
 
-  Homomorphism-path
-    : {x y : So.Ob} {f g : So.Hom x y}
-    → (∀ x → f # x ＝ g # x)
-    → f ＝ g
-  Homomorphism-path h = Structured-hom-path spec (fun-ext h)
-
   Homomorphism-monic
-    : ∀ {x y : So.Ob} (f : So.Hom x y)
-    → (∀ {x y} (p : f # x ＝ f # y) → x ＝ y)
+    : {x y : So.Ob} (f : So.Hom x y)
+    → ({a b : ⌞ x ⌟} (p : f # a ＝ f # b) → a ＝ b)
     → Som.is-monic f
-  Homomorphism-monic f wit g h p = Homomorphism-path λ x → wit (ap hom p $ₚ x)
+  Homomorphism-monic f wit g h p = ext λ x → wit (ap hom p $ₚ x)
 
 
 record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin-structure ℓ′ S) : Type (ℓsuc ℓ ⊔ o′ ⊔ ℓ′) where
   field
-    invert-id-hom : ∀ {x} {s t : S x} → ⌞ spec .is-hom idₜ s t ⌟ → ⌞ spec .is-hom idₜ t s ⌟
+    invert-id-hom : ∀ {x} {s t : S x} → ⌞ spec .is-hom refl s t ⌟ → ⌞ spec .is-hom refl t s ⌟
 
   private
     module So = Precategory (Structured-objects spec)

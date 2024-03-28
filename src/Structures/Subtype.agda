@@ -58,15 +58,11 @@ module Path where
       =  ua e
       ,ₚ to-pathᴾ⁻ (Σ-prop-path! $ fun-ext λ x → p x ∙ (transport-refl _ ∙ ap g (ua-β e x)) ⁻¹)
 
-
-@0 Extensional-Subtype : Extensional (Subtype ℓ T) ℓ
-Extensional-Subtype .Pathᵉ = Path.Code
-Extensional-Subtype .reflᵉ _ = refl , λ _ → refl
-Extensional-Subtype .idsᵉ = Path.identity-system
-
 instance
-  extensionality-subtype : Extensionality (Subtype ℓ T)
-  extensionality-subtype .Extensionality.lemma = quote Extensional-Subtype
+  @0 Extensional-Subtype : Extensional (Subtype ℓ T) ℓ
+  Extensional-Subtype .Pathᵉ = Path.Code
+  Extensional-Subtype .reflᵉ _ = refl , λ _ → refl
+  Extensional-Subtype .idsᵉ = Path.identity-system
 
   membership-subtype : ∀{ℓ} {A : Type ℓ} → Membership A (Subtype ℓ A) ℓ
   membership-subtype .Membership._∈_ x (A′ , e) = fibre {A = A′} (e $_) x

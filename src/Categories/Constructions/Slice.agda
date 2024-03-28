@@ -51,15 +51,12 @@ private variable f g : /-Hom a b
   (f .commutes) (g .commutes) i
   where open /-Hom
 
-Extensional-/-Hom
-  : ∀ {ℓr} ⦃ sa : Extensional (Hom (a .domain) (b .domain)) ℓr ⦄
-  → Extensional (/-Hom {c} a b) ℓr
-Extensional-/-Hom ⦃ sa ⦄ = set-injective→extensional!
-  (/-Hom-pathᴾ refl refl) sa
-
 instance
-  extensionality-/-hom : Extensionality (/-Hom {c} a b)
-  extensionality-/-hom = record { lemma = quote Extensional-/-Hom }
+  Extensional-/-Hom
+    : ∀ {ℓr} ⦃ sa : Extensional (Hom (a .domain) (b .domain)) ℓr ⦄
+    → Extensional (/-Hom {c} a b) ℓr
+  Extensional-/-Hom ⦃ sa ⦄ = set-injective→extensional!
+    (/-Hom-pathᴾ refl refl) sa
 
 /-Hom-is-set : is-set (/-Hom {c} a b)
 /-Hom-is-set = ≅→is-of-hlevel 2 /-hom-iso hlevel!

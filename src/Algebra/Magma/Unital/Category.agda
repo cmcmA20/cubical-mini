@@ -48,4 +48,4 @@ Forget-unit .Functor.F-id = trivial!
 Forget-unit .Functor.F-∘ _ _ = trivial!
 
 forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
-forget-unit-is-faithful p = ext $ p $ₚ_
+forget-unit-is-faithful p = ext (p $ₚ_)

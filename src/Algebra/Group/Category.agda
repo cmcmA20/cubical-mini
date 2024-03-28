@@ -17,7 +17,7 @@ Group-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 Group-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =
   ap f (q .pres-⋆ _ _) ∙ p .pres-⋆ _ _
 Group-structure ℓ .id-hom-unique p q .erased = Equiv.injective
-  (≅ₜ→≃ group-on-iso) $ Σ-prop-path! $ ext $ p .pres-⋆
+  (≅ₜ→≃ group-on-iso) $ Σ-prop-path! $ ext (p .pres-⋆)
 
 Groups : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Groups ℓ = Structured-objects (Group-structure ℓ)
@@ -47,4 +47,4 @@ Forget-inverse .Functor.F-id = trivial!
 Forget-inverse .Functor.F-∘ _ _ = trivial!
 
 forget-inverse-is-faithful : is-faithful (Forget-inverse {ℓ})
-forget-inverse-is-faithful p = ext $ p $ₚ_
+forget-inverse-is-faithful p = ext (p $ₚ_)

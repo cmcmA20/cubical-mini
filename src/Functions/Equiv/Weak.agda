@@ -43,11 +43,8 @@ is-surjective-embedding≃is-equiv = prop-extₑ!
   → Extensional B ℓ″
 ≅→extensional f = ≃→extensional (≅→≃ f)
 
-Extensional-≃
-  : {A : Type ℓ} ⦃ sb : Extensional (A → B) ℓ″ ⦄
-  → Extensional (A ≃ B) ℓ″
-Extensional-≃ ⦃ sb ⦄ = Σ-prop→extensional (λ _ → is-equiv-is-prop _) sb
-
 instance
-  extensionality-≃ : Extensionality (A ≃ B)
-  extensionality-≃ = record { lemma = quote Extensional-≃ }
+  Extensional-≃
+    : {A : Type ℓ} ⦃ sb : Extensional (A → B) ℓ″ ⦄
+    → Extensional (A ≃ B) ℓ″
+  Extensional-≃ ⦃ sb ⦄ = Σ-prop→extensional hlevel! sb
