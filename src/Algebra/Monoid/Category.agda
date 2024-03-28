@@ -50,7 +50,7 @@ Forget-unit .Functor.F-id = trivial!
 Forget-unit .Functor.F-∘ _ _ = trivial!
 
 forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
-forget-unit-is-faithful p = ext $ p $ₚ_
+forget-unit-is-faithful p = ext (p $ₚ_)
 
 
 Forget-assoc : Functor (Monoids ℓ) (UMagmas ℓ)
@@ -64,4 +64,4 @@ Forget-assoc .Functor.F-id = trivial!
 Forget-assoc .Functor.F-∘ _ _ = trivial!
 
 forget-assoc-is-faithful : is-faithful (Forget-assoc {ℓ})
-forget-assoc-is-faithful p = ext $ p $ₚ_
+forget-assoc-is-faithful p = ext (p $ₚ_)

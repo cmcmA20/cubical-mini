@@ -43,4 +43,4 @@ Forget-absorb .Functor.F-id = refl
 Forget-absorb .Functor.F-∘ _ _ = refl
 
 forget-absorb-is-faithful : is-faithful (Forget-absorb {ℓ})
-forget-absorb-is-faithful p = ext $ p $ₚ_
+forget-absorb-is-faithful p = ext (p $ₚ_)

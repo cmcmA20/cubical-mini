@@ -237,6 +237,8 @@ record _⇒_ {C : Precategory oᶜ hᶜ}
 
 {-# INLINE NT #-}
 
+unquoteDecl nt-iso = declare-record-iso nt-iso (quote _⇒_)
+
 instance
   Funlike-natural-transformation
     : {C : Precategory o ℓ} {D : Precategory o′ ℓ′} {F G : Functor C D}
@@ -286,8 +288,7 @@ module _ {C : Precategory oᶜ hᶜ}
   open _⇒_
 
   nat-is-set : is-set (F ⇒ G)
-  nat-is-set = ≅→is-of-hlevel 2 eqv hlevel! where
-    unquoteDecl eqv = declare-record-iso eqv (quote _⇒_)
+  nat-is-set = ≅→is-of-hlevel 2 nt-iso hlevel! where
     instance
       ds : ∀{x y} → H-Level 2 (D.Hom x y)
       ds = hlevel-basic-instance 2 $ D.Hom-set _ _
@@ -296,7 +297,7 @@ module _ {C : Precategory oᶜ hᶜ}
             → (p : F ＝ F') (q : G ＝ G')
             → {a : F ⇒ G} {b : F' ⇒ G'}
             → (∀ x → ＜ a .η x ／ _ ＼ b .η x ＞)
-            → Pathᴾ (λ i → p i ⇒ q i) a b
+            → ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
   nat-pathᴾ p q path i .η x = path x i
   nat-pathᴾ p q {a} {b} path i .is-natural x y f =
     is-prop→pathᴾ
@@ -321,21 +322,17 @@ module _ {C : Precategory oᶜ hᶜ}
 
   infixl 45 _ηₚ_
 
-  Extensional-natural-transformation
-    : ∀ {ℓr}
-    → {@(tactic extensionalᶠ {A = ⌞ C ⌟ → Type _} (λ x → D .Hom (F $ x) (G $ x)))
-        sa : ∀ x → Extensional (D .Hom (F $ x) (G $ x)) ℓr}
-    → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
-  Extensional-natural-transformation {sa} .Pathᵉ f g = ∀ i → Pathᵉ (sa i) (f .η i) (g .η i)
-  Extensional-natural-transformation {sa} .reflᵉ x i = reflᵉ (sa i) (x .η i)
-  Extensional-natural-transformation {sa} .idsᵉ .to-path x = nat-pathᴾ _ _ λ i →
-    sa _ .idsᵉ .to-path (x i)
-  Extensional-natural-transformation {sa} .idsᵉ .to-path-over h =
-    is-prop→pathᴾ
-      (λ i → Π-is-of-hlevel 1
-        λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa _ .idsᵉ)) (is-prop-η $ is-set-β (D .Hom-set _ _) _ _))
-      _ _
-
   instance
-    extensionality-natural-transformation : Extensionality (F ⇒ G)
-    extensionality-natural-transformation = record { lemma = quote Extensional-natural-transformation }
+    Extensional-natural-transformation
+      : ∀ {ℓr}
+      → ⦃ sa : {x : ⌞ C ⌟} → Extensional (D .Hom (F $ x) (G $ x)) ℓr ⦄
+      → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
+    Extensional-natural-transformation ⦃ sa ⦄ .Pathᵉ f g = ∀ i → Pathᵉ sa (f .η i) (g .η i)
+    Extensional-natural-transformation ⦃ sa ⦄ .reflᵉ x i = reflᵉ sa (x .η i)
+    Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path x = nat-path
+      λ i → sa .idsᵉ .to-path (x i)
+    Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path-over h =
+      is-prop→pathᴾ
+        (λ i → Π-is-of-hlevel 1
+          λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa .idsᵉ)) (is-prop-η $ is-set-β (D .Hom-set _ _) _ _))
+        _ _

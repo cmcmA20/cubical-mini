@@ -104,16 +104,12 @@ monotone-pathᴾ {P} {Q} {f} {g} q i .Monotone.pres-≤ {x} {y} α =
     (λ _ _ α → f .Monotone.pres-≤ α)
     (λ _ _ α → g .Monotone.pres-≤ α) i x y α
 
-Extensional-Monotone
-  : ∀ {ℓr} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-  → ⦃ sa : Extensional (P →̇ Q) ℓr ⦄
-  → Extensional (Monotone P Q) ℓr
-Extensional-Monotone ⦃ sa ⦄ = set-injective→extensional! monotone-pathᴾ sa
-
 instance
-  Extensionality-Monotone : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-                          → Extensionality (Monotone P Q)
-  Extensionality-Monotone = record { lemma = quote Extensional-Monotone }
+  Extensional-Monotone
+    : ∀ {ℓr} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+    → ⦃ sa : Extensional (P →̇ Q) ℓr ⦄
+    → Extensional (Monotone P Q) ℓr
+  Extensional-Monotone ⦃ sa ⦄ = set-injective→extensional! monotone-pathᴾ sa
 
 
 idₘ : Monotone P P

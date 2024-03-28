@@ -3,6 +3,7 @@ module Data.Sum.Path where
 
 open import Meta.Prelude
 
+open import Meta.Extensionality
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
@@ -104,3 +105,19 @@ instance
     → goal-decomposition (quote is-of-hlevel) (A ⊎ B)
   decomp-hlevel-⊎ = decomp (quote ⊎-is-of-hlevel)
     [ `level-minus 2 , `search (quote is-of-hlevel) , `search (quote is-of-hlevel) ]
+
+instance
+  Extensional-⊎
+    : ∀ {ℓ ℓ′ ℓr ℓs} {A : Type ℓ} {B : Type ℓ′}
+    → ⦃ sa : Extensional A ℓr ⦄
+    → ⦃ sb : Extensional B ℓs ⦄
+    → Extensional (A ⊎ B) (ℓr ⊔ ℓs)
+  Extensional-⊎ {ℓs} ⦃ sa ⦄ .Pathᵉ (inl x) (inl x′) = Lift ℓs (Pathᵉ sa x x′)
+  Extensional-⊎ {ℓr} ⦃ sb ⦄ .Pathᵉ (inr y) (inr y′) = Lift ℓr (Pathᵉ sb y y′)
+  Extensional-⊎ .Pathᵉ _ _ = Lift _ ⊥
+  Extensional-⊎ ⦃ sa ⦄ .reflᵉ (inl x) = lift (reflᵉ sa x)
+  Extensional-⊎ ⦃ sb ⦄ .reflᵉ (inr y) = lift (reflᵉ sb y)
+  Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path {inl x} {inl x′} (lift p) = ap inl $ sa .idsᵉ .to-path p
+  Extensional-⊎ ⦃ sb ⦄ .idsᵉ .to-path {inr y} {inr y′} (lift p) = ap inr $ sb .idsᵉ .to-path p
+  Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path-over {inl x} {inl x′} (lift p) = apᴾ (λ _ → lift) $ sa .idsᵉ .to-path-over p
+  Extensional-⊎ ⦃ sb ⦄ .idsᵉ .to-path-over {inr y} {inr y′} (lift p) = apᴾ (λ _ → lift) $ sb .idsᵉ .to-path-over p

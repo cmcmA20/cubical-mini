@@ -40,4 +40,4 @@ Forget-assoc .Functor.F-id = refl
 Forget-assoc .Functor.F-∘ _ _ = refl
 
 forget-assoc-is-faithful : is-faithful (Forget-assoc {ℓ})
-forget-assoc-is-faithful p = ext $ p $ₚ_
+forget-assoc-is-faithful p = ext (p $ₚ_)

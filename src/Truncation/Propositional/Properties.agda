@@ -4,6 +4,7 @@ module Truncation.Propositional.Properties where
 open import Meta.Prelude
 
 open import Meta.Effect.Map
+open import Meta.Extensionality
 open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Interface
@@ -142,6 +143,21 @@ rec-set! f-const {B-set} = rec-set f-const B-set
 Σ-over-prop-∥-∥₁≃∃ A-prop = prop-extₑ!
   (λ x → map (x .fst ,_) (x .snd))
   (rec! (second ∣_∣₁)) where instance _ = hlevel-prop-instance A-prop
+
+instance
+  Extensional-Σ-∥-∥₁
+    : {A : Type ℓ} {B : A → Type ℓ′}
+      ⦃ ea : Extensional A ℓ″ ⦄
+    → Extensional (Σ[ x ꞉ A ] ∥ B x ∥₁) ℓ″
+  Extensional-Σ-∥-∥₁ ⦃ ea ⦄ = Σ-prop→extensional hlevel! ea
+  {-# OVERLAPPING Extensional-Σ-∥-∥₁ #-}
+
+  Extensional-∥-∥₁-map
+    : ∀ {ℓ ℓ′ ℓr} {A : Type ℓ} {B : Type ℓ′}
+    → ⦃ B-set : H-Level 2 B ⦄
+    → ⦃ ea : Extensional (A → B) ℓr ⦄
+    → Extensional (∥ A ∥₁ → B) ℓr
+  Extensional-∥-∥₁-map ⦃ ea ⦄ = set-injective→extensional! (λ p → fun-ext (elim! (happly p))) ea
 
 
 _factors-through_
