@@ -7,7 +7,8 @@ open import Meta.Search.HLevel
 
 open import Data.Dec.Base
 open import Data.Empty.Base
-open import Data.Sum.Base
+open import Data.Sum.Base as ⊎
+open import Data.Sum.Path as ⊎
 open import Data.Unit.Base
 
 open import Data.Nat.Base
@@ -17,30 +18,35 @@ open import Data.Nat.Properties
 private variable
   m n k : ℕ
 
+infix 3 _≤_ _<_ _≥_ _>_
+        _≰_ _≮_ _≱_ _≯_
+
 data _≤_ : ℕ → ℕ → Type where
   instance
     z≤ : 0 ≤ n
   s≤s : m ≤ n → suc m ≤ suc n
 
+_<_ _≥_ _>_ _≰_ _≮_ _≱_ _≯_ : ℕ → ℕ → Type
+
+m < n = suc m ≤ n
+m ≥ n = n ≤ m
+m > n = n < m
+m ≰ n = ¬ m ≤ n
+m ≮ n = ¬ m < n
+m ≱ n = ¬ m ≥ n
+m ≯ n = ¬ m > n
+
+
+-- Properties of order
+
 instance
   s≤s′ : ⦃ p : m ≤ n ⦄ → suc m ≤ suc n
   s≤s′ ⦃ p ⦄ = s≤s p
 
-_<_ : ℕ → ℕ → Type
-m < n = suc m ≤ n
-infix 3 _<_ _≤_
-
-_≥_ : ℕ → ℕ → Type
-m ≥ n = n ≤ m
-
-_>_ : ℕ → ℕ → Type
-m > n = n < m
-
--- Properties of order
-
-≤-refl : n ≤ n
-≤-refl {(zero)} = z≤
-≤-refl {suc n}  = s≤s ≤-refl
+  ≤-refl : n ≤ n
+  ≤-refl {(zero)} = z≤
+  ≤-refl {suc n}  = s≤s ≤-refl
+-- {-# INCOHERENT ≤-refl #-} TODO uncomment later
 
 ≤-trans : m ≤ n → n ≤ k → m ≤ k
 ≤-trans z≤      z≤      = z≤
@@ -71,74 +77,84 @@ instance
 ≤-suc-r z≤      = z≤
 ≤-suc-r (s≤s p) = s≤s (≤-suc-r p)
 
+instance
+ ≤-suc-r′ : ⦃ m≤n : m ≤ n ⦄ → m ≤ suc n
+ ≤-suc-r′ ⦃ m≤n ⦄ = ≤-suc-r m≤n
+-- {-# INCOHERENT ≤-suc-r′ #-} TODO uncomment later
+
 ≤-ascend : n ≤ suc n
 ≤-ascend = ≤-suc-r ≤-refl
 
-<-weaken : (x y : ℕ) → x < y → x ≤ y
-<-weaken x (suc y) (s≤s prf) = ≤-suc-r prf
+suc≰id : suc n ≰ n
+suc≰id (s≤s p) = suc≰id p
 
-<-trans : {x y z : ℕ} → x < y → y < z → x < z
-<-trans xy yz = ≤-trans xy (<-weaken _ _ yz)
-
-<-weaken-0 : (x y : ℕ) → x < y → 0 < y
-<-weaken-0 x (suc y) (s≤s xy) = s≤s z≤
-
-≤-+-l : (x y : ℕ) → x ≤ y + x
-≤-+-l zero    y = z≤
-≤-+-l (suc x) y = transport (sym (ap (λ q → suc x ≤ q) (+-suc-r y x))) (s≤s (≤-+-l x y))
-
-≤-weak-+l : (x y z : ℕ) → x ≤ z → x ≤ y + z
-≤-weak-+l x  zero   z prf = prf
-≤-weak-+l x (suc y) z prf = ≤-suc-r (≤-weak-+l x y z prf)
+s≰z : suc n ≰ 0
+s≰z = λ ()
 
 ≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
-≤-subst ab cd = transport $ ap² (_≤_) ab cd
+≤-subst a=b c=d = transport $ ap² (_≤_) a=b c=d
 
-≤-+l-≃ : {x y z : ℕ} → (y ≤ z) ≃ (x + y ≤ x + z)
-≤-+l-≃ {x} {y} {z} = prop-extₑ! (ff x y z) (gg x y z)
-  where
-  ff : (a b c : ℕ) → b ≤ c → a + b ≤ a + c
-  ff zero    b c prf = prf
-  ff (suc a) b c prf = s≤s (ff a b c prf)
+¬sucn≤n : ¬ suc n ≤ n
+¬sucn≤n {(suc n)} (s≤s ord) = ¬sucn≤n ord
+{-# WARNING_ON_USAGE ¬sucn≤n "Use `suc≰id`" #-}
 
-  gg : (a b c : ℕ) → a + b ≤ a + c → b ≤ c
-  gg  zero   b c prf = prf
-  gg (suc a) b c prf = gg a b c (≤-peel prf)
+¬sucn≤0 : ¬ suc n ≤ 0
+¬sucn≤0 {(suc n)} = λ ()
+{-# WARNING_ON_USAGE ¬sucn≤0 "Use `s≰z`" #-}
 
-≤-+r-≃ : {x y z : ℕ} → (x ≤ y) ≃ (x + z ≤ y + z)
-≤-+r-≃ {x} {y} {z} = ≤-+l-≃ {x = z} ∙ prop-extₑ!
-  (≤-subst (+-comm z x) (+-comm z y))
-  (≤-subst (+-comm x z) (+-comm y z))
 
-≤-cong-+ : (m n p q : ℕ) → m ≤ p → n ≤ q → m + n ≤ p + q
-≤-cong-+ zero    n  p      q prf1 prf2 = ≤-weak-+l n p q prf2
-≤-cong-+ (suc m) n (suc p) q prf1 prf2 = s≤s (≤-cong-+ m n p q (≤-peel prf1) prf2)
+-- Properties of strict order
 
-<-+l-≃ : {x y z : ℕ} → (y < z) ≃ (x + y < x + z)
-<-+l-≃ {x} {y} {z} = ≤-+l-≃ {x = x} ∙ prop-extₑ!
-  (≤-subst (+-suc-r x y) refl)
-  (≤-subst (sym (+-suc-r x y)) refl)
+<-irr : n ≮ n
+<-irr (s≤s p) = <-irr p
 
-<-+r-≃ : {x y z : ℕ} → (x < y) ≃ (x + z < y + z)
-<-+r-≃ {x} = ≤-+r-≃ {x = suc x}
+s<s : m < n → suc m < suc n
+s<s = s≤s
 
-≤-·l : (a b c : ℕ) → b ≤ c → a · b ≤ a · c
-≤-·l  zero   b c prf = z≤
-≤-·l (suc a) b c prf = ≤-cong-+ b (a · b) c (a · c) prf (≤-·l a b c prf)
+<-peel : suc m < suc n → m < n
+<-peel = ≤-peel
+
+<-weaken : (x y : ℕ) → x < y → x ≤ y
+<-weaken x (suc y) (s≤s p) = ≤-suc-r p
+
+<-trans : {x y z : ℕ} → x < y → y < z → x < z
+<-trans x<y y<z = ≤-trans x<y (<-weaken _ _ y<z)
+
+<-weaken-z : (x y : ℕ) → x < y → 0 < y
+<-weaken-z x (suc y) (s≤s _) = s≤s z≤
+
+<-weaken-0 : (x y : ℕ) → x < y → 0 < y
+<-weaken-0 = <-weaken-z
+{-# WARNING_ON_USAGE <-weaken-0 "Use `<-weaken-z`" #-}
+
+<-asym : ∀[ _<_ →̇ _≯_ ]
+<-asym (s≤s p) (s≤s q) = <-asym p q
+
+<-suc-r : m < n → m < suc n
+<-suc-r = ≤-suc-r
+
+<-suc-l : suc m < n → m < n
+<-suc-l p = <-trans ≤-refl p
+
+<-ascend : n < suc n
+<-ascend = ≤-refl
+
+≮z : n ≮ 0
+≮z = s≰z
+
+z<s : 0 < suc n
+z<s = s≤s z≤
+
+
+-- Decidability
 
 ≤-dec : (m n : ℕ) → Dec (m ≤ n)
 ≤-dec zero zero = yes z≤
 ≤-dec zero (suc y) = yes z≤
-≤-dec (suc x) zero = no λ { () }
+≤-dec (suc x) zero = no λ ()
 ≤-dec (suc x) (suc y) with ≤-dec x y
 ... | yes x≤y = yes (s≤s x≤y)
 ... | no ¬x≤y = no (λ { (s≤s x≤y) → ¬x≤y x≤y })
-
-¬sucn≤n : ¬ suc n ≤ n
-¬sucn≤n {(suc n)} (s≤s ord) = ¬sucn≤n ord
-
-¬sucn≤0 : ¬ suc n ≤ 0
-¬sucn≤0 {(suc n)} = λ ()
 
 ≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
 ≤-split m n with ≤-dec (suc m) n
@@ -154,28 +170,23 @@ instance
   go (suc (suc m)) zero p q = absurd $ q $ s≤s z≤
   go (suc m) (suc n) p q    = ap suc $ go m n (p ∘′ s≤s) (q ∘′ s≤s)
 
-≤→¬< : {x y : ℕ} → x ≤ y → ¬ (y < x)
-≤→¬< {0}     {y}      z≤       = ¬sucn≤0
-≤→¬< {suc x} {suc y} (s≤s prf) = ≤→¬< prf ∘ ≤-peel
 
-¬<→≤ : {x y : ℕ} → ¬ (y < x) → x ≤ y
-¬<→≤ {0}     {y}     ctra = z≤
-¬<→≤ {suc x} {0}     ctra = absurd $ ctra $ s≤s z≤
-¬<→≤ {suc x} {suc y} ctra = s≤s $ ¬<→≤ $ ctra ∘ s≤s
+-- Addition
 
-¬≤→< : {x y : ℕ} → ¬ (y ≤ x) → x < y
-¬≤→< ctra = ¬<→≤ (ctra ∘ ≤-peel)
+≤-+-l : (x y : ℕ) → x ≤ y + x
+≤-+-l zero    y = z≤
+≤-+-l (suc x) y = transport (sym (ap (suc x ≤_) (+-suc-r y x))) (s≤s (≤-+-l x y))
 
-≤→<＝ : {x y : ℕ} → x ≤ y → (x < y) ⊎ (x ＝ y)
-≤→<＝ {x} {y} prf with ≤-split x y
-... | inl p = inl p
-... | inr (inl p) = absurd $ ≤→¬< p $ s≤s prf
-... | inr (inr p) = inr p
+≤-weak-+l : (x y z : ℕ) → x ≤ z → x ≤ y + z
+≤-weak-+l x  zero   z p = p
+≤-weak-+l x (suc y) z p = ≤-suc-r (≤-weak-+l x y z p)
 
-<→¬＝ : {x y : ℕ} → x < y → ¬ (x ＝ y)
-<→¬＝ {x} {y} xy eq = ¬sucn≤n (subst (_< y) eq xy)
+≤-cong-+ : (m n p q : ℕ) → m ≤ p → n ≤ q → m + n ≤ p + q
+≤-cong-+ zero    n  p      q u v = ≤-weak-+l n p q v
+≤-cong-+ (suc m) n (suc p) q u v = s≤s (≤-cong-+ m n p q (≤-peel u) v)
 
--- subtraction
+
+-- Subtraction
 
 suc-pred : (n : ℕ) → 0 < n → n ＝ suc (pred n)
 suc-pred (suc n) n0 = refl
@@ -192,7 +203,12 @@ suc-pred (suc n) n0 = refl
 <-sub-lr : (p q r : ℕ) → 0 < q → p < q + r → p ∸ r < q
 <-sub-lr p (suc q) r _ pqr = s≤s (≤-sub-lr p q r (≤-peel pqr))
 
--- multiplication
+
+-- Multiplication
+
+≤-·l : (a b c : ℕ) → b ≤ c → a · b ≤ a · c
+≤-·l  zero   b c p = z≤
+≤-·l (suc a) b c p = ≤-cong-+ b (a · b) c (a · c) p (≤-·l a b c p)
 
 ·-inj-r : (x y z : ℕ) → 0 < z → x · z ＝ y · z → x ＝ y
 ·-inj-r zero y .(suc z) (s≤s {n = z} _) H with (·-zero y (suc z) (sym H))
@@ -205,6 +221,111 @@ suc-pred (suc n) n0 = refl
 ·-inj-l : (x y z : ℕ) → 0 < x → x · y ＝ x · z → y ＝ z
 ·-inj-l x y z 0<x p = ·-inj-r _ _ _ 0<x (·-comm y x ∙ p ∙ ·-comm x z)
 
-mul-<0 : (m n : ℕ) → (0 < m · n) → (0 < m) × (0 < n)
-mul-<0 (suc m) zero    0<mn = absurd (¬sucn≤0 (subst (0 <_) (·-absorb-r m) 0<mn))
-mul-<0 (suc _) (suc _) _    = s≤s z≤ , s≤s z≤
+z<· : (m n : ℕ) → (0 < m · n) → (0 < m) × (0 < n)
+z<· (suc m) zero    0<mn = absurd (s≰z (subst (0 <_) (·-absorb-r m) 0<mn))
+z<· (suc _) (suc _) _    = s≤s z≤ , s≤s z≤
+
+
+-- Conversion
+
+=→≤ : ∀[ _＝_ {A = ℕ} →̇ _≤_ ]
+=→≤ p = ≤-subst refl p ≤-refl
+
+<→≤ : ∀[ _<_ →̇ _≤_ ]
+<→≤ p = ≤-trans ≤-ascend p
+
+<→≠ : ∀[ _<_ →̇ _≠_ {A = ℕ} ]
+<→≠ {x = m} {x = n} m<n m=n = suc≰id (subst (_≤ n) (ap suc m=n) m<n)
+
+≤≃≯ : (m ≤ n) ≃ (m ≯ n)
+≤≃≯ = prop-extₑ! ≤→≯ ≯→≤ where
+  ≤→≯ : ∀[ _≤_ →̇ _≯_ ]
+  ≤→≯ (s≤s p) (s≤s q) = ≤→≯ p q
+
+  ≯→≤ : ∀[ _≯_ →̇ _≤_ ]
+  ≯→≤ {x = m} {x = n} f =
+    [ (λ p → absurd $ f $ <→≤ p)
+    , [ ≤-peel
+      , (λ p → absurd $ f $ =→≤ p)
+      ]ᵤ
+    ]ᵤ $ ≤-split (suc n) m
+
+≤≃<⊎= : (m ≤ n)
+      ≃ (m < n) ⊎ (m ＝ n)
+≤≃<⊎= = prop-extₑ hlevel! (disjoint-⊎-is-prop hlevel! hlevel! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
+  where
+  ≤→<⊎= : ∀[ _≤_ →̇ _<_ ⊎̇ _＝_ {A = ℕ} ]
+  ≤→<⊎= {x = 0}     {x = 0}     z≤      = inr refl
+  ≤→<⊎= {x = 0}     {x = suc n} z≤      = inl (s≤s z≤)
+  ≤→<⊎= {x = suc m} {x = suc n} (s≤s p) = ⊎.dmap s≤s (ap suc) $ ≤→<⊎= p
+
+  <⊎=→≤ : ∀[ _<_ ⊎̇ _＝_ {A = ℕ} →̇ _≤_ ]
+  <⊎=→≤ {x = m} {x = n} = [ <→≤ , =→≤ ]ᵤ
+
+<≃≱ : (m < n) ≃ (m ≱ n)
+<≃≱ = prop-extₑ! <→≱ ≱→< where
+  <→≱ : ∀[ _<_ →̇ _≱_ ]
+  <→≱ m<n m≥n = (≤≃≯ # m≥n)  m<n
+
+  ≱→< : ∀[ _≱_ →̇ _<_ ]
+  ≱→< p = ≤≃≯ ⁻¹ $ (p ∘ ≤-peel)
+
+≤≃≤+l : (n ≤ k) ≃ (m + n ≤ m + k)
+≤≃≤+l {n} {k} {m} = prop-extₑ! (ff m n k) (gg m n k)
+  where
+  ff : (a b c : ℕ) → b ≤ c → a + b ≤ a + c
+  ff zero    b c p = p
+  ff (suc a) b c p = s≤s (ff a b c p)
+
+  gg : (a b c : ℕ) → a + b ≤ a + c → b ≤ c
+  gg  zero   b c p = p
+  gg (suc a) b c p = gg a b c (≤-peel p)
+
+≤≃≤+r : (m ≤ n) ≃ (m + k ≤ n + k)
+≤≃≤+r {m} {n} {k} = ≤≃≤+l ∙ prop-extₑ!
+  (≤-subst (+-comm k m) (+-comm k n))
+  (≤-subst (+-comm m k) (+-comm n k))
+
+<≃<+l : (n < k) ≃ (m + n < m + k)
+<≃<+l {n} {k} {m} = ≤≃≤+l ∙ prop-extₑ!
+  (≤-subst (+-suc-r m n) refl)
+  (≤-subst (+-suc-r m n ⁻¹) refl)
+
+<≃<+r : (m < n) ≃ (m + k < n + k)
+<≃<+r = ≤≃≤+r
+
+
+¬≤→< : {x y : ℕ} → ¬ (y ≤ x) → x < y
+¬≤→< = <≃≱ ⁻¹ $_
+{-# WARNING_ON_USAGE ¬≤→< "Use `<≃≱`" #-}
+
+<→¬＝ : {x y : ℕ} → x < y → ¬ (x ＝ y)
+<→¬＝ = <→≠
+{-# WARNING_ON_USAGE <→¬＝ "Use `<→≠`" #-}
+
+¬<→≤ : {x y : ℕ} → ¬ (y < x) → x ≤ y
+¬<→≤ = ≤≃≯ ⁻¹ $_
+{-# WARNING_ON_USAGE ¬<→≤ "Use `≤≃≯`" #-}
+
+≤→¬< : {x y : ℕ} → x ≤ y → ¬ (y < x)
+≤→¬< = ≤≃≯ $_
+{-# WARNING_ON_USAGE ≤→¬< "Use `≤≃≯`" #-}
+
+≤→<＝ : {x y : ℕ} → x ≤ y → (x < y) ⊎ (x ＝ y)
+≤→<＝ = ≤≃<⊎= $_
+{-# WARNING_ON_USAGE ≤→<＝ "Use `≤≃<⊎=`" #-}
+
+mul-<0 = z<·
+{-# WARNING_ON_USAGE mul-<0 "Use `z<·`" #-}
+
+≤-+l-≃ = ≤≃≤+l
+{-# WARNING_ON_USAGE ≤-+l-≃ "Use `≤≃≤+l`" #-}
+
+≤-+r-≃ = ≤≃≤+r
+{-# WARNING_ON_USAGE ≤-+r-≃ "Use `≤≃≤+r`" #-}
+
+<-+l-≃ = <≃<+l
+{-# WARNING_ON_USAGE <-+l-≃ "Use `<≃<+l`" #-}
+
+<-+r-≃ = <≃<+r
+{-# WARNING_ON_USAGE <-+r-≃ "Use `<≃<+r`" #-}
