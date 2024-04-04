@@ -66,9 +66,7 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     → is-gaunt C
   skeletal+trivial-automorphisms→gaunt skel trivial-aut =
     skeletal+category→gaunt skel $
-      equiv-path→identity-system
-        (isoₜ→≃ path-iso)
-        (λ _ → transport-refl _)
+      equiv-path→identity-system (isoₜ→≃ path-iso)
     where
       open is-gaunt
 
