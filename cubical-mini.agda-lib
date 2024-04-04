@@ -1,4 +1,4 @@
-name: cubical-mini-0.4
+name: cubical-mini-0.4.1
 include: src
 depend:
 flags:
