@@ -53,7 +53,7 @@ comm-monoid-on↪monoid-on .fst M .Monoid-on._⋆_ = M .CMonoid-on._⋆_
 comm-monoid-on↪monoid-on .fst M .Monoid-on.has-monoid =
   M .CMonoid-on.has-comm-monoid .is-comm-monoid.has-monoid
 comm-monoid-on↪monoid-on .snd = set-injective→is-embedding hlevel! λ p →
-  Equiv.injective (isoₜ→equiv cmonoid-on-iso) $
+  Equiv.injective (isoₜ→≃ cmonoid-on-iso) $
     ap Monoid-on._⋆_ p ,ₚ prop!
 
 

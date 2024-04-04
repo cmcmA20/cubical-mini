@@ -20,7 +20,7 @@ open Correspondences.Finite.Bishop public
         ; bishop-finite ; H-Level-is-bishop-finite
         ; is-bishop-finite→omniscient₁
         ; lift-is-bishop-finite ; ×-is-bishop-finite ; Π-is-bishop-finite
-        ; fun-is-bishop-finite ; Σ-is-bishop-finite ; is-bishop-finite-≃ )
+        ; fun-is-bishop-finite ; Σ-is-bishop-finite ; ≃→is-bishop-finite )
 open import Correspondences.Finite.ManifestBishop
 open import Correspondences.Omniscient
 

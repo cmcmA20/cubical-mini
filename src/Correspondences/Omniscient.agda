@@ -13,7 +13,7 @@ open import Correspondences.Exhaustible
 
 open import Data.Dec as Dec
 open import Data.Empty.Base as ⊥
-  using (¬_)
+  using (¬_; contra)
 
 open import Truncation.Propositional as ∥-∥₁
   using (∥_∥₁; ∣_∣₁; ∃-syntax-und; ∃[_])
@@ -21,6 +21,7 @@ open import Truncation.Propositional as ∥-∥₁
 private variable
   ℓ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
+  B : Type ℓᵇ
 
 record Omniscient₁ {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (ℓᵃ ⊔ ℓsuc ℓ) where
   no-eta-equality
@@ -29,10 +30,17 @@ record Omniscient₁ {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (�
 
 open Omniscient₁ public
 
+-- TODO
+-- ≃→omniscient₁ : B ≃ A → Omniscient₁ {ℓ} A → Omniscient₁ {ℓ} B
+-- ≃→omniscient₁ e omn₁ .omniscient₁-β P? =
+--   let u = omn₁ .omniscient₁-β λ x → P? (e ⁻¹ $ x)
+--   in ≃→dec (prop-extₑ! (map (Σ-ap e {!!} $_)) {!!}) u
+
+-- TODO use contra?
 omniscient₁→exhaustible : Omniscient₁ {ℓ} A → Exhaustible {ℓ} A
-omniscient₁→exhaustible omn .exhaustible-β {P} P? = Dec.dmap
+omniscient₁→exhaustible omn .exhaustible-β {P} P? = Dec.dmap {P = ¬ ∃[ mapⁿ 1 ¬_ P ]}
   (λ ¬∃p x → dec→essentially-classical (P? x) $ ¬∃p ∘ ∣_∣₁ ∘ (x ,_))
-  (λ ¬∃p ∀p → ¬∃p $ ∥-∥₁.rec! λ p → p .snd (∀p (p .fst)))
+  (contra λ ∀p → ∥-∥₁.rec! λ p → p .snd (∀p (p .fst)))
   (¬-decision $ omn .omniscient₁-β (¬-decision ∘ P?))
 
 omni₁ : ⦃ x : Omniscient₁ {ℓ} A ⦄ → Omniscient₁ A
@@ -54,6 +62,12 @@ record Omniscient {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (ℓ�
   field omniscient-β : {P : Pred A ℓ} → Decidable P → Dec Σ[ P ]
 
 open Omniscient public
+
+≃→omniscient : B ≃ A → Omniscient {ℓ} A → Omniscient {ℓ} B
+≃→omniscient e omn .omniscient-β {P} P? = ≃→dec
+  (Σ-ap e λ b → subst (λ φ → P b ≃ P φ) (e.η b ⁻¹) refl)
+  (omn .omniscient-β λ x → P? (e ⁻¹ $ x))
+  where module e = Equiv e
 
 omniscient→omniscient₁ : Omniscient {ℓ} A → Omniscient₁ {ℓ} A
 omniscient→omniscient₁ omn .omniscient₁-β d = Dec.dmap

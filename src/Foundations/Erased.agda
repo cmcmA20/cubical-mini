@@ -25,7 +25,7 @@ opaque
 
   @0 is-of-hlevelᴱ≃is-of-hlevel : {n : HLevel} → is-of-hlevelᴱ n A ≃ is-of-hlevel n A
   is-of-hlevelᴱ≃is-of-hlevel {n = 0} = Σ-ap-snd λ _ → erased≃id
-  is-of-hlevelᴱ≃is-of-hlevel {n = 1} = iso→equiv $ to , iso from (λ _ → refl) li where
+  is-of-hlevelᴱ≃is-of-hlevel {n = 1} = iso→≃ $ to , iso from (λ _ → refl) li where
     to : is-propᴱ A → is-prop A
     to pr x y = pr x y .fst
     from : is-prop A → is-propᴱ A
@@ -39,7 +39,7 @@ opaque
 
   @0 is-equivᴱ≃is-equiv : {f : A → B} → is-equivᴱ f ≃ is-equiv f
   is-equivᴱ≃is-equiv {B} {f} =
-    Π-cod-≃ (λ _ → is-of-hlevelᴱ≃is-of-hlevel ∙ₑ apₑ is-contr fibreᴱ≃fibre ) ∙ₑ iso→equiv go where
+    Π-cod-≃ (λ _ → is-of-hlevelᴱ≃is-of-hlevel ∙ₑ apₑ is-contr fibreᴱ≃fibre ) ∙ₑ iso→≃ go where
       go : Π[ b ꞉ B ] (is-contr (fibre f b)) ≅ is-equiv f
       go .fst h .equiv-proof = h
       go .snd .is-iso.inv eqv = eqv .equiv-proof
@@ -51,7 +51,7 @@ opaque
 equivᴱ≃equiv = Σ-ap-snd λ _ → is-equivᴱ≃is-equiv
 
 @0 is-isoᴱ≃is-iso : {@0 f : A → B} → is-isoᴱ f ≃ is-iso f
-is-isoᴱ≃is-iso = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ₑ iso→equiv λ where
+is-isoᴱ≃is-iso = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ₑ iso→≃ λ where
   .fst → iso $³_
   .snd .is-iso.inv isi → is-iso.inv isi , is-iso.rinv isi , is-iso.linv isi
   .snd .is-iso.rinv isi _ .is-iso.inv x → isi .is-iso.inv x
@@ -79,7 +79,7 @@ opaque
   erased-is-of-hlevel : {@0 A : Type ℓᵃ} → (n : HLevel) → @0 is-of-hlevel n A → is-of-hlevel n (Erased A)
   erased-is-of-hlevel 0 = erased-is-contr
   erased-is-of-hlevel 1 = erased-is-prop
-  erased-is-of-hlevel (suc (suc n)) hl (erase x) (erase y) = is-of-hlevel-≃ (suc n)
+  erased-is-of-hlevel (suc (suc n)) hl (erase x) (erase y) = ≃→is-of-hlevel (suc n)
     erased-path.inverse (erased-is-of-hlevel (suc n) (hl x y))
 
 -- awful notation

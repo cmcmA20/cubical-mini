@@ -83,7 +83,7 @@ code-is-of-hlevel {xs = empty} {ys = empty} = hlevel!
 code-is-of-hlevel {xs = empty} {leaf _} = hlevel!
 code-is-of-hlevel {xs = empty} {node _ _} = hlevel!
 code-is-of-hlevel {xs = leaf _} {ys = empty} = hlevel!
-code-is-of-hlevel {xs = leaf x} {leaf y} hl = path-is-of-hlevel′ _ hl x y
+code-is-of-hlevel {xs = leaf x} {leaf y} hl = path-is-of-hlevel _ hl x y
 code-is-of-hlevel {xs = leaf _} {node _ _} = hlevel!
 code-is-of-hlevel {xs = node _ _} {ys = empty} = hlevel!
 code-is-of-hlevel {xs = node _ _} {leaf _} = hlevel!
@@ -94,7 +94,7 @@ tree-is-of-hlevel : (n : HLevel)
                   → is-of-hlevel (2 + n) A
                   → is-of-hlevel (2 + n) (Tree A)
 tree-is-of-hlevel n A-hl = is-of-hlevel-η n λ _ _ →
-  is-of-hlevel-≃ (suc n)
+  ≃→is-of-hlevel (suc n)
                  (identity-system-gives-path identity-system ⁻¹)
                  (code-is-of-hlevel A-hl)
 

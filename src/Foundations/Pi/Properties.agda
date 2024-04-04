@@ -27,18 +27,24 @@ private variable
 Π-dom-≃ : (e : B ≃ A)
         → Π[ x ꞉ A ] P x
         ≃ Π[ x ꞉ B ] P (e .fst x)
-Π-dom-≃ {P} e =
-  iso→equiv λ where
-    .fst k x → k (e .fst x)
-    .snd .is-iso.inv k x → subst P (ε x) (k (from x))
-    .snd .is-iso.rinv k → fun-ext λ x →
-        ap² (subst P) (sym (zig x))
-          (sym (from-pathP (symP-from-goal (ap k (η x)))))
-      ∙ transport⁻-transport (ap P (ap to (sym (η x)))) (k x)
-    .snd .is-iso.linv k → fun-ext λ x →
-      ap (subst P _) (sym (from-pathP (symP-from-goal (ap k (ε x)))))
-      ∙ transport⁻-transport (sym (ap P (ε x))) _
-  where open module e = Equiv e
+Π-dom-≃ {B} {A} {P} e = iso→≃ $ to , iso from ri li where
+  module e = Equiv e
+  to : Π[ x ꞉ A ] P x → Π[ x ꞉ B ] P (e.to x)
+  to k x = k (e.to x)
+
+  from : Π[ x ꞉ B ] P (e.to x) → Π[ x ꞉ A ] P x
+  from k x = subst P (e.ε x) (k (e.from x))
+
+  ri : from is-right-inverse-of to
+  ri k = fun-ext λ x →
+           ap² (subst P) (sym (e.zig x))
+            (sym (from-pathP (symP-from-goal (ap k (e.η x)))))
+          ∙ transport⁻-transport (ap P (ap e.to (sym (e.η x)))) (k x)
+
+  li : from is-left-inverse-of to
+  li k = fun-ext λ x →
+           ap (subst P _) (sym (from-pathP (symP-from-goal (ap k (e.ε x)))))
+         ∙ transport⁻-transport (sym (ap P (e.ε x))) _
 
 Π-impl-cod-≃ : Π[ x ꞉ A ] (P x ≃ Q x)
              → ∀[ x ꞉ A ] P x
@@ -57,7 +63,7 @@ private variable
 Π-impl-Π-≃ .snd .equiv-proof = strict-contr-fibres λ p _ → p
 
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
-function-≃ dom rng = iso→equiv the-iso where
+function-≃ dom rng = iso→≃ the-iso where
   rng-iso = is-equiv→is-iso (rng .snd)
   dom-iso = is-equiv→is-iso (dom .snd)
 
@@ -91,7 +97,7 @@ fun-ext-dep-≃
   → ( {x₀ : A i0} {x₁ : A i1} (p : ＜ x₀ ／ A ＼ x₁ ＞)
     → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   ≃ ＜ f ／ (λ i → Π[ x ꞉ A i ] B i x) ＼ g ＞
-fun-ext-dep-≃ {A} {B} {f} {g} = iso→equiv isom where
+fun-ext-dep-≃ {A} {B} {f} {g} = iso→≃ isom where
   open is-iso
   isom : Iso _ _
   isom .fst = fun-ext-dep
@@ -117,7 +123,7 @@ opaque
       {f : A i0 → B i0} {g : A i1 → B i1}
     → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
     ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-  hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→equiv isom where
+  hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→≃ isom where
     open is-iso
     c : {x₀ : A i0} → is-contr (SingletonP A x₀)
     c {x₀} = singletonP-is-contr A x₀

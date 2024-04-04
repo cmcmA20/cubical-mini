@@ -144,5 +144,5 @@ module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where
   line→is-equiv : is-equiv (g i0)
   line→is-equiv = transport-line-is-equiv i0
 
-  line→equiv : L ≃ R
-  line→equiv = transport-line-equiv i0
+  line→≃ : L ≃ R
+  line→≃ = transport-line-equiv i0

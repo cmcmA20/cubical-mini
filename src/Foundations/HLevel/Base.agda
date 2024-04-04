@@ -57,13 +57,6 @@ opaque
   extend→is-contr : (∀ φ (p : Partial φ A) → A [ φ ↦ p ]) → is-contr A
   extend→is-contr ext = outS (ext i0 λ ()) , λ x i → outS (ext i λ _ → x)
 
-  is-contr→is-set : is-contr A → is-set A
-  is-contr→is-set C x y p q i j = outS (is-contr→extend C (∂ i ∨ ∂ j) λ where
-    (i = i0) → p j
-    (i = i1) → q j
-    (j = i0) → x
-    (j = i1) → y)
-
 
   contractible-if-inhabited : (A → is-contr A) → is-prop A
   contractible-if-inhabited cont x y = is-contr→is-prop (cont x) x y
@@ -101,35 +94,38 @@ opaque
         go n zero = refl
         go n (suc k) = ap suc (go n k)
 
+  is-contr→is-set : is-contr A → is-set A
+  is-contr→is-set = is-of-hlevel-+-left 0 2
+
   is-prop→is-of-hlevel-suc : is-prop A → is-of-hlevel (suc h) A
   is-prop→is-of-hlevel-suc {h = 0    } A-prop = A-prop
   is-prop→is-of-hlevel-suc {h = suc h} A-prop =
     is-of-hlevel-suc (suc h) (is-prop→is-of-hlevel-suc A-prop)
 
-  path-is-of-hlevel : (h : HLevel) → is-of-hlevel h A → {x y : A}
-                    → is-of-hlevel h (x ＝ y)
-  path-is-of-hlevel 0 ahl =
+  path-is-of-hlevel-same : (h : HLevel) → is-of-hlevel h A → {x y : A}
+                         → is-of-hlevel h (x ＝ y)
+  path-is-of-hlevel-same 0 ahl =
     is-contr→is-prop ahl _ _ , is-prop→is-set (is-contr→is-prop ahl) _ _ _
-  path-is-of-hlevel (suc h) ahl = is-of-hlevel-suc (suc h) ahl _ _
+  path-is-of-hlevel-same (suc h) ahl = is-of-hlevel-suc (suc h) ahl _ _
+
+  pathP-is-of-hlevel-same : {A : I → Type ℓ} (h : HLevel)
+                          → is-of-hlevel h (A i1)
+                          → {x : A i0} {y : A i1}
+                          → is-of-hlevel h ＜ x ／ A ＼ y ＞
+  pathP-is-of-hlevel-same {A} h ahl {x} {y} =
+    subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel-same h ahl)
+
+  path-is-of-hlevel : (h : HLevel) → is-of-hlevel (suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
+  path-is-of-hlevel 0 ahl x y =
+    ahl x y , is-prop→is-set ahl _ _ _
+  path-is-of-hlevel (suc h) p x y = p x y
 
   pathP-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
-                     → is-of-hlevel h (A i1)
-                     → {x : A i0} {y : A i1}
+                     → is-of-hlevel (suc h) (A i1)
+                     → (x : A i0) (y : A i1)
                      → is-of-hlevel h ＜ x ／ A ＼ y ＞
-  pathP-is-of-hlevel {A} h ahl {x} {y} =
-    subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel h ahl)
-
-  path-is-of-hlevel′ : (h : HLevel) → is-of-hlevel (suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
-  path-is-of-hlevel′ 0 ahl x y =
-    ahl x y , is-prop→is-set ahl _ _ _
-  path-is-of-hlevel′ (suc h) p x y = p x y
-
-  pathP-is-of-hlevel′ : {A : I → Type ℓ} (h : HLevel)
-                      → is-of-hlevel (suc h) (A i1)
-                      → (x : A i0) (y : A i1)
-                      → is-of-hlevel h ＜ x ／ A ＼ y ＞
-  pathP-is-of-hlevel′ {A} h ahl x y =
-    subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel′ h ahl _ _)
+  pathP-is-of-hlevel {A} h ahl x y =
+    subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel h ahl _ _)
 
 
   is-contr-is-prop : is-prop (is-contr A)
@@ -212,7 +208,7 @@ opaque
     → SquareP A q p s r
   is-set→squareP is-set a₀₋ a₁₋ a₋₀ a₋₁ =
     transport (sym (pathP＝path _ _ _))
-              (pathP-is-of-hlevel′ 1 (is-set _ _) _ _ _ _)
+              (pathP-is-of-hlevel 1 (is-set _ _) _ _ _ _)
 
   -- litmus
   _ : {a b c d : A} (p : a ＝ c) (q : a ＝ b) (r : b ＝ d) (s : c ＝ d)

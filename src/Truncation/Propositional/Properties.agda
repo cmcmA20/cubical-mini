@@ -72,7 +72,7 @@ elim²! : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
 elim²! {P-prop} = elim² P-prop
 
 universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
-universal {B} {A} B-prop = iso→equiv $ inc′ , iso rec′ (λ _ → refl) beta where
+universal {B} {A} B-prop = iso→≃ $ inc′ , iso rec′ (λ _ → refl) beta where
   instance _ = hlevel-prop-instance B-prop
   inc′ : (x : ∥ A ∥₁ → B) → A → B
   inc′ f x = f ∣ x ∣₁
@@ -89,7 +89,7 @@ is-prop→equiv-∥-∥₁ A-prop = prop-extₑ! ∣_∣₁ proj!
   where instance _ = hlevel-prop-instance A-prop
 
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
-is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → is-of-hlevel-≃ 1 e hlevel!)
+is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → ≃→is-of-hlevel 1 e hlevel!)
 
 corestriction : (f : A → B) → (A → Im f)
 corestriction f x = f x , ∣ x , refl ∣₁

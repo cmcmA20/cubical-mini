@@ -30,7 +30,7 @@ opaque
   fin-1-is-contr .snd (mk-fin 0) = refl
 
 fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
-fin-suc = iso→equiv $ f , iso g rinv linv where
+fin-suc = iso→≃ $ f , iso g rinv linv where
   f : Fin (suc n) → ⊤ ⊎ Fin n
   f (mk-fin 0)       = inl tt
   f (mk-fin (suc k)) = inr (mk-fin k)
@@ -48,7 +48,7 @@ fin-suc-universal
   : {n : ℕ} → {A : Fin (suc n) → Type ℓ}
   → Π[ x ꞉ Fin (suc n) ] A x
   ≃ A fzero × (∀ x → A (fsuc x))
-fin-suc-universal {n} {A} = iso→equiv $ ff , iso gg ri li where
+fin-suc-universal {n} {A} = iso→≃ $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin _ ] A x → A fzero × (∀ x → A (fsuc x))
   ff f = f fzero , f ∘ fsuc
 
@@ -119,7 +119,7 @@ fin-product : {n m : ℕ}
             ≃ Fin (n · m)
 fin-product {n} {m} =
   Fin n × Fin m         ≃⟨ fin-sum {n = n} (λ _ → m) ⟩
-  Fin (sum n (λ _ → m)) ≃⟨ path→equiv (ap (λ n → Fin n) (sum≡* n m))  ⟩
+  Fin (sum n (λ _ → m)) ≃⟨ ＝→≃ (ap (λ n → Fin n) (sum≡* n m))  ⟩
   Fin (n · m)           ≃∎
   where
     sum≡* : ∀ n m → sum n (λ _ → m) ＝ n · m

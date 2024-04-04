@@ -22,10 +22,20 @@ private variable
 dec-∥-∥₁-equiv : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
 dec-∥-∥₁-equiv = prop-extₑ!
   (∥-∥₁.rec! $ Dec.dmap pure ∥-∥₁.rec!)
-  (Dec.rec (yes <$>_) $ pure ∘ no ∘ _∘ pure)
+  (Dec.rec (yes <$>_) (pure ∘ no ∘ contra pure))
 
 dec-≃ : A ≃ B → Dec A ≃ Dec B
-dec-≃ eqv = dec-as-sum ∙ ⊎-ap (¬-≃ to from) eqv ∙ dec-as-sum ⁻¹
-  where open Equiv eqv
+dec-≃ {A} {B} e = iso→≃ $ to , iso from ri li where
+  to   = Dec.dmap (e    $_) (contra (e ⁻¹ $_))
+  from = Dec.dmap (e ⁻¹ $_) (contra (e    $_))
 
-module dec-≃ {ℓ} {ℓ′} {A} {B} e = Equiv (dec-≃ {ℓ} {ℓ′} {A} {B} e)
+  module e = Equiv e
+
+  ri : from is-right-inverse-of to
+  ri = Dec.elim (ap yes ∘ e.ε) (ap no ∘ λ _ → prop!)
+
+  li : from is-left-inverse-of to
+  li = Dec.elim (ap yes ∘ e.η) (ap no ∘ λ _ → prop!)
+
+≃→dec : (B ≃ A) → Dec A → Dec B
+≃→dec e = dec-≃ e ⁻¹ $_

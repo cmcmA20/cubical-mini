@@ -17,13 +17,13 @@ module @0 _ where private
                                ; (φ = i1) → u i 1=1 }) ]
   glue-hfill φ u i = inS $ₛ
     Glue (u i0 1=1) {φ = φ ∨ ~ i} λ where
-      (φ = i1) → u i  1=1 , line→equiv (λ j → u (i ∧ ~ j) 1=1)
-      (i = i0) → u i0 1=1 , line→equiv (λ i → u i0        1=1)
+      (φ = i1) → u i  1=1 , line→≃ (λ j → u (i ∧ ~ j) 1=1)
+      (i = i0) → u i0 1=1 , line→≃ (λ i → u i0        1=1)
 
   hcomp＝Glue : {φ : _} (u : ∀ i → Partial (φ ∨ ~ i) (Type ℓ))
               →  hcomp φ u
               ＝ Glue (u i0 1=1)
-                      (λ { (φ = i1) → u i1 1=1 , line→equiv (λ j → u (~ j) 1=1) })
+                      (λ { (φ = i1) → u i1 1=1 , line→≃ (λ j → u (~ j) 1=1) })
   hcomp＝Glue {φ} u = hcomp-unique φ u (glue-hfill φ u)
 
 
@@ -36,10 +36,10 @@ module @0 _ where opaque
   ua-unglue : (e : A ≃ B) (i : I) (x : ua e i) → B
   ua-unglue e i x = unglue (i ∨ ~ i) x
 
-  ua-pathP→path : (e : A ≃ B) {x : A} {y : B}
+  ua-pathP→＝ : (e : A ≃ B) {x : A} {y : B}
                 → ＜ x ／ (λ i → ua e i) ＼ y ＞
                 → e .fst x ＝ y
-  ua-pathP→path e p i = ua-unglue e i (p i)
+  ua-pathP→＝ e p i = ua-unglue e i (p i)
 
   ua-glue : (e : A ≃ B) (i : I)
             (x : Partial (~ i) A)
@@ -52,25 +52,32 @@ module @0 _ where opaque
                                       ; (i = i1) → outS y })
                                    (outS y))
 
-  path→ua-pathP : (e : A ≃ B) {x : A} {y : B}
-                → e .fst x ＝ y
-                → ＜ x ／ (λ i → ua e i) ＼ y ＞
-  path→ua-pathP e {x} p i = outS (ua-glue e i (λ { (i = i0) → x }) (inS (p i)))
+  ＝→ua-pathP : (e : A ≃ B) {x : A} {y : B}
+              → e .fst x ＝ y
+              → ＜ x ／ (λ i → ua e i) ＼ y ＞
+  ＝→ua-pathP e {x} p i = outS (ua-glue e i (λ { (i = i0) → x }) (inS (p i)))
 
-  ua-pathP≃path : (e : A ≃ B) {x : A} {y : B}
-                → (e .fst x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
-  ua-pathP≃path eqv .fst = path→ua-pathP eqv
-  ua-pathP≃path eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathP→path eqv) y .fst
-  ua-pathP≃path eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathP→path eqv) y .snd
+  ua-pathP≃＝ : (e : A ≃ B) {x : A} {y : B}
+              → (e .fst x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
+  ua-pathP≃＝ eqv .fst = ＝→ua-pathP eqv
+  ua-pathP≃＝ eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathP→＝ eqv) y .fst
+  ua-pathP≃＝ eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathP→＝ eqv) y .snd
 
-@0 iso→path : Iso A B → A ＝ B
-iso→path (f , r) = ua (f , is-iso→is-equiv r)
+@0 iso→＝ : Iso A B → A ＝ B
+iso→＝ (f , r) = ua (f , is-iso→is-equiv r)
 
-path→equiv : A ＝ B → A ≃ B
-path→equiv p = line→equiv (λ i → p i)
+@0 iso→path : _
+iso→path = iso→＝
+{-# WARNING_ON_USAGE iso→path "Use `iso→＝`" #-}
 
-path→equiv-refl : path→equiv (refl {x = A}) ＝ idₑ
-path→equiv-refl = equiv-ext $ fun-ext transport-refl
+＝→≃ : A ＝ B → A ≃ B
+＝→≃ p = line→≃ (λ i → p i)
+
+path→equiv = ＝→≃
+{-# WARNING_ON_USAGE path→equiv "Use `＝→≃`" #-}
+
+＝→≃-refl : ＝→≃ (refl {x = A}) ＝ idₑ
+＝→≃-refl = equiv-ext $ fun-ext transport-refl
 
 opaque
   unfolding ua transport-line-is-equiv
@@ -80,23 +87,23 @@ opaque
   ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e .fst x
   ua-β e x = transport-refl _
 
-  @0 ua-η : (p : A ＝ B) → ua (path→equiv p) ＝ p
+  @0 ua-η : (p : A ＝ B) → ua (＝→≃ p) ＝ p
   ua-η {A} {B} p i j = Glue B ω where
     ω : Partial (i ∨ ∂ j) (Σ[ T ꞉ Type (level-of-type B) ] (T ≃ B))
     ω (i = i1) = p j , transport-line-equiv (λ k → p k) j
-    ω (j = i0) = A   , path→equiv p
+    ω (j = i0) = A   , ＝→≃ p
     ω (j = i1) = B   , idₑ
 
 module @0 _ where opaque
   unfolding is-of-hlevel ua
   path≅equiv : (A ＝ B) ≅ (A ≃ B)
-  path≅equiv {A} {B} = path→equiv , r where
-    r : is-iso {A = A ＝ B} path→equiv
+  path≅equiv {A} {B} = ＝→≃ , r where
+    r : is-iso {A = A ＝ B} ＝→≃
     r .is-iso.inv  = ua
     r .is-iso.rinv = equiv-ext ∘ fun-ext ∘ ua-β
     r .is-iso.linv = ua-η
 
-  univalence : is-equiv (path→equiv {A = A} {B = B})
+  univalence : is-equiv (＝→≃ {A = A} {B = B})
   univalence = is-iso→is-equiv (path≅equiv .snd)
 
   univalence⁻¹ : is-equiv (ua {A = A} {B = B})

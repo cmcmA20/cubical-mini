@@ -333,7 +333,7 @@ module _ {C : Precategory oᶜ hᶜ}
   Extensional-natural-transformation {sa} .idsᵉ .to-path-over h =
     is-prop→pathP
       (λ i → Π-is-of-hlevel 1
-        λ _ → is-of-hlevel-≃ 1 (identity-system-gives-path (sa _ .idsᵉ)) (is-prop-η $ is-set-β (D .Hom-set _ _) _ _))
+        λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa _ .idsᵉ)) (is-prop-η $ is-set-β (D .Hom-set _ _) _ _))
       _ _
 
   instance

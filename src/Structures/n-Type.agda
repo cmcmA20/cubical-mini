@@ -54,7 +54,7 @@ opaque
   @0 n-univalence : (⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰) ≃ (X ＝ Y)
   n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where
     inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰
-    inv p = path→equiv (ap carrier p)
+    inv p = ＝→≃ (ap carrier p)
 
     linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua
     linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
@@ -66,7 +66,7 @@ opaque
       path i j .carrier-is-tr = is-prop→squareP
         (λ i j → is-of-hlevel-is-prop
           {A = ua.ε {A = ⌞ X ⌟⁰} refl i j } _)
-        (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (path→equiv refl) j)
+        (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (＝→≃ refl) j)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
@@ -99,7 +99,7 @@ opaque
   n-Type-is-of-hlevel zero X Y = n-ua
     ((λ _ → carrier-is-tr Y .fst) , is-contr→is-equiv (X .carrier-is-tr) (Y .carrier-is-tr))
   n-Type-is-of-hlevel (suc n) X Y =
-    is-of-hlevel-≃ (suc n) (n-univalence ⁻¹) (≃-is-of-hlevel (suc n) (X .carrier-is-tr) (Y .carrier-is-tr))
+    ≃→is-of-hlevel (suc n) (n-univalence ⁻¹) (≃-is-of-hlevel (suc n) (X .carrier-is-tr) (Y .carrier-is-tr))
 
 Prop : ∀ ℓ → Type (ℓsuc ℓ)
 Prop ℓ = n-Type ℓ 1

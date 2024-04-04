@@ -50,7 +50,7 @@ instance
 
 -- TODO generalize to Reflectsⁿ
 is-discrete→path≃equals-true : (d : is-discrete A) (x y : A) → (x ＝ y) ≃ (d .is-discrete-β x y .does ＝ true)
-is-discrete→path≃equals-true d x y = prop-extₑ (path-is-of-hlevel′ 1 (is-discrete→is-set d) x y) hlevel! to from where
+is-discrete→path≃equals-true d x y = prop-extₑ (path-is-of-hlevel 1 (is-discrete→is-set d) x y) hlevel! to from where
   to : ∀ {x y} → x ＝ y → d .is-discrete-β x y .does ＝ true
   to {x} {y} p with d .is-discrete-β x y
   ... | no ¬p = ⊥.rec $ ¬p p
@@ -63,15 +63,18 @@ is-discrete→path≃equals-true d x y = prop-extₑ (path-is-of-hlevel′ 1 (is
 
 module is-discrete→path≃equals-true {ℓ} {A} d {x y} = Equiv (is-discrete→path≃equals-true {ℓ} {A} d x y)
 
-is-discrete-injection : (A ↣ B) → is-discrete B → is-discrete A
-is-discrete-injection (f , f-inj) B-dis .is-discrete-β x y =
+↣→is-discrete : (A ↣ B) → is-discrete B → is-discrete A
+↣→is-discrete (f , f-inj) B-dis .is-discrete-β x y =
   Dec.dmap f-inj
            (_∘ ap f)
            (B-dis .is-discrete-β (f x) (f y))
 
-is-discrete-embedding : (A ↪ B) → is-discrete B → is-discrete A
-is-discrete-embedding (f , f-emb) =
-  is-discrete-injection (f , is-embedding→injective f-emb)
+↪→is-discrete : (A ↪ B) → is-discrete B → is-discrete A
+↪→is-discrete (f , f-emb) =
+  ↣→is-discrete (f , is-embedding→injective f-emb)
+
+≃→is-discrete : (B ≃ A) → is-discrete A → is-discrete B
+≃→is-discrete = ≃→↪ ∙ ↪→is-discrete
 
 
 discrete : ⦃ d : is-discrete A ⦄ → is-discrete A
@@ -102,5 +105,10 @@ lift-is-discrete : is-discrete A → is-discrete (Lift ℓ A)
 lift-is-discrete di .is-discrete-β (lift x) (lift y) =
   Dec.dmap (ap lift) (_∘ ap lower) (is-discrete-β di x y)
 
-is-discrete-≃ : (B ≃ A) → is-discrete A → is-discrete B
-is-discrete-≃ = is-discrete-embedding ∘ equiv→embedding
+
+is-discrete-injection = ↣→is-discrete
+{-# WARNING_ON_USAGE is-discrete-injection "Use `↣→is-discrete`" #-}
+is-discrete-embedding = ↪→is-discrete
+{-# WARNING_ON_USAGE is-discrete-embedding "Use `↪→is-discrete`" #-}
+is-discrete-≃ = ≃→is-discrete
+{-# WARNING_ON_USAGE is-discrete-≃ "Use `≃→is-discrete`" #-}

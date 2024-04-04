@@ -46,7 +46,7 @@ private variable f g : /-Hom a b
             → ＜ f ／ (λ i → /-Hom (p i) (q i)) ＼ g ＞
 /-Hom-pathP p q {f} {g} r i ./-Hom.map = r i
 /-Hom-pathP p q {f} {g} r i ./-Hom.commutes = is-prop→pathP
-  (λ j → path-is-of-hlevel′ 1 (Hom-set (p j .domain) _)
+  (λ j → path-is-of-hlevel 1 (Hom-set (p j .domain) _)
     (q j ./-Obj.map ∘ r j) (p j ./-Obj.map) )
   (f .commutes) (g .commutes) i
   where open /-Hom

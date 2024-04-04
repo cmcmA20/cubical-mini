@@ -125,7 +125,7 @@ rec²! {C-set} = rec² C-set
 universal : is-set B
           → (A / R → B)
           ≃ Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b)
-universal {B} {A} {R} B-set = iso→equiv $ inc , iso back (λ _ → refl) li where
+universal {B} {A} {R} B-set = iso→≃ $ inc , iso back (λ _ → refl) li where
   instance _ = hlevel-basic-instance 2 B-set
   inc : (A / R → B) → Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b)
   inc f = f ∘ ⦋_⦌ , λ a b r i → f (glue/ a b r i)

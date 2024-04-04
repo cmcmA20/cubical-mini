@@ -41,7 +41,7 @@ module _ {o ℓ} {C : Precategory o ℓ} (gaunt : is-gaunt C) where
 
   is-gaunt→is-skeletal : is-skeletal C
   is-gaunt→is-skeletal = set-identity-system hlevel! $
-    ∥-∥₁.rec (path-is-of-hlevel′ 1 has-strict _ _) (has-category .to-path)
+    ∥-∥₁.rec (path-is-of-hlevel 1 has-strict _ _) (has-category .to-path)
 
 module _ {o ℓ} {C : Precategory o ℓ} where
   skeletal+category→gaunt
@@ -67,7 +67,7 @@ module _ {o ℓ} {C : Precategory o ℓ} where
   skeletal+trivial-automorphisms→gaunt skel trivial-aut =
     skeletal+category→gaunt skel $
       equiv-path→identity-system
-        (isoₜ→equiv path-iso)
+        (isoₜ→≃ path-iso)
         (λ _ → transport-refl _)
     where
       open is-gaunt

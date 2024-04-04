@@ -73,7 +73,7 @@ subset-proj-is-embedding
   : {B : A → Type ℓ′}
   → (∀ x → is-prop (B x))
   → is-embedding {A = Σ _ B} fst
-subset-proj-is-embedding {B} B-prop x = is-of-hlevel-≃ 1 (Σ-fibre-equiv B x) (B-prop _)
+subset-proj-is-embedding {B} B-prop x = ≃→is-of-hlevel 1 (Σ-fibre-equiv B x) (B-prop _)
 
 is-embedding→monic
   : is-embedding f
@@ -114,14 +114,14 @@ is-equiv-on-paths→is-embedding ep b = is-prop-η λ fib₁ fib₂ →
   fibre-equality≃fibre-on-paths ⁻¹ $ (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
 
 cancellable→is-embedding : Cancellable f → is-embedding f
-cancellable→is-embedding can = preimage-is-contr→is-embedding λ x → is-of-hlevel-≃ 0 (Σ-ap-snd (λ _ → can)) $
+cancellable→is-embedding can = preimage-is-contr→is-embedding λ x → ≃→is-of-hlevel 0 (Σ-ap-snd (λ _ → can)) $
   is-contr-η $ (x , reflₚ) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
 
 is-embedding→is-equiv-on-paths : is-embedding f → is-equiv-on-paths f
 is-embedding→is-equiv-on-paths {f} emb = total-is-equiv→fibrewise-is-equiv {f = λ y p → ap {y = y} f p}
   (is-contr→is-equiv
     (is-contr-η $ (_ , reflₚ) , λ (y , p) i → p i , λ j → p (i ∧ j))
-    (is-contr-η $ (_ , reflₚ) , is-prop-β (is-of-hlevel-≃ 1 (Σ-ap-snd (λ _ → sym-≃)) (emb _)) _))
+    (is-contr-η $ (_ , reflₚ) , is-prop-β (≃→is-of-hlevel 1 (Σ-ap-snd (λ _ → sym-≃)) (emb _)) _))
 
 @0 is-embedding≃is-equiv-on-paths : is-embedding f ≃ is-equiv-on-paths f
 is-embedding≃is-equiv-on-paths = prop-extₑ! is-embedding→is-equiv-on-paths is-equiv-on-paths→is-embedding
@@ -130,20 +130,26 @@ is-embedding→is-of-hlevel
   : ∀ n → {f : A → B} → is-embedding f
   → is-of-hlevel (suc n) B
   → is-of-hlevel (suc n) A
-is-embedding→is-of-hlevel n {f} emb a-hl = is-of-hlevel-≃ (suc n) (total-equiv f) $
+is-embedding→is-of-hlevel n {f} emb a-hl = ≃→is-of-hlevel (suc n) (total-equiv f) $
   Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-of-hlevel-suc (emb x)
 
 is-equiv→is-embedding : is-equiv f → is-embedding f
 is-equiv→is-embedding r y = is-contr→is-prop $ is-contr-η $ r .equiv-proof y
 
-equiv→embedding : A ≃ B → A ↪ B
-equiv→embedding = second is-equiv→is-embedding
+≃→↪ : A ≃ B → A ↪ B
+≃→↪ = second is-equiv→is-embedding
+
+equiv→embedding = ≃→↪
+{-# WARNING_ON_USAGE equiv→embedding "Use `≃→↪`" #-}
 
 is-iso→is-embedding : is-iso f → is-embedding f
 is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
 
-iso→embedding : A ≅ B → A ↪ B
-iso→embedding = second is-iso→is-embedding
+iso→↪ : A ≅ B → A ↪ B
+iso→↪ = second is-iso→is-embedding
+
+iso→embedding = iso→↪
+{-# WARNING_ON_USAGE iso→embedding "Use `iso→↪`" #-}
 
 instance
   Refl-Inj : Refl large _↣_
@@ -157,7 +163,7 @@ instance
 
   Compose-Emb : Compose large _↪_
   Compose-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
-    is-of-hlevel-≃ 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
+    ≃→is-of-hlevel 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
 
 opaque
   unfolding is-of-hlevel
@@ -177,13 +183,16 @@ opaque
         k (i = i1) → p
         k (k = i0) → ids .to-path-over p (~ k)
 
-embedding→extensional
+↪→extensional
   : A ↪ B
   → Extensional B ℓ″
   → Extensional A ℓ″
-embedding→extensional f ext .Pathᵉ x y = Pathᵉ ext (f $ x) (f $ y)
-embedding→extensional f ext .reflᵉ x = reflᵉ ext (f $ x)
-embedding→extensional f ext .idsᵉ = pullback-identity-system (ext .idsᵉ) f
+↪→extensional f ext .Pathᵉ x y = Pathᵉ ext (f $ x) (f $ y)
+↪→extensional f ext .reflᵉ x = reflᵉ ext (f $ x)
+↪→extensional f ext .idsᵉ = pullback-identity-system (ext .idsᵉ) f
+
+embedding→extensional = ↪→extensional
+{-# WARNING_ON_USAGE embedding→extensional "Use `↪→extensional`" #-}
 
 set-injective→extensional!
   : {@(tactic hlevel-tactic-worker) B-set : is-set B}
@@ -192,11 +201,11 @@ set-injective→extensional!
   → Extensional B ℓ″
   → Extensional A ℓ″
 set-injective→extensional! {B-set} {f} inj ext =
-  embedding→extensional (f , set-injective→is-embedding B-set inj) ext
+  ↪→extensional (f , set-injective→is-embedding B-set inj) ext
 
 Σ-prop→extensional
   : {A : Type ℓ} {B : A → Type ℓ′}
   → (∀ x → is-prop (B x))
   → Extensional A ℓ″
   → Extensional (Σ A B) ℓ″
-Σ-prop→extensional B-prop = embedding→extensional (fst , subset-proj-is-embedding B-prop)
+Σ-prop→extensional B-prop = ↪→extensional (fst , subset-proj-is-embedding B-prop)

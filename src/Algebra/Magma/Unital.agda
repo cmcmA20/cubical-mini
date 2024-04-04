@@ -47,7 +47,7 @@ module _ where
 opaque
   unfolding is-of-hlevel
   is-unital-magma-is-prop : is-prop (is-unital-magma _✦_)
-  is-unital-magma-is-prop C C′ = Equiv.injective (isoₜ→equiv is-unital-magma-iso) $
+  is-unital-magma-is-prop C C′ = Equiv.injective (isoₜ→≃ is-unital-magma-iso) $
     prop! ,ₚ identity-unique C C′ ,ₚ prop!
     where open is-unital-magma C
 
@@ -103,7 +103,7 @@ unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A
 unital-magma-on↪magma-on .fst M .n-Magma-on._⋆_ = M .UMagma-on._⋆_
 unital-magma-on↪magma-on .fst M .n-Magma-on.has-n-magma = M .UMagma-on.has-magma
 unital-magma-on↪magma-on .snd = set-injective→is-embedding hlevel! λ p →
-  Equiv.injective (isoₜ→equiv umagma-on-iso) $ ap n-Magma-on._⋆_ p ,ₚ prop!
+  Equiv.injective (isoₜ→≃ umagma-on-iso) $ ap n-Magma-on._⋆_ p ,ₚ prop!
 
 
 record make-unital-magma {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

@@ -38,7 +38,7 @@ opaque
   code-is-of-hlevel : {x y : Reflects⁰ P a} {n : HLevel}
                     → is-of-hlevel (suc n) P
                     → is-of-hlevel n (Code x y)
-  code-is-of-hlevel {x = ofʸ p} {ofʸ p′} hl = path-is-of-hlevel′ _ hl p p′
+  code-is-of-hlevel {x = ofʸ p} {ofʸ p′} hl = path-is-of-hlevel _ hl p p′
   code-is-of-hlevel {x = ofⁿ _} {ofⁿ _}  _  = hlevel!
 
   reflects-true-is-contr : is-contr P → is-contr (Reflects⁰ P true)
@@ -48,7 +48,7 @@ opaque
   reflects-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) P → is-of-hlevel (suc n) (Reflects⁰ P a)
   reflects-is-of-hlevel 0 hl (ofʸ p) (ofʸ p′) = ap ofʸ (hl p p′)
   reflects-is-of-hlevel 0 _  (ofⁿ _) (ofⁿ _)  = ap ofⁿ prop!
-  reflects-is-of-hlevel (suc n) hl _ _ = is-of-hlevel-≃ (1 + n)
+  reflects-is-of-hlevel (suc n) hl _ _ = ≃→is-of-hlevel (1 + n)
     (identity-system-gives-path identity-system ⁻¹) $ code-is-of-hlevel hl
 
 ofʸ-inj : ∀ {x y : P} → ofʸ x ＝ ofʸ y → x ＝ y

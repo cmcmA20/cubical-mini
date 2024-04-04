@@ -13,7 +13,7 @@ open import Data.Word.Properties
 instance
   word64-is-discrete : is-discrete Word64
   word64-is-discrete =
-    is-discrete-injection (word64→ℕ , word64→ℕ-inj) discrete!
+    ↣→is-discrete (word64→ℕ , word64→ℕ-inj) discrete!
 
   decomp-dis-word64 : goal-decomposition (quote is-discrete) Word64
   decomp-dis-word64 = decomp (quote word64-is-discrete) []

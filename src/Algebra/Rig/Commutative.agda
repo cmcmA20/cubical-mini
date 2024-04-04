@@ -54,7 +54,7 @@ comm-rig-on↪rig-on .fst R .Rig-on._·_ = R .CRig-on._·_
 comm-rig-on↪rig-on .fst R .Rig-on.has-rig =
   R .CRig-on.has-comm-rig .is-comm-rig.has-rig
 comm-rig-on↪rig-on .snd = set-injective→is-embedding hlevel! λ p →
-  Equiv.injective (isoₜ→equiv crig-on-iso) $
+  Equiv.injective (isoₜ→≃ crig-on-iso) $
     ap Rig-on._+_ p ,ₚ ap Rig-on._·_ p ,ₚ prop!
 
 comm-rig-on-is-set : is-set (CRig-on A)

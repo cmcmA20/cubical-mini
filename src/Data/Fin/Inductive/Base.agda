@@ -62,7 +62,7 @@ module _ where
   open import Data.Fin.Base
     renaming (Fin to Finᵈ; fzero to fzeroᵈ; fsuc to fsucᵈ)
   default≃inductive : ∀{n} → Finᵈ n ≃ Fin n
-  default≃inductive = iso→equiv $ to , iso from ri li where
+  default≃inductive = iso→≃ $ to , iso from ri li where
     to : ∀{n} → Finᵈ n → Fin n
     to {suc _} fzeroᵈ    = fzero
     to {suc _} (fsucᵈ k) = fsuc (to k)

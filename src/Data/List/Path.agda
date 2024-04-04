@@ -60,7 +60,7 @@ code-is-of-hlevel {xs = []}     {([])}  _ = hlevel!
 code-is-of-hlevel {xs = []}     {_ ∷ _} _ = hlevel!
 code-is-of-hlevel {xs = _ ∷ _}  {([])}  _ = hlevel!
 code-is-of-hlevel {xs = x ∷ xs} {y ∷ ys} A-hl =
-  ×-is-of-hlevel _ (path-is-of-hlevel′ _ A-hl x y) (code-is-of-hlevel A-hl)
+  ×-is-of-hlevel _ (path-is-of-hlevel _ A-hl x y) (code-is-of-hlevel A-hl)
 
 opaque
   unfolding is-of-hlevel
@@ -68,7 +68,7 @@ opaque
                     → is-of-hlevel (2 + n) A
                     → is-of-hlevel (2 + n) (List A)
   list-is-of-hlevel n A-hl _ _ =
-    is-of-hlevel-≃ (1 + n)
+    ≃→is-of-hlevel (1 + n)
                    (identity-system-gives-path identity-system ⁻¹)
                    (code-is-of-hlevel A-hl)
 

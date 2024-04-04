@@ -56,7 +56,7 @@ fsuc-inj {k} = ap pred′ where
   pred′ (fsuc x) = x
 
 fin-peel : Fin (suc m) ≃ Fin (suc n) → Fin m ≃ Fin n
-fin-peel {m} {n} sm≃sn = iso→equiv $ m→n , iso n→m b→a→b a→b→a where
+fin-peel {m} {n} sm≃sn = iso→≃ $ m→n , iso n→m b→a→b a→b→a where
   sn≃sm : Fin (suc n) ≃ Fin (suc m)
   sn≃sm = sm≃sn ⁻¹
   module sm≃sn = Equiv sm≃sn
@@ -81,9 +81,9 @@ fin-peel {m} {n} sm≃sn = iso→equiv $ m→n , iso n→m b→a→b a→b→a w
   a→b→a a | fsuc x , p′ with inspect (sn≃sm.to (fsuc x))
   a→b→a a | fsuc x , p′ | fsuc y , q′ =
     fsuc-inj $ q′ ⁻¹ ∙ ap sn≃sm.to (p′ ⁻¹) ∙ sm≃sn.η _
-  a→b→a a | fsuc x , p′ | fzero , q′ = absurd contra where
+  a→b→a a | fsuc x , p′ | fzero , q′ = absurd ctra where
     r = sm≃sn.injective₂ p′ $ sm≃sn.ε $ fsuc x
-    contra = fzero≠fsuc $ (r ∙ q′) ⁻¹
+    ctra = fzero≠fsuc $ (r ∙ q′) ⁻¹
   a→b→a a | fzero , p′ with inspect (sm≃sn.to fzero)
   a→b→a a | fzero , p′ | fsuc x , q′ with inspect (sn≃sm.to (fsuc x))
   a→b→a a | fzero , p′ | fsuc x , q′ | fsuc y , r′ =
@@ -99,9 +99,9 @@ fin-peel {m} {n} sm≃sn = iso→equiv $ m→n , iso n→m b→a→b a→b→a w
   b→a→b b | fsuc x , p′ with inspect (sm≃sn.to (fsuc x))
   b→a→b b | fsuc x , p′ | fsuc y , q′ =
     fsuc-inj $ (ap sm≃sn.to p′ ∙ q′) ⁻¹ ∙ sn≃sm.η _
-  b→a→b b | fsuc x , p′ | fzero , q′ = absurd contra where
+  b→a→b b | fsuc x , p′ | fzero , q′ = absurd ctra where
     r = sn≃sm.injective₂ p′ $ sn≃sm.ε $ fsuc x
-    contra = fzero≠fsuc $ (r ∙ q′) ⁻¹
+    ctra = fzero≠fsuc $ (r ∙ q′) ⁻¹
   b→a→b b | fzero , p′ with inspect (sn≃sm.to fzero)
   b→a→b b | fzero , p′ | fsuc x , q′ with inspect (sm≃sn.to (fsuc x))
   b→a→b b | fzero , p′ | fsuc x , q′ | fsuc y , r′  =

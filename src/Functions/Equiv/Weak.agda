@@ -35,7 +35,7 @@ iso→extensional
   : Iso A B
   → Extensional B ℓ″
   → Extensional A ℓ″
-iso→extensional f = embedding→extensional (equiv→embedding (iso→equiv f))
+iso→extensional f = ↪→extensional (≃→↪ (iso→≃ f))
 
 Extensional-≃
   : {A : Type ℓ} ⦃ sb : Extensional (A → B) ℓ″ ⦄

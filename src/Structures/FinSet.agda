@@ -42,15 +42,15 @@ instance
   Underlying-FinSet .⌞_⌟⁰ = carrier
 
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
-FinSet-is-groupoid = is-of-hlevel-≃ 3 go hlevel! where
+FinSet-is-groupoid = ≃→is-of-hlevel 3 go hlevel! where
   go = FinSet _
-         ≃⟨ iso→equiv fin-set-iso ⟩
+         ≃⟨ iso→≃ fin-set-iso ⟩
        Σ[ X ꞉ Type _ ] is-bishop-finite X
          ≃⟨ Σ-ap-snd (λ _ → prop-extₑ! < is-discrete→is-set ∘ is-bishop-finite→is-discrete , id > snd) ⟩
        Σ[ X ꞉ Type _ ] is-set X × is-bishop-finite X
          ≃⟨ Σ-assoc ⟩
        Σ[ U ꞉ Σ[ X ꞉ Type _ ] is-set X ] is-bishop-finite (U .fst)
-         ≃˘⟨ Σ-ap-fst (iso→equiv n-Type-iso) ⟩
+         ≃˘⟨ Σ-ap-fst (iso→≃ n-Type-iso) ⟩
        Σ[ X ꞉ Set _ ] is-bishop-finite ⌞ X ⌟ ≃∎
 
 instance
@@ -77,7 +77,7 @@ private
   fin-set′-ext {X} {Y} p = do
     u ← X .snd .snd
     v ← Y .snd .snd
-    pure $ sip fin-set-str-is-univalent (u ∙ path→equiv (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
+    pure $ sip fin-set-str-is-univalent (u ∙ ＝→≃ (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
 
   ∥FinSet′∥₂≃ᴱℕ : ∥ FinSet′ ℓ ∥₂ ≃ᴱ ℕ
   ∥FinSet′∥₂≃ᴱℕ = (∥-∥₂.rec! (fst ∘ snd)) , is-isoᴱ→is-equivᴱ
@@ -87,5 +87,5 @@ private
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
 ∥FinSet∥₂≃ᴱℕ
-  = ∥-∥₂-≃ᴱ (iso→equiv fin-set-iso ∙ Σ-ap-snd λ _ → iso→equiv is-bishop-finite-iso)
+  = ∥-∥₂-≃ᴱ (iso→≃ fin-set-iso ∙ Σ-ap-snd λ _ → iso→≃ is-bishop-finite-iso)
   ∙ ∥FinSet′∥₂≃ᴱℕ

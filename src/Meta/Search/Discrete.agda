@@ -12,7 +12,7 @@ open import Correspondences.Decidable
 open import Correspondences.Discrete
 open Correspondences.Discrete public
   using ( is-discrete ; is-discrete-β ; is-discrete-η
-        ; is-discrete-injection ; is-discrete-embedding )
+        ; ↣→is-discrete ; ↪→is-discrete ; ≃→is-discrete )
 
 open import Data.Dec.Base as Dec
 

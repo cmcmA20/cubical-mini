@@ -97,7 +97,7 @@ instance
   decomp-hlevel-pi = decomp (quote Π-is-of-hlevel) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
 
   decomp-hlevel-impl-pi : goal-decomposition (quote is-of-hlevel) (∀ {a} → B a)
-  decomp-hlevel-impl-pi = decomp (quote Π-is-of-hlevel-implicit) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
+  decomp-hlevel-impl-pi = decomp (quote ∀-is-of-hlevel) [ `level-same , `search-under 1 (quote is-of-hlevel) ]
 
   decomp-hlevel-erased : goal-decomposition (quote is-of-hlevel) (Erased A)
   decomp-hlevel-erased = decomp (quote erased-is-of-hlevel)
@@ -120,17 +120,17 @@ instance
   decomp-hlevel-univalence = decomp (quote ＝-is-of-hlevel)
     [ `level-same , `search (quote is-of-hlevel) , `search (quote is-of-hlevel) ]
 
-  decomp-hlevel-path : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
-  decomp-hlevel-path = decomp (quote path-is-of-hlevel)
+  decomp-hlevel-path-same : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
+  decomp-hlevel-path-same = decomp (quote path-is-of-hlevel-same)
     [ `level-same , `search (quote is-of-hlevel) ]
 
-  decomp-hlevel-path′ : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
-  decomp-hlevel-path′ = decomp (quote path-is-of-hlevel′)
+  decomp-hlevel-path : {a b : A} → goal-decomposition (quote is-of-hlevel) (a ＝ b)
+  decomp-hlevel-path = decomp (quote path-is-of-hlevel)
     [ `level-suc , `search (quote is-of-hlevel) , `meta , `meta ]
 
-  decomp-hlevel-pathP′ : {F : I → Type ℓ} {a : F i0} {b : F i1}
-                       → goal-decomposition (quote is-of-hlevel) ＜ a ／ F ＼ b ＞
-  decomp-hlevel-pathP′ = decomp (quote pathP-is-of-hlevel′)
+  decomp-hlevel-pathP : {F : I → Type ℓ} {a : F i0} {b : F i1}
+                      → goal-decomposition (quote is-of-hlevel) ＜ a ／ F ＼ b ＞
+  decomp-hlevel-pathP = decomp (quote pathP-is-of-hlevel)
     [ `level-suc , `search (quote is-of-hlevel) , `meta , `meta ]
 
   decomp-hlevel-ntype : goal-decomposition (quote is-of-hlevel) (n-Type ℓ n)

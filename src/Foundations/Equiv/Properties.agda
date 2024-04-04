@@ -18,7 +18,7 @@ private variable
   x y : A
 
 _ₑ⁻¹ : A ≃ B → B ≃ A
-e ₑ⁻¹ = iso→equiv (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
+e ₑ⁻¹ = iso→≃ (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
 infix 90 _ₑ⁻¹
 
 open is-iso
@@ -59,7 +59,7 @@ is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse 
 is-equiv-inv fe = ((_ , fe) ₑ⁻¹) .snd
 
 @0 apₑ : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
-apₑ F e = path→equiv (ap F (ua e))
+apₑ F e = ＝→≃ (ap F (ua e))
 
 sym-≃ : (x ＝ y) ≃ (y ＝ x)
 sym-≃ .fst = sym

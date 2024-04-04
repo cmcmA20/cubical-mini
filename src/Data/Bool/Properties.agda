@@ -30,14 +30,14 @@ private variable
 
 universal : (Bool → A)
           ≃ A × A
-universal = iso→equiv
+universal = iso→≃
   $ (λ ch → ch true , ch false)
   , iso (flip (Bool.rec fst snd))
         (λ _ → refl)
         (λ _ → fun-ext $ Bool.elim refl refl)
 
 bool≃maybe⊤ : Bool ≃ Maybe ⊤
-bool≃maybe⊤ = iso→equiv $ to , iso from ri li where
+bool≃maybe⊤ = iso→≃ $ to , iso from ri li where
   to : Bool → Maybe ⊤
   to false = nothing
   to true  = just tt

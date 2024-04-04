@@ -143,5 +143,7 @@ module _ {f : A → B} (r : is-iso f) where
   is-iso→is-equiv .equiv-proof y .snd z =
     is-iso→fibre-is-prop y (g y) (fst z) (u y) (snd z)
 
-iso→equiv : Iso A B → A ≃ B
-iso→equiv (f , is-iso) = f , is-iso→is-equiv is-iso
+iso→≃ : Iso A B → A ≃ B
+iso→≃ (f , is-iso) = f , is-iso→is-equiv is-iso
+iso→equiv = iso→≃
+{-# WARNING_ON_USAGE iso→equiv "Use `iso→≃`" #-}

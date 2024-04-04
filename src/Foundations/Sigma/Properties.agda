@@ -51,7 +51,7 @@ open is-iso
 ×-path ac bd i = (ac i , bd i)
 
 Σ-ap-snd : Π[ x ꞉ A ] (P x ≃ Q x) → Σ A P ≃ Σ A Q
-Σ-ap-snd {A} {P} {Q} pointwise = iso→equiv morp where
+Σ-ap-snd {A} {P} {Q} pointwise = iso→≃ morp where
   pwise : Π[ x ꞉ A ] (P x ≅ Q x)
   pwise x = _ , is-equiv→is-iso (pointwise x .snd)
 
@@ -140,7 +140,7 @@ open is-iso
   isom .linv p = refl
   isom .is-iso.rinv p i j
     = p j .fst
-    , is-prop→pathP (λ k → path-is-of-hlevel 1 (bp (p k .fst))
+    , is-prop→pathP (λ k → path-is-of-hlevel-same 1 (bp (p k .fst))
                                       {x = Σ-prop-path bp {x} {y} (ap fst p) k .snd}
                                       {y = p k .snd})
                              refl refl j i
@@ -162,17 +162,17 @@ open is-iso
   is-prop→squareP (λ i j → B-prop (sq i j)) (ap snd q) (ap snd p) (ap snd s) (ap snd r) i j
 
 Σ-contract-fst : (A-c : is-contr A) → Σ[ x ꞉ A ] B x ≃ B (centre A-c)
-Σ-contract-fst {B} A-c = iso→equiv the-iso where
+Σ-contract-fst {B} A-c = iso→≃ the-iso where
   the-iso : Iso _ _
   the-iso .fst (x , b) = subst B (sym $ paths A-c x) b
   the-iso .snd .inv = _ ,_
   the-iso .snd .rinv b′
     = sym $ subst-filler B refl b′
-    ∙ ap (λ f → subst B f b′) (is-prop-β (is-contr→is-prop (path-is-of-hlevel 0 A-c)) _ _)
+    ∙ ap (λ f → subst B f b′) (is-prop-β (is-contr→is-prop (path-is-of-hlevel-same 0 A-c)) _ _)
   the-iso .snd .linv (x , b) = Σ-pathP (paths A-c _) $ symP $ subst-filler B (sym $ paths A-c _) b
 
 Σ-contract-snd : (∀ x → is-contr (B x)) → Σ A B ≃ A
-Σ-contract-snd B-contr = iso→equiv the-iso where
+Σ-contract-snd B-contr = iso→≃ the-iso where
   the-iso : Iso _ _
   the-iso .fst (a , b) = a
   the-iso .snd .inv x = x , centre (B-contr _)

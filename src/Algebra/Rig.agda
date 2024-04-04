@@ -63,7 +63,7 @@ rig-on↪semiring-on .fst R .Semiring-on._·_ = R .Rig-on._·_
 rig-on↪semiring-on .fst R .Semiring-on.has-semiring =
   R .Rig-on.has-rig .is-rig.has-semiring
 rig-on↪semiring-on .snd = set-injective→is-embedding hlevel! λ p →
-  Equiv.injective (isoₜ→equiv rig-on-iso) $
+  Equiv.injective (isoₜ→≃ rig-on-iso) $
     ap Semiring-on._+_ p ,ₚ ap Semiring-on._·_ p ,ₚ prop!
 
 rig-on-is-set : is-set (Rig-on A)

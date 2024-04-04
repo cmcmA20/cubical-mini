@@ -51,7 +51,7 @@ abelian-group-on↪group-on .fst G .Group-on._⋆_ = G .AGroup-on._⋆_
 abelian-group-on↪group-on .fst G .Group-on.has-group =
   G .AGroup-on.has-abelian-group .is-abelian-group.has-group
 abelian-group-on↪group-on .snd = set-injective→is-embedding hlevel! λ p →
-  Equiv.injective (isoₜ→equiv agroup-on-iso) $ ap Group-on._⋆_ p ,ₚ prop!
+  Equiv.injective (isoₜ→≃ agroup-on-iso) $ ap Group-on._⋆_ p ,ₚ prop!
 
 
 record make-abelian-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

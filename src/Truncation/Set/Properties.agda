@@ -52,7 +52,7 @@ proj! {A-set} = rec A-set id
   inc∘proj = elim! λ _ → refl
 
 universal : is-set B → (∥ A ∥₂ → B) ≃ (A → B)
-universal {B} {A} B-set = iso→equiv (ff , iso  gg (λ _ → refl) li) where
+universal {B} {A} B-set = iso→≃ (ff , iso  gg (λ _ → refl) li) where
   instance _ = hlevel-basic-instance 2 B-set
   ff : (∥ A ∥₂ → B) → A → B
   ff f t = f ∣ t ∣₂
@@ -64,5 +64,5 @@ universal {B} {A} B-set = iso→equiv (ff , iso  gg (λ _ → refl) li) where
   li f = fun-ext (elim! λ _ → refl)
 
 is-set→equiv-∥-∥₂ : is-set A → A ≃ ∥ A ∥₂
-is-set→equiv-∥-∥₂ A-set = iso→equiv $ ∣_∣₂ , iso proj! (elim! λ _ → refl) λ _ → refl where
+is-set→equiv-∥-∥₂ A-set = iso→≃ $ ∣_∣₂ , iso proj! (elim! λ _ → refl) λ _ → refl where
   instance _ = hlevel-basic-instance 2 A-set

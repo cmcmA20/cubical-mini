@@ -41,24 +41,6 @@ J
 J ids P pr s =
   transport (λ i → P (ids .to-path s i) (ids .to-path-over s i)) pr
 
-J-refl
-  : {r : ∀ a → R a a} {x : A}
-  → (ids : is-identity-system R r)
-  → (P : ∀ b → R x b → Type ℓ″)
-  → (p : P x (r x))
-  → J ids P p (r x) ＝ p
-J-refl {R} {r} {x} ids P p =
-  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p  ＝⟨⟩
-  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p       ＝⟨ ap (λ e → subst P′ e p) lemma ⟩
-  subst P′ refl p                                                           ＝⟨ transport-refl p ⟩
-  p                                                                         ∎
-  where
-    P′ : Σ _ (R x) → Type _
-    P′ (b , r) = P b r
-
-    lemma : (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) ＝ refl
-    lemma = is-set-β (is-contr→is-set (ΣR-is-contr ids)) _ _ _ _
-
 to-path-refl-coh
   : {A : Type ℓ} {R : A → A → Type ℓ′}
     {r : (a : A) → R a a}
@@ -67,6 +49,21 @@ to-path-refl-coh
   → (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) ＝ refl
 to-path-refl-coh {r} ids x = is-set-β (is-contr→is-set (ΣR-is-contr ids)) _ _
   (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) refl
+
+J-refl
+  : {r : ∀ a → R a a} {x : A}
+  → (ids : is-identity-system R r)
+  → (P : ∀ b → R x b → Type ℓ″)
+  → (p : P x (r x))
+  → J ids P p (r x) ＝ p
+J-refl {R} {r} {x} ids P p =
+  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p  ＝⟨⟩
+  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p       ＝⟨ ap (λ e → subst P′ e p) (to-path-refl-coh ids x) ⟩
+  subst P′ refl p                                                           ＝⟨ transport-refl p ⟩
+  p                                                                         ∎
+  where
+    P′ : Σ _ (R x) → Type _
+    P′ (b , r) = P b r
 
 to-path-refl
   : {A : Type ℓ} {R : A → A → Type ℓ′}
@@ -91,7 +88,7 @@ equiv-path→identity-system
 equiv-path→identity-system {A} {R} {r} eqv pres′ = ids where opaque
   unfolding is-of-hlevel
   contract : ∀ {a} → is-contr (Σ _ (R a))
-  contract = is-of-hlevel-≃ 0 ((total (λ _ → eqv $_) , fibrewise-is-equiv→total-is-equiv (eqv .snd)))
+  contract = ≃→is-of-hlevel 0 ((total (λ _ → eqv $_) , fibrewise-is-equiv→total-is-equiv (eqv .snd)))
     (_ , singleton-is-prop)
 
   pres : {a : A} → eqv # r a ＝ refl
@@ -111,7 +108,7 @@ identity-system-gives-path
   → is-identity-system R r
   → ∀ {x y} → R x y ≃ (x ＝ y)
 identity-system-gives-path {R} {r} ids =
-  iso→equiv (ids .to-path , iso from ri li) where
+  iso→≃ (ids .to-path , iso from ri li) where
     from : ∀ {a b} → a ＝ b → R a b
     from {a} p = transport (λ i → R a (p i)) (r a)
 
@@ -147,7 +144,7 @@ module _
   : is-identity-system {A = Type ℓ} _≃_ (λ _ → refl)
 univalence-identity-system .to-path = ua
 univalence-identity-system .to-path-over p =
-  Σ-prop-pathP (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → path→ua-pathP p refl
+  Σ-prop-pathP (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → ＝→ua-pathP p refl
 
 path-identity-system : {A : Type ℓ} → is-identity-system (Path A) (λ _ → refl)
 path-identity-system .to-path = id
@@ -209,7 +206,7 @@ opaque
     → is-of-hlevel (suc n) A
   identity-system→is-of-hlevel zero ids hl x y = ids .to-path (hl _ _ .fst)
   identity-system→is-of-hlevel (suc n) ids hl x y =
-    is-of-hlevel-≃ (suc n) (identity-system-gives-path ids ⁻¹) (hl x y)
+    ≃→is-of-hlevel (suc n) (identity-system-gives-path ids ⁻¹) (hl x y)
 
 instance
   H-Level-identity-system : ∀ {n} {r : ∀ a → R a a} → H-Level (suc n) (is-identity-system R r)
