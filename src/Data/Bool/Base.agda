@@ -54,6 +54,16 @@ if_then_else_ : Bool → A → A → A
 if false then _  else fa = fa
 if true  then tr else _  = tr
 -- if b then tr else fa = rec tr fa b
+-- TODO Use `rec` and noinline? otherwise it looks bad in goals
 
-⟦_⟧ᵇ : Bool → Type
-⟦ b ⟧ᵇ = if b then ⊤ else ⊥
+is-true : Bool → Type
+is-true b = if b then ⊤ else ⊥
+
+is-trueₚ : Bool → Type
+is-trueₚ b = b ＝ true
+
+is-falseₚ : Bool → Type
+is-falseₚ b = b ＝ false
+
+⟦_⟧ᵇ = is-true
+{-# WARNING_ON_USAGE ⟦_⟧ᵇ "Use `is-true`" #-}

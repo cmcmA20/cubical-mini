@@ -16,25 +16,16 @@ open import Data.Sum.Path
 
 open import Data.Bool.Base
 open import Data.Nat.Base
+open import Data.Nat.Order.Computational
+  using ( _≤ᵇ_ ; _<ᵇ_ ; _≥ᵇ_ ; _>ᵇ_
+        ; _≰ᵇ_ ; _≮ᵇ_ ; _≱ᵇ_ ; _≯ᵇ_
+        )
 open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Solver
 
 private variable
   m n k : ℕ
-
-infix 3 _≤ᵇ_      _≥ᵇ_ _>ᵇ_
-        _≰ᵇ_ _≮ᵇ_ _≱ᵇ_ _≯ᵇ_
-
-_≤ᵇ_ _≥ᵇ_ _>ᵇ_ _≰ᵇ_ _≮ᵇ_ _≱ᵇ_ _≯ᵇ_ : DProc _ (ℕ , ℕ)
-
-m ≤ᵇ n = (m <ᵇ suc n)
-m ≥ᵇ n =      n ≤ᵇ m
-m >ᵇ n =      n <ᵇ m
-m ≰ᵇ n = not (m ≤ᵇ n)
-m ≮ᵇ n = not (m <ᵇ n)
-m ≱ᵇ n = not (m ≥ᵇ n)
-m ≯ᵇ n = not (m >ᵇ n)
 
 infix 3 _≤_ _<_ _≥_ _>_
         _≰_ _≮_ _≱_ _≯_

@@ -21,14 +21,14 @@ instance
   H-Level-sub : ∀ {n} {X : 𝒰 ℓ} {P Q : X → Bool} → H-Level (suc n) (P ⊆ Q)
   H-Level-sub {Q} = hlevel-prop-instance $
     ∀-is-of-hlevel _ λ x →
-    Bool.elim {P = λ z → is-prop (_ → ⟦ z ⟧ᵇ)}
+    Bool.elim {P = λ z → is-prop (_ → is-true z)}
     hlevel! hlevel! (Q x)
 
 record Supported {ℓ} (X : 𝒰 ℓ) : 𝒰 (ℓᵃ ⊔ ℓ) where
   no-eta-equality
   field
     support : X → A →̇ Bool
-    support-is-finite : Π[ x ꞉ X ] is-bishop-finite (Σ[ a ꞉ A ] ⟦ support x a ⟧ᵇ)
+    support-is-finite : Π[ x ꞉ X ] is-bishop-finite (Σ[ a ꞉ A ] is-true (support x a))
 
 open Supported
 

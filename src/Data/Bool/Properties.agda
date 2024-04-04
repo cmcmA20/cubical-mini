@@ -58,22 +58,22 @@ boolean-pred-ext : (f g : A → Bool) → f ⊆ g → g ⊆ f → f ＝ g
 boolean-pred-ext f g p q i a with f a | recall f a | g a | recall g a
 ... | false | ⟪ _ ⟫ | false | ⟪ _ ⟫ = false
 ... | false | ⟪ u ⟫ | true  | ⟪ v ⟫ =
-  let q′ = subst² (λ φ ψ → ⟦ φ ⟧ᵇ → ⟦ ψ ⟧ᵇ) v u (q {a})
+  let q′ = subst² (λ φ ψ → is-true φ → is-true ψ) v u (q {a})
   in ⊥.rec {A = false ＝ true} (q′ tt) i
 ... | true  | ⟪ u ⟫ | false | ⟪ v ⟫ =
-  let p′ = subst² (λ φ ψ → ⟦ φ ⟧ᵇ → ⟦ ψ ⟧ᵇ) u v (p {a})
+  let p′ = subst² (λ φ ψ → is-true φ → is-true ψ) u v (p {a})
   in ⊥.rec {A = true ＝ false} (p′ tt) i
 ... | true  | ⟪ _ ⟫ | true  | ⟪ _ ⟫ = true
 
 
-reflects-id : ∀ {x} → Reflects (⟦ x ⟧ᵇ) x
+reflects-id : ∀ {x} → Reflects (is-true x) x
 reflects-id {(false)} = ofⁿ id
 reflects-id {(true)}  = ofʸ tt
 
 
 -- negation
 
-reflects-not : ∀ {x} → Reflects (¬ ⟦ x ⟧ᵇ) (not x)
+reflects-not : ∀ {x} → Reflects (¬ is-true x) (not x)
 reflects-not {(false)} = ofʸ id
 reflects-not {(true)}  = ofⁿ (_$ tt)
 
@@ -86,19 +86,19 @@ not-invol = witness!
 
 -- conjunction
 
-and-true-≃ : (x and y ＝ true) ≃ ((x ＝ true) × (y ＝ true))
+and-true-≃ : is-trueₚ (x and y) ≃ (is-trueₚ x × is-trueₚ y)
 and-true-≃ = prop-extₑ! to from where
-  to : x and y ＝ true → (x ＝ true) × (y ＝ true)
+  to : is-trueₚ (x and y) → (is-trueₚ x × is-trueₚ y)
   to {(false)} p = ⊥.rec $ false≠true p
   to {(true)}  p = refl , p
 
-  from : (x ＝ true) × (y ＝ true) → x and y ＝ true
+  from : (is-trueₚ x × is-trueₚ y) → is-trueₚ (x and y)
   from {(false)} p = p .fst
   from {(true)}  p = p .snd
 
 module and-true-≃ {x} {y} = Equiv (and-true-≃ {x} {y})
 
-reflects-and : ∀ {x y} → Reflects (⟦ x ⟧ᵇ × ⟦ y ⟧ᵇ) (x and y)
+reflects-and : ∀ {x y} → Reflects (is-true x × is-true y) (x and y)
 reflects-and {x = false}            = ofⁿ fst
 reflects-and {x = true} {y = false} = ofⁿ snd
 reflects-and {x = true} {y = true}  = ofʸ (tt , tt)
@@ -125,23 +125,25 @@ and-compl = witness!
 -- disjunction
 
 or-true-≃
-  : (x or y ＝ true)
-  ≃ ( ((x ＝ true ) × (y ＝ false))
-  ⊎   ((x ＝ false) × (y ＝ true ))
-  ⊎   ((x ＝ true ) × (y ＝ true )) )
+  : is-trueₚ (x or y)
+  ≃ ( (is-trueₚ  x × is-falseₚ y)
+  ⊎   (is-falseₚ x × is-trueₚ  y)
+  ⊎   (is-trueₚ  x × is-trueₚ  y) )
 or-true-≃ = prop-extₑ hlevel! go to from where
-  to : (x or y ＝ true) → (((x ＝ true) × (y ＝ false)) ⊎ ((x ＝ false) × (y ＝ true)) ⊎ ((x ＝ true) × (y ＝ true)))
+  to : is-trueₚ (x or y)
+     → ((is-trueₚ x × is-falseₚ y) ⊎ (is-falseₚ x × is-trueₚ y) ⊎ (is-trueₚ x × is-trueₚ y))
   to {(false)} {(false)} p = ⊥.rec $ false≠true p
   to {(false)} {(true)}  _ = inr (inl (refl , refl))
   to {(true)}  {(false)} _ = inl (refl , refl)
   to {(true)}  {(true)}  _ = inr (inr (refl , refl))
 
-  from : (((x ＝ true) × (y ＝ false)) ⊎ ((x ＝ false) × (y ＝ true)) ⊎ ((x ＝ true) × (y ＝ true))) → (x or y ＝ true)
+  from : ((is-trueₚ x × is-falseₚ y) ⊎ (is-falseₚ x × is-trueₚ y) ⊎ (is-trueₚ x × is-trueₚ y))
+       → is-trueₚ (x or y)
   from {(false)} {(false)}   = [ fst , [ snd , snd ]ᵤ ]ᵤ
   from {(false)} {(true)}  _ = refl
   from {(true)}            _ = refl
 
-  go : is-prop ((x ＝ true) × (y ＝ false) ⊎ (x ＝ false) × (y ＝ true) ⊎ (x ＝ true) × (y ＝ true))
+  go : is-prop (is-trueₚ x × is-falseₚ y ⊎ is-falseₚ x × is-trueₚ y ⊎ is-trueₚ x × is-trueₚ y)
   go {x} {y} = disjoint-⊎-is-prop hlevel!
     (disjoint-⊎-is-prop hlevel! hlevel! λ z → false≠true (z .fst .fst ⁻¹ ∙ z .snd .fst))
     λ z → [ (λ w → false≠true (w .fst ⁻¹ ∙ z .fst .fst)) , (λ w → false≠true (z .fst .snd ⁻¹ ∙ w .snd)) ]ᵤ (z .snd)
@@ -149,7 +151,7 @@ or-true-≃ = prop-extₑ hlevel! go to from where
 module or-true-≃ {x} {y} = Equiv (or-true-≃ {x} {y})
 
 -- TODO reflection to a These structure
-reflects-or : ∀ {x y} → Reflects (⟦ x ⟧ᵇ ⊎ ⟦ y ⟧ᵇ) (x or y)
+reflects-or : ∀ {x y} → Reflects (is-true x ⊎ is-true y) (x or y)
 reflects-or {x = false} {y = false} = ofⁿ [ id , id ]ᵤ
 reflects-or {x = false} {y = true}  = ofʸ (inr tt)
 reflects-or {x = true}              = ofʸ (inl tt)

@@ -19,10 +19,13 @@ private variable
   A P : Type ℓ
   B : Type ℓ′
 
-dec-∥-∥₁-equiv : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
-dec-∥-∥₁-equiv = prop-extₑ!
+∥-∥₁∘dec≃dec∘∥-∥₁ : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
+∥-∥₁∘dec≃dec∘∥-∥₁ = prop-extₑ!
   (∥-∥₁.rec! $ Dec.dmap pure ∥-∥₁.rec!)
   (Dec.rec (yes <$>_) (pure ∘ no ∘ contra pure))
+
+dec-∥-∥₁-equiv = ∥-∥₁∘dec≃dec∘∥-∥₁
+{-# WARNING_ON_USAGE dec-∥-∥₁-equiv "Use `∥-∥₁∘dec≃dec∘∥-∥₁`" #-}
 
 dec-≃ : A ≃ B → Dec A ≃ Dec B
 dec-≃ {A} {B} e = iso→≃ $ to , iso from ri li where

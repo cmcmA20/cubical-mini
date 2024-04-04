@@ -11,38 +11,45 @@ open import Data.Sum.Base
 open import Data.Unit.Base
 
 open import Data.Nat.Base
+open import Data.Nat.Base public
+  using (_<ᵇ_)
 
 private variable
   m n k : ℕ
 
-infix 3 _<_ _≤ᵇ_ _≤_
+infix 3 _≤ᵇ_      _≥ᵇ_ _>ᵇ_
+        _≰ᵇ_ _≮ᵇ_ _≱ᵇ_ _≯ᵇ_
+
+_≤ᵇ_ _≥ᵇ_ _>ᵇ_ _≰ᵇ_ _≮ᵇ_ _≱ᵇ_ _≯ᵇ_ : ℕ → ℕ → Bool
+
+m ≤ᵇ n =      m <ᵇ suc n
+m ≥ᵇ n =      n ≤ᵇ m
+m >ᵇ n =      n <ᵇ m
+m ≰ᵇ n = not (m ≤ᵇ n)
+m ≮ᵇ n = not (m <ᵇ n)
+m ≱ᵇ n = not (m ≥ᵇ n)
+m ≯ᵇ n = not (m >ᵇ n)
+
+infix 3 _≤_ _<_ _≥_ _>_
+        _≰_ _≮_ _≱_ _≯_
+
+_≥_ _>_ _≰_ _≮_ _≱_ _≯_ : Corr _ (ℕ , ℕ) 0ℓ
 
 _<_ : ℕ → ℕ → Type
-m < n = ⟦ m <ᵇ n ⟧ᵇ
-
-_≤ᵇ_ : ℕ → ℕ → Bool
-m ≤ᵇ n = m <ᵇ suc n
+m < n = is-true (m <ᵇ n)
 
 _≤_ : ℕ → ℕ → Type
-m ≤ n = ⟦ m ≤ᵇ n ⟧ᵇ
+m ≤ n = is-true (m ≤ᵇ n)
 
-z≤ : 0 ≤ n
-z≤ = tt
-
-s≤s : m ≤ n → suc m ≤ suc n
-s≤s = refl
-
-≤-peel : suc m ≤ suc n → m ≤ n
-≤-peel = refl
-
-_≥_ : ℕ → ℕ → Type
-m ≥ n = n ≤ m
-
-_>_ : ℕ → ℕ → Type
-m > n = n < m
+m ≥ n =   n ≤ m
+m > n =   n < m
+m ≰ n = ¬ m ≤ n
+m ≮ n = ¬ m < n
+m ≱ n = ¬ m ≥ n
+m ≯ n = ¬ m > n
 
 
--- Properties of order
+-- Properties of strict order
 
 <-trans : m < n → n < k → m < k
 <-trans {0}     {suc n} {suc k} _ _ = tt
@@ -65,6 +72,28 @@ m > n = n < m
 <→s : m < n → Σ[ k ꞉ ℕ ] (n ＝ suc k)
 <→s {m} {suc n} p = n , refl
 
+opaque
+  unfolding is-of-hlevel
+  <-is-prop : is-prop (m < n)
+  <-is-prop {0}     {suc _} _ _ = refl
+  <-is-prop {suc m} {suc n} = <-is-prop {m} {n}
+
+instance
+  <-is-of-hlevel : is-of-hlevel (suc k) (m < n)
+  <-is-of-hlevel {m} {n} = is-prop→is-of-hlevel-suc (<-is-prop {m} {n})
+
+
+-- Properties of order
+
+z≤ : 0 ≤ n
+z≤ = tt
+
+s≤s : m ≤ n → suc m ≤ suc n
+s≤s = refl
+
+≤-peel : suc m ≤ suc n → m ≤ n
+≤-peel = refl
+
 ≤-refl : n ≤ n
 ≤-refl {0}     = tt
 ≤-refl {suc n} = ≤-refl {n}
@@ -77,12 +106,6 @@ m > n = n < m
 ≤-antisym {0}     {0}     _ _ = refl
 ≤-antisym {suc m} {suc n} p q = ap suc (≤-antisym p q)
 
-opaque
-  unfolding is-of-hlevel
-  <-is-prop : is-prop (m < n)
-  <-is-prop {0}     {suc _} _ _ = refl
-  <-is-prop {suc m} {suc n} = <-is-prop {m} {n}
-
 ≤-is-prop : is-prop (m ≤ n)
 ≤-is-prop {m} {n} = <-is-prop {m} {suc n}
 
@@ -93,20 +116,16 @@ opaque
 ≤-ascend : n ≤ suc n
 ≤-ascend {n} = ≤-suc-r {n} (≤-refl {n})
 
-instance
-  <-is-of-hlevel : is-of-hlevel (suc k) (m < n)
-  <-is-of-hlevel {m} {n} = is-prop→is-of-hlevel-suc (<-is-prop {m} {n})
-
 ≤-dec : (m n : ℕ) → Dec (m ≤ n)
 ≤-dec m n with m ≤ᵇ n
 ... | false = no  refl
 ... | true  = yes tt
 
-¬sucn≤n : ¬ suc n ≤ n
-¬sucn≤n {suc n} = ¬sucn≤n {n}
+suc≰id : ¬ suc n ≤ n
+suc≰id {suc n} = suc≰id {n}
 
-¬sucn≤0 : ¬ suc n ≤ 0
-¬sucn≤0 {suc _} ()
+s≰z : suc n ≰ 0
+s≰z {suc _} ()
 
 ≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
 ≤-split m n with m <ᵇ n in p
@@ -114,10 +133,17 @@ instance
 ... | false with n <ᵇ m in q
 ... | true  = inr $ inl tt
 ... | false = inr $ inr $ go m n
-  (substⁱ ⟦_⟧ᵇ p)
-  (substⁱ ⟦_⟧ᵇ q) where
+  (substⁱ is-true p)
+  (substⁱ is-true q) where
     go : ∀ m n → ¬ (m < n) → ¬ (n < m) → m ＝ n
     go 0       0       _ _ = refl
     go 0       (suc _) p _ = ⊥.rec $ p tt
     go (suc _) 0       _ q = ⊥.rec $ q tt
     go (suc m) (suc n) p q = ap suc $ go m n p q
+
+
+¬sucn≤n = suc≰id
+{-# WARNING_ON_USAGE ¬sucn≤n "Use `suc≰id`" #-}
+
+¬sucn≤0 = s≰z
+{-# WARNING_ON_USAGE ¬sucn≤0 "Use `s≰z`" #-}
