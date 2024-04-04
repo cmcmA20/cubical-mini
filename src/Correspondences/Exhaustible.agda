@@ -37,4 +37,4 @@ lift-exhaustible ex .exhaustible-β P? = Dec.dmap (_∘ lower) (λ ¬f g → ¬f
 Π-decision d ex = ex .exhaustible-β d
 
 ∀-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec ∀[ B ]
-∀-decision d ex = dec-≃ Π-impl-Π-≃ $ Π-decision d ex
+∀-decision d ex = dec-≃ Π≃∀ $ Π-decision d ex

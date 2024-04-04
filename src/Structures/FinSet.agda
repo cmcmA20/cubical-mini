@@ -30,7 +30,7 @@ record FinSet (ℓ : Level) : Type (ℓsuc ℓ) where
   constructor fin-set
   field
     carrier : Type ℓ
-    has-is-bishop-finite : is-bishop-finite carrier
+    has-bishop-finite : is-bishop-finite carrier
 
 open FinSet
 
@@ -87,5 +87,5 @@ private
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
 ∥FinSet∥₂≃ᴱℕ
-  = ∥-∥₂-≃ᴱ (iso→≃ fin-set-iso ∙ Σ-ap-snd λ _ → iso→≃ is-bishop-finite-iso)
+  = ≃→≃ᴱ (∥-∥₂-≃ (iso→≃ fin-set-iso ∙ Σ-ap-snd λ _ → iso→≃ is-bishop-finite-iso))
   ∙ ∥FinSet′∥₂≃ᴱℕ

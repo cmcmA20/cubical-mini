@@ -4,6 +4,7 @@ module Truncation.Set.Properties where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Meta.Effect.Map
 open import Meta.Search.HLevel
 
 open import Truncation.Set.Base public

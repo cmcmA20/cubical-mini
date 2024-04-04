@@ -42,9 +42,15 @@ instance
 module @0 ∥-∥₂-path {ℓ} {A : Type ℓ} {x} {y} =
   Equiv (∥-∥₂-path-equiv {A = A} {x = x} {y = y})
 
-∥-∥₂-≃ᴱ : A ≃ B → ∥ A ∥₂ ≃ᴱ ∥ B ∥₂
-∥-∥₂-≃ᴱ e = map e.to , is-isoᴱ→is-equivᴱ
-  ( map e.from
-  , erase (elim! λ x → ∥-∥₂-path.from ∣ e.ε _ ∣₁)
-  , erase (elim! λ x → ∥-∥₂-path.from ∣ e.η _ ∣₁))
-    where module e = Equiv e
+∥-∥₂-≃ : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
+∥-∥₂-≃ e = to , is-iso→is-equiv (iso from ri li)
+  where
+  module e = Equiv e
+  to = map e.to
+  from = map e.from
+
+  ri : from is-right-inverse-of to
+  ri = elim! (ap ∣_∣₂ ∘ e.ε)
+
+  li : from is-left-inverse-of to
+  li = elim! (ap ∣_∣₂ ∘ e.η)

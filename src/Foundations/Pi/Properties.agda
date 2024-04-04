@@ -46,21 +46,15 @@ private variable
            ap (subst P _) (sym (from-pathP (symP-from-goal (ap k (e.ε x)))))
          ∙ transport⁻-transport (sym (ap P (e.ε x))) _
 
-Π-impl-cod-≃ : Π[ x ꞉ A ] (P x ≃ Q x)
-             → ∀[ x ꞉ A ] P x
-             ≃ ∀[ x ꞉ A ] Q x
-Π-impl-cod-≃ k .fst f {x} = k x .fst (f {x})
-Π-impl-cod-≃ k .snd .equiv-proof f .fst .fst {x}   = equiv-centre (k x) (f {x}) .fst
-Π-impl-cod-≃ k .snd .equiv-proof f .fst .snd i {x} = equiv-centre (k x) (f {x}) .snd i
-Π-impl-cod-≃ k .snd .equiv-proof f .snd (g , p) i .fst {x} =
-  equiv-path (k x) (f {x}) (g {x} , λ j → p j {x}) i .fst
-Π-impl-cod-≃ k .snd .equiv-proof f .snd (g , p) i .snd j {x} =
-  equiv-path (k x) (f {x}) (g {x} , λ k → p k {x}) i .snd j
+Π≃∀ : Π[ x ꞉ A ] P x
+    ≃ ∀[ x ꞉ A ] P x
+Π≃∀ .fst = implicit
+Π≃∀ .snd .equiv-proof = strict-contr-fibres λ p _ → p
 
-Π-impl-Π-≃ : Π[ x ꞉ A ] P x
-           ≃ ∀[ x ꞉ A ] P x
-Π-impl-Π-≃ .fst f = f _
-Π-impl-Π-≃ .snd .equiv-proof = strict-contr-fibres λ p _ → p
+∀-cod-≃ : Π[ x ꞉ A ] (P x ≃ Q x)
+        → ∀[ x ꞉ A ] P x
+        ≃ ∀[ x ꞉ A ] Q x
+∀-cod-≃ k = Π≃∀ ₑ⁻¹ ∙ₑ Π-cod-≃ k ∙ₑ Π≃∀
 
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
 function-≃ dom rng = iso→≃ the-iso where
@@ -143,3 +137,10 @@ opaque
       coei→1
         (λ i → ＜ f x₀ ／ B ＼ g (c .snd (x₁ , p) (i ∨ j) .fst) ＞)
         j $ h $ c .snd (x₁ , p) j .snd
+
+
+Π-impl-Π-≃ = Π≃∀
+{-# WARNING_ON_USAGE Π-impl-Π-≃ "Use `Π≃∀`" #-}
+
+Π-impl-cod-≃ = ∀-cod-≃
+{-# WARNING_ON_USAGE Π-impl-cod-≃ "Use `∀-cod-≃`" #-}

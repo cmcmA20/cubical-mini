@@ -91,6 +91,19 @@ is-prop→equiv-∥-∥₁ A-prop = prop-extₑ! ∣_∣₁ proj!
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
 is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → ≃→is-of-hlevel 1 e hlevel!)
 
+∥-∥₁-≃ : A ≃ B → ∥ A ∥₁ ≃ ∥ B ∥₁
+∥-∥₁-≃ {A} {B} e = iso→≃ $ to , iso from ri li where
+  to = map (e $_)
+  from = map (e ⁻¹ $_)
+
+  module e = Equiv e
+  ri : from is-right-inverse-of to
+  ri = elim! (ap ∣_∣₁ ∘ e.ε)
+
+  li : from is-left-inverse-of to
+  li = elim! (ap ∣_∣₁ ∘ e.η)
+
+
 corestriction : (f : A → B) → (A → Im f)
 corestriction f x = f x , ∣ x , refl ∣₁
 
@@ -123,13 +136,15 @@ rec-set! : {f : A → B}
          → ∥ A ∥₁ → B
 rec-set! f-const {B-set} = rec-set f-const B-set
 
-Σ-∥-∥₁-over-prop
+Σ-over-prop-∥-∥₁≃∃
   : {A : Type ℓ} {B : A → Type ℓ′} → is-prop A
-  → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∥ Σ[ a ꞉ A ] B a ∥₁
-Σ-∥-∥₁-over-prop A-prop = prop-extₑ!
+  → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∃[ a ꞉ A ] B a
+Σ-over-prop-∥-∥₁≃∃ A-prop = prop-extₑ!
   (λ x → map (x .fst ,_) (x .snd))
   (rec! (second ∣_∣₁)) where instance _ = hlevel-prop-instance A-prop
 
+Σ-∥-∥₁-over-prop = Σ-over-prop-∥-∥₁≃∃
+{-# WARNING_ON_USAGE Σ-∥-∥₁-over-prop "Use `Σ-prop-∥-∥₁≃∃`" #-}
 
 _factors-through_
   : (f : A → C) (B : Type (level-of-type A ⊔ level-of-type C)) → _

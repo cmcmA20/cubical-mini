@@ -30,13 +30,12 @@ record Omniscient₁ {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (�
 
 open Omniscient₁ public
 
--- TODO
--- ≃→omniscient₁ : B ≃ A → Omniscient₁ {ℓ} A → Omniscient₁ {ℓ} B
--- ≃→omniscient₁ e omn₁ .omniscient₁-β P? =
---   let u = omn₁ .omniscient₁-β λ x → P? (e ⁻¹ $ x)
---   in ≃→dec (prop-extₑ! (map (Σ-ap e {!!} $_)) {!!}) u
+≃→omniscient₁ : B ≃ A → Omniscient₁ {ℓ} A → Omniscient₁ {ℓ} B
+≃→omniscient₁ e omn₁ .omniscient₁-β {P} P? = ≃→dec
+  (∥-∥₁.∥-∥₁-≃ (Σ-ap e λ b → subst (λ φ → P b ≃ P φ) (e.η b ⁻¹) refl)) $
+    omn₁ .omniscient₁-β λ x → P? (e ⁻¹ $ x)
+  where module e = Equiv e
 
--- TODO use contra?
 omniscient₁→exhaustible : Omniscient₁ {ℓ} A → Exhaustible {ℓ} A
 omniscient₁→exhaustible omn .exhaustible-β {P} P? = Dec.dmap {P = ¬ ∃[ mapⁿ 1 ¬_ P ]}
   (λ ¬∃p x → dec→essentially-classical (P? x) $ ¬∃p ∘ ∣_∣₁ ∘ (x ,_))

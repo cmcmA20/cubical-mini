@@ -72,7 +72,7 @@ private
                                 → is-univalent σ → is-univalent τ
                                 → is-univalent (function-str′ σ τ)
   function-str′-is-univalent {S} {T} {σ} {τ} θ₁ θ₂ eqv =
-    Π-impl-cod-≃ (λ s → Π-impl-cod-≃ λ t → function-≃ (θ₁ eqv) (θ₂ eqv)) ∙ fun-ext-dep-≃
+    ∀-cod-≃ (λ s → ∀-cod-≃ λ t → function-≃ (θ₁ eqv) (θ₂ eqv)) ∙ fun-ext-dep-≃
 
 
 function-str : Equiv-action S → Structure ℓ T → Structure _ (λ X → S X → T X)

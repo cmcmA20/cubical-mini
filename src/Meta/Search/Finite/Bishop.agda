@@ -88,7 +88,7 @@ instance
   proj-fin₁-finset : Struct-proj-desc (quote is-bishop-finite) none (quote FinSet.carrier) true
   proj-fin₁-finset .Struct-proj-desc.struct-name = quote FinSet
   proj-fin₁-finset .Struct-proj-desc.struct-args-length = 1
-  proj-fin₁-finset .Struct-proj-desc.goal-projection = quote FinSet.has-is-bishop-finite
+  proj-fin₁-finset .Struct-proj-desc.goal-projection = quote FinSet.has-bishop-finite
   proj-fin₁-finset .Struct-proj-desc.projection-args-length = 2
   proj-fin₁-finset .Struct-proj-desc.carrier-selector = 1
 
