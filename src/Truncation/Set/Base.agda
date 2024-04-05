@@ -37,6 +37,6 @@ elim : {P : ∥ A ∥₂ → Type ℓ}
      → Π[ x ꞉ ∥ A ∥₂ ] P   x
 elim _ incc ∣ x ∣₂ = incc x
 elim P-set incc (squash₂ x y p q i j) =
-  is-set→squareP (λ k l → P-set (squash₂ x y p q k l))
+  is-set→squareᴾ (λ k l → P-set (squash₂ x y p q k l))
     (λ _ → go x) (λ k → go (p k)) (λ k → go (q k)) (λ _ → go y) i j
     where go = elim P-set incc

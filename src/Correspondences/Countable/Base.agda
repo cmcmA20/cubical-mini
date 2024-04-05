@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Countable.Base where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Effect.Bind
 open import Meta.Record
@@ -41,7 +40,12 @@ countable₁ ⦃ c ⦄ = c
 is-countable→is-discrete : is-countable A → is-discrete A
 is-countable→is-discrete cn = ∥-∥₁.proj! do
   e ← enumeration₁ cn
-  pure $ is-discrete-≃ e ℕ-is-discrete
+  pure $ ≃→is-discrete e ℕ-is-discrete
+
+≃→is-countable : B ≃ A → is-countable A → is-countable B
+≃→is-countable e c .enumeration₁ = do
+  x ← c .enumeration₁
+  pure (e ∙ x)
 
 -- TODO generalize to sigma?
 -- TODO Cantor's pairing function

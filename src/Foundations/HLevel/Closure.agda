@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.HLevel.Retracts where
+module Foundations.HLevel.Closure where
 
 open import Foundations.Base
 open import Foundations.Equiv.Base
@@ -67,8 +67,12 @@ opaque
   is-equiv→is-of-hlevel : (h : HLevel) (f : A → B) → is-equiv f → is-of-hlevel h A → is-of-hlevel h B
   is-equiv→is-of-hlevel h f eqv = is-iso→is-of-hlevel h f (is-equiv→is-iso eqv)
 
+  ≃→is-of-hlevel : (h : HLevel) → (B ≃ A) → is-of-hlevel h A → is-of-hlevel h B
+  ≃→is-of-hlevel h f = is-iso→is-of-hlevel h from (iso to η ε) where open Equiv f
+
   is-of-hlevel-≃ : (h : HLevel) → (B ≃ A) → is-of-hlevel h A → is-of-hlevel h B
-  is-of-hlevel-≃ h f = is-iso→is-of-hlevel h from (iso to η ε) where open Equiv f
+  is-of-hlevel-≃ = ≃→is-of-hlevel
+  {-# WARNING_ON_USAGE is-of-hlevel-≃ "Use `≃→is-of-hlevel`" #-}
 
   iso→is-of-hlevel : (h : HLevel) → Iso B A → is-of-hlevel h A → is-of-hlevel h B
   iso→is-of-hlevel h (f , isic) = is-iso→is-of-hlevel h (isic .is-iso.inv) $
@@ -83,12 +87,19 @@ opaque
     retract→is-of-hlevel (suc h) fun-ext happly (λ x → refl)
       (Π-is-of-hlevel (suc h) λ x → bhl x (f x) (g x))
 
+  ∀-is-of-hlevel : {B : A → Type ℓ′} (h : HLevel)
+                   (Bhl : (x : A) → is-of-hlevel h (B x))
+                 → is-of-hlevel h ({x : A} → B x)
+  ∀-is-of-hlevel h bhl = retract→is-of-hlevel h
+    (λ f {x} → f x) (λ f x → f) (λ _ → refl)
+    (Π-is-of-hlevel h bhl)
+
+
   Π-is-of-hlevel-implicit : {B : A → Type ℓ′} (h : HLevel)
                             (Bhl : (x : A) → is-of-hlevel h (B x))
                           → is-of-hlevel h ({x : A} → B x)
-  Π-is-of-hlevel-implicit h bhl = retract→is-of-hlevel h
-    (λ f {x} → f x) (λ f x → f) (λ _ → refl)
-    (Π-is-of-hlevel h bhl)
+  Π-is-of-hlevel-implicit = ∀-is-of-hlevel
+  {-# WARNING_ON_USAGE Π-is-of-hlevel-implicit "Use `∀-is-of-hlevel`" #-}
 
   Π²-is-of-hlevel
     : {B : A → Type ℓ′} {C : ∀ a → B a → Type ℓ″}
@@ -115,9 +126,9 @@ opaque
   Σ-is-of-hlevel 0 acontr bcontr =
     (acontr .fst , bcontr _ .fst) ,
       λ x →  acontr .snd _
-          ,ₚ is-prop→pathP (λ _ → is-contr→is-prop (bcontr _)) _ _
+          ,ₚ is-prop→pathᴾ (λ _ → is-contr→is-prop (bcontr _)) _ _
   Σ-is-of-hlevel 1 aprop bprop (a , b) (a' , b') i =
-    (aprop a a' i) , (is-prop→pathP (λ i → bprop (aprop a a' i)) b b' i)
+    (aprop a a' i) , (is-prop→pathᴾ (λ i → bprop (aprop a a' i)) b b' i)
   Σ-is-of-hlevel {B} (suc (suc n)) h1 h2 x y =
     is-iso→is-of-hlevel (suc n)
       (is-iso-inv (Σ-path-iso .snd) .is-iso.inv)
@@ -154,14 +165,14 @@ opaque
     ≃-is-of-hlevel 1 A-hl (retract→is-prop to from ε A-hl) e
     where open Equiv e
   ≃-is-of-hlevel-left-suc (suc n) A-hl e =
-    ≃-is-of-hlevel (suc (suc n)) A-hl (is-of-hlevel-≃ (suc (suc n)) (e ₑ⁻¹) A-hl) e
+    ≃-is-of-hlevel (suc (suc n)) A-hl (≃→is-of-hlevel (suc (suc n)) (e ₑ⁻¹) A-hl) e
 
   ≃-is-of-hlevel-right-suc : (n : HLevel) → is-of-hlevel (suc n) B → is-of-hlevel (suc n) (A ≃ B)
   ≃-is-of-hlevel-right-suc zero    B-hl e =
     ≃-is-of-hlevel 1 (retract→is-prop from to η B-hl) B-hl e
     where open Equiv e
   ≃-is-of-hlevel-right-suc (suc n) B-hl e =
-    ≃-is-of-hlevel (suc (suc n)) (is-of-hlevel-≃ (suc (suc n)) e B-hl) B-hl e
+    ≃-is-of-hlevel (suc (suc n)) (≃→is-of-hlevel (suc (suc n)) e B-hl) B-hl e
 
   @0 ＝-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
   ＝-is-of-hlevel n Ahl Bhl = is-equiv→is-of-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)

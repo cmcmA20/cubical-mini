@@ -315,7 +315,7 @@ macro
     → x ＝ y → Term → TC ⊤
   reext! p goal = do
     `p ← quoteTC p
-    unify goal (def (quote ext) [ argN (def (quote unext) [ argN `p ]) ])
+    unify goal $ it ext ##ₙ (it unext ##ₙ `p)
 
 Pathᵉ-is-of-hlevel
   : ∀ {ℓ ℓr} {A : Type ℓ} n (sa : Extensional A ℓr)
@@ -323,5 +323,5 @@ Pathᵉ-is-of-hlevel
   → ∀ {x y}
   → is-of-hlevel n (Pathᵉ sa x y)
 Pathᵉ-is-of-hlevel n sa hl =
-  is-of-hlevel-≃ _ (identity-system-gives-path (sa .idsᵉ))
-    ((path-is-of-hlevel′ _ hl _ _))
+  ≃→is-of-hlevel _ (identity-system-gives-path (sa .idsᵉ))
+    ((path-is-of-hlevel _ hl _ _))

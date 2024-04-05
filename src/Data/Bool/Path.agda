@@ -18,13 +18,13 @@ true  == true  = true
 _     == _     = false
 
 false≠true : false ≠ true
-false≠true p = subst (λ b → ⟦ not b ⟧ᵇ) p tt
+false≠true p = subst (λ b → is-true (not b)) p tt
 
 true≠false : true ≠ false
 true≠false = false≠true ∘ symₚ
 
 Code : Bool → Bool → Type
-Code b₁ b₂ = ⟦ b₁ == b₂ ⟧ᵇ
+Code b₁ b₂ = is-true (b₁ == b₂)
 
 code-refl : (b : Bool) → Code b b
 code-refl false = tt
@@ -62,20 +62,20 @@ instance
   decomp-hlevel-bool : goal-decomposition (quote is-of-hlevel) Bool
   decomp-hlevel-bool = decomp (quote bool-is-of-hlevel) [ `level-minus 2 ]
 
-⟦-⟧ᵇ-inj : ⟦ b₁ ⟧ᵇ ≃ ⟦ b₂ ⟧ᵇ → b₁ ＝ b₂
-⟦-⟧ᵇ-inj {(false)} {(false)} _ = refl
-⟦-⟧ᵇ-inj {(false)} {(true)}  f = ⊥.rec $ f ⁻¹ $ tt
-⟦-⟧ᵇ-inj {(true)}  {(false)} f = ⊥.rec $ f    $ tt
-⟦-⟧ᵇ-inj {(true)}  {(true)}  _ = refl
+is-true-inj : is-true b₁ ≃ is-true b₂ → b₁ ＝ b₂
+is-true-inj {(false)} {(false)} _ = refl
+is-true-inj {(false)} {(true)}  f = ⊥.rec $ f ⁻¹ $ tt
+is-true-inj {(true)}  {(false)} f = ⊥.rec $ f    $ tt
+is-true-inj {(true)}  {(true)}  _ = refl
 
-⟦-⟧ᵇ≃true : ⟦ b ⟧ᵇ ≃ (b ＝ true)
-⟦-⟧ᵇ≃true = go ∙ identity-system-gives-path identity-system where
-  go : ⟦ b ⟧ᵇ ≃ ⟦ b == true ⟧ᵇ
+is-true≃is-trueₚ : is-true b ≃ is-trueₚ b
+is-true≃is-trueₚ = go ∙ identity-system-gives-path identity-system where
+  go : is-true b ≃ is-true (b == true)
   go {(false)} = prop-extₑ! refl refl
   go {(true)}  = prop-extₑ! refl refl
 
-¬⟦-⟧ᵇ≃false : (¬ ⟦ b ⟧ᵇ) ≃ (b ＝ false)
-¬⟦-⟧ᵇ≃false = go ∙ identity-system-gives-path identity-system where
-  go : (¬ ⟦ b ⟧ᵇ) ≃ ⟦ b == false ⟧ᵇ
+¬is-true≃is-falseₚ : (¬ is-true b) ≃ is-falseₚ b
+¬is-true≃is-falseₚ = go ∙ identity-system-gives-path identity-system where
+  go : (¬ is-true b) ≃ is-true (b == false)
   go {(false)} = prop-extₑ! _ λ _ → refl
   go {(true)}  = prop-extₑ! (λ f → f _) (λ f _ → f)

@@ -56,30 +56,30 @@ private variable
   r : y ＝ z
   s : w ＝ z
 
--- symP infers the type of its argument from the type of its output
-symP : {A : I → Type ℓ} {x : A i1} {y : A i0}
+-- symᴾ infers the type of its argument from the type of its output
+symᴾ : {A : I → Type ℓ} {x : A i1} {y : A i0}
        (p : ＜ x    ／ (λ i → A (~ i)) ＼    y ＞)
      →      ＜ y ／    (λ i → A    i )    ＼ x ＞
-symP p j = p (~ j)
+symᴾ p j = p (~ j)
 
--- symP infers the type of its output from the type of its argument
-symP-from-goal : {A : I → Type ℓ} {x : A i0} {y : A i1}
+-- symᴾ infers the type of its output from the type of its argument
+symᴾ-from-goal : {A : I → Type ℓ} {x : A i0} {y : A i1}
                  (p : ＜ x    ／ (λ i → A    i ) ＼    y ＞)
                →      ＜ y ／    (λ i → A (~ i))    ＼ x ＞
-symP-from-goal p j = p (~ j)
+symᴾ-from-goal p j = p (~ j)
 
-ap-simple : {B : Type ℓ′} (f : A → B)
-            (p : x ＝ y) → f x ＝ f y
-ap-simple f p i = f (p i)
-{-# INLINE ap-simple #-}
+apˢ : {B : Type ℓ′} (f : A → B)
+      (p : x ＝ y) → f x ＝ f y
+apˢ f p i = f (p i)
+{-# INLINE apˢ #-}
 
 
-apP : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
+apᴾ : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
       (f : (i : I) → Π[ a ꞉ A i ] B i a) {x : A i0} {y : A i1}
       (p : ＜      x    ／ (λ i →       A i) ＼         y ＞)
     →      ＜ f i0 x ／ (λ i    →  B i (p i))   ＼ f i1 y ＞
-apP f p i = f i (p i)
-{-# INLINE apP #-}
+apᴾ f p i = f i (p i)
+{-# INLINE apᴾ #-}
 
 ap² : {C : Π[ a ꞉ A ] Π[ b ꞉ B a ] Type ℓ}
       (f : Π[ a ꞉ A ] Π[ b ꞉ B a ] C a b)
@@ -89,15 +89,15 @@ ap² : {C : Π[ a ꞉ A ] Π[ b ꞉ B a ] Type ℓ}
 ap² f p q i = f (p i) (q i)
 {-# INLINE ap² #-}
 
-apP² : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
+apᴾ² : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
        {C : (i : I) → Π[ a ꞉ A i ] (B i a → Type ℓ″)}
        (f : (i : I) → Π[ a ꞉ A i ] Π[ b ꞉ B i a ] C i a b)
        {x : A i0} {y : A i1} {u : B i0 x} {v : B i1 y}
        (p : ＜      x         ／ (λ i →      A i)          ＼            y   ＞)
        (q : ＜        u    ／ (λ i    →            B i (p i)) ＼           v ＞)
      →      ＜ f i0 x u ／ (λ i       → C i (p i) (q      i ))   ＼ f i1 y v ＞
-apP² f p q i = f i (p i) (q i)
-{-# INLINE apP² #-}
+apᴾ² f p q i = f i (p i) (q i)
+{-# INLINE apᴾ² #-}
 
 {- Observe an "open box".
 
@@ -379,33 +379,11 @@ fun-ext : {B : A → I → Type ℓ′}
         →            ＜ f   ／ (λ i → Π[ x ꞉ A ] B x i)  ＼ g   ＞
 fun-ext p i x = p x i
 
-fun-ext-implicit : {B : A → I → Type ℓ′}
-                   {f : {a : A} → B a i0} {g : {a : A} → B a i1}
-                 → ({a : A} → ＜ f {a} ／               B a ＼    g {a} ＞)
-                 →            ＜ f  ／ (λ i → {x : A} → B x i) ＼ g     ＞
-fun-ext-implicit p i {x} = p {x} i
-
-fun-ext⁻ : {B : A → I → Type ℓ′}
-           {f : Π[ a ꞉ A ] B a i0} {g : Π[ a ꞉ A ] B a i1}
-         →            ＜ f      ／ (λ i → Π[ a ꞉ A ] B a i) ＼    g   ＞
-         → Π[ x ꞉ A ] ＜ f x ／                      B x       ＼ g x ＞
-fun-ext⁻ eq x i = eq i x
-
-happly = fun-ext⁻
-
-fun-ext-implicit⁻ : {B : A → I → Type ℓ′}
-                    {f : {a : A} → B a i0} {g : {a : A} → B a i1}
-                  →           ＜ f        ／ (λ i → {a : A} → B a i) ＼    g     ＞
-                  → {x : A} → ＜ f {x} ／                     B x       ＼ g {x} ＞
-fun-ext-implicit⁻ eq {x} i = eq i {x}
-
-fun-ext-simple⁻ : {B : I → Type ℓ′}
-                  {f : A → B i0} {g : A → B i1}
-                →            ＜ f      ／ (λ i → Π[ _ ꞉ A ] B i) ＼    g   ＞
-                → Π[ x ꞉ A ] ＜ f x ／ (λ i    →            B i)    ＼ g x ＞
-fun-ext-simple⁻ eq x i = eq i x
-
-happly-simple = fun-ext-simple⁻
+happly : {B : A → I → Type ℓ′}
+         {f : Π[ a ꞉ A ] B a i0} {g : Π[ a ꞉ A ] B a i1}
+       →            ＜ f      ／ (λ i → Π[ a ꞉ A ] B a i) ＼    g   ＞
+       → Π[ x ꞉ A ] ＜ f x ／                      B x       ＼ g x ＞
+happly eq x i = eq i x
 
 
 -- h-levels
@@ -483,11 +461,11 @@ opaque
 fibre : {A : Type ℓ} {B : Type ℓ′} (f : A → B) (y : B) → Type (ℓ ⊔ ℓ′)
 fibre {A} f y = Σ[ x ꞉ A ] (f x ＝ y)
 
-SingletonP : (A : I → Type ℓ) (a : A i0) → Type _
-SingletonP A a = Σ[ x ꞉ A i1 ] ＜ a ／ A ＼ x ＞
+Singletonᴾ : (A : I → Type ℓ) (a : A i0) → Type _
+Singletonᴾ A a = Σ[ x ꞉ A i1 ] ＜ a ／ A ＼ x ＞
 
 Singleton : {A : Type ℓ} → A → Type _
-Singleton {A} = SingletonP (λ _ → A)
+Singleton {A} = Singletonᴾ (λ _ → A)
 
 singleton-is-prop : {A : Type ℓ} {a : A} (s : Singleton a)
                   → (a , refl) ＝ s
@@ -501,9 +479,9 @@ opaque
                      → is-contr (Singleton a)
   singleton-is-contr {a} _ = (a , refl) , singleton-is-prop
 
-  singletonP-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (SingletonP A a)
-  singletonP-is-contr A a .fst = _ , transport-filler (λ i → A i) a
-  singletonP-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
+  singletonᴾ-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (Singletonᴾ A a)
+  singletonᴾ-is-contr A a .fst = _ , transport-filler (λ i → A i) a
+  singletonᴾ-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
     k (i = i0) → transport-filler (λ i → A i) a k
     k (i = i1) → p k
     k (k = i0) → a
@@ -535,11 +513,11 @@ module _ {b : B x}
   (P : (y : A) (p : x ＝ y) (z : B y) (q : ＜ b ／ (λ i → B (p i)) ＼ z ＞) → Type ℓ″)
   (d : P _ refl _ refl) where
 
-  J-dep : {y : A} (p : x ＝ y) {z : B y} (q : ＜ b ／ (λ i → B (p i)) ＼ z ＞) → P _ p _ q
-  J-dep _ q = transport (λ i → P _ _ _ (λ j → q (i ∧ j))) d
+  Jᵈ : {y : A} (p : x ＝ y) {z : B y} (q : ＜ b ／ (λ i → B (p i)) ＼ z ＞) → P _ p _ q
+  Jᵈ _ q = transport (λ i → P _ _ _ (λ j → q (i ∧ j))) d
 
-  J-dep-refl : J-dep refl refl ＝ d
-  J-dep-refl = transport-refl d
+  Jᵈ-refl : Jᵈ refl refl ＝ d
+  Jᵈ-refl = transport-refl d
 
 module _ {x : A}
   {P : (y : A) → x ＝ y → Type ℓ′} {d : (y : A) (p : x ＝ y) → P y p}
@@ -566,52 +544,52 @@ module _ {P : ∀ y → x ＝ y → Type ℓ′} (d : P x refl) where
   infix 10 J>_
 
 
--- Converting to and from a PathP
+-- Converting to and from a Pathᴾ
 
-pathP＝path : (P : I → Type ℓ) (p : P i0) (q : P i1)
+pathᴾ＝path : (P : I → Type ℓ) (p : P i0) (q : P i1)
             →  ＜ p ／ P ＼ q ＞
             ＝ (transport (λ i → P i) p ＝ q)
-pathP＝path P p q i =
+pathᴾ＝path P p q i =
   ＜ transport-filler (λ j → P j) p i ／ (λ j → P (i ∨ j)) ＼ q ＞
 
-pathP＝path⁻ : (P : I → Type ℓ) (p : P i0) (q : P i1)
+pathᴾ＝path⁻ : (P : I → Type ℓ) (p : P i0) (q : P i1)
              →  ＜ p ／ P ＼  q ＞
              ＝ (p ＝ transport (λ i → P (~ i)) q)
-pathP＝path⁻ P p q i =
+pathᴾ＝path⁻ P p q i =
   ＜ p ／ (λ j → P (~ i ∧ j)) ＼ transport-filler (λ j → P (~ j)) q i ＞
 
 
 
 module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
-  -- to-pathP : (transport (λ i → A i) x ＝ y) → ＜ x ／ A ＼ y ＞
-  to-pathP : (coe0→1 A x ＝ y) → ＜ x ／ A ＼ y ＞
-  to-pathP p i = hcomp (∂ i) λ where
+  -- to-pathᴾ : (transport (λ i → A i) x ＝ y) → ＜ x ／ A ＼ y ＞
+  to-pathᴾ : (coe0→1 A x ＝ y) → ＜ x ／ A ＼ y ＞
+  to-pathᴾ p i = hcomp (∂ i) λ where
     j (i = i0) → x
     j (i = i1) → p j
     j (j = i0) → coe0→i A i x
 
-  -- from-pathP : ＜ x ／ A ＼ y ＞ → transport (λ i → A i) x ＝ y
-  from-pathP : ＜ x ／ A ＼ y ＞ → coe0→1 A x ＝ y
-  from-pathP p i = coei→1 A i (p i)
+  -- from-pathᴾ : ＜ x ／ A ＼ y ＞ → transport (λ i → A i) x ＝ y
+  from-pathᴾ : ＜ x ／ A ＼ y ＞ → coe0→1 A x ＝ y
+  from-pathᴾ p i = coei→1 A i (p i)
 
 module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
-  unfolding to-pathP
-  to-pathP⁻ : x ＝ coe1→0 A y → ＜ x ／ A ＼ y ＞
-  to-pathP⁻ p = symP $ to-pathP {A = λ j → A (~ j)} (λ i → p (~ i))
+  unfolding to-pathᴾ
+  to-pathᴾ⁻ : x ＝ coe1→0 A y → ＜ x ／ A ＼ y ＞
+  to-pathᴾ⁻ p = symᴾ $ to-pathᴾ {A = λ j → A (~ j)} (λ i → p (~ i))
 
-  from-pathP⁻ : ＜ x ／ A ＼ y ＞ → x ＝ coe1→0 A y
-  from-pathP⁻ p = sym $ from-pathP (λ i → p (~ i))
+  from-pathᴾ⁻ : ＜ x ／ A ＼ y ＞ → x ＝ coe1→0 A y
+  from-pathᴾ⁻ p = sym $ from-pathᴾ (λ i → p (~ i))
 
-  to-from-pathP : (p : ＜ x ／ A ＼ y ＞) → to-pathP (from-pathP p) ＝ p
-  to-from-pathP p i j = hcomp (i ∨ ∂ j) λ where
+  to-from-pathᴾ : (p : ＜ x ／ A ＼ y ＞) → to-pathᴾ (from-pathᴾ p) ＝ p
+  to-from-pathᴾ p i j = hcomp (i ∨ ∂ j) λ where
     k (i = i1) → transp (λ l → A (j ∧ (k ∨ l))) (~ j ∨ k) (p (j ∧ k)) -- TODO use `coe` ?
     k (j = i0) → x
     k (j = i1) → coei→1 A k (p k)
     k (k = i0) → coe0→i A j x
 
   -- just pray
-  from-to-pathP : (p : coe0→1 A x ＝ y) → from-pathP {A = A} (to-pathP p) ＝ p
-  from-to-pathP p i j =
+  from-to-pathᴾ : (p : coe0→1 A x ＝ y) → from-pathᴾ {A = A} (to-pathᴾ p) ＝ p
+  from-to-pathᴾ p i j =
     hcomp (∂ i ∨ ∂ j) λ where
       k (k = i0) → coei→1 A (j ∨ ~ i) $
         transp (λ l → A (j ∨ (~ i ∧ l))) (i ∨ j) $ coe0→i A j x -- TODO use `coe` ?
@@ -636,19 +614,19 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 
 
 -- Sigma path space
-Σ-pathP
+Σ-pathᴾ
   : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
   → {x : Σ _ (B i0)} {y : Σ _ (B i1)}
   → (p : ＜ x .fst ／ A ＼ y .fst ＞)
   → ＜ x .snd ／ (λ i → B i (p i)) ＼ y .snd ＞
   → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
-Σ-pathP p q i = p i , q i
+Σ-pathᴾ p q i = p i , q i
 
 Σ-path : {x y : Σ A B}
          (p : x .fst ＝ y .fst)
        → subst B p (x .snd) ＝ (y .snd)
        → x ＝ y
-Σ-path p q = Σ-pathP p (to-pathP q)
+Σ-path p q = Σ-pathᴾ p (to-pathᴾ q)
 
 
 -- Path transport
@@ -701,8 +679,8 @@ subst-path-both p adj = transport-path p adj adj
 
 -- TODO move this section somewhere?
 
-by-instance : ⦃ A ⦄ → A
-by-instance ⦃ (a) ⦄ = a
+auto : ⦃ A ⦄ → A
+auto ⦃ (a) ⦄ = a
 
 -- Explicit type hint
 the : (A : Type ℓ) → A → A
@@ -718,3 +696,67 @@ record Recall {A : Type ℓ} {B : A → Type ℓ′}
 
 recall : (f : Π[ x ꞉ A ] B x) (x : A) → Recall f x (f x)
 recall f x = ⟪ refl ⟫
+
+
+symP = symᴾ
+{-# WARNING_ON_USAGE symP "Use `symᴾ`" #-}
+symP-from-goal = symᴾ-from-goal
+{-# WARNING_ON_USAGE symP-from-goal "Use `symᴾ-from-goal`" #-}
+ap-simple = apˢ
+{-# WARNING_ON_USAGE ap-simple "Use `apˢ`" #-}
+apP = apᴾ
+{-# WARNING_ON_USAGE apP "Use `apᴾ`" #-}
+apP² = apᴾ²
+{-# WARNING_ON_USAGE apP² "Use `apᴾ²`" #-}
+fun-ext⁻ = happly
+{-# WARNING_ON_USAGE fun-ext⁻ "Use `happly`" #-}
+
+fun-ext-implicit : {B : A → I → Type ℓ′}
+                   {f : {a : A} → B a i0} {g : {a : A} → B a i1}
+                 → ({a : A} → ＜ f {a} ／               B a ＼    g {a} ＞)
+                 →            ＜ f  ／ (λ i → {x : A} → B x i) ＼ g     ＞
+fun-ext-implicit p i {x} = p {x} i
+{-# WARNING_ON_USAGE fun-ext-implicit "Use `fun-ext` composed with `implicit`/`explicit`" #-}
+
+fun-ext-implicit⁻ : {B : A → I → Type ℓ′}
+                    {f : {a : A} → B a i0} {g : {a : A} → B a i1}
+                  →           ＜ f        ／ (λ i → {a : A} → B a i) ＼    g     ＞
+                  → {x : A} → ＜ f {x} ／                     B x       ＼ g {x} ＞
+fun-ext-implicit⁻ eq {x} i = eq i {x}
+{-# WARNING_ON_USAGE fun-ext-implicit⁻ "Use `fun-ext` composed with `implicit`/`explicit`" #-}
+
+fun-ext-simple⁻ : {B : I → Type ℓ′}
+                  {f : A → B i0} {g : A → B i1}
+                →            ＜ f      ／ (λ i → Π[ _ ꞉ A ] B i) ＼    g   ＞
+                → Π[ x ꞉ A ] ＜ f x ／ (λ i    →            B i)    ＼ g x ＞
+fun-ext-simple⁻ eq x i = eq i x
+{-# WARNING_ON_USAGE fun-ext-simple⁻ "Use `fun-ext`" #-}
+
+happly-simple = id
+{-# WARNING_ON_USAGE happly-simple "Use `fun-ext`" #-}
+SingletonP = Singletonᴾ
+{-# WARNING_ON_USAGE SingletonP "Use `Singletonᴾ`" #-}
+singletonP-is-contr = singletonᴾ-is-contr
+{-# WARNING_ON_USAGE singletonP-is-contr "Use `singletonᴾ-is-contr`" #-}
+J-dep = Jᵈ
+{-# WARNING_ON_USAGE J-dep "Use `Jᵈ" #-}
+J-dep-refl = Jᵈ-refl
+{-# WARNING_ON_USAGE J-dep-refl "Use `Jᵈ-refl" #-}
+Σ-pathP = Σ-pathᴾ
+{-# WARNING_ON_USAGE Σ-pathP "Use `Σ-pathᴾ" #-}
+to-pathP = to-pathᴾ
+{-# WARNING_ON_USAGE to-pathP "Use `to-pathᴾ" #-}
+from-pathP = from-pathᴾ
+{-# WARNING_ON_USAGE from-pathP "Use `from-pathᴾ" #-}
+to-pathP⁻ = to-pathᴾ⁻
+{-# WARNING_ON_USAGE to-pathP⁻ "Use `to-pathᴾ⁻" #-}
+from-pathP⁻ = from-pathᴾ⁻
+{-# WARNING_ON_USAGE from-pathP⁻ "Use `from-pathᴾ⁻" #-}
+to-from-pathP = to-from-pathᴾ
+{-# WARNING_ON_USAGE to-from-pathP "Use `to-from-pathᴾ" #-}
+from-to-pathP = from-to-pathᴾ
+{-# WARNING_ON_USAGE from-to-pathP "Use `from-to-pathᴾ" #-}
+pathP＝path = pathᴾ＝path
+{-# WARNING_ON_USAGE pathP＝path "Use `pathᴾ＝path" #-}
+pathP＝path⁻ = pathᴾ＝path⁻
+{-# WARNING_ON_USAGE pathP＝path⁻ "Use `pathᴾ＝path⁻" #-}

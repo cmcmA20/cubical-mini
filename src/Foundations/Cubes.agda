@@ -23,14 +23,14 @@ or-square p j i = p (i ∨ j)
 
 -- Higher cube types
 
-SquareP
+Squareᴾ
   : (A : I → I → Type ℓ)
     {a₀₀ : A i0 i0} {a₀₁ : A i0 i1} (a₀₋ : ＜ a₀₀ ／ (λ j → A i0 j) ＼ a₀₁ ＞)
     {a₁₀ : A i1 i0} (a₋₀ : ＜ a₀₀ ／ (λ i → A i i0) ＼ a₁₀ ＞)
     {a₁₁ : A i1 i1} (a₁₋ : ＜ a₁₀ ／ (λ j → A i1 j) ＼ a₁₁ ＞)
     (a₋₁ : ＜ a₀₁ ／ (λ i → A i i1) ＼ a₁₁ ＞)
   → Type ℓ
-SquareP A a₀₋ a₋₀ a₁₋ a₋₁ = ＜ a₀₋ ／ (λ i → ＜ a₋₀ i ／ (λ j → A i j) ＼ a₋₁ i ＞) ＼ a₁₋ ＞
+Squareᴾ A a₀₋ a₋₀ a₁₋ a₋₁ = ＜ a₀₋ ／ (λ i → ＜ a₋₀ i ／ (λ j → A i j) ＼ a₋₁ i ＞) ＼ a₁₋ ＞
 
 -- 3d unicode diagrams are beyond my ability, sorry
 Cube
@@ -69,7 +69,7 @@ is-set-□ A =
 opaque
   unfolding is-of-hlevel
   is-set→is-set-□ : is-set A → is-set-□ A
-  is-set→is-set-□ A-set a₀₋ a₋₀ a₁₋ a₋₁ = to-pathP (A-set _ _ _ a₋₁)
+  is-set→is-set-□ A-set a₀₋ a₋₀ a₁₋ a₋₁ = to-pathᴾ (A-set _ _ _ a₋₁)
 
   is-set-□→is-set : is-set-□ A → is-set A
   is-set-□→is-set A-set-□ _ _ p q = A-set-□ refl p refl q
@@ -100,3 +100,6 @@ opaque
 --   (a₋₋₀ : Square a₀₋₀ a₁₋₀ a₋₀₀ a₋₁₀)
 --   (a₋₋₁ : Square a₀₋₁ a₁₋₁ a₋₀₁ a₋₁₁)
 --   → Cube a₀₋₋ a₁₋₋ a₋₀₋ a₋₁₋ a₋₋₀ a₋₋₁
+
+SquareP = Squareᴾ
+{-# WARNING_ON_USAGE SquareP "Use `Squareᴾ`" #-}

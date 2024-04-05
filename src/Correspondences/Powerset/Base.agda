@@ -36,7 +36,7 @@ subst-∈ A = subst (_∈ A)
 ℙ-ext A⊆B B⊆A = fun-ext λ _ → n-ua (prop-extₑ! A⊆B B⊆A)
 
 single : {@(tactic hlevel-tactic-worker) X-set : is-set X} → X → ℙ X
-single {X-set} x t = el (x ＝ t) (path-is-of-hlevel′ 1 X-set x t)
+single {X-set} x t = el (x ＝ t) (path-is-of-hlevel 1 X-set x t)
 
 infixr 22 _∩_
 _∩_ : ℙ X → ℙ X → ℙ X

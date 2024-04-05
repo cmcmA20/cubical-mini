@@ -43,7 +43,7 @@ elim : {A : Type ℓ} {P : ∥ A ∥₁ → Type ℓ′}
      → Π[ x ꞉ ∥ A ∥₁ ] P   x
 elim P-prop incc ∣ x ∣₁ = incc x
 elim P-prop incc (squash₁ x y i) =
-  is-prop→pathP (λ j → P-prop (squash₁ x y j)) (elim P-prop incc x)
+  is-prop→pathᴾ (λ j → P-prop (squash₁ x y j)) (elim P-prop incc x)
                                                (elim P-prop incc y)
                                                i
 

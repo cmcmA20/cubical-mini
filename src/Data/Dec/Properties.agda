@@ -6,7 +6,8 @@ open import Meta.Prelude
 open import Meta.Effect.Idiom
 open import Meta.Search.HLevel
 
-open import Truncation.Propositional as ∥-∥₁
+import Truncation.Propositional as ∥-∥₁
+open ∥-∥₁ using (∥_∥₁)
 
 open import Data.Empty.Properties
 open import Data.Sum.Properties
@@ -19,13 +20,27 @@ private variable
   A P : Type ℓ
   B : Type ℓ′
 
-dec-∥-∥₁-equiv : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
-dec-∥-∥₁-equiv = prop-extₑ!
+∥-∥₁∘dec≃dec∘∥-∥₁ : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
+∥-∥₁∘dec≃dec∘∥-∥₁ = prop-extₑ!
   (∥-∥₁.rec! $ Dec.dmap pure ∥-∥₁.rec!)
-  (Dec.rec (yes <$>_) $ pure ∘ no ∘ _∘ pure)
+  (Dec.rec (yes <$>_) (pure ∘ no ∘ contra pure))
 
-dec-≃ : A ≃ B → Dec A ≃ Dec B
-dec-≃ eqv = dec-as-sum ∙ ⊎-ap (¬-≃ to from) eqv ∙ dec-as-sum ⁻¹
-  where open Equiv eqv
+ae : A ≃ B → Dec A ≃ Dec B
+ae {A} {B} e = ≅→≃ $ to , iso from ri li where
+  to   = Dec.dmap (e    $_) (contra (e ⁻¹ $_))
+  from = Dec.dmap (e ⁻¹ $_) (contra (e    $_))
 
-module dec-≃ {ℓ} {ℓ′} {A} {B} e = Equiv (dec-≃ {ℓ} {ℓ′} {A} {B} e)
+  module e = Equiv e
+
+  ri : from is-right-inverse-of to
+  ri = Dec.elim (ap yes ∘ e.ε) (ap no ∘ λ _ → prop!)
+
+  li : from is-left-inverse-of to
+  li = Dec.elim (ap yes ∘ e.η) (ap no ∘ λ _ → prop!)
+
+≃→dec : (B ≃ A) → Dec A → Dec B
+≃→dec e = ae e ⁻¹ $_
+
+
+dec-∥-∥₁-equiv = ∥-∥₁∘dec≃dec∘∥-∥₁
+{-# WARNING_ON_USAGE dec-∥-∥₁-equiv "Use `∥-∥₁∘dec≃dec∘∥-∥₁`" #-}

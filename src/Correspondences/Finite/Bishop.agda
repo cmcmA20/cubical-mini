@@ -45,7 +45,7 @@ unquoteDecl is-bishop-finite-iso = declare-record-iso is-bishop-finite-iso (quot
 
 instance
   H-Level-is-bishop-finite : ∀ {n} → H-Level (suc n) (is-bishop-finite A)
-  H-Level-is-bishop-finite = hlevel-prop-instance $ is-of-hlevel-≃ _ (iso→equiv is-bishop-finite-iso) $ is-prop-η go where
+  H-Level-is-bishop-finite = hlevel-prop-instance $ ≃→is-of-hlevel _ (≅→≃ is-bishop-finite-iso) $ is-prop-η go where
     go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
     go (m , ∣p∣₁) (n , ∣q∣₁) = Σ-prop-path! $ ∥-∥₁.elim²!
       (λ p q → fin-injective (p ⁻¹ ∙ q)) ∣p∣₁ ∣q∣₁
@@ -57,7 +57,7 @@ manifest-bishop-finite→is-bishop-finite fi .enumeration₁ = ∣ fi .enumerati
 is-bishop-finite→is-discrete : is-bishop-finite A → is-discrete A
 is-bishop-finite→is-discrete fi = ∥-∥₁.proj! do
   e ← fi .enumeration₁
-  pure $ is-discrete-embedding (equiv→embedding e) fin-is-discrete
+  pure $ ↪→is-discrete (≃→↪ e) fin-is-discrete
 
 is-bishop-finite→omniscient₁ : is-bishop-finite A → Omniscient₁ {ℓ = ℓ′} A
 is-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? = ∥-∥₁.proj! do
@@ -81,7 +81,7 @@ bishop-finite-pi-fin
   : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
   → (∀ x → is-bishop-finite (P x))
   → is-bishop-finite Π[ P ]
-bishop-finite-pi-fin 0 {P} fam = fin₁ $ pure $ iso→equiv $ ff , iso gg ri li where
+bishop-finite-pi-fin 0 {P} fam = fin₁ $ pure $ ≅→≃ $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
   gg : _
@@ -122,7 +122,7 @@ bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do
     work = do
       t ← finite-choice afin $ enumeration₁ ∘ fam
       pure $ Σ-ap aeq λ x → t x
-           ∙ path→equiv (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
+           ∙ ＝→≃ (ap (λ T → Fin T) (ap (cardinality ∘ fam) (sym (aeq.η x))))
 
   pure $ fin₁ ⦇ work ∙ₑ pure fs ⦈
 
@@ -146,7 +146,7 @@ fun-is-bishop-finite afin bfin = ∥-∥₁.proj! do
 lift-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Lift ℓ′ A)
 lift-is-bishop-finite afin = fin₁ do
   aeq ← enumeration₁ afin
-  pure $ lift-equiv ∙ aeq
+  pure $ lift≃id ∙ aeq
 
 decidable-prop→is-bishop-finite : is-prop A → Dec A → is-bishop-finite A
 decidable-prop→is-bishop-finite A-prop (yes a) = fin₁ $ pure $
@@ -157,11 +157,14 @@ is-discrete→path-is-bishop-finite : is-discrete A → {x y : A} → is-bishop-
 is-discrete→path-is-bishop-finite d = decidable-prop→is-bishop-finite hlevel! (d .is-discrete-β _ _)
   where instance _ = d
 
-pathP-is-bishop-finite : ∀ {A :  I → Type ℓ} → is-bishop-finite (A i1) → ∀ x y → is-bishop-finite ＜ x ／ A ＼ y ＞
-pathP-is-bishop-finite f _ _ = subst is-bishop-finite (symₚ $ pathP＝path _ _ _) $
+pathᴾ-is-bishop-finite : ∀ {A :  I → Type ℓ} → is-bishop-finite (A i1) → ∀ x y → is-bishop-finite ＜ x ／ A ＼ y ＞
+pathᴾ-is-bishop-finite f _ _ = subst is-bishop-finite (symₚ $ pathᴾ＝path _ _ _) $
   is-discrete→path-is-bishop-finite (is-bishop-finite→is-discrete f)
 
-is-bishop-finite-≃ : (B ≃ A) → is-bishop-finite A → is-bishop-finite B
-is-bishop-finite-≃ f afin = fin₁ do
+≃→is-bishop-finite : (B ≃ A) → is-bishop-finite A → is-bishop-finite B
+≃→is-bishop-finite f afin = fin₁ do
   aeq ← enumeration₁ afin
   pure $ f ∙ aeq
+
+is-bishop-finite-≃ = ≃→is-bishop-finite
+{-# WARNING_ON_USAGE is-bishop-finite-≃ "Use ``"  #-}

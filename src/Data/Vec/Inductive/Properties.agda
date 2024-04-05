@@ -25,7 +25,7 @@ cast {suc m} {0}     p = absurd $ suc≠zero $ p
 cast {suc m} {suc n} p (x ∷ xs) = x ∷ cast (suc-inj p) xs
 
 vec-fun-equiv : Vec A n ≃ (Fin n → A)
-vec-fun-equiv = iso→equiv (lookup , iso tabulate lemma₁ lemma₂) where
+vec-fun-equiv = ≅→≃ (lookup , iso tabulate lemma₁ lemma₂) where
   lemma₁ : Π[ f ꞉ (Fin n → A) ] (lookup (tabulate f) ＝ f)
   lemma₁ {0}     _ = fun-ext λ()
   lemma₁ {suc n} f = fun-ext λ where

@@ -20,7 +20,7 @@ open Correspondences.Finite.Bishop public
         ; bishop-finite ; H-Level-is-bishop-finite
         ; is-bishop-finite→omniscient₁
         ; lift-is-bishop-finite ; ×-is-bishop-finite ; Π-is-bishop-finite
-        ; fun-is-bishop-finite ; Σ-is-bishop-finite ; is-bishop-finite-≃ )
+        ; fun-is-bishop-finite ; Σ-is-bishop-finite ; ≃→is-bishop-finite )
 open import Correspondences.Finite.ManifestBishop
 open import Correspondences.Omniscient
 
@@ -72,8 +72,8 @@ instance
   -- decomp-dec-prop→fin₁ = decomp (quote decidable-prop→is-bishop-finite)
   --   [ `search (quote is-of-hlevel) , `search (quote Dec) ]
 
-  decomp-fin₁→pathP : ∀ {A : I → Type ℓ} {x y} → goal-decomposition (quote is-bishop-finite) ＜ x ／ A ＼ y ＞
-  decomp-fin₁→pathP = decomp (quote pathP-is-bishop-finite)
+  decomp-fin₁→pathᴾ : ∀ {A : I → Type ℓ} {x y} → goal-decomposition (quote is-bishop-finite) ＜ x ／ A ＼ y ＞
+  decomp-fin₁→pathᴾ = decomp (quote pathᴾ-is-bishop-finite)
     [ `search (quote is-bishop-finite) , `meta , `meta ]
 
   decomp-fin₁→omn₁ : goal-decomposition (quote Omniscient₁) A
@@ -88,7 +88,7 @@ instance
   proj-fin₁-finset : Struct-proj-desc (quote is-bishop-finite) none (quote FinSet.carrier) true
   proj-fin₁-finset .Struct-proj-desc.struct-name = quote FinSet
   proj-fin₁-finset .Struct-proj-desc.struct-args-length = 1
-  proj-fin₁-finset .Struct-proj-desc.goal-projection = quote FinSet.has-is-bishop-finite
+  proj-fin₁-finset .Struct-proj-desc.goal-projection = quote FinSet.has-bishop-finite
   proj-fin₁-finset .Struct-proj-desc.projection-args-length = 2
   proj-fin₁-finset .Struct-proj-desc.carrier-selector = 1
 

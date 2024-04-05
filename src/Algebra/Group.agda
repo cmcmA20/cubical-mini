@@ -31,7 +31,7 @@ unquoteDecl is-group-iso = declare-record-iso is-group-iso (quote is-group)
 opaque
   unfolding is-of-hlevel
   is-group-is-prop : {_✦_ : A → A → A} → is-prop (is-group _✦_)
-  is-group-is-prop {A} {_✦_} M N = Equiv.injective (isoₜ→equiv is-group-iso)
+  is-group-is-prop {A} {_✦_} M N = Equiv.injective (≅ₜ→≃ is-group-iso)
     $  fun-ext (λ a → monoid-inverse-unique {IM = M .is-group.has-monoid} a _ _
          (M .is-group.inverse-l a) (N .is-group.inverse-r a ∙ sym u))
     ,ₚ prop!
@@ -113,7 +113,7 @@ group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A
 group-on↪monoid-on .fst G .Monoid-on._⋆_ = G .Group-on._⋆_
 group-on↪monoid-on .fst G .Monoid-on.has-monoid = G .Group-on.has-monoid
 group-on↪monoid-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
-  Equiv.injective (isoₜ→equiv group-on-iso) $
+  Equiv.injective (≅ₜ→≃ group-on-iso) $
     ap Monoid-on._⋆_ p ,ₚ prop!
 
 

@@ -47,20 +47,20 @@ decode : Code xs ys → xs ＝ ys
 decode {xs = []}     {([])}   _       = refl
 decode {xs = x ∷ xs} {y ∷ ys} (p , c) = ap² _∷_ p (decode c)
 
-code-refl-pathP : {xs ys : List A} (c : Code xs ys) → ＜ code-refl xs ／ (λ i → Code xs (decode c i)) ＼ c ＞
-code-refl-pathP {xs = []}     {([])}   (lift tt) = refl
-code-refl-pathP {xs = x ∷ xs} {y ∷ ys} (p , c) i = (λ j → p (i ∧ j)) , code-refl-pathP c i
+code-refl-pathᴾ : {xs ys : List A} (c : Code xs ys) → ＜ code-refl xs ／ (λ i → Code xs (decode c i)) ＼ c ＞
+code-refl-pathᴾ {xs = []}     {([])}   (lift tt) = refl
+code-refl-pathᴾ {xs = x ∷ xs} {y ∷ ys} (p , c) i = (λ j → p (i ∧ j)) , code-refl-pathᴾ c i
 
 identity-system : is-identity-system {A = List A} Code code-refl
 identity-system .to-path      = decode
-identity-system .to-path-over = code-refl-pathP
+identity-system .to-path-over = code-refl-pathᴾ
 
 code-is-of-hlevel : {xs ys : List A} {n : HLevel} → is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code xs ys)
 code-is-of-hlevel {xs = []}     {([])}  _ = hlevel!
 code-is-of-hlevel {xs = []}     {_ ∷ _} _ = hlevel!
 code-is-of-hlevel {xs = _ ∷ _}  {([])}  _ = hlevel!
 code-is-of-hlevel {xs = x ∷ xs} {y ∷ ys} A-hl =
-  ×-is-of-hlevel _ (path-is-of-hlevel′ _ A-hl x y) (code-is-of-hlevel A-hl)
+  ×-is-of-hlevel _ (path-is-of-hlevel _ A-hl x y) (code-is-of-hlevel A-hl)
 
 opaque
   unfolding is-of-hlevel
@@ -68,7 +68,7 @@ opaque
                     → is-of-hlevel (2 + n) A
                     → is-of-hlevel (2 + n) (List A)
   list-is-of-hlevel n A-hl _ _ =
-    is-of-hlevel-≃ (1 + n)
+    ≃→is-of-hlevel (1 + n)
                    (identity-system-gives-path identity-system ⁻¹)
                    (code-is-of-hlevel A-hl)
 

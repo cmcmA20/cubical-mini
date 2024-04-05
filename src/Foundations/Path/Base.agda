@@ -124,7 +124,7 @@ module _
   _∙ₕ_ : {a₂₀ a₂₁ : A} {t : a₁₀ ＝ a₂₀} {u : a₁₁ ＝ a₂₁} {v : a₂₀ ＝ a₂₁}
        → Square p q r s → Square r t v u
        → Square p (q ∙ t) v (s ∙ u)
-  _∙ₕ_ = apP² λ _ → _∙_
+  _∙ₕ_ = apᴾ² λ _ → _∙_
 
 -- opaque
 --   unfolding _∙_ _∙ᵥ_ _∙ₕ_

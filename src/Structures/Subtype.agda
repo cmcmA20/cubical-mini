@@ -26,10 +26,10 @@ Subtype : (ℓ : Level) → Type ℓ → Type _
 Subtype ℓ T = Σ[ X ꞉ Type ℓ ] X ↪ T
 
 @0 subtype≃ℙ : Subtype ℓ T ≃ ℙ T
-subtype≃ℙ = subtype-classifier ∙ Π-cod-≃ λ _ → iso→equiv n-Type-iso ⁻¹
+subtype≃ℙ = subtype-classifier ∙ Π-cod-≃ λ _ → ≅→≃ n-Type-iso ⁻¹
 
 @0 subtype-is-set : is-set (Subtype ℓ T)
-subtype-is-set = is-of-hlevel-≃ 2 subtype≃ℙ hlevel!
+subtype-is-set = ≃→is-of-hlevel 2 subtype≃ℙ hlevel!
 
 instance
   @0 H-Level-subtype : H-Level (2 + n) (Subtype ℓ T)
@@ -49,14 +49,14 @@ module Path where
     U ＝ V                                        ≃∎
 
   @0 code-is-prop : (U V : Subtype ℓ T) → is-prop (Code U V)
-  code-is-prop U V = is-of-hlevel-≃ 1 (code≃path U V) (path-is-of-hlevel′ 1 subtype-is-set U V)
+  code-is-prop U V = ≃→is-of-hlevel 1 (code≃path U V) (path-is-of-hlevel 1 subtype-is-set U V)
 
   @0 identity-system : ∀{ℓ} {T : 𝒰 ℓ} → is-identity-system {A = Subtype ℓ T} Code (λ _ → refl , λ _ → refl)
   identity-system = set-identity-system code-is-prop go where
     go : {U V : Subtype ℓ T} → Code U V → U ＝ V
     go {V = _ , g , _} (e , p)
       =  ua e
-      ,ₚ to-pathP⁻ (Σ-prop-path! $ fun-ext λ x → p x ∙ (transport-refl _ ∙ ap g (ua-β e x)) ⁻¹)
+      ,ₚ to-pathᴾ⁻ (Σ-prop-path! $ fun-ext λ x → p x ∙ (transport-refl _ ∙ ap g (ua-β e x)) ⁻¹)
 
 
 @0 Extensional-Subtype : Extensional (Subtype ℓ T) ℓ

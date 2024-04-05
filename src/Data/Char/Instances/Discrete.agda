@@ -12,7 +12,7 @@ open import Data.Char.Properties
 
 instance
   char-is-discrete : is-discrete Char
-  char-is-discrete = is-discrete-injection (char→ℕ , char→ℕ-inj) discrete!
+  char-is-discrete = ↣→is-discrete (char→ℕ , char→ℕ-inj) discrete!
 
   decomp-dis-char : goal-decomposition (quote is-discrete) Char
   decomp-dis-char = decomp (quote char-is-discrete ) []

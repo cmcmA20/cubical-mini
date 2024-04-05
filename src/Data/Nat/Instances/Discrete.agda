@@ -20,8 +20,8 @@ private module ℕIS = IdSS ℕ-path.identity-system ℕ-is-set
 
 ==-reflects : Reflects (_＝_ {A = ℕ}) _==_
 ==-reflects m n with m == n | recall (m ==_) n
-... | false | ⟪ p ⟫ = ofⁿ $ subst ⟦_⟧ᵇ p ∘ ℕIS.encode
-... | true  | ⟪ p ⟫ = ofʸ $ ℕIS.decode $ subst ⟦_⟧ᵇ (sym p) tt
+... | false | ⟪ p ⟫ = ofⁿ $ subst is-true p ∘ ℕIS.encode
+... | true  | ⟪ p ⟫ = ofʸ $ ℕIS.decode $ subst is-true (sym p) tt
 
 instance
   ℕ-is-discrete : is-discrete ℕ

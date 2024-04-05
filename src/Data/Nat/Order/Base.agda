@@ -16,25 +16,16 @@ open import Data.Sum.Path
 
 open import Data.Bool.Base
 open import Data.Nat.Base
+open import Data.Nat.Order.Computational
+  using ( _≤ᵇ_ ; _<ᵇ_ ; _≥ᵇ_ ; _>ᵇ_
+        ; _≰ᵇ_ ; _≮ᵇ_ ; _≱ᵇ_ ; _≯ᵇ_
+        )
 open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Solver
 
 private variable
   m n k : ℕ
-
-infix 3 _≤ᵇ_      _≥ᵇ_ _>ᵇ_
-        _≰ᵇ_ _≮ᵇ_ _≱ᵇ_ _≯ᵇ_
-
-_≤ᵇ_ _≥ᵇ_ _>ᵇ_ _≰ᵇ_ _≮ᵇ_ _≱ᵇ_ _≯ᵇ_ : DProc _ (ℕ , ℕ)
-
-m ≤ᵇ n = (m <ᵇ suc n)
-m ≥ᵇ n =      n ≤ᵇ m
-m >ᵇ n =      n <ᵇ m
-m ≰ᵇ n = not (m ≤ᵇ n)
-m ≮ᵇ n = not (m <ᵇ n)
-m ≱ᵇ n = not (m ≥ᵇ n)
-m ≯ᵇ n = not (m >ᵇ n)
 
 infix 3 _≤_ _<_ _≥_ _>_
         _≰_ _≮_ _≱_ _≯_
@@ -92,6 +83,9 @@ opaque
   ≤-peel : suc m ≤ suc n → m ≤ n
   ≤-peel = second suc-inj
 
+  ≤-peel-unpeel : (p : suc m ≤ suc n) → s≤s (≤-peel p) ＝ p
+  ≤-peel-unpeel (_ , _) = refl ,ₚ prop!
+
   ≤-refl : n ≤ n
   ≤-refl = 0 , nat!
 
@@ -118,6 +112,9 @@ opaque
   s≰z : suc n ≰ 0
   s≰z = suc≠zero ∘ snd
 
+  ≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
+  ≤-subst a=b c=d = second $ subst² (λ u v → u + _ ＝ v) a=b c=d
+
 
 -- Properties of strict order
 
@@ -132,6 +129,9 @@ opaque
 
   <-peel : suc m < suc n → m < n
   <-peel = ≤-peel
+
+  <-weaken : (x y : ℕ) → x < y → x ≤ y
+  <-weaken x y (δ , p) = suc δ , nat! ∙ p
 
   <-trans : m < n → n < k → m < k
   <-trans (δ₁ , p) (δ₂ , q)

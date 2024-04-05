@@ -116,7 +116,7 @@ record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin
     =  n-ua (f .hom , eqv)
     ,ₚ Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e .fst) (a .snd) st ⌟
                         → ＜ a .snd ／ (λ i → S (ua e i)) ＼ st ＞)
-        (λ st pres → to-pathP (ap (λ e → subst S e (a .snd)) ua-idₑ
+        (λ st pres → to-pathᴾ (ap (λ e → subst S e (a .snd)) ua-idₑ
                   ∙∙ transport-refl _
                   ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
         (f .hom , eqv) (b .snd) (f .preserves)

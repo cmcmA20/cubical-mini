@@ -20,7 +20,7 @@ universal : {A : Type a} {B : Type b}
           ≃ ( (Π[ x ꞉ A ] C (inl x))
             × (Π[ y ꞉ B ] C (inr y))
             )
-universal = iso→equiv the-iso where
+universal = ≅→≃ the-iso where
   the-iso : Iso _ _
   the-iso .fst f = (λ x → f (inl x)) , (λ x → f (inr x))
   the-iso .snd .is-iso.inv (f , g) (inl x) = f x
@@ -30,7 +30,7 @@ universal = iso→equiv the-iso where
   the-iso .snd .is-iso.linv f i (inr x) = f (inr x)
 
 ⊎-ap : A ≃ B → C ≃ D → (A ⊎ C) ≃ (B ⊎ D)
-⊎-ap (f , f-eqv) (g , g-eqv) = iso→equiv cong′ where
+⊎-ap (f , f-eqv) (g , g-eqv) = ≅→≃ cong′ where
   f-iso = is-equiv→is-iso f-eqv
   g-iso = is-equiv→is-iso g-eqv
 
@@ -50,7 +50,7 @@ universal = iso→equiv the-iso where
 ⊎-ap-r f = ⊎-ap refl f
 
 ⊎-comm : (A ⊎ B) ≃ (B ⊎ A)
-⊎-comm = iso→equiv i where
+⊎-comm = ≅→≃ i where
   i : Iso _ _
   i .fst (inl x) = inr x
   i .fst (inr x) = inl x
@@ -64,7 +64,7 @@ universal = iso→equiv the-iso where
   i .snd .is-iso.linv (inr x) = refl
 
 ⊎-assoc : ((A ⊎ B) ⊎ C) ≃ (A ⊎ (B ⊎ C))
-⊎-assoc = iso→equiv i where
+⊎-assoc = ≅→≃ i where
   i : Iso _ _
   i .fst (inl (inl x)) = inl x
   i .fst (inl (inr x)) = inr (inl x)
@@ -93,7 +93,7 @@ universal = iso→equiv the-iso where
 ⊎-zero-l .snd .equiv-proof y .snd (inr x , p) i = inr (p (~ i)) , λ j → p (~ i ∨ j)
 
 ⊎-×-distribute : ((A ⊎ B) × C) ≃ ((A × C) ⊎ (B × C))
-⊎-×-distribute = iso→equiv i where
+⊎-×-distribute = ≅→≃ i where
   i : Iso _ _
   i .fst (inl x , y) = inl (x , y)
   i .fst (inr x , y) = inr (x , y)

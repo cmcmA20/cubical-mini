@@ -40,8 +40,8 @@ container→list→container (suc n) f =
   let ih = container→list→container n (f ∘ fsuc)
   in Σ-path (ap (suc ∘ fst) ih) $ fun-ext λ where
        fzero    → transport-refl _
-       (fsuc k) → ap (_$ k) (from-pathP (ap snd ih))
+       (fsuc k) → ap (_$ k) (from-pathᴾ (ap snd ih))
 
 list-container-equiv : Listⁱ A ≃ List A
 list-container-equiv =
-  iso→equiv (list→container , iso (container→list′ $²_) (container→list→container $²_) list→container→list)
+  ≅→≃ (list→container , iso (container→list′ $²_) (container→list→container $²_) list→container→list)

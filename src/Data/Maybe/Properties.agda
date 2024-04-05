@@ -17,7 +17,7 @@ private variable
   x : Maybe A
 
 maybe-as-sum : Maybe A ≃ (⊤ ⊎ A)
-maybe-as-sum = iso→equiv 𝔯
+maybe-as-sum = ≅→≃ 𝔯
   where
   𝔯 : Iso _ _
   𝔯 .fst (just x) = inr x

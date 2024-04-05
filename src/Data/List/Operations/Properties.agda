@@ -45,11 +45,11 @@ snoc-elim P p[] ps xs = go [] xs p[]
 -- all
 
 reflects-all : ∀ (p : A → Bool) xs
-             → Reflects⁰ (All (⟦_⟧ᵇ ∘ p) xs) (all p xs)
+             → Reflects⁰ (All (is-true ∘ p) xs) (all p xs)
 reflects-all p []       = ofʸ []
 reflects-all p (x ∷ xs) with p x | recall p x
-... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → subst ⟦_⟧ᵇ e a)
-... | true  | ⟪ e ⟫ = Reflects.dmap (λ a → (subst ⟦_⟧ᵇ (sym e) tt) ∷ a)
+... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → subst is-true e a)
+... | true  | ⟪ e ⟫ = Reflects.dmap (λ a → (subst is-true (sym e) tt) ∷ a)
                        (λ ne → λ where (px ∷ a) → ne a)
                        (reflects-all p xs)
 
@@ -62,14 +62,14 @@ elem= = elem (λ a b → ⌊ a ≟ b ⌋)
 all-elem : ⦃ A-dis : is-discrete A ⦄
          → ∀ (P : A → 𝒰 ℓ′) xs
          → All P xs
-         → (z : A) → ⟦ elem= z xs ⟧ᵇ → P z
+         → (z : A) → is-true (elem= z xs) → P z
 all-elem P (x ∷ xs) (px ∷ a) z el with (true-reflects (reflects-or {x = ⌊ z ≟ x ⌋}) el)
 ... | inl z=x = subst P (sym (true-reflects discrete-reflects z=x)) px
 ... | inr els = all-elem P xs a z els
 
 elem-all : ⦃ A-dis : is-discrete A ⦄
          → ∀ (P : A → 𝒰 ℓ′) xs
-         → ((z : A) → ⟦ elem= z xs ⟧ᵇ → P z)
+         → ((z : A) → is-true (elem= z xs) → P z)
          → All P xs
 elem-all P []       f = []
 elem-all P (x ∷ xs) f = (f x (reflects-true (reflects-or {x = ⌊ x ≟ x ⌋}) (inl (reflects-true discrete-reflects refl))))
@@ -77,11 +77,11 @@ elem-all P (x ∷ xs) f = (f x (reflects-true (reflects-or {x = ⌊ x ≟ x ⌋}
 
 reflects-all-dis : ⦃ A-dis : is-discrete A ⦄
                  → ∀ (p : A → Bool) xs
-                 → Reflects⁰ (∀ x → ⟦ elem= x xs ⟧ᵇ → ⟦ p x ⟧ᵇ) (all p xs)
+                 → Reflects⁰ (∀ x → is-true (elem= x xs) → is-true (p x)) (all p xs)
 reflects-all-dis p xs =
   Reflects.dmap
-    (all-elem (⟦_⟧ᵇ ∘ p) xs)
-    (λ na e → na (elem-all (⟦_⟧ᵇ ∘ p) xs e))
+    (all-elem (is-true ∘ p) xs)
+    (λ na e → na (elem-all (is-true ∘ p) xs e))
     (reflects-all p xs)
 
 -- replicate
@@ -110,8 +110,8 @@ span-length p xs =
   ap length (span-append p xs) ∙ ++-length ys zs
 
 span-all : ∀ (p : A → Bool) xs
-         → All (⟦_⟧ᵇ ∘ p) (span p xs .fst)
+         → All (is-true ∘ p) (span p xs .fst)
 span-all p []       = []
 span-all p (x ∷ xs) with p x | recall p x
 ... | false | ⟪ e ⟫ = []
-... | true  | ⟪ e ⟫ = subst ⟦_⟧ᵇ (sym e) tt ∷ (span-all p xs)
+... | true  | ⟪ e ⟫ = subst is-true (sym e) tt ∷ (span-all p xs)

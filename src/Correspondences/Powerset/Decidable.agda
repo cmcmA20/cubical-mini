@@ -47,12 +47,12 @@ is-decidable-subset→is-complemented {X} A d
 ℙᵈ X = Σ[ A ꞉ ℙ X ] is-decidable-subset A
 
 @0 decidable-subobject-classifier : (X → Bool) ≃ ℙᵈ X
-decidable-subobject-classifier {X} = iso→equiv $ to , iso (λ pr x → from pr x .fst) ri li where
+decidable-subobject-classifier {X} = ≅→≃ $ to , iso (λ pr x → from pr x .fst) ri li where
   to : _
-  to ch = (λ x → el (Lift _ ⟦ ch x ⟧ᵇ) (Bool.elim {P = λ b → is-prop (Lift _ ⟦ b ⟧ᵇ)} hlevel! hlevel! (ch x)))
-        , λ x → Bool.elim {P = λ x → Dec (Lift _ ⟦ x ⟧ᵇ)} decide! decide! (ch x)
+  to ch = (λ x → el (Lift _ (is-true (ch x))) (Bool.elim {P = λ b → is-prop (Lift _ (is-true b))} hlevel! hlevel! (ch x)))
+        , λ x → Bool.elim {P = λ x → Dec (Lift _ (is-true x))} decide! decide! (ch x)
 
-  from : (pr : ℙᵈ X) (x : X) → Σ[ b ꞉ Bool ] (⟦ b ⟧ᵇ ≃ (x ∈ pr .fst))
+  from : (pr : ℙᵈ X) (x : X) → Σ[ b ꞉ Bool ] (is-true b ≃ (x ∈ pr .fst))
   from (A , d) x = Dec.elim (λ x∈A → true  , prop-extₑ! (λ _ → x∈A) _)
                             (λ x∉A → false , prop-extₑ! (⊥.rec $_) x∉A) (d x)
 

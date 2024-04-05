@@ -25,7 +25,7 @@ opaque
   fin-1-is-contr .snd fzero = refl
 
 fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
-fin-suc = iso→equiv (f , iso g rinv linv) where
+fin-suc = ≅→≃ (f , iso g rinv linv) where
   f : Fin (suc n) → ⊤ ⊎ Fin n
   f fzero = inl tt
   f (fsuc x) = inr x
@@ -46,7 +46,7 @@ fin-suc-universal
   : {A : Fin (suc n) → Type ℓ}
   → Π[ x ꞉ Fin _ ] A x
   ≃ A fzero × (∀ x → A (fsuc x))
-fin-suc-universal = iso→equiv λ where
+fin-suc-universal = ≅→≃ λ where
   .fst f → f fzero , (λ x → f (fsuc x))
 
   .snd .is-iso.inv (z , f) fzero    → z

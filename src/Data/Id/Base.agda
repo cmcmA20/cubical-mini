@@ -28,12 +28,13 @@ _∙ˢ_ : x ＝ˢ y → y ＝ˢ z → x ＝ˢ z
 transportˢ : A ＝ˢ B → A → B
 transportˢ p = transport (p _ refl)
 
-apˢ : (f : A → B) → x ＝ˢ y → f x ＝ˢ f y
-apˢ f p _ q = q ∙ ap f (p _ refl)
+-- TODO don't use superscripts at all in `Data.Id.*` modules
+apˢ′ : (f : A → B) → x ＝ˢ y → f x ＝ˢ f y
+apˢ′ f p _ q = q ∙ ap f (p _ refl)
 
 substˢ : (P : A → Type ℓ)
        → x ＝ˢ y → P x → P y
-substˢ P = transportˢ ∘ apˢ P
+substˢ P = transportˢ ∘ apˢ′ P
 
 _on-pathsˢ-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
 S on-pathsˢ-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ˢ a′)

@@ -79,7 +79,7 @@ opaque
     → s ＝ sym p ∙ q ∙ r
     → Square p q r s
   conjugate→square {p} {q} {r} {s} u =
-    to-pathP (transport-path q p r ∙ sym u)
+    to-pathᴾ (transport-path q p r ∙ sym u)
 
   ∙-cancel′-l : (p : x ＝ y) (q r : y ＝ z)
               → p ∙ q ＝ p ∙ r

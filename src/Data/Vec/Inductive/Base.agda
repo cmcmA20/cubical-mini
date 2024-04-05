@@ -60,7 +60,7 @@ module _ where
     renaming (Vec to Vecᵈ)
 
   default≃inductive : ∀ {n} → Vecᵈ A n ≃ Vec A n
-  default≃inductive {A} = iso→equiv $ to , iso from ri li where
+  default≃inductive {A} = ≅→≃ $ to , iso from ri li where
     to : ∀{n} → Vecᵈ A n → Vec A n
     to {n = 0}     _        = []
     to {n = suc _} (x , xs) = x ∷ to xs

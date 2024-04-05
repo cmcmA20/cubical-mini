@@ -13,6 +13,7 @@ open import Data.Dec as Dec
 private variable
   ℓ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
+  B : Type ℓᵇ
 
 record Exhaustible {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (ℓᵃ ⊔ ℓsuc ℓ) where
   no-eta-equality
@@ -24,6 +25,10 @@ open Exhaustible public
 exhaust : ⦃ x : Exhaustible {ℓ} A ⦄ → Exhaustible A
 exhaust ⦃ x ⦄ = x
 
+≃→exhaustible : B ≃ A → Exhaustible {ℓ} A → Exhaustible {ℓ} B
+≃→exhaustible e ex .exhaustible-β P? = ≃→dec (Π-dom-≃ (e ⁻¹))
+  (ex .exhaustible-β λ x → P? (e ⁻¹ $ x))
+
 lift-exhaustible : Exhaustible {ℓ} A → Exhaustible (Lift ℓ A)
 lift-exhaustible ex .exhaustible-β P? = Dec.dmap (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift)
   (ex .exhaustible-β $ P? ∘ lift)
@@ -32,4 +37,4 @@ lift-exhaustible ex .exhaustible-β P? = Dec.dmap (_∘ lower) (λ ¬f g → ¬f
 Π-decision d ex = ex .exhaustible-β d
 
 ∀-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec ∀[ B ]
-∀-decision d ex = dec-≃ Π-impl-Π-≃ $ Π-decision d ex
+∀-decision d ex = Dec.ae Π≃∀ $ Π-decision d ex

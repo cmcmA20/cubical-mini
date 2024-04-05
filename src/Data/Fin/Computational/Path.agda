@@ -17,4 +17,4 @@ open Fin
 
 fin-ext : {k₁ k₂ : Fin n} → k₁ .index ＝ k₂ .index → k₁ ＝ k₂
 fin-ext {n} = ap e.from ∘ Σ-prop-path (λ _ → erased-is-prop (<-is-prop {n = n})) where
-  module e = Equiv (iso→equiv fin-iso)
+  module e = Equiv (≅→≃ fin-iso)

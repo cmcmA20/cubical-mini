@@ -30,11 +30,11 @@ elim² {A} {B} {P} P-prop work x y = go x y where
   go : ∀ x y → P x y
   go ∣ x ∣₁ ∣ y ∣₁ = work x y
   go ∣ x ∣₁ (squash₁ y y′ i) =
-    is-prop→pathP (λ i → P-prop ∣ x ∣₁ (squash₁ y y′ i))
+    is-prop→pathᴾ (λ i → P-prop ∣ x ∣₁ (squash₁ y y′ i))
                   (go ∣ x ∣₁ y) (go ∣ x ∣₁ y′) i
 
   go (squash₁ x y i) z =
-    is-prop→pathP (λ i → P-prop (squash₁ x y i) z)
+    is-prop→pathᴾ (λ i → P-prop (squash₁ x y i) z)
                   (go x z) (go y z) i
 
 rec² : is-prop C
@@ -72,7 +72,7 @@ elim²! : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
 elim²! {P-prop} = elim² P-prop
 
 universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
-universal {B} {A} B-prop = iso→equiv $ inc′ , iso rec′ (λ _ → refl) beta where
+universal {B} {A} B-prop = ≅→≃ $ inc′ , iso rec′ (λ _ → refl) beta where
   instance _ = hlevel-prop-instance B-prop
   inc′ : (x : ∥ A ∥₁ → B) → A → B
   inc′ f x = f ∣ x ∣₁
@@ -89,7 +89,20 @@ is-prop→equiv-∥-∥₁ A-prop = prop-extₑ! ∣_∣₁ proj!
   where instance _ = hlevel-prop-instance A-prop
 
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
-is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → is-of-hlevel-≃ 1 e hlevel!)
+is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → ≃→is-of-hlevel 1 e hlevel!)
+
+ae : A ≃ B → ∥ A ∥₁ ≃ ∥ B ∥₁
+ae {A} {B} e = ≅→≃ $ to , iso from ri li where
+  to = map (e $_)
+  from = map (e ⁻¹ $_)
+
+  module e = Equiv e
+  ri : from is-right-inverse-of to
+  ri = elim! (ap ∣_∣₁ ∘ e.ε)
+
+  li : from is-left-inverse-of to
+  li = elim! (ap ∣_∣₁ ∘ e.η)
+
 
 corestriction : (f : A → B) → (A → Im f)
 corestriction f x = f x , ∣ x , refl ∣₁
@@ -123,13 +136,15 @@ rec-set! : {f : A → B}
          → ∥ A ∥₁ → B
 rec-set! f-const {B-set} = rec-set f-const B-set
 
-Σ-∥-∥₁-over-prop
+Σ-over-prop-∥-∥₁≃∃
   : {A : Type ℓ} {B : A → Type ℓ′} → is-prop A
-  → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∥ Σ[ a ꞉ A ] B a ∥₁
-Σ-∥-∥₁-over-prop A-prop = prop-extₑ!
+  → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∃[ a ꞉ A ] B a
+Σ-over-prop-∥-∥₁≃∃ A-prop = prop-extₑ!
   (λ x → map (x .fst ,_) (x .snd))
   (rec! (second ∣_∣₁)) where instance _ = hlevel-prop-instance A-prop
 
+Σ-∥-∥₁-over-prop = Σ-over-prop-∥-∥₁≃∃
+{-# WARNING_ON_USAGE Σ-∥-∥₁-over-prop "Use `Σ-prop-∥-∥₁≃∃`" #-}
 
 _factors-through_
   : (f : A → C) (B : Type (level-of-type A ⊔ level-of-type C)) → _
@@ -178,7 +193,7 @@ module Replacement
     → ∀ x → P x
   elim-prop P-prop p⦋⦌ ⦋ x ⦌ = p⦋⦌ x
   elim-prop P-prop p⦋⦌ (quot {r = x} {r′ = y} p i) =
-    is-prop→pathP (λ i → P-prop (quot p i))
+    is-prop→pathᴾ (λ i → P-prop (quot p i))
       (elim-prop P-prop p⦋⦌ x)
       (elim-prop P-prop p⦋⦌ y) i
 
@@ -196,6 +211,6 @@ module Replacement
     (λ { (w , p) → Jₜ (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) p }) p where
       go : (f⁻¹x : A) → is-contr _
       go f⁻¹x = is-contr-η $ (⦋ f⁻¹x ⦌ , refl) , λ where
-        (u , α) → Σ-pathP (quot (ls.encode (ap fst α ⁻¹))) $
+        (u , α) → Σ-pathᴾ (quot (ls.encode (ap fst α ⁻¹))) $
                           Σ-prop-square hlevel! $ commutes→square $
                             ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹

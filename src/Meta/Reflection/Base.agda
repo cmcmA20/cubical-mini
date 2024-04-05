@@ -317,7 +317,7 @@ wait-just-a-bit tm = pure tm
 
 
 unapply-path : Term → TC (Maybe (Term × Term × Term))
-unapply-path red@(def (quote PathP) (l h∷ T v∷ x v∷ y v∷ [])) = do
+unapply-path red@(def (quote Pathᴾ) (l h∷ T v∷ x v∷ y v∷ [])) = do
   domain ← new-meta (def (quote Type) (l v∷ []))
   ty ← pure (def (quote Path) (domain v∷ x v∷ y v∷ []))
   debug-print "tactic" 50
@@ -336,7 +336,7 @@ unapply-path tm = reduce tm >>= λ where
     unify tm (def (quote Path) (dom v∷ l v∷ r v∷ []))
     traverse wait-for-type (l ∷ r ∷ [])
     pure (just (dom , l , r))
-  red@(def (quote PathP) (l h∷ T v∷ x v∷ y v∷ [])) → do
+  red@(def (quote Pathᴾ) (l h∷ T v∷ x v∷ y v∷ [])) → do
     domain ← new-meta (def (quote Type) (l v∷ []))
     ty ← pure (def (quote Path) (domain v∷ x v∷ y v∷ []))
     debug-print "tactic" 50

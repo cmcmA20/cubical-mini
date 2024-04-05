@@ -22,7 +22,7 @@ opaque
     → is-set A
     → is-prop (R a b)
   set-identity-is-prop {R} {a} {b} ids set =
-    is-of-hlevel-≃ 1 (identity-system-gives-path ids) (set a b)
+    ≃→is-of-hlevel 1 (identity-system-gives-path ids) (set a b)
 
   K
     : {r : (a : A) → R a a} {a : A}

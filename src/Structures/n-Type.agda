@@ -36,15 +36,15 @@ instance
 n-path : ⌞ X ⌟⁰ ＝ ⌞ Y ⌟⁰ → X ＝ Y
 n-path f i .carrier = f i
 n-path {X} {Y} f i .carrier-is-tr =
-  is-prop→pathP (λ i → is-of-hlevel-is-prop {A = f i} _) (X .carrier-is-tr) (Y .carrier-is-tr) i
+  is-prop→pathᴾ (λ i → is-of-hlevel-is-prop {A = f i} _) (X .carrier-is-tr) (Y .carrier-is-tr) i
 
 -- FIXME rewrite without cubes
 n-path-refl : {X : n-Type ℓ n} → n-path {X = X} refl ＝ refl
 n-path-refl {X} _ _ .carrier = X .carrier
 n-path-refl {X} i j .carrier-is-tr = θ j i where
-  p = is-prop→pathP (λ _ → is-of-hlevel-is-prop _) (X .carrier-is-tr) _
+  p = is-prop→pathᴾ (λ _ → is-of-hlevel-is-prop _) (X .carrier-is-tr) _
   θ : Square p refl refl refl
-  θ = is-prop→squareP (λ _ _ → is-of-hlevel-is-prop _) _ _ _ _
+  θ = is-prop→squareᴾ (λ _ _ → is-of-hlevel-is-prop _) _ _ _ _
 
 @0 n-ua : ⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰ → X ＝ Y
 n-ua f = n-path (ua f)
@@ -54,7 +54,7 @@ opaque
   @0 n-univalence : (⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰) ≃ (X ＝ Y)
   n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where
     inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰
-    inv p = path→equiv (ap carrier p)
+    inv p = ＝→≃ (ap carrier p)
 
     linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua
     linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
@@ -63,10 +63,10 @@ opaque
     rinv = Jₜ (λ y p → n-ua (inv p) ＝ p) path where
       path : n-ua {X = X} (inv {X} refl) ＝ refl
       path i j .carrier = ua.ε refl i j
-      path i j .carrier-is-tr = is-prop→squareP
+      path i j .carrier-is-tr = is-prop→squareᴾ
         (λ i j → is-of-hlevel-is-prop
           {A = ua.ε {A = ⌞ X ⌟⁰} refl i j } _)
-        (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (path→equiv refl) j)
+        (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (＝→≃ refl) j)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
@@ -83,10 +83,10 @@ opaque
               → n-path {X = A} {Y = C} (p ∙ q) ＝ n-path {Y = B} p ∙ n-path q
   n-path-∙ p q i j .carrier = (p ∙ q) j
   n-path-∙ {n} {A} {B} {C} p q j i .carrier-is-tr = θ i j where
-    θ : SquareP (λ k _ → is-of-hlevel n ((p ∙ q) k))
-          refl (is-prop→pathP (λ _ → is-of-hlevel-is-prop n) (A .carrier-is-tr) (C .carrier-is-tr))
+    θ : Squareᴾ (λ k _ → is-of-hlevel n ((p ∙ q) k))
+          refl (is-prop→pathᴾ (λ _ → is-of-hlevel-is-prop n) (A .carrier-is-tr) (C .carrier-is-tr))
           refl (λ k → (n-path {X = A} {Y = B} p ∙ n-path {Y = C} q) k .carrier-is-tr)
-    θ = is-set→squareP (λ _ _ → is-of-hlevel-is-of-hlevel-suc 1) _ _ _ _
+    θ = is-set→squareᴾ (λ _ _ → is-of-hlevel-is-of-hlevel-suc 1) _ _ _ _
 
 @0 n-ua-∙ₑ : {A B C : n-Type ℓ n}
              (f : ⌞ A ⌟⁰ ≃ ⌞ B ⌟⁰) (g : ⌞ B ⌟⁰ ≃ ⌞ C ⌟⁰)
@@ -99,7 +99,7 @@ opaque
   n-Type-is-of-hlevel zero X Y = n-ua
     ((λ _ → carrier-is-tr Y .fst) , is-contr→is-equiv (X .carrier-is-tr) (Y .carrier-is-tr))
   n-Type-is-of-hlevel (suc n) X Y =
-    is-of-hlevel-≃ (suc n) (n-univalence ⁻¹) (≃-is-of-hlevel (suc n) (X .carrier-is-tr) (Y .carrier-is-tr))
+    ≃→is-of-hlevel (suc n) (n-univalence ⁻¹) (≃-is-of-hlevel (suc n) (X .carrier-is-tr) (Y .carrier-is-tr))
 
 Prop : ∀ ℓ → Type (ℓsuc ℓ)
 Prop ℓ = n-Type ℓ 1

@@ -17,7 +17,7 @@ Group-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 Group-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =
   ap f (q .pres-⋆ _ _) ∙ p .pres-⋆ _ _
 Group-structure ℓ .id-hom-unique p q .erased = Equiv.injective
-  (isoₜ→equiv group-on-iso) $ Σ-prop-path! $ ext $ p .pres-⋆
+  (≅ₜ→≃ group-on-iso) $ Σ-prop-path! $ ext $ p .pres-⋆
 
 Groups : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Groups ℓ = Structured-objects (Group-structure ℓ)

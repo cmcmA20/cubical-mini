@@ -15,7 +15,7 @@ open _⇒_
 Disc : is-groupoid A → Precategory _ _
 Disc {A} _ .Ob = A
 Disc _ .Hom = _＝_
-Disc A-is-grp .Hom-set = path-is-of-hlevel′ 2 A-is-grp
+Disc A-is-grp .Hom-set = path-is-of-hlevel 2 A-is-grp
 Disc _ .id = refl
 Disc _ ._∘_ f g = f ∘′ g
 Disc _ .id-r = ∙-id-l

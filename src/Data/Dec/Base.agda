@@ -4,7 +4,7 @@ module Data.Dec.Base where
 open import Foundations.Base
 
 open import Data.Bool.Base as Bool
-  using (Bool; false; true; not; if_then_else_; ⟦_⟧ᵇ)
+  using (Bool; false; true; not; if_then_else_; is-true)
 open import Data.Empty.Base as ⊥
   using (⊥; ¬_)
 
@@ -66,5 +66,5 @@ rec {Q} = elim {C = λ _ → Q}
 ⌊_⌋ : Dec P → Bool
 ⌊ b because _ ⌋ = b
 
-is-true : Dec P → Type
-is-true = ⟦_⟧ᵇ ∘ ⌊_⌋
+is-trueᵈ : Dec P → Type
+is-trueᵈ = is-true ∘ ⌊_⌋

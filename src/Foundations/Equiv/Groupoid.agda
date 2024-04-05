@@ -47,15 +47,15 @@ ua-∙ₑ {C} = Jₑ (λ B′ f → Π[ g ꞉ B′ ≃ C ] (ua (f ∙ₑ g) ＝ 
   λ g → ap ua (∙ₑ-id-l g) ∙ sym (∙-id-l (ua g)) ∙ (ap (_∙ ua g) $ sym ua-idₑ)
 
 whisker-path-lₑ : (a ＝ c) → (a ＝ b) ≃ (c ＝ b)
-whisker-path-lₑ ac = iso→equiv $ sym ac ∙_ , iso (ac ∙_) (λ _ → ∙-cancel-l _ _) (λ _ → ∙-cancel-l _ _)
+whisker-path-lₑ ac = ≅→≃ $ sym ac ∙_ , iso (ac ∙_) (λ _ → ∙-cancel-l _ _) (λ _ → ∙-cancel-l _ _)
 
 whisker-path-rₑ : (b ＝ c) → (a ＝ b) ≃ (a ＝ c)
-whisker-path-rₑ bc = iso→equiv $ _∙ bc , iso (_∙ sym bc) (λ _ → ∙-cancel-r _ _) (λ _ → ∙-cancel-r _ _)
+whisker-path-rₑ bc = ≅→≃ $ _∙ bc , iso (_∙ sym bc) (λ _ → ∙-cancel-r _ _) (λ _ → ∙-cancel-r _ _)
 
 whisker-lₑ : (A ≃ C) → (A ≃ B) ≃ (C ≃ B)
-whisker-lₑ ac = iso→equiv $ ac ₑ⁻¹ ∙ₑ_ , iso (ac ∙ₑ_) (λ _ → ∙ₑ-cancel-l _ _) λ ab →
+whisker-lₑ ac = ≅→≃ $ ac ₑ⁻¹ ∙ₑ_ , iso (ac ∙ₑ_) (λ _ → ∙ₑ-cancel-l _ _) λ ab →
   ∙ₑ-assoc _ _ _ ∙ ap (_∙ₑ ab) (∙ₑ-inv-r _) ∙ ∙ₑ-id-l _
 
 whisker-rₑ : (B ≃ C) → (A ≃ B) ≃ (A ≃ C)
-whisker-rₑ bc = iso→equiv $ _∙ₑ bc , iso (_∙ₑ bc ₑ⁻¹) (λ _ → ∙ₑ-cancel-r _ _) λ ab →
+whisker-rₑ bc = ≅→≃ $ _∙ₑ bc , iso (_∙ₑ bc ₑ⁻¹) (λ _ → ∙ₑ-cancel-r _ _) λ ab →
   sym (∙ₑ-assoc _ _ _) ∙ ap (ab ∙ₑ_) (∙ₑ-inv-r _) ∙ ∙ₑ-id-r _

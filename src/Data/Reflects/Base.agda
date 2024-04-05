@@ -16,17 +16,17 @@ private variable
   P : Type ℓ
   Q : Type ℓ′
 
-true-reflects : Reflects⁰ P a → ⟦ a ⟧ᵇ → P
+true-reflects : Reflects⁰ P a → is-true a → P
 true-reflects (ofʸ p) tt = p
 
-false-reflects : Reflects⁰ P a → ⟦ not a ⟧ᵇ → ¬ P
+false-reflects : Reflects⁰ P a → is-true (not a) → ¬ P
 false-reflects (ofⁿ ¬p) tt = ¬p
 
-reflects-true : Reflects⁰ P a → P → ⟦ a ⟧ᵇ
+reflects-true : Reflects⁰ P a → P → is-true a
 reflects-true (ofʸ  p₀) p = tt
 reflects-true (ofⁿ ¬p)  p = ¬p p
 
-reflects-false : Reflects⁰ P a → ¬ P → ⟦ not a ⟧ᵇ
+reflects-false : Reflects⁰ P a → ¬ P → is-true (not a)
 reflects-false (ofʸ p)   ¬p = ¬p p
 reflects-false (ofⁿ ¬p₀) ¬p = tt
 

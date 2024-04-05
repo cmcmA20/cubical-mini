@@ -20,7 +20,7 @@ UMagma-structure ℓ .∘-is-hom f g p q .pres-id =
 UMagma-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =
   ap f (q .pres-⋆ _ _) ∙ p .pres-⋆ _ _
 UMagma-structure ℓ .id-hom-unique p q .erased = Equiv.injective
-  (isoₜ→equiv umagma-on-iso) $ Σ-prop-path! $ ext (p .pres-⋆)
+  (≅ₜ→≃ umagma-on-iso) $ Σ-prop-path! $ ext (p .pres-⋆)
 
 UMagmas : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 UMagmas ℓ = Structured-objects (UMagma-structure ℓ)

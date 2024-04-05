@@ -4,6 +4,7 @@ module Correspondences.Decidable where
 open import Meta.Prelude
 
 open import Meta.Reflection.Base
+open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
 open import Meta.Search.HLevel
 
@@ -71,11 +72,9 @@ macro
   Decidable t hole = do
     ar , r ← variadic-worker t
     und ← variadic-instance-worker r
-    unify hole $ def (quote Decidableⁿ)
-      [ harg ar , harg unknown , harg unknown
-      , harg unknown , harg unknown , iarg und
-      , varg t ]
-
+    unify hole
+      $   it Decidableⁿ ##ₕ ar ##ₕ unknown ##ₕ unknown
+      ##ₕ unknown ##ₕ unknown ##ᵢ und ##ₙ t
 
 -- Decision procedure
 DProc
@@ -119,10 +118,9 @@ macro
     dar , _ ← variadic-worker d
     unify car dar
     und ← variadic-instance-worker r
-    unify hole $ def (quote Reflectsⁿ)
-      [ harg car , harg unknown , harg unknown
-      , harg unknown , harg unknown , iarg und
-      , varg c , varg d ]
+    unify hole
+      $   it Reflectsⁿ ##ₕ car ##ₕ unknown ##ₕ unknown
+      ##ₕ unknown ##ₕ unknown ##ᵢ und ##ₙ c ##ₙ d
 
 reflectsⁿ-bool-inj
   : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}

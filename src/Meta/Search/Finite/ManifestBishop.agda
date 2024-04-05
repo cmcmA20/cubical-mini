@@ -20,7 +20,7 @@ open import Correspondences.Finite.ManifestBishop public
         ; fun-manifest-bishop-finite ; Π-manifest-bishop-finite
         ; Σ-manifest-bishop-finite
         ; manifest-bishop-finite→omniscient₁ ; manifest-bishop-finite→is-discrete
-        ; manifest-bishop-finite-≃ )
+        ; ≃→manifest-bishop-finite )
 open import Correspondences.Omniscient
 
 open import Data.Bool.Base

@@ -27,37 +27,37 @@ private variable
 Π-dom-≃ : (e : B ≃ A)
         → Π[ x ꞉ A ] P x
         ≃ Π[ x ꞉ B ] P (e .fst x)
-Π-dom-≃ {P} e =
-  iso→equiv λ where
-    .fst k x → k (e .fst x)
-    .snd .is-iso.inv k x → subst P (ε x) (k (from x))
-    .snd .is-iso.rinv k → fun-ext λ x →
-        ap² (subst P) (sym (zig x))
-          (sym (from-pathP (symP-from-goal (ap k (η x)))))
-      ∙ transport⁻-transport (ap P (ap to (sym (η x)))) (k x)
-    .snd .is-iso.linv k → fun-ext λ x →
-      ap (subst P _) (sym (from-pathP (symP-from-goal (ap k (ε x)))))
-      ∙ transport⁻-transport (sym (ap P (ε x))) _
-  where open module e = Equiv e
+Π-dom-≃ {B} {A} {P} e = ≅→≃ $ to , iso from ri li where
+  module e = Equiv e
+  to : Π[ x ꞉ A ] P x → Π[ x ꞉ B ] P (e.to x)
+  to k x = k (e.to x)
 
-Π-impl-cod-≃ : Π[ x ꞉ A ] (P x ≃ Q x)
-             → ∀[ x ꞉ A ] P x
-             ≃ ∀[ x ꞉ A ] Q x
-Π-impl-cod-≃ k .fst f {x} = k x .fst (f {x})
-Π-impl-cod-≃ k .snd .equiv-proof f .fst .fst {x}   = equiv-centre (k x) (f {x}) .fst
-Π-impl-cod-≃ k .snd .equiv-proof f .fst .snd i {x} = equiv-centre (k x) (f {x}) .snd i
-Π-impl-cod-≃ k .snd .equiv-proof f .snd (g , p) i .fst {x} =
-  equiv-path (k x) (f {x}) (g {x} , λ j → p j {x}) i .fst
-Π-impl-cod-≃ k .snd .equiv-proof f .snd (g , p) i .snd j {x} =
-  equiv-path (k x) (f {x}) (g {x} , λ k → p k {x}) i .snd j
+  from : Π[ x ꞉ B ] P (e.to x) → Π[ x ꞉ A ] P x
+  from k x = subst P (e.ε x) (k (e.from x))
 
-Π-impl-Π-≃ : Π[ x ꞉ A ] P x
-           ≃ ∀[ x ꞉ A ] P x
-Π-impl-Π-≃ .fst f = f _
-Π-impl-Π-≃ .snd .equiv-proof = strict-contr-fibres λ p _ → p
+  ri : from is-right-inverse-of to
+  ri k = fun-ext λ x →
+           ap² (subst P) (sym (e.zig x))
+            (sym (from-pathᴾ (symᴾ-from-goal (ap k (e.η x)))))
+          ∙ transport⁻-transport (ap P (ap e.to (sym (e.η x)))) (k x)
+
+  li : from is-left-inverse-of to
+  li k = fun-ext λ x →
+           ap (subst P _) (sym (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x)))))
+         ∙ transport⁻-transport (sym (ap P (e.ε x))) _
+
+Π≃∀ : Π[ x ꞉ A ] P x
+    ≃ ∀[ x ꞉ A ] P x
+Π≃∀ .fst = implicit
+Π≃∀ .snd .equiv-proof = strict-contr-fibres λ p _ → p
+
+∀-cod-≃ : Π[ x ꞉ A ] (P x ≃ Q x)
+        → ∀[ x ꞉ A ] P x
+        ≃ ∀[ x ꞉ A ] Q x
+∀-cod-≃ k = Π≃∀ ₑ⁻¹ ∙ₑ Π-cod-≃ k ∙ₑ Π≃∀
 
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
-function-≃ dom rng = iso→equiv the-iso where
+function-≃ dom rng = ≅→≃ the-iso where
   rng-iso = is-equiv→is-iso (rng .snd)
   dom-iso = is-equiv→is-iso (dom .snd)
 
@@ -91,7 +91,7 @@ fun-ext-dep-≃
   → ( {x₀ : A i0} {x₁ : A i1} (p : ＜ x₀ ／ A ＼ x₁ ＞)
     → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   ≃ ＜ f ／ (λ i → Π[ x ꞉ A i ] B i x) ＼ g ＞
-fun-ext-dep-≃ {A} {B} {f} {g} = iso→equiv isom where
+fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ isom where
   open is-iso
   isom : Iso _ _
   isom .fst = fun-ext-dep
@@ -111,16 +111,16 @@ fun-ext-dep-≃ {A} {B} {f} {g} = iso→equiv isom where
       lemi→i m k = coei→i A i (p i) (m ∨ k)
 
 opaque
-  unfolding singletonP-is-contr
+  unfolding singletonᴾ-is-contr
   hetero-homotopy≃homotopy
     : {A : I → Type ℓ} {B : (i : I) → Type ℓ′}
       {f : A i0 → B i0} {g : A i1 → B i1}
     → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
     ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-  hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→equiv isom where
+  hetero-homotopy≃homotopy {A} {B} {f} {g} = ≅→≃ isom where
     open is-iso
-    c : {x₀ : A i0} → is-contr (SingletonP A x₀)
-    c {x₀} = singletonP-is-contr A x₀
+    c : {x₀ : A i0} → is-contr (Singletonᴾ A x₀)
+    c {x₀} = singletonᴾ-is-contr A x₀
 
     isom : ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
          ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
@@ -137,3 +137,10 @@ opaque
       coei→1
         (λ i → ＜ f x₀ ／ B ＼ g (c .snd (x₁ , p) (i ∨ j) .fst) ＞)
         j $ h $ c .snd (x₁ , p) j .snd
+
+
+Π-impl-Π-≃ = Π≃∀
+{-# WARNING_ON_USAGE Π-impl-Π-≃ "Use `Π≃∀`" #-}
+
+Π-impl-cod-≃ = ∀-cod-≃
+{-# WARNING_ON_USAGE Π-impl-cod-≃ "Use `∀-cod-≃`" #-}

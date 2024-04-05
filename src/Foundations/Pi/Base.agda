@@ -113,6 +113,11 @@ module _ where
   case x of f = f x
   {-# INLINE case_of_ #-}
 
+  implicit : ((a : A) → B a) → ({x : A} → B x)
+  implicit f {x} = f x
+
+  explicit : ({a : A} → B a) → ((x : A) → B x)
+  explicit f x = f {x}
 
 is-contrᴱ : ∀ {ℓ} → Type ℓ → Type ℓ
 is-contrᴱ A = Σ[ x ꞉ A ] Erased (Π[ y ꞉ A ] (x ＝ y))

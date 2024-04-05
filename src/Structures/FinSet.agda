@@ -30,7 +30,7 @@ record FinSet (ℓ : Level) : Type (ℓsuc ℓ) where
   constructor fin-set
   field
     carrier : Type ℓ
-    has-is-bishop-finite : is-bishop-finite carrier
+    has-bishop-finite : is-bishop-finite carrier
 
 open FinSet
 
@@ -42,15 +42,15 @@ instance
   Underlying-FinSet .⌞_⌟⁰ = carrier
 
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
-FinSet-is-groupoid = is-of-hlevel-≃ 3 go hlevel! where
+FinSet-is-groupoid = ≃→is-of-hlevel 3 go hlevel! where
   go = FinSet _
-         ≃⟨ iso→equiv fin-set-iso ⟩
+         ≃⟨ ≅→≃ fin-set-iso ⟩
        Σ[ X ꞉ Type _ ] is-bishop-finite X
          ≃⟨ Σ-ap-snd (λ _ → prop-extₑ! < is-discrete→is-set ∘ is-bishop-finite→is-discrete , id > snd) ⟩
        Σ[ X ꞉ Type _ ] is-set X × is-bishop-finite X
          ≃⟨ Σ-assoc ⟩
        Σ[ U ꞉ Σ[ X ꞉ Type _ ] is-set X ] is-bishop-finite (U .fst)
-         ≃˘⟨ Σ-ap-fst (iso→equiv n-Type-iso) ⟩
+         ≃˘⟨ Σ-ap-fst (≅→≃ n-Type-iso) ⟩
        Σ[ X ꞉ Set _ ] is-bishop-finite ⌞ X ⌟ ≃∎
 
 instance
@@ -77,15 +77,15 @@ private
   fin-set′-ext {X} {Y} p = do
     u ← X .snd .snd
     v ← Y .snd .snd
-    pure $ sip fin-set-str-is-univalent (u ∙ path→equiv (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
+    pure $ sip fin-set-str-is-univalent (u ∙ ＝→≃ (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
 
   ∥FinSet′∥₂≃ᴱℕ : ∥ FinSet′ ℓ ∥₂ ≃ᴱ ℕ
   ∥FinSet′∥₂≃ᴱℕ = (∥-∥₂.rec! (fst ∘ snd)) , is-isoᴱ→is-equivᴱ
-    ( (λ n → pure $ Lift _ (Fin n) , n , pure lift-equiv)
+    ( (λ n → pure $ Lift _ (Fin n) , n , pure lift≃id)
     , erase (λ _ → refl)
     , erase (∥-∥₂.elim! (λ X → ∥-∥₂-path.from (fin-set′-ext refl))) )
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
 ∥FinSet∥₂≃ᴱℕ
-  = ∥-∥₂-≃ᴱ (iso→equiv fin-set-iso ∙ Σ-ap-snd λ _ → iso→equiv is-bishop-finite-iso)
+  = ≃→≃ᴱ (∥-∥₂.ae (≅→≃ fin-set-iso ∙ Σ-ap-snd λ _ → ≅→≃ is-bishop-finite-iso))
   ∙ ∥FinSet′∥₂≃ᴱℕ

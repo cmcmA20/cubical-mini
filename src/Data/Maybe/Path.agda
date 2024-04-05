@@ -37,7 +37,7 @@ identity-system .to-path-over {(nothing)} {(nothing)} _ = refl
 code-is-of-hlevel : {x y : Maybe A} {n : HLevel}
                   → is-of-hlevel (2 + n) A
                   → is-of-hlevel (1 + n) (Code x y)
-code-is-of-hlevel {x = just x}  {just y}    A-hl = path-is-of-hlevel′ _ A-hl x y
+code-is-of-hlevel {x = just x}  {just y}    A-hl = path-is-of-hlevel _ A-hl x y
 code-is-of-hlevel {x = nothing} {(nothing)} _    = hlevel!
 code-is-of-hlevel {x = just x}  {(nothing)} _    = hlevel!
 code-is-of-hlevel {x = nothing} {just x}    _    = hlevel!

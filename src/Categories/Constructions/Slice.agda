@@ -40,13 +40,13 @@ private unquoteDecl /-hom-iso = declare-record-iso /-hom-iso (quote /-Hom)
 
 private variable f g : /-Hom a b
 
-/-Hom-pathP : (p : a ＝ a′) (q : b ＝ b′)
+/-Hom-pathᴾ : (p : a ＝ a′) (q : b ＝ b′)
               {f : /-Hom {c} a b} {g : /-Hom a′ b′}
             → ＜ f ./-Hom.map ／ (λ i → Hom (p i .domain) (q i .domain)) ＼ g ./-Hom.map ＞
             → ＜ f ／ (λ i → /-Hom (p i) (q i)) ＼ g ＞
-/-Hom-pathP p q {f} {g} r i ./-Hom.map = r i
-/-Hom-pathP p q {f} {g} r i ./-Hom.commutes = is-prop→pathP
-  (λ j → path-is-of-hlevel′ 1 (Hom-set (p j .domain) _)
+/-Hom-pathᴾ p q {f} {g} r i ./-Hom.map = r i
+/-Hom-pathᴾ p q {f} {g} r i ./-Hom.commutes = is-prop→pathᴾ
+  (λ j → path-is-of-hlevel 1 (Hom-set (p j .domain) _)
     (q j ./-Obj.map ∘ r j) (p j ./-Obj.map) )
   (f .commutes) (g .commutes) i
   where open /-Hom
@@ -55,7 +55,7 @@ Extensional-/-Hom
   : ∀ {ℓr} ⦃ sa : Extensional (Hom (a .domain) (b .domain)) ℓr ⦄
   → Extensional (/-Hom {c} a b) ℓr
 Extensional-/-Hom ⦃ sa ⦄ = set-injective→extensional!
-  (/-Hom-pathP refl refl) sa
+  (/-Hom-pathᴾ refl refl) sa
 
 instance
   extensionality-/-hom : Extensionality (/-Hom {c} a b)

@@ -15,7 +15,7 @@ private variable
 
 Σ-fibre-equiv : (B : A → Type ℓᵇ) (a : A)
               → fibre fst a ≃ B a
-Σ-fibre-equiv B a = iso→equiv isom where
+Σ-fibre-equiv B a = ≅→≃ isom where
   isom : _ ≅ _
   isom .fst ((_ , y) , p) = subst B p y
   isom .snd .is-iso.inv x       = (a , x) , refl
@@ -26,7 +26,7 @@ private variable
 total-equiv
   : {E : Type ℓᵉ} {B : Type ℓᵇ}
     (p : E → B) → E ≃ Σ[ b ꞉ B ] fibre p b
-total-equiv p = iso→equiv isom where
+total-equiv p = ≅→≃ isom where
   isom : _ ≅ (Σ _ (fibre p))
   isom .fst x                   = p x , x , refl
   isom .snd .is-iso.inv (_ , x , _)    = x
@@ -44,7 +44,7 @@ fibre-paths : {z@(a , p) z′@(a′ , p′) : fibre f y}
             → z ＝ z′
             ≃ Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)
 fibre-paths {f} {y} {z = a , p} {z′ = a′ , p′} =
-  (a , p) ＝ (a′ , p′)                                ≃˘⟨ iso→equiv Σ-path-iso ⟩
+  (a , p) ＝ (a′ , p′)                                ≃˘⟨ ≅→≃ Σ-path-iso ⟩
   Σ[ q ꞉ a ＝ a′ ] (subst (λ v → f v ＝ y) q p ＝ p′) ≃⟨ Σ-ap-snd (whisker-path-lₑ ∘ subst-path-left p ∘ ap f) ⟩
   Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)           ≃∎
 
@@ -54,7 +54,7 @@ module @0 _ where
     fibration-equiv : {B : Type ℓᵇ} {ℓ : Level}
                     → Σ[ E ꞉ Type (ℓᵇ ⊔ ℓ) ] (E → B)
                     ≃ (B → Type (ℓᵇ ⊔ ℓ))
-    fibration-equiv {B} {ℓ} = iso→equiv isom where
+    fibration-equiv {B} {ℓ} = ≅→≃ isom where
       isom : Σ[ E ꞉ Type (level-of-type B ⊔ ℓ) ] (E → B) ≅ (B → Type (level-of-type B ⊔ ℓ))
       isom .fst (E , p)       = fibre p
       isom .snd .is-iso.inv p⁻¹      = Σ _ p⁻¹ , fst
@@ -86,7 +86,7 @@ fibre-comp : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
              {g : B → C} {f : A → B} {c : C}
            → fibre (g ∘ f) c
            ≃ Σ[ w ꞉ fibre g c ] fibre f (w .fst)
-fibre-comp {g} {f} {c} = iso→equiv $ to , iso from ri li where
+fibre-comp {g} {f} {c} = ≅→≃ $ to , iso from ri li where
   to : fibre (g ∘ f) c → Σ[ w ꞉ fibre g c ] fibre f (w .fst)
   to (a , p) = (f a , p) , a , refl
   from : Σ[ w ꞉ fibre g c ] fibre f (w .fst) → fibre (g ∘ f) c

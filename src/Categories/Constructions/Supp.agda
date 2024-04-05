@@ -20,15 +20,15 @@ private variable
 instance
   H-Level-sub : ∀ {n} {X : 𝒰 ℓ} {P Q : X → Bool} → H-Level (suc n) (P ⊆ Q)
   H-Level-sub {Q} = hlevel-prop-instance $
-    Π-is-of-hlevel-implicit _ λ x →
-    Bool.elim {P = λ z → is-prop (_ → ⟦ z ⟧ᵇ)}
+    ∀-is-of-hlevel _ λ x →
+    Bool.elim {P = λ z → is-prop (_ → is-true z)}
     hlevel! hlevel! (Q x)
 
 record Supported {ℓ} (X : 𝒰 ℓ) : 𝒰 (ℓᵃ ⊔ ℓ) where
   no-eta-equality
   field
     support : X → A →̇ Bool
-    support-is-finite : Π[ x ꞉ X ] is-bishop-finite (Σ[ a ꞉ A ] ⟦ support x a ⟧ᵇ)
+    support-is-finite : Π[ x ꞉ X ] is-bishop-finite (Σ[ a ꞉ A ] is-true (support x a))
 
 open Supported
 
@@ -56,8 +56,8 @@ Supported-structure ℓ .is-hom f X Y = el! (Supported-hom X Y f)
 Supported-structure _ .id-is-hom .sub-supp _ = refl
 Supported-structure _ .∘-is-hom f g p q .sub-supp x = q .sub-supp x ∘ₜ p .sub-supp _
 Supported-structure _ .id-hom-unique {s} {t} p q = pure $ Equiv.injective
-  (isoₜ→equiv supported-iso) $ Σ-prop-path hlevel! $ ext $ λ x a →
-    happly (boolean-pred-ext (s .support x) (t .support x) (q .sub-supp x) (p .sub-supp x)) a
+  (≅ₜ→≃ supported-iso) $ Σ-prop-path hlevel! $ ext $ λ x a →
+    (boolean-pred-ext (s .support x) (t .support x) (q .sub-supp x) (p .sub-supp x)) $ₚ a
 
 Supp : ∀ ℓ → Precategory (ℓᵃ ⊔ ℓsuc ℓ) (ℓᵃ ⊔ ℓ)
 Supp ℓ = Structured-objects (Supported-structure ℓ)

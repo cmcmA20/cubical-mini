@@ -6,9 +6,12 @@ open import Prelude
            ; _↪_       to _↪ₜ_
            ; _×_       to _×ₜ_
            ; _∘_       to _∘ₜ_
+           ; Iso       to Isoₜ
            ; id        to idₜ
-           ; iso→path  to isoₜ→path
-           ; iso→equiv to isoₜ→equiv
+           ; ≅→≃       to ≅ₜ→≃
+           ; ≅→＝      to ≅ₜ→＝
+           ; iso→path  to isoₜ→path  -- deprecated
+           ; iso→equiv to isoₜ→equiv -- deprecated
            )
   -- FIXME remove after fixing search tactic
   hiding ( Tactic-bishop-finite
@@ -21,8 +24,8 @@ open import Categories.Solver
   hiding ( module NbE ; module Reflection )
   public
 open import Categories.Univalent
-  using ( is-category ; path→iso ; Hom-pathP
-        ; Hom-transport ; Hom-pathP-refl-l ; Hom-pathP-refl-r
+  using ( is-category ; path→iso ; Hom-pathᴾ
+        ; Hom-transport ; Hom-pathᴾ-refl-l ; Hom-pathᴾ-refl-r
         ; module Univalent )
   public
 

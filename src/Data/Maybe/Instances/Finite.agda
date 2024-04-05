@@ -20,7 +20,7 @@ private variable
 
 maybe-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Maybe A)
 maybe-manifest-bishop-finite fi = fin $
-  maybe-as-sum ∙ ⊎-ap (enumeration by-instance) (enumeration fi) ∙ fin-coproduct
+  maybe-as-sum ∙ ⊎-ap (enumeration auto) (enumeration fi) ∙ fin-coproduct
 
 maybe-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Maybe A)
 maybe-is-bishop-finite fi = fin₁ do

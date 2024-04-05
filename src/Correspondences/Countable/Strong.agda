@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Countable.Strong where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
 open import Meta.Record
 open import Meta.Search.HLevel
@@ -10,8 +9,6 @@ open import Meta.Search.HLevel
 open import Correspondences.Discrete
 
 open import Data.Nat.Instances.Discrete
-
-open import Truncation.Propositional as ∥-∥₁
 
 private variable
   ℓ ℓ′ : Level
@@ -38,4 +35,7 @@ countable : ⦃ c : Countable A ⦄ → Countable A
 countable ⦃ c ⦄ = c
 
 countable→is-discrete : Countable A → is-discrete A
-countable→is-discrete cn = is-discrete-≃ (enumeration cn) ℕ-is-discrete
+countable→is-discrete cn = ≃→is-discrete (enumeration cn) ℕ-is-discrete
+
+≃→countable : B ≃ A → Countable A → Countable B
+≃→countable e c .enumeration = e ∙ c .enumeration

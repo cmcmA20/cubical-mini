@@ -30,12 +30,18 @@ is-surjective-embedding≃is-equiv = prop-extₑ!
   (is-surjective-embedding→is-equiv $²_)
   (λ fe → is-equiv→is-surjective fe , is-equiv→is-embedding fe)
 
--- TODO move?
-iso→extensional
-  : Iso A B
-  → Extensional B ℓ″
+≃→extensional
+  : B ≃ A
   → Extensional A ℓ″
-iso→extensional f = embedding→extensional (equiv→embedding (iso→equiv f))
+  → Extensional B ℓ″
+≃→extensional f = ↪→extensional (≃→↪ f)
+
+-- TODO move?
+≅→extensional
+  : Iso B A
+  → Extensional A ℓ″
+  → Extensional B ℓ″
+≅→extensional f = ≃→extensional (≅→≃ f)
 
 Extensional-≃
   : {A : Type ℓ} ⦃ sb : Extensional (A → B) ℓ″ ⦄

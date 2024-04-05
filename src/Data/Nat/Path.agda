@@ -35,7 +35,7 @@ id≠plus-suc {suc n} = id≠plus-suc ∘ suc-inj
 
 
 Code : ℕ → ℕ → Type
-Code m n = ⟦ m == n ⟧ᵇ
+Code m n = is-true (m == n)
 
 code-refl : (m : ℕ) → Code m m
 code-refl 0       = tt

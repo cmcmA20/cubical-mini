@@ -22,7 +22,7 @@ total f (x , y) = x , f x y
 total-fibres-equiv : {x : A} {v : Q x}
                    → fibre (f x)          v
                    ≃ fibre (total f) (x , v)
-total-fibres-equiv {A} {Q} {f} = iso→equiv the-iso where opaque
+total-fibres-equiv {A} {Q} {f} = ≅→≃ the-iso where opaque
   unfolding J
   open is-iso
 
@@ -61,7 +61,7 @@ opaque
 fibrewise-is-equiv≃total-is-equiv : ∀[ x ꞉ A ] is-equiv (f x)
                                   ≃ is-equiv (total f)
 fibrewise-is-equiv≃total-is-equiv =
-  prop-extₑ (Π-is-of-hlevel-implicit 1 (λ _ → hlevel 1))
+  prop-extₑ (∀-is-of-hlevel 1 (λ _ → hlevel 1))
             (hlevel 1)
             fibrewise-is-equiv→total-is-equiv
             total-is-equiv→fibrewise-is-equiv
