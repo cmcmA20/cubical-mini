@@ -4,7 +4,6 @@ module Data.Fin.Computational.Closure where
 open import Meta.Prelude
 
 open import Meta.Marker
-open import Meta.Search.HLevel
 open import Meta.Regularity
 
 open import Data.Empty.Base as ⊥

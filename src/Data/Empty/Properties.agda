@@ -3,8 +3,7 @@ module Data.Empty.Properties where
 
 open import Foundations.Base
 open import Foundations.Equiv
-
-open import Meta.Search.HLevel
+open import Foundations.HLevel
 
 open import Data.Unit.Base
 
@@ -26,13 +25,6 @@ opaque
 instance
   H-Level-absurd : H-Level n (Π[ f ꞉ ⊥ ] C f)
   H-Level-absurd = hlevel-basic-instance 0 absurd-is-contr
-
-absurd-is-of-hlevel : ∀ n → is-of-hlevel n (Π[ f ꞉ ⊥ ] C f)
-absurd-is-of-hlevel n = hlevel n
-
-instance
-  decomp-hlevel-absurd : goal-decomposition (quote is-of-hlevel) (Π[ f ꞉ ⊥ ] C f)
-  decomp-hlevel-absurd = decomp (quote absurd-is-of-hlevel) [ `level-same ]
 
 universal : (Π[ f ꞉ ⊥ ] C f) ≃ ⊤
 universal = _ , is-contr→is-equiv absurd-is-contr ⊤-is-contr

@@ -3,9 +3,8 @@ module Data.Maybe.Path where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Structures.IdentitySystem
+open import Structures.n-Type
 
 open import Functions.Embedding
 
@@ -46,14 +45,6 @@ maybe-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) A → is-of-hlevel (2
 maybe-is-of-hlevel n A-hl =
   identity-system→is-of-hlevel _ identity-system λ _ _ → code-is-of-hlevel A-hl
 
-instance
-  decomp-hlevel-maybe
-    : ∀ {ℓ} {A : Type ℓ}
-    → goal-decomposition (quote is-of-hlevel) (Maybe A)
-  decomp-hlevel-maybe = decomp (quote maybe-is-of-hlevel)
-    [ `level-minus 2 , `search (quote is-of-hlevel) ]
-
-
 nothing≠just : nothing ≠ just x
 nothing≠just p = subst is-nothing p tt
 
@@ -68,3 +59,7 @@ just-cancellable = identity-system-gives-path identity-system ⁻¹
 
 just-is-embedding : is-embedding {A = A} just
 just-is-embedding = cancellable→is-embedding just-cancellable
+
+instance
+  H-Level-Maybe : ∀ {n ℓ} {A : Type ℓ} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (Maybe A)
+  H-Level-Maybe .H-Level.has-of-hlevel = maybe-is-of-hlevel _ hlevel!

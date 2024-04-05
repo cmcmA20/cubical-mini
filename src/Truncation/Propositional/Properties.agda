@@ -5,9 +5,9 @@ open import Meta.Prelude
 
 open import Meta.Effect.Map
 open import Meta.Extensionality
-open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Interface
+open import Structures.n-Type
 
 open import Functions.Constant
 open import Functions.Embedding
@@ -44,33 +44,33 @@ rec² : is-prop C
 rec² C-prop = elim² (λ _ _ → C-prop)
 
 rec!
-  : {@(tactic hlevel-tactic-worker) B-prop : is-prop B}
+  : ⦃ B-prop : H-Level 1 B ⦄
   → (A → B)
   → (x : ∥ A ∥₁) → B
-rec! {B-prop} = elim (λ _ → B-prop)
+rec! = elim hlevel!
 
-rec²! : {@(tactic hlevel-tactic-worker) C-prop : is-prop C}
+rec!² : ⦃ C-prop : H-Level 1 C ⦄
       → (A → B → C)
       → (x : ∥ A ∥₁) (y : ∥ B ∥₁) → C
-rec²! {C-prop} = rec² C-prop
+rec!² = rec² hlevel!
 
 elim!
   : {A : Type ℓ} {P : ∥ A ∥₁ → Type ℓ′}
-    {@(tactic hlevel-tactic-worker) P-prop : ∀{a} → is-prop (P a)}
+    ⦃ P-prop : ∀{a} → H-Level 1 (P a) ⦄
   → Π[ a ꞉ A ] P ∣ a ∣₁
   → (x : ∥ A ∥₁) → P x
-elim! {P-prop} = elim (λ _ → P-prop)
+elim! = elim hlevel!
 
 proj!
-  : {@(tactic hlevel-tactic-worker) A-prop : is-prop A}
+  : ⦃ A-prop : H-Level 1 A ⦄
   → ∥ A ∥₁ → A
-proj! {A-prop} = rec A-prop id
+proj! = rec! id
 
-elim²! : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
-       → {@(tactic hlevel-tactic-worker) P-prop : ∀ x y → is-prop (P x y)}
+elim!² : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
+       → ⦃ P-prop : ∀ {x y} → H-Level 1 (P x y) ⦄
        → (∀ x y → P ∣ x ∣₁ ∣ y ∣₁)
        → ∀ x y → P x y
-elim²! {P-prop} = elim² P-prop
+elim!² = elim² hlevel!
 
 universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
 universal {B} {A} B-prop = ≅→≃ $ inc′ , iso rec′ (λ _ → refl) beta where
@@ -90,11 +90,11 @@ is-prop→equiv-∥-∥₁ A-prop = prop-extₑ! ∣_∣₁ proj!
   where instance _ = hlevel-prop-instance A-prop
 
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
-is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → ≃→is-of-hlevel 1 e hlevel!)
+is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → ≃→is-of-hlevel! 1 e)
 
 ae : A ≃ B → ∥ A ∥₁ ≃ ∥ B ∥₁
 ae {A} {B} e = ≅→≃ $ to , iso from ri li where
-  to = map (e $_)
+  to   = map (e    $_)
   from = map (e ⁻¹ $_)
 
   module e = Equiv e
@@ -119,7 +119,7 @@ dom-is-set→image-is-set B-set = hlevel!
 is-constant→image-is-prop
   : is-set B → {f : A → B} → 2-Constant f → is-prop (Im f)
 is-constant→image-is-prop B-set {f} f-const = is-prop-η λ (a , x) (b , y) →
-  Σ-prop-path! $ elim²! (λ { (f*a , p) (f*b , q) → sym p ∙∙ f-const f*a f*b ∙∙ q }) x y
+  Σ-prop-path! $ elim!² (λ { (f*a , p) (f*b , q) → sym p ∙∙ f-const f*a f*b ∙∙ q }) x y
   where instance _ = hlevel-basic-instance 2 B-set
 
 -- TODO if codomain is an n-type, we should require f to be n-constant
@@ -133,9 +133,9 @@ rec-set f-const B-set = fst ∘ elim
 
 rec-set! : {f : A → B}
          → 2-Constant f
-         → {@(tactic hlevel-tactic-worker) B-set : is-set B}
+         → ⦃ B-set : H-Level 2 B ⦄
          → ∥ A ∥₁ → B
-rec-set! f-const {B-set} = rec-set f-const B-set
+rec-set! f-const = rec-set f-const (hlevel 2)
 
 Σ-over-prop-∥-∥₁≃∃
   : {A : Type ℓ} {B : A → Type ℓ′} → is-prop A

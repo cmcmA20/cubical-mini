@@ -4,9 +4,9 @@ module Data.Vec.Inductive.Correspondences.Unary.Any where
 open import Meta.Prelude
 
 open import Meta.Effect.Idiom
-open import Meta.Search.Discrete
 
 open import Correspondences.Decidable
+open import Correspondences.Discrete
 
 open import Data.Dec as Dec
 open import Data.Fin.Inductive.Base
@@ -26,12 +26,12 @@ Any : ∀ {a a′} {n} {A : Type a} (P : Pred A a′) → Vec A n → Type _
 Any {n} P xs = Σ[ idx ꞉ Fin n ] P (lookup xs idx)
 
 any? : Decidable P → Decidable (λ (xs : Vec A n) → Any P xs)
-any? {n = 0}     P? [] = no λ()
-any? {n = suc n} P? (x ∷ xs) =
+any? {n = 0}     P? {([])} = no λ()
+any? {n = suc n} P? {x ∷ xs} =
   Dec.dmap [ (fzero ,_) , bimap fsuc id ]ᵤ
            (λ { ¬ps (fzero  , p ) → ¬ps (inl p)
               ; ¬ps (fsuc i , ps) → ¬ps (inr (_ , ps)) })
-           (⊎-decision (P? x) (any? P? xs))
+           (Dec-⊎ ⦃ P? ⦄ ⦃ any? (λ {z} → P? {z}) {xs} ⦄)
 
 any-ap
   : {a a′ b b′ : Level} {A : Type a} {B : Type b} {P : Pred A a′} {Q : Pred B b′}

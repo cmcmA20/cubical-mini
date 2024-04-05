@@ -1,11 +1,7 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Connected where
 
-open import Foundations.Base
-
-open import Meta.Search.HLevel
-
-open import Correspondences.Base public
+open import Meta.Prelude
 
 open import Truncation.Propositional
 

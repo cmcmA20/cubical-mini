@@ -3,7 +3,7 @@ module Data.Fin.Instances.Finite where
 
 open import Foundations.Base
 
-open import Meta.Search.Finite.ManifestBishop
+open import Correspondences.Finite.ManifestBishop
 
 open import Data.Empty.Instances.Finite
 open import Data.Fin.Base
@@ -15,7 +15,4 @@ private variable n : ℕ
 instance
   fin-manifest-bishop-finite : Manifest-bishop-finite (Fin n)
   fin-manifest-bishop-finite {0}     = ⊥-manifest-bishop-finite
-  fin-manifest-bishop-finite {suc _} = maybe-manifest-bishop-finite fin-manifest-bishop-finite
-
-  decomp-fin-fin : goal-decomposition (quote Manifest-bishop-finite) (Fin n)
-  decomp-fin-fin = decomp (quote fin-manifest-bishop-finite) []
+  fin-manifest-bishop-finite {suc _} = maybe-manifest-bishop-finite ⦃ fin-manifest-bishop-finite ⦄

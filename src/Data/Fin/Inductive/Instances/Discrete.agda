@@ -3,11 +3,10 @@ module Data.Fin.Inductive.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Search.Discrete
+open import Correspondences.Discrete
 
 open import Data.Dec.Base as Dec
 open import Data.Id.Inductive
-open import Data.List.Base
 
 open import Data.Fin.Inductive.Base
 
@@ -24,6 +23,3 @@ instance
       Dec.dmap (apⁱ fsuc)
                (_∘ (λ { reflⁱ → reflⁱ }))
                (fin-is-discreteⁱ k l)
-
-  decomp-dis-fin : goal-decomposition (quote is-discrete) (Fin n)
-  decomp-dis-fin = decomp (quote fin-is-discrete) []

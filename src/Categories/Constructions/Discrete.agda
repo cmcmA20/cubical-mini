@@ -1,7 +1,9 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --backtracking-instance-search #-}
 module Categories.Constructions.Discrete where
 
 open import Categories.Prelude
+
+open import Data.Unit
 
 private variable
   ℓ ℓ′ o h : Level
@@ -22,9 +24,9 @@ Disc _ .id-r = ∙-id-l
 Disc _ .id-l = ∙-id-r
 Disc _ .assoc _ _ _ = ∙-assoc _ _ _ ⁻¹
 
-Disc! : (A : Type ℓ) {@(tactic hlevel-tactic-worker) A-is-grp : is-groupoid A}
+Disc! : (A : Type ℓ) ⦃ A-is-grp : H-Level 3 A ⦄
       → Precategory ℓ ℓ
-Disc! A {A-is-grp} = Disc A-is-grp
+Disc! A ⦃ A-is-grp ⦄ = Disc {A = A} hlevel!
 
 Disc₃ : Grpd ℓ → Precategory ℓ ℓ
 Disc₃ A = Disc! ⌞ A ⌟

@@ -4,12 +4,17 @@ module Categories.Base where
 open import Meta.Prelude
   hiding (id ; _∘_)
 
+open import Meta.Effect.Idiom
 open import Meta.Extensionality
+open import Meta.Deriving.HLevel
 open import Meta.Literals.FromNat
+open import Meta.Projection
 open import Meta.Record
-open import Meta.Search.HLevel
+open import Meta.Reflection.Base
 
 open import Structures.n-Type
+
+open import Data.Bool.Base
 
 open import Functions.Embedding using (Injective)
 
@@ -63,13 +68,15 @@ instance
   Underlying-precat {o} .Underlying.ℓ-underlying = o
   Underlying-precat .Underlying.⌞_⌟⁰ = Ob
 
-  proj-hlevel-precat-hom : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote Hom) false
-  proj-hlevel-precat-hom .Struct-proj-desc.struct-name = quote Precategory
-  proj-hlevel-precat-hom .Struct-proj-desc.struct-args-length = 2
-  proj-hlevel-precat-hom .Struct-proj-desc.goal-projection = quote hom-set′
-  proj-hlevel-precat-hom .Struct-proj-desc.projection-args-length = 5
-  proj-hlevel-precat-hom .Struct-proj-desc.level-selector = inl 2
-  proj-hlevel-precat-hom .Struct-proj-desc.carrier-selector = 2
+  open Struct-proj-desc
+
+  hlevel-proj-precat : Struct-proj-desc true (quote Precategory.Hom)
+  hlevel-proj-precat .has-level = quote hom-set′
+  hlevel-proj-precat .upwards-closure = quote is-of-hlevel-≤
+  hlevel-proj-precat .get-level _ = pure (lit (nat 2))
+  hlevel-proj-precat .get-argument (_ ∷ _ ∷ x v∷ _) = pure x
+  hlevel-proj-precat .get-argument _ = type-error []
+
 
 infixl 60 _ᵒᵖ
 _ᵒᵖ : Precategory o h → Precategory o h
@@ -237,7 +244,7 @@ record _⇒_ {C : Precategory oᶜ hᶜ}
 
 {-# INLINE NT #-}
 
-unquoteDecl nt-iso = declare-record-iso nt-iso (quote _⇒_)
+unquoteDecl H-Level-Nat = declare-record-hlevel 2 H-Level-Nat (quote _⇒_)
 
 instance
   Funlike-natural-transformation
@@ -286,12 +293,6 @@ module _ {C : Precategory oᶜ hᶜ}
 
   open Functor
   open _⇒_
-
-  nat-is-set : is-set (F ⇒ G)
-  nat-is-set = ≅→is-of-hlevel 2 nt-iso hlevel! where
-    instance
-      ds : ∀{x y} → H-Level 2 (D.Hom x y)
-      ds = hlevel-basic-instance 2 $ D.Hom-set _ _
 
   nat-pathᴾ : {F' G' : Functor C D}
             → (p : F ＝ F') (q : G ＝ G')

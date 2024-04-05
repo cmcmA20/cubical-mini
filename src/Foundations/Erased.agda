@@ -155,3 +155,8 @@ opaque
 
     q : ＜ id-is-equiv ／ (λ i → is-equiv (p i)) ＼ A≃B .snd ＞
     q = is-prop→pathᴾ (λ i → is-equiv-is-prop (p i)) _ _
+
+instance
+  H-Level-Erased : ∀ {h} → ⦃ @0 A-hl : H-Level h A ⦄
+                 → H-Level h (Erased A)
+  H-Level-Erased .H-Level.has-of-hlevel = erased-is-of-hlevel _ (hlevel _)

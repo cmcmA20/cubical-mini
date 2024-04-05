@@ -36,7 +36,7 @@ module _ {o h} {C : Precategory o h} where
       public
 
     Ob-is-groupoid : is-groupoid (C .Precategory.Ob)
-    Ob-is-groupoid = path→iso.hlevel′ 2 λ _ _ → ≅-is-set
+    Ob-is-groupoid = path→iso.hlevel′ 2 hlevel!
 
 
 module _ {o h} (C : Precategory o h) where

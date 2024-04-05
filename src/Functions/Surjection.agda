@@ -3,8 +3,6 @@ module Functions.Surjection where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Truncation.Propositional.Base
 
 private variable
@@ -24,7 +22,7 @@ is-surjective : (A → B) → Type _
 is-surjective {B} f = Π[ y ꞉ B ] ∥ fibre f y ∥₁
 
 is-surjective-is-prop : is-prop (is-surjective f)
-is-surjective-is-prop = hlevel!
+is-surjective-is-prop = hlevel _
 
 _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f

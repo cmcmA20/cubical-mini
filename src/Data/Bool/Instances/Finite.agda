@@ -4,7 +4,7 @@ module Data.Bool.Instances.Finite where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Search.Finite.ManifestBishop
+open import Correspondences.Finite.ManifestBishop
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base
@@ -22,6 +22,3 @@ instance
     go .snd .is-iso.rinv (mk-fin 1) = refl
     go .snd .is-iso.linv false = refl
     go .snd .is-iso.linv true = refl
-
-  decomp-fin-bool : goal-decomposition (quote Manifest-bishop-finite) Bool
-  decomp-fin-bool = decomp (quote bool-manifest-bishop-finite) []

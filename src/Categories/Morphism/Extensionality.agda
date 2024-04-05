@@ -4,7 +4,8 @@ open import Categories.Base
 module Categories.Morphism.Extensionality {o ℓ} {C : Precategory o ℓ} where
 
 open import Meta.Extensionality
-open import Meta.Search.HLevel
+
+open import Structures.n-Type
 
 open import Categories.Morphism C
 

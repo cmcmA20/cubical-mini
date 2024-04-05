@@ -3,10 +3,8 @@ module Correspondences.Separated where
 
 open import Foundations.Base
 
-open import Meta.Search.HLevel
-
-open import Structures.Base
 open import Structures.IdentitySystem.Base
+open import Structures.n-Type
 
 open import Correspondences.Base public
 open import Correspondences.Classical
@@ -36,4 +34,4 @@ opaque
   unfolding is-of-hlevel
   is-¬¬-separated-is-prop : is-prop (is-¬¬-separated A)
   is-¬¬-separated-is-prop As As′ =
-    fun-ext λ x i y p j → (is-¬¬-separated→is-set As) x y (As _ _ p) (As′ _ _ p) i j
+   fun-ext λ x i y p j → (is-¬¬-separated→is-set As) x y (As _ _ p) (As′ _ _ p) i j

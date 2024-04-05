@@ -1,9 +1,7 @@
 {-# OPTIONS --safe #-}
 module Truncation.Set.Base where
 
-open import Foundations.Base
-
-open import Meta.Search.HLevel
+open import Meta.Prelude
 
 data ∥_∥₂ {ℓ} (A : Type ℓ) : Type ℓ where
   ∣_∣₂    : A → ∥ A ∥₂
@@ -18,11 +16,7 @@ rec : is-set B → (A → B) → ∥ A ∥₂ → B
 rec _ f ∣ x ∣₂ = f x
 rec B-set f (squash₂ x y p q i j) =
   is-set-β B-set (go x) (go y) (λ k → go (p k)) (λ k → go (q k)) i j where
-    go : ∥ _ ∥₂ → _
     go = rec B-set f
-
-∥-∥₂-is-set : is-set ∥ A ∥₂
-∥-∥₂-is-set = is-set-η squash₂
 
 instance
   H-Level-∥-∥₂ : ∀ {n} → H-Level (2 + n) ∥ A ∥₂
@@ -31,7 +25,7 @@ instance
 proj : (A-set : is-set A) → ∥ A ∥₂ → A
 proj A-set = rec A-set id
 
-elim : {P : ∥ A ∥₂ → Type ℓ}
+elim : {A : Type ℓᵃ} {P : ∥ A ∥₂ → Type ℓ}
      → Π[ x ꞉ ∥ A ∥₂ ] is-set (P x)
      → Π[ x ꞉   A    ] P ∣ x ∣₂
      → Π[ x ꞉ ∥ A ∥₂ ] P   x

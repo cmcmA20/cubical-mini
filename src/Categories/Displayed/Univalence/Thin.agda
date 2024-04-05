@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --backtracking-instance-search #-}
 module Categories.Displayed.Univalence.Thin where
 
 open import Categories.Displayed.Base public
@@ -43,7 +43,7 @@ module _
   Thin-structure-over : Displayed (Sets ℓ) o′ ℓ′
   Thin-structure-over .Ob[_] x = S ⌞ x ⌟
   Thin-structure-over .Hom[_] f x y = ⌞ spec .is-hom f x y ⌟
-  Thin-structure-over .Hom[_]-set _ _ _ = hlevel!
+  Thin-structure-over .Hom[_]-set = hlevel!
   Thin-structure-over .idᵈ = spec .id-is-hom
   Thin-structure-over ._∘ᵈ_ = spec .∘-is-hom _ _
   Thin-structure-over .id-rᵈ _ = prop!

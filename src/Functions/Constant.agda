@@ -3,7 +3,7 @@ module Functions.Constant where
 
 open import Foundations.Base
 
-open import Meta.Search.HLevel
+open import Structures.n-Type
 
 private variable
   ℓ ℓ′ : Level

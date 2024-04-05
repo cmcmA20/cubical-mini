@@ -2,8 +2,9 @@
 module Data.List.Operations.Properties where
 
 open import Foundations.Base
+
 open import Correspondences.Decidable
-open import Meta.Search.Discrete
+open import Correspondences.Discrete
 
 open import Data.Bool.Base as Bool
 open import Data.Bool.Properties
@@ -64,16 +65,17 @@ all-elem : ⦃ A-dis : is-discrete A ⦄
          → All P xs
          → (z : A) → is-true (elem= z xs) → P z
 all-elem P (x ∷ xs) (px ∷ a) z el with (true-reflects (reflects-or {x = ⌊ z ≟ x ⌋}) el)
-... | inl z=x = subst P (sym (true-reflects discrete-reflects z=x)) px
+... | inl z=x = subst P (sym (true-reflects discrete-reflects! z=x)) px
 ... | inr els = all-elem P xs a z els
 
-elem-all : ⦃ A-dis : is-discrete A ⦄
+elem-all : ⦃ di : is-discrete A ⦄
          → ∀ (P : A → 𝒰 ℓ′) xs
          → ((z : A) → is-true (elem= z xs) → P z)
          → All P xs
-elem-all P []       f = []
-elem-all P (x ∷ xs) f = (f x (reflects-true (reflects-or {x = ⌊ x ≟ x ⌋}) (inl (reflects-true discrete-reflects refl))))
-                      ∷ (elem-all P xs (λ z el → f z (reflects-true (reflects-or {x = ⌊ z ≟ x ⌋}) (inr el))))
+elem-all        P []       f = []
+elem-all ⦃ di ⦄ P (x ∷ xs) f
+  = f x (reflects-true reflects-or (inl (reflects-true (discrete-reflects! ⦃ di ⦄) refl)))
+  ∷ elem-all P xs (λ z el → f z (reflects-true reflects-or (inr el)))
 
 reflects-all-dis : ⦃ A-dis : is-discrete A ⦄
                  → ∀ (p : A → Bool) xs

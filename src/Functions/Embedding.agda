@@ -4,11 +4,11 @@ module Functions.Embedding where
 open import Meta.Prelude
 
 open import Meta.Extensionality
-open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
 open import Structures.n-Type
 
+open import Data.Nat.Order.Inductive
 open import Data.Unit.Base
 
 open import Functions.Equiv.Fibrewise
@@ -51,6 +51,9 @@ set-injective→is-embedding B-set inj x = is-prop-η λ (f*x , p) (f*x′ , q) 
 is-embedding→injective
   : is-embedding f → Injective f
 is-embedding→injective prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl))
+
+↪→↣ : A ↪ B → A ↣ B
+↪→↣ = second is-embedding→injective
 
 set-injective≃is-embedding
   : {f : A → B} → is-set A → is-set B
@@ -133,6 +136,13 @@ is-embedding→is-of-hlevel
 is-embedding→is-of-hlevel n {f} emb a-hl = ≃→is-of-hlevel (suc n) (total-equiv f) $
   Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-of-hlevel-suc (emb x)
 
+↪→is-of-hlevel
+  : ∀ n → ⦃ le : 1 ≤ n ⦄
+  → B ↪ A
+  → is-of-hlevel n A
+  → is-of-hlevel n B
+↪→is-of-hlevel n ⦃ s≤s le ⦄ f = is-embedding→is-of-hlevel _ (f .snd)
+
 is-equiv→is-embedding : is-equiv f → is-embedding f
 is-equiv→is-embedding r y = is-contr→is-prop $ is-contr-η $ r .equiv-proof y
 
@@ -142,8 +152,8 @@ is-equiv→is-embedding r y = is-contr→is-prop $ is-contr-η $ r .equiv-proof 
 is-iso→is-embedding : is-iso f → is-embedding f
 is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
 
-iso→↪ : A ≅ B → A ↪ B
-iso→↪ = second is-iso→is-embedding
+≅→↪ : A ≅ B → A ↪ B
+≅→↪ = second is-iso→is-embedding
 
 instance
   Refl-Inj : Refl large _↣_
@@ -185,18 +195,46 @@ opaque
 ↪→extensional f ext .reflᵉ x = reflᵉ ext (f $ x)
 ↪→extensional f ext .idsᵉ = pullback-identity-system (ext .idsᵉ) f
 
-set-injective→extensional!
-  : {@(tactic hlevel-tactic-worker) B-set : is-set B}
-  → {f : A → B}
-  → Injective f
-  → Extensional B ℓ″
-  → Extensional A ℓ″
-set-injective→extensional! {B-set} {f} inj ext =
-  ↪→extensional (f , set-injective→is-embedding B-set inj) ext
-
 Σ-prop→extensional
   : {A : Type ℓ} {B : A → Type ℓ′}
   → (∀ x → is-prop (B x))
   → Extensional A ℓ″
   → Extensional (Σ A B) ℓ″
 Σ-prop→extensional B-prop = ↪→extensional (fst , subset-proj-is-embedding B-prop)
+
+
+-- Automation
+
+↪→is-of-hlevel!
+  : ∀ n → B ↪ A
+  → ⦃ le : 1 ≤ n ⦄
+  → ⦃ hl : H-Level n A ⦄
+  → is-of-hlevel n B
+↪→is-of-hlevel! n f = ↪→is-of-hlevel n f hlevel!
+
+set-injective→is-embedding!
+  : {f : A → B} → ⦃ B-set : H-Level 2 B ⦄ → Injective f
+  → is-embedding f
+set-injective→is-embedding! = set-injective→is-embedding hlevel!
+
+set-injective→extensional!
+  : ⦃ B-set : H-Level 2 B ⦄
+  → {f : A → B}
+  → Injective f
+  → Extensional B ℓ″
+  → Extensional A ℓ″
+set-injective→extensional! {f} inj ext =
+  ↪→extensional (f , set-injective→is-embedding! inj) ext
+
+Σ-prop→extensional!
+  : {A : Type ℓ} {B : A → Type ℓ′}
+  → ⦃ B-pr : ∀ {x} → H-Level 1 (B x) ⦄
+  → Extensional A ℓ″
+  → Extensional (Σ A B) ℓ″
+Σ-prop→extensional! = Σ-prop→extensional hlevel!
+
+instance
+  Extensional-↪
+    : {A : Type ℓ} ⦃ sb : Extensional (A → B) ℓ″ ⦄
+    → Extensional (A ↪ B) ℓ″
+  Extensional-↪ ⦃ sb ⦄ = Σ-prop→extensional! sb

@@ -3,8 +3,6 @@ module Truncation.Propositional.Base where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Data.Sum.Base
   using (_⊎_)
 
@@ -21,18 +19,9 @@ rec : is-prop B → (A → B) → ∥ A ∥₁ → B
 rec B-prop f ∣ x ∣₁ = f x
 rec B-prop f (squash₁ x y i) = is-prop-β B-prop (rec B-prop f x) (rec B-prop f y) i
 
-∥-∥₁-is-prop : is-prop ∥ A ∥₁
-∥-∥₁-is-prop = is-prop-η squash₁
-
-∥-∥₁-is-of-hlevel : ∀ n → is-of-hlevel (suc n) ∥ A ∥₁
-∥-∥₁-is-of-hlevel n = is-prop→is-of-hlevel-suc ∥-∥₁-is-prop
-
 instance
   H-Level-∥-∥₁ : ∀ {n} → H-Level (suc n) ∥ A ∥₁
-  H-Level-∥-∥₁ = hlevel-prop-instance ∥-∥₁-is-prop
-
-  decomp-hlevel-∥-∥₁ : goal-decomposition (quote is-of-hlevel) ∥ A ∥₁
-  decomp-hlevel-∥-∥₁ = decomp (quote ∥-∥₁-is-of-hlevel ) [ `level-minus 1 ]
+  H-Level-∥-∥₁ = hlevel-prop-instance $ is-prop-η squash₁
 
 proj : (A-prop : is-prop A) → ∥ A ∥₁ → A
 proj A-prop = rec A-prop id

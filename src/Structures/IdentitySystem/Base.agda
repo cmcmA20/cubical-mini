@@ -194,3 +194,21 @@ set-identity-system
 set-identity-system rprop rpath .to-path = rpath
 set-identity-system rprop rpath .to-path-over p =
   is-prop→pathᴾ (λ i → rprop _ _) _ p
+
+
+-- Automation
+
+set-identity-system!
+  : {r : ∀ x → R x x}
+  → ⦃ R-pr : ∀ {x y} → H-Level 1 (R x y) ⦄
+  → (∀ {x y} → R x y → x ＝ y)
+  → is-identity-system R r
+set-identity-system! = set-identity-system λ _ _ → hlevel 1
+
+identity-system→is-of-hlevel!
+  : (n : HLevel) {R : A → A → Type ℓ′} {r : ∀ x → R x x}
+  → is-identity-system R r
+  → ⦃ ∀ {x y} → H-Level n (R x y) ⦄
+  → is-of-hlevel (suc n) A
+identity-system→is-of-hlevel! n ids =
+  identity-system→is-of-hlevel n ids λ _ _ → hlevel _

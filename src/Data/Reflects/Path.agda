@@ -3,13 +3,12 @@ module Data.Reflects.Path where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Structures.IdentitySystem.Base
 
 open import Data.Bool.Base
 open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
+open import Data.Unit.Base
 
 open import Data.Reflects.Base
 
@@ -39,7 +38,7 @@ opaque
                     → is-of-hlevel (suc n) P
                     → is-of-hlevel n (Code x y)
   code-is-of-hlevel {x = ofʸ p} {ofʸ p′} hl = path-is-of-hlevel _ hl p p′
-  code-is-of-hlevel {x = ofⁿ _} {ofⁿ _}  _  = hlevel!
+  code-is-of-hlevel {x = ofⁿ _} {ofⁿ _}  _  = hlevel _
 
   reflects-true-is-contr : is-contr P → is-contr (Reflects⁰ P true)
   reflects-true-is-contr (p , paths) = ofʸ p , λ where
@@ -58,7 +57,5 @@ ofⁿ-inj : ∀ {x y : ¬ P} → ofⁿ x ＝ ofⁿ y → x ＝ y
 ofⁿ-inj _ = prop!
 
 instance
-  decomp-hlevel-reflects
-    : goal-decomposition (quote is-of-hlevel) (Reflects⁰ P a)
-  decomp-hlevel-reflects = decomp (quote reflects-is-of-hlevel)
-    [ `level-minus 1 , `search (quote is-of-hlevel) ]
+  H-Level-Reflects : ∀ {n} →  ⦃ H-Level (suc n) P ⦄ → H-Level (suc n) (Reflects⁰ P a)
+  H-Level-Reflects .H-Level.has-of-hlevel = reflects-is-of-hlevel _ (hlevel _)

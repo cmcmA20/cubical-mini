@@ -4,7 +4,6 @@ module Data.Quotient.Set.Properties where
 open import Meta.Prelude
 
 open import Meta.Effect.Map
-open import Meta.Search.HLevel
 
 open import Structures.n-Type
 
@@ -34,33 +33,33 @@ private variable
 
 elim-prop!
   : {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓᵖ}
-    {@(tactic hlevel-tactic-worker) P-prop : Π[ x ꞉ A / R ] is-prop (P x)}
+    ⦃ P-prop : ∀[ x ꞉ A / R ] H-Level 1 (P x) ⦄
     (f : Π[ a ꞉ A ] P ⦋ a ⦌)
   → Π[ q ꞉ A / R ] P q
-elim-prop! {P-prop} = elim-prop P-prop
+elim-prop! = elim-prop hlevel!
 
-elim²-prop
+elim-prop²
   : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
     {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
     {P : A / R → B / S → Type ℓ}
     (P-prop : ∀ x y → is-prop (P x y))
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
-elim²-prop {P} P-prop f = elim-prop! λ a → elim-prop! (f a)
+elim-prop² {P} P-prop f = elim-prop! λ a → elim-prop! (f a)
   where instance
     P-prop′ : ∀ {x y} → H-Level 1 (P x y)
     P-prop′ = hlevel-prop-instance (P-prop _ _)
 
-elim²-prop!
+elim-prop!²
   : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
     {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
     {P : A / R → B / S → Type ℓ}
-    {@(tactic hlevel-tactic-worker) P-prop : ∀ x y → is-prop (P x y)}
+    ⦃ P-prop : ∀ {x y} → H-Level 1 (P x y) ⦄
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
-elim²-prop! {P} {P-prop} = elim²-prop P-prop
+elim-prop!² = elim-prop² hlevel!
 
-elim³-prop
+elim-prop³
   : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
     {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
     {C : Type ℓᶜ} {T : C → C → Type ℓᵗ}
@@ -68,36 +67,36 @@ elim³-prop
     (P-prop : ∀ x y z → is-prop (P x y z))
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
-elim³-prop {P} P-prop f = elim²-prop! λ a b → elim-prop! (f a b)
+elim-prop³ {P} P-prop f = elim-prop!² λ a b → elim-prop! (f a b)
   where instance
     P-prop′ : ∀ {x y z} → H-Level 1 (P x y z)
     P-prop′ = hlevel-prop-instance (P-prop _ _ _)
 
-elim³-prop!
+elim-prop!³
   : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
     {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
     {C : Type ℓᶜ} {T : C → C → Type ℓᵗ}
     {P : A / R → B / S → C / T → Type ℓ}
-    {@(tactic hlevel-tactic-worker) P-prop : ∀ x y z → is-prop (P x y z)}
+    ⦃ P-prop : ∀ {x y z} → H-Level 1 (P x y z) ⦄
     (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
   → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
-elim³-prop! {P} {P-prop} = elim³-prop P-prop
+elim-prop!³ = elim-prop³ hlevel!
 
 
 elim!
   : {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓᵖ}
-    {@(tactic hlevel-tactic-worker) P-set : Π[ x ꞉ A / R ] is-set (P x)}
+    ⦃ P-set : ∀[ x ꞉ A / R ] H-Level 2 (P x) ⦄
     (f : Π[ a ꞉ A ] P ⦋ a ⦌)
   → (∀ a b (r : R a b) → ＜ f a ／ (λ i → P (glue/ a b r i)) ＼ f b ＞)
   → Π[ q ꞉ A / R ] P q
-elim! {P-set} = elim P-set
+elim! = elim hlevel!
 
 
-rec! : {@(tactic hlevel-tactic-worker) B-set : is-set B}
+rec! : ⦃ B-set : H-Level 2 B ⦄
      → (f : A → B)
      → (∀ a b → R a b → f a ＝ f b)
      → A / R → B
-rec! {B-set} = rec B-set
+rec! = rec hlevel!
 
 rec² : is-set C
      → (f : A → B → C)
@@ -108,12 +107,12 @@ rec² C-set f fa= fb= =
   rec! (λ a → rec! (f a) (fb= a)) λ a b r → fun-ext $ elim-prop! λ x → fa= a b x r
   where instance _ = hlevel-basic-instance 2 C-set
 
-rec²! : {@(tactic hlevel-tactic-worker) C-set : is-set C}
+rec!² : ⦃ C-set : H-Level 2 C ⦄
       → (f : A → B → C)
       → (∀ x y b → R x y → f x b ＝ f y b)
       → (∀ a x y → S x y → f a x ＝ f a y)
       → A / R → B / S → C
-rec²! {C-set} = rec² C-set
+rec!² = rec² hlevel!
 
 
 -- Actual properties
@@ -159,12 +158,13 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   ∥R∥₁-c : is-congruence _
   ∥R∥₁-c .is-congruence.equivalenceᶜ .reflᶜ = ∣ reflᶜ ∣₁
   ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = map symᶜ
-  ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim²! λ a b → ∣ a ∙ᶜ b ∣₁
+  ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim!² λ a b → ∣ a ∙ᶜ b ∣₁
   ∥R∥₁-c .is-congruence.has-propᶜ = hlevel!
 
 /₂-is-discrete
   : (R-c : is-congruence R)
-  → (∀ x y → Dec (R x y))
+  → ⦃ d : ∀ {x y} → Dec (R x y) ⦄
   → is-discrete (A / R)
-/₂-is-discrete R-c d = is-discrete-η $ elim²-prop! λ x y →
-  Dec.dmap (glue/ _ _) (λ f p → ⊥.rec $ f $ effective R-c ⁻¹ $ p) $ d x y
+/₂-is-discrete {A} {R} R-c ⦃ d ⦄ {x} {y} = elim-prop!² {P = λ a b → Dec (a ＝ b)} go x y where
+  go : (x y : A) → Dec (⦋ x ⦌ ＝ ⦋ y ⦌)
+  go x y = Dec.dmap (glue/ _ _) (λ f p → ⊥.rec $ f $ effective R-c ⁻¹ $ p) d

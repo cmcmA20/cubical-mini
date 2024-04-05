@@ -1,10 +1,11 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Path where
 
-open import Foundations.Base
+open import Meta.Prelude
 
-open import Meta.Search.HLevel
+open import Structures.n-Type
 
+open import Data.Empty.Base
 open import Data.Nat.Base
 open import Data.Maybe.Base
   using ()
@@ -42,7 +43,3 @@ instance
 
 fin-is-of-hlevel : (k : HLevel) → is-of-hlevel (2 + k) (Fin n)
 fin-is-of-hlevel _ = hlevel _
-
-instance
-  decomp-hlevel-fin : goal-decomposition (quote is-of-hlevel) (Fin n)
-  decomp-hlevel-fin = decomp (quote fin-is-of-hlevel) [ `level-minus 2 ]

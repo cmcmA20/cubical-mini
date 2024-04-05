@@ -151,18 +151,35 @@ _ ≃⟨⟩ e = e
 _≃∎ : (A : Type ℓ) → A ≃ A
 _ ≃∎ = idₑ
 
-prop-extₑ : is-prop A → is-prop B
-          → (A → B) → (B → A)
-          → A ≃ B
-prop-extₑ A-prop B-prop a→b b→a .fst = a→b
-prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .fst = b→a y , is-prop-β B-prop _ _
-prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
-  Σ-path (is-prop-β A-prop _ _) (is-set-β (is-prop→is-set B-prop) _ _ _ _)
-
-module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
-
 lift≃id : Lift ℓ′ A ≃ A
 lift≃id .fst = lower
 lift≃id .snd .equiv-proof = strict-contr-fibres lift
 
-module @0 erased≃id {ℓ} {A} = Equiv (erased≃id {ℓ} {A})
+module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
+
+module _
+  (A-pr : is-prop A) (B-pr : is-prop B)
+  (to : A → B) (from : B → A)
+  where
+
+  biimp-is-equiv : is-equiv to
+  biimp-is-equiv .equiv-proof b .fst = from b , is-prop-β B-pr _ _
+  biimp-is-equiv .equiv-proof b .snd (p′ , path) =
+    Σ-path (is-prop-β A-pr _ _) (is-set-β (is-prop→is-set B-pr) _ _ _ _)
+
+  prop-extₑ : A ≃ B
+  prop-extₑ .fst = to
+  prop-extₑ .snd = biimp-is-equiv
+
+
+-- Automation
+
+biimp-is-equiv! : ⦃ A-pr : H-Level 1 A ⦄ ⦃ B-pr : H-Level 1 B ⦄
+                → (to : A → B) → (B → A)
+                → is-equiv to
+biimp-is-equiv! = biimp-is-equiv (hlevel _) (hlevel _)
+
+prop-extₑ! : ⦃ A-pr : H-Level 1 A ⦄ ⦃ B-pr : H-Level 1 B ⦄
+           → (A → B) → (B → A)
+           → A ≃ B
+prop-extₑ! = prop-extₑ (hlevel _) (hlevel _)

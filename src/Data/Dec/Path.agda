@@ -3,9 +3,9 @@ module Data.Dec.Path where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.HLevel
 
 open import Meta.Extensionality
-open import Meta.Search.HLevel
 
 open import Data.Empty.Base
 open import Data.Sum.Base
@@ -31,23 +31,22 @@ dec-as-sum = ≅→≃ helper where
 
 opaque
   unfolding is-of-hlevel
-  dec-contr : is-contr A → is-contr (Dec A)
-  dec-contr (a , _) .fst = yes a
-  dec-contr (a , p) .snd (no ¬a)  = absurd (¬a a)
-  dec-contr (a , p) .snd (yes a′) = ap yes (p a′)
+  dec-is-contr : is-contr A → is-contr (Dec A)
+  dec-is-contr (a , _) .fst = yes a
+  dec-is-contr (a , p) .snd (no ¬a)  = absurd (¬a a)
+  dec-is-contr (a , p) .snd (yes a′) = ap yes (p a′)
 
 dec-is-of-hlevel : (n : HLevel) → is-of-hlevel n A → is-of-hlevel n (Dec A)
-dec-is-of-hlevel 0 = dec-contr
+dec-is-of-hlevel 0 = dec-is-contr
 dec-is-of-hlevel 1 A-hl =
-  ≃→is-of-hlevel 1 dec-as-sum (disjoint-⊎-is-prop hlevel! A-hl (λ f → f .fst (f .snd)))
+  ≃→is-of-hlevel 1 dec-as-sum (disjoint-⊎-is-prop (hlevel _) A-hl (λ f → f .fst (f .snd)))
 dec-is-of-hlevel (suc (suc n)) A-hl =
- ≃→is-of-hlevel (suc (suc n)) dec-as-sum (⊎-is-of-hlevel n hlevel! A-hl)
+ ≃→is-of-hlevel (suc (suc n)) dec-as-sum (⊎-is-of-hlevel n (hlevel _) A-hl)
 
 instance
-  decomp-hlevel-dec : goal-decomposition (quote is-of-hlevel) (Dec A)
-  decomp-hlevel-dec = decomp (quote dec-is-of-hlevel) [ `level-same , `search (quote is-of-hlevel) ]
+  H-Level-Dec : ∀ {n} → ⦃ H-Level n A ⦄ → H-Level n (Dec A)
+  H-Level-Dec .H-Level.has-of-hlevel = dec-is-of-hlevel _ (hlevel _)
 
-instance
   Extensional-Dec : ⦃ sa : Extensional A ℓ′ ⦄ → Extensional (Dec A) ℓ′
   Extensional-Dec ⦃ sa ⦄ .Pathᵉ (_ because ofʸ p) (_ because ofʸ q) = Pathᵉ sa p q
   Extensional-Dec        .Pathᵉ (_ because ofⁿ _) (_ because ofⁿ _) = Lift _ ⊤

@@ -71,6 +71,11 @@ umagma-on-is-set : is-set (UMagma-on A)
 umagma-on-is-set = ≅→is-of-hlevel _ umagma-on-iso $ is-set-η λ (_ , x) _ _ _ →
   let open is-unital-magma x in prop!
 
+instance
+  H-Level-umagma-on : H-Level (2 + n) (UMagma-on A)
+  H-Level-umagma-on = hlevel-basic-instance 2 umagma-on-is-set
+
+
 record UMagma-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
   (M : UMagma-on A) (M′ : UMagma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
@@ -92,9 +97,6 @@ umagma-hom-is-prop {M′} = ≅→is-of-hlevel _ umagma-hom-iso hlevel! where
   open UMagma-on M′
 
 instance
-  H-Level-umagma-on : H-Level (2 + n) (UMagma-on A)
-  H-Level-umagma-on = hlevel-basic-instance 2 umagma-on-is-set
-
   H-Level-umagma-hom : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
                      → H-Level (suc n) (UMagma-hom M M′ f)
   H-Level-umagma-hom = hlevel-prop-instance umagma-hom-is-prop
@@ -102,7 +104,7 @@ instance
 unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A
 unital-magma-on↪magma-on .fst M .n-Magma-on._⋆_ = M .UMagma-on._⋆_
 unital-magma-on↪magma-on .fst M .n-Magma-on.has-n-magma = M .UMagma-on.has-magma
-unital-magma-on↪magma-on .snd = set-injective→is-embedding hlevel! λ p →
+unital-magma-on↪magma-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ umagma-on-iso) $ ap n-Magma-on._⋆_ p ,ₚ prop!
 
 

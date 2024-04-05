@@ -4,7 +4,6 @@ module Data.Dec.Properties where
 open import Meta.Prelude
 
 open import Meta.Effect.Idiom
-open import Meta.Search.HLevel
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∥_∥₁)

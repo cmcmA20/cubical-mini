@@ -679,8 +679,11 @@ subst-path-both p adj = transport-path p adj adj
 
 -- TODO move this section somewhere?
 
-auto : ⦃ A ⦄ → A
+auto : {ℓ : Level} {A : Type ℓ} → ⦃ A ⦄ → A
 auto ⦃ (a) ⦄ = a
+
+autoω : {A : Typeω} → ⦃ A ⦄ → A
+autoω ⦃ (a) ⦄ = a
 
 -- Explicit type hint
 the : (A : Type ℓ) → A → A

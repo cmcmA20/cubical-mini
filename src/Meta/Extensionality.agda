@@ -4,18 +4,19 @@ module Meta.Extensionality where
 open import Meta.Prelude
 
 open import Meta.Effect.Alt
+open import Meta.Literals.FromProduct
 open import Meta.Reflection.Base
 open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
-open import Meta.Search.HLevel
 
 open import Structures.IdentitySystem.Base
   hiding (J; J-refl)
   public
-open import Structures.n-Type
+-- open import Structures.n-Type
 
 open import Data.Bool.Base
 open import Data.List.Base
+open import Data.List.Instances.FromProduct
 open import Data.Maybe.Instances.Alt
 
 
@@ -102,12 +103,6 @@ instance
   Extensional-Type .Pathᵉ A B = A ≃ B
   Extensional-Type .reflᵉ _ = idₑ
   Extensional-Type .idsᵉ = univalence-identity-system
-
-  @0 Extensional-n-Type : ∀ {n} → Extensional (n-Type ℓ n) ℓ
-  Extensional-n-Type .Pathᵉ A B = Pathᵉ Extensional-Type ⌞ A ⌟ ⌞ B ⌟
-  Extensional-n-Type .reflᵉ _ = idₑ
-  Extensional-n-Type .idsᵉ .to-path = n-ua
-  Extensional-n-Type .idsᵉ .to-path-over = Extensional-Type .idsᵉ .to-path-over
 
 
 ext

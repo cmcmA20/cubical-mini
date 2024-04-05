@@ -4,8 +4,9 @@ module Data.Maybe.Instances.Finite where
 open import Meta.Prelude
 
 open import Meta.Effect.Bind
-open import Meta.Search.Finite.Bishop
-open import Meta.Search.Finite.ManifestBishop
+
+open import Correspondences.Finite.Bishop
+open import Correspondences.Finite.ManifestBishop
 
 open import Data.Maybe.Properties
 open import Data.Fin.Computational.Closure
@@ -18,19 +19,16 @@ private variable
   ℓ : Level
   A : Type ℓ
 
-maybe-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Maybe A)
-maybe-manifest-bishop-finite fi = fin $
-  maybe-as-sum ∙ ⊎-ap (enumeration auto) (enumeration fi) ∙ fin-coproduct
-
-maybe-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Maybe A)
-maybe-is-bishop-finite fi = fin₁ do
-  aeq ← enumeration₁ fi
-  ueq ← enumeration₁ bishop-finite!
-  pure $ maybe-as-sum ∙ ⊎-ap ueq aeq ∙ fin-coproduct
-
 instance
-  decomp-fin-maybe : goal-decomposition (quote Manifest-bishop-finite) (Maybe A)
-  decomp-fin-maybe = decomp (quote maybe-manifest-bishop-finite) [ `search (quote Manifest-bishop-finite) ]
+  maybe-manifest-bishop-finite
+    : ⦃ A-mbf : Manifest-bishop-finite A ⦄ → Manifest-bishop-finite (Maybe A)
+  maybe-manifest-bishop-finite = fin $
+    maybe-as-sum ∙ ⊎-ap (enumeration auto) (enumeration auto) ∙ fin-coproduct
 
-  decomp-fin₁-maybe : goal-decomposition (quote is-bishop-finite) (Maybe A)
-  decomp-fin₁-maybe = decomp (quote maybe-is-bishop-finite) [ `search (quote is-bishop-finite) ]
+  maybe-is-bishop-finite
+    : ⦃ A-bf : is-bishop-finite A ⦄
+    → is-bishop-finite (Maybe A)
+  maybe-is-bishop-finite ⦃ A-bf ⦄ = fin₁ do
+    aeq ← enumeration₁ A-bf
+    ueq ← enumeration₁ manifest-bishop-finite→is-bishop-finite
+    pure $ maybe-as-sum ∙ ⊎-ap ueq aeq ∙ fin-coproduct

@@ -1,17 +1,18 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --backtracking-instance-search #-}
 module Data.Bool.Properties where
 
 open import Meta.Prelude
 
 open import Meta.Membership
-open import Meta.Search.Decidable
-open import Meta.Search.Discrete
-open import Meta.Search.Exhaustible
-open import Meta.Search.Finite.Bishop
-open import Meta.Search.Finite.ManifestBishop
-open import Meta.Search.HLevel
-open import Meta.Search.Omniscient
 open import Meta.Witness
+
+open import Structures.n-Type
+
+open import Correspondences.Decidable
+open import Correspondences.Exhaustible
+open import Correspondences.Finite.Bishop
+open import Correspondences.Finite.ManifestBishop
+open import Correspondences.Omniscient
 
 open import Data.Empty.Base as ⊥
 open import Data.Bool.Base as Bool public
@@ -145,7 +146,7 @@ or-true-≃ = prop-extₑ hlevel! go to from where
 
   go : is-prop (is-trueₚ x × is-falseₚ y ⊎ is-falseₚ x × is-trueₚ y ⊎ is-trueₚ x × is-trueₚ y)
   go {x} {y} = disjoint-⊎-is-prop hlevel!
-    (disjoint-⊎-is-prop hlevel! hlevel! λ z → false≠true (z .fst .fst ⁻¹ ∙ z .snd .fst))
+    (disjoint-⊎-is-prop! λ z → false≠true (z .fst .fst ⁻¹ ∙ z .snd .fst))
     λ z → [ (λ w → false≠true (w .fst ⁻¹ ∙ z .fst .fst)) , (λ w → false≠true (z .fst .snd ⁻¹ ∙ w .snd)) ]ᵤ (z .snd)
 
 module or-true-≃ {x} {y} = Equiv (or-true-≃ {x} {y})
@@ -196,7 +197,7 @@ and-distrib-or-r : ∀ x y z → (x or y) and z ＝ (x and z) or (y and z)
 and-distrib-or-r = witness!
 
 
--- Testing witness tactic, uncomment if needed
+-- -- Testing witness tactic, uncomment if needed
 -- private module _ where
 --   open import Truncation.Propositional.Base
 
@@ -218,5 +219,5 @@ and-distrib-or-r = witness!
 --     _ = witness!
 
 --     module _ {R : Type} {a u : Bool} {v : A} where
---       _ : ∃[ x ꞉ Bool ] (x ＝ r or a)
---       _ = witness!
+--       beb : Σ[ x ꞉ Bool ] (x ＝ r or a)
+--       beb = witness!
