@@ -64,13 +64,13 @@ _<$>ⁿ_ F {n = suc (suc n)} (A , As) = F A , (F <$>ⁿ As)
 -- mapping under n arguments
 mapⁿ : ∀ n {ls} {As : Types n ls} → (B → C) → funⁿ As B → funⁿ As C
 mapⁿ 0             f v = f v
-mapⁿ 1             f v = f ∘′ v
-mapⁿ (suc (suc n)) f g = mapⁿ _ f ∘′ g
+mapⁿ 1             f v = f ∘ v
+mapⁿ (suc (suc n)) f g = mapⁿ _ f ∘ g
 
 -- compose function at the n-th position
 infix 1 _%=_⊢_
 _%=_⊢_ : ∀ n {ls} {As : Types n ls} → (A → B) → funⁿ As (B → C) → funⁿ As (A → C)
-n %= f ⊢ g = mapⁿ n (_∘′ f) g
+n %= f ⊢ g = mapⁿ n (_∘ f) g
 
 -- partially apply function at the n-th position
 infix 1 _∷=_⊢_
@@ -81,7 +81,7 @@ n ∷= x ⊢ g = mapⁿ n (_$ x) g
 holeⁿ : ∀ n {ls} {As : Types n ls} → (A → funⁿ As B) → funⁿ As (A → B)
 holeⁿ 0             f = f
 holeⁿ 1             f = flip f
-holeⁿ (suc (suc n)) f = holeⁿ _ ∘′ flip f
+holeⁿ (suc (suc n)) f = holeⁿ _ ∘ flip f
 
 constⁿ : ∀ n {ls ℓ} {As : Types n ls} {B : Type ℓ} → B → funⁿ As B
 constⁿ 0             v = v
@@ -102,4 +102,4 @@ curryⁿ : ∀ n {ls} {As : Types n ls} {ℓ} {B : Type ℓ}
        → (HVec n As → B) → funⁿ As B
 curryⁿ 0             f = f _
 curryⁿ 1             f = f
-curryⁿ (suc (suc n)) f = curryⁿ (suc n) ∘′ curry² f
+curryⁿ (suc (suc n)) f = curryⁿ (suc n) ∘ curry² f

@@ -100,6 +100,3 @@ opaque
 --   (a₋₋₀ : Square a₀₋₀ a₁₋₀ a₋₀₀ a₋₁₀)
 --   (a₋₋₁ : Square a₀₋₁ a₁₋₁ a₋₀₁ a₋₁₁)
 --   → Cube a₀₋₋ a₁₋₋ a₋₀₋ a₋₁₋ a₋₋₀ a₋₋₁
-
-SquareP = Squareᴾ
-{-# WARNING_ON_USAGE SquareP "Use `Squareᴾ`" #-}

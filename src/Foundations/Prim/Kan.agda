@@ -53,9 +53,6 @@ open import Agda.Builtin.Cubical.Path public
   renaming ( _≡_ to _＝_
            ; PathP to Pathᴾ )
 
-PathP = Pathᴾ
-{-# WARNING_ON_USAGE PathP "Use `Pathᴾ`" #-}
-
 infix 0 Pathᴾ-syntax
 Pathᴾ-syntax = Pathᴾ
 syntax Pathᴾ-syntax Aᵢ A₀ A₁ = ＜ A₀ ／ Aᵢ ＼ A₁ ＞

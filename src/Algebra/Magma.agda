@@ -57,7 +57,7 @@ is-magma = is-n-magma 2
 is-2-magma = is-n-magma 3
 
 is-n-magma-is-prop : is-prop (is-n-magma n _✦_)
-is-n-magma-is-prop = iso→is-of-hlevel 1 is-n-magma-iso hlevel!
+is-n-magma-is-prop = ≅→is-of-hlevel 1 is-n-magma-iso hlevel!
 
 instance
   H-Level-n-magma : ∀ {k} → H-Level (suc k) (is-n-magma n _✦_)
@@ -96,12 +96,12 @@ Magma-on = n-Magma-on 2
 opaque
   unfolding is-of-hlevel
   magma-on-is-set : is-set (Magma-on A)
-  magma-on-is-set = iso→is-of-hlevel 2 (n-magma-on-iso _) $ λ (_ , x) _ _ _ →
+  magma-on-is-set = ≅→is-of-hlevel 2 (n-magma-on-iso _) $ λ (_ , x) _ _ _ →
     let open is-n-magma x in prop!
 
 n-magma-hom-is-of-hlevel : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
                          → is-of-hlevel n (n-Magma-hom (suc n) M M′ f)
-n-magma-hom-is-of-hlevel {M′} = iso→is-of-hlevel _ (n-magma-hom-iso _) hlevel! where
+n-magma-hom-is-of-hlevel {M′} = ≅→is-of-hlevel _ (n-magma-hom-iso _) hlevel! where
   open n-Magma-on M′
 
 instance

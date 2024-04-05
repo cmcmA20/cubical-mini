@@ -65,7 +65,7 @@ unquoteDecl group-on-iso = declare-record-iso group-on-iso (quote Group-on)
 --   Inv-group Invertible.⁻¹ = {!inverse!}
 
 group-on-is-set : is-set (Group-on A)
-group-on-is-set = iso→is-of-hlevel _ group-on-iso $ is-set-η λ (op , x) _ _ _ →
+group-on-is-set = ≅→is-of-hlevel _ group-on-iso $ is-set-η λ (op , x) _ _ _ →
   let open is-group x in prop!
 
 
@@ -98,7 +98,7 @@ unquoteDecl group-hom-iso = declare-record-iso group-hom-iso (quote Group-hom)
 
 group-hom-is-prop : ∀ {M : Group-on A} {M′ : Group-on B} {f}
                    → is-prop (Group-hom M M′ f)
-group-hom-is-prop {M′} = iso→is-of-hlevel _ group-hom-iso hlevel! where
+group-hom-is-prop {M′} = ≅→is-of-hlevel _ group-hom-iso hlevel! where
   open Group-on M′
 
 instance

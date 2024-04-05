@@ -36,7 +36,7 @@ unquoteDecl is-rig-iso = declare-record-iso is-rig-iso (quote is-rig)
 opaque
   unfolding is-of-hlevel
   is-rig-is-prop : is-prop (is-rig _✦_ _✧_)
-  is-rig-is-prop R = iso→is-of-hlevel 1 is-rig-iso hlevel! R where
+  is-rig-is-prop R = ≅→is-of-hlevel 1 is-rig-iso hlevel! R where
     open is-rig R
 
 instance

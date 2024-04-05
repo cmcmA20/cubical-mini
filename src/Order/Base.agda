@@ -81,7 +81,7 @@ private variable
   P Q R : Poset o ℓ
 
 monotone-is-set : is-set (Monotone P Q)
-monotone-is-set {Q} = iso→is-of-hlevel 2 monotone-iso
+monotone-is-set {Q} = ≅→is-of-hlevel 2 monotone-iso
   (Σ-is-of-hlevel 2 hlevel! λ _ → is-prop→is-set hlevel!)
 
 instance

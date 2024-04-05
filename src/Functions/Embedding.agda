@@ -83,7 +83,7 @@ is-embedding→monic {f} emb g h p =
 
 set-monic→is-embedding
   : {A : Type ℓ} {B : Type ℓ′} {f : A → B} → is-set B
-  → (∀ {C : Set ℓ″} (g h : C →̇ A) → f ∘′ g ＝ f ∘′ h → g ＝ h)
+  → (∀ {C : Set ℓ″} (g h : C →̇ A) → f ∘ g ＝ f ∘ h → g ＝ h)
   → is-embedding f
 set-monic→is-embedding {f} B-set monic =
   set-injective→is-embedding B-set λ {x} {y} p →
@@ -139,17 +139,11 @@ is-equiv→is-embedding r y = is-contr→is-prop $ is-contr-η $ r .equiv-proof 
 ≃→↪ : A ≃ B → A ↪ B
 ≃→↪ = second is-equiv→is-embedding
 
-equiv→embedding = ≃→↪
-{-# WARNING_ON_USAGE equiv→embedding "Use `≃→↪`" #-}
-
 is-iso→is-embedding : is-iso f → is-embedding f
 is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
 
 iso→↪ : A ≅ B → A ↪ B
 iso→↪ = second is-iso→is-embedding
-
-iso→embedding = iso→↪
-{-# WARNING_ON_USAGE iso→embedding "Use `iso→↪`" #-}
 
 instance
   Refl-Inj : Refl large _↣_
@@ -190,9 +184,6 @@ opaque
 ↪→extensional f ext .Pathᵉ x y = Pathᵉ ext (f $ x) (f $ y)
 ↪→extensional f ext .reflᵉ x = reflᵉ ext (f $ x)
 ↪→extensional f ext .idsᵉ = pullback-identity-system (ext .idsᵉ) f
-
-embedding→extensional = ↪→extensional
-{-# WARNING_ON_USAGE embedding→extensional "Use `↪→extensional`" #-}
 
 set-injective→extensional!
   : {@(tactic hlevel-tactic-worker) B-set : is-set B}

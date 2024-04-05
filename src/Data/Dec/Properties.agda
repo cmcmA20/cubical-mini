@@ -40,7 +40,3 @@ ae {A} {B} e = ≅→≃ $ to , iso from ri li where
 
 ≃→dec : (B ≃ A) → Dec A → Dec B
 ≃→dec e = ae e ⁻¹ $_
-
-
-dec-∥-∥₁-equiv = ∥-∥₁∘dec≃dec∘∥-∥₁
-{-# WARNING_ON_USAGE dec-∥-∥₁-equiv "Use `∥-∥₁∘dec≃dec∘∥-∥₁`" #-}

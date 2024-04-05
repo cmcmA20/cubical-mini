@@ -99,7 +99,7 @@ _∙ᴱₑ_ : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ
     @0 left : (f⁻¹ ∘ g⁻¹) is-left-inverse-of (g ∘ f)
     left _ = ap f⁻¹ (gi .snd .snd .erased _) ∙ fi .snd .snd .erased _
 
-  e : is-equivᴱ (g ∘′ f)
+  e : is-equivᴱ (g ∘ f)
   e = is-isoᴱ→is-equivᴱ $ (f⁻¹ ∘ g⁻¹) , erase right , erase left
 
 

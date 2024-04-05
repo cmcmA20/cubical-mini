@@ -138,6 +138,6 @@ Cartesian-morphism-pathᴾ {f′ = f′} {g′ = g′} {p = p} q i .Cartesian-mo
 Cartesian-morphism-is-set
   : ∀ {x y x′ y′} {f : Hom x y}
   → is-set (Cartesian-morphism f x′ y′)
-Cartesian-morphism-is-set = iso→is-of-hlevel 2 cartesian-morphism-iso hlevel!
+Cartesian-morphism-is-set = ≅→is-of-hlevel 2 cartesian-morphism-iso hlevel!
 
 -- TODO theorems about cartesian stuff

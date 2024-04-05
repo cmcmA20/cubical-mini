@@ -143,8 +143,6 @@ rec-set! f-const {B-set} = rec-set f-const B-set
   (λ x → map (x .fst ,_) (x .snd))
   (rec! (second ∣_∣₁)) where instance _ = hlevel-prop-instance A-prop
 
-Σ-∥-∥₁-over-prop = Σ-over-prop-∥-∥₁≃∃
-{-# WARNING_ON_USAGE Σ-∥-∥₁-over-prop "Use `Σ-prop-∥-∥₁≃∃`" #-}
 
 _factors-through_
   : (f : A → C) (B : Type (level-of-type A ⊔ level-of-type C)) → _

@@ -94,14 +94,6 @@ s≰z = λ ()
 ≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
 ≤-subst a=b c=d = transport $ ap² (_≤_) a=b c=d
 
-¬sucn≤n : ¬ suc n ≤ n
-¬sucn≤n {(suc n)} (s≤s ord) = ¬sucn≤n ord
-{-# WARNING_ON_USAGE ¬sucn≤n "Use `suc≰id`" #-}
-
-¬sucn≤0 : ¬ suc n ≤ 0
-¬sucn≤0 {(suc n)} = λ ()
-{-# WARNING_ON_USAGE ¬sucn≤0 "Use `s≰z`" #-}
-
 
 -- Properties of strict order
 
@@ -122,10 +114,6 @@ s<s = s≤s
 
 <-weaken-z : (x y : ℕ) → x < y → 0 < y
 <-weaken-z x (suc y) (s≤s _) = s≤s z≤
-
-<-weaken-0 : (x y : ℕ) → x < y → 0 < y
-<-weaken-0 = <-weaken-z
-{-# WARNING_ON_USAGE <-weaken-0 "Use `<-weaken-z`" #-}
 
 <-asym : ∀[ _<_ →̇ _≯_ ]
 <-asym (s≤s p) (s≤s q) = <-asym p q
@@ -168,7 +156,7 @@ z<s = s≤s z≤
   go zero (suc (suc n)) p q = absurd $ p $ s≤s z≤
   go (suc zero) zero p q    = absurd $ q $ s≤s z≤
   go (suc (suc m)) zero p q = absurd $ q $ s≤s z≤
-  go (suc m) (suc n) p q    = ap suc $ go m n (p ∘′ s≤s) (q ∘′ s≤s)
+  go (suc m) (suc n) p q    = ap suc $ go m n (p ∘ s≤s) (q ∘ s≤s)
 
 
 -- Addition
@@ -293,39 +281,3 @@ z<· (suc _) (suc _) _    = s≤s z≤ , s≤s z≤
 
 <≃<+r : (m < n) ≃ (m + k < n + k)
 <≃<+r = ≤≃≤+r
-
-
-¬≤→< : {x y : ℕ} → ¬ (y ≤ x) → x < y
-¬≤→< = <≃≱ ⁻¹ $_
-{-# WARNING_ON_USAGE ¬≤→< "Use `<≃≱`" #-}
-
-<→¬＝ : {x y : ℕ} → x < y → ¬ (x ＝ y)
-<→¬＝ = <→≠
-{-# WARNING_ON_USAGE <→¬＝ "Use `<→≠`" #-}
-
-¬<→≤ : {x y : ℕ} → ¬ (y < x) → x ≤ y
-¬<→≤ = ≤≃≯ ⁻¹ $_
-{-# WARNING_ON_USAGE ¬<→≤ "Use `≤≃≯`" #-}
-
-≤→¬< : {x y : ℕ} → x ≤ y → ¬ (y < x)
-≤→¬< = ≤≃≯ $_
-{-# WARNING_ON_USAGE ≤→¬< "Use `≤≃≯`" #-}
-
-≤→<＝ : {x y : ℕ} → x ≤ y → (x < y) ⊎ (x ＝ y)
-≤→<＝ = ≤≃<⊎= $_
-{-# WARNING_ON_USAGE ≤→<＝ "Use `≤≃<⊎=`" #-}
-
-mul-<0 = z<·
-{-# WARNING_ON_USAGE mul-<0 "Use `z<·`" #-}
-
-≤-+l-≃ = ≤≃≤+l
-{-# WARNING_ON_USAGE ≤-+l-≃ "Use `≤≃≤+l`" #-}
-
-≤-+r-≃ = ≤≃≤+r
-{-# WARNING_ON_USAGE ≤-+r-≃ "Use `≤≃≤+r`" #-}
-
-<-+l-≃ = <≃<+l
-{-# WARNING_ON_USAGE <-+l-≃ "Use `<≃<+l`" #-}
-
-<-+r-≃ = <≃<+r
-{-# WARNING_ON_USAGE <-+r-≃ "Use `<≃<+r`" #-}

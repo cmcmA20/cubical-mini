@@ -32,7 +32,7 @@ unquoteDecl is-countable-iso =
 instance
   H-Level-is-countable : ∀ {n} → H-Level (suc n) (is-countable A)
   H-Level-is-countable = hlevel-prop-instance $
-    iso→is-of-hlevel 1 is-countable-iso hlevel!
+    ≅→is-of-hlevel 1 is-countable-iso hlevel!
 
 countable₁ : ⦃ c : is-countable A ⦄ → is-countable A
 countable₁ ⦃ c ⦄ = c

@@ -68,7 +68,7 @@ record UMagma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 unquoteDecl umagma-on-iso = declare-record-iso umagma-on-iso (quote UMagma-on)
 
 umagma-on-is-set : is-set (UMagma-on A)
-umagma-on-is-set = iso→is-of-hlevel _ umagma-on-iso $ is-set-η λ (_ , x) _ _ _ →
+umagma-on-is-set = ≅→is-of-hlevel _ umagma-on-iso $ is-set-η λ (_ , x) _ _ _ →
   let open is-unital-magma x in prop!
 
 record UMagma-hom
@@ -88,7 +88,7 @@ unquoteDecl umagma-hom-iso = declare-record-iso umagma-hom-iso (quote UMagma-hom
 
 umagma-hom-is-prop : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
                    → is-prop (UMagma-hom M M′ f)
-umagma-hom-is-prop {M′} = iso→is-of-hlevel _ umagma-hom-iso hlevel! where
+umagma-hom-is-prop {M′} = ≅→is-of-hlevel _ umagma-hom-iso hlevel! where
   open UMagma-on M′
 
 instance

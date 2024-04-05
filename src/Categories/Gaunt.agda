@@ -27,7 +27,7 @@ is-gaunt-is-prop
   : ∀ {o ℓ} {C : Precategory o ℓ}
   → is-prop (is-gaunt C)
 is-gaunt-is-prop =
-  iso→is-of-hlevel 1 is-gaunt-iso hlevel!
+  ≅→is-of-hlevel 1 is-gaunt-iso hlevel!
 
 instance
   H-Level-is-gaunt

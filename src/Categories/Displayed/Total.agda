@@ -31,7 +31,7 @@ private variable
   X X′ Y Y′ : Total
 
 total-hom-is-set : (X Y : Total) → is-set (Total-hom X Y)
-total-hom-is-set _ _ = iso→is-of-hlevel 2 total-hom-iso hlevel!
+total-hom-is-set _ _ = ≅→is-of-hlevel 2 total-hom-iso hlevel!
 
 total-hom-path : {f g : Total-hom X Y}
                → (p : f .hom ＝ g .hom)

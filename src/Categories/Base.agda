@@ -286,7 +286,7 @@ module _ {C : Precategory oᶜ hᶜ}
   open _⇒_
 
   nat-is-set : is-set (F ⇒ G)
-  nat-is-set = iso→is-of-hlevel 2 eqv hlevel! where
+  nat-is-set = ≅→is-of-hlevel 2 eqv hlevel! where
     unquoteDecl eqv = declare-record-iso eqv (quote _⇒_)
     instance
       ds : ∀{x y} → H-Level 2 (D.Hom x y)

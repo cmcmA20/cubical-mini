@@ -62,7 +62,7 @@ instance
   extensionality-/-hom = record { lemma = quote Extensional-/-Hom }
 
 /-Hom-is-set : is-set (/-Hom {c} a b)
-/-Hom-is-set = iso→is-of-hlevel 2 /-hom-iso hlevel!
+/-Hom-is-set = ≅→is-of-hlevel 2 /-hom-iso hlevel!
 
 Slice : Ob → Precategory _ _
 Slice c = go where

@@ -27,7 +27,7 @@ unquoteDecl is-abelian-group-iso = declare-record-iso is-abelian-group-iso (quot
 opaque
   unfolding is-of-hlevel
   is-abelian-group-is-prop : is-prop (is-abelian-group _✦_)
-  is-abelian-group-is-prop C = iso→is-of-hlevel 1 is-abelian-group-iso hlevel! C where
+  is-abelian-group-is-prop C = ≅→is-of-hlevel 1 is-abelian-group-iso hlevel! C where
     open is-abelian-group C
 
 instance
