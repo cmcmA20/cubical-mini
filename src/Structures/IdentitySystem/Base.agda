@@ -75,7 +75,7 @@ to-path-refl {r} {x} ids = ap (ap fst) $ to-path-refl-coh ids x
 to-path-over-refl
   : {A : Type ℓ} {R : A → A → Type ℓ′} {r : ∀ a → R a a} {x : A}
   → (ids : is-identity-system R r)
-  → SquareP (λ i j → R x (to-path-refl ids i j))
+  → Squareᴾ (λ i j → R x (to-path-refl ids i j))
       (ids .to-path-over (r x)) refl refl refl
 to-path-over-refl {x} ids = ap (ap snd) $ to-path-refl-coh ids x
 
@@ -141,7 +141,7 @@ module _
   : is-identity-system {A = Type ℓ} _≃_ (λ _ → refl)
 univalence-identity-system .to-path = ua
 univalence-identity-system .to-path-over p =
-  Σ-prop-pathP (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → ＝→ua-pathP p refl
+  Σ-prop-pathᴾ (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → ＝→ua-pathᴾ p refl
 
 path-identity-system : {A : Type ℓ} → is-identity-system (Path A) (λ _ → refl)
 path-identity-system .to-path = id
@@ -166,7 +166,7 @@ opaque
         → Path ((a , r a) ＝ (b , s))
             (ΣR-is-contr (from (to x)) .snd (b , s))
             (ΣR-is-contr x .snd (b , s))
-      cancel′ x s = is-prop→squareP (λ _ _ → is-contr→is-prop (ΣR-is-contr x)) _ _ _ _
+      cancel′ x s = is-prop→squareᴾ (λ _ _ → is-contr→is-prop (ΣR-is-contr x)) _ _ _ _
 
       cancel : from is-left-inverse-of to
       cancel x i .to-path s = ap fst (cancel′ x s i)
@@ -193,4 +193,4 @@ set-identity-system
   → is-identity-system R r
 set-identity-system rprop rpath .to-path = rpath
 set-identity-system rprop rpath .to-path-over p =
-  is-prop→pathP (λ i → rprop _ _) _ p
+  is-prop→pathᴾ (λ i → rprop _ _) _ p

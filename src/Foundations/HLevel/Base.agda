@@ -35,11 +35,11 @@ opaque
 
   -- Essential properties of `is-prop` and `is-contr`
 
-  is-prop→pathP : {B : I → Type ℓ}
+  is-prop→pathᴾ : {B : I → Type ℓ}
                   (h : (i : I) → is-prop (B i))
                 → (b₀ : B i0) (b₁ : B i1)
                 → ＜ b₀ ／ B ＼ b₁ ＞
-  is-prop→pathP h b₀ b₁ = to-pathP (h _ _ _)
+  is-prop→pathᴾ h b₀ b₁ = to-pathᴾ (h _ _ _)
 
   -- Amy says it's more efficient to use direct cubical proof
   is-contr→is-prop : is-contr A → is-prop A
@@ -108,24 +108,24 @@ opaque
     is-contr→is-prop ahl _ _ , is-prop→is-set (is-contr→is-prop ahl) _ _ _
   path-is-of-hlevel-same (suc h) ahl = is-of-hlevel-suc (suc h) ahl _ _
 
-  pathP-is-of-hlevel-same : {A : I → Type ℓ} (h : HLevel)
+  pathᴾ-is-of-hlevel-same : {A : I → Type ℓ} (h : HLevel)
                           → is-of-hlevel h (A i1)
                           → {x : A i0} {y : A i1}
                           → is-of-hlevel h ＜ x ／ A ＼ y ＞
-  pathP-is-of-hlevel-same {A} h ahl {x} {y} =
-    subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel-same h ahl)
+  pathᴾ-is-of-hlevel-same {A} h ahl {x} {y} =
+    subst (is-of-hlevel h) (sym (pathᴾ＝path A x y)) (path-is-of-hlevel-same h ahl)
 
   path-is-of-hlevel : (h : HLevel) → is-of-hlevel (suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
   path-is-of-hlevel 0 ahl x y =
     ahl x y , is-prop→is-set ahl _ _ _
   path-is-of-hlevel (suc h) p x y = p x y
 
-  pathP-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
+  pathᴾ-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
                      → is-of-hlevel (suc h) (A i1)
                      → (x : A i0) (y : A i1)
                      → is-of-hlevel h ＜ x ／ A ＼ y ＞
-  pathP-is-of-hlevel {A} h ahl x y =
-    subst (is-of-hlevel h) (sym (pathP＝path A x y)) (path-is-of-hlevel h ahl _ _)
+  pathᴾ-is-of-hlevel {A} h ahl x y =
+    subst (is-of-hlevel h) (sym (pathᴾ＝path A x y)) (path-is-of-hlevel h ahl _ _)
 
 
   is-contr-is-prop : is-prop (is-contr A)
@@ -160,7 +160,7 @@ opaque
   is-of-hlevel→is-of-hlevel-dep
     : (n : HLevel) → Π[ x ꞉ A ] is-of-hlevel (suc n) (B x)
     → is-of-hlevel-dep n B
-  is-of-hlevel→is-of-hlevel-dep 0 hl α β p = is-prop→pathP (λ i → hl (p i)) α β
+  is-of-hlevel→is-of-hlevel-dep 0 hl α β p = is-prop→pathᴾ (λ i → hl (p i)) α β
   is-of-hlevel→is-of-hlevel-dep {A} {B} (suc n) hl {a₀} {a₁} b₀ b₁ =
     is-of-hlevel→is-of-hlevel-dep n (λ p → helper a₁ p b₁)
     where
@@ -171,15 +171,15 @@ opaque
           (λ _ → hl _ _ _) p b₁
 
 
-  is-prop→squareP
+  is-prop→squareᴾ
     : {B : I → I → Type ℓ} → ((i j : I) → is-prop (B i j))
     → {a : B i0 i0} {c : B i0 i1} {b : B i1 i0} {d : B i1 i1}
     → (p : ＜ a ／ (λ j → B i0 j) ＼ c ＞)
     → (q : ＜ a ／ (λ i → B i i0) ＼ b ＞)
     → (r : ＜ b ／ (λ j → B i1 j) ＼ d ＞)
     → (s : ＜ c ／ (λ i → B i i1) ＼ d ＞)
-    → SquareP B p q r s
-  is-prop→squareP {B} B-pr {a} p q r s i j =
+    → Squareᴾ B p q r s
+  is-prop→squareᴾ {B} B-pr {a} p q r s i j =
     hcomp (∂ j ∨ ∂ i) λ where
       k (j = i0) → B-pr i j (base i j) (q i) k
       k (j = i1) → B-pr i j (base i j) (s i) k
@@ -190,14 +190,14 @@ opaque
       base : (i j : I) → B i j
       base i j = transport (λ k → B (i ∧ k) (j ∧ k)) a
 
-  is-prop→pathP-is-contr
+  is-prop→pathᴾ-is-contr
     : {A : I → Type ℓ} → ((i : I) → is-prop (A i))
     → (x : A i0) (y : A i1) → is-contr ＜ x ／ A ＼ y ＞
-  is-prop→pathP-is-contr A-pr x y .fst = is-prop→pathP A-pr x y
-  is-prop→pathP-is-contr A-pr x y .snd p =
-    is-prop→squareP (λ _ → A-pr) _ refl p refl
+  is-prop→pathᴾ-is-contr A-pr x y .fst = is-prop→pathᴾ A-pr x y
+  is-prop→pathᴾ-is-contr A-pr x y .snd p =
+    is-prop→squareᴾ (λ _ → A-pr) _ refl p refl
 
-  is-set→squareP
+  is-set→squareᴾ
     : {A : I → I → Type ℓ}
       (is-set : (i j : I) → is-set (A i j))
       {a : A i0 i0} {b : A i0 i1} {c : A i1 i0} {d : A i1 i1}
@@ -205,22 +205,22 @@ opaque
       (q : ＜ a ／ (λ j → A i0 j) ＼ b ＞)
       (s : ＜ c ／ (λ j → A i1 j) ＼ d ＞)
       (r : ＜ b ／ (λ j → A j i1) ＼ d ＞)
-    → SquareP A q p s r
-  is-set→squareP is-set a₀₋ a₁₋ a₋₀ a₋₁ =
-    transport (sym (pathP＝path _ _ _))
-              (pathP-is-of-hlevel 1 (is-set _ _) _ _ _ _)
+    → Squareᴾ A q p s r
+  is-set→squareᴾ is-set a₀₋ a₁₋ a₋₀ a₋₁ =
+    transport (sym (pathᴾ＝path _ _ _))
+              (pathᴾ-is-of-hlevel 1 (is-set _ _) _ _ _ _)
 
   -- litmus
   _ : {a b c d : A} (p : a ＝ c) (q : a ＝ b) (r : b ＝ d) (s : c ＝ d)
-    → Square p q r s ＝ SquareP (λ _ _ → A) q p s r -- observe the π/2 rotation
+    → Square p q r s ＝ Squareᴾ (λ _ _ → A) q p s r -- observe the π/2 rotation
   _ = λ _ _ _ _ → refl
 
-  is-set→cast-pathP
+  is-set→cast-pathᴾ
     : {x y : A} {p q : x ＝ y} (P : A → Type ℓ′) {px : P x} {py : P y}
     → is-set A
     → ＜ px ／ (λ i → P (p i)) ＼ py ＞
     → ＜ px ／ (λ i → P (q i)) ＼ py ＞
-  is-set→cast-pathP {p} {q} P {px} {py} A-set =
+  is-set→cast-pathᴾ {p} {q} P {px} {py} A-set =
     coe0→1 (λ j → ＜ px ／ (λ i → P (A-set _ _ p q j i)) ＼ py ＞)
 
 
@@ -261,3 +261,19 @@ opaque
 
   erased-is-prop : {@0 A : Type ℓ} → @0 is-prop A → is-prop (Erased A)
   erased-is-prop pr (erase x) (erase y) = congᴱ $ erase (pr x y)
+
+
+is-prop→pathP = is-prop→pathᴾ
+{-# WARNING_ON_USAGE is-prop→pathP "Use `is-prop→pathᴾ`" #-}
+pathP-is-of-hlevel-same = pathᴾ-is-of-hlevel-same
+{-# WARNING_ON_USAGE pathP-is-of-hlevel-same "Use `pathᴾ-is-of-hlevel-same`" #-}
+pathP-is-of-hlevel = pathᴾ-is-of-hlevel
+{-# WARNING_ON_USAGE pathP-is-of-hlevel "Use `pathᴾ-is-of-hlevel`" #-}
+is-prop→pathP-is-contr = is-prop→pathᴾ-is-contr
+{-# WARNING_ON_USAGE is-prop→pathP-is-contr "Use `is-prop→pathᴾ-is-contr`" #-}
+is-set→cast-pathP = is-set→cast-pathᴾ
+{-# WARNING_ON_USAGE is-set→cast-pathP "Use `is-set→cast-pathᴾ`" #-}
+is-prop→squareP = is-prop→squareᴾ
+{-# WARNING_ON_USAGE is-prop→squareP "Use `is-prop→squareᴾ`" #-}
+is-set→squareP = is-set→squareᴾ
+{-# WARNING_ON_USAGE is-set→squareP "Use `is-set→squareᴾ`" #-}

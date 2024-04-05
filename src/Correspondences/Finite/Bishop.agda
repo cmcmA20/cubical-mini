@@ -157,8 +157,8 @@ is-discrete→path-is-bishop-finite : is-discrete A → {x y : A} → is-bishop-
 is-discrete→path-is-bishop-finite d = decidable-prop→is-bishop-finite hlevel! (d .is-discrete-β _ _)
   where instance _ = d
 
-pathP-is-bishop-finite : ∀ {A :  I → Type ℓ} → is-bishop-finite (A i1) → ∀ x y → is-bishop-finite ＜ x ／ A ＼ y ＞
-pathP-is-bishop-finite f _ _ = subst is-bishop-finite (symₚ $ pathP＝path _ _ _) $
+pathᴾ-is-bishop-finite : ∀ {A :  I → Type ℓ} → is-bishop-finite (A i1) → ∀ x y → is-bishop-finite ＜ x ／ A ＼ y ＞
+pathᴾ-is-bishop-finite f _ _ = subst is-bishop-finite (symₚ $ pathᴾ＝path _ _ _) $
   is-discrete→path-is-bishop-finite (is-bishop-finite→is-discrete f)
 
 ≃→is-bishop-finite : (B ≃ A) → is-bishop-finite A → is-bishop-finite B

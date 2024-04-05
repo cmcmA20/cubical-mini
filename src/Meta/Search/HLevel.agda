@@ -73,7 +73,7 @@ prop!
   → {x : A i0} {y : A i1}
   → ＜ x ／ A ＼ y ＞
 prop! {A} {aip} {x} {y} =
-  is-prop→pathP (λ i → coe0→i (λ j → is-prop (A j)) i aip) x y
+  is-prop→pathᴾ (λ i → coe0→i (λ j → is-prop (A j)) i aip) x y
 
 instance
   decomp-hlevel-lift : goal-decomposition (quote is-of-hlevel) (Lift ℓ′ A)
@@ -128,9 +128,9 @@ instance
   decomp-hlevel-path = decomp (quote path-is-of-hlevel)
     [ `level-suc , `search (quote is-of-hlevel) , `meta , `meta ]
 
-  decomp-hlevel-pathP : {F : I → Type ℓ} {a : F i0} {b : F i1}
+  decomp-hlevel-pathᴾ : {F : I → Type ℓ} {a : F i0} {b : F i1}
                       → goal-decomposition (quote is-of-hlevel) ＜ a ／ F ＼ b ＞
-  decomp-hlevel-pathP = decomp (quote pathP-is-of-hlevel)
+  decomp-hlevel-pathᴾ = decomp (quote pathᴾ-is-of-hlevel)
     [ `level-suc , `search (quote is-of-hlevel) , `meta , `meta ]
 
   decomp-hlevel-ntype : goal-decomposition (quote is-of-hlevel) (n-Type ℓ n)

@@ -91,14 +91,14 @@ instance
   Funlike-Monotone : Funlike ur (Monotone P Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
   Funlike-Monotone ._#_ = hom
 
-monotone-pathP
+monotone-pathᴾ
   : {P : I → Poset o ℓ} {Q : I → Poset o′ ℓ′}
   → {f : Monotone (P i0) (Q i0)} {g : Monotone (P i1) (Q i1)}
   → ＜ f $_ ／ (λ i → ⌞ P i ⌟ → ⌞ Q i ⌟) ＼ g $_ ＞
   → ＜ f ／ (λ i → Monotone (P i) (Q i)) ＼ g ＞
-monotone-pathP q i .hom a = q i a
-monotone-pathP {P} {Q} {f} {g} q i .Monotone.pres-≤ {x} {y} α =
-  is-prop→pathP
+monotone-pathᴾ q i .hom a = q i a
+monotone-pathᴾ {P} {Q} {f} {g} q i .Monotone.pres-≤ {x} {y} α =
+  is-prop→pathᴾ
     (λ i → Π³-is-of-hlevel {A = ⌞ P i ⌟} {B = λ _ → ⌞ P i ⌟} {C = λ x y → P i .Poset._≤_ x y} 1
       λ x y _ → Q i .Poset.≤-thin {q i x} {q i y})
     (λ _ _ α → f .Monotone.pres-≤ α)
@@ -108,7 +108,7 @@ Extensional-Monotone
   : ∀ {ℓr} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
   → ⦃ sa : Extensional (P →̇ Q) ℓr ⦄
   → Extensional (Monotone P Q) ℓr
-Extensional-Monotone ⦃ sa ⦄ = set-injective→extensional! monotone-pathP sa
+Extensional-Monotone ⦃ sa ⦄ = set-injective→extensional! monotone-pathᴾ sa
 
 instance
   Extensionality-Monotone : {P : Poset o ℓ} {Q : Poset o′ ℓ′}

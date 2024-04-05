@@ -65,7 +65,7 @@ instance
   H-Level-is-equiv = hlevel-prop-instance (is-equiv-is-prop _)
 
 equiv-ext : {e₀ e₁ : A ≃ B} (h : e₀ .fst ＝ e₁ .fst) → e₀ ＝ e₁
-equiv-ext {e₀} {e₁} h i = h i , is-prop→pathP (λ i → is-equiv-is-prop (h i)) (e₀ .snd) (e₁ .snd) i
+equiv-ext {e₀} {e₁} h i = h i , is-prop→pathᴾ (λ i → is-equiv-is-prop (h i)) (e₀ .snd) (e₁ .snd) i
 
 is-equiv→inverse : {f : A → B} → is-equiv f → (B → A)
 is-equiv→inverse eqv y = eqv .equiv-proof y .fst .fst

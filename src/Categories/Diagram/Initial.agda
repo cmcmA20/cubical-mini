@@ -37,7 +37,7 @@ opaque
   ⊥-contractible cat x₁ x₂ i .bot =
     Univalent.iso→path cat (⊥-unique x₁ x₂) i
   ⊥-contractible cat x₁ x₂ i .has⊥ ob =
-    is-prop→pathP
+    is-prop→pathᴾ
       (λ j → is-contr-is-prop
         {A = Hom (Univalent.iso→path cat (⊥-unique x₁ x₂) j) _})
       (x₁ .has⊥ ob) (x₂ .has⊥ ob) i

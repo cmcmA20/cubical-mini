@@ -30,11 +30,11 @@ elim² {A} {B} {P} P-prop work x y = go x y where
   go : ∀ x y → P x y
   go ∣ x ∣₁ ∣ y ∣₁ = work x y
   go ∣ x ∣₁ (squash₁ y y′ i) =
-    is-prop→pathP (λ i → P-prop ∣ x ∣₁ (squash₁ y y′ i))
+    is-prop→pathᴾ (λ i → P-prop ∣ x ∣₁ (squash₁ y y′ i))
                   (go ∣ x ∣₁ y) (go ∣ x ∣₁ y′) i
 
   go (squash₁ x y i) z =
-    is-prop→pathP (λ i → P-prop (squash₁ x y i) z)
+    is-prop→pathᴾ (λ i → P-prop (squash₁ x y i) z)
                   (go x z) (go y z) i
 
 rec² : is-prop C
@@ -193,7 +193,7 @@ module Replacement
     → ∀ x → P x
   elim-prop P-prop p⦋⦌ ⦋ x ⦌ = p⦋⦌ x
   elim-prop P-prop p⦋⦌ (quot {r = x} {r′ = y} p i) =
-    is-prop→pathP (λ i → P-prop (quot p i))
+    is-prop→pathᴾ (λ i → P-prop (quot p i))
       (elim-prop P-prop p⦋⦌ x)
       (elim-prop P-prop p⦋⦌ y) i
 
@@ -211,6 +211,6 @@ module Replacement
     (λ { (w , p) → Jₜ (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) p }) p where
       go : (f⁻¹x : A) → is-contr _
       go f⁻¹x = is-contr-η $ (⦋ f⁻¹x ⦌ , refl) , λ where
-        (u , α) → Σ-pathP (quot (ls.encode (ap fst α ⁻¹))) $
+        (u , α) → Σ-pathᴾ (quot (ls.encode (ap fst α ⁻¹))) $
                           Σ-prop-square hlevel! $ commutes→square $
                             ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹

@@ -56,7 +56,7 @@ module Path where
     go : {U V : Subtype ℓ T} → Code U V → U ＝ V
     go {V = _ , g , _} (e , p)
       =  ua e
-      ,ₚ to-pathP⁻ (Σ-prop-path! $ fun-ext λ x → p x ∙ (transport-refl _ ∙ ap g (ua-β e x)) ⁻¹)
+      ,ₚ to-pathᴾ⁻ (Σ-prop-path! $ fun-ext λ x → p x ∙ (transport-refl _ ∙ ap g (ua-β e x)) ⁻¹)
 
 
 @0 Extensional-Subtype : Extensional (Subtype ℓ T) ℓ

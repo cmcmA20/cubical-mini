@@ -126,9 +126,9 @@ opaque
   Σ-is-of-hlevel 0 acontr bcontr =
     (acontr .fst , bcontr _ .fst) ,
       λ x →  acontr .snd _
-          ,ₚ is-prop→pathP (λ _ → is-contr→is-prop (bcontr _)) _ _
+          ,ₚ is-prop→pathᴾ (λ _ → is-contr→is-prop (bcontr _)) _ _
   Σ-is-of-hlevel 1 aprop bprop (a , b) (a' , b') i =
-    (aprop a a' i) , (is-prop→pathP (λ i → bprop (aprop a a' i)) b b' i)
+    (aprop a a' i) , (is-prop→pathᴾ (λ i → bprop (aprop a a' i)) b b' i)
   Σ-is-of-hlevel {B} (suc (suc n)) h1 h2 x y =
     is-iso→is-of-hlevel (suc n)
       (is-iso-inv (Σ-path-iso .snd) .is-iso.inv)

@@ -72,8 +72,8 @@ instance
   -- decomp-dec-prop→fin₁ = decomp (quote decidable-prop→is-bishop-finite)
   --   [ `search (quote is-of-hlevel) , `search (quote Dec) ]
 
-  decomp-fin₁→pathP : ∀ {A : I → Type ℓ} {x y} → goal-decomposition (quote is-bishop-finite) ＜ x ／ A ＼ y ＞
-  decomp-fin₁→pathP = decomp (quote pathP-is-bishop-finite)
+  decomp-fin₁→pathᴾ : ∀ {A : I → Type ℓ} {x y} → goal-decomposition (quote is-bishop-finite) ＜ x ／ A ＼ y ＞
+  decomp-fin₁→pathᴾ = decomp (quote pathᴾ-is-bishop-finite)
     [ `search (quote is-bishop-finite) , `meta , `meta ]
 
   decomp-fin₁→omn₁ : goal-decomposition (quote Omniscient₁) A

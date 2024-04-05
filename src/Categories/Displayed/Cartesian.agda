@@ -28,62 +28,62 @@ record is-cartesian {a b} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
   universal′ {u′} p h′ =
     universal _ (coe1→0 (λ i → Hom[ p i ] u′ b′) h′)
 
-  commutesP : {m : Hom u a} {k : Hom u b}
+  commutesᴾ : {m : Hom u a} {k : Hom u b}
             → (p : f ∘ m ＝ k) (h′ : Hom[ k ] u′ b′)
             → f′ ∘ᵈ universal′ p h′ ＝[ p ] h′
-  commutesP {u′} p h′ =
-    to-pathP⁻ $ commutes _ (coe1→0 (λ i → Hom[ p i ] u′ b′) h′)
+  commutesᴾ {u′} p h′ =
+    to-pathᴾ⁻ $ commutes _ (coe1→0 (λ i → Hom[ p i ] u′ b′) h′)
 
-  universalP : {m₁ m₂ : Hom u a} {k : Hom u b}
+  universalᴾ : {m₁ m₂ : Hom u a} {k : Hom u b}
              → (p : f ∘ m₁ ＝ k) (q : m₁ ＝ m₂) (r : f ∘ m₂ ＝ k)
              → (h′ : Hom[ k ] u′ b′)
              → universal′ p h′ ＝[ q ] universal′ r h′
-  universalP {u} p q r h′ i =
-    universal′ (is-set→squareP (λ _ _ → Hom-set u b) (ap (f ∘_) q) p r refl i) h′
+  universalᴾ {u} p q r h′ i =
+    universal′ (is-set→squareᴾ (λ _ _ → Hom-set u b) (ap (f ∘_) q) p r refl i) h′
 
-  uniqueP : {m₁ m₂ : Hom u a} {k : Hom u b}
+  uniqueᴾ : {m₁ m₂ : Hom u a} {k : Hom u b}
           → (p : f ∘ m₁ ＝ k) (q : m₁ ＝ m₂) (r : f ∘ m₂ ＝ k)
           → {h′ : Hom[ k ] u′ b′}
           → (m′ : Hom[ m₁ ] u′ a′)
           → f′ ∘ᵈ m′ ＝[ p ] h′ → m′ ＝[ q ] universal′ r h′
-  uniqueP p q r {h′} m′ s =
-    to-pathP⁻ (unique m′ (from-pathP⁻ s) ∙ from-pathP⁻ (universalP p q r h′))
+  uniqueᴾ p q r {h′} m′ s =
+    to-pathᴾ⁻ (unique m′ (from-pathᴾ⁻ s) ∙ from-pathᴾ⁻ (universalᴾ p q r h′))
 
-  uniqueP²
+  uniqueᴾ²
     : {m₁ m₂ : Hom u a} {k : Hom u b}
     → (p : f ∘ m₁ ＝ k) (q : m₁ ＝ m₂) (r : f ∘ m₂ ＝ k)
     → {h′ : Hom[ k ] u′ b′} (m₁′ : Hom[ m₁ ] u′ a′) (m₂′ : Hom[ m₂ ] u′ a′)
     → f′ ∘ᵈ m₁′ ＝[ p ] h′
     → f′ ∘ᵈ m₂′ ＝[ r ] h′
     → m₁′ ＝[ q ] m₂′
-  uniqueP² {u′} p q r m₁′ m₂′ α β = to-pathP⁻ $
-       unique m₁′ (from-pathP⁻ α)
-    ∙∙ from-pathP⁻ (universalP p q r _)
-    ∙∙ ap (coe1→0 (λ i → Hom[ q i ] u′ a′)) (sym (unique m₂′ (from-pathP⁻ β)))
+  uniqueᴾ² {u′} p q r m₁′ m₂′ α β = to-pathᴾ⁻ $
+       unique m₁′ (from-pathᴾ⁻ α)
+    ∙∙ from-pathᴾ⁻ (universalᴾ p q r _)
+    ∙∙ ap (coe1→0 (λ i → Hom[ q i ] u′ a′)) (sym (unique m₂′ (from-pathᴾ⁻ β)))
 
-  universalV : ∀ {a″} (f″ : Hom[ f ] a″ b′) → Hom[ id ] a″ a′
-  universalV f″ = universal′ (id-r _) f″
+  universalⱽ : ∀ {a″} (f″ : Hom[ f ] a″ b′) → Hom[ id ] a″ a′
+  universalⱽ f″ = universal′ (id-r _) f″
 
-  commutesV
+  commutesⱽ
     : ∀ {x′} (g′ : Hom[ f ] x′ b′)
-    → f′ ∘ᵈ universalV g′ ＝[ id-r _ ] g′
-  commutesV = commutesP (id-r _)
+    → f′ ∘ᵈ universalⱽ g′ ＝[ id-r _ ] g′
+  commutesⱽ = commutesᴾ (id-r _)
 
-  uniqueV
+  uniqueⱽ
     : ∀ {x′} {g′ : Hom[ f ] x′ b′}
     → (h′ : Hom[ id ] x′ a′)
     → f′ ∘ᵈ h′ ＝[ id-r _ ] g′
-    → h′ ＝ universalV g′
-  uniqueV h′ p = uniqueP (id-r f) refl (id-r f) h′ p
+    → h′ ＝ universalⱽ g′
+  uniqueⱽ h′ p = uniqueᴾ (id-r f) refl (id-r f) h′ p
 
-  uniqueV²
+  uniqueⱽ²
     : ∀ {x′} {g′ : Hom[ f ] x′ b′}
     → (h′ h″ : Hom[ id ] x′ a′)
     → f′ ∘ᵈ h′ ＝[ id-r _ ] g′
     → f′ ∘ᵈ h″ ＝[ id-r _ ] g′
     → h′ ＝ h″
-  uniqueV² h′ h″ p q =
-    uniqueP² (id-r f) refl (id-r f) h′ h″ p q
+  uniqueⱽ² h′ h″ p q =
+    uniqueᴾ² (id-r f) refl (id-r f) h′ h″ p q
 
 
 opaque
@@ -97,13 +97,13 @@ opaque
     worker i .universal m h′ =
       cart′ .unique (cart .universal m h′) (cart .commutes _ _) i
     worker i .commutes m h′ =
-      is-set→squareP (λ _ _ → Hom[ _ ]-set _ _)
+      is-set→squareᴾ (λ _ _ → Hom[ _ ]-set _ _)
         (ap (f′ ∘ᵈ_) (cart′ .unique _ _))
         (cart .commutes m h′)
         (cart′ .commutes m h′)
         refl i
     worker i .unique m′ p =
-      is-set→squareP (λ _ _ → Hom[ _ ]-set _ _)
+      is-set→squareᴾ (λ _ _ → Hom[ _ ]-set _ _)
         refl
         (cart .unique m′ p)
         (cart′ .unique m′ p)
@@ -123,15 +123,15 @@ record Cartesian-morphism
 
 unquoteDecl cartesian-morphism-iso = declare-record-iso cartesian-morphism-iso (quote Cartesian-morphism)
 
-Cartesian-morphism-pathP
+Cartesian-morphism-pathᴾ
   : ∀ {x y x′ y′} {f g : Hom x y}
   → {f′ : Cartesian-morphism f x′ y′} {g′ : Cartesian-morphism g x′ y′}
   → {p : f ＝ g}
   → ＜ Cartesian-morphism.hom′ f′ ／ (λ i → Hom[ p i ] x′ y′) ＼ Cartesian-morphism.hom′ g′ ＞
   → ＜ f′ ／ (λ i → Cartesian-morphism (p i) x′ y′) ＼ g′ ＞
-Cartesian-morphism-pathP q i .Cartesian-morphism.hom′ = q i
-Cartesian-morphism-pathP {f′ = f′} {g′ = g′} {p = p} q i .Cartesian-morphism.cartesian =
-  is-prop→pathP (λ i → is-cartesian-is-prop {f = p i} {f′ = q i})
+Cartesian-morphism-pathᴾ q i .Cartesian-morphism.hom′ = q i
+Cartesian-morphism-pathᴾ {f′ = f′} {g′ = g′} {p = p} q i .Cartesian-morphism.cartesian =
+  is-prop→pathᴾ (λ i → is-cartesian-is-prop {f = p i} {f′ = q i})
     (Cartesian-morphism.cartesian f′)
     (Cartesian-morphism.cartesian g′) i
 

@@ -87,7 +87,7 @@ discrete ⦃ d ⦄ = d
 Σ-is-discrete {B} A-d B-d .is-discrete-β (a₁ , b₁) (a₂ , b₂) with A-d .is-discrete-β a₁ a₂
 ... | no  a₁≠a₂ = no $ a₁≠a₂ ∘ ap fst
 ... | yes a₁=a₂ with B-d _ .is-discrete-β (subst _ a₁=a₂ b₁) b₂
-... | no  b₁≠b₂ = no λ r → b₁≠b₂ $ from-pathP $
+... | no  b₁≠b₂ = no λ r → b₁≠b₂ $ from-pathᴾ $
   subst (λ X → ＜ b₁ ／ (λ i → B (X i)) ＼ b₂ ＞)
         (is-set-β (is-discrete→is-set A-d) a₁ a₂ (ap fst r) a₁=a₂)
         (ap snd r)

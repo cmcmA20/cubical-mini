@@ -125,9 +125,9 @@ private
   it-worker : Name → TC Term
   it-worker n = get-definition n <&> λ where
     (data-cons _) →
-      def₀ (quote Has-constr.from-constr) ##ₙ def₀ (quote by-instance) ##ₙ lit (name n)
+      def₀ (quote Has-constr.from-constr) ##ₙ def₀ (quote auto) ##ₙ lit (name n)
     _ →
-      def₀ (quote Has-def.from-def) ##ₙ def₀ (quote by-instance) ##ₙ lit (name n)
+      def₀ (quote Has-def.from-def) ##ₙ def₀ (quote auto) ##ₙ lit (name n)
 
 macro
   -- Macro which turns a Name into its quoted Term/Pattern
@@ -150,7 +150,7 @@ macro
   `constructor : Name → Term → TC ⊤
   `constructor n g = do
     (c , _) ← get-record-type n
-    unify g (it Has-constr.from-constr ##ₙ def₀ (quote by-instance) ##ₙ lit (name c))
+    unify g (it Has-constr.from-constr ##ₙ def₀ (quote auto) ##ₙ lit (name c))
 
 _ : Path Term (`constructor Σ) (con₀ (quote _,_))
 _ = refl

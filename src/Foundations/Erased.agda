@@ -154,4 +154,4 @@ opaque
     p i x = outS (ua-glue A≃B i (λ { (i = i0) → x }) (inS (A≃B .fst x)))
 
     q : ＜ id-is-equiv ／ (λ i → is-equiv (p i)) ＼ A≃B .snd ＞
-    q = is-prop→pathP (λ i → is-equiv-is-prop (p i)) _ _
+    q = is-prop→pathᴾ (λ i → is-equiv-is-prop (p i)) _ _

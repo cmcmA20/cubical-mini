@@ -53,7 +53,7 @@ semigroup-on↪magma-on .fst S .n-Magma-on.has-n-magma =
   S .Semigroup-on.has-semigroup .is-semigroup.has-magma
 semigroup-on↪magma-on .snd = set-injective→is-embedding hlevel! λ p →
   Equiv.injective (≅ₜ→≃ semigroup-on-iso) $
-    Σ-prop-pathP hlevel! (ap n-Magma-on._⋆_ p)
+    Σ-prop-pathᴾ hlevel! (ap n-Magma-on._⋆_ p)
 
 semigroup-on-is-set : is-set (Semigroup-on A)
 semigroup-on-is-set = is-embedding→is-of-hlevel 1 (semigroup-on↪magma-on .snd) hlevel!

@@ -36,10 +36,10 @@ module @0 _ where opaque
   ua-unglue : (e : A ≃ B) (i : I) (x : ua e i) → B
   ua-unglue e i x = unglue (i ∨ ~ i) x
 
-  ua-pathP→＝ : (e : A ≃ B) {x : A} {y : B}
+  ua-pathᴾ→＝ : (e : A ≃ B) {x : A} {y : B}
                 → ＜ x ／ (λ i → ua e i) ＼ y ＞
                 → e .fst x ＝ y
-  ua-pathP→＝ e p i = ua-unglue e i (p i)
+  ua-pathᴾ→＝ e p i = ua-unglue e i (p i)
 
   ua-glue : (e : A ≃ B) (i : I)
             (x : Partial (~ i) A)
@@ -52,16 +52,16 @@ module @0 _ where opaque
                                       ; (i = i1) → outS y })
                                    (outS y))
 
-  ＝→ua-pathP : (e : A ≃ B) {x : A} {y : B}
+  ＝→ua-pathᴾ : (e : A ≃ B) {x : A} {y : B}
               → e .fst x ＝ y
               → ＜ x ／ (λ i → ua e i) ＼ y ＞
-  ＝→ua-pathP e {x} p i = outS (ua-glue e i (λ { (i = i0) → x }) (inS (p i)))
+  ＝→ua-pathᴾ e {x} p i = outS (ua-glue e i (λ { (i = i0) → x }) (inS (p i)))
 
-  ua-pathP≃＝ : (e : A ≃ B) {x : A} {y : B}
+  ua-pathᴾ≃＝ : (e : A ≃ B) {x : A} {y : B}
               → (e .fst x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
-  ua-pathP≃＝ eqv .fst = ＝→ua-pathP eqv
-  ua-pathP≃＝ eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathP→＝ eqv) y .fst
-  ua-pathP≃＝ eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathP→＝ eqv) y .snd
+  ua-pathᴾ≃＝ eqv .fst = ＝→ua-pathᴾ eqv
+  ua-pathᴾ≃＝ eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathᴾ→＝ eqv) y .fst
+  ua-pathᴾ≃＝ eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathᴾ→＝ eqv) y .snd
 
 @0 ≅→＝ : Iso A B → A ＝ B
 ≅→＝ (f , r) = ua (f , is-iso→is-equiv r)
@@ -109,7 +109,7 @@ module @0 _ where opaque
     p i x = outS (ua-glue A≃B i (λ { (i = i0) → x }) (inS (A≃B .fst x)))
 
     q : ＜ id-is-equiv ／ (λ i → is-equiv (p i)) ＼ A≃B .snd ＞
-    q = is-prop→pathP (λ i → is-equiv-is-prop (p i)) _ _
+    q = is-prop→pathᴾ (λ i → is-equiv-is-prop (p i)) _ _
 
   Jₑ : (P : (B : Type ℓ) → A ≃ B → Type ℓ′)
      → P A idₑ
@@ -164,3 +164,15 @@ iso→path = ≅→＝
 
 path→equiv = ＝→≃
 {-# WARNING_ON_USAGE path→equiv "Use `＝→≃`" #-}
+
+@0 ua-pathP→＝ : _
+ua-pathP→＝ = ua-pathᴾ→＝
+{-# WARNING_ON_USAGE ua-pathP→＝ "Use `ua-pathᴾ→＝`" #-}
+
+@0 ＝→ua-pathP : _
+＝→ua-pathP = ＝→ua-pathᴾ
+{-# WARNING_ON_USAGE ＝→ua-pathP "Use `＝→ua-pathᴾ`" #-}
+
+@0 ua-pathP≃＝ : _
+ua-pathP≃＝ = ua-pathᴾ≃＝
+{-# WARNING_ON_USAGE ua-pathP≃＝ "Use `ua-pathᴾ≃＝`" #-}

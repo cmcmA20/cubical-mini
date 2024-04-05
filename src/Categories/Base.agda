@@ -39,7 +39,7 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
   Mor-path : {f g : Mor}
            → (p : f .fst ＝ g .fst)
            → (q : f .snd .fst ＝ g .snd .fst)
-           → PathP (λ i → Hom (p i) (q i)) (f .snd .snd) (g .snd .snd)
+           → Pathᴾ (λ i → Hom (p i) (q i)) (f .snd .snd) (g .snd .snd)
            → f ＝ g
   Mor-path p q r i = p i , q i , r i
 
@@ -292,14 +292,14 @@ module _ {C : Precategory oᶜ hᶜ}
       ds : ∀{x y} → H-Level 2 (D.Hom x y)
       ds = hlevel-basic-instance 2 $ D.Hom-set _ _
 
-  nat-pathP : {F' G' : Functor C D}
+  nat-pathᴾ : {F' G' : Functor C D}
             → (p : F ＝ F') (q : G ＝ G')
             → {a : F ⇒ G} {b : F' ⇒ G'}
             → (∀ x → ＜ a .η x ／ _ ＼ b .η x ＞)
-            → PathP (λ i → p i ⇒ q i) a b
-  nat-pathP p q path i .η x = path x i
-  nat-pathP p q {a} {b} path i .is-natural x y f =
-    is-prop→pathP
+            → Pathᴾ (λ i → p i ⇒ q i) a b
+  nat-pathᴾ p q path i .η x = path x i
+  nat-pathᴾ p q {a} {b} path i .is-natural x y f =
+    is-prop→pathᴾ
       (λ i → is-prop-η $ is-set-β (D.Hom-set _ _)
         (path y i D.∘ Functor.F₁ (p i) f) (Functor.F₁ (q i) f D.∘ path x i))
       (a .is-natural x y f)
@@ -308,7 +308,7 @@ module _ {C : Precategory oᶜ hᶜ}
   nat-path : {a b : F ⇒ G}
            → ((x : _) → a .η x ＝ b .η x)
            → a ＝ b
-  nat-path = nat-pathP refl refl
+  nat-path = nat-pathᴾ refl refl
 
   _ηₚ_ : ∀ {a b : F ⇒ G} → a ＝ b → ∀ x → a .η x ＝ b .η x
   p ηₚ x = ap (λ e → e .η x) p
@@ -317,7 +317,7 @@ module _ {C : Precategory oᶜ hᶜ}
        → {a : F ⇒ G} {b : F' ⇒ G'}
        →                      ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
        → ∀ x → ＜ a .η x ／ (λ i → D.Hom (p i .F₀ x) (q i .F₀ x)) ＼ b .η x ＞
-  p ηᵈ x = apP (λ i e → e .η x) p
+  p ηᵈ x = apᴾ (λ i e → e .η x) p
 
   infixl 45 _ηₚ_
 
@@ -328,10 +328,10 @@ module _ {C : Precategory oᶜ hᶜ}
     → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
   Extensional-natural-transformation {sa} .Pathᵉ f g = ∀ i → Pathᵉ (sa i) (f .η i) (g .η i)
   Extensional-natural-transformation {sa} .reflᵉ x i = reflᵉ (sa i) (x .η i)
-  Extensional-natural-transformation {sa} .idsᵉ .to-path x = nat-pathP _ _ λ i →
+  Extensional-natural-transformation {sa} .idsᵉ .to-path x = nat-pathᴾ _ _ λ i →
     sa _ .idsᵉ .to-path (x i)
   Extensional-natural-transformation {sa} .idsᵉ .to-path-over h =
-    is-prop→pathP
+    is-prop→pathᴾ
       (λ i → Π-is-of-hlevel 1
         λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa _ .idsᵉ)) (is-prop-η $ is-set-β (D .Hom-set _ _) _ _))
       _ _

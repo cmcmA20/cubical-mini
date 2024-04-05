@@ -37,7 +37,7 @@ opaque
     cat .to-path (⊤-unique x₁ x₂) i
 
   ⊤-contractible cat x₁ x₂ i .has⊤ ob =
-    is-prop→pathP
+    is-prop→pathᴾ
       (λ i → is-contr-is-prop {A = Hom _
         (cat .to-path (⊤-unique x₁ x₂) i)})
       (x₁ .has⊤ ob) (x₂ .has⊤ ob) i

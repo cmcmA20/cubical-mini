@@ -36,9 +36,9 @@ elim-prop
   → Π[ q ꞉ A / R ] P q
 elim-prop _ f ⦋ a ⦌ = f a
 elim-prop P-prop f (glue/ a b r i) =
-  is-prop→pathP (λ k → P-prop (glue/ a b r k)) (f a) (f b) i
+  is-prop→pathᴾ (λ k → P-prop (glue/ a b r k)) (f a) (f b) i
 elim-prop P-prop f (squash/ x y p q i j) =
-  is-prop→squareP (λ i j → P-prop (squash/ x y p q i j))
+  is-prop→squareᴾ (λ i j → P-prop (squash/ x y p q i j))
                   (λ k → g (p k)) (λ _ → g x)
                   (λ k → g (q k)) (λ _ → g y) -- TODO same order as in elim
                   i j
@@ -52,7 +52,7 @@ elim
 elim _ f _ ⦋ a ⦌ = f a
 elim _ f f= (glue/ a b r i) = f= a b r i
 elim P-set f f= (squash/ x y p q i j) =
-  is-set→squareP (λ i j → P-set (squash/ x y p q i j))
+  is-set→squareᴾ (λ i j → P-set (squash/ x y p q i j))
                  (λ _ → g x)     (λ k → g (p k))
                  (λ k → g (q k)) (λ _ → g y)
                  i j

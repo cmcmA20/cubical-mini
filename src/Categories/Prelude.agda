@@ -24,8 +24,8 @@ open import Categories.Solver
   hiding ( module NbE ; module Reflection )
   public
 open import Categories.Univalent
-  using ( is-category ; path→iso ; Hom-pathP
-        ; Hom-transport ; Hom-pathP-refl-l ; Hom-pathP-refl-r
+  using ( is-category ; path→iso ; Hom-pathᴾ
+        ; Hom-transport ; Hom-pathᴾ-refl-l ; Hom-pathᴾ-refl-r
         ; module Univalent )
   public
 

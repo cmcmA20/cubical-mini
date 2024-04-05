@@ -45,6 +45,12 @@ For naming conventions specific to the Algebra subfolder, see
   Numerical subscripts should be preferred to indicate hlevel, but
   can be used for other purposes if it improves readability.
 
+  The order is as following:
+  - Other subscript
+  - Numerical subscript
+  - Other superscript
+  - Numerical superscript
+
 * Use `equiv` or `≃` to refer to equivalences of types or structures.
   Operators can use subscript `ₑ`.
 
@@ -55,6 +61,7 @@ For naming conventions specific to the Algebra subfolder, see
 
 * Use `Path` or `＝` to refer to paths in names, not `Eq`, `Id`, or
   other "equality" or "identity"-related names.
+  Operators can use subscript `ₚ`.
 
 * Use `≡` to refer to congruences or some other strict similarity relations.
   When defining a new target language, locally rename `＝` to `≡` for
@@ -63,15 +70,21 @@ For naming conventions specific to the Algebra subfolder, see
 
 * Prefer using `→` over `to`.
 
-* Results about `PathP` (path overs) should end with `P` (like
-  `compP`).
+* Results about `Pathᴾ` (path overs) should end with superscript `ᴾ`.
+
+* Results about displayed categorical stuff should end with superscript `ᴰ`.
+
+* If you need to distinguish simple and dependent result, prefer
+  making dependent stuff default, simple can have superscript `ˢ`.
+  If the former appraoch looks unpleasing, use superscript `ᵈ` for dependent
+  stuff.
 
 * Type families valued in propositions, either defined as records,
   functions or as truncated inductive types, should start with the word
   `is`: `is-prop`, `is-set`, etc. Predicates should be written _after_
   what they apply to: `Nat-is-set`, `is-prop-is-prop`,
   `is-of-hlevel-is-prop`. Record fields indicating the truth of a predicate
-  should be prefixed `has-is-`, since Agda doesn't allow you to shadow
+  should be prefixed `has-`, since Agda doesn't allow you to shadow
   globals with record fields.
 
 * When defining eliminators, recursors and similar functions for datatypes,
@@ -88,7 +101,7 @@ For naming conventions specific to the Algebra subfolder, see
   `renaming (rec to rec-⊥)` and using `rec-⊥`.
 
   Some conventional naming :
-  - Empty                   -> ⊥
-  - PropositionalTruncation -> PT
-  - SetTruncation           -> ST
-  - SetQuotient             -> SQ
+  - Empty                   -> `⊥`
+  - PropositionalTruncation -> `∥-∥₁`
+  - SetTruncation           -> `∥-∥₂`
+  - SetQuotient             -> `/₂`

@@ -65,7 +65,7 @@ private
     unify hole $ it refl′ ##ₕ s ##ₕ r ##ᵢ sol
 
   decompose-as-path : Term → TC Term
-  decompose-as-path (def (quote PathP) (l h∷ T v∷ _ v∷ _ v∷ [])) = do
+  decompose-as-path (def (quote Pathᴾ) (l h∷ T v∷ _ v∷ _ v∷ [])) = do
     pure $ it _＝_
   decompose-as-path (def (quote _＝_) (l h∷ T h∷ _ v∷ _ v∷ [])) = do
     pure $ it _＝_

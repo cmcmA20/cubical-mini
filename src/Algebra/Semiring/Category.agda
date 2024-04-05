@@ -26,7 +26,7 @@ Semiring-structure ℓ .∘-is-hom f g p q .pres-· _ _ =
   ap f (q .pres-· _ _) ∙ p .pres-· _ _
 Semiring-structure ℓ .id-hom-unique p q .erased = Equiv.injective (≅ₜ→≃ semiring-on-iso)
   $ ext (p .pres-+) ,ₚ ext (p .pres-·)
-  ,ₚ is-prop→pathP (λ _ → is-semiring-is-prop) _ _ -- FIXME using `prop!` here hogs CPU. Why?
+  ,ₚ is-prop→pathᴾ (λ _ → is-semiring-is-prop) _ _ -- FIXME using `prop!` here hogs CPU. Why?
 
 Semirings : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Semirings ℓ = Structured-objects (Semiring-structure ℓ)

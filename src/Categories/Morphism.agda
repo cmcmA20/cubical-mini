@@ -364,7 +364,7 @@ opaque
     p : g ＝ h
     p i .is-invertible.inv = g≡h i
     p i .is-invertible.inverses =
-     is-prop→pathP (λ i → inverses-are-prop {g = g≡h i}) g.inverses h.inverses i
+     is-prop→pathᴾ (λ i → inverses-are-prop {g = g≡h i}) g.inverses h.inverses i
 
 instance
   H-Level-is-invertible : H-Level (suc n) (is-invertible f)
@@ -479,7 +479,7 @@ opaque
     s i j .to = Hom-set _ _ (x .to) (y .to) (ap to p) (ap to q) i j
     s i j .from = Hom-set _ _ (x .from) (y .from) (ap from p) (ap from q) i j
     s i j .inverses =
-      is-prop→squareP
+      is-prop→squareᴾ
         (λ i j → inverses-are-prop {f = Hom-set _ _ (x .to) (y .to) (ap to p) (ap to q) i j}
                                    {g = Hom-set _ _ (x .from) (y .from) (ap from p) (ap from q) i j})
         (λ i → p i .inverses) (λ i → x .inverses) (λ i → q i .inverses) (λ i → y .inverses) i j
@@ -489,16 +489,16 @@ instance
   H-Level-≅ = hlevel-basic-instance 2 ≅-is-set
 
 private
-  ≅-pathP-internal
+  ≅-pathᴾ-internal
     : (p : a ＝ c) (q : b ＝ d)
     → {f : a ≅ b} {g : c ≅ d}
     → ＜ f ._≅_.to   ／ (λ i → Hom (p i) (q i)) ＼ g ._≅_.to   ＞
     → ＜ f ._≅_.from ／ (λ i → Hom (q i) (p i)) ＼ g ._≅_.from ＞
     → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-  ≅-pathP-internal p q r s i .to = r i
-  ≅-pathP-internal p q r s i .from = s i
-  ≅-pathP-internal p q {f} {g} r s i .inverses =
-    is-prop→pathP (λ j → inverses-are-prop {f = r j} {g = s j})
+  ≅-pathᴾ-internal p q r s i .to = r i
+  ≅-pathᴾ-internal p q r s i .from = s i
+  ≅-pathᴾ-internal p q {f} {g} r s i .inverses =
+    is-prop→pathᴾ (λ j → inverses-are-prop {f = r j} {g = s j})
       (f .inverses) (g .inverses) i
 
 opaque
@@ -521,20 +521,20 @@ opaque
     → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
   inverse-unique p = inverse-unique-internal _ _ p _ _
 
-≅-pathP
+≅-pathᴾ
   : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
   → ＜ f ._≅_.to ／ (λ i → Hom (p i) (q i)) ＼ g ._≅_.to ＞
   → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-≅-pathP p q {f} {g} r = ≅-pathP-internal p q r (inverse-unique p q {f = f} {g = g} r)
+≅-pathᴾ p q {f} {g} r = ≅-pathᴾ-internal p q r (inverse-unique p q {f = f} {g = g} r)
 
-≅-pathP-from
+≅-pathᴾ-from
   : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
   → ＜ f ._≅_.from ／ (λ i → Hom (q i) (p i)) ＼ g ._≅_.from ＞
   → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-≅-pathP-from p q {f = f} {g = g} r = ≅-pathP-internal p q (inverse-unique q p {f = f ᵢ⁻¹} {g = g ᵢ⁻¹} r) r
+≅-pathᴾ-from p q {f = f} {g = g} r = ≅-pathᴾ-internal p q (inverse-unique q p {f = f ᵢ⁻¹} {g = g ᵢ⁻¹} r) r
 
 ≅-path : {f g : a ≅ b} → f ._≅_.to ＝ g ._≅_.to → f ＝ g
-≅-path = ≅-pathP refl refl
+≅-path = ≅-pathᴾ refl refl
 
 ≅-path-from : {f g : a ≅ b} → f ._≅_.from ＝ g ._≅_.from → f ＝ g
-≅-path-from = ≅-pathP-from refl refl
+≅-path-from = ≅-pathᴾ-from refl refl

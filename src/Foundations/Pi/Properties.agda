@@ -38,12 +38,12 @@ private variable
   ri : from is-right-inverse-of to
   ri k = fun-ext λ x →
            ap² (subst P) (sym (e.zig x))
-            (sym (from-pathP (symP-from-goal (ap k (e.η x)))))
+            (sym (from-pathᴾ (symᴾ-from-goal (ap k (e.η x)))))
           ∙ transport⁻-transport (ap P (ap e.to (sym (e.η x)))) (k x)
 
   li : from is-left-inverse-of to
   li k = fun-ext λ x →
-           ap (subst P _) (sym (from-pathP (symP-from-goal (ap k (e.ε x)))))
+           ap (subst P _) (sym (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x)))))
          ∙ transport⁻-transport (sym (ap P (e.ε x))) _
 
 Π≃∀ : Π[ x ꞉ A ] P x
@@ -111,7 +111,7 @@ fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ isom where
       lemi→i m k = coei→i A i (p i) (m ∨ k)
 
 opaque
-  unfolding singletonP-is-contr
+  unfolding singletonᴾ-is-contr
   hetero-homotopy≃homotopy
     : {A : I → Type ℓ} {B : (i : I) → Type ℓ′}
       {f : A i0 → B i0} {g : A i1 → B i1}
@@ -119,8 +119,8 @@ opaque
     ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
   hetero-homotopy≃homotopy {A} {B} {f} {g} = ≅→≃ isom where
     open is-iso
-    c : {x₀ : A i0} → is-contr (SingletonP A x₀)
-    c {x₀} = singletonP-is-contr A x₀
+    c : {x₀ : A i0} → is-contr (Singletonᴾ A x₀)
+    c {x₀} = singletonᴾ-is-contr A x₀
 
     isom : ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
          ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
