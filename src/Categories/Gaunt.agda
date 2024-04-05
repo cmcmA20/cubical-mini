@@ -66,11 +66,11 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     → is-gaunt C
   skeletal+trivial-automorphisms→gaunt skel trivial-aut =
     skeletal+category→gaunt skel $
-      equiv-path→identity-system (isoₜ→≃ path-iso)
+      equiv-path→identity-system (≅ₜ→≃ path-iso)
     where
       open is-gaunt
 
-      path-iso : ∀ {x y} → Iso (x ≅ y) (x ＝ y)
+      path-iso : ∀ {x y} → Isoₜ (x ≅ y) (x ＝ y)
       path-iso .fst f = skel .to-path ∣ f ∣₁
       path-iso .snd .is-iso.inv f = path→iso f
       path-iso .snd .is-iso.rinv _ =

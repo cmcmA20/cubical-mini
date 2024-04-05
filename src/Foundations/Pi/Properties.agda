@@ -27,7 +27,7 @@ private variable
 Π-dom-≃ : (e : B ≃ A)
         → Π[ x ꞉ A ] P x
         ≃ Π[ x ꞉ B ] P (e .fst x)
-Π-dom-≃ {B} {A} {P} e = iso→≃ $ to , iso from ri li where
+Π-dom-≃ {B} {A} {P} e = ≅→≃ $ to , iso from ri li where
   module e = Equiv e
   to : Π[ x ꞉ A ] P x → Π[ x ꞉ B ] P (e.to x)
   to k x = k (e.to x)
@@ -57,7 +57,7 @@ private variable
 ∀-cod-≃ k = Π≃∀ ₑ⁻¹ ∙ₑ Π-cod-≃ k ∙ₑ Π≃∀
 
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
-function-≃ dom rng = iso→≃ the-iso where
+function-≃ dom rng = ≅→≃ the-iso where
   rng-iso = is-equiv→is-iso (rng .snd)
   dom-iso = is-equiv→is-iso (dom .snd)
 
@@ -91,7 +91,7 @@ fun-ext-dep-≃
   → ( {x₀ : A i0} {x₁ : A i1} (p : ＜ x₀ ／ A ＼ x₁ ＞)
     → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   ≃ ＜ f ／ (λ i → Π[ x ꞉ A i ] B i x) ＼ g ＞
-fun-ext-dep-≃ {A} {B} {f} {g} = iso→≃ isom where
+fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ isom where
   open is-iso
   isom : Iso _ _
   isom .fst = fun-ext-dep
@@ -117,7 +117,7 @@ opaque
       {f : A i0 → B i0} {g : A i1 → B i1}
     → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
     ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-  hetero-homotopy≃homotopy {A} {B} {f} {g} = iso→≃ isom where
+  hetero-homotopy≃homotopy {A} {B} {f} {g} = ≅→≃ isom where
     open is-iso
     c : {x₀ : A i0} → is-contr (SingletonP A x₀)
     c {x₀} = singletonP-is-contr A x₀

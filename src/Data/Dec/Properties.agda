@@ -6,7 +6,8 @@ open import Meta.Prelude
 open import Meta.Effect.Idiom
 open import Meta.Search.HLevel
 
-open import Truncation.Propositional as ∥-∥₁
+import Truncation.Propositional as ∥-∥₁
+open ∥-∥₁ using (∥_∥₁)
 
 open import Data.Empty.Properties
 open import Data.Sum.Properties
@@ -24,11 +25,8 @@ private variable
   (∥-∥₁.rec! $ Dec.dmap pure ∥-∥₁.rec!)
   (Dec.rec (yes <$>_) (pure ∘ no ∘ contra pure))
 
-dec-∥-∥₁-equiv = ∥-∥₁∘dec≃dec∘∥-∥₁
-{-# WARNING_ON_USAGE dec-∥-∥₁-equiv "Use `∥-∥₁∘dec≃dec∘∥-∥₁`" #-}
-
-dec-≃ : A ≃ B → Dec A ≃ Dec B
-dec-≃ {A} {B} e = iso→≃ $ to , iso from ri li where
+ae : A ≃ B → Dec A ≃ Dec B
+ae {A} {B} e = ≅→≃ $ to , iso from ri li where
   to   = Dec.dmap (e    $_) (contra (e ⁻¹ $_))
   from = Dec.dmap (e ⁻¹ $_) (contra (e    $_))
 
@@ -41,4 +39,8 @@ dec-≃ {A} {B} e = iso→≃ $ to , iso from ri li where
   li = Dec.elim (ap yes ∘ e.η) (ap no ∘ λ _ → prop!)
 
 ≃→dec : (B ≃ A) → Dec A → Dec B
-≃→dec e = dec-≃ e ⁻¹ $_
+≃→dec e = ae e ⁻¹ $_
+
+
+dec-∥-∥₁-equiv = ∥-∥₁∘dec≃dec∘∥-∥₁
+{-# WARNING_ON_USAGE dec-∥-∥₁-equiv "Use `∥-∥₁∘dec≃dec∘∥-∥₁`" #-}

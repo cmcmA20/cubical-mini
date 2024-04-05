@@ -63,18 +63,11 @@ module @0 _ where opaque
   ua-pathP≃＝ eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathP→＝ eqv) y .fst
   ua-pathP≃＝ eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathP→＝ eqv) y .snd
 
-@0 iso→＝ : Iso A B → A ＝ B
-iso→＝ (f , r) = ua (f , is-iso→is-equiv r)
-
-@0 iso→path : _
-iso→path = iso→＝
-{-# WARNING_ON_USAGE iso→path "Use `iso→＝`" #-}
+@0 ≅→＝ : Iso A B → A ＝ B
+≅→＝ (f , r) = ua (f , is-iso→is-equiv r)
 
 ＝→≃ : A ＝ B → A ≃ B
 ＝→≃ p = line→≃ (λ i → p i)
-
-path→equiv = ＝→≃
-{-# WARNING_ON_USAGE path→equiv "Use `＝→≃`" #-}
 
 ＝→≃-refl : ＝→≃ (refl {x = A}) ＝ idₑ
 ＝→≃-refl = equiv-ext $ fun-ext transport-refl
@@ -163,3 +156,11 @@ ap-≃ e = ap _ , ap-is-equiv _ (e .snd)
 --     → ＜ f .snd ／ (λ i → is-equiv (ua-unglue f i)) ＼ id-is-equiv ＞
 --   ua-unglue-is-equiv f =
 --     is-prop→pathP (λ j → is-equiv-is-prop (ua-unglue f j)) (f .snd) id-is-equiv
+
+
+@0 iso→path : _
+iso→path = ≅→＝
+{-# WARNING_ON_USAGE iso→path "Use `≅→＝`" #-}
+
+path→equiv = ＝→≃
+{-# WARNING_ON_USAGE path→equiv "Use `＝→≃`" #-}

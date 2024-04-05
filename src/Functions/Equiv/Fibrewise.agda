@@ -22,7 +22,7 @@ total f (x , y) = x , f x y
 total-fibres-equiv : {x : A} {v : Q x}
                    → fibre (f x)          v
                    ≃ fibre (total f) (x , v)
-total-fibres-equiv {A} {Q} {f} = iso→≃ the-iso where opaque
+total-fibres-equiv {A} {Q} {f} = ≅→≃ the-iso where opaque
   unfolding J
   open is-iso
 

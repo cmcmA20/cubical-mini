@@ -16,7 +16,7 @@ Magma-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 Magma-structure ℓ .∘-is-hom f g p q .pres-⋆ a b =
   ap f (q .pres-⋆ _ _) ∙ pres-⋆ p _ _
 Magma-structure ℓ .id-hom-unique p _ = pure $ Equiv.injective
-  (isoₜ→≃ $ n-magma-on-iso 2) $ Σ-prop-path! $ ext $ p .pres-⋆
+  (≅ₜ→≃ $ n-magma-on-iso 2) $ Σ-prop-path! $ ext $ p .pres-⋆
 
 Magmas : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Magmas ℓ = Structured-objects (Magma-structure ℓ)

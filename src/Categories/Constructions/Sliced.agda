@@ -29,7 +29,7 @@ open /-Obj
 sliced≃sigma-slice
   : T ⇑ c
   ≃ Σ[ x ꞉ C↓c.Ob {c} ] T (x .domain)
-sliced≃sigma-slice = isoₜ→≃ sliced-iso
+sliced≃sigma-slice = ≅ₜ→≃ sliced-iso
                    ∙ Σ-ap-snd (λ _ → ×-swap)
                    ∙ Σ-assoc
-                   ∙ Σ-ap-fst (isoₜ→≃ /-Obj-iso) ⁻¹
+                   ∙ Σ-ap-fst (≅ₜ→≃ /-Obj-iso) ⁻¹

@@ -6,10 +6,12 @@ open import Prelude
            ; _↪_       to _↪ₜ_
            ; _×_       to _×ₜ_
            ; _∘_       to _∘ₜ_
+           ; Iso       to Isoₜ
            ; id        to idₜ
-           ; iso→path  to isoₜ→path
-           ; iso→equiv to isoₜ→equiv
-           ; iso→≃     to isoₜ→≃
+           ; ≅→≃       to ≅ₜ→≃
+           ; ≅→＝      to ≅ₜ→＝
+           ; iso→path  to isoₜ→path  -- deprecated
+           ; iso→equiv to isoₜ→equiv -- deprecated
            )
   -- FIXME remove after fixing search tactic
   hiding ( Tactic-bishop-finite

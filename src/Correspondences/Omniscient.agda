@@ -32,7 +32,7 @@ open Omniscient₁ public
 
 ≃→omniscient₁ : B ≃ A → Omniscient₁ {ℓ} A → Omniscient₁ {ℓ} B
 ≃→omniscient₁ e omn₁ .omniscient₁-β {P} P? = ≃→dec
-  (∥-∥₁.∥-∥₁-≃ (Σ-ap e λ b → subst (λ φ → P b ≃ P φ) (e.η b ⁻¹) refl)) $
+  (∥-∥₁.ae (Σ-ap e λ b → subst (λ φ → P b ≃ P φ) (e.η b ⁻¹) refl)) $
     omn₁ .omniscient₁-β λ x → P? (e ⁻¹ $ x)
   where module e = Equiv e
 

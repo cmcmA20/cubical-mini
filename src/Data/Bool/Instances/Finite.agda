@@ -12,7 +12,7 @@ open import Data.List.Base
 
 instance
   bool-manifest-bishop-finite : Manifest-bishop-finite Bool
-  bool-manifest-bishop-finite = fin $ iso→≃ go where
+  bool-manifest-bishop-finite = fin $ ≅→≃ go where
     go : Bool ≅ Fin 2
     go .fst false = fzero
     go .fst true = fsuc fzero

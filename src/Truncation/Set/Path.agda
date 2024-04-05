@@ -42,8 +42,8 @@ instance
 module @0 ∥-∥₂-path {ℓ} {A : Type ℓ} {x} {y} =
   Equiv (∥-∥₂-path-equiv {A = A} {x = x} {y = y})
 
-∥-∥₂-≃ : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
-∥-∥₂-≃ e = to , is-iso→is-equiv (iso from ri li)
+ae : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
+ae e = to , is-iso→is-equiv (iso from ri li)
   where
   module e = Equiv e
   to = map e.to

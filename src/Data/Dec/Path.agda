@@ -17,7 +17,7 @@ private variable
   A : Type ℓ
 
 dec-as-sum : Dec A ≃ ((¬ A) ⊎ A)
-dec-as-sum = iso→≃ helper where
+dec-as-sum = ≅→≃ helper where
   helper : Iso _ _
   helper .fst (yes a) = inr  a
   helper .fst (no ¬a) = inl ¬a

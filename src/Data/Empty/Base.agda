@@ -38,7 +38,10 @@ infix 4 _≠_
 _≠_ : ∀ {ℓ} {A : Type ℓ} → A → A → Type ℓ
 x ≠ y = ¬ x ＝ y
 
-contra : ∀{ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′} → (A → B) → (¬ B → ¬ A)
+contra
+  : ∀{ℓ ℓ′} {@0 A : Type ℓ} {@0 B : Type ℓ′}
+  → (  A →   B)
+  → (¬ B → ¬ A)
 contra f ¬b a = ¬b (f a)
 
 opaque

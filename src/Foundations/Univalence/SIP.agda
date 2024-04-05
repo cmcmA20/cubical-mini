@@ -48,7 +48,7 @@ private variable
 SIP {S} {σ} is-univ {X} {Y} =
   X ≃[ σ ] Y                                                          ≃⟨⟩
   Σ[ e ꞉ X .fst ≃  Y .fst ] (σ .is-hom X Y e)                         ≃⟨ Σ-ap (ua , univalence⁻¹) is-univ ⟩
-  Σ[ p ꞉ X .fst ＝ Y .fst ] ＜ X .snd ／ (λ i → S (p i)) ＼ Y .snd ＞ ≃⟨ iso→≃ Σ-pathP-iso ⟩
+  Σ[ p ꞉ X .fst ＝ Y .fst ] ＜ X .snd ／ (λ i → S (p i)) ＼ Y .snd ＞ ≃⟨ ≅→≃ Σ-pathP-iso ⟩
   X ＝ Y                                                              ≃∎
 
 @0 sip : is-univalent σ → {X Y : Σ _ S} → (X ≃[ σ ] Y) → (X ＝ Y)

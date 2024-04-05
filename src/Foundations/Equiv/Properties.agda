@@ -18,7 +18,7 @@ private variable
   x y : A
 
 _ₑ⁻¹ : A ≃ B → B ≃ A
-e ₑ⁻¹ = iso→≃ (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
+e ₑ⁻¹ = ≅→≃ (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
 infix 90 _ₑ⁻¹
 
 open is-iso
@@ -58,8 +58,10 @@ inv-≃ = _ , inv-equiv-is-equiv
 is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
 is-equiv-inv fe = ((_ , fe) ₑ⁻¹) .snd
 
-@0 apₑ : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
-apₑ F e = ＝→≃ (ap F (ua e))
+-- action on equivalences by univalence
+@0 generic-ae : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
+generic-ae F e = ＝→≃ (ap F (ua e))
+
 
 sym-≃ : (x ＝ y) ≃ (y ＝ x)
 sym-≃ .fst = sym
@@ -159,8 +161,16 @@ prop-extₑ A-prop B-prop a→b b→a .snd .equiv-proof y .snd (p′ , path) =
 
 module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
 
-lift-equiv : Lift ℓ′ A ≃ A
-lift-equiv .fst = lower
-lift-equiv .snd .equiv-proof = strict-contr-fibres lift
+lift≃id : Lift ℓ′ A ≃ A
+lift≃id .fst = lower
+lift≃id .snd .equiv-proof = strict-contr-fibres lift
 
 module @0 erased≃id {ℓ} {A} = Equiv (erased≃id {ℓ} {A})
+
+
+lift-equiv = lift≃id
+{-# WARNING_ON_USAGE lift-equiv "Use `lift≃id`" #-}
+
+@0 apₑ : _
+apₑ = generic-ae
+{-# WARNING_ON_USAGE apₑ "Use `generic-ae`" #-}

@@ -48,7 +48,7 @@ product-str S T .is-hom (A , x , y) (B , x′ , y′) f =
                             → is-univalent (product-str σ τ)
 product-str-is-univalent {S} {T} {σ} {τ} θ₁ θ₂ {X , x , y} {Y , x′ , y′} f =
   σ .is-hom (X , x) (Y , x′) f × τ .is-hom (X , y) (Y , y′) f               ≃⟨ ×-ap (θ₁ f) (θ₂ f) ⟩
-  ＜ x ／ (λ i → S (ua f i)) ＼ x′ ＞ × ＜ y ／ (λ i → T (ua f i)) ＼ y′ ＞  ≃⟨ iso→≃ Σ-pathP-iso ⟩
+  ＜ x ／ (λ i → S (ua f i)) ＼ x′ ＞ × ＜ y ／ (λ i → T (ua f i)) ＼ y′ ＞  ≃⟨ ≅→≃ Σ-pathP-iso ⟩
   ＜ x , y ／ (λ i → S (ua f i) × T (ua f i)) ＼ x′ , y′ ＞                  ≃∎
 
 product-action : Equiv-action S → Equiv-action T → Equiv-action (λ X → S X × T X)
@@ -139,7 +139,7 @@ module _
       ＜ s ／ (λ i → S (ua f i)) ＼ t ＞
         ≃˘⟨ Σ-contract-snd (λ x → pathP-is-of-hlevel-same 0 (b , (axioms-prop b))) ⟩
       Σ[ p ꞉ ＜ s ／ (λ i → S (ua f i)) ＼ t ＞ ] ＜ a ／ (λ i → axioms (ua f i) (p i)) ＼ b ＞
-        ≃⟨ iso→≃ Σ-pathP-iso ⟩
+        ≃⟨ ≅→≃ Σ-pathP-iso ⟩
       _
         ≃∎
 

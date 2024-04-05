@@ -42,7 +42,7 @@ unquoteDecl manifest-bishop-finite-iso = declare-record-iso manifest-bishop-fini
 
 instance
   H-Level-is-manifest-bishop-finite : ∀ {n} → H-Level (2 + n) (Manifest-bishop-finite A)
-  H-Level-is-manifest-bishop-finite = hlevel-basic-instance 2 $ ≃→is-of-hlevel 2 (iso→≃ manifest-bishop-finite-iso)
+  H-Level-is-manifest-bishop-finite = hlevel-basic-instance 2 $ ≃→is-of-hlevel 2 (≅→≃ manifest-bishop-finite-iso)
     (Σ-is-of-hlevel _ (ℕ-is-of-hlevel _) (λ _ → hlevel!))
 
 manifest-bishop-finite : ⦃ d : Manifest-bishop-finite A ⦄ → Manifest-bishop-finite A
@@ -66,7 +66,7 @@ manifest-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? =
     lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘′ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))
 
 lift-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Lift ℓ A)
-lift-manifest-bishop-finite afin = fin $ lift-equiv ∙ enumeration afin
+lift-manifest-bishop-finite afin = fin $ lift≃id ∙ enumeration afin
 
 ×-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite B → Manifest-bishop-finite (A × B)
 ×-manifest-bishop-finite afin bfin = fin $ ×-ap (enumeration afin) (enumeration bfin) ∙ fin-product
@@ -78,7 +78,7 @@ finite-pi-fin
   : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
   → (∀ x → Manifest-bishop-finite (P x))
   → Manifest-bishop-finite Π[ P ]
-finite-pi-fin 0 {P} fam = fin $ iso→≃ $ ff , iso gg ri li where
+finite-pi-fin 0 {P} fam = fin $ ≅→≃ $ ff , iso gg ri li where
   ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
   ff _ = fzero
   gg : _

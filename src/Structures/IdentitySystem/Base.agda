@@ -105,7 +105,7 @@ identity-system-gives-path
   → is-identity-system R r
   → ∀ {x y} → R x y ≃ (x ＝ y)
 identity-system-gives-path {R} {r} ids =
-  iso→≃ (ids .to-path , iso from ri li) where
+  ≅→≃ (ids .to-path , iso from ri li) where
     from : ∀ {a b} → a ＝ b → R a b
     from {a} p = transport (λ i → R a (p i)) (r a)
 

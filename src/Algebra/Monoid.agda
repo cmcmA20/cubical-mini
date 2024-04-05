@@ -43,7 +43,7 @@ unquoteDecl is-monoid-iso = declare-record-iso is-monoid-iso (quote is-monoid)
 opaque
   unfolding is-of-hlevel
   is-monoid-is-prop : is-prop (is-monoid _✦_)
-  is-monoid-is-prop M M′ = Equiv.injective (isoₜ→≃ is-monoid-iso) $
+  is-monoid-is-prop M M′ = Equiv.injective (≅ₜ→≃ is-monoid-iso) $
     prop! ,ₚ identity-unique (is-monoid.has-unital-magma M) (is-monoid.has-unital-magma M′) ,ₚ prop!
     where open is-monoid M
 
@@ -112,13 +112,13 @@ monoid-on↪semigroup-on .fst M .Semigroup-on._⋆_ = M .Monoid-on._⋆_
 monoid-on↪semigroup-on .fst M .Semigroup-on.has-semigroup =
   M .Monoid-on.has-monoid .is-monoid.has-semigroup
 monoid-on↪semigroup-on .snd = set-injective→is-embedding hlevel! λ p →
-  Equiv.injective (isoₜ→≃ monoid-on-iso) $ ap Semigroup-on._⋆_ p ,ₚ prop!
+  Equiv.injective (≅ₜ→≃ monoid-on-iso) $ ap Semigroup-on._⋆_ p ,ₚ prop!
 
 monoid-on↪unital-magma-on : Monoid-on A ↪ₜ UMagma-on A
 monoid-on↪unital-magma-on .fst M .UMagma-on._⋆_ = M .Monoid-on._⋆_
 monoid-on↪unital-magma-on .fst M .UMagma-on.has-unital-magma = Monoid-on.has-unital-magma M
 monoid-on↪unital-magma-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
-  Equiv.injective (isoₜ→≃ monoid-on-iso) $ ap UMagma-on._⋆_ p ,ₚ prop!
+  Equiv.injective (≅ₜ→≃ monoid-on-iso) $ ap UMagma-on._⋆_ p ,ₚ prop!
 
 
 record make-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

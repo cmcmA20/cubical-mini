@@ -26,7 +26,7 @@ Subtype : (ℓ : Level) → Type ℓ → Type _
 Subtype ℓ T = Σ[ X ꞉ Type ℓ ] X ↪ T
 
 @0 subtype≃ℙ : Subtype ℓ T ≃ ℙ T
-subtype≃ℙ = subtype-classifier ∙ Π-cod-≃ λ _ → iso→≃ n-Type-iso ⁻¹
+subtype≃ℙ = subtype-classifier ∙ Π-cod-≃ λ _ → ≅→≃ n-Type-iso ⁻¹
 
 @0 subtype-is-set : is-set (Subtype ℓ T)
 subtype-is-set = ≃→is-of-hlevel 2 subtype≃ℙ hlevel!

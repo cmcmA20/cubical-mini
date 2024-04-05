@@ -44,4 +44,4 @@ container→list→container (suc n) f =
 
 list-container-equiv : Listⁱ A ≃ List A
 list-container-equiv =
-  iso→≃ (list→container , iso (container→list′ $²_) (container→list→container $²_) list→container→list)
+  ≅→≃ (list→container , iso (container→list′ $²_) (container→list→container $²_) list→container→list)

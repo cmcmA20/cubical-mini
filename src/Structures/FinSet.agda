@@ -44,13 +44,13 @@ instance
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
 FinSet-is-groupoid = ≃→is-of-hlevel 3 go hlevel! where
   go = FinSet _
-         ≃⟨ iso→≃ fin-set-iso ⟩
+         ≃⟨ ≅→≃ fin-set-iso ⟩
        Σ[ X ꞉ Type _ ] is-bishop-finite X
          ≃⟨ Σ-ap-snd (λ _ → prop-extₑ! < is-discrete→is-set ∘ is-bishop-finite→is-discrete , id > snd) ⟩
        Σ[ X ꞉ Type _ ] is-set X × is-bishop-finite X
          ≃⟨ Σ-assoc ⟩
        Σ[ U ꞉ Σ[ X ꞉ Type _ ] is-set X ] is-bishop-finite (U .fst)
-         ≃˘⟨ Σ-ap-fst (iso→≃ n-Type-iso) ⟩
+         ≃˘⟨ Σ-ap-fst (≅→≃ n-Type-iso) ⟩
        Σ[ X ꞉ Set _ ] is-bishop-finite ⌞ X ⌟ ≃∎
 
 instance
@@ -81,11 +81,11 @@ private
 
   ∥FinSet′∥₂≃ᴱℕ : ∥ FinSet′ ℓ ∥₂ ≃ᴱ ℕ
   ∥FinSet′∥₂≃ᴱℕ = (∥-∥₂.rec! (fst ∘ snd)) , is-isoᴱ→is-equivᴱ
-    ( (λ n → pure $ Lift _ (Fin n) , n , pure lift-equiv)
+    ( (λ n → pure $ Lift _ (Fin n) , n , pure lift≃id)
     , erase (λ _ → refl)
     , erase (∥-∥₂.elim! (λ X → ∥-∥₂-path.from (fin-set′-ext refl))) )
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
 ∥FinSet∥₂≃ᴱℕ
-  = ≃→≃ᴱ (∥-∥₂-≃ (iso→≃ fin-set-iso ∙ Σ-ap-snd λ _ → iso→≃ is-bishop-finite-iso))
+  = ≃→≃ᴱ (∥-∥₂.ae (≅→≃ fin-set-iso ∙ Σ-ap-snd λ _ → ≅→≃ is-bishop-finite-iso))
   ∙ ∥FinSet′∥₂≃ᴱℕ
