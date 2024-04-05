@@ -8,7 +8,7 @@ open import Foundations.Prelude
            ; _$³_ to _$ₜ³_
            ; _$⁴_ to _$ₜ⁴_
            ; _$⁵_ to _$ₜ⁵_
-           ; _∘′_ to _∘ₜ′_
+           ; _∘ˢ_ to _∘ₜˢ_
 
            ; _∙_  to _∙ₚ_
            ; sym  to symₚ
@@ -17,7 +17,8 @@ open import Foundations.Prelude
            ; J       to Jₜ
            ; J-refl  to Jₜ-refl
            ; J-∙     to Jₜ-∙
-           ; J-dep   to Jₜ-dep
+           ; Jᵈ      to Jₜᵈ
+           ; Jᵈ-refl to Jₜᵈ-refl
            ; J²      to Jₜ²
            ; J²-refl to Jₜ²-refl
            ; J>_     to Jₜ>_

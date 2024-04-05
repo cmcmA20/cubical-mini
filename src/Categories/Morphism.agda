@@ -37,7 +37,7 @@ open _↪_ public
 unquoteDecl mono-iso = declare-record-iso mono-iso (quote _↪_)
 
 ↪-is-set : is-set (a ↪ b)
-↪-is-set = iso→is-of-hlevel 2 mono-iso hlevel!
+↪-is-set = ≅→is-of-hlevel 2 mono-iso hlevel!
 
 instance
   H-Level-↪ : H-Level (2 + n) (a ↪ b)
@@ -59,7 +59,7 @@ open _↠_ public
 unquoteDecl epi-iso = declare-record-iso epi-iso (quote _↠_)
 
 ↠-is-set : is-set (a ↠ b)
-↠-is-set = iso→is-of-hlevel 2 epi-iso hlevel!
+↠-is-set = ≅→is-of-hlevel 2 epi-iso hlevel!
 
 instance
   H-Level-↠ : H-Level (2 + n) (a ↠ b)
@@ -193,7 +193,7 @@ has-section→epic {f = f} f-sect g h p =
 
 
 has-section-is-set : is-set (has-section f)
-has-section-is-set = iso→is-of-hlevel 2 has-section-iso hlevel!
+has-section-is-set = ≅→is-of-hlevel 2 has-section-iso hlevel!
 
 instance
   H-Level-has-section : H-Level (2 + n) (has-section f)
@@ -236,7 +236,7 @@ retract-∘ f-ret g-ret .is-retract =
 
 
 has-retract-is-set : is-set (has-retract f)
-has-retract-is-set = iso→is-of-hlevel 2 has-retract-iso hlevel!
+has-retract-is-set = ≅→is-of-hlevel 2 has-retract-iso hlevel!
 
 instance
   H-Level-has-retract : H-Level (2 + n) (has-retract f)

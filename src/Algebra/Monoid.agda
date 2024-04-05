@@ -75,7 +75,7 @@ record Monoid-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 unquoteDecl monoid-on-iso = declare-record-iso monoid-on-iso (quote Monoid-on)
 
 monoid-on-is-set : is-set (Monoid-on A)
-monoid-on-is-set = iso→is-of-hlevel _ monoid-on-iso $ is-set-η λ (_ , x) _ _ _ →
+monoid-on-is-set = ≅→is-of-hlevel _ monoid-on-iso $ is-set-η λ (_ , x) _ _ _ →
   let open is-monoid x in prop!
 
 
@@ -96,7 +96,7 @@ unquoteDecl monoid-hom-iso = declare-record-iso monoid-hom-iso (quote Monoid-hom
 
 monoid-hom-is-prop : ∀ {M : Monoid-on A} {M′ : Monoid-on B} {f}
                    → is-prop (Monoid-hom M M′ f)
-monoid-hom-is-prop {M′} = iso→is-of-hlevel _ monoid-hom-iso hlevel! where
+monoid-hom-is-prop {M′} = ≅→is-of-hlevel _ monoid-hom-iso hlevel! where
   open Monoid-on M′
 
 instance

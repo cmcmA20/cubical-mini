@@ -145,6 +145,3 @@ module _ {f : A → B} (r : is-iso f) where
 
 ≅→≃ : Iso A B → A ≃ B
 ≅→≃ (f , is-iso) = f , is-iso→is-equiv is-iso
-
-iso→equiv = ≅→≃
-{-# WARNING_ON_USAGE iso→equiv "Use `≅→≃`" #-}

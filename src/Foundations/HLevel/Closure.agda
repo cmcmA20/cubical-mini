@@ -61,21 +61,17 @@ opaque
         refl ∙ path                               ＝⟨ ∙-id-l path ⟩
         path                                      ∎
 
-  is-iso→is-of-hlevel : (h : HLevel) (f : A → B) → is-iso f → is-of-hlevel h A → is-of-hlevel h B
-  is-iso→is-of-hlevel h f is-iso = retract→is-of-hlevel h f (is-iso .is-iso.inv) (is-iso .is-iso.rinv)
+  is-≅→is-of-hlevel : (h : HLevel) (f : A → B) → is-iso f → is-of-hlevel h A → is-of-hlevel h B
+  is-≅→is-of-hlevel h f is-iso = retract→is-of-hlevel h f (is-iso .is-iso.inv) (is-iso .is-iso.rinv)
 
   is-equiv→is-of-hlevel : (h : HLevel) (f : A → B) → is-equiv f → is-of-hlevel h A → is-of-hlevel h B
-  is-equiv→is-of-hlevel h f eqv = is-iso→is-of-hlevel h f (is-equiv→is-iso eqv)
+  is-equiv→is-of-hlevel h f eqv = is-≅→is-of-hlevel h f (is-equiv→is-iso eqv)
 
   ≃→is-of-hlevel : (h : HLevel) → (B ≃ A) → is-of-hlevel h A → is-of-hlevel h B
-  ≃→is-of-hlevel h f = is-iso→is-of-hlevel h from (iso to η ε) where open Equiv f
+  ≃→is-of-hlevel h f = is-≅→is-of-hlevel h from (iso to η ε) where open Equiv f
 
-  is-of-hlevel-≃ : (h : HLevel) → (B ≃ A) → is-of-hlevel h A → is-of-hlevel h B
-  is-of-hlevel-≃ = ≃→is-of-hlevel
-  {-# WARNING_ON_USAGE is-of-hlevel-≃ "Use `≃→is-of-hlevel`" #-}
-
-  iso→is-of-hlevel : (h : HLevel) → Iso B A → is-of-hlevel h A → is-of-hlevel h B
-  iso→is-of-hlevel h (f , isic) = is-iso→is-of-hlevel h (isic .is-iso.inv) $
+  ≅→is-of-hlevel : (h : HLevel) → Iso B A → is-of-hlevel h A → is-of-hlevel h B
+  ≅→is-of-hlevel h (f , isic) = is-≅→is-of-hlevel h (isic .is-iso.inv) $
     iso f (isic .is-iso.linv) (isic .is-iso.rinv)
 
   Π-is-of-hlevel : {B : A → Type ℓ′} (h : HLevel)
@@ -93,13 +89,6 @@ opaque
   ∀-is-of-hlevel h bhl = retract→is-of-hlevel h
     (λ f {x} → f x) (λ f x → f) (λ _ → refl)
     (Π-is-of-hlevel h bhl)
-
-
-  Π-is-of-hlevel-implicit : {B : A → Type ℓ′} (h : HLevel)
-                            (Bhl : (x : A) → is-of-hlevel h (B x))
-                          → is-of-hlevel h ({x : A} → B x)
-  Π-is-of-hlevel-implicit = ∀-is-of-hlevel
-  {-# WARNING_ON_USAGE Π-is-of-hlevel-implicit "Use `∀-is-of-hlevel`" #-}
 
   Π²-is-of-hlevel
     : {B : A → Type ℓ′} {C : ∀ a → B a → Type ℓ″}
@@ -130,7 +119,7 @@ opaque
   Σ-is-of-hlevel 1 aprop bprop (a , b) (a' , b') i =
     (aprop a a' i) , (is-prop→pathᴾ (λ i → bprop (aprop a a' i)) b b' i)
   Σ-is-of-hlevel {B} (suc (suc n)) h1 h2 x y =
-    is-iso→is-of-hlevel (suc n)
+    is-≅→is-of-hlevel (suc n)
       (is-iso-inv (Σ-path-iso .snd) .is-iso.inv)
       (Σ-path-iso .snd)
       (Σ-is-of-hlevel (suc n) (h1 (fst x) (fst y)) λ x → h2 _ _ _)

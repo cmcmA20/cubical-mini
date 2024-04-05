@@ -104,11 +104,3 @@ discrete ⦃ d ⦄ = d
 lift-is-discrete : is-discrete A → is-discrete (Lift ℓ A)
 lift-is-discrete di .is-discrete-β (lift x) (lift y) =
   Dec.dmap (ap lift) (_∘ ap lower) (is-discrete-β di x y)
-
-
-is-discrete-injection = ↣→is-discrete
-{-# WARNING_ON_USAGE is-discrete-injection "Use `↣→is-discrete`" #-}
-is-discrete-embedding = ↪→is-discrete
-{-# WARNING_ON_USAGE is-discrete-embedding "Use `↪→is-discrete`" #-}
-is-discrete-≃ = ≃→is-discrete
-{-# WARNING_ON_USAGE is-discrete-≃ "Use `≃→is-discrete`" #-}

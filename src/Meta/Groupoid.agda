@@ -3,7 +3,7 @@ module Meta.Groupoid where
 
 open import Foundations.Prelude
   renaming ( _∙_  to _∙ₚ_
-           ; _∘′_ to _∘′ₜ_
+           ; _∘ˢ_ to _∘ₜˢ_
            ; refl to reflₚ
            ; sym  to symₚ
            )
@@ -110,9 +110,9 @@ record Compose (s : Size) (_~_ : Relₛ² s) : 𝒰ω where
   infixr 30 _∙_
   field _∙_ : Concatₛ s _~_
 
-  infixr 9 _∘′_
-  _∘′_ : Concat⁻ₛ s _~_
-  _∘′_ = flipₛ _ _∙_
+  infixr 9 _∘ˢ_
+  _∘ˢ_ : Concat⁻ₛ s _~_
+  _∘ˢ_ = flipₛ _ _∙_
 
 open Compose ⦃ ... ⦄ public
 
@@ -121,7 +121,7 @@ instance
   Compose-path ._∙_  = _∙ₚ_
 
   Compose-Fun : Compose large (λ {ℓ} {ℓ′} (A : 𝒰 ℓ) (B : 𝒰 ℓ′) → A → B)
-  Compose-Fun ._∙_ f g = g ∘′ₜ f
+  Compose-Fun ._∙_ f g = g ∘ₜˢ f
 
   Compose-≃ : Compose large _≃_
   Compose-≃ ._∙_  = _∙ₑ_

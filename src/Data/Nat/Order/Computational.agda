@@ -140,10 +140,3 @@ s≰z {suc _} ()
     go 0       (suc _) p _ = ⊥.rec $ p tt
     go (suc _) 0       _ q = ⊥.rec $ q tt
     go (suc m) (suc n) p q = ap suc $ go m n p q
-
-
-¬sucn≤n = suc≰id
-{-# WARNING_ON_USAGE ¬sucn≤n "Use `suc≰id`" #-}
-
-¬sucn≤0 = s≰z
-{-# WARNING_ON_USAGE ¬sucn≤0 "Use `s≰z`" #-}

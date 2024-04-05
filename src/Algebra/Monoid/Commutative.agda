@@ -29,7 +29,7 @@ unquoteDecl is-comm-monoid-iso = declare-record-iso is-comm-monoid-iso (quote is
 opaque
   unfolding is-of-hlevel
   is-comm-monoid-is-prop : is-prop (is-comm-monoid _✦_)
-  is-comm-monoid-is-prop C = iso→is-of-hlevel 1 is-comm-monoid-iso hlevel! C where
+  is-comm-monoid-is-prop C = ≅→is-of-hlevel 1 is-comm-monoid-iso hlevel! C where
     open is-comm-monoid C
 
 instance

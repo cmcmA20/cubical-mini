@@ -61,10 +61,10 @@ module _ where
   id x = x
   {-# INLINE id #-}
 
-  infixr 9 _∘′_
-  _∘′_ : (B → C) → (A → B) → (A → C)
-  (g ∘′ f) x = g (f x)
-  {-# INLINE _∘′_ #-}
+  infixr 9 _∘ˢ_
+  _∘ˢ_ : (B → C) → (A → B) → (A → C)
+  (g ∘ˢ f) x = g (f x)
+  {-# INLINE _∘ˢ_ #-}
 
 
 -- dependent stuff
@@ -76,15 +76,10 @@ module _ where
     B : A → Type ℓᵇ
     C : (a : A) → B a → Type ℓᶜ
 
-  infixr -1 _$_ _$ᴱ_
+  infixr -1 _$_
   _$_ : (f : (a : A) → B a) (x : A) → B x
   f $ a = f a
   {-# INLINE _$_ #-}
-
-  _$ᴱ_ : (f : (@0 a : A) → B a) (@0 x : A) → B x
-  f $ᴱ a = f a
-  {-# INLINE _$ᴱ_ #-}
-  {-# WARNING_ON_USAGE _$ᴱ_ "Use polymorphic `_$_` from `Meta.Underlying`" #-}
 
   infixl -1 _&_
   _&_ : (x : A) (f : (a : A) → B a) → B x

@@ -25,7 +25,7 @@ open is-iso
 
 infixr 30 _∙ₑ_
 _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
-(f , fe) ∙ₑ (g , ge) = g ∘′ f , e where
+(f , fe) ∙ₑ (g , ge) = g ∘ˢ f , e where
   fi = is-equiv→is-iso fe
   f⁻¹ = fi .inv
 
@@ -39,7 +39,7 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
     left : (f⁻¹ ∘ g⁻¹) is-left-inverse-of (g ∘ f)
     left _ = ap f⁻¹ (gi .linv _) ∙ fi .linv _
 
-  e : is-equiv (g ∘′ f)
+  e : is-equiv (g ∘ˢ f)
   e = is-iso→is-equiv $ iso (f⁻¹ ∘ g⁻¹) right left
 
 is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
@@ -166,11 +166,3 @@ lift≃id .fst = lower
 lift≃id .snd .equiv-proof = strict-contr-fibres lift
 
 module @0 erased≃id {ℓ} {A} = Equiv (erased≃id {ℓ} {A})
-
-
-lift-equiv = lift≃id
-{-# WARNING_ON_USAGE lift-equiv "Use `lift≃id`" #-}
-
-@0 apₑ : _
-apₑ = generic-ae
-{-# WARNING_ON_USAGE apₑ "Use `generic-ae`" #-}

@@ -137,10 +137,3 @@ opaque
       coei→1
         (λ i → ＜ f x₀ ／ B ＼ g (c .snd (x₁ , p) (i ∨ j) .fst) ＞)
         j $ h $ c .snd (x₁ , p) j .snd
-
-
-Π-impl-Π-≃ = Π≃∀
-{-# WARNING_ON_USAGE Π-impl-Π-≃ "Use `Π≃∀`" #-}
-
-Π-impl-cod-≃ = ∀-cod-≃
-{-# WARNING_ON_USAGE Π-impl-cod-≃ "Use `∀-cod-≃`" #-}

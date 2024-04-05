@@ -213,9 +213,3 @@ infixr 4 _,ₚ_
 ×-swap : {B : Type ℓ′} → A × B ≃ B × A
 ×-swap .fst (x , y) = y , x
 ×-swap .snd .equiv-proof = strict-contr-fibres _
-
-
-Σ-pathP-iso = Σ-pathᴾ-iso
-{-# WARNING_ON_USAGE Σ-pathP-iso "Use `Σ-pathᴾ-iso`" #-}
-Σ-prop-pathP = Σ-prop-pathᴾ
-{-# WARNING_ON_USAGE Σ-prop-pathP "Use `Σ-prop-pathᴾ`" #-}

@@ -165,6 +165,3 @@ pathᴾ-is-bishop-finite f _ _ = subst is-bishop-finite (symₚ $ pathᴾ＝path
 ≃→is-bishop-finite f afin = fin₁ do
   aeq ← enumeration₁ afin
   pure $ f ∙ aeq
-
-is-bishop-finite-≃ = ≃→is-bishop-finite
-{-# WARNING_ON_USAGE is-bishop-finite-≃ "Use ``"  #-}

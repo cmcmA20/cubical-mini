@@ -29,7 +29,7 @@ unquoteDecl is-semigroup-iso = declare-record-iso is-semigroup-iso (quote is-sem
 opaque
   unfolding is-of-hlevel
   is-semigroup-is-prop : is-prop (is-semigroup _✦_)
-  is-semigroup-is-prop S = iso→is-of-hlevel 1 is-semigroup-iso hlevel! S where
+  is-semigroup-is-prop S = ≅→is-of-hlevel 1 is-semigroup-iso hlevel! S where
     open is-semigroup S
 
 instance

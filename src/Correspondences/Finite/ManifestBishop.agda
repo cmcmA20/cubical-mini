@@ -60,10 +60,10 @@ manifest-bishop-finite→omniscient₁ {A} fi .omniscient₁-β {P} P? =
     xs = Ṽ.from $ Ã.from
 
     lemma₁ : Σ[ i ꞉ Fin n ] P (lookup xs i) → ∥ Σ[ a ꞉ A ] P a ∥₁
-    lemma₁ = ∣_∣₁ ∘′ bimap (lookup xs) refl
+    lemma₁ = ∣_∣₁ ∘ˢ bimap (lookup xs) refl
 
     lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ ∥ Σ[ a ꞉ A ] P a ∥₁
-    lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘′ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))
+    lemma₂ ¬p = ∥-∥₁.rec! $ ¬p ∘ˢ bimap Ã.to (subst P (sym (happly (Ṽ.ε _) _ ∙ Ã.η _)))
 
 lift-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Lift ℓ A)
 lift-manifest-bishop-finite afin = fin $ lift≃id ∙ enumeration afin
@@ -122,6 +122,3 @@ fun-manifest-bishop-finite afin bfin =
 
 ≃→manifest-bishop-finite : (B ≃ A) → Manifest-bishop-finite A → Manifest-bishop-finite B
 ≃→manifest-bishop-finite f afin = fin $ f ∙ enumeration afin
-
-manifest-bishop-finite-≃ = ≃→manifest-bishop-finite
-{-# WARNING_ON_USAGE manifest-bishop-finite-≃ "Use `≃→manifest-bishop-finite`" #-}

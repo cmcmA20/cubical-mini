@@ -38,14 +38,14 @@ decide ⦃ d ⦄ = d
 
 ×-decision : Dec A → Dec B → Dec (A × B)
 ×-decision da db .does = da .does and db .does
-×-decision (no ¬a) db .proof = ofⁿ $ ¬a ∘′ fst
-×-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘′ snd
+×-decision (no ¬a) db .proof = ofⁿ $ ¬a ∘ fst
+×-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ snd
 ×-decision (yes a) (yes b) .proof = ofʸ (a , b)
 
 fun-decision : Dec A → Dec B → Dec (A → B)
 fun-decision da db .does = not (da .does) or db .does
 fun-decision (no ¬a) db .proof = ofʸ $ λ a → ⊥.rec $ ¬a a
-fun-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘′ (_$ a)
+fun-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ (_$ a)
 fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 
 ¬-decision : Dec A → Dec (¬ A)
@@ -56,7 +56,7 @@ fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
 lift-decision : Dec A → Dec (Lift ℓ A)
 lift-decision da .does = da .does
 lift-decision (yes a) .proof = ofʸ (lift a)
-lift-decision (no ¬a) .proof = ofⁿ (¬a ∘′ lower)
+lift-decision (no ¬a) .proof = ofⁿ (¬a ∘ lower)
 
 instance
   universe-decision : Dec (Type ℓ)

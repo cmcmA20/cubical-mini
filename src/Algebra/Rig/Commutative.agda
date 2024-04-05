@@ -28,7 +28,7 @@ unquoteDecl is-comm-rig-iso = declare-record-iso is-comm-rig-iso (quote is-comm-
 opaque
   unfolding is-of-hlevel
   is-comm-rig-is-prop : is-prop (is-comm-rig _✦_ _✧_)
-  is-comm-rig-is-prop R = iso→is-of-hlevel 1 is-comm-rig-iso hlevel! R where
+  is-comm-rig-is-prop R = ≅→is-of-hlevel 1 is-comm-rig-iso hlevel! R where
     open is-comm-rig R
 
 instance

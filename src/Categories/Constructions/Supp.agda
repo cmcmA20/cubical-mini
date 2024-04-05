@@ -45,7 +45,7 @@ open Supported-hom
 unquoteDecl supported-hom-iso = declare-record-iso supported-hom-iso (quote Supported-hom)
 
 supported-hom-is-prop : ∀ {S : Supported X} {S′ : Supported Y} {f} → is-prop (Supported-hom S S′ f)
-supported-hom-is-prop = iso→is-of-hlevel _ supported-hom-iso hlevel!
+supported-hom-is-prop = ≅→is-of-hlevel _ supported-hom-iso hlevel!
 
 instance
   H-Level-supported-hom : ∀ {n} {S : Supported X} {S′ : Supported Y} {f} → H-Level (suc n) (Supported-hom S S′ f)

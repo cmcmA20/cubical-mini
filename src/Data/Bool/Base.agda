@@ -45,16 +45,10 @@ _implies_ : Bool → Bool → Bool
 true implies false = false
 _    implies _     = true
 
-infixr 5 _⊕_
-_⊕_ = _xor_
-{-# WARNING_ON_USAGE _⊕_ "Use `_xor_` instead" #-}
-
 infix 0 if_then_else_
 if_then_else_ : Bool → A → A → A
-if false then _  else fa = fa
-if true  then tr else _  = tr
--- if b then tr else fa = rec tr fa b
--- TODO Use `rec` and noinline? otherwise it looks bad in goals
+if b then tr else fa = rec tr fa b
+{-# NOINLINE if_then_else_ #-}
 
 is-true : Bool → Type
 is-true b = if b then ⊤ else ⊥
@@ -64,6 +58,3 @@ is-trueₚ b = b ＝ true
 
 is-falseₚ : Bool → Type
 is-falseₚ b = b ＝ false
-
-⟦_⟧ᵇ = is-true
-{-# WARNING_ON_USAGE ⟦_⟧ᵇ "Use `is-true`" #-}

@@ -261,19 +261,3 @@ opaque
 
   erased-is-prop : {@0 A : Type ℓ} → @0 is-prop A → is-prop (Erased A)
   erased-is-prop pr (erase x) (erase y) = congᴱ $ erase (pr x y)
-
-
-is-prop→pathP = is-prop→pathᴾ
-{-# WARNING_ON_USAGE is-prop→pathP "Use `is-prop→pathᴾ`" #-}
-pathP-is-of-hlevel-same = pathᴾ-is-of-hlevel-same
-{-# WARNING_ON_USAGE pathP-is-of-hlevel-same "Use `pathᴾ-is-of-hlevel-same`" #-}
-pathP-is-of-hlevel = pathᴾ-is-of-hlevel
-{-# WARNING_ON_USAGE pathP-is-of-hlevel "Use `pathᴾ-is-of-hlevel`" #-}
-is-prop→pathP-is-contr = is-prop→pathᴾ-is-contr
-{-# WARNING_ON_USAGE is-prop→pathP-is-contr "Use `is-prop→pathᴾ-is-contr`" #-}
-is-set→cast-pathP = is-set→cast-pathᴾ
-{-# WARNING_ON_USAGE is-set→cast-pathP "Use `is-set→cast-pathᴾ`" #-}
-is-prop→squareP = is-prop→squareᴾ
-{-# WARNING_ON_USAGE is-prop→squareP "Use `is-prop→squareᴾ`" #-}
-is-set→squareP = is-set→squareᴾ
-{-# WARNING_ON_USAGE is-set→squareP "Use `is-set→squareᴾ`" #-}

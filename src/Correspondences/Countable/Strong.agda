@@ -29,7 +29,7 @@ unquoteDecl countable-iso =
 instance
   H-Level-countable : ∀ {n} → H-Level (2 + n) (Countable A)
   H-Level-countable = hlevel-basic-instance 2 $
-    iso→is-of-hlevel 2 countable-iso hlevel!
+    ≅→is-of-hlevel 2 countable-iso hlevel!
 
 countable : ⦃ c : Countable A ⦄ → Countable A
 countable ⦃ c ⦄ = c
