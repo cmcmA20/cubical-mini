@@ -7,25 +7,28 @@
            <a id="119" class="Symbol">;</a> <a id="121" href="Functions.Embedding.html#680" class="Function Operator">_↪_</a>       <a id="131" class="Symbol">to</a> <a id="134" class="Function Operator">_↪ₜ_</a>
            <a id="150" class="Symbol">;</a> <a id="152" href="Foundations.Sigma.Base.html#621" class="Function Operator">_×_</a>       <a id="162" class="Symbol">to</a> <a id="165" class="Function Operator">_×ₜ_</a>
            <a id="181" class="Symbol">;</a> <a id="183" href="Foundations.Pi.Base.html#1950" class="Function Operator">_∘_</a>       <a id="193" class="Symbol">to</a> <a id="196" class="Function Operator">_∘ₜ_</a>
-           <a id="212" class="Symbol">;</a> <a id="214" href="Foundations.Pi.Base.html#1307" class="Function">id</a>        <a id="224" class="Symbol">to</a> <a id="227" class="Function">idₜ</a>
-           <a id="242" class="Symbol">;</a> <a id="244" href="Foundations.Univalence.Base.html#2330" class="Function">iso→path</a>  <a id="254" class="Symbol">to</a> <a id="257" class="Function">isoₜ→path</a>
-           <a id="278" class="Symbol">;</a> <a id="280" href="Foundations.Isomorphism.html#4349" class="Function">iso→equiv</a> <a id="290" class="Symbol">to</a> <a id="293" class="Function">isoₜ→equiv</a>
-           <a id="315" class="Symbol">)</a>
-  <a id="319" class="Comment">-- FIXME remove after fixing search tactic</a>
-  <a id="364" class="Keyword">hiding</a> <a id="371" class="Symbol">(</a> <a id="373" href="Meta.Search.Finite.Bishop.html#1076" class="Function">Tactic-bishop-finite</a>
-         <a id="403" class="Symbol">;</a> <a id="405" href="Meta.Search.Discrete.html#673" class="Function">Tactic-discrete</a>
-         <a id="430" class="Symbol">;</a> <a id="432" href="Meta.Search.Finite.ManifestBishop.html#1039" class="Function">Tactic-manifest-bishop-finite</a><a id="461" class="Symbol">)</a>
-  <a id="465" class="Keyword">public</a>
+           <a id="212" class="Symbol">;</a> <a id="214" href="Foundations.Isomorphism.html#1227" class="Function">Iso</a>       <a id="224" class="Symbol">to</a> <a id="227" class="Function">Isoₜ</a>
+           <a id="243" class="Symbol">;</a> <a id="245" href="Foundations.Pi.Base.html#1307" class="Function">id</a>        <a id="255" class="Symbol">to</a> <a id="258" class="Function">idₜ</a>
+           <a id="273" class="Symbol">;</a> <a id="275" href="Foundations.Isomorphism.html#4349" class="Function">≅→≃</a>       <a id="285" class="Symbol">to</a> <a id="288" class="Function">≅ₜ→≃</a>
+           <a id="304" class="Symbol">;</a> <a id="306" href="Foundations.Univalence.Base.html#2279" class="Function">≅→＝</a>      <a id="315" class="Symbol">to</a> <a id="318" class="Function">≅ₜ→＝</a>
+           <a id="334" class="Symbol">;</a> <a id="336" href="Foundations.Univalence.Base.html#5509" class="Function">iso→path</a>  <a id="346" class="Symbol">to</a> <a id="349" class="Function">isoₜ→path</a>  <a id="360" class="Comment">-- deprecated</a>
+           <a id="385" class="Symbol">;</a> <a id="387" href="Foundations.Isomorphism.html#4418" class="Function">iso→equiv</a> <a id="397" class="Symbol">to</a> <a id="400" class="Function">isoₜ→equiv</a> <a id="411" class="Comment">-- deprecated</a>
+           <a id="436" class="Symbol">)</a>
+  <a id="440" class="Comment">-- FIXME remove after fixing search tactic</a>
+  <a id="485" class="Keyword">hiding</a> <a id="492" class="Symbol">(</a> <a id="494" href="Meta.Search.Finite.Bishop.html#1076" class="Function">Tactic-bishop-finite</a>
+         <a id="524" class="Symbol">;</a> <a id="526" href="Meta.Search.Discrete.html#673" class="Function">Tactic-discrete</a>
+         <a id="551" class="Symbol">;</a> <a id="553" href="Meta.Search.Finite.ManifestBishop.html#1039" class="Function">Tactic-manifest-bishop-finite</a><a id="582" class="Symbol">)</a>
+  <a id="586" class="Keyword">public</a>
 
-<a id="473" class="Keyword">open</a> <a id="478" class="Keyword">import</a> <a id="485" href="Categories.Base.html" class="Module">Categories.Base</a> <a id="501" class="Keyword">public</a>
-<a id="508" class="Keyword">open</a> <a id="513" class="Keyword">import</a> <a id="520" href="Categories.Solver.html" class="Module">Categories.Solver</a>
-  <a id="540" class="Keyword">hiding</a> <a id="547" class="Symbol">(</a> <a id="549" class="Keyword">module</a> <a id="556" href="Categories.Solver.html#292" class="Module">NbE</a> <a id="560" class="Symbol">;</a> <a id="562" class="Keyword">module</a> <a id="569" href="Categories.Solver.html#1641" class="Module">Reflection</a> <a id="580" class="Symbol">)</a>
-  <a id="584" class="Keyword">public</a>
-<a id="591" class="Keyword">open</a> <a id="596" class="Keyword">import</a> <a id="603" href="Categories.Univalent.html" class="Module">Categories.Univalent</a>
-  <a id="626" class="Keyword">using</a> <a id="632" class="Symbol">(</a> <a id="634" href="Categories.Univalent.html#301" class="Function">is-category</a> <a id="646" class="Symbol">;</a> <a id="648" href="Categories.Univalent.html#429" class="Function">path→iso</a> <a id="657" class="Symbol">;</a> <a id="659" href="Categories.Univalent.html#2087" class="Function">Hom-pathP</a>
-        <a id="677" class="Symbol">;</a> <a id="679" href="Categories.Univalent.html#1356" class="Function">Hom-transport</a> <a id="693" class="Symbol">;</a> <a id="695" href="Categories.Univalent.html#2997" class="Function">Hom-pathP-refl-l</a> <a id="712" class="Symbol">;</a> <a id="714" href="Categories.Univalent.html#3226" class="Function">Hom-pathP-refl-r</a>
-        <a id="739" class="Symbol">;</a> <a id="741" class="Keyword">module</a> <a id="748" href="Categories.Univalent.html#3549" class="Module">Univalent</a> <a id="758" class="Symbol">)</a>
-  <a id="762" class="Keyword">public</a>
+<a id="594" class="Keyword">open</a> <a id="599" class="Keyword">import</a> <a id="606" href="Categories.Base.html" class="Module">Categories.Base</a> <a id="622" class="Keyword">public</a>
+<a id="629" class="Keyword">open</a> <a id="634" class="Keyword">import</a> <a id="641" href="Categories.Solver.html" class="Module">Categories.Solver</a>
+  <a id="661" class="Keyword">hiding</a> <a id="668" class="Symbol">(</a> <a id="670" class="Keyword">module</a> <a id="677" href="Categories.Solver.html#292" class="Module">NbE</a> <a id="681" class="Symbol">;</a> <a id="683" class="Keyword">module</a> <a id="690" href="Categories.Solver.html#1641" class="Module">Reflection</a> <a id="701" class="Symbol">)</a>
+  <a id="705" class="Keyword">public</a>
+<a id="712" class="Keyword">open</a> <a id="717" class="Keyword">import</a> <a id="724" href="Categories.Univalent.html" class="Module">Categories.Univalent</a>
+  <a id="747" class="Keyword">using</a> <a id="753" class="Symbol">(</a> <a id="755" href="Categories.Univalent.html#301" class="Function">is-category</a> <a id="767" class="Symbol">;</a> <a id="769" href="Categories.Univalent.html#429" class="Function">path→iso</a> <a id="778" class="Symbol">;</a> <a id="780" href="Categories.Univalent.html#2087" class="Function">Hom-pathᴾ</a>
+        <a id="798" class="Symbol">;</a> <a id="800" href="Categories.Univalent.html#1356" class="Function">Hom-transport</a> <a id="814" class="Symbol">;</a> <a id="816" href="Categories.Univalent.html#2997" class="Function">Hom-pathᴾ-refl-l</a> <a id="833" class="Symbol">;</a> <a id="835" href="Categories.Univalent.html#3226" class="Function">Hom-pathᴾ-refl-r</a>
+        <a id="860" class="Symbol">;</a> <a id="862" class="Keyword">module</a> <a id="869" href="Categories.Univalent.html#3549" class="Module">Univalent</a> <a id="879" class="Symbol">)</a>
+  <a id="883" class="Keyword">public</a>
 
-<a id="770" class="Keyword">open</a> <a id="775" class="Keyword">import</a> <a id="782" href="Categories.Morphism.Extensionality.html" class="Module">Categories.Morphism.Extensionality</a> <a id="817" class="Keyword">public</a>
+<a id="891" class="Keyword">open</a> <a id="896" class="Keyword">import</a> <a id="903" href="Categories.Morphism.Extensionality.html" class="Module">Categories.Morphism.Extensionality</a> <a id="938" class="Keyword">public</a>
 </pre></body></html>
