@@ -3,38 +3,45 @@ module Correspondences.Exhaustible where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Correspondences.Base public
 open import Correspondences.Decidable
 
 open import Data.Dec as Dec
+open import Data.Empty.Base as ⊥
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
 
-record Exhaustible {ℓ : Level} {ℓᵃ : Level} (A : Type ℓᵃ) : Type (ℓᵃ ⊔ ℓsuc ℓ) where
+record Exhaustible {ℓᵃ : Level} (A : Type ℓᵃ) : Typeω where
   no-eta-equality
   constructor exhaustible-η
-  field exhaustible-β : {P : Pred A ℓ} → Decidable P → Dec Π[ P ]
+  field exhaustible-β : ∀{ℓ} {P : Pred A ℓ} → Decidable P → Decidable Π[ P ]
 
 open Exhaustible public
 
-exhaust : ⦃ x : Exhaustible {ℓ} A ⦄ → Exhaustible A
-exhaust ⦃ x ⦄ = x
+instance
+  lift-exhaustible : ⦃ ex : Exhaustible A ⦄ → Exhaustible (Lift ℓ A)
+  lift-exhaustible ⦃ ex ⦄ .exhaustible-β P? = Dec.dmap (_∘ lower) (contra $ _∘ lift)
+    (ex .exhaustible-β P?)
 
-≃→exhaustible : B ≃ A → Exhaustible {ℓ} A → Exhaustible {ℓ} B
-≃→exhaustible e ex .exhaustible-β P? = ≃→dec (Π-dom-≃ (e ⁻¹))
-  (ex .exhaustible-β λ x → P? (e ⁻¹ $ x))
+  Π-decision
+    : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ}
+    → ⦃ d : Decidable B ⦄ → ⦃ ex : Exhaustible A ⦄
+    → Decidable Π[ B ]
+  Π-decision ⦃ d ⦄ ⦃ ex ⦄ = ex .exhaustible-β d
+  {-# OVERLAPPABLE Π-decision #-}
 
-lift-exhaustible : Exhaustible {ℓ} A → Exhaustible (Lift ℓ A)
-lift-exhaustible ex .exhaustible-β P? = Dec.dmap (_∘ lower) (λ ¬f g → ¬f $ g ∘ lift)
-  (ex .exhaustible-β $ P? ∘ lift)
+  ∀-decision
+    : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ}
+    → ⦃ d : Decidable B ⦄ → ⦃ ex : Exhaustible A ⦄
+    → Decidable ∀[ B ]
+  ∀-decision ⦃ d ⦄ ⦃ ex ⦄ = Dec.ae Π≃∀ $ Π-decision
+  {-# OVERLAPPABLE ∀-decision #-}
 
-Π-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec Π[ B ]
-Π-decision d ex = ex .exhaustible-β d
 
-∀-decision : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ} → Decidable B → Exhaustible A → Dec ∀[ B ]
-∀-decision d ex = Dec.ae Π≃∀ $ Π-decision d ex
+-- Usage
+module _ ⦃ A-exh : Exhaustible A ⦄ where private
+  _ : Exhaustible (Lift ℓ A)
+  _ = autoω

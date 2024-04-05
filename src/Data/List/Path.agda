@@ -3,9 +3,8 @@ module Data.List.Path where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Structures.IdentitySystem.Base
+open import Structures.n-Type
 
 open import Data.Empty
 open import Data.Unit
@@ -73,8 +72,5 @@ opaque
                    (code-is-of-hlevel A-hl)
 
 instance
-  decomp-hlevel-list
-    : ∀ {ℓ} {A : Type ℓ}
-    → goal-decomposition (quote is-of-hlevel) (List A)
-  decomp-hlevel-list = decomp (quote list-is-of-hlevel)
-    [ `level-minus 2 , `search (quote is-of-hlevel) ]
+  H-Level-List : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (List A)
+  H-Level-List .H-Level.has-of-hlevel = list-is-of-hlevel _ hlevel!

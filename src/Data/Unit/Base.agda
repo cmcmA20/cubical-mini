@@ -18,9 +18,8 @@ opaque
 instance
   H-Level-⊤ : H-Level n ⊤
   H-Level-⊤ = hlevel-basic-instance 0 ⊤-is-contr
+  {-# OVERLAPPING H-Level-⊤ #-}
 
-⊤-is-of-hlevel : ∀ n → is-of-hlevel n ⊤
-⊤-is-of-hlevel _ = hlevel _
 
 record ⊤ω : Typeω where
   instance constructor ttω

@@ -4,7 +4,8 @@ module Data.Fin.Computational.Properties where
 open import Meta.Prelude
 
 open import Meta.Effect.Bind
-open import Meta.Search.HLevel
+
+open import Structures.n-Type
 
 open import Data.Empty.Base
 open import Data.Nat.Order.Computational

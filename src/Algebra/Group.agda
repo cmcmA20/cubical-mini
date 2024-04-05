@@ -98,7 +98,7 @@ unquoteDecl group-hom-iso = declare-record-iso group-hom-iso (quote Group-hom)
 
 group-hom-is-prop : ∀ {M : Group-on A} {M′ : Group-on B} {f}
                    → is-prop (Group-hom M M′ f)
-group-hom-is-prop {M′} = ≅→is-of-hlevel _ group-hom-iso hlevel! where
+group-hom-is-prop {M′} = ≅→is-of-hlevel! _ group-hom-iso where
   open Group-on M′
 
 instance
@@ -112,9 +112,8 @@ instance
 group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A
 group-on↪monoid-on .fst G .Monoid-on._⋆_ = G .Group-on._⋆_
 group-on↪monoid-on .fst G .Monoid-on.has-monoid = G .Group-on.has-monoid
-group-on↪monoid-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
-  Equiv.injective (≅ₜ→≃ group-on-iso) $
-    ap Monoid-on._⋆_ p ,ₚ prop!
+group-on↪monoid-on .snd = set-injective→is-embedding! λ {x} {y} p →
+  Equiv.injective (≅ₜ→≃ group-on-iso) $ ap Monoid-on._⋆_ p ,ₚ prop!
 
 
 record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

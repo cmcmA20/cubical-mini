@@ -61,17 +61,17 @@ opaque
         refl ∙ path                               ＝⟨ ∙-id-l path ⟩
         path                                      ∎
 
-  is-≅→is-of-hlevel : (h : HLevel) (f : A → B) → is-iso f → is-of-hlevel h A → is-of-hlevel h B
-  is-≅→is-of-hlevel h f is-iso = retract→is-of-hlevel h f (is-iso .is-iso.inv) (is-iso .is-iso.rinv)
+  is-iso→is-of-hlevel : (h : HLevel) (f : A → B) → is-iso f → is-of-hlevel h A → is-of-hlevel h B
+  is-iso→is-of-hlevel h f is-iso = retract→is-of-hlevel h f (is-iso .is-iso.inv) (is-iso .is-iso.rinv)
 
   is-equiv→is-of-hlevel : (h : HLevel) (f : A → B) → is-equiv f → is-of-hlevel h A → is-of-hlevel h B
-  is-equiv→is-of-hlevel h f eqv = is-≅→is-of-hlevel h f (is-equiv→is-iso eqv)
+  is-equiv→is-of-hlevel h f eqv = is-iso→is-of-hlevel h f (is-equiv→is-iso eqv)
 
   ≃→is-of-hlevel : (h : HLevel) → (B ≃ A) → is-of-hlevel h A → is-of-hlevel h B
-  ≃→is-of-hlevel h f = is-≅→is-of-hlevel h from (iso to η ε) where open Equiv f
+  ≃→is-of-hlevel h e = is-iso→is-of-hlevel h from (iso to η ε) where open Equiv e
 
   ≅→is-of-hlevel : (h : HLevel) → Iso B A → is-of-hlevel h A → is-of-hlevel h B
-  ≅→is-of-hlevel h (f , isic) = is-≅→is-of-hlevel h (isic .is-iso.inv) $
+  ≅→is-of-hlevel h (f , isic) = is-iso→is-of-hlevel h (isic .is-iso.inv) $
     iso f (isic .is-iso.linv) (isic .is-iso.rinv)
 
   Π-is-of-hlevel : {B : A → Type ℓ′} (h : HLevel)
@@ -119,7 +119,7 @@ opaque
   Σ-is-of-hlevel 1 aprop bprop (a , b) (a' , b') i =
     (aprop a a' i) , (is-prop→pathᴾ (λ i → bprop (aprop a a' i)) b b' i)
   Σ-is-of-hlevel {B} (suc (suc n)) h1 h2 x y =
-    is-≅→is-of-hlevel (suc n)
+    is-iso→is-of-hlevel (suc n)
       (is-iso-inv (Σ-path-iso .snd) .is-iso.inv)
       (Σ-path-iso .snd)
       (Σ-is-of-hlevel (suc n) (h1 (fst x) (fst y)) λ x → h2 _ _ _)
@@ -166,6 +166,67 @@ opaque
   @0 ＝-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
   ＝-is-of-hlevel n Ahl Bhl = is-equiv→is-of-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
 
-instance
-  is-equiv-is-of-hlevel : {f : A → B} {n : HLevel} → is-of-hlevel (suc n) (is-equiv f)
-  is-equiv-is-of-hlevel = is-prop→is-of-hlevel-suc (is-equiv-is-prop _)
+
+instance opaque
+  H-Level-Π : ∀ {h} {B : A → Type ℓ′}
+            → ⦃ {a : A} → H-Level h (B a) ⦄
+            → H-Level h (Π[ a ꞉ A ] B a)
+  H-Level-Π .H-Level.has-of-hlevel = Π-is-of-hlevel _ λ _ → hlevel _
+  {-# OVERLAPPABLE H-Level-Π #-}
+
+  H-Level-∀ : ∀ {h} {B : A → Type ℓ′}
+            → ⦃ {a : A} → H-Level h (B a) ⦄
+            → H-Level h (∀[ a ꞉ A ] B a)
+  H-Level-∀ .H-Level.has-of-hlevel = ∀-is-of-hlevel _ λ _ → hlevel _
+  {-# OVERLAPPABLE H-Level-∀ #-}
+
+  H-Level-Σ : ∀ {h} {B : A → Type ℓ′}
+            → ⦃ H-Level h A ⦄
+            → ⦃ {a : A} → H-Level h (B a) ⦄
+            → H-Level h (Σ[ a ꞉ A ] B a)
+  H-Level-Σ .H-Level.has-of-hlevel = Σ-is-of-hlevel _ (hlevel _) λ _ → hlevel _
+  {-# OVERLAPPABLE H-Level-Σ #-}
+
+  -- H-Level-Pathᴾ-same : ∀ {h} {P : I → Type ℓ}
+  --                    → ⦃ H-Level h (P i1) ⦄
+  --                    → ∀ {x y}
+  --                    → H-Level h ＜ x ／ P ＼ y ＞
+  -- H-Level-Pathᴾ-same .H-Level.has-of-hlevel = pathᴾ-is-of-hlevel-same _ (hlevel _)
+  -- {-# INCOHERENT H-Level-Pathᴾ-same #-}
+
+  H-Level-Pathᴾ : ∀ {h} {P : I → Type ℓ}
+                → ⦃ H-Level (suc h) (P i1) ⦄
+                → ∀ {x y}
+                → H-Level h ＜ x ／ P ＼ y ＞
+  H-Level-Pathᴾ .H-Level.has-of-hlevel = pathᴾ-is-of-hlevel _ (hlevel _) _ _
+  {-# OVERLAPPABLE H-Level-Pathᴾ #-}
+
+  H-Level-Lift : ∀ {h} ⦃ hl : H-Level h A ⦄ → H-Level h (Lift ℓ′ A)
+  H-Level-Lift .H-Level.has-of-hlevel = Lift-is-of-hlevel _ (hlevel _)
+
+  H-Level-≃-l : ∀ {h} ⦃ hl : H-Level (suc h) A ⦄ → H-Level (suc h) (A ≃ B)
+  H-Level-≃-l .H-Level.has-of-hlevel = ≃-is-of-hlevel-left-suc _ (hlevel _)
+  {-# INCOHERENT H-Level-≃-l #-}
+
+  H-Level-≃-r : ∀ {h} ⦃ hl : H-Level (suc h) B ⦄ → H-Level (suc h) (A ≃ B)
+  H-Level-≃-r .H-Level.has-of-hlevel = ≃-is-of-hlevel-right-suc _ (hlevel _)
+  {-# OVERLAPPING H-Level-≃-r #-}
+
+  H-Level-≃ : ∀ {h} → ⦃ A-hl : H-Level h A ⦄ → ⦃ B-hl : H-Level h B ⦄ → H-Level h (A ≃ B)
+  H-Level-≃ .H-Level.has-of-hlevel = ≃-is-of-hlevel _ (hlevel _) (hlevel _)
+  {-# INCOHERENT H-Level-≃ #-}
+
+  -- @0 H-Level-univalence
+  --   : ∀ {h} {A B : Type ℓ} → ⦃ A-hl : H-Level h A ⦄ → ⦃ B-hl : H-Level h B ⦄ → H-Level h (A ＝ B)
+  -- H-Level-univalence .H-Level.has-of-hlevel = ＝-is-of-hlevel _ (hlevel _) (hlevel _)
+  -- {-# INCOHERENT H-Level-univalence #-}
+
+
+
+-- Automation
+
+≃→is-of-hlevel! : (h : HLevel) → (B ≃ A) → ⦃ A-hl : H-Level h A ⦄ → is-of-hlevel h B
+≃→is-of-hlevel! h e = ≃→is-of-hlevel h e (hlevel _)
+
+≅→is-of-hlevel! : (h : HLevel) → Iso B A → ⦃ A-hl : H-Level h A ⦄ → is-of-hlevel h B
+≅→is-of-hlevel! h e = ≅→is-of-hlevel h e (hlevel _)

@@ -3,7 +3,7 @@ module Data.Sum.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Meta.Search.Discrete
+open import Correspondences.Discrete
 
 open import Data.Dec.Base as Dec
 open import Data.Sum.Base
@@ -14,14 +14,12 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
-⊎-is-discrete : is-discrete A → is-discrete B → is-discrete (A ⊎ B)
-⊎-is-discrete A-di B-di = is-discrete-η λ where
-  (inl a₁) (inl a₂) → Dec.dmap (ap inl) (_∘ inl-inj) $ is-discrete-β A-di a₁ a₂
-  (inl _)  (inr _)  → no ⊎-disjoint
-  (inr _)  (inl _)  → no $ ⊎-disjoint ∘ sym
-  (inr b₁) (inr b₂) → Dec.dmap (ap inr) (_∘ inr-inj) (is-discrete-β B-di b₁ b₂)
-
 instance
-  decomp-dis-⊎ : goal-decomposition (quote is-discrete) (A ⊎ B)
-  decomp-dis-⊎ = decomp (quote ⊎-is-discrete)
-    [ `search (quote is-discrete) , `search (quote is-discrete) ]
+  ⊎-is-discrete : ⦃ A-di : is-discrete A ⦄ → ⦃ B-di : is-discrete B ⦄
+                → is-discrete (A ⊎ B)
+  ⊎-is-discrete {A} {B} = go _ _ where
+    go : (x y : A ⊎ B) → Dec (x ＝ y)
+    go (inl a₁) (inl a₂) = Dec.dmap (ap inl) (_∘ inl-inj) $ a₁ ≟ a₂
+    go (inl _)  (inr _)  = no ⊎-disjoint
+    go (inr _)  (inl _)  = no $ ⊎-disjoint ∘ sym
+    go (inr b₁) (inr b₂) = Dec.dmap (ap inr) (_∘ inr-inj) (b₁ ≟ b₂)

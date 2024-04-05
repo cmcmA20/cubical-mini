@@ -3,13 +3,10 @@ module Data.Nat.Order.Inductive where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Data.Dec.Base
 open import Data.Empty.Base
 open import Data.Sum.Base as ⊎
 open import Data.Sum.Path as ⊎
-open import Data.Unit.Base
 
 open import Data.Nat.Base
 open import Data.Nat.Path
@@ -46,7 +43,7 @@ instance
   ≤-refl : n ≤ n
   ≤-refl {(zero)} = z≤
   ≤-refl {suc n}  = s≤s ≤-refl
--- {-# INCOHERENT ≤-refl #-} TODO uncomment later
+{-# INCOHERENT ≤-refl #-}
 
 ≤-trans : m ≤ n → n ≤ k → m ≤ k
 ≤-trans z≤      z≤      = z≤
@@ -80,7 +77,7 @@ instance
 instance
  ≤-suc-r′ : ⦃ m≤n : m ≤ n ⦄ → m ≤ suc n
  ≤-suc-r′ ⦃ m≤n ⦄ = ≤-suc-r m≤n
--- {-# INCOHERENT ≤-suc-r′ #-} TODO uncomment later
+{-# INCOHERENT ≤-suc-r′ #-}
 
 ≤-ascend : n ≤ suc n
 ≤-ascend = ≤-suc-r ≤-refl
@@ -240,7 +237,7 @@ z<· (suc _) (suc _) _    = s≤s z≤ , s≤s z≤
 
 ≤≃<⊎= : (m ≤ n)
       ≃ (m < n) ⊎ (m ＝ n)
-≤≃<⊎= = prop-extₑ hlevel! (disjoint-⊎-is-prop hlevel! hlevel! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
+≤≃<⊎= = prop-extₑ (hlevel _) (disjoint-⊎-is-prop! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
   where
   ≤→<⊎= : ∀[ _≤_ →̇ _<_ ⊎̇ _＝_ {A = ℕ} ]
   ≤→<⊎= {x = 0}     {x = 0}     z≤      = inr refl

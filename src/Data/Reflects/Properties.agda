@@ -3,8 +3,6 @@ module Data.Reflects.Properties where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Data.Bool.Base
 open import Data.Empty.Base as ⊥
 open import Data.Empty.Properties
@@ -33,8 +31,10 @@ reflects-injₑ
 reflects-injₑ P-prop Q-prop (ofʸ p)  (ofʸ q)  = prop-extₑ P-prop Q-prop (λ _ → q) (λ _ → p)
 reflects-injₑ _      _      (ofⁿ ¬p) (ofⁿ ¬q) = ¬-extₑ ¬p ¬q
 
+-- Automation
+
 reflects-injₑ!
-  : {@(tactic hlevel-tactic-worker) P-prop : is-prop P}
-    {@(tactic hlevel-tactic-worker) Q-prop : is-prop Q}
+  : ⦃ P-prop : H-Level 1 P ⦄
+    ⦃ Q-prop : H-Level 1 Q ⦄
   → Reflects⁰ P a → Reflects⁰ Q a → P ≃ Q
-reflects-injₑ! {P-prop} {Q-prop} = reflects-injₑ P-prop Q-prop
+reflects-injₑ! = reflects-injₑ (hlevel _) (hlevel _)

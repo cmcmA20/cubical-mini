@@ -5,7 +5,6 @@ open import Meta.Prelude
 
 open import Meta.Extensionality
 open import Meta.Membership
-open import Meta.Search.HLevel
 open import Meta.SIP
 
 open import Structures.Fibration
@@ -29,7 +28,7 @@ Subtype ℓ T = Σ[ X ꞉ Type ℓ ] X ↪ T
 subtype≃ℙ = subtype-classifier ∙ Π-cod-≃ λ _ → ≅→≃ n-Type-iso ⁻¹
 
 @0 subtype-is-set : is-set (Subtype ℓ T)
-subtype-is-set = ≃→is-of-hlevel 2 subtype≃ℙ hlevel!
+subtype-is-set = ≃→is-of-hlevel! 2 subtype≃ℙ
 
 instance
   @0 H-Level-subtype : H-Level (2 + n) (Subtype ℓ T)

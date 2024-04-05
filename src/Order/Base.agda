@@ -1,10 +1,15 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --backtracking-instance-search #-}
 module Order.Base where
 
 open import Categories.Prelude
 import Categories.Morphism
 
+open import Meta.Projection
+open import Meta.Reflection.Base
+
 open import Structures.IdentitySystem
+
+open import Data.Bool.Base
 
 private variable n : HLevel
 
@@ -24,10 +29,9 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
 
   opaque
     ob-is-set : is-set Ob
-    ob-is-set = identity-system→is-of-hlevel 1
+    ob-is-set = identity-system→is-of-hlevel! 1
       {r = λ _ → ≤-refl , ≤-refl}
-      (set-identity-system hlevel! (≤-antisym $ₜ²_))
-      hlevel!
+      (set-identity-system! (≤-antisym $ₜ²_))
 
     ≤-refl′ : ∀ {x y} → x ＝ y → x ≤ y
     ≤-refl′ {x} p = subst (x ≤_) p ≤-refl
@@ -46,21 +50,21 @@ instance
   Underlying-Poset .Underlying.ℓ-underlying = _
   Underlying-Poset .Underlying.⌞_⌟⁰ = Poset.Ob
 
-  proj-hlevel-poset-ob : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote Poset.Ob) false
-  proj-hlevel-poset-ob .Struct-proj-desc.struct-name = quote Poset
-  proj-hlevel-poset-ob .Struct-proj-desc.struct-args-length = 2
-  proj-hlevel-poset-ob .Struct-proj-desc.goal-projection = quote Poset.ob-is-set
-  proj-hlevel-poset-ob .Struct-proj-desc.projection-args-length = 3
-  proj-hlevel-poset-ob .Struct-proj-desc.level-selector = inl 2
-  proj-hlevel-poset-ob .Struct-proj-desc.carrier-selector = 2
+  open Struct-proj-desc
 
-  proj-hlevel-poset-≤ : Struct-proj-desc (quote is-of-hlevel) by-hlevel (quote Poset._≤_) false
-  proj-hlevel-poset-≤ .Struct-proj-desc.struct-name = quote Poset
-  proj-hlevel-poset-≤ .Struct-proj-desc.struct-args-length = 2
-  proj-hlevel-poset-≤ .Struct-proj-desc.goal-projection = quote Poset.≤-thin
-  proj-hlevel-poset-≤ .Struct-proj-desc.projection-args-length = 5
-  proj-hlevel-poset-≤ .Struct-proj-desc.level-selector = inl 1
-  proj-hlevel-poset-≤ .Struct-proj-desc.carrier-selector = 2
+  hlevel-proj-poset-ob : Struct-proj-desc true (quote Poset.Ob)
+  hlevel-proj-poset-ob .has-level = quote Poset.ob-is-set
+  hlevel-proj-poset-ob .upwards-closure = quote is-of-hlevel-≤
+  hlevel-proj-poset-ob .get-level _ = pure (lit (nat 2))
+  hlevel-proj-poset-ob .get-argument (_ ∷ _ ∷ x v∷ _) = pure x
+  hlevel-proj-poset-ob .get-argument _ = type-error []
+
+  hlevel-proj-poset-hom : Struct-proj-desc true (quote Poset._≤_)
+  hlevel-proj-poset-hom .has-level = quote Poset.≤-thin
+  hlevel-proj-poset-hom .upwards-closure = quote is-of-hlevel-≤
+  hlevel-proj-poset-hom .get-level _ = pure (lit (nat 1))
+  hlevel-proj-poset-hom .get-argument (_ ∷ _ ∷ x v∷ _) = pure x
+  hlevel-proj-poset-hom .get-argument _ = type-error []
 
 
 record Monotone {o o′ ℓ ℓ′}
@@ -75,19 +79,14 @@ record Monotone {o o′ ℓ ℓ′}
 
 open Monotone public
 
-unquoteDecl monotone-iso = declare-record-iso monotone-iso (quote Monotone)
+instance
+  unquoteDecl H-Level-Monotone =
+    declare-record-hlevel 2 H-Level-Monotone (quote Monotone)
 
 private variable
   P Q R : Poset o ℓ
 
-monotone-is-set : is-set (Monotone P Q)
-monotone-is-set {Q} = ≅→is-of-hlevel 2 monotone-iso
-  (Σ-is-of-hlevel 2 hlevel! λ _ → is-prop→is-set hlevel!)
-
 instance
-  H-Level-Monotone : ∀ {n} → H-Level (2 + n) (Monotone P Q)
-  H-Level-Monotone = hlevel-basic-instance 2 monotone-is-set
-
   Funlike-Monotone : Funlike ur (Monotone P Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
   Funlike-Monotone ._#_ = hom
 

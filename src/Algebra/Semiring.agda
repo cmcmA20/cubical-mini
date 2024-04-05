@@ -53,7 +53,7 @@ unquoteDecl is-semiring-iso = declare-record-iso is-semiring-iso (quote is-semir
 opaque
   unfolding is-of-hlevel
   is-semiring-is-prop : is-prop (is-semiring _✦_ _✧_)
-  is-semiring-is-prop S = ≅→is-of-hlevel 1 is-semiring-iso hlevel! S where
+  is-semiring-is-prop S = ≅→is-of-hlevel! 1 is-semiring-iso S where
     open is-semiring S
 
 instance
@@ -97,7 +97,7 @@ unquoteDecl semiring-hom-iso = declare-record-iso semiring-hom-iso (quote Semiri
 
 semiring-hom-is-prop : ∀ {M : Semiring-on A} {M′ : Semiring-on B} {f}
                      → is-prop (Semiring-hom M M′ f)
-semiring-hom-is-prop {M′} = ≅→is-of-hlevel _ semiring-hom-iso hlevel! where
+semiring-hom-is-prop {M′} = ≅→is-of-hlevel! _ semiring-hom-iso where
   open Semiring-on M′
 
 instance

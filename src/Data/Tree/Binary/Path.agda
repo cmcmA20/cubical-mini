@@ -3,9 +3,8 @@ module Data.Tree.Binary.Path where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Structures.IdentitySystem
+open import Structures.n-Type
 
 open import Data.Empty.Base
 open import Data.Nat.Base
@@ -99,8 +98,5 @@ tree-is-of-hlevel n A-hl = is-of-hlevel-η n λ _ _ →
                  (code-is-of-hlevel A-hl)
 
 instance
-  decomp-hlevel-binary-tree
-    : ∀ {ℓ} {A : Type ℓ}
-    → goal-decomposition (quote is-of-hlevel) (Tree A)
-  decomp-hlevel-binary-tree = decomp (quote tree-is-of-hlevel)
-    [ `level-minus 2 , `search (quote is-of-hlevel) ]
+  H-Level-binary-tree : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (Tree A)
+  H-Level-binary-tree .H-Level.has-of-hlevel = tree-is-of-hlevel _ hlevel!

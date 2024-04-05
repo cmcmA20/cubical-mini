@@ -3,8 +3,8 @@ module Data.Vec.Instances.Finite where
 
 open import Foundations.Base
 
-open import Meta.Search.Finite.Bishop
-open import Meta.Search.Finite.ManifestBishop
+open import Correspondences.Finite.Bishop
+open import Correspondences.Finite.ManifestBishop
 
 open import Data.Nat.Base
 open import Data.Unit.Instances.Finite
@@ -21,19 +21,13 @@ private variable
 -- be selected by instance search, they are used to easily transfer finiteness
 -- between different vector implementations
 
-vec-manifest-bishop-finite : Manifest-bishop-finite A → Manifest-bishop-finite (Vec A n)
-vec-manifest-bishop-finite {A} {0} _ = manifest-bishop-finite!
-vec-manifest-bishop-finite {A} {suc _} A-fin =
-  ×-manifest-bishop-finite A-fin (vec-manifest-bishop-finite A-fin)
-
-vec-is-bishop-finite : is-bishop-finite A → is-bishop-finite (Vec A n)
-vec-is-bishop-finite {A} {0} _ = bishop-finite!
-vec-is-bishop-finite {A} {suc _} A-fin =
-  ×-is-bishop-finite A-fin (vec-is-bishop-finite A-fin)
-
 instance
-  decomp-fin-vec : goal-decomposition (quote Manifest-bishop-finite) (Vec A n)
-  decomp-fin-vec = decomp (quote vec-manifest-bishop-finite) [ `search (quote Manifest-bishop-finite) ]
+  vec-manifest-bishop-finite : ⦃ A-mbf : Manifest-bishop-finite A ⦄ → Manifest-bishop-finite (Vec A n)
+  vec-manifest-bishop-finite {A} {0} ⦃ A-mbf ⦄ = lift-manifest-bishop-finite
+  vec-manifest-bishop-finite {A} {suc _} ⦃ A-mbf ⦄ =
+    ×-manifest-bishop-finite ⦃ A-mbf ⦄ ⦃ vec-manifest-bishop-finite ⦄
 
-  decomp-fin₁-vec : goal-decomposition (quote is-bishop-finite) (Vec A n)
-  decomp-fin₁-vec = decomp (quote vec-is-bishop-finite) [ `search (quote is-bishop-finite) ]
+  vec-is-bishop-finite : ⦃ A-bf : is-bishop-finite A ⦄ → is-bishop-finite (Vec A n)
+  vec-is-bishop-finite {A} {0} ⦃ A-bf ⦄ = lift-is-bishop-finite
+  vec-is-bishop-finite {A} {suc _} ⦃ A-bf ⦄ =
+    ×-is-bishop-finite ⦃ A-bf ⦄ ⦃ vec-is-bishop-finite ⦄

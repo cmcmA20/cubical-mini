@@ -3,13 +3,11 @@ module Meta.Ord where
 
 open import Foundations.Base
 
-open import Meta.Search.Discrete
-open import Meta.Search.HLevel
+open import Correspondences.Discrete
 
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
-open import Data.Sum.Base
 
 open import Truncation.Propositional.Base
 
@@ -63,7 +61,8 @@ private variable
 
 instance
   ord→is-discrete : ⦃ ord : Ord T ⦄ → is-discrete T
-  ord→is-discrete .is-discrete-β x y with x ≤? y
+  ord→is-discrete {x} {y} with x ≤? y
   ... | lt _ x≠y _ = no  x≠y
   ... | eq _ x=y _ = yes x=y
   ... | gt _ x≠y _ = no  x≠y
+  {-# OVERLAPPABLE ord→is-discrete #-}

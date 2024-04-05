@@ -3,8 +3,6 @@ module Data.Nat.Properties where
 
 open import Meta.Prelude
 
-open import Correspondences.Decidable
-
 open import Data.Dec.Base
 open import Data.Empty.Base
 open import Data.Sum.Base
@@ -147,13 +145,3 @@ iter-mul : {ℓ : Level} {A : 𝒰 ℓ}
          → iter (m · n) f x ＝ iter m (iter n f) x
 iter-mul  zero   n f x = refl
 iter-mul (suc m) n f x = iter-add n (m · n) f x ∙ ap (iter n f) (iter-mul m n f x)
-
-
-instance
-  is-zero-decision : Decidable (is-zero n)
-  is-zero-decision {0}     = yes tt
-  is-zero-decision {suc _} = no  refl
-
-  is-positive-decision : Decidable (is-positive n)
-  is-positive-decision {0}     = no  refl
-  is-positive-decision {suc _} = yes tt

@@ -59,12 +59,7 @@ instance
 
   H-Level-¬ : {A : Type ℓ} → H-Level (suc n) (¬ A)
   H-Level-¬ = hlevel-prop-instance ¬-is-prop
-
-⊥-is-of-hlevel : ∀ n → is-of-hlevel (suc n) ⊥
-⊥-is-of-hlevel _ = hlevel _
-
-¬-is-of-hlevel : {A : Type ℓ} → ∀ n → is-of-hlevel (suc n) (¬ A)
-¬-is-of-hlevel _ = hlevel _
+  {-# OVERLAPPING H-Level-¬ #-}
 
 
 data ⊥ω : Typeω where

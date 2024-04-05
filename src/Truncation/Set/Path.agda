@@ -4,7 +4,8 @@ module Truncation.Set.Path where
 open import Meta.Prelude
 
 open import Meta.Effect.Map
-open import Meta.Search.HLevel
+
+open import Structures.n-Type
 
 open import Truncation.Propositional as ∥-∥₁
   using (∥_∥₁; ∣_∣₁)
@@ -17,13 +18,6 @@ private variable
   A : Type ℓ
   B : Type ℓ′
   x y : A
-
-∥-∥₂-is-of-hlevel : ∀ n → is-of-hlevel (2 + n) ∥ A ∥₂
-∥-∥₂-is-of-hlevel n = is-of-hlevel-+-left 2 n ∥-∥₂-is-set
-
-instance
-  decomp-hlevel-∥-∥₂ : goal-decomposition (quote is-of-hlevel) ∥ A ∥₂
-  decomp-hlevel-∥-∥₂ = decomp (quote ∥-∥₂-is-of-hlevel ) [ `level-minus 2 ]
 
 @0 ∥-∥₂-path-equiv
   : {x y : A}

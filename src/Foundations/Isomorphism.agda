@@ -63,10 +63,10 @@ is-iso-comp {f} r s .linv x = ap (r .inv) (s .linv (f      x)) ∙ r .linv x
 _∙ᵢ_ : Iso A B → Iso B C → Iso A C
 𝔯 ∙ᵢ 𝔰 = 𝔰 .fst ∘ 𝔯 .fst , is-iso-comp (𝔯 .snd) (𝔰 .snd)
 
-id-composition→iso : (r : is-iso f) (g : B → A) (p : f ∘ g ＝ id) → is-iso g
-id-composition→iso {f} r g p .inv = f
-id-composition→iso {f} r g p .rinv y = sym (r .linv (g (f y))) ∙∙ ap (λ φ → r .inv (φ (f y))) p ∙∙ r .linv y
-id-composition→iso     r g p .linv y = ap (_$ y) p
+id-composition→is-iso : (r : is-iso f) (g : B → A) (p : f ∘ g ＝ id) → is-iso g
+id-composition→is-iso {f} r g p .inv = f
+id-composition→is-iso {f} r g p .rinv y = sym (r .linv (g (f y))) ∙∙ ap (λ φ → r .inv (φ (f y))) p ∙∙ r .linv y
+id-composition→is-iso     r g p .linv y = ap (_$ y) p
 
 is-equiv→is-iso : is-equiv f → is-iso f
 is-iso.inv  (is-equiv→is-iso eqv) = is-equiv→inverse eqv

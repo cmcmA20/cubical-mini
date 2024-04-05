@@ -3,8 +3,6 @@ module Data.Vec.Inductive.Correspondences.Unary.Any.Computational where
 
 open import Meta.Prelude
 
-open import Meta.Search.Decidable
-
 open import Correspondences.Decidable
 
 open import Data.Dec as Dec
@@ -23,11 +21,11 @@ Any : ∀ {a a′} {n} {A : Type a} (P : Pred A a′) → Vec A n → Type _
 Any {n} P xs = Σ[ idx ꞉ Fin n ] P (lookup xs idx)
 
 any? : Decidable P → Decidable (λ (xs : Vec A n) → Any P xs)
-any? {n = 0}     P? []       = no λ()
-any? {n = suc n} P? (x ∷ xs) =
+any? {n = 0}     P? {([])}       = no λ()
+any? {n = suc n} P? {x ∷ xs} =
   Dec.dmap [ (fzero ,_) , bimap fsuc id ]ᵤ
            go
-           (⊎-decision (P? x) (any? P? xs)) where
+           (Dec-⊎ ⦃ P? ⦄ ⦃ any? (λ {z} → P? {z}) {xs} ⦄) where
              go : _
              go ¬ps (mk-fin 0       , p)  = ¬ps (inl p)
              go ¬ps (mk-fin (suc k) , ps) = ¬ps (inr (_ , ps))

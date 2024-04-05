@@ -1,11 +1,12 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --backtracking-instance-search #-}
 module Structures.FinSet where
 
 open import Meta.Prelude
 
 open import Meta.Effect.Bind
+open import Meta.Projection
 open import Meta.Record
-open import Meta.Search.HLevel
+open import Meta.Reflection.Base
 open import Meta.SIP
 
 open import Structures.IdentitySystem.Interface
@@ -14,7 +15,9 @@ open import Structures.n-Type
 open import Correspondences.Discrete
 open import Correspondences.Finite.Bishop
 
+open import Data.Bool.Base
 open import Data.Fin.Computational.Base
+open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Nat.Path
 
@@ -41,12 +44,25 @@ instance
   Underlying-FinSet {ℓ} .Underlying.ℓ-underlying = ℓ
   Underlying-FinSet .⌞_⌟⁰ = carrier
 
+  bf-proj-fin-ord : Struct-proj-desc false (quote carrier)
+  bf-proj-fin-ord .Struct-proj-desc.has-level = quote has-bishop-finite
+  bf-proj-fin-ord .Struct-proj-desc.get-argument (_ ∷ x v∷ []) = pure x
+  bf-proj-fin-ord .Struct-proj-desc.get-argument _ = type-error []
+
+  bf-projection
+    : ∀ {ℓ} {A : Type ℓ}
+    → {@(tactic struct-proj A nothing) A-bf : is-bishop-finite A}
+    → is-bishop-finite A
+  bf-projection {A-bf} = A-bf
+  {-# INCOHERENT bf-projection #-}
+
+
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
 FinSet-is-groupoid = ≃→is-of-hlevel 3 go hlevel! where
   go = FinSet _
          ≃⟨ ≅→≃ fin-set-iso ⟩
        Σ[ X ꞉ Type _ ] is-bishop-finite X
-         ≃⟨ Σ-ap-snd (λ _ → prop-extₑ! < is-discrete→is-set ∘ is-bishop-finite→is-discrete , id > snd) ⟩
+         ≃⟨ Σ-ap-snd (λ _ → prop-extₑ! < (λ bf → is-discrete→is-set (is-bishop-finite→is-discrete ⦃ bf ⦄)) , id > snd) ⟩
        Σ[ X ꞉ Type _ ] is-set X × is-bishop-finite X
          ≃⟨ Σ-assoc ⟩
        Σ[ U ꞉ Σ[ X ꞉ Type _ ] is-set X ] is-bishop-finite (U .fst)
@@ -56,6 +72,7 @@ FinSet-is-groupoid = ≃→is-of-hlevel 3 go hlevel! where
 instance
   @0 H-Level-FinSet : ∀ {n} → H-Level (3 + n) (FinSet ℓ)
   H-Level-FinSet = hlevel-basic-instance 3 FinSet-is-groupoid
+
 
 -- have to go through sigmas
 private
@@ -89,3 +106,26 @@ private
 ∥FinSet∥₂≃ᴱℕ
   = ≃→≃ᴱ (∥-∥₂.ae (≅→≃ fin-set-iso ∙ Σ-ap-snd λ _ → ≅→≃ is-bishop-finite-iso))
   ∙ ∥FinSet′∥₂≃ᴱℕ
+
+
+-- Usage
+module _ {ℓᵃ ℓᵇ : Level} {A : FinSet ℓᵃ} {B : A →̇ FinSet ℓᵇ} where private
+  open import Correspondences.Exhaustible
+  open import Correspondences.Omniscient
+  _ : is-groupoid (A →̇ A)
+  _ = hlevel!
+
+  _ : is-discrete (A ×̇ A)
+  _ = auto
+
+  _ : is-bishop-finite (A →̇ A →̇ A)
+  _ = auto
+
+  _ : Omniscient₁ Π[ B ]
+  _ = autoω
+
+  _ : Exhaustible (A ×̇ A)
+  _ = autoω
+
+  _ : {x y : ⌞ A ⌟} → is-bishop-finite (x ＝ y)
+  _ = auto

@@ -27,7 +27,7 @@ unquoteDecl is-abelian-group-iso = declare-record-iso is-abelian-group-iso (quot
 opaque
   unfolding is-of-hlevel
   is-abelian-group-is-prop : is-prop (is-abelian-group _✦_)
-  is-abelian-group-is-prop C = ≅→is-of-hlevel 1 is-abelian-group-iso hlevel! C where
+  is-abelian-group-is-prop C = ≅→is-of-hlevel! 1 is-abelian-group-iso C where
     open is-abelian-group C
 
 instance
@@ -50,7 +50,7 @@ abelian-group-on↪group-on : AGroup-on A ↪ₜ Group-on A
 abelian-group-on↪group-on .fst G .Group-on._⋆_ = G .AGroup-on._⋆_
 abelian-group-on↪group-on .fst G .Group-on.has-group =
   G .AGroup-on.has-abelian-group .is-abelian-group.has-group
-abelian-group-on↪group-on .snd = set-injective→is-embedding hlevel! λ p →
+abelian-group-on↪group-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ agroup-on-iso) $ ap Group-on._⋆_ p ,ₚ prop!
 
 

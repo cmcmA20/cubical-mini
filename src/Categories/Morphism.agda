@@ -6,15 +6,19 @@ module Categories.Morphism {o h} (C : Precategory o h) where
 open import Meta.Prelude
   hiding (_∘_; _≅_; _ᵢ⁻¹ ; id; section)
 
+open import Meta.Deriving.HLevel
 open import Meta.Marker
 open import Meta.Record
   hiding (_≅_ ; _ᵢ⁻¹)
-open import Meta.Search.HLevel
+
+open import Structures.n-Type
 
 open import Functions.Embedding
   hiding (_↪_)
 
 open import Categories.Solver
+
+open import Data.Nat.Order.Inductive
 
 open Precategory C public
 private variable
@@ -34,14 +38,9 @@ record _↪_ (a b : Ob) : Type (o ⊔ h) where
 
 open _↪_ public
 
-unquoteDecl mono-iso = declare-record-iso mono-iso (quote _↪_)
-
-↪-is-set : is-set (a ↪ b)
-↪-is-set = ≅→is-of-hlevel 2 mono-iso hlevel!
-
 instance
-  H-Level-↪ : H-Level (2 + n) (a ↪ b)
-  H-Level-↪ = hlevel-basic-instance 2 ↪-is-set
+  unquoteDecl H-Level-mono =
+    declare-record-hlevel 2 H-Level-mono (quote _↪_)
 
 
 -- Epimorphism (epi)
@@ -56,14 +55,9 @@ record _↠_ (a b : Ob) : Type (o ⊔ h) where
 
 open _↠_ public
 
-unquoteDecl epi-iso = declare-record-iso epi-iso (quote _↠_)
-
-↠-is-set : is-set (a ↠ b)
-↠-is-set = ≅→is-of-hlevel 2 epi-iso hlevel!
-
 instance
-  H-Level-↠ : H-Level (2 + n) (a ↠ b)
-  H-Level-↠ = hlevel-basic-instance 2 ↠-is-set
+  unquoteDecl H-Level-epi =
+    declare-record-hlevel 2 H-Level-epi (quote _↠_)
 
 
 -- The identity morphism is monic and epic.
@@ -151,7 +145,9 @@ record has-section (r : Hom a b) : Type h where
 
 open has-section public
 
-unquoteDecl has-section-iso = declare-record-iso has-section-iso (quote has-section)
+instance
+  unquoteDecl H-Level-section =
+    declare-record-hlevel 2 H-Level-section (quote has-section)
 
 id-has-section : has-section (id {a})
 id-has-section .section = id
@@ -192,14 +188,6 @@ has-section→epic {f = f} f-sect g h p =
   h                            ∎
 
 
-has-section-is-set : is-set (has-section f)
-has-section-is-set = ≅→is-of-hlevel 2 has-section-iso hlevel!
-
-instance
-  H-Level-has-section : H-Level (2 + n) (has-section f)
-  H-Level-has-section = hlevel-basic-instance 2 has-section-is-set
-
-
 -- Retracts
 
 
@@ -214,7 +202,9 @@ record has-retract (s : Hom b a) : Type h where
 
 open has-retract public
 
-unquoteDecl has-retract-iso = declare-record-iso has-retract-iso (quote has-retract)
+instance
+  unquoteDecl H-Level-retract =
+    declare-record-hlevel 2 H-Level-retract (quote has-retract)
 
 id-has-retract : has-retract (id {a})
 id-has-retract .retract = id
@@ -233,14 +223,6 @@ retract-∘
 retract-∘ f-ret g-ret .retract = g-ret .retract ∘ f-ret .retract
 retract-∘ f-ret g-ret .is-retract =
   retract-of-∘ (f-ret .is-retract) (g-ret .is-retract)
-
-
-has-retract-is-set : is-set (has-retract f)
-has-retract-is-set = ≅→is-of-hlevel 2 has-retract-iso hlevel!
-
-instance
-  H-Level-has-retract : H-Level (2 + n) (has-retract f)
-  H-Level-has-retract = hlevel-basic-instance 2 has-retract-is-set
 
 
 -- If `f` has a retract, then `f` is monic.
@@ -316,6 +298,14 @@ record Inverses (f : Hom a b) (g : Hom b a) : Type h where
 
 open Inverses
 
+instance
+  unquoteDecl H-Level-inverses =
+    declare-record-hlevel 1 H-Level-inverses (quote Inverses)
+
+inverses-are-prop : {f : Hom a b} {g : Hom b a} → is-prop (Inverses f g)
+inverses-are-prop = hlevel!
+
+
 record is-invertible (f : Hom a b) : Type h where
   field
     inv : Hom b a
@@ -327,26 +317,6 @@ record is-invertible (f : Hom a b) : Type h where
   op .inv = f
   op .inverses .inv-l = inv-r inverses
   op .inverses .inv-r = inv-l inverses
-
-record _≅_ (a b : Ob) : Type h where
-  field
-    to       : Hom a b
-    from     : Hom b a
-    inverses : Inverses to from
-
-  open Inverses inverses public
-
-open _≅_ public
-
-opaque
-  unfolding is-of-hlevel
-  inverses-are-prop : {f : Hom a b} {g : Hom b a} → is-prop (Inverses f g)
-  inverses-are-prop x y i .Inverses.inv-l = Hom-set _ _ _ _ (x .inv-l) (y .inv-l) i
-  inverses-are-prop x y i .Inverses.inv-r = Hom-set _ _ _ _ (x .inv-r) (y .inv-r) i
-
-instance
-  H-Level-inverses : {f : Hom a b} {g : Hom b a} → H-Level (suc n) (Inverses f g)
-  H-Level-inverses = hlevel-prop-instance inverses-are-prop
 
 opaque
   unfolding is-of-hlevel
@@ -375,6 +345,21 @@ id-invertible .is-invertible.inv = id
 id-invertible .is-invertible.inverses .inv-l = id-l id
 id-invertible .is-invertible.inverses .inv-r = id-l id
 
+
+record _≅_ (a b : Ob) : Type h where
+  field
+    to       : Hom a b
+    from     : Hom b a
+    inverses : Inverses to from
+
+  open Inverses inverses public
+
+open _≅_ public
+
+instance
+  unquoteDecl H-Level-≅ =
+    declare-record-hlevel 2 H-Level-≅ (quote _≅_)
+
 id-iso : a ≅ a
 id-iso .to = id
 id-iso .from = id
@@ -382,7 +367,6 @@ id-iso .inverses .inv-l = id-l id
 id-iso .inverses .inv-r = id-l id
 
 Isomorphism = _≅_
-
 
 Inverses-∘ : {f : Hom a b} {f⁻¹ : Hom b a} {g : Hom b c} {g⁻¹ : Hom c b}
            → Inverses f f⁻¹ → Inverses g g⁻¹ → Inverses (g ∘ f) (f⁻¹ ∘ g⁻¹)
@@ -467,26 +451,6 @@ is-invertible-inverse g = make-invertible _ (inv-r g) (inv-l g) where
 iso→invertible : (i : a ≅ b) → is-invertible (i ._≅_.to)
 iso→invertible i .is-invertible.inv = i ._≅_.from
 iso→invertible i .is-invertible.inverses = i ._≅_.inverses
-
-opaque
-  unfolding is-of-hlevel
-  ≅-is-set : is-set (a ≅ b)
-  ≅-is-set x y p q = s where
-    open _≅_
-    open Inverses
-
-    s : p ＝ q
-    s i j .to = Hom-set _ _ (x .to) (y .to) (ap to p) (ap to q) i j
-    s i j .from = Hom-set _ _ (x .from) (y .from) (ap from p) (ap from q) i j
-    s i j .inverses =
-      is-prop→squareᴾ
-        (λ i j → inverses-are-prop {f = Hom-set _ _ (x .to) (y .to) (ap to p) (ap to q) i j}
-                                   {g = Hom-set _ _ (x .from) (y .from) (ap from p) (ap from q) i j})
-        (λ i → p i .inverses) (λ i → x .inverses) (λ i → q i .inverses) (λ i → y .inverses) i j
-
-instance
-  H-Level-≅ : H-Level (2 + n) (a ≅ b)
-  H-Level-≅ = hlevel-basic-instance 2 ≅-is-set
 
 private
   ≅-pathᴾ-internal

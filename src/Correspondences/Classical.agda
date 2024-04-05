@@ -4,7 +4,6 @@ module Correspondences.Classical where
 open import Meta.Prelude
 
 open import Meta.Effect.Bind
-open import Meta.Search.HLevel
 
 open import Correspondences.Base public
 
@@ -30,7 +29,7 @@ opaque
   is-classical-η = refl
 
   is-classical-is-prop : is-prop (is-classical A)
-  is-classical-is-prop = hlevel!
+  is-classical-is-prop = hlevel 1
 
   Classically : Type ℓ → Type ℓ
   Classically = is-classical
@@ -39,7 +38,7 @@ opaque
   unfolding is-classical
   instance
     Map-Classically : Map (eff Classically)
-    Map-Classically .map f ¬¬a ¬b = ¬¬a $ ¬b ∘ f
+    Map-Classically .map = contra ∘ contra
 
     Idiom-Classically : Idiom (eff Classically)
     Idiom-Classically .pure = _&_
@@ -51,9 +50,6 @@ opaque
 
 Essentially-classical : Type ℓ → Type ℓ
 Essentially-classical = ¬¬_ weakly-stable_
-
-is-essentially-classical : Prop ℓ → Prop ℓ
-is-essentially-classical A = el! (Essentially-classical ⌞ A ⌟)
 
 -- Usage
 -- module _ where private

@@ -125,10 +125,22 @@ open is-iso
 Σ-Π-distrib .snd .equiv-proof y .fst = strict-contr-fibres (λ f x → f .fst x , f .snd x) y .fst
 Σ-Π-distrib .snd .equiv-proof y .snd = strict-contr-fibres (λ f x → f .fst x , f .snd x) y .snd
 
+_,ₚ_ = Σ-pathᴾ
+infixr 4 _,ₚ_
+
+Σ-prop-pathᴾ
+  : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
+  → (∀ i x → is-prop (B i x))
+  → {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
+  → ＜ x .fst ／ A ＼ y .fst ＞
+  → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
+Σ-prop-pathᴾ bp {x} {y} p i =
+  p i , is-prop→pathᴾ (λ i → bp i (p i)) (x .snd) (y .snd) i
+
 Σ-prop-path : (∀ x → is-prop (B x))
             → {x y : Σ _ B}
             → (x .fst ＝ y .fst) → x ＝ y
-Σ-prop-path bp {x} {y} p i = p i , is-prop→pathᴾ (λ i → bp (p i)) (x .snd) (y .snd) i
+Σ-prop-path B-pr = Σ-prop-pathᴾ (λ _ → B-pr)
 
 Σ-prop-path-is-equiv
   : (bp : ∀ x → is-prop (B x))
@@ -182,18 +194,6 @@ open is-iso
 Σ-map-snd : ({x : A} → P x → Q x) → Σ _ P → Σ _ Q
 Σ-map-snd f (x , y) = (x , f y)
 
-_,ₚ_ = Σ-pathᴾ
-infixr 4 _,ₚ_
-
-Σ-prop-pathᴾ
-  : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
-  → (∀ i x → is-prop (B i x))
-  → {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
-  → ＜ x .fst ／ A ＼ y .fst ＞
-  → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
-Σ-prop-pathᴾ bp {x} {y} p i =
-  p i , is-prop→pathᴾ (λ i → bp i (p i)) (x .snd) (y .snd) i
-
 Σ-inj-set
   : ∀ {x y z}
   → is-set A
@@ -213,3 +213,28 @@ infixr 4 _,ₚ_
 ×-swap : {B : Type ℓ′} → A × B ≃ B × A
 ×-swap .fst (x , y) = y , x
 ×-swap .snd .equiv-proof = strict-contr-fibres _
+
+
+-- Automation
+
+Σ-prop-pathᴾ!
+  : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
+  → ⦃ ∀ {i x} → H-Level 1 (B i x) ⦄
+  → {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
+  → ＜ x .fst ／ A ＼ y .fst ＞
+  → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
+Σ-prop-pathᴾ! = Σ-prop-pathᴾ (λ _ _ → hlevel _)
+
+Σ-prop-path!
+  : ⦃ B-pr : ∀ {x} → H-Level 1 (B x) ⦄
+  → {x y : Σ A B}
+  → x .fst ＝ y .fst
+  → x ＝ y
+Σ-prop-path! = Σ-prop-pathᴾ!
+
+Σ-inj-set!
+  : ∀ {x y z}
+  → ⦃ A-set : H-Level 2 A ⦄
+  → Path (Σ A B) (x , y) (x , z)
+  → y ＝ z
+Σ-inj-set! = Σ-inj-set (hlevel _)

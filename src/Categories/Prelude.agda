@@ -11,10 +11,6 @@ open import Prelude
            ; ≅→≃       to ≅ₜ→≃
            ; ≅→＝      to ≅ₜ→＝
            )
-  -- FIXME remove after fixing search tactic
-  hiding ( Tactic-bishop-finite
-         ; Tactic-discrete
-         ; Tactic-manifest-bishop-finite)
   public
 
 open import Categories.Base public

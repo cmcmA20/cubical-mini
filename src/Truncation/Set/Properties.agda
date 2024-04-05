@@ -1,10 +1,9 @@
 {-# OPTIONS --safe #-}
 module Truncation.Set.Properties where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Meta.Prelude
 
-open import Meta.Search.HLevel
+open import Structures.n-Type
 
 open import Truncation.Set.Base public
 
@@ -29,22 +28,22 @@ elim³ B-set f = elim² (λ x y → Π-is-of-hlevel 2 (B-set x y))
   λ x y → elim (B-set ∣ x ∣₂ ∣ y ∣₂) (f x y)
 
 rec!
-  : {@(tactic hlevel-tactic-worker) B-set : is-set B}
+  : ⦃ B-set : H-Level 2 B ⦄
   → (A → B)
   → (x : ∥ A ∥₂) → B
-rec! {B-set} = elim (λ _ → B-set)
+rec! = elim hlevel!
 
 elim!
-  : {P : ∥ A ∥₂ → Type ℓ}
-    {@(tactic hlevel-tactic-worker) P-set : ∀{a} → is-set (P a)}
+  : {A : Type ℓᵃ} {P : ∥ A ∥₂ → Type ℓ}
+    ⦃ P-set : ∀{a} → H-Level 2 (P a) ⦄
   → Π[ a ꞉ A ] P ∣ a ∣₂
   → (x : ∥ A ∥₂) → P x
-elim! {P-set} = elim (λ _ → P-set)
+elim! = elim hlevel!
 
 proj!
-  : {@(tactic hlevel-tactic-worker) A-set : is-set A}
+  : ⦃ A-set : H-Level 2 A ⦄
   → ∥ A ∥₂ → A
-proj! {A-set} = rec A-set id
+proj! = rec! id
 
 ∥-∥₂-idempotent : is-set A → is-equiv ∣_∣₂
 ∥-∥₂-idempotent {A} A-set = is-iso→is-equiv $ iso (proj A-set) inc∘proj λ _ → refl where

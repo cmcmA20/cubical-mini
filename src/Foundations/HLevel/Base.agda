@@ -224,6 +224,19 @@ opaque
     coe0→1 (λ j → ＜ px ／ (λ i → P (A-set _ _ p q j i)) ＼ py ＞)
 
 
+opaque
+  unfolding is-of-hlevel
+
+  erased-is-contr : {@0 A : Type ℓ} → @0 is-contr A → is-contr (Erased A)
+  erased-is-contr (centre , paths) = erase centre , λ where
+    (erase x) → congᴱ $ erase (paths x)
+
+  erased-is-prop : {@0 A : Type ℓ} → @0 is-prop A → is-prop (Erased A)
+  erased-is-prop pr (erase x) (erase y) = congᴱ $ erase (pr x y)
+
+
+-- Automation
+
 record H-Level (n : ℕ) (T : Type ℓ) : Type ℓ where
   no-eta-equality
   constructor hlevel-instance
@@ -232,8 +245,14 @@ record H-Level (n : ℕ) (T : Type ℓ) : Type ℓ where
 
 open H-Level
 
-hlevel : (n : HLevel) ⦃ x : H-Level n A ⦄ → is-of-hlevel n A
+hlevel : {ℓ : Level} {A : Type ℓ} (n : HLevel) ⦃ x : H-Level n A ⦄ → is-of-hlevel n A
 hlevel n ⦃ x ⦄ = x .has-of-hlevel
+
+prop!
+  : {A : I → Type ℓ} ⦃ A-pr : H-Level 1 (A i0) ⦄
+  → {x : A i0} {y : A i1}
+  → ＜ x ／ A ＼ y ＞
+prop! {A} = is-prop→pathᴾ (λ i → coe0→i (λ j → is-prop (A j)) i (hlevel _)) _ _
 
 opaque
   unfolding is-of-hlevel
@@ -251,13 +270,3 @@ opaque
 instance
   H-Level-is-of-hlevel : H-Level (suc h) (is-of-hlevel h₁ A)
   H-Level-is-of-hlevel = hlevel-prop-instance (is-of-hlevel-is-prop _)
-
-opaque
-  unfolding is-of-hlevel
-
-  erased-is-contr : {@0 A : Type ℓ} → @0 is-contr A → is-contr (Erased A)
-  erased-is-contr (centre , paths) = erase centre , λ where
-    (erase x) → congᴱ $ erase (paths x)
-
-  erased-is-prop : {@0 A : Type ℓ} → @0 is-prop A → is-prop (Erased A)
-  erased-is-prop pr (erase x) (erase y) = congᴱ $ erase (pr x y)

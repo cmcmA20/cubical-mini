@@ -3,9 +3,8 @@ module Data.Bool.Path where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
-
 open import Structures.IdentitySystem.Base
+open import Structures.n-Type
 
 open import Data.Empty.Base as ⊥
 open import Data.Unit.Base as ⊤
@@ -48,19 +47,17 @@ private variable
   b b₁ b₂ : Bool
   n : HLevel
 
-bool-is-set : is-set Bool
-bool-is-set = identity-system→is-of-hlevel 1 identity-system code-is-prop
-
 instance
   H-Level-Bool : ∀ {n} → H-Level (2 + n) Bool
-  H-Level-Bool = hlevel-basic-instance 2 bool-is-set
+  H-Level-Bool = hlevel-basic-instance 2 $ identity-system→is-of-hlevel 1 identity-system code-is-prop
+  {-# OVERLAPPING H-Level-Bool #-}
 
-bool-is-of-hlevel : ∀ n → is-of-hlevel (2 + n) Bool
-bool-is-of-hlevel _ = hlevel _
-
-instance
-  decomp-hlevel-bool : goal-decomposition (quote is-of-hlevel) Bool
-  decomp-hlevel-bool = decomp (quote bool-is-of-hlevel) [ `level-minus 2 ]
+  -- H-Level-is-true : ∀ {b n} → H-Level (suc n) (is-true b)
+  -- H-Level-is-true = hlevel-prop-instance $
+  --   Bool.elim {P = is-prop ∘ is-true}
+  --     (is-contr→is-prop ⊤-is-contr)
+  --     ⊥-is-prop _
+  -- {-# INCOHERENT H-Level-is-true #-}
 
 is-true-inj : is-true b₁ ≃ is-true b₂ → b₁ ＝ b₂
 is-true-inj {(false)} {(false)} _ = refl

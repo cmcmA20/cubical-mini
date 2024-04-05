@@ -28,7 +28,7 @@ unquoteDecl is-comm-rig-iso = declare-record-iso is-comm-rig-iso (quote is-comm-
 opaque
   unfolding is-of-hlevel
   is-comm-rig-is-prop : is-prop (is-comm-rig _✦_ _✧_)
-  is-comm-rig-is-prop R = ≅→is-of-hlevel 1 is-comm-rig-iso hlevel! R where
+  is-comm-rig-is-prop R = ≅→is-of-hlevel! 1 is-comm-rig-iso R where
     open is-comm-rig R
 
 instance
@@ -53,16 +53,13 @@ comm-rig-on↪rig-on .fst R .Rig-on._+_ = R .CRig-on._+_
 comm-rig-on↪rig-on .fst R .Rig-on._·_ = R .CRig-on._·_
 comm-rig-on↪rig-on .fst R .Rig-on.has-rig =
   R .CRig-on.has-comm-rig .is-comm-rig.has-rig
-comm-rig-on↪rig-on .snd = set-injective→is-embedding hlevel! λ p →
+comm-rig-on↪rig-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ crig-on-iso) $
     ap Rig-on._+_ p ,ₚ ap Rig-on._·_ p ,ₚ prop!
 
-comm-rig-on-is-set : is-set (CRig-on A)
-comm-rig-on-is-set = is-embedding→is-of-hlevel 1 (comm-rig-on↪rig-on .snd) hlevel!
-
 instance
   H-Level-comm-rig-on : H-Level (suc (suc n)) (CRig-on A)
-  H-Level-comm-rig-on = hlevel-basic-instance 2 comm-rig-on-is-set
+  H-Level-comm-rig-on = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 comm-rig-on↪rig-on
 
 
 record make-comm-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

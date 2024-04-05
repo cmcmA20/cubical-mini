@@ -4,7 +4,6 @@ module Correspondences.Powerset.Base where
 open import Meta.Prelude
 
 open import Meta.Membership
-open import Meta.Search.HLevel
 
 open import Structures.n-Type
 
@@ -35,8 +34,8 @@ subst-∈ A = subst (_∈ A)
 @0 ℙ-ext : A ⊆ B → B ⊆ A → A ＝ B
 ℙ-ext A⊆B B⊆A = fun-ext λ _ → n-ua (prop-extₑ! A⊆B B⊆A)
 
-single : {@(tactic hlevel-tactic-worker) X-set : is-set X} → X → ℙ X
-single {X-set} x t = el (x ＝ t) (path-is-of-hlevel 1 X-set x t)
+single : ⦃ X-set : H-Level 2 X ⦄ → X → ℙ X
+single x t = el! (x ＝ t)
 
 infixr 22 _∩_
 _∩_ : ℙ X → ℙ X → ℙ X

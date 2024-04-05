@@ -4,10 +4,24 @@ module Structures.n-Type where
 open import Meta.Prelude
 
 open import Foundations.Cubes
+open import Foundations.HLevel
+  public
 
+open import Meta.Extensionality
+open import Meta.Projection
 open import Meta.Record
+open import Meta.Reflection.Base
+open import Meta.Reflection.Signature
 
-open import Structures.Base
+open import Data.Bool.Base
+open import Data.Maybe.Base
+open import Data.Nat.Order.Inductive
+open import Data.Nat.Order.Inductive
+  public
+  using ()
+  renaming ( z≤ to z≤-whatever
+           ; s≤s′ to s≤s-whatever
+           ; ≤-refl to ≤-refl-whatever ) -- instances
 
 private variable
   ℓ ℓ′ : Level
@@ -33,7 +47,7 @@ instance
   Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
   Underlying-n-Type .⌞_⌟⁰ = carrier
 
-n-path : ⌞ X ⌟⁰ ＝ ⌞ Y ⌟⁰ → X ＝ Y
+n-path : ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y
 n-path f i .carrier = f i
 n-path {X} {Y} f i .carrier-is-tr =
   is-prop→pathᴾ (λ i → is-of-hlevel-is-prop {A = f i} _) (X .carrier-is-tr) (Y .carrier-is-tr) i
@@ -46,14 +60,21 @@ n-path-refl {X} i j .carrier-is-tr = θ j i where
   θ : Square p refl refl refl
   θ = is-prop→squareᴾ (λ _ _ → is-of-hlevel-is-prop _) _ _ _ _
 
-@0 n-ua : ⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰ → X ＝ Y
+@0 n-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y
 n-ua f = n-path (ua f)
+
+instance
+  @0 Extensional-n-Type : ∀ {n} → Extensional (n-Type ℓ n) ℓ
+  Extensional-n-Type .Pathᵉ A B = Pathᵉ Extensional-Type ⌞ A ⌟ ⌞ B ⌟
+  Extensional-n-Type .reflᵉ _ = refl
+  Extensional-n-Type .idsᵉ .to-path = n-ua
+  Extensional-n-Type .idsᵉ .to-path-over = Extensional-Type .idsᵉ .to-path-over
 
 opaque
   unfolding univalence⁻¹
-  @0 n-univalence : (⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰) ≃ (X ＝ Y)
+  @0 n-univalence : (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
   n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where
-    inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟⁰ ≃ ⌞ Y ⌟⁰
+    inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
     inv p = ＝→≃ (ap carrier p)
 
     linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua
@@ -65,7 +86,7 @@ opaque
       path i j .carrier = ua.ε refl i j
       path i j .carrier-is-tr = is-prop→squareᴾ
         (λ i j → is-of-hlevel-is-prop
-          {A = ua.ε {A = ⌞ X ⌟⁰} refl i j } _)
+          {A = ua.ε {A = ⌞ X ⌟} refl i j } _)
         (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (＝→≃ refl) j)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
@@ -79,7 +100,7 @@ opaque
 opaque
   unfolding _∙ₚ_
   @0 n-path-∙ : {A B C : n-Type ℓ n}
-                (p : ⌞ A ⌟⁰ ＝ ⌞ B ⌟⁰) (q : ⌞ B ⌟⁰ ＝ ⌞ C ⌟⁰)
+                (p : ⌞ A ⌟ ＝ ⌞ B ⌟) (q : ⌞ B ⌟ ＝ ⌞ C ⌟)
               → n-path {X = A} {Y = C} (p ∙ q) ＝ n-path {Y = B} p ∙ n-path q
   n-path-∙ p q i j .carrier = (p ∙ q) j
   n-path-∙ {n} {A} {B} {C} p q j i .carrier-is-tr = θ i j where
@@ -89,7 +110,7 @@ opaque
     θ = is-set→squareᴾ (λ _ _ → is-of-hlevel-is-of-hlevel-suc 1) _ _ _ _
 
 @0 n-ua-∙ₑ : {A B C : n-Type ℓ n}
-             (f : ⌞ A ⌟⁰ ≃ ⌞ B ⌟⁰) (g : ⌞ B ⌟⁰ ≃ ⌞ C ⌟⁰)
+             (f : ⌞ A ⌟ ≃ ⌞ B ⌟) (g : ⌞ B ⌟ ≃ ⌞ C ⌟)
            → n-ua {X = A} {Y = C} (f ∙ g) ＝ n-ua {Y = B} f ∙ n-ua g
 n-ua-∙ₑ f g = ap n-path (ua-∙ₑ f g) ∙ n-path-∙ (ua f) (ua g)
 
@@ -100,6 +121,7 @@ opaque
     ((λ _ → carrier-is-tr Y .fst) , is-contr→is-equiv (X .carrier-is-tr) (Y .carrier-is-tr))
   n-Type-is-of-hlevel (suc n) X Y =
     ≃→is-of-hlevel (suc n) (n-univalence ⁻¹) (≃-is-of-hlevel (suc n) (X .carrier-is-tr) (Y .carrier-is-tr))
+
 
 Prop : ∀ ℓ → Type (ℓsuc ℓ)
 Prop ℓ = n-Type ℓ 1
@@ -115,7 +137,7 @@ Grpd ℓ = n-Type ℓ 3
 -- module _ {ℓ : Level} {n : HLevel} where private
 --   open import Foundations.Univalence.SIP
 --   _ : n-Type ℓ n ≃ Type-with {S = is-of-hlevel n} (HomT→Str λ _ _ _ → ⊤)
---   _ = iso→equiv n-Type-iso
+--   _ = ≅→≃ n-Type-iso
 
 
 -- n-truncated correspondence
@@ -153,3 +175,93 @@ Pred₂ = n-Pred 2
 Pred₃ = n-Pred 3
 Pred₄ = n-Pred 4
 Pred₅ = n-Pred 5
+
+
+-- Automation
+
+el! : (A : Type ℓ) ⦃ A-hl : H-Level n A ⦄ → n-Type ℓ n
+el! A = el A (hlevel _)
+
+opaque
+  unfolding is-of-hlevel
+  is-of-hlevel-≤ : ∀ n k → n ≤ k → is-of-hlevel n A → is-of-hlevel k A
+  is-of-hlevel-≤ 0 k 0≤x p = is-of-hlevel-+-left 0 k p
+  is-of-hlevel-≤ 1 1 (s≤s 0≤x) p = p
+  is-of-hlevel-≤ 1 (suc (suc k)) (s≤s 0≤x) p x y =
+    is-of-hlevel-+-left 1 k (is-prop→is-set p x y)
+  is-of-hlevel-≤ (suc (suc n)) (suc (suc k)) (s≤s le) p x y =
+    is-of-hlevel-≤ (suc n) (suc k) le (p x y)
+
+macro
+  hlevel! : Term → TC ⊤
+  hlevel! goal = do
+    ty ← infer-type goal >>= reduce
+    let tel = fst $ pi-view ty
+    unify goal (leave tel $ it hlevel ##ₙ unknown)
+
+open Struct-proj-desc
+
+instance
+  @0 H-Level-n-Type : H-Level (suc n) (n-Type ℓ n)
+  H-Level-n-Type .H-Level.has-of-hlevel = n-Type-is-of-hlevel _
+
+  hlevel-proj-n-type : Struct-proj-desc true (quote carrier)
+  hlevel-proj-n-type .has-level = quote carrier-is-tr
+  hlevel-proj-n-type .upwards-closure = quote is-of-hlevel-≤
+  hlevel-proj-n-type .get-level ty = do
+    def (quote n-Type) (ℓ v∷ hl v∷ []) ← reduce ty
+      where _ → type-error $ [ "Type of thing isn't n-Type, it is " , termErr ty ]
+    normalise hl
+  hlevel-proj-n-type .get-argument (_ ∷ _ ∷ x v∷ []) = pure x
+  hlevel-proj-n-type .get-argument _ = type-error []
+
+  H-Level-projection
+    : {A : Type ℓ} {n : ℕ}
+    → {@(tactic struct-proj A (just n)) A-hl : is-of-hlevel n A}
+    → H-Level n A
+  H-Level-projection {A-hl} = hlevel-instance A-hl
+  {-# INCOHERENT H-Level-projection #-}
+
+
+-- Usage
+private
+  module _ {A : Set ℓ} {B : A →̇ n-Type ℓ′ 3} where
+    _ : is-set (A →̇ A)
+    _ = hlevel!
+
+    _ : is-of-hlevel 2 (A →̇ A →̇ A →̇ A)
+    _ = hlevel!
+
+    _ : is-of-hlevel 3 Σ[ B ]
+    _ = hlevel!
+
+    _ : ∀ a → is-of-hlevel 5 (A ×̇ A ×̇ (ℕ →̇ B a))
+    _ = hlevel!
+
+    _ : ∀ a → is-of-hlevel 3 (A ×̇ A ×̇ (ℕ →̇ B a))
+    _ = hlevel!
+
+    _ : (w z : Term) (x : ℕ) (r : ⌞ A ⌟) → is-of-hlevel 2 ⌞ A ⌟
+    _ = hlevel!
+
+    _ : (a : ℕ) (x y : ⌞ A ⌟) → is-prop (x ＝ y)
+    _ = hlevel!
+
+    -- this one uses `H-Level-n-Type` instance which is compile-time only
+    _ : Erased (∀ n → is-of-hlevel (suc n) (n-Type ℓ n))
+    _ = erase hlevel!
+
+    _ : is-of-hlevel 3 (Erased ⌞ A ⌟)
+    _ = hlevel!
+
+    _ : ∀ n (x : n-Type ℓ n) → is-of-hlevel (2 + n) ⌞ x ⌟
+    _ = hlevel!
+
+-- TODO restore
+-- corr→is-of-hlevelⁿ
+--   : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+--     {ℓ : Level} {h : HLevel} {P : n-Corr _ h As ℓ}
+--   → Π[ mapⁿ arity (is-of-hlevel h) ⌞ P ⌟ ]
+-- corr→is-of-hlevelⁿ {0} = hlevel!
+-- corr→is-of-hlevelⁿ {1} = hlevel!
+-- corr→is-of-hlevelⁿ {suc (suc arity)} _ = corr→is-of-hlevelⁿ {suc arity}

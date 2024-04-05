@@ -3,7 +3,7 @@ module Data.Nat.Order.Base where
 
 open import Meta.Prelude
 
-open import Meta.Search.HLevel
+open import Structures.n-Type
 
 open import Correspondences.Decidable
 open import Correspondences.Wellfounded
@@ -61,12 +61,6 @@ instance
 
   H-Level-< : H-Level (suc k) (m < n)
   H-Level-< = hlevel-prop-instance <-is-prop
-
-  decomp-hlevel-≤ : goal-decomposition (quote is-of-hlevel) (m ≤ n)
-  decomp-hlevel-≤ = decomp (quote ≤-is-prop) []
-
-  decomp-hlevel-< : goal-decomposition (quote is-of-hlevel) (m < n)
-  decomp-hlevel-< = decomp (quote <-is-prop) []
 
 
 -- Properties of order
@@ -200,11 +194,7 @@ opaque
 <≃≱ = prop-extₑ! <→≱ ≱→<
 
 ≤≃<⊎= : (m ≤ n) ≃ ((m < n) ⊎ (m ＝ n))
-≤≃<⊎= = prop-extₑ hlevel! (disjoint-⊎-is-prop hlevel! hlevel! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
-
-module ≤≃≯   {m} {n} = Equiv (≤≃≯   {m} {n})
-module <≃≱   {m} {n} = Equiv (<≃≱   {m} {n})
-module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
+≤≃<⊎= = prop-extₑ hlevel! (disjoint-⊎-is-prop! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
 
 
 -- Decidability
@@ -229,11 +219,11 @@ module ≤≃<⊎= {m} {n} = Equiv (≤≃<⊎= {m} {n})
 
 -- TODO use trichotomy
 ≤-split : Π[ _<_ ⊎̇ _>_ ⊎̇ _＝_ {A = ℕ} ]
-≤-split m n with <-dec m n
+≤-split m n with <-dec {m} {n}
 ... | yes m<n = inl m<n
-... | no  m≮n with <-dec n m
+... | no  m≮n with <-dec {n} {m}
 ... | yes n<m = inr $ inl n<m
-... | no  n≮m = inr $ inr $ ≤-antisym (≤≃≯.from n≮m) (≤≃≯.from m≮n)
+... | no  n≮m = inr $ inr $ ≤-antisym (≤≃≯ ⁻¹ $ n≮m) (≤≃≯ ⁻¹ $ m≮n)
 
 opaque
   unfolding _<_

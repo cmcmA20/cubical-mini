@@ -5,22 +5,16 @@ open import Meta.Prelude
 
 open import Meta.Reflection.Base
 open import Meta.Reflection.Signature
-open import Meta.Reflection.Subst
-open import Meta.Search.HLevel
 
-open import Structures.n-Type
-
-open import Correspondences.Base public
 open import Correspondences.Classical
 
 open import Data.Bool.Base
-open import Data.Bool.Path
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
-open import Data.List.Instances.FromProduct
-open import Data.Nat.Base
 open import Data.Reflects.Path
 open import Data.Reflects.Properties
+
+open import Truncation.Propositional.Base as ∥-∥₁
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level
@@ -33,39 +27,51 @@ dec→essentially-classical = Dec.rec
   (λ a _ → a)
   (λ ¬a f → ⊥.rec $ f ¬a)
 
-decide : ⦃ d : Dec A ⦄ → Dec A
-decide ⦃ d ⦄ = d
-
-×-decision : Dec A → Dec B → Dec (A × B)
-×-decision da db .does = da .does and db .does
-×-decision (no ¬a) db .proof = ofⁿ $ ¬a ∘ fst
-×-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ snd
-×-decision (yes a) (yes b) .proof = ofʸ (a , b)
-
-fun-decision : Dec A → Dec B → Dec (A → B)
-fun-decision da db .does = not (da .does) or db .does
-fun-decision (no ¬a) db .proof = ofʸ $ λ a → ⊥.rec $ ¬a a
-fun-decision (yes a) (no ¬b) .proof = ofⁿ $ ¬b ∘ (_$ a)
-fun-decision (yes a) (yes b) .proof = ofʸ λ _ → b
-
-¬-decision : Dec A → Dec (¬ A)
-¬-decision da .does = not (da .does)
-¬-decision (yes a) .proof = ofⁿ (_$ a)
-¬-decision (no ¬a) .proof = ofʸ ¬a
-
-lift-decision : Dec A → Dec (Lift ℓ A)
-lift-decision da .does = da .does
-lift-decision (yes a) .proof = ofʸ (lift a)
-lift-decision (no ¬a) .proof = ofⁿ (¬a ∘ lower)
-
 instance
-  universe-decision : Dec (Type ℓ)
-  universe-decision = yes (Lift _ ⊤)
+  Dec-⊥ : Dec ⊥
+  Dec-⊥ = no id
+  {-# OVERLAPPING Dec-⊥ #-}
+
+  Dec-⊤ : Dec ⊤
+  Dec-⊤ = yes tt
+  {-# OVERLAPPING Dec-⊤ #-}
+
+  Dec-× : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A × B)
+  Dec-× ⦃ da ⦄    ⦃ db ⦄ .does = da .does and db .does
+  Dec-× ⦃ no ¬a ⦄ ⦃ db ⦄ .proof = ofⁿ $ ¬a ∘ fst
+  Dec-× ⦃ yes a ⦄ ⦃ no ¬b ⦄ .proof = ofⁿ $ ¬b ∘ snd
+  Dec-× ⦃ yes a ⦄ ⦃ yes b ⦄ .proof = ofʸ (a , b)
+
+  Dec-fun : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A → B)
+  Dec-fun ⦃ da ⦄    ⦃ db ⦄ .does = not (da .does) or db .does
+  Dec-fun ⦃ no ¬a ⦄ ⦃ db ⦄ .proof = ofʸ $ λ a → ⊥.rec $ ¬a a
+  Dec-fun ⦃ yes a ⦄ ⦃ no ¬b ⦄ .proof = ofⁿ $ ¬b ∘ (_$ a)
+  Dec-fun ⦃ yes a ⦄ ⦃ yes b ⦄ .proof = ofʸ λ _ → b
+  {-# OVERLAPPABLE Dec-fun #-}
+
+  Dec-¬ : ⦃ da : Dec A ⦄ → Dec (¬ A)
+  Dec-¬ ⦃ da ⦄ .does = not (da .does)
+  Dec-¬ ⦃ yes a ⦄ .proof = ofⁿ (_$ a)
+  Dec-¬ ⦃ no ¬a ⦄ .proof = ofʸ ¬a
+
+  Dec-lift : ⦃ da : Dec A ⦄ → Dec (Lift ℓ A)
+  Dec-lift ⦃ da ⦄ .does = da .does
+  Dec-lift ⦃ yes a ⦄ .proof = ofʸ (lift a)
+  Dec-lift ⦃ no ¬a ⦄ .proof = ofⁿ (¬a ∘ lower)
+
+  Dec-∥-∥₁ : ⦃ da : Dec A ⦄ → Dec ∥ A ∥₁
+  Dec-∥-∥₁ ⦃ da ⦄ .does = da .does
+  Dec-∥-∥₁ ⦃ yes a ⦄ .proof = ofʸ ∣ a ∣₁
+  Dec-∥-∥₁ ⦃ no ¬a ⦄ .proof = ofⁿ $ ∥-∥₁.rec (hlevel 1) ¬a
+  {-# OVERLAPPABLE Dec-∥-∥₁ #-}
+
+  Dec-universe : Dec (Type ℓ)
+  Dec-universe = yes (Lift _ ⊤)
 
 
 -- Decidability of a generalized predicate
 Decidableⁿ : Variadic-binding¹
-Decidableⁿ {arity} P = Π[ mapⁿ arity Dec ⌞ P ⌟ ]
+Decidableⁿ {arity} P = ∀[ mapⁿ arity Dec ⌞ P ⌟ ]
 
 macro
   Decidable : Term → Term → TC ⊤
@@ -137,24 +143,25 @@ reflects→decidable
     {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
     {P : SCorr _ As U} {d : DProc _ As}
   → Reflects P d → Decidable P
-reflects→decidable {0}          {d} p   = d because p
-reflects→decidable {1}          {d} f x = d x because f x
-reflects→decidable {suc (suc _)}    f x = reflects→decidable (f x)
+reflects→decidable {0}          {d} p     = d because p
+reflects→decidable {1}          {d} f {x} = d x because f x
+reflects→decidable {suc (suc _)}    f {x} = reflects→decidable (f x)
 
-opaque
-  unfolding is-of-hlevel
-  decidable₁→reflects!
-    : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
-      {ℓ : Level} {P : Rel _ As ℓ}
-    → Decidable P → ∃![ d ꞉ DProc _ As ] Reflects P d
-  decidable₁→reflects! {0} p =
-      (p .does , p .proof)
-    , λ z → Σ-prop-path! $ reflects-bool-inj (z .snd) (p .proof) ⁻¹
-  decidable₁→reflects! {1} f =
-      (does ∘ f  , proof ∘ f)
-    , λ z → Σ-prop-path! $ fun-ext λ x → reflects-bool-inj (z .snd x) (f x .proof) ⁻¹
-  decidable₁→reflects! {suc (suc arity)} {As} {ℓ} {P} f =
-    let ih = decidable₁→reflects!
-    in ((λ x → ih (f x) .fst .fst) , λ x → ih (f x) .fst .snd)
-      , λ z → Σ-prop-path (λ _ → reflectsⁿ-is-of-hlevel {arity = suc (suc arity)} {h = 0} $ corr→is-of-hlevelⁿ {arity = suc (suc arity)})
-                          (fun-ext λ x → let u = ih (f x) .snd (z .fst x , z .snd x) in ap fst u)
+-- TODO move
+-- opaque
+--   unfolding is-of-hlevel
+--   decidable₁→reflects!
+--     : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+--       {ℓ : Level} {P : Rel _ As ℓ}
+--     → Decidable P → ∃![ d ꞉ DProc _ As ] Reflects P d
+--   decidable₁→reflects! {0} p =
+--       (p .does , p .proof)
+--     , λ z → Σ-prop-path! $ reflects-bool-inj (z .snd) (p .proof) ⁻¹
+--   decidable₁→reflects! {1} f =
+--       (does ∘ f  , proof ∘ f)
+--     , λ z → Σ-prop-path! $ fun-ext λ x → reflects-bool-inj (z .snd x) (f x .proof) ⁻¹
+--   decidable₁→reflects! {suc (suc arity)} {As} {ℓ} {P} f =
+--     let ih = decidable₁→reflects!
+--     in ((λ x → ih (f x) .fst .fst) , λ x → ih (f x) .fst .snd)
+--       , λ z → Σ-prop-path (λ _ → reflectsⁿ-is-of-hlevel {arity = suc (suc arity)} {h = 0} $ corr→is-of-hlevelⁿ {arity = suc (suc arity)})
+--                           (fun-ext λ x → let u = ih (f x) .snd (z .fst x , z .snd x) in ap fst u)

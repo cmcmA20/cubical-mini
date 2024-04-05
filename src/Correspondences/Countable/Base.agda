@@ -3,9 +3,9 @@ module Correspondences.Countable.Base where
 
 open import Meta.Prelude
 
+open import Meta.Deriving.HLevel
 open import Meta.Effect.Bind
 open import Meta.Record
-open import Meta.Search.HLevel
 
 open import Correspondences.Discrete
 
@@ -26,21 +26,16 @@ record is-countable {ℓ} (A : 𝒰 ℓ) : 𝒰 ℓ where
 
 open is-countable public
 
-unquoteDecl is-countable-iso =
-  declare-record-iso is-countable-iso (quote is-countable)
-
 instance
-  H-Level-is-countable : ∀ {n} → H-Level (suc n) (is-countable A)
-  H-Level-is-countable = hlevel-prop-instance $
-    ≅→is-of-hlevel 1 is-countable-iso hlevel!
-
-countable₁ : ⦃ c : is-countable A ⦄ → is-countable A
-countable₁ ⦃ c ⦄ = c
+  unquoteDecl H-Level-is-countable =
+    declare-record-hlevel 1 H-Level-is-countable (quote is-countable)
 
 is-countable→is-discrete : is-countable A → is-discrete A
-is-countable→is-discrete cn = ∥-∥₁.proj! do
-  e ← enumeration₁ cn
-  pure $ ≃→is-discrete e ℕ-is-discrete
+is-countable→is-discrete {A} cn = ∥-∥₁.proj! go where
+  go : ∥ is-discrete A ∥₁
+  go = do
+    e ← enumeration₁ cn
+    pure $ λ {x} {y} → ≃→is-discrete e ℕ-is-discrete
 
 ≃→is-countable : B ≃ A → is-countable A → is-countable B
 ≃→is-countable e c .enumeration₁ = do

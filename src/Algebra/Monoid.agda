@@ -96,8 +96,7 @@ unquoteDecl monoid-hom-iso = declare-record-iso monoid-hom-iso (quote Monoid-hom
 
 monoid-hom-is-prop : ∀ {M : Monoid-on A} {M′ : Monoid-on B} {f}
                    → is-prop (Monoid-hom M M′ f)
-monoid-hom-is-prop {M′} = ≅→is-of-hlevel _ monoid-hom-iso hlevel! where
-  open Monoid-on M′
+monoid-hom-is-prop {M′} = ≅→is-of-hlevel! _ monoid-hom-iso where open Monoid-on M′
 
 instance
   H-Level-monoid-on : H-Level (2 + n) (Monoid-on A)
@@ -111,13 +110,13 @@ monoid-on↪semigroup-on : Monoid-on A ↪ₜ Semigroup-on A
 monoid-on↪semigroup-on .fst M .Semigroup-on._⋆_ = M .Monoid-on._⋆_
 monoid-on↪semigroup-on .fst M .Semigroup-on.has-semigroup =
   M .Monoid-on.has-monoid .is-monoid.has-semigroup
-monoid-on↪semigroup-on .snd = set-injective→is-embedding hlevel! λ p →
+monoid-on↪semigroup-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ monoid-on-iso) $ ap Semigroup-on._⋆_ p ,ₚ prop!
 
 monoid-on↪unital-magma-on : Monoid-on A ↪ₜ UMagma-on A
 monoid-on↪unital-magma-on .fst M .UMagma-on._⋆_ = M .Monoid-on._⋆_
 monoid-on↪unital-magma-on .fst M .UMagma-on.has-unital-magma = Monoid-on.has-unital-magma M
-monoid-on↪unital-magma-on .snd = set-injective→is-embedding hlevel! λ {x} {y} p →
+monoid-on↪unital-magma-on .snd = set-injective→is-embedding! λ {x} {y} p →
   Equiv.injective (≅ₜ→≃ monoid-on-iso) $ ap UMagma-on._⋆_ p ,ₚ prop!
 
 

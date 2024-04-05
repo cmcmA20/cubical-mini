@@ -68,3 +68,14 @@ rec {Q} = elim {C = λ _ → Q}
 
 is-trueᵈ : Dec P → Type
 is-trueᵈ = is-true ∘ ⌊_⌋
+
+caseᵈ_of_ : (A : Type ℓ) ⦃ d : Dec A ⦄ {B : Type ℓ′}
+          → (Dec A → B) → B
+caseᵈ_of_ A ⦃ d ⦄ f = f d
+{-# INLINE caseᵈ_of_ #-}
+
+caseᵈ_return_of_ : (A : Type ℓ) ⦃ d : Dec A ⦄
+                   (B : Dec A → Type ℓ)
+                 → (∀ x → B x) → B d
+caseᵈ_return_of_ A ⦃ d ⦄ B f = f d
+{-# INLINE caseᵈ_return_of_ #-}

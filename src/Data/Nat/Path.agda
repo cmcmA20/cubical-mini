@@ -56,12 +56,8 @@ code-is-prop (suc m) (suc _) = code-is-prop m _
 identity-system : is-identity-system Code code-refl
 identity-system = set-identity-system code-is-prop (decode _ _)
 
-ℕ-is-set : is-set ℕ
-ℕ-is-set = identity-system→is-of-hlevel 1 identity-system code-is-prop
-
-ℕ-is-of-hlevel : ∀ n → is-of-hlevel (2 + n) ℕ
-ℕ-is-of-hlevel n = is-of-hlevel-+-left 2 n ℕ-is-set
-
 instance
   H-Level-ℕ : H-Level (2 + n) ℕ
-  H-Level-ℕ = hlevel-basic-instance 2 ℕ-is-set
+  H-Level-ℕ = hlevel-basic-instance 2 $
+    identity-system→is-of-hlevel 1 identity-system code-is-prop
+  {-# OVERLAPPING H-Level-ℕ #-}

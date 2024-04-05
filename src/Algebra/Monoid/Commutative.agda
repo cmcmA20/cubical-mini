@@ -29,7 +29,7 @@ unquoteDecl is-comm-monoid-iso = declare-record-iso is-comm-monoid-iso (quote is
 opaque
   unfolding is-of-hlevel
   is-comm-monoid-is-prop : is-prop (is-comm-monoid _✦_)
-  is-comm-monoid-is-prop C = ≅→is-of-hlevel 1 is-comm-monoid-iso hlevel! C where
+  is-comm-monoid-is-prop C = ≅→is-of-hlevel! 1 is-comm-monoid-iso C where
     open is-comm-monoid C
 
 instance
@@ -52,7 +52,7 @@ comm-monoid-on↪monoid-on : CMonoid-on A ↪ₜ Monoid-on A
 comm-monoid-on↪monoid-on .fst M .Monoid-on._⋆_ = M .CMonoid-on._⋆_
 comm-monoid-on↪monoid-on .fst M .Monoid-on.has-monoid =
   M .CMonoid-on.has-comm-monoid .is-comm-monoid.has-monoid
-comm-monoid-on↪monoid-on .snd = set-injective→is-embedding hlevel! λ p →
+comm-monoid-on↪monoid-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ cmonoid-on-iso) $
     ap Monoid-on._⋆_ p ,ₚ prop!
 

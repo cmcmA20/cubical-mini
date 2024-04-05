@@ -3,9 +3,9 @@ module Structures.Set.Instances.Bool where
 
 open import Meta.Prelude
 
-open import Meta.Search.Discrete
-
 open import Structures.Set.Base
+
+open import Correspondences.Discrete
 
 open import Data.Bool.Base
 open import Data.Dec.Base
