@@ -160,6 +160,18 @@ opaque
     → x ＝ y
   trivial! ⦃ r ⦄ {p} = r .idsᵉ .to-path p
 
+  trivial-iso!
+    : ∀ {ℓ ℓ′ ℓr ℓs} {A : Type ℓ} {B : Type ℓ′}
+    → ⦃ r : Extensional (A → A) ℓr ⦄
+    → ⦃ s : Extensional (B → B) ℓs ⦄
+    → (f : A → B)
+    → (g : B → A)
+    → {@(tactic trivial-worker r (g ∘ f) id) p : Pathᵉ r (g ∘ f) id}
+    → {@(tactic trivial-worker s (f ∘ g) id) q : Pathᵉ s (f ∘ g) id}
+    → Iso A B
+  trivial-iso! ⦃ r ⦄ ⦃ s ⦄ f g {p} {q} =
+    f , iso g (s .idsᵉ .to-path q $ₚ_) (r .idsᵉ .to-path p $ₚ_)
+
   unext : ∀ {ℓ ℓr} {A : Type ℓ} ⦃ e : Extensional A ℓr ⦄ {x y : A} → x ＝ y → e .Pathᵉ x y
   unext ⦃ e ⦄ {x = x} p = transport (λ i → e .Pathᵉ x (p i)) (e .reflᵉ x)
 
