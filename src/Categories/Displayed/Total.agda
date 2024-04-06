@@ -24,14 +24,12 @@ record Total-hom (X Y : Total) : Type (ℓ ⊔ ℓ′) where
 
 open Total-hom
 
-private unquoteDecl total-hom-iso = declare-record-iso total-hom-iso (quote Total-hom)
-
+instance
+  unquoteDecl H-Level-total-hom =
+    declare-record-hlevel 2 H-Level-total-hom (quote Total-hom)
 
 private variable
   X X′ Y Y′ : Total
-
-total-hom-is-set : (X Y : Total) → is-set (Total-hom X Y)
-total-hom-is-set _ _ = ≅→is-of-hlevel 2 total-hom-iso hlevel!
 
 total-hom-path : {f g : Total-hom X Y}
                → (p : f .hom ＝ g .hom)
@@ -52,7 +50,7 @@ total-hom-pathp _ _ _ s i .preserves = s i
 ∫ : Precategory (o ⊔ o′) (ℓ ⊔ ℓ′)
 ∫ .Precategory.Ob = Total
 ∫ .Precategory.Hom = Total-hom
-∫ .Precategory.Hom-set = total-hom-is-set
+∫ .Precategory.Hom-set = hlevel!
 ∫ .Precategory.id .hom = id
 ∫ .Precategory.id .preserves = idᵈ
 ∫ .Precategory._∘_ f g .hom = f .hom ∘ g .hom

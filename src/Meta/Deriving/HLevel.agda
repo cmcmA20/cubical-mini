@@ -27,7 +27,7 @@ private
     → ∀ {k} ⦃ p : n ≤ k ⦄
     → H-Level k B
   record-hlevel-instance n im ⦃ p ⦄ = hlevel-instance $
-    ≅→is-of-hlevel _ im (is-of-hlevel-≤ _ _ p (hlevel _))
+    ≅→is-of-hlevel _ im (is-of-hlevel-≤ _ _ p hlevel!)
 
 declare-record-hlevel : (n : ℕ) → Name → Name → TC ⊤
 declare-record-hlevel n inst rec = do

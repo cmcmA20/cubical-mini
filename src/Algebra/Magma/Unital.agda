@@ -93,7 +93,7 @@ unquoteDecl umagma-hom-iso = declare-record-iso umagma-hom-iso (quote UMagma-hom
 
 umagma-hom-is-prop : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
                    → is-prop (UMagma-hom M M′ f)
-umagma-hom-is-prop {M′} = ≅→is-of-hlevel _ umagma-hom-iso hlevel! where
+umagma-hom-is-prop {M′} = ≅→is-of-hlevel! _ umagma-hom-iso where
   open UMagma-on M′
 
 instance
