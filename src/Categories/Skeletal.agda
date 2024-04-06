@@ -17,7 +17,7 @@ module _ {o ℓ} (C : Precategory o ℓ) where
   path-from-has-iso→is-skeletal
     : (∀ {a b} → ∥ Isomorphism a b ∥₁ → a ＝ b)
     → is-skeletal C
-  path-from-has-iso→is-skeletal = set-identity-system hlevel!
+  path-from-has-iso→is-skeletal = set-identity-system!
 
   is-skeletal→is-strict : is-skeletal C → is-strict C
-  is-skeletal→is-strict skel = identity-system→is-of-hlevel 1 skel hlevel!
+  is-skeletal→is-strict skel = identity-system→is-of-hlevel! 1 skel

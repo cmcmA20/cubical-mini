@@ -23,24 +23,17 @@ record is-gaunt {o ℓ} (C : Precategory o ℓ) : Type (o ⊔ ℓ) where
 
 private unquoteDecl is-gaunt-iso = declare-record-iso is-gaunt-iso (quote is-gaunt)
 
-is-gaunt-is-prop
-  : ∀ {o ℓ} {C : Precategory o ℓ}
-  → is-prop (is-gaunt C)
-is-gaunt-is-prop =
-  ≅→is-of-hlevel 1 is-gaunt-iso hlevel!
-
 instance
-  H-Level-is-gaunt
-    : ∀ {o ℓ} {C : Precategory o ℓ} {n}
-    → H-Level (suc n) (is-gaunt C)
-  H-Level-is-gaunt = hlevel-prop-instance is-gaunt-is-prop
+  unquoteDecl H-Level-is-gaunt =
+    declare-record-hlevel 1 H-Level-is-gaunt (quote is-gaunt)
+
 
 module _ {o ℓ} {C : Precategory o ℓ} (gaunt : is-gaunt C) where
   open is-gaunt gaunt
   open Categories.Morphism C
 
   is-gaunt→is-skeletal : is-skeletal C
-  is-gaunt→is-skeletal = set-identity-system hlevel! $
+  is-gaunt→is-skeletal = set-identity-system! $
     ∥-∥₁.rec (path-is-of-hlevel 1 has-strict _ _) (has-category .to-path)
 
 module _ {o ℓ} {C : Precategory o ℓ} where
@@ -78,6 +71,6 @@ module _ {o ℓ} {C : Precategory o ℓ} where
       path-iso {x} .snd .is-iso.linv f = IdS.J
         skel
         (λ y′ ∥f∥₁ → ∀(f : x ≅ y′) → path→iso ((skel .to-path ∥f∥₁)) ＝ f)
-        (λ f → trivial-aut _ ∙ sym (trivial-aut _))
+        (λ f → trivial-aut _ ∙ trivial-aut _ ⁻¹)
         ∣ f ∣₁
         f

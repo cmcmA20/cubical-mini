@@ -85,34 +85,22 @@ record is-cartesian {a b} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
   uniqueⱽ² h′ h″ p q =
     uniqueᴾ² (id-r f) refl (id-r f) h′ h″ p q
 
+unquoteDecl is-cartesian-iso = declare-record-iso is-cartesian-iso (quote is-cartesian)
 
 opaque
   unfolding is-of-hlevel
   is-cartesian-is-prop
     : ∀ {x y x′ y′} {f : Hom x y} {f′ : Hom[ f ] x′ y′}
     → is-prop (is-cartesian f f′)
-  is-cartesian-is-prop {f′} cart cart′ = worker where
-    open is-cartesian
-    worker : cart ＝ cart′
-    worker i .universal m h′ =
-      cart′ .unique (cart .universal m h′) (cart .commutes _ _) i
-    worker i .commutes m h′ =
-      is-set→squareᴾ (λ _ _ → Hom[ _ ]-set _ _)
-        (ap (f′ ∘ᵈ_) (cart′ .unique _ _))
-        (cart .commutes m h′)
-        (cart′ .commutes m h′)
-        refl i
-    worker i .unique m′ p =
-      is-set→squareᴾ (λ _ _ → Hom[ _ ]-set _ _)
-        refl
-        (cart .unique m′ p)
-        (cart′ .unique m′ p)
-        (cart′ .unique _ _) i
+  is-cartesian-is-prop a b = Equiv.injective (≅ₜ→≃ is-cartesian-iso)
+    $   ext (λ m h′ → b .unique (a .universal m h′) (a .commutes m h′))
+    ,ₚ prop! where open is-cartesian
 
 instance
   H-Level-is-cartesian : ∀ {n} {a b} {f : Hom a b} {a′ b′} {f′ : Hom[ f ] a′ b′}
                        → H-Level (suc n) (is-cartesian f f′)
   H-Level-is-cartesian = hlevel-basic-instance 1 is-cartesian-is-prop
+
 
 record Cartesian-morphism
   {x y : Ob} (f : Hom x y) (x′ : Ob[ x ]) (y′ : Ob[ y ]) : Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) where
@@ -121,7 +109,9 @@ record Cartesian-morphism
       hom′ : Hom[ f ] x′ y′
       cartesian : is-cartesian f hom′
 
-unquoteDecl cartesian-morphism-iso = declare-record-iso cartesian-morphism-iso (quote Cartesian-morphism)
+instance
+  unquoteDecl H-Level-cartesian-morphism =
+    declare-record-hlevel 2 H-Level-cartesian-morphism (quote Cartesian-morphism)
 
 Cartesian-morphism-pathᴾ
   : ∀ {x y x′ y′} {f g : Hom x y}
@@ -134,10 +124,5 @@ Cartesian-morphism-pathᴾ {f′ = f′} {g′ = g′} {p = p} q i .Cartesian-mo
   is-prop→pathᴾ (λ i → is-cartesian-is-prop {f = p i} {f′ = q i})
     (Cartesian-morphism.cartesian f′)
     (Cartesian-morphism.cartesian g′) i
-
-Cartesian-morphism-is-set
-  : ∀ {x y x′ y′} {f : Hom x y}
-  → is-set (Cartesian-morphism f x′ y′)
-Cartesian-morphism-is-set = ≅→is-of-hlevel 2 cartesian-morphism-iso hlevel!
 
 -- TODO theorems about cartesian stuff

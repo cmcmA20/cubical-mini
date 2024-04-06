@@ -36,7 +36,9 @@ record /-Hom (a b : /-Obj c) : Type ℓ where
     map      : Hom a.domain b.domain
     commutes : b.map ∘ map ＝ a.map
 
-private unquoteDecl /-hom-iso = declare-record-iso /-hom-iso (quote /-Hom)
+instance
+  unquoteDecl H-Level-/-Hom =
+    declare-record-hlevel 2 H-Level-/-Hom (quote /-Hom)
 
 private variable f g : /-Hom a b
 
@@ -58,9 +60,6 @@ instance
   Extensional-/-Hom ⦃ sa ⦄ = set-injective→extensional!
     (/-Hom-pathᴾ refl refl) sa
 
-/-Hom-is-set : is-set (/-Hom {c} a b)
-/-Hom-is-set = ≅→is-of-hlevel 2 /-hom-iso hlevel!
-
 Slice : Ob → Precategory _ _
 Slice c = go where
   module C = Precategory C
@@ -68,7 +67,7 @@ Slice c = go where
   go : Precategory _ _
   go .Ob = /-Obj c
   go .Hom = /-Hom
-  go .Hom-set _ _ = /-Hom-is-set
+  go .Hom-set = hlevel!
   go .id .map = C.id
   go .id .commutes = C.id-r _
   go ._∘_ f g .map = f .map C.∘ g .map

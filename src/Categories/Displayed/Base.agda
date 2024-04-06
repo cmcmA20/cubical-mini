@@ -4,7 +4,14 @@ module Categories.Displayed.Base where
 open import Meta.Prelude
   hiding (_∘_; id)
 
+open import Meta.Projection
+open import Meta.Reflection.Base
+
+open import Structures.n-Type
+
 open import Categories.Base
+
+open import Data.Bool.Base
 
 record Displayed {o ℓ} (B : Precategory o ℓ)
                  (o′ ℓ′ : Level) : Type (o ⊔ ℓ ⊔ ℓsuc o′ ⊔ ℓsuc ℓ′) where
@@ -66,6 +73,20 @@ record Displayed {o ℓ} (B : Precategory o ℓ)
   infixr 30 _∙[]_ ∙[-]-syntax
   infixr 2 ＝[]⟨⟩-syntax ＝[-]⟨⟩-syntax _＝[]˘⟨_⟩_
 
+  hom[-]-set′ : ∀ {x y} {f : Hom x y} {x′ y′} → is-set (Hom[ f ] x′ y′)
+  hom[-]-set′ = Hom[ _ ]-set _ _
+
   instance
     H-Level-Hom[-] : ∀ {n} {a b} {f : Hom a b} {a′ b′} → H-Level (2 + n) (Hom[ f ] a′ b′)
-    H-Level-Hom[-] = hlevel-basic-instance 2 (Hom[ _ ]-set _ _)
+    H-Level-Hom[-] = hlevel-basic-instance 2 hom[-]-set′
+
+
+instance
+  open Struct-proj-desc
+
+  hlevel-proj-displayed : Struct-proj-desc true (quote Displayed.Hom[_])
+  hlevel-proj-displayed .has-level = quote Displayed.hom[-]-set′
+  hlevel-proj-displayed .upwards-closure = quote is-of-hlevel-≤
+  hlevel-proj-displayed .get-level _ = pure (lit (nat 2))
+  hlevel-proj-displayed .get-argument (_ ∷ _ ∷ _ ∷ _ ∷ _ ∷ x v∷ _) = pure x
+  hlevel-proj-displayed .get-argument _ = type-error []

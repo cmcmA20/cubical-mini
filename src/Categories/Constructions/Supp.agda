@@ -42,21 +42,16 @@ record Supported-hom {ℓ ℓ′} {X : 𝒰 ℓ} {Y : 𝒰 ℓ′}
 
 open Supported-hom
 
-unquoteDecl supported-hom-iso = declare-record-iso supported-hom-iso (quote Supported-hom)
-
-supported-hom-is-prop : ∀ {S : Supported X} {S′ : Supported Y} {f} → is-prop (Supported-hom S S′ f)
-supported-hom-is-prop = ≅→is-of-hlevel _ supported-hom-iso hlevel!
-
 instance
-  H-Level-supported-hom : ∀ {n} {S : Supported X} {S′ : Supported Y} {f} → H-Level (suc n) (Supported-hom S S′ f)
-  H-Level-supported-hom = hlevel-prop-instance supported-hom-is-prop
+  unquoteDecl H-Level-supported-hom =
+    declare-record-hlevel 1 H-Level-supported-hom (quote Supported-hom)
 
 Supported-structure : ∀ ℓ → Thin-structure {ℓ} (ℓ ⊔ ℓᵃ) Supported
 Supported-structure ℓ .is-hom f X Y = el! (Supported-hom X Y f)
 Supported-structure _ .id-is-hom .sub-supp _ = refl
 Supported-structure _ .∘-is-hom f g p q .sub-supp x = q .sub-supp x ∘ₜ p .sub-supp _
 Supported-structure _ .id-hom-unique {s} {t} p q = pure $ Equiv.injective
-  (≅ₜ→≃ supported-iso) $ Σ-prop-path hlevel! $ ext $ λ x a →
+  (≅ₜ→≃ supported-iso) $ Σ-prop-path! $ ext $ λ x a →
     (boolean-pred-ext (s .support x) (t .support x) (q .sub-supp x) (p .sub-supp x)) $ₚ a
 
 Supp : ∀ ℓ → Precategory (ℓᵃ ⊔ ℓsuc ℓ) (ℓᵃ ⊔ ℓ)

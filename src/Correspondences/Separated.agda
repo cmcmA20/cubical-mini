@@ -25,13 +25,14 @@ is-¬¬-separated A = ¬¬_ separated A
   : is-¬¬-separated A
   → is-identity-system (mapⁿ 2 ¬¬_ _＝_) (λ _ k → k refl)
 ¬¬-separated-identity-system A-sep =
-  set-identity-system hlevel! $ A-sep _ _
+  set-identity-system! $ A-sep _ _
 
 is-¬¬-separated→is-set : is-¬¬-separated A → is-set A
-is-¬¬-separated→is-set As = identity-system→is-of-hlevel _ (¬¬-separated-identity-system As) hlevel!
+is-¬¬-separated→is-set As =
+  identity-system→is-of-hlevel! _ (¬¬-separated-identity-system As)
 
 opaque
   unfolding is-of-hlevel
   is-¬¬-separated-is-prop : is-prop (is-¬¬-separated A)
   is-¬¬-separated-is-prop As As′ =
-   fun-ext λ x i y p j → (is-¬¬-separated→is-set As) x y (As _ _ p) (As′ _ _ p) i j
+    fun-ext λ x i y p j → (is-¬¬-separated→is-set As) x y (As _ _ p) (As′ _ _ p) i j
