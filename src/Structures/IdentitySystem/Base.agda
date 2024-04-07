@@ -20,8 +20,9 @@ record
       : ∀ {a b} (p : R a b)
       → ＜ rfl a ／ (λ i → R a (to-path p i)) ＼ p ＞
 
-  ΣR-is-contr : ∀ {a} → is-contr (Σ A (R a))
-  ΣR-is-contr = (_ , rfl _) , λ x i → to-path (x .snd) i , to-path-over (x .snd) i
+  singleton-is-contr : ∀ {a} → is-contr (Σ A (R a))
+  singleton-is-contr .fst = _ , rfl _
+  singleton-is-contr .snd x i = to-path (x .snd) i , to-path-over (x .snd) i
 
 open is-identity-system public
 
@@ -47,7 +48,7 @@ to-path-refl-coh
   → (ids : is-identity-system R r)
   → ∀ x
   → (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) ＝ refl
-to-path-refl-coh {r} ids x = is-contr→is-set (ΣR-is-contr ids) _ _
+to-path-refl-coh {r} ids x = is-contr→is-set (singleton-is-contr ids) _ _
   (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) refl
 
 J-refl
@@ -79,11 +80,11 @@ to-path-over-refl
       (ids .to-path-over (r x)) refl refl refl
 to-path-over-refl {x} ids = ap (ap snd) $ to-path-refl-coh ids x
 
-singleton-contr→identity-system
+singleton-is-contr→identity-system
   : {A : Type ℓ} {R : A → A → Type ℓ′} {r : ∀ a → R a a}
   → (∀ {a} → is-contr (Σ _ (R a)))
   → is-identity-system R r
-singleton-contr→identity-system {R} {r} c = ids where
+singleton-is-contr→identity-system {R} {r} c = ids where
   paths′ : ∀ {a} (p : Σ _ (R a)) → (a , r a) ＝ p
   paths′ p = is-contr→is-prop c _ _
 
@@ -96,9 +97,9 @@ equiv-path→identity-system
     {r : (a : A) → R a a}
   → (eqv : ∀ {a b} → R a b ≃ (a ＝ b))
   → is-identity-system R r
-equiv-path→identity-system e = singleton-contr→identity-system $
+equiv-path→identity-system e = singleton-is-contr→identity-system $
   ≃→is-of-hlevel 0 ((total (λ _ → e .fst)) , fibrewise-is-equiv→total-is-equiv (e .snd))
-    (singleton-is-contr (_ , refl))
+    (singletonₜ-is-contr (_ , refl))
 
 identity-system-gives-path
   : {r : ∀ a → R a a}
@@ -155,17 +156,17 @@ opaque
     retract→is-of-hlevel 1 from to cancel λ x y i a → is-contr-is-prop (x a) (y a) i
     where
       to : is-identity-system R r → ∀ x → is-contr (Σ A (R x))
-      to ids x = ΣR-is-contr ids
+      to ids x = singleton-is-contr ids
 
       from : (∀ x → is-contr (Σ A (R x))) → is-identity-system R r
-      from x = singleton-contr→identity-system (x _)
+      from x = singleton-is-contr→identity-system (x _)
 
       cancel′
         : ∀ (x : is-identity-system R r) {a b} (s : R a b)
         → Path ((a , r a) ＝ (b , s))
-            (ΣR-is-contr (from (to x)) .snd (b , s))
-            (ΣR-is-contr x .snd (b , s))
-      cancel′ x s = is-prop→squareᴾ (λ _ _ → is-contr→is-prop (ΣR-is-contr x)) _ _ _ _
+            (singleton-is-contr (from (to x)) .snd (b , s))
+            (singleton-is-contr x .snd (b , s))
+      cancel′ x s = is-prop→squareᴾ (λ _ _ → is-contr→is-prop (singleton-is-contr x)) _ _ _ _
 
       cancel : from is-left-inverse-of to
       cancel x i .to-path s = ap fst (cancel′ x s i)

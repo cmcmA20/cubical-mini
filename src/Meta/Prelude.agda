@@ -14,6 +14,9 @@ open import Foundations.Prelude
            ; sym  to symₚ
            ; refl to reflₚ
 
+           ; singleton-is-contr  to singletonₜ-is-contr
+           ; singletonᴾ-is-contr to singletonₜᴾ-is-contr
+
            ; J       to Jₜ
            ; J-refl  to Jₜ-refl
            ; J-∙     to Jₜ-∙
