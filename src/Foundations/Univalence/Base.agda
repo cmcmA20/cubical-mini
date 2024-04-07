@@ -73,7 +73,7 @@ module @0 _ where opaque
 ＝→≃-refl = equiv-ext $ fun-ext transport-refl
 
 opaque
-  unfolding ua transport-line-is-equiv
+  unfolding ua
   @0 ua-idₑ : ua idₑ ＝ refl {x = A}
   ua-idₑ {A} i j = Glue A {φ = i ∨ ∂ j} (λ _ → A , idₑ)
 
@@ -87,8 +87,7 @@ opaque
     ω (j = i0) = A   , ＝→≃ p
     ω (j = i1) = B   , idₑ
 
-module @0 _ where opaque
-  unfolding is-of-hlevel ua
+module @0 _ where
   path≅equiv : (A ＝ B) ≅ (A ≃ B)
   path≅equiv {A} {B} = ＝→≃ , r where
     r : is-iso {A = A ＝ B} ＝→≃
@@ -102,42 +101,44 @@ module @0 _ where opaque
   univalence⁻¹ : is-equiv (ua {A = A} {B = B})
   univalence⁻¹ = is-iso→is-equiv (is-iso-inv (path≅equiv .snd))
 
-  equiv-is-contr : (A : Type ℓ) → is-contr (Σ[ B ꞉ Type ℓ ] (A ≃ B))
-  equiv-is-contr A .fst             = A , idₑ
-  equiv-is-contr A .snd (B , A≃B) i = ua A≃B i , p i , q i where
-    p : ＜ id ／ (λ i → A → ua A≃B i) ＼ A≃B .fst ＞
-    p i x = outS (ua-glue A≃B i (λ { (i = i0) → x }) (inS (A≃B .fst x)))
+  opaque
+    unfolding ua
+    equiv-is-contr : (A : Type ℓ) → is-contr (Σ[ B ꞉ Type ℓ ] (A ≃ B))
+    equiv-is-contr A .fst             = A , idₑ
+    equiv-is-contr A .snd (B , A≃B) i = ua A≃B i , p i , q i where
+      p : ＜ id ／ (λ i → A → ua A≃B i) ＼ A≃B .fst ＞
+      p i x = outS (ua-glue A≃B i (λ { (i = i0) → x }) (inS (A≃B .fst x)))
 
-    q : ＜ id-is-equiv ／ (λ i → is-equiv (p i)) ＼ A≃B .snd ＞
-    q = is-prop→pathᴾ (λ i → is-equiv-is-prop (p i)) _ _
+      q : ＜ id-is-equiv ／ (λ i → is-equiv (p i)) ＼ A≃B .snd ＞
+      q = is-prop→pathᴾ (λ i → is-equiv-is-prop (p i)) _ _
 
-  Jₑ : (P : (B : Type ℓ) → A ≃ B → Type ℓ′)
-     → P A idₑ
-     → {B : Type ℓ} (e : A ≃ B)
-     → P B e
-  Jₑ P pid eqv =
-    subst (λ e → P (e .fst) (e .snd)) (equiv-is-contr _ .snd (_ , eqv)) pid
+    Jₑ : (P : (B : Type ℓ) → A ≃ B → Type ℓ′)
+       → P A idₑ
+       → {B : Type ℓ} (e : A ≃ B)
+       → P B e
+    Jₑ P pid eqv =
+      subst (λ e → P (e .fst) (e .snd)) (equiv-is-contr _ .snd (_ , eqv)) pid
 
-  unglue-is-equiv
-    : (φ : I)
-    → {B : Partial φ (Σ[ X ꞉ Type ℓ′ ] (X ≃ A))}
-    → is-equiv {A = Glue A B} (unglue φ)
-  unglue-is-equiv {A} φ {B} .equiv-proof y = extend→is-contr ctr where
-    module _ (ψ : I) (par : Partial ψ (fibre (unglue φ) y)) where
-      fib : .(p : IsOne φ)
-          → fibre (B p .snd .fst) y
-            [ (ψ ∧ φ) ↦ (λ { (ψ = i1) (φ = i1) → par 1=1 }) ]
-      fib p = is-contr→extend (B p .snd .snd .equiv-proof y) (ψ ∧ φ) _
+    unglue-is-equiv
+      : (φ : I)
+      → {B : Partial φ (Σ[ X ꞉ Type ℓ′ ] (X ≃ A))}
+      → is-equiv {A = Glue A B} (unglue φ)
+    unglue-is-equiv {A} φ {B} .equiv-proof y = extend→is-contr ctr where
+      module _ (ψ : I) (par : Partial ψ (fibre (unglue φ) y)) where
+        fib : .(p : IsOne φ)
+            → fibre (B p .snd .fst) y
+              [ (ψ ∧ φ) ↦ (λ { (ψ = i1) (φ = i1) → par 1=1 }) ]
+        fib p = is-contr→extend (B p .snd .snd .equiv-proof y) (ψ ∧ φ) _
 
-      sys : ∀ j → Partial (φ ∨ ψ ∨ ~ j) A
-      sys j (j = i0) = y
-      sys j (φ = i1) = outS (fib 1=1) .snd (~ j)
-      sys j (ψ = i1) = par 1=1 .snd (~ j)
+        sys : ∀ j → Partial (φ ∨ ψ ∨ ~ j) A
+        sys j (j = i0) = y
+        sys j (φ = i1) = outS (fib 1=1) .snd (~ j)
+        sys j (ψ = i1) = par 1=1 .snd (~ j)
 
-      ctr : Σ _ _ [ _ ↦ _ ]
-      ctr = inS $ₛ glue-inc φ {Tf = B} (λ { (φ = i1) → outS (fib 1=1) .fst })
-                    (inS (hcomp (φ ∨ ψ) sys))
-                 , (λ i → hfill (φ ∨ ψ) (~ i) sys)
+        ctr : Σ _ _ [ _ ↦ _ ]
+        ctr = inS $ₛ glue-inc φ {Tf = B} (λ { (φ = i1) → outS (fib 1=1) .fst })
+                      (inS (hcomp (φ ∨ ψ) sys))
+                   , (λ i → hfill (φ ∨ ψ) (~ i) sys)
 
 @0 ap-is-equiv : {A B : Type ℓ}
                  (f : A → B) → is-equiv f

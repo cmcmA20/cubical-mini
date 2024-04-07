@@ -55,12 +55,11 @@ instance
 ≤-antisym (s≤s p) (s≤s q) = ap suc (≤-antisym p q)
 
 opaque
-  unfolding is-of-hlevel
   ≤-is-prop : is-prop (m ≤ n)
   ≤-is-prop z≤      z≤      = refl
   ≤-is-prop (s≤s p) (s≤s q) = ap s≤s (≤-is-prop p q)
 
-instance
+instance opaque
   H-Level-≤ : H-Level (suc k) (m ≤ n)
   H-Level-≤ = hlevel-prop-instance ≤-is-prop
 
@@ -237,7 +236,7 @@ z<· (suc _) (suc _) _    = s≤s z≤ , s≤s z≤
 
 ≤≃<⊎= : (m ≤ n)
       ≃ (m < n) ⊎ (m ＝ n)
-≤≃<⊎= = prop-extₑ (hlevel _) (disjoint-⊎-is-prop! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
+≤≃<⊎= = prop-extₑ (hlevel 1) (disjoint-⊎-is-prop! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
   where
   ≤→<⊎= : ∀[ _≤_ →̇ _<_ ⊎̇ _＝_ {A = ℕ} ]
   ≤→<⊎= {x = 0}     {x = 0}     z≤      = inr refl

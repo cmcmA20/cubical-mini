@@ -14,9 +14,9 @@ universal : (⊤ → A) ≃ A
 universal .fst = _$ tt
 universal .snd .equiv-proof = strict-contr-fibres (λ x _ → x)
 
-opaque
-  unfolding is-of-hlevel
-  is-contr→equiv-⊤ : is-contr A → A ≃ ⊤
-  is-contr→equiv-⊤ A-ctr .fst _ = tt
-  is-contr→equiv-⊤ A-ctr .snd .equiv-proof tt
-    = (A-ctr .fst , refl) , λ { (a , _) i → A-ctr .snd a i , refl }
+is-contr→equiv-⊤ : is-contr A → A ≃ ⊤
+is-contr→equiv-⊤ A-ctr .fst _ = tt
+is-contr→equiv-⊤ A-ctr .snd .equiv-proof tt .fst =
+  A-ctr .fst , refl
+is-contr→equiv-⊤ A-ctr .snd .equiv-proof tt .snd (a , _) i =
+  A-ctr .snd a i , λ _ → tt

@@ -27,9 +27,9 @@ opaque
   is-connected-η = id
 
   is-connected-is-prop : is-prop (is-connected A)
-  is-connected-is-prop = is-prop-η λ _ _ → prop!
+  is-connected-is-prop  _ _ = prop!
 
-instance
+instance opaque
   H-Level-conn : ∀ {n} → H-Level (suc n) (is-connected A)
   H-Level-conn = hlevel-prop-instance is-connected-is-prop
 

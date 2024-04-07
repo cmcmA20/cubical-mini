@@ -110,30 +110,29 @@ fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ isom where
       lemi→i : ＜ coei→i A i (p i) ／ (λ m → lemi→j i m ＝ p i) ＼ refl ＞
       lemi→i m k = coei→i A i (p i) (m ∨ k)
 
-opaque
-  unfolding singletonᴾ-is-contr
-  hetero-homotopy≃homotopy
-    : {A : I → Type ℓ} {B : (i : I) → Type ℓ′}
-      {f : A i0 → B i0} {g : A i1 → B i1}
-    → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
-    ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-  hetero-homotopy≃homotopy {A} {B} {f} {g} = ≅→≃ isom where
-    open is-iso
-    c : {x₀ : A i0} → is-contr (Singletonᴾ A x₀)
-    c {x₀} = singletonᴾ-is-contr A x₀
+-- TODO opaque proofs of invertibility?
+hetero-homotopy≃homotopy
+  : {A : I → Type ℓ} {B : (i : I) → Type ℓ′}
+    {f : A i0 → B i0} {g : A i1 → B i1}
+  → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
+  ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
+hetero-homotopy≃homotopy {A} {B} {f} {g} = ≅→≃ isom where
+  open is-iso
+  c : {x₀ : A i0} → is-contr (Singletonᴾ A x₀)
+  c {x₀} = singletonᴾ-is-contr A x₀
 
-    isom : ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
-         ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-    isom .fst h x₀ = h $ c .fst .snd
-    isom .snd .inv k {x₀} {x₁} p =
-      subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) (c .snd (x₁ , p)) (k x₀)
+  isom : ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
+       ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
+  isom .fst h x₀ = h $ c .fst .snd
+  isom .snd .inv k {x₀} {x₁} p =
+    subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) (c .snd (x₁ , p)) (k x₀)
 
-    isom .snd .rinv k = fun-ext λ x₀ →
-      ap (λ α → subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) α (k x₀))
-        (is-prop→is-set (is-contr→is-prop c) (c .fst) (c .fst) (c .snd $ c .fst) refl)
-      ∙ transport-refl (k x₀)
+  isom .snd .rinv k = fun-ext λ x₀ →
+    ap (λ α → subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) α (k x₀))
+      (is-contr→is-set c (c .fst) (c .fst) (c .snd $ c .fst) refl)
+    ∙ transport-refl (k x₀)
 
-    isom .snd .linv h j {x₀} {x₁} p =
-      coei→1
-        (λ i → ＜ f x₀ ／ B ＼ g (c .snd (x₁ , p) (i ∨ j) .fst) ＞)
-        j $ h $ c .snd (x₁ , p) j .snd
+  isom .snd .linv h j {x₀} {x₁} p =
+    coei→1
+      (λ i → ＜ f x₀ ／ B ＼ g (c .snd (x₁ , p) (i ∨ j) .fst) ＞)
+      j $ h $ c .snd (x₁ , p) j .snd

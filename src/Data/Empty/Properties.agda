@@ -16,11 +16,9 @@ private variable
   C : ⊥ → Type ℓᶜ
   n : HLevel
 
-opaque
-  unfolding is-of-hlevel
-  absurd-is-contr : is-contr (Π[ f ꞉ ⊥ ] C f)
-  absurd-is-contr .fst ()
-  absurd-is-contr .snd _ _ ()
+absurd-is-contr : is-contr (Π[ f ꞉ ⊥ ] C f)
+absurd-is-contr .fst ()
+absurd-is-contr .snd _ _ ()
 
 instance
   H-Level-absurd : H-Level n (Π[ f ꞉ ⊥ ] C f)

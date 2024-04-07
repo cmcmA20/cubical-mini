@@ -397,63 +397,34 @@ S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)
 is-central : {A : Type ℓ} (c : A) → Type _
 is-central {A} c = Π[ x ꞉ A ] (c ＝ x)
 
+is-of-hlevel : HLevel → Type ℓ → Type ℓ
+is-of-hlevel 0 A = Σ[ x ꞉ A ] is-central x
+is-of-hlevel 1 A = Π[ x ꞉ A ] is-central x
+is-of-hlevel (suc (suc h)) A = is-of-hlevel (suc h) on-paths-of A
+
+is-contr : Type ℓ → Type ℓ
+is-contr = is-of-hlevel 0
+
+-- TODO remove this?
+centre : is-contr A → A
+centre = fst
+
+-- TODO remove this?
+paths : (A-c : is-contr A) → is-central (centre A-c)
+paths = snd
+
+is-prop : Type ℓ → Type ℓ
+is-prop = is-of-hlevel 1
+
+is-set : Type ℓ → Type ℓ
+is-set = is-of-hlevel 2
+
 is-of-hlevelᴱ : HLevel → Type ℓ → Type ℓ
 is-of-hlevelᴱ 0       A = is-contrᴱ A
 is-of-hlevelᴱ (suc h) A = is-of-hlevelᴱ h on-paths-of A
 
 is-propᴱ : Type ℓ → Type ℓ
 is-propᴱ = is-of-hlevelᴱ 1
-
-opaque
-  is-of-hlevel : HLevel → Type ℓ → Type ℓ
-  is-of-hlevel 0 A = Σ[ x ꞉ A ] is-central x
-  is-of-hlevel 1 A = Π[ x ꞉ A ] is-central x
-  is-of-hlevel (suc (suc h)) A = is-of-hlevel (suc h) on-paths-of A
-
-  is-of-hlevel-β : (n : HLevel) → is-of-hlevel (suc (suc n)) A → is-of-hlevel (suc n) on-paths-of A
-  is-of-hlevel-β _ = id
-
-  is-of-hlevel-η : (n : HLevel) → is-of-hlevel (suc n) on-paths-of A → is-of-hlevel (suc (suc n)) A
-  is-of-hlevel-η _ = id
-
-is-contr : Type ℓ → Type ℓ
-is-contr = is-of-hlevel 0
-
-opaque
-  unfolding is-of-hlevel
-  centre : is-contr A → A
-  centre = fst
-
-  paths : (A-c : is-contr A) → is-central (centre A-c)
-  paths = snd
-
-  is-contr-β : is-contr A → Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
-  is-contr-β = id
-
-  is-contr-η : Σ[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y) → is-contr A
-  is-contr-η = id
-
-is-prop : Type ℓ → Type ℓ
-is-prop = is-of-hlevel 1
-
-opaque
-  unfolding is-of-hlevel
-  is-prop-β : is-prop A → Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y)
-  is-prop-β = id
-
-  is-prop-η : Π[ x ꞉ A ] Π[ y ꞉ A ] (x ＝ y) → is-prop A
-  is-prop-η = id
-
-is-set : Type ℓ → Type ℓ
-is-set = is-of-hlevel 2
-
-opaque
-  unfolding is-of-hlevel
-  is-set-β : is-set A → Π[ x ꞉ A ] Π[ y ꞉ A ] Π[ p ꞉ (x ＝ y) ] Π[ q ꞉ x ＝ y ] (p ＝ q)
-  is-set-β = id
-
-  is-set-η : Π[ x ꞉ A ] Π[ y ꞉ A ] Π[ p ꞉ (x ＝ y) ] Π[ q ꞉ x ＝ y ] (p ＝ q) → is-set A
-  is-set-η = id
 
 
 -- Singleton contractibility
@@ -467,46 +438,51 @@ Singletonᴾ A a = Σ[ x ꞉ A i1 ] ＜ a ／ A ＼ x ＞
 Singleton : {A : Type ℓ} → A → Type _
 Singleton {A} = Singletonᴾ (λ _ → A)
 
-singleton-is-prop : {A : Type ℓ} {a : A} (s : Singleton a)
-                  → (a , refl) ＝ s
-singleton-is-prop (_ , path) i = path i , square i where
-    square : Square refl refl path path
-    square i j = path (i ∧ j)
-
 opaque
-  unfolding is-of-hlevel
-  singleton-is-contr : {A : Type ℓ} {a : A} (s : Singleton a)
-                     → is-contr (Singleton a)
-  singleton-is-contr {a} _ = (a , refl) , singleton-is-prop
+  singleton-is-prop : {A : Type ℓ} {a : A} (s : Singleton a)
+                    → (a , refl) ＝ s
+  singleton-is-prop (_ , path) i = path i , square i where
+      square : Square refl refl path path
+      square i j = path (i ∧ j)
 
-  singletonᴾ-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (Singletonᴾ A a)
-  singletonᴾ-is-contr A a .fst = _ , transport-filler (λ i → A i) a
-  singletonᴾ-is-contr A a .snd (x , p) i = _ , λ j → fill A (∂ i) j λ where
+  singletonᴾ-is-prop
+    : (A : I → Type ℓ) (a : A i0) (s : Singletonᴾ A a)
+    → (transport (λ i → A i) a , transport-filler (λ i → A i) a) ＝ s
+  singletonᴾ-is-prop A a (x , p) i = _ , λ j → fill A (∂ i) j λ where
     k (i = i0) → transport-filler (λ i → A i) a k
     k (i = i1) → p k
     k (k = i0) → a
 
+singleton-is-contr : {A : Type ℓ} {a : A} (s : Singleton a)
+                   → is-contr (Singleton a)
+singleton-is-contr {a} _ = (a , refl) , singleton-is-prop
+
+singletonᴾ-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (Singletonᴾ A a)
+singletonᴾ-is-contr A a .fst = _
+singletonᴾ-is-contr A a .snd = singletonᴾ-is-prop A a
+
 
 -- Path induction (J) and its computation rule
 
-module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x refl) where opaque
-  unfolding is-of-hlevel singleton-is-contr
-
+module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x refl) where
   J : (p : x ＝ y) → P y p
   J {y} p = transport (λ i → P (path i .fst) (path i .snd)) d where
-    path : Path (Σ A λ t → x ＝ t) (x , refl) (y , p)
+    path : Path (Σ[ t ꞉ A ] (x ＝ t)) (x , refl) (y , p)
     path = singleton-is-contr (y , p) .snd _
 
-  J-refl : J refl ＝ d
-  J-refl = transport-refl d
+  opaque
+    unfolding singleton-is-prop
+    J-refl : J refl ＝ d
+    J-refl = transport-refl d
 
-  J-∙ : (p : x ＝ y) (q : y ＝ z)
-      → J (p ∙ q) ＝ transport (λ i → P (q i) (λ j → ∙-filler-l p q i j)) (J p)
-  J-∙ p q k =
-    transp
-      (λ i → P (q (i ∨ ~ k))
-      (λ j → ∙-filler-l p q (i ∨ ~ k) j)) (~ k)
-      (J (λ j → ∙-filler-l p q (~ k) j))
+  opaque
+    J-∙ : (p : x ＝ y) (q : y ＝ z)
+        → J (p ∙ q) ＝ transport (λ i → P (q i) (λ j → ∙-filler-l p q i j)) (J p)
+    J-∙ p q k =
+      transp
+        (λ i → P (q (i ∨ ~ k))
+        (λ j → ∙-filler-l p q (i ∨ ~ k) j)) (~ k)
+        (J (λ j → ∙-filler-l p q (~ k) j))
 
 -- Multi-variable versions of J
 module _ {b : B x}
@@ -649,32 +625,33 @@ opaque
       k (j = i0) → coei→1 (λ _ → A) (k ∨ i) (left k)
       k (j = i1) → coei→1 (λ _ → A) (k ∨ i) (right k)
 
-subst-path-left : {x y x′ : A}
-                → (p : x ＝ y)
-                → (left : x ＝ x′)
-                → subst (λ e → e ＝ y) left p ＝ sym left ∙ p
-subst-path-left {y} p left =
-  subst (λ e → e ＝ y) left p     ＝⟨⟩
-  transport (λ i → left i ＝ y) p ＝⟨ transport-path p left refl ⟩
-  sym left ∙ p ∙ refl             ＝⟨ ap (sym left ∙_) (sym (∙-filler-l _ _)) ⟩
-  sym left ∙ p                    ∎
+opaque
+  subst-path-left : {x y x′ : A}
+                  → (p : x ＝ y)
+                  → (left : x ＝ x′)
+                  → subst (λ e → e ＝ y) left p ＝ sym left ∙ p
+  subst-path-left {y} p left =
+    subst (λ e → e ＝ y) left p     ＝⟨⟩
+    transport (λ i → left i ＝ y) p ＝⟨ transport-path p left refl ⟩
+    sym left ∙ p ∙ refl             ＝⟨ ap (sym left ∙_) (sym (∙-filler-l _ _)) ⟩
+    sym left ∙ p                    ∎
 
-subst-path-right : {x y y′ : A}
-                 → (p : x ＝ y)
-                 → (right : y ＝ y′)
-                 → subst (λ e → x ＝ e) right p ＝ p ∙ right
-subst-path-right {x} p right =
-  subst (λ e → x ＝ e) right p     ＝⟨⟩
-  transport (λ i → x ＝ right i) p ＝⟨ transport-path p refl right ⟩
-  sym refl ∙ p ∙ right             ＝⟨⟩
-  refl ∙ p ∙ right                 ＝⟨ sym (∙-filler-r _ _) ⟩
-  p ∙ right                        ∎
+  subst-path-right : {x y y′ : A}
+                   → (p : x ＝ y)
+                   → (right : y ＝ y′)
+                   → subst (λ e → x ＝ e) right p ＝ p ∙ right
+  subst-path-right {x} p right =
+    subst (λ e → x ＝ e) right p     ＝⟨⟩
+    transport (λ i → x ＝ right i) p ＝⟨ transport-path p refl right ⟩
+    sym refl ∙ p ∙ right             ＝⟨⟩
+    refl ∙ p ∙ right                 ＝⟨ sym (∙-filler-r _ _) ⟩
+    p ∙ right                        ∎
 
-subst-path-both : {x x′ : A}
-                → (p : x ＝ x)
-                → (adj : x ＝ x′)
-                → subst (λ x → x ＝ x) adj p ＝ sym adj ∙ p ∙ adj
-subst-path-both p adj = transport-path p adj adj
+  subst-path-both : {x x′ : A}
+                  → (p : x ＝ x)
+                  → (adj : x ＝ x′)
+                  → subst (λ x → x ＝ x) adj p ＝ sym adj ∙ p ∙ adj
+  subst-path-both p adj = transport-path p adj adj
 
 
 -- TODO move this section somewhere?

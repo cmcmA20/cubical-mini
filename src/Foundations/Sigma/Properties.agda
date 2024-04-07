@@ -180,7 +180,7 @@ infixr 4 _,ₚ_
   the-iso .snd .inv = _ ,_
   the-iso .snd .rinv b′
     = sym $ subst-filler B refl b′
-    ∙ ap (λ f → subst B f b′) (is-prop-β (is-contr→is-prop (path-is-of-hlevel-same 0 A-c)) _ _)
+    ∙ ap (λ f → subst B f b′) (is-contr→is-prop (path-is-of-hlevel-same 0 A-c) _ _)
   the-iso .snd .linv (x , b) = Σ-pathᴾ (paths A-c _) $ symᴾ $ subst-filler B (sym $ paths A-c _) b
 
 Σ-contract-snd : (∀ x → is-contr (B x)) → Σ A B ≃ A
@@ -200,7 +200,7 @@ infixr 4 _,ₚ_
   → Path (Σ A B) (x , y) (x , z)
   → y ＝ z
 Σ-inj-set {B} {y} {z} A-set path =
-  subst (_＝ z) (ap (λ e → transport (ap B e) y) (is-set-β A-set _ _ _ _) ∙ transport-refl y)
+  subst (_＝ z) (ap (λ e → transport (ap B e) y) (A-set _ _ _ _) ∙ transport-refl y)
     (from-pathᴾ (ap snd path))
 
 Σ-swap
@@ -223,7 +223,7 @@ infixr 4 _,ₚ_
   → {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
   → ＜ x .fst ／ A ＼ y .fst ＞
   → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
-Σ-prop-pathᴾ! = Σ-prop-pathᴾ (λ _ _ → hlevel _)
+Σ-prop-pathᴾ! = Σ-prop-pathᴾ (λ _ _ → hlevel 1)
 
 Σ-prop-path!
   : ⦃ B-pr : ∀ {x} → H-Level 1 (B x) ⦄
@@ -237,4 +237,4 @@ infixr 4 _,ₚ_
   → ⦃ A-set : H-Level 2 A ⦄
   → Path (Σ A B) (x , y) (x , z)
   → y ＝ z
-Σ-inj-set! = Σ-inj-set (hlevel _)
+Σ-inj-set! = Σ-inj-set (hlevel 2)

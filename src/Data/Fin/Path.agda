@@ -35,11 +35,8 @@ private variable
 
 fin-is-set : is-set (Fin n)
 fin-is-set {0}     = hlevel!
-fin-is-set {suc n} = maybe-is-of-hlevel _ fin-is-set
+fin-is-set {suc n} = maybe-is-of-hlevel 0 fin-is-set
 
-instance
+instance opaque
   H-Level-fin : H-Level (2 + k) (Fin n)
   H-Level-fin = hlevel-basic-instance 2 fin-is-set
-
-fin-is-of-hlevel : (k : HLevel) → is-of-hlevel (2 + k) (Fin n)
-fin-is-of-hlevel _ = hlevel _

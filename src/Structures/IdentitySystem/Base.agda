@@ -21,7 +21,7 @@ record
       → ＜ rfl a ／ (λ i → R a (to-path p i)) ＼ p ＞
 
   ΣR-is-contr : ∀ {a} → is-contr (Σ A (R a))
-  ΣR-is-contr = is-contr-η $ (_ , rfl _) , λ x i → to-path (x .snd) i , to-path-over (x .snd) i
+  ΣR-is-contr = (_ , rfl _) , λ x i → to-path (x .snd) i , to-path-over (x .snd) i
 
 open is-identity-system public
 
@@ -47,7 +47,7 @@ to-path-refl-coh
   → (ids : is-identity-system R r)
   → ∀ x
   → (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) ＝ refl
-to-path-refl-coh {r} ids x = is-set-β (is-contr→is-set (ΣR-is-contr ids)) _ _
+to-path-refl-coh {r} ids x = is-contr→is-set (ΣR-is-contr ids) _ _
   (ids .to-path (r x) ,ₚ ids .to-path-over (r x)) refl
 
 J-refl
@@ -85,7 +85,7 @@ singleton-contr→identity-system
   → is-identity-system R r
 singleton-contr→identity-system {R} {r} c = ids where
   paths′ : ∀ {a} (p : Σ _ (R a)) → (a , r a) ＝ p
-  paths′ p = is-prop-β (is-contr→is-prop c) _ _
+  paths′ p = is-contr→is-prop c _ _
 
   ids : is-identity-system R r
   ids .to-path p = ap fst (paths′ (_ , p))
@@ -148,7 +148,6 @@ path-identity-system .to-path = id
 path-identity-system .to-path-over p i j = p (i ∧ j)
 
 opaque
-  unfolding is-of-hlevel is-contr-η
   is-identity-system-is-prop
     : {R : A → A → Type ℓ′} {r : ∀ a → R a a}
     → is-prop (is-identity-system R r)
@@ -181,7 +180,7 @@ opaque
   identity-system→is-of-hlevel (suc n) ids hl x y =
     ≃→is-of-hlevel (suc n) (identity-system-gives-path ids ⁻¹) (hl x y)
 
-instance
+instance opaque
   H-Level-identity-system : ∀ {n} {r : ∀ a → R a a} → H-Level (suc n) (is-identity-system R r)
   H-Level-identity-system = hlevel-prop-instance is-identity-system-is-prop
 
@@ -205,10 +204,11 @@ set-identity-system!
   → is-identity-system R r
 set-identity-system! = set-identity-system λ _ _ → hlevel 1
 
-identity-system→is-of-hlevel!
-  : (n : HLevel) {R : A → A → Type ℓ′} {r : ∀ x → R x x}
-  → is-identity-system R r
-  → ⦃ ∀ {x y} → H-Level n (R x y) ⦄
-  → is-of-hlevel (suc n) A
-identity-system→is-of-hlevel! n ids =
-  identity-system→is-of-hlevel n ids λ _ _ → hlevel _
+opaque
+  identity-system→is-of-hlevel!
+    : (n : HLevel) {R : A → A → Type ℓ′} {r : ∀ x → R x x}
+    → is-identity-system R r
+    → ⦃ ∀ {x y} → H-Level n (R x y) ⦄
+    → is-of-hlevel (suc n) A
+  identity-system→is-of-hlevel! n ids =
+    identity-system→is-of-hlevel n ids λ _ _ → hlevel n

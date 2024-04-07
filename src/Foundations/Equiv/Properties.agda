@@ -67,22 +67,20 @@ sym-≃ : (x ＝ y) ≃ (y ＝ x)
 sym-≃ .fst = sym
 sym-≃ .snd .equiv-proof = strict-contr-fibres sym
 
-opaque
-  unfolding is-of-hlevel
-  is-contr→is-equiv : is-contr A → is-contr B
-                    → {f : A → B} → is-equiv f
-  is-contr→is-equiv contr-A contr-B {f} = is-iso→is-equiv f-is-iso where
-    f-is-iso : is-iso f
-    f-is-iso .inv  _ = contr-A .fst
-    f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
-    f-is-iso .linv _ = is-contr→is-prop contr-A _ _
+is-contr→is-equiv : is-contr A → is-contr B
+                  → {f : A → B} → is-equiv f
+is-contr→is-equiv contr-A contr-B {f} = is-iso→is-equiv f-is-iso where
+  f-is-iso : is-iso f
+  f-is-iso .inv  _ = contr-A .fst
+  f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
+  f-is-iso .linv _ = is-contr→is-prop contr-A _ _
 
-  is-contr→equiv : is-contr A → is-contr B → A ≃ B
-  is-contr→equiv {A} contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
-    f-is-iso : is-iso {A = A} (λ _ → contr-B .fst)
-    f-is-iso .inv  _ = contr-A .fst
-    f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
-    f-is-iso .linv _ = is-contr→is-prop contr-A _ _
+is-contr→≃ : is-contr A → is-contr B → A ≃ B
+is-contr→≃ {A} contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
+  f-is-iso : is-iso {A = A} (λ _ → contr-B .fst)
+  f-is-iso .inv  _ = contr-A .fst
+  f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
+  f-is-iso .linv _ = is-contr→is-prop contr-A _ _
 
 is-equiv→pre-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = C → A} (f ∘_)
 is-equiv→pre-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
@@ -119,22 +117,20 @@ module Equiv (e : A ≃ B) where
   zag = is-equiv→zag (e .snd)
 
   opaque
-    unfolding is-of-hlevel
     injective : ∀ {x y} → to x ＝ to y → x ＝ y
     injective p = ap fst $ is-contr→is-prop (e .snd .equiv-proof _) (_ , refl) (_ , sym p)
 
     injective₂ : ∀ {x y z} → to x ＝ z → to y ＝ z → x ＝ y
     injective₂ p q = ap fst $ is-contr→is-prop (e .snd .equiv-proof _) (_ , p) (_ , q)
 
+    adjunct-l : ∀ {x y} → to x ＝ y → x ＝ from y
+    adjunct-l p = sym (η _) ∙ ap from p
+
+    adjunct-r : ∀ {x y} → x ＝ from y → to x ＝ y
+    adjunct-r p = ap to p ∙ ε _
+
   inverse : B ≃ A
   inverse = e ₑ⁻¹
-
-  adjunct-l : ∀ {x y} → to x ＝ y → x ＝ from y
-  adjunct-l p = sym (η _) ∙ ap from p
-
-  adjunct-r : ∀ {x y} → x ＝ from y → to x ＝ y
-  adjunct-r p = ap to p ∙ ε _
-
 
 infixr 1.5 _≃⟨⟩_ _≃⟨_⟩_ _≃˘⟨_⟩_
 infix  1.9 _≃∎
@@ -163,9 +159,9 @@ module _
   where
 
   biimp-is-equiv : is-equiv to
-  biimp-is-equiv .equiv-proof b .fst = from b , is-prop-β B-pr _ _
+  biimp-is-equiv .equiv-proof b .fst = from b , B-pr _ _
   biimp-is-equiv .equiv-proof b .snd (p′ , path) =
-    Σ-path (is-prop-β A-pr _ _) (is-set-β (is-prop→is-set B-pr) _ _ _ _)
+    Σ-path (A-pr _ _) (is-prop→is-set B-pr _ _ _ _)
 
   prop-extₑ : A ≃ B
   prop-extₑ .fst = to
@@ -177,9 +173,9 @@ module _
 biimp-is-equiv! : ⦃ A-pr : H-Level 1 A ⦄ ⦃ B-pr : H-Level 1 B ⦄
                 → (to : A → B) → (B → A)
                 → is-equiv to
-biimp-is-equiv! = biimp-is-equiv (hlevel _) (hlevel _)
+biimp-is-equiv! = biimp-is-equiv (hlevel 1) (hlevel 1)
 
 prop-extₑ! : ⦃ A-pr : H-Level 1 A ⦄ ⦃ B-pr : H-Level 1 B ⦄
            → (A → B) → (B → A)
            → A ≃ B
-prop-extₑ! = prop-extₑ (hlevel _) (hlevel _)
+prop-extₑ! = prop-extₑ (hlevel 1) (hlevel 1)

@@ -29,7 +29,6 @@ record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 unquoteDecl is-group-iso = declare-record-iso is-group-iso (quote is-group)
 
 opaque
-  unfolding is-of-hlevel
   is-group-is-prop : {_✦_ : A → A → A} → is-prop (is-group _✦_)
   is-group-is-prop {A} {_✦_} M N = Equiv.injective (≅ₜ→≃ is-group-iso)
     $  fun-ext (λ a → monoid-inverse-unique {IM = M .is-group.has-monoid} a _ _
@@ -64,9 +63,10 @@ unquoteDecl group-on-iso = declare-record-iso group-on-iso (quote Group-on)
 --   Inv-group : ⦃ G : Group-on A ⦄ → Invertible small {!!}
 --   Inv-group Invertible.⁻¹ = {!inverse!}
 
-group-on-is-set : is-set (Group-on A)
-group-on-is-set = ≅→is-of-hlevel _ group-on-iso $ is-set-η λ (op , x) _ _ _ →
-  let open is-group x in prop!
+opaque
+  group-on-is-set : is-set (Group-on A)
+  group-on-is-set = ≅→is-of-hlevel 2 group-on-iso λ (op , x) _ _ _ →
+    let open is-group x in prop!
 
 
 record Group-hom
@@ -96,12 +96,13 @@ record Group-hom
 
 unquoteDecl group-hom-iso = declare-record-iso group-hom-iso (quote Group-hom)
 
-group-hom-is-prop : ∀ {M : Group-on A} {M′ : Group-on B} {f}
-                   → is-prop (Group-hom M M′ f)
-group-hom-is-prop {M′} = ≅→is-of-hlevel! _ group-hom-iso where
-  open Group-on M′
+opaque
+  group-hom-is-prop : ∀ {M : Group-on A} {M′ : Group-on B} {f}
+                    → is-prop (Group-hom M M′ f)
+  group-hom-is-prop {M′} = ≅→is-of-hlevel! 1 group-hom-iso where
+    open Group-on M′
 
-instance
+instance opaque
   H-Level-group-on : H-Level (2 + n) (Group-on A)
   H-Level-group-on = hlevel-basic-instance 2 group-on-is-set
 

@@ -35,24 +35,23 @@ identity-system .to-path-over {inl x₁} {inl x₂} (lift p) i = lift λ j → p
 identity-system .to-path-over {inr y₁} {inr y₂} (lift p) i = lift λ j → p (i ∧ j)
 
 opaque
-  unfolding is-of-hlevel
   code-is-of-hlevel : {s₁ s₂ : A ⊎ B} {n : HLevel}
                     → is-of-hlevel (2 + n) A
                     → is-of-hlevel (2 + n) B
                     → is-of-hlevel (1 + n) (Code s₁ s₂)
-  code-is-of-hlevel {s₁ = inl x₁} {inl x₂} ahl bhl = Lift-is-of-hlevel _ (ahl x₁ x₂)
-  code-is-of-hlevel {s₁ = inl x}  {inr y}  ahl bhl = hlevel _
-  code-is-of-hlevel {s₁ = inr x}  {inl y}  ahl bhl = hlevel _
-  code-is-of-hlevel {s₁ = inr y₁} {inr y₂} ahl bhl = Lift-is-of-hlevel _ (bhl y₁ y₂)
+  code-is-of-hlevel {s₁ = inl x₁} {inl x₂} {n} ahl bhl = Lift-is-of-hlevel (suc n) (ahl x₁ x₂)
+  code-is-of-hlevel {s₁ = inl x}  {inr y}  {n} ahl bhl = hlevel (suc n)
+  code-is-of-hlevel {s₁ = inr x}  {inl y}  {n} ahl bhl = hlevel (suc n)
+  code-is-of-hlevel {s₁ = inr y₁} {inr y₂} {n} ahl bhl = Lift-is-of-hlevel (suc n) (bhl y₁ y₂)
 
 opaque
-  unfolding is-of-hlevel
   ⊎-is-of-hlevel : (n : HLevel)
                  → is-of-hlevel (2 + n) A
                  → is-of-hlevel (2 + n) B
                  → is-of-hlevel (2 + n) (A ⊎ B)
   ⊎-is-of-hlevel n ahl bhl _ _ =
-    ≃→is-of-hlevel (1 + n) (identity-system-gives-path identity-system ⁻¹) (code-is-of-hlevel ahl bhl)
+    ≃→is-of-hlevel (1 + n) (identity-system-gives-path identity-system ⁻¹)
+      (code-is-of-hlevel {n = n} ahl bhl)
 
   disjoint-⊎-is-prop
     : is-prop A → is-prop B → ¬ A × B
@@ -62,8 +61,6 @@ opaque
   disjoint-⊎-is-prop Ap Bp notab (inr x)  (inl y)  = absurd $ notab (y , x)
   disjoint-⊎-is-prop Ap Bp notab (inr y₁) (inr y₂) = ap inr (Bp y₁ y₂)
 
-opaque
-  unfolding is-of-hlevel
   prop-⊎-is-set
     : is-prop A → is-prop B
     → is-set (A ⊎ B)
@@ -74,10 +71,12 @@ opaque
     go (inl x₁) (inl x₂) = Lift-is-of-hlevel 1 $ is-prop→is-set A-prop _ _
     go (inr y₁) (inr y₂) = Lift-is-of-hlevel 1 $ is-prop→is-set B-prop _ _
 
-contr-⊎-is-set
-  : is-contr A → is-contr B
-  → is-set (A ⊎ B)
-contr-⊎-is-set A-contr B-contr = prop-⊎-is-set (is-contr→is-prop A-contr) (is-contr→is-prop B-contr)
+  contr-⊎-is-set
+    : is-contr A → is-contr B
+    → is-set (A ⊎ B)
+  contr-⊎-is-set A-contr B-contr = prop-⊎-is-set
+    (is-contr→is-prop A-contr)
+    (is-contr→is-prop B-contr)
 
 inl-inj : {x y : A} → inl {B = B} x ＝ inl y → x ＝ y
 inl-inj {A} {x} path = ap f path where
@@ -100,12 +99,13 @@ inr-inj {B} {x} path = ap f path where
 
 
 -- Automation
-instance
+instance opaque
   H-Level-⊎
     : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → ⦃ B-hl : H-Level (2 + n) B ⦄
     → H-Level (2 + n) (A ⊎ B)
-  H-Level-⊎ .H-Level.has-of-hlevel = ⊎-is-of-hlevel _ (hlevel _) (hlevel _)
+  H-Level-⊎ {n} .H-Level.has-of-hlevel = ⊎-is-of-hlevel n (hlevel (2 + n)) (hlevel (2 + n))
 
+instance
   Extensional-⊎
     : ∀ {ℓ ℓ′ ℓr ℓs} {A : Type ℓ} {B : Type ℓ′}
     → ⦃ sa : Extensional A ℓr ⦄
@@ -121,7 +121,8 @@ instance
   Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path-over {inl x} {inl x′} (lift p) = apᴾ (λ _ → lift) $ sa .idsᵉ .to-path-over p
   Extensional-⊎ ⦃ sb ⦄ .idsᵉ .to-path-over {inr y} {inr y′} (lift p) = apᴾ (λ _ → lift) $ sb .idsᵉ .to-path-over p
 
-disjoint-⊎-is-prop!
-  : ⦃ A-pr : H-Level 1 A ⦄ → ⦃ B-pr : H-Level 1 B ⦄
-  → ¬ A × B → is-prop (A ⊎ B)
-disjoint-⊎-is-prop! = disjoint-⊎-is-prop (hlevel _) (hlevel _)
+opaque
+  disjoint-⊎-is-prop!
+    : ⦃ A-pr : H-Level 1 A ⦄ → ⦃ B-pr : H-Level 1 B ⦄
+    → ¬ A × B → is-prop (A ⊎ B)
+  disjoint-⊎-is-prop! = disjoint-⊎-is-prop (hlevel 1) (hlevel 1)

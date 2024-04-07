@@ -45,12 +45,12 @@ instance
 set-injective→is-embedding
   : {f : A → B} → is-set B → Injective f
   → is-embedding f
-set-injective→is-embedding B-set inj x = is-prop-η λ (f*x , p) (f*x′ , q) →
+set-injective→is-embedding B-set inj x (f*x , p) (f*x′ , q) =
   Σ-prop-path! (inj (p ∙ q ⁻¹)) where instance _ = hlevel-basic-instance 2 B-set
 
 is-embedding→injective
   : is-embedding f → Injective f
-is-embedding→injective prop p = ap fst (is-prop-β (prop _) (_ , p) (_ , refl))
+is-embedding→injective prop p = ap fst (prop _ (_ , p) (_ , refl))
 
 ↪→↣ : A ↪ B → A ↣ B
 ↪→↣ = second is-embedding→injective
@@ -82,7 +82,7 @@ is-embedding→monic
   : is-embedding f
   → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ g ＝ f ∘ h → g ＝ h
 is-embedding→monic {f} emb g h p =
-  fun-ext λ x → ap fst (is-prop-β (emb _) (g x , refl) (h x , p ⁻¹ $ₚ x))
+  fun-ext λ x → ap fst (emb _ (g x , refl) (h x , p ⁻¹ $ₚ x))
 
 set-monic→is-embedding
   : {A : Type ℓ} {B : Type ℓ′} {f : A → B} → is-set B
@@ -94,8 +94,8 @@ set-monic→is-embedding {f} B-set monic =
 
 
 preimage-is-prop→is-embedding : (∀ x → is-prop (fibre f (f x))) → is-embedding f
-preimage-is-prop→is-embedding {f} pffx y = is-prop-η λ a →
-  is-prop-β (subst (λ φ → is-prop (fibre f φ)) (a .snd) (pffx (a .fst))) a
+preimage-is-prop→is-embedding {f} pffx y a = subst (λ φ → is-prop (fibre f φ))
+  (a .snd) (pffx (a .fst)) a
 
 preimage-is-contr→is-embedding : (∀ x → is-contr (fibre f (f x))) → is-embedding f
 preimage-is-contr→is-embedding cffx =
@@ -113,18 +113,18 @@ is-equiv-on-paths→cancellable : is-equiv-on-paths f → Cancellable f
 is-equiv-on-paths→cancellable f-eop = _ , is-equiv-inv f-eop
 
 @0 is-equiv-on-paths→is-embedding : is-equiv-on-paths f → is-embedding f
-is-equiv-on-paths→is-embedding ep b = is-prop-η λ fib₁ fib₂ →
+is-equiv-on-paths→is-embedding ep b fib₁ fib₂ =
   fibre-equality≃fibre-on-paths ⁻¹ $ (ep .equiv-proof (fib₁ .snd ∙ sym (fib₂ .snd)) .fst)
 
 cancellable→is-embedding : Cancellable f → is-embedding f
 cancellable→is-embedding can = preimage-is-contr→is-embedding λ x → ≃→is-of-hlevel 0 (Σ-ap-snd (λ _ → can)) $
-  is-contr-η $ (x , reflₚ) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
+  (x , reflₚ) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
 
 is-embedding→is-equiv-on-paths : is-embedding f → is-equiv-on-paths f
 is-embedding→is-equiv-on-paths {f} emb = total-is-equiv→fibrewise-is-equiv {f = λ y p → ap {y = y} f p}
   (is-contr→is-equiv
-    (is-contr-η $ (_ , reflₚ) , λ (y , p) i → p i , λ j → p (i ∧ j))
-    (is-contr-η $ (_ , reflₚ) , is-prop-β (≃→is-of-hlevel 1 (Σ-ap-snd (λ _ → sym-≃)) (emb _)) _))
+    ((_ , refl) , λ (y , p) i → p i , λ j → p (i ∧ j))
+    ((_ , refl) , ≃→is-of-hlevel 1 (Σ-ap-snd (λ _ → sym-≃)) (emb _) _))
 
 @0 is-embedding≃is-equiv-on-paths : is-embedding f ≃ is-equiv-on-paths f
 is-embedding≃is-equiv-on-paths = prop-extₑ! is-embedding→is-equiv-on-paths is-equiv-on-paths→is-embedding
@@ -134,17 +134,17 @@ is-embedding→is-of-hlevel
   → is-of-hlevel (suc n) B
   → is-of-hlevel (suc n) A
 is-embedding→is-of-hlevel n {f} emb a-hl = ≃→is-of-hlevel (suc n) (total-equiv f) $
-  Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-of-hlevel-suc (emb x)
+  Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-of-hlevel-suc {h = n} (emb x)
 
 ↪→is-of-hlevel
   : ∀ n → ⦃ le : 1 ≤ n ⦄
   → B ↪ A
   → is-of-hlevel n A
   → is-of-hlevel n B
-↪→is-of-hlevel n ⦃ s≤s le ⦄ f = is-embedding→is-of-hlevel _ (f .snd)
+↪→is-of-hlevel (suc n) ⦃ s≤s le ⦄ f = is-embedding→is-of-hlevel n (f .snd)
 
 is-equiv→is-embedding : is-equiv f → is-embedding f
-is-equiv→is-embedding r y = is-contr→is-prop $ is-contr-η $ r .equiv-proof y
+is-equiv→is-embedding r y = is-contr→is-prop $ r .equiv-proof y
 
 ≃→↪ : A ≃ B → A ↪ B
 ≃→↪ = second is-equiv→is-embedding
@@ -170,7 +170,6 @@ instance
     ≃→is-of-hlevel 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
 
 opaque
-  unfolding is-of-hlevel
 
   pullback-identity-system
     : {A : Type ℓ} {B : Type ℓ′} {R : B → B → Type ℓ″} {r : ∀ b → R b b}

@@ -29,19 +29,17 @@ dec-as-sum = ≅→≃ helper where
   helper .snd .is-iso.linv (no ¬a) = refl
   helper .snd .is-iso.linv (yes a) = refl
 
-opaque
-  unfolding is-of-hlevel
-  dec-is-contr : is-contr A → is-contr (Dec A)
-  dec-is-contr (a , _) .fst = yes a
-  dec-is-contr (a , p) .snd (no ¬a)  = absurd (¬a a)
-  dec-is-contr (a , p) .snd (yes a′) = ap yes (p a′)
+dec-is-contr : is-contr A → is-contr (Dec A)
+dec-is-contr (a , _) .fst = yes a
+dec-is-contr (a , p) .snd (no ¬a)  = absurd (¬a a)
+dec-is-contr (a , p) .snd (yes a′) = ap yes (p a′)
 
 dec-is-of-hlevel : (n : HLevel) → is-of-hlevel n A → is-of-hlevel n (Dec A)
 dec-is-of-hlevel 0 = dec-is-contr
 dec-is-of-hlevel 1 A-hl =
-  ≃→is-of-hlevel 1 dec-as-sum (disjoint-⊎-is-prop (hlevel _) A-hl (λ f → f .fst (f .snd)))
+  ≃→is-of-hlevel 1 dec-as-sum (disjoint-⊎-is-prop (hlevel 1) A-hl (λ f → f .fst (f .snd)))
 dec-is-of-hlevel (suc (suc n)) A-hl =
- ≃→is-of-hlevel (suc (suc n)) dec-as-sum (⊎-is-of-hlevel n (hlevel _) A-hl)
+ ≃→is-of-hlevel (suc (suc n)) dec-as-sum (⊎-is-of-hlevel n (hlevel (suc (suc n))) A-hl)
 
 instance
   H-Level-Dec : ∀ {n} → ⦃ H-Level n A ⦄ → H-Level n (Dec A)

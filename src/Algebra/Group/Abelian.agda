@@ -25,12 +25,11 @@ record is-abelian-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 unquoteDecl is-abelian-group-iso = declare-record-iso is-abelian-group-iso (quote is-abelian-group)
 
 opaque
-  unfolding is-of-hlevel
   is-abelian-group-is-prop : is-prop (is-abelian-group _✦_)
   is-abelian-group-is-prop C = ≅→is-of-hlevel! 1 is-abelian-group-iso C where
     open is-abelian-group C
 
-instance
+instance opaque
   H-Level-is-abelian-group : H-Level (suc n) (is-abelian-group _✦_)
   H-Level-is-abelian-group = hlevel-prop-instance is-abelian-group-is-prop
 

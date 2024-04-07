@@ -47,9 +47,8 @@ open is-bishop-finite public
 unquoteDecl is-bishop-finite-iso = declare-record-iso is-bishop-finite-iso (quote is-bishop-finite)
 
 unique-cardinality : is-prop (Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁)
-unique-cardinality = is-prop-η go where
-  go : (p q : Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁) → p ＝ q
-  go (m , ∣p∣₁) (n , ∣q∣₁) = ext (∥-∥₁.elim!² (λ p q → fin-injective (p ⁻¹ ∙ q)) ∣p∣₁ ∣q∣₁)
+unique-cardinality (m , ∣p∣₁) (n , ∣q∣₁) =
+  ext (∥-∥₁.elim!² (λ p q → fin-injective (p ⁻¹ ∙ q)) ∣p∣₁ ∣q∣₁)
 
 private instance
   H-Level-card : ∀{n} → H-Level (suc n) (Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁)
@@ -194,7 +193,7 @@ instance
 
   decidable-prop→is-bishop-finite : ⦃ A-pr : H-Level 1 A ⦄ → ⦃ da : Dec A ⦄ → is-bishop-finite A
   decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ yes a ⦄ = fin₁ $ pure $
-    is-contr→equiv (inhabited-prop-is-contr a hlevel!) fin-1-is-contr
+    is-contr→≃ (inhabited-prop-is-contr a hlevel!) fin-1-is-contr
   decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ no ¬a ⦄ = fin₁ $ pure $ ¬-extₑ ¬a refl ∙ fin-0-is-initial ⁻¹
   {-# INCOHERENT decidable-prop→is-bishop-finite #-}
 

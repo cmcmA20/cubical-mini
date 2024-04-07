@@ -11,10 +11,8 @@ private variable
 
 open Precategory
 
-Functor-is-set : is-set (D .Ob) → is-set (Functor C D)
-Functor-is-set {D} ds = ≅→is-of-hlevel! 2 functor-iso where instance
-  DS : H-Level 2 (D .Ob)
-  DS = hlevel-basic-instance 2 ds
+Functor-is-set : ⦃ ds : H-Level 2 (D .Ob) ⦄ → is-set (Functor C D)
+Functor-is-set = ≅→is-of-hlevel! 2 functor-iso
 
 
 -- TODO

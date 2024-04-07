@@ -26,12 +26,11 @@ record is-comm-rig {A : 𝒰 ℓ}
 unquoteDecl is-comm-rig-iso = declare-record-iso is-comm-rig-iso (quote is-comm-rig)
 
 opaque
-  unfolding is-of-hlevel
   is-comm-rig-is-prop : is-prop (is-comm-rig _✦_ _✧_)
   is-comm-rig-is-prop R = ≅→is-of-hlevel! 1 is-comm-rig-iso R where
     open is-comm-rig R
 
-instance
+instance opaque
   H-Level-is-comm-rig : H-Level (suc n) (is-comm-rig _✦_ _✧_)
   H-Level-is-comm-rig = hlevel-prop-instance is-comm-rig-is-prop
 
@@ -57,7 +56,7 @@ comm-rig-on↪rig-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ crig-on-iso) $
     ap Rig-on._+_ p ,ₚ ap Rig-on._·_ p ,ₚ prop!
 
-instance
+instance opaque
   H-Level-comm-rig-on : H-Level (suc (suc n)) (CRig-on A)
   H-Level-comm-rig-on = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 comm-rig-on↪rig-on
 

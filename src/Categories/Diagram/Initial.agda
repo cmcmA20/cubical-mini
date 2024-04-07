@@ -22,7 +22,7 @@ record Initial : Type (o ⊔ h) where
   ¡-unique = paths $ has⊥ _
 
   ¡-unique² : ∀ {x} (f g : Hom bot x) → f ＝ g
-  ¡-unique² = is-prop-β $ is-contr→is-prop (has⊥ _)
+  ¡-unique² = is-contr→is-prop (has⊥ _)
 
 open Initial
 
@@ -32,7 +32,6 @@ open Initial
 
 
 opaque
-  unfolding is-of-hlevel
   ⊥-contractible : is-category C → is-prop Initial
   ⊥-contractible cat x₁ x₂ i .bot =
     Univalent.iso→path cat (⊥-unique x₁ x₂) i

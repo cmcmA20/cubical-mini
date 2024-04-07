@@ -39,7 +39,7 @@ module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
       =  (λ i → x , pair i .fst)
       ,ₚ (∫E.≅-pathᴾ refl _ (total-hom-pathp E _ _ refl λ i → pair i .snd .toᵈ))
       where
-        pair = is-prop-β (disp-c B.id-iso A)
+        pair = disp-c B.id-iso A
           (A , id-iso↓)
           (B , f)
 

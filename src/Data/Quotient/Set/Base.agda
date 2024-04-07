@@ -15,9 +15,9 @@ private variable
   P : A → Type ℓᵖ
   R : A → A → Type ℓʳ
 
-instance
+instance opaque
   H-Level-/₂ : ∀ {n} → H-Level (2 + n) (A / R)
-  H-Level-/₂ = hlevel-basic-instance 2 $ is-set-η squash/
+  H-Level-/₂ = hlevel-basic-instance 2 squash/
 
 elim-prop
   : {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓᵖ}
@@ -56,5 +56,5 @@ rec : is-set B
 rec _ f _ ⦋ a ⦌ = f a
 rec _ _ f= (glue/ a b r i) = f= a b r i
 rec B-set f f= (squash/ x y p q i j) =
-  is-set-β B-set (g x) (g y) (λ k → g (p k)) (λ k → g (q k)) i j
+  B-set (g x) (g y) (λ k → g (p k)) (λ k → g (q k)) i j
   where g = rec B-set f f=

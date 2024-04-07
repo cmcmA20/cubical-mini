@@ -37,4 +37,4 @@ reflects-injₑ!
   : ⦃ P-prop : H-Level 1 P ⦄
     ⦃ Q-prop : H-Level 1 Q ⦄
   → Reflects⁰ P a → Reflects⁰ Q a → P ≃ Q
-reflects-injₑ! = reflects-injₑ (hlevel _) (hlevel _)
+reflects-injₑ! = reflects-injₑ (hlevel 1) (hlevel 1)

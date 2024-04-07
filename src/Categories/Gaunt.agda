@@ -67,7 +67,7 @@ module _ {o ℓ} {C : Precategory o ℓ} where
       path-iso .fst f = skel .to-path ∣ f ∣₁
       path-iso .snd .is-iso.inv f = path→iso f
       path-iso .snd .is-iso.rinv _ =
-        is-set-β (is-skeletal→is-strict _ skel) _ _ _ _
+        is-skeletal→is-strict _ skel _ _ _ _
       path-iso {x} .snd .is-iso.linv f = IdS.J
         skel
         (λ y′ ∥f∥₁ → ∀(f : x ≅ y′) → path→iso ((skel .to-path ∥f∥₁)) ＝ f)

@@ -67,7 +67,6 @@ instance
   membership-subtype .Membership._∈_ x (A′ , e) = fibre {A = A′} (e $_) x
 
 opaque
-  unfolding is-of-hlevel
   subtype-membership-is-prop
     : ∀ {ℓ} {A : Type ℓ} {P : Subtype ℓ A} {x : A} → is-prop (x ∈ P)
   subtype-membership-is-prop {P = A′ , e} {x} = e .snd x

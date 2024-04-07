@@ -47,7 +47,7 @@ m ≯ n = ¬ m > n
 
 
 opaque
-  unfolding _≤_ is-of-hlevel
+  unfolding _≤_
 
   ≤-is-prop : is-prop (m ≤ n)
   ≤-is-prop (_ , p) (_ , q) = Σ-prop-path! (+-inj-l _ _ _ (p ∙ q ⁻¹))
@@ -55,7 +55,7 @@ opaque
   <-is-prop : is-prop (m < n)
   <-is-prop = ≤-is-prop
 
-instance
+instance opaque
   H-Level-≤ : H-Level (suc k) (m ≤ n)
   H-Level-≤ = hlevel-prop-instance ≤-is-prop
 

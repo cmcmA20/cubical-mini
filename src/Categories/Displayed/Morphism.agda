@@ -73,7 +73,6 @@ make-invertible↓ g′ p q .is-invertible[_].inversesᵈ .Inverses[_].inv-lᵈ 
 make-invertible↓ g′ p q .is-invertible[_].inversesᵈ .Inverses[_].inv-rᵈ = q
 
 opaque
-  unfolding is-of-hlevel
   Inverses[]-are-prop
     : ∀ {a b a′ b′} {f : Hom a b} {g : Hom b a}
     → (inv : Inverses f g)

@@ -9,11 +9,9 @@ open import Agda.Builtin.Unit public
 private variable
   n : HLevel
 
-opaque
-  unfolding is-of-hlevel
-  ⊤-is-contr : is-contr ⊤
-  ⊤-is-contr .fst = tt
-  ⊤-is-contr .snd tt = refl
+⊤-is-contr : is-contr ⊤
+⊤-is-contr .fst = tt
+⊤-is-contr .snd _ = refl
 
 instance
   H-Level-⊤ : H-Level n ⊤

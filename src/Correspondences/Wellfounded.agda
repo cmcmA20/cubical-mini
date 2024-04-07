@@ -29,11 +29,10 @@ from-induction
 from-induction ind = ind Acc λ _ → acc
 
 opaque
-  unfolding is-of-hlevel
   acc-is-prop : ∀ x → is-prop (Acc x)
   acc-is-prop x (acc s) (acc t) = ap acc $
     ext λ y y<x → acc-is-prop y (s y y<x) (t y y<x)
 
-instance
+instance opaque
   H-Level-acc : ∀ {x} {n} → H-Level (suc n) (Acc x)
   H-Level-acc = hlevel-prop-instance (acc-is-prop _)

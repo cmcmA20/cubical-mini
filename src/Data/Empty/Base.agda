@@ -45,15 +45,13 @@ contra
 contra f ¬b a = ¬b (f a)
 
 opaque
-  unfolding is-of-hlevel
-
   ⊥-is-prop : is-prop ⊥
   ⊥-is-prop ()
 
   ¬-is-prop : is-prop (¬ A)
   ¬-is-prop ¬a₁ ¬a₂ i a = ⊥-ext {x = ¬a₁ a} {y = ¬a₂ a} i
 
-instance
+instance opaque
   H-Level-⊥ : H-Level (suc n) ⊥
   H-Level-⊥ = hlevel-prop-instance ⊥-is-prop
 

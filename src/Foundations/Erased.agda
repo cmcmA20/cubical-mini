@@ -17,12 +17,10 @@ private variable
 @0 fibreᴱ≃fibre : {@0 f : A → B} {@0 y : B} → fibreᴱ f y ≃ fibre f y
 fibreᴱ≃fibre = Σ-ap-snd λ _ → erased≃id
 
+is-contr→is-contrᴱ : is-contr A → is-contrᴱ A
+is-contr→is-contrᴱ (c , p) = (c , erase p)
+
 opaque
-  unfolding is-of-hlevel
-
-  is-contr→is-contrᴱ : is-contr A → is-contrᴱ A
-  is-contr→is-contrᴱ (c , p) = (c , erase p)
-
   @0 is-of-hlevelᴱ≃is-of-hlevel : {n : HLevel} → is-of-hlevelᴱ n A ≃ is-of-hlevel n A
   is-of-hlevelᴱ≃is-of-hlevel {n = 0} = Σ-ap-snd λ _ → erased≃id
   is-of-hlevelᴱ≃is-of-hlevel {n = 1} = ≅→≃ $ to , iso from (λ _ → refl) li where
@@ -37,14 +35,14 @@ opaque
         in congᴱ $ erase (fun-ext (λ _ → is-of-hlevel-+ 1 2 (to pr) _ _ _ _ _ _))
   is-of-hlevelᴱ≃is-of-hlevel {n = suc (suc n)} = Π-cod-≃ λ _ → Π-cod-≃ λ _ → is-of-hlevelᴱ≃is-of-hlevel
 
-  @0 is-equivᴱ≃is-equiv : {f : A → B} → is-equivᴱ f ≃ is-equiv f
-  is-equivᴱ≃is-equiv {B} {f} =
-    Π-cod-≃ (λ _ → is-of-hlevelᴱ≃is-of-hlevel ∙ₑ generic-ae is-contr fibreᴱ≃fibre ) ∙ₑ ≅→≃ go where
-      go : Π[ b ꞉ B ] (is-contr (fibre f b)) ≅ is-equiv f
-      go .fst h .equiv-proof = h
-      go .snd .is-iso.inv eqv = eqv .equiv-proof
-      go .snd .is-iso.rinv eqv i .equiv-proof = eqv .equiv-proof
-      go .snd .is-iso.linv _ = refl
+@0 is-equivᴱ≃is-equiv : {f : A → B} → is-equivᴱ f ≃ is-equiv f
+is-equivᴱ≃is-equiv {B} {f} =
+  Π-cod-≃ (λ _ → is-of-hlevelᴱ≃is-of-hlevel ∙ₑ generic-ae is-contr fibreᴱ≃fibre ) ∙ₑ ≅→≃ go where
+    go : Π[ b ꞉ B ] (is-contr (fibre f b)) ≅ is-equiv f
+    go .fst h .equiv-proof = h
+    go .snd .is-iso.inv eqv = eqv .equiv-proof
+    go .snd .is-iso.rinv eqv i .equiv-proof = eqv .equiv-proof
+    go .snd .is-iso.linv _ = refl
 
 
 @0 equivᴱ≃equiv : (A ≃ᴱ B) ≃ (A ≃ B)
@@ -74,13 +72,11 @@ erased-path .snd .equiv-proof = strict-contr-fibres uncongᴱ
 
 module erased-path {ℓ} {@0 A} {@0 x} {@0 y} = Equiv (erased-path {ℓ} {A} {x} {y})
 
-opaque
-  unfolding is-of-hlevel
-  erased-is-of-hlevel : {@0 A : Type ℓᵃ} → (n : HLevel) → @0 is-of-hlevel n A → is-of-hlevel n (Erased A)
-  erased-is-of-hlevel 0 = erased-is-contr
-  erased-is-of-hlevel 1 = erased-is-prop
-  erased-is-of-hlevel (suc (suc n)) hl (erase x) (erase y) = ≃→is-of-hlevel (suc n)
-    erased-path.inverse (erased-is-of-hlevel (suc n) (hl x y))
+erased-is-of-hlevel : {@0 A : Type ℓᵃ} → (n : HLevel) → @0 is-of-hlevel n A → is-of-hlevel n (Erased A)
+erased-is-of-hlevel 0 = erased-is-contr
+erased-is-of-hlevel 1 = erased-is-prop
+erased-is-of-hlevel (suc (suc n)) hl (erase x) (erase y) = ≃→is-of-hlevel (suc n)
+  erased-path.inverse (erased-is-of-hlevel (suc n) (hl x y))
 
 -- awful notation
 infixr 30 _∙ᴱₑ_
@@ -146,7 +142,7 @@ _ ≃ᴱ∎ = ≃→≃ᴱ idₑ
   , erase λ (a , b) i → a , B-contr a .snd .erased b i )
 
 opaque
-  unfolding is-of-hlevel ua
+  unfolding ua
   equiv-is-contrᴱ : (A : Type ℓᵃ) → is-contrᴱ (Σ[ B ꞉ Type ℓᵃ ] (A ≃ B))
   equiv-is-contrᴱ A .fst = A , idₑ
   equiv-is-contrᴱ A .snd .erased (B , A≃B) i = ua A≃B i , p i , q i where
@@ -156,7 +152,7 @@ opaque
     q : ＜ id-is-equiv ／ (λ i → is-equiv (p i)) ＼ A≃B .snd ＞
     q = is-prop→pathᴾ (λ i → is-equiv-is-prop (p i)) _ _
 
-instance
+instance opaque
   H-Level-Erased : ∀ {h} → ⦃ @0 A-hl : H-Level h A ⦄
                  → H-Level h (Erased A)
-  H-Level-Erased .H-Level.has-of-hlevel = erased-is-of-hlevel _ (hlevel _)
+  H-Level-Erased {h} .H-Level.has-of-hlevel = erased-is-of-hlevel h (hlevel h)

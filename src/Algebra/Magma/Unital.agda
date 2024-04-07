@@ -45,13 +45,12 @@ module _ where
     M′ .id          ∎
 
 opaque
-  unfolding is-of-hlevel
   is-unital-magma-is-prop : is-prop (is-unital-magma _✦_)
   is-unital-magma-is-prop C C′ = Equiv.injective (≅ₜ→≃ is-unital-magma-iso) $
     prop! ,ₚ identity-unique C C′ ,ₚ prop!
     where open is-unital-magma C
 
-instance
+instance opaque
   H-Level-is-unital-magma : H-Level (suc n) (is-unital-magma _✦_)
   H-Level-is-unital-magma = hlevel-prop-instance is-unital-magma-is-prop
 
@@ -67,11 +66,12 @@ record UMagma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 
 unquoteDecl umagma-on-iso = declare-record-iso umagma-on-iso (quote UMagma-on)
 
-umagma-on-is-set : is-set (UMagma-on A)
-umagma-on-is-set = ≅→is-of-hlevel _ umagma-on-iso $ is-set-η λ (_ , x) _ _ _ →
-  let open is-unital-magma x in prop!
+opaque
+  umagma-on-is-set : is-set (UMagma-on A)
+  umagma-on-is-set = ≅→is-of-hlevel 2 umagma-on-iso $ λ (_ , x) _ _ _ →
+    let open is-unital-magma x in prop!
 
-instance
+instance opaque
   H-Level-umagma-on : H-Level (2 + n) (UMagma-on A)
   H-Level-umagma-on = hlevel-basic-instance 2 umagma-on-is-set
 
@@ -91,12 +91,13 @@ record UMagma-hom
 
 unquoteDecl umagma-hom-iso = declare-record-iso umagma-hom-iso (quote UMagma-hom)
 
-umagma-hom-is-prop : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
-                   → is-prop (UMagma-hom M M′ f)
-umagma-hom-is-prop {M′} = ≅→is-of-hlevel! _ umagma-hom-iso where
-  open UMagma-on M′
+opaque
+  umagma-hom-is-prop : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
+                     → is-prop (UMagma-hom M M′ f)
+  umagma-hom-is-prop {M′} = ≅→is-of-hlevel! 1 umagma-hom-iso where
+    open UMagma-on M′
 
-instance
+instance opaque
   H-Level-umagma-hom : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
                      → H-Level (suc n) (UMagma-hom M M′ f)
   H-Level-umagma-hom = hlevel-prop-instance umagma-hom-is-prop

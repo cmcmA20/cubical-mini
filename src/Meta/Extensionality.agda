@@ -12,7 +12,6 @@ open import Meta.Reflection.Subst
 open import Structures.IdentitySystem.Base
   hiding (J; J-refl)
   public
--- open import Structures.n-Type
 
 open import Data.Bool.Base
 open import Data.List.Base
@@ -189,5 +188,5 @@ Pathᵉ-is-of-hlevel
   → ∀ {x y}
   → is-of-hlevel n (Pathᵉ sa x y)
 Pathᵉ-is-of-hlevel n sa hl =
-  ≃→is-of-hlevel _ (identity-system-gives-path (sa .idsᵉ))
-    ((path-is-of-hlevel _ hl _ _))
+  ≃→is-of-hlevel n (identity-system-gives-path (sa .idsᵉ))
+    ((path-is-of-hlevel n hl _ _))
