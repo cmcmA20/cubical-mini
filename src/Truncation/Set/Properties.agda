@@ -13,38 +13,6 @@ private variable
   B : Type ℓᵇ
   C : Type ℓᶜ
 
-elim² : {C : ∥ A ∥₂ → ∥ B ∥₂ → Type ℓ}
-      → (∀ x y → is-set (C x y))
-      → (∀ x y → C ∣ x ∣₂ ∣ y ∣₂)
-      → ∀ x y → C x y
-elim² B-set f = elim (λ x → Π-is-of-hlevel 2 (B-set x))
-  λ x → elim (B-set ∣ x ∣₂) (f x)
-
-elim³ : {D : ∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂ → Type ℓ}
-      → (∀ x y z → is-set (D x y z))
-      → (∀ x y z → D ∣ x ∣₂ ∣ y ∣₂ ∣ z ∣₂)
-      → ∀ x y z → D x y z
-elim³ B-set f = elim² (λ x y → Π-is-of-hlevel 2 (B-set x y))
-  λ x y → elim (B-set ∣ x ∣₂ ∣ y ∣₂) (f x y)
-
-rec!
-  : ⦃ B-set : H-Level 2 B ⦄
-  → (A → B)
-  → (x : ∥ A ∥₂) → B
-rec! = elim hlevel!
-
-elim!
-  : {A : Type ℓᵃ} {P : ∥ A ∥₂ → Type ℓ}
-    ⦃ P-set : ∀{a} → H-Level 2 (P a) ⦄
-  → Π[ a ꞉ A ] P ∣ a ∣₂
-  → (x : ∥ A ∥₂) → P x
-elim! = elim hlevel!
-
-proj!
-  : ⦃ A-set : H-Level 2 A ⦄
-  → ∥ A ∥₂ → A
-proj! = rec! id
-
 ∥-∥₂-idempotent : is-set A → is-equiv ∣_∣₂
 ∥-∥₂-idempotent {A} A-set = is-iso→is-equiv $ iso (proj A-set) inc∘proj λ _ → refl where
   inc∘proj : (x : ∥ A ∥₂) → ∣ proj A-set x ∣₂ ＝ x

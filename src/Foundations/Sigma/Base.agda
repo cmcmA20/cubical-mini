@@ -38,11 +38,11 @@ bimap : {P : A → Type ℓ} {Q : ∀ {a} → P a → B a → Type ℓ′}
       → Σ (B a) (Q b)
 bimap f g (x , y) = f x , g y
 
-bimap-simple : {B : Type ℓᵇ} {P : A → Type ℓ} {Q : B → Type ℓ′}
-             → (f : A → B)
-             → (∀ {x} → P x → Q (f x))
-             → Σ A P → Σ B Q
-bimap-simple = bimap
+bimapˢ : {B : Type ℓᵇ} {P : A → Type ℓ} {Q : B → Type ℓ′}
+       → (f : A → B)
+       → (∀ {x} → P x → Q (f x))
+       → Σ A P → Σ B Q
+bimapˢ = bimap
 
 first : {C : A → Type ℓᶜ} → (f : (a : A) → B a) → ((a , _) : Σ A C) → B a × C a
 first f = bimap f (λ x → x)

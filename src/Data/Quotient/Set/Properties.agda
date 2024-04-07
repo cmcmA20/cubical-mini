@@ -15,7 +15,9 @@ open import Data.Dec.Base as Dec
   using (Dec)
 import Data.Dec.Path
 
-open import Data.Quotient.Set.Base public
+open import Data.Quotient.Set.Base
+
+open import Functions.Surjection
 
 import Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∃-syntax-und; ∥_∥₁ ; ∣_∣₁)
@@ -28,98 +30,10 @@ private variable
   C : Type ℓᶜ
   P : A → Type ℓᵖ
   R : A → A → Type ℓʳ
-  S : B → B → Type ℓˢ
-  T : C → C → Type ℓᵗ
-
-elim-prop!
-  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓᵖ}
-    ⦃ P-prop : ∀[ x ꞉ A / R ] H-Level 1 (P x) ⦄
-    (f : Π[ a ꞉ A ] P ⦋ a ⦌)
-  → Π[ q ꞉ A / R ] P q
-elim-prop! = elim-prop hlevel!
-
-elim-prop²
-  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
-    {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
-    {P : A / R → B / S → Type ℓ}
-    (P-prop : ∀ x y → is-prop (P x y))
-    (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
-  → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
-elim-prop² {P} P-prop f = elim-prop! λ a → elim-prop! (f a)
-  where instance
-    P-prop′ : ∀ {x y} → H-Level 1 (P x y)
-    P-prop′ = hlevel-prop-instance (P-prop _ _)
-
-elim-prop!²
-  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
-    {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
-    {P : A / R → B / S → Type ℓ}
-    ⦃ P-prop : ∀ {x y} → H-Level 1 (P x y) ⦄
-    (f : Π[ a ꞉ A ] Π[ b ꞉ B ] P ⦋ a ⦌ ⦋ b ⦌)
-  → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] P q₁ q₂
-elim-prop!² = elim-prop² hlevel!
-
-elim-prop³
-  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
-    {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
-    {C : Type ℓᶜ} {T : C → C → Type ℓᵗ}
-    {P : A / R → B / S → C / T → Type ℓ}
-    (P-prop : ∀ x y z → is-prop (P x y z))
-    (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
-  → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
-elim-prop³ {P} P-prop f = elim-prop!² λ a b → elim-prop! (f a b)
-  where instance
-    P-prop′ : ∀ {x y z} → H-Level 1 (P x y z)
-    P-prop′ = hlevel-prop-instance (P-prop _ _ _)
-
-elim-prop!³
-  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
-    {B : Type ℓᵇ} {S : B → B → Type ℓˢ}
-    {C : Type ℓᶜ} {T : C → C → Type ℓᵗ}
-    {P : A / R → B / S → C / T → Type ℓ}
-    ⦃ P-prop : ∀ {x y z} → H-Level 1 (P x y z) ⦄
-    (f : Π[ a ꞉ A ] Π[ b ꞉ B ] Π[ c ꞉ C ] P ⦋ a ⦌ ⦋ b ⦌ ⦋ c ⦌)
-  → Π[ q₁ ꞉ A / R ] Π[ q₂ ꞉ B / S ] Π[ q₃ ꞉ C / T ] P q₁ q₂ q₃
-elim-prop!³ = elim-prop³ hlevel!
-
-
-elim!
-  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓᵖ}
-    ⦃ P-set : ∀[ x ꞉ A / R ] H-Level 2 (P x) ⦄
-    (f : Π[ a ꞉ A ] P ⦋ a ⦌)
-  → (∀ a b (r : R a b) → ＜ f a ／ (λ i → P (glue/ a b r i)) ＼ f b ＞)
-  → Π[ q ꞉ A / R ] P q
-elim! = elim hlevel!
-
-
-rec! : ⦃ B-set : H-Level 2 B ⦄
-     → (f : A → B)
-     → (∀ a b → R a b → f a ＝ f b)
-     → A / R → B
-rec! = rec hlevel!
-
-rec² : is-set C
-     → (f : A → B → C)
-     → (∀ x y b → R x y → f x b ＝ f y b)
-     → (∀ a x y → S x y → f a x ＝ f a y)
-     → A / R → B / S → C
-rec² C-set f fa= fb= =
-  rec! (λ a → rec! (f a) (fb= a)) λ a b r → fun-ext $ elim-prop! λ x → fa= a b x r
-  where instance _ = hlevel-basic-instance 2 C-set
-
-rec!² : ⦃ C-set : H-Level 2 C ⦄
-      → (f : A → B → C)
-      → (∀ x y b → R x y → f x b ＝ f y b)
-      → (∀ a x y → S x y → f a x ＝ f a y)
-      → A / R → B / S → C
-rec!² = rec² hlevel!
-
-
--- Actual properties
 
 ⦋-⦌-surjective : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
-                (x : A / R) → ∃[ a ꞉ A ] (⦋ a ⦌ ＝ x)
-⦋-⦌-surjective = elim-prop! λ a → ∣ a , refl ∣₁
+              → is-surjective (⦋_⦌ {R = R})
+⦋-⦌-surjective = elim-prop! (λ a → ∣ a , refl ∣₁)
 
 universal : is-set B
           → (A / R → B)

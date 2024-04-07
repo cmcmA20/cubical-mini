@@ -100,7 +100,7 @@ private
   ∥FinSet′∥₂≃ᴱℕ = (∥-∥₂.rec! (fst ∘ snd)) , is-isoᴱ→is-equivᴱ
     ( (λ n → pure $ Lift _ (Fin n) , n , pure lift≃id)
     , erase (λ _ → refl)
-    , erase (∥-∥₂.elim! (λ X → ∥-∥₂-path.from (fin-set′-ext refl))) )
+    , erase (∥-∥₂.elim! (λ X → ＝∘∣-∣₂≃∥-∥₁∘＝ ⁻¹ $ fin-set′-ext refl)) )
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
 ∥FinSet∥₂≃ᴱℕ
