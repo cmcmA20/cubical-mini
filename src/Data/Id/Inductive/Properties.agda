@@ -28,12 +28,11 @@ Id≃path = identity-system-gives-path Id-identity-system
 module Id≃path {ℓ} {A : Type ℓ} = IdS (Id-identity-system {A = A})
 
 
-opaque
-  unfolding is-of-hlevel
-  is-contrⁱ→is-contr : is-contrⁱ A → is-contr A
-  is-contrⁱ→is-contr (centre , _) .fst = centre
-  is-contrⁱ→is-contr (_ , paths)  .snd = Id≃path.to ∘ paths
+is-contrⁱ→is-contr : is-contrⁱ A → is-contr A
+is-contrⁱ→is-contr (centre , _) .fst = centre
+is-contrⁱ→is-contr (_ , paths)  .snd = Id≃path.to ∘ paths
 
+opaque
   is-propⁱ→is-prop : is-propⁱ A → is-prop A
   is-propⁱ→is-prop A-propⁱ x y = Id≃path.to (A-propⁱ x y)
 

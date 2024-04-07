@@ -88,7 +88,6 @@ record is-cartesian {a b} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
 unquoteDecl is-cartesian-iso = declare-record-iso is-cartesian-iso (quote is-cartesian)
 
 opaque
-  unfolding is-of-hlevel
   is-cartesian-is-prop
     : ∀ {x y x′ y′} {f : Hom x y} {f′ : Hom[ f ] x′ y′}
     → is-prop (is-cartesian f f′)

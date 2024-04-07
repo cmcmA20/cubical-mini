@@ -27,12 +27,11 @@ record is-semigroup {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 unquoteDecl is-semigroup-iso = declare-record-iso is-semigroup-iso (quote is-semigroup)
 
 opaque
-  unfolding is-of-hlevel
   is-semigroup-is-prop : is-prop (is-semigroup _✦_)
   is-semigroup-is-prop S = ≅→is-of-hlevel! 1 is-semigroup-iso S where
     open is-semigroup S
 
-instance
+instance opaque
   H-Level-is-semigroup : H-Level (suc n) (is-semigroup _✦_)
   H-Level-is-semigroup = hlevel-prop-instance is-semigroup-is-prop
 
@@ -54,9 +53,9 @@ semigroup-on↪magma-on .fst S .n-Magma-on.has-n-magma =
 semigroup-on↪magma-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ semigroup-on-iso) $ Σ-prop-pathᴾ! (ap n-Magma-on._⋆_ p)
 
-instance
+instance opaque
   H-Level-semigroup-on : H-Level (2 + n) (Semigroup-on A)
-  H-Level-semigroup-on = hlevel-basic-instance 2 $ ↪→is-of-hlevel! _ semigroup-on↪magma-on
+  H-Level-semigroup-on = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 semigroup-on↪magma-on
 
 
 record make-semigroup {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

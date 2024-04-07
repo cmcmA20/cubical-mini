@@ -21,8 +21,6 @@ is-2-groupoid : Type ℓ → Type ℓ
 is-2-groupoid = is-of-hlevel 4
 
 opaque
-  unfolding is-of-hlevel
-
   is-of-hlevel-Ω→is-of-hlevel
     : (h : HLevel)
     → Π[ x ꞉ A ] is-of-hlevel (1 + h) (x ＝ x)
@@ -61,9 +59,10 @@ opaque
   contractible-if-inhabited : (A → is-contr A) → is-prop A
   contractible-if-inhabited cont x y = is-contr→is-prop (cont x) x y
 
-  inhabited-prop-is-contr : A → is-prop A → is-contr A
-  inhabited-prop-is-contr x p = x , p x
+inhabited-prop-is-contr : A → is-prop A → is-contr A
+inhabited-prop-is-contr x p = x , p x
 
+opaque
   is-prop→is-set : is-prop A → is-set A
   is-prop→is-set h a b p q j i = hcomp (∂ i ∨ ∂ j) λ where
     k (i = i0) → h a a k
@@ -77,30 +76,31 @@ opaque
   is-of-hlevel-suc (suc 0) x = is-prop→is-set x
   is-of-hlevel-suc (suc (suc h)) p x y = is-of-hlevel-suc (suc h) (p x y)
 
-  is-of-hlevel-+ : (h₀ h₁ : HLevel) → is-of-hlevel h₀ A → is-of-hlevel (h₁ + h₀) A
-  is-of-hlevel-+ h₀ 0     x = x
-  is-of-hlevel-+ h₀ (suc h₁) x = is-of-hlevel-suc _ (is-of-hlevel-+ h₀ h₁ x)
+is-of-hlevel-+ : (h₀ h₁ : HLevel) → is-of-hlevel h₀ A → is-of-hlevel (h₁ + h₀) A
+is-of-hlevel-+ h₀ 0     x = x
+is-of-hlevel-+ h₀ (suc h₁) x = is-of-hlevel-suc (h₁ + h₀) (is-of-hlevel-+ h₀ h₁ x)
 
-  is-of-hlevel-+-left : (h₀ h₁ : HLevel) → is-of-hlevel h₀ A → is-of-hlevel (h₀ + h₁) A
-  is-of-hlevel-+-left {A} h₀ h₁ A-hl =
-    subst (λ h → is-of-hlevel h A) (+-comm h₀ h₁) (is-of-hlevel-+ h₀ h₁ A-hl) where
-      +-comm : ∀ n k → k + n ＝ n + k
-      +-comm 0 k = go k where
-        go : ∀ k → k + 0 ＝ k
-        go zero = refl
-        go (suc x) = ap suc (go x)
-      +-comm (suc n) k = go n k ∙ ap suc (+-comm n k) where
-        go : ∀ n k → k + suc n ＝ suc (k + n)
-        go n zero = refl
-        go n (suc k) = ap suc (go n k)
+is-of-hlevel-+-left : (h₀ h₁ : HLevel) → is-of-hlevel h₀ A → is-of-hlevel (h₀ + h₁) A
+is-of-hlevel-+-left {A} h₀ h₁ A-hl =
+  subst (λ h → is-of-hlevel h A) (+-comm h₀ h₁) (is-of-hlevel-+ h₀ h₁ A-hl) where
+    +-comm : ∀ n k → k + n ＝ n + k
+    +-comm 0 k = go k where
+      go : ∀ k → k + 0 ＝ k
+      go zero = refl
+      go (suc x) = ap suc (go x)
+    +-comm (suc n) k = go n k ∙ ap suc (+-comm n k) where
+      go : ∀ n k → k + suc n ＝ suc (k + n)
+      go n zero = refl
+      go n (suc k) = ap suc (go n k)
 
+opaque
   is-contr→is-set : is-contr A → is-set A
   is-contr→is-set = is-of-hlevel-+-left 0 2
 
   is-prop→is-of-hlevel-suc : is-prop A → is-of-hlevel (suc h) A
   is-prop→is-of-hlevel-suc {h = 0    } A-prop = A-prop
   is-prop→is-of-hlevel-suc {h = suc h} A-prop =
-    is-of-hlevel-suc (suc h) (is-prop→is-of-hlevel-suc A-prop)
+    is-of-hlevel-suc (suc h) (is-prop→is-of-hlevel-suc {h = h} A-prop)
 
   path-is-of-hlevel-same : (h : HLevel) → is-of-hlevel h A → {x y : A}
                          → is-of-hlevel h (x ＝ y)
@@ -115,19 +115,20 @@ opaque
   pathᴾ-is-of-hlevel-same {A} h ahl {x} {y} =
     subst (is-of-hlevel h) (sym (pathᴾ＝path A x y)) (path-is-of-hlevel-same h ahl)
 
-  path-is-of-hlevel : (h : HLevel) → is-of-hlevel (suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
-  path-is-of-hlevel 0 ahl x y =
-    ahl x y , is-prop→is-set ahl _ _ _
-  path-is-of-hlevel (suc h) p x y = p x y
+path-is-of-hlevel : (h : HLevel) → is-of-hlevel (suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
+path-is-of-hlevel 0 ahl x y =
+  ahl x y , is-prop→is-set ahl _ _ _
+path-is-of-hlevel (suc h) p x y = p x y
 
-  pathᴾ-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
-                     → is-of-hlevel (suc h) (A i1)
-                     → (x : A i0) (y : A i1)
-                     → is-of-hlevel h ＜ x ／ A ＼ y ＞
-  pathᴾ-is-of-hlevel {A} h ahl x y =
-    subst (is-of-hlevel h) (sym (pathᴾ＝path A x y)) (path-is-of-hlevel h ahl _ _)
+pathᴾ-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
+                   → is-of-hlevel (suc h) (A i1)
+                   → (x : A i0) (y : A i1)
+                   → is-of-hlevel h ＜ x ／ A ＼ y ＞
+pathᴾ-is-of-hlevel {A} h ahl x y =
+  subst (is-of-hlevel h) (sym (pathᴾ＝path A x y)) (path-is-of-hlevel h ahl _ _)
 
 
+opaque
   is-contr-is-prop : is-prop (is-contr A)
   is-contr-is-prop (c₀ , h₀) (c₁ , h₁) j .fst = h₀ c₁ j
   is-contr-is-prop (c₀ , h₀) (c₁ , h₁) j .snd y i = hcomp (∂ i ∨ ∂ j) λ where
@@ -147,16 +148,18 @@ opaque
     is-of-hlevel-is-prop (suc h) (x a b) (y a b) i
 
   is-of-hlevel-is-of-hlevel-suc : (h₁ : HLevel) → is-of-hlevel (suc h₁) (is-of-hlevel h A)
-  is-of-hlevel-is-of-hlevel-suc h₁ = is-of-hlevel-+-left 1 h₁ (is-of-hlevel-is-prop _)
+  is-of-hlevel-is-of-hlevel-suc {h} h₁ = is-of-hlevel-+-left 1 h₁ (is-of-hlevel-is-prop h)
 
-  -- note that it's shifted up by one
-  is-of-hlevel-dep : HLevel → (A → Type ℓ′) → Type (level-of-type A ⊔ ℓ′)
-  is-of-hlevel-dep 0 B =
-    ∀ {x y} (α : B x) (β : B y) (p : x ＝ y) → ＜ α ／ (λ i → B (p i)) ＼ β ＞
-  is-of-hlevel-dep (suc n) B =
-    ∀ {a₀ a₁} (b₀ : B a₀) (b₁ : B a₁)
-    → is-of-hlevel-dep {A = a₀ ＝ a₁} n (λ p → ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞)
 
+-- note that it's shifted up by one
+is-of-hlevel-dep : HLevel → (A → Type ℓ′) → Type (level-of-type A ⊔ ℓ′)
+is-of-hlevel-dep 0 B =
+  ∀ {x y} (α : B x) (β : B y) (p : x ＝ y) → ＜ α ／ (λ i → B (p i)) ＼ β ＞
+is-of-hlevel-dep (suc n) B =
+  ∀ {a₀ a₁} (b₀ : B a₀) (b₁ : B a₁)
+  → is-of-hlevel-dep {A = a₀ ＝ a₁} n (λ p → ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞)
+
+opaque
   is-of-hlevel→is-of-hlevel-dep
     : (n : HLevel) → Π[ x ꞉ A ] is-of-hlevel (suc n) (B x)
     → is-of-hlevel-dep n B
@@ -190,13 +193,14 @@ opaque
       base : (i j : I) → B i j
       base i j = transport (λ k → B (i ∧ k) (j ∧ k)) a
 
-  is-prop→pathᴾ-is-contr
-    : {A : I → Type ℓ} → ((i : I) → is-prop (A i))
-    → (x : A i0) (y : A i1) → is-contr ＜ x ／ A ＼ y ＞
-  is-prop→pathᴾ-is-contr A-pr x y .fst = is-prop→pathᴾ A-pr x y
-  is-prop→pathᴾ-is-contr A-pr x y .snd p =
-    is-prop→squareᴾ (λ _ → A-pr) _ refl p refl
+is-prop→pathᴾ-is-contr
+  : {A : I → Type ℓ} → ((i : I) → is-prop (A i))
+  → (x : A i0) (y : A i1) → is-contr ＜ x ／ A ＼ y ＞
+is-prop→pathᴾ-is-contr A-pr x y .fst = is-prop→pathᴾ A-pr x y
+is-prop→pathᴾ-is-contr A-pr x y .snd p =
+  is-prop→squareᴾ (λ _ → A-pr) _ refl p refl
 
+opaque
   is-set→squareᴾ
     : {A : I → I → Type ℓ}
       (is-set : (i j : I) → is-set (A i j))
@@ -224,13 +228,11 @@ opaque
     coe0→1 (λ j → ＜ px ／ (λ i → P (A-set _ _ p q j i)) ＼ py ＞)
 
 
+erased-is-contr : {@0 A : Type ℓ} → @0 is-contr A → is-contr (Erased A)
+erased-is-contr (centre , paths) = erase centre , λ where
+  (erase x) → congᴱ $ erase (paths x)
+
 opaque
-  unfolding is-of-hlevel
-
-  erased-is-contr : {@0 A : Type ℓ} → @0 is-contr A → is-contr (Erased A)
-  erased-is-contr (centre , paths) = erase centre , λ where
-    (erase x) → congᴱ $ erase (paths x)
-
   erased-is-prop : {@0 A : Type ℓ} → @0 is-prop A → is-prop (Erased A)
   erased-is-prop pr (erase x) (erase y) = congᴱ $ erase (pr x y)
 
@@ -255,18 +257,34 @@ prop!
 prop! {A} = is-prop→pathᴾ (λ i → coe0→i (λ j → is-prop (A j)) i (hlevel _)) _ _
 
 opaque
-  unfolding is-of-hlevel
-
   H-Level-is-prop : is-prop (H-Level h A)
-  H-Level-is-prop x y i .has-of-hlevel =
-    is-of-hlevel-is-prop _ (x .has-of-hlevel) (y .has-of-hlevel) i
+  H-Level-is-prop {h} x y i .has-of-hlevel =
+    is-of-hlevel-is-prop h (x .has-of-hlevel) (y .has-of-hlevel) i
 
-  hlevel-basic-instance : ∀ n → is-of-hlevel n A → ∀ {k} → H-Level (n + k) A
-  hlevel-basic-instance n hl .has-of-hlevel = is-of-hlevel-+-left n _ hl
+hlevel-basic-instance : ∀ n → is-of-hlevel n A → ∀ {k} → H-Level (n + k) A
+hlevel-basic-instance n hl .has-of-hlevel = is-of-hlevel-+-left n _ hl
 
+opaque
   hlevel-prop-instance : is-prop A → H-Level (suc h) A
-  hlevel-prop-instance A-pr .has-of-hlevel = is-prop→is-of-hlevel-suc A-pr
+  hlevel-prop-instance {h} A-pr .has-of-hlevel = is-prop→is-of-hlevel-suc {h = h} A-pr
 
-instance
-  H-Level-is-of-hlevel : H-Level (suc h) (is-of-hlevel h₁ A)
-  H-Level-is-of-hlevel = hlevel-prop-instance (is-of-hlevel-is-prop _)
+-- TODO remove? seems useless if `is-of-hlevel` is transparent
+instance opaque
+  H-Level-contr : H-Level (suc h) (is-contr A)
+  H-Level-contr {h} = hlevel-prop-instance is-contr-is-prop
+  {-# INCOHERENT H-Level-contr #-}
+
+  H-Level-prop : H-Level (suc h) (is-prop A)
+  H-Level-prop {h} = hlevel-prop-instance is-prop-is-prop
+  {-# INCOHERENT H-Level-prop #-}
+
+  -- H-Level-set : H-Level (suc h) (is-set A)
+  -- H-Level-set {h} = hlevel-prop-instance (is-of-hlevel-is-prop 2)
+  -- {-# INCOHERENT H-Level-set #-}
+
+  H-Level-of-hlevel : H-Level (suc h) (is-of-hlevel h₁ A)
+  H-Level-of-hlevel {h₁} = hlevel-prop-instance (is-of-hlevel-is-prop h₁)
+  {-# INCOHERENT H-Level-of-hlevel #-}
+
+  H-Level-H-Level : H-Level (suc h) (H-Level h₁ A)
+  H-Level-H-Level {h₁} = hlevel-prop-instance H-Level-is-prop

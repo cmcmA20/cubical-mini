@@ -73,12 +73,11 @@ m ≯ n = ¬ m > n
 <→s {m} {suc n} p = n , refl
 
 opaque
-  unfolding is-of-hlevel
   <-is-prop : is-prop (m < n)
   <-is-prop {0}     {suc _} _ _ = refl
   <-is-prop {suc m} {suc n} = <-is-prop {m} {n}
 
-instance
+instance opaque
   <-is-of-hlevel : is-of-hlevel (suc k) (m < n)
   <-is-of-hlevel {m} {n} = is-prop→is-of-hlevel-suc (<-is-prop {m} {n})
 

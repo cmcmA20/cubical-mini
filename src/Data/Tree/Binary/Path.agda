@@ -92,11 +92,11 @@ code-is-of-hlevel {xs = node xl xr} {node yl yr} hl =
 tree-is-of-hlevel : (n : HLevel)
                   → is-of-hlevel (2 + n) A
                   → is-of-hlevel (2 + n) (Tree A)
-tree-is-of-hlevel n A-hl = is-of-hlevel-η n λ _ _ →
+tree-is-of-hlevel n A-hl _ _ =
   ≃→is-of-hlevel (suc n)
                  (identity-system-gives-path identity-system ⁻¹)
                  (code-is-of-hlevel A-hl)
 
-instance
+instance opaque
   H-Level-binary-tree : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (Tree A)
   H-Level-binary-tree .H-Level.has-of-hlevel = tree-is-of-hlevel _ hlevel!

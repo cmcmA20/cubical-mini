@@ -19,7 +19,7 @@ hom[ p ]⁻ = hom[ sym p ]
 reindex
   : ∀ {a b x y} {f g : B.Hom a b} (p q : f ＝ g) {f′ : E.Hom[ f ] x y}
   → hom[ p ] f′ ＝ hom[ q ] f′
-reindex p q {f′} = ap (λ e → hom[ e ] f′) (is-set-β (B.Hom-set _ _) _ _ p q)
+reindex p q {f′} = ap (λ e → hom[ e ] f′) (B.Hom-set _ _ _ _ p q)
 
 cast[]
   : ∀ {a b x y} {f g : B.Hom a b} {f′ : E.Hom[ f ] x y} {g′ : E.Hom[ g ] x y}
@@ -27,7 +27,7 @@ cast[]
   → f′ E.＝[ p ] g′
   → f′ E.＝[ q ] g′
 cast[] {f} {g} {f′} {g′} {p} {q} r =
-  coe0→1 (λ i → f′ E.＝[ is-set-β (B.Hom-set _ _) f g p q i ] g′) r
+  coe0→1 (λ i → f′ E.＝[ B.Hom-set _ _ f g p q i ] g′) r
 
 hom[]-∙
   : ∀ {a b x y} {f g h : B.Hom a b} (p : f ＝ g) (q : g ＝ h)

@@ -32,18 +32,17 @@ identity-system .to-path {ofⁿ ¬p} {ofⁿ ¬p′} _ = ap ofⁿ $ fun-ext $ λ 
 identity-system .to-path-over {ofʸ p} {ofʸ p′} c i j = c (i ∧ j)
 identity-system .to-path-over {ofⁿ ¬p} {ofⁿ ¬p′} _ = refl
 
+code-is-of-hlevel : {x y : Reflects⁰ P a} {n : HLevel}
+                  → is-of-hlevel (suc n) P
+                  → is-of-hlevel n (Code x y)
+code-is-of-hlevel {x = ofʸ p} {ofʸ p′} hl = path-is-of-hlevel _ hl p p′
+code-is-of-hlevel {x = ofⁿ _} {ofⁿ _}  _  = hlevel _
+
+reflects-true-is-contr : is-contr P → is-contr (Reflects⁰ P true)
+reflects-true-is-contr (p , paths) = ofʸ p , λ where
+  (ofʸ q) → ap ofʸ (paths q)
+
 opaque
-  unfolding is-of-hlevel
-  code-is-of-hlevel : {x y : Reflects⁰ P a} {n : HLevel}
-                    → is-of-hlevel (suc n) P
-                    → is-of-hlevel n (Code x y)
-  code-is-of-hlevel {x = ofʸ p} {ofʸ p′} hl = path-is-of-hlevel _ hl p p′
-  code-is-of-hlevel {x = ofⁿ _} {ofⁿ _}  _  = hlevel _
-
-  reflects-true-is-contr : is-contr P → is-contr (Reflects⁰ P true)
-  reflects-true-is-contr (p , paths) = ofʸ p , λ where
-    (ofʸ q) → ap ofʸ (paths q)
-
   reflects-is-of-hlevel : (n : HLevel) → is-of-hlevel (suc n) P → is-of-hlevel (suc n) (Reflects⁰ P a)
   reflects-is-of-hlevel 0 hl (ofʸ p) (ofʸ p′) = ap ofʸ (hl p p′)
   reflects-is-of-hlevel 0 _  (ofⁿ _) (ofⁿ _)  = ap ofⁿ prop!
@@ -56,6 +55,6 @@ ofʸ-inj = ap invert-true
 ofⁿ-inj : ∀ {x y : ¬ P} → ofⁿ x ＝ ofⁿ y → x ＝ y
 ofⁿ-inj _ = prop!
 
-instance
+instance opaque
   H-Level-Reflects : ∀ {n} →  ⦃ H-Level (suc n) P ⦄ → H-Level (suc n) (Reflects⁰ P a)
   H-Level-Reflects .H-Level.has-of-hlevel = reflects-is-of-hlevel _ (hlevel _)

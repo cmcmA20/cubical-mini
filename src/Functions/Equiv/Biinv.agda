@@ -21,15 +21,13 @@ rinv f = Σ[ h ꞉ (_ → _) ] (f ∘ h ＝ id)
 is-biinv : (A → B) → Type _
 is-biinv f = linv f × rinv f
 
-opaque
-  unfolding is-of-hlevel
-  is-iso→is-contr-linv : is-iso f → is-contr (linv f)
-  is-iso→is-contr-linv isiso =
-    is-equiv→post-is-equiv (is-iso→is-equiv isiso) .equiv-proof id
+is-iso→is-contr-linv : is-iso f → is-contr (linv f)
+is-iso→is-contr-linv isiso =
+  is-equiv→post-is-equiv (is-iso→is-equiv isiso) .equiv-proof id
 
-  is-iso→is-contr-rinv : is-iso f → is-contr (rinv f)
-  is-iso→is-contr-rinv isiso =
-    is-equiv→pre-is-equiv (is-iso→is-equiv isiso) .equiv-proof id
+is-iso→is-contr-rinv : is-iso f → is-contr (rinv f)
+is-iso→is-contr-rinv isiso =
+  is-equiv→pre-is-equiv (is-iso→is-equiv isiso) .equiv-proof id
 
 _ : {f : A → B} → linv f ＝ fibre (_∘ f) id
 _ = refl

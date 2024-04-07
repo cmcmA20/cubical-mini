@@ -319,7 +319,6 @@ record is-invertible (f : Hom a b) : Type h where
   op .inverses .inv-r = inv-l inverses
 
 opaque
-  unfolding is-of-hlevel
   is-invertible-is-prop : {f : Hom a b} → is-prop (is-invertible f)
   is-invertible-is-prop {a} {b} {f} g h = p where
     module g = is-invertible g
@@ -336,7 +335,7 @@ opaque
     p i .is-invertible.inverses =
      is-prop→pathᴾ (λ i → inverses-are-prop {g = g≡h i}) g.inverses h.inverses i
 
-instance
+instance opaque
   H-Level-is-invertible : H-Level (suc n) (is-invertible f)
   H-Level-is-invertible = hlevel-prop-instance is-invertible-is-prop
 

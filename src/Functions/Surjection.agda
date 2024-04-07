@@ -22,7 +22,7 @@ is-surjective : (A → B) → Type _
 is-surjective {B} f = Π[ y ꞉ B ] ∥ fibre f y ∥₁
 
 is-surjective-is-prop : is-prop (is-surjective f)
-is-surjective-is-prop = hlevel _
+is-surjective-is-prop = hlevel 1
 
 _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f

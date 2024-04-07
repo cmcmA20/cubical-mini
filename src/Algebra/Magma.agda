@@ -56,10 +56,11 @@ is-magma is-2-magma : (A → A → A) → 𝒰 _
 is-magma = is-n-magma 2
 is-2-magma = is-n-magma 3
 
-is-n-magma-is-prop : is-prop (is-n-magma n _✦_)
-is-n-magma-is-prop = ≅→is-of-hlevel! 1 is-n-magma-iso
+opaque
+  is-n-magma-is-prop : is-prop (is-n-magma n _✦_)
+  is-n-magma-is-prop {n} = ≅→is-of-hlevel 1 is-n-magma-iso (is-of-hlevel-is-prop n)
 
-instance
+instance opaque
   H-Level-n-magma : ∀ {k} → H-Level (suc k) (is-n-magma n _✦_)
   H-Level-n-magma = hlevel-prop-instance is-n-magma-is-prop
 
@@ -94,7 +95,6 @@ Magma-on = n-Magma-on 2
 
 -- TODO generalize
 opaque
-  unfolding is-of-hlevel
   magma-on-is-set : is-set (Magma-on A)
   magma-on-is-set M = ≅→is-of-hlevel! 2 (n-magma-on-iso 2) M where
     open n-Magma-on M
@@ -104,7 +104,7 @@ n-magma-hom-is-of-hlevel : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (su
 n-magma-hom-is-of-hlevel {M′} = ≅→is-of-hlevel! _ (n-magma-hom-iso _) where
   open n-Magma-on M′
 
-instance
+instance opaque
   H-Level-magma-on : H-Level (2 + n) (Magma-on A)
   H-Level-magma-on = hlevel-basic-instance 2 magma-on-is-set
 

@@ -19,9 +19,9 @@ private variable
 
 instance
   H-Level-sub : ∀ {n} {X : 𝒰 ℓ} {P Q : X → Bool} → H-Level (suc n) (P ⊆ Q)
-  H-Level-sub {Q} = hlevel-prop-instance $
-    ∀-is-of-hlevel _ λ x →
-    Bool.elim {P = λ z → is-prop (_ → is-true z)}
+  H-Level-sub {P} {Q} = hlevel-prop-instance $
+    ∀-is-of-hlevel 1 λ x →
+    Bool.elim {P = λ z → is-prop (is-true (P x) → is-true z)}
     hlevel! hlevel! (Q x)
 
 record Supported {ℓ} (X : 𝒰 ℓ) : 𝒰 (ℓᵃ ⊔ ℓ) where

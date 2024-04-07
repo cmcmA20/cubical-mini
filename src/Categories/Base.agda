@@ -188,8 +188,8 @@ _∘ᶠ_ {C} {D} {E} F G = comps
 {-# DISPLAY F∘.comps F G = F ∘ᶠ G #-}
 
 Id : {C : Precategory oᶜ hᶜ} → Functor C C
-Functor.F₀ Id x = x
-Functor.F₁ Id f = f
+Functor.F₀ Id = refl
+Functor.F₁ Id = refl
 Functor.F-id Id = refl
 Functor.F-∘ Id _ _ = refl
 
@@ -302,7 +302,7 @@ module _ {C : Precategory oᶜ hᶜ}
   nat-pathᴾ p q path i .η x = path x i
   nat-pathᴾ p q {a} {b} path i .is-natural x y f =
     is-prop→pathᴾ
-      (λ i → is-prop-η $ is-set-β (D.Hom-set _ _)
+      (λ i → (D.Hom-set _ _)
         (path y i D.∘ Functor.F₁ (p i) f) (Functor.F₁ (q i) f D.∘ path x i))
       (a .is-natural x y f)
       (b .is-natural x y f) i
@@ -335,5 +335,5 @@ module _ {C : Precategory oᶜ hᶜ}
     Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path-over h =
       is-prop→pathᴾ
         (λ i → Π-is-of-hlevel 1
-          λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa .idsᵉ)) (is-prop-η $ is-set-β (D .Hom-set _ _) _ _))
+          λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa .idsᵉ)) (D .Hom-set _ _ _ _))
         _ _

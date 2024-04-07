@@ -41,13 +41,12 @@ record is-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 unquoteDecl is-monoid-iso = declare-record-iso is-monoid-iso (quote is-monoid)
 
 opaque
-  unfolding is-of-hlevel
   is-monoid-is-prop : is-prop (is-monoid _✦_)
   is-monoid-is-prop M M′ = Equiv.injective (≅ₜ→≃ is-monoid-iso) $
     prop! ,ₚ identity-unique (is-monoid.has-unital-magma M) (is-monoid.has-unital-magma M′) ,ₚ prop!
     where open is-monoid M
 
-instance
+instance opaque
   H-Level-is-monoid : H-Level (suc n) (is-monoid _✦_)
   H-Level-is-monoid = hlevel-prop-instance is-monoid-is-prop
 
@@ -74,9 +73,10 @@ record Monoid-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 
 unquoteDecl monoid-on-iso = declare-record-iso monoid-on-iso (quote Monoid-on)
 
-monoid-on-is-set : is-set (Monoid-on A)
-monoid-on-is-set = ≅→is-of-hlevel _ monoid-on-iso $ is-set-η λ (_ , x) _ _ _ →
-  let open is-monoid x in prop!
+opaque
+  monoid-on-is-set : is-set (Monoid-on A)
+  monoid-on-is-set = ≅→is-of-hlevel 2 monoid-on-iso λ (_ , x) _ _ _ →
+    let open is-monoid x in prop!
 
 
 record Monoid-hom
@@ -94,11 +94,12 @@ record Monoid-hom
 
 unquoteDecl monoid-hom-iso = declare-record-iso monoid-hom-iso (quote Monoid-hom)
 
-monoid-hom-is-prop : ∀ {M : Monoid-on A} {M′ : Monoid-on B} {f}
-                   → is-prop (Monoid-hom M M′ f)
-monoid-hom-is-prop {M′} = ≅→is-of-hlevel! _ monoid-hom-iso where open Monoid-on M′
+opaque
+  monoid-hom-is-prop : ∀ {M : Monoid-on A} {M′ : Monoid-on B} {f}
+                     → is-prop (Monoid-hom M M′ f)
+  monoid-hom-is-prop {M′} = ≅→is-of-hlevel! 1 monoid-hom-iso where open Monoid-on M′
 
-instance
+instance opaque
   H-Level-monoid-on : H-Level (2 + n) (Monoid-on A)
   H-Level-monoid-on = hlevel-basic-instance 2 monoid-on-is-set
 

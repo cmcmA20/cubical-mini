@@ -67,7 +67,6 @@ is-set-□ A =
   (a₋₁ : a₀₁ ＝ a₁₁) → Square a₀₋ a₋₀ a₁₋ a₋₁
 
 opaque
-  unfolding is-of-hlevel
   is-set→is-set-□ : is-set A → is-set-□ A
   is-set→is-set-□ A-set a₀₋ a₋₀ a₁₋ a₋₁ = to-pathᴾ (A-set _ _ _ a₋₁)
 

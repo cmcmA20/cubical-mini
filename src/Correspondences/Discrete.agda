@@ -37,7 +37,6 @@ is-discrete→is-set : is-discrete A → is-set A
 is-discrete→is-set = is-¬¬-separated→is-set ∘ is-discrete→is-¬¬-separated
 
 opaque
-  unfolding is-of-hlevel
   is-discrete-is-prop : is-prop (is-discrete A)
   is-discrete-is-prop d₁ d₂ i =
     dec-is-of-hlevel 1 (is-discrete→is-set d₁ _ _) d₁ d₂ i
@@ -70,7 +69,7 @@ instance
   ... | yes a₁=a₂ with B-d
   ... | no  b₁≠b₂ = no λ r → b₁≠b₂ $ from-pathᴾ $
     subst (λ X → ＜ b₁ ／ (λ i → B (X i)) ＼ b₂ ＞)
-          (is-set-β (is-discrete→is-set A-d) a₁ a₂ (ap fst r) a₁=a₂)
+          (is-discrete→is-set A-d a₁ a₂ (ap fst r) a₁=a₂)
           (ap snd r)
   ... | yes b₁=b₂ = yes $ Σ-path a₁=a₂ b₁=b₂
   {-# OVERLAPPABLE Σ-is-discrete #-}

@@ -27,12 +27,11 @@ record is-comm-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 unquoteDecl is-comm-monoid-iso = declare-record-iso is-comm-monoid-iso (quote is-comm-monoid)
 
 opaque
-  unfolding is-of-hlevel
   is-comm-monoid-is-prop : is-prop (is-comm-monoid _✦_)
   is-comm-monoid-is-prop C = ≅→is-of-hlevel! 1 is-comm-monoid-iso C where
     open is-comm-monoid C
 
-instance
+instance opaque
   H-Level-is-comm-monoid : H-Level (suc n) (is-comm-monoid _✦_)
   H-Level-is-comm-monoid = hlevel-prop-instance is-comm-monoid-is-prop
 

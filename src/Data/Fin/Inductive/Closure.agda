@@ -18,11 +18,9 @@ fin-0-is-initial : Fin 0 ≃ ⊥
 fin-0-is-initial .fst ()
 fin-0-is-initial .snd .equiv-proof ()
 
-opaque
-  unfolding is-of-hlevel
-  fin-1-is-contr : is-contr (Fin 1)
-  fin-1-is-contr .fst = fzero
-  fin-1-is-contr .snd fzero = refl
+fin-1-is-contr : is-contr (Fin 1)
+fin-1-is-contr .fst = fzero
+fin-1-is-contr .snd fzero = refl
 
 fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
 fin-suc = ≅→≃ (f , iso g rinv linv) where

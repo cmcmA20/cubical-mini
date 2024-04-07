@@ -48,7 +48,6 @@ equiv-path : (e : A ≃ B) (y : B) (v : fibre (e .fst) y) → equiv-centre e y �
 equiv-path e y = e .snd .equiv-proof y .snd
 
 opaque
-  unfolding is-of-hlevel
   is-equiv-is-prop : (f : A → B) → is-prop (is-equiv f)
   is-equiv-is-prop f p q i .equiv-proof y =
     let p₂ = p .equiv-proof y .snd
@@ -60,7 +59,7 @@ opaque
        k (j = i1) → w
        k (k = i0) → p₂ w (i ∨ j)
 
-instance
+instance opaque
   H-Level-is-equiv : ∀ {n} → H-Level (suc n) (is-equiv f)
   H-Level-is-equiv = hlevel-prop-instance (is-equiv-is-prop _)
 
@@ -70,38 +69,42 @@ equiv-ext {e₀} {e₁} h i = h i , is-prop→pathᴾ (λ i → is-equiv-is-prop
 is-equiv→inverse : {f : A → B} → is-equiv f → (B → A)
 is-equiv→inverse eqv y = eqv .equiv-proof y .fst .fst
 
-is-equiv→counit : (eqv : is-equiv f) (y : B) → f (is-equiv→inverse eqv y) ＝ y
-is-equiv→counit eqv y = eqv .equiv-proof y .fst .snd
+opaque
+  is-equiv→counit : (eqv : is-equiv f) (y : B) → f (is-equiv→inverse eqv y) ＝ y
+  is-equiv→counit eqv y = eqv .equiv-proof y .fst .snd
 
-is-equiv→unit : (eqv : is-equiv f) (x : A) → is-equiv→inverse eqv (f x) ＝ x
-is-equiv→unit {f} eqv x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
+  is-equiv→unit : (eqv : is-equiv f) (x : A) → is-equiv→inverse eqv (f x) ＝ x
+  is-equiv→unit {f} eqv x i = eqv .equiv-proof (f x) .snd (x , refl) i .fst
 
-is-equiv→zig : (eqv : is-equiv f) (x : A)
-             →  ap f (is-equiv→unit eqv x)
-             ＝ is-equiv→counit eqv (f x)
-is-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
-   k (i = i0) → f (is-equiv→unit eqv x j)
-   k (i = i1) → is-equiv→counit eqv (f x) (j ∨ ~ k)
-   k (j = i0) → is-equiv→counit eqv (f x) (i ∧ ~ k)
-   k (j = i1) → f x
-   k (k = i0) → eqv .equiv-proof (f x) .snd (x , refl) j .snd i
+  is-equiv→zig : (eqv : is-equiv f) (x : A)
+               →  ap f (is-equiv→unit eqv x)
+               ＝ is-equiv→counit eqv (f x)
+  is-equiv→zig {f} eqv x i j = hcomp (∂ i ∨ ∂ j) λ where
+     k (i = i0) → f (is-equiv→unit eqv x j)
+     k (i = i1) → is-equiv→counit eqv (f x) (j ∨ ~ k)
+     k (j = i0) → is-equiv→counit eqv (f x) (i ∧ ~ k)
+     k (j = i1) → f x
+     k (k = i0) → eqv .equiv-proof (f x) .snd (x , refl) j .snd i
 
-is-equiv→zag : (eqv : is-equiv f) (y : B)
-             →  ap (is-equiv→inverse eqv) (is-equiv→counit eqv y)
-             ＝ is-equiv→unit eqv (is-equiv→inverse eqv y)
-is-equiv→zag {B} {f} eqv b =
-  subst (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
-    g = is-equiv→inverse eqv
-    ε = is-equiv→counit eqv
-    η = is-equiv→unit eqv
+  is-equiv→zag : {f : A → B} (eqv : is-equiv f) (y : B)
+               →  ap (is-equiv→inverse eqv) (is-equiv→counit eqv y)
+               ＝ is-equiv→unit eqv (is-equiv→inverse eqv y)
+  is-equiv→zag {A} {B} {f} eqv b =
+    subst (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
+      g : B → A
+      g = is-equiv→inverse eqv
+      ε : (y : B) → f (is-equiv→inverse eqv y) ＝ y
+      ε = is-equiv→counit eqv
+      η : (x : A) → is-equiv→inverse eqv (f x) ＝ x
+      η = is-equiv→unit eqv
 
-    helper : ∀ a → ap g (ε (f a)) ＝ η (g (f a))
-    helper a i j = hcomp (∂ i ∨ ∂ j) λ where
-      k (i = i0) → g (ε (f a) (j ∨ ~ k))
-      k (i = i1) → η (η a (~ k)) j
-      k (j = i0) → g (is-equiv→zig eqv a (~ i) (~ k))
-      k (j = i1) → η a (i ∧ ~ k)
-      k (k = i0) → η a (i ∧ j)
+      helper : ∀ a → ap g (ε (f a)) ＝ η (g (f a))
+      helper a i j = hcomp (∂ i ∨ ∂ j) λ where
+        k (i = i0) → g (ε (f a) (j ∨ ~ k))
+        k (i = i1) → η (η a (~ k)) j
+        k (j = i0) → g (is-equiv→zig eqv a (~ i) (~ k))
+        k (j = i1) → η a (i ∧ ~ k)
+        k (k = i0) → η a (i ∧ j)
 
 @0 erased≃id : Erased A ≃ A
 erased≃id .fst = erased
@@ -132,10 +135,9 @@ module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where
 
     g = coei→1 P
 
-  opaque
-    transport-line-is-equiv : ∀ i → is-equiv (g i)
-    transport-line-is-equiv i =
-      coe1→i (λ j → is-equiv (g j)) i id-is-equiv
+  transport-line-is-equiv : ∀ i → is-equiv (g i)
+  transport-line-is-equiv i =
+    coe1→i (λ j → is-equiv (g j)) i id-is-equiv
 
   transport-line-equiv : ∀ i → P i ≃ R
   transport-line-equiv i .fst = g i

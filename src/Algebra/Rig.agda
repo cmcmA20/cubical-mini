@@ -34,12 +34,11 @@ record is-rig {A : 𝒰 ℓ}
 unquoteDecl is-rig-iso = declare-record-iso is-rig-iso (quote is-rig)
 
 opaque
-  unfolding is-of-hlevel
   is-rig-is-prop : is-prop (is-rig _✦_ _✧_)
   is-rig-is-prop R = ≅→is-of-hlevel! 1 is-rig-iso R where
     open is-rig R
 
-instance
+instance opaque
   H-Level-is-rig : H-Level (suc n) (is-rig _✦_ _✧_)
   H-Level-is-rig = hlevel-prop-instance is-rig-is-prop
 
@@ -66,7 +65,7 @@ rig-on↪semiring-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ rig-on-iso) $
     ap Semiring-on._+_ p ,ₚ ap Semiring-on._·_ p ,ₚ prop!
 
-instance
+instance opaque
   H-Level-rig-on : H-Level (suc (suc n)) (Rig-on A)
   H-Level-rig-on = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 rig-on↪semiring-on
 

@@ -17,11 +17,11 @@ private variable
 
 rec : is-prop B → (A → B) → ∥ A ∥₁ → B
 rec B-prop f ∣ x ∣₁ = f x
-rec B-prop f (squash₁ x y i) = is-prop-β B-prop (rec B-prop f x) (rec B-prop f y) i
+rec B-prop f (squash₁ x y i) = B-prop (rec B-prop f x) (rec B-prop f y) i
 
-instance
+instance opaque
   H-Level-∥-∥₁ : ∀ {n} → H-Level (suc n) ∥ A ∥₁
-  H-Level-∥-∥₁ = hlevel-prop-instance $ is-prop-η squash₁
+  H-Level-∥-∥₁ = hlevel-prop-instance squash₁
 
 proj : (A-prop : is-prop A) → ∥ A ∥₁ → A
 proj A-prop = rec A-prop id

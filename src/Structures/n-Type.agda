@@ -7,6 +7,7 @@ open import Foundations.Cubes
 open import Foundations.HLevel
   public
 
+open import Meta.Effect.Alt
 open import Meta.Extensionality
 open import Meta.Projection
 open import Meta.Record
@@ -47,18 +48,18 @@ instance
   Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
   Underlying-n-Type .⌞_⌟⁰ = carrier
 
-n-path : ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y
+n-path : {X Y : n-Type ℓ n} → ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y
 n-path f i .carrier = f i
-n-path {X} {Y} f i .carrier-is-tr =
-  is-prop→pathᴾ (λ i → is-of-hlevel-is-prop {A = f i} _) (X .carrier-is-tr) (Y .carrier-is-tr) i
+n-path {n} {X} {Y} f i .carrier-is-tr =
+  is-prop→pathᴾ (λ i → is-of-hlevel-is-prop {A = f i} n) (X .carrier-is-tr) (Y .carrier-is-tr) i
 
 -- FIXME rewrite without cubes
 n-path-refl : {X : n-Type ℓ n} → n-path {X = X} refl ＝ refl
 n-path-refl {X} _ _ .carrier = X .carrier
-n-path-refl {X} i j .carrier-is-tr = θ j i where
-  p = is-prop→pathᴾ (λ _ → is-of-hlevel-is-prop _) (X .carrier-is-tr) _
+n-path-refl {n} {X} i j .carrier-is-tr = θ j i where
+  p = is-prop→pathᴾ (λ _ → is-of-hlevel-is-prop n) (X .carrier-is-tr) _
   θ : Square p refl refl refl
-  θ = is-prop→squareᴾ (λ _ _ → is-of-hlevel-is-prop _) _ _ _ _
+  θ = is-prop→squareᴾ (λ _ _ → is-of-hlevel-is-prop n) _ _ _ _
 
 @0 n-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y
 n-ua f = n-path (ua f)
@@ -71,9 +72,9 @@ instance
   Extensional-n-Type .idsᵉ .to-path-over = Extensional-Type .idsᵉ .to-path-over
 
 opaque
-  unfolding univalence⁻¹
-  @0 n-univalence : (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
-  n-univalence {X} {Y} = n-ua , is-iso→is-equiv isic where
+  unfolding ua
+  @0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
+  n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
     inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
     inv p = ＝→≃ (ap carrier p)
 
@@ -86,7 +87,7 @@ opaque
       path i j .carrier = ua.ε refl i j
       path i j .carrier-is-tr = is-prop→squareᴾ
         (λ i j → is-of-hlevel-is-prop
-          {A = ua.ε {A = ⌞ X ⌟} refl i j } _)
+          {A = ua.ε {A = ⌞ X ⌟} refl i j } n)
         (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (＝→≃ refl) j)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
@@ -107,7 +108,7 @@ opaque
     θ : Squareᴾ (λ k _ → is-of-hlevel n ((p ∙ q) k))
           refl (is-prop→pathᴾ (λ _ → is-of-hlevel-is-prop n) (A .carrier-is-tr) (C .carrier-is-tr))
           refl (λ k → (n-path {X = A} {Y = B} p ∙ n-path {Y = C} q) k .carrier-is-tr)
-    θ = is-set→squareᴾ (λ _ _ → is-of-hlevel-is-of-hlevel-suc 1) _ _ _ _
+    θ = is-set→squareᴾ (λ _ _ → is-of-hlevel-is-of-hlevel-suc {h = n} 1) _ _ _ _
 
 @0 n-ua-∙ₑ : {A B C : n-Type ℓ n}
              (f : ⌞ A ⌟ ≃ ⌞ B ⌟) (g : ⌞ B ⌟ ≃ ⌞ C ⌟)
@@ -115,7 +116,6 @@ opaque
 n-ua-∙ₑ f g = ap n-path (ua-∙ₑ f g) ∙ n-path-∙ (ua f) (ua g)
 
 opaque
-  unfolding is-of-hlevel
   @0 n-Type-is-of-hlevel : ∀ n → is-of-hlevel (suc n) (n-Type ℓ n)
   n-Type-is-of-hlevel zero X Y = n-ua
     ((λ _ → carrier-is-tr Y .fst) , is-contr→is-equiv (X .carrier-is-tr) (Y .carrier-is-tr))
@@ -180,10 +180,9 @@ Pred₅ = n-Pred 5
 -- Automation
 
 el! : (A : Type ℓ) ⦃ A-hl : H-Level n A ⦄ → n-Type ℓ n
-el! A = el A (hlevel _)
+el! {n} A = el A (hlevel n)
 
 opaque
-  unfolding is-of-hlevel
   is-of-hlevel-≤ : ∀ n k → n ≤ k → is-of-hlevel n A → is-of-hlevel k A
   is-of-hlevel-≤ 0 k 0≤x p = is-of-hlevel-+-left 0 k p
   is-of-hlevel-≤ 1 1 (s≤s 0≤x) p = p
@@ -192,19 +191,45 @@ opaque
   is-of-hlevel-≤ (suc (suc n)) (suc (suc k)) (s≤s le) p x y =
     is-of-hlevel-≤ (suc n) (suc k) le (p x y)
 
+-- TODO abstract this bullshit away
+private
+  decompose-as-contr : Term → TC Term
+  decompose-as-contr (def (quote is-contr) (_ ∷ ty ∷ [])) =
+    pure (lit (nat 0))
+  decompose-as-contr t = type-error
+    [ "Target is not an application of is-contr: " , termErr t ]
+
+  decompose-as-prop : Term → TC Term
+  decompose-as-prop (def (quote is-prop) (_ ∷ ty ∷ [])) =
+    pure (lit (nat 1))
+  decompose-as-prop t = type-error
+    [ "Target is not an application of is-prop: " , termErr t ]
+
+  decompose-as-set : Term → TC Term
+  decompose-as-set (def (quote is-set) (_ ∷ ty ∷ [])) =
+    pure (lit (nat 2))
+  decompose-as-set t = type-error
+    [ "Target is not an application of is-set: " , termErr t ]
+
+  decompose-as-hlevel : Term → TC Term
+  decompose-as-hlevel (def (quote is-of-hlevel) (_ ∷ varg lvl ∷ ty ∷ [])) =
+    pure lvl
+  decompose-as-hlevel t = type-error
+    [ "Target is not an application of is-of-hlevel: " , termErr t ]
+
 macro
   hlevel! : Term → TC ⊤
-  hlevel! goal = do
-    ty ← infer-type goal >>= reduce
-    let tel = fst $ pi-view ty
-    unify goal (leave tel $ it hlevel ##ₙ unknown)
+  hlevel! goal = with-reduce-defs (false ,
+    [ it is-contr , it is-prop , it is-of-hlevel ]) do
+      ty ← infer-type goal >>= reduce
+      let tel , ty′ = pi-view ty
+      lvl ← decompose-as-contr ty′ <|> decompose-as-prop ty′
+        <|> decompose-as-set ty′ <|> decompose-as-hlevel ty′
+      unify goal (leave tel $ it hlevel ##ₙ lvl)
 
 open Struct-proj-desc
 
 instance
-  @0 H-Level-n-Type : H-Level (suc n) (n-Type ℓ n)
-  H-Level-n-Type .H-Level.has-of-hlevel = n-Type-is-of-hlevel _
-
   hlevel-proj-n-type : Struct-proj-desc true (quote carrier)
   hlevel-proj-n-type .has-level = quote carrier-is-tr
   hlevel-proj-n-type .upwards-closure = quote is-of-hlevel-≤
@@ -214,6 +239,10 @@ instance
     normalise hl
   hlevel-proj-n-type .get-argument (_ ∷ _ ∷ x v∷ []) = pure x
   hlevel-proj-n-type .get-argument _ = type-error []
+
+instance opaque
+  @0 H-Level-n-Type : H-Level (suc n) (n-Type ℓ n)
+  H-Level-n-Type {n} .H-Level.has-of-hlevel = n-Type-is-of-hlevel n
 
   H-Level-projection
     : {A : Type ℓ} {n : ℕ}

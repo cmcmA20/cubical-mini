@@ -15,7 +15,6 @@ private variable
   r : ∀ a → R a a
 
 opaque
-  unfolding is-of-hlevel
   set-identity-is-prop
     : ∀ {r : (a : A) → R a a} {a b : A}
     → is-identity-system R r
@@ -24,14 +23,15 @@ opaque
   set-identity-is-prop {R} {a} {b} ids set =
     ≃→is-of-hlevel 1 (identity-system-gives-path ids) (set a b)
 
-  K
-    : {r : (a : A) → R a a} {a : A}
-    → is-identity-system R r
-    → is-set A
-    → (P : R a a → Type ℓ″) → P (r a) → ∀ s → P s
-  K {r} {a} ids set P pr s =
-    transport (λ i → P (set-identity-is-prop ids set (r a) s i)) pr
+K
+  : {r : (a : A) → R a a} {a : A}
+  → is-identity-system R r
+  → is-set A
+  → (P : R a a → Type ℓ″) → P (r a) → ∀ s → P s
+K {r} {a} ids set P pr s =
+  transport (λ i → P (set-identity-is-prop ids set (r a) s i)) pr
 
+opaque
   K-refl
     : {r : ∀ a → R a a} {a : A}
     → (ids : is-identity-system R r)

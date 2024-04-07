@@ -130,7 +130,6 @@ module _
   module _
     (univ : is-univalent σ)
     (axioms-prop : ∀ {X} {s} → is-prop (axioms X s)) where opaque
-    unfolding is-of-hlevel
 
     @0 axiom-str-univalent : is-univalent axiom-str
     axiom-str-univalent {X = A , s , a} {Y = B , t , b} f =

@@ -80,7 +80,7 @@ universal {B} {A} B-prop = ≅→≃ $ inc′ , iso rec′ (λ _ → refl) beta 
 
   rec′ : (f : A → B) → ∥ A ∥₁ → B
   rec′ f ∣ x ∣₁ = f x
-  rec′ f (squash₁ x y i) = is-prop-β B-prop (rec′ f x) (rec′ f y) i
+  rec′ f (squash₁ x y i) = B-prop (rec′ f x) (rec′ f y) i
 
   beta : rec′ is-left-inverse-of inc′
   beta f = fun-ext $ elim! λ _ → refl
@@ -118,7 +118,7 @@ dom-is-set→image-is-set B-set = hlevel!
 
 is-constant→image-is-prop
   : is-set B → {f : A → B} → 2-Constant f → is-prop (Im f)
-is-constant→image-is-prop B-set {f} f-const = is-prop-η λ (a , x) (b , y) →
+is-constant→image-is-prop B-set {f} f-const  (a , x) (b , y) =
   Σ-prop-path! $ elim!² (λ { (f*a , p) (f*b , q) → sym p ∙∙ f-const f*a f*b ∙∙ q }) x y
   where instance _ = hlevel-basic-instance 2 B-set
 
@@ -194,7 +194,7 @@ module Replacement
   embed (quot p i) = ls.decode p i
 
   embed-is-embedding : is-embedding embed
-  embed-is-embedding = (preimage-is-prop→is-embedding ∘ (is-prop-η ∘_)) go where
+  embed-is-embedding = preimage-is-prop→is-embedding go where
     go : (t : Image) (u v : Σ[ z ꞉ Image ] (embed z ＝ embed t)) → u ＝ v
     go t (x , p) (y , q) = quot (ls.from (p ∙ q ⁻¹)) ,ₚ commutes→square coh where opaque
       coh : ls.to (ls.from (p ∙ q ⁻¹)) ∙ q ＝ p ∙ refl
@@ -221,10 +221,10 @@ module Replacement
 
   Image≃Im : Image ≃ Im f
   Image≃Im .fst = Image→Im
-  Image≃Im .snd .equiv-proof (x , p) = is-contr-β $ elim! {P = λ p → is-contr (fibre _ (x , p))}
+  Image≃Im .snd .equiv-proof (x , p) = elim! {P = λ p → is-contr (fibre _ (x , p))}
     (λ { (w , p) → Jₜ (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) p }) p where
       go : (f⁻¹x : A) → is-contr _
-      go f⁻¹x = is-contr-η $ (⦋ f⁻¹x ⦌ , refl) , λ where
+      go f⁻¹x = (⦋ f⁻¹x ⦌ , refl) , λ where
         (u , α) → Σ-pathᴾ (quot (ls.encode (ap fst α ⁻¹))) $
                           Σ-prop-square hlevel! $ commutes→square $
                             ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹

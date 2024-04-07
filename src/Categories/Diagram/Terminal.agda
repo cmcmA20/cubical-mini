@@ -20,7 +20,7 @@ record Terminal : Type (o ⊔ h) where
   !-unique = paths $ has⊤ _
 
   !-unique² : ∀ {x} (f g : Hom x top) → f ＝ g
-  !-unique² = is-prop-β $ is-contr→is-prop (has⊤ _)
+  !-unique² =  is-contr→is-prop (has⊤ _)
 
 open Terminal
 
@@ -31,7 +31,6 @@ open Terminal
 ⊤-unique t₁ t₂ = invertible→iso (! t₂) (!-invertible t₂ t₁)
 
 opaque
-  unfolding is-of-hlevel
   ⊤-contractible : is-category C → is-prop Terminal
   ⊤-contractible cat x₁ x₂ i .top =
     cat .to-path (⊤-unique x₁ x₂) i
