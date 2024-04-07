@@ -11,7 +11,7 @@ open import Truncation.Propositional as ∥-∥₁
   using (∥_∥₁; ∣_∣₁)
 open import Truncation.Set.Base public
 open import Truncation.Set.Instances.Map
-open import Truncation.Set.Properties
+open import Truncation.Set.Properties as ∥-∥₂
 
 private variable
   ℓ ℓ′ : Level
@@ -19,11 +19,11 @@ private variable
   B : Type ℓ′
   x y : A
 
-@0 ∥-∥₂-path-equiv
+@0 ＝∘∣-∣₂≃∥-∥₁∘＝
   : {x y : A}
   → ∣ x ∣₂ ＝ ∣ y ∣₂
   ≃ ∥ x ＝ y ∥₁
-∥-∥₂-path-equiv {x} {y} = prop-extₑ! (encode x ∣ y ∣₂) (decode x (∣ y ∣₂)) where
+＝∘∣-∣₂≃∥-∥₁∘＝ {x} {y} = prop-extₑ! (encode x ∣ y ∣₂) (decode x (∣ y ∣₂)) where
   code : ∀ x (y : ∥ A ∥₂) → Prop _
   code x = elim! (λ y → el! ∥ x ＝ y ∥₁)
 
@@ -32,9 +32,6 @@ private variable
 
   decode : ∀ x y → ⌞ code x y ⌟ → ∣ x ∣₂ ＝ y
   decode x = elim! (λ _ → ∥-∥₁.rec! (ap ∣_∣₂))
-
-module @0 ∥-∥₂-path {ℓ} {A : Type ℓ} {x} {y} =
-  Equiv (∥-∥₂-path-equiv {A = A} {x = x} {y = y})
 
 ae : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
 ae e = to , is-iso→is-equiv (iso from ri li)

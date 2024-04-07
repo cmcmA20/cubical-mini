@@ -2,7 +2,11 @@
 module Data.Id.Properties where
 
 open import Foundations.Base
-  renaming (J to Jₜ)
+  renaming ( _＝_ to _＝ₚ_
+           ; refl to reflₚ
+           ; sym  to symₚ
+           ; _∙_  to _∙ₚ_
+           ; J    to Jₜ )
 open import Foundations.Equiv
 open import Foundations.Path
 
@@ -15,26 +19,26 @@ private variable
   A : 𝒰 ℓᵃ
   x y z w : A
 
-Id-identity-system : is-identity-system (_＝ˢ_ {A = A}) (λ _ → reflˢ)
-Id-identity-system .to-path p = p _ refl
+Id-identity-system : is-identity-system (_＝_ {A = A}) (λ _ → refl)
+Id-identity-system .to-path p = p _ reflₚ
 Id-identity-system .to-path-over f = fun-ext λ _ → fun-ext λ q →
-  Jₜ (λ y p → ＜ sym p ／ (λ i → y ＝ f _ refl i) ＼ f _ (sym p) ＞)
-     (λ i j → f _ refl (i ∧ j)) (sym q)
+  Jₜ (λ y p → ＜ symₚ p ／ (λ i → y ＝ₚ f _ reflₚ i) ＼ f _ (symₚ p) ＞)
+     ((λ i j → f _ reflₚ (i ∧ j))) (symₚ q)
 
-Id≃path : (x ＝ˢ y) ≃ (x ＝ y)
+Id≃path : (x ＝ y) ≃ (x ＝ₚ y)
 Id≃path = identity-system-gives-path Id-identity-system
 
 module Id≃path {ℓ} {A : Type ℓ} = IdS (Id-identity-system {A = A})
 
 -- excellent reduction behaviour
 
-∙ˢ-id-l : (p : x ＝ˢ y) → reflˢ ∙ˢ p ＝ p
-∙ˢ-id-l _ = refl
+∙ˢ-id-l : (p : x ＝ y) → refl ∙ p ＝ₚ p
+∙ˢ-id-l _ = reflₚ
 
-∙ˢ-id-r : (p : x ＝ˢ y) → p ∙ˢ reflˢ ＝ p
-∙ˢ-id-r _ = refl
+∙ˢ-id-r : (p : x ＝ y) → p ∙ refl ＝ₚ p
+∙ˢ-id-r _ = reflₚ
 
 ∙ˢ-assoc
-  : (p : x ＝ˢ y) (q : y ＝ˢ z) (r : z ＝ˢ w)
-  → p ∙ˢ (q ∙ˢ r) ＝ (p ∙ˢ q) ∙ˢ r
+  : (p : x ＝ y) (q : y ＝ z) (r : z ＝ w)
+  → p ∙ (q ∙ r) ＝ (p ∙ q) ∙ r
 ∙ˢ-assoc _ _ _ = refl

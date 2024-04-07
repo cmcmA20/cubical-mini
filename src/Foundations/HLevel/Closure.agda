@@ -216,10 +216,10 @@ instance opaque
   H-Level-≃ {h} .H-Level.has-of-hlevel = ≃-is-of-hlevel h (hlevel h) (hlevel h)
   {-# INCOHERENT H-Level-≃ #-}
 
-  -- @0 H-Level-univalence
-  --   : ∀ {h} {A B : Type ℓ} → ⦃ A-hl : H-Level h A ⦄ → ⦃ B-hl : H-Level h B ⦄ → H-Level h (A ＝ B)
-  -- H-Level-univalence .H-Level.has-of-hlevel = ＝-is-of-hlevel _ (hlevel _) (hlevel _)
-  -- {-# INCOHERENT H-Level-univalence #-}
+  @0 H-Level-univalence
+    : ∀ {h} {A B : Type ℓ} → ⦃ A-hl : H-Level h A ⦄ → ⦃ B-hl : H-Level h B ⦄ → H-Level h (A ＝ B)
+  H-Level-univalence .H-Level.has-of-hlevel = ＝-is-of-hlevel _ (hlevel _) (hlevel _)
+  {-# INCOHERENT H-Level-univalence #-}
 
 
 

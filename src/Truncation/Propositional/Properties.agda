@@ -23,55 +23,6 @@ private variable
   f : A → B
   C : Type ℓ″
 
-elim² : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
-      → (∀ x y → is-prop (P x y))
-      → (∀ x y → P ∣ x ∣₁ ∣ y ∣₁)
-      → ∀ x y → P x y
-elim² {A} {B} {P} P-prop work x y = go x y where
-  go : ∀ x y → P x y
-  go ∣ x ∣₁ ∣ y ∣₁ = work x y
-  go ∣ x ∣₁ (squash₁ y y′ i) =
-    is-prop→pathᴾ (λ i → P-prop ∣ x ∣₁ (squash₁ y y′ i))
-                  (go ∣ x ∣₁ y) (go ∣ x ∣₁ y′) i
-
-  go (squash₁ x y i) z =
-    is-prop→pathᴾ (λ i → P-prop (squash₁ x y i) z)
-                  (go x z) (go y z) i
-
-rec² : is-prop C
-     → (A → B → C)
-     → (x : ∥ A ∥₁) (y : ∥ B ∥₁) → C
-rec² C-prop = elim² (λ _ _ → C-prop)
-
-rec!
-  : ⦃ B-prop : H-Level 1 B ⦄
-  → (A → B)
-  → (x : ∥ A ∥₁) → B
-rec! = elim hlevel!
-
-rec!² : ⦃ C-prop : H-Level 1 C ⦄
-      → (A → B → C)
-      → (x : ∥ A ∥₁) (y : ∥ B ∥₁) → C
-rec!² = rec² hlevel!
-
-elim!
-  : {A : Type ℓ} {P : ∥ A ∥₁ → Type ℓ′}
-    ⦃ P-prop : ∀{a} → H-Level 1 (P a) ⦄
-  → Π[ a ꞉ A ] P ∣ a ∣₁
-  → (x : ∥ A ∥₁) → P x
-elim! = elim hlevel!
-
-proj!
-  : ⦃ A-prop : H-Level 1 A ⦄
-  → ∥ A ∥₁ → A
-proj! = rec! id
-
-elim!² : {P : ∥ A ∥₁ → ∥ B ∥₁ → Type ℓ″}
-       → ⦃ P-prop : ∀ {x y} → H-Level 1 (P x y) ⦄
-       → (∀ x y → P ∣ x ∣₁ ∣ y ∣₁)
-       → ∀ x y → P x y
-elim!² = elim² hlevel!
-
 universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
 universal {B} {A} B-prop = ≅→≃ $ inc′ , iso rec′ (λ _ → refl) beta where
   instance _ = hlevel-prop-instance B-prop
@@ -85,24 +36,13 @@ universal {B} {A} B-prop = ≅→≃ $ inc′ , iso rec′ (λ _ → refl) beta 
   beta : rec′ is-left-inverse-of inc′
   beta f = fun-ext $ elim! λ _ → refl
 
-is-prop→equiv-∥-∥₁ : is-prop A → A ≃ ∥ A ∥₁
-is-prop→equiv-∥-∥₁ A-prop = prop-extₑ! ∣_∣₁ proj!
-  where instance _ = hlevel-prop-instance A-prop
-
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
-is-prop≃equiv-∥-∥₁ {A} = prop-extₑ! is-prop→equiv-∥-∥₁ (λ e → ≃→is-of-hlevel! 1 e)
-
-ae : A ≃ B → ∥ A ∥₁ ≃ ∥ B ∥₁
-ae {A} {B} e = ≅→≃ $ to , iso from ri li where
-  to   = map (e    $_)
-  from = map (e ⁻¹ $_)
-
-  module e = Equiv e
-  ri : from is-right-inverse-of to
-  ri = elim! (ap ∣_∣₁ ∘ e.ε)
-
-  li : from is-left-inverse-of to
-  li = elim! (ap ∣_∣₁ ∘ e.η)
+is-prop≃equiv-∥-∥₁ = prop-extₑ!
+  (λ pr → to ⦃ hlevel-instance pr ⦄)
+  (λ e → ≃→is-of-hlevel! 1 e)
+  where
+   to : ⦃ H-Level 1 A ⦄ → (A ≃ ∥ A ∥₁)
+   to = prop-extₑ! ∣_∣₁ proj!
 
 
 corestriction : (f : A → B) → (A → Im f)
@@ -149,7 +89,7 @@ instance
     : {A : Type ℓ} {B : A → Type ℓ′}
       ⦃ ea : Extensional A ℓ″ ⦄
     → Extensional (Σ[ x ꞉ A ] ∥ B x ∥₁) ℓ″
-  Extensional-Σ-∥-∥₁ ⦃ ea ⦄ = Σ-prop→extensional hlevel! ea
+  Extensional-Σ-∥-∥₁ ⦃ ea ⦄ = Σ-prop→extensional! ea
   {-# OVERLAPPING Extensional-Σ-∥-∥₁ #-}
 
   Extensional-∥-∥₁-map
@@ -157,8 +97,11 @@ instance
     → ⦃ B-set : H-Level 2 B ⦄
     → ⦃ ea : Extensional (A → B) ℓr ⦄
     → Extensional (∥ A ∥₁ → B) ℓr
-  Extensional-∥-∥₁-map ⦃ ea ⦄ = set-injective→extensional! (λ p → fun-ext (elim! (happly p))) ea
+  Extensional-∥-∥₁-map ⦃ ea ⦄ =
+    set-injective→extensional! (λ p → fun-ext (elim! (happly p))) ea
 
+
+-- Truncated/connected factorization
 
 _factors-through_
   : (f : A → C) (B : Type (level-of-type A ⊔ level-of-type C)) → _

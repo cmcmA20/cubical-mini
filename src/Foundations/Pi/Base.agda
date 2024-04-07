@@ -49,9 +49,9 @@ module _ where
   flip f b a = f a b
   {-# INLINE flip #-}
 
-  flip-simple : (A → B → C) → (B → A → C)
-  flip-simple f b a = f a b
-  {-# INLINE flip-simple #-}
+  flipˢ : (A → B → C) → (B → A → C)
+  flipˢ f b a = f a b
+  {-# INLINE flipˢ #-}
 
   const : A → @0 B → A
   const x _ = x
