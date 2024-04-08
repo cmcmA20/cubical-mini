@@ -30,3 +30,4 @@ instance
     (λ x<y → <-irr {x} (subst (x ℕ-ord.<_) (sym x=y) x<y))
     x=y
     (λ y<x → <-irr {y} (subst (y ℕ-ord.<_) x=y y<x))
+  {-# OVERLAPPING Ord-ℕ #-}

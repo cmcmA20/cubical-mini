@@ -5,7 +5,11 @@ open import Foundations.Base
 
 open import Meta.Literals.FromNat public
 
-open import Data.Nat.Order.Inductive public
+open import Data.Nat.Order.Inductive
+  using ()
+  renaming (_<_ to <-from-nat-constraint)
+  public
+open import Data.Nat.Order.Inductive
 
 open import Data.Fin.Inductive.Base
 
