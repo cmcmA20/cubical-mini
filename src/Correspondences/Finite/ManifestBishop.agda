@@ -4,6 +4,7 @@ module Correspondences.Finite.ManifestBishop where
 open import Meta.Prelude
 
 open import Meta.Deriving.HLevel
+open import Meta.Ord
 open import Meta.Record
 
 open import Structures.n-Type
@@ -16,6 +17,7 @@ open import Data.Dec.Base as Dec
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Closure
 open import Data.Fin.Computational.Instances.Discrete
+open import Data.Fin.Computational.Instances.Ord
 open import Data.Nat
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Inductive.Operations.Computational
@@ -52,12 +54,10 @@ instance
     → Manifest-bishop-finite (Lift ℓ A)
   lift-manifest-bishop-finite ⦃ mbf ⦄ = fin $ lift≃id ∙ enumeration mbf
 
-  -- TODO go through `Ord`?
-  manifest-bishop-finite→is-discrete
+  manifest-bishop-finite→ord
     : ⦃ mbf : Manifest-bishop-finite A ⦄
-    → is-discrete A
-  manifest-bishop-finite→is-discrete = ≃→is-discrete (auto .enumeration) fin-is-discrete
-  {-# OVERLAPPABLE manifest-bishop-finite→is-discrete #-}
+    → Ord A
+  manifest-bishop-finite→ord = ≃→ord (auto .enumeration) Ord-Fin
 
   ×-manifest-bishop-finite
     : ⦃ A-mbf : Manifest-bishop-finite A ⦄ ⦃ B-mbf : Manifest-bishop-finite B ⦄

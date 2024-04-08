@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Meta.Ord where
 
-open import Foundations.Base
+open import Meta.Prelude
 
 open import Correspondences.Discrete
 
@@ -56,8 +56,9 @@ open Ord ⦃ ... ⦄
 open Ord using (<-thin; <-trans)
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ : Level
   T : Type ℓ
+  S : Type ℓ′
 
 instance
   ord→is-discrete : ⦃ ord : Ord T ⦄ → is-discrete T
@@ -66,3 +67,15 @@ instance
   ... | eq _ x=y _ = yes x=y
   ... | gt _ x≠y _ = no  x≠y
   {-# OVERLAPPABLE ord→is-discrete #-}
+
+≃→ord : T ≃ S → Ord S → Ord T
+≃→ord e o .Ord.ℓo = o .Ord.ℓo
+≃→ord e o .Ord._<_ x y = o .Ord._<_ (e $ x) (e $ y)
+≃→ord e o .<-thin = o .<-thin
+≃→ord e o .<-trans = o .<-trans
+≃→ord e o .Ord._≤?_ x y = Tri-elim
+  {C = λ _ → Tri (≃→ord e o .Ord._<_) _ _}
+  (λ x<y x≠y y≮x → lt x<y (λ x=y → x≠y (ap$ e x=y)) y≮x)
+  (λ x≮y x=y y≮x → eq x≮y (Equiv.injective e x=y) y≮x)
+  (λ x≮y x≠y y<x → gt x≮y (λ x=y → x≠y (ap$ e x=y)) y<x)
+  (o .Ord._≤?_ (e $ x) (e $ y))

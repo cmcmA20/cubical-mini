@@ -21,6 +21,12 @@ fin-ext : {k₁ k₂ : Fin n} → k₁ .index ＝ k₂ .index → k₁ ＝ k₂
 fin-ext {n} = ap e.from ∘ Σ-prop-path (λ _ → erased-is-prop (<-is-prop {n = n})) where
   module e = Equiv (≅→≃ fin-iso)
 
+mk-fin-inj
+  : ∀ {x y : ℕ} {b₁ b₂} → mk-fin {n = n} x {b₁}  ＝ mk-fin y {b₂} → x ＝ y
+mk-fin-inj = ap unfin where
+  unfin : Fin n → ℕ
+  unfin (mk-fin k) = k
+
 instance
   Extensional-Fin : Extensional (Fin n) 0ℓ
   Extensional-Fin .Pathᵉ (mk-fin u) (mk-fin v) = u ＝ v
