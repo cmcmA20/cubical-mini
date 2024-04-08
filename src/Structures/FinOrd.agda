@@ -66,6 +66,7 @@ instance
 
 -- Usage
 module _ {ℓᵃ ℓᵇ : Level} {A : FinOrd ℓᵃ} {B : A →̇ FinOrd ℓᵇ} where private
+  open import Meta.Ord
   open import Correspondences.Discrete
   open import Correspondences.Exhaustible
   open import Correspondences.Omniscient
