@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Truncation.Propositional.Base where
+module Data.Truncation.Propositional.Base where
 
 open import Meta.Prelude
 

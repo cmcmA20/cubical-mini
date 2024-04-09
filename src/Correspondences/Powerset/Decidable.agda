@@ -15,8 +15,7 @@ open import Data.Dec as Dec
 open import Data.Empty as ⊥
 open import Data.Sum.Base
 open import Data.Unit.Base
-
-open import Truncation.Propositional as ∥-∥₁
+open import Data.Truncation.Propositional as ∥-∥₁
 
 
 private variable

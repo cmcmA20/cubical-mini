@@ -10,8 +10,7 @@ open import Correspondences.Exhaustible
 
 open import Data.Dec as Dec
 open import Data.Empty.Base as ⊥
-
-open import Truncation.Propositional as ∥-∥₁
+open import Data.Truncation.Propositional as ∥-∥₁
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ : Level

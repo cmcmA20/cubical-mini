@@ -91,7 +91,7 @@ For naming conventions specific to the Algebra subfolder, see
   use the names `elim` and `rec`, potentially with a suitable suffix (like `elim-prop`).
   Do not use `ind`.
   You can look
-  [here](https://github.com/cmcmA20/cubical-mini/blob/master/src/Truncation/Propositional/Base.agda)
+  [here](https://github.com/cmcmA20/cubical-mini/blob/master/src/Data/Truncation/Propositional/Base.agda)
   to see how diffrent versions of `elim` and `rec` are named and typed.
 
 * The `elim` and `rec` should be used as much as possible without

@@ -23,11 +23,10 @@ open import Data.Fin.Computational.Properties
 open import Data.Fin.Computational.Closure
 open import Data.Fin.Computational.Instances.Discrete
 open import Data.Nat.Path
+import Data.Truncation.Propositional as ∥-∥₁
+open ∥-∥₁ using (∥_∥₁; ∣_∣₁)
 
 open import Functions.Embedding
-
-import Truncation.Propositional as ∥-∥₁
-open ∥-∥₁ using (∥_∥₁; ∣_∣₁)
 
 private variable
   ℓ ℓ′ : Level

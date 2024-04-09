@@ -10,17 +10,16 @@ open import Structures.n-Type
 open import Correspondences.Base
 open import Correspondences.Discrete
 
-import Data.Empty.Base as ⊥
 open import Data.Dec.Base as Dec
   using (Dec)
 import Data.Dec.Path
-
+import Data.Empty.Base as ⊥
 open import Data.Quotient.Set.Base
+import Data.Truncation.Propositional as ∥-∥₁
+open ∥-∥₁ using (∃-syntax-und; ∥_∥₁ ; ∣_∣₁)
 
 open import Functions.Surjection
 
-import Truncation.Propositional as ∥-∥₁
-open ∥-∥₁ using (∃-syntax-und; ∥_∥₁ ; ∣_∣₁)
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ ℓᵖ ℓʳ ℓˢ ℓᵗ ℓ : Level

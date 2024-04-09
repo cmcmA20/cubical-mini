@@ -11,9 +11,8 @@ open import Correspondences.Base public
 
 open import Data.Empty as ⊥
 open import Data.Sum.Base
+open import Data.Truncation.Propositional as ∥-∥₁
 open import Data.Unit.Base
-
-open import Truncation.Propositional as ∥-∥₁
 
 private variable
   ℓ : Level

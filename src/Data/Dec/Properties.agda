@@ -5,14 +5,12 @@ open import Meta.Prelude
 
 open import Meta.Effect.Idiom
 
-import Truncation.Propositional as ∥-∥₁
-open ∥-∥₁ using (∥_∥₁)
-
-open import Data.Empty.Properties
-open import Data.Sum.Properties
-
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
+open import Data.Empty.Properties
+open import Data.Sum.Properties
+import Data.Truncation.Propositional as ∥-∥₁
+open ∥-∥₁ using (∥_∥₁)
 
 private variable
   ℓ ℓ′ : Level

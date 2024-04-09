@@ -6,13 +6,12 @@ open import Meta.Prelude
 open import Correspondences.Finite.Bishop
 open import Correspondences.Finite.ManifestBishop
 
+open import Data.Truncation.Propositional.Base
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Instances.Finite
   using ()
   renaming ( vec-is-bishop-finite to vec-is-bishop-finiteᵈ
            ; vec-manifest-bishop-finite to vec-manifest-bishop-finiteᵈ)
-
-open import Truncation.Propositional
 
 private variable
   ℓ : Level

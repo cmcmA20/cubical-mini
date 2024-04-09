@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Truncation.Propositional.Properties where
+module Data.Truncation.Propositional.Properties where
 
 open import Meta.Prelude
 
@@ -13,8 +13,8 @@ open import Functions.Constant
 open import Functions.Embedding
 open import Functions.Surjection
 
-open import Truncation.Propositional.Base public
-open import Truncation.Propositional.Instances.Map
+open import Data.Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Instances.Map
 
 private variable
   ℓ ℓ′ ℓ″ : Level

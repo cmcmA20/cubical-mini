@@ -1,13 +1,13 @@
 {-# OPTIONS --safe #-}
-module Truncation.Propositional.Instances.Idiom where
+module Data.Truncation.Propositional.Instances.Idiom where
 
 open import Foundations.Base
 open import Foundations.HLevel
 
 open import Meta.Effect.Idiom
 
-open import Truncation.Propositional.Base
-open import Truncation.Propositional.Instances.Map public
+open import Data.Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Instances.Map public
 
 instance
   Idiom-∥-∥₁ : Idiom (eff ∥_∥₁)

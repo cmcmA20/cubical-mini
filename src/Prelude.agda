@@ -41,15 +41,15 @@ open import Functions.Equiv.Weak      public
 open import Functions.Embedding       public
 open import Functions.Fibration       public
 
-import Truncation.Propositional
-module ∥-∥₁ = Truncation.Propositional
+import Data.Truncation.Propositional
+module ∥-∥₁ = Data.Truncation.Propositional
 open ∥-∥₁ public
   using ( ∥_∥₁ ; ∣_∣₁ ; squash₁
         ; ∃ ; ∃-syntax-und ; ∃[_]
         ; _⊎₁_ ; _⊎̇₁_
         ; fibre₁ ; Im )
 
-import Truncation.Set
-module ∥-∥₂ = Truncation.Set
+import Data.Truncation.Set
+module ∥-∥₂ = Data.Truncation.Set
 open ∥-∥₂ public
   using ( ∥_∥₂ ; ∣_∣₂ ; squash₂ )

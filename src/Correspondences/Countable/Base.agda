@@ -11,7 +11,7 @@ open import Correspondences.Discrete
 
 open import Data.Nat.Instances.Discrete
 
-open import Truncation.Propositional as ∥-∥₁
+open import Data.Truncation.Propositional as ∥-∥₁
 
 private variable
   ℓ ℓ′ : Level

@@ -15,10 +15,9 @@ open import Meta.Reflection.Base
 open import Structures.n-Type
 
 open import Data.Bool.Base
+open import Data.Truncation.Propositional.Base
 
 open import Functions.Embedding using (Injective)
-
-open import Truncation.Propositional.Base
 
 record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
   -- no-eta-equality

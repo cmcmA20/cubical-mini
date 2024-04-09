@@ -3,7 +3,7 @@ module Correspondences.Connected where
 
 open import Meta.Prelude
 
-open import Truncation.Propositional
+open import Data.Truncation.Propositional
 
 private variable
   ℓ : Level
