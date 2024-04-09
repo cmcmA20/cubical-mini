@@ -3,8 +3,6 @@ module Correspondences.Separated where
 
 open import Foundations.Prelude
 
-open import Structures.n-Type
-
 open import Correspondences.Base public
 open import Correspondences.Classical
 

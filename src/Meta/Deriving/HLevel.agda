@@ -7,8 +7,6 @@ open import Meta.Record
 open import Meta.Reflection.Base
 open import Meta.Reflection.Signature
 
-open import Structures.n-Type
-
 open import Data.Nat.Order.Inductive
 open import Data.List.Base
 open import Data.List.Operations

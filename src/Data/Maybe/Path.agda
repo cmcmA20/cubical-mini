@@ -3,14 +3,11 @@ module Data.Maybe.Path where
 
 open import Meta.Prelude
 
-open import Structures.n-Type
-
 open import Functions.Embedding
 
 open import Data.Empty.Base
-open import Data.Unit.Base
-
 open import Data.Maybe.Base
+open import Data.Unit.Base
 
 private variable
   ℓ : Level

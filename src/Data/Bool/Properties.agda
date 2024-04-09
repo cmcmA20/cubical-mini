@@ -6,8 +6,6 @@ open import Meta.Prelude
 open import Meta.Membership
 open import Meta.Witness
 
-open import Structures.n-Type
-
 open import Correspondences.Decidable
 open import Correspondences.Exhaustible
 open import Correspondences.Finite.Bishop

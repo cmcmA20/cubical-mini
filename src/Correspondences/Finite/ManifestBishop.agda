@@ -7,8 +7,6 @@ open import Meta.Deriving.HLevel
 open import Meta.Ord
 open import Meta.Record
 
-open import Structures.n-Type
-
 open import Correspondences.Discrete
 open import Correspondences.Omniscient
 

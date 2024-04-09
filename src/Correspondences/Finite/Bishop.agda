@@ -8,8 +8,6 @@ open import Meta.Effect.Bind
 open import Meta.Extensionality
 open import Meta.Record
 
-open import Structures.n-Type
-
 open import Correspondences.Discrete
 open import Correspondences.Finite.ManifestBishop
 open import Correspondences.Omniscient

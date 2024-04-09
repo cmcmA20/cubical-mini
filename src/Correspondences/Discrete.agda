@@ -3,8 +3,6 @@ module Correspondences.Discrete where
 
 open import Meta.Prelude
 
-open import Structures.n-Type
-
 open import Correspondences.Decidable
 open import Correspondences.Separated
 

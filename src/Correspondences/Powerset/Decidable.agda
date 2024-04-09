@@ -5,10 +5,8 @@ open import Meta.Prelude
 
 open import Meta.Membership
 
-open import Structures.n-Type
-
 open import Correspondences.Decidable
-open import Correspondences.Powerset.Base public
+open import Correspondences.Powerset.Base
 
 open import Data.Bool as Bool
 open import Data.Dec as Dec

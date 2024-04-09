@@ -1,18 +1,22 @@
 {-# OPTIONS --safe #-}
 module Structures.n-Type where
 
-open import Meta.Prelude
+open import Foundations.Prelude
+  renaming ( _$_ to _$ₜ_
 
-open import Foundations.Cubes
-open import Foundations.HLevel
-  public
+           ; _∙_  to _∙ₚ_
+           ; sym  to symₚ
+           ; refl to reflₚ
+           )
 
 open import Meta.Effect.Alt
 open import Meta.Extensionality
+open import Meta.Groupoid
 open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
 open import Meta.Reflection.Signature
+open import Meta.Variadic
 
 open import Data.Bool.Base
 open import Data.Maybe.Base
