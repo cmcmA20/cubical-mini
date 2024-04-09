@@ -3,14 +3,11 @@ module Data.Reflects.Path where
 
 open import Meta.Prelude
 
-open import Structures.IdentitySystem.Base
-
 open import Data.Bool.Base
 open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
-open import Data.Unit.Base
-
 open import Data.Reflects.Base
+open import Data.Unit.Base
 
 private variable
   ℓ ℓ′ : Level

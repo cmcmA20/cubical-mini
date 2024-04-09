@@ -1,8 +1,6 @@
 {-# OPTIONS --safe #-}
 module Categories.Gaunt where
 
-open import Structures.IdentitySystem.Interface
-
 import Categories.Morphism
 open import Categories.Prelude
 open import Categories.Skeletal

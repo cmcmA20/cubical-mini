@@ -4,8 +4,6 @@ module Categories.Univalent where
 open import Prelude
   hiding (_∘_; _≅_; id; ≅→＝)
 
-open import Structures.IdentitySystem.Interface
-
 open import Categories.Base
 import Categories.Morphism
 open Categories.Morphism using (Isomorphism ; id-iso)

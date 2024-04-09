@@ -16,7 +16,7 @@ private variable
 Σ-fibre-equiv : (B : A → Type ℓᵇ) (a : A)
               → fibre fst a ≃ B a
 Σ-fibre-equiv B a = ≅→≃ isom where
-  isom : _ ≅ _
+  isom : Iso _ _
   isom .fst ((_ , y) , p) = subst B p y
   isom .snd .is-iso.inv x       = (a , x) , refl
   isom .snd .is-iso.rinv _      = transport-refl _
@@ -27,7 +27,7 @@ total-equiv
   : {E : Type ℓᵉ} {B : Type ℓᵇ}
     (p : E → B) → E ≃ Σ[ b ꞉ B ] fibre p b
 total-equiv p = ≅→≃ isom where
-  isom : _ ≅ (Σ _ (fibre p))
+  isom : Iso _ (Σ _ (fibre p))
   isom .fst x                   = p x , x , refl
   isom .snd .is-iso.inv (_ , x , _)    = x
   isom .snd .is-iso.rinv (_ , x , q) i = q i , x , λ j → q (i ∧ j)

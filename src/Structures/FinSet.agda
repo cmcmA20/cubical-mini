@@ -9,7 +9,6 @@ open import Meta.Record
 open import Meta.Reflection.Base
 open import Meta.SIP
 
-open import Structures.IdentitySystem.Interface
 open import Structures.n-Type
 
 open import Correspondences.Discrete

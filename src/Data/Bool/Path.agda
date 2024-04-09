@@ -3,13 +3,11 @@ module Data.Bool.Path where
 
 open import Meta.Prelude
 
-open import Structures.IdentitySystem.Base
 open import Structures.n-Type
 
+open import Data.Bool.Base  as Bool
 open import Data.Empty.Base as ⊥
-open import Data.Unit.Base as ⊤
-
-open import Data.Bool.Base as Bool
+open import Data.Unit.Base  as ⊤
 
 _==_ : Bool → Bool → Bool
 false == false = true

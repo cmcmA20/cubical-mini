@@ -9,10 +9,6 @@ open import Meta.Reflection.Base
 open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
 
-open import Structures.IdentitySystem.Base
-  hiding (J; J-refl)
-  public
-
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct

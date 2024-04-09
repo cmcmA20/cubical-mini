@@ -1,8 +1,9 @@
 {-# OPTIONS --safe #-}
-module Functions.Equiv.Fibrewise where
+module Foundations.Equiv.Fibrewise where
 
 open import Foundations.Base
-open import Foundations.Equiv
+open import Foundations.Equiv.Base
+open import Foundations.Equiv.Properties
 open import Foundations.HLevel
 open import Foundations.Isomorphism
 

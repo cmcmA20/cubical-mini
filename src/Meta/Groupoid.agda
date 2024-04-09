@@ -51,7 +51,7 @@ instance
   Refl-≃ᴱ : Refl large _≃ᴱ_
   Refl-≃ᴱ .refl′ = ≃→≃ᴱ idₑ
 
-  Refl-iso : Refl large _≅_
+  Refl-iso : Refl large Iso
   Refl-iso .refl′ = idᵢ
 
 private
@@ -129,7 +129,7 @@ instance
   Compose-≃ᴱ : Compose large _≃ᴱ_
   Compose-≃ᴱ ._∙_  = _∙ᴱₑ_
 
-  Compose-iso : Compose large _≅_
+  Compose-iso : Compose large Iso
   Compose-iso ._∙_  = _∙ᵢ_
 
 
@@ -156,5 +156,5 @@ instance
   Inv-≃ᴱ : Invertible large _≃ᴱ_
   Inv-≃ᴱ ._⁻¹ = _ᴱₑ⁻¹
 
-  Inv-iso : Invertible large _≅_
+  Inv-iso : Invertible large Iso
   Inv-iso ._⁻¹ = _ᵢ⁻¹

@@ -1,9 +1,8 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Separated where
 
-open import Foundations.Base
+open import Foundations.Prelude
 
-open import Structures.IdentitySystem.Base
 open import Structures.n-Type
 
 open import Correspondences.Base public

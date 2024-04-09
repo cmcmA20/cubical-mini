@@ -8,15 +8,16 @@ open import Foundations.Prim.Type
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Equiv
 
-open import Foundations.Base        public
-open import Foundations.Cubes       public
-open import Foundations.Equiv       public
-open import Foundations.Erased      public
-open import Foundations.HLevel      public
-open import Foundations.Isomorphism public
-open import Foundations.Path        public
-open import Foundations.Pi          public
-open import Foundations.Prelude     public
-open import Foundations.Sigma       public
-open import Foundations.Transport   public
-open import Foundations.Univalence  public
+open import Foundations.Base
+open import Foundations.Cubes
+open import Foundations.Equiv
+open import Foundations.Erased
+open import Foundations.HLevel
+open import Foundations.IdentitySystem
+open import Foundations.Isomorphism
+open import Foundations.Path
+open import Foundations.Pi
+open import Foundations.Prelude
+open import Foundations.Sigma
+open import Foundations.Transport
+open import Foundations.Univalence

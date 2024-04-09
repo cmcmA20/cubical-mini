@@ -36,10 +36,9 @@ open import Meta.Marker          public
 open import Meta.Record          public
 open import Meta.SIP             public
 
-open import Functions.Equiv.Fibrewise public
-open import Functions.Equiv.Weak      public
-open import Functions.Embedding       public
-open import Functions.Fibration       public
+open import Functions.Equiv.Weak public
+open import Functions.Embedding  public
+open import Functions.Fibration  public
 
 import Data.Truncation.Propositional
 module ∥-∥₁ = Data.Truncation.Propositional

@@ -1,9 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Dec.Path where
 
-open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.HLevel
+open import Foundations.Prelude
 
 open import Meta.Extensionality
 
