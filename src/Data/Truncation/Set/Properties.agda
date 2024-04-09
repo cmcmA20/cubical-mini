@@ -1,11 +1,11 @@
 {-# OPTIONS --safe #-}
-module Truncation.Set.Properties where
+module Data.Truncation.Set.Properties where
 
 open import Meta.Prelude
 
 open import Structures.n-Type
 
-open import Truncation.Set.Base public
+open import Data.Truncation.Set.Base
 
 private variable
   ℓ ℓᵃ ℓᵇ ℓᶜ : Level

@@ -9,10 +9,10 @@ open import Foundations.Equiv public
 open import Meta.Effect.Bind
 open import Meta.Extensionality
 
+open import Data.Truncation.Propositional
+
 open import Functions.Embedding
 open import Functions.Surjection
-
-open import Truncation.Propositional
 
 private variable
   ℓ ℓ′ ℓ″ : Level

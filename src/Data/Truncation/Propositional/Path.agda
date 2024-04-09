@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Truncation.Propositional.Path where
+module Data.Truncation.Propositional.Path where
 
 open import Meta.Prelude
 
@@ -7,10 +7,9 @@ open import Meta.Effect.Map
 
 open import Structures.n-Type
 
-open import Truncation.Propositional.Base as ∥-∥₁
+open import Data.Truncation.Propositional.Base as ∥-∥₁
   using (∥_∥₁; ∣_∣₁)
-open import Truncation.Propositional.Instances.Map
-
+open import Data.Truncation.Propositional.Instances.Map
 open import Data.Unit.Base
 
 private variable

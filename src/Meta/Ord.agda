@@ -8,8 +8,7 @@ open import Correspondences.Discrete
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
-
-open import Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Base as ∥-∥₁
 
 -- TODO move this out
 data Tri {ℓo} {ℓ} {T : Type ℓ} (_<_ : T → T → Type ℓo) (x y : T) : Type (ℓ ⊔ ℓo) where

@@ -22,10 +22,10 @@ open import Data.Nat
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Inductive.Operations.Computational
 open import Data.Vec.Inductive.Correspondences.Unary.Any.Computational
+open import Data.Truncation.Propositional as ∥-∥₁
 
 open import Functions.Embedding
 
-open import Truncation.Propositional as ∥-∥₁
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level

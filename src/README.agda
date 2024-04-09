@@ -44,13 +44,5 @@ import Order.Everything
 -- Function kinds.
 import Functions.Everything
 
--- Homotopy level truncations.
-import Truncation.Everything
-
-
--- TODO
--- Modalities.
--- TODO import Modalities.Everything
-
 -- -- Homotopy theory
 -- import Homotopy.Everything

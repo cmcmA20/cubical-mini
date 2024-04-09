@@ -112,8 +112,8 @@ When preparing a PR here are some general guidelines:
   and try to group them by folder like `Foundations` or `Data`
 
   If possible, group imports in the following order: `Foundations`, `Meta`,
-  `Structures`, `Correspondences`, `Data`, `Functions`, `Containers`,
-  `Truncation`. Inside the group use the lexicographical order.
+  `Structures`, `Correspondences`, `Data`, `Functions`, `Containers`.
+  Inside the group use the lexicographical order.
 
 - Avoid `public` imports, except in modules that are specifically meant
   to collect and re-export results from several modules.

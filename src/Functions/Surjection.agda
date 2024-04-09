@@ -3,7 +3,7 @@ module Functions.Surjection where
 
 open import Meta.Prelude
 
-open import Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Base
 
 private variable
   ℓ ℓ′ : Level

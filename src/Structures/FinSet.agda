@@ -20,9 +20,8 @@ open import Data.Fin.Computational.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Nat.Path
-
-open import Truncation.Propositional as ∥-∥₁
-open import Truncation.Set as ∥-∥₂
+open import Data.Truncation.Propositional as ∥-∥₁
+open import Data.Truncation.Set as ∥-∥₂
 
 private variable
   ℓ : Level

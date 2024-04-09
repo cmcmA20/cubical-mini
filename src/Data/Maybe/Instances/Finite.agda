@@ -11,9 +11,8 @@ open import Correspondences.Finite.ManifestBishop
 open import Data.Maybe.Properties
 open import Data.Fin.Computational.Closure
 open import Data.Sum.Properties
+open import Data.Truncation.Propositional.Instances.Bind
 open import Data.Unit.Instances.Finite
-
-open import Truncation.Propositional.Instances.Bind
 
 private variable
   ℓ : Level

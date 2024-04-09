@@ -13,8 +13,7 @@ open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Reflects.Path
 open import Data.Reflects.Properties
-
-open import Truncation.Propositional.Base as ∥-∥₁
+open import Data.Truncation.Propositional.Base as ∥-∥₁
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level
