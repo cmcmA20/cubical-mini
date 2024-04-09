@@ -1,7 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Properties where
 
-open import Meta.Prelude
+open import Foundations.Prelude
+  hiding ( refl; sym; _∙_ )
+
+open import Meta.Groupoid
 
 open import Data.Dec.Base
 open import Data.Empty.Base

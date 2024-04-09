@@ -5,8 +5,6 @@ open import Meta.Prelude
 
 open import Meta.Effect.Map
 
-open import Structures.n-Type
-
 open import Correspondences.Base
 open import Correspondences.Discrete
 

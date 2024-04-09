@@ -20,8 +20,6 @@ open import Meta.Membership           public
 open import Meta.Show                 public
 open import Meta.Witness              public
 
-open import Structures.n-Type public
-
 open import Correspondences.Decidable             public
 open import Correspondences.Discrete              public
 open import Correspondences.Exhaustible           public

@@ -3,8 +3,6 @@ module Data.Fin.Path where
 
 open import Meta.Prelude
 
-open import Structures.n-Type
-
 open import Data.Empty.Base
 open import Data.Nat.Base
 open import Data.Maybe.Base

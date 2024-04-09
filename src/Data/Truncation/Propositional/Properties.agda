@@ -5,8 +5,6 @@ open import Meta.Prelude
 open import Meta.Effect.Map
 open import Meta.Extensionality
 
-open import Structures.n-Type
-
 open import Functions.Constant
 open import Functions.Embedding
 open import Functions.Surjection

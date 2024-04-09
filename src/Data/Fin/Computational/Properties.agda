@@ -5,8 +5,6 @@ open import Meta.Prelude
 
 open import Meta.Effect.Bind
 
-open import Structures.n-Type
-
 open import Data.Empty.Base
 open import Data.Nat.Order.Computational
 open import Data.Nat.Path

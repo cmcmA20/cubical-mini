@@ -3,8 +3,6 @@ module Data.Truncation.Set.Properties where
 
 open import Meta.Prelude
 
-open import Structures.n-Type
-
 open import Data.Truncation.Set.Base
 
 private variable

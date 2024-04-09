@@ -12,8 +12,6 @@ open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
 
-open import Structures.n-Type
-
 open import Data.Bool.Base
 open import Data.Truncation.Propositional.Base
 

@@ -3,8 +3,6 @@ module Data.Nat.Order.Base where
 
 open import Meta.Prelude
 
-open import Structures.n-Type
-
 open import Correspondences.Decidable
 open import Correspondences.Wellfounded
 

@@ -11,8 +11,6 @@ open import Meta.Marker
 open import Meta.Record
   hiding (_≅_ ; _ᵢ⁻¹)
 
-open import Structures.n-Type
-
 open import Functions.Embedding
   hiding (_↪_)
 

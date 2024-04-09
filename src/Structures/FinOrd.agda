@@ -7,8 +7,6 @@ open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
 
-open import Structures.n-Type
-
 open import Correspondences.Finite.ManifestBishop
 
 open import Data.Bool.Base

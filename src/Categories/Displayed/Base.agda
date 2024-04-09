@@ -7,8 +7,6 @@ open import Meta.Prelude
 open import Meta.Projection
 open import Meta.Reflection.Base
 
-open import Structures.n-Type
-
 open import Categories.Base
 
 open import Data.Bool.Base

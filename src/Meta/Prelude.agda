@@ -22,3 +22,5 @@ open import Foundations.Prelude
 
 open import Meta.Groupoid public
 open import Meta.Variadic public
+
+open import Structures.n-Type public

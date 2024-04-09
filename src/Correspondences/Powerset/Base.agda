@@ -5,8 +5,6 @@ open import Meta.Prelude
 
 open import Meta.Membership
 
-open import Structures.n-Type
-
 open import Correspondences.Base public
 
 open import Data.Empty as ⊥

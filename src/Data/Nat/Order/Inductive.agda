@@ -1,7 +1,14 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Order.Inductive where
 
-open import Meta.Prelude
+open import Foundations.Prelude
+  renaming ( _$_  to _$ₜ_
+           ; _$²_ to _$ₜ²_
+           )
+  hiding (refl; sym; _∙_)
+
+open import Meta.Groupoid
+open import Meta.Variadic
 
 open import Data.Dec.Base
 open import Data.Empty.Base
