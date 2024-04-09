@@ -26,9 +26,8 @@ record is-countable {ℓ} (A : 𝒰 ℓ) : 𝒰 ℓ where
 
 open is-countable public
 
-instance
-  unquoteDecl H-Level-is-countable =
-    declare-record-hlevel 1 H-Level-is-countable (quote is-countable)
+unquoteDecl H-Level-is-countable =
+  declare-record-hlevel 1 H-Level-is-countable (quote is-countable)
 
 is-countable→is-discrete : is-countable A → is-discrete A
 is-countable→is-discrete {A} cn = ∥-∥₁.proj! go where

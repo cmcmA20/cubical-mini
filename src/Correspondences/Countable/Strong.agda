@@ -22,9 +22,8 @@ record Countable {ℓ} (A : 𝒰 ℓ) : 𝒰 ℓ where
 
 open Countable public
 
-instance
-  unquoteDecl H-Level-countable =
-    declare-record-hlevel 2 H-Level-countable (quote Countable)
+unquoteDecl H-Level-countable =
+  declare-record-hlevel 2 H-Level-countable (quote Countable)
 
 countable→is-discrete : Countable A → is-discrete A
 countable→is-discrete cn = ≃→is-discrete (enumeration cn) ℕ-is-discrete
