@@ -2,6 +2,7 @@
 module Foundations.Sigma.Properties where
 
 open import Foundations.Base
+open import Foundations.Cubes
 open import Foundations.Equiv
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
@@ -162,6 +163,15 @@ infixr 4 _,ₚ_
               → (x .fst ＝ y .fst) ≃ (x ＝ y)
 Σ-prop-path-≃ bp = Σ-prop-path bp , Σ-prop-path-is-equiv bp
 
+Σ-square
+  : ∀ {ℓ ℓ'} {A : Type ℓ} {B : A → Type ℓ'}
+  → {w x y z : Σ _ B}
+  → {p : x ＝ w} {q : x ＝ y} {r : y ＝ z} {s : w ＝ z}
+  → (θ : Square (ap fst p) (ap fst q) (ap fst r) (ap fst s))
+  → Squareᴾ (λ i j → B (θ i j)) (ap snd q) (ap snd p) (ap snd s) (ap snd r)
+  → Square p q r s
+Σ-square θ ζ i j = θ i j , ζ i j
+
 Σ-prop-square
   : ∀ {ℓ ℓ'} {A : Type ℓ} {B : A → Type ℓ'}
   → {w x y z : Σ _ B}
@@ -169,9 +179,8 @@ infixr 4 _,ₚ_
   → {p : x ＝ w} {q : x ＝ y} {r : y ＝ z} {s : w ＝ z}
   → Square (ap fst p) (ap fst q) (ap fst r) (ap fst s)
   → Square p q r s
-Σ-prop-square B-prop sq i j .fst = sq i j
-Σ-prop-square B-prop {p} {q} {r} {s} sq i j .snd =
-  is-prop→squareᴾ (λ i j → B-prop (sq i j)) (ap snd q) (ap snd p) (ap snd s) (ap snd r) i j
+Σ-prop-square B-prop {p} {q} {r} {s} θ = Σ-square θ
+  (is-prop→squareᴾ (λ i j → B-prop (θ i j)) (ap snd q) (ap snd p) (ap snd s) (ap snd r))
 
 Σ-contract-fst : (A-c : is-contr A) → Σ[ x ꞉ A ] B x ≃ B (centre A-c)
 Σ-contract-fst {B} A-c = ≅→≃ the-iso where
@@ -238,3 +247,12 @@ infixr 4 _,ₚ_
   → Path (Σ A B) (x , y) (x , z)
   → y ＝ z
 Σ-inj-set! = Σ-inj-set (hlevel 2)
+
+Σ-prop-square!
+  : ∀ {ℓ ℓ'} {A : Type ℓ} {B : A → Type ℓ'}
+  → {w x y z : Σ _ B}
+  → ⦃ ∀ {x} → H-Level 1 (B x) ⦄
+  → {p : x ＝ w} {q : x ＝ y} {r : y ＝ z} {s : w ＝ z}
+  → Square (ap fst p) (ap fst q) (ap fst r) (ap fst s)
+  → Square p q r s
+Σ-prop-square! = Σ-prop-square (λ _ → hlevel 1)
