@@ -10,6 +10,8 @@ open import Prelude
            ; id   to idₜ
            ; ≅→≃  to ≅ₜ→≃
            ; ≅→＝ to ≅ₜ→＝
+
+           ; Extensional-↪ to Extensional-↪ₜ
            )
   public
 
@@ -23,4 +25,4 @@ open import Categories.Univalent
         ; module Univalent )
   public
 
-open import Categories.Morphism.Extensionality public
+open import Categories.Morphism.Instances public

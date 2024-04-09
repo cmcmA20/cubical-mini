@@ -36,9 +36,8 @@ record /-Hom (a b : /-Obj c) : Type ℓ where
     map      : Hom a.domain b.domain
     commutes : b.map ∘ map ＝ a.map
 
-instance
-  unquoteDecl H-Level-/-Hom =
-    declare-record-hlevel 2 H-Level-/-Hom (quote /-Hom)
+unquoteDecl H-Level-/-Hom =
+  declare-record-hlevel 2 H-Level-/-Hom (quote /-Hom)
 
 private variable f g : /-Hom a b
 

@@ -42,9 +42,8 @@ record Supported-hom {ℓ ℓ′} {X : 𝒰 ℓ} {Y : 𝒰 ℓ′}
 
 open Supported-hom
 
-instance
-  unquoteDecl H-Level-supported-hom =
-    declare-record-hlevel 1 H-Level-supported-hom (quote Supported-hom)
+unquoteDecl H-Level-supported-hom =
+  declare-record-hlevel 1 H-Level-supported-hom (quote Supported-hom)
 
 Supported-structure : ∀ ℓ → Thin-structure {ℓ} (ℓ ⊔ ℓᵃ) Supported
 Supported-structure ℓ .is-hom f X Y = el! (Supported-hom X Y f)

@@ -108,9 +108,8 @@ record Cartesian-morphism
       hom′ : Hom[ f ] x′ y′
       cartesian : is-cartesian f hom′
 
-instance
-  unquoteDecl H-Level-cartesian-morphism =
-    declare-record-hlevel 2 H-Level-cartesian-morphism (quote Cartesian-morphism)
+unquoteDecl H-Level-cartesian-morphism =
+  declare-record-hlevel 2 H-Level-cartesian-morphism (quote Cartesian-morphism)
 
 Cartesian-morphism-pathᴾ
   : ∀ {x y x′ y′} {f g : Hom x y}

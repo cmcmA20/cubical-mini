@@ -5,6 +5,7 @@ open import Prelude
   hiding (_∘_; _≅_; id; ≅→＝)
 
 open import Categories.Base
+open import Categories.Morphism.Instances
 import Categories.Morphism
 open Categories.Morphism using (Isomorphism ; id-iso)
 open Precategory using (Ob)

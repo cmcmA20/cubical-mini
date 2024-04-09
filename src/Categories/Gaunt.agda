@@ -21,9 +21,8 @@ record is-gaunt {o ℓ} (C : Precategory o ℓ) : Type (o ⊔ ℓ) where
 
 private unquoteDecl is-gaunt-iso = declare-record-iso is-gaunt-iso (quote is-gaunt)
 
-instance
-  unquoteDecl H-Level-is-gaunt =
-    declare-record-hlevel 1 H-Level-is-gaunt (quote is-gaunt)
+unquoteDecl H-Level-is-gaunt =
+  declare-record-hlevel 1 H-Level-is-gaunt (quote is-gaunt)
 
 
 module _ {o ℓ} {C : Precategory o ℓ} (gaunt : is-gaunt C) where

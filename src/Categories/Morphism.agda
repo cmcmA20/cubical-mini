@@ -7,6 +7,7 @@ open import Meta.Prelude
   hiding (_∘_; _≅_; _ᵢ⁻¹ ; id; section)
 
 open import Meta.Deriving.HLevel
+open import Meta.Extensionality
 open import Meta.Marker
 open import Meta.Record
   hiding (_≅_ ; _ᵢ⁻¹)
@@ -36,10 +37,6 @@ record _↪_ (a b : Ob) : Type (o ⊔ h) where
 
 open _↪_ public
 
-instance
-  unquoteDecl H-Level-mono =
-    declare-record-hlevel 2 H-Level-mono (quote _↪_)
-
 
 -- Epimorphism (epi)
 
@@ -52,10 +49,6 @@ record _↠_ (a b : Ob) : Type (o ⊔ h) where
     epic : is-epic mor
 
 open _↠_ public
-
-instance
-  unquoteDecl H-Level-epi =
-    declare-record-hlevel 2 H-Level-epi (quote _↠_)
 
 
 -- The identity morphism is monic and epic.
@@ -143,10 +136,6 @@ record has-section (r : Hom a b) : Type h where
 
 open has-section public
 
-instance
-  unquoteDecl H-Level-section =
-    declare-record-hlevel 2 H-Level-section (quote has-section)
-
 id-has-section : has-section (id {a})
 id-has-section .section = id
 id-has-section .is-section = id-l _
@@ -199,10 +188,6 @@ record has-retract (s : Hom b a) : Type h where
     is-retract : retract retract-of s
 
 open has-retract public
-
-instance
-  unquoteDecl H-Level-retract =
-    declare-record-hlevel 2 H-Level-retract (quote has-retract)
 
 id-has-retract : has-retract (id {a})
 id-has-retract .retract = id
@@ -296,7 +281,7 @@ record Inverses (f : Hom a b) (g : Hom b a) : Type h where
 
 open Inverses
 
-instance
+private
   unquoteDecl H-Level-inverses =
     declare-record-hlevel 1 H-Level-inverses (quote Inverses)
 
@@ -333,10 +318,6 @@ opaque
     p i .is-invertible.inverses =
      is-prop→pathᴾ (λ i → inverses-are-prop {g = g≡h i}) g.inverses h.inverses i
 
-instance opaque
-  H-Level-is-invertible : H-Level (suc n) (is-invertible f)
-  H-Level-is-invertible = hlevel-prop-instance is-invertible-is-prop
-
 id-invertible : is-invertible (id {a})
 id-invertible .is-invertible.inv = id
 id-invertible .is-invertible.inverses .inv-l = id-l id
@@ -352,10 +333,6 @@ record _≅_ (a b : Ob) : Type h where
   open Inverses inverses public
 
 open _≅_ public
-
-instance
-  unquoteDecl H-Level-≅ =
-    declare-record-hlevel 2 H-Level-≅ (quote _≅_)
 
 id-iso : a ≅ a
 id-iso .to = id
@@ -499,3 +476,27 @@ opaque
 
 ≅-path-from : {f g : a ≅ b} → f ._≅_.from ＝ g ._≅_.from → f ＝ g
 ≅-path-from = ≅-pathᴾ-from refl refl
+
+↪-pathᴾ
+  : {a b : I → Ob} {f : a i0 ↪ b i0} {g : a i1 ↪ b i1}
+  → ＜ f .mor ／ (λ i → Hom (a i) (b i)) ＼ g .mor ＞
+  → ＜ f ／ (λ i → a i ↪ b i) ＼ g ＞
+↪-pathᴾ {a} {b} {f} {g} pa = go where
+  go : ＜ f ／ (λ i → a i ↪ b i) ＼ g ＞
+  go i .mor = pa i
+  go i .monic {c} = is-prop→pathᴾ
+    {B = λ i → (f′ g′ : Hom c (a i)) → pa i ∘ f′ ＝ pa i ∘ g′ → f′ ＝ g′}
+    hlevel!
+    (f .monic) (g .monic) i
+
+↠-pathᴾ
+  : {a b : I → Ob} {f : a i0 ↠ b i0} {g : a i1 ↠ b i1}
+  → ＜ f .mor ／ (λ i → Hom (a i) (b i)) ＼ g .mor ＞
+  → ＜ f ／ (λ i → a i ↠ b i) ＼ g ＞
+↠-pathᴾ {a} {b} {f} {g} pa = go where
+  go : ＜ f ／ (λ i → a i ↠ b i) ＼ g ＞
+  go i .mor = pa i
+  go i .epic {c} = is-prop→pathᴾ
+    {B = λ i → (f′ g′ : Hom (b i) c) → f′ ∘ pa i ＝ g′ ∘ pa i → f′ ＝ g′}
+    hlevel!
+    (f .epic) (g .epic) i

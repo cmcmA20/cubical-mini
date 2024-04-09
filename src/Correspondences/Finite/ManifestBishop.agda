@@ -43,10 +43,10 @@ open Manifest-bishop-finite public
 unquoteDecl manifest-bishop-finite-iso =
   declare-record-iso manifest-bishop-finite-iso (quote Manifest-bishop-finite)
 
-instance
-  unquoteDecl H-Level-manifest-bishop-finite =
-    declare-record-hlevel 2 H-Level-manifest-bishop-finite (quote Manifest-bishop-finite)
+unquoteDecl H-Level-manifest-bishop-finite =
+  declare-record-hlevel 2 H-Level-manifest-bishop-finite (quote Manifest-bishop-finite)
 
+instance
   lift-manifest-bishop-finite
     : ⦃ mbf : Manifest-bishop-finite A ⦄
     → Manifest-bishop-finite (Lift ℓ A)
