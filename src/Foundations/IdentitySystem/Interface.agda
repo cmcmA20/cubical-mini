@@ -1,16 +1,19 @@
 {-# OPTIONS --safe #-}
-module Structures.IdentitySystem.Interface where
+module Foundations.IdentitySystem.Interface where
 
 open import Foundations.Base
   hiding (J; J-refl)
 open import Foundations.HLevel.Base
 open import Foundations.Equiv
 
-import Structures.IdentitySystem.Base as I
+import Foundations.IdentitySystem.Base as I
 open I public
   using ( is-identity-system ; to-path ; to-path-over ; to-path-refl ; identity-system-gives-path
-        ; identity-system→is-of-hlevel ; transfer-identity-system )
-import Structures.IdentitySystem.Strict as IS
+        ; identity-system→is-of-hlevel ; transfer-identity-system ; path-identity-system
+        ; univalence-identity-system ; set-identity-system ; set-identity-system!
+        ; identity-system→is-of-hlevel! ; equiv-path→identity-system ; H-Level-identity-system
+        )
+import Foundations.IdentitySystem.Strict as IS
 open IS public
   using (set-identity-is-prop)
 
@@ -63,6 +66,6 @@ module IdSS
 
   open IdS ids public
 
-  instance
+  instance opaque
     HLevel-R : ∀ {a b} {n} → H-Level (suc n) (R a b)
     HLevel-R = hlevel-prop-instance (set-identity-is-prop ids set)

@@ -1,16 +1,12 @@
 {-# OPTIONS --safe #-}
 module Data.Id.Properties where
 
-open import Foundations.Base
+open import Foundations.Prelude
   renaming ( _＝_ to _＝ₚ_
            ; refl to reflₚ
            ; sym  to symₚ
            ; _∙_  to _∙ₚ_
-           ; J    to Jₜ )
-open import Foundations.Equiv
-open import Foundations.Path
-
-open import Structures.IdentitySystem
+           )
 
 open import Data.Id.Base
 

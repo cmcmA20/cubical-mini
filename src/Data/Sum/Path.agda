@@ -2,13 +2,9 @@
 module Data.Sum.Path where
 
 open import Meta.Prelude
-
 open import Meta.Extensionality
 
-open import Structures.IdentitySystem.Base
-
 open import Data.Empty.Base
-
 open import Data.Sum.Base
 
 private variable

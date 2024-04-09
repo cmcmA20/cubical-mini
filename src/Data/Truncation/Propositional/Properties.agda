@@ -2,11 +2,9 @@
 module Data.Truncation.Propositional.Properties where
 
 open import Meta.Prelude
-
 open import Meta.Effect.Map
 open import Meta.Extensionality
 
-open import Structures.IdentitySystem.Interface
 open import Structures.n-Type
 
 open import Functions.Constant

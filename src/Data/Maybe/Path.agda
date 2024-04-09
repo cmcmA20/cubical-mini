@@ -3,7 +3,6 @@ module Data.Maybe.Path where
 
 open import Meta.Prelude
 
-open import Structures.IdentitySystem
 open import Structures.n-Type
 
 open import Functions.Embedding

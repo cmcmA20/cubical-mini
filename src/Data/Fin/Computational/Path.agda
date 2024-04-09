@@ -1,10 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Computational.Path where
 
-open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.HLevel
-open import Foundations.Sigma
+open import Foundations.Prelude
 
 open import Meta.Extensionality
 

@@ -2,14 +2,14 @@
 module Categories.Prelude where
 
 open import Prelude
-  renaming ( _≅_       to _≅ₜ_
-           ; _↪_       to _↪ₜ_
-           ; _×_       to _×ₜ_
-           ; _∘_       to _∘ₜ_
-           ; Iso       to Isoₜ
-           ; id        to idₜ
-           ; ≅→≃       to ≅ₜ→≃
-           ; ≅→＝      to ≅ₜ→＝
+  renaming ( _≅_  to _≅ₜ_
+           ; _↪_  to _↪ₜ_
+           ; _×_  to _×ₜ_
+           ; _∘_  to _∘ₜ_
+           ; Iso  to Isoₜ
+           ; id   to idₜ
+           ; ≅→≃  to ≅ₜ→≃
+           ; ≅→＝ to ≅ₜ→＝
            )
   public
 

@@ -2,17 +2,13 @@
 module Functions.Embedding where
 
 open import Meta.Prelude
-
 open import Meta.Extensionality
 
-open import Structures.IdentitySystem.Base
 open import Structures.n-Type
 
 open import Data.Nat.Order.Inductive
 open import Data.Unit.Base
 
-open import Functions.Equiv.Fibrewise
-open import Functions.Equiv.HalfAdjoint
 open import Functions.Fibration
 
 private variable

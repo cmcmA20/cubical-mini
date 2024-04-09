@@ -3,7 +3,6 @@ module Data.List.Path where
 
 open import Meta.Prelude
 
-open import Structures.IdentitySystem.Base
 open import Structures.n-Type
 
 open import Data.Empty

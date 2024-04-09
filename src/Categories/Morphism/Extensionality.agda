@@ -3,6 +3,8 @@ open import Categories.Base
 
 module Categories.Morphism.Extensionality {o ℓ} {C : Precategory o ℓ} where
 
+open import Foundations.Prelude
+  hiding (_≅_)
 open import Meta.Extensionality
 
 open import Structures.n-Type

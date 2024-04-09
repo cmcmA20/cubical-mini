@@ -1,11 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Id.Inductive.Properties where
 
-open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.Transport
-
-open import Structures.IdentitySystem
+open import Foundations.Prelude
 
 open import Correspondences.Discrete
 

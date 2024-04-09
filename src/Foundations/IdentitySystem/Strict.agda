@@ -1,12 +1,9 @@
 {-# OPTIONS --safe #-}
-module Structures.IdentitySystem.Strict where
+module Foundations.IdentitySystem.Strict where
 
 open import Foundations.Base
 open import Foundations.HLevel
-
-open import Meta.Marker
-
-open import Structures.IdentitySystem.Base
+open import Foundations.IdentitySystem.Base
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -40,10 +37,10 @@ opaque
     → (p : P (r a))
     → K ids set P p (r a) ＝ p
   K-refl {R} {r} {a} ids set P p =
-    transport (λ i → P (set-identity-is-prop ids set (r a) (r a) i)) p ＝⟨⟩
-    subst P   ⌜ set-identity-is-prop ids set (r a) (r a) ⌝           p ＝⟨ ap! lemma ⟩
-    transport (λ _ → P (r a))                                        p ＝⟨ transport-refl p ⟩
-    p                                                                  ∎
+    transport (λ i → P (set-identity-is-prop ids set (r a) (r a) i)) p  ＝⟨⟩
+    subst P (set-identity-is-prop ids set (r a) (r a) )              p  ＝⟨ ap (λ φ → subst P φ p) lemma ⟩
+    transport (λ _ → P (r a))                                        p  ＝⟨ transport-refl p ⟩
+    p                                                                   ∎
     where
       lemma : set-identity-is-prop ids set (r a) (r a) ＝ refl
       lemma = is-prop→is-set (set-identity-is-prop ids set) (r a) (r a) _ _

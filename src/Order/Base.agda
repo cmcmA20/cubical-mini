@@ -7,8 +7,6 @@ import Categories.Morphism
 open import Meta.Projection
 open import Meta.Reflection.Base
 
-open import Structures.IdentitySystem
-
 open import Data.Bool.Base
 
 private variable n : HLevel

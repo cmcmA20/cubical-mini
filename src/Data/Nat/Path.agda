@@ -1,10 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Path where
 
-open import Foundations.Base
-open import Foundations.HLevel
-
-open import Structures.IdentitySystem.Base
+open import Foundations.Prelude
 
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec
