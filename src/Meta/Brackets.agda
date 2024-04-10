@@ -11,4 +11,5 @@ record ⟦⟧-notation {ℓ} (A : Type ℓ) : Typeω where
     ⟦_⟧   : A → Sem
 
 open ⟦⟧-notation ⦃...⦄ public
+  using(⟦_⟧)
 {-# DISPLAY ⟦⟧-notation.⟦_⟧ f x = ⟦ x ⟧ #-}

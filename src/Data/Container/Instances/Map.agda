@@ -11,4 +11,4 @@ open import Data.Container.Instances.Brackets
 
 instance
   Map-Container : ∀ {s p} {C : Container s p} → Map (eff ⟦ C ⟧)
-  Map-Container .Map.map f = second (f ∘_)
+  Map-Container .map f = second (f ∘_)

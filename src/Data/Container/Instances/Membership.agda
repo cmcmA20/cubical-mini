@@ -13,4 +13,4 @@ instance
   Membership-container
     : ∀ {ℓ s p} {X : Type ℓ} {S : Type s} {P : S → Type p}
     → Membership X (⟦ S ▶ P ⟧ X) (ℓ ⊔ p)
-  Membership-container .Membership._∈_ x (_ , p) = fibre p x
+  Membership-container ._∈_ x (_ , p) = fibre p x
