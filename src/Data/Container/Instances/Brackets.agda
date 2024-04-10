@@ -11,4 +11,4 @@ instance
   Sem-container : {ℓ s p : Level} → ⟦⟧-notation (Container s p)
   Sem-container {ℓ} {s} {p} .⟦⟧-notation.lvl = ℓsuc (ℓ ⊔ s ⊔ p)
   Sem-container {ℓ} {s} {p} .⟦⟧-notation.Sem = Type ℓ → Type (ℓ ⊔ s ⊔ p)
-  Sem-container .⟦⟧-notation.⟦_⟧ (S ▶ P) X = Σ[ s ꞉ S ] (P s → X)
+  Sem-container .⟦_⟧ (S ▶ P) X = Σ[ s ꞉ S ] (P s → X)
