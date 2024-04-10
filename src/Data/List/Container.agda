@@ -1,16 +1,19 @@
 {-# OPTIONS --safe #-}
 module Data.List.Container where
 
-open import Foundations.Base
-open import Foundations.Equiv
-open import Foundations.Sigma
+open import Foundations.Prelude
+
+open import Meta.Brackets
 
 open import Data.List.Base
   renaming (List to Listⁱ)
 open import Data.Nat.Base
 open import Data.Fin.Base
 
-open import Containers.List.Base
+open import Data.Container
+
+List : {ℓ : Level} → Type ℓ → Type ℓ
+List = ⟦ ℕ ▶ Fin ⟧
 
 private variable
   ℓ : Level

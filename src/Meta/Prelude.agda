@@ -20,6 +20,7 @@ open import Foundations.Prelude
          ; ∀-syntax )
   public
 
+open import Meta.Brackets public
 open import Meta.Groupoid public
 open import Meta.Variadic public
 
