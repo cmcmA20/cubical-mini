@@ -23,9 +23,6 @@ import Structures.Everything
 -- Correspondences (proof-relevant relations).
 import Correspondences.Everything
 
--- Containers aka polynomial functors.
-import Containers.Everything
-
 -- Basic types and their properties.
 import Data.Everything
 

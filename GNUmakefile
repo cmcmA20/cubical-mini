@@ -8,7 +8,6 @@ RUNHASKELL?=runhaskell
 EVERYTHINGS=$(RUNHASKELL) ./Everythings.hs
 DATA_INSTANCE_DIRS=`find src/Data -type d -name Instances -printf "Data/%P\n"`
 STR_INSTANCE_DIRS=`find src/Structures -type d -name Instances -printf "Structures/%P\n"`
-CON_INSTANCE_DIRS=`find src/Containers -type d -name Instances -printf "Containers/%P\n"`
 
 .PHONY : all
 all : build
