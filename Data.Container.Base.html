@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Container.Base</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Container.Base.html" class="Module">Data.Container.Base</a> <a id="51" class="Keyword">where</a>
+
+<a id="58" class="Keyword">open</a> <a id="63" class="Keyword">import</a> <a id="70" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="88" class="Comment">-- it has many names</a>
+<a id="109" class="Keyword">infix</a> <a id="115" class="Number">5</a> <a id="117" href="Data.Container.Base.html#221" class="InductiveConstructor Operator">_▶_</a>
+<a id="121" class="Keyword">record</a> <a id="Container"></a><a id="128" href="Data.Container.Base.html#128" class="Record">Container</a> <a id="138" class="Symbol">(</a><a id="139" href="Data.Container.Base.html#139" class="Bound">s</a> <a id="141" href="Data.Container.Base.html#141" class="Bound">p</a> <a id="143" class="Symbol">:</a> <a id="145" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="150" class="Symbol">)</a> <a id="152" class="Symbol">:</a> <a id="154" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="159" class="Symbol">(</a><a id="160" href="Foundations.Prim.Type.html#402" class="Primitive">ℓsuc</a> <a id="165" class="Symbol">(</a><a id="166" href="Data.Container.Base.html#139" class="Bound">s</a> <a id="168" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="170" href="Data.Container.Base.html#141" class="Bound">p</a><a id="171" class="Symbol">))</a> <a id="174" class="Keyword">where</a>
+  <a id="182" class="Keyword">inductive</a>
+  <a id="194" class="Keyword">eta-equality</a>
+  <a id="209" class="Keyword">constructor</a> <a id="_▶_"></a><a id="221" href="Data.Container.Base.html#221" class="InductiveConstructor Operator">_▶_</a>
+  <a id="227" class="Keyword">field</a>
+    <a id="Container.Shape"></a><a id="237" href="Data.Container.Base.html#237" class="Field">Shape</a>    <a id="246" class="Symbol">:</a> <a id="248" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="253" href="Data.Container.Base.html#139" class="Bound">s</a>
+    <a id="Container.Position"></a><a id="259" href="Data.Container.Base.html#259" class="Field">Position</a> <a id="268" class="Symbol">:</a> <a id="270" href="Data.Container.Base.html#237" class="Field">Shape</a> <a id="276" class="Symbol">→</a> <a id="278" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="283" href="Data.Container.Base.html#141" class="Bound">p</a>
+</pre></body></html>

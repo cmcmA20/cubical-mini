@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Truncation.Set.Instances.Bind</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Truncation.Set.Instances.Bind.html" class="Module">Data.Truncation.Set.Instances.Bind</a> <a id="66" class="Keyword">where</a>
+
+<a id="73" class="Keyword">open</a> <a id="78" class="Keyword">import</a> <a id="85" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="102" class="Keyword">open</a> <a id="107" class="Keyword">import</a> <a id="114" href="Foundations.HLevel.html" class="Module">Foundations.HLevel</a>
+
+<a id="134" class="Keyword">open</a> <a id="139" class="Keyword">import</a> <a id="146" href="Meta.Effect.Bind.html" class="Module">Meta.Effect.Bind</a>
+
+<a id="164" class="Keyword">open</a> <a id="169" class="Keyword">import</a> <a id="176" href="Data.Truncation.Set.Base.html" class="Module">Data.Truncation.Set.Base</a>
+<a id="201" class="Keyword">open</a> <a id="206" class="Keyword">import</a> <a id="213" href="Data.Truncation.Set.Instances.Idiom.html" class="Module">Data.Truncation.Set.Instances.Idiom</a> <a id="249" class="Keyword">public</a>
+
+<a id="257" class="Keyword">instance</a>
+  <a id="Bind-∥-∥₂"></a><a id="268" href="Data.Truncation.Set.Instances.Bind.html#268" class="Function">Bind-∥-∥₂</a> <a id="278" class="Symbol">:</a> <a id="280" href="Meta.Effect.Bind.html#192" class="Record">Bind</a> <a id="285" class="Symbol">(</a><a id="286" href="Meta.Effect.Map.html#190" class="InductiveConstructor">eff</a> <a id="290" href="Data.Truncation.Set.Base.html#94" class="Datatype Operator">∥_∥₂</a><a id="294" class="Symbol">)</a>
+  <a id="298" href="Data.Truncation.Set.Instances.Bind.html#268" class="Function">Bind-∥-∥₂</a> <a id="308" class="Symbol">.</a><a id="309" href="Meta.Effect.Bind.html#266" class="Field Operator">Bind._&gt;&gt;=_</a> <a id="320" class="Symbol">=</a> <a id="322" href="Foundations.Pi.Base.html#1033" class="Function">flip</a> <a id="327" href="Foundations.Pi.Base.html#1574" class="Function Operator">$</a> <a id="329" href="Data.Truncation.Set.Base.html#1242" class="Function">rec</a> <a id="333" href="Foundations.Pi.Base.html#1574" class="Function Operator">$</a> <a id="335" href="Foundations.HLevel.Base.html#8778" class="Function">hlevel</a> <a id="342" class="Number">2</a>
+</pre></body></html>

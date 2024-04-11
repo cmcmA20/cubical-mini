@@ -4,18 +4,14 @@
 
 <a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Meta.Search.Discrete.html" class="Module">Meta.Search.Discrete</a>
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Correspondences.Discrete.html" class="Module">Correspondences.Discrete</a>
 
-<a id="131" class="Keyword">open</a> <a id="136" class="Keyword">import</a> <a id="143" href="Data.List.Base.html" class="Module">Data.List.Base</a>
-<a id="158" class="Keyword">open</a> <a id="163" class="Keyword">import</a> <a id="170" href="Data.Nat.Instances.Discrete.html" class="Module">Data.Nat.Instances.Discrete</a>
+<a id="135" class="Keyword">open</a> <a id="140" class="Keyword">import</a> <a id="147" href="Data.List.Base.html" class="Module">Data.List.Base</a>
+<a id="162" class="Keyword">open</a> <a id="167" class="Keyword">import</a> <a id="174" href="Data.Nat.Instances.Discrete.html" class="Module">Data.Nat.Instances.Discrete</a>
 
-<a id="199" class="Keyword">open</a> <a id="204" class="Keyword">import</a> <a id="211" href="Data.Word.Properties.html" class="Module">Data.Word.Properties</a>
+<a id="203" class="Keyword">open</a> <a id="208" class="Keyword">import</a> <a id="215" href="Data.Word.Properties.html" class="Module">Data.Word.Properties</a>
 
-<a id="233" class="Keyword">instance</a>
-  <a id="word64-is-discrete"></a><a id="244" href="Data.Word.Instances.Discrete.html#244" class="Function">word64-is-discrete</a> <a id="263" class="Symbol">:</a> <a id="265" href="Correspondences.Discrete.html#518" class="Record">is-discrete</a> <a id="277" href="Agda.Builtin.Word.html#208" class="Postulate">Word64</a>
-  <a id="286" href="Data.Word.Instances.Discrete.html#244" class="Function">word64-is-discrete</a> <a id="305" class="Symbol">=</a>
-    <a id="311" href="Correspondences.Discrete.html#2008" class="Function">↣→is-discrete</a> <a id="325" class="Symbol">(</a><a id="326" href="Data.Word.Base.html#143" class="Primitive">word64→ℕ</a> <a id="335" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="337" href="Data.Word.Properties.html#301" class="Function">word64→ℕ-inj</a><a id="349" class="Symbol">)</a> <a id="351" href="Meta.Search.Discrete.html#1081" class="Macro">discrete!</a>
-
-  <a id="decomp-dis-word64"></a><a id="364" href="Data.Word.Instances.Discrete.html#364" class="Function">decomp-dis-word64</a> <a id="382" class="Symbol">:</a> <a id="384" href="Meta.Search.Base.html#3112" class="Datatype">goal-decomposition</a> <a id="403" class="Symbol">(</a><a id="404" class="Keyword">quote</a> <a id="410" href="Correspondences.Discrete.html#518" class="Record">is-discrete</a><a id="421" class="Symbol">)</a> <a id="423" href="Agda.Builtin.Word.html#208" class="Postulate">Word64</a>
-  <a id="432" href="Data.Word.Instances.Discrete.html#364" class="Function">decomp-dis-word64</a> <a id="450" class="Symbol">=</a> <a id="452" href="Meta.Search.Base.html#3263" class="InductiveConstructor">decomp</a> <a id="459" class="Symbol">(</a><a id="460" class="Keyword">quote</a> <a id="466" href="Data.Word.Instances.Discrete.html#244" class="Function">word64-is-discrete</a><a id="484" class="Symbol">)</a> <a id="486" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a>
+<a id="237" class="Keyword">instance</a>
+  <a id="word64-is-discrete"></a><a id="248" href="Data.Word.Instances.Discrete.html#248" class="Function">word64-is-discrete</a> <a id="267" class="Symbol">:</a> <a id="269" href="Correspondences.Discrete.html#437" class="Function">is-discrete</a> <a id="281" href="Agda.Builtin.Word.html#208" class="Postulate">Word64</a>
+  <a id="290" href="Data.Word.Instances.Discrete.html#248" class="Function">word64-is-discrete</a> <a id="309" class="Symbol">=</a> <a id="311" href="Correspondences.Discrete.html#2964" class="Function">↣→is-discrete!</a> <a id="326" class="Symbol">(</a><a id="327" href="Data.Word.Base.html#143" class="Primitive">word64→ℕ</a> <a id="336" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="338" href="Data.Word.Properties.html#301" class="Function">word64→ℕ-inj</a><a id="350" class="Symbol">)</a>
 </pre></body></html>

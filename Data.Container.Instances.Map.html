@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Container.Instances.Map</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Container.Instances.Map.html" class="Module">Data.Container.Instances.Map</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Prelude.html" class="Module">Foundations.Prelude</a>
+
+<a id="100" class="Keyword">open</a> <a id="105" class="Keyword">import</a> <a id="112" href="Meta.Brackets.html" class="Module">Meta.Brackets</a>
+<a id="126" class="Keyword">open</a> <a id="131" class="Keyword">import</a> <a id="138" href="Meta.Effect.Idiom.html" class="Module">Meta.Effect.Idiom</a>
+
+<a id="157" class="Keyword">open</a> <a id="162" class="Keyword">import</a> <a id="169" href="Data.Container.Base.html" class="Module">Data.Container.Base</a>
+<a id="189" class="Keyword">open</a> <a id="194" class="Keyword">import</a> <a id="201" href="Data.Container.Instances.Brackets.html" class="Module">Data.Container.Instances.Brackets</a>
+
+<a id="236" class="Keyword">instance</a>
+  <a id="Map-Container"></a><a id="247" href="Data.Container.Instances.Map.html#247" class="Function">Map-Container</a> <a id="261" class="Symbol">:</a> <a id="263" class="Symbol">∀</a> <a id="265" class="Symbol">{</a><a id="266" href="Data.Container.Instances.Map.html#266" class="Bound">s</a> <a id="268" href="Data.Container.Instances.Map.html#268" class="Bound">p</a><a id="269" class="Symbol">}</a> <a id="271" class="Symbol">{</a><a id="272" href="Data.Container.Instances.Map.html#272" class="Bound">C</a> <a id="274" class="Symbol">:</a> <a id="276" href="Data.Container.Base.html#128" class="Record">Container</a> <a id="286" href="Data.Container.Instances.Map.html#266" class="Bound">s</a> <a id="288" href="Data.Container.Instances.Map.html#268" class="Bound">p</a><a id="289" class="Symbol">}</a> <a id="291" class="Symbol">→</a> <a id="293" href="Meta.Effect.Map.html#271" class="Record">Map</a> <a id="297" class="Symbol">(</a><a id="298" href="Meta.Effect.Map.html#190" class="InductiveConstructor">eff</a> <a id="302" href="Meta.Brackets.html#209" class="Field Operator">⟦</a> <a id="304" href="Data.Container.Instances.Map.html#272" class="Bound">C</a> <a id="306" href="Meta.Brackets.html#209" class="Field Operator">⟧</a><a id="307" class="Symbol">)</a>
+  <a id="311" href="Data.Container.Instances.Map.html#247" class="Function">Map-Container</a> <a id="325" class="Symbol">.</a><a id="326" href="Meta.Effect.Map.html#344" class="Field">map</a> <a id="330" href="Data.Container.Instances.Map.html#330" class="Bound">f</a> <a id="332" class="Symbol">=</a> <a id="334" href="Foundations.Sigma.Base.html#1332" class="Function">second</a> <a id="341" class="Symbol">(</a><a id="342" href="Data.Container.Instances.Map.html#330" class="Bound">f</a> <a id="344" href="Foundations.Pi.Base.html#1761" class="Function Operator">∘_</a><a id="346" class="Symbol">)</a>
+</pre></body></html>

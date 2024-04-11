@@ -4,19 +4,14 @@
 
 <a id="68" class="Keyword">open</a> <a id="73" class="Keyword">import</a> <a id="80" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="98" class="Keyword">open</a> <a id="103" class="Keyword">import</a> <a id="110" href="Meta.Search.Discrete.html" class="Module">Meta.Search.Discrete</a>
+<a id="98" class="Keyword">open</a> <a id="103" class="Keyword">import</a> <a id="110" href="Correspondences.Discrete.html" class="Module">Correspondences.Discrete</a>
 
-<a id="132" class="Keyword">open</a> <a id="137" class="Keyword">import</a> <a id="144" href="Data.List.Base.html" class="Module">Data.List.Base</a>
-<a id="159" class="Keyword">open</a> <a id="164" class="Keyword">import</a> <a id="171" href="Data.Maybe.Instances.Discrete.html" class="Module">Data.Maybe.Instances.Discrete</a>
-<a id="201" class="Keyword">open</a> <a id="206" class="Keyword">import</a> <a id="213" href="Data.Word.Instances.Discrete.html" class="Module">Data.Word.Instances.Discrete</a>
+<a id="136" class="Keyword">open</a> <a id="141" class="Keyword">import</a> <a id="148" href="Data.Maybe.Instances.Discrete.html" class="Module">Data.Maybe.Instances.Discrete</a>
+<a id="178" class="Keyword">open</a> <a id="183" class="Keyword">import</a> <a id="190" href="Data.Word.Instances.Discrete.html" class="Module">Data.Word.Instances.Discrete</a>
 
-<a id="243" class="Keyword">open</a> <a id="248" class="Keyword">import</a> <a id="255" href="Data.Float.Properties.html" class="Module">Data.Float.Properties</a>
+<a id="220" class="Keyword">open</a> <a id="225" class="Keyword">import</a> <a id="232" href="Data.Float.Properties.html" class="Module">Data.Float.Properties</a>
 
-<a id="278" class="Keyword">instance</a>
-  <a id="float-is-discrete"></a><a id="289" href="Data.Float.Instances.Discrete.html#289" class="Function">float-is-discrete</a> <a id="307" class="Symbol">:</a> <a id="309" href="Correspondences.Discrete.html#518" class="Record">is-discrete</a> <a id="321" href="Agda.Builtin.Float.html#353" class="Postulate">Float</a>
-  <a id="329" href="Data.Float.Instances.Discrete.html#289" class="Function">float-is-discrete</a> <a id="347" class="Symbol">=</a>
-    <a id="353" href="Correspondences.Discrete.html#2008" class="Function">↣→is-discrete</a> <a id="367" class="Symbol">(</a><a id="368" href="Agda.Builtin.Float.html#770" class="Primitive">float→maybe-word64</a> <a id="387" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="389" href="Data.Float.Properties.html#315" class="Function">float→maybe-word64-inj</a><a id="411" class="Symbol">)</a> <a id="413" href="Meta.Search.Discrete.html#1081" class="Macro">discrete!</a>
-
-  <a id="decomp-dis-float"></a><a id="426" href="Data.Float.Instances.Discrete.html#426" class="Function">decomp-dis-float</a> <a id="443" class="Symbol">:</a> <a id="445" href="Meta.Search.Base.html#3112" class="Datatype">goal-decomposition</a> <a id="464" class="Symbol">(</a><a id="465" class="Keyword">quote</a> <a id="471" href="Correspondences.Discrete.html#518" class="Record">is-discrete</a><a id="482" class="Symbol">)</a> <a id="484" href="Agda.Builtin.Float.html#353" class="Postulate">Float</a>
-  <a id="492" href="Data.Float.Instances.Discrete.html#426" class="Function">decomp-dis-float</a> <a id="509" class="Symbol">=</a> <a id="511" href="Meta.Search.Base.html#3263" class="InductiveConstructor">decomp</a> <a id="518" class="Symbol">(</a><a id="519" class="Keyword">quote</a> <a id="525" href="Data.Float.Instances.Discrete.html#289" class="Function">float-is-discrete</a><a id="542" class="Symbol">)</a> <a id="544" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a>
+<a id="255" class="Keyword">instance</a>
+  <a id="float-is-discrete"></a><a id="266" href="Data.Float.Instances.Discrete.html#266" class="Function">float-is-discrete</a> <a id="284" class="Symbol">:</a> <a id="286" href="Correspondences.Discrete.html#437" class="Function">is-discrete</a> <a id="298" href="Agda.Builtin.Float.html#353" class="Postulate">Float</a>
+  <a id="306" href="Data.Float.Instances.Discrete.html#266" class="Function">float-is-discrete</a> <a id="324" class="Symbol">=</a> <a id="326" href="Correspondences.Discrete.html#2964" class="Function">↣→is-discrete!</a> <a id="341" class="Symbol">(</a><a id="342" href="Agda.Builtin.Float.html#770" class="Primitive">float→maybe-word64</a> <a id="361" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="363" href="Data.Float.Properties.html#315" class="Function">float→maybe-word64-inj</a><a id="385" class="Symbol">)</a>
 </pre></body></html>

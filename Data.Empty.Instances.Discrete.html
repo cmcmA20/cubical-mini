@@ -2,18 +2,14 @@
 <html><head><meta charset="utf-8"><title>Data.Empty.Instances.Discrete</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
 <a id="24" class="Keyword">module</a> <a id="31" href="Data.Empty.Instances.Discrete.html" class="Module">Data.Empty.Instances.Discrete</a> <a id="61" class="Keyword">where</a>
 
-<a id="68" class="Keyword">open</a> <a id="73" class="Keyword">import</a> <a id="80" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="68" class="Keyword">open</a> <a id="73" class="Keyword">import</a> <a id="80" href="Meta.Prelude.html" class="Module">Meta.Prelude</a>
 
-<a id="98" class="Keyword">open</a> <a id="103" class="Keyword">import</a> <a id="110" href="Meta.Search.Discrete.html" class="Module">Meta.Search.Discrete</a>
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Correspondences.Discrete.html" class="Module">Correspondences.Discrete</a>
 
-<a id="132" class="Keyword">open</a> <a id="137" class="Keyword">import</a> <a id="144" href="Data.List.Base.html" class="Module">Data.List.Base</a>
+<a id="132" class="Keyword">open</a> <a id="137" class="Keyword">import</a> <a id="144" href="Data.Dec.Base.html" class="Module">Data.Dec.Base</a>
+<a id="158" class="Keyword">open</a> <a id="163" class="Keyword">import</a> <a id="170" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
 
-<a id="160" class="Keyword">open</a> <a id="165" class="Keyword">import</a> <a id="172" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
-
-<a id="189" class="Keyword">instance</a>
-  <a id="⊥-is-discrete"></a><a id="200" href="Data.Empty.Instances.Discrete.html#200" class="Function">⊥-is-discrete</a> <a id="214" class="Symbol">:</a> <a id="216" href="Correspondences.Discrete.html#518" class="Record">is-discrete</a> <a id="228" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
-  <a id="232" href="Data.Empty.Instances.Discrete.html#200" class="Function">⊥-is-discrete</a> <a id="246" class="Symbol">.</a><a id="247" href="Correspondences.Discrete.html#612" class="Field">is-discrete-β</a> <a id="261" class="Symbol">()</a>
-
-  <a id="decomp-dis-⊥"></a><a id="267" href="Data.Empty.Instances.Discrete.html#267" class="Function">decomp-dis-⊥</a> <a id="280" class="Symbol">:</a> <a id="282" href="Meta.Search.Base.html#3112" class="Datatype">goal-decomposition</a> <a id="301" class="Symbol">(</a><a id="302" class="Keyword">quote</a> <a id="308" href="Correspondences.Discrete.html#518" class="Record">is-discrete</a><a id="319" class="Symbol">)</a> <a id="321" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
-  <a id="325" href="Data.Empty.Instances.Discrete.html#267" class="Function">decomp-dis-⊥</a> <a id="338" class="Symbol">=</a> <a id="340" href="Meta.Search.Base.html#3263" class="InductiveConstructor">decomp</a> <a id="347" class="Symbol">(</a><a id="348" class="Keyword">quote</a> <a id="354" href="Data.Empty.Instances.Discrete.html#200" class="Function">⊥-is-discrete</a><a id="367" class="Symbol">)</a> <a id="369" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a>
+<a id="187" class="Keyword">instance</a>
+  <a id="⊥-is-discrete"></a><a id="198" href="Data.Empty.Instances.Discrete.html#198" class="Function">⊥-is-discrete</a> <a id="212" class="Symbol">:</a> <a id="214" href="Correspondences.Discrete.html#437" class="Function">is-discrete</a> <a id="226" href="Data.Empty.Base.html#125" class="Datatype">⊥</a>
+  <a id="230" href="Data.Empty.Instances.Discrete.html#198" class="Function">⊥-is-discrete</a> <a id="244" class="Symbol">{()}</a>
 </pre></body></html>

@@ -1,31 +1,29 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="utf-8"><title>Categories.Constructions.StrictCats</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
-<a id="24" class="Keyword">module</a> <a id="31" href="Categories.Constructions.StrictCats.html" class="Module">Categories.Constructions.StrictCats</a> <a id="67" class="Keyword">where</a>
+<html><head><meta charset="utf-8"><title>Categories.Constructions.StrictCats</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Pragma">--backtracking-instance-search</a> <a id="51" class="Symbol">#-}</a>
+<a id="55" class="Keyword">module</a> <a id="62" href="Categories.Constructions.StrictCats.html" class="Module">Categories.Constructions.StrictCats</a> <a id="98" class="Keyword">where</a>
 
-<a id="74" class="Keyword">open</a> <a id="79" class="Keyword">import</a> <a id="86" href="Categories.Prelude.html" class="Module">Categories.Prelude</a>
-<a id="105" class="Keyword">open</a> <a id="110" class="Keyword">import</a> <a id="117" href="Categories.Strict.html" class="Module">Categories.Strict</a>
+<a id="105" class="Keyword">open</a> <a id="110" class="Keyword">import</a> <a id="117" href="Categories.Prelude.html" class="Module">Categories.Prelude</a>
+<a id="136" class="Keyword">open</a> <a id="141" class="Keyword">import</a> <a id="148" href="Categories.Strict.html" class="Module">Categories.Strict</a>
 
-<a id="136" class="Keyword">private</a> <a id="144" class="Keyword">variable</a>
-  <a id="155" href="Categories.Constructions.StrictCats.html#155" class="Generalizable">o</a> <a id="157" href="Categories.Constructions.StrictCats.html#157" class="Generalizable">o′</a> <a id="160" href="Categories.Constructions.StrictCats.html#160" class="Generalizable">h</a> <a id="162" href="Categories.Constructions.StrictCats.html#162" class="Generalizable">h′</a> <a id="165" class="Symbol">:</a> <a id="167" href="Agda.Primitive.html#742" class="Postulate">Level</a>
-  <a id="175" href="Categories.Constructions.StrictCats.html#175" class="Generalizable">C</a> <a id="177" class="Symbol">:</a> <a id="179" href="Categories.Base.html#354" class="Record">Precategory</a> <a id="191" href="Categories.Constructions.StrictCats.html#155" class="Generalizable">o</a> <a id="193" href="Categories.Constructions.StrictCats.html#160" class="Generalizable">h</a>
-  <a id="197" href="Categories.Constructions.StrictCats.html#197" class="Generalizable">D</a> <a id="199" class="Symbol">:</a> <a id="201" href="Categories.Base.html#354" class="Record">Precategory</a> <a id="213" href="Categories.Constructions.StrictCats.html#157" class="Generalizable">o′</a> <a id="216" href="Categories.Constructions.StrictCats.html#162" class="Generalizable">h′</a>
+<a id="167" class="Keyword">private</a> <a id="175" class="Keyword">variable</a>
+  <a id="186" href="Categories.Constructions.StrictCats.html#186" class="Generalizable">o</a> <a id="188" href="Categories.Constructions.StrictCats.html#188" class="Generalizable">o′</a> <a id="191" href="Categories.Constructions.StrictCats.html#191" class="Generalizable">h</a> <a id="193" href="Categories.Constructions.StrictCats.html#193" class="Generalizable">h′</a> <a id="196" class="Symbol">:</a> <a id="198" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="206" href="Categories.Constructions.StrictCats.html#206" class="Generalizable">C</a> <a id="208" class="Symbol">:</a> <a id="210" href="Categories.Base.html#448" class="Record">Precategory</a> <a id="222" href="Categories.Constructions.StrictCats.html#186" class="Generalizable">o</a> <a id="224" href="Categories.Constructions.StrictCats.html#191" class="Generalizable">h</a>
+  <a id="228" href="Categories.Constructions.StrictCats.html#228" class="Generalizable">D</a> <a id="230" class="Symbol">:</a> <a id="232" href="Categories.Base.html#448" class="Record">Precategory</a> <a id="244" href="Categories.Constructions.StrictCats.html#188" class="Generalizable">o′</a> <a id="247" href="Categories.Constructions.StrictCats.html#193" class="Generalizable">h′</a>
 
-<a id="220" class="Keyword">open</a> <a id="225" href="Categories.Base.html#354" class="Module">Precategory</a>
+<a id="251" class="Keyword">open</a> <a id="256" href="Categories.Base.html#448" class="Module">Precategory</a>
 
-<a id="Functor-is-set"></a><a id="238" href="Categories.Constructions.StrictCats.html#238" class="Function">Functor-is-set</a> <a id="253" class="Symbol">:</a> <a id="255" href="Foundations.Base.html#12915" class="Function">is-set</a> <a id="262" class="Symbol">(</a><a id="263" href="Categories.Constructions.StrictCats.html#197" class="Generalizable">D</a> <a id="265" class="Symbol">.</a><a id="266" href="Categories.Base.html#508" class="Field">Ob</a><a id="268" class="Symbol">)</a> <a id="270" class="Symbol">→</a> <a id="272" href="Foundations.Base.html#12915" class="Function">is-set</a> <a id="279" class="Symbol">(</a><a id="280" href="Categories.Base.html#2826" class="Record">Functor</a> <a id="288" href="Categories.Constructions.StrictCats.html#175" class="Generalizable">C</a> <a id="290" href="Categories.Constructions.StrictCats.html#197" class="Generalizable">D</a><a id="291" class="Symbol">)</a>
-<a id="293" href="Categories.Constructions.StrictCats.html#238" class="Function">Functor-is-set</a> <a id="308" class="Symbol">{</a><a id="309" href="Categories.Constructions.StrictCats.html#309" class="Bound">D</a><a id="310" class="Symbol">}</a> <a id="312" href="Categories.Constructions.StrictCats.html#312" class="Bound">ds</a> <a id="315" class="Symbol">=</a> <a id="317" href="Foundations.HLevel.Closure.html#2893" class="Function">iso→is-of-hlevel</a> <a id="334" class="Number">2</a> <a id="336" href="Categories.Base.html#3468" class="Function">functor-iso</a> <a id="348" href="Meta.Search.HLevel.html#1477" class="Macro">hlevel!</a> <a id="356" class="Keyword">where</a> <a id="362" class="Keyword">instance</a>
-  <a id="373" href="Categories.Constructions.StrictCats.html#373" class="Function">DS</a> <a id="376" class="Symbol">:</a> <a id="378" href="Foundations.HLevel.Base.html#8320" class="Record">H-Level</a> <a id="386" class="Number">2</a> <a id="388" class="Symbol">(</a><a id="389" href="Categories.Constructions.StrictCats.html#309" class="Bound">D</a> <a id="391" class="Symbol">.</a><a id="392" href="Categories.Base.html#508" class="Field">Ob</a><a id="394" class="Symbol">)</a>
-  <a id="398" href="Categories.Constructions.StrictCats.html#373" class="Function">DS</a> <a id="401" class="Symbol">=</a> <a id="403" href="Foundations.HLevel.Base.html#8781" class="Function">hlevel-basic-instance</a> <a id="425" class="Number">2</a> <a id="427" href="Categories.Constructions.StrictCats.html#312" class="Bound">ds</a>
+<a id="Functor-is-set"></a><a id="269" href="Categories.Constructions.StrictCats.html#269" class="Function">Functor-is-set</a> <a id="284" class="Symbol">:</a> <a id="286" class="Symbol">⦃</a> <a id="288" href="Categories.Constructions.StrictCats.html#288" class="Bound">ds</a> <a id="291" class="Symbol">:</a> <a id="293" href="Foundations.HLevel.Base.html#8599" class="Record">H-Level</a> <a id="301" class="Number">2</a> <a id="303" class="Symbol">(</a><a id="304" href="Categories.Constructions.StrictCats.html#228" class="Generalizable">D</a> <a id="306" class="Symbol">.</a><a id="307" href="Categories.Base.html#602" class="Field">Ob</a><a id="309" class="Symbol">)</a> <a id="311" class="Symbol">⦄</a> <a id="313" class="Symbol">→</a> <a id="315" href="Foundations.Base.html#12127" class="Function">is-set</a> <a id="322" class="Symbol">(</a><a id="323" href="Categories.Base.html#2784" class="Record">Functor</a> <a id="331" href="Categories.Constructions.StrictCats.html#206" class="Generalizable">C</a> <a id="333" href="Categories.Constructions.StrictCats.html#228" class="Generalizable">D</a><a id="334" class="Symbol">)</a>
+<a id="336" href="Categories.Constructions.StrictCats.html#269" class="Function">Functor-is-set</a> <a id="351" class="Symbol">=</a> <a id="353" href="Foundations.HLevel.Closure.html#9129" class="Function">≅→is-of-hlevel!</a> <a id="369" class="Number">2</a> <a id="371" href="Categories.Base.html#3426" class="Function">functor-iso</a>
 
 
-<a id="432" class="Comment">-- TODO</a>
-<a id="440" class="Comment">-- Strict-cats : ∀ o h → Precategory _ _</a>
-<a id="481" class="Comment">-- Strict-cats o h .Ob = Σ[ C ꞉ Precategory o h ] is-strict C</a>
-<a id="543" class="Comment">-- Strict-cats o h .Hom (C , _) (D , _) = Functor C D</a>
-<a id="597" class="Comment">-- Strict-cats o h .id  = Id</a>
-<a id="626" class="Comment">-- Strict-cats o h ._∘_ = _∘ᶠ_</a>
-<a id="657" class="Comment">-- Strict-cats o h .id-r _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
-<a id="736" class="Comment">-- Strict-cats o h .id-l _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
-<a id="815" class="Comment">-- Strict-cats o h .assoc _ _ _ = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
-<a id="894" class="Comment">-- Strict-cats o h .Hom-set _ (_ , ds) = Functor-is-set ds</a>
+<a id="385" class="Comment">-- TODO</a>
+<a id="393" class="Comment">-- Strict-cats : ∀ o h → Precategory _ _</a>
+<a id="434" class="Comment">-- Strict-cats o h .Ob = Σ[ C ꞉ Precategory o h ] is-strict C</a>
+<a id="496" class="Comment">-- Strict-cats o h .Hom (C , _) (D , _) = Functor C D</a>
+<a id="550" class="Comment">-- Strict-cats o h .id  = Id</a>
+<a id="579" class="Comment">-- Strict-cats o h ._∘_ = _∘ᶠ_</a>
+<a id="610" class="Comment">-- Strict-cats o h .id-r _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="689" class="Comment">-- Strict-cats o h .id-l _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="768" class="Comment">-- Strict-cats o h .assoc _ _ _ = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="847" class="Comment">-- Strict-cats o h .Hom-set _ (_ , ds) = Functor-is-set ds</a>
 </pre></body></html>

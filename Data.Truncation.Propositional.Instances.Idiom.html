@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Truncation.Propositional.Instances.Idiom</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Truncation.Propositional.Instances.Idiom.html" class="Module">Data.Truncation.Propositional.Instances.Idiom</a> <a id="77" class="Keyword">where</a>
+
+<a id="84" class="Keyword">open</a> <a id="89" class="Keyword">import</a> <a id="96" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+<a id="113" class="Keyword">open</a> <a id="118" class="Keyword">import</a> <a id="125" href="Foundations.HLevel.html" class="Module">Foundations.HLevel</a>
+
+<a id="145" class="Keyword">open</a> <a id="150" class="Keyword">import</a> <a id="157" href="Meta.Effect.Idiom.html" class="Module">Meta.Effect.Idiom</a>
+
+<a id="176" class="Keyword">open</a> <a id="181" class="Keyword">import</a> <a id="188" href="Data.Truncation.Propositional.Base.html" class="Module">Data.Truncation.Propositional.Base</a>
+<a id="223" class="Keyword">open</a> <a id="228" class="Keyword">import</a> <a id="235" href="Data.Truncation.Propositional.Instances.Map.html" class="Module">Data.Truncation.Propositional.Instances.Map</a> <a id="279" class="Keyword">public</a>
+
+<a id="287" class="Keyword">instance</a>
+  <a id="Idiom-∥-∥₁"></a><a id="298" href="Data.Truncation.Propositional.Instances.Idiom.html#298" class="Function">Idiom-∥-∥₁</a> <a id="309" class="Symbol">:</a> <a id="311" href="Meta.Effect.Idiom.html#253" class="Record">Idiom</a> <a id="317" class="Symbol">(</a><a id="318" href="Meta.Effect.Map.html#190" class="InductiveConstructor">eff</a> <a id="322" href="Data.Truncation.Propositional.Base.html#145" class="Datatype Operator">∥_∥₁</a><a id="326" class="Symbol">)</a>
+  <a id="330" href="Data.Truncation.Propositional.Instances.Idiom.html#298" class="Function">Idiom-∥-∥₁</a> <a id="341" class="Symbol">.</a><a id="342" href="Meta.Effect.Idiom.html#354" class="Field">pure</a> <a id="347" class="Symbol">=</a> <a id="349" href="Data.Truncation.Propositional.Base.html#184" class="InductiveConstructor Operator">∣_∣₁</a>
+  <a id="356" href="Data.Truncation.Propositional.Instances.Idiom.html#298" class="Function">Idiom-∥-∥₁</a> <a id="367" class="Symbol">.</a><a id="368" href="Meta.Effect.Idiom.html#376" class="Field Operator">_&lt;*&gt;_</a> <a id="374" href="Data.Truncation.Propositional.Instances.Idiom.html#374" class="Bound">∣f∣₁</a> <a id="379" href="Data.Truncation.Propositional.Instances.Idiom.html#379" class="Bound">∣a∣₁</a> <a id="384" class="Symbol">=</a>
+    <a id="390" href="Data.Truncation.Propositional.Base.html#1307" class="Function">rec</a> <a id="394" class="Symbol">(</a><a id="395" href="Foundations.HLevel.Base.html#8778" class="Function">hlevel</a> <a id="402" class="Number">1</a><a id="403" class="Symbol">)</a> <a id="405" class="Symbol">(</a><a id="406" href="Meta.Effect.Map.html#494" class="Function Operator">_&lt;$&gt;</a> <a id="411" href="Data.Truncation.Propositional.Instances.Idiom.html#379" class="Bound">∣a∣₁</a><a id="415" class="Symbol">)</a> <a id="417" href="Data.Truncation.Propositional.Instances.Idiom.html#374" class="Bound">∣f∣₁</a>
+</pre></body></html>

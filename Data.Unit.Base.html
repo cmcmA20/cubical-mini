@@ -10,19 +10,16 @@
 <a id="157" class="Keyword">private</a> <a id="165" class="Keyword">variable</a>
   <a id="176" href="Data.Unit.Base.html#176" class="Generalizable">n</a> <a id="178" class="Symbol">:</a> <a id="180" href="Foundations.Base.html#11460" class="Function">HLevel</a>
 
-<a id="188" class="Keyword">opaque</a>
-  <a id="197" class="Keyword">unfolding</a> <a id="207" href="Foundations.Base.html#11882" class="Function">is-of-hlevel</a>
-  <a id="⊤-is-contr"></a><a id="222" href="Data.Unit.Base.html#222" class="Function">⊤-is-contr</a> <a id="233" class="Symbol">:</a> <a id="235" href="Foundations.Base.html#12331" class="Function">is-contr</a> <a id="244" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
-  <a id="248" href="Data.Unit.Base.html#222" class="Function">⊤-is-contr</a> <a id="259" class="Symbol">.</a><a id="260" href="Agda.Builtin.Sigma.html#251" class="Field">fst</a> <a id="264" class="Symbol">=</a> <a id="266" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a>
-  <a id="271" href="Data.Unit.Base.html#222" class="Function">⊤-is-contr</a> <a id="282" class="Symbol">.</a><a id="283" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a> <a id="287" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a> <a id="290" class="Symbol">=</a> <a id="292" href="Foundations.Prim.Kan.html#1525" class="Function">refl</a>
+<a id="⊤-is-contr"></a><a id="188" href="Data.Unit.Base.html#188" class="Function">⊤-is-contr</a> <a id="199" class="Symbol">:</a> <a id="201" href="Foundations.Base.html#11875" class="Function">is-contr</a> <a id="210" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+<a id="212" href="Data.Unit.Base.html#188" class="Function">⊤-is-contr</a> <a id="223" class="Symbol">.</a><a id="224" href="Agda.Builtin.Sigma.html#251" class="Field">fst</a> <a id="228" class="Symbol">=</a> <a id="230" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a>
+<a id="233" href="Data.Unit.Base.html#188" class="Function">⊤-is-contr</a> <a id="244" class="Symbol">.</a><a id="245" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a> <a id="249" class="Symbol">_</a> <a id="251" class="Symbol">=</a> <a id="253" href="Foundations.Prim.Kan.html#1465" class="Function">refl</a>
 
-<a id="298" class="Keyword">instance</a>
-  <a id="H-Level-⊤"></a><a id="309" href="Data.Unit.Base.html#309" class="Function">H-Level-⊤</a> <a id="319" class="Symbol">:</a> <a id="321" href="Foundations.HLevel.Base.html#8320" class="Record">H-Level</a> <a id="329" href="Data.Unit.Base.html#176" class="Generalizable">n</a> <a id="331" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
-  <a id="335" href="Data.Unit.Base.html#309" class="Function">H-Level-⊤</a> <a id="345" class="Symbol">=</a> <a id="347" href="Foundations.HLevel.Base.html#8781" class="Function">hlevel-basic-instance</a> <a id="369" class="Number">0</a> <a id="371" href="Data.Unit.Base.html#222" class="Function">⊤-is-contr</a>
+<a id="259" class="Keyword">instance</a>
+  <a id="H-Level-⊤"></a><a id="270" href="Data.Unit.Base.html#270" class="Function">H-Level-⊤</a> <a id="280" class="Symbol">:</a> <a id="282" href="Foundations.HLevel.Base.html#8599" class="Record">H-Level</a> <a id="290" href="Data.Unit.Base.html#176" class="Generalizable">n</a> <a id="292" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+  <a id="296" href="Data.Unit.Base.html#270" class="Function">H-Level-⊤</a> <a id="306" class="Symbol">=</a> <a id="308" href="Foundations.HLevel.Base.html#9241" class="Function">hlevel-basic-instance</a> <a id="330" class="Number">0</a> <a id="332" href="Data.Unit.Base.html#188" class="Function">⊤-is-contr</a>
+  <a id="345" class="Symbol">{-#</a> <a id="349" class="Keyword">OVERLAPPING</a> <a id="361" href="Data.Unit.Base.html#270" class="Function">H-Level-⊤</a> <a id="371" class="Symbol">#-}</a>
 
-<a id="⊤-is-of-hlevel"></a><a id="383" href="Data.Unit.Base.html#383" class="Function">⊤-is-of-hlevel</a> <a id="398" class="Symbol">:</a> <a id="400" class="Symbol">∀</a> <a id="402" href="Data.Unit.Base.html#402" class="Bound">n</a> <a id="404" class="Symbol">→</a> <a id="406" href="Foundations.Base.html#11882" class="Function">is-of-hlevel</a> <a id="419" href="Data.Unit.Base.html#402" class="Bound">n</a> <a id="421" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
-<a id="423" href="Data.Unit.Base.html#383" class="Function">⊤-is-of-hlevel</a> <a id="438" class="Symbol">_</a> <a id="440" class="Symbol">=</a> <a id="442" href="Foundations.HLevel.Base.html#8499" class="Function">hlevel</a> <a id="449" class="Symbol">_</a>
 
-<a id="452" class="Keyword">record</a> <a id="⊤ω"></a><a id="459" href="Data.Unit.Base.html#459" class="Record">⊤ω</a> <a id="462" class="Symbol">:</a> <a id="464" href="Foundations.Prim.Type.html#349" class="Primitive">Typeω</a> <a id="470" class="Keyword">where</a>
-  <a id="478" class="Keyword">instance</a> <a id="487" class="Keyword">constructor</a> <a id="ttω"></a><a id="499" href="Data.Unit.Base.html#499" class="InductiveConstructor">ttω</a>
+<a id="377" class="Keyword">record</a> <a id="⊤ω"></a><a id="384" href="Data.Unit.Base.html#384" class="Record">⊤ω</a> <a id="387" class="Symbol">:</a> <a id="389" href="Foundations.Prim.Type.html#349" class="Primitive">Typeω</a> <a id="395" class="Keyword">where</a>
+  <a id="403" class="Keyword">instance</a> <a id="412" class="Keyword">constructor</a> <a id="ttω"></a><a id="424" href="Data.Unit.Base.html#424" class="InductiveConstructor">ttω</a>
 </pre></body></html>
