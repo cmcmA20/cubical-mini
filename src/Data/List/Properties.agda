@@ -25,7 +25,7 @@ map-++ f (x ∷ xs) ys = ap (f x ∷_) (map-++ f xs ys)
 
 map-comp : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
            {g : B → C} {f : A → B}
-         → map (g ∘ f) ＝ map g ∘ map f
+         → map {M = eff List} (g ∘ f) ＝ map g ∘ map f
 map-comp = fun-ext go where
   go : _
   go []       = refl

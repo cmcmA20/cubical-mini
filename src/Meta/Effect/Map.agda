@@ -3,17 +3,12 @@ module Meta.Effect.Map where
 
 open import Foundations.Base
 
+open import Meta.Effect.Base public
+
 private variable
   ℓ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
-
-record Effect : Typeω where
-  constructor eff
-  field
-    {adj} : Level → Level
-    ₀     : Type ℓ → Type (adj ℓ)
-
 
 record Map (M : Effect) : Typeω where
   private module M = Effect M
@@ -47,3 +42,10 @@ module _ {M N : Effect} (let module M = Effect M; module N = Effect N)
 instance
   Map-Erased : Map (eff λ T → Erased T)
   Map-Erased .map f (erase x) .erased = f x
+
+  Map-Syntax : ∀ {o a} {𝔽 : Signature o a}
+             → Map (eff (Syntax 𝔽))
+  Map-Syntax {𝔽} .map {A} {B} = go where
+    go : (A → B) → Syntax 𝔽 A → Syntax 𝔽 B
+    go f (var x) = var (f x)
+    go f (impure (x , k)) = impure (x , go f ∘ k) -- can't reuse container map, termination checker complains

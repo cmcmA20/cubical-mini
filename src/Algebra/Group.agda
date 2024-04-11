@@ -65,7 +65,7 @@ unquoteDecl group-on-iso = declare-record-iso group-on-iso (quote Group-on)
 
 opaque
   group-on-is-set : is-set (Group-on A)
-  group-on-is-set = ≅→is-of-hlevel 2 group-on-iso λ (op , x) _ _ _ →
+  group-on-is-set = ≅→is-of-hlevel 2 group-on-iso λ (o , x) _ _ _ →
     let open is-group x in prop!
 
 

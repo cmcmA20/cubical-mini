@@ -45,3 +45,11 @@ instance
   Idiom-Erased : Idiom (eff λ T → Erased T)
   Idiom-Erased .pure x = erase x
   Idiom-Erased ._<*>_ (erase f) (erase x) .erased = f x
+
+  Idiom-Syntax : ∀ {o a} {𝔽 : Signature o a}
+               → Idiom (eff (Syntax 𝔽))
+  Idiom-Syntax .pure = var
+  Idiom-Syntax {𝔽} ._<*>_ {A} {B} = go where
+    go : Syntax 𝔽 (A → B) → Syntax 𝔽 A → Syntax 𝔽 B
+    go (var f)          x = map f x
+    go (impure (o , k)) x = impure (o , λ i → go (k i) x)

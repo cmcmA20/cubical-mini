@@ -3,6 +3,7 @@ module Meta.Effect.Bind where
 
 open import Foundations.Base
 
+open import Meta.Brackets
 open import Meta.Effect.Idiom public
 
 private variable
@@ -29,3 +30,7 @@ open Bind ⦃ ... ⦄ public
 instance
   Bind-Erased : Bind (eff λ T → Erased T)
   Bind-Erased ._>>=_ (erase x) mf .erased = mf x .erased
+
+  Bind-Syntax : ∀ {o a} {𝔽 : Signature o a}
+              → Bind (eff (Syntax 𝔽))
+  Bind-Syntax ._>>=_ xs = ⟦ xs ⟧ (mk-alg impure)

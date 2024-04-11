@@ -127,11 +127,11 @@ record Functor
   -- Alias for F₁ for use in Functor record modules.
   ₁ = F₁
 
-  op : Functor (C ᵒᵖ) (D ᵒᵖ)
-  F₀ op      = F₀
-  F₁ op      = F₁
-  F-id op    = F-id
-  F-∘ op f g = F-∘ g f
+  Fᵒᵖ : Functor (C ᵒᵖ) (D ᵒᵖ)
+  F₀ Fᵒᵖ      = F₀
+  F₁ Fᵒᵖ      = F₁
+  F-id Fᵒᵖ    = F-id
+  F-∘ Fᵒᵖ f g = F-∘ g f
 
 unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
 
@@ -142,7 +142,7 @@ instance
   Funlike-Functor ._#_ = Functor.₀
 
 functor-double-dual : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {F : Functor C D}
-                    → Functor.op (Functor.op F) ＝ F
+                    → Functor.Fᵒᵖ (Functor.Fᵒᵖ F) ＝ F
 functor-double-dual {F} i .Functor.F₀ = F .Functor.F₀
 functor-double-dual {F} i .Functor.F₁ = F .Functor.F₁
 functor-double-dual {F} i .Functor.F-id = F .Functor.F-id
@@ -238,9 +238,9 @@ record _⇒_ {C : Precategory oᶜ hᶜ}
     is-natural : ∀ x y → (f : C.Hom x y)
                → η y D.∘ F.₁ f ＝ G.₁ f D.∘ η x
 
-  op : Functor.op G ⇒ Functor.op F
-  op .η = η
-  op .is-natural x y f = is-natural y x f ⁻¹
+  ntᵒᵖ : Functor.Fᵒᵖ G ⇒ Functor.Fᵒᵖ F
+  ntᵒᵖ .η = η
+  ntᵒᵖ .is-natural x y f = is-natural y x f ⁻¹
 
 {-# INLINE NT #-}
 
