@@ -10,7 +10,9 @@ open import Data.Maybe.Base
   renaming ( is-just    to is-fsuc
            ; is-nothing to is-fzero)
   public
-open import Data.Maybe.Path using (maybe-is-of-hlevel)
+open import Data.Maybe.Path
+  using ( maybe-is-of-hlevel
+        ; maybe-¬-is-contr )
 open import Data.Maybe.Path
   using ( Code
         ; code-refl
@@ -36,5 +38,6 @@ fin-is-set {0}     = hlevel!
 fin-is-set {suc n} = maybe-is-of-hlevel 0 fin-is-set
 
 instance opaque
-  H-Level-fin : H-Level (2 + k) (Fin n)
-  H-Level-fin = hlevel-basic-instance 2 fin-is-set
+  H-Level-Fin1 : H-Level k (Fin 1)
+  H-Level-Fin1 = hlevel-basic-instance 0 (maybe-¬-is-contr λ ())
+  {-# OVERLAPPING H-Level-Fin1 #-}

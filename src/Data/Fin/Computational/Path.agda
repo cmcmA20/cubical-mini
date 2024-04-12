@@ -5,7 +5,9 @@ open import Foundations.Prelude
 
 open import Meta.Extensionality
 
+open import Data.Empty.Base as ⊥
 open import Data.Nat.Base using (ℕ)
+open import Data.Nat.Path
 open import Data.Nat.Order.Computational
 
 open import Data.Fin.Computational.Base
@@ -31,3 +33,13 @@ instance
   Extensional-Fin .reflᵉ _ = refl
   Extensional-Fin .idsᵉ .to-path = fin-ext
   Extensional-Fin .idsᵉ .to-path-over p i j = p (i ∧ j)
+
+  H-Level-Fin0 : ∀ {k} → H-Level (1 + k) (Fin 0)
+  H-Level-Fin0 = hlevel-prop-instance $ λ ()
+  {-# OVERLAPPING H-Level-Fin0 #-}
+
+  H-Level-Fin1 : ∀ {k} → H-Level k (Fin 1)
+  H-Level-Fin1 = hlevel-basic-instance 0 $ fzero , λ where
+    (mk-fin zero) → refl
+    (mk-fin (suc j) {(b)}) → ⊥.rec (b .erased)
+  {-# OVERLAPPING H-Level-Fin1 #-}

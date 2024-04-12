@@ -22,6 +22,15 @@ fin-1-is-contr : is-contr (Fin 1)
 fin-1-is-contr .fst = fzero
 fin-1-is-contr .snd fzero = refl
 
+instance
+  H-Level-Fin0 : ∀{k} → H-Level (1 + k) (Fin 0)
+  H-Level-Fin0 = hlevel-prop-instance (≃→is-of-hlevel! 1 fin-0-is-initial)
+  {-# OVERLAPPING H-Level-Fin0 #-}
+
+  H-Level-Fin1 : ∀{k} → H-Level k (Fin 1)
+  H-Level-Fin1 = hlevel-basic-instance 0 fin-1-is-contr
+  {-# OVERLAPPING H-Level-Fin1 #-}
+
 fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
 fin-suc = ≅→≃ (f , iso g rinv linv) where
   f : Fin (suc n) → ⊤ ⊎ Fin n

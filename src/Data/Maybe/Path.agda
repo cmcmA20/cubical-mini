@@ -5,7 +5,7 @@ open import Meta.Prelude
 
 open import Functions.Embedding
 
-open import Data.Empty.Base
+open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
 open import Data.Unit.Base
 
@@ -40,6 +40,12 @@ code-is-of-hlevel {x = nothing} {just x}    _    = hlevel!
 maybe-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) A → is-of-hlevel (2 + n) (Maybe A)
 maybe-is-of-hlevel n A-hl =
   identity-system→is-of-hlevel _ identity-system λ _ _ → code-is-of-hlevel A-hl
+
+maybe-¬-is-contr : (¬ A) → is-contr (Maybe A)
+maybe-¬-is-contr ¬a = inhabited-prop-is-contr nothing λ where
+  nothing  nothing  → refl
+  nothing  (just a) → ⊥.rec $ ¬a a
+  (just a) _        → ⊥.rec $ ¬a a
 
 nothing≠just : nothing ≠ just x
 nothing≠just p = subst is-nothing p tt
