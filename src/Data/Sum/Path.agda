@@ -18,21 +18,30 @@ private variable
   x : A
   y : B
 
-Code : A ⊎ B → A ⊎ B → Type (level-of-type A ⊔ level-of-type B)
-Code {B} (inl x₁) (inl x₂) = Lift (level-of-type B) (x₁ ＝ x₂)
-Code     (inl _)  (inr _)  = Lift _ ⊥
-Code     (inr _)  (inl _)  = Lift _ ⊥
-Code {A} (inr y₁) (inr y₂) = Lift (level-of-type A) (y₁ ＝ y₂)
+instance
+  Extensional-⊎
+    : ∀ {ℓ ℓ′ ℓr ℓs} {A : Type ℓ} {B : Type ℓ′}
+    → ⦃ sa : Extensional A ℓr ⦄
+    → ⦃ sb : Extensional B ℓs ⦄
+    → Extensional (A ⊎ B) (ℓr ⊔ ℓs)
+  Extensional-⊎ {ℓs} ⦃ sa ⦄ .Pathᵉ (inl x) (inl x′) = Lift ℓs (Pathᵉ sa x x′)
+  Extensional-⊎ {ℓr} ⦃ sb ⦄ .Pathᵉ (inr y) (inr y′) = Lift ℓr (Pathᵉ sb y y′)
+  Extensional-⊎ .Pathᵉ _ _ = Lift _ ⊥
+  Extensional-⊎ ⦃ sa ⦄ .reflᵉ (inl x) = lift (reflᵉ sa x)
+  Extensional-⊎ ⦃ sb ⦄ .reflᵉ (inr y) = lift (reflᵉ sb y)
+  Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path {inl x} {inl x′} (lift p) = ap inl $ sa .idsᵉ .to-path p
+  Extensional-⊎ ⦃ sb ⦄ .idsᵉ .to-path {inr y} {inr y′} (lift p) = ap inr $ sb .idsᵉ .to-path p
+  Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path-over {inl x} {inl x′} (lift p) = apᴾ (λ _ → lift) $ sa .idsᵉ .to-path-over p
+  Extensional-⊎ ⦃ sb ⦄ .idsᵉ .to-path-over {inr y} {inr y′} (lift p) = apᴾ (λ _ → lift) $ sb .idsᵉ .to-path-over p
 
-code-refl : (s : A ⊎ B) → Code s s
-code-refl (inl x) = lift refl
-code-refl (inr y) = lift refl
+Code : (x y : A ⊎ B) → Type (level-of-type A ⊔ level-of-type B)
+Code = Extensional-⊎ .Pathᵉ
 
-identity-system : is-identity-system {A = A ⊎ B} Code code-refl
-identity-system .to-path {inl x₁} {inl x₂} c = ap inl (lower c)
-identity-system .to-path {inr y₁} {inr y₂} c = ap inr (lower c)
-identity-system .to-path-over {inl x₁} {inl x₂} (lift p) i = lift λ j → p (i ∧ j)
-identity-system .to-path-over {inr y₁} {inr y₂} (lift p) i = lift λ j → p (i ∧ j)
+code-refl : (x : A ⊎ B) → Extensional-⊎ .Pathᵉ x x
+code-refl = Extensional-⊎ .reflᵉ
+
+identity-system : is-identity-system {A = A ⊎ B} Code _
+identity-system = Extensional-⊎ .idsᵉ
 
 opaque
   code-is-of-hlevel : {s₁ s₂ : A ⊎ B} {n : HLevel}
@@ -44,14 +53,13 @@ opaque
   code-is-of-hlevel {s₁ = inr x}  {inl y}  {n} ahl bhl = hlevel (suc n)
   code-is-of-hlevel {s₁ = inr y₁} {inr y₂} {n} ahl bhl = Lift-is-of-hlevel (suc n) (bhl y₁ y₂)
 
-opaque
   ⊎-is-of-hlevel : (n : HLevel)
                  → is-of-hlevel (2 + n) A
                  → is-of-hlevel (2 + n) B
                  → is-of-hlevel (2 + n) (A ⊎ B)
-  ⊎-is-of-hlevel n ahl bhl _ _ =
+  ⊎-is-of-hlevel n ahl bhl s₁ s₂ =
     ≃→is-of-hlevel (1 + n) (identity-system-gives-path identity-system ⁻¹)
-      (code-is-of-hlevel {n = n} ahl bhl)
+      (code-is-of-hlevel {s₁ = s₁} {s₂ = s₂} ahl bhl)
 
   disjoint-⊎-is-prop
     : is-prop A → is-prop B → ¬ A × B
@@ -104,22 +112,6 @@ instance opaque
     : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → ⦃ B-hl : H-Level (2 + n) B ⦄
     → H-Level (2 + n) (A ⊎ B)
   H-Level-⊎ {n} .H-Level.has-of-hlevel = ⊎-is-of-hlevel n (hlevel (2 + n)) (hlevel (2 + n))
-
-instance
-  Extensional-⊎
-    : ∀ {ℓ ℓ′ ℓr ℓs} {A : Type ℓ} {B : Type ℓ′}
-    → ⦃ sa : Extensional A ℓr ⦄
-    → ⦃ sb : Extensional B ℓs ⦄
-    → Extensional (A ⊎ B) (ℓr ⊔ ℓs)
-  Extensional-⊎ {ℓs} ⦃ sa ⦄ .Pathᵉ (inl x) (inl x′) = Lift ℓs (Pathᵉ sa x x′)
-  Extensional-⊎ {ℓr} ⦃ sb ⦄ .Pathᵉ (inr y) (inr y′) = Lift ℓr (Pathᵉ sb y y′)
-  Extensional-⊎ .Pathᵉ _ _ = Lift _ ⊥
-  Extensional-⊎ ⦃ sa ⦄ .reflᵉ (inl x) = lift (reflᵉ sa x)
-  Extensional-⊎ ⦃ sb ⦄ .reflᵉ (inr y) = lift (reflᵉ sb y)
-  Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path {inl x} {inl x′} (lift p) = ap inl $ sa .idsᵉ .to-path p
-  Extensional-⊎ ⦃ sb ⦄ .idsᵉ .to-path {inr y} {inr y′} (lift p) = ap inr $ sb .idsᵉ .to-path p
-  Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path-over {inl x} {inl x′} (lift p) = apᴾ (λ _ → lift) $ sa .idsᵉ .to-path-over p
-  Extensional-⊎ ⦃ sb ⦄ .idsᵉ .to-path-over {inr y} {inr y′} (lift p) = apᴾ (λ _ → lift) $ sb .idsᵉ .to-path-over p
 
 opaque
   disjoint-⊎-is-prop!
