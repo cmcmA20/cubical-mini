@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search --instance-search-depth=3 #-}
+{-# OPTIONS --safe #-}
 module Correspondences.Finite.Bishop where
 
 open import Meta.Prelude
@@ -44,8 +44,8 @@ open is-bishop-finite public
 unquoteDecl is-bishop-finite-iso = declare-record-iso is-bishop-finite-iso (quote is-bishop-finite)
 
 unique-cardinality : is-prop (Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁)
-unique-cardinality (m , ∣p∣₁) (n , ∣q∣₁) =
-  ext (∥-∥₁.elim!² (λ p q → fin-injective (p ⁻¹ ∙ q)) ∣p∣₁ ∣q∣₁)
+unique-cardinality (m , ∣p∣₁) (n , ∣q∣₁) = ext (
+  case ∣p∣₁ of λ p → case ∣q∣₁ of λ q → fin-injective (p ⁻¹ ∙ q) )
 
 private instance
   H-Level-card : ∀{n} → H-Level (suc n) (Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁)
@@ -73,7 +73,7 @@ instance
 ∥-∥₁∘manifest-bishop-finite≃is-bishop-finite : ∥ Manifest-bishop-finite A ∥₁ ≃ is-bishop-finite A
 ∥-∥₁∘manifest-bishop-finite≃is-bishop-finite {A} =
   ∥ Manifest-bishop-finite A ∥₁  ≃⟨ ∥-∥₁.ae (≅→≃ manifest-bishop-finite-iso) ⟩
-  ∥ Σ[ n ꞉ ℕ ] (A ≃ Fin n) ∥₁    ≃⟨ prop-extₑ! (∥-∥₁.rec! (second pure)) (λ (n , ∣e∣₁) → map (n ,_) ∣e∣₁) ⟩
+  ∥ Σ[ n ꞉ ℕ ] (A ≃ Fin n) ∥₁    ≃⟨ prop-extₑ! (rec! (λ n e → n , pure e)) (λ (n , ∣e∣₁) → map (n ,_) ∣e∣₁) ⟩
   Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁      ≃˘⟨ ≅→≃ is-bishop-finite-iso ⟩
   is-bishop-finite A             ≃∎
 

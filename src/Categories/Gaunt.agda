@@ -30,8 +30,9 @@ module _ {o ℓ} {C : Precategory o ℓ} (gaunt : is-gaunt C) where
   open Categories.Morphism C
 
   is-gaunt→is-skeletal : is-skeletal C
-  is-gaunt→is-skeletal = set-identity-system! $
-    ∥-∥₁.rec (path-is-of-hlevel 1 has-strict _ _) (has-category .to-path)
+  is-gaunt→is-skeletal = set-identity-system! $ λ {x y} →
+    let instance _ = hlevel-prop-instance (path-is-of-hlevel 1 has-strict x y)
+    in rec! (has-category .to-path)
 
 module _ {o ℓ} {C : Precategory o ℓ} where
   skeletal+category→gaunt

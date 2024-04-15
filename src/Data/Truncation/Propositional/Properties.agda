@@ -54,8 +54,8 @@ dom-is-set→image-is-set B-set = hlevel!
 
 is-constant→image-is-prop
   : is-set B → {f : A → B} → 2-Constant f → is-prop (Im f)
-is-constant→image-is-prop B-set {f} f-const  (a , x) (b , y) =
-  Σ-prop-path! $ elim!² (λ { (f*a , p) (f*b , q) → sym p ∙∙ f-const f*a f*b ∙∙ q }) x y
+is-constant→image-is-prop B-set {f} f-const (a , x) (b , y) = Σ-prop-path! $ case (x , y) of
+  λ f*a p f*b q → p ⁻¹ ∙∙ f-const f*a f*b ∙∙ q
   where instance _ = hlevel-basic-instance 2 B-set
 
 -- TODO if codomain is an n-type, we should require f to be n-constant
@@ -78,7 +78,8 @@ rec-set! f-const = rec-set f-const (hlevel 2)
   → Σ[ a ꞉ A ] ∥ B a ∥₁ ≃ ∃[ a ꞉ A ] B a
 Σ-over-prop-∥-∥₁≃∃ A-prop = prop-extₑ!
   (λ x → map (x .fst ,_) (x .snd))
-  (rec! (second ∣_∣₁)) where instance _ = hlevel-prop-instance A-prop
+  (rec! λ a b → a , ∣ b ∣₁)
+  where instance _ = hlevel-prop-instance A-prop
 
 instance
   Extensional-Σ-∥-∥₁
@@ -160,10 +161,9 @@ module Replacement
 
   Image≃Im : Image ≃ Im f
   Image≃Im .fst = Image→Im
-  Image≃Im .snd .equiv-proof (x , p) = elim! {P = λ p → is-contr (fibre _ (x , p))}
-    (λ { (w , p) → Jₜ (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) p }) p where
+  Image≃Im .snd .equiv-proof (x , p) = case p return (λ p → is-contr (fibre _ (x , p))) of λ where
+    w → Jₜ (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) where
       go : (f⁻¹x : A) → is-contr _
       go f⁻¹x = (⦋ f⁻¹x ⦌ , refl) , λ where
-        (u , α) → Σ-pathᴾ (quot (ls.encode (ap fst α ⁻¹))) $
-                          Σ-prop-square hlevel! $ commutes→square $
-                            ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹
+        (u , α) → quot (ls.encode (ap fst α ⁻¹)) ,ₚ Σ-prop-square!
+          (commutes→square (ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹))

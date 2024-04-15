@@ -4,6 +4,7 @@ module Data.Quotient.Set.Properties where
 open import Meta.Prelude
 
 open import Meta.Effect.Map
+open import Meta.Extensionality
 
 open import Correspondences.Base
 open import Correspondences.Discrete
@@ -30,7 +31,7 @@ private variable
 
 ⦋-⦌-surjective : {A : Type ℓᵃ} {R : A → A → Type ℓʳ}
               → is-surjective (⦋_⦌ {R = R})
-⦋-⦌-surjective = elim-prop! (λ a → ∣ a , refl ∣₁)
+⦋-⦌-surjective = elim! λ a → ∣ a , refl ∣₁
 
 universal : is-set B
           → (A / R → B)
@@ -39,22 +40,24 @@ universal {B} {A} {R} B-set = ≅→≃ $ inc , iso back (λ _ → refl) li wher
   instance _ = hlevel-basic-instance 2 B-set
   inc : (A / R → B) → Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b)
   inc f = f ∘ ⦋_⦌ , λ a b r i → f (glue/ a b r i)
-  back = rec! $ₜ²_
+  back : Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b) → A / R → B
+  back = rec hlevel! $ₜ²_
   li : _
-  li f′ = fun-ext λ r → ∥-∥₁.rec! (λ (_ , p) → ap (back (inc f′)) p ⁻¹ ∙ ap f′ p) (⦋-⦌-surjective r)
+  li f′ = ext λ r → case ⦋-⦌-surjective r of λ _ p →
+    ap (back (inc f′)) p ⁻¹ ∙ ap f′ p
 
 module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
   open is-congruence congr
 
   Code : A → A / R → Prop ℓ
-  Code x = elim! (λ y → el! $ R x y) (λ y z r →
-    n-ua $ prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r) )
+  Code x = elim hlevel! (λ y → el! $ R x y) λ y z r →
+    ext (prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r))
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
   encode x _ p = subst ⌞ Code x ⌟ p reflᶜ
 
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
-  decode = elim-prop! ∘ glue/
+  decode = elim! ∘ glue/
 
   effective : R x y
             ≃ ⦋ x ⦌ ＝ ⦋ y ⦌
@@ -69,13 +72,14 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   ∥R∥₁-c : is-congruence _
   ∥R∥₁-c .is-congruence.equivalenceᶜ .reflᶜ = ∣ reflᶜ ∣₁
   ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = map symᶜ
-  ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = ∥-∥₁.elim!² λ a b → ∣ a ∙ᶜ b ∣₁
+  ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = elim! λ a b → ∣ a ∙ᶜ b ∣₁
   ∥R∥₁-c .is-congruence.has-propᶜ = hlevel!
 
 /₂-is-discrete
   : (R-c : is-congruence R)
   → ⦃ d : ∀ {x y} → Dec (R x y) ⦄
   → is-discrete (A / R)
-/₂-is-discrete {A} {R} R-c ⦃ d ⦄ {x} {y} = elim-prop!² {P = λ a b → Dec (a ＝ b)} go x y where
-  go : (x y : A) → Dec (⦋ x ⦌ ＝ ⦋ y ⦌)
-  go x y = Dec.dmap (glue/ _ _) (λ f p → ⊥.rec $ f $ effective R-c ⁻¹ $ p) d
+/₂-is-discrete {A} {R} R-c ⦃ d ⦄ {x = x/} {y = y/} =
+  elim! {P = λ x → (y : A / R) → Dec (x ＝ y)}
+    (λ x y → Dec.dmap (glue/ x y) (λ f p → ⊥.rec $ f $ effective R-c ⁻¹ $ p) d)
+    x/ y/

@@ -125,6 +125,7 @@ infixr 6 Σ-syntax-und
   → Type _
 Σ-syntax-und X F = Σ ⌞ X ⌟⁰ F
 syntax Σ-syntax-und X (λ x → F) = Σ[ x ꞉ X ] F
+{-# DISPLAY Σ-syntax-und = Σ #-}
 
 infixr 6 Π-syntax-und
 Π-syntax-und

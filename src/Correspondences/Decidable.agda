@@ -61,7 +61,7 @@ instance
   Dec-∥-∥₁ : ⦃ da : Dec A ⦄ → Dec ∥ A ∥₁
   Dec-∥-∥₁ ⦃ da ⦄ .does = da .does
   Dec-∥-∥₁ ⦃ yes a ⦄ .proof = ofʸ ∣ a ∣₁
-  Dec-∥-∥₁ ⦃ no ¬a ⦄ .proof = ofⁿ $ ∥-∥₁.rec (hlevel 1) ¬a
+  Dec-∥-∥₁ ⦃ no ¬a ⦄ .proof = ofⁿ $ rec! ¬a
   {-# OVERLAPPABLE Dec-∥-∥₁ #-}
 
   Dec-universe : Dec (Type ℓ)

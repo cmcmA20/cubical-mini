@@ -13,15 +13,19 @@ open import Foundations.Prelude
            ; _∙_  to _∙ₚ_
            ; sym  to symₚ
            ; refl to reflₚ
-
            )
   hiding ( Σ-syntax
          ; Π-syntax
-         ; ∀-syntax )
+         ; ∀-syntax
+
+         ; case_of_
+         ; case_return_of_
+         )
   public
 
-open import Meta.Brackets public
-open import Meta.Groupoid public
-open import Meta.Variadic public
+open import Meta.Brackets  public
+open import Meta.Groupoid  public
+open import Meta.Inductive public
+open import Meta.Variadic  public
 
 open import Structures.n-Type public

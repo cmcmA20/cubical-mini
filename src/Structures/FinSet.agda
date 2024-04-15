@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search #-}
+{-# OPTIONS --safe #-}
 module Structures.FinSet where
 
 open import Meta.Prelude
@@ -93,10 +93,10 @@ private
     pure $ sip fin-set-str-is-univalent (u ∙ ＝→≃ (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
 
   ∥FinSet′∥₂≃ᴱℕ : ∥ FinSet′ ℓ ∥₂ ≃ᴱ ℕ
-  ∥FinSet′∥₂≃ᴱℕ = (∥-∥₂.rec! (fst ∘ snd)) , is-isoᴱ→is-equivᴱ
-    ( (λ n → pure $ Lift _ (Fin n) , n , pure lift≃id)
+  ∥FinSet′∥₂≃ᴱℕ {ℓ} = rec! ⦃ Inductive-∥-∥₂ ⦃ Inductive-default ⦄ ⦄ (fst ∘ snd) , is-isoᴱ→is-equivᴱ {B = ℕ}
+    ( (λ n → pure $ Lift ℓ (Fin n) , n , pure lift≃id)
     , erase (λ _ → refl)
-    , erase (∥-∥₂.elim! (λ X → ＝∘∣-∣₂≃∥-∥₁∘＝ ⁻¹ $ fin-set′-ext refl)) )
+    , erase (elim! λ X n e → ＝∘∣-∣₂≃∥-∥₁∘＝ ⁻¹ $ fin-set′-ext refl) )
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
 ∥FinSet∥₂≃ᴱℕ

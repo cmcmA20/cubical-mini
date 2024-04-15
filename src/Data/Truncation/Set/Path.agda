@@ -21,15 +21,15 @@ private variable
   : {x y : A}
   → ∣ x ∣₂ ＝ ∣ y ∣₂
   ≃ ∥ x ＝ y ∥₁
-＝∘∣-∣₂≃∥-∥₁∘＝ {x} {y} = prop-extₑ! (encode x ∣ y ∣₂) (decode x (∣ y ∣₂)) where
-  code : ∀ x (y : ∥ A ∥₂) → Prop _
+＝∘∣-∣₂≃∥-∥₁∘＝ {A} {x} {y} = prop-extₑ! (encode x ∣ y ∣₂) (decode x (∣ y ∣₂)) where
+  code : (x : A) (y : ∥ A ∥₂) → Prop _
   code x = elim! (λ y → el! ∥ x ＝ y ∥₁)
 
   encode : ∀ x y → ∣ x ∣₂ ＝ y → ⌞ code x y ⌟
   encode x y = Jₜ (λ y p → ⌞ code x y ⌟ ) ∣ refl ∣₁
 
   decode : ∀ x y → ⌞ code x y ⌟ → ∣ x ∣₂ ＝ y
-  decode x = elim! (λ _ → ∥-∥₁.rec! (ap ∣_∣₂))
+  decode x = elim! (λ _ → rec! (ap ∣_∣₂))
 
 ae : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
 ae e = to , is-iso→is-equiv (iso from ri li)

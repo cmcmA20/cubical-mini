@@ -65,6 +65,10 @@ open import Agda.Builtin.Reflection public
            ; blockOnMeta to block-on-meta
            ; primShowQName to show-name
            ; primQNameFixity to name→fixity
+
+           ; blockerAny  to blocker-any
+           ; blockerAll  to blocker-all
+           ; blockerMeta to blocker-meta
            )
 
 instance
@@ -315,6 +319,31 @@ wait-just-a-bit : Term → TC Term
 wait-just-a-bit (meta m _) = block-on-meta m
 wait-just-a-bit tm = pure tm
 
+blocking-meta : Term → Maybe Blocker
+blocking-meta* : List (Arg Term) → Maybe Blocker
+
+blocking-meta (var x as)       = nothing
+blocking-meta (con c as)       = nothing
+blocking-meta (def f as)       = blocking-meta* as
+blocking-meta (lam v t)        = nothing
+blocking-meta (pat-lam _ as)   = blocking-meta* as
+blocking-meta (pi a (abs _ b)) = blocking-meta b
+blocking-meta (agda-sort s)    = nothing
+blocking-meta (lit l)          = nothing
+blocking-meta (meta x _)       = just (blocker-meta x)
+blocking-meta unknown          = nothing
+
+blocking-meta* (arg (arg-info visible _)   tm ∷ _ ) = blocking-meta tm
+blocking-meta* (arg (arg-info instance′ _) tm ∷ _ ) = blocking-meta tm
+blocking-meta* (arg (arg-info hidden _)    tm ∷ as) = blocking-meta* as
+blocking-meta* [] = nothing
+
+reduceB : Term → TC Term
+reduceB tm = do
+  tm′ ← reduce tm
+  case blocking-meta tm′ of λ where
+    (just b) → blockTC b
+    nothing  → pure tm′
 
 unapply-path : Term → TC (Maybe (Term × Term × Term))
 unapply-path red@(def (quote Pathᴾ) (l h∷ T v∷ x v∷ y v∷ [])) = do

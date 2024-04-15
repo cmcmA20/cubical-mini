@@ -19,7 +19,7 @@ private variable
 
 ∥-∥₁∘dec≃dec∘∥-∥₁ : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
 ∥-∥₁∘dec≃dec∘∥-∥₁ = prop-extₑ!
-  (∥-∥₁.rec! $ Dec.dmap pure ∥-∥₁.rec!)
+  (rec! $ Dec.dmap pure λ ¬p ∣p∣₁ → rec! ¬p ∣p∣₁)
   (Dec.rec (yes <$>_) (pure ∘ no ∘ contra pure))
 
 ae : A ≃ B → Dec A ≃ Dec B

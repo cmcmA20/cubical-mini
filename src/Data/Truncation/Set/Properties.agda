@@ -12,8 +12,9 @@ private variable
   C : Type ℓᶜ
 
 ∥-∥₂-idempotent : is-set A → is-equiv ∣_∣₂
-∥-∥₂-idempotent {A} A-set = is-iso→is-equiv $ iso (proj A-set) inc∘proj λ _ → refl where
-  inc∘proj : (x : ∥ A ∥₂) → ∣ proj A-set x ∣₂ ＝ x
+∥-∥₂-idempotent {A} A-set = is-iso→is-equiv $ iso proj! inc∘proj λ _ → refl where
+  instance _ = hlevel-basic-instance 2 A-set
+  inc∘proj : (x : ∥ A ∥₂) → ∣ proj! x ∣₂ ＝ x
   inc∘proj = elim! λ _ → refl
 
 universal : is-set B → (∥ A ∥₂ → B) ≃ (A → B)

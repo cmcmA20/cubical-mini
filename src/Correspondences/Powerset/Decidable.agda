@@ -28,8 +28,10 @@ is-decidable-subset : (A : ℙ X) → Type (level-of-type X)
 is-decidable-subset {X} A = Decidableⁿ {1} (λ (x : X) → x ∈ A)
 
 is-complemented→is-decidable-subset : (A : ℙ X) → is-complemented A → is-decidable-subset A
-is-complemented→is-decidable-subset A (A⁻¹ , int , uni) {x} =
-  ∥-∥₁.rec! [ yes , (λ x∈A⁻¹ → no λ x∈A → lower (int (x∈A , x∈A⁻¹))) ]ᵤ (uni _)
+is-complemented→is-decidable-subset A (A⁻¹ , int , uni) {x} = case uni _ of
+  [ yes
+  , (λ x∈A⁻¹ → no λ x∈A → int (x∈A , x∈A⁻¹) .lower)
+  ]ᵤ
 
 is-decidable-subset→is-complemented : (A : ℙ X) → is-decidable-subset A → is-complemented A
 is-decidable-subset→is-complemented {X} A d

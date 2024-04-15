@@ -62,14 +62,14 @@ instance
   omniscient→omniscient₁ : ⦃ omn : Omniscient A ⦄ → Omniscient₁ A
   omniscient→omniscient₁ ⦃ omn ⦄ .omniscient₁-β d = Dec.dmap
     ∣_∣₁
-    ∥-∥₁.rec!
+    (λ ¬AP → rec! λ a p → ¬AP (a , p))
     (omniscient-β omn d)
   {-# INCOHERENT omniscient→omniscient₁ #-}
 
   omniscient₁→exhaustible : ⦃ omn₁ : Omniscient₁ A ⦄ → Exhaustible A
   omniscient₁→exhaustible ⦃ omn₁ ⦄ .exhaustible-β {P} P? = Dec.dmap {P = ¬ ∃[ mapⁿ 1 ¬_ P ]}
     (λ ¬∃p x → dec→essentially-classical P? (¬∃p ∘ ∣_∣₁ ∘ (x ,_)))
-    (contra λ ∀p → ∥-∥₁.rec! λ p → p .snd (∀p (p .fst)))
+    (contra λ ∀p → rec! λ a ¬p → ¬p (∀p a))
     (Dec-¬ ⦃ omn₁ .omniscient₁-β λ {z} → Dec-¬ ⦃ P? ⦄ ⦄)
 
   lift-omniscient₁ : ⦃ omn₁ : Omniscient₁ A ⦄ → Omniscient₁ (Lift ℓ A)

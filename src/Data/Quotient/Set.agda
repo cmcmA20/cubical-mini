@@ -2,4 +2,5 @@
 module Data.Quotient.Set where
 
 open import Data.Quotient.Set.Base       public
+open import Data.Quotient.Set.Path       public
 open import Data.Quotient.Set.Properties public
