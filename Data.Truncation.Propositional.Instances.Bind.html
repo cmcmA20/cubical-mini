@@ -6,11 +6,12 @@
 <a id="112" class="Keyword">open</a> <a id="117" class="Keyword">import</a> <a id="124" href="Foundations.HLevel.html" class="Module">Foundations.HLevel</a>
 
 <a id="144" class="Keyword">open</a> <a id="149" class="Keyword">import</a> <a id="156" href="Meta.Effect.Bind.html" class="Module">Meta.Effect.Bind</a>
+<a id="173" class="Keyword">open</a> <a id="178" class="Keyword">import</a> <a id="185" href="Meta.Inductive.html" class="Module">Meta.Inductive</a>
 
-<a id="174" class="Keyword">open</a> <a id="179" class="Keyword">import</a> <a id="186" href="Data.Truncation.Propositional.Base.html" class="Module">Data.Truncation.Propositional.Base</a>
-<a id="221" class="Keyword">open</a> <a id="226" class="Keyword">import</a> <a id="233" href="Data.Truncation.Propositional.Instances.Idiom.html" class="Module">Data.Truncation.Propositional.Instances.Idiom</a> <a id="279" class="Keyword">public</a>
+<a id="201" class="Keyword">open</a> <a id="206" class="Keyword">import</a> <a id="213" href="Data.Truncation.Propositional.Base.html" class="Module">Data.Truncation.Propositional.Base</a>
+<a id="248" class="Keyword">open</a> <a id="253" class="Keyword">import</a> <a id="260" href="Data.Truncation.Propositional.Instances.Idiom.html" class="Module">Data.Truncation.Propositional.Instances.Idiom</a> <a id="306" class="Keyword">public</a>
 
-<a id="287" class="Keyword">instance</a>
-  <a id="Bind-∥-∥₁"></a><a id="298" href="Data.Truncation.Propositional.Instances.Bind.html#298" class="Function">Bind-∥-∥₁</a> <a id="308" class="Symbol">:</a> <a id="310" href="Meta.Effect.Bind.html#192" class="Record">Bind</a> <a id="315" class="Symbol">(</a><a id="316" href="Meta.Effect.Map.html#190" class="InductiveConstructor">eff</a> <a id="320" href="Data.Truncation.Propositional.Base.html#145" class="Datatype Operator">∥_∥₁</a><a id="324" class="Symbol">)</a>
-  <a id="328" href="Data.Truncation.Propositional.Instances.Bind.html#298" class="Function">Bind-∥-∥₁</a> <a id="338" class="Symbol">.</a><a id="339" href="Meta.Effect.Bind.html#266" class="Field Operator">_&gt;&gt;=_</a> <a id="345" class="Symbol">=</a> <a id="347" href="Foundations.Pi.Base.html#1033" class="Function">flip</a> <a id="352" href="Foundations.Pi.Base.html#1574" class="Function Operator">$</a> <a id="354" href="Data.Truncation.Propositional.Base.html#1307" class="Function">rec</a> <a id="358" href="Foundations.Pi.Base.html#1574" class="Function Operator">$</a> <a id="360" href="Foundations.HLevel.Base.html#8778" class="Function">hlevel</a> <a id="367" class="Number">1</a>
+<a id="314" class="Keyword">instance</a>
+  <a id="Bind-∥-∥₁"></a><a id="325" href="Data.Truncation.Propositional.Instances.Bind.html#325" class="Function">Bind-∥-∥₁</a> <a id="335" class="Symbol">:</a> <a id="337" href="Meta.Effect.Bind.html#192" class="Record">Bind</a> <a id="342" class="Symbol">(</a><a id="343" href="Meta.Effect.Map.html#190" class="InductiveConstructor">eff</a> <a id="347" href="Data.Truncation.Propositional.Base.html#145" class="Datatype Operator">∥_∥₁</a><a id="351" class="Symbol">)</a>
+  <a id="355" href="Data.Truncation.Propositional.Instances.Bind.html#325" class="Function">Bind-∥-∥₁</a> <a id="365" class="Symbol">.</a><a id="366" href="Meta.Effect.Bind.html#266" class="Field Operator">_&gt;&gt;=_</a> <a id="372" class="Symbol">=</a> <a id="374" href="Foundations.Pi.Base.html#1033" class="Function">flip</a> <a id="379" href="Meta.Inductive.html#1495" class="Function">rec!</a>
 </pre></body></html>
