@@ -135,6 +135,10 @@ under-abs (lam v (abs nm _)) m = extend-context nm (arg (arg-info v (modality re
 under-abs (pi a (abs nm _))  m = extend-context nm a m
 under-abs _ m = m
 
+extend-context* : Telescope → TC A → TC A
+extend-context* []              x = x
+extend-context* ((n , t) ∷ tel) x = extend-context n t (extend-context* tel x)
+
 new-meta : Term → TC Term
 new-meta ty = do
   mv ← check-type unknown ty
@@ -499,6 +503,32 @@ fv-dup = go 0 where
 
 fv     = nub-slow _==_ ∘ fv-dup
 fv-ord = nub-unsafe _==_ ∘ insertion-sort (λ m n → m <ᵇ suc n) ∘ fv-dup
+
+
+record Has-visibility {ℓ} (A : Type ℓ) : Type ℓ where
+  field set-visibility : Visibility → A → A
+
+open Has-visibility ⦃ ... ⦄ public
+
+instance
+  Has-visibility-arg-info : Has-visibility ArgInfo
+  Has-visibility-arg-info .set-visibility v (arg-info _ m) = arg-info v m
+
+  Has-visibility-Arg : ∀ {ℓ} {A : Type ℓ} → Has-visibility (Arg A)
+  Has-visibility-Arg .set-visibility v (arg ai x) = arg (set-visibility v ai) x
+
+  Has-visibility-Args : ∀ {ℓ} {A : Type ℓ} → Has-visibility (List (Arg A))
+  Has-visibility-Args .set-visibility v = map (set-visibility v)
+
+  Has-visibility-Telescope : Has-visibility Telescope
+  Has-visibility-Telescope .set-visibility v = map (second (set-visibility v))
+
+hide : ∀{ℓ} {A : Type ℓ} → ⦃ Has-visibility A ⦄ → A → A
+hide = set-visibility hidden
+
+hide-if : ∀ {ℓ} {A : Type ℓ} → ⦃ Has-visibility A ⦄ → Bool → A → A
+hide-if true  a = hide a
+hide-if false a = a
 
 
 -- Notation class for the reflected in reflected syntax which have a
