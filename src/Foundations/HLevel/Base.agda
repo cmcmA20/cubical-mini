@@ -254,7 +254,7 @@ prop!
   : {A : I → Type ℓ} ⦃ A-pr : H-Level 1 (A i0) ⦄
   → {x : A i0} {y : A i1}
   → ＜ x ／ A ＼ y ＞
-prop! {A} = is-prop→pathᴾ (λ i → coe0→i (λ j → is-prop (A j)) i (hlevel _)) _ _
+prop! {A} {x} {y} = is-prop→pathᴾ (λ i → coe0→i (λ j → is-prop (A j)) i (hlevel 1)) x y
 
 opaque
   H-Level-is-prop : is-prop (H-Level h A)
@@ -278,9 +278,9 @@ instance opaque
   H-Level-prop {h} = hlevel-prop-instance is-prop-is-prop
   {-# INCOHERENT H-Level-prop #-}
 
-  -- H-Level-set : H-Level (suc h) (is-set A)
-  -- H-Level-set {h} = hlevel-prop-instance (is-of-hlevel-is-prop 2)
-  -- {-# INCOHERENT H-Level-set #-}
+  H-Level-set : H-Level (suc h) (is-set A)
+  H-Level-set {h} = hlevel-prop-instance (is-of-hlevel-is-prop 2)
+  {-# INCOHERENT H-Level-set #-}
 
   H-Level-of-hlevel : H-Level (suc h) (is-of-hlevel h₁ A)
   H-Level-of-hlevel {h₁} = hlevel-prop-instance (is-of-hlevel-is-prop h₁)
@@ -288,3 +288,8 @@ instance opaque
 
   H-Level-H-Level : H-Level (suc h) (H-Level h₁ A)
   H-Level-H-Level {h₁} = hlevel-prop-instance H-Level-is-prop
+
+instance
+  H-Level-singleton : {a : A} → H-Level h (Singleton a)
+  H-Level-singleton {h} = hlevel-basic-instance 0 (singleton-is-contr (_ , refl))
+  {-# OVERLAPPING H-Level-singleton #-}

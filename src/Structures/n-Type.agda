@@ -19,6 +19,7 @@ open import Meta.Reflection.Signature
 open import Meta.Variadic
 
 open import Data.Bool.Base
+open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.Nat.Order.Inductive
 open import Data.Nat.Order.Inductive
@@ -195,25 +196,13 @@ opaque
   is-of-hlevel-≤ (suc (suc n)) (suc (suc k)) (s≤s le) p x y =
     is-of-hlevel-≤ (suc n) (suc k) le (p x y)
 
--- TODO abstract this bullshit away
 private
-  decompose-as-contr : Term → TC Term
-  decompose-as-contr (def (quote is-contr) (_ ∷ ty ∷ [])) =
-    pure (lit (nat 0))
-  decompose-as-contr t = type-error
-    [ "Target is not an application of is-contr: " , termErr t ]
-
-  decompose-as-prop : Term → TC Term
-  decompose-as-prop (def (quote is-prop) (_ ∷ ty ∷ [])) =
-    pure (lit (nat 1))
-  decompose-as-prop t = type-error
-    [ "Target is not an application of is-prop: " , termErr t ]
-
-  decompose-as-set : Term → TC Term
-  decompose-as-set (def (quote is-set) (_ ∷ ty ∷ [])) =
-    pure (lit (nat 2))
-  decompose-as-set t = type-error
-    [ "Target is not an application of is-set: " , termErr t ]
+  decompose-as-fixed-hlevel : Name → ℕ → Term → TC Term
+  decompose-as-fixed-hlevel wnm lvl (def anm (_ ∷ ty ∷ [])) = do
+    guard (wnm name=? anm)
+    pure (lit (nat lvl))
+  decompose-as-fixed-hlevel wnm _ t  = type-error
+    [ "Target is not an application of " , nameErr wnm , ": " , termErr t ]
 
   decompose-as-hlevel : Term → TC Term
   decompose-as-hlevel (def (quote is-of-hlevel) (_ ∷ varg lvl ∷ ty ∷ [])) =
@@ -224,11 +213,13 @@ private
 macro
   hlevel! : Term → TC ⊤
   hlevel! goal = with-reduce-defs (false ,
-    [ it is-contr , it is-prop , it is-of-hlevel ]) do
+    [ it is-contr , it is-prop , it is-set , it is-of-hlevel ]) do
       ty ← infer-type goal >>= reduce
       let tel , ty′ = pi-view ty
-      lvl ← decompose-as-contr ty′ <|> decompose-as-prop ty′
-        <|> decompose-as-set ty′ <|> decompose-as-hlevel ty′
+      lvl ← decompose-as-fixed-hlevel (it is-contr) 0 ty′
+        <|> decompose-as-fixed-hlevel (it is-prop)  1 ty′
+        <|> decompose-as-fixed-hlevel (it is-set)   2 ty′
+        <|> decompose-as-hlevel ty′
       unify goal (leave tel $ it hlevel ##ₙ lvl)
 
 open Struct-proj-desc

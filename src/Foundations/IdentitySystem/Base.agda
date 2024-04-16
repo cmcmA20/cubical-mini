@@ -105,8 +105,7 @@ equiv-path→identity-system
   → (eqv : ∀ {a b} → R a b ≃ (a ＝ b))
   → is-identity-system R r
 equiv-path→identity-system e = singleton-is-contr→identity-system $
-  ≃→is-of-hlevel 0 ((total (λ _ → e .fst)) , fibrewise-is-equiv→total-is-equiv (e .snd))
-    (singletonₜ-is-contr (_ , refl))
+  ≃→is-of-hlevel! 0 ((total (λ _ → e .fst)) , fibrewise-is-equiv→total-is-equiv (e .snd))
 
 identity-system-gives-path
   : {r : ∀ a → R a a}

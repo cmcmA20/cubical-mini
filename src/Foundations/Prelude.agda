@@ -4,6 +4,8 @@ module Foundations.Prelude where
 open import Foundations.Base public
   renaming ( singleton-is-contr  to singletonₜ-is-contr
            ; singletonᴾ-is-contr to singletonₜᴾ-is-contr
+           ; singleton-is-prop   to singletonₜ-is-prop
+           ; singletonᴾ-is-prop  to singletonₜᴾ-is-prop
 
            ; J       to Jₜ
            ; J-refl  to Jₜ-refl
