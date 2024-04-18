@@ -5,6 +5,7 @@ open import Meta.Prelude
 
 open import Meta.Record
 open import Meta.Reflection.Base
+open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 
 open import Data.Nat.Order.Inductive
@@ -12,6 +13,11 @@ open import Data.List.Base
 open import Data.List.Operations
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Map
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Literal
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 private variable
   ℓ ℓ′ : Level

@@ -3,8 +3,8 @@ module Data.List.Path where
 
 open import Meta.Prelude
 
-open import Data.Empty
-open import Data.Unit
+open import Data.Empty.Base
+open import Data.Unit.Base
 
 open import Data.List.Base
 

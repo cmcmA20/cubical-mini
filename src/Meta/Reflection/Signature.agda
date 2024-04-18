@@ -8,6 +8,7 @@ open import Meta.Effect.Foldable
 open import Meta.Effect.Traversable
 open import Meta.Show
 open import Meta.Reflection.Base
+open import Meta.Reflection.Neutral
 open import Meta.Reflection.Subst
 
 open import Data.Bool.Base
@@ -21,19 +22,29 @@ open import Data.Maybe.Base
 open import Data.Maybe.Instances.Bind
 open import Data.Maybe.Instances.Map
 open import Data.Nat.Base
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Instances.Show
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 open import Data.String.Instances.Append
 
 -- Look up a data type definition in the signature.
 get-data-type : Name → TC (ℕ × List Name)
 get-data-type n = get-definition n >>= λ where
   (data-type pars cs) → pure (pars , cs)
-  _ → type-error [ "get-data-type: definition " , nameErr n , " is not a data type." ]
+  _ → type-error [ "get-data-type: definition " , name-err n , " is not a data type." ]
 
 -- Look up a record type definition in the signature.
 get-record-type : Name → TC (Name × List (Arg Name))
 get-record-type n = get-definition n >>= λ where
   (record-type conm fields) → pure (conm , fields)
-  _ → type-error [ "get-record-type: definition " , nameErr n , " is not a record type." ]
+  _ → type-error [ "get-record-type: definition " , name-err n , " is not a record type." ]
 
 -- Representation of a data/record constructor.
 record Constructor : Type where
@@ -84,14 +95,14 @@ get-constructor n = get-definition n >>= λ where
     (npars , cons) ← get-data-type t
     (args , ty)    ← pi-view <$> get-type n
     pure $ conhead n t (drop npars args) ty
-  _ → type-error [ "get-constructor: " , nameErr n , " is not a data constructor." ]
+  _ → type-error [ "get-constructor: " , name-err n , " is not a data constructor." ]
 
 -- If a term reduces to an application of a record type, return
 -- information about that record.
 get-record : Term → TC (Name × List (Arg Name))
 get-record tm = reduce tm >>= λ where
   (def qn _) → get-record-type qn
-  _          → type-error [ "get-record: " , termErr tm , " is not a record type." ]
+  _          → type-error [ "get-record: " , term-err tm , " is not a record type." ]
 
 -- Get the argument telescope of something in the signature. NOTE: If
 -- the Name refers to a Constructor, the returned telescope *will*
@@ -193,8 +204,8 @@ render-name def-nm = do
   d ← is-defined def-nm
   let
     fancy = get-definition def-nm >>= λ where
-      (data-cons _) → format-error-parts [ termErr (con₀ def-nm) ]
-      _             → format-error-parts [ termErr (def₀ def-nm) ]
+      (data-cons _) → format-error-parts [ term-err (con₀ def-nm) ]
+      _             → format-error-parts [ term-err (def₀ def-nm) ]
     plain = show def-nm
   if d then fancy else pure plain
 

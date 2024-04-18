@@ -10,6 +10,9 @@ open import Meta.Reflection.Base
 open import Categories.Base
 
 open import Data.Bool.Base
+open import Data.Reflection.Argument
+open import Data.Reflection.Literal
+open import Data.Reflection.Term
 
 record Displayed {o ℓ} (B : Precategory o ℓ)
                  (o′ ℓ′ : Level) : Type (o ⊔ ℓ ⊔ ℓsuc o′ ⊔ ℓsuc ℓ′) where

@@ -7,6 +7,7 @@ open import Correspondences.Decidable
 open import Correspondences.Discrete
 
 open import Data.Dec.Base as Dec
+open import Data.Empty.Base
 open import Data.List.Base
 open import Data.List.Path
 
@@ -23,5 +24,5 @@ instance
     go {_ ∷ _}  {([])}   = no ∷≠[]
     go {x ∷ xs} {y ∷ ys} = Dec.dmap
       (λ (x=y , xs=ys) → ap² _∷_ x=y xs=ys)
-      (λ f p → f (∷-head-inj p , ap tail p))
+      (contra < ∷-head-inj , ∷-tail-inj >)
       (Dec-× ⦃ di ⦄ ⦃ go ⦄)

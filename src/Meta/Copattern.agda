@@ -5,6 +5,7 @@ module Meta.Copattern where
 open import Foundations.Prelude
 
 open import Meta.Effect.Traversable
+open import Meta.Reflection.Argument
 open import Meta.Reflection.Base
 open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
@@ -14,6 +15,11 @@ open import Data.List.Base
 open import Data.List.Operations
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Traversable
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 --------------------------------------------------------------------------------
 -- Macros for manipulating copattern definitions.
@@ -24,7 +30,7 @@ make-copattern declare? def-name tm tp = do
   -- Ensure that codomain is a record type.
   let tele , cod-tp = pi-view tp
   def rec-name params ← pure cod-tp
-    where _ → type-error [ "make-copattern: codomain of " , termErr tp , " is not a record type." ]
+    where _ → type-error [ "make-copattern: codomain of " , term-err tp , " is not a record type." ]
 
   inst-tm ← apply*TC tm (tel→args 0 tele)
 
@@ -76,7 +82,7 @@ repack-record tm tp = do
   -- Ensure that codomain is a record type.
   tele , cod-tp ← pi-view <$> reduce tp
   def rec-name params ← pure cod-tp
-    where _ → type-error [ "repack-record: codomain of " , termErr tp , " is not a record type." ]
+    where _ → type-error [ "repack-record: codomain of " , term-err tp , " is not a record type." ]
 
   -- Instantiate the term with all telescope arguments to saturate it.
   inst-tm ← apply*TC tm (tel→args 0 tele)

@@ -12,13 +12,27 @@ open import Agda.Builtin.Equality public
            ; refl to reflⁱ )
 
 private variable
-  ℓ ℓ′ ℓᵃ ℓᵇ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
+  C : Type ℓᶜ
+  D : Type ℓᵈ
   x y z : A
 
 apⁱ : (f : A → B) → x ＝ⁱ y → f x ＝ⁱ f y
 apⁱ f reflⁱ = reflⁱ
+
+apⁱ²
+  : (f : A → B → C) {x₁ x₂ : A} {y₁ y₂ : B}
+  → x₁ ＝ⁱ x₂ → y₁ ＝ⁱ y₂
+  → f x₁ y₁ ＝ⁱ f x₂ y₂
+apⁱ² f reflⁱ reflⁱ = reflⁱ
+
+apⁱ³
+  : (f : A → B → C → D) {x₁ x₂ : A} {y₁ y₂ : B} {z₁ z₂ : C}
+  → x₁ ＝ⁱ x₂ → y₁ ＝ⁱ y₂ → z₁ ＝ⁱ z₂
+  → f x₁ y₁ z₁ ＝ⁱ f x₂ y₂ z₂
+apⁱ³ f reflⁱ reflⁱ reflⁱ = reflⁱ
 
 symⁱ : x ＝ⁱ y → y ＝ⁱ x
 symⁱ reflⁱ = reflⁱ

@@ -6,6 +6,7 @@ open import Foundations.Base
 open import Meta.Append
 open import Meta.Effect.Traversable
 open import Meta.Reflection.Base
+open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 open import Meta.Show public
 
@@ -18,6 +19,14 @@ open import Data.List.Instances.Map
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Traversable
 open import Data.Nat.Base
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 open import Data.String.Base
 open import Data.String.Instances.Append
 

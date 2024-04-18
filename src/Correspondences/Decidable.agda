@@ -4,6 +4,7 @@ module Correspondences.Decidable where
 open import Meta.Prelude
 
 open import Meta.Reflection.Base
+open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 
 open import Correspondences.Classical
@@ -11,6 +12,7 @@ open import Correspondences.Classical
 open import Data.Bool.Base
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
+open import Data.Reflection.Term
 open import Data.Reflects.Path
 open import Data.Reflects.Properties
 open import Data.Truncation.Propositional.Base as ∥-∥₁

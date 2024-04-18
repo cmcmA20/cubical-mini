@@ -15,6 +15,7 @@ open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Nat.Path
+open import Data.Reflection.Argument
 
 private variable
   ℓ : Level

@@ -5,11 +5,11 @@ open import Foundations.Base
 
 open import Meta.Append
 open import Meta.Literals.FromString
-open import Meta.Reflection.Base
-  using (Name; Precedence; show-name)
 
 open import Data.Bool.Base
 open import Data.Nat.Base
+open import Data.Reflection.Fixity
+open import Data.Reflection.Name
 open import Data.String.Base public
 open import Data.String.Instances.Append
 
@@ -42,8 +42,3 @@ default-show s .show = s
 show-parens : Bool → ShowS → ShowS
 show-parens true  s = "(" <> s <> ")"
 show-parens false s = s
-
-
-instance
-  Show-Name : Show Name
-  Show-Name = default-show show-name

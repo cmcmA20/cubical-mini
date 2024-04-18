@@ -18,6 +18,15 @@ open import Data.List.Instances.Traversable
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Bind
 open import Data.Nat.Base
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 data Subst : Type where
   idₛ        : Subst
@@ -83,7 +92,7 @@ applyS* ρ = traverse (applyS ρ)
 
 instance
   Has-subst-Arg : ⦃ _ : Has-subst A ⦄ → Has-subst (Arg A)
-  Has-subst-Arg .Has-subst.applyS ρ (arg ai x) = arg ai <$> applyS ρ x
+  Has-subst-Arg .applyS ρ (arg ai x) = arg ai <$> applyS ρ x
 
 
 -- fueled
@@ -173,12 +182,12 @@ subst-tm (suc fuel) ρ (pi (arg ι a) (abs n b)) = do
 subst-tm (suc fuel) ρ (lit l) = pure $ lit l
 subst-tm (suc fuel) ρ unknown = pure unknown
 subst-tm (suc fuel) ρ (agda-sort s) with s
-… | set t     = agda-sort ∘ set <$> subst-tm fuel ρ t
-… | lit n     = pure $ agda-sort (lit n)
-… | prop t    = agda-sort ∘ prop <$> subst-tm fuel ρ t
-… | propLit n = pure $ agda-sort (propLit n)
-… | inf n     = pure $ agda-sort (inf n)
-… | unknown   = pure unknown
+… | set t      = agda-sort ∘ set <$> subst-tm fuel ρ t
+… | lit n      = pure $ agda-sort (lit n)
+… | prop t     = agda-sort ∘ prop <$> subst-tm fuel ρ t
+… | prop-lit n = pure $ agda-sort (prop-lit n)
+… | inf n      = pure $ agda-sort (inf n)
+… | unknown    = pure unknown
 
 subst-tel 0 _ _ = nothing
 subst-tel (suc fuel) ρ []                    = pure []
@@ -208,28 +217,31 @@ pi-apply ty as = go ty as idₛ where
   go : Term → List (Arg Term) → Subst → Maybe Term
   go (pi (arg _ x) (abs n y)) (arg _ a ∷ as) s = go y as (a ∷ₛ s)
   go _ (_ ∷ as) s = nothing
-  go t [] s = with-full-tank subst-tm s t
+  go t [] s = applyS s t
 
-maybe→tc : Maybe Term →  (err : List ErrorPart) → TC Term
+maybe→tc : Maybe A →  (err : List ErrorPart) → TC A
 maybe→tc act err with act
 ... | just x = pure x
 ... | nothing = type-error err
 
 pi-applyTC : Term → List (Arg Term) → TC Term
 pi-applyTC t as = maybe→tc (pi-apply t as)
-                           ([ "Failed to apply type " , termErr t ])
+                           ([ "Failed to apply type " , term-err t ])
 
-raiseTC : ℕ → Term → TC Term
-raiseTC n tm = maybe→tc (raise n tm) [ "Failed to raise term " , termErr tm ]
+raiseTC : ⦃ _ : Has-subst A ⦄ → ℕ → A → TC A
+raiseTC n a = maybe→tc (raise n a) [ "Failed to raise term " ]
 
-substTC : Subst → Term → TC Term
-substTC θ tm = maybe→tc (applyS θ tm) [ "Failed to substitute in term " , termErr tm ]
+substTC : ⦃ _ : Has-subst A ⦄ → Subst → A → TC A
+substTC θ a = maybe→tc (applyS θ a) [ "Failed to substitute in term " ]
+
+applyS*TC : ⦃ _ : Has-subst A ⦄ → Subst → List A → TC (List A)
+applyS*TC ρ xs = maybe→tc (applyS* ρ xs) [ "Failed to apply in terms " ]
 
 applyTC : Term → Arg Term → TC Term
-applyTC f x = maybe→tc (with-full-tank apply-tm f x) [ "Failed to apply function " , termErr f ]
+applyTC f x = maybe→tc (with-full-tank apply-tm f x) [ "Failed to apply function " , term-err f ]
 
-apply*TC : Term → List (Arg Term) → TC Term
-apply*TC f x = maybe→tc (with-full-tank apply-tm* f x) [ "Failed to apply function " , termErr f ]
+apply*TC : Term → Args → TC Term
+apply*TC f x = maybe→tc (with-full-tank apply-tm* f x) [ "Failed to apply function " , term-err f ]
 
 
 -- very unsafe way to do this
@@ -240,16 +252,9 @@ Ren = List ℕ
 -- TODO refactor
 inverseR : Ren → Ren
 inverseR = go 0 ∘ insertion-sort (λ x y → x .fst <ᵇ suc (y .fst)) ∘ (λ vs → zip vs (count-from-to 0 (length vs))) where
-  zip : List ℕ → List ℕ → List (ℕ × ℕ)
-  zip []       _        = []
-  zip (_ ∷ _)  []       = []
-  zip (x ∷ xs) (y ∷ ys) = (x , y) ∷ zip xs ys
-
   go : ℕ → List (ℕ × ℕ) → Ren
   go n [] = []
-  go n ((k , v) ∷ ss) =
-    let ih = go (suc k) ss
-    in count-from-to n k ++ (v ∷ ih)
+  go n ((k , v) ∷ ss) = count-from-to n k ++ (v ∷ go (suc k) ss)
 
 ren→sub : Ren → Subst
 ren→sub vs = ((λ v → var v []) <$> vs) ++# idₛ
@@ -257,10 +262,8 @@ ren→sub vs = ((λ v → var v []) <$> vs) ++# idₛ
 rename-tm : (fuel : ℕ) → Ren → Term → Maybe Term
 rename-tm fuel = subst-tm fuel ∘ ren→sub
 
-renameTC : Ren → Term → TC Term
-renameTC vs tm with applyS (ren→sub vs) tm
-... | just x = pure x
-... | nothing = type-error [ "Failed to rename term " , termErr tm ]
+renameTC : ⦃ _ : Has-subst A ⦄ → Ren → A → TC A
+renameTC vs tm = maybe→tc (applyS (ren→sub vs) tm) [ "Failed to rename term " ]
 
 generalize : List ℕ → Term → TC Term
 generalize fvs t

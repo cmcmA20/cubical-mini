@@ -15,6 +15,7 @@ open import Meta.Groupoid
 open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
+open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 open import Meta.Variadic
 
@@ -28,6 +29,12 @@ open import Data.Nat.Order.Inductive
   renaming ( z≤ to z≤-whatever
            ; s≤s′ to s≤s-whatever
            ; ≤-refl to ≤-refl-whatever ) -- instances
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Literal
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 private variable
   ℓ ℓ′ : Level
@@ -202,13 +209,13 @@ private
     guard (wnm name=? anm)
     pure (lit (nat lvl))
   decompose-as-fixed-hlevel wnm _ t  = type-error
-    [ "Target is not an application of " , nameErr wnm , ": " , termErr t ]
+    [ "Target is not an application of " , name-err wnm , ": " , term-err t ]
 
   decompose-as-hlevel : Term → TC Term
   decompose-as-hlevel (def (quote is-of-hlevel) (_ ∷ varg lvl ∷ ty ∷ [])) =
     pure lvl
   decompose-as-hlevel t = type-error
-    [ "Target is not an application of is-of-hlevel: " , termErr t ]
+    [ "Target is not an application of is-of-hlevel: " , term-err t ]
 
 macro
   hlevel! : Term → TC ⊤
@@ -230,7 +237,7 @@ instance
   hlevel-proj-n-type .upwards-closure = quote is-of-hlevel-≤
   hlevel-proj-n-type .get-level ty = do
     def (quote n-Type) (ℓ v∷ hl v∷ []) ← reduce ty
-      where _ → type-error $ [ "Type of thing isn't n-Type, it is " , termErr ty ]
+      where _ → type-error $ [ "Type of thing isn't n-Type, it is " , term-err ty ]
     normalise hl
   hlevel-proj-n-type .get-argument (_ ∷ _ ∷ x v∷ []) = pure x
   hlevel-proj-n-type .get-argument _ = type-error []

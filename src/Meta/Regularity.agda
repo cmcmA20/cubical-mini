@@ -12,6 +12,15 @@ open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Alt
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 
 {-
@@ -79,7 +88,7 @@ private
     -- functions, so that the transport will have more arguments? No:
     -- The term is in normal form.
     (do
-      debug-print "tactic.regularity" 10 $ "Checking regularity of " ∷ termErr tm ∷ []
+      debug-print "tactic.regularity" 10 $ "Checking regularity of " ∷ term-err tm ∷ []
       let φ′ = def (quote _∨_) (φ v∷ var n [] v∷ [])
       let tm′ = def (quote transp) (ℓ h∷ Al v∷ φ′ v∷ x v∷ [])
       -- We simply ask Agda to check that the newly constructed term `transp Al (φ ∨ i) x`
@@ -90,7 +99,7 @@ private
       check-type tm′ unknown -- inferType doesn't trigger the constancy check https://github.com/agda/agda/issues/6585
       pure tm′) <|>
     (do
-      debug-print "tactic.regularity" 10 $ "NOT a (transport refl): " ∷ termErr tm ∷ []
+      debug-print "tactic.regularity" 10 $ "NOT a (transport refl): " ∷ term-err tm ∷ []
       pure tm)
   refl-transport _ tm = pure tm
 
@@ -188,9 +197,9 @@ module Regularity where
       red ← applyTC tm (argN (con (quote i1) [])) >>= normalise
       `pres ← quoteTC pres
       type-error
-        [ "The term\n\n  " , termErr orig , "\n\nreduces modulo "
-        , termErr `pres , " regularity to\n\n  "
-        , termErr red , "\n" ]
+        [ "The term\n\n  " , term-err orig , "\n\nreduces modulo "
+        , term-err `pres , " regularity to\n\n  "
+        , term-err red , "\n" ]
 
 -- Test cases.
 module

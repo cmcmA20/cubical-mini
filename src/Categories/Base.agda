@@ -13,6 +13,9 @@ open import Meta.Record
 open import Meta.Reflection.Base
 
 open import Data.Bool.Base
+open import Data.Reflection.Argument
+open import Data.Reflection.Literal
+open import Data.Reflection.Term
 open import Data.Truncation.Propositional.Base
 
 open import Functions.Embedding using (Injective)

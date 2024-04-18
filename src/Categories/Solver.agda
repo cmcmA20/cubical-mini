@@ -10,6 +10,10 @@ open import Meta.Reflection.Solver
 open import Categories.Base
 
 open import Data.List.Base
+open import Data.Reflection.Argument
+open import Data.Reflection.Literal
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 private variable
   o h : Level
@@ -76,10 +80,10 @@ module Reflection where
 
   “solve” : Term → Term → Term → Term
   “solve” cat lhs rhs = def (quote NbE.solve) $ mk-category-args cat $
-    infer-hidden′ 2 $ lhs v∷ rhs v∷ def (quote refl) [] v∷ []
+    infer-hidden 2 $ lhs v∷ rhs v∷ def (quote refl) [] v∷ []
 
   “nf” : Term → Term → Term
-  “nf” cat e = def (quote NbE.nf) (mk-category-args cat $ infer-hidden′ 2 $ varg e ∷ [])
+  “nf” cat e = def (quote NbE.nf) (mk-category-args cat $ infer-hidden 2 $ varg e ∷ [])
 
   build-expr : Term → Term
   build-expr “id” = con (quote NbE.`id) []

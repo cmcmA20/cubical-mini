@@ -6,7 +6,9 @@ open import Foundations.Base
 
 open import Meta.Literals.FromNat
 open import Meta.Marker
-open import Meta.Reflection
+open import Meta.Reflection.Base
+open import Meta.Reflection.Solver
+open import Meta.Reflection.Variables
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base
@@ -14,6 +16,8 @@ open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Nat.Properties
+open import Data.Reflection.Argument
+open import Data.Reflection.Term
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Inductive.Operations.Computational
 

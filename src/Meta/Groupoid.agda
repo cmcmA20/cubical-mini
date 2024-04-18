@@ -10,12 +10,22 @@ open import Foundations.Prelude
 
 open import Meta.Effect.Alt
 open import Meta.Reflection.Base
+open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 data Size : 𝒰 where
   small large : Size
@@ -41,7 +51,7 @@ instance
   Refl-path : Refl small _＝_
   Refl-path .refl′ = reflₚ
 
-  Refl-Fun : Refl large Fun
+  Refl-Fun : Refl large λ A B → A → B
   Refl-Fun .refl′ = id
 
   Refl-≃ : Refl large _≃_
@@ -69,23 +79,23 @@ private
     pure $ it _＝_
   decompose-as-path (def (quote _＝_) (l h∷ T h∷ _ v∷ _ v∷ [])) = do
     pure $ it _＝_
-  decompose-as-path t = type-error [ "Target is not a path: " , termErr t ]
+  decompose-as-path t = type-error [ "Target is not a path: " , term-err t ]
 
   decompose-as-fun : Term → TC Term
   decompose-as-fun t@(pi (varg x) (abs _ _)) = do
     unify t $ it Fun ##ₙ x ##ₙ x
     pure $ it Fun
-  decompose-as-fun t = type-error [ "Target is not a function: " , termErr t ]
+  decompose-as-fun t = type-error [ "Target is not a function: " , term-err t ]
 
   decompose-as-other : Term → TC Term
   decompose-as-other (def r (_ h∷ _ h∷ _ v∷ _ v∷ [])) = pure $ def r []
   decompose-as-other t =
-    type-error [ "Target is not an application of a binary relation: " , termErr t ]
+    type-error [ "Target is not an application of a binary relation: " , term-err t ]
 
   refl-macro : Term → TC ⊤
   refl-macro hole = with-reduce-defs (false , [ quote _≃_ , quote Iso , quote _≅_ ]) do
     ty ← (infer-type hole >>= reduce) >>= wait-just-a-bit
-    debug-print "tactic.groupoid" 20 [ "Goal: " , termErr ty ]
+    debug-print "tactic.groupoid" 20 [ "Goal: " , term-err ty ]
     r ← decompose-as-path ty <|> decompose-as-fun ty <|> decompose-as-other ty
     try-sized (it small) r hole <|> try-sized (it large) r hole
 

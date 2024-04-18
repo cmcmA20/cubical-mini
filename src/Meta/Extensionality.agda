@@ -7,6 +7,7 @@ open import Foundations.Prelude
 open import Meta.Effect.Alt
 open import Meta.Literals.FromProduct
 open import Meta.Reflection.Base
+open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
 open import Meta.Variadic
@@ -15,6 +16,9 @@ open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Instances.Alt
+open import Data.Reflection.Error
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Term
 
 
 record Extensional {ℓ} (A : Type ℓ) (ℓ-rel : Level) : Type (ℓ ⊔ ℓsuc ℓ-rel) where
@@ -132,7 +136,7 @@ private
       `y ← quoteTC y
       type-error
         [ "trivial! failed: the values\n  "
-        , termErr `x , "\nand\n  " , termErr `y
+        , term-err `x , "\nand\n  " , term-err `y
         , "\nare not extensionally equal by refl." ]
 
 {-

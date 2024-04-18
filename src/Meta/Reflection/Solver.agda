@@ -12,6 +12,10 @@ open import Data.Bool.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
+open import Data.Reflection.Error
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 private variable
   ℓ : Level
@@ -23,21 +27,21 @@ private variable
 solver-failed : Term → Term → TC A
 solver-failed lhs rhs = type-error
   [ "Could not equate the following expressions:\n  "
-  , termErr lhs , "\nAnd\n  " , termErr rhs ]
+  , term-err lhs , "\nAnd\n  " , term-err rhs ]
 
 print-repr : Term → Term → TC A
 print-repr tm repr = type-error
-  [ "The expression\n  " , termErr tm
-  , "\nIs represented by the expression\n  " , termErr repr ]
+  [ "The expression\n  " , term-err tm
+  , "\nIs represented by the expression\n  " , term-err repr ]
 
 print-var-repr : Term → Term → Term → TC A
 print-var-repr tm repr env = type-error
-  [ "The expression\n  " , termErr tm
-  , "\nIs represented by the expression\n  " , termErr repr
-  , "\nIn the environment\n  " , termErr env ]
+  [ "The expression\n  " , term-err tm
+  , "\nIs represented by the expression\n  " , term-err repr
+  , "\nIn the environment\n  " , term-err env ]
 
 print-boundary : Term → TC A
-print-boundary goal = type-error [ "Can't determine boundary: " , termErr goal ]
+print-boundary goal = type-error [ "Can't determine boundary: " , term-err goal ]
 
 
 data Reduction-strategy : Type where
@@ -123,20 +127,20 @@ module _ {ℓ} {A : Type ℓ} (solver : Variable-solver A) where
     lhs ← wait-just-a-bit lhs
     rhs ← wait-just-a-bit rhs
     elhs , vs ← prepare lhs >>= build-expr empty-vars
-    debug-print "tactic.solver.var" 10 [ "LHS: " , termErr elhs ]
+    debug-print "tactic.solver.var" 10 [ "LHS: " , term-err elhs ]
     erhs , vs ← prepare rhs >>= build-expr vs
-    debug-print "tactic.solver.var" 10 [ "RHS: " , termErr erhs ]
+    debug-print "tactic.solver.var" 10 [ "RHS: " , term-err erhs ]
     size , env ← environment vs
-    debug-print "tactic.solver.var" 10 [ "Env: " , termErr env ]
+    debug-print "tactic.solver.var" 10 [ "Env: " , term-err env ]
     (no-constraints $ unify hole $ invoke-solver elhs erhs env) <|>
       solver-failed elhs erhs
 
   mk-var-normalise : Term → Term → TC ⊤
   mk-var-normalise tm hole = withReduction do
     e , vs ← prepare tm >>= build-expr empty-vars
-    debug-print "tactic.solver.var" 10 [ "Expression: " , termErr e ]
+    debug-print "tactic.solver.var" 10 [ "Expression: " , term-err e ]
     size , env ← environment vs
-    debug-print "tactic.solver.var" 10 [ "Env: " , termErr env ]
+    debug-print "tactic.solver.var" 10 [ "Env: " , term-err env ]
     soln ← reduce $ invoke-normaliser e env
     unify hole soln
 

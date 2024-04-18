@@ -14,6 +14,15 @@ open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Bind
 open import Data.Nat.Base
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 private variable
   ℓ : Level
@@ -49,7 +58,7 @@ abstract-marker = go 0 where
   ... | set t = agda-sort ∘ set <$> go k t
   ... | lit n = pure (agda-sort (lit n))
   ... | prop t = agda-sort ∘ prop <$> go k t
-  ... | propLit n = pure (agda-sort (propLit n))
+  ... | prop-lit n = pure (agda-sort (prop-lit n))
   ... | inf n = pure (agda-sort (inf n))
   ... | unknown = pure (agda-sort unknown)
   go k (lit l) = pure (lit l)
@@ -71,14 +80,14 @@ macro
     goalt ← infer-type goal
     just (l , r) ← get-boundary goalt
       where nothing → type-error [ "ap!: Goal type "
-                                 , termErr goalt
+                                 , term-err goalt
                                  , " is not a path type" ]
     just l′ ← pure (abstract-marker l)
-      where _ → type-error [ "Failed to abstract over marker in term " , termErr l ]
+      where _ → type-error [ "Failed to abstract over marker in term " , term-err l ]
     let dm = lam visible (abs "x" l′)
     path′ ← quoteTC path
-    debug-print "tactic.marked-ap" 10 [ "original term " , termErr l ]
-    debug-print "tactic.marked-ap" 10 [ "abstracted term " , termErr dm ]
+    debug-print "tactic.marked-ap" 10 [ "original term " , term-err l ]
+    debug-print "tactic.marked-ap" 10 [ "abstracted term " , term-err dm ]
     unify goal (def (quote ap) (dm v∷ path′ v∷ []))
 
   -- Generalised ap. Automatically generates the function to apply to by
@@ -89,10 +98,10 @@ macro
     goalt ← infer-type goal
     just (l , r) ← get-boundary goalt
       where nothing → type-error [ "ap¡: Goal type "
-                                 , termErr goalt
+                                 , term-err goalt
                                  , " is not a path type" ]
     just r′ ← pure (abstract-marker r)
-      where _ → type-error [ "Failed to abstract over marker in term " , termErr r ]
+      where _ → type-error [ "Failed to abstract over marker in term " , term-err r ]
     path′ ← quoteTC path
     unify goal $
       def (quote ap) (lam visible (abs "x" r′) v∷ path′ v∷ [])

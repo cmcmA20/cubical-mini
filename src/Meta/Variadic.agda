@@ -16,6 +16,15 @@ open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.List.Operations
 open import Data.Nat.Base
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 open import Data.Sum.Base
 
 -- Correspondence valued in arbitrary structure
@@ -164,20 +173,20 @@ get-arity+type ninv = go 0 where
 variadic-worker : Term → TC (Term × Term)
 variadic-worker t = do
   ty ← (infer-type t >>= reduce) >>= wait-just-a-bit
-  debug-print "tactic.variadic" 20 [ "Given type: " , termErr ty ]
+  debug-print "tactic.variadic" 20 [ "Given type: " , term-err ty ]
   let ty , invs = strip-invisible ty
       ninv = length invs
-  ctx-len ← length <$> getContext
-  debug-print "tactic.variadic" 20 [ "Ctx len: " , termErr (lit (nat ctx-len)) ]
+  ctx-len ← length <$> get-context
+  debug-print "tactic.variadic" 20 [ "Ctx len: " , term-err (lit (nat ctx-len)) ]
   let θ = drop (ctx-len ∸ ninv) $ count-from-to 0 ctx-len
-  debug-print "tactic.variadic" 20 [ "Stripped type: " , termErr ty ]
+  debug-print "tactic.variadic" 20 [ "Stripped type: " , term-err ty ]
   ty ← renameTC θ ty
   let ar , r = get-arity+type ninv ty
   debug-print "tactic.variadic" 20
-    [ "Invisible args prefix length: " , termErr (lit (nat ninv)) , "\n"
-    , "Stripped+substituted type: " , termErr ty , "\n"
-    , "Inferred arity: " , termErr ar , "\n"
-    , "Codomain: " , termErr r ]
+    [ "Invisible args prefix length: " , term-err (lit (nat ninv)) , "\n"
+    , "Stripped+substituted type: " , term-err ty , "\n"
+    , "Inferred arity: " , term-err ar , "\n"
+    , "Codomain: " , term-err r ]
   unify ty $ def (quote Arrows)
     [ varg ar , harg unknown , harg unknown , varg unknown , varg unknown ]
   pure $ ar , r
@@ -186,10 +195,10 @@ variadic-worker t = do
 variadic-instance-worker : Term → TC Term
 variadic-instance-worker r = do
   solved@(meta mv _) ← new-meta (def (quote Underlying) [ harg unknown , varg r ])
-    where _ → type-error [ "Could not get `Underlying` instances: " , termErr r ]
+    where _ → type-error [ "Could not get `Underlying` instances: " , term-err r ]
   (und ∷ []) ← get-instances mv where
-    [] → type-error [ "No `Underlying `instances for ", termErr r ]
-    _  → type-error [ "Multiple `Underlying` instances for ", termErr r ]
+    [] → type-error [ "No `Underlying `instances for ", term-err r ]
+    _  → type-error [ "Multiple `Underlying` instances for ", term-err r ]
   unify solved und
   pure und
 

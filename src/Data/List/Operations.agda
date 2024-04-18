@@ -22,6 +22,9 @@ snoc : List A → A → List A
 snoc []      x = x ∷ []
 snoc (y ∷ l) x = y ∷ snoc l x
 
+_∷r_ = snoc
+infixl 20 _∷r_
+
 any : (A → Bool) → List A → Bool
 any p = List.rec false _or_ ∘ map p
 
@@ -113,3 +116,17 @@ span p []       = [] , []
 span p (x ∷ xs) =
   if p x then first (x ∷_) (span p xs)
          else [] , x ∷ xs
+
+split-at : ℕ → List A → List A × List A
+split-at 0       xs       = [] , xs
+split-at (suc n) []       = [] , []
+split-at (suc n) (x ∷ xs) = first (x ∷_) (split-at n xs)
+
+zip : List A → List B → List (A × B)
+zip [] _ = []
+zip _ [] = []
+zip (a ∷ as) (b ∷ bs) = (a , b) ∷ zip as bs
+
+unzip : List (A × B) → List A × List B
+unzip [] = [] , []
+unzip ((a , b) ∷ xs) = bimap (a ∷_) (b ∷_) (unzip xs)

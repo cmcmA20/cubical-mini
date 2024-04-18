@@ -17,6 +17,15 @@ open import Data.List.Instances.Append
 open import Data.List.Instances.Foldable
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Map
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 private variable
   ℓ : Level
@@ -41,7 +50,7 @@ record→iso : Name → (List (Arg Term) → TC Term) → TC Term
 record→iso namen unfolded =
   (infer-type (def namen []) >>= normalise) >>= go []
   where
-  go : List ArgInfo → Term → TC Term
+  go : List Arg-info → Term → TC Term
   go acc (pi argu@(arg i@(arg-info _ m) argTy) (abs s ty)) = do
     r ← extend-context "arg" argu $ go (i ∷ acc) ty
     pure $ pi (arg (arg-info hidden m) argTy) (abs s r)
@@ -50,14 +59,14 @@ record→iso namen unfolded =
     unfolded ← unfolded (implicitArgs 0 [] acc)
     pure $ def (quote Iso) (rec v∷ unfolded v∷ [])
     where
-      makeArgs : ℕ → List (Arg Term) → List ArgInfo → List (Arg Term)
+      makeArgs : ℕ → List (Arg Term) → List Arg-info → List (Arg Term)
       makeArgs n acc [] = acc
       makeArgs n acc (i ∷ infos) = makeArgs (suc n) (arg i (var n []) ∷ acc) infos
 
-      implicitArgs : ℕ → List (Arg Term) → List ArgInfo → List (Arg Term)
+      implicitArgs : ℕ → List (Arg Term) → List Arg-info → List (Arg Term)
       implicitArgs n acc [] = acc
       implicitArgs n acc (_ ∷ i) = implicitArgs (suc n) (var n [] h∷ acc) i
-  go _ _ = type-error [ "Not a record type name: " , nameErr namen ]
+  go _ _ = type-error [ "Not a record type name: " , name-err namen ]
 
 undo-clause : Name × List Name → Clause
 undo-clause (r-field , sel-path) = clause
@@ -104,7 +113,7 @@ instantiate′ _ tm = tm
 make-record-iso-sigma : Bool → TC Name → Name → TC Name
 make-record-iso-sigma declare? getName `R = do
   record-type `R-con fields ← get-definition `R
-    where _ → type-error [ nameErr `R , " is not a record type" ]
+    where _ → type-error [ name-err `R , " is not a record type" ]
 
   let fields = field-names→paths fields
 

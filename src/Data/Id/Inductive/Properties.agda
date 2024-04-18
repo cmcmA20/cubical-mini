@@ -6,6 +6,7 @@ open import Foundations.Prelude
 open import Correspondences.Discrete
 
 open import Data.Dec.Base as Dec
+open import Data.Empty.Base as ⊥
 
 open import Data.Id.Inductive.Base
 
@@ -40,7 +41,12 @@ opaque
 
 
 is-discreteⁱ→is-discrete : is-discreteⁱ A → is-discrete A
-is-discreteⁱ→is-discrete d = Dec.dmap Id≃path.to (_∘ Id≃path.from) (d _ _)
+is-discreteⁱ→is-discrete d = Dec.dmap Id≃path.to (contra Id≃path.from) (d _ _)
 
 is-discrete→is-discreteⁱ : is-discrete A → is-discreteⁱ A
-is-discrete→is-discreteⁱ d _ _ = Dec.dmap Id≃path.from (_∘ Id≃path.to) d
+is-discrete→is-discreteⁱ d _ _ = Dec.dmap Id≃path.from (contra Id≃path.to) d
+
+-- opacitiy breaks solvers
+instance
+  id-is-discrete : ∀ {ℓ} {A : Type ℓ} {x y : A} ⦃ d : Dec (x ＝ y) ⦄ → Dec (x ＝ⁱ y)
+  id-is-discrete ⦃ d ⦄ = Dec.dmap Id≃path.from (contra Id≃path.to) d

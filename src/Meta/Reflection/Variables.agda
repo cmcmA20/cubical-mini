@@ -5,11 +5,15 @@ open import Foundations.Base
 
 open import Meta.Reflection.Base
 
+open import Correspondences.Discrete
+
 open import Data.Bool.Base
+open import Data.Dec.Base
 open import Data.Fin.Computational.Base
 open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
+open import Data.Reflection
 open import Data.Vec.Inductive.Base
 
 --------------------------------------------------------------------------------
@@ -67,10 +71,10 @@ empty-vars = mk-variables [] (λ _ → nothing)
 
 private
   bind : Term → Term → (Term → Maybe Term) → Term → Maybe Term
-  bind tm tm-var lookup tm′ with lookup tm′ | tm term=? tm′
+  bind tm tm-var lookup tm′ with lookup tm′ | ⌊ tm ≟ tm′ ⌋
   ... | just tm′-var | _ = just tm′-var
-  ... | nothing      | true = just tm-var
-  ... | nothing      | false = nothing
+  ... | nothing | true = just tm-var
+  ... | nothing | false = nothing
 
   fin-term : ℕ → Term
   fin-term zero    = def (quote fzero) (unknown h∷ [])

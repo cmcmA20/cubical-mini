@@ -6,6 +6,7 @@ open import Foundations.Base
 open import Meta.Literals.FromProduct
   public
 open import Meta.Reflection.Base
+open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 
 open import Data.Bool.Base as Bool
@@ -17,6 +18,15 @@ open import Data.List.Base
 open import Data.List.Instances.FromProduct
   public
 open import Data.Maybe.Base
+open import Data.Reflection.Abs
+open import Data.Reflection.Argument
+open import Data.Reflection.Error
+open import Data.Reflection.Fixity
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Literal
+open import Data.Reflection.Meta
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 
 private ⊤′ = ⊥ → ⊥
@@ -36,10 +46,10 @@ private
     → TC (List (Arg Term) × (Σ[ head ꞉ Name ] Struct-proj-desc stratified head))
   work A stratified = do
     def head args ← reduce =<< quoteTC A
-      where ty → type-error [ "Goal is not a an application of a projection:" , termErr ty ]
+      where ty → type-error [ "Goal is not a an application of a projection:" , term-err ty ]
     debug-print "tactic.search" 30
-      [ "Trying projections for term:\n  " , termErr (def head args)
-      , "\nwith head symbol ", nameErr head ]
+      [ "Trying projections for term:\n  " , term-err (def head args)
+      , "\nwith head symbol ", name-err head ]
 
     `stratified ← quoteTC stratified >>= normalise
 
@@ -47,8 +57,8 @@ private
       (mv , _) ← new-meta′ (it Struct-proj-desc ##ₙ `stratified ##ₙ lit (name head))
       get-instances mv >>= λ where
         (tm ∷ []) → unquoteTC {A = Struct-proj-desc stratified head} =<< normalise tm
-        []        → type-error [ "Do not know how to invert projection\n  " , termErr (def head args) ]
-        _         → type-error [ "Ambiguous inversions for projection\n  " , nameErr head ]
+        []        → type-error [ "Do not know how to invert projection\n  " , term-err (def head args) ]
+        _         → type-error [ "Ambiguous inversions for projection\n  " , name-err head ]
 
     returnTC $ args , head , projection
 

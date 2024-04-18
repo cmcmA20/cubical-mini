@@ -16,6 +16,10 @@ open import Structures.Base public
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
 open import Data.Nat.Base
+open import Data.Reflection.Argument
+open import Data.Reflection.Instances.FromString
+open import Data.Reflection.Name
+open import Data.Reflection.Term
 
 
 private variable

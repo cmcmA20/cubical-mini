@@ -12,6 +12,7 @@ private variable
 
 record Bind (M : Effect) : Typeω where
   private module M = Effect M
+  infixl 1 _>>=_
   field
     _>>=_ : M.₀ A → (A → M.₀ B) → M.₀ B
     ⦃ Idiom-bind ⦄ : Idiom M
@@ -19,11 +20,11 @@ record Bind (M : Effect) : Typeω where
   _>>_ : M.₀ A → M.₀ B → M.₀ B
   _>>_ f g = f >>= λ _ → g
 
+  infixr 1 _=<<_
   _=<<_ : (A → M.₀ B) → M.₀ A → M.₀ B
   _=<<_ f x = x >>= f
 
 open Bind ⦃ ... ⦄ public
-
 
 instance
   Bind-Erased : Bind (eff λ T → Erased T)
