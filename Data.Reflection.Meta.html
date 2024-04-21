@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Reflection.Meta</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Reflection.Meta.html" class="Module">Data.Reflection.Meta</a> <a id="52" class="Keyword">where</a>
+
+<a id="59" class="Keyword">open</a> <a id="64" class="Keyword">import</a> <a id="71" href="Agda.Builtin.Reflection.html" class="Module">Agda.Builtin.Reflection</a>
+  <a id="97" class="Keyword">public</a>
+  <a id="106" class="Keyword">using</a> <a id="112" class="Symbol">(</a> <a id="114" href="Agda.Builtin.Reflection.html#2457" class="Postulate">Meta</a>
+        <a id="127" class="Symbol">;</a> <a id="129" href="Agda.Builtin.Reflection.html#3919" class="Datatype">Blocker</a>
+        <a id="145" class="Symbol">)</a>
+  <a id="149" class="Keyword">renaming</a> <a id="158" class="Symbol">(</a> <a id="160" href="Agda.Builtin.Reflection.html#2511" class="Primitive">primMetaEquality</a> <a id="177" class="Symbol">to</a> <a id="180" class="Primitive">_meta=?_</a>
+           <a id="200" class="Symbol">;</a> <a id="202" href="Agda.Builtin.Reflection.html#2551" class="Primitive">primMetaLess</a>     <a id="219" class="Symbol">to</a> <a id="222" class="Primitive">_meta&lt;?_</a>
+           <a id="242" class="Symbol">;</a> <a id="244" href="Agda.Builtin.Reflection.html#2591" class="Primitive">primShowMeta</a>     <a id="261" class="Symbol">to</a> <a id="264" class="Primitive">show-meta</a>
+           <a id="285" class="Symbol">;</a> <a id="287" href="Agda.Builtin.Reflection.html#2626" class="Primitive">primMetaToNat</a>    <a id="304" class="Symbol">to</a> <a id="307" class="Primitive">meta→ℕ</a>
+
+           <a id="326" class="Symbol">;</a> <a id="328" href="Agda.Builtin.Reflection.html#3941" class="InductiveConstructor">blockerAny</a>  <a id="340" class="Symbol">to</a> <a id="343" class="InductiveConstructor">blocker-any</a>
+           <a id="366" class="Symbol">;</a> <a id="368" href="Agda.Builtin.Reflection.html#3980" class="InductiveConstructor">blockerAll</a>  <a id="380" class="Symbol">to</a> <a id="383" class="InductiveConstructor">blocker-all</a>
+           <a id="406" class="Symbol">;</a> <a id="408" href="Agda.Builtin.Reflection.html#4019" class="InductiveConstructor">blockerMeta</a> <a id="420" class="Symbol">to</a> <a id="423" class="InductiveConstructor">blocker-meta</a>
+           <a id="447" class="Symbol">)</a>
+</pre></body></html>

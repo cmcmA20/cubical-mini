@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Reflection.Abs</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Reflection.Abs.html" class="Module">Data.Reflection.Abs</a> <a id="51" class="Keyword">where</a>
+
+<a id="58" class="Keyword">open</a> <a id="63" class="Keyword">import</a> <a id="70" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="88" class="Keyword">open</a> <a id="93" class="Keyword">import</a> <a id="100" href="Data.String.Base.html" class="Module">Data.String.Base</a>
+
+<a id="118" class="Keyword">open</a> <a id="123" class="Keyword">import</a> <a id="130" href="Agda.Builtin.Reflection.html" class="Module">Agda.Builtin.Reflection</a>
+  <a id="156" class="Keyword">public</a>
+  <a id="165" class="Keyword">using</a> <a id="171" class="Symbol">(</a> <a id="173" href="Agda.Builtin.Reflection.html#4249" class="Datatype">Abs</a> <a id="177" class="Symbol">;</a> <a id="179" href="Agda.Builtin.Reflection.html#4285" class="InductiveConstructor">abs</a>
+        <a id="191" class="Symbol">)</a>
+
+<a id="194" class="Keyword">private</a> <a id="202" class="Keyword">variable</a>
+  <a id="213" href="Data.Reflection.Abs.html#213" class="Generalizable">ℓ</a> <a id="215" class="Symbol">:</a> <a id="217" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="225" href="Data.Reflection.Abs.html#225" class="Generalizable">A</a> <a id="227" class="Symbol">:</a> <a id="229" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="234" href="Data.Reflection.Abs.html#213" class="Generalizable">ℓ</a>
+
+<a id="abs-name"></a><a id="237" href="Data.Reflection.Abs.html#237" class="Function">abs-name</a> <a id="246" class="Symbol">:</a> <a id="248" href="Agda.Builtin.Reflection.html#4249" class="Datatype">Abs</a> <a id="252" href="Data.Reflection.Abs.html#225" class="Generalizable">A</a> <a id="254" class="Symbol">→</a> <a id="256" href="Agda.Builtin.String.html#335" class="Postulate">String</a>
+<a id="263" href="Data.Reflection.Abs.html#237" class="Function">abs-name</a> <a id="272" class="Symbol">(</a><a id="273" href="Agda.Builtin.Reflection.html#4285" class="InductiveConstructor">abs</a> <a id="277" href="Data.Reflection.Abs.html#277" class="Bound">s</a> <a id="279" class="Symbol">_)</a> <a id="282" class="Symbol">=</a> <a id="284" href="Data.Reflection.Abs.html#277" class="Bound">s</a>
+
+<a id="abs-binder"></a><a id="287" href="Data.Reflection.Abs.html#287" class="Function">abs-binder</a> <a id="298" class="Symbol">:</a> <a id="300" href="Agda.Builtin.Reflection.html#4249" class="Datatype">Abs</a> <a id="304" href="Data.Reflection.Abs.html#225" class="Generalizable">A</a> <a id="306" class="Symbol">→</a> <a id="308" href="Data.Reflection.Abs.html#225" class="Generalizable">A</a>
+<a id="310" href="Data.Reflection.Abs.html#287" class="Function">abs-binder</a> <a id="321" class="Symbol">(</a><a id="322" href="Agda.Builtin.Reflection.html#4285" class="InductiveConstructor">abs</a> <a id="326" class="Symbol">_</a> <a id="328" href="Data.Reflection.Abs.html#328" class="Bound">x</a><a id="329" class="Symbol">)</a> <a id="331" class="Symbol">=</a> <a id="333" href="Data.Reflection.Abs.html#328" class="Bound">x</a>
+</pre></body></html>

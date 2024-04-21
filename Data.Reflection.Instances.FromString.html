@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Reflection.Instances.FromString</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Reflection.Instances.FromString.html" class="Module">Data.Reflection.Instances.FromString</a> <a id="68" class="Keyword">where</a>
+
+<a id="75" class="Keyword">open</a> <a id="80" class="Keyword">import</a> <a id="87" href="Meta.Literals.FromString.html" class="Module">Meta.Literals.FromString</a>
+
+<a id="113" class="Keyword">open</a> <a id="118" class="Keyword">import</a> <a id="125" href="Data.List.Base.html" class="Module">Data.List.Base</a>
+<a id="140" class="Keyword">open</a> <a id="145" class="Keyword">import</a> <a id="152" href="Data.Reflection.Error.html" class="Module">Data.Reflection.Error</a>
+<a id="174" class="Keyword">open</a> <a id="179" class="Keyword">import</a> <a id="186" href="Data.Unit.Base.html" class="Module">Data.Unit.Base</a>
+
+<a id="202" class="Keyword">instance</a>
+  <a id="From-string-ErrorPart"></a><a id="213" href="Data.Reflection.Instances.FromString.html#213" class="Function">From-string-ErrorPart</a> <a id="235" class="Symbol">:</a> <a id="237" href="Agda.Builtin.FromString.html#202" class="Record">From-string</a> <a id="249" href="Agda.Builtin.Reflection.html#8199" class="Datatype">ErrorPart</a>
+  <a id="261" href="Data.Reflection.Instances.FromString.html#213" class="Function">From-string-ErrorPart</a> <a id="283" class="Symbol">.</a><a id="284" href="Agda.Builtin.FromString.html#260" class="Field">From-string.Constraint</a> <a id="307" class="Symbol">_</a> <a id="309" class="Symbol">=</a> <a id="311" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+  <a id="315" href="Data.Reflection.Instances.FromString.html#213" class="Function">From-string-ErrorPart</a> <a id="337" class="Symbol">.</a><a id="338" href="Agda.Builtin.FromString.html#292" class="Field">from-string</a> <a id="350" href="Data.Reflection.Instances.FromString.html#350" class="Bound">s</a> <a id="352" class="Symbol">=</a> <a id="354" href="Data.Reflection.Error.html#159" class="InductiveConstructor">str-err</a> <a id="362" href="Data.Reflection.Instances.FromString.html#350" class="Bound">s</a>
+
+  <a id="From-string-error"></a><a id="367" href="Data.Reflection.Instances.FromString.html#367" class="Function">From-string-error</a> <a id="385" class="Symbol">:</a> <a id="387" href="Agda.Builtin.FromString.html#202" class="Record">From-string</a> <a id="399" class="Symbol">(</a><a id="400" href="Agda.Builtin.List.html#147" class="Datatype">List</a> <a id="405" href="Agda.Builtin.Reflection.html#8199" class="Datatype">ErrorPart</a><a id="414" class="Symbol">)</a>
+  <a id="418" href="Data.Reflection.Instances.FromString.html#367" class="Function">From-string-error</a> <a id="436" class="Symbol">.</a><a id="437" href="Agda.Builtin.FromString.html#260" class="Field">From-string.Constraint</a> <a id="460" class="Symbol">_</a> <a id="462" class="Symbol">=</a> <a id="464" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+  <a id="468" href="Data.Reflection.Instances.FromString.html#367" class="Function">From-string-error</a> <a id="486" class="Symbol">.</a><a id="487" href="Agda.Builtin.FromString.html#292" class="Field">from-string</a> <a id="499" href="Data.Reflection.Instances.FromString.html#499" class="Bound">s</a> <a id="501" class="Symbol">=</a> <a id="503" href="Data.Reflection.Error.html#159" class="InductiveConstructor">str-err</a> <a id="511" href="Data.Reflection.Instances.FromString.html#499" class="Bound">s</a> <a id="513" href="Agda.Builtin.List.html#199" class="InductiveConstructor Operator">∷</a> <a id="515" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a>
+</pre></body></html>
