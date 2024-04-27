@@ -374,3 +374,94 @@ make-rec = make-elim-with default-rec
 make-elim-n make-rec-n : ℕ → Name → Name → TC ⊤
 make-elim-n n = make-elim-with (default-elim into n)
 make-rec-n n = make-elim-with (default-rec into n)
+
+
+-- Examples
+-- be careful, they consume about ~10GB of memory
+-- TODO remove the warning after the fix
+-- module _ where private
+
+  -- open import Data.Nat.Base
+  -- unquoteDecl ℕ-elim = make-elim ℕ-elim (quote ℕ)
+  -- unquoteDecl ℕ-rec = make-rec ℕ-rec (quote ℕ)
+
+  -- _ : {ℓ : Level} {P : ℕ → 𝒰 ℓ}
+  --   → P 0
+  --   → Π[ n ꞉ ℕ ] (P n → P (suc n))
+  --   → Π[ n ꞉ ℕ ] P n
+  -- _ = ℕ-elim
+
+  -- _ : {ℓ : Level} {A : 𝒰 ℓ}
+  --   → A
+  --   → (ℕ → A → A)
+  --   → ℕ → A
+  -- _ = ℕ-rec
+
+  -- open import Data.Fin.Inductive.Base
+  -- unquoteDecl Fin-elim = make-elim Fin-elim (quote Fin)
+
+  -- _ : {ℓ : Level} {P : {@0 n : ℕ} → Fin n → 𝒰 ℓ}
+  --   → ∀ᴱ[ m ꞉ ℕ ] P fzero
+  --   → ∀ᴱ[ m ꞉ ℕ ] Π[ k ꞉ Fin m ] (P k → P (fsuc k))
+  --   → ∀ᴱ[ n ꞉ ℕ ] Π[ x ꞉ Fin n ] P x
+  -- _ = Fin-elim
+
+  -- open import Data.List.Base
+  -- unquoteDecl List-elim = make-elim List-elim (quote List)
+  -- unquoteDecl List-rec = make-elim-with (record default-rec {hide-cons-args = true}) List-rec (quote List)
+
+  -- _ : {ℓᵃ : Level} {A : 𝒰 ℓᵃ} {ℓ : Level} {P : List A → 𝒰 ℓ}
+  --   → P []
+  --   → Π[ y ꞉ A ] Π[ ys ꞉ List A ] (P ys → P (y ∷ ys))
+  --   → Π[ xs ꞉ List A ] P xs
+  -- _ = List-elim
+
+  -- _ : {ℓᵃ : Level} {A : 𝒰 ℓᵃ} {ℓ : Level} {B : 𝒰 ℓ}
+  --   → B
+  --   → ∀[ x ꞉ A ] ∀[ xs ꞉ List A ] (B → B)
+  --   → List A → B
+  -- _ = List-rec
+
+  -- open import Data.Vec.Inductive.Base
+  -- unquoteDecl Vec-elim = make-elim Vec-elim (quote Vec)
+
+  -- _ : {ℓᵃ : Level} {A : 𝒰 ℓᵃ} {ℓ : Level} {P : {@0 n : ℕ} → Vec A n → 𝒰 ℓ}
+  --   → P []
+  --   → ∀ᴱ[ m ꞉ ℕ ] Π[ y ꞉ A ] Π[ ys ꞉ Vec A m ] (P ys → P (y ∷ ys))
+  --   → ∀ᴱ[ n ꞉ ℕ ] Π[ xs ꞉ Vec A n ] P xs
+  -- _ = Vec-elim
+
+  -- open import Data.Id.Inductive
+  -- unquoteDecl Id-elim = make-elim-with default-elim-visible Id-elim (quote _＝ⁱ_)
+
+  -- _ : {ℓᵃ : Level} {A : 𝒰 ℓᵃ} {a : A} {ℓ : Level}
+  --     (P : Π[ b ꞉ A ] (a ＝ⁱ b → 𝒰 ℓ))
+  --   → P a reflⁱ
+  --   → Π[ x ꞉ A ] Π[ p ꞉ a ＝ⁱ x ] P x p
+  -- _ = Id-elim
+
+  -- open import Data.Truncation.Propositional.Base
+  -- unquoteDecl ∥-∥₁-elim = make-elim ∥-∥₁-elim (quote ∥_∥₁)
+  -- unquoteDecl ∥-∥₁-elim-prop = make-elim-n 1 ∥-∥₁-elim-prop (quote ∥_∥₁)
+
+  -- _ : {ℓ : Level} {A : 𝒰 ℓ} {ℓ′ : Level} {P : ∥ A ∥₁ → 𝒰 ℓ′}
+  --   → Π[ a ꞉ A ] P ∣ a ∣₁
+  --   → Π[ a ꞉ ∥ A ∥₁ ] Π[ pᵃ ꞉ P a ] Π[ b ꞉ ∥ A ∥₁ ] Π[ pᵇ ꞉ P b ] ＜ pᵃ ／ (λ i → P (squash₁ a b i)) ＼ pᵇ ＞
+  --   → Π[ x ꞉ ∥ A ∥₁ ] P x
+  -- _ = ∥-∥₁-elim
+
+  -- _ : {ℓ : Level} {A : 𝒰 ℓ} {ℓ′ : Level} {P : ∥ A ∥₁ → 𝒰 ℓ′}
+  --   → Π[ a ꞉ ∥ A ∥₁ ] is-prop (P a)
+  --   → Π[ a ꞉ A ] P ∣ a ∣₁
+  --   → Π[ x ꞉ ∥ A ∥₁ ] P x
+  -- _ = ∥-∥₁-elim-prop
+
+  -- open import Data.Tree.Binary.Base
+  -- unquoteDecl tree-elim = make-elim-with (record default-elim {hide-cons-args = true}) tree-elim (quote Tree)
+
+  -- _ : {ℓ : Level} {A : 𝒰 ℓ} {ℓ′ : Level} {P : Tree A → 𝒰 ℓ′}
+  --   → P empty
+  --   → ∀[ a ꞉ A ] P (leaf a)
+  --   → ∀[ t₁ ꞉ Tree A ] (P t₁ → ∀[ t₂ ꞉ Tree A ] (P t₂ → P (node t₁ t₂)))
+  --   → Π[ t ꞉ Tree A ] P t
+  -- _ = tree-elim
