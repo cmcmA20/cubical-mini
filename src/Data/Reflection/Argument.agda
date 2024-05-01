@@ -54,15 +54,17 @@ pattern varg t = vis-arg visible t
 pattern harg t = vis-arg hidden t
 pattern iarg t = vis-arg instance′ t
 
-pattern _v∷_ t xs = varg t ∷ xs
-pattern _h∷_ t xs = harg t ∷ xs
+pattern _v∷_  t xs = varg t ∷ xs
+pattern _h∷_  t xs = harg t ∷ xs
 pattern _hm∷_ t xs = arg (arg-info hidden (modality relevant _)) t ∷ xs
-pattern _i∷_ t xs = iarg t ∷ xs
+pattern _i∷_  t xs = iarg t ∷ xs
 
 infixr 30 _v∷_ _h∷_ _hm∷_ _i∷_
 
-argH0 argH argI argN : A → Arg A
+argH0 argI0 argN0 argH argI argN : A → Arg A
+argH0 = arg (arg-info hidden erased-modality)
+argI0 = arg (arg-info instance′ erased-modality)
+argN0 = arg (arg-info visible erased-modality)
 argH  = arg (arg-info hidden default-modality)
 argI  = arg (arg-info instance′ default-modality)
-argH0 = arg (arg-info hidden erased-modality)
 argN  = vis-arg visible

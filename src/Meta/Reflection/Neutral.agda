@@ -28,23 +28,35 @@ record Has-neutrals {ℓ} (A : Type ℓ) : Type (ℓsuc ℓ) where
 open Has-neutrals ⦃ ... ⦄ using (applyⁿᵉ) public
 
 module _ {ℓ} {A : Type ℓ} ⦃ a : Has-neutrals A ⦄ (d : A) ⦃ _ : Has-neutrals.neutral a d ⦄ where
-  infixl 20 _##_ _##ₙ_ _##ᵢ_ _##ₕ_
+  infixl 20 _##_ _##ₙ_ _##ᵢ_ _##ₕ_ _##ₙ₀_ _##ᵢ₀_ _##ₕ₀_
 
   -- Apply a neutral to an argument with specified information.
   _##_ : (arg : Arg A) → A
   _##_ x = Has-neutrals.applyⁿᵉ a d (x ∷ [])
 
--- Apply a neutral to an argument with the default information.
+  -- Apply a neutral to an argument with the default information.
   _##ₙ_ : (arg : A) → A
   _##ₙ_ x = _##_ (argN x)
+
+  -- Apply a neutral to an instance argument with the default modality.
+  _##ᵢ_ : (arg : A) → A
+  _##ᵢ_ x = _##_ (argI x)
 
   -- Apply a neutral to a hidden argument with the default modality.
   _##ₕ_ : (arg : A) → A
   _##ₕ_ x = _##_ (argH x)
 
-  -- Apply a neutral to an instance argument with the default modality.
-  _##ᵢ_ : (arg : A) → A
-  _##ᵢ_ x = _##_ (argI x)
+  -- Apply a neutral to an argument with erased modality.
+  _##ₙ₀_ : (arg : A) → A
+  _##ₙ₀_ x = _##_ (argN0 x)
+
+  -- Apply a neutral to an instance argument with erased modality.
+  _##ᵢ₀_ : (arg : A) → A
+  _##ᵢ₀_ x = _##_ (argI0 x)
+
+  -- Apply a neutral to a hidden argument with erased modality.
+  _##ₕ₀_ : (arg : A) → A
+  _##ₕ₀_ x = _##_ (argH0 x)
 
 instance
   Has-neutrals-Term : Has-neutrals Term
