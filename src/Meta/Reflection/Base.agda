@@ -39,7 +39,7 @@ open import Data.Reflection.Term
 open import Data.String.Base
 
 open import Agda.Builtin.Reflection public
-  using ( TC ; bindTC ; returnTC ; catchTC
+  using ( TC ; bindTC ; returnTC ; catchTC ; commitTC
         ; blockTC ; quoteTC ; unquoteTC ; quoteωTC
         ; reduce ; normalise ; unify )
   renaming ( inferType to infer-type
