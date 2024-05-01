@@ -3,7 +3,7 @@ module Data.List.Instances.Append where
 
 open import Foundations.Base
 
-open import Meta.Append
+open import Meta.Groupoid
 
 open import Data.List.Base as List
 
@@ -12,6 +12,8 @@ private variable
   A : Type ℓ
 
 instance
-  Append-List : Append (List A)
-  Append-List .mempty = []
-  Append-List ._<>_ = _++_
+  Reflexiveᵘ-List : Reflexiveᵘ (List A)
+  Reflexiveᵘ-List .mempty = []
+
+  Transitiveᵘ-List : Transitiveᵘ (List A)
+  Transitiveᵘ-List ._<>_ = _++_

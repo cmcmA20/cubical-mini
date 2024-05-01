@@ -3,7 +3,7 @@ module Meta.Reflection.Neutral where
 
 open import Foundations.Base
 
-open import Meta.Append
+open import Meta.Groupoid
 
 open import Data.Empty.Base
 open import Data.List.Base

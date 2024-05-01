@@ -3,7 +3,7 @@ module Data.Tree.Binary.Instances.Append where
 
 open import Foundations.Base
 
-open import Meta.Append
+open import Meta.Groupoid
 
 open import Data.Tree.Binary.Base
 
@@ -12,6 +12,8 @@ private variable
   A : Type ℓ
 
 instance
-  Append-Tree : Append (Tree A)
-  Append-Tree .mempty = empty
-  Append-Tree ._<>_   = node
+  Reflexiveᵘ-Tree : Reflexiveᵘ (Tree A)
+  Reflexiveᵘ-Tree .mempty = empty
+
+  Transitiveᵘ-Tree : Transitiveᵘ (Tree A)
+  Transitiveᵘ-Tree ._<>_ = node

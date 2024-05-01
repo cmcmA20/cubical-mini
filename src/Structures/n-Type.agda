@@ -70,7 +70,7 @@ n-path-refl : {X : n-Type ℓ n} → n-path {X = X} refl ＝ refl
 n-path-refl {X} _ _ .carrier = X .carrier
 n-path-refl {n} {X} i j .carrier-is-tr = θ j i where
   p = is-prop→pathᴾ (λ _ → is-of-hlevel-is-prop n) (X .carrier-is-tr) _
-  θ : Square p refl refl refl
+  θ : Square p reflₚ reflₚ refl
   θ = is-prop→squareᴾ (λ _ _ → is-of-hlevel-is-prop n) _ _ _ _
 
 @0 n-ua : ⌞ X ⌟ ≃ ⌞ Y ⌟ → X ＝ Y
@@ -87,15 +87,15 @@ opaque
   unfolding ua
   @0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
   n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
-    inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
-    inv p = ＝→≃ (ap carrier p)
+    inv′ : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
+    inv′ p = ＝→≃ (ap carrier p)
 
-    linv : ∀ {Y} → (inv {Y}) is-left-inverse-of n-ua
+    linv : ∀ {Y} → (inv′ {Y}) is-left-inverse-of n-ua
     linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
 
-    rinv : ∀ {Y} → (inv {Y}) is-right-inverse-of n-ua
-    rinv = Jₜ (λ y p → n-ua (inv p) ＝ p) path where
-      path : n-ua {X = X} (inv {X} refl) ＝ refl
+    rinv : ∀ {Y} → (inv′ {Y}) is-right-inverse-of n-ua
+    rinv = Jₜ (λ y p → n-ua (inv′ p) ＝ p) path where
+      path : n-ua {X = X} (inv′ {X} refl) ＝ refl
       path i j .carrier = ua.ε refl i j
       path i j .carrier-is-tr = is-prop→squareᴾ
         (λ i j → is-of-hlevel-is-prop
@@ -107,7 +107,7 @@ opaque
         i j
 
     isic : is-iso (n-ua {X = X} {Y = Y})
-    isic = iso inv rinv (linv {Y})
+    isic = iso inv′ rinv (linv {Y})
 
 -- FIXME disgusting! rewrite it without resorting to direct cube manipulations
 opaque

@@ -1,18 +1,25 @@
 {-# OPTIONS --safe #-}
 module Meta.Reflection.Base where
 
-open import Foundations.Base
+open import Foundations.Prelude
+  renaming ( refl to reflₚ
+           ; sym  to symₚ
+           ; _∙_  to _∙ₚ_
+           )
+  renaming ( _∘ˢ_ to _∘ₜˢ_
+           ; _∘_  to _∘ₜ_
+           )
 
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromString  public
 open import Meta.Literals.FromProduct public
 
-open import Meta.Append
 open import Meta.Effect.Map
 open import Meta.Effect.Idiom
 open import Meta.Effect.Bind public
 open import Meta.Effect.Alt
 open import Meta.Effect.Traversable
+open import Meta.Groupoid
 open import Meta.Reflection.Argument
 open import Meta.Reflection.Neutral
 
@@ -97,9 +104,6 @@ private variable
   B : Type ℓ′
   n : ℕ
 
-Fun : {ℓ ℓ′ : Level} (A : Type ℓ) (B : Type ℓ′) → Type (ℓ ⊔ ℓ′)
-Fun A B = A → B
-
 full-tank : ℕ
 full-tank = 1234567890
 
@@ -134,11 +138,11 @@ vlam : String → Term → Term
 vlam nam body = lam visible (abs nam body)
 
 infer-hidden : (m : ℕ) → Args → Args
-infer-hidden 0 xs = xs
+infer-hidden 0       xs = xs
 infer-hidden (suc n) xs = harg unknown ∷ infer-hidden n xs
 
 infer-tel : Telescope → Args
-infer-tel = map (map (λ _ → unknown) ∘ snd)
+infer-tel = map (map (λ _ → unknown) ∘ˢ snd)
 
 get-name : Term → Maybe Name
 get-name (def x _) = just x
@@ -146,7 +150,7 @@ get-name (con x _) = just x
 get-name _ = nothing
 
 “refl” : Term
-“refl” = def (quote refl) []
+“refl” = def (quote reflₚ) []
 
 “Path” : Term → Term → Term → Term
 “Path” A x y = def (quote Path) (unknown h∷ A v∷ x v∷ y v∷ [])
@@ -259,7 +263,7 @@ unapply-path tm = reduce tm >>= λ where
   _ → pure nothing
 
 get-boundary : Term → TC (Maybe (Term × Term))
-get-boundary tm = unapply-path tm >>= (pure ∘ (snd <$>_))
+get-boundary tm = unapply-path tm >>= (pure ∘ˢ (snd <$>_))
 
 
 debug! : Term → TC A
@@ -318,11 +322,11 @@ plus-term x y = def (quote _+′_) (x v∷ y v∷ [])
 
 leave : Telescope → Term → Term
 leave [] = id
-leave ((na , arg as _) ∷ xs) = leave xs ∘ lam (arg-vis as) ∘ abs na
+leave ((na , arg as _) ∷ xs) = leave xs ∘ˢ lam (arg-vis as) ∘ˢ abs na
 
 enter : Telescope → TC A → TC A
 enter [] = id
-enter ((na , ar) ∷ xs) = enter xs ∘ extend-context na ar
+enter ((na , ar) ∷ xs) = enter xs ∘ˢ extend-context na ar
 
 
 strip-invisible : Term → Term × List Arg-info
@@ -356,5 +360,5 @@ fv-dup = go 0 where
   go* nbind (arg _ x ∷ xs) =
     go nbind x List.++ go* nbind xs
 
-fv     = nub-slow _==_ ∘ fv-dup
-fv-ord = nub-unsafe _==_ ∘ insertion-sort (λ m n → m <ᵇ suc n) ∘ fv-dup
+fv     = nub-slow _==_ ∘ˢ fv-dup
+fv-ord = nub-unsafe _==_ ∘ˢ insertion-sort (λ m n → m <ᵇ suc n) ∘ˢ fv-dup

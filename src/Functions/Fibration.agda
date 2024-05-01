@@ -40,7 +40,9 @@ _/[_]_ {ℓ′} ℓ P B =
   Π[ x ꞉ B ]
   P (fibre f x)
 
-fibre-paths : {z@(a , p) z′@(a′ , p′) : fibre f y}
+fibre-paths : {A : Type ℓᵃ} {B : Type ℓᵇ}
+              {f : A → B} {y : B}
+              {z@(a , p) z′@(a′ , p′) : fibre f y}
             → z ＝ z′
             ≃ Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)
 fibre-paths {f} {y} {z = a , p} {z′ = a′ , p′} =
@@ -76,7 +78,9 @@ module @0 _ where
       (B → Σ[ T ꞉ Type (ℓ ⊔ ℓᵇ) ] P T)                                        ≃∎
 
   fibre-equality≃fibre-on-paths
-    : {z@(_ , p) z′@(_ , p′) : fibre f y}
+    : {A : Type ℓᵃ} {B : Type ℓᵇ}
+      {f : A → B} {y : B}
+      {z@(_ , p) z′@(_ , p′) : fibre f y}
     → z ＝ z′
     ≃ fibre (ap f) (p ∙ sym p′)
   fibre-equality≃fibre-on-paths = fibre-paths ∙ Σ-ap-snd (λ _ → tiltₑ)

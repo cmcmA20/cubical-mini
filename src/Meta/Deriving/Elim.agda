@@ -6,9 +6,9 @@ open import Foundations.Prelude
 
 open import Foundations.HLevel public
 
-open import Meta.Append
 open import Meta.Effect.Alt
 open import Meta.Effect.Traversable
+open import Meta.Groupoid
 open import Meta.Reflection.Argument
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral

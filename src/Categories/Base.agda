@@ -55,6 +55,12 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     H-Level-Hom : ∀ {x y} {k} → H-Level (2 + k) (Hom x y)
     H-Level-Hom = hlevel-basic-instance 2 hom-set′
 
+    Reflexive-Hom : Reflexive Hom
+    Reflexive-Hom .refl = id
+
+    Transitive-Hom : Transitive Hom Hom Hom
+    Transitive-Hom ._∙_ = flip _∘_
+
 
 private variable
   o h ℓ o′ h′ ℓ′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level

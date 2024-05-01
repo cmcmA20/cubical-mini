@@ -2,8 +2,15 @@
 module Meta.Show where
 
 open import Foundations.Base
+  renaming ( refl to reflₚ
+           ; sym  to symₚ
+           ; _∙_  to _∙ₚ_
+           )
+  renaming ( _∘ˢ_ to _∘ₜˢ_
+           ; _∘_  to _∘ₜ_
+           )
 
-open import Meta.Append
+open import Meta.Groupoid
 open import Meta.Literals.FromString
 
 open import Data.Bool.Base
@@ -22,9 +29,11 @@ instance
   From-string-ShowS .From-string.Constraint _ = ⊤
   From-string-ShowS .from-string s = showS (s <>_)
 
-  Append-ShowS : Append ShowS
-  Append-ShowS .Append.mempty                     = showS id
-  Append-ShowS .Append._<>_ (showS k₁) (showS k₂) = showS (k₁ ∘ k₂)
+  Reflexiveᵘ-ShowS : Reflexiveᵘ ShowS
+  Reflexiveᵘ-ShowS .mempty = showS id
+
+  Transitiveᵘ-ShowS : Transitiveᵘ ShowS
+  Transitiveᵘ-ShowS ._<>_ (showS k₁) (showS k₂) = showS (k₁ ∘ˢ k₂)
 
 
 record Show {ℓ} (T : Type ℓ) : Type ℓ where

@@ -4,167 +4,131 @@ module Meta.Groupoid where
 open import Foundations.Prelude
   renaming ( _∙_  to _∙ₚ_
            ; _∘ˢ_ to _∘ₜˢ_
+           ; _∘_  to _∘ₜ_
            ; refl to reflₚ
            ; sym  to symₚ
            )
 
-open import Meta.Effect.Alt
-open import Meta.Reflection.Base
-open import Meta.Reflection.Neutral
-open import Meta.Reflection.Signature
-
-open import Data.Bool.Base
-open import Data.List.Base
-open import Data.List.Instances.FromProduct
-open import Data.Maybe.Base
-open import Data.Reflection.Abs
-open import Data.Reflection.Argument
-open import Data.Reflection.Error
-open import Data.Reflection.Fixity
-open import Data.Reflection.Instances.FromString
-open import Data.Reflection.Literal
-open import Data.Reflection.Meta
-open import Data.Reflection.Name
-open import Data.Reflection.Term
-
-data Size : 𝒰 where
-  small large : Size
-
--- TODO abstract again for use with categories
-Relₛ² : Size → 𝒰ω
-Relₛ² small = ∀{ℓ} {A : 𝒰 ℓ} → A    → A     → 𝒰 ℓ
-Relₛ² large = ∀{ℓ ℓ′}         → 𝒰 ℓ → 𝒰 ℓ′ → 𝒰 (ℓ ⊔ ℓ′)
-
-Neutralₛ : (s : Size) → Relₛ² s → 𝒰ω
-Neutralₛ small _~_ = ∀ {ℓ} {A : 𝒰 ℓ} {x : A}    → x ~ x
-Neutralₛ large _~_ = ∀ {ℓ}            {A : 𝒰 ℓ} → A ~ A
-
--- `ₐ` for automatic? FIXME naming
-
-record Refl (s : Size) (_~_ : Relₛ² s) : 𝒰ω where
+record Reflexive {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ : Level}
+  (_~_ : A → A → 𝒰 ℓ) : 𝒰 (ℓᵃ ⊔ ℓ) where
   no-eta-equality
-  field refl′ : Neutralₛ s _~_
+  field refl : {x : A} → x ~ x
 
-open Refl ⦃ ... ⦄ public
+open Reflexive ⦃ ... ⦄ public
+
+private variable
+  ℓᵃ ℓᵇ ℓᶜ : Level
+  A : 𝒰 ℓᵃ
+  B : 𝒰 ℓᵇ
+  C : 𝒰 ℓᶜ
+  ℓ : Level
 
 instance
-  Refl-path : Refl small _＝_
-  Refl-path .refl′ = reflₚ
+  Reflexive-Path : Reflexive (Path A)
+  Reflexive-Path .refl = reflₚ
 
-  Refl-Fun : Refl large λ A B → A → B
-  Refl-Fun .refl′ = id
+  Reflexive-Fun : Reflexive (Fun {ℓ})
+  Reflexive-Fun .refl = id
 
-  Refl-≃ : Refl large _≃_
-  Refl-≃ .refl′ = idₑ
+  Reflexive-≃ : Reflexive (_≃_ {ℓ})
+  Reflexive-≃ .refl = idₑ
 
-  -- FIXME
-  Refl-≃ᴱ : Refl large _≃ᴱ_
-  Refl-≃ᴱ .refl′ = ≃→≃ᴱ idₑ
+  Reflexive-≃ᴱ : Reflexive (_≃ᴱ_ {ℓ})
+  Reflexive-≃ᴱ .refl = ≃→≃ᴱ idₑ
 
-  Refl-iso : Refl large Iso
-  Refl-iso .refl′ = idᵢ
+  Reflexive-Iso : Reflexive (Iso {ℓ})
+  Reflexive-Iso .refl = idᵢ
 
-private
-
-  try-sized : Term → Term → Term → TC ⊤
-  try-sized s r hole = do
-    (mv , sol) ← new-meta′ $ it Refl ##ₙ s ##ₙ r
-    (`cmp ∷ _) ← get-instances mv
-      where _ → type-error [ "No (or too many) instances" ]
-    unify sol `cmp
-    unify hole $ it refl′ ##ₕ s ##ₕ r ##ᵢ sol
-
-  decompose-as-path : Term → TC Term
-  decompose-as-path (def (quote Pathᴾ) (l h∷ T v∷ _ v∷ _ v∷ [])) = do
-    pure $ it _＝_
-  decompose-as-path (def (quote _＝_) (l h∷ T h∷ _ v∷ _ v∷ [])) = do
-    pure $ it _＝_
-  decompose-as-path t = type-error [ "Target is not a path: " , term-err t ]
-
-  decompose-as-fun : Term → TC Term
-  decompose-as-fun t@(pi (varg x) (abs _ _)) = do
-    unify t $ it Fun ##ₙ x ##ₙ x
-    pure $ it Fun
-  decompose-as-fun t = type-error [ "Target is not a function: " , term-err t ]
-
-  decompose-as-other : Term → TC Term
-  decompose-as-other (def r (_ h∷ _ h∷ _ v∷ _ v∷ [])) = pure $ def r []
-  decompose-as-other t =
-    type-error [ "Target is not an application of a binary relation: " , term-err t ]
-
-  refl-macro : Term → TC ⊤
-  refl-macro hole = with-reduce-defs (false , [ quote _≃_ , quote Iso , quote _≅_ ]) do
-    ty ← (infer-type hole >>= reduce) >>= wait-just-a-bit
-    debug-print "tactic.groupoid" 20 [ "Goal: " , term-err ty ]
-    r ← decompose-as-path ty <|> decompose-as-fun ty <|> decompose-as-other ty
-    try-sized (it small) r hole <|> try-sized (it large) r hole
-
-macro refl = refl-macro
-
-
-Concatₛ : (s : Size) → Relₛ² s → 𝒰ω
-Concatₛ small _~_ = ∀ {ℓ} {A : 𝒰 ℓ} {x y z : A}                        → x ~ y → y ~ z → x ~ z
-Concatₛ large _~_ = ∀ {ℓ ℓ′ ℓ″}      {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {C : 𝒰 ℓ″} → A ~ B → B ~ C → A ~ C
-
-Concat⁻ₛ : (s : Size) → Relₛ² s → 𝒰ω
-Concat⁻ₛ small _~_ = ∀ {ℓ} {A : 𝒰 ℓ} {x y z : A}                        → y ~ z → x ~ y → x ~ z
-Concat⁻ₛ large _~_ = ∀ {ℓ ℓ′ ℓ″}      {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {C : 𝒰 ℓ″} → B ~ C → A ~ B → A ~ C
-
-private
-  flipₛ : (s : Size) {r : Relₛ² s} → Concatₛ s r → Concat⁻ₛ s r
-  flipₛ small = λ f p q → f q p
-  flipₛ large = λ f p q → f q p
-
-record Compose (s : Size) (_~_ : Relₛ² s) : 𝒰ω where
+-- "untyped" raw reflexivity is just being pointed
+record Reflexiveᵘ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
   no-eta-equality
-  infixr 30 _∙_
-  field _∙_ : Concatₛ s _~_
+  field mempty : A
 
-  infixr 9 _∘ˢ_
-  _∘ˢ_ : Concat⁻ₛ s _~_
-  _∘ˢ_ = flipₛ _ _∙_
-
-open Compose ⦃ ... ⦄ public
+open Reflexiveᵘ ⦃ ... ⦄ public
 
 instance
-  Compose-path : Compose small _＝_
-  Compose-path ._∙_  = _∙ₚ_
-
-  Compose-Fun : Compose large (λ {ℓ} {ℓ′} (A : 𝒰 ℓ) (B : 𝒰 ℓ′) → A → B)
-  Compose-Fun ._∙_ f g = g ∘ₜˢ f
-
-  Compose-≃ : Compose large _≃_
-  Compose-≃ ._∙_  = _∙ₑ_
-
-  Compose-≃ᴱ : Compose large _≃ᴱ_
-  Compose-≃ᴱ ._∙_  = _∙ᴱₑ_
-
-  Compose-iso : Compose large Iso
-  Compose-iso ._∙_  = _∙ᵢ_
+  Reflexiveᵘ→Reflexive : ⦃ Reflexiveᵘ A ⦄ → Reflexive {A = A} λ _ _ → A
+  Reflexiveᵘ→Reflexive .refl = mempty
+  {-# INCOHERENT Reflexiveᵘ→Reflexive #-}
 
 
-Inverseₛ : (s : Size) → Relₛ² s → 𝒰ω
-Inverseₛ small _~_ = ∀ {ℓ} {A : 𝒰 ℓ} {x y : A}      → x ~ y → y ~ x
-Inverseₛ large _~_ = ∀ {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′} → A ~ B → B ~ A
-
-record Invertible (s : Size) (_~_ : Relₛ² s) : 𝒰ω where
+record Symmetric {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ : Level}
+  (I : A → B → 𝒰 ℓ) (O : B → A → 𝒰 ℓ′) : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ′) where
   no-eta-equality
   infix 90 _⁻¹
-  field _⁻¹  : Inverseₛ  s _~_
+  field _⁻¹ : {x : A} {y : B} → I x y → O y x
 
   sym = _⁻¹
 
-open Invertible ⦃ ... ⦄ public
+open Symmetric ⦃ ... ⦄ public
 
 instance
-  Inv-path : Invertible small _＝_
-  Inv-path ._⁻¹ = symₚ
+  Symmetric-Path : Symmetric (Path A) (Path A)
+  Symmetric-Path ._⁻¹ = symₚ
 
-  Inv-≃ : Invertible large _≃_
-  Inv-≃ ._⁻¹ = _ₑ⁻¹
+  Symmetric-≃ : Symmetric (_≃_ {ℓᵃ} {ℓᵇ}) _≃_
+  Symmetric-≃ ._⁻¹ = _ₑ⁻¹
 
-  Inv-≃ᴱ : Invertible large _≃ᴱ_
-  Inv-≃ᴱ ._⁻¹ = _ᴱₑ⁻¹
+  Symmetric-≃ᴱ : Symmetric (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) _≃ᴱ_
+  Symmetric-≃ᴱ ._⁻¹ = _ᴱₑ⁻¹
 
-  Inv-iso : Invertible large Iso
-  Inv-iso ._⁻¹ = _ᵢ⁻¹
+  Symmetric-Iso : Symmetric (Iso {ℓᵃ} {ℓᵇ}) Iso
+  Symmetric-Iso ._⁻¹ = _ᵢ⁻¹
+
+-- "untyped" raw symmetry is just having an automorphism
+record Symmetricˢ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
+  no-eta-equality
+  field inv : A → A
+
+open Symmetricˢ ⦃ ... ⦄ public
+
+instance
+  Symmetricˢ→Symmetric
+    : ⦃ Symmetricˢ A ⦄
+    → Symmetric {A = ⊤} {B = ⊤} (λ _ _ → A) (λ _ _ → A)
+  Symmetricˢ→Symmetric ._⁻¹ = inv
+  {-# INCOHERENT Symmetricˢ→Symmetric #-}
+
+
+record Transitive {ℓᵃ ℓᵇ ℓᶜ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ} {ℓl ℓr ℓo : Level}
+  (L : A → B → 𝒰 ℓl) (R : B → C → 𝒰 ℓr) (O : A → C → 𝒰 ℓo) : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓᶜ ⊔ ℓl ⊔ ℓr ⊔ ℓo) where
+  no-eta-equality
+  infixr 30 _∙_
+  field _∙_ : {x : A} {y : B} {z : C} → L x y → R y z → O x z
+
+  infixr 9 _∘ˢ_
+  _∘ˢ_ : {x : A} {y : B} {z : C} → R y z → L x y → O x z
+  _∘ˢ_ = flip _∙_
+
+open Transitive ⦃ ... ⦄ public
+
+instance
+  Transitive-Path : Transitive (Path A) (Path A) (Path A)
+  Transitive-Path ._∙_ = _∙ₚ_
+
+  Transitive-Fun : Transitive (Fun {ℓᵃ} {ℓᵇ}) (Fun {ℓᵇ = ℓᶜ}) Fun
+  Transitive-Fun ._∙_ f g = g ∘ₜˢ f
+
+  Transitive-≃ : Transitive (_≃_ {ℓᵃ} {ℓᵇ}) (_≃_ {ℓ' = ℓᶜ}) _≃_
+  Transitive-≃ ._∙_  = _∙ₑ_
+
+  Transitive-≃ᴱ : Transitive (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) (_≃ᴱ_ {ℓ′ = ℓᶜ}) _≃ᴱ_
+  Transitive-≃ᴱ ._∙_  = _∙ᴱₑ_
+
+  Transitive-Iso : Transitive (Iso {ℓᵃ} {ℓᵇ}) (Iso {ℓ′ = ℓᶜ}) Iso
+  Transitive-Iso ._∙_  = _∙ᵢ_
+
+-- "untyped" raw transitivity is just having a binary operation
+record Transitiveᵘ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
+  no-eta-equality
+  infixr 6 _<>_
+  field _<>_ : A → A → A
+
+open Transitiveᵘ ⦃ ... ⦄ public
+
+instance
+  Transitiveᵘ→Transitive
+    : ⦃ Transitiveᵘ A ⦄
+    → Transitive {A = ⊤} {B = ⊤} {C = ⊤} (λ _ _ → A) (λ _ _ → A) (λ _ _ → A)
+  Transitiveᵘ→Transitive ._∙_ = _<>_
+  {-# INCOHERENT Transitiveᵘ→Transitive #-}

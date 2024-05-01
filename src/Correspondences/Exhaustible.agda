@@ -3,7 +3,6 @@ module Correspondences.Exhaustible where
 
 open import Meta.Prelude
 
-open import Correspondences.Base public
 open import Correspondences.Decidable
 
 open import Data.Dec as Dec
