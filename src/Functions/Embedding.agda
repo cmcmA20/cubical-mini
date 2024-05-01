@@ -150,17 +150,17 @@ is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
 ≅→↪ = second is-iso→is-embedding
 
 instance
-  Refl-Inj : Refl large _↣_
-  Refl-Inj .refl′ = id , id
+  Reflexive-Inj : Reflexive (_↣_ {ℓ})
+  Reflexive-Inj .refl = id , id
 
-  Refl-Emb : Refl large _↪_
-  Refl-Emb .refl′ = id , is-equiv→is-embedding id-is-equiv
+  Reflexive-Emb : Reflexive (_↪_ {ℓ})
+  Reflexive-Emb .refl = id , is-equiv→is-embedding id-is-equiv
 
-  Compose-Inj : Compose large _↣_
-  Compose-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ f , f-inj ∘ g-inj
+  Transitive-Inj : Transitive (_↣_ {ℓ} {ℓ′}) (_↣_ {ℓ′ = ℓ″}) _↣_
+  Transitive-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ f , f-inj ∘ g-inj
 
-  Compose-Emb : Compose large _↪_
-  Compose-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
+  Transitive-Emb : Transitive (_↪_ {ℓ} {ℓ′}) (_↪_ {ℓ′ = ℓ″}) _↪_
+  Transitive-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
     ≃→is-of-hlevel 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
 
 opaque

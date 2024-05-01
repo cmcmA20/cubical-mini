@@ -2,10 +2,17 @@
 module Meta.Record where
 
 open import Foundations.Base
+  renaming ( refl to reflₚ
+           ; sym  to symₚ
+           ; _∙_  to _∙ₚ_
+           )
+  renaming ( _∘ˢ_ to _∘ₜˢ_
+           ; _∘_  to _∘ₜ_
+           )
 open import Foundations.Isomorphism public
 
-open import Meta.Append
 open import Meta.Effect.Foldable
+open import Meta.Groupoid
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
@@ -81,7 +88,7 @@ undo-clause (r-field , sel-path) = clause
 redo-clause : Name × List Name → Clause
 redo-clause (r-field , sel-path) = clause
   (("rec" , argN unknown) ∷ [])
-  (argN (proj (quote fst)) ∷ argN (var 0) ∷ map (argN ∘ proj) sel-path)
+  (argN (proj (quote fst)) ∷ argN (var 0) ∷ map (argN ∘ˢ proj) sel-path)
   (def r-field (var 0 [] v∷ []))
 
 undo-redo-clause : Name × List Name → Clause
@@ -95,7 +102,7 @@ redo-undo-clause : Name × List Name → Clause
 redo-undo-clause (r-field , sel-path) = clause
   (("rec" , argN unknown) ∷ ("i" , argN (quoteTerm I)) ∷ [])
   (  [ argN (proj (quote snd)) , argN (proj (quote is-iso.rinv)) , argN (var 1) , argN (var 0) ]
-  <> map (argN ∘ proj) sel-path)
+  <> map (argN ∘ˢ proj) sel-path)
   (fold-r (λ n t → def n (t v∷ [])) (var 1 []) (reverse sel-path))
 
 pi-term→sigma : Term → TC Term

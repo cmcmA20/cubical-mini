@@ -296,7 +296,7 @@ record is-invertible (f : Hom a b) : Type h where
 
   open Inverses inverses public
 
-  op : is-invertible inv
+  op : is-invertible _
   op .inv = f
   op .inverses .inv-l = inv-r inverses
   op .inverses .inv-r = inv-l inverses

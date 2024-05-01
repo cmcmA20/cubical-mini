@@ -2,6 +2,7 @@
 module Correspondences.Base where
 
 open import Meta.Prelude
+  hiding (Reflexive; Symmetric; Transitive)
 
 open import Data.HVec.Base public
 

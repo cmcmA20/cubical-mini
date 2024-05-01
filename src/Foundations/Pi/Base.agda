@@ -45,6 +45,9 @@ module _ where
     B : Type ℓᵇ
     C : Type ℓᶜ
 
+  Fun : (A : Type ℓᵃ) (B : Type ℓᵇ) → Type (ℓᵃ ⊔ ℓᵇ)
+  Fun A B = A → B
+
   flip : {C : A → B → Type ℓᶜ} → (∀ a b → C a b) → (∀ b a → C a b)
   flip f b a = f a b
   {-# INLINE flip #-}

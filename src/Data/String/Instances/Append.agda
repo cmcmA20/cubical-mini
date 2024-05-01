@@ -1,11 +1,13 @@
 {-# OPTIONS --safe #-}
 module Data.String.Instances.Append where
 
-open import Meta.Append
+open import Meta.Groupoid
 
 open import Data.String.Base as String
 
 instance
-  Append-String : Append String
-  Append-String .Append.mempty = ""
-  Append-String .Append._<>_ = _++ₛ_
+  Reflexiveᵘ-String : Reflexiveᵘ String
+  Reflexiveᵘ-String .mempty = ""
+
+  Transitiveᵘ-String : Transitiveᵘ String
+  Transitiveᵘ-String ._<>_ = _++ₛ_

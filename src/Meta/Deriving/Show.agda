@@ -2,9 +2,16 @@
 module Meta.Deriving.Show where
 
 open import Foundations.Base
+  renaming ( refl to reflₚ
+           ; sym  to symₚ
+           ; _∙_  to _∙ₚ_
+           )
+  renaming ( _∘ˢ_ to _∘ₜˢ_
+           ; _∘_  to _∘ₜ_
+           )
 
-open import Meta.Append
 open import Meta.Effect.Traversable
+open import Meta.Groupoid
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
@@ -42,7 +49,7 @@ private
 
   -- Parse a name to a list of its parts.
   name→parts : String → List Name-part
-  name→parts = go full-tank ∘ string→list where
+  name→parts = go full-tank ∘ˢ string→list where
     not-under : Char → Bool
     not-under '_' = false
     not-under _   = true
@@ -139,7 +146,7 @@ private
     let argp = suc-precedence thisp
 
     let
-      shown₀ = map (itₙ shows-prec (it unrelated) ∘ var₀) ixs
+      shown₀ = map (itₙ shows-prec (it unrelated) ∘ˢ var₀) ixs
       parts  = assoc-name-parts thisa thisp argp (name→parts con-str)
 
       holes  = length (filter (λ { (hole _) → true ; _ → false }) parts)
@@ -171,7 +178,7 @@ private
     pure $
       clause (("prec" , argN (it Precedence)) ∷ tele)
         [ argN (var (length tele))
-        , argN (con conm (map (argN ∘ var) ixs))
+        , argN (con conm (map (argN ∘ˢ var) ixs))
         ]
         tm
 
