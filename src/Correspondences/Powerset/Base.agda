@@ -5,8 +5,6 @@ open import Meta.Prelude
 
 open import Meta.Membership
 
-open import Correspondences.Base public
-
 open import Data.Empty as ⊥
 open import Data.Sum.Base
 open import Data.Truncation.Propositional as ∥-∥₁

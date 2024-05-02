@@ -18,8 +18,8 @@ record ∞-Magma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   infixr 20 _⋆_
 
   instance
-    Transitiveᵘ-∞-Magma-on : Transitiveᵘ X
-    Transitiveᵘ-∞-Magma-on ._<>_ = _⋆_
+    Transᵘ-∞-Magma-on : Transᵘ X
+    Transᵘ-∞-Magma-on ._<>_ = _⋆_
 
 record ∞-magma-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
@@ -52,8 +52,8 @@ record is-n-magma (n : HLevel) {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ
     H-Level-magma-carrier : H-Level n A
     H-Level-magma-carrier .H-Level.has-of-hlevel = has-is-of-hlevel
 
-    Transitiveᵘ-is-n-magma : Transitiveᵘ A
-    Transitiveᵘ-is-n-magma ._<>_ = _⋆_
+    Transᵘ-is-n-magma : Transᵘ A
+    Transᵘ-is-n-magma ._<>_ = _⋆_
 
 unquoteDecl is-n-magma-iso = declare-record-iso is-n-magma-iso (quote is-n-magma)
 

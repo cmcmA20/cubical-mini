@@ -148,3 +148,12 @@ module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where
 
   line→≃ : L ≃ R
   line→≃ = transport-line-equiv i0
+
+
+-- TODO is it really necessary to have these? Maybe wait for modalities
+-- this is the general form
+_stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S stable A = A ≃ S A
+
+_weakly-stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S weakly-stable A = S A → A

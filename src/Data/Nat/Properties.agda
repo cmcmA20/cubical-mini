@@ -4,7 +4,9 @@ module Data.Nat.Properties where
 open import Foundations.Prelude
   hiding ( refl; sym; _∙_ )
 
-open import Meta.Groupoid
+open import Correspondences.Binary.Reflexive
+open import Correspondences.Binary.Symmetric
+open import Correspondences.Binary.Transitive
 
 open import Data.Dec.Base
 open import Data.Empty.Base

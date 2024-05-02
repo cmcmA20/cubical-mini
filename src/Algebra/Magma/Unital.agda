@@ -32,8 +32,8 @@ record is-unital-magma {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
     id-r : Unital-right id _⋆_
 
   instance
-    Reflexiveᵘ-is-unital-magma : Reflexiveᵘ A
-    Reflexiveᵘ-is-unital-magma .mempty = id
+    Reflᵘ-is-unital-magma : Reflᵘ A
+    Reflᵘ-is-unital-magma .mempty = id
 
 unquoteDecl is-unital-magma-iso = declare-record-iso is-unital-magma-iso (quote is-unital-magma)
 

@@ -1,47 +1,39 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Base where
 
-open import Meta.Prelude
-  hiding (Reflexive; Symmetric; Transitive)
+open import Foundations.Prelude
 
-open import Data.HVec.Base public
+open import Meta.Underlying
 
-private variable
-  ℓ ℓ′ ℓᵃ : Level
-  A : Type ℓᵃ
-  n : HLevel
+open import Data.HVec.Base
 
--- this is the general form
-_stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
-S stable A = A ≃ S A
+-- Correspondence valued in arbitrary structure
+SCorr
+  : (arity : ℕ) {ls : Levels arity} (As : Types _ ls)
+    {ℓ : Level} (U : Type ℓ) ⦃ u : Underlying U ⦄
+  → Type (ℓ ⊔ ℓsup _ ls)
+SCorr arity As U = Arrows arity As U
 
-_weakly-stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
-S weakly-stable A = S A → A
+SCorr⁰ = SCorr 0
+SCorr¹ = SCorr 1
+SCorr² = SCorr 2
+SCorr³ = SCorr 3
+SCorr⁴ = SCorr 4
+SCorr⁵ = SCorr 5
 
+SPred = SCorr¹
 
--- Binary homogeneous correspondences
+-- Type-valued correspondence
+Corr
+  : (arity : ℕ) {ls : Levels arity} (As : Types _ ls) (ℓ : Level)
+  → Type (ℓsuc ℓ ⊔ ℓsup _ ls)
+Corr arity As ℓ = SCorr arity As (Type ℓ)
 
-Reflexive : Corr² (A , A) ℓ → Type _
-Reflexive _~_ = ∀ {x} → x ~ x
+Corr⁰ = Corr 0
+Corr¹ = Corr 1
+Corr² = Corr 2
+Corr³ = Corr 3
+Corr⁴ = Corr 4
+Corr⁵ = Corr 5
 
-Symmetric : Corr² (A , A) ℓ → Type _
-Symmetric _~_ = ∀ {x y} → (x ~ y) → (y ~ x)
-
-Transitive : Corr² (A , A) ℓ → Type _
-Transitive _~_ = ∀ {x y z} → (x ~ y) → (y ~ z) → (x ~ z)
-
-record Equivalence (_~_ : Corr² (A , A) ℓ) : Type (level-of-type A ⊔ ℓ) where
-  field
-    reflᶜ : Reflexive _~_
-    symᶜ  : Symmetric _~_
-    _∙ᶜ_  : Transitive _~_
-
-record is-congruence (_~_ : Corr² (A , A) ℓ) : Type (level-of-type A ⊔ ℓ) where
-  field
-    equivalenceᶜ : Equivalence _~_
-    has-propᶜ : ∀ {x y} → is-prop (x ~ y)
-
-  instance
-    H-Level-~ : ∀ {x y} → H-Level (suc n) (x ~ y)
-    H-Level-~ = hlevel-prop-instance has-propᶜ
-  open Equivalence equivalenceᶜ public
+Pred = Corr¹

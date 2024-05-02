@@ -1,9 +1,8 @@
 {-# OPTIONS --safe #-}
 module Correspondences.Separated where
 
-open import Foundations.Prelude
+open import Meta.Prelude
 
-open import Correspondences.Base public
 open import Correspondences.Classical
 
 import Data.Empty.Base as ⊥

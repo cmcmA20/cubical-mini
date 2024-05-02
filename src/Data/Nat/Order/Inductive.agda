@@ -10,8 +10,11 @@ open import Foundations.Prelude
            ; _∙_  to _∙ₚ_
            )
 
-open import Meta.Groupoid
 open import Meta.Variadic
+
+open import Correspondences.Binary.Reflexive
+open import Correspondences.Binary.Symmetric
+open import Correspondences.Binary.Transitive
 
 open import Data.Dec.Base
 open import Data.Empty.Base

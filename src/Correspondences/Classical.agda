@@ -5,8 +5,6 @@ open import Meta.Prelude
 
 open import Meta.Effect.Bind
 
-open import Correspondences.Base public
-
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 

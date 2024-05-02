@@ -4,7 +4,6 @@ module Data.Dec.Path where
 open import Meta.Prelude
 
 open import Meta.Extensionality
-open import Meta.Groupoid
 
 open import Data.Empty.Base as ⊥
 open import Data.Unit.Base

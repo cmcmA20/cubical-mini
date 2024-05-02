@@ -12,11 +12,12 @@ open import Foundations.Base
 open import Foundations.Isomorphism public
 
 open import Meta.Effect.Foldable
-open import Meta.Groupoid
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
 open import Meta.Reflection.Base
+
+open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.List.Base as List

@@ -19,9 +19,10 @@ open import Meta.Effect.Idiom
 open import Meta.Effect.Bind public
 open import Meta.Effect.Alt
 open import Meta.Effect.Traversable
-open import Meta.Groupoid
 open import Meta.Reflection.Argument
 open import Meta.Reflection.Neutral
+
+open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.Empty.Base

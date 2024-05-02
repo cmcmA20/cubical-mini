@@ -33,8 +33,8 @@ record is-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
     id-r : Unital-right id _⋆_
 
   instance
-    Reflexiveᵘ-is-monoid : Reflexiveᵘ A
-    Reflexiveᵘ-is-monoid .mempty = id
+    Reflᵘ-is-monoid : Reflᵘ A
+    Reflᵘ-is-monoid .mempty = id
 
   has-unital-magma : is-unital-magma _⋆_
   has-unital-magma .is-unital-magma.has-magma = has-magma

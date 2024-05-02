@@ -4,8 +4,6 @@ module Meta.Underlying where
 open import Foundations.Prelude
   hiding (_$_)
 
-open import Meta.Reflection.Base
-
 open import Data.Bool.Base
 open import Data.Empty.Base
 open import Data.List.Instances.FromProduct

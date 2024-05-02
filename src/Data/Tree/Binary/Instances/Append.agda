@@ -3,7 +3,8 @@ module Data.Tree.Binary.Instances.Append where
 
 open import Foundations.Base
 
-open import Meta.Groupoid
+open import Correspondences.Binary.Reflexive
+open import Correspondences.Binary.Transitive
 
 open import Data.Tree.Binary.Base
 
@@ -12,8 +13,8 @@ private variable
   A : Type ℓ
 
 instance
-  Reflexiveᵘ-Tree : Reflexiveᵘ (Tree A)
-  Reflexiveᵘ-Tree .mempty = empty
+  Reflᵘ-Tree : Reflᵘ (Tree A)
+  Reflᵘ-Tree .mempty = empty
 
-  Transitiveᵘ-Tree : Transitiveᵘ (Tree A)
-  Transitiveᵘ-Tree ._<>_ = node
+  Transᵘ-Tree : Transᵘ (Tree A)
+  Transᵘ-Tree ._<>_ = node

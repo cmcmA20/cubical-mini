@@ -2,7 +2,6 @@
 module Data.List.Correspondences.Unary.Any where
 
 open import Prelude
-open import Correspondences.Base
 open import Correspondences.Decidable
 open import Data.List.Base
 open import Data.Empty.Base

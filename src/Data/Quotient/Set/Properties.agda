@@ -6,7 +6,7 @@ open import Meta.Prelude
 open import Meta.Effect.Map
 open import Meta.Extensionality
 
-open import Correspondences.Base
+open import Correspondences.Binary.Equivalence
 open import Correspondences.Discrete
 
 open import Data.Dec.Base as Dec
@@ -51,10 +51,10 @@ module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
 
   Code : A → A / R → Prop ℓ
   Code x = elim hlevel! (λ y → el! $ R x y) λ y z r →
-    ext (prop-extₑ! (_∙ᶜ r) (_∙ᶜ symᶜ r))
+    ext (prop-extₑ! (_∙ r) (_∙ r ⁻¹))
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
-  encode x _ p = subst ⌞ Code x ⌟ p reflᶜ
+  encode x _ p = subst ⌞ Code x ⌟ p refl
 
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
   decode = elim! ∘ glue/
@@ -70,10 +70,10 @@ module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
 equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   open Equivalence R-eq
   ∥R∥₁-c : is-congruence _
-  ∥R∥₁-c .is-congruence.equivalenceᶜ .reflᶜ = ∣ reflᶜ ∣₁
-  ∥R∥₁-c .is-congruence.equivalenceᶜ .symᶜ = map symᶜ
-  ∥R∥₁-c .is-congruence.equivalenceᶜ ._∙ᶜ_ = elim! λ a b → ∣ a ∙ᶜ b ∣₁
-  ∥R∥₁-c .is-congruence.has-propᶜ = hlevel!
+  ∥R∥₁-c .is-congruence.equivalence .reflexive .refl = ∣ refl ∣₁
+  ∥R∥₁-c .is-congruence.equivalence .symmetric ._⁻¹ = map sym
+  ∥R∥₁-c .is-congruence.equivalence .transitive ._∙_ = elim! λ a b → ∣ a ∙ b ∣₁
+  ∥R∥₁-c .is-congruence.has-prop = hlevel!
 
 /₂-is-discrete
   : (R-c : is-congruence R)
