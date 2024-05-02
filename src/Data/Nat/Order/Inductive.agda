@@ -4,8 +4,11 @@ module Data.Nat.Order.Inductive where
 open import Foundations.Prelude
   renaming ( _$_  to _$ₜ_
            ; _$²_ to _$ₜ²_
+
+           ; refl to reflₚ
+           ; sym  to symₚ
+           ; _∙_  to _∙ₚ_
            )
-  hiding (refl; sym; _∙_)
 
 open import Meta.Groupoid
 open import Meta.Variadic

@@ -3,6 +3,9 @@ module Functions.Surjection where
 
 open import Meta.Prelude
 open import Meta.Effect.Bind
+open import Meta.Extensionality
+
+open import Functions.Embedding
 
 open import Data.Truncation.Propositional.Base
 open import Data.Truncation.Propositional.Instances.Bind
@@ -61,3 +64,9 @@ is-left-inverse-of→is-surjective {g} s b = ∣ g b , s b ∣₁
 
 is-equiv→is-surjective : is-equiv f → is-surjective f
 is-equiv→is-surjective r y = ∣ equiv-proof r y .fst ∣₁
+
+instance
+  Extensional-↠
+    : {A : Type ℓ} ⦃ sb : Extensional (A → B) ℓ″ ⦄
+    → Extensional (A ↠ B) ℓ″
+  Extensional-↠ ⦃ sb ⦄ = Σ-prop→extensional! sb
