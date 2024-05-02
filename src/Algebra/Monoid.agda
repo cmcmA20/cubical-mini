@@ -32,6 +32,10 @@ record is-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
     id-l : Unital-left  id _⋆_
     id-r : Unital-right id _⋆_
 
+  instance
+    Reflexiveᵘ-is-monoid : Reflexiveᵘ A
+    Reflexiveᵘ-is-monoid .mempty = id
+
   has-unital-magma : is-unital-magma _⋆_
   has-unital-magma .is-unital-magma.has-magma = has-magma
   has-unital-magma .is-unital-magma.id = id
@@ -52,7 +56,7 @@ instance opaque
 
 module _ {_✦_ : A → A → A} {IM : is-monoid _✦_} where
   open is-monoid IM
-  monoid-inverse-unique : (e x y : A) → x ✦ e ＝ id → e ✦ y ＝ id → x ＝ y
+  monoid-inverse-unique : (e x y : A) → x ✦ e ＝ refl → e ✦ y ＝ refl → x ＝ y
   monoid-inverse-unique e x y p q =
     x              ＝˘⟨ id-r _ ⟩
     x ✦ ⌜ id ⌝     ＝˘⟨ ap¡ q ⟩
@@ -89,8 +93,8 @@ record Monoid-hom
       module B = Monoid-on M′
 
     field
-      pres-id : e A.id ＝ B.id
-      pres-⋆  : (x y : A) → e (x A.⋆ y) ＝ e x B.⋆ e y
+      pres-id : e refl ＝ refl
+      pres-⋆  : (x y : A) → e (x ∙ y) ＝ e x ∙ e y
 
 unquoteDecl monoid-hom-iso = declare-record-iso monoid-hom-iso (quote Monoid-hom)
 

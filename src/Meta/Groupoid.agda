@@ -47,7 +47,7 @@ record Reflexiveᵘ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
 open Reflexiveᵘ ⦃ ... ⦄ public
 
 instance
-  Reflexiveᵘ→Reflexive : ⦃ Reflexiveᵘ A ⦄ → Reflexive {A = A} λ _ _ → A
+  Reflexiveᵘ→Reflexive : ⦃ Reflexiveᵘ A ⦄ → Reflexive {A = ⊤} λ _ _ → A
   Reflexiveᵘ→Reflexive .refl = mempty
   {-# INCOHERENT Reflexiveᵘ→Reflexive #-}
 
@@ -76,18 +76,18 @@ instance
   Symmetric-Iso ._⁻¹ = _ᵢ⁻¹
 
 -- "untyped" raw symmetry is just having an automorphism
-record Symmetricˢ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
+record Symmetricᵘ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
   no-eta-equality
   field inv : A → A
 
-open Symmetricˢ ⦃ ... ⦄ public
+open Symmetricᵘ ⦃ ... ⦄ public
 
 instance
-  Symmetricˢ→Symmetric
-    : ⦃ Symmetricˢ A ⦄
+  Symmetricᵘ→Symmetric
+    : ⦃ Symmetricᵘ A ⦄
     → Symmetric {A = ⊤} {B = ⊤} (λ _ _ → A) (λ _ _ → A)
-  Symmetricˢ→Symmetric ._⁻¹ = inv
-  {-# INCOHERENT Symmetricˢ→Symmetric #-}
+  Symmetricᵘ→Symmetric ._⁻¹ = inv
+  {-# INCOHERENT Symmetricᵘ→Symmetric #-}
 
 
 record Transitive {ℓᵃ ℓᵇ ℓᶜ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ} {ℓl ℓr ℓo : Level}

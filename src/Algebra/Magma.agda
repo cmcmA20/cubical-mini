@@ -17,6 +17,10 @@ record ∞-Magma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   field _⋆_ : X → X → X
   infixr 20 _⋆_
 
+  instance
+    Transitiveᵘ-∞-Magma-on : Transitiveᵘ X
+    Transitiveᵘ-∞-Magma-on ._<>_ = _⋆_
+
 record ∞-magma-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
   (M : ∞-Magma-on A) (M′ : ∞-Magma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
@@ -26,8 +30,7 @@ record ∞-magma-hom
       module A = ∞-Magma-on M
       module B = ∞-Magma-on M′
 
-    field
-      pres-⋆ : (x y : A) → e (x A.⋆ y) ＝ e x B.⋆ e y
+    field pres-⋆ : (x y : A) → e (x ∙ y) ＝ e x ∙ e y
 
 ∞-Magma[_⇒_]
   : (A : Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (B : Σ[ X ꞉ 𝒰 ℓ′ ] ∞-Magma-on X) → 𝒰 (ℓ ⊔ ℓ′)
@@ -49,6 +52,8 @@ record is-n-magma (n : HLevel) {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ
     H-Level-magma-carrier : H-Level n A
     H-Level-magma-carrier .H-Level.has-of-hlevel = has-is-of-hlevel
 
+    Transitiveᵘ-is-n-magma : Transitiveᵘ A
+    Transitiveᵘ-is-n-magma ._<>_ = _⋆_
 
 unquoteDecl is-n-magma-iso = declare-record-iso is-n-magma-iso (quote is-n-magma)
 
@@ -85,8 +90,7 @@ module _ (n : HLevel) where
         module A = n-Magma-on M
         module B = n-Magma-on M′
 
-      field
-        pres-⋆ : (x y : A) → e (x A.⋆ y) ＝ e x B.⋆ e y
+      field pres-⋆ : (x y : A) → e (x ∙ y) ＝ e x ∙ e y
 
   unquoteDecl n-magma-hom-iso = declare-record-iso n-magma-hom-iso (quote n-Magma-hom)
 
