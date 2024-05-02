@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Decidable where
+module Logic.Decidability where
 
 open import Meta.Prelude
 
@@ -7,7 +7,7 @@ open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 
-open import Correspondences.Classical
+open import Logic.DoubleNegation
 
 open import Data.Bool.Base
 open import Data.Dec.Base as Dec

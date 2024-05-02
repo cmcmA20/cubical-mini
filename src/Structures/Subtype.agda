@@ -10,7 +10,7 @@ open import Meta.SIP
 open import Structures.Fibration
 open import Structures.n-Type
 
-open import Correspondences.Powerset.Base
+open import Combinatorics.Power.Base
 
 open import Functions.Embedding
 

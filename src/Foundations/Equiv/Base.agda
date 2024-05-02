@@ -157,3 +157,6 @@ S stable A = A ≃ S A
 
 _weakly-stable_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
 S weakly-stable A = S A → A
+
+_separated_ : (S : Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
+S separated A = (S weakly-stable_) on-paths-of A

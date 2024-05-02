@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Countable.Base where
+module Combinatorics.Countability.Base where
 
 open import Meta.Prelude
 
@@ -7,7 +7,7 @@ open import Meta.Deriving.HLevel
 open import Meta.Effect.Bind
 open import Meta.Record
 
-open import Correspondences.Discrete
+open import Logic.Discreteness
 
 open import Data.Nat.Instances.Discrete
 

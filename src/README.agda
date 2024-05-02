@@ -20,14 +20,17 @@ import Meta.Everything
 -- (Univalently) structured types.
 import Structures.Everything
 
--- Correspondences (proof-relevant relations).
+-- Correspondence (proof-relevant relation) kinds.
 import Correspondences.Everything
 
--- Basic types and their properties.
-import Data.Everything
+-- (Topo)logical stuff.
+import Logic.Everything
 
--- I/O and related stuff.
-import System.Everything
+-- Vaguely combinatorial things.
+import Combinatorics.Everything
+
+-- Homotopy theory.
+import Homotopy.Everything
 
 -- Category theory.
 import Categories.Everything
@@ -38,8 +41,11 @@ import Algebra.Everything
 -- Order theory.
 import Order.Everything
 
+-- Basic types and their properties.
+import Data.Everything
+
 -- Function kinds.
 import Functions.Everything
 
--- -- Homotopy theory
--- import Homotopy.Everything
+-- I/O and related stuff.
+import System.Everything

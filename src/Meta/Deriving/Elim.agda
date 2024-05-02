@@ -12,7 +12,7 @@ open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
 
-open import Correspondences.Discrete
+open import Logic.Discreteness
 
 open import Data.Bool.Base
 open import Data.Dec.Base

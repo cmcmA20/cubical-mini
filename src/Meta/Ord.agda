@@ -3,7 +3,7 @@ module Meta.Ord where
 
 open import Meta.Prelude
 
-open import Correspondences.Discrete
+open import Logic.Discreteness
 
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec

@@ -4,7 +4,7 @@ module Data.Bool.Instances.Finite where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Correspondences.Finite.ManifestBishop
+open import Combinatorics.Finiteness.ManifestBishop
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base

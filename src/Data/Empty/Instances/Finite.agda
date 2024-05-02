@@ -3,7 +3,7 @@ module Data.Empty.Instances.Finite where
 
 open import Meta.Prelude
 
-open import Correspondences.Finite.ManifestBishop
+open import Combinatorics.Finiteness.ManifestBishop
 
 open import Data.Empty.Base
 open import Data.Fin.Computational.Closure

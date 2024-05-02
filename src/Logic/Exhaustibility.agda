@@ -1,9 +1,9 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Exhaustible where
+module Logic.Exhaustibility where
 
 open import Meta.Prelude
 
-open import Correspondences.Decidable
+open import Logic.Decidability
 
 open import Data.Dec as Dec
 open import Data.Empty.Base as ⊥
@@ -13,6 +13,7 @@ private variable
   A : Type ℓᵃ
   B : Type ℓᵇ
 
+-- Π-compact types (Escardo)
 record Exhaustible {ℓᵃ : Level} (A : Type ℓᵃ) : Typeω where
   no-eta-equality
   constructor exhaustible-η

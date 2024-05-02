@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Powerset.Base where
+module Combinatorics.Power.Base where
 
 open import Meta.Prelude
 

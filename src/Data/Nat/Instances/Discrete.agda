@@ -3,8 +3,8 @@ module Data.Nat.Instances.Discrete where
 
 open import Meta.Prelude
 
-open import Correspondences.Decidable
-open import Correspondences.Discrete
+open import Logic.Decidability
+open import Logic.Discreteness
 
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec

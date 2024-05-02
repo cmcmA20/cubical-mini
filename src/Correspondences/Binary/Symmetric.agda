@@ -23,7 +23,7 @@ record Symm {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ : Le
 open Symm ⦃ ... ⦄ public
 
 -- homogeneous
-Symmetric : Corr² (A , A) ℓ → Type _
+Symmetric : Corr² (A , A) ℓ → 𝒰 _
 Symmetric R = Symm R R
 
 instance

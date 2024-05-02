@@ -3,8 +3,8 @@ module Data.Vec.Inductive.Instances.Finite where
 
 open import Meta.Prelude
 
-open import Correspondences.Finite.Bishop
-open import Correspondences.Finite.ManifestBishop
+open import Combinatorics.Finiteness.Bishop
+open import Combinatorics.Finiteness.ManifestBishop
 
 open import Data.Truncation.Propositional.Base
 open import Data.Vec.Inductive.Base

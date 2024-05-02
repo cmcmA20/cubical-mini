@@ -9,7 +9,8 @@ open import Meta.Extensionality
 open import Structures.n-Type
 
 open import Correspondences.Binary.Equivalence
-open import Correspondences.Discrete
+
+open import Logic.Discreteness
 
 open import Data.Dec.Base as Dec
   using (Dec)

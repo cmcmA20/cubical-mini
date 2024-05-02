@@ -3,7 +3,7 @@ module Data.Fin.Inductive.Instances.Finite where
 
 open import Meta.Prelude
 
-open import Correspondences.Finite.ManifestBishop
+open import Combinatorics.Finiteness.ManifestBishop
 
 open import Data.Fin.Computational.Base
   using (default≃computational)

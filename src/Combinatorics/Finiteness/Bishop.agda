@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Finite.Bishop where
+module Combinatorics.Finiteness.Bishop where
 
 open import Meta.Prelude
 
@@ -8,9 +8,10 @@ open import Meta.Effect.Bind
 open import Meta.Extensionality
 open import Meta.Record
 
-open import Correspondences.Discrete
-open import Correspondences.Finite.ManifestBishop
-open import Correspondences.Omniscient
+open import Logic.Discreteness
+open import Logic.Omniscience
+
+open import Combinatorics.Finiteness.ManifestBishop
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path

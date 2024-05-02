@@ -4,7 +4,8 @@ module Data.Vec.Inductive.Membership where
 open import Foundations.Base
 
 open import Meta.Membership
-open import Correspondences.Discrete
+
+open import Logic.Discreteness
 
 open import Data.Dec as Dec
 open import Data.Empty.Base

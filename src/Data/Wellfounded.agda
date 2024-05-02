@@ -1,11 +1,10 @@
 {-# OPTIONS --safe #-}
-open import Meta.Prelude
+open import Foundations.Prelude
+open import Correspondences.Base
 
-module Correspondences.Wellfounded
+module Data.Wellfounded
   {ℓ ℓ′} {A : Type ℓ} (_<_ : Corr² (A , A) ℓ′)
   where
-
-open import Meta.Extensionality
 
 data Acc (x : A) : Type (ℓ ⊔ ℓ′) where
   acc : (∀ y → y < x → Acc y) → Acc x
@@ -31,7 +30,7 @@ from-induction ind = ind Acc λ _ → acc
 opaque
   acc-is-prop : ∀ x → is-prop (Acc x)
   acc-is-prop x (acc s) (acc t) = ap acc $
-    ext λ y y<x → acc-is-prop y (s y y<x) (t y y<x)
+    fun-ext λ y → fun-ext λ y<x → acc-is-prop y (s y y<x) (t y y<x)
 
 instance opaque
   H-Level-acc : ∀ {x} {n} → H-Level (suc n) (Acc x)

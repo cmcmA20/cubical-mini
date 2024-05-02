@@ -1,9 +1,11 @@
 {-# OPTIONS --safe #-}
 module Data.List.Correspondences.Unary.All where
 
-open import Prelude
-open import Correspondences.Base
-open import Correspondences.Decidable
+open import Meta.Prelude
+
+open import Logic.Decidability
+open import Logic.Discreteness
+
 open import Data.List.Base
 open import Data.Dec as Dec
 

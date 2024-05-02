@@ -1,11 +1,11 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Countable.Strong where
+module Combinatorics.Countability.Strong where
 
 open import Meta.Prelude
 
 open import Meta.Deriving.HLevel
 
-open import Correspondences.Discrete
+open import Logic.Discreteness
 
 open import Data.Nat.Instances.Discrete
 

@@ -1,12 +1,12 @@
 {-# OPTIONS --safe --backtracking-instance-search #-}
-module Correspondences.Omniscient where
+module Logic.Omniscience where
 
 open import Meta.Prelude
 
 open import Meta.Effect.Map
 
-open import Correspondences.Decidable
-open import Correspondences.Exhaustible
+open import Logic.Decidability
+open import Logic.Exhaustibility
 
 open import Data.Dec as Dec
 open import Data.Empty.Base as ⊥
@@ -17,6 +17,7 @@ private variable
   A : Type ℓᵃ
   B : Type ℓᵇ
 
+-- Σ-compact types (Escardo)
 record Omniscient {ℓᵃ : Level} (A : Type ℓᵃ) : Typeω where
   no-eta-equality
   constructor omniscient-η
@@ -44,7 +45,7 @@ instance
   {-# OVERLAPPING Σ-decision #-}
 
 
-
+-- ∃-compact types (Escardo)
 record Omniscient₁ {ℓᵃ : Level} (A : Type ℓᵃ) : Typeω where
   no-eta-equality
   constructor omniscient₁-η

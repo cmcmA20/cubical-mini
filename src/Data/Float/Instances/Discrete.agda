@@ -3,7 +3,7 @@ module Data.Float.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Correspondences.Discrete
+open import Logic.Discreteness
 
 open import Data.Maybe.Instances.Discrete
 open import Data.Word.Instances.Discrete
