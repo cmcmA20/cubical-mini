@@ -24,8 +24,11 @@ open import Foundations.Prelude
   public
 
 open import Meta.Brackets  public
-open import Meta.Groupoid  public
 open import Meta.Inductive public
 open import Meta.Variadic  public
 
 open import Structures.n-Type public
+
+open import Correspondences.Binary.Reflexive  public
+open import Correspondences.Binary.Symmetric  public
+open import Correspondences.Binary.Transitive public

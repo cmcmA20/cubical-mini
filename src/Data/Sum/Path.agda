@@ -5,8 +5,9 @@ open import Foundations.Prelude
   hiding ( _$_; refl; sym; _∙_ )
 
 open import Meta.Extensionality
-open import Meta.Groupoid
-open import Meta.Variadic
+open import Meta.Underlying
+
+open import Correspondences.Binary.Symmetric
 
 open import Data.Empty.Base
 open import Data.Sum.Base

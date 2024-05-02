@@ -11,13 +11,17 @@ open import Foundations.Prelude
 
 open import Meta.Effect.Alt
 open import Meta.Extensionality
-open import Meta.Groupoid
 open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 open import Meta.Variadic
+
+open import Correspondences.Base
+open import Correspondences.Binary.Reflexive
+open import Correspondences.Binary.Symmetric
+open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.List.Base

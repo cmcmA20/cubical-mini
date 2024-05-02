@@ -39,22 +39,22 @@ instance
   Funlike-Surj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↠ B) A (λ _ → B)
   Funlike-Surj ._#_ = fst
 
-  Reflexive-Split-surj :  Reflexive (_↠!_ {ℓ})
-  Reflexive-Split-surj .refl = refl , (_, refl)
+  Refl-Split-surj :  Refl (_↠!_ {ℓ})
+  Refl-Split-surj .refl = refl , (_, refl)
 
-  Reflexive-Surj :  Reflexive (_↠_ {ℓ})
-  Reflexive-Surj .refl = refl , λ a → ∣ a , refl ∣₁
+  Refl-Surj :  Refl (_↠_ {ℓ})
+  Refl-Surj .refl = refl , λ a → ∣ a , refl ∣₁
 
-  Transitive-Split-surj : Transitive (_↠!_ {ℓ} {ℓ′}) (_↠!_ {ℓ′ = ℓ″}) _↠!_
-  Transitive-Split-surj ._∙_ (f , _) (g , _) .fst = f ∙ g
-  Transitive-Split-surj ._∙_ (f , φ) (g , ψ) .snd c =
+  Trans-Split-surj : Trans (_↠!_ {ℓ} {ℓ′}) (_↠!_ {ℓ′ = ℓ″}) _↠!_
+  Trans-Split-surj ._∙_ (f , _) (g , _) .fst = f ∙ g
+  Trans-Split-surj ._∙_ (f , φ) (g , ψ) .snd c =
     let u  , v  = ψ c
         u′ , v′ = φ u
     in u′ , ap g v′ ∙ v
 
-  Transitive-Surj : Transitive (_↠_ {ℓ} {ℓ′}) (_↠_ {ℓ′ = ℓ″}) _↠_
-  Transitive-Surj ._∙_ (f , _) (g , _) .fst = f ∙ g
-  Transitive-Surj ._∙_ (f , φ) (g , ψ) .snd c = do
+  Trans-Surj : Trans (_↠_ {ℓ} {ℓ′}) (_↠_ {ℓ′ = ℓ″}) _↠_
+  Trans-Surj ._∙_ (f , _) (g , _) .fst = f ∙ g
+  Trans-Surj ._∙_ (f , φ) (g , ψ) .snd c = do
     u  , v  ← ψ c
     u′ , v′ ← φ u
     pure (u′ , ap g v′ ∙ v)

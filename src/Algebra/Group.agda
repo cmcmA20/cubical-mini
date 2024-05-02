@@ -27,8 +27,8 @@ record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
     inverse-r : Inverse-right id _⋆_ inverse
 
   instance
-    Symmetricᵘ-is-group : Symmetricᵘ A
-    Symmetricᵘ-is-group .inv = inverse
+    Symmᵘ-is-group : Symmᵘ A
+    Symmᵘ-is-group .inv = inverse
 
 unquoteDecl is-group-iso = declare-record-iso is-group-iso (quote is-group)
 
@@ -128,14 +128,14 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     assoc     : Associative _⋆_
 
   private instance
-    Reflexiveᵘ-make-group : Reflexiveᵘ X
-    Reflexiveᵘ-make-group .mempty = id
+    Reflᵘ-make-group : Reflᵘ X
+    Reflᵘ-make-group .mempty = id
 
-    Symmetricᵘ-make-group : Symmetricᵘ X
-    Symmetricᵘ-make-group .inv = inverse
+    Symmᵘ-make-group : Symmᵘ X
+    Symmᵘ-make-group .inv = inverse
 
-    Transitiveᵘ-make-group : Transitiveᵘ X
-    Transitiveᵘ-make-group ._<>_ = _⋆_
+    Transᵘ-make-group : Transᵘ X
+    Transᵘ-make-group ._<>_ = _⋆_
 
   inverse-r : Inverse-right id _⋆_ inverse
   inverse-r x =

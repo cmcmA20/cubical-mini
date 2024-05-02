@@ -10,8 +10,10 @@ open import Foundations.Base
            ; _∘_  to _∘ₜ_
            )
 
-open import Meta.Groupoid
 open import Meta.Literals.FromString
+
+open import Correspondences.Binary.Reflexive
+open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.Nat.Base
@@ -29,11 +31,11 @@ instance
   From-string-ShowS .From-string.Constraint _ = ⊤
   From-string-ShowS .from-string s = showS (s <>_)
 
-  Reflexiveᵘ-ShowS : Reflexiveᵘ ShowS
-  Reflexiveᵘ-ShowS .mempty = showS id
+  Reflᵘ-ShowS : Reflᵘ ShowS
+  Reflᵘ-ShowS .mempty = showS id
 
-  Transitiveᵘ-ShowS : Transitiveᵘ ShowS
-  Transitiveᵘ-ShowS ._<>_ (showS k₁) (showS k₂) = showS (k₁ ∘ˢ k₂)
+  Transᵘ-ShowS : Transᵘ ShowS
+  Transᵘ-ShowS ._<>_ (showS k₁) (showS k₂) = showS (k₁ ∘ˢ k₂)
 
 
 record Show {ℓ} (T : Type ℓ) : Type ℓ where

@@ -12,11 +12,13 @@ open import Foundations.Base
 
 open import Meta.Effect.Foldable
 open import Meta.Effect.Traversable
-open import Meta.Groupoid
 open import Meta.Show
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral
 open import Meta.Reflection.Subst
+
+open import Correspondences.Binary.Reflexive
+open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.List.Base

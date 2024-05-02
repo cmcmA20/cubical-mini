@@ -25,6 +25,6 @@ module _ {ℓ : Level} {X : Type ℓ} {M : Monoid-on X} where private
   module Mon = Monoid-on M
   module Cat = Precategory (𝑩 M)
 
-  _ :  _∙_ ⦃ Transitiveᵘ→Transitive ⦃ Mon.Transitiveᵘ-is-n-magma ⦄ ⦄
-    ＝ _∙_ ⦃ Cat.Transitive-Hom ⦄
+  _ :  _∙_ ⦃ Transᵘ→Trans ⦃ Mon.Transᵘ-is-n-magma ⦄ ⦄
+    ＝ _∙_ ⦃ Cat.Trans-Hom ⦄
   _ = λ _ → Mon._⋆_

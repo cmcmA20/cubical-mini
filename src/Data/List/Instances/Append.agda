@@ -3,17 +3,18 @@ module Data.List.Instances.Append where
 
 open import Foundations.Base
 
-open import Meta.Groupoid
+open import Correspondences.Binary.Reflexive
+open import Correspondences.Binary.Transitive
 
 open import Data.List.Base as List
 
 private variable
   ℓ : Level
-  A : Type ℓ
+  A : 𝒰 ℓ
 
 instance
-  Reflexiveᵘ-List : Reflexiveᵘ (List A)
-  Reflexiveᵘ-List .mempty = []
+  Reflᵘ-List : Reflᵘ (List A)
+  Reflᵘ-List .mempty = []
 
-  Transitiveᵘ-List : Transitiveᵘ (List A)
-  Transitiveᵘ-List ._<>_ = _++_
+  Transᵘ-List : Transᵘ (List A)
+  Transᵘ-List ._<>_ = _++_
