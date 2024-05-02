@@ -128,7 +128,7 @@ or-true-≃
   ≃ ( (is-trueₚ  x × is-falseₚ y)
   ⊎   (is-falseₚ x × is-trueₚ  y)
   ⊎   (is-trueₚ  x × is-trueₚ  y) )
-or-true-≃ = prop-extₑ hlevel! go to from where
+or-true-≃ = prop-extₑ (hlevel 1) go to from where
   to : is-trueₚ (x or y)
      → ((is-trueₚ x × is-falseₚ y) ⊎ (is-falseₚ x × is-trueₚ y) ⊎ (is-trueₚ x × is-trueₚ y))
   to {(false)} {(false)} p = ⊥.rec $ false≠true p
@@ -143,7 +143,7 @@ or-true-≃ = prop-extₑ hlevel! go to from where
   from {(true)}            _ = refl
 
   go : is-prop (is-trueₚ x × is-falseₚ y ⊎ is-falseₚ x × is-trueₚ y ⊎ is-trueₚ x × is-trueₚ y)
-  go {x} {y} = disjoint-⊎-is-prop hlevel!
+  go {x} {y} = disjoint-⊎-is-prop (hlevel 1)
     (disjoint-⊎-is-prop! λ z → false≠true (z .fst .fst ⁻¹ ∙ z .snd .fst))
     λ z → [ (λ w → false≠true (w .fst ⁻¹ ∙ z .fst .fst)) , (λ w → false≠true (z .fst .snd ⁻¹ ∙ w .snd)) ]ᵤ (z .snd)
 

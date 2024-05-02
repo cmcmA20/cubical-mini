@@ -10,7 +10,6 @@ open import Meta.Deriving.HLevel
 open import Meta.Extensionality
 open import Meta.Marker
 open import Meta.Record
-  hiding (_≅_ ; _ᵢ⁻¹)
 
 open import Functions.Embedding
   hiding (_↪_)
@@ -286,7 +285,7 @@ private
     declare-record-hlevel 1 H-Level-inverses (quote Inverses)
 
 inverses-are-prop : {f : Hom a b} {g : Hom b a} → is-prop (Inverses f g)
-inverses-are-prop = hlevel!
+inverses-are-prop = hlevel 1
 
 
 record is-invertible (f : Hom a b) : Type h where
@@ -486,7 +485,7 @@ opaque
   go i .mor = pa i
   go i .monic {c} = is-prop→pathᴾ
     {B = λ i → (f′ g′ : Hom c (a i)) → pa i ∘ f′ ＝ pa i ∘ g′ → f′ ＝ g′}
-    hlevel!
+    (λ _ → hlevel 1)
     (f .monic) (g .monic) i
 
 ↠-pathᴾ
@@ -498,5 +497,5 @@ opaque
   go i .mor = pa i
   go i .epic {c} = is-prop→pathᴾ
     {B = λ i → (f′ g′ : Hom (b i) c) → f′ ∘ pa i ＝ g′ ∘ pa i → f′ ＝ g′}
-    hlevel!
+    (λ _ → hlevel 1)
     (f .epic) (g .epic) i

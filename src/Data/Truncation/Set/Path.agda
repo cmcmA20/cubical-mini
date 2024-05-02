@@ -5,6 +5,8 @@ open import Meta.Prelude
 
 open import Meta.Effect.Map
 
+open import Structures.n-Type
+
 open import Data.Truncation.Propositional as ∥-∥₁
   using (∥_∥₁; ∣_∣₁)
 open import Data.Truncation.Set.Base public

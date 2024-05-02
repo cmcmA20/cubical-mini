@@ -4,6 +4,8 @@ module Categories.Univalent where
 open import Prelude
   hiding (_∘_; _≅_; id; ≅→＝)
 
+open import Structures.n-Type
+
 open import Categories.Base
 open import Categories.Morphism.Instances
 import Categories.Morphism
@@ -35,7 +37,7 @@ module _ {o h} {C : Precategory o h} where
       public
 
     Ob-is-groupoid : is-groupoid (C .Precategory.Ob)
-    Ob-is-groupoid = path→iso.hlevel′ 2 hlevel!
+    Ob-is-groupoid = path→iso.hlevel′ 2 λ _ _ → hlevel 2
 
 
 module _ {o h} (C : Precategory o h) where

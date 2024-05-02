@@ -1,13 +1,7 @@
 {-# OPTIONS --safe #-}
 module Structures.n-Type where
 
-open import Foundations.Prelude
-  renaming ( _$_ to _$ₜ_
-
-           ; _∙_  to _∙ₚ_
-           ; sym  to symₚ
-           ; refl to reflₚ
-           )
+open import Meta.Prelude
 
 open import Meta.Effect.Alt
 open import Meta.Extensionality
@@ -16,12 +10,6 @@ open import Meta.Record
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
-open import Meta.Variadic
-
-open import Correspondences.Base
-open import Correspondences.Binary.Reflexive
-open import Correspondences.Binary.Symmetric
-open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.List.Base

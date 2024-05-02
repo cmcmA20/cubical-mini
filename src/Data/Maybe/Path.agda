@@ -33,9 +33,9 @@ code-is-of-hlevel : {x y : Maybe A} {n : HLevel}
                   → is-of-hlevel (2 + n) A
                   → is-of-hlevel (1 + n) (Code x y)
 code-is-of-hlevel {x = just x}  {just y}    A-hl = path-is-of-hlevel _ A-hl x y
-code-is-of-hlevel {x = nothing} {(nothing)} _    = hlevel!
-code-is-of-hlevel {x = just x}  {(nothing)} _    = hlevel!
-code-is-of-hlevel {x = nothing} {just x}    _    = hlevel!
+code-is-of-hlevel {x = nothing} {(nothing)} _    = hlevel _
+code-is-of-hlevel {x = just x}  {(nothing)} _    = hlevel _
+code-is-of-hlevel {x = nothing} {just x}    _    = hlevel _
 
 maybe-is-of-hlevel : (n : HLevel) → is-of-hlevel (2 + n) A → is-of-hlevel (2 + n) (Maybe A)
 maybe-is-of-hlevel n A-hl =
@@ -64,4 +64,4 @@ just-is-embedding = cancellable→is-embedding just-cancellable
 
 instance
   H-Level-Maybe : ∀ {n ℓ} {A : Type ℓ} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (Maybe A)
-  H-Level-Maybe .H-Level.has-of-hlevel = maybe-is-of-hlevel _ hlevel!
+  H-Level-Maybe {n} .H-Level.has-of-hlevel = maybe-is-of-hlevel _ (hlevel (2 + n))

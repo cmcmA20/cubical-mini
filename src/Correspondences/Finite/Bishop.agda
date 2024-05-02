@@ -190,7 +190,7 @@ instance
 
   decidable-prop→is-bishop-finite : ⦃ A-pr : H-Level 1 A ⦄ → ⦃ da : Dec A ⦄ → is-bishop-finite A
   decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ yes a ⦄ = fin₁ $ pure $
-    is-contr→≃ (inhabited-prop-is-contr a hlevel!) fin-1-is-contr
+    is-contr→≃ (inhabited-prop-is-contr a (hlevel 1)) fin-1-is-contr
   decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ no ¬a ⦄ = fin₁ $ pure $ ¬-extₑ ¬a refl ∙ fin-0-is-initial ⁻¹
   {-# INCOHERENT decidable-prop→is-bishop-finite #-}
 

@@ -24,7 +24,7 @@ open Fin
 
 fin-is-set : is-set (Fin n)
 fin-is-set {n} = ≃→is-of-hlevel 2 (≅→≃ fin-iso)
-  (Σ-is-of-hlevel 2 hlevel! λ z → is-prop→is-set (erased-is-prop (≤-is-prop {suc z} {n})))
+  (Σ-is-of-hlevel 2 (hlevel 2) λ z → is-prop→is-set (erased-is-prop (≤-is-prop {suc z} {n})))
 
 strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
 strengthen {0}     (mk-fin k {(b)})       = inl (mk-fin k {b})

@@ -9,6 +9,8 @@ open import Meta.Record
 open import Meta.Reflection.Base
 open import Meta.SIP
 
+open import Structures.n-Type
+
 open import Correspondences.Discrete
 open import Correspondences.Finite.Bishop
 

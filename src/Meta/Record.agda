@@ -1,23 +1,13 @@
 {-# OPTIONS --safe #-}
 module Meta.Record where
 
-open import Foundations.Base
-  renaming ( refl to reflₚ
-           ; sym  to symₚ
-           ; _∙_  to _∙ₚ_
-           )
-  renaming ( _∘ˢ_ to _∘ₜˢ_
-           ; _∘_  to _∘ₜ_
-           )
-open import Foundations.Isomorphism public
+open import Meta.Prelude
 
 open import Meta.Effect.Foldable
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString
 open import Meta.Reflection.Base
-
-open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.List.Base as List

@@ -35,7 +35,7 @@ instance
     → ⦃ pr : ∀ {x} → H-Level 2 (P x) ⦄
     → Inductive (∀ x → P x) ℓm
   Inductive-∥-∥₂ ⦃ i ⦄ .Inductive.methods = i .Inductive.methods
-  Inductive-∥-∥₂ ⦃ i ⦄ .Inductive.from f = elim hlevel! (i .Inductive.from f)
+  Inductive-∥-∥₂ ⦃ i ⦄ .Inductive.from f = elim (λ _ → hlevel 2) (i .Inductive.from f)
 
 proj!
   : ⦃ A-set : H-Level 2 A ⦄

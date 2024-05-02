@@ -1,20 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Order.Inductive where
 
-open import Foundations.Prelude
-  renaming ( _$_  to _$ₜ_
-           ; _$²_ to _$ₜ²_
-
-           ; refl to reflₚ
-           ; sym  to symₚ
-           ; _∙_  to _∙ₚ_
-           )
-
-open import Meta.Variadic
-
-open import Correspondences.Binary.Reflexive
-open import Correspondences.Binary.Symmetric
-open import Correspondences.Binary.Transitive
+open import Meta.Prelude
 
 open import Data.Dec.Base
 open import Data.Empty.Base

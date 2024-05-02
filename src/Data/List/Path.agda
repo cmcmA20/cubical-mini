@@ -52,9 +52,9 @@ identity-system .to-path      = decode
 identity-system .to-path-over = code-refl-pathᴾ
 
 code-is-of-hlevel : {xs ys : List A} {n : HLevel} → is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code xs ys)
-code-is-of-hlevel {xs = []}     {([])}  _ = hlevel!
-code-is-of-hlevel {xs = []}     {_ ∷ _} _ = hlevel!
-code-is-of-hlevel {xs = _ ∷ _}  {([])}  _ = hlevel!
+code-is-of-hlevel {xs = []}     {([])}  _ = hlevel _
+code-is-of-hlevel {xs = []}     {_ ∷ _} _ = hlevel _
+code-is-of-hlevel {xs = _ ∷ _}  {([])}  _ = hlevel _
 code-is-of-hlevel {xs = x ∷ xs} {y ∷ ys} A-hl =
   ×-is-of-hlevel _ (path-is-of-hlevel _ A-hl x y) (code-is-of-hlevel A-hl)
 
@@ -69,4 +69,4 @@ opaque
 
 instance opaque
   H-Level-List : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (List A)
-  H-Level-List .H-Level.has-of-hlevel = list-is-of-hlevel _ hlevel!
+  H-Level-List {n} .H-Level.has-of-hlevel = list-is-of-hlevel _ (hlevel (2 + n))

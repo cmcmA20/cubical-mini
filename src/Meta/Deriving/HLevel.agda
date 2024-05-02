@@ -3,6 +3,8 @@ module Meta.Deriving.HLevel where
 
 open import Meta.Prelude
 
+open import Structures.n-Type
+
 open import Meta.Record
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral

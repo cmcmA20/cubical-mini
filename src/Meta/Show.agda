@@ -1,19 +1,9 @@
 {-# OPTIONS --safe #-}
 module Meta.Show where
 
-open import Foundations.Base
-  renaming ( refl to reflₚ
-           ; sym  to symₚ
-           ; _∙_  to _∙ₚ_
-           )
-  renaming ( _∘ˢ_ to _∘ₜˢ_
-           ; _∘_  to _∘ₜ_
-           )
+open import Meta.Prelude
 
 open import Meta.Literals.FromString
-
-open import Correspondences.Binary.Reflexive
-open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.Nat.Base

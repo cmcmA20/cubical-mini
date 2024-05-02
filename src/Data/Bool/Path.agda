@@ -30,10 +30,10 @@ decode false false _ = refl
 decode true  true  _ = refl
 
 code-is-prop : ∀ b₁ b₂ → is-prop (Code b₁ b₂)
-code-is-prop false false = hlevel!
-code-is-prop false true  = hlevel!
-code-is-prop true  false = hlevel!
-code-is-prop true  true  = hlevel!
+code-is-prop false false = hlevel 1
+code-is-prop false true  = hlevel 1
+code-is-prop true  false = hlevel 1
+code-is-prop true  true  = hlevel 1
 
 identity-system : is-identity-system Code code-refl
 identity-system = set-identity-system code-is-prop (decode _ _)

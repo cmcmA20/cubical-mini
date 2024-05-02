@@ -5,6 +5,8 @@ open import Meta.Prelude
 
 open import Meta.Membership
 
+open import Structures.n-Type
+
 open import Data.Empty as ⊥
 open import Data.Sum.Base
 open import Data.Truncation.Propositional as ∥-∥₁

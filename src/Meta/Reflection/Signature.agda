@@ -1,14 +1,7 @@
 {-# OPTIONS --safe #-}
 module Meta.Reflection.Signature where
 
-open import Foundations.Base
-  renaming ( refl to reflₚ
-           ; sym  to symₚ
-           ; _∙_  to _∙ₚ_
-           )
-  renaming ( _∘ˢ_ to _∘ₜˢ_
-           ; _∘_  to _∘ₜ_
-           )
+open import Meta.Prelude
 
 open import Meta.Effect.Foldable
 open import Meta.Effect.Traversable
@@ -16,9 +9,6 @@ open import Meta.Show
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral
 open import Meta.Reflection.Subst
-
-open import Correspondences.Binary.Reflexive
-open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.List.Base
@@ -250,7 +240,7 @@ private
 
   class-for-param : (Arg Term → Term) → ℕ → List (Arg ℕ) → Term → Maybe Term
   class-for-param class n xs (agda-sort _) =
-    just $ class $ argN $ var n $ make-args n xs
+    just $ class $ argN $ var n $ₜ make-args n xs
   class-for-param class n xs (pi a (abs s b)) =
     pi (argH (unarg a)) ∘ˢ abs s <$>
      class-for-param class (suc n) (arg (unai a) n ∷ xs) b

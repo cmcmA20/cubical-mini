@@ -15,4 +15,4 @@ instance
   Extensional-/₂-map ⦃ sf ⦄ .reflᵉ f = sf .reflᵉ (f ∘ ⦋_⦌)
   Extensional-/₂-map ⦃ sf ⦄ .idsᵉ .to-path h = fun-ext $ elim! (sf .idsᵉ .to-path h $ₚ_)
   Extensional-/₂-map ⦃ sf ⦄ .idsᵉ .to-path-over p =
-    is-prop→pathᴾ (λ i → Pathᵉ-is-of-hlevel 1 sf hlevel!) _ p
+    is-prop→pathᴾ (λ i → Pathᵉ-is-of-hlevel 1 sf (hlevel 2)) _ p

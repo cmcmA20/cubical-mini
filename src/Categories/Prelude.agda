@@ -15,6 +15,8 @@ open import Prelude
            )
   public
 
+open import Structures.n-Type public
+
 open import Categories.Base public
 open import Categories.Solver
   hiding ( module NbE ; module Reflection )
