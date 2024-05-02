@@ -31,6 +31,10 @@ record is-unital-magma {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
     id-l : Unital-left  id _⋆_
     id-r : Unital-right id _⋆_
 
+  instance
+    Reflexiveᵘ-is-unital-magma : Reflexiveᵘ A
+    Reflexiveᵘ-is-unital-magma .mempty = id
+
 unquoteDecl is-unital-magma-iso = declare-record-iso is-unital-magma-iso (quote is-unital-magma)
 
 module _ where
@@ -86,8 +90,8 @@ record UMagma-hom
       module B = UMagma-on M′
 
     field
-      pres-id : e A.id ＝ B.id
-      pres-⋆  : (x y : A) → e (x A.⋆ y) ＝ e x B.⋆ e y
+      pres-id : e refl ＝ refl
+      pres-⋆  : (x y : A) → e (x ∙ y) ＝ e x ∙ e y
 
 unquoteDecl umagma-hom-iso = declare-record-iso umagma-hom-iso (quote UMagma-hom)
 

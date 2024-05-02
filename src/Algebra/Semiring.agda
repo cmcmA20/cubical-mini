@@ -29,20 +29,27 @@ record is-semiring {A : 𝒰 ℓ}
   no-eta-equality
   field +-comm-monoid : is-comm-monoid _+_
   open is-comm-monoid +-comm-monoid public
+    hiding ( Reflexiveᵘ-is-monoid ; Transitiveᵘ-is-n-magma
+           )
     renaming ( id    to 0a
              ; assoc to +-assoc
              ; id-l  to +-id-l
              ; id-r  to +-id-r
              ; comm  to +-comm
-             ; has-unital-magma to has-unital-magma-+)
+             ; has-unital-magma to has-unital-magma-+
+             )
 
   field ·-monoid : is-monoid _·_
-  open is-monoid ·-monoid hiding (has-is-of-hlevel ; H-Level-magma-carrier) public
+  open is-monoid ·-monoid public
+    hiding ( has-is-of-hlevel ; H-Level-magma-carrier
+           ; Reflexiveᵘ-is-monoid ; Transitiveᵘ-is-n-magma
+           )
     renaming ( id    to 1a
              ; assoc to ·-assoc
              ; id-l  to ·-id-l
              ; id-r  to ·-id-r
-             ; has-unital-magma to has-unital-magma-·)
+             ; has-unital-magma to has-unital-magma-·
+             )
 
   field
     ·-distrib-+-l : Distrib-left  _·_ _+_

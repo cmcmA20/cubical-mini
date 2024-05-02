@@ -13,7 +13,7 @@ private variable
   _✦_ : A → A → A
   n : HLevel
 
--- monoids
+-- groups
 
 record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   no-eta-equality
@@ -25,6 +25,10 @@ record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   field
     inverse-l : Inverse-left  id _⋆_ inverse
     inverse-r : Inverse-right id _⋆_ inverse
+
+  instance
+    Symmetricᵘ-is-group : Symmetricᵘ A
+    Symmetricᵘ-is-group .inv = inverse
 
 unquoteDecl is-group-iso = declare-record-iso is-group-iso (quote is-group)
 
@@ -58,11 +62,6 @@ record Group-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 
 unquoteDecl group-on-iso = declare-record-iso group-on-iso (quote Group-on)
 
--- TODO
--- instance
---   Inv-group : ⦃ G : Group-on A ⦄ → Invertible small {!!}
---   Inv-group Invertible.⁻¹ = {!inverse!}
-
 opaque
   group-on-is-set : is-set (Group-on A)
   group-on-is-set = ≅→is-of-hlevel 2 group-on-iso λ (op , x) _ _ _ →
@@ -78,18 +77,18 @@ record Group-hom
       module A = Group-on M
       module B = Group-on M′
 
-    field pres-⋆  : (x y : A) → e (x A.⋆ y) ＝ e x B.⋆ e y
+    field pres-⋆  : (x y : A) → e (x ∙ y) ＝ e x ∙ e y
 
-    pres-id : e A.id ＝ B.id
+    pres-id : e refl ＝ refl
     pres-id =
-      e A.id                                        ＝˘⟨ B.id-r _ ⟩
-      e A.id B.⋆ ⌜ B.id ⌝                           ＝˘⟨ ap¡ (B.inverse-r _) ⟩
-      e A.id B.⋆ (e A.id B.⋆ B.inverse (e A.id))    ＝⟨ B.assoc _ _ _ ⟩
-      ⌜ e A.id B.⋆ e A.id ⌝ B.⋆ B.inverse (e A.id)  ＝⟨ ap! (sym (pres-⋆ _ _) ∙ ap e (A.id-l _)) ⟩
-      e A.id B.⋆ B.inverse (e A.id)                 ＝⟨ B.inverse-r _ ⟩
-      B.id                                          ∎
+      e refl                               ＝˘⟨ B.id-r _ ⟩
+      e refl B.⋆ ⌜ B.id ⌝                  ＝˘⟨ ap¡ (B.inverse-r _) ⟩
+      e refl ∙ (e refl ∙ e refl ⁻¹)        ＝⟨ B.assoc _ _ _ ⟩
+      ⌜ e refl B.⋆ e refl ⌝ B.⋆ e refl ⁻¹  ＝⟨ ap! (sym (pres-⋆ _ _) ∙ ap e (A.id-l _)) ⟩
+      e refl ∙ e refl ⁻¹                   ＝⟨ B.inverse-r _ ⟩
+      refl                                 ∎
 
-    pres-inv : ∀ x → e (A.inverse x) ＝ B.inverse (e x)
+    pres-inv : (x : A) → e (x ⁻¹) ＝ (e x) ⁻¹
     pres-inv x = monoid-inverse-unique {IM = B.has-monoid} (e x) _ _
       (sym (pres-⋆ _ _) ∙∙ ap e (A.inverse-l _) ∙∙ pres-id)
       (B.inverse-r _)
@@ -128,24 +127,34 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     inverse-l : Inverse-left id _⋆_ inverse
     assoc     : Associative _⋆_
 
+  private instance
+    Reflexiveᵘ-make-group : Reflexiveᵘ X
+    Reflexiveᵘ-make-group .mempty = id
+
+    Symmetricᵘ-make-group : Symmetricᵘ X
+    Symmetricᵘ-make-group .inv = inverse
+
+    Transitiveᵘ-make-group : Transitiveᵘ X
+    Transitiveᵘ-make-group ._<>_ = _⋆_
+
   inverse-r : Inverse-right id _⋆_ inverse
   inverse-r x =
-    x ⋆ inverse x                                          ＝˘⟨ id-l _ ⟩
-    ⌜ id ⌝ ⋆ (x ⋆ inverse x)                               ＝˘⟨ ap¡ (inverse-l _) ⟩
-    (inverse (inverse x) ⋆ inverse x) ⋆ (x ⋆ inverse x)    ＝˘⟨ assoc _ _ _ ⟩
-    inverse (inverse x) ⋆ ⌜ inverse x ⋆ (x ⋆ inverse x) ⌝  ＝⟨ ap! (assoc _ _ _) ⟩
-    inverse (inverse x) ⋆ (⌜ inverse x ⋆ x ⌝ ⋆ inverse x)  ＝⟨ ap! (inverse-l _) ⟩
-    inverse (inverse x) ⋆ ⌜ id ⋆ inverse x ⌝               ＝⟨ ap! (id-l _) ⟩
-    inverse (inverse x) ⋆ inverse x                        ＝⟨ inverse-l _ ⟩
-    id                                                     ∎
+    x ∙ x ⁻¹                         ＝˘⟨ id-l _ ⟩
+    ⌜ id ⌝ ⋆ (x ⋆ x ⁻¹)              ＝˘⟨ ap¡ (inverse-l _) ⟩
+    (x ⁻¹ ⁻¹ ∙ x ⁻¹) ∙ (x ∙ x ⁻¹)    ＝˘⟨ assoc _ _ _ ⟩
+    x ⁻¹ ⁻¹ ⋆ ⌜ x ⁻¹ ⋆ (x ⋆ x ⁻¹) ⌝  ＝⟨ ap! (assoc _ _ _) ⟩
+    x ⁻¹ ⁻¹ ⋆ (⌜ x ⁻¹ ⋆ x ⌝ ⋆ x ⁻¹)  ＝⟨ ap! (inverse-l _) ⟩
+    x ⁻¹ ⁻¹ ⋆ ⌜ id ⋆ x ⁻¹ ⌝          ＝⟨ ap! (id-l _) ⟩
+    x ⁻¹ ⁻¹ ⋆ x ⁻¹                   ＝⟨ inverse-l _ ⟩
+    refl                             ∎
 
   id-r : Unital-right id _⋆_
   id-r x =
-    x ⋆ ⌜ id ⌝             ＝˘⟨ ap¡ (inverse-l _) ⟩
-    x ⋆ (inverse x ⋆ x)    ＝⟨ assoc _ _ _ ⟩
-    ⌜ x ⋆ inverse x ⌝ ⋆ x  ＝⟨ ap! (inverse-r _) ⟩
-    id ⋆ x                 ＝⟨ id-l _ ⟩
-    x                      ∎
+    x ⋆ ⌜ id ⌝        ＝˘⟨ ap¡ (inverse-l _) ⟩
+    x ∙ (x ⁻¹ ∙ x)    ＝⟨ assoc _ _ _ ⟩
+    ⌜ x ⋆ x ⁻¹ ⌝ ⋆ x  ＝⟨ ap! (inverse-r _) ⟩
+    refl ∙ x          ＝⟨ id-l _ ⟩
+    x                 ∎
 
   to-is-group : is-group _⋆_
   to-is-group .is-group.has-monoid = to-is-monoid m where

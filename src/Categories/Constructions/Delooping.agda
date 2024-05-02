@@ -16,7 +16,15 @@ open import Categories.Prelude
   r .Hom _ _ = M
   r .Hom-set _ _ = hlevel!
   r .Precategory.id = mm.id
-  r .Precategory._∘_ = mm._⋆_
-  r .id-r = mm.id-r
-  r .id-l = mm.id-l
-  r .assoc = mm.assoc
+  r .Precategory._∘_ = flip mm._⋆_
+  r .id-r = mm.id-l
+  r .id-l = mm.id-r
+  r .assoc _ _ _ = sym (mm.assoc _ _ _)
+
+module _ {ℓ : Level} {X : Type ℓ} {M : Monoid-on X} where private
+  module Mon = Monoid-on M
+  module Cat = Precategory (𝑩 M)
+
+  _ :  _∙_ ⦃ Transitiveᵘ→Transitive ⦃ Mon.Transitiveᵘ-is-n-magma ⦄ ⦄
+    ＝ _∙_ ⦃ Cat.Transitive-Hom ⦄
+  _ = λ _ → Mon._⋆_
