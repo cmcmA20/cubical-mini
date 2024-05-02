@@ -5,8 +5,8 @@ open import Meta.Prelude
 
 open import Meta.Effect.Bind
 
-open import Correspondences.Finite.Bishop
-open import Correspondences.Finite.ManifestBishop
+open import Combinatorics.Finiteness.Bishop
+open import Combinatorics.Finiteness.ManifestBishop
 
 open import Data.Maybe.Properties
 open import Data.Fin.Computational.Closure

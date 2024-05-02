@@ -5,8 +5,8 @@ open import Meta.Prelude
 
 open import Meta.Effect.Idiom
 
-open import Correspondences.Decidable
-open import Correspondences.Discrete
+open import Logic.Decidability
+open import Logic.Discreteness
 
 open import Data.Dec as Dec
 open import Data.Fin.Inductive.Base

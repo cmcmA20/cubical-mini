@@ -3,9 +3,8 @@ module Data.Vec.Inductive.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Correspondences.Discrete
-
-open import Correspondences.Decidable
+open import Logic.Decidability
+open import Logic.Discreteness
 
 open import Data.Dec.Base as Dec
 open import Data.List.Base using ([]) renaming (_∷_ to _∷ₗ_)

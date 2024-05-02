@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Correspondences.Classical where
+module Logic.DoubleNegation where
 
 open import Meta.Prelude
 
@@ -15,6 +15,9 @@ private variable
 infixr 0 ¬¬_
 ¬¬_ : Type ℓ → Type ℓ
 ¬¬ A = ¬ ¬ A
+
+-- TODO
+-- proper translation
 
 opaque
   is-classical : Type ℓ → Type ℓ

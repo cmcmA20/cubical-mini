@@ -11,8 +11,9 @@ open import Meta.SIP
 
 open import Structures.n-Type
 
-open import Correspondences.Discrete
-open import Correspondences.Finite.Bishop
+open import Logic.Discreteness
+
+open import Combinatorics.Finiteness.Bishop
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base
@@ -109,8 +110,9 @@ private
 
 -- Usage
 module _ {ℓᵃ ℓᵇ : Level} {A : FinSet ℓᵃ} {B : A →̇ FinSet ℓᵇ} where private
-  open import Correspondences.Exhaustible
-  open import Correspondences.Omniscient
+  open import Logic.Exhaustibility
+  open import Logic.Omniscience
+
   _ : is-groupoid (A →̇ A)
   _ = hlevel!
 

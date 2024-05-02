@@ -3,8 +3,8 @@ module Data.Reflection.Instances.Discrete where
 
 open import Foundations.Prelude
 
-open import Correspondences.Decidable
-open import Correspondences.Discrete
+open import Logic.Decidability
+open import Logic.Discreteness
 
 open import Data.Char.Instances.Discrete
 open import Data.Dec.Base as Dec

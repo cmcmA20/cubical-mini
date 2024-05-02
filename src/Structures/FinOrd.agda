@@ -7,7 +7,7 @@ open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
 
-open import Correspondences.Finite.ManifestBishop
+open import Combinatorics.Finiteness.ManifestBishop
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base
@@ -66,9 +66,9 @@ instance
 -- Usage
 module _ {ℓᵃ ℓᵇ : Level} {A : FinOrd ℓᵃ} {B : A →̇ FinOrd ℓᵇ} where private
   open import Meta.Ord
-  open import Correspondences.Discrete
-  open import Correspondences.Exhaustible
-  open import Correspondences.Omniscient
+  open import Logic.Discreteness
+  open import Logic.Exhaustibility
+  open import Logic.Omniscience
 
   _ : is-groupoid (A →̇ A)
   _ = hlevel 3

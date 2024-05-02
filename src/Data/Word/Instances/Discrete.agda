@@ -3,7 +3,7 @@ module Data.Word.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Correspondences.Discrete
+open import Logic.Discreteness
 
 open import Data.List.Base
 open import Data.Nat.Instances.Discrete

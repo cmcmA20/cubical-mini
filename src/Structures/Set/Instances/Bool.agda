@@ -5,7 +5,7 @@ open import Meta.Prelude
 
 open import Structures.Set.Base
 
-open import Correspondences.Discrete
+open import Logic.Discreteness
 
 open import Data.Bool.Base
 open import Data.Dec.Base

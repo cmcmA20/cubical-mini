@@ -3,7 +3,7 @@ module Data.Maybe.Properties where
 
 open import Meta.Prelude
 
-open import Correspondences.Decidable
+open import Logic.Decidability
 
 open import Data.Dec.Base
 open import Data.Maybe.Base public

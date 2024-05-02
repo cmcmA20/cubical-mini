@@ -3,12 +3,8 @@ module Data.Vec.Inductive.Correspondences.Unary.All where
 
 open import Meta.Prelude
 
-open import Correspondences.Decidable
-open import Correspondences.Discrete
-
-open import Structures.Base
-
-open import Correspondences.Separated
+open import Logic.Decidability
+open import Logic.Discreteness
 
 open import Data.Dec as Dec
 open import Data.Vec.Inductive.Base
@@ -52,10 +48,9 @@ all? P? {x ∷ xs} =
            (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
            (Dec-× ⦃ P? ⦄ ⦃ all? P? ⦄)
 
-
 instance
   all-is-discrete : {xs : Vec A n}
-                  ⦃ di : ∀ {x} → is-discrete (P x) ⦄
+                    ⦃ di : ∀ {x} → is-discrete (P x) ⦄
                   → is-discrete (All P xs)
   all-is-discrete {xs = []} {([])} {([])} = yes refl
   all-is-discrete {P} {xs = xs@(_ ∷ _)} ⦃ di ⦄ {u ∷ us} {v ∷ vs} = Dec.dmap

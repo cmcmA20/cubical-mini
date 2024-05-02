@@ -3,14 +3,14 @@ module Data.Nat.Order.Base where
 
 open import Meta.Prelude
 
-open import Correspondences.Decidable
-open import Correspondences.Wellfounded
+open import Logic.Decidability
 
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Reflects.Base as Reflects
 open import Data.Sum.Base
 open import Data.Sum.Path
+open import Data.Wellfounded
 
 open import Data.Bool.Base
 open import Data.Nat.Base

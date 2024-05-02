@@ -3,8 +3,8 @@ module Data.List.Operations.Properties where
 
 open import Foundations.Base
 
-open import Correspondences.Decidable
-open import Correspondences.Discrete
+open import Logic.Decidability
+open import Logic.Discreteness
 
 open import Data.Bool.Base as Bool
 open import Data.Bool.Properties

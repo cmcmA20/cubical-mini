@@ -3,11 +3,10 @@ module Data.Char.Instances.Discrete where
 
 open import Foundations.Base
 
-open import Correspondences.Discrete
-
-open import Data.Nat.Instances.Discrete
+open import Logic.Discreteness
 
 open import Data.Char.Properties
+open import Data.Nat.Instances.Discrete
 
 instance
   char-is-discrete : is-discrete Char

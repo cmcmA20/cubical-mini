@@ -2,7 +2,9 @@
 module Data.List.Correspondences.Unary.Any where
 
 open import Prelude
-open import Correspondences.Decidable
+
+open import Logic.Decidability
+
 open import Data.List.Base
 open import Data.Empty.Base
 open import Data.Dec as Dec

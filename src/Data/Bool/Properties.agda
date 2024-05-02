@@ -6,11 +6,12 @@ open import Meta.Prelude
 open import Meta.Membership
 open import Meta.Witness
 
-open import Correspondences.Decidable
-open import Correspondences.Exhaustible
-open import Correspondences.Finite.Bishop
-open import Correspondences.Finite.ManifestBishop
-open import Correspondences.Omniscient
+open import Logic.Decidability
+open import Logic.Exhaustibility
+open import Logic.Omniscience
+
+open import Combinatorics.Finiteness.Bishop
+open import Combinatorics.Finiteness.ManifestBishop
 
 open import Data.Empty.Base as ⊥
 open import Data.Bool.Base as Bool public

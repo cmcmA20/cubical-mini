@@ -3,7 +3,7 @@ module Data.Id.Inductive.Properties where
 
 open import Foundations.Prelude
 
-open import Correspondences.Discrete
+open import Logic.Discreteness
 
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
