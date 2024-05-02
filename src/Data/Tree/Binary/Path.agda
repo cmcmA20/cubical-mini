@@ -75,14 +75,14 @@ identity-system .to-path-over = code-refl-pathᴾ where
   code-refl-pathᴾ {xs = node xl xr} {ys = node yl yr} (cl , cr) i = code-refl-pathᴾ cl i , code-refl-pathᴾ cr i
 
 code-is-of-hlevel : is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code {A = A} xs ys)
-code-is-of-hlevel {xs = empty} {ys = empty} = hlevel!
-code-is-of-hlevel {xs = empty} {leaf _} = hlevel!
-code-is-of-hlevel {xs = empty} {node _ _} = hlevel!
-code-is-of-hlevel {xs = leaf _} {ys = empty} = hlevel!
+code-is-of-hlevel {n} {xs = empty} {ys = empty} _ = hlevel _
+code-is-of-hlevel {xs = empty} {leaf _} _ = hlevel _
+code-is-of-hlevel {xs = empty} {node _ _} _ = hlevel _
+code-is-of-hlevel {xs = leaf _} {ys = empty} _ = hlevel _
 code-is-of-hlevel {xs = leaf x} {leaf y} hl = path-is-of-hlevel _ hl x y
-code-is-of-hlevel {xs = leaf _} {node _ _} = hlevel!
-code-is-of-hlevel {xs = node _ _} {ys = empty} = hlevel!
-code-is-of-hlevel {xs = node _ _} {leaf _} = hlevel!
+code-is-of-hlevel {xs = leaf _} {node _ _} _ = hlevel _
+code-is-of-hlevel {xs = node _ _} {ys = empty} _ = hlevel _
+code-is-of-hlevel {xs = node _ _} {leaf _} _ = hlevel _
 code-is-of-hlevel {xs = node xl xr} {node yl yr} hl =
   ×-is-of-hlevel _ (code-is-of-hlevel hl) (code-is-of-hlevel hl)
 
@@ -96,4 +96,4 @@ tree-is-of-hlevel n A-hl _ _ =
 
 instance opaque
   H-Level-binary-tree : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (Tree A)
-  H-Level-binary-tree .H-Level.has-of-hlevel = tree-is-of-hlevel _ hlevel!
+  H-Level-binary-tree {n} .H-Level.has-of-hlevel = tree-is-of-hlevel _ (hlevel (2 + n))

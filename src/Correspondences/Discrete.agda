@@ -114,10 +114,10 @@ private
     _ = auto
 
     _ : is-set (Σ[ B ] ≃ Lift ℓᵇ A)
-    _ = hlevel!
+    _ = hlevel 2
 
     _ : is-groupoid (Lift ℓᵇ A ≃ Σ[ B ])
-    _ = hlevel!
+    _ = hlevel 3
 
     _ : {a₁ a₂ : A} (p : is-trueᵈ (a₁ ≟ a₂)) → a₁ ＝ a₂
     _ = true-reflects discrete-reflects!

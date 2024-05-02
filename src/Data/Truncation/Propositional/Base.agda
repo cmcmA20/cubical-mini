@@ -79,7 +79,7 @@ instance
     → ⦃ pr : ∀ {x} → H-Level 1 (P x) ⦄
     → Inductive (∀ x → P x) ℓm
   Inductive-∥-∥₁ ⦃ i ⦄ .Inductive.methods = i .Inductive.methods
-  Inductive-∥-∥₁ ⦃ i ⦄ .Inductive.from f = elim hlevel! (i .Inductive.from f)
+  Inductive-∥-∥₁ ⦃ i ⦄ .Inductive.from f = elim (λ _ → hlevel 1) (i .Inductive.from f)
 
 proj!
   : ⦃ A-prop : H-Level 1 A ⦄

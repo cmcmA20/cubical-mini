@@ -12,6 +12,8 @@ open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
 
+open import Structures.n-Type
+
 open import Data.Bool.Base
 open import Data.Reflection.Argument
 open import Data.Reflection.Literal
@@ -44,7 +46,7 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
   Mor-path : {f g : Mor}
            → (p : f .fst ＝ g .fst)
            → (q : f .snd .fst ＝ g .snd .fst)
-           → Pathᴾ (λ i → Hom (p i) (q i)) (f .snd .snd) (g .snd .snd)
+           → ＜ f .snd .snd ／ (λ i → Hom (p i) (q i)) ＼ g .snd .snd ＞
            → f ＝ g
   Mor-path p q r i = p i , q i , r i
 

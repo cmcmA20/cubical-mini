@@ -71,7 +71,7 @@ module _ {ℓᵃ ℓᵇ : Level} {A : FinOrd ℓᵃ} {B : A →̇ FinOrd ℓᵇ}
   open import Correspondences.Omniscient
 
   _ : is-groupoid (A →̇ A)
-  _ = hlevel!
+  _ = hlevel 3
 
   _ : is-discrete (A ×̇ A)
   _ = auto

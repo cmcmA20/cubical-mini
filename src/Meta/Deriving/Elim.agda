@@ -2,9 +2,7 @@
 {-# OPTIONS --safe #-}
 module Meta.Deriving.Elim where
 
-open import Foundations.Prelude
-
-open import Foundations.HLevel public
+open import Meta.Prelude
 
 open import Meta.Effect.Alt
 open import Meta.Effect.Traversable
@@ -14,7 +12,6 @@ open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 open import Meta.Reflection.Subst
 
-open import Correspondences.Binary.Transitive
 open import Correspondences.Discrete
 
 open import Data.Bool.Base

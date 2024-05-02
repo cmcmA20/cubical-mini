@@ -3,6 +3,8 @@ module Functions.Constant where
 
 open import Meta.Prelude
 
+open import Structures.n-Type
+
 private variable
   ℓ ℓ′ : Level
   A : Type ℓ

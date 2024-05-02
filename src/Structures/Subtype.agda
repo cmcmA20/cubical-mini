@@ -8,6 +8,7 @@ open import Meta.Membership
 open import Meta.SIP
 
 open import Structures.Fibration
+open import Structures.n-Type
 
 open import Correspondences.Powerset.Base
 

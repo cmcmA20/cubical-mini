@@ -192,7 +192,7 @@ opaque
 <≃≱ = prop-extₑ! <→≱ ≱→<
 
 ≤≃<⊎= : (m ≤ n) ≃ ((m < n) ⊎ (m ＝ n))
-≤≃<⊎= = prop-extₑ hlevel! (disjoint-⊎-is-prop! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
+≤≃<⊎= = prop-extₑ (hlevel 1) (disjoint-⊎-is-prop! (<→≠ $ₜ²_)) ≤→<⊎= <⊎=→≤
 
 
 -- Decidability

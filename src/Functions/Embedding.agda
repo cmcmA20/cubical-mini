@@ -4,6 +4,8 @@ module Functions.Embedding where
 open import Meta.Prelude
 open import Meta.Extensionality
 
+open import Structures.n-Type
+
 open import Data.Nat.Order.Inductive
 open import Data.Unit.Base
 

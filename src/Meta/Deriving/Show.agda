@@ -1,23 +1,13 @@
 {-# OPTIONS --safe #-}
 module Meta.Deriving.Show where
 
-open import Foundations.Base
-  renaming ( refl to reflₚ
-           ; sym  to symₚ
-           ; _∙_  to _∙ₚ_
-           )
-  renaming ( _∘ˢ_ to _∘ₜˢ_
-           ; _∘_  to _∘ₜ_
-           )
+open import Meta.Prelude
 
 open import Meta.Effect.Traversable
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature
 open import Meta.Show public
-
-open import Correspondences.Binary.Reflexive
-open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.Char.Base
@@ -173,7 +163,7 @@ private
 
       guard = itₙ prec-parens (var₀ (length tele)) (quote-prec thisp)
 
-      tm = case shown₀ of λ where
+      tm = case_of_ ⦃ Inductive-Π ⦄ shown₀ λ where
         [] → itₙ from-string (lit (string con-str))
         _  → itₙ show-parens guard inner
 

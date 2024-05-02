@@ -6,6 +6,8 @@ open import Meta.Prelude
 open import Meta.Effect.Map
 open import Meta.Extensionality
 
+open import Structures.n-Type
+
 open import Correspondences.Binary.Equivalence
 open import Correspondences.Discrete
 

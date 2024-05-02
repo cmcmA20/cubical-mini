@@ -7,6 +7,8 @@ open import Prelude
            ; Extensional-↪ to Extensional-↪ₜ
            )
 
+open import Structures.n-Type
+
 open import Categories.Base
 open import Categories.Morphism
 
