@@ -72,6 +72,7 @@ open import Agda.Builtin.Reflection public
            ; runSpeculative to run-speculative
            ; getInstances to get-instances
            ; blockOnMeta to block-on-meta
+           ; workOnTypes to work-on-types
            )
 
 instance

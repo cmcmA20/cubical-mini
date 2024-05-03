@@ -260,16 +260,18 @@ private
           -- Otherwise, add m : T to the telescope and replace the corresponding
           -- constructor with m henceforth.
           method ← ("P" <>_) <$> render-name c
+          q ← get-con-quantity c
+          let argE = if ⌊ q ≟ quantity-0 ⌋ then argN0 else argN
           ps  ← raiseTC 1 ps
           P   ← raiseTC 1 P
           rs  ← do
             rs′ ← raiseTC 1 rs
             pure ((c′ , var₀ 0) ∷ rs′)
-          extend-context method (argN methodT) (go fuel ps P rs cs) <&>
-            ×-map₁₂ ((method , argN methodT) ∷_) (α ∷_)
+          extend-context method (argE methodT) (go fuel ps P rs cs) <&>
+            ×-map₁₂ ((method , argE methodT) ∷_) (α ∷_)
 
 make-elim-with : Elim-options → Name → Name → TC ⊤
-make-elim-with opts elim D = with-normalisation true do
+make-elim-with opts elim D = work-on-types $ with-normalisation true do
   DT ← get-type D >>= normalise -- D : (ps : Γ) (is : Ξ) → Type _
   data-type pars cs ← get-definition D
     where _ → type-error [ "not a data type: " , name-err D ]
@@ -328,7 +330,6 @@ make-elim-with opts elim D = with-normalisation true do
   clauses ← in-context (reverse-fast (baseTel <> ix-tel)) do
     let get-clause = λ (c , α) → do
       cT ← flip pi-applyTC ps =<< normalise =<< get-type c
-      debug-print "tactic.derive.elim" 20 [ "cT = " , term-err cT ]
       let cTel = pi-view-path cT
           pats = tel→pats (length cTel) (baseTel <> ix-tel) ∷r argN (con c (tel→pats 0 cTel))
           rec = def elim (tel→args (length ix-tel + length cTel) baseTel)
@@ -377,6 +378,21 @@ make-rec-n n = make-elim-with (default-rec into n)
 -- be careful, they consume about ~10GB of memory
 -- TODO remove the warning after the fix
 -- module _ where private
+  -- open import Data.Bool.Base
+  -- unquoteDecl Bool-elim = make-elim Bool-elim (quote Bool)
+  -- unquoteDecl Bool-rec = make-rec Bool-rec (quote Bool)
+
+  -- _ : {ℓ : Level} {P : Bool → 𝒰 ℓ}
+  --   → P false
+  --   → P true
+  --   → Π[ b ꞉ Bool ] P b
+  -- _ = Bool-elim
+
+  -- _ : {ℓ : Level} {A : 𝒰 ℓ}
+  --   → A
+  --   → A
+  --   → Bool → A
+  -- _ = Bool-rec
 
   -- open import Data.Nat.Base
   -- unquoteDecl ℕ-elim = make-elim ℕ-elim (quote ℕ)
@@ -452,6 +468,19 @@ make-rec-n n = make-elim-with (default-rec into n)
   --   → Π[ a ꞉ A ] P ∣ a ∣₁
   --   → Π[ x ꞉ ∥ A ∥₁ ] P x
   -- _ = ∥-∥₁-elim-prop
+
+  -- data S¹ : 𝒰 where
+  --   base : S¹
+  --   @0 loop : base ＝ base
+
+  -- unquoteDecl S¹-elim = make-elim S¹-elim (quote S¹)
+
+  -- _ : {ℓ : Level} {P : S¹ → 𝒰 ℓ}
+  --     (Pbase : P base)
+  --   → @0 Pathᴾ (λ i → P (loop i)) Pbase Pbase
+  --   → (s : S¹) → P s
+  -- _ = S¹-elim
+
 
   -- open import Data.Tree.Binary.Base
   -- unquoteDecl tree-elim = make-elim-with (record default-elim {hide-cons-args = true}) tree-elim (quote Tree)
