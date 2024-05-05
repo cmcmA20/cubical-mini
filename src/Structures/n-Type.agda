@@ -86,7 +86,7 @@ opaque
     linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
 
     rinv : ∀ {Y} → (inv′ {Y}) is-right-inverse-of n-ua
-    rinv = Jₜ (λ y p → n-ua (inv′ p) ＝ p) path where
+    rinv = Jₚ (λ y p → n-ua (inv′ p) ＝ p) path where
       path : n-ua {X = X} (inv′ {X} refl) ＝ refl
       path i j .carrier = ua.ε refl i j
       path i j .carrier-is-tr = is-prop→squareᴾ

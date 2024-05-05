@@ -15,7 +15,7 @@ private variable
   A : Type ℓᵃ
   x y : A
 
-Id-identity-system : is-identity-system (_＝ⁱ_ {A = A}) (λ _ → reflⁱ)
+Id-identity-system : {A : Type ℓᵃ} → is-identity-system (_＝ⁱ_ {A = A}) (λ _ → refl)
 Id-identity-system .to-path      reflⁱ = refl
 Id-identity-system .to-path-over reflⁱ = refl
 

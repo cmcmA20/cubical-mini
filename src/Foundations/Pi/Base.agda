@@ -3,6 +3,9 @@ module Foundations.Pi.Base where
 
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
+
+open import Foundations.Correspondences.Binary.Reflexive
+open import Foundations.Correspondences.Binary.Transitive
 open import Foundations.Sigma.Base
 
 private variable
@@ -64,10 +67,17 @@ module _ where
   id x = x
   {-# INLINE id #-}
 
-  infixr 9 _∘ˢ_
-  _∘ˢ_ : (B → C) → (A → B) → (A → C)
-  (g ∘ˢ f) x = g (f x)
-  {-# INLINE _∘ˢ_ #-}
+  infixr 9 _∘ₜˢ_
+  _∘ₜˢ_ : (B → C) → (A → B) → (A → C)
+  (g ∘ₜˢ f) x = g (f x)
+  {-# INLINE _∘ₜˢ_ #-}
+
+instance
+  Refl-Fun : Refl (Fun {ℓ})
+  Refl-Fun .refl = id
+
+  Trans-Fun : Trans (Fun {ℓᵃ} {ℓᵇ}) (Fun {ℓᵇ = ℓᶜ}) Fun
+  Trans-Fun ._∙_ f g = g ∘ₜˢ f
 
 
 -- dependent stuff

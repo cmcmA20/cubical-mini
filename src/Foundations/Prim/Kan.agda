@@ -60,11 +60,11 @@ syntax Pathᴾ-syntax Aᵢ A₀ A₁ = ＜ A₀ ／ Aᵢ ＼ A₁ ＞
 Path : (A : Type ℓ) → A → A → Type ℓ
 Path A A₀ A₁ = ＜ A₀ ／ (λ _ → A) ＼ A₁ ＞
 
-refl : {x : A} → x ＝ x
-refl {x} _ = x
+reflₚ : {x : A} → x ＝ x
+reflₚ {x} _ = x
 
-sym : {x y : A} → x ＝ y → y ＝ x
-sym p i = p (~ i)
+symₚ : {x y : A} → x ＝ y → y ＝ x
+symₚ p i = p (~ i)
 
 ap : {x y : A}
      (f : (a : A) → B a)

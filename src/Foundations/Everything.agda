@@ -9,6 +9,10 @@ open import Foundations.Prim.Kan
 open import Foundations.Prim.Equiv
 
 open import Foundations.Base
+open import Foundations.Correspondences.Binary.Equivalence
+open import Foundations.Correspondences.Binary.Reflexive
+open import Foundations.Correspondences.Binary.Symmetric
+open import Foundations.Correspondences.Binary.Transitive
 open import Foundations.Cubes
 open import Foundations.Equiv
 open import Foundations.Erased

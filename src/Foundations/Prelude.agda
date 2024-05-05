@@ -1,22 +1,9 @@
 {-# OPTIONS --safe #-}
 module Foundations.Prelude where
 
-open import Foundations.Base public
-  renaming ( singleton-is-contr  to singletonₜ-is-contr
-           ; singletonᴾ-is-contr to singletonₜᴾ-is-contr
-           ; singleton-is-prop   to singletonₜ-is-prop
-           ; singletonᴾ-is-prop  to singletonₜᴾ-is-prop
+open import Foundations.Correspondences.Binary.Equivalence public
 
-           ; J       to Jₜ
-           ; J-refl  to Jₜ-refl
-           ; J-∙     to Jₜ-∙
-           ; Jᵈ      to Jₜᵈ
-           ; Jᵈ-refl to Jₜᵈ-refl
-           ; J²      to Jₜ²
-           ; J²-refl to Jₜ²-refl
-           ; J>_     to Jₜ>_
-           )
-
+open import Foundations.Base       public
 open import Foundations.Cubes      public
 open import Foundations.Erased     public
 open import Foundations.HLevel     public

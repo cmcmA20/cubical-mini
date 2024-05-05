@@ -8,4 +8,4 @@ open import Data.Unit.Base
 
 ⊤-path : (x y : ⊤) → (x ＝ y) ≃ ⊤
 ⊤-path _ _ .fst _ = tt
-⊤-path x y .snd .equiv-proof = strict-contr-fibres (λ _ → refl)
+⊤-path x y .snd .equiv-proof = strict-contr-fibres (λ _ → reflₚ)

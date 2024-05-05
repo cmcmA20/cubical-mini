@@ -3,8 +3,10 @@ module Categories.Morphism.Instances where
 
 open import Prelude
   renaming ( _↪_ to ↪ₜ
+           ; _↠_ to ↠ₜ
            ; _≅_ to _≅ₜ_
            ; Extensional-↪ to Extensional-↪ₜ
+           ; Extensional-↠ to Extensional-↠ₜ
            )
 
 open import Structures.n-Type

@@ -37,14 +37,14 @@ private variable
 
   ri : from is-right-inverse-of to
   ri k = fun-ext λ x →
-           ap² (subst P) (sym (e.zig x))
-            (sym (from-pathᴾ (symᴾ-from-goal (ap k (e.η x)))))
-          ∙ transport⁻-transport (ap P (ap e.to (sym (e.η x)))) (k x)
+           ap² (subst P) (e.zig x ⁻¹)
+            (from-pathᴾ (symᴾ-from-goal (ap k (e.η x))) ⁻¹)
+          ∙ transport⁻-transport (ap P (ap e.to (e.η x ⁻¹))) (k x)
 
   li : from is-left-inverse-of to
   li k = fun-ext λ x →
-           ap (subst P _) (sym (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x)))))
-         ∙ transport⁻-transport (sym (ap P (e.ε x))) _
+           ap (subst P _) (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x))) ⁻¹)
+         ∙ transport⁻-transport (ap P (e.ε x) ⁻¹) _
 
 Π≃∀ : Π[ x ꞉ A ] P x
     ≃ ∀[ x ꞉ A ] P x
@@ -54,7 +54,7 @@ private variable
 ∀-cod-≃ : Π[ x ꞉ A ] (P x ≃ Q x)
         → ∀[ x ꞉ A ] P x
         ≃ ∀[ x ꞉ A ] Q x
-∀-cod-≃ k = Π≃∀ ₑ⁻¹ ∙ₑ Π-cod-≃ k ∙ₑ Π≃∀
+∀-cod-≃ k = Π≃∀ ⁻¹ ∙ Π-cod-≃ k ∙ Π≃∀
 
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
 function-≃ dom rng = ≅→≃ the-iso where

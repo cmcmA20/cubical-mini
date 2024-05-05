@@ -80,7 +80,7 @@ module Reflection where
 
   “solve” : Term → Term → Term → Term
   “solve” cat lhs rhs = def (quote NbE.solve) $ mk-category-args cat $
-    infer-hidden 2 $ lhs v∷ rhs v∷ def (quote refl) [] v∷ []
+    infer-hidden 2 $ lhs v∷ rhs v∷ def (quote reflₚ) [] v∷ []
 
   “nf” : Term → Term → Term
   “nf” cat e = def (quote NbE.nf) (mk-category-args cat $ infer-hidden 2 $ varg e ∷ [])

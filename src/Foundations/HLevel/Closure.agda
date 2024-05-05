@@ -2,6 +2,7 @@
 module Foundations.HLevel.Closure where
 
 open import Foundations.Base
+  hiding (inv)
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
 open import Foundations.HLevel.Base
@@ -30,7 +31,7 @@ opaque
                   → is-prop A
                   → is-prop B
   retract→is-prop f g h propA x y =
-    x       ＝⟨ sym (h _) ⟩
+    x       ＝˘⟨ h _ ⟩
     f (g x) ＝⟨ ap f (propA _ _) ⟩
     f (g y) ＝⟨ h _ ⟩
     y       ∎
@@ -46,19 +47,19 @@ retract→is-of-hlevel (suc (suc h)) f g p hlevel x y =
   where
     sect : g x ＝ g y → x ＝ y
     sect path =
-      x       ＝⟨ sym (p _) ⟩
+      x       ＝˘⟨ p _ ⟩
       f (g x) ＝⟨ ap f path ⟩
       f (g y) ＝⟨ p _ ⟩
       y       ∎
 
     inv : sect is-left-inverse-of (ap g)
     inv path =
-      sym (p x) ∙ ap f (ap g path) ∙ p y ∙ refl ＝⟨ ap (λ e → sym (p _) ∙ _ ∙ e) (∙-id-r (p _)) ⟩
-      sym (p x) ∙ ap f (ap g path) ∙ p y        ＝⟨ ap² _∙_ refl (sym (homotopy-natural p _)) ⟩
-      sym (p x) ∙ p x ∙ path                    ＝⟨ ∙-assoc _ _ _ ⟩
-      (sym (p x) ∙ p x) ∙ path                  ＝⟨ ap² _∙_ (∙-inv-l (p x)) refl ⟩
-      refl ∙ path                               ＝⟨ ∙-id-l path ⟩
-      path                                      ∎
+      p x ⁻¹ ∙ ap f (ap g path) ∙ p y ∙ refl  ＝⟨ ap (λ e → p _ ⁻¹ ∙ _ ∙ e) (∙-id-r (p _)) ⟩
+      p x ⁻¹ ∙ ap f (ap g path) ∙ p y         ＝⟨ ap² _∙_ refl (homotopy-natural p _ ⁻¹) ⟩
+      p x ⁻¹ ∙ p x ∙ path                     ＝⟨ ∙-assoc _ _ _ ⟩
+      (p x ⁻¹ ∙ p x) ∙ path                   ＝⟨ ap² _∙_ (∙-inv-l (p x)) refl ⟩
+      refl ∙ path                             ＝⟨ ∙-id-l path ⟩
+      path                                    ∎
 
 is-iso→is-of-hlevel : (h : HLevel) (f : A → B) → is-iso f → is-of-hlevel h A → is-of-hlevel h B
 is-iso→is-of-hlevel h f is-iso = retract→is-of-hlevel h f (is-iso .is-iso.inv) (is-iso .is-iso.rinv)
@@ -154,7 +155,7 @@ opaque
     ≃-is-of-hlevel 1 A-hl (retract→is-prop to from ε A-hl) e
     where open Equiv e
   ≃-is-of-hlevel-left-suc (suc n) A-hl e =
-    ≃-is-of-hlevel (suc (suc n)) A-hl (≃→is-of-hlevel (suc (suc n)) (e ₑ⁻¹) A-hl) e
+    ≃-is-of-hlevel (suc (suc n)) A-hl (≃→is-of-hlevel (suc (suc n)) (e ⁻¹) A-hl) e
 
   ≃-is-of-hlevel-right-suc : (n : HLevel) → is-of-hlevel (suc n) B → is-of-hlevel (suc n) (A ≃ B)
   ≃-is-of-hlevel-right-suc zero    B-hl e =

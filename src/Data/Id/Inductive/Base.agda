@@ -34,12 +34,15 @@ apⁱ³
   → f x₁ y₁ z₁ ＝ⁱ f x₂ y₂ z₂
 apⁱ³ f reflⁱ reflⁱ reflⁱ = reflⁱ
 
-symⁱ : x ＝ⁱ y → y ＝ⁱ x
-symⁱ reflⁱ = reflⁱ
+instance
+  Refl-＝ⁱ : Reflexive (_＝ⁱ_ {A = A})
+  Refl-＝ⁱ .refl = reflⁱ
 
-infixr 30 _∙ⁱ_
-_∙ⁱ_ : x ＝ⁱ y → y ＝ⁱ z → x ＝ⁱ z
-reflⁱ ∙ⁱ reflⁱ = reflⁱ
+  Symm-＝ⁱ : Symmetric (_＝ⁱ_ {A = A})
+  Symm-＝ⁱ ._⁻¹ reflⁱ = reflⁱ
+
+  Trans-＝ⁱ : Transitive (_＝ⁱ_ {A = A})
+  Trans-＝ⁱ ._∙_ reflⁱ reflⁱ = reflⁱ
 
 transportⁱ : A ＝ⁱ B → A → B
 transportⁱ reflⁱ = id

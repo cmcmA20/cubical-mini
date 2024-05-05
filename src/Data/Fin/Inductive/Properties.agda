@@ -22,7 +22,7 @@ cast {suc m} {suc n} _ fzero    = fzero
 cast {suc m} {suc n} p (fsuc k) = fsuc $ cast (suc-inj p) k
 
 cast-is-equiv : {m n : ℕ} (p : m ＝ n) → is-equiv (cast p)
-cast-is-equiv = Jₜ (λ _ p → is-equiv (cast p)) cast-refl-is-equiv
+cast-is-equiv = Jₚ (λ _ p → is-equiv (cast p)) cast-refl-is-equiv
   where
     id=cast-refl : {n : ℕ} → refl ＝ cast (λ _ → n)
     id=cast-refl {0}     _ ()

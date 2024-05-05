@@ -4,6 +4,7 @@ module Categories.Prelude where
 open import Prelude
   renaming ( _≅_  to _≅ₜ_
            ; _↪_  to _↪ₜ_
+           ; _↠_  to _↠ₜ_
            ; _×_  to _×ₜ_
            ; _∘_  to _∘ₜ_
            ; Iso  to Isoₜ
@@ -12,6 +13,7 @@ open import Prelude
            ; ≅→＝ to ≅ₜ→＝
 
            ; Extensional-↪ to Extensional-↪ₜ
+           ; Extensional-↠ to Extensional-↠ₜ
            )
   public
 

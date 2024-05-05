@@ -17,10 +17,6 @@ private variable
   D : Type ℓ‴
   x y : A
 
-_ₑ⁻¹ : A ≃ B → B ≃ A
-e ₑ⁻¹ = ≅→≃ (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
-infix 90 _ₑ⁻¹
-
 open is-iso
 
 infixr 30 _∙ₑ_
@@ -42,13 +38,20 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
   e : is-equiv (g ∘ˢ f)
   e = is-iso→is-equiv $ iso (f⁻¹ ∘ g⁻¹) right left
 
-is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
-is-equiv-comp fe ge = ((_ , fe) ∙ₑ (_ , ge)) .snd
+instance
+  Symm-≃ : Symm (_≃_ {ℓ} {ℓ′}) _≃_
+  Symm-≃ ._⁻¹ e = ≅→≃ (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
 
-inv-equiv-is-equiv : is-equiv (λ (e : A ≃ B) → e ₑ⁻¹)
+  Trans-≃ : Trans (_≃_ {ℓ} {ℓ′}) (_≃_ {ℓ' = ℓ″}) _≃_
+  Trans-≃ ._∙_  = _∙ₑ_
+
+is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
+is-equiv-comp fe ge = ((_ , fe) ∙ (_ , ge)) .snd
+
+inv-equiv-is-equiv : {A : Type ℓ} {B : Type ℓ′} → is-equiv (λ (e : A ≃ B) → e ⁻¹)
 inv-equiv-is-equiv = is-iso→is-equiv goal where
-  goal : is-iso _ₑ⁻¹
-  goal .inv  = _ₑ⁻¹
+  goal : is-iso _⁻¹
+  goal .inv  = _⁻¹
   goal .rinv _ = equiv-ext refl
   goal .linv _ = equiv-ext refl
 
@@ -56,7 +59,7 @@ inv-≃ : (A ≃ B) ≃ (B ≃ A)
 inv-≃ = _ , inv-equiv-is-equiv
 
 is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
-is-equiv-inv fe = ((_ , fe) ₑ⁻¹) .snd
+is-equiv-inv fe = ((_ , fe) ⁻¹) .snd
 
 -- action on equivalences by univalence
 @0 generic-ae : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
@@ -130,22 +133,22 @@ module Equiv (e : A ≃ B) where
     adjunct-r p = ap to p ∙ ε _
 
   inverse : B ≃ A
-  inverse = e ₑ⁻¹
+  inverse = e ⁻¹
 
 infixr 1.5 _≃⟨⟩_ _≃⟨_⟩_ _≃˘⟨_⟩_
 infix  1.9 _≃∎
 
 _≃⟨_⟩_ : (A : Type ℓ) → A ≃ B → B ≃ C → A ≃ C
-_ ≃⟨ u ⟩ v = u ∙ₑ v
+_ ≃⟨ u ⟩ v = u ∙ v
 
 _≃˘⟨_⟩_ : (A : Type ℓ) → B ≃ A → B ≃ C → A ≃ C
-_ ≃˘⟨ u ⟩ v = (u ₑ⁻¹) ∙ₑ v
+_ ≃˘⟨ u ⟩ v = (u ⁻¹) ∙ v
 
 _≃⟨⟩_ : (A : Type ℓ) → A ≃ B → A ≃ B
 _ ≃⟨⟩ e = e
 
 _≃∎ : (A : Type ℓ) → A ≃ A
-_ ≃∎ = idₑ
+_ ≃∎ = refl
 
 lift≃id : Lift ℓ′ A ≃ A
 lift≃id .fst = lower

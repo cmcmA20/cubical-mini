@@ -20,9 +20,6 @@ import Meta.Everything
 -- (Univalently) structured types.
 import Structures.Everything
 
--- Correspondence (proof-relevant relation) kinds.
-import Correspondences.Everything
-
 -- (Topo)logical stuff.
 import Logic.Everything
 

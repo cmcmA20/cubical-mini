@@ -8,29 +8,26 @@ open import Foundations.Equiv.Properties
 open import Foundations.Path
 open import Foundations.Univalence.Base
 
-private variable
-  ℓᵃ : Level
-  A : Type ℓᵃ
-  a b c : A
-  ab : a ＝ b
-  ac : a ＝ c
-  bc : b ＝ c
+private variable ℓᵃ : Level
 
-@0 ∙-flip-rₑ : ab ∙ bc ＝ ac
-             ≃ ab      ＝ ac ∙ sym bc
+@0 ∙-flip-rₑ : {A : Type ℓᵃ} {a b c : A} {ab : a ＝ b} {bc : b ＝ c} {ac : a ＝ c}
+             → ab ∙ bc ＝ ac
+             ≃ ab      ＝ ac ∙ bc ⁻¹
 ∙-flip-rₑ {ab} {bc} {ac} =
-  ab ∙ bc            ＝ ac            ≃⟨ ap-≃ (whisker-path-rₑ _) ⟩
-  (ab ∙ bc) ∙ sym bc ＝ ac ∙ sym bc   ≃⟨ whisker-path-lₑ (∙-cancel-r′ (∙-inv-l _)) ⟩
-  ab                 ＝ ac ∙ sym bc   ≃∎
+  ab ∙ bc           ＝ ac          ≃⟨ ap-≃ (whisker-path-rₑ _) ⟩
+  (ab ∙ bc) ∙ bc ⁻¹ ＝ ac ∙ bc ⁻¹  ≃⟨ whisker-path-lₑ (∙-cancel-r′ (∙-inv-l _)) ⟩
+  ab                ＝ ac ∙ bc ⁻¹  ≃∎
 
 -- it could be defined using `flip-rₑ` but the chain would be longer
-@0 flip-lₑ : ab ∙ bc ＝ ac
-           ≃      bc ＝ sym ab ∙ ac
+@0 flip-lₑ : {A : Type ℓᵃ} {a b c : A} {ab : a ＝ b} {bc : b ＝ c} {ac : a ＝ c}
+           → ab ∙ bc ＝ ac
+           ≃      bc ＝ ab ⁻¹ ∙ ac
 flip-lₑ {ab} {bc} {ac} =
-  ab ∙ bc          ＝ ac            ≃⟨ ap-≃ (whisker-path-lₑ _) ⟩
-  sym ab ∙ ab ∙ bc ＝ sym ab ∙ ac   ≃⟨ whisker-path-lₑ (∙-cancel-l′ (∙-inv-r _)) ⟩
-  bc               ＝ sym ab ∙ ac   ≃∎
+  ab ∙ bc         ＝ ac          ≃⟨ ap-≃ (whisker-path-lₑ _) ⟩
+  ab ⁻¹ ∙ ab ∙ bc ＝ ab ⁻¹ ∙ ac  ≃⟨ whisker-path-lₑ (∙-cancel-l′ (∙-inv-r _)) ⟩
+  bc              ＝ ab ⁻¹ ∙ ac  ≃∎
 
-@0 tiltₑ : sym ab ∙ ac ＝ bc
-         ≃     ab      ＝ ac ∙ sym bc
-tiltₑ = ∙-flip-rₑ ∙ₑ ap-≃ sym-≃ ∙ₑ whisker-path-rₑ (sym-∙ _ _)
+@0 tiltₑ : {A : Type ℓᵃ} {a b c : A} {ab : a ＝ b} {bc : b ＝ c} {ac : a ＝ c}
+         → ab ⁻¹ ∙ ac ＝ bc
+         ≃ ab ＝ ac ∙ bc ⁻¹
+tiltₑ = ∙-flip-rₑ ∙ ap-≃ sym-≃ ∙ whisker-path-rₑ (sym-∙ _ _)

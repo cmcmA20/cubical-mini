@@ -3,9 +3,6 @@ module Data.Tree.Binary.Instances.Append where
 
 open import Foundations.Base
 
-open import Correspondences.Binary.Reflexive
-open import Correspondences.Binary.Transitive
-
 open import Data.Tree.Binary.Base
 
 private variable

@@ -3,9 +3,6 @@ module Data.Id.Base where
 
 open import Foundations.Base
   renaming ( _＝_ to _＝ₚ_
-           ; refl to reflₚ
-           ; sym  to symₚ
-           ; _∙_  to _∙ₚ_
            ; apˢ  to apₚˢ
            )
 
@@ -21,21 +18,21 @@ private variable
   B : 𝒰 ℓᵇ
   x y z : A
 
-refl : x ＝ x
-refl _ = id
+instance
+  Refl-＝ : Reflexive (_＝_ {A = A})
+  Refl-＝ .refl _ = id
 
-sym : x ＝ y → y ＝ x
-sym p _ q = q ∙ₚ symₚ (p _ reflₚ)
+  Symm-＝ : Symmetric (_＝_ {A = A})
+  Symm-＝ ._⁻¹ p _ q = q ∙ p _ refl ⁻¹
 
-infixr 30 _∙_
-_∙_ : x ＝ y → y ＝ z → x ＝ z
-(p ∙ q) _ = q _ ∘ p _
+  Trans-＝ : Transitive (_＝_ {A = A})
+  Trans-＝ ._∙_ p q _ = q _ ∘ p _
 
 transportˢ : A ＝ B → A → B
-transportˢ p = transport (p _ reflₚ)
+transportˢ p = transport (p _ refl)
 
 apˢ : (f : A → B) → x ＝ y → f x ＝ f y
-apˢ f p _ q = q ∙ₚ ap f (p _ reflₚ)
+apˢ f p _ q = q ∙ ap f (p _ refl)
 
 substˢ : (P : A → Type ℓ)
        → x ＝ y → P x → P y

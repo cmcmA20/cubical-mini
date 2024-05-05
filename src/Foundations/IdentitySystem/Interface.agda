@@ -2,7 +2,6 @@
 module Foundations.IdentitySystem.Interface where
 
 open import Foundations.Base
-  hiding (J; J-refl)
 open import Foundations.HLevel.Base
 open import Foundations.Equiv
 

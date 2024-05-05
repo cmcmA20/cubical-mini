@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.String.Instances.Append where
 
-open import Correspondences.Binary.Reflexive
-open import Correspondences.Binary.Transitive
+open import Foundations.Base
 
 open import Data.String.Base as String
 

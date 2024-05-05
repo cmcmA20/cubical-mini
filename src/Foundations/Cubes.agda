@@ -15,10 +15,10 @@ magic-square p q j i = hcomp (∂ i ∨ ∂ j) λ where
   k (j = i1) → q (i ∧ k)
   k (k = i0) → p (i ∨ j)
 
-and-square : {x y : A} (p : x ＝ y) → Square refl refl p p
+and-square : {A : Type ℓ} {x y : A} (p : x ＝ y) → Square refl refl p p
 and-square p j i = p (i ∧ j)
 
-or-square : {x y : A} (p : x ＝ y) → Square p p refl refl
+or-square : {A : Type ℓ} {x y : A} (p : x ＝ y) → Square p p refl refl
 or-square p j i = p (i ∨ j)
 
 -- Higher cube types

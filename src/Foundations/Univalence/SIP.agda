@@ -66,19 +66,19 @@ is-transport-str {ℓ} {S} act =
 
 preserves-id : {S : Type ℓ → Type ℓ} → Equiv-action S → Type _
 preserves-id {ℓ} {S} act =
-  {X : Type ℓ} (s : S X) → act idₑ .fst s ＝ s
+  {X : Type ℓ} (s : S X) → act refl .fst s ＝ s
 
 @0 preserves-id→is-transport-str
   : (σ : Equiv-action S)
   → preserves-id σ → is-transport-str σ
 preserves-id→is-transport-str {S} σ pres-id e s =
   Jₑ (λ _ e → σ e .fst s ＝ subst S (ua e) s) lemma′ e where
-    lemma′ : σ idₑ .fst s ＝ subst S (ua idₑ) s
+    lemma′ : σ refl .fst s ＝ subst S (ua refl) s
     lemma′ = sym $
-      subst S (ua idₑ) s ＝⟨ ap (λ p → subst S p s) ua-idₑ ⟩
-      transport refl s   ＝⟨ transport-refl _ ⟩
-      s                  ＝⟨ sym (pres-id s) ⟩
-      σ idₑ .fst s       ∎
+      subst S (ua refl) s ＝⟨ ap (λ p → subst S p s) ua-idₑ ⟩
+      transport refl s    ＝⟨ transport-refl _ ⟩
+      s                   ＝⟨ sym (pres-id s) ⟩
+      σ refl .fst s       ∎
 
 @0 sym-transport-str
   : (α : Equiv-action S) (τ : is-transport-str α)

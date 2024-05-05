@@ -26,6 +26,8 @@ open import Meta.Marker          public
 open import Meta.Record          public
 open import Meta.SIP             public
 
+open import Structures.n-Type public
+
 open import Logic.Decidability   public
 open import Logic.Discreteness   public
 open import Logic.Exhaustibility public
@@ -37,6 +39,7 @@ open import Combinatorics.Finiteness.ManifestBishop public
 open import Functions.Equiv.Weak public
 open import Functions.Embedding  public
 open import Functions.Fibration  public
+open import Functions.Surjection public
 
 import Data.Truncation.Propositional
 module ∥-∥₁ = Data.Truncation.Propositional
