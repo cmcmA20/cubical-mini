@@ -14,18 +14,18 @@ private variable ℓᵃ : Level
              → ab ∙ bc ＝ ac
              ≃ ab      ＝ ac ∙ bc ⁻¹
 ∙-flip-rₑ {ab} {bc} {ac} =
-  ab ∙ bc           ＝ ac          ≃⟨ ap-≃ (whisker-path-rₑ _) ⟩
-  (ab ∙ bc) ∙ bc ⁻¹ ＝ ac ∙ bc ⁻¹  ≃⟨ whisker-path-lₑ (∙-cancel-r′ (∙-inv-l _)) ⟩
-  ab                ＝ ac ∙ bc ⁻¹  ≃∎
+  ab ∙ bc           ＝ ac          ≡⟨ ap-≃ (whisker-path-rₑ _) ⟩
+  (ab ∙ bc) ∙ bc ⁻¹ ＝ ac ∙ bc ⁻¹  ≡⟨ whisker-path-lₑ (∙-cancel-r′ (∙-inv-l _)) ⟩
+  ab                ＝ ac ∙ bc ⁻¹  ∎
 
 -- it could be defined using `flip-rₑ` but the chain would be longer
 @0 flip-lₑ : {A : Type ℓᵃ} {a b c : A} {ab : a ＝ b} {bc : b ＝ c} {ac : a ＝ c}
            → ab ∙ bc ＝ ac
            ≃      bc ＝ ab ⁻¹ ∙ ac
 flip-lₑ {ab} {bc} {ac} =
-  ab ∙ bc         ＝ ac          ≃⟨ ap-≃ (whisker-path-lₑ _) ⟩
-  ab ⁻¹ ∙ ab ∙ bc ＝ ab ⁻¹ ∙ ac  ≃⟨ whisker-path-lₑ (∙-cancel-l′ (∙-inv-r _)) ⟩
-  bc              ＝ ab ⁻¹ ∙ ac  ≃∎
+  ab ∙ bc         ＝ ac          ≡⟨ ap-≃ (whisker-path-lₑ _) ⟩
+  ab ⁻¹ ∙ ab ∙ bc ＝ ab ⁻¹ ∙ ac  ≡⟨ whisker-path-lₑ (∙-cancel-l′ (∙-inv-r _)) ⟩
+  bc              ＝ ab ⁻¹ ∙ ac  ∎
 
 @0 tiltₑ : {A : Type ℓᵃ} {a b c : A} {ab : a ＝ b} {bc : b ＝ c} {ac : a ＝ c}
          → ab ⁻¹ ∙ ac ＝ bc

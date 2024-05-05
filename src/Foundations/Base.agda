@@ -18,20 +18,58 @@ open import Agda.Builtin.Nat
   renaming (Nat to ℕ)
 open import Agda.Builtin.Unit      public
 
-infixr 30 _∙ₚ_
+private variable
+  ℓ ℓ′ ℓ″ ℓ‴ ℓᵃ ℓᵇ ℓᶜ : Level
+  A : Type ℓ
+  B : A → Type ℓ′
+  x y z w : A
+
+-- Syntax for chains of equational reasoning
+
 infix  3 _∎
-infixr 2 _＝⟨_⟩_ _＝˘⟨_⟩_ _＝⟨⟩_
-infixr 2.5 _＝⟨_⟩＝⟨_⟩_
+_∎
+  : {A : Type ℓᵃ}
+    {_~_ : A → A → 𝒰 ℓ} ⦃ rfl : Refl _~_ ⦄
+  → (x : A) → x ~ x
+_ ∎ = refl
+
+infixr 2 _≡⟨⟩_
+_≡⟨⟩_
+  : {A : Type ℓᵃ} {B : Type ℓᵇ}
+    {_~I_ : A → B → 𝒰 ℓ} {_~O_ : B → A → 𝒰 ℓ′}
+    ⦃ sy : Symm _~I_ _~O_ ⦄ -- for inference
+  → (x : B) {y : A} → x ~O y → x ~O y
+_≡⟨⟩_ _ xy = xy
+
+infixr 2 _≡⟨_⟩_
+_≡⟨_⟩_
+  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+    {_~L_ : A → B → 𝒰 ℓ} {_~R_ : B → C → 𝒰 ℓ′} {_~O_ : A → C → 𝒰 ℓ″}
+    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
+  → (x : A) {y : B} {z : C} → x ~L y → y ~R z → x ~O z
+_ ≡⟨ x~y ⟩ y~z = x~y ∙ y~z
+
+infixr 2 _≡⟨_⟨_
+_≡⟨_⟨_
+  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+    {_~L_ : A → B → 𝒰 ℓ} {_~L′_ : B → A → 𝒰 ℓ′} {_~R_ : B → C → 𝒰 ℓ″} {_~O_ : A → C → 𝒰 ℓ‴}
+    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄ ⦃ sy : Symm _~L′_ _~L_ ⦄
+  → (x : A) {y : B} {z : C} → y ~L′ x → y ~R z → x ~O z
+x ≡⟨ p ⟨ q = p ⁻¹ ∙ q
+
+infixr 2 ≡⟨⟩-syntax
+≡⟨⟩-syntax
+  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+    {_~L_ : A → B → 𝒰 ℓ} {_~R_ : B → C → 𝒰 ℓ′} {_~O_ : A → C → 𝒰 ℓ″}
+    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
+  → (x : A) {y : B} {z : C} → x ~L y → y ~R z → x ~O z
+≡⟨⟩-syntax = _≡⟨_⟩_
+syntax ≡⟨⟩-syntax x (λ i → B) y = x ≡[ i ]⟨ B ⟩ y
+
 
 -- Basic theory about paths. These proofs should typically be
 -- inlined. This module also makes equational reasoning work with
 -- (non-dependent) paths.
-
-private variable
-  ℓ ℓ′ ℓ″ : Level
-  A : Type ℓ
-  B : A → Type ℓ′
-  x y z w : A
 
 instance
   Refl-Path : Refl (Path A)
@@ -189,6 +227,7 @@ opaque
   ∙∙-contract p q r = ∙∙-unique p q r _
 
   -- For single homogenous path composition, we take `refl` as the top side:
+  infixr 30 _∙ₚ_
   _∙ₚ_ : x ＝ y → y ＝ z → x ＝ z
   p ∙ₚ q = p ∙∙ reflₚ ∙∙ q
 
@@ -253,54 +292,35 @@ instance
   Trans-Path ._∙_ = _∙ₚ_
 
 -- `ap` has good computational properties:
-module _ {B : Type ℓ′} {x y : A} where
+module _ {A : Type ℓ} {B : Type ℓ′} {x y : A} where
   module _ {C : Type ℓ″} {f : A → B} {g : B → C} {p : x ＝ y} where private
     ap-comp : ap (g ∘ f) p ＝ ap g (ap f p)
-    ap-comp = reflₚ
+    ap-comp = refl
 
     ap-id : ap id p ＝ p
-    ap-id = reflₚ
+    ap-id = refl
 
-    ap-sym : symₚ (ap f p) ＝ ap f (symₚ p)
-    ap-sym = reflₚ
+    ap-sym : ap f p ⁻¹ ＝ ap f (p ⁻¹)
+    ap-sym = refl
 
-    ap-refl : ap f (reflₚ {x = x}) ＝ reflₚ
-    ap-refl = reflₚ
+    ap-refl : ap f (refl {x = x}) ＝ refl
+    ap-refl = refl
 
   opaque
-    ap-comp-∙ : (f : A → B) (p : x ＝ y) (q : y ＝ z) → ap f (p ∙ₚ q) ＝ ap f p ∙ₚ ap f q
-    ap-comp-∙ f p q i = ∙∙-unique (ap f p) reflₚ (ap f q)
-      (ap f (p ∙ₚ q)    , λ k j → f (∙-filler p q k j))
-      (ap f p ∙ₚ ap f q , ∙-filler _ _)
+    ap-comp-∙ : (f : A → B) (p : x ＝ y) (q : y ＝ z) → ap f (p ∙ q) ＝ ap f p ∙ ap f q
+    ap-comp-∙ f p q i = ∙∙-unique (ap f p) refl (ap f q)
+      (ap f (p ∙ q)    , λ k j → f (∙-filler p q k j))
+      (ap f p ∙ ap f q , ∙-filler _ _)
       i .fst
 
-
--- Syntax for chains of equational reasoning
-
-_＝⟨_⟩_ : (x : A) → x ＝ y → y ＝ z → x ＝ z
-_ ＝⟨ x＝y ⟩ y＝z = x＝y ∙ₚ y＝z
-
-＝⟨⟩-syntax : (x : A) → x ＝ y → y ＝ z → x ＝ z
-＝⟨⟩-syntax = _＝⟨_⟩_
-infixr 2 ＝⟨⟩-syntax
-syntax ＝⟨⟩-syntax x (λ i → B) y = x ＝[ i ]⟨ B ⟩ y
-
-_＝⟨⟩_ : (x : A) → x ＝ y → x ＝ y
-_ ＝⟨⟩ x＝y = x＝y
-
+infixr 3 ＝⟨⟩⟨⟩-syntax
 ＝⟨⟩⟨⟩-syntax : (x y : A) → x ＝ y → y ＝ z → z ＝ w → x ＝ w
 ＝⟨⟩⟨⟩-syntax x y p q r = p ∙∙ q ∙∙ r
-infixr 3 ＝⟨⟩⟨⟩-syntax
 syntax ＝⟨⟩⟨⟩-syntax x y B C = x ＝⟨ B ⟩＝ y ＝⟨ C ⟩＝
 
+infixr 2.5 _＝⟨_⟩＝⟨_⟩_
 _＝⟨_⟩＝⟨_⟩_ : (x : A) → x ＝ y → y ＝ z → z ＝ w → x ＝ w
 _ ＝⟨ x＝y ⟩＝⟨ y＝z ⟩ z＝w = x＝y ∙∙ y＝z ∙∙ z＝w
-
-_＝˘⟨_⟩_ : (x : A) → y ＝ x → y ＝ z → x ＝ z
-x ＝˘⟨ p ⟩ q = (symₚ p) ∙ₚ q
-
-_∎ : (x : A) → x ＝ x
-_ ∎ = reflₚ
 
 
 -- Squeezing and spreading, coercions
@@ -344,16 +364,16 @@ module _ (A : I → Type ℓ) where
   -- Observe the computational behaviour of `coe`!
   private
     coei0→0 : (a : A i0) → coei→0 A i0 a ＝ a
-    coei0→0 _ = reflₚ
+    coei0→0 _ = refl
 
     coei1→0 : (a : A i1) → coei→0 A i1 a ＝ coe1→0 a
-    coei1→0 _ = reflₚ
+    coei1→0 _ = refl
 
     coei0→1 : (a : A i0) → coei→1 A i0 a ＝ coe0→1 a
-    coei0→1 _ = reflₚ
+    coei0→1 _ = refl
 
     coei1→1 : (a : A i1) → coei→1 A i1 a ＝ a
-    coei1→1 _ = reflₚ
+    coei1→1 _ = refl
 
   coei→i : (i : I) (x : A i) → coe A i i x ＝ x
   coei→i i x j = transp (λ _ → A i) (j ∨ ∂ i) x
@@ -369,7 +389,7 @@ module _ (A : I → Type ℓ) where
 
 -- Transporting in a constant family is the identity function (up to a
 -- path). If we would have regularity this would be definitional.
-transport-refl : (x : A) → transport reflₚ x ＝ x
+transport-refl : {A : Type ℓ} (x : A) → transport refl x ＝ x
 transport-refl x i = coe1→i _ i x
 
 transport-filler : {A B : Type ℓ} (p : A ＝ B) (x : A)
@@ -380,7 +400,7 @@ transport-filler p x i = coe0→i (λ j → p j) i x
 subst : (B : A → Type ℓ′) (p : x ＝ y) → B x → B y
 subst B p = transport (λ i → B (p i))
 
-subst-refl : {B : A → Type ℓ} {x : A} (px : B x) → subst B reflₚ px ＝ px
+subst-refl : {A : Type ℓ} {B : A → Type ℓ} {x : A} (px : B x) → subst B refl px ＝ px
 subst-refl = transport-refl
 
 
@@ -455,7 +475,7 @@ opaque
   singletonₚ-is-prop : {A : Type ℓ} {a : A} (s : Singletonₚ a)
                      → (a , reflₚ) ＝ s
   singletonₚ-is-prop (_ , path) i = path i , square i where
-      square : Square reflₚ reflₚ path path
+      square : Square refl refl path path
       square i j = path (i ∧ j)
 
   singletonᴾ-is-prop
@@ -468,7 +488,7 @@ opaque
 
 singletonₚ-is-contr : {A : Type ℓ} {a : A} (s : Singletonₚ a)
                     → is-contr (Singletonₚ a)
-singletonₚ-is-contr {a} _ = (a , reflₚ) , singletonₚ-is-prop
+singletonₚ-is-contr {a} _ = (a , refl) , singletonₚ-is-prop
 
 singletonᴾ-is-contr : (A : I → Type ℓ) (a : A i0) → is-contr (Singletonᴾ A a)
 singletonᴾ-is-contr A a .fst = _
@@ -477,20 +497,20 @@ singletonᴾ-is-contr A a .snd = singletonᴾ-is-prop A a
 
 -- Path induction (J) and its computation rule
 
-module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x reflₚ) where
+module _ {A : Type ℓ} {x : A} (P : (y : A) → x ＝ y → Type ℓ′) (d : P x refl) where
   Jₚ : (p : x ＝ y) → P y p
   Jₚ {y} p = transport (λ i → P (path i .fst) (path i .snd)) d where
-    path : Path (Σ[ t ꞉ A ] (x ＝ t)) (x , reflₚ) (y , p)
+    path : Path (Σ[ t ꞉ A ] (x ＝ t)) (x , refl) (y , p)
     path = singletonₚ-is-contr (y , p) .snd _
 
   opaque
     unfolding singletonₚ-is-prop
-    Jₚ-refl : Jₚ reflₚ ＝ d
+    Jₚ-refl : Jₚ refl ＝ d
     Jₚ-refl = transport-refl d
 
   opaque
     Jₚ-∙ : (p : x ＝ y) (q : y ＝ z)
-         → Jₚ (p ∙ₚ q) ＝ transport (λ i → P (q i) (λ j → ∙-filler-l p q i j)) (Jₚ p)
+         → Jₚ (p ∙ q) ＝ transport (λ i → P (q i) (λ j → ∙-filler-l p q i j)) (Jₚ p)
     Jₚ-∙ p q k =
       transp
         (λ i → P (q (i ∨ ~ k))
@@ -498,30 +518,30 @@ module _ (P : (y : A) → x ＝ y → Type ℓ′) (d : P x reflₚ) where
         (Jₚ (λ j → ∙-filler-l p q (~ k) j))
 
 -- Multi-variable versions of J
-module _ {b : B x}
+module _ {A : Type ℓ} {B : A → Type ℓ′} {x : A} {b : B x}
   (P : (y : A) (p : x ＝ y) (z : B y) (q : ＜ b ／ (λ i → B (p i)) ＼ z ＞) → Type ℓ″)
-  (d : P _ reflₚ _ reflₚ) where
+  (d : P _ refl _ refl) where
 
   Jₚᵈ : {y : A} (p : x ＝ y) {z : B y} (q : ＜ b ／ (λ i → B (p i)) ＼ z ＞) → P _ p _ q
   Jₚᵈ _ q = transport (λ i → P _ _ _ (λ j → q (i ∧ j))) d
 
-  Jₚᵈ-refl : Jₚᵈ reflₚ reflₚ ＝ d
+  Jₚᵈ-refl : Jₚᵈ refl refl ＝ d
   Jₚᵈ-refl = transport-refl d
 
-module _ {x : A}
+module _ {A : Type ℓ} {x : A}
   {P : (y : A) → x ＝ y → Type ℓ′} {d : (y : A) (p : x ＝ y) → P y p}
   (Q : (y : A) (p : x ＝ y) (z : P y p) → d y p ＝ z → Type ℓ″)
-  (r : Q _ reflₚ _ reflₚ) where
+  (r : Q _ refl _ refl) where
 
   private
     ΠQ : (y : A) → x ＝ y → _
     ΠQ y p = ∀ z q → Q y p z q
 
   Jₚ² : {y : A} (p : x ＝ y) {z : P y p} (q : d y p ＝ z) → Q _ p _ q
-  Jₚ² p = Jₚ ΠQ (λ _ → Jₚ (Q x reflₚ) r) p _
+  Jₚ² p = Jₚ ΠQ (λ _ → Jₚ (Q x refl) r) p _
 
   Jₚ²-refl : Jₚ² reflₚ reflₚ ＝ r
-  Jₚ²-refl = (λ i → Jₚ-refl ΠQ (λ _ → Jₚ (Q x reflₚ) r) i _ reflₚ) ∙ₚ Jₚ-refl (Q x reflₚ) _
+  Jₚ²-refl = (λ i → Jₚ-refl ΠQ (λ _ → Jₚ (Q x refl) r) i _ refl) ∙ₚ Jₚ-refl (Q x refl) _
 
 -- A prefix operator version of J that is more suitable to be nested
 
@@ -622,11 +642,11 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 
 opaque
   unfolding _∙∙_∙∙_
-  transport-path : {x y x′ y′ : A}
+  transport-path : {A : Type ℓᵃ} {x y x′ y′ : A}
                  → (p : x ＝ y)
                  → (left : x ＝ x′) (right : y ＝ y′)
-                 → transport (λ i → left i ＝ right i) p ＝ symₚ left ∙ₚ p ∙ₚ right
-  transport-path {A} p left right = lemma ∙ₚ ∙∙＝∙ _ _ _
+                 → transport (λ i → left i ＝ right i) p ＝ left ⁻¹ ∙ p ∙ right
+  transport-path {A} p left right = lemma ∙ ∙∙＝∙ _ _ _
     where
     lemma : transport (λ i → left i ＝ right i) p ＝ symₚ left ∙∙ p ∙∙ right
     lemma i j = hcomp (~ i ∨ ∂ j) λ where
@@ -639,26 +659,26 @@ opaque
       k (j = i1) → coei→1 (λ _ → A) (k ∨ i) (right k)
 
 opaque
-  subst-path-left : {x y x′ : A}
+  subst-path-left : {A : Type ℓᵃ} {x y x′ : A}
                   → (p : x ＝ y)
                   → (left : x ＝ x′)
-                  → subst (λ e → e ＝ y) left p ＝ symₚ left ∙ₚ p
+                  → subst (λ e → e ＝ y) left p ＝ left ⁻¹ ∙ p
   subst-path-left {y} p left =
-    subst (λ e → e ＝ y) left p      ＝⟨⟩
-    transport (λ i → left i ＝ y) p  ＝⟨ transport-path p left reflₚ ⟩
-    symₚ left ∙ₚ p ∙ₚ reflₚ          ＝⟨ ap (symₚ left ∙ₚ_) (symₚ (∙-filler-l _ _)) ⟩
-    symₚ left ∙ₚ p                   ∎
+    subst (λ e → e ＝ y) left p      ≡⟨⟩
+    transport (λ i → left i ＝ y) p  ≡⟨ transport-path p left refl ⟩
+    left ⁻¹ ∙ p ∙ reflₚ              ≡⟨ ap (sym left ∙ₚ_) (∙-filler-l _ _) ⟨
+    left ⁻¹ ∙ p                      ∎
 
-  subst-path-right : {x y y′ : A}
+  subst-path-right : {A : Type ℓᵃ} {x y y′ : A}
                    → (p : x ＝ y)
                    → (right : y ＝ y′)
-                   → subst (λ e → x ＝ e) right p ＝ p ∙ₚ right
+                   → subst (λ e → x ＝ e) right p ＝ p ∙ right
   subst-path-right {x} p right =
-    subst (λ e → x ＝ e) right p     ＝⟨⟩
-    transport (λ i → x ＝ right i) p ＝⟨ transport-path p reflₚ right ⟩
-    symₚ reflₚ ∙ₚ p ∙ₚ right         ＝⟨⟩
-    reflₚ ∙ₚ p ∙ₚ right              ＝⟨ symₚ (∙-filler-r _ _) ⟩
-    p ∙ₚ right                       ∎
+    subst (λ e → x ＝ e) right p      ≡⟨⟩
+    transport (λ i → x ＝ right i) p  ≡⟨ transport-path p refl right ⟩
+    refl ⁻¹ ∙ p ∙ right               ≡⟨⟩
+    refl ∙ p ∙ right                  ≡⟨ ∙-filler-r _ _ ⟨
+    p ∙ right                         ∎
 
   subst-path-both : {x x′ : A}
                   → (p : x ＝ x)

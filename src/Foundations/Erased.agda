@@ -121,21 +121,6 @@ instance
   Trans-≃ᴱ : Trans (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) (_≃ᴱ_ {ℓ′ = ℓᶜ}) _≃ᴱ_
   Trans-≃ᴱ ._∙_  = _∙ᴱₑ_
 
-infixr 1.5 _≃ᴱ⟨⟩_ _≃ᴱ⟨_⟩_ _≃ᴱ˘⟨_⟩_
-infix  1.9 _≃ᴱ∎
-
-_≃ᴱ⟨_⟩_ : (A : Type ℓᵃ) {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ B → B ≃ᴱ C → A ≃ᴱ C
-_ ≃ᴱ⟨ u ⟩ v = u ∙ v
-
-_≃ᴱ˘⟨_⟩_ : (A : Type ℓᵃ) {B : Type ℓᵇ} {C : Type ℓᶜ} → B ≃ᴱ A → B ≃ᴱ C → A ≃ᴱ C
-_ ≃ᴱ˘⟨ u ⟩ v = (u ⁻¹) ∙ v
-
-_≃ᴱ⟨⟩_ : (A : Type ℓᵃ) → A ≃ᴱ B → A ≃ᴱ B
-_ ≃ᴱ⟨⟩ e = e
-
-_≃ᴱ∎ : (A : Type ℓᵃ) → A ≃ᴱ A
-_ ≃ᴱ∎ = ≃→≃ᴱ refl
-
 Σ-contract-sndᴱ
   : {A : Type ℓᵃ} {B : A → Type ℓᵇ}
   → (∀ x → is-contrᴱ (B x)) → Σ A B ≃ᴱ A

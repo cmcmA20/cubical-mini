@@ -144,10 +144,10 @@ section-of-∘
   → f section-of g → h section-of i
   → (h ∘ f) section-of (g ∘ i)
 section-of-∘ {f} {g} {h} {i} fg-sect hi-sect =
-  (g ∘ i) ∘ h ∘ f    ＝⟨ cat! C ⟩
-  g ∘ ⌜ i ∘ h ⌝ ∘ f  ＝⟨ ap! (hi-sect) ⟩
-  g ∘ ⌜ id ∘ f ⌝     ＝⟨ ap! (id-l _) ⟩
-  g ∘ f              ＝⟨ fg-sect ⟩
+  (g ∘ i) ∘ h ∘ f    ≡⟨ cat! C ⟩
+  g ∘ ⌜ i ∘ h ⌝ ∘ f  ≡⟨ ap! (hi-sect) ⟩
+  g ∘ ⌜ id ∘ f ⌝     ≡⟨ ap! (id-l _) ⟩
+  g ∘ f              ≡⟨ fg-sect ⟩
   id                 ∎
 
 section-∘
@@ -164,13 +164,13 @@ has-section→epic
   : has-section f
   → is-epic f
 has-section→epic {f = f} f-sect g h p =
-  g                            ＝˘⟨ id-r _ ⟩
-  g ∘ ⌜ id ⌝                   ＝˘⟨ ap¡ (f-sect .is-section) ⟩
-  g ∘ f ∘ f-sect .section      ＝⟨ assoc _ _ _ ⟩
-  ⌜ g ∘ f ⌝ ∘ f-sect .section  ＝⟨ ap! p ⟩
-  (h ∘ f) ∘ f-sect .section    ＝˘⟨ assoc _ _ _ ⟩
-  h ∘ ⌜ f ∘ f-sect .section ⌝  ＝⟨ ap! (f-sect .is-section) ⟩
-  h ∘ id                       ＝⟨ id-r _ ⟩
+  g                            ≡⟨ id-r _ ⟨
+  g ∘ ⌜ id ⌝                   ≡⟨ ap¡ (f-sect .is-section) ⟨
+  g ∘ f ∘ f-sect .section      ≡⟨ assoc _ _ _ ⟩
+  ⌜ g ∘ f ⌝ ∘ f-sect .section  ≡⟨ ap! p ⟩
+  (h ∘ f) ∘ f-sect .section    ≡⟨ assoc _ _ _ ⟨
+  h ∘ ⌜ f ∘ f-sect .section ⌝  ≡⟨ ap! (f-sect .is-section) ⟩
+  h ∘ id                       ≡⟨ id-r _ ⟩
   h                            ∎
 
 
@@ -213,13 +213,13 @@ has-retract→monic
   : has-retract f
   → is-monic f
 has-retract→monic {f} f-ret g h p =
-  g                           ＝˘⟨ id-l _ ⟩
-  ⌜ id ⌝ ∘ g                  ＝˘⟨ ap¡ (f-ret .is-retract) ⟩
-  (f-ret .retract ∘ f) ∘ g    ＝˘⟨ assoc _ _ _ ⟩
-  f-ret .retract ∘ ⌜ f ∘ g ⌝  ＝⟨ ap! p ⟩
-  f-ret .retract ∘ f ∘ h      ＝⟨ assoc _ _ _ ⟩
-  ⌜ f-ret .retract ∘ f ⌝ ∘ h  ＝⟨ ap! (f-ret .is-retract) ⟩
-  id ∘ h                      ＝⟨ id-l _ ⟩
+  g                           ≡⟨ id-l _ ⟨
+  ⌜ id ⌝ ∘ g                  ≡⟨ ap¡ (f-ret .is-retract) ⟨
+  (f-ret .retract ∘ f) ∘ g    ≡⟨ assoc _ _ _ ⟨
+  f-ret .retract ∘ ⌜ f ∘ g ⌝  ≡⟨ ap! p ⟩
+  f-ret .retract ∘ f ∘ h      ≡⟨ assoc _ _ _ ⟩
+  ⌜ f-ret .retract ∘ f ⌝ ∘ h  ≡⟨ ap! (f-ret .is-retract) ⟩
+  id ∘ h                      ≡⟨ id-l _ ⟩
   h                           ∎
 
 
@@ -232,9 +232,9 @@ section-of+epic→retract-of
   → s retract-of r
 section-of+epic→retract-of {s} {r} sect epic =
   epic (s ∘ r) id $
-    (s ∘ r) ∘ s    ＝˘⟨ assoc s r s ⟩
-    s ∘ ⌜ r ∘ s ⌝  ＝⟨ ap! sect ⟩
-    s ∘ id         ＝⟨ cat! C ⟩
+    (s ∘ r) ∘ s    ≡⟨ assoc s r s ⟨
+    s ∘ ⌜ r ∘ s ⌝  ≡⟨ ap! sect ⟩
+    s ∘ id         ≡⟨ cat! C ⟩
     id ∘ s         ∎
 
 
@@ -247,9 +247,9 @@ retract-of+monic→section-of
   → r section-of s
 retract-of+monic→section-of {s = s} {r = r} ret monic =
   monic (s ∘ r) id $
-    r ∘ s ∘ r      ＝⟨ assoc r s r ⟩
-    ⌜ r ∘ s ⌝ ∘ r  ＝⟨ ap! ret ⟩
-    id ∘ r         ＝⟨ cat! C ⟩
+    r ∘ s ∘ r      ≡⟨ assoc r s r ⟩
+    ⌜ r ∘ s ⌝ ∘ r  ≡⟨ ap! ret ⟩
+    id ∘ r         ≡⟨ cat! C ⟩
     r ∘ id         ∎
 
 
@@ -308,9 +308,9 @@ opaque
 
     g≡h : g.inv ＝ h.inv
     g≡h =
-      g.inv             ＝⟨ sym (id-r _) ∙ ap² _∘_ refl (sym h.inv-l) ⟩
-      g.inv ∘ f ∘ h.inv ＝⟨ assoc _ _ _ ∙∙ ap² _∘_ g.inv-r refl ∙∙ id-l _ ⟩
-      h.inv             ∎
+      g.inv              ≡⟨ sym (id-r _) ∙ ap² _∘_ refl (sym h.inv-l) ⟩
+      g.inv ∘ f ∘ h.inv  ≡⟨ assoc _ _ _ ∙∙ ap² _∘_ g.inv-r refl ∙∙ id-l _ ⟩
+      h.inv              ∎
 
     p : g ＝ h
     p i .is-invertible.inv = g≡h i
@@ -349,17 +349,17 @@ Inverses-∘ {f} {f⁻¹} {g} {g⁻¹} finv ginv = record { inv-l = l ; inv-r = 
 
   opaque
     l : (g ∘ f) ∘ f⁻¹ ∘ g⁻¹ ＝ id
-    l = (g ∘ f) ∘ f⁻¹ ∘ g⁻¹    ＝⟨ cat! C ⟩
-        g ∘ ⌜ f ∘ f⁻¹ ⌝ ∘ g⁻¹  ＝⟨ ap! finv.inv-l ⟩
-        g ∘ id ∘ g⁻¹           ＝⟨ cat! C ⟩
-        g ∘ g⁻¹                ＝⟨ ginv.inv-l ⟩
+    l = (g ∘ f) ∘ f⁻¹ ∘ g⁻¹    ≡⟨ cat! C ⟩
+        g ∘ ⌜ f ∘ f⁻¹ ⌝ ∘ g⁻¹  ≡⟨ ap! finv.inv-l ⟩
+        g ∘ id ∘ g⁻¹           ≡⟨ cat! C ⟩
+        g ∘ g⁻¹                ≡⟨ ginv.inv-l ⟩
         id                     ∎
 
     r : (f⁻¹ ∘ g⁻¹) ∘ g ∘ f ＝ id
-    r = (f⁻¹ ∘ g⁻¹) ∘ g ∘ f    ＝⟨ cat! C ⟩
-        f⁻¹ ∘ ⌜ g⁻¹ ∘ g ⌝ ∘ f  ＝⟨ ap! ginv.inv-r ⟩
-        f⁻¹ ∘ id ∘ f           ＝⟨ cat! C ⟩
-        f⁻¹ ∘ f                ＝⟨ finv.inv-r ⟩
+    r = (f⁻¹ ∘ g⁻¹) ∘ g ∘ f    ≡⟨ cat! C ⟩
+        f⁻¹ ∘ ⌜ g⁻¹ ∘ g ⌝ ∘ f  ≡⟨ ap! ginv.inv-r ⟩
+        f⁻¹ ∘ id ∘ f           ≡⟨ cat! C ⟩
+        f⁻¹ ∘ f                ≡⟨ finv.inv-r ⟩
         id                     ∎
 
 _∘ᵢ_ : a ≅ b → b ≅ c → a ≅ c
@@ -445,11 +445,11 @@ opaque
       → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
       → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
     inverse-unique-internal x = Jₚ> λ y → Jₚ> λ {f} {g} d →
-      f .from                        ＝⟨ cat! C ⟩
-      f .from ∘ ⌜ id ⌝               ＝˘⟨ ap¡ (g .inv-l) ⟩
-      f .from ∘ g .to ∘ g .from      ＝⟨ assoc _ _ _ ⟩
-      ⌜ f .from ∘ g .to ⌝ ∘ g .from  ＝⟨ ap! (ap (f .from ∘_) (sym d) ∙ f .inv-r) ⟩
-      id ∘ g .from                   ＝⟨ cat! C ⟩
+      f .from                        ≡⟨ cat! C ⟩
+      f .from ∘ ⌜ id ⌝               ≡⟨ ap¡ (g .inv-l) ⟨
+      f .from ∘ g .to ∘ g .from      ≡⟨ assoc _ _ _ ⟩
+      ⌜ f .from ∘ g .to ⌝ ∘ g .from  ≡⟨ ap! (ap (f .from ∘_) (sym d) ∙ f .inv-r) ⟩
+      id ∘ g .from                   ≡⟨ cat! C ⟩
       g .from                        ∎
 
   inverse-unique

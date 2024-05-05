@@ -39,12 +39,12 @@ instance
 
 FinOrd≃ᴱℕ : FinOrd ℓ ≃ᴱ ℕ
 FinOrd≃ᴱℕ {ℓ} =
-  FinOrd ℓ                                       ≃ᴱ⟨ ≃→≃ᴱ (≅→≃ fin-ord-iso) ⟩
-  Σ[ X ꞉ 𝒰 ℓ ] Manifest-bishop-finite X         ≃ᴱ⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → ≅→≃ manifest-bishop-finite-iso)) ⟩
-  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (X ≃ Fin n)           ≃ᴱ⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → Σ-ap-snd λ _ → inv-≃ ∙ whisker-lₑ (lift≃id ⁻¹))) ⟩
-  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (Lift ℓ (Fin n) ≃ X)  ≃ᴱ⟨ ≃→≃ᴱ Σ-swap ⟩
-  Σ[ n ꞉ ℕ ] Σ[ X ꞉ 𝒰 ℓ ] (Lift ℓ (Fin n) ≃ X)  ≃ᴱ⟨ Σ-contract-sndᴱ (λ n → equiv-is-contrᴱ _) ⟩
-  ℕ                                              ≃ᴱ∎
+  FinOrd ℓ                                       ≡⟨ ≃→≃ᴱ (≅→≃ fin-ord-iso) ⟩
+  Σ[ X ꞉ 𝒰 ℓ ] Manifest-bishop-finite X         ≡⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → ≅→≃ manifest-bishop-finite-iso)) ⟩
+  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (X ≃ Fin n)           ≡⟨ ≃→≃ᴱ (Σ-ap-snd (λ _ → Σ-ap-snd λ _ → inv-≃ ∙ whisker-lₑ (lift≃id ⁻¹))) ⟩
+  Σ[ X ꞉ 𝒰 ℓ ] Σ[ n ꞉ ℕ ] (Lift ℓ (Fin n) ≃ X)  ≡⟨ ≃→≃ᴱ Σ-swap ⟩
+  Σ[ n ꞉ ℕ ] Σ[ X ꞉ 𝒰 ℓ ] (Lift ℓ (Fin n) ≃ X)  ≡⟨ Σ-contract-sndᴱ (λ n → equiv-is-contrᴱ _) ⟩
+  ℕ                                              ∎
 
 instance
   @0 H-Level-FinOrd : ∀ {n} → H-Level (2 + n) (FinOrd ℓ)
