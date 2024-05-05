@@ -2,12 +2,6 @@
 module Foundations.IdentitySystem.Base where
 
 open import Foundations.Base
-  renaming ( singleton-is-contr to singletonₜ-is-contr
-
-           ; J      to Jₜ
-           ; J-refl to Jₜ-refl
-           )
-
 open import Foundations.Cubes
 open import Foundations.Equiv
 open import Foundations.HLevel
@@ -117,7 +111,7 @@ identity-system-gives-path {R} {r} ids =
     from {a} p = transport (λ i → R a (p i)) (r a)
 
     ri : ∀ {a b} → (from {a} {b}) is-right-inverse-of (ids .to-path)
-    ri = Jₜ (λ y p → ids .to-path (from p) ＝ p)
+    ri = Jₚ (λ y p → ids .to-path (from p) ＝ p)
             ( ap (ids .to-path) (transport-refl _)
             ∙ to-path-refl ids)
 
@@ -135,7 +129,6 @@ module _
   (ids : is-identity-system R r)
   (eqv : ∀ x y → R x y ≃ S x y)
   (pres : ∀ x → eqv x x .fst (r x) ＝ s x)
-  -- (pres : ∀ x → eqv x x # r x ＝ s x)
   where
   private module e x y = Equiv (eqv x y)
   transfer-identity-system : is-identity-system S s
@@ -146,7 +139,7 @@ module _
     j (j = i0) → e.to _ _ (ids .to-path-over (e.from _ _ p) i)
 
 @0 univalence-identity-system
-  : is-identity-system {A = Type ℓ} _≃_ (λ _ → idₑ)
+  : is-identity-system {A = Type ℓ} _≃_ (λ _ → refl)
 univalence-identity-system .to-path = ua
 univalence-identity-system .to-path-over p =
   Σ-prop-pathᴾ (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → ＝→ua-pathᴾ p refl
@@ -186,7 +179,7 @@ opaque
     → is-of-hlevel (suc n) A
   identity-system→is-of-hlevel zero ids hl x y = ids .to-path (hl _ _ .fst)
   identity-system→is-of-hlevel (suc n) ids hl x y =
-    ≃→is-of-hlevel (suc n) (identity-system-gives-path ids ₑ⁻¹) (hl x y)
+    ≃→is-of-hlevel (suc n) (identity-system-gives-path ids ⁻¹) (hl x y)
 
 instance opaque
   H-Level-identity-system : ∀ {n} {r : ∀ a → R a a} → H-Level (suc n) (is-identity-system R r)

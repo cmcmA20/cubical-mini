@@ -14,46 +14,46 @@ module _ where private
   -- We could have also defined single composition by taking `refl` on the right
   infixr 30 _∙′_
   _∙′_ : x ＝ y → y ＝ z → x ＝ z
-  p ∙′ q = p ∙∙ q ∙∙ refl
+  p ∙′ q = p ∙∙ q ∙∙ reflₚ
 
-  ∙′-filler-r : (p : x ＝ y) (q : y ＝ z)
+  ∙′-filler-r : {A : Type ℓ} {x y z : A} (p : x ＝ y) (q : y ＝ z)
               →  y  ̇      q       ̇ z
                      ┌─    ̇   ─┐
 
-             sym p   │    _    │   refl
+            symₚ p   │    _    │   reflₚ
 
                      └─    ̇   ─┘
                  x  ̇    p ∙′ q    ̇ z
-  ∙′-filler-r p q = ∙∙-filler p q refl
+  ∙′-filler-r p q = ∙∙-filler p q reflₚ
 
   -- From this, we can show that these two notions of composition are the same
-  ∙＝∙′ : (p : x ＝ y) (q : y ＝ z) → p ∙ q ＝ p ∙′ q
-  ∙＝∙′ p q j = ∙∙-unique p q refl (p ∙ q , ∙-filler-r p q) (p ∙′ q , ∙′-filler-r p q) j .fst
+  ∙＝∙′ : (p : x ＝ y) (q : y ＝ z) → p ∙ₚ q ＝ p ∙′ q
+  ∙＝∙′ p q j = ∙∙-unique p q reflₚ (p ∙ₚ q , ∙-filler-r p q) (p ∙′ q , ∙′-filler-r p q) j .fst
 
   -- We could define double composition with left side `refl`
   -- (classic cubical library way)
   infixr 30 _∙″_
   _∙″_ : x ＝ y → y ＝ z → x ＝ z
-  p ∙″ q = refl ∙∙ p ∙∙ q
+  p ∙″ q = reflₚ ∙∙ p ∙∙ q
 
   ∙″-filler-l : (p : x ＝ y) (q : y ＝ z)
               →  x  ̇      p      ̇ y
                      ┌─    ̇   ─┐
 
-              refl   │    _    │   q
+             reflₚ   │    _    │   q
 
                      └─    ̇   ─┘
                  x  ̇    p ∙″ q    ̇ z
-  ∙″-filler-l = ∙∙-filler refl
+  ∙″-filler-l = ∙∙-filler reflₚ
 
-  ∙＝∙″ : (p : x ＝ y) (q : y ＝ z) → p ∙ q ＝ p ∙″ q
-  ∙＝∙″ p q j = ∙∙-unique refl p q (p ∙ q , ∙-filler-l p q) (p ∙″ q , ∙″-filler-l p q) j .fst
+  ∙＝∙″ : (p : x ＝ y) (q : y ＝ z) → p ∙ₚ q ＝ p ∙″ q
+  ∙＝∙″ p q j = ∙∙-unique reflₚ p q (p ∙ₚ q , ∙-filler-l p q) (p ∙″ q , ∙″-filler-l p q) j .fst
 
 
 opaque
-  unfolding _∙_
-  sym-∙ : (p : x ＝ y) (q : y ＝ z) → sym (p ∙ q) ＝ sym q ∙ sym p
-  sym-∙ p q _ j = (p ∙ q) (~ j)
+  unfolding _∙ₚ_
+  sym-∙ : (p : x ＝ y) (q : y ＝ z) → symₚ (p ∙ₚ q) ＝ symₚ q ∙ₚ symₚ p
+  sym-∙ p q _ j = (p ∙ₚ q) (~ j)
 
 
   -- Whiskering a dependent path by a path
@@ -91,9 +91,9 @@ opaque
 
 
 opaque
-  unfolding _∙_
+  unfolding _∙ₚ_
   infixr 30 _∙ᴾ_
-  _∙ᴾ_ : {B : A → Type ℓ′} {x y z : A} {x′ : B x} {y′ : B y} {z′ : B z} {p : x ＝ y} {q : y ＝ z}
+  _∙ᴾ_ : {A : Type ℓ} {B : A → Type ℓ′} {x y z : A} {x′ : B x} {y′ : B y} {z′ : B z} {p : x ＝ y} {q : y ＝ z}
        → ＜ x′ ／ (λ i → B (p i)) ＼ y′ ＞
        → ＜ y′ ／ (λ i → B (q i)) ＼ z′ ＞
        → ＜ x′ ／ (λ i → B ((p ∙ q) i)) ＼ z′ ＞

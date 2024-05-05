@@ -2,12 +2,7 @@
 module Meta.Reflection.Base where
 
 open import Foundations.Prelude
-  renaming ( refl to reflₚ
-           ; sym  to symₚ
-           ; _∙_  to _∙ₚ_
-           )
-  renaming ( _∘ˢ_ to _∘ₜˢ_
-           ; _∘_  to _∘ₜ_
+  renaming ( _∘_ to _∘ₜ_
            )
 
 open import Meta.Literals.FromNat     public
@@ -21,8 +16,6 @@ open import Meta.Effect.Alt
 open import Meta.Effect.Traversable
 open import Meta.Reflection.Argument
 open import Meta.Reflection.Neutral
-
-open import Correspondences.Binary.Transitive
 
 open import Data.Bool.Base
 open import Data.Empty.Base

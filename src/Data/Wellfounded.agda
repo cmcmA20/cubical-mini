@@ -1,9 +1,9 @@
 {-# OPTIONS --safe #-}
-open import Foundations.Prelude
-open import Correspondences.Base
+open import Foundations.Base
+open import Foundations.HLevel
 
 module Data.Wellfounded
-  {ℓ ℓ′} {A : Type ℓ} (_<_ : Corr² (A , A) ℓ′)
+  {ℓ ℓ′} {A : Type ℓ} (_<_ : A → A → 𝒰 ℓ′)
   where
 
 data Acc (x : A) : Type (ℓ ⊔ ℓ′) where

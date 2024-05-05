@@ -28,7 +28,7 @@ private variable
   code x = elim! (λ y → el! ∥ x ＝ y ∥₁)
 
   encode : ∀ x y → ∣ x ∣₂ ＝ y → ⌞ code x y ⌟
-  encode x y = Jₜ (λ y p → ⌞ code x y ⌟ ) ∣ refl ∣₁
+  encode x y = Jₚ (λ y p → ⌞ code x y ⌟ ) ∣ refl ∣₁
 
   decode : ∀ x y → ⌞ code x y ⌟ → ∣ x ∣₂ ＝ y
   decode x = elim! (λ _ → rec! (ap ∣_∣₂))

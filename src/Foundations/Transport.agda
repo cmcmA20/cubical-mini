@@ -13,16 +13,16 @@ transport-filler-ext : (p : A ＝ B)
                      → ＜ id ／ (λ i → A → p i) ＼ transport p ＞
 transport-filler-ext p i x = transport-filler p x i
 
-transport⁻-filler-ext : (p : A ＝ B)
+transport⁻-filler-ext : {A B : Type ℓ} (p : A ＝ B)
                       → ＜ id ／ (λ i → p i → A) ＼ transport (sym p) ＞
 transport⁻-filler-ext p i = coei→0 (λ j → p j) i
 
-transport⁻-transport : (p : A ＝ B) (a : A)
+transport⁻-transport : {A B : Type ℓ} (p : A ＝ B) (a : A)
                      → transport (sym p) (transport p a) ＝ a
 transport⁻-transport p a i =
   transport⁻-filler-ext p (~ i) (transport-filler-ext p (~ i) a)
 
-transport-comp : (p : A ＝ B) (q : B ＝ C) (x : A)
+transport-comp : {A B : Type ℓ} (p : A ＝ B) (q : B ＝ C) (x : A)
                → transport (p ∙ q) x ＝ transport q (transport p x)
 transport-comp p q x i = transport (∙-filler-r p q (~ i)) (transport-filler-ext p i x)
 
@@ -40,11 +40,11 @@ subst-filler : (B : A → Type ℓ′) (p : x ＝ y) (b : B x)
              → ＜ b ／ (λ i → B (p i)) ＼ subst B p b ＞
 subst-filler B p = transport-filler (ap B p)
 
-subst⁻-filler : (B : A → Type ℓ′) (p : x ＝ y) (b : B y)
+subst⁻-filler : {A : Type ℓ} (B : A → Type ℓ′) {x y : A} (p : x ＝ y) (b : B y)
               → ＜ b ／ (λ i → B (p (~ i))) ＼ subst B (sym p) b ＞
 subst⁻-filler B p = subst-filler B (sym p)
 
-subst⁻-subst : (B : A → Type ℓ′) (p : x ＝ y)
+subst⁻-subst : {A : Type ℓ} (B : A → Type ℓ′) {x y : A} (p : x ＝ y)
              → (u : B x) → subst B (sym p) (subst B p u) ＝ u
 subst⁻-subst B p u = transport⁻-transport (ap B p) u
 
@@ -58,8 +58,8 @@ subst²-filler : {B : Type ℓ′} {z w : B} (C : A → B → Type ℓ″)
               → ＜ c ／ (λ i → C (p i) (q i)) ＼ subst² C p q c ＞
 subst²-filler C p q = transport-filler (ap² C p q)
 
-subst-comp : (B : A → Type ℓ′)
-             (p : x ＝ y) (q : y ＝ z) (u : B x)
+subst-comp : {A : Type ℓ} (B : A → Type ℓ′)
+             {x y z : A} (p : x ＝ y) (q : y ＝ z) (u : B x)
            → subst B (p ∙ q) u ＝ subst B q (subst B p u)
 subst-comp B p q Bx i =
   transport (ap B (∙-filler-r p q (~ i))) (transport-filler-ext (ap B p) i Bx)
@@ -71,10 +71,10 @@ subst-slice : (B : A → Type ℓ′) (C : A → Type ℓ″)
 subst-slice B C F p b i = (symᴾ $ transport⁻-filler-ext $ ap C (sym p)) i $
   F {p i} (transport-filler-ext (ap B p) i b)
 
-subst-slice-filler : (B : A → Type ℓ′) (C : A → Type ℓ″)
-                 (F : ∀[ a ꞉ A ] (B a → C a))
-                 (p : x ＝ y)
-               → ＜ F ／ (λ i → B (p i) → C (p i)) ＼ subst C p ∘ F ∘ subst B (sym p) ＞
+subst-slice-filler : {A : Type ℓ} (B : A → Type ℓ′) (C : A → Type ℓ″)
+                     (F : ∀[ a ꞉ A ] (B a → C a))
+                     {x y : A} (p : x ＝ y)
+                   → ＜ F ／ (λ i → B (p i) → C (p i)) ＼ subst C p ∘ F ∘ subst B (sym p) ＞
 subst-slice-filler B C F p i b = transport-filler (ap C p)
   (F (transport⁻-filler-ext (ap B p) i b)) i
 

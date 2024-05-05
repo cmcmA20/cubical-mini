@@ -38,8 +38,9 @@ strict-contr-fibres {f} g b .snd (a , p) i = g (p (~ i)) , λ j → f (g (p (~ i
 id-is-equiv : is-equiv (id {A = A})
 id-is-equiv .equiv-proof = strict-contr-fibres id
 
-idₑ : A ≃ A
-idₑ = id , id-is-equiv
+instance
+  Refl-≃ : Refl (_≃_ {ℓ})
+  Refl-≃ .refl = id , id-is-equiv
 
 equiv-centre : (e : A ≃ B) (y : B) → fibre (e .fst) y
 equiv-centre e y = e .snd .equiv-proof y .fst
@@ -112,6 +113,10 @@ erased≃id .snd .equiv-proof = strict-contr-fibres (λ a → erase a)
 
 _≃ᴱ_ : (A : Type ℓ) (B : Type ℓ′) → Type _
 A ≃ᴱ B = Σ[ f ꞉ (A → B) ] is-equivᴱ f
+
+instance
+  Refl-≃ᴱ : Refl (_≃ᴱ_ {ℓ})
+  Refl-≃ᴱ .refl = id , λ y → (y , erase refl) , erase λ (z , erase w) i → w (~ i) , erase λ j → w (~ i ∨ j)
 
 is-equivᴱ→inverse : {A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B} → is-equivᴱ f → (B → A)
 is-equivᴱ→inverse eqv y = eqv y .fst .fst

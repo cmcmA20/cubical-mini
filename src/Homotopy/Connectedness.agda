@@ -13,9 +13,12 @@ private variable
 
 record is-connected {ℓ} (A : 𝒰 ℓ) : 𝒰 ℓ where
   no-eta-equality
+  constructor conn₁
   field
     centre₁ : ∥ A ∥₁
     paths₁  : ∥_∥₁ on-paths-of A
+
+open is-connected public
 
 unquoteDecl H-Level-is-connected =
   declare-record-hlevel 1 H-Level-is-connected (quote is-connected)

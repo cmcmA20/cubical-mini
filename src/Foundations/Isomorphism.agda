@@ -2,6 +2,7 @@
 module Foundations.Isomorphism where
 
 open import Foundations.Base
+  hiding (inv)
 open import Foundations.Equiv.Base
 
 private variable
@@ -15,6 +16,9 @@ is-isoᴱ : (f : A → B) → Type _
 is-isoᴱ {A} {B} f = Σ[ inv ꞉ (B → A) ]
   ( Erased (inv is-right-inverse-of f)
   × Erased (inv is-left-inverse-of  f) )
+
+Isoᴱ : Type ℓ → Type ℓ′ → Type _
+Isoᴱ A B = Σ[ f ꞉ (A → B) ] is-isoᴱ f
 
 is-equivᴱ→is-isoᴱ : is-equivᴱ f → is-isoᴱ f
 is-equivᴱ→is-isoᴱ {f} eqv = is-equivᴱ→inverse eqv
@@ -38,6 +42,9 @@ record is-iso (f : A → B) : Type (level-of-type A ⊔ level-of-type B) where
 
 open is-iso
 
+is-iso→is-isoᴱ : is-iso f → is-isoᴱ f
+is-iso→is-isoᴱ f-iso = inv f-iso , erase (rinv f-iso) , erase (linv f-iso)
+
 is-iso-inv : (r : is-iso f) → is-iso (r . inv)
 is-iso-inv {f} r .inv  = f
 is-iso-inv     r .rinv = r .linv
@@ -49,19 +56,37 @@ Iso A B = Σ[ f ꞉ (A → B) ] is-iso f
 _≅_ = Iso
 infix 1 _≅_
 
-idᵢ : A ≅ A
-idᵢ = id , iso id (λ _ → refl) (λ _ → refl)
-
-_ᵢ⁻¹ : A ≅ B → B ≅ A
-𝔯 ᵢ⁻¹ = 𝔯 .snd .inv , is-iso-inv (𝔯 .snd)
+id-is-iso : is-iso {A = A} id
+id-is-iso .inv = id
+id-is-iso .rinv = λ _ → refl
+id-is-iso .linv = λ _ → refl
 
 is-iso-comp : {g : B → C} → is-iso f → is-iso g → is-iso (g ∘ f)
 is-iso-comp     r s .inv    = r .inv ∘ s .inv
 is-iso-comp {g} r s .rinv z = ap g        (r .rinv (s .inv z)) ∙ s .rinv z
 is-iso-comp {f} r s .linv x = ap (r .inv) (s .linv (f      x)) ∙ r .linv x
 
-_∙ᵢ_ : Iso A B → Iso B C → Iso A C
-𝔯 ∙ᵢ 𝔰 = 𝔰 .fst ∘ 𝔯 .fst , is-iso-comp (𝔯 .snd) (𝔰 .snd)
+instance
+  Refl-Iso : Refl (Iso {ℓ})
+  Refl-Iso .refl = id , id-is-iso
+
+  Refl-Isoᴱ : Refl (Isoᴱ {ℓ})
+  Refl-Isoᴱ .refl = id , is-iso→is-isoᴱ id-is-iso
+
+  Symm-Iso : Symm (Iso {ℓ} {ℓ′}) Iso
+  Symm-Iso ._⁻¹ r = r .snd .inv , is-iso-inv (r .snd)
+
+  Symm-Isoᴱ : Symm (Isoᴱ {ℓ} {ℓ′}) Isoᴱ
+  Symm-Isoᴱ ._⁻¹ (f , g , r , l) = g , f , l , r
+
+  Trans-Iso : Trans (Iso {ℓ} {ℓ′}) (Iso {ℓ′ = ℓ″}) Iso
+  Trans-Iso ._∙_ (f , f-iso) (f′ , f′-iso) = f′ ∘ f , is-iso-comp f-iso f′-iso
+
+  Trans-Isoᴱ : Trans (Isoᴱ {ℓ} {ℓ′}) (Isoᴱ {ℓ′ = ℓ″}) Isoᴱ
+  Trans-Isoᴱ ._∙_ (f , g , erase r , erase l) (f′ , g′ , erase r′ , erase l′)
+    = f′ ∘ f  , g ∘ g′
+    , erase (λ x → ap f′ (r (g′ x)) ∙ r′ x)
+    , erase (λ x → ap g  (l′ (f x)) ∙ l  x)
 
 id-composition→is-iso : (r : is-iso f) (g : B → A) (p : f ∘ g ＝ id) → is-iso g
 id-composition→is-iso {f} r g p .inv = f

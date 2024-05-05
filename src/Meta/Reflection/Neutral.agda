@@ -3,8 +3,6 @@ module Meta.Reflection.Neutral where
 
 open import Foundations.Base
 
-open import Correspondences.Binary.Transitive
-
 open import Data.Empty.Base
 open import Data.List.Base
 open import Data.List.Instances.Append

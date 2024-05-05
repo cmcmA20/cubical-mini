@@ -31,20 +31,20 @@ total-fibres-equiv {A} {Q} {f} = ≅→≃ $ to , iso from ri li where
   from ((x , v) , p) = transport (λ i → fibre (f (p i .fst)) (p i .snd)) (v , refl)
 
   opaque
-    unfolding singleton-is-prop
+    unfolding singletonₚ-is-prop
     ri : {x : A} {v : Q x}
        → from {x = x} {v = v} is-right-inverse-of to
     ri ((x , v) , p) =
-      J (λ { _ p → to (from ((x , v) , p)) ＝ ((x , v) , p) })
-        (ap to (J-refl {A = Σ A Q} (λ { (x , v) _ → fibre (f x) v } ) (v , refl)))
-        p
+      Jₚ (λ { _ p → to (from ((x , v) , p)) ＝ ((x , v) , p) })
+         (ap to (Jₚ-refl {A = Σ A Q} (λ { (x , v) _ → fibre (f x) v } ) (v , refl)))
+         p
 
     li : {x : A} {v : Q x}
        → from {x = x} {v = v} is-left-inverse-of to
     li (v , p) =
-      J (λ { _ p → from (to (v , p)) ＝ (v , p) })
-        (J-refl {A = Σ A Q} (λ { (x , v) _ → fibre (f x) v } ) (v , refl))
-        p
+      Jₚ (λ { _ p → from (to (v , p)) ＝ (v , p) })
+         (Jₚ-refl {A = Σ A Q} (λ { (x , v) _ → fibre (f x) v } ) (v , refl))
+         p
 
 total-is-equiv→fibrewise-is-equiv : is-equiv (total f)
                                   → ∀[ x ꞉ A ] is-equiv (f x)

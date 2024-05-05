@@ -37,7 +37,7 @@ opaque
 
 @0 is-equivᴱ≃is-equiv : {f : A → B} → is-equivᴱ f ≃ is-equiv f
 is-equivᴱ≃is-equiv {B} {f} =
-  Π-cod-≃ (λ _ → is-of-hlevelᴱ≃is-of-hlevel ∙ₑ generic-ae is-contr fibreᴱ≃fibre ) ∙ₑ ≅→≃ go where
+  Π-cod-≃ (λ _ → is-of-hlevelᴱ≃is-of-hlevel ∙ generic-ae is-contr fibreᴱ≃fibre ) ∙ ≅→≃ go where
     go : Π[ b ꞉ B ] (is-contr (fibre f b)) ≅ is-equiv f
     go .fst h .equiv-proof = h
     go .snd .is-iso.inv eqv = eqv .equiv-proof
@@ -49,7 +49,7 @@ is-equivᴱ≃is-equiv {B} {f} =
 equivᴱ≃equiv = Σ-ap-snd λ _ → is-equivᴱ≃is-equiv
 
 @0 is-isoᴱ≃is-iso : {@0 f : A → B} → is-isoᴱ f ≃ is-iso f
-is-isoᴱ≃is-iso = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ₑ ≅→≃ λ where
+is-isoᴱ≃is-iso = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ ≅→≃ λ where
   .fst → iso $³_
   .snd .is-iso.inv isi → is-iso.inv isi , is-iso.rinv isi , is-iso.linv isi
   .snd .is-iso.rinv isi _ .is-iso.inv x → isi .is-iso.inv x
@@ -111,27 +111,30 @@ is-equiv→is-equivᴱ fe y .snd .erased (c , erase p) i
 ≃→≃ᴱ : {A : Type ℓᵃ} {B : Type ℓᵇ} → A ≃ B → A ≃ᴱ B
 ≃→≃ᴱ = second is-equiv→is-equivᴱ
 
-_ᴱₑ⁻¹ : {A : Type ℓᵃ} {B : Type ℓᵇ} → A ≃ᴱ B → B ≃ᴱ A
-e ᴱₑ⁻¹ = is-equivᴱ→inverse (e .snd) , is-isoᴱ→is-equivᴱ
-  ( e .fst
-  , erase (λ x → is-equivᴱ→unit (e .snd) x .erased)
-  , erase λ x → is-equivᴱ→counit (e .snd) x .erased )
-infix 90 _ᴱₑ⁻¹
+instance
+  Symm-≃ᴱ : Symm (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) _≃ᴱ_
+  Symm-≃ᴱ ._⁻¹ e = is-equivᴱ→inverse (e .snd) , is-isoᴱ→is-equivᴱ
+    ( e .fst
+    , erase (λ x → is-equivᴱ→unit (e .snd) x .erased)
+    , erase λ x → is-equivᴱ→counit (e .snd) x .erased )
+
+  Trans-≃ᴱ : Trans (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) (_≃ᴱ_ {ℓ′ = ℓᶜ}) _≃ᴱ_
+  Trans-≃ᴱ ._∙_  = _∙ᴱₑ_
 
 infixr 1.5 _≃ᴱ⟨⟩_ _≃ᴱ⟨_⟩_ _≃ᴱ˘⟨_⟩_
 infix  1.9 _≃ᴱ∎
 
 _≃ᴱ⟨_⟩_ : (A : Type ℓᵃ) {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ B → B ≃ᴱ C → A ≃ᴱ C
-_ ≃ᴱ⟨ u ⟩ v = u ∙ᴱₑ v
+_ ≃ᴱ⟨ u ⟩ v = u ∙ v
 
 _≃ᴱ˘⟨_⟩_ : (A : Type ℓᵃ) {B : Type ℓᵇ} {C : Type ℓᶜ} → B ≃ᴱ A → B ≃ᴱ C → A ≃ᴱ C
-_ ≃ᴱ˘⟨ u ⟩ v = (u ᴱₑ⁻¹) ∙ᴱₑ v
+_ ≃ᴱ˘⟨ u ⟩ v = (u ⁻¹) ∙ v
 
 _≃ᴱ⟨⟩_ : (A : Type ℓᵃ) → A ≃ᴱ B → A ≃ᴱ B
 _ ≃ᴱ⟨⟩ e = e
 
 _≃ᴱ∎ : (A : Type ℓᵃ) → A ≃ᴱ A
-_ ≃ᴱ∎ = ≃→≃ᴱ idₑ
+_ ≃ᴱ∎ = ≃→≃ᴱ refl
 
 Σ-contract-sndᴱ
   : {A : Type ℓᵃ} {B : A → Type ℓᵇ}
@@ -144,7 +147,7 @@ _ ≃ᴱ∎ = ≃→≃ᴱ idₑ
 opaque
   unfolding ua
   equiv-is-contrᴱ : (A : Type ℓᵃ) → is-contrᴱ (Σ[ B ꞉ Type ℓᵃ ] (A ≃ B))
-  equiv-is-contrᴱ A .fst = A , idₑ
+  equiv-is-contrᴱ A .fst = A , refl
   equiv-is-contrᴱ A .snd .erased (B , A≃B) i = ua A≃B i , p i , q i where
     p : ＜ id ／ (λ i → A → ua A≃B i) ＼ A≃B .fst ＞
     p i x = outS (ua-glue A≃B i (λ { (i = i0) → x }) (inS (A≃B .fst x)))

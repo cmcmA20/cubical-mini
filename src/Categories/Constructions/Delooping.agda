@@ -19,7 +19,7 @@ open import Categories.Prelude
   r .Precategory._∘_ = flip mm._⋆_
   r .id-r = mm.id-l
   r .id-l = mm.id-r
-  r .assoc _ _ _ = sym (mm.assoc _ _ _)
+  r .assoc _ _ _ = mm.assoc _ _ _ ⁻¹
 
 module _ {ℓ : Level} {X : Type ℓ} {M : Monoid-on X} where private
   module Mon = Monoid-on M

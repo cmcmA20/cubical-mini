@@ -26,9 +26,9 @@ opaque
     → Π[ x ꞉ A ] is-of-hlevel (1 + h) (x ＝ x)
     → is-of-hlevel (2 + h) A
   is-of-hlevel-Ω→is-of-hlevel 0 hΩ x _ =
-    J (λ y p → Π[ q ꞉ x ＝ y ] (p ＝ q)) $ hΩ x refl
+    Jₚ (λ y p → Π[ q ꞉ x ＝ y ] (p ＝ q)) $ hΩ x refl
   is-of-hlevel-Ω→is-of-hlevel (suc h) hΩ x _ =
-    J (λ y p → Π[ q ꞉ x ＝ y ] is-of-hlevel (suc h) (p ＝ q)) $ hΩ x refl
+    Jₚ (λ y p → Π[ q ꞉ x ＝ y ] is-of-hlevel (suc h) (p ＝ q)) $ hΩ x refl
 
 
   -- Essential properties of `is-prop` and `is-contr`
@@ -170,8 +170,8 @@ opaque
       helper : (a₁ : A) (p : a₀ ＝ a₁) (b₁ : B a₁)
              → is-of-hlevel (suc n) ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞
       helper a₁ p b₁ =
-        J (λ a₁ p → ∀ b₁ → is-of-hlevel (suc n) ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞)
-          (λ _ → hl _ _ _) p b₁
+        Jₚ (λ a₁ p → ∀ b₁ → is-of-hlevel (suc n) ＜ b₀ ／ (λ i → B (p i)) ＼ b₁ ＞)
+           (λ _ → hl _ _ _) p b₁
 
 
   is-prop→squareᴾ
@@ -290,6 +290,6 @@ instance opaque
   H-Level-H-Level {h₁} = hlevel-prop-instance H-Level-is-prop
 
 instance
-  H-Level-singleton : {a : A} → H-Level h (Singleton a)
-  H-Level-singleton {h} = hlevel-basic-instance 0 (singleton-is-contr (_ , refl))
+  H-Level-singleton : {a : A} → H-Level h (Singletonₚ a)
+  H-Level-singleton {h} = hlevel-basic-instance 0 (singletonₚ-is-contr (_ , refl))
   {-# OVERLAPPING H-Level-singleton #-}

@@ -102,7 +102,7 @@ instance
 
   @0 Extensional-Type : Extensional (Type ℓ) ℓ
   Extensional-Type .Pathᵉ A B = A ≃ B
-  Extensional-Type .reflᵉ _ = idₑ
+  Extensional-Type .reflᵉ _ = refl
   Extensional-Type .idsᵉ = univalence-identity-system
 
 
