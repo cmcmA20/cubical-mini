@@ -66,15 +66,15 @@ fin-coproduct : {n m : ℕ}
               → Fin n ⊎ Fin m
               ≃ Fin (n + m)
 fin-coproduct {0} {m}  =
-  Fin 0 ⊎ Fin m ≃⟨ ⊎-ap-l fin-0-is-initial ⟩
-  ⊥ ⊎ Fin m     ≃⟨ ⊎-zero-l ⟩
-  Fin m         ≃∎
+  Fin 0 ⊎ Fin m ≡⟨ ⊎-ap-l fin-0-is-initial ⟩
+  ⊥ ⊎ Fin m     ≡⟨ ⊎-zero-l ⟩
+  Fin m         ∎
 fin-coproduct {suc n} {m} =
-  Fin (suc n) ⊎ Fin m ≃⟨ ⊎-ap-l fin-suc ⟩
-  (⊤ ⊎ Fin n) ⊎ Fin m ≃⟨ ⊎-assoc ⟩
-  ⊤ ⊎ Fin n ⊎ Fin m   ≃⟨ ⊎-ap-r (fin-coproduct {n} {m}) ⟩
-  ⊤ ⊎ Fin (n + m)     ≃⟨ fin-suc ⁻¹ ⟩
-  Fin (suc (n + m))   ≃∎
+  Fin (suc n) ⊎ Fin m  ≡⟨ ⊎-ap-l fin-suc ⟩
+  (⊤ ⊎ Fin n) ⊎ Fin m  ≡⟨ ⊎-assoc ⟩
+  ⊤ ⊎ Fin n ⊎ Fin m    ≡⟨ ⊎-ap-r (fin-coproduct {n} {m}) ⟩
+  ⊤ ⊎ Fin (n + m)      ≡⟨ fin-suc ⁻¹ ⟩
+  Fin (suc (n + m))    ∎
 
 sum : ∀ n → (Fin n → ℕ) → ℕ
 sum zero    f = zero
@@ -115,9 +115,9 @@ fin-product : {n m : ℕ}
             → Fin n × Fin m
             ≃ Fin (n · m)
 fin-product {n} {m} =
-  Fin n × Fin m         ≃⟨ fin-sum {n = n} (λ _ → m) ⟩
-  Fin (sum n (λ _ → m)) ≃⟨ ＝→≃ (ap (λ n → Fin n) (sum≡* n m))  ⟩
-  Fin (n · m)           ≃∎
+  Fin n × Fin m          ≡⟨ fin-sum {n = n} (λ _ → m) ⟩
+  Fin (sum n (λ _ → m))  ≡⟨ ＝→≃ (ap (λ n → Fin n) (sum≡* n m))  ⟩
+  Fin (n · m)            ∎
   where
     sum≡* : ∀ n m → sum n (λ _ → m) ＝ n · m
     sum≡* 0       m = refl

@@ -59,9 +59,9 @@ J-refl
   → (p : P x (r x))
   → J ids P p (r x) ＝ p
 J-refl {R} {r} {x} ids P p =
-  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p  ＝⟨⟩
-  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p       ＝⟨ ap (λ e → subst P′ e p) (to-path-refl-coh ids x) ⟩
-  subst P′ refl p                                                           ＝⟨ transport-refl p ⟩
+  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p  ≡⟨⟩
+  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p       ≡⟨ ap (λ e → subst P′ e p) (to-path-refl-coh ids x) ⟩
+  subst P′ refl p                                                           ≡⟨ transport-refl p ⟩
   p                                                                         ∎
   where
     P′ : Σ _ (R x) → Type _

@@ -111,10 +111,10 @@ module _ {x y : A} {p : x ＝ y} {f : A → (A → A) → A} where
   private
     q : f x (λ y → x) ＝ f y (λ z → y)
     q =
-      f ⌜ x ⌝ (λ _ → ⌜ x ⌝) ＝⟨ ap! p ⟩
+      f ⌜ x ⌝ (λ _ → ⌜ x ⌝) ≡⟨ ap! p ⟩
       f y (λ _ → y)         ∎
 
     r : f y (λ _ → y) ＝ f x (λ _ → x)
     r =
-      f ⌜ y ⌝ (λ _ → ⌜ y ⌝) ＝˘⟨ ap¡ p ⟩
+      f ⌜ y ⌝ (λ _ → ⌜ y ⌝) ≡⟨ ap¡ p ⟨
       f x (λ _ → x)         ∎

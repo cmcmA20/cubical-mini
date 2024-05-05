@@ -43,8 +43,8 @@ opaque
 
   is-terminal-iso : ∀ {A B} → A ≅ B → is-terminal A → is-terminal B
   is-terminal-iso isom term x = isom .to ∘ centre (term x) , λ h →
-    isom .to ∘ centre (term x)     ＝⟨ ap (isom .to ∘_) (paths (term x) _) ⟩
-    isom .to ∘ isom .from ∘ h      ＝⟨ assoc _ _ _ ⟩
-    ⌜ isom .to ∘ isom .from ⌝ ∘ h  ＝⟨ ap! (isom .inv-l) ⟩
-    id ∘ h                         ＝⟨ id-l _ ⟩
+    isom .to ∘ centre (term x)     ≡⟨ ap (isom .to ∘_) (paths (term x) _) ⟩
+    isom .to ∘ isom .from ∘ h      ≡⟨ assoc _ _ _ ⟩
+    ⌜ isom .to ∘ isom .from ⌝ ∘ h  ≡⟨ ap! (isom .inv-l) ⟩
+    id ∘ h                         ≡⟨ id-l _ ⟩
     h                              ∎

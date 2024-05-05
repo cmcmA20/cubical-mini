@@ -58,11 +58,11 @@ module _ {_✦_ : A → A → A} {IM : is-monoid _✦_} where
   open is-monoid IM
   monoid-inverse-unique : (e x y : A) → x ✦ e ＝ refl → e ✦ y ＝ refl → x ＝ y
   monoid-inverse-unique e x y p q =
-    x              ＝˘⟨ id-r _ ⟩
-    x ✦ ⌜ id ⌝     ＝˘⟨ ap¡ q ⟩
-    x ✦ (e ✦ y)    ＝⟨ assoc _ _ _ ⟩
-    ⌜ x ✦ e ⌝ ✦ y  ＝⟨ ap! p ⟩
-    id ✦ y         ＝⟨ id-l _ ⟩
+    x              ≡⟨ id-r _ ⟨
+    x ✦ ⌜ id ⌝     ≡⟨ ap¡ q ⟨
+    x ✦ (e ✦ y)    ≡⟨ assoc _ _ _ ⟩
+    ⌜ x ✦ e ⌝ ✦ y  ≡⟨ ap! p ⟩
+    id ✦ y         ≡⟨ id-l _ ⟩
     y              ∎
 
 

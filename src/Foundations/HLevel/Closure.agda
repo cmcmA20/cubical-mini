@@ -21,8 +21,8 @@ retract→is-contr : (f : A → B) (g : B → A)
                  → is-contr B
 retract→is-contr f g h isC .fst = f (isC .fst)
 retract→is-contr f g h isC .snd x =
-  f (isC .fst) ＝⟨ ap f (isC .snd _) ⟩
-  f (g x)      ＝⟨ h _ ⟩
+  f (isC .fst) ≡⟨ ap f (isC .snd _) ⟩
+  f (g x)      ≡⟨ h _ ⟩
   x            ∎
 
 opaque
@@ -31,9 +31,9 @@ opaque
                   → is-prop A
                   → is-prop B
   retract→is-prop f g h propA x y =
-    x       ＝˘⟨ h _ ⟩
-    f (g x) ＝⟨ ap f (propA _ _) ⟩
-    f (g y) ＝⟨ h _ ⟩
+    x       ≡⟨ h _ ⟨
+    f (g x) ≡⟨ ap f (propA _ _) ⟩
+    f (g y) ≡⟨ h _ ⟩
     y       ∎
 
 retract→is-of-hlevel : (n : HLevel) (f : A → B) (g : B → A)
@@ -47,18 +47,18 @@ retract→is-of-hlevel (suc (suc h)) f g p hlevel x y =
   where
     sect : g x ＝ g y → x ＝ y
     sect path =
-      x       ＝˘⟨ p _ ⟩
-      f (g x) ＝⟨ ap f path ⟩
-      f (g y) ＝⟨ p _ ⟩
+      x       ≡⟨ p _ ⟨
+      f (g x) ≡⟨ ap f path ⟩
+      f (g y) ≡⟨ p _ ⟩
       y       ∎
 
     inv : sect is-left-inverse-of (ap g)
     inv path =
-      p x ⁻¹ ∙ ap f (ap g path) ∙ p y ∙ refl  ＝⟨ ap (λ e → p _ ⁻¹ ∙ _ ∙ e) (∙-id-r (p _)) ⟩
-      p x ⁻¹ ∙ ap f (ap g path) ∙ p y         ＝⟨ ap² _∙_ refl (homotopy-natural p _ ⁻¹) ⟩
-      p x ⁻¹ ∙ p x ∙ path                     ＝⟨ ∙-assoc _ _ _ ⟩
-      (p x ⁻¹ ∙ p x) ∙ path                   ＝⟨ ap² _∙_ (∙-inv-l (p x)) refl ⟩
-      refl ∙ path                             ＝⟨ ∙-id-l path ⟩
+      p x ⁻¹ ∙ ap f (ap g path) ∙ p y ∙ refl  ≡⟨ ap (λ e → p _ ⁻¹ ∙ _ ∙ e) (∙-id-r (p _)) ⟩
+      p x ⁻¹ ∙ ap f (ap g path) ∙ p y         ≡⟨ ap² _∙_ refl (homotopy-natural p _ ⁻¹) ⟩
+      p x ⁻¹ ∙ p x ∙ path                     ≡⟨ ∙-assoc _ _ _ ⟩
+      (p x ⁻¹ ∙ p x) ∙ path                   ≡⟨ ap² _∙_ (∙-inv-l (p x)) refl ⟩
+      refl ∙ path                             ≡⟨ ∙-id-l path ⟩
       path                                    ∎
 
 is-iso→is-of-hlevel : (h : HLevel) (f : A → B) → is-iso f → is-of-hlevel h A → is-of-hlevel h B

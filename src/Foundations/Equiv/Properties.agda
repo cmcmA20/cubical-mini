@@ -135,21 +135,6 @@ module Equiv (e : A ≃ B) where
   inverse : B ≃ A
   inverse = e ⁻¹
 
-infixr 1.5 _≃⟨⟩_ _≃⟨_⟩_ _≃˘⟨_⟩_
-infix  1.9 _≃∎
-
-_≃⟨_⟩_ : (A : Type ℓ) → A ≃ B → B ≃ C → A ≃ C
-_ ≃⟨ u ⟩ v = u ∙ v
-
-_≃˘⟨_⟩_ : (A : Type ℓ) → B ≃ A → B ≃ C → A ≃ C
-_ ≃˘⟨ u ⟩ v = (u ⁻¹) ∙ v
-
-_≃⟨⟩_ : (A : Type ℓ) → A ≃ B → A ≃ B
-_ ≃⟨⟩ e = e
-
-_≃∎ : (A : Type ℓ) → A ≃ A
-_ ≃∎ = refl
-
 lift≃id : Lift ℓ′ A ≃ A
 lift≃id .fst = lower
 lift≃id .snd .equiv-proof = strict-contr-fibres lift

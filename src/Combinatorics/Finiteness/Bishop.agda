@@ -73,10 +73,17 @@ instance
 
 ∥-∥₁∘manifest-bishop-finite≃is-bishop-finite : ∥ Manifest-bishop-finite A ∥₁ ≃ is-bishop-finite A
 ∥-∥₁∘manifest-bishop-finite≃is-bishop-finite {A} =
-  ∥ Manifest-bishop-finite A ∥₁  ≃⟨ ∥-∥₁.ae (≅→≃ manifest-bishop-finite-iso) ⟩
-  ∥ Σ[ n ꞉ ℕ ] (A ≃ Fin n) ∥₁    ≃⟨ prop-extₑ! (rec! (λ n e → n , pure e)) (λ (n , ∣e∣₁) → map (n ,_) ∣e∣₁) ⟩
-  Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁      ≃˘⟨ ≅→≃ is-bishop-finite-iso ⟩
-  is-bishop-finite A             ≃∎
+  ∥ Manifest-bishop-finite A ∥₁
+    ≡⟨ ∥-∥₁.ae (≅→≃ manifest-bishop-finite-iso) ⟩
+  ∥ Σ[ n ꞉ ℕ ] (A ≃ Fin n) ∥₁
+    ≡⟨ prop-extₑ! (rec! ⦃ ∥-∥₁.Inductive-∥-∥₁ ⦃ Inductive-Σ ⦃ Inductive-default ⦄ ⦄ ⦄ λ n e →
+                    n , pure e)
+                  (λ (n , ∣e∣₁) → map (n ,_) ∣e∣₁)
+     ⟩
+  Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁
+    ≡⟨ ≅→≃ is-bishop-finite-iso ⟨
+  is-bishop-finite A
+    ∎
 
 
 instance

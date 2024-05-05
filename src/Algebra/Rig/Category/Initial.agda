@@ -50,20 +50,20 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
     f-plus : ∀ m n → f (m + n) ＝ f m R.+ f n
     f-plus 0       _ = sym (R.+-id-l _)
     f-plus (suc m) n =
-      f (suc m + n)             ＝⟨ f-suc (m + n) ⟩
-      R.1a R.+ ⌜ f (m + n) ⌝    ＝⟨ ap! (f-plus m n) ⟩
-      R.1a R.+ f m R.+ f n      ＝⟨ R.+-assoc _ _ _ ⟩
-      ⌜ R.1a R.+ f m ⌝ R.+ f n  ＝˘⟨ ap¡ (f-suc m) ⟩
+      f (suc m + n)             ≡⟨ f-suc (m + n) ⟩
+      R.1a R.+ ⌜ f (m + n) ⌝    ≡⟨ ap! (f-plus m n) ⟩
+      R.1a R.+ f m R.+ f n      ≡⟨ R.+-assoc _ _ _ ⟩
+      ⌜ R.1a R.+ f m ⌝ R.+ f n  ≡⟨ ap¡ (f-suc m) ⟨
       f (suc m) R.+ f n         ∎
 
     f-mul : ∀ m n → f (m · n) ＝ f m R.· f n
     f-mul 0       _ = sym (R.·-absorb-l _)
     f-mul (suc m) n =
-      f (n + m · n)                ＝⟨ f-plus n (m · n) ⟩
-      f n R.+ ⌜ f (m · n) ⌝        ＝⟨ ap! (f-mul m n) ⟩
-      ⌜ f n ⌝ R.+ f m R.· f n      ＝˘⟨ ap¡ (R.·-id-l _) ⟩
-      f 1 R.· f n R.+ f m R.· f n  ＝˘⟨ R.·-distrib-+-r (f n) _ _ ⟩
-      ⌜ f 1 R.+ f m ⌝ R.· f n      ＝˘⟨ ap¡ (f-suc m) ⟩
+      f (n + m · n)                ≡⟨ f-plus n (m · n) ⟩
+      f n R.+ ⌜ f (m · n) ⌝        ≡⟨ ap! (f-mul m n) ⟩
+      ⌜ f n ⌝ R.+ f m R.· f n      ≡⟨ ap¡ (R.·-id-l _) ⟨
+      f 1 R.· f n R.+ f m R.· f n  ≡⟨ R.·-distrib-+-r (f n) _ _ ⟨
+      ⌜ f 1 R.+ f m ⌝ R.· f n      ≡⟨ ap¡ (f-suc m) ⟨
       f (suc m) R.· f n            ∎
 
     ℕ→R : Rigs.Hom ℕᵣ R
@@ -76,8 +76,8 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
     uniq : (g : Rigs.Hom ℕᵣ R) (m : ℕ) → ℕ→R # lift m ＝ g # lift m
     uniq g 0       = sym (g .preserves .Semiring-hom.pres-0)
     uniq g (suc m) =
-      f (suc m)                            ＝⟨ f-suc m ⟩
-      R.1a R.+ ⌜ f m ⌝                     ＝⟨ ap! (uniq g m) ⟩
-      ⌜ R.1a ⌝ R.+ g .hom (lift m)         ＝˘⟨ ap¡ (g .preserves .Semiring-hom.pres-1) ⟩
-      g .hom (lift 1) R.+ g .hom (lift m)  ＝˘⟨ g .preserves .Semiring-hom.pres-+ (lift 1) (lift m) ⟩
+      f (suc m)                            ≡⟨ f-suc m ⟩
+      R.1a R.+ ⌜ f m ⌝                     ≡⟨ ap! (uniq g m) ⟩
+      ⌜ R.1a ⌝ R.+ g .hom (lift m)         ≡⟨ ap¡ (g .preserves .Semiring-hom.pres-1) ⟨
+      g .hom (lift 1) R.+ g .hom (lift m)  ≡⟨ g .preserves .Semiring-hom.pres-+ (lift 1) (lift m) ⟨
       g .hom (lift (suc m))                ∎

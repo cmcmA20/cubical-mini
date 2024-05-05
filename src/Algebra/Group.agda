@@ -81,11 +81,11 @@ record Group-hom
 
     pres-id : e refl ＝ refl
     pres-id =
-      e refl                               ＝˘⟨ B.id-r _ ⟩
-      e refl B.⋆ ⌜ B.id ⌝                  ＝˘⟨ ap¡ (B.inverse-r _) ⟩
-      e refl ∙ (e refl ∙ e refl ⁻¹)        ＝⟨ B.assoc _ _ _ ⟩
-      ⌜ e refl B.⋆ e refl ⌝ B.⋆ e refl ⁻¹  ＝⟨ ap! (sym (pres-⋆ _ _) ∙ ap e (A.id-l _)) ⟩
-      e refl ∙ e refl ⁻¹                   ＝⟨ B.inverse-r _ ⟩
+      e refl                               ≡⟨ B.id-r _ ⟨
+      e refl B.⋆ ⌜ B.id ⌝                  ≡⟨ ap¡ (B.inverse-r _) ⟨
+      e refl ∙ (e refl ∙ e refl ⁻¹)        ≡⟨ B.assoc _ _ _ ⟩
+      ⌜ e refl B.⋆ e refl ⌝ B.⋆ e refl ⁻¹  ≡⟨ ap! (sym (pres-⋆ _ _) ∙ ap e (A.id-l _)) ⟩
+      e refl ∙ e refl ⁻¹                   ≡⟨ B.inverse-r _ ⟩
       refl                                 ∎
 
     pres-inv : (x : A) → e (x ⁻¹) ＝ (e x) ⁻¹
@@ -139,21 +139,21 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 
   inverse-r : Inverse-right id _⋆_ inverse
   inverse-r x =
-    x ∙ x ⁻¹                         ＝˘⟨ id-l _ ⟩
-    ⌜ id ⌝ ⋆ (x ⋆ x ⁻¹)              ＝˘⟨ ap¡ (inverse-l _) ⟩
-    (x ⁻¹ ⁻¹ ∙ x ⁻¹) ∙ (x ∙ x ⁻¹)    ＝˘⟨ assoc _ _ _ ⟩
-    x ⁻¹ ⁻¹ ⋆ ⌜ x ⁻¹ ⋆ (x ⋆ x ⁻¹) ⌝  ＝⟨ ap! (assoc _ _ _) ⟩
-    x ⁻¹ ⁻¹ ⋆ (⌜ x ⁻¹ ⋆ x ⌝ ⋆ x ⁻¹)  ＝⟨ ap! (inverse-l _) ⟩
-    x ⁻¹ ⁻¹ ⋆ ⌜ id ⋆ x ⁻¹ ⌝          ＝⟨ ap! (id-l _) ⟩
-    x ⁻¹ ⁻¹ ⋆ x ⁻¹                   ＝⟨ inverse-l _ ⟩
+    x ∙ x ⁻¹                         ≡⟨ id-l _ ⟨
+    ⌜ id ⌝ ⋆ (x ⋆ x ⁻¹)              ≡⟨ ap¡ (inverse-l _) ⟨
+    (x ⁻¹ ⁻¹ ∙ x ⁻¹) ∙ (x ∙ x ⁻¹)    ≡⟨ assoc _ _ _ ⟨
+    x ⁻¹ ⁻¹ ⋆ ⌜ x ⁻¹ ⋆ (x ⋆ x ⁻¹) ⌝  ≡⟨ ap! (assoc _ _ _) ⟩
+    x ⁻¹ ⁻¹ ⋆ (⌜ x ⁻¹ ⋆ x ⌝ ⋆ x ⁻¹)  ≡⟨ ap! (inverse-l _) ⟩
+    x ⁻¹ ⁻¹ ⋆ ⌜ id ⋆ x ⁻¹ ⌝          ≡⟨ ap! (id-l _) ⟩
+    x ⁻¹ ⁻¹ ⋆ x ⁻¹                   ≡⟨ inverse-l _ ⟩
     refl                             ∎
 
   id-r : Unital-right id _⋆_
   id-r x =
-    x ⋆ ⌜ id ⌝        ＝˘⟨ ap¡ (inverse-l _) ⟩
-    x ∙ (x ⁻¹ ∙ x)    ＝⟨ assoc _ _ _ ⟩
-    ⌜ x ⋆ x ⁻¹ ⌝ ⋆ x  ＝⟨ ap! (inverse-r _) ⟩
-    refl ∙ x          ＝⟨ id-l _ ⟩
+    x ⋆ ⌜ id ⌝        ≡⟨ ap¡ (inverse-l _) ⟨
+    x ∙ (x ⁻¹ ∙ x)    ≡⟨ assoc _ _ _ ⟩
+    ⌜ x ⋆ x ⁻¹ ⌝ ⋆ x  ≡⟨ ap! (inverse-r _) ⟩
+    refl ∙ x          ≡⟨ id-l _ ⟩
     x                 ∎
 
   to-is-group : is-group _⋆_

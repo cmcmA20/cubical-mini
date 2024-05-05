@@ -40,9 +40,9 @@ is-biinv→is-iso {f} ((g , g∘f＝id) , h , h∘f＝id) = iso h (happly h∘f�
   where
     β : (x : _) → h (f x) ＝ x
     β x =
-      h (f x)         ＝⟨ happly (sym g∘f＝id) _ ⟩
-      g (f (h (f x))) ＝⟨ ap g (happly h∘f＝id _) ⟩
-      g (f x)         ＝⟨ happly g∘f＝id _ ⟩
+      h (f x)         ≡⟨ happly g∘f＝id _ ⟨
+      g (f (h (f x))) ≡⟨ ap g (happly h∘f＝id _) ⟩
+      g (f x)         ≡⟨ happly g∘f＝id _ ⟩
       x               ∎
 
 is-biinv-is-prop : is-prop (is-biinv f)
