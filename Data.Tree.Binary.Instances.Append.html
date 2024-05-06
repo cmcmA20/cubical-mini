@@ -4,16 +4,16 @@
 
 <a id="72" class="Keyword">open</a> <a id="77" class="Keyword">import</a> <a id="84" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="102" class="Keyword">open</a> <a id="107" class="Keyword">import</a> <a id="114" href="Meta.Append.html" class="Module">Meta.Append</a>
+<a id="102" class="Keyword">open</a> <a id="107" class="Keyword">import</a> <a id="114" href="Data.Tree.Binary.Base.html" class="Module">Data.Tree.Binary.Base</a>
 
-<a id="127" class="Keyword">open</a> <a id="132" class="Keyword">import</a> <a id="139" href="Data.Tree.Binary.Base.html" class="Module">Data.Tree.Binary.Base</a>
+<a id="137" class="Keyword">private</a> <a id="145" class="Keyword">variable</a>
+  <a id="156" href="Data.Tree.Binary.Instances.Append.html#156" class="Generalizable">ℓ</a> <a id="158" class="Symbol">:</a> <a id="160" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="168" href="Data.Tree.Binary.Instances.Append.html#168" class="Generalizable">A</a> <a id="170" class="Symbol">:</a> <a id="172" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="177" href="Data.Tree.Binary.Instances.Append.html#156" class="Generalizable">ℓ</a>
 
-<a id="162" class="Keyword">private</a> <a id="170" class="Keyword">variable</a>
-  <a id="181" href="Data.Tree.Binary.Instances.Append.html#181" class="Generalizable">ℓ</a> <a id="183" class="Symbol">:</a> <a id="185" href="Agda.Primitive.html#742" class="Postulate">Level</a>
-  <a id="193" href="Data.Tree.Binary.Instances.Append.html#193" class="Generalizable">A</a> <a id="195" class="Symbol">:</a> <a id="197" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="202" href="Data.Tree.Binary.Instances.Append.html#181" class="Generalizable">ℓ</a>
+<a id="180" class="Keyword">instance</a>
+  <a id="Reflᵘ-Tree"></a><a id="191" href="Data.Tree.Binary.Instances.Append.html#191" class="Function">Reflᵘ-Tree</a> <a id="202" class="Symbol">:</a> <a id="204" href="Foundations.Correspondences.Binary.Reflexive.html#509" class="Record">Reflᵘ</a> <a id="210" class="Symbol">(</a><a id="211" href="Data.Tree.Binary.Base.html#95" class="Datatype">Tree</a> <a id="216" href="Data.Tree.Binary.Instances.Append.html#168" class="Generalizable">A</a><a id="217" class="Symbol">)</a>
+  <a id="221" href="Data.Tree.Binary.Instances.Append.html#191" class="Function">Reflᵘ-Tree</a> <a id="232" class="Symbol">.</a><a id="233" href="Foundations.Correspondences.Binary.Reflexive.html#570" class="Field">mempty</a> <a id="240" class="Symbol">=</a> <a id="242" href="Data.Tree.Binary.Base.html#128" class="InductiveConstructor">empty</a>
 
-<a id="205" class="Keyword">instance</a>
-  <a id="Append-Tree"></a><a id="216" href="Data.Tree.Binary.Instances.Append.html#216" class="Function">Append-Tree</a> <a id="228" class="Symbol">:</a> <a id="230" href="Meta.Append.html#105" class="Record">Append</a> <a id="237" class="Symbol">(</a><a id="238" href="Data.Tree.Binary.Base.html#95" class="Datatype">Tree</a> <a id="243" href="Data.Tree.Binary.Instances.Append.html#193" class="Generalizable">A</a><a id="244" class="Symbol">)</a>
-  <a id="248" href="Data.Tree.Binary.Instances.Append.html#216" class="Function">Append-Tree</a> <a id="260" class="Symbol">.</a><a id="261" href="Meta.Append.html#173" class="Field">mempty</a> <a id="268" class="Symbol">=</a> <a id="270" href="Data.Tree.Binary.Base.html#128" class="InductiveConstructor">empty</a>
-  <a id="278" href="Data.Tree.Binary.Instances.Append.html#216" class="Function">Append-Tree</a> <a id="290" class="Symbol">.</a><a id="291" href="Meta.Append.html#188" class="Field Operator">_&lt;&gt;_</a>   <a id="298" class="Symbol">=</a> <a id="300" href="Data.Tree.Binary.Base.html#166" class="InductiveConstructor">node</a>
+  <a id="Transᵘ-Tree"></a><a id="251" href="Data.Tree.Binary.Instances.Append.html#251" class="Function">Transᵘ-Tree</a> <a id="263" class="Symbol">:</a> <a id="265" href="Foundations.Correspondences.Binary.Transitive.html#798" class="Record">Transᵘ</a> <a id="272" class="Symbol">(</a><a id="273" href="Data.Tree.Binary.Base.html#95" class="Datatype">Tree</a> <a id="278" href="Data.Tree.Binary.Instances.Append.html#168" class="Generalizable">A</a><a id="279" class="Symbol">)</a>
+  <a id="283" href="Data.Tree.Binary.Instances.Append.html#251" class="Function">Transᵘ-Tree</a> <a id="295" class="Symbol">.</a><a id="296" href="Foundations.Correspondences.Binary.Transitive.html#876" class="Field Operator">_&lt;&gt;_</a> <a id="301" class="Symbol">=</a> <a id="303" href="Data.Tree.Binary.Base.html#166" class="InductiveConstructor">node</a>
 </pre></body></html>

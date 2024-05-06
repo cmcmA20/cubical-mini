@@ -4,17 +4,17 @@
 
 <a id="64" class="Keyword">open</a> <a id="69" class="Keyword">import</a> <a id="76" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Correspondences.Finite.ManifestBishop.html" class="Module">Correspondences.Finite.ManifestBishop</a>
+<a id="94" class="Keyword">open</a> <a id="99" class="Keyword">import</a> <a id="106" href="Combinatorics.Finiteness.ManifestBishop.html" class="Module">Combinatorics.Finiteness.ManifestBishop</a>
 
-<a id="145" class="Keyword">open</a> <a id="150" class="Keyword">import</a> <a id="157" href="Data.Empty.Instances.Finite.html" class="Module">Data.Empty.Instances.Finite</a>
-<a id="185" class="Keyword">open</a> <a id="190" class="Keyword">import</a> <a id="197" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>
-<a id="211" class="Keyword">open</a> <a id="216" class="Keyword">import</a> <a id="223" href="Data.Maybe.Instances.Finite.html" class="Module">Data.Maybe.Instances.Finite</a>
-<a id="251" class="Keyword">open</a> <a id="256" class="Keyword">import</a> <a id="263" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a>
+<a id="147" class="Keyword">open</a> <a id="152" class="Keyword">import</a> <a id="159" href="Data.Empty.Instances.Finite.html" class="Module">Data.Empty.Instances.Finite</a>
+<a id="187" class="Keyword">open</a> <a id="192" class="Keyword">import</a> <a id="199" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>
+<a id="213" class="Keyword">open</a> <a id="218" class="Keyword">import</a> <a id="225" href="Data.Maybe.Instances.Finite.html" class="Module">Data.Maybe.Instances.Finite</a>
+<a id="253" class="Keyword">open</a> <a id="258" class="Keyword">import</a> <a id="265" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a>
 
-<a id="278" class="Keyword">private</a> <a id="286" class="Keyword">variable</a> <a id="295" href="Data.Fin.Instances.Finite.html#295" class="Generalizable">n</a> <a id="297" class="Symbol">:</a> <a id="299" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+<a id="280" class="Keyword">private</a> <a id="288" class="Keyword">variable</a> <a id="297" href="Data.Fin.Instances.Finite.html#297" class="Generalizable">n</a> <a id="299" class="Symbol">:</a> <a id="301" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
 
-<a id="302" class="Keyword">instance</a>
-  <a id="fin-manifest-bishop-finite"></a><a id="313" href="Data.Fin.Instances.Finite.html#313" class="Function">fin-manifest-bishop-finite</a> <a id="340" class="Symbol">:</a> <a id="342" href="Correspondences.Finite.ManifestBishop.html#862" class="Record">Manifest-bishop-finite</a> <a id="365" class="Symbol">(</a><a id="366" href="Data.Fin.Base.html#333" class="Function">Fin</a> <a id="370" href="Data.Fin.Instances.Finite.html#295" class="Generalizable">n</a><a id="371" class="Symbol">)</a>
-  <a id="375" href="Data.Fin.Instances.Finite.html#313" class="Function">fin-manifest-bishop-finite</a> <a id="402" class="Symbol">{</a><a id="403" class="Number">0</a><a id="404" class="Symbol">}</a>     <a id="410" class="Symbol">=</a> <a id="412" href="Data.Empty.Instances.Finite.html#226" class="Function">⊥-manifest-bishop-finite</a>
-  <a id="439" href="Data.Fin.Instances.Finite.html#313" class="Function">fin-manifest-bishop-finite</a> <a id="466" class="Symbol">{</a><a id="467" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="471" class="Symbol">_}</a> <a id="474" class="Symbol">=</a> <a id="476" href="Data.Maybe.Instances.Finite.html#475" class="Function">maybe-manifest-bishop-finite</a> <a id="505" class="Symbol">⦃</a> <a id="507" href="Data.Fin.Instances.Finite.html#313" class="Function">fin-manifest-bishop-finite</a> <a id="534" class="Symbol">⦄</a>
+<a id="304" class="Keyword">instance</a>
+  <a id="fin-manifest-bishop-finite"></a><a id="315" href="Data.Fin.Instances.Finite.html#315" class="Function">fin-manifest-bishop-finite</a> <a id="342" class="Symbol">:</a> <a id="344" href="Combinatorics.Finiteness.ManifestBishop.html#849" class="Record">Manifest-bishop-finite</a> <a id="367" class="Symbol">(</a><a id="368" href="Data.Fin.Base.html#333" class="Function">Fin</a> <a id="372" href="Data.Fin.Instances.Finite.html#297" class="Generalizable">n</a><a id="373" class="Symbol">)</a>
+  <a id="377" href="Data.Fin.Instances.Finite.html#315" class="Function">fin-manifest-bishop-finite</a> <a id="404" class="Symbol">{</a><a id="405" class="Number">0</a><a id="406" class="Symbol">}</a>     <a id="412" class="Symbol">=</a> <a id="414" href="Data.Empty.Instances.Finite.html#228" class="Function">⊥-manifest-bishop-finite</a>
+  <a id="441" href="Data.Fin.Instances.Finite.html#315" class="Function">fin-manifest-bishop-finite</a> <a id="468" class="Symbol">{</a><a id="469" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="473" class="Symbol">_}</a> <a id="476" class="Symbol">=</a> <a id="478" href="Data.Maybe.Instances.Finite.html#479" class="Function">maybe-manifest-bishop-finite</a> <a id="507" class="Symbol">⦃</a> <a id="509" href="Data.Fin.Instances.Finite.html#315" class="Function">fin-manifest-bishop-finite</a> <a id="536" class="Symbol">⦄</a>
 </pre></body></html>

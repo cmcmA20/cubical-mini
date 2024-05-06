@@ -2,12 +2,14 @@
 <html><head><meta charset="utf-8"><title>Data.String.Instances.Append</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
 <a id="24" class="Keyword">module</a> <a id="31" href="Data.String.Instances.Append.html" class="Module">Data.String.Instances.Append</a> <a id="60" class="Keyword">where</a>
 
-<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Meta.Append.html" class="Module">Meta.Append</a>
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 
-<a id="92" class="Keyword">open</a> <a id="97" class="Keyword">import</a> <a id="104" href="Data.String.Base.html" class="Module">Data.String.Base</a> <a id="121" class="Symbol">as</a> <a id="124" class="Module">String</a>
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Data.String.Base.html" class="Module">Data.String.Base</a> <a id="126" class="Symbol">as</a> <a id="129" class="Module">String</a>
 
-<a id="132" class="Keyword">instance</a>
-  <a id="Append-String"></a><a id="143" href="Data.String.Instances.Append.html#143" class="Function">Append-String</a> <a id="157" class="Symbol">:</a> <a id="159" href="Meta.Append.html#105" class="Record">Append</a> <a id="166" href="Agda.Builtin.String.html#335" class="Postulate">String</a>
-  <a id="175" href="Data.String.Instances.Append.html#143" class="Function">Append-String</a> <a id="189" class="Symbol">.</a><a id="190" href="Meta.Append.html#173" class="Field">Append.mempty</a> <a id="204" class="Symbol">=</a> <a id="206" class="String">&quot;&quot;</a>
-  <a id="211" href="Data.String.Instances.Append.html#143" class="Function">Append-String</a> <a id="225" class="Symbol">.</a><a id="226" href="Meta.Append.html#188" class="Field Operator">Append._&lt;&gt;_</a> <a id="238" class="Symbol">=</a> <a id="240" href="Data.String.Base.html#160" class="Primitive Operator">_++ₛ_</a>
+<a id="137" class="Keyword">instance</a>
+  <a id="Reflᵘ-String"></a><a id="148" href="Data.String.Instances.Append.html#148" class="Function">Reflᵘ-String</a> <a id="161" class="Symbol">:</a> <a id="163" href="Foundations.Correspondences.Binary.Reflexive.html#509" class="Record">Reflᵘ</a> <a id="169" href="Agda.Builtin.String.html#335" class="Postulate">String</a>
+  <a id="178" href="Data.String.Instances.Append.html#148" class="Function">Reflᵘ-String</a> <a id="191" class="Symbol">.</a><a id="192" href="Foundations.Correspondences.Binary.Reflexive.html#570" class="Field">mempty</a> <a id="199" class="Symbol">=</a> <a id="201" class="String">&quot;&quot;</a>
+
+  <a id="Transᵘ-String"></a><a id="207" href="Data.String.Instances.Append.html#207" class="Function">Transᵘ-String</a> <a id="221" class="Symbol">:</a> <a id="223" href="Foundations.Correspondences.Binary.Transitive.html#798" class="Record">Transᵘ</a> <a id="230" href="Agda.Builtin.String.html#335" class="Postulate">String</a>
+  <a id="239" href="Data.String.Instances.Append.html#207" class="Function">Transᵘ-String</a> <a id="253" class="Symbol">.</a><a id="254" href="Foundations.Correspondences.Binary.Transitive.html#876" class="Field Operator">_&lt;&gt;_</a> <a id="259" class="Symbol">=</a> <a id="261" href="Data.String.Base.html#160" class="Primitive Operator">_++ₛ_</a>
 </pre></body></html>
