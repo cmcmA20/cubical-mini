@@ -12,4 +12,4 @@ iso→equiv x .snd = is-iso→is-equiv $ iso x.from (x.inv-l $ₚ_) (x.inv-r $�
 @0 Sets-is-category : is-category (Sets ℓ)
 Sets-is-category .to-path i = n-ua (iso→equiv i)
 Sets-is-category .to-path-over p =
-  Sets.≅-pathᴾ refl _ $ fun-ext λ _ → ＝→ua-pathᴾ _ refl
+  Sets.≅-pathᴾ refl _ $ fun-ext λ _ → =→ua-pathᴾ _ refl

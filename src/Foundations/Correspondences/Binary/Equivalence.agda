@@ -9,9 +9,11 @@ open import Foundations.HLevel
 record Equivalence {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ}
   (_~_ : A → A → 𝒰 ℓ) : 𝒰 (level-of-type A ⊔ ℓ) where
   field instance
-    reflexive  : Reflexive _~_
-    symmetric  : Symmetric _~_
+    reflexive  : Reflexive  _~_
+    symmetric  : Symmetric  _~_
     transitive : Transitive _~_
+
+open Equivalence public
 
 record is-congruence {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ}
   (_~_ : A → A → 𝒰 ℓ) : 𝒰 (level-of-type A ⊔ ℓ) where
@@ -22,5 +24,3 @@ record is-congruence {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ}
   opaque instance
     H-Level-~ : ∀ {n x y} → H-Level (suc n) (x ~ y)
     H-Level-~ = hlevel-prop-instance has-prop
-
-  open Equivalence equivalence public

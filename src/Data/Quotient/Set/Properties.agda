@@ -49,6 +49,7 @@ universal {B} {A} {R} B-set = ≅→≃ $ inc , iso back (λ _ → refl) li wher
 
 module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
   open is-congruence congr
+  open Equivalence equivalence
 
   Code : A → A / R → Prop ℓ
   Code x = elim hlevel! (λ y → el! $ R x y) λ y z r →

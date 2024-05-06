@@ -68,14 +68,14 @@ fin-coproduct : {n m : ℕ}
               → Fin n ⊎ Fin m
               ≃ Fin (n + m)
 fin-coproduct {0} {m}  =
-  Fin 0 ⊎ Fin m  ≡⟨ ⊎-ap-l fin-0-is-initial ⟩
-  ⊥ ⊎ Fin m      ≡⟨ ⊎-zero-l ⟩
+  Fin 0 ⊎ Fin m  ~⟨ ⊎-ap-l fin-0-is-initial ⟩
+  ⊥ ⊎ Fin m      ~⟨ ⊎-zero-l ⟩
   Fin m          ∎
 fin-coproduct {suc n} {m} =
-  Fin (suc n) ⊎ Fin m  ≡⟨ ⊎-ap-l fin-suc ⟩
-  (⊤ ⊎ Fin n) ⊎ Fin m  ≡⟨ ⊎-assoc ⟩
-  ⊤ ⊎ Fin n ⊎ Fin m    ≡⟨ ⊎-ap-r (fin-coproduct {n} {m}) ⟩
-  ⊤ ⊎ Fin (n + m)      ≡⟨ fin-suc ⁻¹ ⟩
+  Fin (suc n) ⊎ Fin m  ~⟨ ⊎-ap-l fin-suc ⟩
+  (⊤ ⊎ Fin n) ⊎ Fin m  ~⟨ ⊎-assoc ⟩
+  ⊤ ⊎ Fin n ⊎ Fin m    ~⟨ ⊎-ap-r (fin-coproduct {n} {m}) ⟩
+  ⊤ ⊎ Fin (n + m)      ~⟨ fin-suc ⁻¹ ⟩
   Fin (suc (n + m))    ∎
 
 sum : ∀ n → (Fin n → ℕ) → ℕ
@@ -115,10 +115,10 @@ fin-product : {n m : ℕ}
             → Fin n × Fin m
             ≃ Fin (n · m)
 fin-product {n} {m} =
-  Fin n × Fin m          ≡⟨ fin-sum (λ _ → m) ⟩
-  Fin (sum n (λ _ → m))  ≡⟨ cast (sum≡* n m) , cast-is-equiv _ ⟩
+  Fin n × Fin m          ~⟨ fin-sum (λ _ → m) ⟩
+  Fin (sum n (λ _ → m))  ~⟨ cast (sum=* n m) , cast-is-equiv _ ⟩
   Fin (n · m)            ∎
   where
-    sum≡* : ∀ n m → sum n (λ _ → m) ＝ n · m
-    sum≡* 0       m = refl
-    sum≡* (suc n) m = ap (m +_) (sum≡* n m)
+    sum=* : ∀ n m → sum n (λ _ → m) ＝ n · m
+    sum=* 0       m = refl
+    sum=* (suc n) m = ap (m +_) (sum=* n m)

@@ -27,8 +27,8 @@ module _ where private
   ∙′-filler-r p q = ∙∙-filler p q reflₚ
 
   -- From this, we can show that these two notions of composition are the same
-  ∙＝∙′ : (p : x ＝ y) (q : y ＝ z) → p ∙ₚ q ＝ p ∙′ q
-  ∙＝∙′ p q j = ∙∙-unique p q reflₚ (p ∙ₚ q , ∙-filler-r p q) (p ∙′ q , ∙′-filler-r p q) j .fst
+  ∙=∙′ : (p : x ＝ y) (q : y ＝ z) → p ∙ₚ q ＝ p ∙′ q
+  ∙=∙′ p q j = ∙∙-unique p q reflₚ (p ∙ₚ q , ∙-filler-r p q) (p ∙′ q , ∙′-filler-r p q) j .fst
 
   -- We could define double composition with left side `refl`
   -- (classic cubical library way)
@@ -46,8 +46,8 @@ module _ where private
                  x  ̇    p ∙″ q    ̇ z
   ∙″-filler-l = ∙∙-filler reflₚ
 
-  ∙＝∙″ : (p : x ＝ y) (q : y ＝ z) → p ∙ₚ q ＝ p ∙″ q
-  ∙＝∙″ p q j = ∙∙-unique reflₚ p q (p ∙ₚ q , ∙-filler-l p q) (p ∙″ q , ∙″-filler-l p q) j .fst
+  ∙=∙″ : (p : x ＝ y) (q : y ＝ z) → p ∙ₚ q ＝ p ∙″ q
+  ∙=∙″ p q j = ∙∙-unique reflₚ p q (p ∙ₚ q , ∙-filler-l p q) (p ∙″ q , ∙″-filler-l p q) j .fst
 
 
 opaque

@@ -113,7 +113,7 @@ opaque
                           → {x : A i0} {y : A i1}
                           → is-of-hlevel h ＜ x ／ A ＼ y ＞
   pathᴾ-is-of-hlevel-same {A} h ahl {x} {y} =
-    subst (is-of-hlevel h) (sym (pathᴾ＝path A x y)) (path-is-of-hlevel-same h ahl)
+    subst (is-of-hlevel h) (sym (pathᴾ=path A x y)) (path-is-of-hlevel-same h ahl)
 
 path-is-of-hlevel : (h : HLevel) → is-of-hlevel (suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
 path-is-of-hlevel 0 ahl x y =
@@ -125,7 +125,7 @@ pathᴾ-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
                    → (x : A i0) (y : A i1)
                    → is-of-hlevel h ＜ x ／ A ＼ y ＞
 pathᴾ-is-of-hlevel {A} h ahl x y =
-  subst (is-of-hlevel h) (sym (pathᴾ＝path A x y)) (path-is-of-hlevel h ahl _ _)
+  subst (is-of-hlevel h) (sym (pathᴾ=path A x y)) (path-is-of-hlevel h ahl _ _)
 
 
 opaque
@@ -211,7 +211,7 @@ opaque
       (r : ＜ b ／ (λ j → A j i1) ＼ d ＞)
     → Squareᴾ A q p s r
   is-set→squareᴾ is-set a₀₋ a₁₋ a₋₀ a₋₁ =
-    transport (sym (pathᴾ＝path _ _ _))
+    transport (sym (pathᴾ=path _ _ _))
               (pathᴾ-is-of-hlevel 1 (is-set _ _) _ _ _ _)
 
   -- litmus

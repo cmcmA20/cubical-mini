@@ -80,7 +80,7 @@ opaque
   @0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
   n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
     inv′ : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
-    inv′ p = ＝→≃ (ap carrier p)
+    inv′ p = =→≃ (ap carrier p)
 
     linv : ∀ {Y} → (inv′ {Y}) is-left-inverse-of n-ua
     linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
@@ -92,7 +92,7 @@ opaque
       path i j .carrier-is-tr = is-prop→squareᴾ
         (λ i j → is-of-hlevel-is-prop
           {A = ua.ε {A = ⌞ X ⌟} refl i j } n)
-        (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (＝→≃ refl) j)
+        (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (=→≃ refl) j)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)

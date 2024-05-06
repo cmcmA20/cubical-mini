@@ -35,18 +35,18 @@ infixl 2 _*X+_
 
 commute-inner : ∀ w x y z → (w + x) + (y + z) ＝ (w + y) + (x + z)
 commute-inner w x y z =
-  (w + x) + (y + z)    ≡⟨ +-assoc w _ _ ⟨
-  w + ⌜ x + (y + z) ⌝  ≡⟨ ap! (+-assoc x _ _) ⟩
-  w + (⌜ x + y ⌝ + z)  ≡⟨ ap! (+-comm x _) ⟩
-  w + ⌜ y + x + z ⌝    ≡⟨ ap¡ (+-assoc y _ _) ⟨
-  w + (y + (x + z))    ≡⟨ +-assoc w _ _ ⟩
+  (w + x) + (y + z)    ~⟨ +-assoc w _ _ ⟨
+  w + ⌜ x + (y + z) ⌝  ~⟨ ap! (+-assoc x _ _) ⟩
+  w + (⌜ x + y ⌝ + z)  ~⟨ ap! (+-comm x _) ⟩
+  w + ⌜ y + x + z ⌝    ~⟨ ap¡ (+-assoc y _ _) ⟨
+  w + (y + (x + z))    ~⟨ +-assoc w _ _ ⟩
   (w + y) + (x + z)    ∎
 
 commute-last : ∀ x y z → (x · y) · z ＝ (x · z) · y
 commute-last x y z =
-  x · y · z      ≡⟨ ·-assoc x y z ⟨
-  x · ⌜ y · z ⌝  ≡⟨ ap! (·-comm y z) ⟩
-  x · (z · y)    ≡⟨ ·-assoc x z y ⟩
+  x · y · z      ~⟨ ·-assoc x y z ⟨
+  x · ⌜ y · z ⌝  ~⟨ ap! (·-comm y z) ⟩
+  x · (z · y)    ~⟨ ·-assoc x z y ⟩
   x · z · y      ∎
 
 private
@@ -103,10 +103,10 @@ sound-constₚ {suc n} c (x ∷ env) = sound-constₚ c env
 
 sound-X[_] : ∀ k → (env : Vec ℕ n) → ⟦ X[ k ] ⟧ₚ env ＝ lookup env k
 sound-X[_] {suc _} (mk-fin 0) (x₀ ∷ env) =
-  ⌜ ⟦ constₚ 1 ⟧ₚ env ⌝ · x₀ + ⟦ 0ₚ ⟧ₚ env  ≡⟨ ap! (sound-constₚ 1 env) ⟩
-  1 · x₀ + ⌜ ⟦ 0ₚ ⟧ₚ env ⌝                  ≡⟨ ap! (sound-0ₚ env) ⟩
-  1 · x₀ + 0                                ≡⟨ +-zero-r (1 · x₀) ⟩
-  1 · x₀                                    ≡⟨ ·-id-l x₀ ⟩
+  ⌜ ⟦ constₚ 1 ⟧ₚ env ⌝ · x₀ + ⟦ 0ₚ ⟧ₚ env  ~⟨ ap! (sound-constₚ 1 env) ⟩
+  1 · x₀ + ⌜ ⟦ 0ₚ ⟧ₚ env ⌝                  ~⟨ ap! (sound-0ₚ env) ⟩
+  1 · x₀ + 0                                ~⟨ +-zero-r (1 · x₀) ⟩
+  1 · x₀                                    ~⟨ ·-id-l x₀ ⟩
   x₀                                        ∎
 sound-X[_] {suc _} (mk-fin (suc k)) (_ ∷ env) = sound-X[ mk-fin k ] env
 
@@ -117,10 +117,10 @@ sound-+ₚ zerop     _         _   = refl
 sound-+ₚ (p *X+ r) zerop     env = sym $ +-zero-r $
   ⟦ (p *X+ r) +ₚ zerop ⟧ₚ env
 sound-+ₚ (p *X+ r) (q *X+ s) (x₀ ∷ env) =
-  ⌜ ⟦p+q⟧ ⌝ · x₀ + ⟦r+s⟧              ≡⟨ ap! (sound-+ₚ p _ _) ⟩
-  (⟦p⟧ + ⟦q⟧) · x₀ + ⌜ ⟦r+s⟧ ⌝        ≡⟨ ap! (sound-+ₚ r _ _) ⟩
-  ⌜ (⟦p⟧ + ⟦q⟧) · x₀ ⌝ + (⟦r⟧ + ⟦s⟧)  ≡⟨ ap! (·-distrib-+-r ⟦p⟧ ⟦q⟧ x₀) ⟩
-  ⟦p⟧ · x₀ + ⟦q⟧ · x₀ + (⟦r⟧ + ⟦s⟧)   ≡⟨ commute-inner (⟦p⟧ · x₀) (⟦q⟧ · x₀) ⟦r⟧ ⟦s⟧ ⟩
+  ⌜ ⟦p+q⟧ ⌝ · x₀ + ⟦r+s⟧              ~⟨ ap! (sound-+ₚ p _ _) ⟩
+  (⟦p⟧ + ⟦q⟧) · x₀ + ⌜ ⟦r+s⟧ ⌝        ~⟨ ap! (sound-+ₚ r _ _) ⟩
+  ⌜ (⟦p⟧ + ⟦q⟧) · x₀ ⌝ + (⟦r⟧ + ⟦s⟧)  ~⟨ ap! (·-distrib-+-r ⟦p⟧ ⟦q⟧ x₀) ⟩
+  ⟦p⟧ · x₀ + ⟦q⟧ · x₀ + (⟦r⟧ + ⟦s⟧)   ~⟨ commute-inner (⟦p⟧ · x₀) (⟦q⟧ · x₀) ⟦r⟧ ⟦s⟧ ⟩
   ⟦p⟧ · x₀ + ⟦r⟧ + (⟦q⟧ · x₀ + ⟦s⟧)   ∎
   where
     ⟦p+q⟧ = ⟦ p +ₚ q ⟧ₚ (x₀ ∷ env)
@@ -140,28 +140,28 @@ sound-*ₚ′
 sound-*ₚ (const _) (const _) _ = refl
 sound-*ₚ zerop _ _ = refl
 sound-*ₚ (p *X+ r) zerop (x₀ ∷ env) =
-  ⌜ ⟦ p *ₚ zerop ⟧ₚ (x₀ ∷ env) ⌝ · x₀ + ⟦ 0ₚ ⟧ₚ env  ≡⟨ ap! (sound-*ₚ p _ _) ⟩
-  ⟦p⟧ · 0 · x₀ + ⌜ ⟦ 0ₚ ⟧ₚ env ⌝                     ≡⟨ ap! (sound-0ₚ env) ⟩
-  ⌜ ⟦p⟧ · 0 ⌝ · x₀ + 0                               ≡⟨ ap! (·-absorb-r ⟦p⟧) ⟩
-  0                                                  ≡⟨ ·-absorb-r (⟦p⟧ · x₀ + ⟦r⟧) ⟨
+  ⌜ ⟦ p *ₚ zerop ⟧ₚ (x₀ ∷ env) ⌝ · x₀ + ⟦ 0ₚ ⟧ₚ env  ~⟨ ap! (sound-*ₚ p _ _) ⟩
+  ⟦p⟧ · 0 · x₀ + ⌜ ⟦ 0ₚ ⟧ₚ env ⌝                     ~⟨ ap! (sound-0ₚ env) ⟩
+  ⌜ ⟦p⟧ · 0 ⌝ · x₀ + 0                               ~⟨ ap! (·-absorb-r ⟦p⟧) ⟩
+  0                                                  ~⟨ ·-absorb-r (⟦p⟧ · x₀ + ⟦r⟧) ⟨
   (⟦p⟧ · x₀ + ⟦r⟧) · 0                               ∎
   where
     ⟦p⟧ = ⟦ p ⟧ₚ (x₀ ∷ env)
     ⟦r⟧ = ⟦ r ⟧ₚ env
 
 sound-*ₚ (p *X+ r) (q *X+ s) (x₀ ∷ env) =
-  ⟦p*⟨qx+s⟩+r*q⟧ · x₀ + ⌜ ⟦ 0ₚ +ₚ (r *ₚ s) ⟧ₚ env ⌝               ≡⟨ ap! (sound-+ₚ 0ₚ (r *ₚ s) _) ⟩
-  ⟦p*⟨qx+s⟩+r*q⟧ · x₀ + (⌜ ⟦ 0ₚ ⟧ₚ env ⌝ + ⟦ r *ₚ s ⟧ₚ env)       ≡⟨ ap! (sound-0ₚ env) ⟩
-  ⟦p*⟨qx+s⟩+r*q⟧ · x₀ + ⌜ ⟦ r *ₚ s ⟧ₚ env ⌝                       ≡⟨ ap! (sound-*ₚ r _ _) ⟩
-  ⌜ ⟦p*⟨qx+s⟩+r*q⟧ ⌝ · x₀ + ⟦r⟧ · ⟦s⟧                             ≡⟨ ap! (sound-+ₚ (p *ₚ (q *X+ s)) (r *ₚ′ q) _) ⟩
-  (⌜ ⟦p*⟨qx+s⟩⟧ ⌝ + ⟦r*q⟧) · x₀ + ⟦r⟧ · ⟦s⟧                       ≡⟨ ap! (sound-*ₚ p _ _) ⟩
-  (⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) + ⌜ ⟦r*q⟧ ⌝) · x₀ + ⟦r⟧ · ⟦s⟧           ≡⟨ ap! (sound-*ₚ′ r q _ _) ⟩
-  ⌜ (⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) + ⟦r⟧ · ⟦q⟧) · x₀ ⌝ + ⟦r⟧ · ⟦s⟧       ≡⟨ ap! (·-distrib-+-r (⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧)) (⟦r⟧ · ⟦q⟧) x₀) ⟩
-  ⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀ + ⟦r⟧ · ⟦q⟧ · x₀ + ⟦r⟧ · ⟦s⟧        ≡⟨ +-assoc (⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀) _ _ ⟨
-  ⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀ + (⌜ ⟦r⟧ · ⟦q⟧ · x₀ ⌝ + ⟦r⟧ · ⟦s⟧)  ≡⟨ ap¡ (·-assoc ⟦r⟧ _ _) ⟨
-  ⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀ + ⌜ ⟦r⟧ · (⟦q⟧ · x₀) + ⟦r⟧ · ⟦s⟧ ⌝  ≡⟨ ap¡ (·-distrib-+-l ⟦r⟧ _ _) ⟨
-  ⌜ ⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀ ⌝ + ⟦r⟧ · (⟦q⟧ · x₀ + ⟦s⟧)        ≡⟨ ap! (commute-last ⟦p⟧ _ _) ⟩
-  ⟦p⟧ · x₀ · (⟦q⟧ · x₀ + ⟦s⟧) + ⟦r⟧ · (⟦q⟧ · x₀ + ⟦s⟧)            ≡⟨ ·-distrib-+-r (⟦p⟧ · x₀) _ _ ⟨
+  ⟦p*⟨qx+s⟩+r*q⟧ · x₀ + ⌜ ⟦ 0ₚ +ₚ (r *ₚ s) ⟧ₚ env ⌝               ~⟨ ap! (sound-+ₚ 0ₚ (r *ₚ s) _) ⟩
+  ⟦p*⟨qx+s⟩+r*q⟧ · x₀ + (⌜ ⟦ 0ₚ ⟧ₚ env ⌝ + ⟦ r *ₚ s ⟧ₚ env)       ~⟨ ap! (sound-0ₚ env) ⟩
+  ⟦p*⟨qx+s⟩+r*q⟧ · x₀ + ⌜ ⟦ r *ₚ s ⟧ₚ env ⌝                       ~⟨ ap! (sound-*ₚ r _ _) ⟩
+  ⌜ ⟦p*⟨qx+s⟩+r*q⟧ ⌝ · x₀ + ⟦r⟧ · ⟦s⟧                             ~⟨ ap! (sound-+ₚ (p *ₚ (q *X+ s)) (r *ₚ′ q) _) ⟩
+  (⌜ ⟦p*⟨qx+s⟩⟧ ⌝ + ⟦r*q⟧) · x₀ + ⟦r⟧ · ⟦s⟧                       ~⟨ ap! (sound-*ₚ p _ _) ⟩
+  (⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) + ⌜ ⟦r*q⟧ ⌝) · x₀ + ⟦r⟧ · ⟦s⟧           ~⟨ ap! (sound-*ₚ′ r q _ _) ⟩
+  ⌜ (⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) + ⟦r⟧ · ⟦q⟧) · x₀ ⌝ + ⟦r⟧ · ⟦s⟧       ~⟨ ap! (·-distrib-+-r (⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧)) (⟦r⟧ · ⟦q⟧) x₀) ⟩
+  ⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀ + ⟦r⟧ · ⟦q⟧ · x₀ + ⟦r⟧ · ⟦s⟧        ~⟨ +-assoc (⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀) _ _ ⟨
+  ⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀ + (⌜ ⟦r⟧ · ⟦q⟧ · x₀ ⌝ + ⟦r⟧ · ⟦s⟧)  ~⟨ ap¡ (·-assoc ⟦r⟧ _ _) ⟨
+  ⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀ + ⌜ ⟦r⟧ · (⟦q⟧ · x₀) + ⟦r⟧ · ⟦s⟧ ⌝  ~⟨ ap¡ (·-distrib-+-l ⟦r⟧ _ _) ⟨
+  ⌜ ⟦p⟧ · (⟦q⟧ · x₀ + ⟦s⟧) · x₀ ⌝ + ⟦r⟧ · (⟦q⟧ · x₀ + ⟦s⟧)        ~⟨ ap! (commute-last ⟦p⟧ _ _) ⟩
+  ⟦p⟧ · x₀ · (⟦q⟧ · x₀ + ⟦s⟧) + ⟦r⟧ · (⟦q⟧ · x₀ + ⟦s⟧)            ~⟨ ·-distrib-+-r (⟦p⟧ · x₀) _ _ ⟨
   (⟦p⟧ · x₀ + ⟦r⟧) · (⟦q⟧ · x₀ + ⟦s⟧)                             ∎
   where
     ⟦p*⟨qx+s⟩+r*q⟧ = ⟦ (p *ₚ (q *X+ s)) +ₚ (r *ₚ′ q) ⟧ₚ (x₀ ∷ env)
@@ -174,10 +174,10 @@ sound-*ₚ (p *X+ r) (q *X+ s) (x₀ ∷ env) =
 
 sound-*ₚ′ p zerop x₀ env = sym (·-absorb-r (⟦ p ⟧ₚ env))
 sound-*ₚ′ r (p *X+ q) x₀ env =
-  ⌜ ⟦ r *ₚ′ p ⟧ₚ (x₀ ∷ env) ⌝ · x₀ + ⟦ r *ₚ q ⟧ₚ env  ≡⟨ ap! (sound-*ₚ′ r p _ _) ⟩
-  ⟦r⟧ · ⟦p⟧ · x₀ + ⌜ ⟦ r *ₚ q ⟧ₚ env ⌝                ≡⟨ ap! (sound-*ₚ r _ _) ⟩
-  ⌜ ⟦r⟧ · ⟦p⟧ · x₀ ⌝ + ⟦r⟧ · ⟦q⟧                      ≡⟨ ap¡ (·-assoc ⟦r⟧ _ _) ⟨
-  ⟦r⟧ · (⟦p⟧ · x₀) + ⟦r⟧ · ⟦q⟧                        ≡⟨ ·-distrib-+-l ⟦r⟧ _ _ ⟨
+  ⌜ ⟦ r *ₚ′ p ⟧ₚ (x₀ ∷ env) ⌝ · x₀ + ⟦ r *ₚ q ⟧ₚ env  ~⟨ ap! (sound-*ₚ′ r p _ _) ⟩
+  ⟦r⟧ · ⟦p⟧ · x₀ + ⌜ ⟦ r *ₚ q ⟧ₚ env ⌝                ~⟨ ap! (sound-*ₚ r _ _) ⟩
+  ⌜ ⟦r⟧ · ⟦p⟧ · x₀ ⌝ + ⟦r⟧ · ⟦q⟧                      ~⟨ ap¡ (·-assoc ⟦r⟧ _ _) ⟨
+  ⟦r⟧ · (⟦p⟧ · x₀) + ⟦r⟧ · ⟦q⟧                        ~⟨ ·-distrib-+-l ⟦r⟧ _ _ ⟨
   ⟦r⟧ · (⟦p⟧ · x₀ + ⟦q⟧)                              ∎
   where
     ⟦r⟧ = ⟦ r ⟧ₚ env
@@ -213,18 +213,18 @@ sound : ∀ e → (env : Vec ℕ n) → ⟦ ↓ e ⟧ₚ env ＝ ⟦ e ⟧ₑ en
 sound (‵ k) env = sound-X[ k ] env
 sound ‵0 env = sound-0ₚ env
 sound (‵1+ e) env =
-  ⟦ constₚ 1 +ₚ (↓ e) ⟧ₚ env            ≡⟨ sound-+ₚ (constₚ 1) (↓ e) env ⟩
-  ⌜ ⟦ constₚ 1 ⟧ₚ env ⌝ + ⟦ ↓ e ⟧ₚ env  ≡⟨ ap! (sound-constₚ 1 env) ⟩
-  suc (⟦ ↓ e ⟧ₚ env)                    ≡⟨ ap suc (sound e env) ⟩
+  ⟦ constₚ 1 +ₚ (↓ e) ⟧ₚ env            ~⟨ sound-+ₚ (constₚ 1) (↓ e) env ⟩
+  ⌜ ⟦ constₚ 1 ⟧ₚ env ⌝ + ⟦ ↓ e ⟧ₚ env  ~⟨ ap! (sound-constₚ 1 env) ⟩
+  suc (⟦ ↓ e ⟧ₚ env)                    ~⟨ ap suc (sound e env) ⟩
   suc (⟦ e ⟧ₑ env)                      ∎
 sound (‵lit k) env = sound-constₚ k env
 sound (e₁ ‵+ e₂) env =
-  ⟦ (↓ e₁) +ₚ (↓ e₂) ⟧ₚ env      ≡⟨ sound-+ₚ (↓ e₁) (↓ e₂) env ⟩
-  ⟦ ↓ e₁ ⟧ₚ env + ⟦ ↓ e₂ ⟧ₚ env  ≡⟨ ap² _+_ (sound e₁ env) (sound e₂ env) ⟩
+  ⟦ (↓ e₁) +ₚ (↓ e₂) ⟧ₚ env      ~⟨ sound-+ₚ (↓ e₁) (↓ e₂) env ⟩
+  ⟦ ↓ e₁ ⟧ₚ env + ⟦ ↓ e₂ ⟧ₚ env  ~⟨ ap² _+_ (sound e₁ env) (sound e₂ env) ⟩
   ⟦ e₁ ⟧ₑ env + ⟦ e₂ ⟧ₑ env      ∎
 sound (e₁ ‵· e₂) env =
-  ⟦ (↓ e₁) *ₚ (↓ e₂) ⟧ₚ env      ≡⟨ sound-*ₚ (↓ e₁) (↓ e₂) env ⟩
-  ⟦ ↓ e₁ ⟧ₚ env · ⟦ ↓ e₂ ⟧ₚ env  ≡⟨ ap² _·_ (sound e₁ env) (sound e₂ env) ⟩
+  ⟦ (↓ e₁) *ₚ (↓ e₂) ⟧ₚ env      ~⟨ sound-*ₚ (↓ e₁) (↓ e₂) env ⟩
+  ⟦ ↓ e₁ ⟧ₚ env · ⟦ ↓ e₂ ⟧ₚ env  ~⟨ ap² _·_ (sound e₁ env) (sound e₂ env) ⟩
   ⟦ e₁ ⟧ₑ env · ⟦ e₂ ⟧ₑ env      ∎
 
 expand : (e : Expr n) (env : Vec ℕ n) → ℕ

@@ -28,7 +28,7 @@ pointed-str : Structure ℓ id
 pointed-str .is-hom (_ , x) (_ , y) f = f # x ＝ y
 
 @0 pointed-str-is-univalent : is-univalent (pointed-str {ℓ})
-pointed-str-is-univalent f = ua-pathᴾ≃＝ _
+pointed-str-is-univalent f = ua-pathᴾ≃= _
 
 opaque
   unfolding ua
@@ -47,8 +47,8 @@ product-str S T .is-hom (A , x , y) (B , x′ , y′) f =
                             → is-univalent σ → is-univalent τ
                             → is-univalent (product-str σ τ)
 product-str-is-univalent {S} {T} {σ} {τ} θ₁ θ₂ {X , x , y} {Y , x′ , y′} f =
-  σ .is-hom (X , x) (Y , x′) f × τ .is-hom (X , y) (Y , y′) f               ≡⟨ ×-ap (θ₁ f) (θ₂ f) ⟩
-  ＜ x ／ (λ i → S (ua f i)) ＼ x′ ＞ × ＜ y ／ (λ i → T (ua f i)) ＼ y′ ＞  ≡⟨ ≅→≃ Σ-pathᴾ-iso ⟩
+  σ .is-hom (X , x) (Y , x′) f × τ .is-hom (X , y) (Y , y′) f               ~⟨ ×-ap (θ₁ f) (θ₂ f) ⟩
+  ＜ x ／ (λ i → S (ua f i)) ＼ x′ ＞ × ＜ y ／ (λ i → T (ua f i)) ＼ y′ ＞  ~⟨ ≅→≃ Σ-pathᴾ-iso ⟩
   ＜ x , y ／ (λ i → S (ua f i) × T (ua f i)) ＼ x′ , y′ ＞                  ∎
 
 product-action : Equiv-action S → Equiv-action T → Equiv-action (λ X → S X × T X)
@@ -84,8 +84,8 @@ function-str {S} act str .is-hom (A , f) (B , g) e =
   → (τ : Structure ℓ T) → is-univalent τ
   → is-univalent (function-str α τ)
 function-str-is-univalent {S} {T} α α-tr τ τ-univ {X , f} {Y , g} eqv =
-  Π[ s ꞉ S X ] τ .is-hom (X , f s) (Y , _) eqv         ≡⟨ Π-cod-≃ (λ s → τ-univ eqv ∙ ＝→≃ (ap (Pathᴾ (λ i → T (ua eqv i)) (f s) ∘ g) (α-tr _ _))) ⟩
-  Π[ s ꞉ S X ] ＜ f s ／ (λ i → T (ua eqv i)) ＼ _ ＞  ≡⟨ hetero-homotopy≃homotopy ⁻¹ ∙ fun-ext-dep-≃ ⟩
+  Π[ s ꞉ S X ] τ .is-hom (X , f s) (Y , _) eqv         ~⟨ Π-cod-≃ (λ s → τ-univ eqv ∙ =→≃ (ap (Pathᴾ (λ i → T (ua eqv i)) (f s) ∘ g) (α-tr _ _))) ⟩
+  Π[ s ꞉ S X ] ＜ f s ／ (λ i → T (ua eqv i)) ＼ _ ＞  ~⟨ hetero-homotopy≃homotopy ⁻¹ ∙ fun-ext-dep-≃ ⟩
   _                                                    ∎
 
 function-action : Equiv-action S → Equiv-action T → Equiv-action (λ X → S X → T X)
@@ -134,11 +134,11 @@ module _
     @0 axiom-str-univalent : is-univalent axiom-str
     axiom-str-univalent {X = A , s , a} {Y = B , t , b} f =
       σ .is-hom (A , s) (B , t) f
-        ≡⟨ univ f ⟩
+        ~⟨ univ f ⟩
       ＜ s ／ (λ i → S (ua f i)) ＼ t ＞
-        ≡⟨ Σ-contract-snd (λ x → pathᴾ-is-of-hlevel-same 0 (b , (axioms-prop b))) ⟨
+        ~⟨ Σ-contract-snd (λ x → pathᴾ-is-of-hlevel-same 0 (b , (axioms-prop b))) ⟨
       Σ[ p ꞉ ＜ s ／ (λ i → S (ua f i)) ＼ t ＞ ] ＜ a ／ (λ i → axioms (ua f i) (p i)) ＼ b ＞
-        ≡⟨ ≅→≃ Σ-pathᴾ-iso ⟩
+        ~⟨ ≅→≃ Σ-pathᴾ-iso ⟩
       _
         ∎
 

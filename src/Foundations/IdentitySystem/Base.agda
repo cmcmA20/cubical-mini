@@ -59,9 +59,9 @@ J-refl
   → (p : P x (r x))
   → J ids P p (r x) ＝ p
 J-refl {R} {r} {x} ids P p =
-  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p  ≡⟨⟩
-  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p       ≡⟨ ap (λ e → subst P′ e p) (to-path-refl-coh ids x) ⟩
-  subst P′ refl p                                                           ≡⟨ transport-refl p ⟩
+  transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p  ~⟨⟩
+  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p       ~⟨ ap (λ e → subst P′ e p) (to-path-refl-coh ids x) ⟩
+  subst P′ refl p                                                           ~⟨ transport-refl p ⟩
   p                                                                         ∎
   where
     P′ : Σ _ (R x) → Type _
@@ -142,7 +142,7 @@ module _
   : is-identity-system {A = Type ℓ} _≃_ (λ _ → refl)
 univalence-identity-system .to-path = ua
 univalence-identity-system .to-path-over p =
-  Σ-prop-pathᴾ (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → ＝→ua-pathᴾ p refl
+  Σ-prop-pathᴾ (λ _ → is-equiv-is-prop) $ fun-ext $ λ a → =→ua-pathᴾ p refl
 
 path-identity-system : {A : Type ℓ} → is-identity-system (Path A) (λ _ → refl)
 path-identity-system .to-path = id

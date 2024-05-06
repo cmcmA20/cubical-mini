@@ -65,7 +65,7 @@ module _ {A : Type ℓ} {x y z : A}
   ∙-pull-l {r} = ∙-assoc p q r ∙ ap (_∙ r) pq＝s
 
   double-left : {w : A} {r : z ＝ w} → p ∙∙ q ∙∙ r ＝ s ∙ r
-  double-left {r} = ∙∙＝∙ p q r ∙ ∙-pull-l
+  double-left {r} = ∙∙=∙ p q r ∙ ∙-pull-l
 
   ∙-pull-r : {w : A} {r : w ＝ x} → (r ∙ p) ∙ q ＝ r ∙ s
   ∙-pull-r {r} = sym (∙-assoc r p q) ∙ ap (r ∙_) pq＝s
@@ -80,7 +80,7 @@ module _
   ∙-push-r = sym (∙-pull-r (sym s＝pq))
 
   double-right : {w : A} {r : w ＝ x} → r ∙∙ p ∙∙ q ＝ r ∙ s
-  double-right {r} = ∙∙＝∙ r p q ∙ ap (r ∙_) (sym s＝pq)
+  double-right {r} = ∙∙=∙ r p q ∙ ap (r ∙_) (sym s＝pq)
 
 module _
   {A : Type ℓ} {x y z w : A}

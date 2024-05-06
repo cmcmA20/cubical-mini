@@ -44,7 +44,7 @@ open is-iso
   → Σ[ p ꞉ x .fst ＝ y .fst ] (subst B p (x .snd) ＝ y .snd)
   ≅ (x ＝ y)
 Σ-path-iso {B} {x} {y} = transport
-  (λ i → (Σ[ p ꞉ x .fst ＝ y .fst ] (pathᴾ＝path (λ j → B (p j)) (x .snd) (y .snd) i))
+  (λ i → (Σ[ p ꞉ x .fst ＝ y .fst ] (pathᴾ=path (λ j → B (p j)) (x .snd) (y .snd) i))
        ≅ (x ＝ y))
   Σ-pathᴾ-iso
 

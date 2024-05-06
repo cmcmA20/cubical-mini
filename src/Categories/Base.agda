@@ -176,15 +176,15 @@ _∘ᶠ_ {C} {D} {E} F G = comps
     opaque
       F-id : {x : C.Ob} → F₁ (C.id {x}) ＝ E.id {F₀ x}
       F-id =
-          F.₁ (G.₁ C.id)  ≡⟨ ap F.₁ G.F-id ⟩
-          F.₁ D.id        ≡⟨ F.F-id ⟩
+          F.₁ (G.₁ C.id)  ~⟨ ap F.₁ G.F-id ⟩
+          F.₁ D.id        ~⟨ F.F-id ⟩
           E.id            ∎
 
       F-∘ : {x y z : C.Ob} (f : C.Hom y z) (g : C.Hom x y)
           → F₁ (f C.∘ g) ＝ (F₁ f E.∘ F₁ g)
       F-∘ f g =
-          F.₁ (G.₁ (f C.∘ g))    ≡⟨ ap F.₁ (G.F-∘ f g) ⟩
-          F.₁ (G.₁ f D.∘ G.₁ g)  ≡⟨ F.F-∘ _ _ ⟩
+          F.₁ (G.₁ (f C.∘ g))    ~⟨ ap F.₁ (G.F-∘ f g) ⟩
+          F.₁ (G.₁ f D.∘ G.₁ g)  ~⟨ F.F-∘ _ _ ⟩
           F₁ f E.∘ F₁ g          ∎
 
     comps : Functor _ _

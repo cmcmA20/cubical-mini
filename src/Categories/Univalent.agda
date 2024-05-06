@@ -2,7 +2,7 @@
 module Categories.Univalent where
 
 open import Prelude
-  hiding (_∘_; _≅_; id; ≅→＝)
+  hiding (_∘_; _≅_; id; ≅→=)
 
 open import Structures.n-Type
 

@@ -74,14 +74,14 @@ instance
 ∥-∥₁∘manifest-bishop-finite≃is-bishop-finite : ∥ Manifest-bishop-finite A ∥₁ ≃ is-bishop-finite A
 ∥-∥₁∘manifest-bishop-finite≃is-bishop-finite {A} =
   ∥ Manifest-bishop-finite A ∥₁
-    ≡⟨ ∥-∥₁.ae (≅→≃ manifest-bishop-finite-iso) ⟩
+    ~⟨ ∥-∥₁.ae (≅→≃ manifest-bishop-finite-iso) ⟩
   ∥ Σ[ n ꞉ ℕ ] (A ≃ Fin n) ∥₁
-    ≡⟨ prop-extₑ! (rec! ⦃ ∥-∥₁.Inductive-∥-∥₁ ⦃ Inductive-Σ ⦃ Inductive-default ⦄ ⦄ ⦄ λ n e →
+    ~⟨ prop-extₑ! (rec! ⦃ ∥-∥₁.Inductive-∥-∥₁ ⦃ Inductive-Σ ⦃ Inductive-default ⦄ ⦄ ⦄ λ n e →
                     n , pure e)
                   (λ (n , ∣e∣₁) → map (n ,_) ∣e∣₁)
      ⟩
   Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁
-    ≡⟨ ≅→≃ is-bishop-finite-iso ⟨
+    ~⟨ ≅→≃ is-bishop-finite-iso ⟨
   is-bishop-finite A
     ∎
 
@@ -164,7 +164,7 @@ instance
       work = do
         t ← finite-choice A-bf $ enumeration₁ ∘ (λ z → fam {z})
         pure $ Σ-ap aeq λ x → t x
-             ∙ ＝→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
+             ∙ =→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
 
     pure $ fin₁ ⦇ work ∙ₑ pure fs ⦈
   {-# OVERLAPPABLE Σ-is-bishop-finite #-}
@@ -211,5 +211,5 @@ instance
     : ∀ {A :  I → Type ℓ}
     → ⦃ bf : is-bishop-finite (A i1) ⦄ → ∀ {x y}
     → is-bishop-finite ＜ x ／ A ＼ y ＞
-  pathᴾ-is-bishop-finite = subst is-bishop-finite (pathᴾ＝path _ _ _ ⁻¹)
+  pathᴾ-is-bishop-finite = subst is-bishop-finite (pathᴾ=path _ _ _ ⁻¹)
     is-discrete→path-is-bishop-finite
