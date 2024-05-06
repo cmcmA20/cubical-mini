@@ -21,8 +21,8 @@ retract→is-contr : (f : A → B) (g : B → A)
                  → is-contr B
 retract→is-contr f g h isC .fst = f (isC .fst)
 retract→is-contr f g h isC .snd x =
-  f (isC .fst) ≡⟨ ap f (isC .snd _) ⟩
-  f (g x)      ≡⟨ h _ ⟩
+  f (isC .fst) ~⟨ ap f (isC .snd _) ⟩
+  f (g x)      ~⟨ h _ ⟩
   x            ∎
 
 opaque
@@ -31,9 +31,9 @@ opaque
                   → is-prop A
                   → is-prop B
   retract→is-prop f g h propA x y =
-    x       ≡⟨ h _ ⟨
-    f (g x) ≡⟨ ap f (propA _ _) ⟩
-    f (g y) ≡⟨ h _ ⟩
+    x       ~⟨ h _ ⟨
+    f (g x) ~⟨ ap f (propA _ _) ⟩
+    f (g y) ~⟨ h _ ⟩
     y       ∎
 
 retract→is-of-hlevel : (n : HLevel) (f : A → B) (g : B → A)
@@ -47,18 +47,18 @@ retract→is-of-hlevel (suc (suc h)) f g p hlevel x y =
   where
     sect : g x ＝ g y → x ＝ y
     sect path =
-      x       ≡⟨ p _ ⟨
-      f (g x) ≡⟨ ap f path ⟩
-      f (g y) ≡⟨ p _ ⟩
+      x       ~⟨ p _ ⟨
+      f (g x) ~⟨ ap f path ⟩
+      f (g y) ~⟨ p _ ⟩
       y       ∎
 
     inv : sect is-left-inverse-of (ap g)
     inv path =
-      p x ⁻¹ ∙ ap f (ap g path) ∙ p y ∙ refl  ≡⟨ ap (λ e → p _ ⁻¹ ∙ _ ∙ e) (∙-id-r (p _)) ⟩
-      p x ⁻¹ ∙ ap f (ap g path) ∙ p y         ≡⟨ ap² _∙_ refl (homotopy-natural p _ ⁻¹) ⟩
-      p x ⁻¹ ∙ p x ∙ path                     ≡⟨ ∙-assoc _ _ _ ⟩
-      (p x ⁻¹ ∙ p x) ∙ path                   ≡⟨ ap² _∙_ (∙-inv-l (p x)) refl ⟩
-      refl ∙ path                             ≡⟨ ∙-id-l path ⟩
+      p x ⁻¹ ∙ ap f (ap g path) ∙ p y ∙ refl  ~⟨ ap (λ e → p _ ⁻¹ ∙ _ ∙ e) (∙-id-r (p _)) ⟩
+      p x ⁻¹ ∙ ap f (ap g path) ∙ p y         ~⟨ ap² _∙_ refl (homotopy-natural p _ ⁻¹) ⟩
+      p x ⁻¹ ∙ p x ∙ path                     ~⟨ ∙-assoc _ _ _ ⟩
+      (p x ⁻¹ ∙ p x) ∙ path                   ~⟨ ap² _∙_ (∙-inv-l (p x)) refl ⟩
+      refl ∙ path                             ~⟨ ∙-id-l path ⟩
       path                                    ∎
 
 is-iso→is-of-hlevel : (h : HLevel) (f : A → B) → is-iso f → is-of-hlevel h A → is-of-hlevel h B
@@ -164,8 +164,8 @@ opaque
   ≃-is-of-hlevel-right-suc (suc n) B-hl e =
     ≃-is-of-hlevel (suc (suc n)) (≃→is-of-hlevel (suc (suc n)) e B-hl) B-hl e
 
-@0 ＝-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
-＝-is-of-hlevel n Ahl Bhl = is-equiv→is-of-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
+@0 =-is-of-hlevel : (n : ℕ) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ＝ B)
+=-is-of-hlevel n Ahl Bhl = is-equiv→is-of-hlevel n ua univalence⁻¹ (≃-is-of-hlevel n Ahl Bhl)
 
 
 instance opaque
@@ -219,7 +219,7 @@ instance opaque
 
   @0 H-Level-univalence
     : ∀ {h} {A B : Type ℓ} → ⦃ A-hl : H-Level h A ⦄ → ⦃ B-hl : H-Level h B ⦄ → H-Level h (A ＝ B)
-  H-Level-univalence .H-Level.has-of-hlevel = ＝-is-of-hlevel _ (hlevel _) (hlevel _)
+  H-Level-univalence .H-Level.has-of-hlevel = =-is-of-hlevel _ (hlevel _) (hlevel _)
   {-# INCOHERENT H-Level-univalence #-}
 
 

@@ -74,7 +74,7 @@ opaque
     → Square p q r s
     → s ＝ p ⁻¹ ∙ q ∙ r
   square→conjugate {p} {q} {r} {s} θ =
-    sym (ap fst (∙∙-contract _ _ _ (_ , θ))) ∙ ∙∙＝∙ _ _ _
+    sym (ap fst (∙∙-contract _ _ _ (_ , θ))) ∙ ∙∙=∙ _ _ _
 
   conjugate→square
     : {A : Type ℓ} {w x y z : A}

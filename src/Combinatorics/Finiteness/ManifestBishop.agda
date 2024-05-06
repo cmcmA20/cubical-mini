@@ -97,7 +97,7 @@ instance
         fs = fin-sum $ cardinality ∘ (λ z → fam {z}) ∘ aeq.from
         work = Σ-ap aeq λ x
           → enumeration (fam {x})
-          ∙ ＝→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
+          ∙ =→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
     in fin $ work ∙ fs
   {-# OVERLAPPABLE Σ-manifest-bishop-finite #-}
 

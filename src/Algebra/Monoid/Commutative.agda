@@ -94,7 +94,7 @@ module _ {M : CMonoid-on A} where
     : {x y z : A}
     → (x ∙ y) ∙ z ＝ (x ∙ z) ∙ y
   exchange {x} {y} {z} =
-    (x ∙ y) ∙ z    ≡⟨ assoc _ _ _ ⟨
-    x ⋆ ⌜ y ⋆ z ⌝  ≡⟨ ap! (comm _ _) ⟩
-    x ∙ (z  ∙ y)   ≡⟨ assoc _ _ _ ⟩
+    (x ∙ y) ∙ z    ~⟨ assoc _ _ _ ⟨
+    x ∙ ⌜ y ∙ z ⌝  ~⟨ ap! (comm _ _) ⟩
+    x ∙ (z  ∙ y)   ~⟨ assoc _ _ _ ⟩
     (x ∙ z) ∙ y    ∎

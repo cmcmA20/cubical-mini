@@ -40,10 +40,10 @@ module Path where
 
   @0 code≃path : (U V : Subtype ℓ T) → Code U V ≃ (U ＝ V)
   code≃path U@(X , f , f-emb) V@(Y , g , g-emb) =
-    Code U V                                      ≡⟨⟩
-    Σ[ e ꞉ X ≃ Y ] Π[ x ꞉ X ] (f x ＝ g (e $ x))  ≡⟨ SIP (fibration-str-is-univalent _ _) ⟩
-    (X , f) ＝ (Y , g)                            ≡⟨ Σ-prop-path-≃ hlevel! ⟩
-    ((X , f) , f-emb) ＝ ((Y , g) , g-emb)        ≡⟨ ap-≃ Σ-assoc ⟨
+    Code U V                                      ~⟨⟩
+    Σ[ e ꞉ X ≃ Y ] Π[ x ꞉ X ] (f x ＝ g (e $ x))  ~⟨ SIP (fibration-str-is-univalent _ _) ⟩
+    (X , f) ＝ (Y , g)                            ~⟨ Σ-prop-path-≃ hlevel! ⟩
+    ((X , f) , f-emb) ＝ ((Y , g) , g-emb)        ~⟨ ap-≃ Σ-assoc ⟨
     U ＝ V                                        ∎
 
   @0 code-is-prop : (U V : Subtype ℓ T) → is-prop (Code U V)

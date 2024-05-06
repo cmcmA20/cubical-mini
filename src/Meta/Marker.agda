@@ -77,7 +77,7 @@ macro
   -- with _≡⟨_⟩_.
   ap! : x ＝ y → Term → TC ⊤
   ap! path goal = do
-    goalt ← infer-type goal
+    goalt ← infer-type goal >>= wait-for-type
     just (l , r) ← get-boundary goalt
       where nothing → type-error [ "ap!: Goal type "
                                  , term-err goalt
@@ -92,10 +92,10 @@ macro
 
   -- Generalised ap. Automatically generates the function to apply to by
   -- abstracting over any markers in the RIGHT ENDPOINT of the path. Use
-  -- with _≡˘⟨_⟩_.
+  -- with _≡⟨_⟨_.
   ap¡ : x ＝ y → Term → TC ⊤
   ap¡ path goal = do
-    goalt ← infer-type goal
+    goalt ← infer-type goal >>= wait-for-type
     just (l , r) ← get-boundary goalt
       where nothing → type-error [ "ap¡: Goal type "
                                  , term-err goalt
@@ -111,10 +111,10 @@ module _ {x y : A} {p : x ＝ y} {f : A → (A → A) → A} where
   private
     q : f x (λ y → x) ＝ f y (λ z → y)
     q =
-      f ⌜ x ⌝ (λ _ → ⌜ x ⌝) ≡⟨ ap! p ⟩
-      f y (λ _ → y)         ∎
+      f ⌜ x ⌝ (λ _ → ⌜ x ⌝)  ~⟨ ap! p ⟩
+      f y (λ _ → y)          ∎
 
     r : f y (λ _ → y) ＝ f x (λ _ → x)
     r =
-      f ⌜ y ⌝ (λ _ → ⌜ y ⌝) ≡⟨ ap¡ p ⟨
-      f x (λ _ → x)         ∎
+      f ⌜ y ⌝ (λ _ → ⌜ y ⌝)  ~⟨ ap¡ p ⟨
+      f x (λ _ → x)          ∎

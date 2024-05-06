@@ -36,13 +36,13 @@ _ : {f : A → B} → rinv f ＝ fibre (f ∘_) id
 _ = refl
 
 is-biinv→is-iso : is-biinv f → is-iso f
-is-biinv→is-iso {f} ((g , g∘f＝id) , h , h∘f＝id) = iso h (happly h∘f＝id) β
+is-biinv→is-iso {f} ((g , g∘f=id) , h , h∘f=id) = iso h (happly h∘f=id) β
   where
     β : (x : _) → h (f x) ＝ x
     β x =
-      h (f x)         ≡⟨ happly g∘f＝id _ ⟨
-      g (f (h (f x))) ≡⟨ ap g (happly h∘f＝id _) ⟩
-      g (f x)         ≡⟨ happly g∘f＝id _ ⟩
+      h (f x)         ~⟨ happly g∘f=id _ ⟨
+      g (f (h (f x))) ~⟨ ap g (happly h∘f=id _) ⟩
+      g (f x)         ~⟨ happly g∘f=id _ ⟩
       x               ∎
 
 is-biinv-is-prop : is-prop (is-biinv f)

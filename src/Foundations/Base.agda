@@ -24,59 +24,9 @@ private variable
   B : A → Type ℓ′
   x y z w : A
 
--- Syntax for chains of equational reasoning
-
-infix  3 _∎
-_∎
-  : {A : Type ℓᵃ}
-    {_~_ : A → A → 𝒰 ℓ} ⦃ rfl : Refl _~_ ⦄
-  → (x : A) → x ~ x
-_ ∎ = refl
-
-infixr 2 _≡⟨⟩_
-_≡⟨⟩_
-  : {A : Type ℓᵃ} {B : Type ℓᵇ}
-    {_~I_ : A → B → 𝒰 ℓ} {_~O_ : B → A → 𝒰 ℓ′}
-    ⦃ sy : Symm _~I_ _~O_ ⦄ -- for inference
-  → (x : B) {y : A} → x ~O y → x ~O y
-_≡⟨⟩_ _ xy = xy
-
-infixr 2 _≡⟨_⟩_
-_≡⟨_⟩_
-  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
-    {_~L_ : A → B → 𝒰 ℓ} {_~R_ : B → C → 𝒰 ℓ′} {_~O_ : A → C → 𝒰 ℓ″}
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
-  → (x : A) {y : B} {z : C} → x ~L y → y ~R z → x ~O z
-_ ≡⟨ x~y ⟩ y~z = x~y ∙ y~z
-
-infixr 2 _≡⟨_⟨_
-_≡⟨_⟨_
-  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
-    {_~L_ : A → B → 𝒰 ℓ} {_~L′_ : B → A → 𝒰 ℓ′} {_~R_ : B → C → 𝒰 ℓ″} {_~O_ : A → C → 𝒰 ℓ‴}
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄ ⦃ sy : Symm _~L′_ _~L_ ⦄
-  → (x : A) {y : B} {z : C} → y ~L′ x → y ~R z → x ~O z
-x ≡⟨ p ⟨ q = p ⁻¹ ∙ q
-
-infixr 2 ≡⟨⟩-syntax
-≡⟨⟩-syntax
-  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
-    {_~L_ : A → B → 𝒰 ℓ} {_~R_ : B → C → 𝒰 ℓ′} {_~O_ : A → C → 𝒰 ℓ″}
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
-  → (x : A) {y : B} {z : C} → x ~L y → y ~R z → x ~O z
-≡⟨⟩-syntax = _≡⟨_⟩_
-syntax ≡⟨⟩-syntax x (λ i → B) y = x ≡[ i ]⟨ B ⟩ y
-
-
 -- Basic theory about paths. These proofs should typically be
 -- inlined. This module also makes equational reasoning work with
 -- (non-dependent) paths.
-
-instance
-  Refl-Path : Refl (Path A)
-  Refl-Path .refl = reflₚ
-
-  Symm-Path : Symmetric (Path A)
-  Symm-Path ._⁻¹ = symₚ
 
 lift-ext : {a b : Lift {ℓ} ℓ′ A} → (lower a ＝ lower b) → a ＝ b
 lift-ext x i = lift (x i)
@@ -278,9 +228,9 @@ opaque
   ∙-filler-l p q j i = ∙-filler-r (symₚ q) (symₚ p) j (~ i)
 
   -- Double composition agrees with iterated single composition
-  ∙∙＝∙ : (p : x ＝ y) (q : y ＝ z) (r : z ＝ w)
-        → p ∙∙ q ∙∙ r ＝ p ∙ₚ q ∙ₚ r
-  ∙∙＝∙ p q r j i = hcomp (∂ i ∨ ∂ j) λ where
+  ∙∙=∙ : (p : x ＝ y) (q : y ＝ z) (r : z ＝ w)
+       → p ∙∙ q ∙∙ r ＝ p ∙ₚ q ∙ₚ r
+  ∙∙=∙ p q r j i = hcomp (∂ i ∨ ∂ j) λ where
       k (i = i0) → p (~ k)
       k (i = i1) → ∙-filler-r q r j k
       k (j = i0) → ∙∙-filler p q r k i
@@ -288,8 +238,15 @@ opaque
       k (k = i0) → q (~ j ∧ i)
 
 instance
+  Refl-Path : Refl (Path A)
+  Refl-Path .refl = reflₚ
+
+  Symm-Path : Symmetric (Path A)
+  Symm-Path ._⁻¹ = symₚ
+
   Trans-Path : Transitive (Path A)
   Trans-Path ._∙_ = _∙ₚ_
+
 
 -- `ap` has good computational properties:
 module _ {A : Type ℓ} {B : Type ℓ′} {x y : A} where
@@ -312,15 +269,6 @@ module _ {A : Type ℓ} {B : Type ℓ′} {x y : A} where
       (ap f (p ∙ q)    , λ k j → f (∙-filler p q k j))
       (ap f p ∙ ap f q , ∙-filler _ _)
       i .fst
-
-infixr 3 ＝⟨⟩⟨⟩-syntax
-＝⟨⟩⟨⟩-syntax : (x y : A) → x ＝ y → y ＝ z → z ＝ w → x ＝ w
-＝⟨⟩⟨⟩-syntax x y p q r = p ∙∙ q ∙∙ r
-syntax ＝⟨⟩⟨⟩-syntax x y B C = x ＝⟨ B ⟩＝ y ＝⟨ C ⟩＝
-
-infixr 2.5 _＝⟨_⟩＝⟨_⟩_
-_＝⟨_⟩＝⟨_⟩_ : (x : A) → x ＝ y → y ＝ z → z ＝ w → x ＝ w
-_ ＝⟨ x＝y ⟩＝⟨ y＝z ⟩ z＝w = x＝y ∙∙ y＝z ∙∙ z＝w
 
 
 -- Squeezing and spreading, coercions
@@ -417,6 +365,95 @@ happly : {B : A → I → Type ℓ′}
        →            ＜ f      ／ (λ i → Π[ a ꞉ A ] B a i) ＼    g   ＞
        → Π[ x ꞉ A ] ＜ f x ／                      B x       ＼ g x ＞
 happly eq x i = eq i x
+
+
+-- Syntax for chains of equational reasoning
+
+infix  3 _∎
+_∎
+  : {A : Type ℓᵃ}
+    {_~_ : A → A → 𝒰 ℓ} ⦃ rfl : Refl _~_ ⦄
+  → (x : A) → x ~ x
+_ ∎ = refl
+
+infixr 2 _~⟨⟩_ _=⟨⟩_
+_~⟨⟩_
+  : {A : Type ℓᵃ} {B : Type ℓᵇ}
+    {_~I_ : A → B → 𝒰 ℓ} {_~O_ : B → A → 𝒰 ℓ′}
+    ⦃ sy : Symm _~I_ _~O_ ⦄ -- for inference TODO improve
+  → (x : B) {y : A} → x ~O y → x ~O y
+_~⟨⟩_ _ xy = xy
+
+_=⟨⟩_ : {A : Type ℓᵃ} → (x : A) {y : A} → x ＝ y → x ＝ y
+_=⟨⟩_ = _~⟨⟩_
+
+infixr 2 _~⟨_⟩_ _=⟨_⟩_
+_~⟨_⟩_
+  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+    {_~L_ : A → B → 𝒰 ℓ} {_~R_ : B → C → 𝒰 ℓ′} {_~O_ : A → C → 𝒰 ℓ″}
+    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
+  → (x : A) {y : B} {z : C} → x ~L y → y ~R z → x ~O z
+_ ~⟨ x~y ⟩ y~z = x~y ∙ y~z
+
+_=⟨_⟩_
+  : {A : Type ℓᵃ} {B : Type ℓᵇ}
+    {_~_ : A → B → 𝒰 ℓ}
+    ⦃ tra : Trans _＝_ _~_ _~_ ⦄
+    (x : A) {y : A} {z : B}
+  → x ＝ y → y ~ z → x ~ z
+_=⟨_⟩_ {_~_} _ p q = subst (_~ _) (p ⁻¹) q
+
+=→~
+  : {A : Type ℓᵃ}
+    {_~_ : A → A → 𝒰 ℓ}
+    ⦃ rfl : Refl _~_ ⦄
+    {x y : A} → x ＝ y → x ~ y
+=→~ {_~_} p = subst (_~ _) (p ⁻¹) refl
+
+=→~⁻
+  : {A : Type ℓᵃ}
+    {_~_ : A → A → 𝒰 ℓ}
+    ⦃ rfl : Refl _~_ ⦄
+    {x y : A} → x ＝ y → y ~ x
+=→~⁻ {_~_} p = subst (_~ _) p refl
+
+infixr 2 _~⟨_⟨_ _=⟨_⟨_
+_~⟨_⟨_
+  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+    {_~L_ : A → B → 𝒰 ℓ} {_~L′_ : B → A → 𝒰 ℓ′} {_~R_ : B → C → 𝒰 ℓ″} {_~O_ : A → C → 𝒰 ℓ‴}
+    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄ ⦃ sy : Symm _~L′_ _~L_ ⦄
+  → (x : A) {y : B} {z : C} → y ~L′ x → y ~R z → x ~O z
+x ~⟨ p ⟨ q = p ⁻¹ ∙ q
+
+_=⟨_⟨_
+  : {A : Type ℓᵃ} {B : Type ℓᵇ}
+    {_~_ : A → B → 𝒰 ℓ}
+    ⦃ tra : Trans _＝_ _~_ _~_ ⦄
+    (x : A) {y : A} {z : B}
+  → y ＝ x → y ~ z → x ~ z
+_=⟨_⟨_ {_~_} _ p q = subst (_~ _) p q
+
+infixr 2 ~⟨⟩-syntax =⟨⟩-syntax
+~⟨⟩-syntax
+  : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+    {_~L_ : A → B → 𝒰 ℓ} {_~R_ : B → C → 𝒰 ℓ′} {_~O_ : A → C → 𝒰 ℓ″}
+    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
+  → (x : A) {y : B} {z : C} → x ~L y → y ~R z → x ~O z
+~⟨⟩-syntax = _~⟨_⟩_
+syntax ~⟨⟩-syntax x (λ i → B) y = x ~[ i ]⟨ B ⟩ y
+
+=⟨⟩-syntax : {A : Type ℓᵃ} (x : A) {y z : A} → x ＝ y → y ＝ z → x ＝ z
+=⟨⟩-syntax = _=⟨_⟩_
+syntax =⟨⟩-syntax x (λ i → B) y = x =[ i ]⟨ B ⟩ y
+
+infixr 3 =⟨⟩⟨⟩-syntax
+=⟨⟩⟨⟩-syntax : (x y : A) → x ＝ y → y ＝ z → z ＝ w → x ＝ w
+=⟨⟩⟨⟩-syntax x y p q r = p ∙∙ q ∙∙ r
+syntax =⟨⟩⟨⟩-syntax x y B C = x =⟨ B ⟩= y =⟨ C ⟩=
+
+infixr 2.5 _=⟨_⟩=⟨_⟩_
+_=⟨_⟩=⟨_⟩_ : (x : A) → x ＝ y → y ＝ z → z ＝ w → x ＝ w
+_ =⟨ x=y ⟩=⟨ y=z ⟩ z=w = x=y ∙∙ y=z ∙∙ z=w
 
 
 -- h-levels
@@ -555,16 +592,16 @@ module _ {P : ∀ y → x ＝ y → Type ℓ′} (d : P x reflₚ) where
 
 -- Converting to and from a Pathᴾ
 
-pathᴾ＝path : (P : I → Type ℓ) (p : P i0) (q : P i1)
-            →  ＜ p ／ P ＼ q ＞
-            ＝ (transport (λ i → P i) p ＝ q)
-pathᴾ＝path P p q i =
+pathᴾ=path : (P : I → Type ℓ) (p : P i0) (q : P i1)
+           →  ＜ p ／ P ＼ q ＞
+           ＝ (transport (λ i → P i) p ＝ q)
+pathᴾ=path P p q i =
   ＜ transport-filler (λ j → P j) p i ／ (λ j → P (i ∨ j)) ＼ q ＞
 
-pathᴾ＝path⁻ : (P : I → Type ℓ) (p : P i0) (q : P i1)
-             →  ＜ p ／ P ＼  q ＞
-             ＝ (p ＝ transport (λ i → P (~ i)) q)
-pathᴾ＝path⁻ P p q i =
+pathᴾ=path⁻ : (P : I → Type ℓ) (p : P i0) (q : P i1)
+            →  ＜ p ／ P ＼  q ＞
+            ＝ (p ＝ transport (λ i → P (~ i)) q)
+pathᴾ=path⁻ P p q i =
   ＜ p ／ (λ j → P (~ i ∧ j)) ＼ transport-filler (λ j → P (~ j)) q i ＞
 
 
@@ -646,7 +683,7 @@ opaque
                  → (p : x ＝ y)
                  → (left : x ＝ x′) (right : y ＝ y′)
                  → transport (λ i → left i ＝ right i) p ＝ left ⁻¹ ∙ p ∙ right
-  transport-path {A} p left right = lemma ∙ ∙∙＝∙ _ _ _
+  transport-path {A} p left right = lemma ∙ ∙∙=∙ _ _ _
     where
     lemma : transport (λ i → left i ＝ right i) p ＝ symₚ left ∙∙ p ∙∙ right
     lemma i j = hcomp (~ i ∨ ∂ j) λ where
@@ -664,9 +701,9 @@ opaque
                   → (left : x ＝ x′)
                   → subst (λ e → e ＝ y) left p ＝ left ⁻¹ ∙ p
   subst-path-left {y} p left =
-    subst (λ e → e ＝ y) left p      ≡⟨⟩
-    transport (λ i → left i ＝ y) p  ≡⟨ transport-path p left refl ⟩
-    left ⁻¹ ∙ p ∙ reflₚ              ≡⟨ ap (sym left ∙ₚ_) (∙-filler-l _ _) ⟨
+    subst (λ e → e ＝ y) left p      ~⟨⟩
+    transport (λ i → left i ＝ y) p  ~⟨ transport-path p left refl ⟩
+    left ⁻¹ ∙ p ∙ reflₚ              ~⟨ ap (sym left ∙ₚ_) (∙-filler-l _ _) ⟨
     left ⁻¹ ∙ p                      ∎
 
   subst-path-right : {A : Type ℓᵃ} {x y y′ : A}
@@ -674,10 +711,10 @@ opaque
                    → (right : y ＝ y′)
                    → subst (λ e → x ＝ e) right p ＝ p ∙ right
   subst-path-right {x} p right =
-    subst (λ e → x ＝ e) right p      ≡⟨⟩
-    transport (λ i → x ＝ right i) p  ≡⟨ transport-path p refl right ⟩
-    refl ⁻¹ ∙ p ∙ right               ≡⟨⟩
-    refl ∙ p ∙ right                  ≡⟨ ∙-filler-r _ _ ⟨
+    subst (λ e → x ＝ e) right p      ~⟨⟩
+    transport (λ i → x ＝ right i) p  ~⟨ transport-path p refl right ⟩
+    refl ⁻¹ ∙ p ∙ right               ~⟨⟩
+    refl ∙ p ∙ right                  ~⟨ ∙-filler-r _ _ ⟨
     p ∙ right                         ∎
 
   subst-path-both : {x x′ : A}

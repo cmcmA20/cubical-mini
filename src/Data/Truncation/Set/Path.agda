@@ -19,11 +19,11 @@ private variable
   B : Type ℓ′
   x y : A
 
-@0 ＝∘∣-∣₂≃∥-∥₁∘＝
+@0 =∘∣-∣₂≃∥-∥₁∘=
   : {x y : A}
   → ∣ x ∣₂ ＝ ∣ y ∣₂
   ≃ ∥ x ＝ y ∥₁
-＝∘∣-∣₂≃∥-∥₁∘＝ {A} {x} {y} = prop-extₑ! (encode x ∣ y ∣₂) (decode x (∣ y ∣₂)) where
+=∘∣-∣₂≃∥-∥₁∘= {A} {x} {y} = prop-extₑ! (encode x ∣ y ∣₂) (decode x (∣ y ∣₂)) where
   code : (x : A) (y : ∥ A ∥₂) → Prop _
   code x = elim! (λ y → el! ∥ x ＝ y ∥₁)
 

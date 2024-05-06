@@ -46,8 +46,8 @@ fibre-paths : {A : Type ℓᵃ} {B : Type ℓᵇ}
             → z ＝ z′
             ≃ Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)
 fibre-paths {f} {y} {z = a , p} {z′ = a′ , p′} =
-  (a , p) ＝ (a′ , p′)                                ≡⟨ ≅→≃ Σ-path-iso ⟨
-  Σ[ q ꞉ a ＝ a′ ] (subst (λ v → f v ＝ y) q p ＝ p′) ≡⟨ Σ-ap-snd (whisker-path-lₑ ∘ subst-path-left p ∘ ap f) ⟩
+  (a , p) ＝ (a′ , p′)                                ~⟨ ≅→≃ Σ-path-iso ⟨
+  Σ[ q ꞉ a ＝ a′ ] (subst (λ v → f v ＝ y) q p ＝ p′) ~⟨ Σ-ap-snd (whisker-path-lₑ ∘ subst-path-left p ∘ ap f) ⟩
   Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)           ∎
 
 module @0 _ where
@@ -72,9 +72,9 @@ module @0 _ where
       → ℓ /[ P ] B
       ≃ (B → Σ[ T ꞉ Type (ℓ ⊔ ℓᵇ) ] P T)
     map-classifier {ℓ} {ℓᵇ} {B} P =
-      Σ[ A ꞉ Type (ℓ ⊔ ℓᵇ) ] Σ[ f ꞉ (A → B) ] Π[ x ꞉ B ] P (fibre f x)        ≡⟨ Σ-assoc ⟩
-      Σ[ (A , f) ꞉ Σ[ A ꞉ Type (ℓ ⊔ ℓᵇ) ] (A → B) ] Π[ y ꞉ B ] P (fibre f y)  ≡⟨ Σ-ap-fst (fibration-equiv {ℓ = ℓ}) ⟩
-      Σ[ A ꞉ (B → Type (ℓ ⊔ ℓᵇ)) ] Π[ x ꞉ B ] P (A x)                         ≡⟨ Σ-Π-distrib ⟨
+      Σ[ A ꞉ Type (ℓ ⊔ ℓᵇ) ] Σ[ f ꞉ (A → B) ] Π[ x ꞉ B ] P (fibre f x)        ~⟨ Σ-assoc ⟩
+      Σ[ (A , f) ꞉ Σ[ A ꞉ Type (ℓ ⊔ ℓᵇ) ] (A → B) ] Π[ y ꞉ B ] P (fibre f y)  ~⟨ Σ-ap-fst (fibration-equiv {ℓ = ℓ}) ⟩
+      Σ[ A ꞉ (B → Type (ℓ ⊔ ℓᵇ)) ] Π[ x ꞉ B ] P (A x)                         ~⟨ Σ-Π-distrib ⟨
       (B → Σ[ T ꞉ Type (ℓ ⊔ ℓᵇ) ] P T)                                        ∎
 
   fibre-equality≃fibre-on-paths

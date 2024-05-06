@@ -63,7 +63,7 @@ is-equiv-inv fe = ((_ , fe) ⁻¹) .snd
 
 -- action on equivalences by univalence
 @0 generic-ae : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
-generic-ae F e = ＝→≃ (ap F (ua e))
+generic-ae F e = =→≃ (ap F (ua e))
 
 
 sym-≃ : (x ＝ y) ≃ (y ＝ x)

@@ -29,6 +29,12 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     H-Level-≤-prop : ∀ {x y} → H-Level (suc n) (x ≤ y)
     H-Level-≤-prop = hlevel-prop-instance ≤-thin
 
+    Refl-≤ : Refl _≤_
+    Refl-≤ .refl = ≤-refl
+
+    Trans-≤ : Transitive _≤_
+    Trans-≤ ._∙_ = ≤-trans
+
   opaque
     ob-is-set : is-set Ob
     ob-is-set = identity-system→is-of-hlevel! 1
@@ -45,7 +51,7 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
 unquoteDecl poset-iso = declare-record-iso poset-iso (quote Poset)
 
 private variable
-  o o′ ℓ ℓ′ : Level
+  o o′ o″ ℓ ℓ′ ℓ″ : Level
 
 instance
   Underlying-Poset : Underlying (Poset o ℓ)
@@ -81,9 +87,8 @@ record Monotone {o o′ ℓ ℓ′}
 
 open Monotone public
 
-instance
-  unquoteDecl H-Level-Monotone =
-    declare-record-hlevel 2 H-Level-Monotone (quote Monotone)
+unquoteDecl H-Level-Monotone =
+  declare-record-hlevel 2 H-Level-Monotone (quote Monotone)
 
 private variable
   P Q R : Poset o ℓ
@@ -92,18 +97,28 @@ instance
   Funlike-Monotone : Funlike ur (Monotone P Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
   Funlike-Monotone ._#_ = hom
 
+  Refl-Monotone : Refl {A = Poset o ℓ} Monotone
+  Refl-Monotone .refl .hom = refl
+  Refl-Monotone .refl .pres-≤ = refl
+
+  Trans-Monotone : Trans (Monotone {o} {o′} {ℓ} {ℓ′})
+                         (Monotone {o′ = o″} {ℓ′ = ℓ″})
+                         Monotone
+  Trans-Monotone ._∙_ f g .hom x = g $ f $ x
+  Trans-Monotone ._∙_ f g .pres-≤ x≤y = g .pres-≤ (f .pres-≤ x≤y)
+
 monotone-pathᴾ
   : {P : I → Poset o ℓ} {Q : I → Poset o′ ℓ′}
   → {f : Monotone (P i0) (Q i0)} {g : Monotone (P i1) (Q i1)}
   → ＜ f $_ ／ (λ i → ⌞ P i ⌟ → ⌞ Q i ⌟) ＼ g $_ ＞
   → ＜ f ／ (λ i → Monotone (P i) (Q i)) ＼ g ＞
 monotone-pathᴾ q i .hom a = q i a
-monotone-pathᴾ {P} {Q} {f} {g} q i .Monotone.pres-≤ {x} {y} α =
+monotone-pathᴾ {P} {Q} {f} {g} q i .pres-≤ {x} {y} α =
   is-prop→pathᴾ
     (λ i → Π³-is-of-hlevel {A = ⌞ P i ⌟} {B = λ _ → ⌞ P i ⌟} {C = λ x y → P i .Poset._≤_ x y} 1
       λ x y _ → Q i .Poset.≤-thin {q i x} {q i y})
-    (λ _ _ α → f .Monotone.pres-≤ α)
-    (λ _ _ α → g .Monotone.pres-≤ α) i x y α
+    (λ _ _ α → f .pres-≤ α)
+    (λ _ _ α → g .pres-≤ α) i x y α
 
 instance
   Extensional-Monotone
@@ -113,20 +128,12 @@ instance
   Extensional-Monotone ⦃ sa ⦄ = set-injective→extensional! monotone-pathᴾ sa
 
 
-idₘ : Monotone P P
-idₘ .hom    x   = x
-idₘ .pres-≤ x≤y = x≤y
-
-_∘ₘ_ : Monotone Q R → Monotone P Q → Monotone P R
-(f ∘ₘ g) .hom    x   = f $ g $ x
-(f ∘ₘ g) .pres-≤ x≤y = f .pres-≤ $ g .pres-≤ x≤y
-
 Posets : (o ℓ : Level) → Precategory (ℓsuc o ⊔ ℓsuc ℓ) (o ⊔ ℓ)
 Posets o ℓ .Precategory.Ob = Poset o ℓ
 Posets o ℓ .Precategory.Hom = Monotone
 Posets o ℓ .Precategory.Hom-set = hlevel!
-Posets o ℓ .Precategory.id  = idₘ
-Posets o ℓ .Precategory._∘_ = _∘ₘ_
+Posets o ℓ .Precategory.id  = refl
+Posets o ℓ .Precategory._∘_ = _∘ˢ_
 Posets o ℓ .Precategory.id-r _ = trivial!
 Posets o ℓ .Precategory.id-l _ = trivial!
 Posets o ℓ .Precategory.assoc _ _ _ = trivial!

@@ -60,13 +60,13 @@ instance
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
 FinSet-is-groupoid = ≃→is-of-hlevel 3 go (λ _ _ → hlevel 2) where
   go = FinSet _
-         ≡⟨ ≅→≃ fin-set-iso ⟩
+         ~⟨ ≅→≃ fin-set-iso ⟩
        Σ[ X ꞉ Type _ ] is-bishop-finite X
-         ≡⟨ Σ-ap-snd (λ _ → prop-extₑ! < (λ bf → is-discrete→is-set (is-bishop-finite→is-discrete ⦃ bf ⦄)) , id > snd) ⟩
+         ~⟨ Σ-ap-snd (λ _ → prop-extₑ! < (λ bf → is-discrete→is-set (is-bishop-finite→is-discrete ⦃ bf ⦄)) , id > snd) ⟩
        Σ[ X ꞉ Type _ ] is-set X × is-bishop-finite X
-         ≡⟨ Σ-assoc ⟩
+         ~⟨ Σ-assoc ⟩
        Σ[ U ꞉ Σ[ X ꞉ Type _ ] is-set X ] is-bishop-finite (U .fst)
-         ≡⟨ Σ-ap-fst (≅→≃ n-Type-iso) ⟨
+         ~⟨ Σ-ap-fst (≅→≃ n-Type-iso) ⟨
        Σ[ X ꞉ Set _ ] is-bishop-finite ⌞ X ⌟
          ∎
 
@@ -95,18 +95,19 @@ private
   fin-set′-ext {X} {Y} p = do
     u ← X .snd .snd
     v ← Y .snd .snd
-    pure $ sip fin-set-str-is-univalent (u ∙ ＝→≃ (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
+    pure $ sip fin-set-str-is-univalent (u ∙ =→≃ (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
 
   ∥FinSet′∥₂≃ᴱℕ : ∥ FinSet′ ℓ ∥₂ ≃ᴱ ℕ
   ∥FinSet′∥₂≃ᴱℕ {ℓ} = rec! ⦃ Inductive-∥-∥₂ ⦃ Inductive-default ⦄ ⦄ (fst ∘ snd) , is-isoᴱ→is-equivᴱ {B = ℕ}
     ( (λ n → pure $ Lift ℓ (Fin n) , n , pure lift≃id)
     , erase (λ _ → refl)
-    , erase (elim! λ X n e → ＝∘∣-∣₂≃∥-∥₁∘＝ ⁻¹ $ fin-set′-ext refl) )
+    , erase (elim! λ X n e → =∘∣-∣₂≃∥-∥₁∘= ⁻¹ $ fin-set′-ext refl) )
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
-∥FinSet∥₂≃ᴱℕ
-  = ≃→≃ᴱ (∥-∥₂.ae (≅→≃ fin-set-iso ∙ Σ-ap-snd λ _ → ≅→≃ is-bishop-finite-iso))
-  ∙ ∥FinSet′∥₂≃ᴱℕ
+∥FinSet∥₂≃ᴱℕ {ℓ} =
+  ∥ FinSet  ℓ ∥₂  ~⟨ ≃→≃ᴱ (∥-∥₂.ae (≅→≃ fin-set-iso ∙ Σ-ap-snd λ _ → ≅→≃ is-bishop-finite-iso)) ⟩
+  ∥ FinSet′ ℓ ∥₂  ~⟨ ∥FinSet′∥₂≃ᴱℕ ⟩
+  ℕ               ∎
 
 
 -- Usage

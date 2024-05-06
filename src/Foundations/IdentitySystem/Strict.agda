@@ -37,9 +37,9 @@ opaque
     → (p : P (r a))
     → K ids set P p (r a) ＝ p
   K-refl {R} {r} {a} ids set P p =
-    transport (λ i → P (set-identity-is-prop ids set (r a) (r a) i)) p  ≡⟨⟩
-    subst P (set-identity-is-prop ids set (r a) (r a) )              p  ≡⟨ ap (λ φ → subst P φ p) lemma ⟩
-    transport (λ _ → P (r a))                                        p  ≡⟨ transport-refl p ⟩
+    transport (λ i → P (set-identity-is-prop ids set (r a) (r a) i)) p  ~⟨⟩
+    subst P (set-identity-is-prop ids set (r a) (r a) )              p  ~⟨ ap (λ φ → subst P φ p) lemma ⟩
+    transport (λ _ → P (r a))                                        p  ~⟨ transport-refl p ⟩
     p                                                                   ∎
     where
       lemma : set-identity-is-prop ids set (r a) (r a) ＝ refl

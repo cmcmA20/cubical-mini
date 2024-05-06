@@ -44,8 +44,8 @@ module _ where
     : (M M′ : is-unital-magma _✦_)
     → M .id ＝ M′ .id
   identity-unique {_✦_} M M′ =
-    M .id           ≡⟨ is-unital-magma.id-r M′ _ ⟨
-    M .id ✦ M′ .id  ≡⟨ is-unital-magma.id-l M _ ⟩
+    M .id           ~⟨ is-unital-magma.id-r M′ _ ⟨
+    M .id ✦ M′ .id  ~⟨ is-unital-magma.id-l M _  ⟩
     M′ .id          ∎
 
 opaque
