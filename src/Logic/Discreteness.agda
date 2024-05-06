@@ -6,12 +6,13 @@ open import Meta.Prelude
 open import Logic.Decidability
 open import Logic.DoubleNegation
 
-open import Data.Bool.Base
+open import Data.Bool.Base as Bool
 open import Data.Bool.Path
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
 open import Data.Empty.Base as ⊥
 open import Data.Reflects.Base
+open import Data.Unit.Base
 
 open import Functions.Embedding
 
@@ -112,6 +113,30 @@ discrete-reflects! : ⦃ A-dis : is-discrete A ⦄
                    → Reflects (x ＝ y) ⌊ x ≟ y ⌋
 discrete-reflects! {x} {y} =
   Dec.elim {C = λ d → Reflects (x ＝ y) ⌊ d ⌋} ofʸ ofⁿ (x ≟ y)
+
+Refl-is-true : ⦃ A-dis : is-discrete A ⦄ → Refl {A = A} (λ x y → is-true ⌊ x ≟ y ⌋)
+Refl-is-true .refl {x} = reflects-true (discrete-reflects! {x = x}) reflₚ
+
+Refl-is-trueₚ : ⦃ A-dis : is-discrete A ⦄ → Refl {A = A} (λ x y → is-trueₚ ⌊ x ≟ y ⌋)
+Refl-is-trueₚ .refl {x} = Dec.elim {C = λ d → is-trueₚ (d .does)} (λ _ → refl) (λ ¬refl → ⊥.rec (¬refl refl)) (x ≟ x)
+
+discrete-identity-system
+  : {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
+  → is-identity-system {A = A} (λ x y → is-true ⌊ x ≟ y ⌋) (λ _ → Refl-is-true ⦃ A-dis ⦄ .refl)
+discrete-identity-system .to-path {a} {b} = true-reflects discrete-reflects!
+discrete-identity-system .to-path-over _ = prop!
+  where instance
+  H-Level-is-true : ∀ {b n} → H-Level (suc n) (is-true b)
+  H-Level-is-true = hlevel-prop-instance $
+    Bool.elim {P = is-prop ∘ is-true}
+      (is-contr→is-prop ⊤-is-contr)
+      ⊥-is-prop _
+
+discrete-identity-systemₚ
+  : {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
+  → is-identity-system {A = A} (λ x y → is-trueₚ ⌊ x ≟ y ⌋) (λ _ → Refl-is-trueₚ ⦃ A-dis ⦄ .refl)
+discrete-identity-systemₚ .to-path {a} {b} t = true-reflects discrete-reflects! (is-true≃is-trueₚ ⁻¹ $ t)
+discrete-identity-systemₚ .to-path-over _ = prop!
 
 ↣→is-discrete! : (A ↣ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ↣→is-discrete! f = ↣→is-discrete f auto
