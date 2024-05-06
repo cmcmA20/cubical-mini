@@ -59,13 +59,14 @@ For naming conventions specific to the Algebra subfolder, see
   quasi-equivalence in the sense of the HoTT Book.
   Operators can use subscript `ᵢ`.
 
-* Use `Path` or `＝` to refer to paths in names, not `Eq`, `Id`, or
+* Use `Path` or `=` to refer to paths in names, not `Eq`, `Id`, or
   other "equality" or "identity"-related names.
   Operators can use subscript `ₚ`.
+  Avoid using `＝` in identifier names as it garbles column alignment.
 
 * Use `≡` to refer to congruences or some other strict similarity relations.
   When defining a new target language, locally rename `＝` to `≡` for
-  definitional equalities of the target language.
+  definitional equalities of the target language if you need so.
   Builtin Agda equality is called `_＝ⁱ_`.
 
 * Prefer using `→` over `to`.
