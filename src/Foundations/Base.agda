@@ -348,7 +348,7 @@ transport-filler p x i = coe0→i (λ j → p j) i x
 subst : (B : A → Type ℓ′) (p : x ＝ y) → B x → B y
 subst B p = transport (λ i → B (p i))
 
-subst-refl : {A : Type ℓ} {B : A → Type ℓ} {x : A} (px : B x) → subst B refl px ＝ px
+subst-refl : {A : Type ℓ} {B : A → Type ℓ′} {x : A} (px : B x) → subst B refl px ＝ px
 subst-refl = transport-refl
 
 

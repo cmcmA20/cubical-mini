@@ -65,6 +65,14 @@ is-left-inverse-of→is-surjective {g} s b = ∣ g b , s b ∣₁
 is-equiv→is-surjective : is-equiv f → is-surjective f
 is-equiv→is-surjective r y = ∣ equiv-proof r y .fst ∣₁
 
+is-surjective-comp+is-surjective-inner→is-surjective-outer
+  : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {f : A → B} {g : B → C}
+  → is-surjective (g ∘ f) → is-surjective f → is-surjective g
+is-surjective-comp+is-surjective-inner→is-surjective-outer {f} {g} gfs gs z = do
+  a , p ← gfs z
+  b , q ← gs (f a)
+  pure (f a , p)
+
 instance
   Extensional-↠
     : {A : Type ℓ} ⦃ sb : Extensional (A → B) ℓ″ ⦄

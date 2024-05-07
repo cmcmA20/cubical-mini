@@ -50,12 +50,17 @@ fill A φ i u = comp (λ j → A (i ∧ j)) (φ ∨ ~ i) λ where
   j (j = i0) → u i0 1=1
 
 open import Agda.Builtin.Cubical.Path public
-  renaming ( _≡_ to _＝_
+  renaming ( _≡_   to _＝_
            ; PathP to Pathᴾ )
 
-infix 0 Pathᴾ-syntax
+infix 0 Pathᴾ-syntax Pathᴾ-syntax′
 Pathᴾ-syntax = Pathᴾ
-syntax Pathᴾ-syntax Aᵢ A₀ A₁ = ＜ A₀ ／ Aᵢ ＼ A₁ ＞
+
+Pathᴾ-syntax′ : ∀ {ℓ} {A B : 𝒰 ℓ} (p : A ＝ B) → A → B → Type ℓ
+Pathᴾ-syntax′ p = Pathᴾ (λ i → p i)
+
+syntax Pathᴾ-syntax  Aᵢ A₀ A₁ = ＜ A₀ ／ Aᵢ ＼ A₁ ＞
+syntax Pathᴾ-syntax′ Aᵢ A₀ A₁ = A₀ ＝[ Aᵢ ]＝ A₁
 
 Path : (A : Type ℓ) → A → A → Type ℓ
 Path A A₀ A₁ = ＜ A₀ ／ (λ _ → A) ＼ A₁ ＞

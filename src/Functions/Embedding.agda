@@ -114,7 +114,7 @@ is-equiv-on-paths→is-embedding ep b fib₁ fib₂ =
 
 cancellable→is-embedding : Cancellable f → is-embedding f
 cancellable→is-embedding can = preimage-is-contr→is-embedding λ x → ≃→is-of-hlevel 0 (Σ-ap-snd (λ _ → can)) $
-  (x , reflₚ) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
+  (x , refl) , λ (y , p) i → p (~ i) , λ j → p (~ i ∨ j)
 
 is-embedding→is-equiv-on-paths : is-embedding f → is-equiv-on-paths f
 is-embedding→is-equiv-on-paths {f} emb = total-is-equiv→fibrewise-is-equiv {f = λ y p → ap {y = y} f p}
@@ -165,8 +165,14 @@ instance
   Trans-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
     ≃→is-of-hlevel 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
 
-opaque
+is-embedding-comp+is-embedding-outer→is-embedding-inner
+  : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {f : A → B} {g : B → C}
+  → is-embedding (g ∘ f) → is-embedding g → is-embedding f
+is-embedding-comp+is-embedding-outer→is-embedding-inner {f} {g} gfe ge =
+  cancellable→is-embedding $ (ap g , is-embedding→is-equiv-on-paths ge) ∙
+    (ap (g ∘ f) , is-embedding→is-equiv-on-paths gfe) ⁻¹
 
+opaque
   pullback-identity-system
     : {A : Type ℓ} {B : Type ℓ′} {R : B → B → Type ℓ″} {r : ∀ b → R b b}
       (ids : is-identity-system R r)
