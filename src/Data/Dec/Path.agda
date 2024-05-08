@@ -29,16 +29,10 @@ instance
     sa .idsᵉ .to-path-over
   Extensional-Dec        .idsᵉ .to-path-over {_ because ofⁿ _} {_ because ofⁿ _} _ = refl
 
-Code : (x y : Dec A) → _
-Code = Extensional-Dec .Pathᵉ
-
-identity-system : is-identity-system {A = Dec A} _ _
-identity-system = Extensional-Dec .idsᵉ
-
 opaque
   code-is-of-hlevel : {s₁ s₂ : Dec A} {n : HLevel}
                     → is-of-hlevel (2 + n) A
-                    → is-of-hlevel (1 + n) (Code s₁ s₂)
+                    → is-of-hlevel (1 + n) (Extensional-Dec .Pathᵉ s₁ s₂)
   code-is-of-hlevel {s₁ = yes a₁} {s₂ = yes a₂} A-hl = A-hl a₁ a₂
   code-is-of-hlevel {s₁ = yes a } {s₂ = no ¬a } _    = hlevel _
   code-is-of-hlevel {s₁ = no ¬a } {s₂ = yes a } _    = hlevel _
@@ -59,7 +53,7 @@ dec-is-of-hlevel : (n : HLevel) → is-of-hlevel n A → is-of-hlevel n (Dec A)
 dec-is-of-hlevel 0 = dec-is-contr
 dec-is-of-hlevel 1 = dec-is-prop
 dec-is-of-hlevel (suc (suc n)) A-hl s₁ s₂ =
-  ≃→is-of-hlevel (1 + n) (identity-system-gives-path identity-system ⁻¹)
+  ≃→is-of-hlevel (1 + n) (identity-system-gives-path (Extensional-Dec .idsᵉ) ⁻¹)
     (code-is-of-hlevel {s₁ = s₁} {s₂ = s₂} A-hl)
 
 instance

@@ -3,6 +3,8 @@ module Data.Tree.Binary.Path where
 
 open import Meta.Prelude
 
+open import Meta.Extensionality
+
 open import Data.Empty.Base
 open import Data.Nat.Base
 open import Data.Unit.Base
@@ -10,7 +12,7 @@ open import Data.Unit.Base
 open import Data.Tree.Binary.Base
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓᵃ : Level
   A : Type ℓ
   x y : A
   tl tr xl xr yl yr xs ys : Tree A
@@ -50,49 +52,55 @@ node-inj {xl} p = ap go₁ p , ap go₂ p where
   go₂ _ = xl
 
 
-Code : Tree A → Tree A → Type (level-of-type A)
-Code empty empty = Lift _ ⊤
-Code (leaf x) (leaf y) = x ＝ y
-Code (node xl xr) (node yl yr) = Code xl yl × Code xr yr
-Code _ _ = Lift _ ⊥
+module _ {A : 𝒰 ℓᵃ} ⦃ sa : Extensional A ℓ ⦄ where
+  Code-Tree : Tree A → Tree A → Type ℓ
+  Code-Tree empty empty = Lift _ ⊤
+  Code-Tree (leaf x) (leaf y) = sa .Pathᵉ x y
+  Code-Tree (node xl xr) (node yl yr) = Code-Tree xl yl × Code-Tree xr yr
+  Code-Tree _ _ = Lift _ ⊥
 
-code-refl : (t : Tree A) → Code t t
-code-refl empty = lift tt
-code-refl (leaf _) = refl
-code-refl (node tl tr) = code-refl tl , code-refl tr
+  code-tree-refl : (t : Tree A) → Code-Tree t t
+  code-tree-refl empty = lift tt
+  code-tree-refl (leaf x) = sa .reflᵉ x
+  code-tree-refl (node tl tr) = code-tree-refl tl , code-tree-refl tr
 
-decode : Code xs ys → xs ＝ ys
-decode {xs = empty} {ys = empty} _ = refl
-decode {xs = leaf x} {ys = leaf y} = ap leaf
-decode {xs = node xl xr} {ys = node yl yr} (p , q) = ap² node (decode p) (decode q)
+  decode-tree : Code-Tree xs ys → xs ＝ ys
+  decode-tree {xs = empty} {ys = empty} _ = refl
+  decode-tree {xs = leaf x} {ys = leaf y} = ap leaf ∘ sa .idsᵉ .to-path
+  decode-tree {xs = node xl xr} {ys = node yl yr} (p , q) = ap² node (decode-tree p) (decode-tree q)
 
-identity-system : is-identity-system {A = Tree A} Code code-refl
-identity-system .to-path      = decode
-identity-system .to-path-over = code-refl-pathᴾ where
-  code-refl-pathᴾ : {xs ys : Tree A} (c : Code xs ys) → ＜ code-refl xs ／ (λ i → Code xs (decode c i)) ＼ c ＞
-  code-refl-pathᴾ {xs = empty} {ys = empty} _ = refl
-  code-refl-pathᴾ {xs = leaf x} {leaf y} p i j = p (i ∧ j)
-  code-refl-pathᴾ {xs = node xl xr} {ys = node yl yr} (cl , cr) i = code-refl-pathᴾ cl i , code-refl-pathᴾ cr i
+  code-tree-reflᴾ : (c : Code-Tree xs ys) → code-tree-refl xs ＝[ ap (Code-Tree xs) (decode-tree c) ]＝ c
+  code-tree-reflᴾ {(empty)}    {(empty)} _ = refl
+  code-tree-reflᴾ {leaf x}     {leaf y}    = sa .idsᵉ .to-path-over
+  code-tree-reflᴾ {node xl xr} {node yl yr} (cl , cr) = code-tree-reflᴾ {xl} cl ,ₚ code-tree-reflᴾ {xr} cr
 
-code-is-of-hlevel : is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code {A = A} xs ys)
-code-is-of-hlevel {n} {xs = empty} {ys = empty} _ = hlevel _
-code-is-of-hlevel {xs = empty} {leaf _} _ = hlevel _
-code-is-of-hlevel {xs = empty} {node _ _} _ = hlevel _
-code-is-of-hlevel {xs = leaf _} {ys = empty} _ = hlevel _
-code-is-of-hlevel {xs = leaf x} {leaf y} hl = path-is-of-hlevel _ hl x y
-code-is-of-hlevel {xs = leaf _} {node _ _} _ = hlevel _
-code-is-of-hlevel {xs = node _ _} {ys = empty} _ = hlevel _
-code-is-of-hlevel {xs = node _ _} {leaf _} _ = hlevel _
-code-is-of-hlevel {xs = node xl xr} {node yl yr} hl =
-  ×-is-of-hlevel _ (code-is-of-hlevel hl) (code-is-of-hlevel hl)
+  instance
+    Extensional-Tree : Extensional (Tree A) ℓ
+    Extensional-Tree .Pathᵉ = Code-Tree
+    Extensional-Tree .reflᵉ = code-tree-refl
+    Extensional-Tree .idsᵉ .to-path = decode-tree
+    Extensional-Tree .idsᵉ .to-path-over {a} = code-tree-reflᴾ {a}
 
-tree-is-of-hlevel : (n : HLevel)
-                  → is-of-hlevel (2 + n) A
-                  → is-of-hlevel (2 + n) (Tree A)
-tree-is-of-hlevel n A-hl _ _ =
-  ≃→is-of-hlevel (suc n)
-                 (identity-system-gives-path identity-system ⁻¹)
-                 (code-is-of-hlevel A-hl)
+opaque
+  code-is-of-hlevel : is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code-Tree {A = A} xs ys)
+  code-is-of-hlevel {n} {xs = empty} {ys = empty} _ = hlevel _
+  code-is-of-hlevel {xs = empty} {leaf _} _ = hlevel _
+  code-is-of-hlevel {xs = empty} {node _ _} _ = hlevel _
+  code-is-of-hlevel {xs = leaf _} {ys = empty} _ = hlevel _
+  code-is-of-hlevel {xs = leaf x} {leaf y} hl = path-is-of-hlevel _ hl x y
+  code-is-of-hlevel {xs = leaf _} {node _ _} _ = hlevel _
+  code-is-of-hlevel {xs = node _ _} {ys = empty} _ = hlevel _
+  code-is-of-hlevel {xs = node _ _} {leaf _} _ = hlevel _
+  code-is-of-hlevel {xs = node xl xr} {node yl yr} hl =
+    ×-is-of-hlevel _ (code-is-of-hlevel {xs = xl} hl) (code-is-of-hlevel {xs = xr} hl)
+
+  tree-is-of-hlevel : (n : HLevel)
+                    → is-of-hlevel (2 + n) A
+                    → is-of-hlevel (2 + n) (Tree A)
+  tree-is-of-hlevel n A-hl xs ys =
+    ≃→is-of-hlevel (suc n)
+                   (identity-system-gives-path (Extensional-Tree .idsᵉ) ⁻¹)
+                   (code-is-of-hlevel {xs = xs} A-hl)
 
 instance opaque
   H-Level-binary-tree : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (Tree A)

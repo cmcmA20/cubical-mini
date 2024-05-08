@@ -23,6 +23,7 @@ absurd-is-contr .snd _ _ ()
 instance
   H-Level-absurd : H-Level n (Π[ f ꞉ ⊥ ] C f)
   H-Level-absurd = hlevel-basic-instance 0 absurd-is-contr
+  {-# OVERLAPPING H-Level-absurd #-}
 
 universal : (Π[ f ꞉ ⊥ ] C f) ≃ ⊤
 universal = _ , is-contr→is-equiv absurd-is-contr ⊤-is-contr

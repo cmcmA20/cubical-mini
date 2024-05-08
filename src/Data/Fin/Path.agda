@@ -12,13 +12,8 @@ open import Data.Maybe.Base
   public
 open import Data.Maybe.Path
   using ( maybe-is-of-hlevel
-        ; maybe-¬-is-contr )
+        ; ¬→maybe-is-contr )
 open import Data.Maybe.Path
-  using ( Code
-        ; code-refl
-        ; identity-system
-        ; code-is-of-hlevel
-        )
   renaming ( nothing≠just      to fzero≠fsuc
            ; just≠nothing      to fsuc≠fzero
            ; just-inj          to fsuc-inj
@@ -33,11 +28,17 @@ private variable
   n : ℕ
   k : HLevel
 
-fin-is-set : is-set (Fin n)
-fin-is-set {0}     = hlevel 2
-fin-is-set {suc n} = maybe-is-of-hlevel 0 fin-is-set
+opaque
+  fin-is-set : is-set (Fin n)
+  fin-is-set {0}     = hlevel 2
+  fin-is-set {suc n} = maybe-is-of-hlevel 0 fin-is-set
+
+instance
+  H-Level-Fin1 : H-Level k (Fin 1)
+  H-Level-Fin1 = hlevel-basic-instance 0 (¬→maybe-is-contr λ ())
+  {-# OVERLAPPING H-Level-Fin1 #-}
 
 instance opaque
-  H-Level-Fin1 : H-Level k (Fin 1)
-  H-Level-Fin1 = hlevel-basic-instance 0 (maybe-¬-is-contr λ ())
-  {-# OVERLAPPING H-Level-Fin1 #-}
+  H-Level-Fin : H-Level (2 + k) (Fin n)
+  H-Level-Fin = hlevel-basic-instance 2 fin-is-set
+  {-# INCOHERENT H-Level-Fin #-}

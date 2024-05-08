@@ -23,10 +23,6 @@ elim : (B : Maybe A → Type ℓ′)
 elim B b f nothing  = b
 elim B n f (just x) = f x
 
-extend : Maybe A → (A → Maybe B) → Maybe B
-extend (just x) k = k x
-extend nothing  k = nothing
-
 from-just : A → Maybe A → A
 from-just def (just x) = x
 from-just def nothing  = def

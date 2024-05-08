@@ -31,20 +31,11 @@ instance
   Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path-over {inl x} {inl x′} (lift p) = apᴾ (λ _ → lift) $ sa .idsᵉ .to-path-over p
   Extensional-⊎ ⦃ sb ⦄ .idsᵉ .to-path-over {inr y} {inr y′} (lift p) = apᴾ (λ _ → lift) $ sb .idsᵉ .to-path-over p
 
-Code : (x y : A ⊎ B) → Type (level-of-type A ⊔ level-of-type B)
-Code = Extensional-⊎ .Pathᵉ
-
-code-refl : (x : A ⊎ B) → Extensional-⊎ .Pathᵉ x x
-code-refl = Extensional-⊎ .reflᵉ
-
-identity-system : is-identity-system {A = A ⊎ B} Code _
-identity-system = Extensional-⊎ .idsᵉ
-
 opaque
   code-is-of-hlevel : {s₁ s₂ : A ⊎ B} {n : HLevel}
                     → is-of-hlevel (2 + n) A
                     → is-of-hlevel (2 + n) B
-                    → is-of-hlevel (1 + n) (Code s₁ s₂)
+                    → is-of-hlevel (1 + n) (Extensional-⊎ .Pathᵉ s₁ s₂)
   code-is-of-hlevel {s₁ = inl x₁} {inl x₂} {n} ahl bhl = Lift-is-of-hlevel (suc n) (ahl x₁ x₂)
   code-is-of-hlevel {s₁ = inl x}  {inr y}  {n} ahl bhl = hlevel (suc n)
   code-is-of-hlevel {s₁ = inr x}  {inl y}  {n} ahl bhl = hlevel (suc n)
@@ -55,7 +46,7 @@ opaque
                  → is-of-hlevel (2 + n) B
                  → is-of-hlevel (2 + n) (A ⊎ B)
   ⊎-is-of-hlevel n ahl bhl s₁ s₂ =
-    ≃→is-of-hlevel (1 + n) (identity-system-gives-path identity-system ⁻¹)
+    ≃→is-of-hlevel (1 + n) (identity-system-gives-path (Extensional-⊎ .idsᵉ) ⁻¹)
       (code-is-of-hlevel {s₁ = s₁} {s₂ = s₂} ahl bhl)
 
   disjoint-⊎-is-prop
@@ -69,8 +60,8 @@ opaque
   prop-⊎-is-set
     : is-prop A → is-prop B
     → is-set (A ⊎ B)
-  prop-⊎-is-set {A} {B} A-prop B-prop = identity-system→is-of-hlevel 1 identity-system go where
-    go : (x y : A ⊎ B) → is-prop (Code x y)
+  prop-⊎-is-set {A} {B} A-prop B-prop = identity-system→is-of-hlevel 1 (Extensional-⊎ .idsᵉ) go where
+    go : (x y : A ⊎ B) → is-prop (Extensional-⊎ .Pathᵉ x y)
     go (inl x)  (inr y)  = hlevel 1
     go (inr y)  (inl x)  = hlevel 1
     go (inl x₁) (inl x₂) = Lift-is-of-hlevel 1 $ is-prop→is-set A-prop _ _

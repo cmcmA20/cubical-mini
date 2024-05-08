@@ -28,9 +28,10 @@ _⊆_ : ⦃ m : Membership A ℙA ℓ″ ⦄
     → ℙA → ℙA → Type (level-of-type A ⊔ ℓ″)
 _⊆_ {A} S T = {a : A} → a ∈ S → a ∈ T
 
-infix 30 _∈!_
-_∈!_ : ⦃ m : Membership A ℙA ℓ″ ⦄ → A → ℙA → Type ℓ″
+infix 30 _∈!_ _∉!_
+_∈!_ _∉!_ : ⦃ m : Membership A ℙA ℓ″ ⦄ → A → ℙA → Type ℓ″
 x ∈! y = is-contr (x ∈ y)
+x ∉! y = ¬ x ∈! y
 
 instance
   Membership-pow

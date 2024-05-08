@@ -18,6 +18,10 @@ instance
   H-Level-⊤ = hlevel-basic-instance 0 ⊤-is-contr
   {-# OVERLAPPING H-Level-⊤ #-}
 
+  H-Level-Path-⊤ : {x y : ⊤} → H-Level n (x ＝ y)
+  H-Level-Path-⊤ = hlevel-basic-instance 0 (refl , λ _ → refl)
+  {-# OVERLAPPING H-Level-Path-⊤ #-}
+
 
 record ⊤ω : Typeω where
   instance constructor ttω

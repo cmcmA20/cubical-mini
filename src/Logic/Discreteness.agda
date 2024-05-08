@@ -123,20 +123,14 @@ Refl-is-trueₚ .refl {x} = Dec.elim {C = λ d → is-trueₚ (d .does)} (λ _ �
 discrete-identity-system
   : {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
   → is-identity-system {A = A} (λ x y → is-true ⌊ x ≟ y ⌋) (λ _ → Refl-is-true ⦃ A-dis ⦄ .refl)
-discrete-identity-system .to-path {a} {b} = true-reflects discrete-reflects!
+discrete-identity-system .to-path = true-reflects discrete-reflects!
 discrete-identity-system .to-path-over _ = prop!
-  where instance
-  H-Level-is-true : ∀ {b n} → H-Level (suc n) (is-true b)
-  H-Level-is-true = hlevel-prop-instance $
-    Bool.elim {P = is-prop ∘ is-true}
-      (is-contr→is-prop ⊤-is-contr)
-      ⊥-is-prop _
 
 discrete-identity-systemₚ
   : {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
   → is-identity-system {A = A} (λ x y → is-trueₚ ⌊ x ≟ y ⌋) (λ _ → Refl-is-trueₚ ⦃ A-dis ⦄ .refl)
-discrete-identity-systemₚ .to-path {a} {b} t = true-reflects discrete-reflects! (is-true≃is-trueₚ ⁻¹ $ t)
-discrete-identity-systemₚ .to-path-over _ = prop!
+discrete-identity-systemₚ = transfer-identity-system discrete-identity-system
+  (λ _ _ → is-true≃is-trueₚ) (λ _ → prop!)
 
 ↣→is-discrete! : (A ↣ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ↣→is-discrete! f = ↣→is-discrete f auto

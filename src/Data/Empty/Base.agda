@@ -54,6 +54,7 @@ opaque
 instance opaque
   H-Level-⊥ : H-Level (suc n) ⊥
   H-Level-⊥ = hlevel-prop-instance ⊥-is-prop
+  {-# OVERLAPPING H-Level-⊥ #-}
 
   H-Level-¬ : {A : Type ℓ} → H-Level (suc n) (¬ A)
   H-Level-¬ = hlevel-prop-instance ¬-is-prop

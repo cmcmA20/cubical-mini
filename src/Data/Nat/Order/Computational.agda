@@ -10,6 +10,9 @@ open import Data.Id.Inductive.Base
 open import Data.Sum.Base
 open import Data.Unit.Base
 
+open import Data.Bool.Path
+open import Data.Bool.Path public
+  using (H-Level-is-true)
 open import Data.Nat.Base
 open import Data.Nat.Base public
   using (_<ᵇ_)
@@ -72,15 +75,6 @@ m ≯ n = ¬ m > n
 <→s : m < n → Σ[ k ꞉ ℕ ] (n ＝ suc k)
 <→s {m} {suc n} p = n , refl
 
-opaque
-  <-is-prop : is-prop (m < n)
-  <-is-prop {0}     {suc _} _ _ = refl
-  <-is-prop {suc m} {suc n} = <-is-prop {m} {n}
-
-instance opaque
-  <-is-of-hlevel : is-of-hlevel (suc k) (m < n)
-  <-is-of-hlevel {m} {n} = is-prop→is-of-hlevel-suc (<-is-prop {m} {n})
-
 
 -- Properties of order
 
@@ -104,9 +98,6 @@ s≤s = refl
 ≤-antisym : m ≤ n → n ≤ m → m ＝ n
 ≤-antisym {0}     {0}     _ _ = refl
 ≤-antisym {suc m} {suc n} p q = ap suc (≤-antisym p q)
-
-≤-is-prop : is-prop (m ≤ n)
-≤-is-prop {m} {n} = <-is-prop {m} {suc n}
 
 ≤-suc-r : m ≤ n → m ≤ suc n
 ≤-suc-r {0}     {_}     _ = tt

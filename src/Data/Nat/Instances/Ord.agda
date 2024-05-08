@@ -2,6 +2,7 @@
 module Data.Nat.Instances.Ord where
 
 open import Foundations.Base
+open import Foundations.HLevel
 
 open import Meta.Ord
 
@@ -21,7 +22,7 @@ instance
   Ord-ℕ : Ord ℕ
   Ord-ℕ .Ord.ℓo = 0ℓ
   Ord-ℕ .Ord._<_ = ℕ-ord._<_
-  Ord-ℕ .Ord.<-thin {x} {y} = <-is-prop {x} {y}
+  Ord-ℕ .Ord.<-thin = hlevel 1
   Ord-ℕ .Ord.<-trans {x} {y} {z} = <-trans {x} {y} {z}
   Ord-ℕ .Ord._≤?_ x y with ≤-split x y
   ... | inl x<y = lt x<y (<→≠ x<y) (<-asym {x} x<y)

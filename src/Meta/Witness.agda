@@ -20,14 +20,15 @@ open import Data.Reflects.Base
 
 witness-macro : Term → TC ⊤
 witness-macro hole = do
-  ty ← (infer-type hole >>= reduce) >>= wait-just-a-bit
+  ty ← infer-type hole >>= reduce >>= wait-just-a-bit
   debug-print "tactic.witness" 20 [ "Goal: " , term-err ty ]
   let supp = fv-ord ty
   ty′ ← generalize supp ty
   debug-print "tactic.witness" 20 [ "Generalized goal: " , term-err ty′ ]
   (mv , sol) ← new-meta′ $ it Dec ##ₕ unknown ##ₙ ty′
   (candidate ∷ []) ← get-instances mv where
-    _ → type-error "No solutions or solution isn't unique"
+    [] → type-error "No solutions"
+    _  → type-error "Non-unique solution"
   unify sol candidate
   let prf = it proof ##ₙ sol
       args = varg prf ∷ reverse-fast ((λ n → varg (var n [])) <$> supp)

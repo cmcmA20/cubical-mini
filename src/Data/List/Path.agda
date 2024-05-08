@@ -3,15 +3,17 @@ module Data.List.Path where
 
 open import Meta.Prelude
 
+open import Meta.Extensionality
+
 open import Data.Empty.Base
 open import Data.Unit.Base
 
 open import Data.List.Base
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓᵃ : Level
   n : HLevel
-  A : Type ℓ
+  A : Type ℓᵃ
   x y : A
   xs ys : List A
 
@@ -28,44 +30,48 @@ private variable
   discrim []      = ⊥
   discrim (_ ∷ _) = ⊤
 
+module _ {A : 𝒰 ℓᵃ} ⦃ sa : Extensional A ℓ ⦄ where
+  Code-List : List A → List A → 𝒰 ℓ
+  Code-List []       []       = Lift _ ⊤
+  Code-List (x ∷ xs) (y ∷ ys) = sa .Pathᵉ x y × Code-List xs ys
+  Code-List _ _ = Lift _ ⊥
 
-Code : List A → List A → Type (level-of-type A)
-Code []       []       = Lift _ ⊤
-Code []       (y ∷ ys) = Lift _ ⊥
-Code (x ∷ xs) []       = Lift _ ⊥
-Code (x ∷ xs) (y ∷ ys) = (x ＝ y) × Code xs ys
+  code-list-refl : (xs : List A) → Code-List xs xs
+  code-list-refl []       = _
+  code-list-refl (x ∷ xs) = sa .reflᵉ x , code-list-refl xs
 
-code-refl : (xs : List A) → Code xs xs
-code-refl []       = lift tt
-code-refl (_ ∷ xs) = refl , code-refl xs
+  decode-list : Code-List xs ys → xs ＝ ys
+  decode-list {xs = []}     {([])}   _       = refl
+  decode-list {xs = x ∷ xs} {y ∷ ys} (p , c) = ap² _∷_ (sa .idsᵉ .to-path p) (decode-list c)
 
-decode : Code xs ys → xs ＝ ys
-decode {xs = []}     {([])}   _       = refl
-decode {xs = x ∷ xs} {y ∷ ys} (p , c) = ap² _∷_ p (decode c)
+  code-list-reflᴾ
+    : (c : Code-List xs ys)
+    → code-list-refl xs ＝[ ap (Code-List xs) (decode-list c) ]＝ c
+  code-list-reflᴾ {xs = []}     {([])}   _       = refl
+  code-list-reflᴾ {xs = x ∷ xs} {y ∷ ys} (p , c) = sa .idsᵉ .to-path-over p ,ₚ code-list-reflᴾ c
 
-code-refl-pathᴾ : {xs ys : List A} (c : Code xs ys) → ＜ code-refl xs ／ (λ i → Code xs (decode c i)) ＼ c ＞
-code-refl-pathᴾ {xs = []}     {([])}   (lift tt) = refl
-code-refl-pathᴾ {xs = x ∷ xs} {y ∷ ys} (p , c) i = (λ j → p (i ∧ j)) , code-refl-pathᴾ c i
-
-identity-system : is-identity-system {A = List A} Code code-refl
-identity-system .to-path      = decode
-identity-system .to-path-over = code-refl-pathᴾ
-
-code-is-of-hlevel : {xs ys : List A} {n : HLevel} → is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code xs ys)
-code-is-of-hlevel {xs = []}     {([])}  _ = hlevel _
-code-is-of-hlevel {xs = []}     {_ ∷ _} _ = hlevel _
-code-is-of-hlevel {xs = _ ∷ _}  {([])}  _ = hlevel _
-code-is-of-hlevel {xs = x ∷ xs} {y ∷ ys} A-hl =
-  ×-is-of-hlevel _ (path-is-of-hlevel _ A-hl x y) (code-is-of-hlevel A-hl)
+  instance
+    Extensional-List : Extensional (List A) ℓ
+    Extensional-List .Pathᵉ = Code-List
+    Extensional-List .reflᵉ = code-list-refl
+    Extensional-List .idsᵉ .to-path = decode-list
+    Extensional-List .idsᵉ .to-path-over = code-list-reflᴾ
 
 opaque
+  code-list-is-of-hlevel
+    : {n : HLevel} {xs ys : List A} → is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code-List xs ys)
+  code-list-is-of-hlevel {xs = []}     {([])}   _  = hlevel _
+  code-list-is-of-hlevel {xs = x ∷ xs} {y ∷ ys} hl = ×-is-of-hlevel _ (hl x y) (code-list-is-of-hlevel hl)
+  code-list-is-of-hlevel {xs = []}     {_ ∷ _}  _  = hlevel _
+  code-list-is-of-hlevel {xs = x ∷ xs} {([])}   _  = hlevel _
+
   list-is-of-hlevel : (n : HLevel)
                     → is-of-hlevel (2 + n) A
                     → is-of-hlevel (2 + n) (List A)
   list-is-of-hlevel n A-hl _ _ =
     ≃→is-of-hlevel (1 + n)
-                   (identity-system-gives-path identity-system ⁻¹)
-                   (code-is-of-hlevel A-hl)
+                   (identity-system-gives-path (Extensional-List .idsᵉ) ⁻¹)
+                   (code-list-is-of-hlevel A-hl)
 
 instance opaque
   H-Level-List : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (List A)

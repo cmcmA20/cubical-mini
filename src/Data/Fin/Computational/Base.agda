@@ -4,8 +4,6 @@ module Data.Fin.Computational.Base where
 open import Foundations.Base
 open import Foundations.Equiv
 
-open import Meta.Record
-
 import Data.Empty.Base as ⊥
 open import Data.Fin.Interface
 open import Data.Nat.Base
@@ -24,8 +22,6 @@ record Fin (@0 n : ℕ) : Type where
     { bound } : Erased (index < n)
 
 open Fin
-
-unquoteDecl fin-iso = declare-record-iso fin-iso (quote Fin)
 
 fzero : Fin (suc n)
 fzero = mk-fin 0

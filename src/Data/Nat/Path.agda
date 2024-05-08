@@ -3,7 +3,11 @@ module Data.Nat.Path where
 
 open import Foundations.Prelude
 
+open import Meta.Extensionality
+
 open import Data.Bool.Base as Bool
+open import Data.Bool.Path
+  using (H-Level-is-true)
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base
 open import Data.Unit.Base
@@ -30,31 +34,29 @@ id≠plus-suc : n ≠ n + suc m
 id≠plus-suc {0}     = zero≠suc
 id≠plus-suc {suc n} = id≠plus-suc ∘ suc-inj
 
+code-nat-refl : (m : ℕ) → is-true (m == m)
+code-nat-refl zero    = tt
+code-nat-refl (suc m) = code-nat-refl m
 
-Code : ℕ → ℕ → Type
-Code m n = is-true (m == n)
+decode-nat : is-true (m == n) → m ＝ n
+decode-nat {0}     {0}     _ = refl
+decode-nat {suc m} {suc n}   = ap suc ∘ decode-nat
 
-code-refl : (m : ℕ) → Code m m
-code-refl 0       = tt
-code-refl (suc m) = code-refl m
+decode-nat-refl
+  : (c : is-true (m == n))
+  → ＜ code-nat-refl m ／ (λ i → is-true (m == decode-nat {m = m} c i)) ＼ c ＞
+decode-nat-refl {0}     {0}     _ = refl
+decode-nat-refl {suc m} {suc n}   = decode-nat-refl {m}
 
-decode : ∀ m n → Code m n → m ＝ n
-decode 0       0       _ = refl
-decode 0       (suc _) p = absurd p
-decode (suc _) 0       p = absurd p
-decode (suc _) (suc _) = ap suc ∘ decode _ _
-
-code-is-prop : ∀ m n → is-prop (Code m n)
-code-is-prop 0       0       = hlevel 1
-code-is-prop 0       (suc _) = hlevel 1
-code-is-prop (suc _) 0       = hlevel 1
-code-is-prop (suc m) (suc _) = code-is-prop m _
-
-identity-system : is-identity-system Code code-refl
-identity-system = set-identity-system code-is-prop (decode _ _)
+Extensional-ℕ : Extensional ℕ 0ℓ
+Extensional-ℕ .Pathᵉ m n = is-true (m == n)
+Extensional-ℕ .reflᵉ = code-nat-refl
+Extensional-ℕ .idsᵉ .to-path = decode-nat
+Extensional-ℕ .idsᵉ .to-path-over {a} = decode-nat-refl {a}
+-- {-# INCOHERENT Extensional-ℕ #-}
 
 instance
   H-Level-ℕ : H-Level (2 + n) ℕ
   H-Level-ℕ = hlevel-basic-instance 2 $
-    identity-system→is-of-hlevel 1 identity-system code-is-prop
+    identity-system→is-of-hlevel 1 (Extensional-ℕ .idsᵉ) λ _ _ → hlevel 1
   {-# OVERLAPPING H-Level-ℕ #-}
