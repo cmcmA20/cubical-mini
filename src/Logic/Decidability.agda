@@ -69,6 +69,10 @@ instance
   Dec-universe : Dec (Type ℓ)
   Dec-universe = yes (Lift _ ⊤)
 
+  Dec-refl : ∀ {x : A} → Dec (x ＝ x)
+  Dec-refl = yes refl
+  {-# OVERLAPPING Dec-refl #-}
+
 
 -- Decidability of a generalized predicate
 Decidableⁿ : Variadic-binding¹

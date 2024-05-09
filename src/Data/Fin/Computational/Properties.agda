@@ -30,15 +30,6 @@ strengthen {suc n} (mk-fin (suc k) {(b)}) = ⊎.dmap fsuc fsuc (strengthen (mk-f
 inject : m ≤ n → Fin m → Fin n
 inject {m} p (mk-fin k {erase q}) = mk-fin k {erase (≤-trans {suc k} {m} q p)}
 
-fzero≠fsuc : {k : Fin m} → fzero ≠ fsuc k
-fzero≠fsuc = suc≠zero ∘ symₚ ∘ ap index
-
-fsuc-inj : {k l : Fin m} → fsuc k ＝ fsuc l → k ＝ l
-fsuc-inj {m} {k} = ap pred′ where
-  pred′ : Fin (suc m) → Fin m
-  pred′ (mk-fin 0)       = k
-  pred′ (mk-fin (suc k)) = mk-fin k
-
 -- TODO too clunky, refactor this
 fin-injective : {m n : ℕ} → Fin m ≃ Fin n → m ＝ n
 fin-injective f = finⁱ-injective $ sub-fin≃finⁱ ⁻¹ ∙ f ∙ sub-fin≃finⁱ where

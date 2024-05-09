@@ -33,9 +33,16 @@ module _ {ℓ} ⦃ sa : Extensional ℕ ℓ ⦄ where instance
 mk-fin-inj
   : ∀ {x y : ℕ} {b₁ b₂}
   → mk-fin {n} x {b₁}  ＝ mk-fin y {b₂} → x ＝ y
-mk-fin-inj = ap unfin where
-  unfin : Fin n → ℕ
-  unfin (mk-fin k) = k
+mk-fin-inj = ap index
+
+fzero≠fsuc : ∀{k} → fzero {n} ≠ fsuc k
+fzero≠fsuc = zero≠suc ∘ mk-fin-inj
+
+fsuc≠fzero : ∀{k} → fsuc {n} k ≠ fzero
+fsuc≠fzero = fzero≠fsuc ∘ sym
+
+fsuc-inj : ∀ {k l} → fsuc {n} k ＝ fsuc l → k ＝ l
+fsuc-inj = fin-ext ∘ suc-inj ∘ mk-fin-inj
 
 instance
   H-Level-Fin0 : ∀ {k} → H-Level (1 + k) (Fin 0)
