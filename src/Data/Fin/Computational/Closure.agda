@@ -9,7 +9,7 @@ open import Meta.Regularity
 open import Data.Empty.Base as ⊥
   using (⊥)
 open import Data.Nat.Base
-open import Data.Nat.Order.Computational
+open import Data.Nat.Order.Inductive.Base
 open import Data.Sum.Properties
 
 open import Data.Fin.Computational.Properties

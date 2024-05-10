@@ -1,14 +1,15 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Computational.Base where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Foundations.Prelude
 
+open import Data.Bool.Base
+  using (is-true)
 import Data.Empty.Base as ⊥
 open import Data.Fin.Interface
 open import Data.Nat.Base
   using (ℕ; zero; suc ; pred)
-open import Data.Nat.Order.Computational
+open import Data.Nat.Order.Inductive.Base
 open import Data.Sum.Base
 
 private variable
@@ -19,7 +20,7 @@ record Fin (@0 n : ℕ) : Type where
   constructor mk-fin
   field
     index     : ℕ
-    { bound } : Erased (index < n)
+    { bound } : Erased (is-true (index <ᵇ n))
 
 open Fin
 

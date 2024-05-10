@@ -6,15 +6,16 @@ open import Meta.Prelude
 open import Meta.Effect.Bind
 
 open import Data.Empty.Base
-open import Data.Nat.Order.Computational
-open import Data.Nat.Path
-open import Data.Sum.Base as ⊎
-
 open import Data.Fin.Computational.Base public
 open import Data.Fin.Inductive.Properties
   using (default≃inductive)
   renaming (fin-injective to finⁱ-injective)
 open import Data.Fin.Computational.Path
+open import Data.Nat.Order.Inductive.Base
+open import Data.Nat.Order.Inductive.Decidability
+open import Data.Nat.Path
+open import Data.Reflects.Base
+open import Data.Sum.Base as ⊎
 
 private variable
   ℓ : Level
@@ -28,7 +29,8 @@ strengthen {suc n} (mk-fin 0)             = inl fzero
 strengthen {suc n} (mk-fin (suc k) {(b)}) = ⊎.dmap fsuc fsuc (strengthen (mk-fin k {b}))
 
 inject : m ≤ n → Fin m → Fin n
-inject {m} p (mk-fin k {erase q}) = mk-fin k {erase (≤-trans {suc k} {m} q p)}
+inject {m} {n} p (mk-fin k {erase q}) = mk-fin k
+  {erase (reflects-true (≤-reflects (suc k) n) (true-reflects (≤-reflects (suc k) m) q ∙ p))}
 
 -- TODO too clunky, refactor this
 fin-injective : {m n : ℕ} → Fin m ≃ Fin n → m ＝ n

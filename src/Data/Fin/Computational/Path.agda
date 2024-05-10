@@ -7,11 +7,12 @@ open import Meta.Deriving.HLevel
 open import Meta.Extensionality
 open import Meta.Record
 
+open import Data.Bool.Base
+open import Data.Bool.Path
 open import Data.Empty.Base as ⊥
-open import Data.Nat.Path
-open import Data.Nat.Order.Computational
-
 open import Data.Fin.Computational.Base
+open import Data.Nat.Path
+open import Data.Nat.Order.Inductive.Base
 
 private variable @0 n : ℕ
 
@@ -21,7 +22,7 @@ unquoteDecl fin-iso = declare-record-iso fin-iso (quote Fin)
 unquoteDecl H-Level-Fin = declare-record-hlevel 2 H-Level-Fin (quote Fin)
 
 fin-ext : {k₁ k₂ : Fin n} → k₁ .index ＝ k₂ .index → k₁ ＝ k₂
-fin-ext {n} p = apˢ {A = Σ[ x ꞉ ℕ ] Erased (x < n)} (≅→≃ fin-iso ⁻¹ $_) (p ,ₚ prop!)
+fin-ext {n} p = apˢ {A = Σ[ x ꞉ ℕ ] Erased (is-true (x <ᵇ n))} (≅→≃ fin-iso ⁻¹ $_) (p ,ₚ prop!)
 
 module _ {ℓ} ⦃ sa : Extensional ℕ ℓ ⦄ where instance
   Extensional-Fin : Extensional (Fin n) ℓ

@@ -1,22 +1,15 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Instances.Ord where
 
-open import Foundations.Base
-open import Foundations.HLevel
+open import Foundations.Prelude
 
 open import Meta.Ord
 
 open import Data.Empty.Base
 open import Data.Sum.Base
 open import Data.Nat.Base
-open import Data.Nat.Order.Computational as ℕ-ord
+open import Data.Nat.Order.Inductive as ℕ-ord
 open import Data.Nat.Path
-
-<→≠ : ∀ {m n} → m ℕ-ord.< n → m ≠ n
-<→≠ {0}     {0}     p _ = p
-<→≠ {0}     {suc n} m<n = suc≠zero ∘ sym
-<→≠ {suc m} {0}     sm<0 _ = sm<0
-<→≠ {suc m} {suc n} sm<sn = <→≠ {m} {n} sm<sn ∘ ap pred
 
 instance
   Ord-ℕ : Ord ℕ

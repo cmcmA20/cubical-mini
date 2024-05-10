@@ -14,7 +14,7 @@ open import Data.Wellfounded
 
 open import Data.Bool.Base
 open import Data.Nat.Base
-open import Data.Nat.Order.Computational
+open import Data.Nat.Order.Inductive.Base
   using ( _≤ᵇ_ ; _<ᵇ_ ; _≥ᵇ_ ; _>ᵇ_
         ; _≰ᵇ_ ; _≮ᵇ_ ; _≱ᵇ_ ; _≯ᵇ_
         )

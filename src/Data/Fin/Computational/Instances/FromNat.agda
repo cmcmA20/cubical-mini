@@ -5,11 +5,10 @@ open import Foundations.Base
 
 open import Meta.Literals.FromNat
 
-open import Data.Nat.Base
-open import Data.Nat.Order.Computational
-
 open import Data.Empty.Base
 open import Data.Fin.Computational.Base
+open import Data.Nat.Base
+open import Data.Nat.Order.Inductive.Base
 
 instance
   From-ℕ-Fin : ∀ {n} → From-ℕ (Fin n)
