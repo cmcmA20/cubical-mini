@@ -2,7 +2,6 @@
 module Combinatorics.Countability.Strong where
 
 open import Meta.Prelude
-
 open import Meta.Deriving.HLevel
 
 open import Logic.Discreteness

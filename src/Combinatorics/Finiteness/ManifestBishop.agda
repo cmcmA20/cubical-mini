@@ -2,7 +2,6 @@
 module Combinatorics.Finiteness.ManifestBishop where
 
 open import Meta.Prelude
-
 open import Meta.Deriving.HLevel
 open import Meta.Ord
 open import Meta.Record
@@ -16,7 +15,8 @@ open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Closure
 open import Data.Fin.Computational.Instances.Discrete
 open import Data.Fin.Computational.Instances.Ord
-open import Data.Nat
+open import Data.Nat.Base
+open import Data.Nat.Path
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Inductive.Operations.Computational
 open import Data.Vec.Inductive.Correspondences.Unary.Any.Computational

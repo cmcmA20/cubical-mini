@@ -2,7 +2,6 @@
 module Data.Quotient.Set.Properties where
 
 open import Meta.Prelude
-
 open import Meta.Effect.Map
 open import Meta.Extensionality
 

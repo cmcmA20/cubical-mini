@@ -2,7 +2,6 @@
 module Combinatorics.Finiteness.Bishop where
 
 open import Meta.Prelude
-
 open import Meta.Deriving.HLevel
 open import Meta.Effect.Bind
 open import Meta.Extensionality
@@ -22,8 +21,7 @@ open import Data.Fin.Computational.Properties
 open import Data.Fin.Computational.Closure
 open import Data.Fin.Computational.Instances.Discrete
 open import Data.Nat.Path
-import Data.Truncation.Propositional as ∥-∥₁
-open ∥-∥₁ using (∥_∥₁; ∣_∣₁)
+open import Data.Truncation.Propositional as ∥-∥₁
 
 open import Functions.Embedding
 

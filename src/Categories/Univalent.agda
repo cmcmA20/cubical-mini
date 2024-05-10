@@ -4,8 +4,6 @@ module Categories.Univalent where
 open import Prelude
   hiding (_∘_; _≅_; id; ≅→=)
 
-open import Structures.n-Type
-
 open import Categories.Base
 open import Categories.Morphism.Instances
 import Categories.Morphism

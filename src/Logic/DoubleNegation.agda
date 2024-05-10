@@ -2,7 +2,6 @@
 module Logic.DoubleNegation where
 
 open import Meta.Prelude
-
 open import Meta.Effect.Bind
 
 open import Data.Dec.Base as Dec

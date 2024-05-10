@@ -2,7 +2,6 @@
 module Combinatorics.Countability.Base where
 
 open import Meta.Prelude
-
 open import Meta.Deriving.HLevel
 open import Meta.Effect.Bind
 open import Meta.Record

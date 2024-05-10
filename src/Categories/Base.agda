@@ -3,7 +3,6 @@ module Categories.Base where
 
 open import Meta.Prelude
   hiding (id ; _∘_)
-
 open import Meta.Effect.Idiom
 open import Meta.Extensionality
 open import Meta.Deriving.HLevel

@@ -2,7 +2,6 @@
 module Structures.Subtype where
 
 open import Meta.Prelude
-
 open import Meta.Extensionality
 open import Meta.Membership
 open import Meta.SIP

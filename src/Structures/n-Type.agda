@@ -2,7 +2,6 @@
 module Structures.n-Type where
 
 open import Meta.Prelude
-
 open import Meta.Effect.Alt
 open import Meta.Extensionality
 open import Meta.Projection
@@ -14,7 +13,6 @@ open import Meta.Reflection.Signature
 open import Data.Bool.Base
 open import Data.List.Base
 open import Data.Maybe.Base
-open import Data.Nat.Order.Inductive
 open import Data.Reflection.Argument
 open import Data.Reflection.Error
 open import Data.Reflection.Instances.FromString
@@ -181,12 +179,12 @@ el! : (A : Type ℓ) ⦃ A-hl : H-Level n A ⦄ → n-Type ℓ n
 el! {n} A = el A (hlevel n)
 
 opaque
-  is-of-hlevel-≤ : ∀ n k → n ≤ k → is-of-hlevel n A → is-of-hlevel k A
+  is-of-hlevel-≤ : ∀ n k → n ≤ʰ k → is-of-hlevel n A → is-of-hlevel k A
   is-of-hlevel-≤ 0 k 0≤x p = is-of-hlevel-+-left 0 k p
-  is-of-hlevel-≤ 1 1 (s≤s 0≤x) p = p
-  is-of-hlevel-≤ 1 (suc (suc k)) (s≤s 0≤x) p x y =
+  is-of-hlevel-≤ 1 1 (s≤ʰs 0≤x) p = p
+  is-of-hlevel-≤ 1 (suc (suc k)) (s≤ʰs 0≤x) p x y =
     is-of-hlevel-+-left 1 k (is-prop→is-set p x y)
-  is-of-hlevel-≤ (suc (suc n)) (suc (suc k)) (s≤s le) p x y =
+  is-of-hlevel-≤ (suc (suc n)) (suc (suc k)) (s≤ʰs le) p x y =
     is-of-hlevel-≤ (suc n) (suc k) le (p x y)
 
 private

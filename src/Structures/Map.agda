@@ -2,7 +2,6 @@
 module Structures.Map where
 
 open import Meta.Prelude
-
 open import Meta.Membership
 open import Meta.Record
 

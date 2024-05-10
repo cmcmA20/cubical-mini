@@ -9,12 +9,8 @@ open import Prelude
            ; Extensional-↠ to Extensional-↠ₜ
            )
 
-open import Structures.n-Type
-
 open import Categories.Base
 open import Categories.Morphism
-
-open import Data.Nat.Order.Inductive
 
 unquoteDecl H-Level-mono = declare-record-hlevel 2 H-Level-mono (quote _↪_)
 unquoteDecl H-Level-epi = declare-record-hlevel 2 H-Level-epi (quote _↠_)

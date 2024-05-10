@@ -2,7 +2,6 @@
 module Logic.Decidability where
 
 open import Meta.Prelude
-
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral
 open import Meta.Reflection.Signature

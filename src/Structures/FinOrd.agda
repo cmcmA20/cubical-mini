@@ -2,7 +2,6 @@
 module Structures.FinOrd where
 
 open import Meta.Prelude
-
 open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base

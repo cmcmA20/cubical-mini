@@ -2,7 +2,6 @@
 module Functions.Equiv.Biinv where
 
 open import Foundations.Base
-
 open import Foundations.Equiv
 open import Foundations.HLevel
 open import Foundations.Isomorphism

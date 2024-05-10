@@ -6,7 +6,6 @@ open import Meta.Extensionality
 
 open import Structures.n-Type
 
-open import Data.Nat.Order.Inductive
 open import Data.Unit.Base
 
 open import Functions.Fibration
@@ -133,11 +132,11 @@ is-embedding→is-of-hlevel n {f} emb a-hl = ≃→is-of-hlevel (suc n) (total-e
   Σ-is-of-hlevel (suc n) a-hl λ x → is-prop→is-of-hlevel-suc {h = n} (emb x)
 
 ↪→is-of-hlevel
-  : ∀ n → ⦃ le : 1 ≤ n ⦄
+  : ∀ n → ⦃ le : 1 ≤ʰ n ⦄
   → B ↪ A
   → is-of-hlevel n A
   → is-of-hlevel n B
-↪→is-of-hlevel (suc n) ⦃ s≤s le ⦄ f = is-embedding→is-of-hlevel n (f .snd)
+↪→is-of-hlevel (suc n) ⦃ s≤ʰs le ⦄ f = is-embedding→is-of-hlevel n (f .snd)
 
 is-equiv→is-embedding : is-equiv f → is-embedding f
 is-equiv→is-embedding r y = is-contr→is-prop $ r .equiv-proof y
@@ -208,7 +207,7 @@ opaque
 
 ↪→is-of-hlevel!
   : ∀ n → B ↪ A
-  → ⦃ le : 1 ≤ n ⦄
+  → ⦃ le : 1 ≤ʰ n ⦄
   → ⦃ hl : H-Level n A ⦄
   → is-of-hlevel n B
 ↪→is-of-hlevel! n f = ↪→is-of-hlevel n f hlevel!

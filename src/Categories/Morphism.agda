@@ -16,8 +16,6 @@ open import Functions.Embedding
 
 open import Categories.Solver
 
-open import Data.Nat.Order.Inductive
-
 open Precategory C public
 private variable
   a b c d : Ob

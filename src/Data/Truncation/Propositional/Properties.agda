@@ -5,8 +5,6 @@ open import Meta.Prelude
 open import Meta.Effect.Map
 open import Meta.Extensionality
 
-open import Structures.n-Type
-
 open import Functions.Constant
 open import Functions.Embedding
 open import Functions.Surjection
@@ -51,7 +49,7 @@ corestriction-is-surjective (_ , p) = map (second Σ-prop-path!) p
 
 dom-is-set→image-is-set
   : is-set B → {f : A → B} → is-set (Im f)
-dom-is-set→image-is-set B-set = hlevel!
+dom-is-set→image-is-set B-set = hlevel 2 -- hlevel!
   where instance _ = hlevel-basic-instance 2 B-set
 
 is-constant→image-is-prop
@@ -111,7 +109,7 @@ Factorization f = Σ[ M ꞉ Type _ ] f factors-through M
 
 image-factorization : f factors-through Im f
 image-factorization {f} =
-  (corestriction f , corestriction-is-surjective) , (fst , subset-proj-is-embedding hlevel!) , refl
+  (corestriction f , corestriction-is-surjective) , (fst , subset-proj-is-embedding (λ _ → hlevel 1)) , refl
 
 
 module Replacement
@@ -154,12 +152,12 @@ module Replacement
       (elim-prop P-prop p⦋⦌ y) i
 
   ⦋-⦌-is-surjective : is-surjective ⦋_⦌
-  ⦋-⦌-is-surjective = elim-prop hlevel! λ x → ∣ x , refl ∣₁
+  ⦋-⦌-is-surjective = elim-prop (λ _ → hlevel 1) λ x → ∣ x , refl ∣₁
 
   Image→Im : Image → Im f
   Image→Im x .fst = embed x
   Image→Im x .snd = elim-prop {P = λ y → ∥ fibre f (embed y) ∥₁}
-    hlevel! (λ y → ∣ y , refl ∣₁) x
+    (λ _ → hlevel 1) (λ y → ∣ y , refl ∣₁) x
 
   Image≃Im : Image ≃ Im f
   Image≃Im .fst = Image→Im

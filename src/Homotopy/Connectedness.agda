@@ -2,7 +2,6 @@
 module Homotopy.Connectedness where
 
 open import Meta.Prelude
-
 open import Meta.Deriving.HLevel
 
 open import Data.Truncation.Propositional.Base

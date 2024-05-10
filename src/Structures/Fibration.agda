@@ -2,7 +2,6 @@
 module Structures.Fibration where
 
 open import Meta.Prelude
-
 open import Meta.SIP
 
 module _ {ℓᵇ} (B : Type ℓᵇ) (ℓ : Level) where

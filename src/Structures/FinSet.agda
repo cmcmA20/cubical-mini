@@ -2,7 +2,6 @@
 module Structures.FinSet where
 
 open import Meta.Prelude
-
 open import Meta.Effect.Bind
 open import Meta.Projection
 open import Meta.Record
@@ -58,7 +57,7 @@ instance
 
 
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
-FinSet-is-groupoid = ≃→is-of-hlevel 3 go (λ _ _ → hlevel 2) where
+FinSet-is-groupoid = ≃→is-of-hlevel 3 go (λ _ _ → hlevel!) where
   go = FinSet _
          ~⟨ ≅→≃ fin-set-iso ⟩
        Σ[ X ꞉ Type _ ] is-bishop-finite X
