@@ -36,9 +36,4 @@ opaque
 instance
   H-Level-Fin1 : H-Level k (Fin 1)
   H-Level-Fin1 = hlevel-basic-instance 0 (¬→maybe-is-contr λ ())
-  {-# OVERLAPPING H-Level-Fin1 #-}
-
-instance opaque
-  H-Level-Fin : H-Level (2 + k) (Fin n)
-  H-Level-Fin = hlevel-basic-instance 2 fin-is-set
-  {-# INCOHERENT H-Level-Fin #-}
+  {-# INCOHERENT H-Level-Fin1 #-}

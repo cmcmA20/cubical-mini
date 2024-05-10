@@ -11,6 +11,7 @@ open import Data.Nat.Order.Inductive
 open import Data.Sum.Base as ⊎
 
 open import Data.Fin.Inductive.Base public
+open import Data.Fin.Inductive.Path
 
 private variable
   ℓ : Level
@@ -42,18 +43,6 @@ strengthen {suc n} (fsuc x) = ⊎.dmap fsuc fsuc $ strengthen x
 inject : m ≤ n → Fin m → Fin n
 inject (s≤s _)  fzero    = fzero
 inject (s≤s le) (fsuc x) = fsuc $ inject le x
-
-fzero≠fsuc : {k : Fin m} → ¬ fzero ＝ fsuc k
-fzero≠fsuc p = subst discrim p tt where
-  discrim : Fin (suc m) → Type
-  discrim fzero    = ⊤
-  discrim (fsuc _) = ⊥
-
-fsuc-inj : {k l : Fin m} → fsuc k ＝ fsuc l → k ＝ l
-fsuc-inj {k} = ap pred′ where
-  pred′ : Fin (suc _) → Fin _
-  pred′ fzero    = k
-  pred′ (fsuc x) = x
 
 fin-peel : Fin (suc m) ≃ Fin (suc n) → Fin m ≃ Fin n
 fin-peel {m} {n} sm≃sn = ≅→≃ $ m→n , iso n→m b→a→b a→b→a where

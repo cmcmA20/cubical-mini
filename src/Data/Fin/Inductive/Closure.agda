@@ -8,28 +8,12 @@ open import Data.Empty.Base as ⊥
 open import Data.Nat.Base
 open import Data.Sum.Properties
 
+open import Data.Fin.Inductive.Path
 open import Data.Fin.Inductive.Properties
 
 private variable
   ℓ : Level
   @0 m n : ℕ
-
-fin-0-is-initial : Fin 0 ≃ ⊥
-fin-0-is-initial .fst ()
-fin-0-is-initial .snd .equiv-proof ()
-
-fin-1-is-contr : is-contr (Fin 1)
-fin-1-is-contr .fst = fzero
-fin-1-is-contr .snd fzero = refl
-
-instance
-  H-Level-Fin0 : ∀{k} → H-Level (1 + k) (Fin 0)
-  H-Level-Fin0 = hlevel-prop-instance (≃→is-of-hlevel! 1 fin-0-is-initial)
-  {-# OVERLAPPING H-Level-Fin0 #-}
-
-  H-Level-Fin1 : ∀{k} → H-Level k (Fin 1)
-  H-Level-Fin1 = hlevel-basic-instance 0 fin-1-is-contr
-  {-# OVERLAPPING H-Level-Fin1 #-}
 
 fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
 fin-suc = ≅→≃ (f , iso g rinv linv) where
@@ -68,7 +52,7 @@ fin-coproduct : {n m : ℕ}
               → Fin n ⊎ Fin m
               ≃ Fin (n + m)
 fin-coproduct {0} {m}  =
-  Fin 0 ⊎ Fin m  ~⟨ ⊎-ap-l fin-0-is-initial ⟩
+  Fin 0 ⊎ Fin m  ~⟨ ⊎-ap-l fin0-is-initial ⟩
   ⊥ ⊎ Fin m      ~⟨ ⊎-zero-l ⟩
   Fin m          ∎
 fin-coproduct {suc n} {m} =
