@@ -3,8 +3,6 @@ module Data.Nat.Instances.Discrete where
 
 open import Meta.Prelude
 
-open import Meta.Extensionality
-
 open import Logic.Decidability
 open import Logic.Discreteness
 
@@ -13,9 +11,9 @@ open import Data.Dec.Base as Dec
 open import Data.Nat.Base
 open import Data.Nat.Path
 
-private module ℕIS = IdSS (Extensional-ℕ .idsᵉ) (hlevel 2)
+private module ℕIS = IdSS ℕ-identity-system (hlevel 2)
 
-==-reflects : Reflects (_＝_ {A = ℕ}) _==_
+==-reflects : Reflects (Path ℕ) _==_
 ==-reflects m n with m == n | recall (m ==_) n
 ... | false | ⟪ p ⟫ = ofⁿ $ subst is-true p ∘ ℕIS.encode
 ... | true  | ⟪ p ⟫ = ofʸ $ ℕIS.decode $ subst is-true (sym p) tt

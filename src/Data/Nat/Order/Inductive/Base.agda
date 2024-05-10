@@ -1,7 +1,10 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Order.Inductive.Base where
 
-open import Meta.Prelude
+open import Foundations.Prelude
+  renaming ( _$_ to _$ₜ_
+           )
+open import Meta.Variadic
 
 open import Data.Bool.Base
 open import Data.Empty.Base

@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Nat.Properties where
 
-open import Meta.Prelude
+open import Foundations.Prelude
 
 open import Data.Dec.Base
 open import Data.Empty.Base

@@ -3,11 +3,7 @@ module Data.Nat.Path where
 
 open import Foundations.Prelude
 
-open import Meta.Extensionality
-
 open import Data.Bool.Base as Bool
-open import Data.Bool.Path
-  using (H-Level-is-true)
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base
 open import Data.Unit.Base
@@ -48,15 +44,12 @@ decode-nat-refl
 decode-nat-refl {0}     {0}     _ = refl
 decode-nat-refl {suc m} {suc n}   = decode-nat-refl {m}
 
-Extensional-ℕ : Extensional ℕ 0ℓ
-Extensional-ℕ .Pathᵉ m n = is-true (m == n)
-Extensional-ℕ .reflᵉ = code-nat-refl
-Extensional-ℕ .idsᵉ .to-path = decode-nat
-Extensional-ℕ .idsᵉ .to-path-over {a} = decode-nat-refl {a}
--- {-# INCOHERENT Extensional-ℕ #-}
+ℕ-identity-system : is-identity-system (λ m n → is-true (m == n)) code-nat-refl
+ℕ-identity-system .to-path = decode-nat
+ℕ-identity-system .to-path-over {a} = decode-nat-refl {a}
 
 instance
   H-Level-ℕ : H-Level (2 + n) ℕ
   H-Level-ℕ = hlevel-basic-instance 2 $
-    identity-system→is-of-hlevel 1 (Extensional-ℕ .idsᵉ) λ _ _ → hlevel 1
+    identity-system→is-of-hlevel 1 ℕ-identity-system λ _ _ → hlevel 1
   {-# OVERLAPPING H-Level-ℕ #-}

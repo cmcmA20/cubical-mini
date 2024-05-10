@@ -2,9 +2,12 @@
 module Data.Bool.Base where
 
 open import Foundations.Base
+open import Foundations.HLevel
 
-open import Data.Empty.Base using (⊥)
-open import Data.Unit.Base  using (⊤)
+open import Data.Empty.Base
+  using ( ⊥ ; ⊥-is-prop )
+open import Data.Unit.Base
+  using ( ⊤ ; ⊤-is-contr )
 
 open import Agda.Builtin.Bool public
 
@@ -58,3 +61,11 @@ is-trueₚ b = b ＝ true
 
 is-falseₚ : Bool → Type
 is-falseₚ b = b ＝ false
+
+instance
+  H-Level-is-true : ∀ {b n} → H-Level (suc n) (is-true b)
+  H-Level-is-true = hlevel-prop-instance $
+    elim {P = is-prop ∘ is-true}
+      (is-contr→is-prop ⊤-is-contr)
+      ⊥-is-prop _
+  {-# INCOHERENT H-Level-is-true #-}

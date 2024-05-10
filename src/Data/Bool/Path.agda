@@ -20,14 +20,6 @@ false≠true p = subst (λ b → is-true (not b)) p tt
 true≠false : true ≠ false
 true≠false = false≠true ∘ sym
 
-instance
-  H-Level-is-true : ∀ {b n} → H-Level (suc n) (is-true b)
-  H-Level-is-true = hlevel-prop-instance $
-    Bool.elim {P = is-prop ∘ is-true}
-      (is-contr→is-prop ⊤-is-contr)
-      ⊥-is-prop _
-  {-# INCOHERENT H-Level-is-true #-}
-
 Extensional-Bool : Extensional Bool 0ℓ
 Extensional-Bool .Pathᵉ b₁ b₂ = is-true (b₁ == b₂)
 Extensional-Bool .reflᵉ false = tt

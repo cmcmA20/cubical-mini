@@ -15,12 +15,6 @@ open import Data.Bool.Base
 open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.Nat.Order.Inductive
-open import Data.Nat.Order.Inductive
-  public
-  using ()
-  renaming ( z≤ to z≤-whatever
-           ; s≤s′ to s≤s-whatever
-           ; ≤-refl to ≤-refl-whatever ) -- instances
 open import Data.Reflection.Argument
 open import Data.Reflection.Error
 open import Data.Reflection.Instances.FromString
