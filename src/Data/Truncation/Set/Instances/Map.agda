@@ -11,4 +11,5 @@ open import Data.Truncation.Set.Base
 
 instance
   Map-∥-∥₂ : Map (eff ∥_∥₂)
-  Map-∥-∥₂ .map f = rec! (∣_∣₂ ∘ f)
+  Map-∥-∥₂ .map f = rec! (∣_∣₂ ∘ f) where
+    instance _ = hlevel-basic-instance 2 squash₂

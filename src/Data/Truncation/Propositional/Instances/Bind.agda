@@ -12,4 +12,5 @@ open import Data.Truncation.Propositional.Instances.Idiom public
 
 instance
   Bind-∥-∥₁ : Bind (eff ∥_∥₁)
-  Bind-∥-∥₁ ._>>=_ = flip rec!
+  Bind-∥-∥₁ ._>>=_ = flip rec! where
+    instance _ = hlevel-prop-instance squash₁

@@ -97,8 +97,9 @@ opaque
 
 instance
   H-Level-is-cartesian : ∀ {n} {a b} {f : Hom a b} {a′ b′} {f′ : Hom[ f ] a′ b′}
-                       → H-Level (suc n) (is-cartesian f f′)
-  H-Level-is-cartesian = hlevel-basic-instance 1 is-cartesian-is-prop
+                       → ⦃ n ≥ʰ 1 ⦄
+                       → H-Level n (is-cartesian f f′)
+  H-Level-is-cartesian ⦃ s≤ʰs _ ⦄ = hlevel-basic-instance 1 is-cartesian-is-prop
 
 
 record Cartesian-morphism

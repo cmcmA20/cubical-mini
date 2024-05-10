@@ -46,8 +46,8 @@ fsuc-inj : ∀ {k l} → fsuc {n} k ＝ fsuc l → k ＝ l
 fsuc-inj = fin-ext ∘ suc-inj ∘ mk-fin-inj
 
 instance
-  H-Level-Fin0 : ∀ {k} → H-Level (1 + k) (Fin 0)
-  H-Level-Fin0 = hlevel-prop-instance λ ()
+  H-Level-Fin0 : ∀ {k} → ⦃ k ≥ʰ 1 ⦄ → H-Level k (Fin 0)
+  H-Level-Fin0 ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance λ ()
   {-# OVERLAPPING H-Level-Fin0 #-}
 
   H-Level-Fin1 : ∀ {k} → H-Level k (Fin 1)

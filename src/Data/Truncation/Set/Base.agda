@@ -24,10 +24,6 @@ elim P-set incc (squash₂ x y p q i j) =
 
 -- Automation
 
-instance opaque
-  H-Level-∥-∥₂ : ∀ {n} → H-Level (2 + n) ∥ A ∥₂
-  H-Level-∥-∥₂ = hlevel-basic-instance 2 squash₂
-
 instance
   Inductive-∥-∥₂
     : ∀ {ℓ ℓ′ ℓm} {A : Type ℓ} {P : ∥ A ∥₂ → Type ℓ′}

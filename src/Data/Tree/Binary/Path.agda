@@ -103,5 +103,6 @@ opaque
                    (code-is-of-hlevel {xs = xs} A-hl)
 
 instance opaque
-  H-Level-binary-tree : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (Tree A)
-  H-Level-binary-tree {n} .H-Level.has-of-hlevel = tree-is-of-hlevel _ (hlevel (2 + n))
+  H-Level-binary-tree : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → ⦃ A-hl : H-Level n A ⦄ → H-Level n (Tree A)
+  H-Level-binary-tree {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = tree-is-of-hlevel _ (hlevel n)
+  {-# OVERLAPPING H-Level-binary-tree #-}

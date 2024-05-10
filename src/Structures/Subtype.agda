@@ -29,8 +29,8 @@ subtype≃ℙ = subtype-classifier ∙ Π-cod-≃ λ _ → ≅→≃ n-Type-iso 
 subtype-is-set = ≃→is-of-hlevel! 2 subtype≃ℙ
 
 instance
-  @0 H-Level-subtype : H-Level (2 + n) (Subtype ℓ T)
-  H-Level-subtype = hlevel-basic-instance 2 subtype-is-set
+  @0 H-Level-subtype : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Subtype ℓ T)
+  H-Level-subtype ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 subtype-is-set
 
 module Path where
 

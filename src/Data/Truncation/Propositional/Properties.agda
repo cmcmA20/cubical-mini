@@ -10,6 +10,7 @@ open import Functions.Embedding
 open import Functions.Surjection
 
 open import Data.Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Path
 open import Data.Truncation.Propositional.Instances.Map
 
 private variable

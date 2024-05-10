@@ -23,6 +23,7 @@ instance
     : ⦃ A-mbf : Manifest-bishop-finite A ⦄ → Manifest-bishop-finite (Maybe A)
   maybe-manifest-bishop-finite = fin $
     maybe-as-sum ∙ ⊎-ap (enumeration auto) (enumeration auto) ∙ fin-coproduct
+  {-# OVERLAPPING maybe-manifest-bishop-finite #-}
 
   maybe-is-bishop-finite
     : ⦃ A-bf : is-bishop-finite A ⦄
@@ -31,3 +32,4 @@ instance
     aeq ← enumeration₁ A-bf
     ueq ← enumeration₁ manifest-bishop-finite→is-bishop-finite
     pure $ maybe-as-sum ∙ ⊎-ap ueq aeq ∙ fin-coproduct
+  {-# OVERLAPPING maybe-is-bishop-finite #-}

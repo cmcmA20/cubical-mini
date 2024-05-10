@@ -97,9 +97,10 @@ inr-inj {B} {x} path = ap f path where
 -- Automation
 instance opaque
   H-Level-⊎
-    : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → ⦃ B-hl : H-Level (2 + n) B ⦄
-    → H-Level (2 + n) (A ⊎ B)
-  H-Level-⊎ {n} .H-Level.has-of-hlevel = ⊎-is-of-hlevel n (hlevel (2 + n)) (hlevel (2 + n))
+    : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → ⦃ A-hl : H-Level n A ⦄ → ⦃ B-hl : H-Level n B ⦄
+    → H-Level n (A ⊎ B)
+  H-Level-⊎ {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = ⊎-is-of-hlevel _ (hlevel n) (hlevel n)
+  {-# OVERLAPS H-Level-⊎ #-}
 
 opaque
   disjoint-⊎-is-prop!

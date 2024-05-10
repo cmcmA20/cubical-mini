@@ -85,6 +85,7 @@ opaque
 instance opaque
   H-Level-≤ : ⦃ k ≥ 1 ⦄ → H-Level k (m ≤ n)
   H-Level-≤ ⦃ s≤s _ ⦄ = hlevel-prop-instance ≤-is-prop
+  {-# OVERLAPPING H-Level-≤ #-}
 
 ≤-peel : suc m ≤ suc n → m ≤ n
 ≤-peel (s≤s p) = p

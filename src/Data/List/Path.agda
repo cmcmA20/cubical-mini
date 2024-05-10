@@ -2,7 +2,6 @@
 module Data.List.Path where
 
 open import Meta.Prelude
-
 open import Meta.Extensionality
 
 open import Data.Empty.Base
@@ -74,5 +73,6 @@ opaque
                    (code-list-is-of-hlevel A-hl)
 
 instance opaque
-  H-Level-List : ∀ {n} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (List A)
-  H-Level-List {n} .H-Level.has-of-hlevel = list-is-of-hlevel _ (hlevel (2 + n))
+  H-Level-List : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → ⦃ A-hl : H-Level n A ⦄ → H-Level n (List A)
+  H-Level-List {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = list-is-of-hlevel _ (hlevel n)
+  {-# OVERLAPPING H-Level-List #-}

@@ -18,3 +18,4 @@ instance
   Dec-⊎ ⦃ yes a ⦄ .proof = ofʸ (inl a)
   Dec-⊎ ⦃ no ¬a ⦄ ⦃ yes b ⦄ .proof = ofʸ (inr b)
   Dec-⊎ ⦃ no ¬a ⦄ ⦃ no ¬b ⦄ .proof = ofⁿ [ ¬a , ¬b ]ᵤ
+  {-# OVERLAPPING Dec-⊎ #-}

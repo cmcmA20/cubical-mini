@@ -47,8 +47,8 @@ opaque
         A-set = hlevel-basic-instance 2 (M .is-group.has-is-of-hlevel)
 
 instance
-  H-Level-is-group : H-Level (suc n) (is-group _✦_)
-  H-Level-is-group = hlevel-prop-instance is-group-is-prop
+  H-Level-is-group : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-group _✦_)
+  H-Level-is-group ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-group-is-prop
 
 
 record Group-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -102,12 +102,12 @@ opaque
     open Group-on M′
 
 instance opaque
-  H-Level-group-on : H-Level (2 + n) (Group-on A)
-  H-Level-group-on = hlevel-basic-instance 2 group-on-is-set
+  H-Level-group-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Group-on A)
+  H-Level-group-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 group-on-is-set
 
-  H-Level-group-hom : ∀ {M : Group-on A} {M′ : Group-on B} {f}
-                    → H-Level (suc n) (Group-hom M M′ f)
-  H-Level-group-hom = hlevel-prop-instance group-hom-is-prop
+  H-Level-group-hom : ⦃ n ≥ʰ 1 ⦄ → ∀ {M : Group-on A} {M′ : Group-on B} {f}
+                    → H-Level n (Group-hom M M′ f)
+  H-Level-group-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance group-hom-is-prop
 
 group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A
 group-on↪monoid-on .fst G .Monoid-on._⋆_ = G .Group-on._⋆_

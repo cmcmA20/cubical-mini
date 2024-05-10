@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search #-}
+{-# OPTIONS --safe #-}
 module Categories.Constructions.Discrete where
 
 open import Categories.Prelude

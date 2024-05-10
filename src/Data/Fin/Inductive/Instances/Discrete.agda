@@ -23,3 +23,4 @@ instance
       Dec.dmap (apⁱ fsuc)
                (_∘ (λ { reflⁱ → reflⁱ }))
                (fin-is-discreteⁱ k l)
+  {-# OVERLAPPING fin-is-discrete #-}

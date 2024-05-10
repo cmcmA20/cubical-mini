@@ -13,5 +13,5 @@ open import Data.Truncation.Set.Instances.Map public
 instance
   Idiom-∥-∥₂ : Idiom (eff ∥_∥₂)
   Idiom-∥-∥₂ .pure = ∣_∣₂
-  Idiom-∥-∥₂ ._<*>_ ∣f∣₂ ∣a∣₂ =
-    rec! (_<$> ∣a∣₂) ∣f∣₂
+  Idiom-∥-∥₂ ._<*>_ ∣f∣₂ ∣a∣₂ = rec! (_<$> ∣a∣₂) ∣f∣₂ where
+    instance _ = hlevel-basic-instance 2 squash₂

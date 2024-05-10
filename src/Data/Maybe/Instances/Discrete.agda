@@ -19,3 +19,4 @@ instance
   maybe-is-discrete {x = nothing} {just _ }   = no nothing≠just
   maybe-is-discrete {x = just _ } {(nothing)} = no $ nothing≠just ∘ sym
   maybe-is-discrete {x = just x } {just y }   = Dec.dmap (ap just) (_∘ just-inj) (x ≟ y)
+  {-# OVERLAPPING maybe-is-discrete #-}

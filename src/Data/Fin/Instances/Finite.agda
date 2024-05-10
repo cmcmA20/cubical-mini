@@ -16,3 +16,4 @@ instance
   fin-manifest-bishop-finite : Manifest-bishop-finite (Fin n)
   fin-manifest-bishop-finite {0}     = ⊥-manifest-bishop-finite
   fin-manifest-bishop-finite {suc _} = maybe-manifest-bishop-finite ⦃ fin-manifest-bishop-finite ⦄
+  {-# INCOHERENT fin-manifest-bishop-finite #-}

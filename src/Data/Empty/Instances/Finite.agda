@@ -11,3 +11,4 @@ open import Data.Fin.Computational.Closure
 instance
   ⊥-manifest-bishop-finite : Manifest-bishop-finite ⊥
   ⊥-manifest-bishop-finite = fin $ fin-0-is-initial ⁻¹
+  {-# OVERLAPPING ⊥-manifest-bishop-finite #-}

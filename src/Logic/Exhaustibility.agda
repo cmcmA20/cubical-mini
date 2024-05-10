@@ -25,6 +25,7 @@ instance
   lift-exhaustible : ⦃ ex : Exhaustible A ⦄ → Exhaustible (Lift ℓ A)
   lift-exhaustible ⦃ ex ⦄ .exhaustible-β P? = Dec.dmap (_∘ lower) (contra $ _∘ lift)
     (ex .exhaustible-β P?)
+  {-# OVERLAPPING lift-exhaustible #-}
 
   Π-decision
     : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ}

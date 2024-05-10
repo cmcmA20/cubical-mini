@@ -59,3 +59,4 @@ dec-is-of-hlevel (suc (suc n)) A-hl s₁ s₂ =
 instance
   H-Level-Dec : ∀ {n} → ⦃ H-Level n A ⦄ → H-Level n (Dec A)
   H-Level-Dec .H-Level.has-of-hlevel = dec-is-of-hlevel _ (hlevel _)
+  {-# OVERLAPPING H-Level-Dec #-}

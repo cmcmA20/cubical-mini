@@ -39,8 +39,8 @@ opaque
     open is-rig R
 
 instance opaque
-  H-Level-is-rig : H-Level (suc n) (is-rig _✦_ _✧_)
-  H-Level-is-rig = hlevel-prop-instance is-rig-is-prop
+  H-Level-is-rig : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-rig _✦_ _✧_)
+  H-Level-is-rig ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-rig-is-prop
 
 
 record Rig-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -66,8 +66,8 @@ rig-on↪semiring-on .snd = set-injective→is-embedding! λ p →
     ap Semiring-on._+_ p ,ₚ ap Semiring-on._·_ p ,ₚ prop!
 
 instance opaque
-  H-Level-rig-on : H-Level (suc (suc n)) (Rig-on A)
-  H-Level-rig-on = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 rig-on↪semiring-on
+  H-Level-rig-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Rig-on A)
+  H-Level-rig-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 rig-on↪semiring-on
 
 
 record make-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

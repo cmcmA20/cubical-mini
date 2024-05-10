@@ -31,8 +31,8 @@ opaque
     open is-comm-rig R
 
 instance opaque
-  H-Level-is-comm-rig : H-Level (suc n) (is-comm-rig _✦_ _✧_)
-  H-Level-is-comm-rig = hlevel-prop-instance is-comm-rig-is-prop
+  H-Level-is-comm-rig : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-comm-rig _✦_ _✧_)
+  H-Level-is-comm-rig ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-comm-rig-is-prop
 
 
 record CRig-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -57,8 +57,8 @@ comm-rig-on↪rig-on .snd = set-injective→is-embedding! λ p →
     ap Rig-on._+_ p ,ₚ ap Rig-on._·_ p ,ₚ prop!
 
 instance opaque
-  H-Level-comm-rig-on : H-Level (suc (suc n)) (CRig-on A)
-  H-Level-comm-rig-on = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 comm-rig-on↪rig-on
+  H-Level-comm-rig-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (CRig-on A)
+  H-Level-comm-rig-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 comm-rig-on↪rig-on
 
 
 record make-comm-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

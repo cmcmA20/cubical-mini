@@ -5,6 +5,7 @@ open import Meta.Prelude
 open import Meta.Deriving.HLevel
 
 open import Data.Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Path
 
 private variable
   ℓ : Level

@@ -6,6 +6,13 @@ open import Meta.Extensionality
 
 open import Data.Quotient.Set.Base
 
+instance opaque
+  H-Level-/₂
+    : ∀{ℓᵃ ℓ}{A : Type ℓᵃ} {R : A → A → 𝒰 ℓ}
+    → ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → H-Level n (A / R)
+  H-Level-/₂ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 squash/
+  {-# OVERLAPS H-Level-/₂ #-}
+
 instance
   Extensional-/₂-map
     : ∀ {ℓ ℓ′ ℓ″ ℓr} {A : Type ℓ} {R : A → A → Type ℓ′} {B : Type ℓ″}

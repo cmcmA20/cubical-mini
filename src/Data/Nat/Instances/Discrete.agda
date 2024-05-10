@@ -21,3 +21,4 @@ private module ℕIS = IdSS ℕ-identity-system (hlevel 2)
 instance
   ℕ-is-discrete : is-discrete ℕ
   ℕ-is-discrete = reflects→decidable {2} {U = Type} ==-reflects
+  {-# OVERLAPPING ℕ-is-discrete #-}

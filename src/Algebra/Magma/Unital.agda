@@ -55,8 +55,8 @@ opaque
     where open is-unital-magma C
 
 instance opaque
-  H-Level-is-unital-magma : H-Level (suc n) (is-unital-magma _✦_)
-  H-Level-is-unital-magma = hlevel-prop-instance is-unital-magma-is-prop
+  H-Level-is-unital-magma : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-unital-magma _✦_)
+  H-Level-is-unital-magma ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-unital-magma-is-prop
 
 
 record UMagma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -76,8 +76,8 @@ opaque
     let open is-unital-magma x in prop!
 
 instance opaque
-  H-Level-umagma-on : H-Level (2 + n) (UMagma-on A)
-  H-Level-umagma-on = hlevel-basic-instance 2 umagma-on-is-set
+  H-Level-umagma-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (UMagma-on A)
+  H-Level-umagma-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 umagma-on-is-set
 
 
 record UMagma-hom
@@ -102,9 +102,9 @@ opaque
     open UMagma-on M′
 
 instance opaque
-  H-Level-umagma-hom : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
-                     → H-Level (suc n) (UMagma-hom M M′ f)
-  H-Level-umagma-hom = hlevel-prop-instance umagma-hom-is-prop
+  H-Level-umagma-hom : ⦃ n ≥ʰ 1 ⦄ → ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
+                     → H-Level n (UMagma-hom M M′ f)
+  H-Level-umagma-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance umagma-hom-is-prop
 
 unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A
 unital-magma-on↪magma-on .fst M .n-Magma-on._⋆_ = M .UMagma-on._⋆_

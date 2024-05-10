@@ -12,5 +12,5 @@ open import Data.String.Properties
 
 instance
   string-is-discrete : is-discrete String
-  string-is-discrete =
-    ↣→is-discrete! (string→list , string→list-inj)
+  string-is-discrete = ↣→is-discrete! (string→list , string→list-inj)
+  {-# OVERLAPPING string-is-discrete #-}

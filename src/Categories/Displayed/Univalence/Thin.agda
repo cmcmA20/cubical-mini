@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search #-}
+{-# OPTIONS --safe #-}
 module Categories.Displayed.Univalence.Thin where
 
 open import Categories.Displayed.Base public

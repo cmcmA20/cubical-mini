@@ -37,8 +37,8 @@ private variable
   n : HLevel
 
 instance
-  H-Level-Bool : ∀ {n} → H-Level (2 + n) Bool
-  H-Level-Bool = hlevel-basic-instance 2 $ identity-system→is-of-hlevel 1
+  H-Level-Bool : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → H-Level n Bool
+  H-Level-Bool ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ identity-system→is-of-hlevel 1
     (Extensional-Bool .idsᵉ) λ _ _ → hlevel 1
   {-# OVERLAPPING H-Level-Bool #-}
 

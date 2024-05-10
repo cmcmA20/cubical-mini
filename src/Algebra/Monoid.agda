@@ -51,8 +51,8 @@ opaque
     where open is-monoid M
 
 instance opaque
-  H-Level-is-monoid : H-Level (suc n) (is-monoid _✦_)
-  H-Level-is-monoid = hlevel-prop-instance is-monoid-is-prop
+  H-Level-is-monoid : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-monoid _✦_)
+  H-Level-is-monoid ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-monoid-is-prop
 
 module _ {_✦_ : A → A → A} {IM : is-monoid _✦_} where
   open is-monoid IM
@@ -104,12 +104,12 @@ opaque
   monoid-hom-is-prop {M′} = ≅→is-of-hlevel! 1 monoid-hom-iso where open Monoid-on M′
 
 instance opaque
-  H-Level-monoid-on : H-Level (2 + n) (Monoid-on A)
-  H-Level-monoid-on = hlevel-basic-instance 2 monoid-on-is-set
+  H-Level-monoid-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Monoid-on A)
+  H-Level-monoid-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 monoid-on-is-set
 
-  H-Level-monoid-hom : ∀ {M : Monoid-on A} {M′ : Monoid-on B} {f}
-                     → H-Level (suc n) (Monoid-hom M M′ f)
-  H-Level-monoid-hom = hlevel-prop-instance monoid-hom-is-prop
+  H-Level-monoid-hom : ⦃ n ≥ʰ 1 ⦄ → ∀ {M : Monoid-on A} {M′ : Monoid-on B} {f}
+                     → H-Level n (Monoid-hom M M′ f)
+  H-Level-monoid-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance monoid-hom-is-prop
 
 monoid-on↪semigroup-on : Monoid-on A ↪ₜ Semigroup-on A
 monoid-on↪semigroup-on .fst M .Semigroup-on._⋆_ = M .Monoid-on._⋆_

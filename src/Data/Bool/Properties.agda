@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search #-}
+{-# OPTIONS --safe #-}
 module Data.Bool.Properties where
 
 open import Meta.Prelude

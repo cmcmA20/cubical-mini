@@ -68,10 +68,6 @@ Im f = Σ[ fibre₁ f ]
 
 -- Automation
 
-instance opaque
-  H-Level-∥-∥₁ : ∀ {n} → H-Level (suc n) ∥ A ∥₁
-  H-Level-∥-∥₁ = hlevel-prop-instance squash₁
-
 instance
   Inductive-∥-∥₁
     : ∀ {ℓ ℓ′ ℓm} {A : Type ℓ} {P : ∥ A ∥₁ → Type ℓ′}

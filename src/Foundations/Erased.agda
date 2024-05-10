@@ -144,3 +144,4 @@ instance
   H-Level-Erased : ∀ {h} → ⦃ @0 A-hl : H-Level h A ⦄
                  → H-Level h (Erased A)
   H-Level-Erased {h} .H-Level.has-of-hlevel = erased-is-of-hlevel h (hlevel h)
+  {-# OVERLAPPING H-Level-Erased #-}

@@ -19,6 +19,11 @@ private variable
   B : Type ℓ′
   x y : A
 
+instance opaque
+  H-Level-∥-∥₂ : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → H-Level n ∥ A ∥₂
+  H-Level-∥-∥₂ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 squash₂
+  {-# OVERLAPPING H-Level-∥-∥₂ #-}
+
 @0 =∘∣-∣₂≃∥-∥₁∘=
   : {x y : A}
   → ∣ x ∣₂ ＝ ∣ y ∣₂

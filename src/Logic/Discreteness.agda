@@ -60,12 +60,12 @@ opaque
     dec-is-of-hlevel 1 (is-discrete→is-set d₁ _ _) d₁ d₂ i
 
 instance
-  H-Level-is-discrete : ∀ {n} → H-Level (suc n) (is-discrete A)
-  H-Level-is-discrete = hlevel-prop-instance is-discrete-is-prop
+  H-Level-is-discrete : ∀ {n} → ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-discrete A)
+  H-Level-is-discrete ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-discrete-is-prop
   {-# OVERLAPPING H-Level-is-discrete #-}
 
-  H-Level-hedberg : ∀ {n} → ⦃ di : is-discrete A ⦄ → H-Level (2 + n) A
-  H-Level-hedberg = hlevel-basic-instance 2 (is-discrete→is-set auto)
+  H-Level-hedberg : ∀ {n} → ⦃ di : is-discrete A ⦄ → ⦃ n ≥ʰ 2 ⦄ → H-Level n A
+  H-Level-hedberg ⦃ di ⦄ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 (is-discrete→is-set auto)
   {-# INCOHERENT H-Level-hedberg #-}
 
 ↣→is-discrete : (A ↣ B) → is-discrete B → is-discrete A
@@ -90,7 +90,7 @@ instance
           (is-discrete→is-set A-d a₁ a₂ (ap fst r) a₁=a₂)
           (ap snd r)
   ... | yes b₁=b₂ = yes $ Σ-path a₁=a₂ b₁=b₂
-  {-# OVERLAPPABLE Σ-is-discrete #-}
+  {-# OVERLAPS Σ-is-discrete #-}
 
   ×-is-discrete : ⦃ A-d : is-discrete A ⦄ → ⦃ B-d : is-discrete B ⦄
                 → is-discrete (A × B)
@@ -104,6 +104,7 @@ instance
   lift-is-discrete : ⦃ di : is-discrete A ⦄ → is-discrete (Lift ℓ A)
   lift-is-discrete ⦃ di ⦄ {lift x} {lift y} =
     Dec.dmap (ap lift) (_∘ ap lower) di
+  {-# OVERLAPPING lift-is-discrete #-}
 
 
 -- Automation

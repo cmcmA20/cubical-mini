@@ -22,6 +22,7 @@ instance
     : ⦃ A-mbf : Manifest-bishop-finite A ⦄ → ⦃ B-mbf : Manifest-bishop-finite B ⦄
     → Manifest-bishop-finite (A ⊎ B)
   ⊎-manifest-bishop-finite = fin $ ⊎-ap (enumeration auto) (enumeration auto) ∙ fin-coproduct
+  {-# OVERLAPPING ⊎-manifest-bishop-finite #-}
 
   ⊎-is-bishop-finite
     : ⦃ A-bf : is-bishop-finite A ⦄ → ⦃ B-bf : is-bishop-finite B ⦄
@@ -30,3 +31,4 @@ instance
     aeq ← enumeration₁ auto
     beq ← enumeration₁ auto
     pure $ ⊎-ap aeq beq ∙ fin-coproduct
+  {-# OVERLAPPING ⊎-is-bishop-finite #-}

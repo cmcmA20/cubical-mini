@@ -46,8 +46,9 @@ FinOrd≃ᴱℕ {ℓ} =
   ℕ                                              ∎
 
 instance
-  @0 H-Level-FinOrd : ∀ {n} → H-Level (2 + n) (FinOrd ℓ)
-  H-Level-FinOrd = hlevel-basic-instance 2 $ ≃→is-of-hlevel! 2 (equivᴱ≃equiv $ FinOrd≃ᴱℕ)
+  @0 H-Level-FinOrd : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → H-Level n (FinOrd ℓ)
+  H-Level-FinOrd ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≃→is-of-hlevel! 2 (equivᴱ≃equiv $ FinOrd≃ᴱℕ)
+  {-# OVERLAPPING H-Level-FinOrd #-}
 
   mbf-proj-fin-ord : Struct-proj-desc false (quote carrier)
   mbf-proj-fin-ord .Struct-proj-desc.has-level = quote has-manifest-bishop-finite
@@ -59,7 +60,7 @@ instance
     → {@(tactic struct-proj A nothing) A-mbf : Manifest-bishop-finite A}
     → Manifest-bishop-finite A
   mbf-projection {A-mbf} = A-mbf
-  {-# INCOHERENT mbf-projection #-}
+  {-# OVERLAPS mbf-projection #-}
 
 
 -- Usage

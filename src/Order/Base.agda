@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search #-}
+{-# OPTIONS --safe #-}
 module Order.Base where
 
 open import Categories.Prelude
@@ -45,8 +45,8 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     ≤-refl′ {x} p = subst (x ≤_) p ≤-refl
 
   instance
-    H-Level-poset-ob : H-Level (2 + n) Ob
-    H-Level-poset-ob = hlevel-basic-instance 2 ob-is-set
+    H-Level-poset-ob : ⦃ n ≥ʰ 2 ⦄ → H-Level n Ob
+    H-Level-poset-ob ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 ob-is-set
 
 unquoteDecl poset-iso = declare-record-iso poset-iso (quote Poset)
 

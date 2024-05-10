@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Inductive.Path where
 
-open import Foundations.Prelude
+open import Meta.Prelude
 
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Inductive.Base
@@ -33,11 +33,12 @@ fin1-is-contr : is-contr (Fin 1)
 fin1-is-contr .fst = fzero
 fin1-is-contr .snd fzero = refl
 
-instance
-  H-Level-Fin0 : ∀{k} → H-Level (1 + k) (Fin 0)
-  H-Level-Fin0 = hlevel-prop-instance (≃→is-of-hlevel! 1 fin0-is-initial)
+instance opaque
+  H-Level-Fin0 : ∀{k} → ⦃ k ≥ʰ 1 ⦄ → H-Level k (Fin 0)
+  H-Level-Fin0 ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (≃→is-of-hlevel! 1 fin0-is-initial)
   {-# OVERLAPPING H-Level-Fin0 #-}
 
+instance
   H-Level-Fin1 : ∀{k} → H-Level k (Fin 1)
   H-Level-Fin1 = hlevel-basic-instance 0 fin1-is-contr
   {-# OVERLAPPING H-Level-Fin1 #-}

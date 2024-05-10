@@ -32,8 +32,8 @@ opaque
     open is-semigroup S
 
 instance opaque
-  H-Level-is-semigroup : H-Level (suc n) (is-semigroup _✦_)
-  H-Level-is-semigroup = hlevel-prop-instance is-semigroup-is-prop
+  H-Level-is-semigroup : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-semigroup _✦_)
+  H-Level-is-semigroup ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-semigroup-is-prop
 
 record Semigroup-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   no-eta-equality
@@ -54,8 +54,8 @@ semigroup-on↪magma-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ semigroup-on-iso) $ Σ-prop-pathᴾ! (ap n-Magma-on._⋆_ p)
 
 instance opaque
-  H-Level-semigroup-on : H-Level (2 + n) (Semigroup-on A)
-  H-Level-semigroup-on = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 semigroup-on↪magma-on
+  H-Level-semigroup-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Semigroup-on A)
+  H-Level-semigroup-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 semigroup-on↪magma-on
 
 
 record make-semigroup {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

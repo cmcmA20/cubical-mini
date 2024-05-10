@@ -8,6 +8,7 @@ open import Meta.Extensionality
 open import Functions.Embedding
 
 open import Data.Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Path
 open import Data.Truncation.Propositional.Instances.Bind
 
 private variable
@@ -28,6 +29,8 @@ is-surjective {B} f = Π[ y ꞉ B ] ∥ fibre f y ∥₁
 
 is-surjective-is-prop : is-prop (is-surjective f)
 is-surjective-is-prop = hlevel 1
+
+-- squash₁
 
 _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f

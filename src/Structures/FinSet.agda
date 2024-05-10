@@ -20,6 +20,8 @@ open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Nat.Path
 open import Data.Reflection.Argument
+open import Data.Reflection.Literal
+open import Data.Reflection.Term
 open import Data.Truncation.Propositional as ∥-∥₁
 open import Data.Truncation.Set as ∥-∥₂
 
@@ -33,6 +35,9 @@ record FinSet (ℓ : Level) : Type (ℓsuc ℓ) where
   field
     carrier : Type ℓ
     has-bishop-finite : is-bishop-finite carrier
+
+  fin-set-carrier-is-set : is-set carrier
+  fin-set-carrier-is-set = is-discrete→is-set (is-bishop-finite→is-discrete ⦃ has-bishop-finite ⦄)
 
 open FinSet
 
@@ -53,7 +58,14 @@ instance
     → {@(tactic struct-proj A nothing) A-bf : is-bishop-finite A}
     → is-bishop-finite A
   bf-projection {A-bf} = A-bf
-  {-# INCOHERENT bf-projection #-}
+  {-# OVERLAPS bf-projection #-}
+
+  hlevel-proj-fin-ord : Struct-proj-desc true (quote carrier)
+  hlevel-proj-fin-ord .Struct-proj-desc.has-level = quote fin-set-carrier-is-set
+  hlevel-proj-fin-ord .Struct-proj-desc.get-level _ = pure (lit (nat 2))
+  hlevel-proj-fin-ord .Struct-proj-desc.upwards-closure = quote is-of-hlevel-≤
+  hlevel-proj-fin-ord .Struct-proj-desc.get-argument (_ ∷ x v∷ []) = pure x
+  hlevel-proj-fin-ord .Struct-proj-desc.get-argument _ = type-error []
 
 
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
@@ -70,8 +82,9 @@ FinSet-is-groupoid = ≃→is-of-hlevel 3 go (λ _ _ → hlevel!) where
          ∎
 
 instance
-  @0 H-Level-FinSet : ∀ {n} → H-Level (3 + n) (FinSet ℓ)
-  H-Level-FinSet = hlevel-basic-instance 3 FinSet-is-groupoid
+  @0 H-Level-FinSet : ∀ {n} → ⦃ n ≥ʰ 3 ⦄ → H-Level n (FinSet ℓ)
+  H-Level-FinSet ⦃ s≤ʰs (s≤ʰs (s≤ʰs _)) ⦄ = hlevel-basic-instance 3 FinSet-is-groupoid
+  {-# OVERLAPPING H-Level-FinSet #-}
 
 
 -- have to go through sigmas

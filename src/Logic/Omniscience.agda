@@ -36,12 +36,13 @@ instance
     (bimap lift refl)
     (_∘ bimap lower refl)
     (omn .omniscient-β P?)
+  {-# OVERLAPPING lift-omniscient #-}
 
   Σ-decision
     : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ}
     → ⦃ d : Decidable B ⦄ → ⦃ omn : Omniscient A ⦄ → Decidable Σ[ B ]
   Σ-decision ⦃ omn ⦄ = omniscient-β omn auto
-  {-# OVERLAPPING Σ-decision #-}
+  {-# OVERLAPS Σ-decision #-}
 
 
 -- ∃-compact types (Escardo)
@@ -71,12 +72,14 @@ instance
     (λ ¬∃p x → dec→essentially-classical P? (¬∃p ∘ ∣_∣₁ ∘ (x ,_)))
     (contra λ ∀p → rec! λ a ¬p → ¬p (∀p a))
     (Dec-¬ ⦃ omn₁ .omniscient₁-β λ {z} → Dec-¬ ⦃ P? ⦄ ⦄)
+  {-# INCOHERENT omniscient₁→exhaustible #-}
 
   lift-omniscient₁ : ⦃ omn₁ : Omniscient₁ A ⦄ → Omniscient₁ (Lift ℓ A)
   lift-omniscient₁ ⦃ omn₁ ⦄ .omniscient₁-β P? = Dec.dmap
     (map (bimap lift refl))
     (contra (map (bimap lower refl)))
     (omn₁ .omniscient₁-β P?)
+  {-# OVERLAPPABLE lift-omniscient₁ #-}
 
   Dec-∃
     : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Pred A ℓᵇ}

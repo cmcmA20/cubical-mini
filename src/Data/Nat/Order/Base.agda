@@ -10,7 +10,7 @@ open import Data.Empty.Base as ⊥
 open import Data.Reflects.Base as Reflects
 open import Data.Sum.Base
 open import Data.Sum.Path
-open import Data.Wellfounded
+open import Data.Wellfounded.Base
 
 open import Data.Bool.Base
 open import Data.Nat.Base
@@ -54,12 +54,13 @@ opaque
   <-is-prop = ≤-is-prop
 
 instance opaque
-  H-Level-≤ : H-Level (suc k) (m ≤ n)
-  H-Level-≤ = hlevel-prop-instance ≤-is-prop
+  H-Level-≤ : ⦃ k ≥ʰ 1 ⦄ → H-Level k (m ≤ n)
+  H-Level-≤ ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance ≤-is-prop
+  {-# INCOHERENT H-Level-≤ #-}
 
-  H-Level-< : H-Level (suc k) (m < n)
-  H-Level-< = hlevel-prop-instance <-is-prop
-
+  H-Level-< : ⦃ k ≥ʰ 1 ⦄ → H-Level k (m < n)
+  H-Level-< ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance <-is-prop
+  {-# INCOHERENT H-Level-< #-}
 
 -- Properties of order
 

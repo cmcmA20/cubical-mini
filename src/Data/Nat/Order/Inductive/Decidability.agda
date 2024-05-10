@@ -24,6 +24,7 @@ instance
   Dec-≤ : {m n : ℕ} → Dec (m ≤ n)
   Dec-≤ {m} {n} .does  = m ≤ᵇ n
   Dec-≤ {m} {n} .proof = ≤-reflects m n
+  {-# OVERLAPPING Dec-≤ #-}
 
 ≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
 ≤-split m n with Dec-≤ {suc m} {n}

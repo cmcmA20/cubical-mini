@@ -11,4 +11,5 @@ open import Data.Truncation.Propositional.Base
 
 instance
   Map-∥-∥₁ : Map (eff ∥_∥₁)
-  Map-∥-∥₁ .map f = rec! (∣_∣₁ ∘ f)
+  Map-∥-∥₁ .map f = rec! (∣_∣₁ ∘ f) where
+    instance _ = hlevel-prop-instance squash₁

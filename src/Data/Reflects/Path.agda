@@ -56,5 +56,6 @@ opaque
     λ x _ → code-reflects-is-of-hlevel {x = x} hl
 
 instance opaque
-  H-Level-Reflects : ∀ {n} → ⦃ H-Level (suc n) A ⦄ → H-Level (suc n) (Reflects⁰ A a)
-  H-Level-Reflects .H-Level.has-of-hlevel = reflects-is-of-hlevel _ (hlevel _)
+  H-Level-Reflects : ∀ {n} → ⦃ n ≥ʰ 1 ⦄ → ⦃ H-Level n A ⦄ → H-Level n (Reflects⁰ A a)
+  H-Level-Reflects ⦃ s≤ʰs _ ⦄ .H-Level.has-of-hlevel = reflects-is-of-hlevel _ (hlevel _)
+  {-# OVERLAPS H-Level-Reflects #-}

@@ -15,6 +15,11 @@ private variable
   B : Type ℓ′
   x y : A
 
+instance opaque
+  H-Level-∥-∥₁ : ∀ {n} → ⦃ n ≥ʰ 1 ⦄ → H-Level n ∥ A ∥₁
+  H-Level-∥-∥₁ ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance squash₁
+  {-# OVERLAPPING H-Level-∥-∥₁ #-}
+
 ae : A ≃ B → ∥ A ∥₁ ≃ ∥ B ∥₁
 ae {A} {B} e = ≅→≃ $ to , iso from ri li where
   to : ∥ A ∥₁ → ∥ B ∥₁

@@ -26,11 +26,13 @@ instance
   Membership-Vec : Membership A (Vec A n) (level-of-type A)
   Membership-Vec ._∈_ = _∈ᵥ_
 
-_∈ᵥ?_ : ⦃ di : is-discrete A ⦄
-      → Π[ x ꞉ A ] Π[ as ꞉ Vec A n ] Dec (x ∈ as)
-_∈ᵥ?_ {n = 0} x [] = no λ()
-_∈ᵥ?_ {n = suc _} x (a ∷ as) =
-  Dec.dmap [ fzero ,_ , bimap fsuc id ]ᵤ
-           (λ { x∉as (fzero  , q) → x∉as $ inl q
-              ; x∉as (fsuc i , q) → x∉as $ inr $ i , q })
-           (Dec-⊎ ⦃ a ≟ x ⦄ ⦃ x ∈ᵥ? as ⦄)
+instance
+  Dec-∈ᵥ : ⦃ di : is-discrete A ⦄
+         → {x : A} {as : Vec A n} → Dec (x ∈ as)
+  Dec-∈ᵥ {n = 0} {x} {([])} = no λ()
+  Dec-∈ᵥ {n = suc _} {x} {a ∷ as} =
+    Dec.dmap [ fzero ,_ , bimap fsuc id ]ᵤ
+             (λ { x∉as (fzero  , q) → x∉as $ inl q
+                ; x∉as (fsuc i , q) → x∉as $ inr $ i , q })
+             (Dec-⊎ ⦃ a ≟ x ⦄ ⦃ Dec-∈ᵥ {x = x} {as} ⦄)
+  {-# INCOHERENT Dec-∈ᵥ #-} -- really?

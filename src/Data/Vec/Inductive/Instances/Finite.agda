@@ -21,6 +21,8 @@ private variable
 instance
   vec-manifest-bishop-finite : ⦃ A-mbf : Manifest-bishop-finite A ⦄ → Manifest-bishop-finite (Vec A n)
   vec-manifest-bishop-finite = ≃→manifest-bishop-finite (default≃inductive ⁻¹) vec-manifest-bishop-finiteᵈ
+  {-# OVERLAPPING vec-manifest-bishop-finite #-}
 
   vec-is-bishop-finite : ⦃ is-bishop-finite A }} → is-bishop-finite (Vec A n)
   vec-is-bishop-finite = ≃→is-bishop-finite (default≃inductive ⁻¹) vec-is-bishop-finiteᵈ
+  {-# OVERLAPPING vec-is-bishop-finite #-}

@@ -2,7 +2,6 @@
 module Data.Maybe.Path where
 
 open import Meta.Prelude
-
 open import Meta.Extensionality
 
 open import Functions.Embedding
@@ -69,5 +68,6 @@ just-is-embedding : is-embedding {A = A} just
 just-is-embedding = cancellable→is-embedding just-cancellable
 
 instance opaque
-  H-Level-Maybe : ∀ {n ℓ} {A : Type ℓ} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (Maybe A)
-  H-Level-Maybe {n} .H-Level.has-of-hlevel = maybe-is-of-hlevel _ (hlevel (2 + n))
+  H-Level-Maybe : ∀ {ℓ} {A : Type ℓ} {n} → ⦃ n ≥ʰ 2 ⦄ → ⦃ A-hl : H-Level n A ⦄ → H-Level n (Maybe A)
+  H-Level-Maybe {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = maybe-is-of-hlevel _ (hlevel n)
+  {-# OVERLAPS H-Level-Maybe #-}

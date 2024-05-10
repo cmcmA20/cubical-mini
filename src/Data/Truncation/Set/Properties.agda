@@ -14,6 +14,7 @@ private variable
 ∥-∥₂-idempotent : is-set A → is-equiv ∣_∣₂
 ∥-∥₂-idempotent {A} A-set = is-iso→is-equiv $ iso proj! inc∘proj λ _ → refl where
   instance _ = hlevel-basic-instance 2 A-set
+           _ = hlevel-basic-instance 2 squash₂
   inc∘proj : (x : ∥ A ∥₂) → ∣ proj! x ∣₂ ＝ x
   inc∘proj = elim! λ _ → refl
 
@@ -32,3 +33,4 @@ universal {B} {A} B-set = ≅→≃ (ff , iso  gg (λ _ → refl) li) where
 is-set→equiv-∥-∥₂ : is-set A → A ≃ ∥ A ∥₂
 is-set→equiv-∥-∥₂ A-set = ≅→≃ $ ∣_∣₂ , iso proj! (elim! λ _ → refl) λ _ → refl where
   instance _ = hlevel-basic-instance 2 A-set
+           _ = hlevel-basic-instance 2 squash₂

@@ -32,8 +32,8 @@ opaque
     open is-comm-monoid C
 
 instance opaque
-  H-Level-is-comm-monoid : H-Level (suc n) (is-comm-monoid _✦_)
-  H-Level-is-comm-monoid = hlevel-prop-instance is-comm-monoid-is-prop
+  H-Level-is-comm-monoid : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-comm-monoid _✦_)
+  H-Level-is-comm-monoid ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-comm-monoid-is-prop
 
 record CMonoid-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   no-eta-equality

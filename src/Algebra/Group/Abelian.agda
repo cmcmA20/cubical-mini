@@ -30,8 +30,8 @@ opaque
     open is-abelian-group C
 
 instance opaque
-  H-Level-is-abelian-group : H-Level (suc n) (is-abelian-group _✦_)
-  H-Level-is-abelian-group = hlevel-prop-instance is-abelian-group-is-prop
+  H-Level-is-abelian-group : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-abelian-group _✦_)
+  H-Level-is-abelian-group ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-abelian-group-is-prop
 
 record AGroup-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   no-eta-equality

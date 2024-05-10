@@ -20,3 +20,4 @@ instance
   fin-is-discrete {suc _} {fsuc k}  {(fzero)} = no fsuc≠fzero
   fin-is-discrete {suc _} {fsuc k}  {fsuc l}  =
     Dec.dmap (ap fsuc) (_∘ fsuc-inj) (fin-is-discrete {_} {k} {l})
+  {-# INCOHERENT fin-is-discrete #-}

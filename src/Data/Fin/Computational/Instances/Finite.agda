@@ -12,3 +12,4 @@ private variable n : ℕ
 instance
   fin-manifest-bishop-finite : Manifest-bishop-finite (Fin n)
   fin-manifest-bishop-finite = fin refl
+  {-# OVERLAPPING fin-manifest-bishop-finite #-}

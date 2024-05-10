@@ -16,3 +16,4 @@ instance
   bool-is-discrete { (false) } { (true) }  = no false≠true
   bool-is-discrete { (true) }  { (false) } = no true≠false
   bool-is-discrete { (true) }  { (true) }  = yes refl
+  {-# OVERLAPPING bool-is-discrete #-}

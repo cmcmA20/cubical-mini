@@ -60,10 +60,6 @@ rec B-set f f= (squash/ x y p q i j) =
 
 -- Automation
 
-instance opaque
-  H-Level-/₂ : ∀ {n} → H-Level (2 + n) (A / R)
-  H-Level-/₂ = hlevel-basic-instance 2 squash/
-
 instance
   Inductive-/₂-prop
     : ∀ {ℓ ℓm} {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓ}

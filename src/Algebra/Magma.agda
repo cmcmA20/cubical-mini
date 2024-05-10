@@ -66,8 +66,8 @@ opaque
   is-n-magma-is-prop {n} = ≅→is-of-hlevel 1 is-n-magma-iso (is-of-hlevel-is-prop n)
 
 instance opaque
-  H-Level-n-magma : ∀ {k} → H-Level (suc k) (is-n-magma n _✦_)
-  H-Level-n-magma = hlevel-prop-instance is-n-magma-is-prop
+  H-Level-n-magma : ∀ {k} → ⦃ k ≥ʰ 1 ⦄ → H-Level k (is-n-magma n _✦_)
+  H-Level-n-magma ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-n-magma-is-prop
 
 module _ (n : HLevel) where
   record n-Magma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -109,9 +109,10 @@ n-magma-hom-is-of-hlevel {M′} = ≅→is-of-hlevel! _ (n-magma-hom-iso _) wher
   open n-Magma-on M′
 
 instance opaque
-  H-Level-magma-on : H-Level (2 + n) (Magma-on A)
-  H-Level-magma-on = hlevel-basic-instance 2 magma-on-is-set
+  H-Level-magma-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Magma-on A)
+  H-Level-magma-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 magma-on-is-set
 
+instance
   H-Level-n-magma-hom : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
                       → H-Level n (n-Magma-hom (suc n) M M′ f)
   H-Level-n-magma-hom .H-Level.has-of-hlevel = n-magma-hom-is-of-hlevel

@@ -19,3 +19,4 @@ instance
   fin-is-discrete : is-discrete (Fin n)
   fin-is-discrete {x = k} {y = l} = Dec.dmap
     fin-ext (_∘ ap Fin.index) (Fin.index k ≟ Fin.index l)
+  {-# OVERLAPPING fin-is-discrete #-}

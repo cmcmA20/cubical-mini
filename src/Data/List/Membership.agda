@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.List.Membership where
 
-open import Foundations.Prelude
-
+open import Meta.Prelude
 open import Meta.Extensionality
 open import Meta.Membership
 
@@ -108,8 +107,9 @@ opaque
     identity-system→is-of-hlevel (suc n) (Extensional-∈ₗ .idsᵉ) λ x _ → code-∈ₗ-is-of-hlevel {u = x} hl
 
 instance opaque
-  H-Level-∈ₗ : ∀ {n} {x : A} {xs : List A} → ⦃ A-hl : H-Level (2 + n) A ⦄ → H-Level (2 + n) (x ∈ xs)
-  H-Level-∈ₗ {n} .H-Level.has-of-hlevel = ∈ₗ-is-of-hlevel n (hlevel (2 + n))
+  H-Level-∈ₗ : ∀ {n} ⦃ _ : n ≥ʰ 2 ⦄ → {x : A} {xs : List A} → ⦃ A-hl : H-Level n A ⦄ → H-Level n (x ∈ xs)
+  H-Level-∈ₗ {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = ∈ₗ-is-of-hlevel _ (hlevel n)
+  {-# OVERLAPPING H-Level-∈ₗ #-}
 
 instance
   Dec-∈ₗ

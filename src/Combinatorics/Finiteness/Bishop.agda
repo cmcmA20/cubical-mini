@@ -47,12 +47,13 @@ unique-cardinality (m , ∣p∣₁) (n , ∣q∣₁) = ext (
   case ∣p∣₁ of λ p → case ∣q∣₁ of λ q → fin-injective (p ⁻¹ ∙ q) )
 
 private instance
-  H-Level-card : ∀{n} → H-Level (suc n) (Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁)
-  H-Level-card = hlevel-prop-instance unique-cardinality
+  H-Level-card : ∀{n} → ⦃ n ≥ʰ 1 ⦄ → H-Level n (Σ[ n ꞉ ℕ ] ∥ A ≃ Fin n ∥₁)
+  H-Level-card ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance unique-cardinality
 
 instance
-  H-Level-is-bishop-finite : ∀ {n} → H-Level (suc n) (is-bishop-finite A)
-  H-Level-is-bishop-finite = hlevel-prop-instance $ ≅→is-of-hlevel! 1 is-bishop-finite-iso
+  H-Level-is-bishop-finite : ∀ {n} → ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-bishop-finite A)
+  H-Level-is-bishop-finite ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance $ ≅→is-of-hlevel! 1 is-bishop-finite-iso
+  {-# OVERLAPPING H-Level-is-bishop-finite #-}
 
   manifest-bishop-finite→is-bishop-finite
     : ⦃ mbf : Manifest-bishop-finite A ⦄
@@ -165,7 +166,7 @@ instance
              ∙ =→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
 
     pure $ fin₁ ⦇ work ∙ₑ pure fs ⦈
-  {-# OVERLAPPABLE Σ-is-bishop-finite #-}
+  {-# OVERLAPS Σ-is-bishop-finite #-}
 
   fun-is-bishop-finite
     : ⦃ A-bf : is-bishop-finite A ⦄ → ⦃ B-bf : is-bishop-finite B ⦄
@@ -187,12 +188,13 @@ instance
     let count = bishop-finite-pi-fin (cardinality A-bf) (λ x → fam {eqv ⁻¹ $ x})
     eqv′ ← enumeration₁ count
     pure $ fin₁ $ pure $ Π-dom-≃ (eqv ⁻¹) ∙ eqv′
-  {-# OVERLAPPABLE Π-is-bishop-finite #-}
+  {-# OVERLAPS Π-is-bishop-finite #-}
 
   lift-is-bishop-finite : ⦃ A-bf : is-bishop-finite A ⦄ → is-bishop-finite (Lift ℓ′ A)
   lift-is-bishop-finite ⦃ A-bf ⦄ = fin₁ do
     aeq ← enumeration₁ A-bf
     pure $ lift≃id ∙ aeq
+  {-# OVERLAPPING lift-is-bishop-finite #-}
 
   decidable-prop→is-bishop-finite : ⦃ A-pr : H-Level 1 A ⦄ → ⦃ da : Dec A ⦄ → is-bishop-finite A
   decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ yes a ⦄ = fin₁ $ pure $

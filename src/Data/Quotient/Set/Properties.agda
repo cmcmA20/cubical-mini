@@ -14,6 +14,7 @@ open import Data.Dec.Base as Dec
 import Data.Dec.Path
 import Data.Empty.Base as ⊥
 open import Data.Quotient.Set.Base
+open import Data.Quotient.Set.Path
 import Data.Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∃-syntax-und; ∥_∥₁ ; ∣_∣₁)
 
@@ -43,8 +44,7 @@ universal {B} {A} {R} B-set = ≅→≃ $ inc , iso back (λ _ → refl) li wher
   back : Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b) → A / R → B
   back = rec hlevel! $ₜ²_
   li : _
-  li f′ = ext λ r → case ⦋-⦌-surjective r of λ _ p →
-    ap (back (inc f′)) p ⁻¹ ∙ ap f′ p
+  li _ = trivial!
 
 module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
   open is-congruence congr

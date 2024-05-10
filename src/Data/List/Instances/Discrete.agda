@@ -26,3 +26,4 @@ instance
       (λ (x=y , xs=ys) → ap² _∷_ x=y xs=ys)
       (contra < ∷-head-inj , ∷-tail-inj >)
       (Dec-× ⦃ di ⦄ ⦃ go ⦄)
+  {-# OVERLAPPING list-is-discrete #-}

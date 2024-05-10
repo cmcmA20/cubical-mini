@@ -63,8 +63,8 @@ opaque
     open is-semiring S
 
 instance opaque
-  H-Level-is-semiring : H-Level (suc n) (is-semiring _✦_ _✧_)
-  H-Level-is-semiring = hlevel-prop-instance is-semiring-is-prop
+  H-Level-is-semiring : ⦃ n ≥ʰ 1 ⦄ → H-Level n (is-semiring _✦_ _✧_)
+  H-Level-is-semiring ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance is-semiring-is-prop
 
 
 record Semiring-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
@@ -109,12 +109,12 @@ opaque
     open Semiring-on M′
 
 instance opaque
-  H-Level-semiring-on : H-Level (suc (suc n)) (Semiring-on A)
-  H-Level-semiring-on = hlevel-basic-instance 2 semiring-on-is-set
+  H-Level-semiring-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Semiring-on A)
+  H-Level-semiring-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 semiring-on-is-set
 
-  H-Level-semiring-hom : ∀ {M : Semiring-on A} {M′ : Semiring-on B} {f}
-                       → H-Level (suc n) (Semiring-hom M M′ f)
-  H-Level-semiring-hom = hlevel-prop-instance semiring-hom-is-prop
+  H-Level-semiring-hom : ⦃ n ≥ʰ 1 ⦄ → ∀ {M : Semiring-on A} {M′ : Semiring-on B} {f}
+                       → H-Level n (Semiring-hom M M′ f)
+  H-Level-semiring-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance semiring-hom-is-prop
 
 semiring-on→additive-comm-monoid-on : ∀[ Semiring-on {ℓ} →̇ CMonoid-on {ℓ} ]
 semiring-on→additive-comm-monoid-on S = to-comm-monoid-on go where

@@ -51,11 +51,13 @@ instance
     : ⦃ mbf : Manifest-bishop-finite A ⦄
     → Manifest-bishop-finite (Lift ℓ A)
   lift-manifest-bishop-finite ⦃ mbf ⦄ = fin $ lift≃id ∙ enumeration mbf
+  {-# OVERLAPPING lift-manifest-bishop-finite #-}
 
   manifest-bishop-finite→ord
     : ⦃ mbf : Manifest-bishop-finite A ⦄
     → Ord A
   manifest-bishop-finite→ord = ≃→ord (auto .enumeration) Ord-Fin
+  {-# INCOHERENT manifest-bishop-finite→ord #-}
 
   ×-manifest-bishop-finite
     : ⦃ A-mbf : Manifest-bishop-finite A ⦄ ⦃ B-mbf : Manifest-bishop-finite B ⦄
@@ -122,6 +124,7 @@ instance
         module e = Equiv e
         count = finite-pi-fin (cardinality A-mbf) ((λ z → fam {z}) ∘ e.from)
     in fin $ Π-dom-≃ e.inverse ∙ enumeration count
+  {-# OVERLAPPABLE Π-manifest-bishop-finite #-}
 
   manifest-bishop-finite→omniscient
     : ⦃ mbf : Manifest-bishop-finite A ⦄
@@ -142,7 +145,7 @@ instance
       lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ Σ[ a ꞉ A ] P a
       lemma₂ = contra $ bimap Ã.to λ {a} →
         subst P $ (happly (Ṽ.ε Ã.from) (Ã.to a) ∙ Ã.η a) ⁻¹
-
+  {-# INCOHERENT manifest-bishop-finite→omniscient #-}
 
 ≃→manifest-bishop-finite : (B ≃ A) → Manifest-bishop-finite A → Manifest-bishop-finite B
 ≃→manifest-bishop-finite f afin = fin $ f ∙ enumeration afin

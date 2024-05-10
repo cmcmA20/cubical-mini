@@ -229,13 +229,14 @@ instance
 instance opaque
   @0 H-Level-n-Type : H-Level (suc n) (n-Type ℓ n)
   H-Level-n-Type {n} .H-Level.has-of-hlevel = n-Type-is-of-hlevel n
+  {-# OVERLAPPING H-Level-n-Type #-}
 
   H-Level-projection
     : {A : Type ℓ} {n : ℕ}
     → {@(tactic struct-proj A (just n)) A-hl : is-of-hlevel n A}
     → H-Level n A
   H-Level-projection {A-hl} = hlevel-instance A-hl
-  {-# INCOHERENT H-Level-projection #-}
+  {-# OVERLAPS H-Level-projection #-}
 
 
 -- Usage

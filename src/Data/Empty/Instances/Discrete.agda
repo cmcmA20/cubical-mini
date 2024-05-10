@@ -11,3 +11,4 @@ open import Data.Empty.Base
 instance
   ⊥-is-discrete : is-discrete ⊥
   ⊥-is-discrete {()}
+  {-# OVERLAPPING ⊥-is-discrete #-}

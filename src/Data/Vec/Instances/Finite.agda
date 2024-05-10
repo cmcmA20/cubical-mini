@@ -26,8 +26,10 @@ instance
   vec-manifest-bishop-finite {A} {0} ⦃ A-mbf ⦄ = lift-manifest-bishop-finite
   vec-manifest-bishop-finite {A} {suc _} ⦃ A-mbf ⦄ =
     ×-manifest-bishop-finite ⦃ A-mbf ⦄ ⦃ vec-manifest-bishop-finite ⦄
+  {-# INCOHERENT vec-manifest-bishop-finite #-}
 
   vec-is-bishop-finite : ⦃ A-bf : is-bishop-finite A ⦄ → is-bishop-finite (Vec A n)
   vec-is-bishop-finite {A} {0} ⦃ A-bf ⦄ = lift-is-bishop-finite
   vec-is-bishop-finite {A} {suc _} ⦃ A-bf ⦄ =
     ×-is-bishop-finite ⦃ A-bf ⦄ ⦃ vec-is-bishop-finite ⦄
+  {-# INCOHERENT vec-is-bishop-finite #-}

@@ -22,3 +22,4 @@ instance
     go .snd .is-iso.rinv (mk-fin 1) = refl
     go .snd .is-iso.linv false = refl
     go .snd .is-iso.linv true = refl
+  {-# OVERLAPPING bool-manifest-bishop-finite #-}

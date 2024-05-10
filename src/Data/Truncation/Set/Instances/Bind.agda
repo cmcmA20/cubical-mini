@@ -12,4 +12,5 @@ open import Data.Truncation.Set.Instances.Idiom public
 
 instance
   Bind-∥-∥₂ : Bind (eff ∥_∥₂)
-  Bind-∥-∥₂ .Bind._>>=_ = flip rec!
+  Bind-∥-∥₂ .Bind._>>=_ = flip rec! where
+    instance _ = hlevel-basic-instance 2 squash₂

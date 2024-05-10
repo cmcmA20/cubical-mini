@@ -11,3 +11,4 @@ open import Data.Unit.Properties
 instance
   ⊤-manifest-bishop-finite : Manifest-bishop-finite ⊤
   ⊤-manifest-bishop-finite = fin $ is-contr→equiv-⊤ fin-1-is-contr ⁻¹
+  {-# OVERLAPPING ⊤-manifest-bishop-finite #-}
