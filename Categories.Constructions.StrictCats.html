@@ -1,29 +1,29 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="utf-8"><title>Categories.Constructions.StrictCats</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Pragma">--backtracking-instance-search</a> <a id="51" class="Symbol">#-}</a>
-<a id="55" class="Keyword">module</a> <a id="62" href="Categories.Constructions.StrictCats.html" class="Module">Categories.Constructions.StrictCats</a> <a id="98" class="Keyword">where</a>
+<html><head><meta charset="utf-8"><title>Categories.Constructions.StrictCats</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Categories.Constructions.StrictCats.html" class="Module">Categories.Constructions.StrictCats</a> <a id="67" class="Keyword">where</a>
 
-<a id="105" class="Keyword">open</a> <a id="110" class="Keyword">import</a> <a id="117" href="Categories.Prelude.html" class="Module">Categories.Prelude</a>
-<a id="136" class="Keyword">open</a> <a id="141" class="Keyword">import</a> <a id="148" href="Categories.Strict.html" class="Module">Categories.Strict</a>
+<a id="74" class="Keyword">open</a> <a id="79" class="Keyword">import</a> <a id="86" href="Categories.Prelude.html" class="Module">Categories.Prelude</a>
+<a id="105" class="Keyword">open</a> <a id="110" class="Keyword">import</a> <a id="117" href="Categories.Strict.html" class="Module">Categories.Strict</a>
 
-<a id="167" class="Keyword">private</a> <a id="175" class="Keyword">variable</a>
-  <a id="186" href="Categories.Constructions.StrictCats.html#186" class="Generalizable">o</a> <a id="188" href="Categories.Constructions.StrictCats.html#188" class="Generalizable">o′</a> <a id="191" href="Categories.Constructions.StrictCats.html#191" class="Generalizable">h</a> <a id="193" href="Categories.Constructions.StrictCats.html#193" class="Generalizable">h′</a> <a id="196" class="Symbol">:</a> <a id="198" href="Agda.Primitive.html#742" class="Postulate">Level</a>
-  <a id="206" href="Categories.Constructions.StrictCats.html#206" class="Generalizable">C</a> <a id="208" class="Symbol">:</a> <a id="210" href="Categories.Base.html#585" class="Record">Precategory</a> <a id="222" href="Categories.Constructions.StrictCats.html#186" class="Generalizable">o</a> <a id="224" href="Categories.Constructions.StrictCats.html#191" class="Generalizable">h</a>
-  <a id="228" href="Categories.Constructions.StrictCats.html#228" class="Generalizable">D</a> <a id="230" class="Symbol">:</a> <a id="232" href="Categories.Base.html#585" class="Record">Precategory</a> <a id="244" href="Categories.Constructions.StrictCats.html#188" class="Generalizable">o′</a> <a id="247" href="Categories.Constructions.StrictCats.html#193" class="Generalizable">h′</a>
+<a id="136" class="Keyword">private</a> <a id="144" class="Keyword">variable</a>
+  <a id="155" href="Categories.Constructions.StrictCats.html#155" class="Generalizable">o</a> <a id="157" href="Categories.Constructions.StrictCats.html#157" class="Generalizable">o′</a> <a id="160" href="Categories.Constructions.StrictCats.html#160" class="Generalizable">h</a> <a id="162" href="Categories.Constructions.StrictCats.html#162" class="Generalizable">h′</a> <a id="165" class="Symbol">:</a> <a id="167" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="175" href="Categories.Constructions.StrictCats.html#175" class="Generalizable">C</a> <a id="177" class="Symbol">:</a> <a id="179" href="Categories.Base.html#584" class="Record">Precategory</a> <a id="191" href="Categories.Constructions.StrictCats.html#155" class="Generalizable">o</a> <a id="193" href="Categories.Constructions.StrictCats.html#160" class="Generalizable">h</a>
+  <a id="197" href="Categories.Constructions.StrictCats.html#197" class="Generalizable">D</a> <a id="199" class="Symbol">:</a> <a id="201" href="Categories.Base.html#584" class="Record">Precategory</a> <a id="213" href="Categories.Constructions.StrictCats.html#157" class="Generalizable">o′</a> <a id="216" href="Categories.Constructions.StrictCats.html#162" class="Generalizable">h′</a>
 
-<a id="251" class="Keyword">open</a> <a id="256" href="Categories.Base.html#585" class="Module">Precategory</a>
+<a id="220" class="Keyword">open</a> <a id="225" href="Categories.Base.html#584" class="Module">Precategory</a>
 
-<a id="Functor-is-set"></a><a id="269" href="Categories.Constructions.StrictCats.html#269" class="Function">Functor-is-set</a> <a id="284" class="Symbol">:</a> <a id="286" class="Symbol">⦃</a> <a id="288" href="Categories.Constructions.StrictCats.html#288" class="Bound">ds</a> <a id="291" class="Symbol">:</a> <a id="293" href="Foundations.HLevel.Base.html#8603" class="Record">H-Level</a> <a id="301" class="Number">2</a> <a id="303" class="Symbol">(</a><a id="304" href="Categories.Constructions.StrictCats.html#228" class="Generalizable">D</a> <a id="306" class="Symbol">.</a><a id="307" href="Categories.Base.html#739" class="Field">Ob</a><a id="309" class="Symbol">)</a> <a id="311" class="Symbol">⦄</a> <a id="313" class="Symbol">→</a> <a id="315" href="Foundations.Base.html#14432" class="Function">is-set</a> <a id="322" class="Symbol">(</a><a id="323" href="Categories.Base.html#3030" class="Record">Functor</a> <a id="331" href="Categories.Constructions.StrictCats.html#206" class="Generalizable">C</a> <a id="333" href="Categories.Constructions.StrictCats.html#228" class="Generalizable">D</a><a id="334" class="Symbol">)</a>
-<a id="336" href="Categories.Constructions.StrictCats.html#269" class="Function">Functor-is-set</a> <a id="351" class="Symbol">=</a> <a id="353" href="Foundations.HLevel.Closure.html#9113" class="Function">≅→is-of-hlevel!</a> <a id="369" class="Number">2</a> <a id="371" href="Categories.Base.html#3672" class="Function">functor-iso</a>
+<a id="Functor-is-set"></a><a id="238" href="Categories.Constructions.StrictCats.html#238" class="Function">Functor-is-set</a> <a id="253" class="Symbol">:</a> <a id="255" class="Symbol">⦃</a> <a id="257" href="Categories.Constructions.StrictCats.html#257" class="Bound">ds</a> <a id="260" class="Symbol">:</a> <a id="262" href="Foundations.HLevel.Base.html#8603" class="Record">H-Level</a> <a id="270" class="Number">2</a> <a id="272" class="Symbol">(</a><a id="273" href="Categories.Constructions.StrictCats.html#197" class="Generalizable">D</a> <a id="275" class="Symbol">.</a><a id="276" href="Categories.Base.html#738" class="Field">Ob</a><a id="278" class="Symbol">)</a> <a id="280" class="Symbol">⦄</a> <a id="282" class="Symbol">→</a> <a id="284" href="Foundations.Base.html#14432" class="Function">is-set</a> <a id="291" class="Symbol">(</a><a id="292" href="Categories.Base.html#3029" class="Record">Functor</a> <a id="300" href="Categories.Constructions.StrictCats.html#175" class="Generalizable">C</a> <a id="302" href="Categories.Constructions.StrictCats.html#197" class="Generalizable">D</a><a id="303" class="Symbol">)</a>
+<a id="305" href="Categories.Constructions.StrictCats.html#238" class="Function">Functor-is-set</a> <a id="320" class="Symbol">=</a> <a id="322" href="Foundations.HLevel.Closure.html#9113" class="Function">≅→is-of-hlevel!</a> <a id="338" class="Number">2</a> <a id="340" href="Categories.Base.html#3671" class="Function">functor-iso</a>
 
 
-<a id="385" class="Comment">-- TODO</a>
-<a id="393" class="Comment">-- Strict-cats : ∀ o h → Precategory _ _</a>
-<a id="434" class="Comment">-- Strict-cats o h .Ob = Σ[ C ꞉ Precategory o h ] is-strict C</a>
-<a id="496" class="Comment">-- Strict-cats o h .Hom (C , _) (D , _) = Functor C D</a>
-<a id="550" class="Comment">-- Strict-cats o h .id  = Id</a>
-<a id="579" class="Comment">-- Strict-cats o h ._∘_ = _∘ᶠ_</a>
-<a id="610" class="Comment">-- Strict-cats o h .id-r _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
-<a id="689" class="Comment">-- Strict-cats o h .id-l _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
-<a id="768" class="Comment">-- Strict-cats o h .assoc _ _ _ = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
-<a id="847" class="Comment">-- Strict-cats o h .Hom-set _ (_ , ds) = Functor-is-set ds</a>
+<a id="354" class="Comment">-- TODO</a>
+<a id="362" class="Comment">-- Strict-cats : ∀ o h → Precategory _ _</a>
+<a id="403" class="Comment">-- Strict-cats o h .Ob = Σ[ C ꞉ Precategory o h ] is-strict C</a>
+<a id="465" class="Comment">-- Strict-cats o h .Hom (C , _) (D , _) = Functor C D</a>
+<a id="519" class="Comment">-- Strict-cats o h .id  = Id</a>
+<a id="548" class="Comment">-- Strict-cats o h ._∘_ = _∘ᶠ_</a>
+<a id="579" class="Comment">-- Strict-cats o h .id-r _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="658" class="Comment">-- Strict-cats o h .id-l _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="737" class="Comment">-- Strict-cats o h .assoc _ _ _ = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="816" class="Comment">-- Strict-cats o h .Hom-set _ (_ , ds) = Functor-is-set ds</a>
 </pre></body></html>
