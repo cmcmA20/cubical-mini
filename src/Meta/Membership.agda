@@ -5,6 +5,7 @@ open import Foundations.Base
 
 open import Meta.Underlying
 
+open import Data.Dec.Base
 open import Data.Empty.Base
 
 -- generalizing powerset membership
@@ -28,10 +29,22 @@ _⊆_ : ⦃ m : Membership A ℙA ℓ″ ⦄
     → ℙA → ℙA → Type (level-of-type A ⊔ ℓ″)
 _⊆_ {A} S T = {a : A} → a ∈ S → a ∈ T
 
-infix 30 _∈!_ _∉!_
+infix 30 _∈!_ _∉!_ _∈?_ _∈!?_
 _∈!_ _∉!_ : ⦃ m : Membership A ℙA ℓ″ ⦄ → A → ℙA → Type ℓ″
 x ∈! y = is-contr (x ∈ y)
 x ∉! y = ¬ x ∈! y
+
+_∈?_
+  : ⦃ m : Membership A ℙA ℓ″ ⦄
+  → ⦃ d : {y : A} {ys : ℙA} → Dec (y ∈ ys) ⦄
+  → (x : A) (xs : ℙA) → Dec (x ∈ xs)
+_∈?_ = _~?_
+
+_∈!?_
+  : ⦃ m : Membership A ℙA ℓ″ ⦄
+  → ⦃ d : {y : A} {ys : ℙA} → Dec (y ∈! ys) ⦄
+  → (x : A) (xs : ℙA) → Dec (x ∈! xs)
+_∈!?_ = _~?_
 
 instance
   Membership-pow

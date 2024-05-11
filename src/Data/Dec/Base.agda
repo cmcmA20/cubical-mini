@@ -79,3 +79,9 @@ caseᵈ_return_of_ : (A : Type ℓ) ⦃ d : Dec A ⦄
                  → (∀ x → B x) → B d
 caseᵈ_return_of_ A ⦃ d ⦄ B f = f d
 {-# INLINE caseᵈ_return_of_ #-}
+
+_~?_
+  : {A : Type ℓ} {B : Type ℓ′} {_~_ : A → B → Type ℓ″}
+    ⦃ d : {x : A} {y : B} → Dec (x ~ y) ⦄
+  → (x : A) (y : B) → Dec (x ~ y)
+_~?_ ⦃ d ⦄ _ _ = d
