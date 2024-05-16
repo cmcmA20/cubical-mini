@@ -7,9 +7,15 @@ open import Meta.Membership
 
 open import Logic.Discreteness
 
+open import Functions.Embedding
+
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
+open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Path
+open import Data.Fin.Computational.Instances.Discrete
 open import Data.List.Base
+open import Data.List.Operations
 open import Data.Maybe.Base
 open import Data.Maybe.Path using (just-inj)
 
@@ -44,7 +50,6 @@ there-inj = just-inj ∘ ap unthere where
   unthere (here  _) = nothing
   unthere (there q) = just q
 
-
 instance
   Membership-List : ∀{ℓ} {A : Type ℓ}
                   → Membership A (List A) ℓ
@@ -61,6 +66,9 @@ instance
     → ⦃ x ∈ xs ⦄ → x ∈ (y ∷ xs)
   ∈ₗ-tail = there auto
   {-# OVERLAPPABLE ∈ₗ-tail #-}
+
+∉ₗ[] : x ∉ []
+∉ₗ[] ()
 
 module _ {A : 𝒰 ℓᵃ} ⦃ sa : ∀ {x y : A} → Extensional (x ＝ y) ℓ ⦄ where
   Code-∈ₗ : {x : A} {xs : List A} (p q : x ∈ xs) → 𝒰 ℓ
@@ -176,3 +184,46 @@ instance
         (yes a∈!xs) → yes (¬here+there!→∈!ₗ  a≠x a∈!xs)
         (no  a∉!xs) → no  (¬here+¬there!→∉!ₗ a≠x a∉!xs)
   {-# OVERLAPPING Dec-∈!ₗ #-}
+
+∈ₗ→fin
+  : {a : A} {xs : List A}
+  → a ∈ xs → Fin (length xs)
+∈ₗ→fin (here  _)    = fzero
+∈ₗ→fin (there a∈xs) = fsuc (∈ₗ→fin a∈xs)
+
+∈ₗ→fin-almost-injective
+  : {A : Type ℓᵃ} {a b : A} {xs : List A}
+    (u : a ∈ xs) (v : b ∈ xs)
+  → ∈ₗ→fin u ＝ ∈ₗ→fin v
+  → a ＝ b
+∈ₗ→fin-almost-injective (here p)  (here p′)  _ = p ∙ p′ ⁻¹
+∈ₗ→fin-almost-injective (here p)  (there q)  r = ⊥.rec (fzero≠fsuc r)
+∈ₗ→fin-almost-injective (there q) (here p)   r = ⊥.rec (fsuc≠fzero r)
+∈ₗ→fin-almost-injective (there q) (there q′) r = ∈ₗ→fin-almost-injective q q′ (fsuc-inj r)
+
+∈!ₗ↪fin
+  : {a : A} {xs : List A}
+  → a ∈! xs ↪ Fin (length xs)
+∈!ₗ↪fin .fst = ∈ₗ→fin ∘ fst
+∈!ₗ↪fin .snd _ _ _ = prop!
+
+instance
+  ∈!ₗ-is-discrete
+    : {a : A} {xs : List A}
+    → is-discrete (a ∈! xs)
+  ∈!ₗ-is-discrete = ↪→is-discrete! ∈!ₗ↪fin
+  {-# OVERLAPPABLE ∈!ₗ-is-discrete #-}
+
+∈ₗ→fin-respects-∈!ₗ
+  : {A : Type ℓᵃ} {a b : A} {xs : List A}
+    (u : a ∈ xs) → is-central u
+  → (v : b ∈ xs) → is-central v
+  → a ＝ b
+  → ∈ₗ→fin u ＝ ∈ₗ→fin v
+∈ₗ→fin-respects-∈!ₗ (here  p) _ (here  p′) _ _ = refl
+∈ₗ→fin-respects-∈!ₗ (here  p) _ (there q) v r =
+  ⊥.rec (there≠here (v (here (r ⁻¹ ∙ p))))
+∈ₗ→fin-respects-∈!ₗ (there q) u (here  p) _ r =
+  ⊥.rec (there≠here (u (here (r ∙ p))))
+∈ₗ→fin-respects-∈!ₗ (there q) u (there q′) v r =
+  ap fsuc (∈ₗ→fin-respects-∈!ₗ q (there-inj ∘ u ∘ there) q′ (there-inj ∘ v ∘ there) r)
