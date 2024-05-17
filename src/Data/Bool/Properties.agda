@@ -10,8 +10,8 @@ open import Logic.Decidability
 open import Logic.Exhaustibility
 open import Logic.Omniscience
 
-open import Combinatorics.Finiteness.Bishop
-open import Combinatorics.Finiteness.ManifestBishop
+open import Combinatorics.Finiteness.Bishop.Manifest
+open import Combinatorics.Finiteness.Bishop.Weak
 
 open import Data.Empty.Base as ⊥
 open import Data.Bool.Base as Bool public

@@ -33,8 +33,8 @@ open import Logic.Discreteness   public
 open import Logic.Exhaustibility public
 open import Logic.Omniscience    public
 
-open import Combinatorics.Finiteness.Bishop         public
-open import Combinatorics.Finiteness.ManifestBishop public
+open import Combinatorics.Finiteness.Bishop.Weak     public
+open import Combinatorics.Finiteness.Bishop.Manifest public
 
 open import Functions.Equiv.Weak public
 open import Functions.Embedding  public

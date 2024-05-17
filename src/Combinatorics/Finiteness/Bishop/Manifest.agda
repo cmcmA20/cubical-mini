@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Combinatorics.Finiteness.ManifestBishop where
+module Combinatorics.Finiteness.Bishop.Manifest where
 
 open import Meta.Prelude
 open import Meta.Deriving.HLevel
@@ -33,7 +33,7 @@ private variable
 
 record Manifest-bishop-finite (A : Type ℓ) : Type ℓ where
   no-eta-equality
-  constructor fin
+  constructor finite
   field
     { cardinality } : ℕ
     enumeration     : A ≃ Fin cardinality
@@ -50,7 +50,7 @@ instance
   lift-manifest-bishop-finite
     : ⦃ mbf : Manifest-bishop-finite A ⦄
     → Manifest-bishop-finite (Lift ℓ A)
-  lift-manifest-bishop-finite ⦃ mbf ⦄ = fin $ lift≃id ∙ enumeration mbf
+  lift-manifest-bishop-finite ⦃ mbf ⦄ = finite $ lift≃id ∙ enumeration mbf
   {-# OVERLAPPING lift-manifest-bishop-finite #-}
 
   manifest-bishop-finite→ord
@@ -62,7 +62,7 @@ instance
   ×-manifest-bishop-finite
     : ⦃ A-mbf : Manifest-bishop-finite A ⦄ ⦃ B-mbf : Manifest-bishop-finite B ⦄
     → Manifest-bishop-finite (A × B)
-  ×-manifest-bishop-finite = fin $ ×-ap (enumeration auto) (enumeration auto) ∙ fin-product
+  ×-manifest-bishop-finite = finite $ ×-ap (enumeration auto) (enumeration auto) ∙ fin-product
   {-# OVERLAPPING ×-manifest-bishop-finite #-}
 
 private
@@ -70,7 +70,7 @@ private
     : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
     → (∀ x → Manifest-bishop-finite (P x))
     → Manifest-bishop-finite Π[ P ]
-  finite-pi-fin 0 {P} fam = fin $ ≅→≃ $ ff , iso gg ri li where
+  finite-pi-fin 0 {P} fam = finite $ ≅→≃ $ ff , iso gg ri li where
     ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
     ff _ = fzero
     gg : Fin 1 → Π[ x ꞉ Fin 0 ] P x
@@ -84,7 +84,7 @@ private
     let e    = enumeration ∘ fam
         rest = finite-pi-fin sz (fam ∘ fsuc)
         cont = enumeration rest
-    in fin {cardinality = sum (fam fzero .cardinality) (λ _ → rest .cardinality)}
+    in finite {cardinality = sum (fam fzero .cardinality) (λ _ → rest .cardinality)}
          $ fin-suc-universal ∙ ×-ap (e fzero) cont ∙ fin-sum λ _ → cardinality rest
 
 instance
@@ -100,7 +100,7 @@ instance
         work = Σ-ap aeq λ x
           → enumeration (fam {x})
           ∙ =→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
-    in fin $ work ∙ fs
+    in finite $ work ∙ fs
   {-# OVERLAPPABLE Σ-manifest-bishop-finite #-}
 
   fun-manifest-bishop-finite
@@ -111,7 +111,7 @@ instance
     let ae = enumeration A-mbf
         be = enumeration B-mbf
         count = finite-pi-fin (cardinality A-mbf) λ _ → B-mbf
-    in fin $ Π-cod-≃ (λ _ → be) ∙ function-≃ ae (be ⁻¹) ∙ enumeration count
+    in finite $ Π-cod-≃ (λ _ → be) ∙ function-≃ ae (be ⁻¹) ∙ enumeration count
   {-# OVERLAPPING fun-manifest-bishop-finite #-}
 
   Π-manifest-bishop-finite
@@ -123,7 +123,7 @@ instance
     let e = enumeration A-mbf
         module e = Equiv e
         count = finite-pi-fin (cardinality A-mbf) ((λ z → fam {z}) ∘ e.from)
-    in fin $ Π-dom-≃ e.inverse ∙ enumeration count
+    in finite $ Π-dom-≃ e.inverse ∙ enumeration count
   {-# OVERLAPPABLE Π-manifest-bishop-finite #-}
 
   manifest-bishop-finite→omniscient
@@ -148,4 +148,4 @@ instance
   {-# INCOHERENT manifest-bishop-finite→omniscient #-}
 
 ≃→manifest-bishop-finite : (B ≃ A) → Manifest-bishop-finite A → Manifest-bishop-finite B
-≃→manifest-bishop-finite f afin = fin $ f ∙ enumeration afin
+≃→manifest-bishop-finite f afin = finite $ f ∙ enumeration afin

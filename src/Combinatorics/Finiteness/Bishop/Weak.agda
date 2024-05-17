@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Combinatorics.Finiteness.Bishop where
+module Combinatorics.Finiteness.Bishop.Weak where
 
 open import Meta.Prelude
 open import Meta.Deriving.HLevel
@@ -10,7 +10,7 @@ open import Meta.Record
 open import Logic.Discreteness
 open import Logic.Omniscience
 
-open import Combinatorics.Finiteness.ManifestBishop
+open import Combinatorics.Finiteness.Bishop.Manifest
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
@@ -33,7 +33,7 @@ private variable
 
 record is-bishop-finite (A : Type ℓ) : Type ℓ where
   no-eta-equality
-  constructor fin₁
+  constructor finite₁
   field
     { cardinality } : ℕ
     enumeration₁    : ∥ A ≃ Fin cardinality ∥₁
@@ -63,7 +63,7 @@ instance
   {-# INCOHERENT manifest-bishop-finite→is-bishop-finite #-}
 
 ≃→is-bishop-finite : (B ≃ A) → is-bishop-finite A → is-bishop-finite B
-≃→is-bishop-finite f afin = fin₁ do
+≃→is-bishop-finite f afin = finite₁ do
   aeq ← enumeration₁ afin
   pure $ f ∙ aeq
 
@@ -99,7 +99,7 @@ instance
   is-bishop-finite→omniscient₁ : ⦃ bf : is-bishop-finite A ⦄ → Omniscient₁ A
   is-bishop-finite→omniscient₁ {A} ⦃ bf ⦄ .omniscient₁-β {P} P? = ∥-∥₁.proj! do
     aeq ← bf .enumeration₁
-    let omn = manifest-bishop-finite→omniscient ⦃ fin aeq ⦄
+    let omn = manifest-bishop-finite→omniscient ⦃ finite aeq ⦄
     pure $ omniscient→omniscient₁ ⦃ omn ⦄ .omniscient₁-β P?
   {-# OVERLAPPING is-bishop-finite→omniscient₁ #-}
 
@@ -118,7 +118,7 @@ private
     : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
     → (∀ x → is-bishop-finite (P x))
     → is-bishop-finite Π[ P ]
-  bishop-finite-pi-fin 0 {P} fam = fin₁ $ pure $ ≅→≃ $ ff , iso gg ri li where
+  bishop-finite-pi-fin 0 {P} fam = finite₁ $ pure $ ≅→≃ $ ff , iso gg ri li where
     ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
     ff _ = fzero
     gg : _
@@ -136,13 +136,13 @@ private
       work = fin-suc-universal {n = sz} {A = P}
            ∙ Σ-ap (e fzero) (λ x → cont)
            ∙ fin-sum {n = cardinality (fam fzero)} λ _ → cardinality rest
-    pure $ fin₁ {cardinality = sum (cardinality (fam fzero)) (λ _ → cardinality rest)} $ pure work
+    pure $ finite₁ {cardinality = sum (cardinality (fam fzero)) (λ _ → cardinality rest)} $ pure work
 
 instance
   ×-is-bishop-finite
     : ⦃ A-bf : is-bishop-finite A ⦄ ⦃ B-bf : is-bishop-finite B ⦄
     → is-bishop-finite (A × B)
-  ×-is-bishop-finite ⦃ A-bf ⦄ ⦃ B-bf ⦄ = fin₁ do
+  ×-is-bishop-finite ⦃ A-bf ⦄ ⦃ B-bf ⦄ = finite₁ do
     aeq ← enumeration₁ A-bf
     beq ← enumeration₁ B-bf
     pure $ ×-ap aeq beq ∙ fin-product
@@ -165,7 +165,7 @@ instance
         pure $ Σ-ap aeq λ x → t x
              ∙ =→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
 
-    pure $ fin₁ ⦇ work ∙ₑ pure fs ⦈
+    pure $ finite₁ ⦇ work ∙ₑ pure fs ⦈
   {-# OVERLAPS Σ-is-bishop-finite #-}
 
   fun-is-bishop-finite
@@ -176,7 +176,7 @@ instance
     be ← enumeration₁ B-bf
     let count = bishop-finite-pi-fin (cardinality A-bf) λ _ → B-bf
     eqv′ ← enumeration₁ count
-    pure $ fin₁ $ pure $ Π-cod-≃ (λ _ → be) ∙ function-≃ ae (be ⁻¹) ∙ eqv′
+    pure $ finite₁ $ pure $ Π-cod-≃ (λ _ → be) ∙ function-≃ ae (be ⁻¹) ∙ eqv′
   {-# OVERLAPPING fun-is-bishop-finite #-}
 
   Π-is-bishop-finite
@@ -187,19 +187,19 @@ instance
     eqv ← enumeration₁ A-bf
     let count = bishop-finite-pi-fin (cardinality A-bf) (λ x → fam {eqv ⁻¹ $ x})
     eqv′ ← enumeration₁ count
-    pure $ fin₁ $ pure $ Π-dom-≃ (eqv ⁻¹) ∙ eqv′
+    pure $ finite₁ $ pure $ Π-dom-≃ (eqv ⁻¹) ∙ eqv′
   {-# OVERLAPS Π-is-bishop-finite #-}
 
   lift-is-bishop-finite : ⦃ A-bf : is-bishop-finite A ⦄ → is-bishop-finite (Lift ℓ′ A)
-  lift-is-bishop-finite ⦃ A-bf ⦄ = fin₁ do
+  lift-is-bishop-finite ⦃ A-bf ⦄ = finite₁ do
     aeq ← enumeration₁ A-bf
     pure $ lift≃id ∙ aeq
   {-# OVERLAPPING lift-is-bishop-finite #-}
 
   decidable-prop→is-bishop-finite : ⦃ A-pr : H-Level 1 A ⦄ → ⦃ da : Dec A ⦄ → is-bishop-finite A
-  decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ yes a ⦄ = fin₁ $ pure $
+  decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ yes a ⦄ = finite₁ $ pure $
     is-contr→≃ (inhabited-prop-is-contr a (hlevel 1)) fin-1-is-contr
-  decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ no ¬a ⦄ = fin₁ $ pure $ ¬-extₑ ¬a refl ∙ fin-0-is-initial ⁻¹
+  decidable-prop→is-bishop-finite ⦃ A-pr ⦄ ⦃ no ¬a ⦄ = finite₁ $ pure $ ¬-extₑ ¬a refl ∙ fin-0-is-initial ⁻¹
   {-# INCOHERENT decidable-prop→is-bishop-finite #-}
 
   is-discrete→path-is-bishop-finite : ⦃ d : is-discrete A ⦄ → {x y : A} → is-bishop-finite (x ＝ y)

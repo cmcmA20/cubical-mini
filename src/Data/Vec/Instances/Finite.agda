@@ -3,8 +3,8 @@ module Data.Vec.Instances.Finite where
 
 open import Foundations.Base
 
-open import Combinatorics.Finiteness.Bishop
-open import Combinatorics.Finiteness.ManifestBishop
+open import Combinatorics.Finiteness.Bishop.Manifest
+open import Combinatorics.Finiteness.Bishop.Weak
 
 open import Data.Nat.Base
 open import Data.Unit.Instances.Finite

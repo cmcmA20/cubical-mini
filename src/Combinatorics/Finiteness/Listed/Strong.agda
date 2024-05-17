@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Combinatorics.Finiteness.Listed where
+module Combinatorics.Finiteness.Listed.Strong where
 
 open import Meta.Prelude
 
@@ -9,7 +9,7 @@ open import Meta.Record
 
 open import Logic.Discreteness
 
-open import Combinatorics.Finiteness.ManifestBishop
+open import Combinatorics.Finiteness.Bishop.Manifest
 
 open import Functions.Embedding
 
@@ -25,7 +25,7 @@ open import Data.List.Membership
 
 record Listed {ℓ} (A : Type ℓ) : Type ℓ where
   no-eta-equality
-  constructor finₗ
+  constructor finiteₗ
   field
     support : List A
     cover   : Π[ x ꞉ A ] x ∈! support

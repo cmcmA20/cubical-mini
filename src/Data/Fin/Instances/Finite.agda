@@ -3,7 +3,7 @@ module Data.Fin.Instances.Finite where
 
 open import Foundations.Base
 
-open import Combinatorics.Finiteness.ManifestBishop
+open import Combinatorics.Finiteness.Bishop.Manifest
 
 open import Data.Empty.Instances.Finite
 open import Data.Fin.Base

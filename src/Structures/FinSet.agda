@@ -12,7 +12,7 @@ open import Structures.n-Type
 
 open import Logic.Discreteness
 
-open import Combinatorics.Finiteness.Bishop
+open import Combinatorics.Finiteness.Bishop.Weak
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base

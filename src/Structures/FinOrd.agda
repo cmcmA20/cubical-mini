@@ -6,7 +6,7 @@ open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
 
-open import Combinatorics.Finiteness.ManifestBishop
+open import Combinatorics.Finiteness.Bishop.Manifest
 
 open import Data.Bool.Base
 open import Data.Fin.Computational.Base
