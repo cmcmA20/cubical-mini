@@ -26,7 +26,6 @@ instance
   Membership-Vec : Membership A (Vec A n) (level-of-type A)
   Membership-Vec ._∈_ = _∈ᵥ_
 
-instance
   Dec-∈ᵥ : ⦃ di : is-discrete A ⦄
          → {x : A} {as : Vec A n} → Dec (x ∈ as)
   Dec-∈ᵥ {n = 0} {x} {([])} = no λ()

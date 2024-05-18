@@ -185,6 +185,14 @@ instance
         (no  a∉!xs) → no  (¬here+¬there!→∉!ₗ a≠x a∉!xs)
   {-# OVERLAPPING Dec-∈!ₗ #-}
 
+-- lookup-safe
+fin→Σ∈ₗ
+  : {a : A} {xs : List A}
+  → Fin (length xs) → Σ[ a ꞉ A ] a ∈ xs
+fin→Σ∈ₗ {xs = x ∷ xs} (mk-fin 0) = x , here refl
+fin→Σ∈ₗ {a} {xs = x ∷ xs} (mk-fin (suc k) {(z)}) =
+  second there (fin→Σ∈ₗ {a = a} {xs = xs} (mk-fin k {z}))
+
 ∈ₗ→fin
   : {a : A} {xs : List A}
   → a ∈ xs → Fin (length xs)
@@ -201,10 +209,15 @@ instance
 ∈ₗ→fin-almost-injective (there q) (here p)   r = ⊥.rec (fsuc≠fzero r)
 ∈ₗ→fin-almost-injective (there q) (there q′) r = ∈ₗ→fin-almost-injective q q′ (fsuc-inj r)
 
+∈!ₗ→fin
+  : {a : A} {xs : List A}
+  → a ∈! xs → Fin (length xs)
+∈!ₗ→fin = ∈ₗ→fin ∘ fst
+
 ∈!ₗ↪fin
   : {a : A} {xs : List A}
   → a ∈! xs ↪ Fin (length xs)
-∈!ₗ↪fin .fst = ∈ₗ→fin ∘ fst
+∈!ₗ↪fin .fst = ∈!ₗ→fin
 ∈!ₗ↪fin .snd _ _ _ = prop!
 
 instance
