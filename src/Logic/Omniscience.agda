@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search #-}
+{-# OPTIONS --safe --backtracking-instance-search --instance-search-depth=3 #-}
 module Logic.Omniscience where
 
 open import Meta.Prelude

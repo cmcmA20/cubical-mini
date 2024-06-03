@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --backtracking-instance-search --instance-search-depth=3 #-}
 module Combinatorics.Power.Base where
 
 open import Meta.Prelude

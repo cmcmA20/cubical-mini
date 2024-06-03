@@ -252,8 +252,10 @@ private
     let
       narg = arg (unai a) n
       is′ = traverse (λ (s , t) → raise 1 t >>= λ x → pure (s , x)) is
+      w : Maybe Term
+      w = raise 1 (unarg a) >>= class-for-param d 0 []
       z : Maybe (Telescope × List (Arg Term))
-      z = case (raise 1 (unarg a) >>= class-for-param d 0 []) of λ where
+      z = case w of λ where
         (just i) → do
           is″ ← is′
           r ← raise (length is) i

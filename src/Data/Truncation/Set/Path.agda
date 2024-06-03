@@ -29,14 +29,14 @@ instance opaque
   → ∣ x ∣₂ ＝ ∣ y ∣₂
   ≃ ∥ x ＝ y ∥₁
 =∘∣-∣₂≃∥-∥₁∘= {A} {x} {y} = prop-extₑ! (encode x ∣ y ∣₂) (decode x (∣ y ∣₂)) where
-  code : (x : A) (y : ∥ A ∥₂) → Prop _
-  code x = elim! (λ y → el! ∥ x ＝ y ∥₁)
+  Code : (x : A) (y : ∥ A ∥₂) → Prop _
+  Code x = elim! (λ y → el! ∥ x ＝ y ∥₁)
 
-  encode : ∀ x y → ∣ x ∣₂ ＝ y → ⌞ code x y ⌟
-  encode x y = Jₚ (λ y p → ⌞ code x y ⌟ ) ∣ refl ∣₁
+  encode : ∀ x y → ∣ x ∣₂ ＝ y → ⌞ Code x y ⌟
+  encode x y = Jₚ (λ y _ → ⌞ Code x y ⌟ ) ∣ refl ∣₁
 
-  decode : ∀ x y → ⌞ code x y ⌟ → ∣ x ∣₂ ＝ y
-  decode x = elim! (λ _ → rec! (ap ∣_∣₂))
+  decode : ∀ x y → ⌞ Code x y ⌟ → ∣ x ∣₂ ＝ y
+  decode x = elim! λ _ → ap ∣_∣₂
 
 ae : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
 ae e = to , is-iso→is-equiv (iso from ri li)
