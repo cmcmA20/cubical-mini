@@ -8,6 +8,9 @@ open import Meta.Regularity
 
 open import Data.Empty.Base as ⊥
   using (⊥)
+open import Data.Empty.Properties
+  using (universal)
+open import Data.Unit.Properties
 open import Data.Nat.Base
 open import Data.Nat.Order.Inductive.Base
 open import Data.Sum.Properties
@@ -122,3 +125,19 @@ fin-product {n} {m} =
     sum~* : ∀ n m → sum n (λ _ → m) ＝ n · m
     sum~* 0       m = refl
     sum~* (suc n) m = ap (m +_) (sum~* n m)
+
+
+fin-fun : {n m : ℕ}
+        → (Fin n → Fin m)
+        ≃ Fin (m ^ n)
+fin-fun {n = zero} {m} =
+  (Fin 0 → Fin m) ~⟨ Π-dom-≃ fin-0-is-initial ⁻¹ ⟩
+  (⊥ → Fin m)    ~⟨ Data.Empty.Properties.universal ⟩
+  ⊤              ~⟨ is-contr→equiv-⊤ fin-1-is-contr ⁻¹ ⟩
+  Fin 1           ∎
+fin-fun {suc n}    {m} =
+  (Fin (suc n) → Fin m)          ~⟨ Π-dom-≃ fin-suc ⁻¹ ⟩
+  (⊤ ⊎ Fin n → Fin m)           ~⟨ Data.Sum.Properties.universal ⟩
+  (⊤ → Fin m) × (Fin n → Fin m) ~⟨ ×-ap Data.Unit.Properties.universal fin-fun ⟩
+  Fin m × Fin (m ^ n)           ~⟨ fin-product ⟩
+  Fin (m · m ^ n)                ∎
