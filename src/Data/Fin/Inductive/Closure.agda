@@ -4,12 +4,12 @@ module Data.Fin.Inductive.Closure where
 open import Meta.Prelude
 
 open import Data.Empty.Base as ⊥
-  using (⊥)
-open import Data.Nat.Base
-open import Data.Sum.Properties
-
+open import Data.Empty.Properties as ⊥
 open import Data.Fin.Inductive.Path
 open import Data.Fin.Inductive.Properties
+open import Data.Nat.Base
+open import Data.Sum.Properties as ⊎
+open import Data.Unit.Properties as ⊤
 
 private variable
   ℓ : Level
@@ -63,7 +63,7 @@ fin-coproduct {suc n} {m} =
   Fin (suc (n + m))    ∎
 
 sum : ∀ n → (Fin n → ℕ) → ℕ
-sum zero    f = zero
+sum 0       f = 0
 sum (suc n) f = f fzero + sum n (f ∘ fsuc)
 
 fin-sum : {n : ℕ} (B : Fin n → ℕ)
@@ -75,12 +75,12 @@ fin-sum {suc n} B =
   fin-coproduct .fst ∘ f ,
   is-equiv-comp (is-iso→is-equiv f-iso) (fin-coproduct .snd)
     where
-      rec′ = fin-sum (B ∘ fsuc)
-      module mrec = Equiv rec′
+      rec″ = fin-sum (B ∘ fsuc)
+      module mrec = Equiv rec″
 
       f : Σ _ (λ k → Fin (B k)) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
       f (fzero  , x) = inl x
-      f (fsuc x , y) = inr (rec′ .fst (x , y))
+      f (fsuc x , y) = inr (rec″ .fst (x , y))
 
       f-iso : is-iso f
       f-iso .is-iso.inv (inl x) = fzero , x
@@ -106,3 +106,18 @@ fin-product {n} {m} =
     sum=* : ∀ n m → sum n (λ _ → m) ＝ n · m
     sum=* 0       m = refl
     sum=* (suc n) m = ap (m +_) (sum=* n m)
+
+fin-fun : {n m : ℕ}
+        → (Fin n → Fin m)
+        ≃ Fin (m ^ n)
+fin-fun {0} {m} =
+  (Fin 0 → Fin m)  ~⟨ Π-dom-≃ fin0-is-initial ⟨
+  (⊥ → Fin m)      ~⟨ ⊥.universal ⟩
+  ⊤                ~⟨ is-contr→equiv-⊤ fin1-is-contr ⟨
+  Fin 1            ∎
+fin-fun {suc n} {m} =
+  (Fin (suc n) → Fin m)          ~⟨ Π-dom-≃ fin-suc ⟨
+  (⊤ ⊎ Fin n → Fin m)            ~⟨ ⊎.universal ⟩
+  (⊤ → Fin m) × (Fin n → Fin m)  ~⟨ ×-ap ⊤.universal fin-fun ⟩
+  Fin m × Fin (m ^ n)            ~⟨ fin-product ⟩
+  Fin (m · m ^ n)                ∎

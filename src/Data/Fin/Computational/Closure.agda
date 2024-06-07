@@ -7,12 +7,12 @@ open import Meta.Marker
 open import Meta.Regularity
 
 open import Data.Empty.Base as ⊥
-  using (⊥)
+open import Data.Empty.Properties as ⊥
+open import Data.Fin.Computational.Properties
 open import Data.Nat.Base
 open import Data.Nat.Order.Inductive.Base
-open import Data.Sum.Properties
-
-open import Data.Fin.Computational.Properties
+open import Data.Sum.Properties as ⊎
+open import Data.Unit.Properties as ⊤
 
 private variable
   ℓ : Level
@@ -89,9 +89,9 @@ fin-sum {suc n} B =
   fin-coproduct {n = B fzero} .fst ∘ f ,
   is-equiv-comp (is-iso→is-equiv $ f-iso) (fin-coproduct {n = B fzero} .snd)
     where
-      rec′ : Σ[ k ꞉ Fin n ] Fin (B (fsuc k)) ≃ Fin (sum n (B ∘ fsuc))
-      rec′ = fin-sum {n = n} (B ∘ fsuc)
-      module mrec = Equiv rec′
+      rec″ : Σ[ k ꞉ Fin n ] Fin (B (fsuc k)) ≃ Fin (sum n (B ∘ fsuc))
+      rec″ = fin-sum {n = n} (B ∘ fsuc)
+      module mrec = Equiv rec″
 
       f : Σ[ k ꞉ Fin (suc n) ] Fin (B k) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
       f (mk-fin 0       , x) = inl x
@@ -115,10 +115,26 @@ fin-product : {n m : ℕ}
             → Fin n × Fin m
             ≃ Fin (n · m)
 fin-product {n} {m} =
-  Fin n × Fin m          ~⟨ fin-sum {n = n} (λ _ → m) ⟩
+  Fin n × Fin m          ~⟨ fin-sum (λ _ → m) ⟩
   Fin (sum n (λ _ → m))  ~⟨ =→≃ (ap (λ n → Fin n) (sum~* n m))  ⟩
   Fin (n · m)            ∎
   where
     sum~* : ∀ n m → sum n (λ _ → m) ＝ n · m
     sum~* 0       m = refl
     sum~* (suc n) m = ap (m +_) (sum~* n m)
+
+
+fin-fun : {n m : ℕ}
+        → (Fin n → Fin m)
+        ≃ Fin (m ^ n)
+fin-fun {0} {m} =
+  (Fin 0 → Fin m)  ~⟨ Π-dom-≃ fin-0-is-initial ⟨
+  (⊥ → Fin m)      ~⟨ ⊥.universal ⟩
+  ⊤                ~⟨ is-contr→equiv-⊤ fin-1-is-contr ⟨
+  Fin 1            ∎
+fin-fun {suc n} {m} =
+  (Fin (suc n) → Fin m)          ~⟨ Π-dom-≃ fin-suc ⟨
+  (⊤ ⊎ Fin n → Fin m)            ~⟨ ⊎.universal ⟩
+  (⊤ → Fin m) × (Fin n → Fin m)  ~⟨ ×-ap ⊤.universal fin-fun ⟩
+  Fin m × Fin (m ^ n)            ~⟨ fin-product ⟩
+  Fin (m · m ^ n)                ∎
