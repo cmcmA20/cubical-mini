@@ -22,7 +22,7 @@ private variable
 private variable A B : ℙ X
 
 subst-∈ : (A : ℙ X) {x y : X} → x ＝ y → x ∈ A → y ∈ A
-subst-∈ A = subst (_∈ A)
+subst-∈ A = subst
 
 ⊆-refl : (A : ℙ X) → A ⊆ A
 ⊆-refl _ = refl

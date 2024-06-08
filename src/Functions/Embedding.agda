@@ -89,7 +89,7 @@ set-monic→is-embedding {f} B-set monic =
 
 
 preimage-is-prop→is-embedding : (∀ x → is-prop (fibre f (f x))) → is-embedding f
-preimage-is-prop→is-embedding {f} pffx y a = subst (λ φ → is-prop (fibre f φ))
+preimage-is-prop→is-embedding {f} pffx y a = substₚ (λ φ → is-prop (fibre f φ))
   (a .snd) (pffx (a .fst)) a
 
 preimage-is-contr→is-embedding : (∀ x → is-contr (fibre f (f x))) → is-embedding f

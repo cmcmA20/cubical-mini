@@ -19,19 +19,19 @@ private variable
   n : HLevel
 
 empty≠leaf : empty ≠ leaf x
-empty≠leaf p = subst discrim p tt where
+empty≠leaf p = subst {B = discrim} p tt where
   discrim : Tree A → 𝒰
   discrim empty = ⊤
   discrim _ = ⊥
 
 empty≠node : empty ≠ node tl tr
-empty≠node p = subst discrim p tt where
+empty≠node p = subst {B = discrim} p tt where
   discrim : Tree A → 𝒰
   discrim empty = ⊤
   discrim _ = ⊥
 
 leaf≠node : leaf x ≠ node tl tr
-leaf≠node p = subst discrim p tt where
+leaf≠node p = subst {B = discrim} p tt where
   discrim : Tree A → 𝒰
   discrim (leaf _) = ⊤
   discrim _ = ⊥

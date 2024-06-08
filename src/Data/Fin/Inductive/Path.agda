@@ -5,13 +5,14 @@ open import Meta.Prelude
 
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Inductive.Base
+open import Data.Nat.Base
 
 private variable
   @0 m n : ℕ
   k l : Fin m
 
 fzero≠fsuc : fzero ≠ fsuc k
-fzero≠fsuc p = subst discrim p tt where
+fzero≠fsuc p = substₚ discrim p tt where
   discrim : Fin m → Type
   discrim fzero    = ⊤
   discrim (fsuc _) = ⊥
@@ -42,3 +43,22 @@ instance
   H-Level-Fin1 : ∀{k} → H-Level k (Fin 1)
   H-Level-Fin1 = hlevel-basic-instance 0 fin1-is-contr
   {-# OVERLAPPING H-Level-Fin1 #-}
+
+open import Foundations.IdentitySystem.Transport
+open import Data.Nat.Path
+
+fin-cast : {m n : ℕ} → m ＝ n → Fin m → Fin n
+fin-cast {0}     {0}     _ = id
+fin-cast {suc m} {suc n} _ fzero = fzero
+fin-cast {suc m} {suc n} p (fsuc k) = fsuc (fin-cast (suc-inj p) k)
+fin-cast {suc m} {0}     p = ⊥.rec (suc≠zero p)
+
+fin-cast-coh : (m n : ℕ) (p : m ＝ n) (k : Fin m) → fin-cast p k ＝ substₚ (λ n → Fin n) p k
+fin-cast-coh (suc m) = Jₚ> λ where
+  fzero    → transport-refl _ ⁻¹
+  (fsuc k) → ap fsuc (fin-cast-coh m m refl k ∙ transport-refl k) ∙ transport-refl _ ⁻¹
+
+instance
+  fin-transport-system : is-transport-system {B = λ n → Fin n} (erase path-identity-system)
+  fin-transport-system .is-transport-system.subst     = fin-cast
+  fin-transport-system .is-transport-system.subst-coh p b .erased = fin-cast-coh _ _ p b

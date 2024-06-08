@@ -91,7 +91,7 @@ opaque
                →  ap (is-equiv→inverse eqv) (is-equiv→counit eqv y)
                ＝ is-equiv→unit eqv (is-equiv→inverse eqv y)
   is-equiv→zag {A} {B} {f} eqv b =
-    subst (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
+    substₚ (λ b → ap g (ε b) ＝ η (g b)) (ε b) (helper (g b)) where
       g : B → A
       g = is-equiv→inverse eqv
       ε : (y : B) → f (is-equiv→inverse eqv y) ＝ y

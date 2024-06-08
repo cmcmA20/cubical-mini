@@ -179,9 +179,9 @@ suc-pred (suc _) _ = refl
 +-sub (suc p) (suc q) qp = +-suc-r _ _ ∙ ap suc (+-sub p q (≤-peel qp))
 
 ≤-sub-lr : (p q r : ℕ) → p ≤ q + r → p ∸ r ≤ q
-≤-sub-lr  p      q  zero   pqr = subst (λ x → p ≤ x) (+-zero-r q) pqr
+≤-sub-lr  p      q  zero   pqr = substₚ (λ x → p ≤ x) (+-zero-r q) pqr
 ≤-sub-lr  zero   q (suc r) pqr = z≤
-≤-sub-lr (suc p) q (suc r) pqr = ≤-sub-lr p q r (≤-peel (subst (λ x → suc p ≤ x) (+-suc-r q r) pqr))
+≤-sub-lr (suc p) q (suc r) pqr = ≤-sub-lr p q r (≤-peel (substₚ (λ x → suc p ≤ x) (+-suc-r q r) pqr))
 
 <-sub-lr : (p q r : ℕ) → 0 < q → p < q + r → p ∸ r < q
 <-sub-lr p (suc q) r _ pqr = s≤s (≤-sub-lr p q r (≤-peel pqr))
@@ -205,5 +205,5 @@ suc-pred (suc _) _ = refl
 ·-inj-l x y z 0<x p = ·-inj-r _ _ _ 0<x (·-comm y x ∙ p ∙ ·-comm x z)
 
 z<· : (m n : ℕ) → (0 < m · n) → (0 < m) × (0 < n)
-z<· (suc m) zero    0<mn = absurd (s≰z (subst (0 <_) (·-absorb-r m) 0<mn))
+z<· (suc m) zero    0<mn = absurd (s≰z (substₚ (0 <_) (·-absorb-r m) 0<mn))
 z<· (suc _) (suc _) _    = s≤s z≤ , s≤s z≤

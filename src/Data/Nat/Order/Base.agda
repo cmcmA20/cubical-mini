@@ -85,13 +85,13 @@ opaque
   ≤-trans : m ≤ n → n ≤ k → m ≤ k
   ≤-trans {k} (δ₁ , p) (δ₂ , q)
     = δ₁ + δ₂
-    , nat! ∙ subst (λ φ → φ + δ₂ ＝ k) (symₚ p) q
+    , nat! ∙ subst {B = λ φ → φ + δ₂ ＝ k} (p ⁻¹) q
 
   ≤-antisym : m ≤ n → n ≤ m → m ＝ n
-  ≤-antisym (0      , p) (_      , _) = sym (+-zero-r _) ∙ p
-  ≤-antisym (suc _  , _) (0      , q) = sym q ∙ +-zero-r _
+  ≤-antisym (0      , p) (_      , _) = +-zero-r _ ⁻¹ ∙ p
+  ≤-antisym (suc _  , _) (0      , q) = q ⁻¹ ∙ +-zero-r _
   ≤-antisym {m} (suc δ₁ , p) (suc δ₂ , q) = ⊥.rec $ suc≠zero {m = δ₁ + suc δ₂} $ +-inj-l m _ 0 $
-       +-assoc m (suc δ₁) (suc δ₂) ∙ subst (λ φ → φ + suc δ₂ ＝ m) (sym p) q ∙ nat!
+       +-assoc m (suc δ₁) (suc δ₂) ∙ subst {B = λ φ → φ + suc δ₂ ＝ m} (sym p) q ∙ nat!
 
   ≤-suc-r : m ≤ n → m ≤ suc n
   ≤-suc-r = bimap suc λ p → nat! ∙ ap suc p
@@ -129,11 +129,11 @@ opaque
   <-trans : m < n → n < k → m < k
   <-trans (δ₁ , p) (δ₂ , q)
     = suc (δ₁ + δ₂)
-    , nat! ∙ subst (λ φ → suc (φ + δ₂) ＝ _) (symₚ p) q
+    , nat! ∙ subst {B = λ φ → suc (φ + δ₂) ＝ _} (sym p) q
 
   <-asym : ∀[ _<_ →̇ _≯_ ]
   <-asym {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {n = n} {m = 1 + δ₂ + δ₁}
-    (subst (λ φ → suc (φ + δ₁) ＝ n) (symₚ q) p ⁻¹ ∙ nat!)
+    (subst {B = λ φ → suc (φ + δ₁) ＝ n} (sym q) p ⁻¹ ∙ nat!)
 
   <-suc-r : m < n → m < suc n
   <-suc-r = ≤-suc-r
@@ -159,11 +159,11 @@ opaque
   <→≤ = bimap suc (nat! ∙_)
 
   <→≠ : ∀[ _<_ →̇ _≠_ {A = ℕ} ]
-  <→≠ m<n m=n = <-irr (subst (_ <_) (sym m=n) m<n)
+  <→≠ m<n m=n = <-irr (subst {B = _ <_} (sym m=n) m<n)
 
   ≤→≯ : ∀[ _≤_ →̇ _≯_ ]
   ≤→≯ {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {m} {δ₁ + δ₂} $
-    subst (λ φ → suc (φ + δ₂) ＝ m) (symₚ p) q ⁻¹ ∙ nat!
+    subst {B = λ φ → suc (φ + δ₂) ＝ m} (p ⁻¹) q ⁻¹ ∙ nat!
 
   ≤→<⊎= : ∀[ _≤_ →̇ _<_ ⊎̇ _＝_ {A = ℕ} ]
   ≤→<⊎= (0     , p) = inr $ nat! ∙ p
@@ -171,7 +171,7 @@ opaque
 
   <⊎=→≤ : ∀[ _<_ ⊎̇ _＝_ {A = ℕ} →̇ _≤_ ]
   <⊎=→≤ (inl m<n) = <→≤ m<n
-  <⊎=→≤ (inr m=n) = subst (_≤ _) (sym m=n) ≤-refl
+  <⊎=→≤ (inr m=n) = subst {B = _≤ _} (sym m=n) ≤-refl
 
 <→≱ : ∀[ _<_ →̇ _≱_ ]
 <→≱ m<n m≥n = ≤→≯ m≥n m<n

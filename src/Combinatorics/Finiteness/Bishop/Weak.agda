@@ -111,7 +111,7 @@ finite-choice {P} fi k = do
   e ← enumeration₁ fi
   let module e = Equiv e
   choose ← fin-choice (cardinality fi) (k ∘ e.from)
-  pure $ λ x → subst P (e.η x) (choose (e $ x))
+  pure $ λ x → substₚ P (e.η x) (choose (e $ x))
 
 private
   bishop-finite-pi-fin
@@ -211,5 +211,5 @@ instance
     : ∀ {A :  I → Type ℓ}
     → ⦃ bf : is-bishop-finite (A i1) ⦄ → ∀ {x y}
     → is-bishop-finite ＜ x ／ A ＼ y ＞
-  pathᴾ-is-bishop-finite = subst is-bishop-finite (pathᴾ=path _ _ _ ⁻¹)
+  pathᴾ-is-bishop-finite = substₚ is-bishop-finite (pathᴾ=path _ _ _ ⁻¹)
     is-discrete→path-is-bishop-finite

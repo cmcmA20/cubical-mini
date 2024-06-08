@@ -345,10 +345,10 @@ transport-filler : {A B : Type ℓ} (p : A ＝ B) (x : A)
 transport-filler p x i = coe0→i (λ j → p j) i x
 
 -- We want B to be explicit in subst
-subst : (B : A → Type ℓ′) (p : x ＝ y) → B x → B y
-subst B p = transport (λ i → B (p i))
+substₚ : (B : A → Type ℓ′) (p : x ＝ y) → B x → B y
+substₚ B p = transport (λ i → B (p i))
 
-subst-refl : {A : Type ℓ} {B : A → Type ℓ′} {x : A} (px : B x) → subst B refl px ＝ px
+subst-refl : {A : Type ℓ} {B : A → Type ℓ′} {x : A} (px : B x) → substₚ B refl px ＝ px
 subst-refl = transport-refl
 
 
@@ -392,7 +392,7 @@ _=⟨⟩_ = _~⟨⟩_
     {_~_ : A → A → 𝒰 ℓ}
     ⦃ rfl : Refl _~_ ⦄
     {x y : A} → x ＝ y → y ~ x
-=→~⁻ {_~_} {x} p = subst (_~ x) p refl
+=→~⁻ {_~_} {x} p = substₚ (_~ x) p refl
 
 =→~
   : {A : Type ℓᵃ}
@@ -670,7 +670,7 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 
 Σ-path : {x y : Σ A B}
          (p : x .fst ＝ y .fst)
-       → subst B p (x .snd) ＝ (y .snd)
+       → substₚ B p (x .snd) ＝ (y .snd)
        → x ＝ y
 Σ-path p q = Σ-pathᴾ p (to-pathᴾ q)
 
@@ -699,9 +699,9 @@ opaque
   subst-path-left : {A : Type ℓᵃ} {x y x′ : A}
                   → (p : x ＝ y)
                   → (left : x ＝ x′)
-                  → subst (λ e → e ＝ y) left p ＝ left ⁻¹ ∙ p
+                  → substₚ (λ e → e ＝ y) left p ＝ left ⁻¹ ∙ p
   subst-path-left {y} p left =
-    subst (λ e → e ＝ y) left p      ~⟨⟩
+    substₚ (λ e → e ＝ y) left p     ~⟨⟩
     transport (λ i → left i ＝ y) p  ~⟨ transport-path p left refl ⟩
     left ⁻¹ ∙ p ∙ reflₚ              ~⟨ ap (sym left ∙ₚ_) (∙-filler-l _ _) ⟨
     left ⁻¹ ∙ p                      ∎
@@ -709,9 +709,9 @@ opaque
   subst-path-right : {A : Type ℓᵃ} {x y y′ : A}
                    → (p : x ＝ y)
                    → (right : y ＝ y′)
-                   → subst (λ e → x ＝ e) right p ＝ p ∙ right
+                   → substₚ (λ e → x ＝ e) right p ＝ p ∙ right
   subst-path-right {x} p right =
-    subst (λ e → x ＝ e) right p      ~⟨⟩
+    substₚ (λ e → x ＝ e) right p     ~⟨⟩
     transport (λ i → x ＝ right i) p  ~⟨ transport-path p refl right ⟩
     refl ⁻¹ ∙ p ∙ right               ~⟨⟩
     refl ∙ p ∙ right                  ~⟨ ∙-filler-r _ _ ⟨
@@ -720,7 +720,7 @@ opaque
   subst-path-both : {x x′ : A}
                   → (p : x ＝ x)
                   → (adj : x ＝ x′)
-                  → subst (λ x → x ＝ x) adj p ＝ symₚ adj ∙ₚ p ∙ₚ adj
+                  → substₚ (λ x → x ＝ x) adj p ＝ symₚ adj ∙ₚ p ∙ₚ adj
   subst-path-both p adj = transport-path p adj adj
 
 

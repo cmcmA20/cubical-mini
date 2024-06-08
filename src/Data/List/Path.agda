@@ -23,7 +23,7 @@ private variable
 ∷-tail-inj = ap tail
 
 ∷≠[] : ¬ (x ∷ xs) ＝ []
-∷≠[] p = subst discrim p tt
+∷≠[] p = subst {B = discrim} p tt
   where
   discrim : List _ → Type
   discrim []      = ⊥

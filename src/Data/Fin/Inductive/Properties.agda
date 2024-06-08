@@ -31,7 +31,7 @@ cast-is-equiv = Jₚ (λ _ p → is-equiv (cast p)) cast-refl-is-equiv
     id=cast-refl {suc n} i (fsuc k) = fsuc $ id=cast-refl i k
 
     cast-refl-is-equiv : {n : ℕ} → is-equiv (cast (λ _ → n))
-    cast-refl-is-equiv = subst is-equiv id=cast-refl id-is-equiv
+    cast-refl-is-equiv = substₚ is-equiv id=cast-refl id-is-equiv
 
 cast-equiv : {m n : ℕ} → m ＝ n → Fin m ≃ Fin n
 cast-equiv p = cast p , cast-is-equiv p

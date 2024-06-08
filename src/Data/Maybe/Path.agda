@@ -16,7 +16,7 @@ private variable
   x y : A
 
 nothing≠just : nothing ≠ just x
-nothing≠just p = subst is-nothing p tt
+nothing≠just p = subst {B = is-nothing} p tt
 
 just≠nothing : just x ≠ nothing
 just≠nothing = nothing≠just ∘ symₚ

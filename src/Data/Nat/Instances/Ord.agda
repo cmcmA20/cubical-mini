@@ -21,7 +21,7 @@ instance
   ... | inl x<y = lt x<y (<→≠ x<y) (<-asym {x} x<y)
   ... | inr (inl y<x) = gt (<-asym {y} y<x) (<→≠ y<x ∘ sym) y<x
   ... | inr (inr x=y) = eq
-    (λ x<y → <-irr {x} (subst (x ℕ-ord.<_) (sym x=y) x<y))
+    (λ x<y → <-irr {x} (substₚ (x ℕ-ord.<_) (sym x=y) x<y))
     x=y
-    (λ y<x → <-irr {y} (subst (y ℕ-ord.<_) x=y y<x))
+    (λ y<x → <-irr {y} (substₚ (y ℕ-ord.<_) x=y y<x))
   {-# OVERLAPPING Ord-ℕ #-}

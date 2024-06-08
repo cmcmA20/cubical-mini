@@ -17,7 +17,7 @@ private variable
               → fibre fst a ≃ B a
 Σ-fibre-equiv B a = ≅→≃ isom where
   isom : Iso _ _
-  isom .fst ((_ , y) , p) = subst B p y
+  isom .fst ((_ , y) , p) = substₚ B p y
   isom .snd .is-iso.inv x       = (a , x) , refl
   isom .snd .is-iso.rinv _      = transport-refl _
   isom .snd .is-iso.linv ((_ , y) , p) i =
@@ -46,9 +46,9 @@ fibre-paths : {A : Type ℓᵃ} {B : Type ℓᵇ}
             → z ＝ z′
             ≃ Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)
 fibre-paths {f} {y} {z = a , p} {z′ = a′ , p′} =
-  (a , p) ＝ (a′ , p′)                                ~⟨ ≅→≃ Σ-path-iso ⟨
-  Σ[ q ꞉ a ＝ a′ ] (subst (λ v → f v ＝ y) q p ＝ p′) ~⟨ Σ-ap-snd (whisker-path-lₑ ∘ subst-path-left p ∘ ap f) ⟩
-  Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)           ∎
+  (a , p) ＝ (a′ , p′)                                 ~⟨ ≅→≃ Σ-path-iso ⟨
+  Σ[ q ꞉ a ＝ a′ ] (substₚ (λ v → f v ＝ y) q p ＝ p′) ~⟨ Σ-ap-snd (whisker-path-lₑ ∘ subst-path-left p ∘ ap f) ⟩
+  Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)            ∎
 
 module @0 _ where
   opaque

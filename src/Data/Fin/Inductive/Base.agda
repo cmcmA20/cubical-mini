@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Fin.Inductive.Base where
 
-open import Foundations.Base
-open import Foundations.Equiv
+open import Foundations.Prelude
 
 open import Data.Fin.Interface
 open import Data.Nat.Base as ℕ

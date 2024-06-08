@@ -20,7 +20,7 @@ private variable m n k : ℕ
 <→≤ p = ≤-ascend ∙ p
 
 <→≠ : ∀[ _<_ →̇ _≠_ {A = ℕ} ]
-<→≠ {x = m} {x = n} m<n m=n = suc≰id (subst (_≤ n) (ap suc m=n) m<n)
+<→≠ {x = m} {x = n} m<n m=n = suc≰id (substₚ (_≤ n) (ap suc m=n) m<n)
 
 ≤≃≯ : (m ≤ n) ≃ (m ≯ n)
 ≤≃≯ = prop-extₑ! ≤→≯ ≯→≤ where

@@ -37,15 +37,15 @@ transport-flip {A} {y} p =
 
 
 subst-filler : (B : A → Type ℓ′) (p : x ＝ y) (b : B x)
-             → ＜ b ／ (λ i → B (p i)) ＼ subst B p b ＞
+             → ＜ b ／ (λ i → B (p i)) ＼ substₚ B p b ＞
 subst-filler B p = transport-filler (ap B p)
 
 subst⁻-filler : {A : Type ℓ} (B : A → Type ℓ′) {x y : A} (p : x ＝ y) (b : B y)
-              → ＜ b ／ (λ i → B (p (~ i))) ＼ subst B (sym p) b ＞
+              → ＜ b ／ (λ i → B (p (~ i))) ＼ substₚ B (sym p) b ＞
 subst⁻-filler B p = subst-filler B (sym p)
 
 subst⁻-subst : {A : Type ℓ} (B : A → Type ℓ′) {x y : A} (p : x ＝ y)
-             → (u : B x) → subst B (sym p) (subst B p u) ＝ u
+             → (u : B x) → substₚ B (sym p) (substₚ B p u) ＝ u
 subst⁻-subst B p u = transport⁻-transport (ap B p) u
 
 
@@ -60,23 +60,23 @@ subst²-filler C p q = transport-filler (ap² C p q)
 
 subst-comp : {A : Type ℓ} (B : A → Type ℓ′)
              {x y z : A} (p : x ＝ y) (q : y ＝ z) (u : B x)
-           → subst B (p ∙ q) u ＝ subst B q (subst B p u)
+           → substₚ B (p ∙ q) u ＝ substₚ B q (substₚ B p u)
 subst-comp B p q Bx i =
   transport (ap B (∙-filler-r p q (~ i))) (transport-filler-ext (ap B p) i Bx)
 
 subst-slice : (B : A → Type ℓ′) (C : A → Type ℓ″)
               (F : ∀[ a ꞉ A ] (B a → C a))
               (p : x ＝ y) (b : B x)
-            → subst C p (F b) ＝ F (subst B p b)
+            → substₚ C p (F b) ＝ F (substₚ B p b)
 subst-slice B C F p b i = (symᴾ $ transport⁻-filler-ext $ ap C (sym p)) i $
   F {p i} (transport-filler-ext (ap B p) i b)
 
 subst-slice-filler : {A : Type ℓ} (B : A → Type ℓ′) (C : A → Type ℓ″)
                      (F : ∀[ a ꞉ A ] (B a → C a))
                      {x y : A} (p : x ＝ y)
-                   → ＜ F ／ (λ i → B (p i) → C (p i)) ＼ subst C p ∘ F ∘ subst B (sym p) ＞
+                   → ＜ F ／ (λ i → B (p i) → C (p i)) ＼ substₚ C p ∘ F ∘ substₚ B (sym p) ＞
 subst-slice-filler B C F p i b = transport-filler (ap C p)
   (F (transport⁻-filler-ext (ap B p) i b)) i
 
 subst-equiv : (P : A → Type ℓ′) (p : x ＝ y) → P x ≃ P y
-subst-equiv P p = subst P p , transport-is-equiv (λ i → P (p i))
+subst-equiv P p = substₚ P p , transport-is-equiv (λ i → P (p i))

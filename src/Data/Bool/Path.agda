@@ -15,7 +15,7 @@ true  == true  = true
 _     == _     = false
 
 false≠true : false ≠ true
-false≠true p = subst (λ b → is-true (not b)) p tt
+false≠true p = substₚ (λ b → is-true (not b)) p tt
 
 true≠false : true ≠ false
 true≠false = false≠true ∘ sym

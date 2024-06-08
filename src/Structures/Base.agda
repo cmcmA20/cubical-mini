@@ -97,7 +97,7 @@ function-action actx acty eqv = function-≃ (actx eqv) (acty eqv)
   → is-transport-str (function-action α β)
 function-action-is-transport {S} {α} {β} α-tr β-tr eqv f =
   fun-ext λ x → ap (β eqv .fst ∘ f) (sym-transport-str α α-tr eqv x)
-              ∙ β-tr eqv (f (subst S (ua eqv ⁻¹) x))
+              ∙ β-tr eqv (f (substₚ S (ua eqv ⁻¹) x))
 
 
 property : (S : Type ℓ → Type ℓ₁) → (∀ A → is-prop (S A)) → Structure 0ℓ S
@@ -115,7 +115,7 @@ property-is-univalent {S-prop} {X = _ , s} {Y = _ , t} _ =
   → (A : Type-with (property S S-prop)) (B : Type ℓ)
   → A .fst ≃ B
   → S B
-transfer-property {S} A B eqv = subst S (ua eqv) (A .snd)
+transfer-property {S} A B eqv = substₚ S (ua eqv) (A .snd)
 
 -- TODO use `property`?
 module _
@@ -149,4 +149,4 @@ module _
   → (A .fst , A .snd .fst) ≃[ σ ] B
   → axioms (B .fst) (B .snd)
 transfer-axioms {univ} {axioms} A B eqv =
-  subst (axioms $ₜ²_) (sip univ eqv) (A .snd .snd)
+  substₚ (axioms $ₜ²_) (sip univ eqv) (A .snd .snd)

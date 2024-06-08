@@ -66,7 +66,7 @@ module _ {o h} (C : Precategory o h) where
             → path→iso q .to ∘ h ∘ path→iso p .from ＝ h′
             → ＜ h ／ (λ i → Hom (p i) (q i)) ＼ h′ ＞
   Hom-pathᴾ {p} {q} {h} {h′} prf =
-    to-pathᴾ (subst (_＝ h′) (sym (Hom-transport p q h)) prf)
+    to-pathᴾ (subst {B = _＝ h′} (sym (Hom-transport p q h)) prf)
 
   Hom-transport-id
     : (p : a ＝ b) (q : a ＝ d)

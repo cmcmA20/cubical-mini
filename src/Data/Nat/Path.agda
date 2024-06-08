@@ -14,7 +14,7 @@ private variable
   m n : ℕ
 
 suc≠zero : suc m ≠ 0
-suc≠zero p = subst is-positive p tt
+suc≠zero p = substₚ is-positive p tt
 
 zero≠suc : 0 ≠ suc m
 zero≠suc = suc≠zero ∘ sym

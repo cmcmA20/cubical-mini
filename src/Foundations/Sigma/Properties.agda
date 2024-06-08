@@ -41,7 +41,7 @@ open is-iso
 
 Σ-path-iso
   : {x y : Σ A B}
-  → Σ[ p ꞉ x .fst ＝ y .fst ] (subst B p (x .snd) ＝ y .snd)
+  → Σ[ p ꞉ x .fst ＝ y .fst ] (substₚ B p (x .snd) ＝ y .snd)
   ≅ (x ＝ y)
 Σ-path-iso {B} {x} {y} = transport
   (λ i → (Σ[ p ꞉ x .fst ＝ y .fst ] (pathᴾ=path (λ j → B (p j)) (x .snd) (y .snd) i))
@@ -78,7 +78,7 @@ open is-iso
     open Σ (e .snd .equiv-proof a′ .fst) renaming (fst to A-ctr; snd to α)
 
     B-ctr : B (e .fst A-ctr)
-    B-ctr = subst B (sym α) b
+    B-ctr = substₚ B (sym α) b
 
     P-ctr : PB α B-ctr b
     P-ctr i = coe1→i (λ i → B (α i)) i b
@@ -186,11 +186,11 @@ infixr 4 _,ₚ_
 Σ-contract-fst : (A-c : is-contr A) → Σ[ x ꞉ A ] B x ≃ B (centre A-c)
 Σ-contract-fst {B} A-c = ≅→≃ the-iso where
   the-iso : Iso _ _
-  the-iso .fst (x , b) = subst B (sym $ paths A-c x) b
+  the-iso .fst (x , b) = substₚ B (sym $ paths A-c x) b
   the-iso .snd .inv = _ ,_
   the-iso .snd .rinv b′
     = sym $ subst-filler B refl b′
-    ∙ ap (λ f → subst B f b′) (is-contr→is-prop (path-is-of-hlevel-same 0 A-c) _ _)
+    ∙ ap (λ f → substₚ B f b′) (is-contr→is-prop (path-is-of-hlevel-same 0 A-c) _ _)
   the-iso .snd .linv (x , b) = Σ-pathᴾ (paths A-c _) $ symᴾ $ subst-filler B (sym $ paths A-c _) b
 
 Σ-contract-snd : (∀ x → is-contr (B x)) → Σ A B ≃ A
@@ -210,7 +210,7 @@ infixr 4 _,ₚ_
   → Path (Σ A B) (x , y) (x , z)
   → y ＝ z
 Σ-inj-set {B} {y} {z} A-set path =
-  subst (_＝ z) (ap (λ e → transport (ap B e) y) (A-set _ _ _ _) ∙ transport-refl y)
+  substₚ (_＝ z) (ap (λ e → transport (ap B e) y) (A-set _ _ _ _) ∙ transport-refl y)
     (from-pathᴾ (ap snd path))
 
 Σ-swap

@@ -144,7 +144,7 @@ instance
 
       lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ Σ[ a ꞉ A ] P a
       lemma₂ = contra $ bimap Ã.to λ {a} →
-        subst P $ (happly (Ṽ.ε Ã.from) (Ã.to a) ∙ Ã.η a) ⁻¹
+        substₚ P $ (happly (Ṽ.ε Ã.from) (Ã.to a) ∙ Ã.η a) ⁻¹
   {-# INCOHERENT manifest-bishop-finite→omniscient #-}
 
 ≃→manifest-bishop-finite : (B ≃ A) → Manifest-bishop-finite A → Manifest-bishop-finite B

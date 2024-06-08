@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.List.Operations.Properties where
 
-open import Foundations.Base
+open import Foundations.Prelude
 
 open import Logic.Decidability
 open import Logic.Discreteness
@@ -36,8 +36,8 @@ snoc-elim : (P : List A → 𝒰 ℓ′)
 snoc-elim P p[] ps xs = go [] xs p[]
   where
   go : ∀ xs ys → P xs → P (xs ++ ys)
-  go xs []       pxs = subst P (sym $ ++-id-r xs) pxs
-  go xs (y ∷ ys) pxs = subst P (++-snoc xs ys y) (go (snoc xs y) ys (ps xs y pxs))
+  go xs []       pxs = subst {B = P} (sym $ ++-id-r xs) pxs
+  go xs (y ∷ ys) pxs = subst {B = P} (++-snoc xs ys y) (go (snoc xs y) ys (ps xs y pxs))
 
 ++-length : (xs ys : List A) → length (xs ++ ys) ＝ length xs + length ys
 ++-length []       ys = refl
@@ -49,8 +49,8 @@ reflects-all : ∀ (p : A → Bool) xs
              → Reflects⁰ (All (is-true ∘ p) xs) (all p xs)
 reflects-all p []       = ofʸ []
 reflects-all p (x ∷ xs) with p x | recall p x
-... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → subst is-true e a)
-... | true  | ⟪ e ⟫ = Reflects.dmap (λ a → (subst is-true (sym e) tt) ∷ a)
+... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → subst {B = is-true} e a)
+... | true  | ⟪ e ⟫ = Reflects.dmap (λ a → (subst {B = is-true} (sym e) tt) ∷ a)
                        (λ ne → λ where (px ∷ a) → ne a)
                        (reflects-all p xs)
 
@@ -65,7 +65,7 @@ all-elem : ⦃ A-dis : is-discrete A ⦄
          → All P xs
          → (z : A) → is-true (elem= z xs) → P z
 all-elem P (x ∷ xs) (px ∷ a) z el with (true-reflects (reflects-or {x = ⌊ z ≟ x ⌋}) el)
-... | inl z=x = subst P (sym (true-reflects discrete-reflects! z=x)) px
+... | inl z=x = subst {B = P} (sym (true-reflects discrete-reflects! z=x)) px
 ... | inr els = all-elem P xs a z els
 
 elem-all : ⦃ di : is-discrete A ⦄
@@ -116,4 +116,4 @@ span-all : ∀ (p : A → Bool) xs
 span-all p []       = []
 span-all p (x ∷ xs) with p x | recall p x
 ... | false | ⟪ e ⟫ = []
-... | true  | ⟪ e ⟫ = subst is-true (sym e) tt ∷ (span-all p xs)
+... | true  | ⟪ e ⟫ = subst {B = is-true} (sym e) tt ∷ (span-all p xs)

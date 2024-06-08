@@ -14,3 +14,4 @@ open import Foundations.Transport  public
 open import Foundations.Univalence public
 
 open import Foundations.IdentitySystem.Interface public
+open import Foundations.IdentitySystem.Transport public

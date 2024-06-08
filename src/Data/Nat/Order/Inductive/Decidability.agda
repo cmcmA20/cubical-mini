@@ -17,8 +17,8 @@ private variable m n k : ℕ
 ≤-reflects (suc _) 0 = ofⁿ λ ()
 ≤-reflects (suc m) (suc n) with m ≤ᵇ n | recall (m ≤ᵇ_) n
 ... | false | ⟪ p ⟫ = ofⁿ λ where
-  (s≤s m≤n) → false-reflects (≤-reflects m n) (subst is-true (ap not p ⁻¹) tt) m≤n
-... | true  | ⟪ p ⟫ = ofʸ (s≤s (true-reflects (≤-reflects m n) (subst is-true (p ⁻¹) _)))
+  (s≤s m≤n) → false-reflects (≤-reflects m n) (substₚ is-true (ap not p ⁻¹) tt) m≤n
+... | true  | ⟪ p ⟫ = ofʸ (s≤s (true-reflects (≤-reflects m n) (substₚ is-true (p ⁻¹) _)))
 
 instance
   Dec-≤ : {m n : ℕ} → Dec (m ≤ n)

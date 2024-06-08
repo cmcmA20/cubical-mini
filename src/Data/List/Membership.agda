@@ -30,7 +30,7 @@ data _∈ₗ_ {ℓ} {A : Type ℓ} (x : A) : List A → Type ℓ where
   there : x ∈ₗ xs      → x ∈ₗ (y ∷ xs)
 
 here≠there : {p : x ＝ y} {q : x ∈ₗ xs} → here p ≠ there q
-here≠there {q} w = subst discrim w tt where
+here≠there {q} w = subst {B = discrim} w tt where
   discrim : x ∈ₗ xs → Type
   discrim (here  _)  = ⊤
   discrim (there _) = ⊥

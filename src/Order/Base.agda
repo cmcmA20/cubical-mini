@@ -42,7 +42,7 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
       (set-identity-system! (≤-antisym $ₜ²_))
 
     ≤-refl′ : ∀ {x y} → x ＝ y → x ≤ y
-    ≤-refl′ {x} p = subst (x ≤_) p ≤-refl
+    ≤-refl′ {x} p = subst {B = x ≤_} p ≤-refl
 
   instance
     H-Level-poset-ob : ⦃ n ≥ʰ 2 ⦄ → H-Level n Ob

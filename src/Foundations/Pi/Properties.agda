@@ -33,17 +33,17 @@ private variable
   to k x = k (e.to x)
 
   from : Π[ x ꞉ B ] P (e.to x) → Π[ x ꞉ A ] P x
-  from k x = subst P (e.ε x) (k (e.from x))
+  from k x = substₚ P (e.ε x) (k (e.from x))
 
   ri : from is-right-inverse-of to
   ri k = fun-ext λ x →
-           ap² (subst P) (e.zig x ⁻¹)
+           ap² (substₚ P) (e.zig x ⁻¹)
             (from-pathᴾ (symᴾ-from-goal (ap k (e.η x))) ⁻¹)
           ∙ transport⁻-transport (ap P (ap e.to (e.η x ⁻¹))) (k x)
 
   li : from is-left-inverse-of to
   li k = fun-ext λ x →
-           ap (subst P _) (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x))) ⁻¹)
+           ap (substₚ P _) (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x))) ⁻¹)
          ∙ transport⁻-transport (ap P (e.ε x) ⁻¹) _
 
 Π≃∀ : Π[ x ꞉ A ] P x
@@ -125,10 +125,10 @@ hetero-homotopy≃homotopy {A} {B} {f} {g} = ≅→≃ isom where
        ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
   isom .fst h x₀ = h $ c .fst .snd
   isom .snd .inv k {x₀} {x₁} p =
-    subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) (c .snd (x₁ , p)) (k x₀)
+    substₚ (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) (c .snd (x₁ , p)) (k x₀)
 
   isom .snd .rinv k = fun-ext λ x₀ →
-    ap (λ α → subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) α (k x₀))
+    ap (λ α → substₚ (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) α (k x₀))
       (is-contr→is-set c (c .fst) (c .fst) (c .snd $ c .fst) refl)
     ∙ transport-refl (k x₀)
 

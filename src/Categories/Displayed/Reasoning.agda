@@ -11,7 +11,7 @@ private
   module B = Categories.Morphism B
 
 hom[_] : ∀ {a b x y} {f g : B.Hom a b} → f ＝ g → E.Hom[ f ] x y → E.Hom[ g ] x y
-hom[_] = subst (λ h → E.Hom[ h ] _ _)
+hom[_] = subst {B = λ h → E.Hom[ h ] _ _}
 
 hom[_]⁻ : ∀ {a b x y} {f g : B.Hom a b} → g ＝ f → E.Hom[ f ] x y → E.Hom[ g ] x y
 hom[ p ]⁻ = hom[ sym p ]

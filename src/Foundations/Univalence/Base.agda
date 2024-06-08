@@ -118,7 +118,7 @@ module @0 _ where
        → {B : Type ℓ} (e : A ≃ B)
        → P B e
     Jₑ P pid eqv =
-      subst (λ e → P (e .fst) (e .snd)) (equiv-is-contr _ .snd (_ , eqv)) pid
+      substₚ (λ e → P (e .fst) (e .snd)) (equiv-is-contr _ .snd (_ , eqv)) pid
 
     unglue-is-equiv
       : (φ : I)

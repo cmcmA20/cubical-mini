@@ -62,7 +62,7 @@ action→structure act .is-hom (A , x) (B , y) f = act f .fst x ＝ y
 
 @0 is-transport-str : {S : Type ℓ → Type ℓ′} → Equiv-action S → Type _
 is-transport-str {ℓ} {S} act =
-  {X Y : Type ℓ} (e : X ≃ Y) (s : S X) → act e .fst s ＝ subst S (ua e) s
+  {X Y : Type ℓ} (e : X ≃ Y) (s : S X) → act e .fst s ＝ substₚ S (ua e) s
 
 preserves-id : {S : Type ℓ → Type ℓ} → Equiv-action S → Type _
 preserves-id {ℓ} {S} act =
@@ -72,22 +72,22 @@ preserves-id {ℓ} {S} act =
   : (σ : Equiv-action S)
   → preserves-id σ → is-transport-str σ
 preserves-id→is-transport-str {S} σ pres-id e s =
-  Jₑ (λ _ e → σ e .fst s ＝ subst S (ua e) s) lemma′ e where
-    lemma′ : σ refl .fst s ＝ subst S (ua refl) s
+  Jₑ (λ _ e → σ e .fst s ＝ substₚ S (ua e) s) lemma′ e where
+    lemma′ : σ refl .fst s ＝ substₚ S (ua refl) s
     lemma′ =
-      σ refl .fst s        ~⟨ pres-id s ⟩
-      s                    ~⟨ transport-refl _ ⟨
-      transport refl s     ~⟨ ap (λ p → subst S p s) ua-idₑ ⟨
-      subst S (ua refl) s  ∎
+      σ refl .fst s         ~⟨ pres-id s ⟩
+      s                     ~⟨ transport-refl _ ⟨
+      transport refl s      ~⟨ ap (λ p → substₚ S p s) ua-idₑ ⟨
+      substₚ S (ua refl) s  ∎
 
 @0 sym-transport-str
   : (α : Equiv-action S) (τ : is-transport-str α)
     {X Y : Type ℓ} (e : X ≃ Y) (t : S Y)
-  → is-equiv→inverse (α e .snd) t ＝ subst S (sym (ua e)) t
+  → is-equiv→inverse (α e .snd) t ＝ substₚ S (sym (ua e)) t
 sym-transport-str {S} α τ e t =
      sym (transport⁻-transport (ap S (ua e)) (from t))
-  ∙∙ sym (ap (subst S (sym (ua e))) (τ e (from t)))
-  ∙∙ ap (subst S (sym (ua e))) (ε t)
+  ∙∙ sym (ap (substₚ S (sym (ua e))) (τ e (from t)))
+  ∙∙ ap (substₚ S (sym (ua e))) (ε t)
   where open module ae = Equiv (α e)
 
 @0 is-transport→is-univalent : (a : Equiv-action S)
@@ -95,5 +95,5 @@ sym-transport-str {S} α τ e t =
                              → is-univalent (action→structure a)
 is-transport→is-univalent {S} act is-tr {X , s} {Y , t} eqv =
   act eqv .fst s ＝ t                   ~⟨ =→≃ (ap (_＝ t) (is-tr eqv s)) ⟩
-  subst S (ua eqv) s ＝ t               ~⟨ =→≃ (pathᴾ=path (λ i → S (ua eqv i)) s t) ⟨
+  substₚ S (ua eqv) s ＝ t              ~⟨ =→≃ (pathᴾ=path (λ i → S (ua eqv i)) s t) ⟨
   ＜ s ／ (λ i → S (ua eqv i)) ＼ t ＞  ∎

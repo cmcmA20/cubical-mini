@@ -53,7 +53,7 @@ module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
     ext (prop-extₑ! (_∙ r) (_∙ r ⁻¹))
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
-  encode x _ p = subst ⌞ Code x ⌟ p refl
+  encode x _ p = subst {B = ⌞ Code x ⌟} p refl
 
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
   decode = elim! ∘ glue/

@@ -82,7 +82,7 @@ is-of-hlevel-+ h₀ (suc h₁) x = is-of-hlevel-suc (h₁ + h₀) (is-of-hlevel-
 
 is-of-hlevel-+-left : (h₀ h₁ : HLevel) → is-of-hlevel h₀ A → is-of-hlevel (h₀ + h₁) A
 is-of-hlevel-+-left {A} h₀ h₁ A-hl =
-  subst (λ h → is-of-hlevel h A) (+-comm h₀ h₁) (is-of-hlevel-+ h₀ h₁ A-hl) where
+  substₚ (λ h → is-of-hlevel h A) (+-comm h₀ h₁) (is-of-hlevel-+ h₀ h₁ A-hl) where
     +-comm : ∀ n k → k + n ＝ n + k
     +-comm 0 k = go k where
       go : ∀ k → k + 0 ＝ k
@@ -113,7 +113,7 @@ opaque
                           → {x : A i0} {y : A i1}
                           → is-of-hlevel h ＜ x ／ A ＼ y ＞
   pathᴾ-is-of-hlevel-same {A} h ahl {x} {y} =
-    subst (is-of-hlevel h) (sym (pathᴾ=path A x y)) (path-is-of-hlevel-same h ahl)
+    substₚ (is-of-hlevel h) (sym (pathᴾ=path A x y)) (path-is-of-hlevel-same h ahl)
 
 path-is-of-hlevel : (h : HLevel) → is-of-hlevel (suc h) A → (x y : A) → is-of-hlevel h (x ＝ y)
 path-is-of-hlevel 0 ahl x y =
@@ -125,7 +125,7 @@ pathᴾ-is-of-hlevel : {A : I → Type ℓ} (h : HLevel)
                    → (x : A i0) (y : A i1)
                    → is-of-hlevel h ＜ x ／ A ＼ y ＞
 pathᴾ-is-of-hlevel {A} h ahl x y =
-  subst (is-of-hlevel h) (sym (pathᴾ=path A x y)) (path-is-of-hlevel h ahl _ _)
+  substₚ (is-of-hlevel h) (sym (pathᴾ=path A x y)) (path-is-of-hlevel h ahl _ _)
 
 
 opaque
