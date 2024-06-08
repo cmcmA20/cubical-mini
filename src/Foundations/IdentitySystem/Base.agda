@@ -60,12 +60,9 @@ J-refl
   → J ids P p (r x) ＝ p
 J-refl {R} {r} {x} ids P p =
   transport (λ i → P (ids .to-path (r x) i) (ids .to-path-over (r x) i)) p  ~⟨⟩
-  subst P′ (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p       ~⟨ ap (λ e → subst P′ e p) (to-path-refl-coh ids x) ⟩
-  subst P′ refl p                                                           ~⟨ transport-refl p ⟩
+  subst (P $²_) (λ i → ids .to-path (r x) i , ids .to-path-over (r x) i) p  ~⟨ ap (λ e → subst (P $²_) e p) (to-path-refl-coh ids x) ⟩
+  subst (P $²_) refl p                                                      ~⟨ transport-refl p ⟩
   p                                                                         ∎
-  where
-    P′ : Σ _ (R x) → Type _
-    P′ (b , r) = P b r
 
 to-path-refl
   : {A : Type ℓ} {R : A → A → Type ℓ′}
@@ -90,7 +87,7 @@ singleton-is-contr→identity-system {R} {r} c = ids where
   paths′ p = is-contr→is-prop c _ _
 
   ids : is-identity-system R r
-  ids .to-path p = ap fst (paths′ (_ , p))
+  ids .to-path      p = ap fst (paths′ (_ , p))
   ids .to-path-over p = ap snd (paths′ (_ , p))
 
 equiv-path→identity-system

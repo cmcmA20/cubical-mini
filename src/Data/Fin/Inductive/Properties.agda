@@ -2,6 +2,7 @@
 module Data.Fin.Inductive.Properties where
 
 open import Meta.Prelude
+open import Meta.Extensionality
 
 open import Meta.Effect.Bind
 
@@ -22,19 +23,16 @@ cast {suc m} {0}     p _        = absurd $ suc≠zero p
 cast {suc m} {suc n} _ fzero    = fzero
 cast {suc m} {suc n} p (fsuc k) = fsuc $ cast (suc-inj p) k
 
-cast-is-equiv : {m n : ℕ} (p : m ＝ n) → is-equiv (cast p)
-cast-is-equiv = Jₚ (λ _ p → is-equiv (cast p)) cast-refl-is-equiv
+cast-is-equiv : {m : ℕ} (n : ℕ) (p : m ＝ n) → is-equiv (cast p)
+cast-is-equiv = J>! subst is-equiv id=cast-refl id-is-equiv
   where
-    id=cast-refl : {n : ℕ} → refl ＝ cast (λ _ → n)
+    id=cast-refl : {n : ℕ} → id ＝ cast (λ _ → n)
     id=cast-refl {0}     _ ()
     id=cast-refl {suc n} _ fzero    = fzero
     id=cast-refl {suc n} i (fsuc k) = fsuc $ id=cast-refl i k
 
-    cast-refl-is-equiv : {n : ℕ} → is-equiv (cast (λ _ → n))
-    cast-refl-is-equiv = subst is-equiv id=cast-refl id-is-equiv
-
 cast-equiv : {m n : ℕ} → m ＝ n → Fin m ≃ Fin n
-cast-equiv p = cast p , cast-is-equiv p
+cast-equiv p = cast p , cast-is-equiv _ p
 
 strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
 strengthen fzero            = inl fzero

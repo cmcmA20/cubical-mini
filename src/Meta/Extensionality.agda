@@ -32,6 +32,23 @@ open Extensional using (Pathᵉ ; reflᵉ ; idsᵉ) public
 
 private variable ℓ ℓ′ : Level
 
+J!
+  : ∀{ℓ ℓr ℓ″} {A : Type ℓ} {x : A}
+  → ⦃ sa : Extensional A ℓr ⦄
+  → (P : ∀ b → sa .Pathᵉ x b → Type ℓ″)
+  → (d : P x (sa .reflᵉ x))
+  → ∀ {b} s → P b s
+J! ⦃ sa ⦄ P d _ = IdS.J (sa .idsᵉ) P d _
+
+infix 10 J>!_
+J>!_
+  : ∀{ℓ ℓr ℓ″} {A : Type ℓ} {x : A}
+  → ⦃ sa : Extensional A ℓr ⦄
+  → {P : ∀ b → sa .Pathᵉ x b → Type ℓ″}
+  → P x (sa .reflᵉ x)
+  → ∀ b s → P b s
+J>!_ {P} b _ = J! P b
+
 instance
   -- Default instance, uses regular paths for the relation.
   Extensional-default : {A : Type ℓ} → Extensional A ℓ

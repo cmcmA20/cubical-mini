@@ -100,7 +100,7 @@ fin-product : {n m : ℕ}
             ≃ Fin (n · m)
 fin-product {n} {m} =
   Fin n × Fin m          ~⟨ fin-sum (λ _ → m) ⟩
-  Fin (sum n (λ _ → m))  ~⟨ cast (sum=* n m) , cast-is-equiv _ ⟩
+  Fin (sum n (λ _ → m))  ~⟨ cast (sum=* n m) , cast-is-equiv _ _ ⟩
   Fin (n · m)            ∎
   where
     sum=* : ∀ n m → sum n (λ _ → m) ＝ n · m

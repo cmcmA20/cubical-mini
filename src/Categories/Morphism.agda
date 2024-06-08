@@ -442,7 +442,7 @@ opaque
       : (x y : Ob) (p : x ＝ y) (b d : Ob) (q : b ＝ d) {f : x ≅ b} {g : y ≅ d}
       → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
       → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
-    inverse-unique-internal x = Jₚ> λ y → Jₚ> λ {f} {g} d →
+    inverse-unique-internal x = J>! λ y → J>! λ {f} {g} d →
       f .from                        ~⟨ cat! C ⟩
       f .from ∘ ⌜ id ⌝               ~⟨ ap¡ (g .inv-l) ⟨
       f .from ∘ g .to ∘ g .from      ~⟨ assoc _ _ _ ⟩

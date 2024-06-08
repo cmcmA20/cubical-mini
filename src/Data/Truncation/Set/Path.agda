@@ -2,6 +2,7 @@
 module Data.Truncation.Set.Path where
 
 open import Meta.Prelude
+open import Meta.Extensionality
 
 open import Meta.Effect.Map
 
@@ -33,7 +34,7 @@ instance opaque
   Code x = elim! (λ y → el! ∥ x ＝ y ∥₁)
 
   encode : ∀ x y → ∣ x ∣₂ ＝ y → ⌞ Code x y ⌟
-  encode x y = Jₚ (λ y _ → ⌞ Code x y ⌟ ) ∣ refl ∣₁
+  encode _ = J>! ∣ refl ∣₁
 
   decode : ∀ x y → ⌞ Code x y ⌟ → ∣ x ∣₂ ＝ y
   decode x = elim! λ _ → ap ∣_∣₂

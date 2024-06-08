@@ -163,7 +163,7 @@ module Replacement
   Image≃Im : Image ≃ Im f
   Image≃Im .fst = Image→Im
   Image≃Im .snd .equiv-proof (x , p) = case p return (λ p → is-contr (fibre _ (x , p))) of λ where
-    w → Jₚ (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) where
+    w → J! (λ z q → is-contr (fibre _ (z , ∣ w , q ∣₁))) (go w) where
       go : (f⁻¹x : A) → is-contr _
       go f⁻¹x = (⦋ f⁻¹x ⦌ , refl) , λ where
         (u , α) → quot (ls.encode (ap fst α ⁻¹)) ,ₚ Σ-prop-square!
