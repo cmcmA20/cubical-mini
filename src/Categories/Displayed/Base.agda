@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 module Categories.Displayed.Base where
 
 open import Meta.Prelude

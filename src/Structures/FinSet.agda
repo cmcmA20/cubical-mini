@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 module Structures.FinSet where
 
 open import Meta.Prelude

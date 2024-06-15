@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 module Data.Sum.Path where
 
 open import Meta.Prelude

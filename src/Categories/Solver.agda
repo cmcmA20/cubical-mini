@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 module Categories.Solver where
 
 open import Foundations.Base hiding (id; _∘_)

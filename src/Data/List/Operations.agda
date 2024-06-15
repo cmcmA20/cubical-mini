@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 -- TODO naming is garbage
 module Data.List.Operations where
 

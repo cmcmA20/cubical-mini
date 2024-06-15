@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 module Data.Maybe.Instances.Idiom where
 
 open import Foundations.Base

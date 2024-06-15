@@ -1,5 +1,5 @@
 -- Naïm Favier 2023
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 module Meta.Deriving.Elim where
 
 open import Meta.Prelude

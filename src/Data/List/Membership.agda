@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 module Data.List.Membership where
 
 open import Meta.Prelude
@@ -32,7 +32,7 @@ data _∈ₗ_ {ℓ} {A : Type ℓ} (x : A) : List A → Type ℓ where
 here≠there : {p : x ＝ y} {q : x ∈ₗ xs} → here p ≠ there q
 here≠there {q} w = subst discrim w tt where
   discrim : x ∈ₗ xs → Type
-  discrim (here  _)  = ⊤
+  discrim (here  _) = ⊤
   discrim (there _) = ⊥
 
 there≠here : {p : x ＝ y} {q : x ∈ₗ xs} → there q ≠ here p

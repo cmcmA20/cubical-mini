@@ -33,9 +33,7 @@ instance
 ≤-split m n | no m≥n | yes n<m = inr (inl n<m)
 ≤-split m n | no m≥n | no n≥m  = inr (inr (go m n m≥n n≥m)) where
   go : ∀ m n → ¬ (suc m ≤ n) → ¬ (suc n ≤ m) → m ＝ n
-  go zero zero p q          = refl
-  go zero (suc zero) p q    = absurd $ p $ s≤s z≤
-  go zero (suc (suc n)) p q = absurd $ p $ s≤s z≤
-  go (suc zero) zero p q    = absurd $ q $ s≤s z≤
-  go (suc (suc m)) zero p q = absurd $ q $ s≤s z≤
-  go (suc m) (suc n) p q    = ap suc $ go m n (p ∘ s≤s) (q ∘ s≤s)
+  go 0       0       _ _ = refl
+  go 0       (suc _) p _ = absurd $ p (s≤ʰs z≤ʰ)
+  go (suc _) 0       _ q = absurd $ q (s≤ʰs z≤ʰ)
+  go (suc m) (suc n) p q = ap suc (go m n (p ∘ s≤ʰs) (q ∘ s≤ʰs))

@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 -- -vtactic.variadic:20
 module Meta.Variadic where
 

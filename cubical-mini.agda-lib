@@ -5,10 +5,11 @@ flags:
   --erased-cubical
   --erasure
   --erased-matches
+  --exact-split
   --guardedness
+  --hidden-argument-puns
   --no-import-sorts
   --postfix-projections
-  --hidden-argument-puns
 
-  -WnoUnsupportedIndexedMatch
   -Werror
+  -WnoUnsupportedIndexedMatch

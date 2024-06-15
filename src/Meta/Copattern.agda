@@ -1,5 +1,5 @@
 -- Reed Mullanix 2024
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --no-exact-split #-}
 module Meta.Copattern where
 
 open import Foundations.Prelude
