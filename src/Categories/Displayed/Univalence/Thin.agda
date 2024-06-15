@@ -80,8 +80,6 @@ module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure �
       → Extensional (So.Hom a b) ℓʳ
     Extensional-Hom ⦃ sa ⦄ = set-injective→extensional! (Structured-hom-path spec) sa
 
-    Funlike-Hom : ∀ {a b} → Funlike ur (So.Hom a b) ⌞ a ⌟ (λ _ → ⌞ b ⌟)
-    Funlike-Hom ._#_ = Total-hom.hom
 
   Homomorphism-monic
     : {x y : So.Ob} (f : So.Hom x y)

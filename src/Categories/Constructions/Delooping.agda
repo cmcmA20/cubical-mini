@@ -5,15 +5,18 @@ open import Algebra.Monoid
 
 open import Categories.Prelude
 
+private variable ℓ : Level
+
 -- \MIB
-𝑩 : ∀ {ℓ} {M : Type ℓ} → Monoid-on M → Precategory 0ℓ ℓ
-𝑩 {M} mm = r where
+-- Delooping of a monoid
+𝑩 : {X : Type ℓ} → Monoid-on X → Precategory 0ℓ ℓ
+𝑩 {X} mm = r where
   module mm = Monoid-on mm
   open Precategory
 
   r : Precategory _ _
   r .Ob = ⊤
-  r .Hom _ _ = M
+  r .Hom _ _ = X
   r .Hom-set _ _ = hlevel!
   r .Precategory.id = mm.id
   r .Precategory._∘_ = flip mm._⋆_
@@ -21,7 +24,7 @@ open import Categories.Prelude
   r .id-l = mm.id-r
   r .assoc _ _ _ = mm.assoc _ _ _ ⁻¹
 
-module _ {ℓ : Level} {X : Type ℓ} {M : Monoid-on X} where private
+module _ {X : Type ℓ} {M : Monoid-on X} where private
   module Mon = Monoid-on M
   module Cat = Precategory (𝑩 M)
 

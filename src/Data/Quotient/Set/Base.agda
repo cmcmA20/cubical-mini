@@ -68,3 +68,12 @@ instance
     → Inductive (∀ x → P x) ℓm
   Inductive-/₂-prop ⦃ i ⦄ .Inductive.methods = i .Inductive.methods
   Inductive-/₂-prop ⦃ i ⦄ .Inductive.from f = elim-prop (λ _ → hlevel 1) (i .Inductive.from f)
+
+rec² : is-set C
+     → (f : A → B → C)
+     → (∀ x y b → R x y → f x b ＝ f y b)
+     → (∀ a x y → S x y → f a x ＝ f a y)
+     → A / R → B / S → C
+rec² C-set f fa= fb= = rec (hlevel 2) (λ a → rec (hlevel 2) (f a) (fb= a)) λ a b r →
+  fun-ext (elim! (λ x → fa= a b x r))
+  where instance _ = hlevel-basic-instance 2 C-set
