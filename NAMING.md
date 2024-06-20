@@ -73,7 +73,7 @@ For naming conventions specific to the Algebra subfolder, see
 
 * Results about `Pathᴾ` (path overs) should end with superscript `ᴾ`.
 
-* Results about displayed categorical stuff should end with superscript `ᴰ`.
+* Results about displayed stuff should end with superscript `ᴰ`.
 
 * If you need to distinguish simple and dependent result, prefer
   making dependent stuff default, simple can have superscript `ˢ`.

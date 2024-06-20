@@ -104,11 +104,9 @@ property : (S : Type ℓ → Type ℓ₁) → (∀ A → is-prop (S A)) → Stru
 property _ _ .is-hom _ _ _ = ⊤
 
 @0 property-is-univalent : {S-prop : _} → is-univalent {S = S} (property S S-prop)
-property-is-univalent {S-prop} {X = _ , s} {Y = _ , t} _ =
-  is-contr→equiv-⊤ (
-    inhabited-prop-is-contr (is-prop→pathᴾ (λ _ → S-prop _) s t)
-                            (pathᴾ-is-of-hlevel-same 1 (S-prop _))
-  ) ⁻¹
+property-is-univalent {S-prop} {X = _ , s} {Y = _ , t} _ = sym $ is-contr→equiv-⊤ $
+  inhabited-prop-is-contr (is-prop→pathᴾ (λ _ → S-prop _) s t)
+                          (pathᴾ-is-of-hlevel-same 1 (S-prop _))
 
 @0 transfer-property
   : {S-prop : _}
@@ -136,7 +134,7 @@ module _
       σ .is-hom (A , s) (B , t) f
         ~⟨ univ f ⟩
       ＜ s ／ (λ i → S (ua f i)) ＼ t ＞
-        ~⟨ Σ-contract-snd (λ x → pathᴾ-is-of-hlevel-same 0 (b , (axioms-prop b))) ⟨
+        ~⟨ Σ-contract-snd (λ x → pathᴾ-is-of-hlevel-same 0 (b , axioms-prop b)) ⟨
       Σ[ p ꞉ ＜ s ／ (λ i → S (ua f i)) ＼ t ＞ ] ＜ a ／ (λ i → axioms (ua f i) (p i)) ＼ b ＞
         ~⟨ ≅→≃ Σ-pathᴾ-iso ⟩
       _
@@ -146,7 +144,7 @@ module _
   : {σ : Structure ℓ S} {univ : is-univalent σ}
     {axioms : (X : _) → S X → Type ℓ₃}
   → (A : Type-with (axiom-str σ axioms)) (B : Type-with σ)
-  → (A .fst , A .snd .fst) ≃[ σ ] B
+  → (A .fst , A .snd .fst) ≃s[ σ ] B
   → axioms (B .fst) (B .snd)
 transfer-axioms {univ} {axioms} A B eqv =
   subst (axioms $ₜ²_) (sip univ eqv) (A .snd .snd)

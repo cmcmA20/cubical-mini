@@ -6,8 +6,7 @@ open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
 open import Foundations.HLevel
 open import Foundations.Isomorphism
-
--- Don't you ever try importing meta stuff here
+open import Foundations.Sigma.Properties
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -63,3 +62,40 @@ fibrewise-is-equiv≃total-is-equiv : ∀[ x ꞉ A ] is-equiv (f x)
 fibrewise-is-equiv≃total-is-equiv = prop-extₑ!
   fibrewise-is-equiv→total-is-equiv
   total-is-equiv→fibrewise-is-equiv
+
+
+-- displayed equivalences
+module _ {ℓa ℓb} {A : Type ℓa} {B : Type ℓb} where
+
+  _≃[_]_ : ∀{ℓp ℓq} (P : A → Type ℓp) (e : A ≃ B) (Q : B → Type ℓq) → Type _
+  P ≃[ e ] Q = (a : A) (b : B) → e .fst a ＝ b → P a ≃ Q b
+
+  module _ {ℓp ℓq} {P : A → Type ℓp} {Q : B → Type ℓq} (e : A ≃ B) where
+    private module e = Equiv e
+
+    over-left→over : Π[ a ꞉ A ] (P a ≃ Q (e.to a)) → P ≃[ e ] Q
+    over-left→over e′ a _ p = e′ a ∙ line→≃ (λ i → Q (p i))
+
+    over-right→over : Π[ b ꞉ B ] (P (e.from b) ≃ Q b) → P ≃[ e ] Q
+    over-right→over e′ _ b p = line→≃ (λ i → P (e.adjunct-l p i)) ∙ e′ b
+
+    prop-over-ext
+      : (∀ {a} → is-prop (P a))
+      → (∀ {b} → is-prop (Q b))
+      → Π[ a ꞉ A ] (P a → Q (e.to a))
+      → Π[ b ꞉ B ] (Q b → P (e.from b))
+      → P ≃[ e ] Q
+    prop-over-ext P-prop Q-prop P→Q Q→P a b p = prop-extₑ P-prop Q-prop
+      (subst Q p ∘ P→Q a)
+      (subst P (e.adjunct-l p ⁻¹) ∘ Q→P b)
+
+    over→total : P ≃[ e ] Q → Σ A P ≃ Σ B Q
+    over→total e′ = Σ-ap e λ a → e′ a (e.to a) refl
+
+    prop-over-ext!
+      : ⦃ ∀ {a} → H-Level 1 (P a) ⦄
+      → ⦃ ∀ {b} → H-Level 1 (Q b) ⦄
+      → Π[ a ꞉ A ] (P a → Q (e.to a))
+      → Π[ b ꞉ B ] (Q b → P (e.from b))
+      → P ≃[ e ] Q
+    prop-over-ext! = prop-over-ext (hlevel 1) (hlevel 1)

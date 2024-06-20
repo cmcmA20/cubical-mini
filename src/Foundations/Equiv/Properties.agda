@@ -48,15 +48,13 @@ instance
 is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
 is-equiv-comp fe ge = ((_ , fe) ∙ (_ , ge)) .snd
 
-inv-equiv-is-equiv : {A : Type ℓ} {B : Type ℓ′} → is-equiv (λ (e : A ≃ B) → e ⁻¹)
-inv-equiv-is-equiv = is-iso→is-equiv goal where
-  goal : is-iso _⁻¹
-  goal .inv  = _⁻¹
-  goal .rinv _ = equiv-ext refl
-  goal .linv _ = equiv-ext refl
-
 inv-≃ : (A ≃ B) ≃ (B ≃ A)
-inv-≃ = _ , inv-equiv-is-equiv
+inv-≃ .fst = _
+inv-≃ .snd = is-iso→is-equiv go where
+  go : is-iso _⁻¹
+  go .inv = _⁻¹
+  go .rinv _ = equiv-ext refl
+  go .linv _ = equiv-ext refl
 
 is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
 is-equiv-inv fe = ((_ , fe) ⁻¹) .snd
@@ -90,7 +88,6 @@ is-equiv→pre-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
   f-iso : is-iso f
   f-iso = is-equiv→is-iso f-eqv
 
-  f⁻¹ : _
   f⁻¹ = f-iso .is-iso.inv
 
   isiso : is-iso (_∘_ f)
@@ -103,7 +100,6 @@ is-equiv→post-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
   f-iso : is-iso f
   f-iso = is-equiv→is-iso f-eqv
 
-  f⁻¹ : _
   f⁻¹ = f-iso .is-iso.inv
 
   isiso : is-iso _

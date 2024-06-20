@@ -36,8 +36,8 @@ open is-iso
   ≅ ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
 Σ-pathᴾ-iso .fst (p , q) i = p i , q i
 Σ-pathᴾ-iso .snd .inv p = (λ i → p i .fst) , (λ i → p i .snd)
-Σ-pathᴾ-iso .snd .rinv x = refl
-Σ-pathᴾ-iso .snd .linv x = refl
+Σ-pathᴾ-iso .snd .rinv _ = refl
+Σ-pathᴾ-iso .snd .linv _ = refl
 
 Σ-path-iso
   : {x y : Σ A B}
