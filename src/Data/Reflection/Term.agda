@@ -3,6 +3,7 @@ module Data.Reflection.Term where
 
 open import Foundations.Base
 
+open import Data.Bool.Base
 open import Data.List.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
@@ -83,3 +84,16 @@ list-pattern (x ∷ xs) = con (quote List._∷_) (x ∷ argN (list-pattern xs) �
 pattern con₀ v = con v []
 pattern def₀ v = def v []
 pattern var₀ v = var v []
+
+is-atomic-tree? : Term → Bool
+is-atomic-args? : Args → Bool
+
+is-atomic-tree? (var _ args) = is-atomic-args? args
+is-atomic-tree? (con _ args) = is-atomic-args? args
+is-atomic-tree? (def _ args) = is-atomic-args? args
+is-atomic-tree? (lit _) = true
+is-atomic-tree? (meta _ args) = is-atomic-args? args
+is-atomic-tree? _ = false
+
+is-atomic-args? [] = true
+is-atomic-args? (arg _ x ∷ xs) = is-atomic-tree? x and is-atomic-args? xs

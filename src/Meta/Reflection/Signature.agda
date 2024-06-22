@@ -234,6 +234,20 @@ helper-function def-nm suf ty cls = do
     _  → define-function nm cls
   pure nm
 
+-- TODO what does it even mean? check this
+-- Given a well-typed `val : ty`, return a definitionally-equal atomic
+-- term equal to `val`, potentially by lifting it into the signature.
+-- See 'helper-function' for the naming scheme.
+define-abbrev : Name → String → Term → Term → TC Term
+define-abbrev def-nm suf ty val = do
+  false ← pure (is-atomic-tree? val) where
+    true → pure val
+  let tel , _ = pi-impl-view ty
+  as ← apply*TC val (tel→args 0 tel)
+  nm ← helper-function def-nm suf ty
+    [ clause tel (tel→pats 0 tel) as ]
+  pure (def₀ nm)
+
 private
   make-args : ℕ → List (Arg ℕ) → List (Arg Term)
   make-args n xs = reverse-fast $ map (map (λ i → var₀ (n ∸ i ∸ 1))) xs

@@ -110,6 +110,18 @@ fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ isom where
       lemi→i : ＜ coei→i A i (p i) ／ (λ m → lemi→j i m ＝ p i) ＼ refl ＞
       lemi→i m k = coei→i A i (p i) (m ∨ k)
 
+Π-contract-dom : (A-c : is-contr A)
+               → Π[ x ꞉ A ] P x ≃ P (centre A-c)
+Π-contract-dom {A} {P} A-c = ≅→≃ go where
+  go : Iso _ _
+  go .fst f = f $ centre A-c
+  go .snd .is-iso.inv p x = subst P (paths A-c x) p
+  go .snd .is-iso.rinv p =
+    transport (ap P (paths A-c (centre A-c))) p  ~⟨ ap (λ φ → transport (ap P φ) p) (is-contr→is-set A-c _ _ _ _) ⟩
+    transport (ap P refl) p                      ~⟨ transport-refl _ ⟩
+    p                                            ∎
+  go .snd .is-iso.linv f = fun-ext λ x → from-pathᴾ $ ap f (paths A-c x)
+
 -- TODO opaque proofs of invertibility?
 hetero-homotopy≃homotopy
   : {A : I → Type ℓ} {B : (i : I) → Type ℓ′}

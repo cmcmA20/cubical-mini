@@ -199,7 +199,7 @@ subst-tel (suc fuel) ρ ((x , arg ai t) ∷ xs) = do
 subst-clause 0 _ _ = nothing
 subst-clause (suc fuel) σ (clause tel ps t)      = do
   a ← subst-tel fuel σ tel
-  b ← subst-tm fuel (wkS (length tel) σ) t
+  b ← subst-tm fuel (liftS (length tel) σ) t -- TODO need tests for this
   pure $ clause a ps b
 subst-clause (suc fuel) σ (absurd-clause tel ps) = do
   x ← subst-tel fuel σ tel
