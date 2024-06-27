@@ -4,8 +4,7 @@ AGDA_EXEC?=$(AGDA_BIN) $(AGDA_FLAGS)
 FIX_WHITESPACE?=fix-whitespace
 RTS_OPTIONS=+RTS -H3G -RTS
 AGDA=$(AGDA_EXEC) $(RTS_OPTIONS)
-RUNHASKELL?=runhaskell
-EVERYTHINGS=$(RUNHASKELL) ./Everythings.hs
+EVERYTHINGS?=cabal run exes --
 DATA_INSTANCE_DIRS=`find src/Data -type d -name Instances -printf "Data/%P\n"`
 STR_INSTANCE_DIRS=`find src/Structures -type d -name Instances -printf "Structures/%P\n"`
 
