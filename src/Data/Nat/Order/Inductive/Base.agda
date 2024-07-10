@@ -4,7 +4,7 @@ module Data.Nat.Order.Inductive.Base where
 open import Foundations.Prelude
   renaming ( _$_ to _$ₜ_
            )
-open import Meta.Variadic
+open import Meta.Notation.Variadic
 
 open import Data.Bool.Base
 open import Data.Empty.Base

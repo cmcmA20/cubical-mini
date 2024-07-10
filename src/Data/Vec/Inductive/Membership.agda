@@ -3,7 +3,7 @@ module Data.Vec.Inductive.Membership where
 
 open import Foundations.Base
 
-open import Meta.Membership
+open import Meta.Notation.Membership
 
 open import Logic.Discreteness
 

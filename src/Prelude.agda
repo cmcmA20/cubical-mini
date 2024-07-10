@@ -15,7 +15,7 @@ open import Meta.Literals.FromProduct public
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromNeg     public
 open import Meta.Literals.FromString  public
-open import Meta.Membership           public
+open import Meta.Notation.Membership  public
 open import Meta.Show                 public
 open import Meta.Witness              public
 

@@ -1,13 +1,13 @@
 {-# OPTIONS --safe --no-exact-split #-}
 -- -vtactic.variadic:20
-module Meta.Variadic where
+module Meta.Notation.Variadic where
 
 open import Foundations.Base
   hiding (_$_)
 
+open import Meta.Notation.Underlying public
 open import Meta.Reflection.Base
 open import Meta.Reflection.Subst
-open import Meta.Underlying public
 
 open import Data.Bool.Base
 open import Data.Empty.Base

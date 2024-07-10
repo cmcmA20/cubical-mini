@@ -8,6 +8,8 @@ open import Foundations.Prelude
            ; _$³_ to _$ₜ³_
            ; _$⁴_ to _$ₜ⁴_
            ; _$⁵_ to _$ₜ⁵_
+
+           ; _×_  to _×ₜ_
            )
   hiding ( Σ-syntax
          ; Π-syntax
@@ -18,9 +20,11 @@ open import Foundations.Prelude
          )
   public
 
-open import Meta.Brackets  public
-open import Meta.Inductive public
-open import Meta.Variadic  public
+open import Meta.Inductive            public
+open import Meta.Notation.Brackets    public
+open import Meta.Notation.Implication public
+open import Meta.Notation.Product     public
+open import Meta.Notation.Variadic    public
 
 open import Data.Bool.Base
   using ( H-Level-is-true )

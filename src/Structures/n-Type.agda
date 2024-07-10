@@ -4,6 +4,7 @@ module Structures.n-Type where
 open import Meta.Prelude
 open import Meta.Effect.Alt
 open import Meta.Extensionality
+open import Meta.Notation.Product
 open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base
@@ -24,7 +25,7 @@ private variable
   ℓ ℓ′ : Level
   A : Type ℓ
   B : Type ℓ′
-  n : HLevel
+  m n : HLevel
 
 record n-Type (ℓ : Level) (n : HLevel) : Type (ℓsuc ℓ) where
   constructor el
@@ -43,6 +44,12 @@ instance
   Underlying-n-Type : Underlying (n-Type ℓ n)
   Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
   Underlying-n-Type .⌞_⌟⁰ = carrier
+
+  ×-n-Type : ×-notation (n-Type ℓ n) (n-Type ℓ′ n) _
+  ×-n-Type ._×_ (el A p) (el B q) = el (A × B) (×-is-of-hlevel _ p q)
+
+  ⇒-n-Type : ⇒-notation (n-Type ℓ m) (n-Type ℓ′ n) _
+  ⇒-n-Type ._⇒_ (el A p) (el B q) = el (A → B) (fun-is-of-hlevel _ q)
 
 n-path : {X Y : n-Type ℓ n} → ⌞ X ⌟ ＝ ⌞ Y ⌟ → X ＝ Y
 n-path f i .carrier = f i

@@ -60,17 +60,18 @@ opaque
   code-list-is-of-hlevel
     : {n : HLevel} {xs ys : List A} → is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code-List xs ys)
   code-list-is-of-hlevel {xs = []}     {([])}   _  = hlevel _
-  code-list-is-of-hlevel {xs = x ∷ xs} {y ∷ ys} hl = ×-is-of-hlevel _ (hl x y) (code-list-is-of-hlevel hl)
+  code-list-is-of-hlevel {xs = x ∷ xs} {y ∷ ys} hl =
+    ×-is-of-hlevel _ (hl x y) (code-list-is-of-hlevel {xs = xs} hl)
   code-list-is-of-hlevel {xs = []}     {_ ∷ _}  _  = hlevel _
   code-list-is-of-hlevel {xs = x ∷ xs} {([])}   _  = hlevel _
 
   list-is-of-hlevel : (n : HLevel)
                     → is-of-hlevel (2 + n) A
                     → is-of-hlevel (2 + n) (List A)
-  list-is-of-hlevel n A-hl _ _ =
+  list-is-of-hlevel n A-hl xs _ =
     ≃→is-of-hlevel (1 + n)
                    (identity-system-gives-path (Extensional-List .idsᵉ) ⁻¹)
-                   (code-list-is-of-hlevel A-hl)
+                   (code-list-is-of-hlevel {xs = xs} A-hl)
 
 instance opaque
   H-Level-List : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → ⦃ A-hl : H-Level n A ⦄ → H-Level n (List A)

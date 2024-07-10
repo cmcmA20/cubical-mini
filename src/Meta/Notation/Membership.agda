@@ -1,9 +1,9 @@
 {-# OPTIONS --safe #-}
-module Meta.Membership where
+module Meta.Notation.Membership where
 
 open import Foundations.Base
 
-open import Meta.Underlying
+open import Meta.Notation.Underlying
 
 open import Data.Dec.Base
 open import Data.Empty.Base

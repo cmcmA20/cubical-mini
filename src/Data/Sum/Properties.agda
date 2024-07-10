@@ -14,7 +14,7 @@ private variable
   C : Type c
   D : Type d
 
-universal : {A : Type a} {B : Type b}
+universal : {a b c : Level} {A : Type a} {B : Type b}
             {C : A ⊎ B → Type c}
           → (Π[ x ꞉ A ⊎ B ] C x)
           ≃ ( (Π[ x ꞉ A ] C (inl x))

@@ -3,7 +3,7 @@ module Data.Bool.Properties where
 
 open import Meta.Prelude
 
-open import Meta.Membership
+open import Meta.Notation.Membership
 open import Meta.Witness
 
 open import Logic.Decidability

@@ -10,9 +10,8 @@ private variable
   E : Precategory o″ h″
   B : Precategory o‴ h‴
 
-infixr 8 _×_
-_×_ : (C : Precategory o h) (D : Precategory o′ h′) → Precategory _ _
-C × D = go where
+_×ᶜ_ : (C : Precategory o h) (D : Precategory o′ h′) → Precategory _ _
+C ×ᶜ D = go where
   module C = Precategory C
   module D = Precategory D
   open Precategory
@@ -26,6 +25,10 @@ C × D = go where
   go .id-r (f , g) = ×-path (C.id-r f) (D.id-r g)
   go .assoc (f , g) (f′ , g′) (f″ , g″) =
     ×-path (C.assoc f f′ f″) (D.assoc g g′ g″)
+
+instance
+  ×-Precategory : ×-notation (Precategory o h) (Precategory o′ h′) _
+  ×-Precategory .×-notation._×_ = _×ᶜ_
 
 open Functor
 
@@ -52,3 +55,7 @@ _×ᶠ_ : Functor B D → Functor C E → Functor (B × C) (D × E)
 (F ×ᶠ G) .F₁ = bimap (F .F₁) (G .F₁)
 (F ×ᶠ G) .F-id = ×-path (F .F-id) (G .F-id)
 (F ×ᶠ G) .F-∘ _ _ = ×-path (F .F-∘ _ _) (G .F-∘ _ _)
+
+instance
+  ×-Functor : ×-notation (Functor B D) (Functor C E) _
+  ×-Functor .×-notation._×_ = _×ᶠ_
