@@ -4,7 +4,7 @@ module Combinatorics.Finiteness.Listed.Strong where
 open import Meta.Prelude
 
 open import Meta.Marker
-open import Meta.Membership
+open import Meta.Notation.Membership
 open import Meta.Record
 
 open import Logic.Discreteness

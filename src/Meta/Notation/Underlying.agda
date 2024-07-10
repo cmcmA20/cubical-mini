@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Meta.Underlying where
+module Meta.Notation.Underlying where
 
 open import Foundations.Prelude
   hiding (_$_)

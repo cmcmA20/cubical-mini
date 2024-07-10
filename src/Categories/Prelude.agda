@@ -5,7 +5,6 @@ open import Prelude
   renaming ( _≅_ to _≅ₜ_
            ; _↪_ to _↪ₜ_
            ; _↠_ to _↠ₜ_
-           ; _×_ to _×ₜ_
            ; _∘_ to _∘ₜ_
            ; Iso to Isoₜ
            ; id  to idₜ

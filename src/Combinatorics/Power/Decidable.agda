@@ -2,7 +2,7 @@
 module Combinatorics.Power.Decidable where
 
 open import Meta.Prelude
-open import Meta.Membership
+open import Meta.Notation.Membership
 
 open import Structures.n-Type
 

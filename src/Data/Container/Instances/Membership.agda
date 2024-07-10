@@ -3,8 +3,8 @@ module Data.Container.Instances.Membership where
 
 open import Foundations.Prelude
 
-open import Meta.Brackets
-open import Meta.Membership
+open import Meta.Notation.Brackets
+open import Meta.Notation.Membership
 
 open import Data.Container.Base
 open import Data.Container.Instances.Brackets

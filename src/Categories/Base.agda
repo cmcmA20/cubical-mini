@@ -60,7 +60,7 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     Refl-Hom .refl = id
 
     Trans-Hom : Transitive Hom
-    Trans-Hom ._∙_ = flip _∘_
+    Trans-Hom ._∙_ f g = g ∘ f
 
 
 private variable
@@ -200,6 +200,13 @@ Functor.F₁ Id = refl
 Functor.F-id Id = refl
 Functor.F-∘ Id _ _ = refl
 
+instance
+  Refl-Functor : Refl (Functor {oᶜ} {hᶜ})
+  Refl-Functor .refl = Id
+
+  Trans-Functor : Trans (Functor {oᶜ} {hᶜ}) (Functor {oᵈ} {hᵈ} {oᵉ} {hᵉ}) Functor
+  Trans-Functor ._∙_ F G = G ∘ᶠ F
+
 
 -- basic properties of functors
 
@@ -227,9 +234,9 @@ is-fully-faithful {C} F = {x y : C.Ob} → is-equiv (F.₁ {x} {y})
 
 -- Natural transformations
 
-record _⇒_ {C : Precategory oᶜ hᶜ}
-           {D : Precategory oᵈ hᵈ}
-           (F G : Functor C D)
+record _=>_ {C : Precategory oᶜ hᶜ}
+            {D : Precategory oᵈ hᵈ}
+            (F G : Functor C D)
       : Type (oᶜ ⊔ hᶜ ⊔ hᵈ)
   where
   no-eta-equality
@@ -245,24 +252,57 @@ record _⇒_ {C : Precategory oᶜ hᶜ}
     is-natural : ∀ x y → (f : C.Hom x y)
                → η y D.∘ F.₁ f ＝ G.₁ f D.∘ η x
 
-  op : Functor.op G ⇒ Functor.op F
+  op : Functor.op G => Functor.op F
   op .η = η
   op .is-natural x y f = is-natural y x f ⁻¹
 
 {-# INLINE NT #-}
 
-unquoteDecl H-Level-Nat = declare-record-hlevel 2 H-Level-Nat (quote _⇒_)
+unquoteDecl H-Level-NT = declare-record-hlevel 2 H-Level-NT (quote _=>_)
 
 instance
+  ⇒-natural-transformation : ⇒-notation (Functor C D) (Functor C D) _
+  ⇒-natural-transformation ._⇒_ = _=>_
+
   Funlike-natural-transformation
     : {C : Precategory o ℓ} {D : Precategory o′ ℓ′} {F G : Functor C D}
     → Funlike ur (F ⇒ G) ⌞ C ⌟ (λ x → D .Precategory.Hom (F $ x) (G $ x))
-  Funlike-natural-transformation ._#_ = _⇒_.η
+  Funlike-natural-transformation ._#_ = _=>_.η
+
+  Refl-natural-transformation : Refl (_=>_ {C = C} {D = D})
+  Refl-natural-transformation {D} .refl ._=>_.η _ = D .id
+  Refl-natural-transformation {D} .refl {(F)} ._=>_.is-natural _ _ _ =
+    D .id-l _ ∙ D .id-r _ ⁻¹
+
+_∘ⁿᵗ_ : {F G H : Functor C D} → G => H → F => G → F => H
+_∘ⁿᵗ_ {C} {D} {F} {G} {H} α β = comps
+  module =>∘ where
+    module D = Precategory D
+
+    module F = Functor F
+    module G = Functor G
+    module H = Functor H
+
+    comps : F => H
+    comps ._=>_.η x = β # x ∙ α # x
+    comps ._=>_.is-natural x y f =
+      (α # y D.∘ β # y) D.∘ F.₁ f  ~⟨ D.assoc _ _ _ ⟨
+      α # y D.∘ β # y D.∘ F.₁ f    ~⟨ ap (α # y D.∘_) (β ._=>_.is-natural x y f) ⟩
+      α # y D.∘ G.₁ f D.∘ β # x    ~⟨ D.assoc _ _ _ ⟩
+      (α # y D.∘ G.₁ f) D.∘ β # x  ~⟨ ap (D._∘ β # x) (α ._=>_.is-natural x y f) ⟩
+      (H.₁ f D.∘ α # x) D.∘ β # x  ~⟨ D.assoc _ _ _ ⟨
+      H.₁ f D.∘ α # x D.∘ β # x    ∎
+
+{-# DISPLAY =>∘.comps F G = F ∘ⁿᵗ G #-}
+
+instance
+  Trans-natural-transformation : Trans (_=>_ {C = C} {D = D}) _=>_ _=>_
+  Trans-natural-transformation ._∙_ α β = β ∘ⁿᵗ α
 
 is-natural-transformation
   : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
   → (F G : Functor C D)
-  → (η : ∀ x → D .Hom (F .Functor.F₀ x) (G .Functor.F₀ x))
+  → (η : (x : C .Ob) → D .Hom (F $ x) (G $ x))
   → Type _
 is-natural-transformation {C} {D} F G η =
   ∀ x y (f : C .Hom x y) → η y D.∘ F .F₁ f ＝ G .F₁ f D.∘ η x
@@ -282,12 +322,10 @@ module _ where
 
   const-nt : {C : Precategory oᶜ hᶜ} {D : Precategory oᶜ hᵈ}
            → {x y : Ob D} → Hom D x y
-           → Const {C = C} {D = D} x ⇒ Const {C = C} {D = D} y
-  const-nt f ._⇒_.η _ = f
-  const-nt {D} f ._⇒_.is-natural _ _ _ = id-r D _ ∙ id-l D _ ⁻¹
+           → Const {C = C} {D = D} x ⇒ Const y
+  const-nt f ._=>_.η _ = f
+  const-nt {D} f ._=>_.is-natural _ _ _ = D .id-r _ ∙ D .id-l _ ⁻¹
 
-infixr 30 _∘ᶠ_
-infix 20 _⇒_
 
 module _ {C : Precategory oᶜ hᶜ}
          {D : Precategory oᶜ hᵈ}
@@ -299,12 +337,12 @@ module _ {C : Precategory oᶜ hᶜ}
     module C = Precategory C
 
   open Functor
-  open _⇒_
+  open _=>_
 
   nat-pathᴾ : {F' G' : Functor C D}
             → (p : F ＝ F') (q : G ＝ G')
             → {a : F ⇒ G} {b : F' ⇒ G'}
-            → (∀ x → ＜ a .η x ／ _ ＼ b .η x ＞)
+            → (∀ x → ＜ a $ x ／ _ ＼ b $ x ＞)
             → ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
   nat-pathᴾ p q path i .η x = path x i
   nat-pathᴾ p q {a} {b} path i .is-natural x y f =
@@ -315,18 +353,18 @@ module _ {C : Precategory oᶜ hᶜ}
       (b .is-natural x y f) i
 
   nat-path : {a b : F ⇒ G}
-           → ((x : _) → a .η x ＝ b .η x)
+           → ((x : _) → a # x ＝ b # x)
            → a ＝ b
   nat-path = nat-pathᴾ refl refl
 
-  _ηₚ_ : ∀ {a b : F ⇒ G} → a ＝ b → ∀ x → a .η x ＝ b .η x
-  p ηₚ x = ap (λ e → e .η x) p
+  _ηₚ_ : ∀ {a b : F ⇒ G} → a ＝ b → (x : C.Ob) → a # x ＝ b # x
+  p ηₚ x = ap (_$ x) p
 
-  _ηᵈ_ : ∀ {F' G' : Functor C D} {p : F ＝ F'} {q : G ＝ G'}
+  _ηᵈ_ : {F' G' : Functor C D} {p : F ＝ F'} {q : G ＝ G'}
        → {a : F ⇒ G} {b : F' ⇒ G'}
        →                      ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
-       → ∀ x → ＜ a .η x ／ (λ i → D.Hom (p i .F₀ x) (q i .F₀ x)) ＼ b .η x ＞
-  p ηᵈ x = apᴾ (λ i e → e .η x) p
+       → (x : C.Ob) → ＜ a $ x ／ (λ i → D.Hom (p i $ x) (q i $ x)) ＼ b $ x ＞
+  p ηᵈ x = apᴾ (λ i e → e $ x) p
 
   infixl 45 _ηₚ_
 
@@ -335,8 +373,8 @@ module _ {C : Precategory oᶜ hᶜ}
       : ∀ {ℓr}
       → ⦃ sa : {x : ⌞ C ⌟} → Extensional (D .Hom (F $ x) (G $ x)) ℓr ⦄
       → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
-    Extensional-natural-transformation ⦃ sa ⦄ .Pathᵉ f g = ∀ i → Pathᵉ sa (f .η i) (g .η i)
-    Extensional-natural-transformation ⦃ sa ⦄ .reflᵉ x i = reflᵉ sa (x .η i)
+    Extensional-natural-transformation ⦃ sa ⦄ .Pathᵉ f g = ∀ i → Pathᵉ sa (f $ i) (g $ i)
+    Extensional-natural-transformation ⦃ sa ⦄ .reflᵉ x i = reflᵉ sa (x $ i)
     Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path x = nat-path
       λ i → sa .idsᵉ .to-path (x i)
     Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path-over h =

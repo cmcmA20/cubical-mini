@@ -12,7 +12,7 @@ private variable
 
 open Precategory
 open Functor
-open _⇒_
+open _=>_
 
 Disc : is-groupoid A → Precategory _ _
 Disc {A} _ .Ob = A

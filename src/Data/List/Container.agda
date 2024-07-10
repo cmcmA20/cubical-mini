@@ -3,7 +3,7 @@ module Data.List.Container where
 
 open import Foundations.Prelude
 
-open import Meta.Brackets
+open import Meta.Notation.Brackets
 
 open import Data.List.Base
   renaming (List to Listⁱ)

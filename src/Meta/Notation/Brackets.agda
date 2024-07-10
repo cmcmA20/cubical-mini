@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Meta.Brackets where
+module Meta.Notation.Brackets where
 
 open import Foundations.Prelude
 

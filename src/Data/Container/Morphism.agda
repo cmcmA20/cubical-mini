@@ -3,7 +3,7 @@ module Data.Container.Morphism where
 
 open import Foundations.Prelude
 
-open import Meta.Brackets
+open import Meta.Notation.Brackets
 
 open import Data.Container.Base
 open import Data.Container.Instances.Brackets

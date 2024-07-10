@@ -3,7 +3,7 @@ module Data.List.Membership where
 
 open import Meta.Prelude
 open import Meta.Extensionality
-open import Meta.Membership
+open import Meta.Notation.Membership
 
 open import Logic.Discreteness
 

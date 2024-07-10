@@ -3,7 +3,7 @@ module Data.Bool.Instances.Underlying where
 
 open import Foundations.Base
 
-open import Meta.Underlying
+open import Meta.Notation.Underlying
 
 open import Data.Bool.Base
 

@@ -2,7 +2,7 @@
 module Structures.Map where
 
 open import Meta.Prelude
-open import Meta.Membership
+open import Meta.Notation.Membership
 open import Meta.Record
 
 open import Data.Empty.Base
