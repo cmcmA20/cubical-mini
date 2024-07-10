@@ -36,6 +36,12 @@ private variable
   b b₁ b₂ : Bool
   n : HLevel
 
+not-inj : not b₁ ＝ not b₂ → b₁ ＝ b₂
+not-inj {(false)} {(false)} e = refl
+not-inj {(false)} {(true)}  e = e ⁻¹
+not-inj {(true)}  {(false)} e = e ⁻¹
+not-inj {(true)}  {(true)}  e = refl
+
 instance
   H-Level-Bool : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → H-Level n Bool
   H-Level-Bool ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ identity-system→is-of-hlevel 1

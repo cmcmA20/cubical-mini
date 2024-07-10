@@ -8,7 +8,7 @@ or teach contemporary math.
 
 Credits:
 
-- Amélia's 1Lab is a source of immensely good tricks regarding automation,
+- Amélia's [1Lab](https://1lab.dev/) is a source of immensely good tricks regarding automation,
   design and style in particular. See `Meta`, most of the `Foundations`.
 - `Structures` due to Martin Escardo, Carlo Angiuli, Evan Cavallo,
   Anders Mörtberg, Max Zeuner.
@@ -17,3 +17,5 @@ Credits:
 - `Ordinals` due to Fredrik Nordvall Forsberg et al.
 - `Containers` are folklore, though I took inspiration in a talk by Thorsten
   Altenkirch and Conor McBride's lectures.
+- Reflection machinery and the theories of `Nat`s and `List`s are inspired
+  by Coq's [Mathematical Components library](https://math-comp.github.io/).

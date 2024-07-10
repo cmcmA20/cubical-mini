@@ -78,3 +78,7 @@ private variable m n k : ℕ
 
 <≃<+r : (m < n) ≃ (m + k < n + k)
 <≃<+r = ≤≃≤+r
+
+<≃≤pred : 0 < n → (m < n) ≃ (m ≤ pred n)
+<≃≤pred {n} {m} n0 =
+  subst (λ q → m < q ≃ m ≤ʰ pred n) (suc-pred n n0 ⁻¹) (≤≃≤+l ⁻¹)

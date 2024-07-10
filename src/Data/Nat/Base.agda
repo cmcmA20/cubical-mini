@@ -50,8 +50,7 @@ max (suc x) zero    = suc x
 max (suc x) (suc y) = suc (max x y)
 
 min : ℕ → ℕ → ℕ
-min zero    zero    = zero
-min zero    (suc y) = zero
+min zero    _       = zero
 min (suc x) zero    = zero
 min (suc x) (suc y) = suc (min x y)
 

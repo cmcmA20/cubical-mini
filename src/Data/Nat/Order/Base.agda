@@ -8,6 +8,7 @@ open import Logic.Decidability
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Reflects.Base as Reflects
+open import Data.Empty.Properties
 open import Data.Sum.Base
 open import Data.Sum.Path
 open import Data.Wellfounded.Base
@@ -108,6 +109,11 @@ opaque
   ≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
   ≤-subst a=b c=d = second $ subst² (λ u v → u + _ ＝ v) a=b c=d
 
+＝→≤ : m ＝ n → m ≤ n
+＝→≤ {m} {n} e = subst (m ≤_) e ≤-refl
+
+s≤s≃ : suc m ≤ suc n ≃ m ≤ n
+s≤s≃ = prop-extₑ! ≤-peel s≤s
 
 -- Properties of strict order
 
@@ -150,6 +156,13 @@ opaque
   z<s : 0 < suc n
   z<s = _ , refl
 
+s<s≃ : suc m < suc n ≃ m < n
+s<s≃ = prop-extₑ! <-peel s<s
+
+opaque
+  unfolding _≤_ _<_
+  ≤-<-trans : {x y z : ℕ} → x ≤ y → y < z → x < z
+  ≤-<-trans {x} (k , ek) (m , em) = (k + m) , (ap suc (+-assoc x k m ∙ ap (_+ m) ek) ∙ em)
 
 -- Conversion
 
@@ -185,6 +198,14 @@ opaque
 ≱→< {_}     {0}     f = ⊥.rec $ f z≤
 ≱→< {0}     {suc _} _ = z<s
 ≱→< {suc m} {suc n} f = s<s $ ≱→< (f ∘ s≤s)
+
+opaque
+  unfolding _<_
+  <≃suc≤ : (suc m ≤ n) ≃ (m < n)
+  <≃suc≤ = refl
+
+  ≤≃<suc : (m ≤ n) ≃ (m < suc n)
+  ≤≃<suc = Σ-ap-snd λ x → s＝s≃
 
 ≤≃≯ : (m ≤ n) ≃ (m ≯ n)
 ≤≃≯ = prop-extₑ! ≤→≯ ≯→≤
@@ -224,12 +245,119 @@ opaque
 ... | yes n<m = inr $ inl n<m
 ... | no  n≮m = inr $ inr $ ≤-antisym (≤≃≯ ⁻¹ $ n≮m) (≤≃≯ ⁻¹ $ m≮n)
 
+-- well-foundedness
+
 opaque
   unfolding _<_
-  <-wf : Wf _<_
-  <-wf n = go n n ≤-refl where
-    go : (x y : ℕ) → .(y ≤ x) → Acc _<_ y
-    go x       0       _ = acc $ λ _ <z → ⊥.rec $ ≮z <z
-    go 0       (suc y) w = ⊥.rec′ (s≰z w)
-    go (suc x) (suc y) w = acc λ x′ w′ →
-      go x x′ (≤-trans (≤-peel w′) (≤-peel w))
+  <-ind : ∀ {ℓ″} {P : ℕ → 𝒰 ℓ″}
+        → (∀ x → (∀ y → y < x → P y) → P x)
+        → ∀ x → P x
+  <-ind {P} ih x = go x (suc x) <-ascend
+    where
+    go : ∀ m n → m < n → P m
+    go m  zero   m<n     = ⊥.rec $ ≮z m<n
+    go m (suc n) (q , e) = ih m λ y y<m → go y n (≤-trans y<m (q , suc-inj e))
+
+<-wf : Wf _<_
+<-wf = from-induction _<_ λ P → <-ind
+
+-- addition
+
+opaque
+  unfolding _≤_
+  ≤-+-r : m ≤ m + n
+  ≤-+-r {m} {n} = n , refl
+
+≤-+-l : m ≤ n + m
+≤-+-l {m} {n} = subst (m ≤_) (+-comm m n) ≤-+-r
+
+opaque
+  unfolding _<_
+  <-+-lr : m < suc n + m
+  <-+-lr {m} {n} = n , ap suc (+-comm m n)
+
+≤-+≃2l : ∀ {p m n} → (p + m ≤ p + n) ≃ (m ≤ n)
+≤-+≃2l {p = zero}  = refl
+≤-+≃2l {p = suc p} = s≤s≃ ∙ ≤-+≃2l {p}
+
+≤-+≃2r : ∀ {p m n} → (m + p ≤ n + p) ≃ (m ≤ n)
+≤-+≃2r {p} {m} {n} = subst (λ q → q ≤ n + p ≃ p + m ≤ p + n) (+-comm p m)
+                      (subst (λ q → p + m ≤ q ≃ p + m ≤ p + n) (+-comm p n) refl)
+                   ∙ ≤-+≃2l {p}
+
+<-+≃2l : ∀ {p m n} → (p + m < p + n) ≃ (m < n)
+<-+≃2l {p} {m} {n} = <≃suc≤ ⁻¹
+                   ∙ subst (λ q → q ≤ p + n ≃ p + suc m ≤ p + n) (+-suc-r p m) refl
+                   ∙ (≤-+≃2l {p})
+                   ∙ <≃suc≤
+
+≤-+ : ∀ {m n p q} → m ≤ p → n ≤ q → m + n ≤ p + q
+≤-+ {m} {n} {p} {q} m≤p n≤q = ≤-trans ((≤-+≃2r ⁻¹) .fst m≤p) ((≤-+≃2l ⁻¹) .fst n≤q)
+
+-- subtraction
+
+m+[n∸m] : ∀ m n → m ≤ n → m + (n ∸ m) ＝ n
+m+[n∸m]  zero    n      m≤n = refl
+m+[n∸m] (suc m)  zero   m≤n = absurd (s≰z m≤n)
+m+[n∸m] (suc m) (suc n) m≤n = ap suc (m+[n∸m] m n (≤-peel m≤n))
+
+[n∸m]+m : ∀ m n → m ≤ n → (n ∸ m) + m ＝ n
+[n∸m]+m m n m≤n = +-comm (n ∸ m) m ∙ m+[n∸m] m n m≤n
+
+m+[n∸p]＝m+n∸p : ∀ m n p → p ≤ n → m + (n ∸ p) ＝ m + n ∸ p
+m+[n∸p]＝m+n∸p m n p p≤n =
+    sym (+-cancel-∸-r (m + (n ∸ p)) p)
+  ∙ ap (_∸ p) (sym (+-assoc m (n ∸ p) p))
+  ∙ ap (λ q → m + q ∸ p) (+-comm (n ∸ p) p ∙ m+[n∸m] p n p≤n)
+
+m∸n+p＝m+p∸n : ∀ m n p → n ≤ m → m ∸ n + p ＝ m + p ∸ n
+m∸n+p＝m+p∸n m n p n≤m = +-comm (m ∸ n) p
+                      ∙ m+[n∸p]＝m+n∸p p m n n≤m
+                      ∙ ap (_∸ n) (+-comm p m)
+
+m∸[n∸p]＝m+p∸n : ∀ m n p → p ≤ n → m ∸ (n ∸ p) ＝ m + p ∸ n
+m∸[n∸p]＝m+p∸n m n p p≤n = sym (∸-cancel-+-r m p (n ∸ p)) ∙ ap ((m + p) ∸_) ([n∸m]+m p n p≤n)
+
+m∸[n∸p]＝m∸n+p : ∀ m n p → p ≤ n → n ≤ m → m ∸ (n ∸ p) ＝ m ∸ n + p
+m∸[n∸p]＝m∸n+p m n p p≤n n≤m = m∸[n∸p]＝m+p∸n m n p p≤n ∙ sym (m∸n+p＝m+p∸n m n p n≤m)
+
+suc-∸ : ∀ m n → m ≤ n → suc (n ∸ m) ＝ (suc n) ∸ m
+suc-∸ m n = m+[n∸p]＝m+n∸p 1 n m
+
+∸=0→≤ : m ∸ n ＝ 0 → m ≤ n
+∸=0→≤ {m = zero}              _ = z≤
+∸=0→≤ {m = suc m} {n = zero}  e = absurd (suc≠zero e)
+∸=0→≤ {m = suc m} {n = suc n} e = s≤s (∸=0→≤ {m} {n} e)
+
+opaque
+  unfolding _≤_
+  ≤→∸=0 : m ≤ n → m ∸ n ＝ 0
+  ≤→∸=0 {m} (k , e) = ap (m ∸_) (sym e) ∙ ∸-+-assoc m m k ∙ ap (_∸ k) (∸-cancel m) ∙ ∸-zero-l k
+
+∸=0≃≤ : (m ∸ n ＝ 0) ≃ (m ≤ n)
+∸=0≃≤ = prop-extₑ! ∸=0→≤ ≤→∸=0
+
+∸≤≃≤+ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ≤ n + p)
+∸≤≃≤+ {m} {n} {p} = ∸=0≃≤ ⁻¹ ∙ whisker-path-lₑ (sym (∸-+-assoc n m p)) ∙ ∸=0≃≤
+
+≤-∸-l-≃ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ∸ p ≤ n)
+≤-∸-l-≃ {m} {n} {p} = ∸≤≃≤+ ∙ subst (λ q → m ≤ n + p ≃ m ≤ q) (+-comm n p) refl ∙ ∸≤≃≤+ ⁻¹
+
+<-∸-r-≃ : ∀ {m n p} → (n < p ∸ m) ≃ (m + n < p)
+<-∸-r-≃ {m} {n} {p} = <≃≱ ∙ ¬-≃ (∸≤≃≤+ .fst) ((∸≤≃≤+ ⁻¹) .fst) ∙ <≃≱ ⁻¹
+
+≤-∸-r-≃ : ∀ {m n p} → 0 < n → (n ≤ p ∸ m) ≃ (m + n ≤ p)
+≤-∸-r-≃     {n = zero}      n>0 = absurd (≮z n>0)
+≤-∸-r-≃ {m} {n = suc n} {p} n>0 = <≃suc≤ ∙ <-∸-r-≃ ∙ <≃suc≤ ⁻¹
+                                ∙ subst (λ q → q ≤ p ≃ m + suc n ≤ p) (+-suc-r m n) refl
+
+<-∸-l-≃ : ∀ {m n p} → 0 < p → (m ∸ n < p) ≃ (m < n + p)
+<-∸-l-≃ {p = zero}  p>0 = absurd (≮z p>0)
+<-∸-l-≃ {m} {n} {p = suc p} p>0 = <≃suc≤ ⁻¹ ∙ s≤s≃ ∙ ∸≤≃≤+ {m} {n} ∙ s≤s≃ ⁻¹
+                                ∙ subst (λ q → suc m ≤ q ≃ suc m ≤ n + suc p) (+-suc-r n p) refl
+                                ∙ <≃suc≤
+
+opaque
+  unfolding _≤_
+  ≤→Σ : ∀ m n → m ≤ n → Σ[ k ꞉ ℕ ] (m + k ＝ n)
+  ≤→Σ m n = id

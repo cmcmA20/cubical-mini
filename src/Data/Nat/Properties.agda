@@ -3,13 +3,35 @@ module Data.Nat.Properties where
 
 open import Foundations.Prelude
 
+open import Data.Bool.Base
 open import Data.Dec.Base
 open import Data.Empty.Base
 open import Data.Sum.Base
 open import Data.Nat.Base public
 open import Data.Nat.Path
+open import Data.Reflects.Base as R
 
-private variable n : ℕ
+
+private variable
+  m n : ℕ
+
+s＝s≃ : (m ＝ n) ≃ (suc m ＝ suc n)
+s＝s≃ = prop-extₑ! (ap suc) suc-inj
+
+-- boolean equality
+
+==-refl : ∀ n → is-true (n == n)
+==-refl  zero   = tt
+==-refl (suc n) = ==-refl n
+
+==-reflects : Reflects⁰ (m ＝ n) (m == n)
+==-reflects {m = zero}  {n = zero}  = ofʸ refl
+==-reflects {m = zero}  {n = suc n} = ofⁿ zero≠suc
+==-reflects {m = suc m} {n = zero}  = ofⁿ suc≠zero
+==-reflects {m = suc m} {n = suc n} = R.dmap (ap suc) (λ c → c ∘ suc-inj) (==-reflects {m} {n})
+
+==→＝ : ∀ {m n} → is-true (m == n) → m ＝ n
+==→＝ = true-reflects ==-reflects
 
 -- addition
 
@@ -44,6 +66,42 @@ private variable n : ℕ
 +-assoc-comm : (x y z : ℕ) → x + y + z ＝ x + z + y
 +-assoc-comm x y z = sym (+-assoc x _ _) ∙ ap (x +_) (+-comm y z) ∙ +-assoc x _ _
 
++-cancel-l : ∀ m n1 n2 → m + n1 ＝ m + n2 → n1 ＝ n2
++-cancel-l  zero   n1 n2 e = e
++-cancel-l (suc m) n1 n2 e = +-cancel-l m n1 n2 (suc-inj e)
+
++-cancel-r : ∀ m1 m2 n → m1 + n ＝ m2 + n → m1 ＝ m2
++-cancel-r m1 m2 n e = +-cancel-l n m1 m2 (+-comm n m1 ∙ e ∙ +-comm m2 n)
+
++＝0-2 : ∀ m n → m + n ＝ 0 → (m ＝ 0) × (n ＝ 0)
++＝0-2  zero    zero   e = refl , refl
++＝0-2  zero   (suc n) e = absurd (suc≠zero e)
++＝0-2 (suc m)  n      e = absurd (suc≠zero e)
+
+-- subtraction
+
+∸-cancel : ∀ n → n ∸ n ＝ 0
+∸-cancel  zero   = refl
+∸-cancel (suc n) = ∸-cancel n
+
+∸-zero-l : ∀ n → 0 ∸ n ＝ 0
+∸-zero-l  zero   = refl
+∸-zero-l (suc n) = refl
+
+∸-cancel-+-l : ∀ p m n → (p + m) ∸ (p + n) ＝ m ∸ n
+∸-cancel-+-l  zero   m n = refl
+∸-cancel-+-l (suc p) m n = ∸-cancel-+-l p m n
+
+∸-cancel-+-r : ∀ m p n → (m + p) ∸ (n + p) ＝ m ∸ n
+∸-cancel-+-r m p n = ap² (_∸_) (+-comm m p) (+-comm n p) ∙ ∸-cancel-+-l p m n
+
++-cancel-∸-r : ∀ m n → (m + n) ∸ n ＝ m
++-cancel-∸-r m n = ∸-cancel-+-r m n 0
+
+∸-+-assoc : ∀ m n p → n ∸ (m + p) ＝ (n ∸ m) ∸ p
+∸-+-assoc  zero    n      p = refl
+∸-+-assoc (suc m)  zero   p = ∸-zero-l p ⁻¹
+∸-+-assoc (suc m) (suc n) p = ∸-+-assoc m n p
 
 -- multiplication
 
@@ -75,12 +133,28 @@ private variable n : ℕ
 ·-distrib-+-r (suc x) y z = ap (z +_) (·-distrib-+-r x y z) ∙ +-assoc z (x · z) (y · z)
 
 ·-distrib-+-l : (x y z : ℕ) → x · (y + z) ＝ x · y + x · z
-·-distrib-+-l x y z = ·-comm x (y + z) ∙ ·-distrib-+-r y z x ∙ ap² (_+_) (·-comm y x) (·-comm z x)
+·-distrib-+-l x y z = ·-comm x (y + z) ∙ ·-distrib-+-r y z x ∙ ap² _+_ (·-comm y x) (·-comm z x)
+
+·-distrib-∸-r : (x y z : ℕ) → (x ∸ y) · z ＝ x · z ∸ y · z
+·-distrib-∸-r  zero    y      z = ap (_· z) (∸-zero-l y) ∙ sym (∸-zero-l (y · z))
+·-distrib-∸-r (suc x)  zero   z = refl
+·-distrib-∸-r (suc x) (suc y) z = ·-distrib-∸-r x y z ∙ sym (∸-cancel-+-l z (x · z) (y · z))
+
+·-distrib-∸-l : (x y z : ℕ) → x · (y ∸ z) ＝ x · y ∸ x · z
+·-distrib-∸-l x y z = ·-comm x (y ∸ z) ∙ ·-distrib-∸-r y z x ∙ ap² _∸_ (·-comm y x) (·-comm z x)
 
 ·-assoc : (x y z : ℕ) → x · (y · z) ＝ x · y · z
 ·-assoc 0       _ _ = refl
 ·-assoc (suc x) y z = ap (y · z +_) (·-assoc x y z) ∙ sym (·-distrib-+-r y _ _)
 
+·-cancel-r : ∀ m1 m2 n → m1 · n ＝ m2 · n → (m1 ＝ m2) ⊎ (n ＝ 0)
+·-cancel-r  zero     zero    n e = inl refl
+·-cancel-r  zero    (suc m2) n e = inr (+＝0-2 n (m2 · n) (sym e) .fst)
+·-cancel-r (suc m1)  zero    n e = inr (+＝0-2 n (m1 · n) e .fst)
+·-cancel-r (suc m1) (suc m2) n e = [ inl ∘ ap suc , inr ]ᵤ (·-cancel-r m1 m2 n (+-cancel-l n (m1 · n) (m2 · n) e))
+
+·-cancel-l : ∀ m n1 n2 → m · n1 ＝ m · n2 → (n1 ＝ n2) ⊎ (m ＝ 0)
+·-cancel-l m n1 n2 e = ·-cancel-r n1 n2 m (·-comm n1 m ∙ e ∙ ·-comm m n2)
 
 -- minimum
 
