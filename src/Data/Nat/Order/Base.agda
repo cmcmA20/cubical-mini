@@ -109,11 +109,23 @@ opaque
   ≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
   ≤-subst a=b c=d = second $ subst² (λ u v → u + _ ＝ v) a=b c=d
 
-＝→≤ : m ＝ n → m ≤ n
-＝→≤ {m} {n} e = subst (m ≤_) e ≤-refl
+=→≤ : m ＝ n → m ≤ n
+=→≤ {m} {n} e = subst (m ≤_) e ≤-refl
 
-s≤s≃ : suc m ≤ suc n ≃ m ≤ n
-s≤s≃ = prop-extₑ! ≤-peel s≤s
+≤≃≤+l : (n ≤ k) ≃ (m + n ≤ m + k)
+≤≃≤+l {n} {k} {m} = prop-extₑ! (ff m n k) (gg m n k)
+  where
+  ff : (a b c : ℕ) → b ≤ c → a + b ≤ a + c
+  ff zero    b c p = p
+  ff (suc a) b c p = s≤s (ff a b c p)
+
+  gg : (a b c : ℕ) → a + b ≤ a + c → b ≤ c
+  gg  zero   b c p = p
+  gg (suc a) b c p = gg a b c (≤-peel p)
+
+≤≃≤+r : (n ≤ k) ≃ (n + m ≤ k + m)
+≤≃≤+r {n} {k} {m} = ≤≃≤+l ∙ subst (λ q → q ≤ m + k ≃ n + m ≤ k + m) (+-comm n m)
+                             (subst (λ q → n + m ≤ q ≃ n + m ≤ k + m) (+-comm k m) refl)
 
 -- Properties of strict order
 
@@ -156,13 +168,17 @@ opaque
   z<s : 0 < suc n
   z<s = _ , refl
 
-s<s≃ : suc m < suc n ≃ m < n
-s<s≃ = prop-extₑ! <-peel s<s
-
 opaque
   unfolding _≤_ _<_
+  <≃<+l : (n < k) ≃ (m + n < m + k)
+  <≃<+l {n} {k} {m} = ≤≃≤+l {n = suc n}
+                    ∙ subst (λ q → q ≤ m + k ≃ m + n < m + k) (+-suc-r m n ⁻¹) refl
+
+  <≃<+r : (n < k) ≃ (n + m < k + m)
+  <≃<+r {n} = ≤≃≤+r {n = suc n}
+
   ≤-<-trans : {x y z : ℕ} → x ≤ y → y < z → x < z
-  ≤-<-trans {x} (k , ek) (m , em) = (k + m) , (ap suc (+-assoc x k m ∙ ap (_+ m) ek) ∙ em)
+  ≤-<-trans p = ≤-trans (s≤s p)
 
 -- Conversion
 
@@ -276,23 +292,8 @@ opaque
   <-+-lr : m < suc n + m
   <-+-lr {m} {n} = n , ap suc (+-comm m n)
 
-≤-+≃2l : ∀ {p m n} → (p + m ≤ p + n) ≃ (m ≤ n)
-≤-+≃2l {p = zero}  = refl
-≤-+≃2l {p = suc p} = s≤s≃ ∙ ≤-+≃2l {p}
-
-≤-+≃2r : ∀ {p m n} → (m + p ≤ n + p) ≃ (m ≤ n)
-≤-+≃2r {p} {m} {n} = subst (λ q → q ≤ n + p ≃ p + m ≤ p + n) (+-comm p m)
-                      (subst (λ q → p + m ≤ q ≃ p + m ≤ p + n) (+-comm p n) refl)
-                   ∙ ≤-+≃2l {p}
-
-<-+≃2l : ∀ {p m n} → (p + m < p + n) ≃ (m < n)
-<-+≃2l {p} {m} {n} = <≃suc≤ ⁻¹
-                   ∙ subst (λ q → q ≤ p + n ≃ p + suc m ≤ p + n) (+-suc-r p m) refl
-                   ∙ (≤-+≃2l {p})
-                   ∙ <≃suc≤
-
 ≤-+ : ∀ {m n p q} → m ≤ p → n ≤ q → m + n ≤ p + q
-≤-+ {m} {n} {p} {q} m≤p n≤q = ≤-trans ((≤-+≃2r ⁻¹) .fst m≤p) ((≤-+≃2l ⁻¹) .fst n≤q)
+≤-+ m≤p n≤q = ≤-trans (≤≃≤+r .fst m≤p) (≤≃≤+l .fst n≤q)
 
 -- subtraction
 
@@ -352,10 +353,9 @@ opaque
                                 ∙ subst (λ q → q ≤ p ≃ m + suc n ≤ p) (+-suc-r m n) refl
 
 <-∸-l-≃ : ∀ {m n p} → 0 < p → (m ∸ n < p) ≃ (m < n + p)
-<-∸-l-≃ {p = zero}  p>0 = absurd (≮z p>0)
-<-∸-l-≃ {m} {n} {p = suc p} p>0 = <≃suc≤ ⁻¹ ∙ s≤s≃ ∙ ∸≤≃≤+ {m} {n} ∙ s≤s≃ ⁻¹
-                                ∙ subst (λ q → suc m ≤ q ≃ suc m ≤ n + suc p) (+-suc-r n p) refl
-                                ∙ <≃suc≤
+<-∸-l-≃         {p = zero}  p>0 = absurd (≮z p>0)
+<-∸-l-≃ {m} {n} {p = suc p} p>0 = <≃suc≤ ⁻¹ ∙ ≤≃≤+l {m = 1} ⁻¹ ∙ ∸≤≃≤+ {m} {n} ∙ ≤≃≤+l
+                                ∙ subst (λ q → suc m ≤ q ≃ suc m ≤ n + suc p) (+-suc-r n p) refl ∙ <≃suc≤
 
 opaque
   unfolding _≤_

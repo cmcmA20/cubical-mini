@@ -45,10 +45,10 @@ length : List A → ℕ
 length []       = 0
 length (_ ∷ xs) = suc (length xs)
 
-mnth : List A → ℕ → Maybe A
-mnth []        _      = nothing
-mnth (x ∷ _)   zero   = just x
-mnth (_ ∷ xs) (suc n) = mnth xs n
+_!ᵐ_ : List A → ℕ → Maybe A
+[]       !ᵐ  _      = nothing
+(x ∷ _)  !ᵐ  zero   = just x
+(_ ∷ xs) !ᵐ (suc n) = xs !ᵐ n
 
 replicate : ℕ → A → List A
 replicate 0 _       = []

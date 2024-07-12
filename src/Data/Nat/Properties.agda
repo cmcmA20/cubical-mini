@@ -18,21 +18,6 @@ private variable
 s＝s≃ : (m ＝ n) ≃ (suc m ＝ suc n)
 s＝s≃ = prop-extₑ! (ap suc) suc-inj
 
--- boolean equality
-
-==-refl : ∀ n → is-true (n == n)
-==-refl  zero   = tt
-==-refl (suc n) = ==-refl n
-
-==-reflects : Reflects⁰ (m ＝ n) (m == n)
-==-reflects {m = zero}  {n = zero}  = ofʸ refl
-==-reflects {m = zero}  {n = suc n} = ofⁿ zero≠suc
-==-reflects {m = suc m} {n = zero}  = ofⁿ suc≠zero
-==-reflects {m = suc m} {n = suc n} = R.dmap (ap suc) (λ c → c ∘ suc-inj) (==-reflects {m} {n})
-
-==→＝ : ∀ {m n} → is-true (m == n) → m ＝ n
-==→＝ = true-reflects ==-reflects
-
 -- addition
 
 +-zero-r : (x : ℕ) → x + 0 ＝ x
