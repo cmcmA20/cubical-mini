@@ -7,18 +7,23 @@ open import Data.Bool.Base
 open import Data.Dec.Base
 open import Data.Empty.Base
 open import Data.Nat.Order.Inductive.Base
-open import Data.Reflects.Base
+open import Data.Reflects.Base as R
 open import Data.Sum.Base
 
 private variable m n k : ℕ
 
 ≤-reflects : (m n : ℕ) → Reflects⁰ (m ≤ n) (m ≤ᵇ n)
-≤-reflects 0       _ = ofʸ z≤
-≤-reflects (suc _) 0 = ofⁿ λ ()
+≤-reflects 0        _      = ofʸ z≤
+≤-reflects (suc _)  0      = ofⁿ λ ()
 ≤-reflects (suc m) (suc n) with m ≤ᵇ n | recall (m ≤ᵇ_) n
 ... | false | ⟪ p ⟫ = ofⁿ λ where
   (s≤s m≤n) → false-reflects (≤-reflects m n) (subst is-true (ap not p ⁻¹) tt) m≤n
 ... | true  | ⟪ p ⟫ = ofʸ (s≤s (true-reflects (≤-reflects m n) (subst is-true (p ⁻¹) _)))
+
+<-reflects : (m n : ℕ) → Reflects⁰ (m < n) (m <ᵇ n)
+<-reflects  m       zero   = ofⁿ ≮z
+<-reflects  zero   (suc n) = ofʸ (s≤ʰs z≤ʰ)
+<-reflects (suc m) (suc n) = R.dmap s<s (λ ¬m<n → ¬m<n ∘ <-peel) (<-reflects m n)
 
 instance
   Dec-≤ : {m n : ℕ} → Dec (m ≤ n)

@@ -70,7 +70,6 @@ reflects-id : ∀ {x} → Reflects (is-true x) x
 reflects-id {(false)} = ofⁿ id
 reflects-id {(true)}  = ofʸ tt
 
-
 -- negation
 
 reflects-not : ∀ {x} → Reflects (¬ is-true x) (not x)
@@ -121,6 +120,8 @@ and-comm = witness!
 and-compl : ∀ x → x and not x ＝ false
 and-compl = witness!
 
+not-and : ∀ x y → not (x and y) ＝ not x or not y
+not-and = witness!
 
 -- disjunction
 
@@ -174,12 +175,24 @@ or-idem = witness!
 or-compl : ∀ x → x or not x ＝ true
 or-compl = witness!
 
+not-or : ∀ x y → not (x or y) ＝ not x and not y
+not-or = witness!
 
 -- xor
+reflects-xor : ∀ {x y} → Reflects (not x ＝ y) (x xor y)
+reflects-xor {x = false} {y = false} = ofⁿ true≠false
+reflects-xor {x = false} {y = true}  = ofʸ refl
+reflects-xor {x = true}  {y = false} = ofʸ refl
+reflects-xor {x = true}  {y = true}  = ofⁿ false≠true
 
 xor-assoc : ∀ x y z → (x xor y) xor z ＝ x xor y xor z
 xor-assoc = witness!
 
+not-xor-l : ∀ x y → not (x xor y) ＝ not x xor y
+not-xor-l = witness!
+
+not-xor-r : ∀ x y → not (x xor y) ＝ x xor not y
+not-xor-r = witness!
 
 -- distributivity
 

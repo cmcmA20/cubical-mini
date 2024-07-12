@@ -18,6 +18,10 @@ private variable
   A : Type ℓ
   B : Type ℓ′
 
+empty? : List A → Bool
+empty? []      = false
+empty? (_ ∷ _) = true
+
 snoc : List A → A → List A
 snoc []      x = x ∷ []
 snoc (y ∷ l) x = y ∷ snoc l x
@@ -40,6 +44,11 @@ all=? eq=? (x ∷ xs) (y ∷ ys) = (eq=? x y) and (all=? eq=? xs ys)
 length : List A → ℕ
 length []       = 0
 length (_ ∷ xs) = suc (length xs)
+
+_!ᵐ_ : List A → ℕ → Maybe A
+[]       !ᵐ  _      = nothing
+(x ∷ _)  !ᵐ  zero   = just x
+(_ ∷ xs) !ᵐ (suc n) = xs !ᵐ n
 
 replicate : ℕ → A → List A
 replicate 0 _       = []

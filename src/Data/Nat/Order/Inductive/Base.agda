@@ -132,6 +132,12 @@ s<s = s≤s
 <-trans : {x y z : ℕ} → x < y → y < z → x < z
 <-trans x<y y<z = x<y ∙ <-weaken _ _ y<z
 
+≤-<-trans : {x y z : ℕ} → x ≤ y → y < z → x < z
+≤-<-trans xy yz = ≤-trans (s≤s xy) yz
+
+<-≤-trans : {x y z : ℕ} → x < y → y ≤ z → x < z
+<-≤-trans = ≤-trans
+
 <-weaken-z : (x y : ℕ) → x < y → 0 < y
 <-weaken-z x (suc y) (s≤s _) = s≤s z≤
 

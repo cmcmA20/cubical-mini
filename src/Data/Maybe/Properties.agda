@@ -37,3 +37,6 @@ instance
   is-just-decision : Decidable (is-just x)
   is-just-decision {x = nothing} = no  refl
   is-just-decision {x = just _}  = yes tt
+
+is-just→fibre : (m : Maybe A) → is-just m → fibre just m
+is-just→fibre (just x) tt = x , refl
