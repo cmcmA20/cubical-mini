@@ -86,7 +86,7 @@ record Group-hom
       e refl ∙ (e refl ∙ e refl ⁻¹)    ~⟨ B.assoc _ _ _ ⟩
       ⌜ e refl ∙ e refl ⌝ ∙ e refl ⁻¹  ~⟨ ap! (sym (pres-⋆ _ _) ∙ ap e (A.id-l _)) ⟩
       e refl ∙ e refl ⁻¹               ~⟨ B.inverse-r _ ⟩
-      refl                             ∎
+      the B refl                       ∎
 
     pres-inv : (x : A) → e (x ⁻¹) ＝ (e x) ⁻¹
     pres-inv x = monoid-inverse-unique {IM = B.has-monoid} (e x) _ _
@@ -146,7 +146,7 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     x ⁻¹ ⁻¹ ∙ (⌜ x ⁻¹ ∙ x ⌝ ∙ x ⁻¹)  ~⟨ ap! (inverse-l _) ⟩
     x ⁻¹ ⁻¹ ∙ ⌜ refl ∙ x ⁻¹ ⌝        ~⟨ ap! (id-l _) ⟩
     x ⁻¹ ⁻¹ ∙ x ⁻¹                   ~⟨ inverse-l _ ⟩
-    refl                             ∎
+    the X refl                       ∎
 
   id-r : Unital-right id _⋆_
   id-r x =
