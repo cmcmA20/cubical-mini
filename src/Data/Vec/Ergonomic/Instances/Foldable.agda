@@ -3,6 +3,7 @@ module Data.Vec.Ergonomic.Instances.Foldable where
 
 open import Foundations.Base
 
+open import Meta.Effect.Base
 open import Meta.Effect.Foldable
 
 open import Data.Vec.Ergonomic.Base

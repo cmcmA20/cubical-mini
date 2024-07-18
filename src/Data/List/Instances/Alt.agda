@@ -4,6 +4,7 @@ module Data.List.Instances.Alt where
 open import Foundations.Base
 
 open import Meta.Effect.Alt
+open import Meta.Effect.Base
 
 open import Data.List.Base
 

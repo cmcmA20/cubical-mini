@@ -5,6 +5,8 @@ open import Foundations.Base
 
 open import Meta.Effect.Bind
 open import Meta.Effect.Foldable
+open import Meta.Effect.Idiom
+open import Meta.Effect.Map
 open import Meta.Effect.Traversable
 open import Meta.Reflection.Base
 
@@ -14,6 +16,7 @@ open import Data.List.Operations
 open import Data.List.Instances.Bind
 open import Data.List.Instances.Foldable
 open import Data.List.Instances.FromProduct
+open import Data.List.Instances.Map
 open import Data.List.Instances.Traversable
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Bind

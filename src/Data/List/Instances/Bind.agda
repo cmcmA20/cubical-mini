@@ -3,6 +3,7 @@ module Data.List.Instances.Bind where
 
 open import Foundations.Base
 
+open import Meta.Effect.Base
 open import Meta.Effect.Bind
 
 open import Data.List.Base

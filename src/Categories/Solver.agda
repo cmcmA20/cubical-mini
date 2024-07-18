@@ -3,6 +3,7 @@ module Categories.Solver where
 
 open import Foundations.Base hiding (id; _∘_)
 
+open import Meta.Effect.Idiom
 open import Meta.Marker
 open import Meta.Reflection.Base
 open import Meta.Reflection.Solver

@@ -24,8 +24,9 @@ any? : Decidable P → Decidable (λ (xs : Vec A n) → Any P xs)
 any? {n = 0}     P? {([])}       = no λ()
 any? {n = suc n} P? {x ∷ xs} =
   Dec.dmap [ (fzero ,_) , bimap fsuc id ]ᵤ
-           go
-           (Dec-⊎ ⦃ P? ⦄ ⦃ any? (λ {z} → P? {z}) {xs} ⦄) where
-             go : _
-             go ¬ps (mk-fin 0       , p)  = ¬ps (inl p)
-             go ¬ps (mk-fin (suc k) , ps) = ¬ps (inr (_ , ps))
+           (_∘ go)
+           (P? <+> any? (λ {z} → P? {z}) {xs})
+  where
+  go : _
+  go (mk-fin 0       , p)  = inl p
+  go (mk-fin (suc _) , ps) = inr (_ , ps)

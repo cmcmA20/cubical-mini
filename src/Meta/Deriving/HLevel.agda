@@ -2,13 +2,10 @@
 module Meta.Deriving.HLevel where
 
 open import Meta.Prelude
+open import Meta.Record
+open import Meta.Reflection
 
 open import Structures.n-Type
-
-open import Meta.Record
-open import Meta.Reflection.Base
-open import Meta.Reflection.Neutral
-open import Meta.Reflection.Signature
 
 open import Data.Nat.Order.Inductive
 open import Data.List.Base

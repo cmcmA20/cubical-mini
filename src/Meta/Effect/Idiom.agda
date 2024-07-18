@@ -3,7 +3,8 @@ module Meta.Effect.Idiom where
 
 open import Foundations.Base
 
-open import Meta.Effect.Map public
+open import Meta.Effect.Base
+open import Meta.Effect.Map
 
 open import Data.Bool.Base
 

@@ -1,6 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Reflection.Instances.Map where
 
+open import Meta.Effect.Base
 open import Meta.Effect.Map
 
 open import Data.Reflection.Argument

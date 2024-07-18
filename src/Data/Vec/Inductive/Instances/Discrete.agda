@@ -3,10 +3,13 @@ module Data.Vec.Inductive.Instances.Discrete where
 
 open import Foundations.Base
 
+open import Meta.Effect.Monoidal
+
 open import Logic.Decidability
 open import Logic.Discreteness
 
 open import Data.Dec.Base as Dec
+open import Data.Dec.Instances.Monoidal
 open import Data.List.Base using ([]) renaming (_∷_ to _∷ₗ_)
 open import Data.Vec.Inductive.Base
 
@@ -22,4 +25,4 @@ vec-is-discrete {A} ⦃ di ⦄ = go _ _ where
   go (x ∷ xs) (y ∷ ys) = Dec.dmap
     (λ (x=y , xs=ys) → ap² _∷_ x=y xs=ys)
     (λ f p → f (ap head p , ap tail p))
-    (Dec-× ⦃ x ≟ y ⦄ ⦃ go xs ys ⦄)
+    (x ≟ y <,> go xs ys)

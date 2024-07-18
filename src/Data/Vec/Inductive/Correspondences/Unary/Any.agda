@@ -31,7 +31,7 @@ any? {n = suc n} P? {x ∷ xs} =
   Dec.dmap [ (fzero ,_) , bimap fsuc id ]ᵤ
            (λ { ¬ps (fzero  , p ) → ¬ps (inl p)
               ; ¬ps (fsuc i , ps) → ¬ps (inr (_ , ps)) })
-           (Dec-⊎ ⦃ P? ⦄ ⦃ any? (λ {z} → P? {z}) {xs} ⦄)
+           (P? <+> any? (λ {z} → P? {z}) {xs})
 
 any-ap
   : {a a′ b b′ : Level} {A : Type a} {B : Type b} {P : Pred A a′} {Q : Pred B b′}

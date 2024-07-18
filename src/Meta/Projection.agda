@@ -5,9 +5,7 @@ open import Foundations.Base
 
 open import Meta.Literals.FromProduct
   public
-open import Meta.Reflection.Base
-open import Meta.Reflection.Neutral
-open import Meta.Reflection.Signature
+open import Meta.Reflection
 
 open import Data.Bool.Base as Bool
 open import Data.Empty.Base

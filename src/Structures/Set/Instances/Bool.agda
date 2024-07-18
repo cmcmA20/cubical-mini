@@ -20,8 +20,8 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
       s : S
       x y : A
 
-    empty : S
-    empty _ = false
+    ∅ : S
+    ∅ _ = false
 
     lookup : S → A → Bool
     lookup = id
@@ -36,7 +36,7 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     ... | yes _ = false
     ... | no  _ = s a
 
-    lookup-empty : Erased (lookup empty x ＝ false)
+    lookup-empty : Erased (lookup ∅ x ＝ false)
     lookup-empty .erased = refl
 
     lookup-insert : Erased (lookup (insert s x) x ＝ true)

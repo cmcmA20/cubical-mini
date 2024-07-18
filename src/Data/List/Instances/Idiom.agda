@@ -3,10 +3,11 @@ module Data.List.Instances.Idiom where
 
 open import Foundations.Base
 
+open import Meta.Effect.Base
 open import Meta.Effect.Idiom
 
 open import Data.List.Base
-open import Data.List.Instances.Map public
+open import Data.List.Instances.Map
 
 private variable
   ℓ : Level

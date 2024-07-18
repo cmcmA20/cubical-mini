@@ -9,7 +9,7 @@ open import Data.Empty.Base
 open import Data.Nat.Base
 open import Data.Unit.Base
 
-open import Data.Tree.Binary.Base
+open import Data.Tree.Binary.Base as Tree
 
 private variable
   ℓ ℓ′ ℓᵃ : Level
@@ -18,13 +18,13 @@ private variable
   tl tr xl xr yl yr xs ys : Tree A
   n : HLevel
 
-empty≠leaf : empty ≠ leaf x
+empty≠leaf : Tree.empty ≠ leaf x
 empty≠leaf p = subst discrim p tt where
   discrim : Tree A → 𝒰
   discrim empty = ⊤
   discrim _ = ⊥
 
-empty≠node : empty ≠ node tl tr
+empty≠node : Tree.empty ≠ node tl tr
 empty≠node p = subst discrim p tt where
   discrim : Tree A → 𝒰
   discrim empty = ⊤

@@ -1,8 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.List.Instances.Traversable where
 
-open import Foundations.Base
-
+open import Meta.Effect.Base
+open import Meta.Effect.Idiom
 open import Meta.Effect.Traversable
 
 open import Data.List.Base

@@ -4,6 +4,7 @@ module Data.HVec.Base where
 open import Foundations.Base
 
 open import Meta.Effect.Foldable
+open import Meta.Effect.Map
 
 -- yes, it's the right one
 open import Data.Vec.Ergonomic.Base

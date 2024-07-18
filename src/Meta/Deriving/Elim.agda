@@ -3,14 +3,7 @@
 module Meta.Deriving.Elim where
 
 open import Meta.Prelude
-
-open import Meta.Effect.Alt
-open import Meta.Effect.Traversable
-open import Meta.Reflection.Argument
-open import Meta.Reflection.Base
-open import Meta.Reflection.Neutral
-open import Meta.Reflection.Signature
-open import Meta.Reflection.Subst
+open import Meta.Reflection
 
 open import Logic.Discreteness
 
@@ -25,6 +18,7 @@ open import Data.List.Instances.Append
 open import Data.List.Instances.Discrete
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
+open import Data.List.Instances.Map
 open import Data.List.Instances.Traversable
 open import Data.List.Operations
 open import Data.Maybe.Instances.Alt

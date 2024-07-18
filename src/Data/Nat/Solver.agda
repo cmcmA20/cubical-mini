@@ -4,6 +4,7 @@ module Data.Nat.Solver where
 open import Foundations.Base
   hiding (const)
 
+open import Meta.Effect.Idiom
 open import Meta.Literals.FromNat
 open import Meta.Marker
 open import Meta.Reflection.Base

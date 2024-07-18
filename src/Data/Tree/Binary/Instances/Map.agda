@@ -3,6 +3,7 @@ module Data.Tree.Binary.Instances.Map where
 
 open import Foundations.Base
 
+open import Meta.Effect.Base
 open import Meta.Effect.Map
 
 open import Data.Tree.Binary.Base

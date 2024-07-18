@@ -4,6 +4,7 @@ module Meta.Reflection.Solver where
 open import Foundations.Base
 
 open import Meta.Effect.Alt
+open import Meta.Effect.Idiom
 open import Meta.Literals.FromString
 open import Meta.Reflection.Base
 open import Meta.Reflection.Variables

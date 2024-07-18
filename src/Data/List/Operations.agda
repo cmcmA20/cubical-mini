@@ -4,6 +4,7 @@ module Data.List.Operations where
 
 open import Foundations.Base
 
+open import Meta.Effect.Map
 open import Meta.Effect.Idiom
 
 open import Data.Bool.Base
@@ -12,6 +13,7 @@ open import Data.Nat.Base
 
 open import Data.List.Base as List
 open import Data.List.Instances.Idiom
+open import Data.List.Instances.Map
 
 private variable
   ℓ ℓ′ : Level

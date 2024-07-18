@@ -9,6 +9,7 @@ open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromString  public
 open import Meta.Literals.FromProduct public
 
+open import Meta.Effect.Base
 open import Meta.Effect.Map
 open import Meta.Effect.Idiom
 open import Meta.Effect.Bind public
@@ -23,6 +24,7 @@ open import Data.List.Base as List
 open import Data.List.Instances.Append
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
+open import Data.List.Instances.Map
 open import Data.List.Instances.Traversable
 open import Data.List.Operations as List
 open import Data.Maybe.Base

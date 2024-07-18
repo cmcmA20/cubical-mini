@@ -3,7 +3,10 @@ module Meta.Effect.Foldable where
 
 open import Foundations.Base
 
-open import Meta.Effect.Alt public
+open import Meta.Effect.Base
+open import Meta.Effect.Alt
+open import Meta.Effect.Map
+open import Meta.Effect.Idiom
 
 private variable
   ℓ ℓ′ : Level

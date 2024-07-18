@@ -1,7 +1,7 @@
 {-# OPTIONS --safe --no-exact-split #-}
 module Meta.Marker where
 
-open import Foundations.Base
+open import Meta.Prelude
 
 open import Meta.Reflection.Base
 open import Meta.Literals.FromNat

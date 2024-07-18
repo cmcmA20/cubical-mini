@@ -4,13 +4,6 @@ module Prelude where
 
 open import Meta.Prelude public
 
-open import Meta.Effect.Alt         public
-open import Meta.Effect.Bind        public
-open import Meta.Effect.Foldable    public
-open import Meta.Effect.Idiom       public
-open import Meta.Effect.Map         public
-open import Meta.Effect.Traversable public
-
 open import Meta.Literals.FromProduct public
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromNeg     public

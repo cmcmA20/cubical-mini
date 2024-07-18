@@ -1,6 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Reflection.Instances.Traversable where
 
+open import Meta.Effect.Base
+open import Meta.Effect.Map
 open import Meta.Effect.Traversable
 
 open import Data.Reflection.Argument

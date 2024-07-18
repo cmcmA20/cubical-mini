@@ -1,6 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.List.Instances.Map where
 
+open import Meta.Effect.Base
 open import Meta.Effect.Map
 
 open import Data.List.Base

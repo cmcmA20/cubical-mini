@@ -17,11 +17,11 @@ module _ {ℓᵃ ℓ} (A : 𝒰 ℓᵃ) (S : 𝒰 ℓ) where
   record SetI : 𝒰 (ℓᵃ ⊔ ℓ) where
     no-eta-equality
     field
-      empty  : S
+      ∅  : S
       lookup : S → A → Bool
       insert remove : S → A → S
 
-      lookup-empty  : Erased $ lookup empty x ＝ false
+      lookup-empty  : Erased $ lookup ∅ x ＝ false
       lookup-insert : Erased $ lookup (insert s x) x ＝ true
       lookup-remove : Erased $ lookup (remove s x) x ＝ false
       insert-nop    : lookup s x ＝ true

@@ -5,6 +5,8 @@ module Meta.Notation.Variadic where
 open import Foundations.Base
   hiding (_$_)
 
+open import Meta.Effect.Idiom
+open import Meta.Effect.Map
 open import Meta.Notation.Underlying public
 open import Meta.Reflection.Base
 open import Meta.Reflection.Subst

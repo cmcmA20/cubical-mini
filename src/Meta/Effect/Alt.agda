@@ -3,8 +3,9 @@ module Meta.Effect.Alt where
 
 open import Foundations.Base
 
+open import Meta.Effect.Base
 open import Meta.Effect.Bind
-open import Meta.Effect.Idiom public
+open import Meta.Effect.Idiom
 
 open import Data.Bool.Base
 

@@ -7,10 +7,7 @@ open import Foundations.Prelude
 open import Meta.Effect.Alt
 open import Meta.Literals.FromProduct
 open import Meta.Notation.Variadic
-open import Meta.Reflection.Base
-open import Meta.Reflection.Neutral
-open import Meta.Reflection.Signature
-open import Meta.Reflection.Subst
+open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base

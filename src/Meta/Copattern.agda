@@ -2,14 +2,8 @@
 {-# OPTIONS --safe --no-exact-split #-}
 module Meta.Copattern where
 
-open import Foundations.Prelude
-
-open import Meta.Effect.Alt
-open import Meta.Effect.Traversable
-open import Meta.Reflection.Argument
-open import Meta.Reflection.Base
-open import Meta.Reflection.Signature
-open import Meta.Reflection.Subst
+open import Meta.Prelude
+open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base

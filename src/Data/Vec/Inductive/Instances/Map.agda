@@ -3,6 +3,7 @@ module Data.Vec.Inductive.Instances.Map where
 
 open import Foundations.Base
 
+open import Meta.Effect.Base
 open import Meta.Effect.Map
 
 open import Data.Vec.Inductive.Base as Vec

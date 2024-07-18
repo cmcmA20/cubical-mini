@@ -2,14 +2,14 @@
 module Logic.Decidability where
 
 open import Meta.Prelude
-open import Meta.Reflection.Base
-open import Meta.Reflection.Neutral
-open import Meta.Reflection.Signature
+open import Meta.Reflection
 
 open import Logic.DoubleNegation
 
 open import Data.Bool.Base
 open import Data.Dec.Base as Dec
+open import Data.Dec.Instances.Alternative
+open import Data.Dec.Instances.Monoidal
 open import Data.Empty.Base as ⊥
 open import Data.Reflection.Term
 open import Data.Reflects.Path
@@ -29,18 +29,15 @@ dec→essentially-classical = Dec.rec
 
 instance
   Dec-⊥ : Dec ⊥
-  Dec-⊥ = no id
+  Dec-⊥ = empty
   {-# OVERLAPPING Dec-⊥ #-}
 
   Dec-⊤ : Dec ⊤
-  Dec-⊤ = yes tt
+  Dec-⊤ = unit
   {-# OVERLAPPING Dec-⊤ #-}
 
   Dec-× : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A × B)
-  Dec-× ⦃ da ⦄    ⦃ db ⦄ .does = da .does and db .does
-  Dec-× ⦃ no ¬a ⦄ ⦃ db ⦄ .proof = ofⁿ $ ¬a ∘ fst
-  Dec-× ⦃ yes a ⦄ ⦃ no ¬b ⦄ .proof = ofⁿ $ ¬b ∘ snd
-  Dec-× ⦃ yes a ⦄ ⦃ yes b ⦄ .proof = ofʸ (a , b)
+  Dec-× ⦃ da ⦄ ⦃ db ⦄ = da <,> db
 
   Dec-fun : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A → B)
   Dec-fun ⦃ da ⦄    ⦃ db ⦄ .does = not (da .does) or db .does

@@ -49,4 +49,4 @@ all? P? {([])}   = yes []
 all? P? {x ∷ xs} =
   Dec.dmap (_∷_ $ₜ²_)
            (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
-           (Dec-× ⦃ P? ⦄ ⦃ all? P? ⦄)
+           (P? <,> all? P?)

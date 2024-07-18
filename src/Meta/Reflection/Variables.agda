@@ -3,6 +3,7 @@ module Meta.Reflection.Variables where
 
 open import Foundations.Base
 
+open import Meta.Effect.Idiom
 open import Meta.Reflection.Base
 
 open import Logic.Discreteness

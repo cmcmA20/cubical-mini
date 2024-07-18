@@ -4,7 +4,9 @@ module Data.Truncation.Propositional.Instances.Idiom where
 open import Foundations.Base
 open import Foundations.HLevel
 
+open import Meta.Effect.Base
 open import Meta.Effect.Idiom
+open import Meta.Effect.Map
 open import Meta.Inductive
 
 open import Data.Truncation.Propositional.Base

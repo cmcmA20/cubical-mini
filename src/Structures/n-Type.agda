@@ -7,9 +7,7 @@ open import Meta.Extensionality
 open import Meta.Notation.Product
 open import Meta.Projection
 open import Meta.Record
-open import Meta.Reflection.Base
-open import Meta.Reflection.Neutral
-open import Meta.Reflection.Signature
+open import Meta.Reflection
 
 open import Data.Bool.Base
 open import Data.List.Base

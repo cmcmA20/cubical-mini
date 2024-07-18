@@ -3,7 +3,8 @@ module Meta.Effect.Bind where
 
 open import Foundations.Base
 
-open import Meta.Effect.Idiom public
+open import Meta.Effect.Base
+open import Meta.Effect.Idiom
 
 private variable
   ℓᵃ ℓᵇ : Level

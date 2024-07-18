@@ -1,17 +1,13 @@
 {-# OPTIONS --safe --no-exact-split #-}
 module Meta.Witness where
 
-open import Foundations.Base
-
-open import Meta.Reflection.Base
-open import Meta.Reflection.Neutral
-open import Meta.Reflection.Signature
-open import Meta.Reflection.Subst
+open import Meta.Prelude
+open import Meta.Reflection
 
 open import Data.Dec.Base
 open import Data.List.Base
 open import Data.List.Instances.FromProduct
-open import Data.List.Instances.Idiom
+open import Data.List.Instances.Map
 open import Data.Reflection.Argument
 open import Data.Reflection.Error
 open import Data.Reflection.Instances.FromString
