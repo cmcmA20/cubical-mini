@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Meta.Effect.Base</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Meta.Effect.Base.html" class="Module">Meta.Effect.Base</a> <a id="48" class="Keyword">where</a>
+
+<a id="55" class="Keyword">open</a> <a id="60" class="Keyword">import</a> <a id="67" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="85" class="Keyword">record</a> <a id="Effect"></a><a id="92" href="Meta.Effect.Base.html#92" class="Record">Effect</a> <a id="99" class="Symbol">:</a> <a id="101" href="Foundations.Prim.Type.html#349" class="Primitive">Typeω</a> <a id="107" class="Keyword">where</a>
+  <a id="115" class="Keyword">constructor</a> <a id="eff"></a><a id="127" href="Meta.Effect.Base.html#127" class="InductiveConstructor">eff</a>
+  <a id="133" class="Keyword">field</a>
+    <a id="143" class="Symbol">{</a><a id="Effect.adj"></a><a id="144" href="Meta.Effect.Base.html#144" class="Field">adj</a><a id="147" class="Symbol">}</a> <a id="149" class="Symbol">:</a> <a id="151" href="Agda.Primitive.html#742" class="Postulate">Level</a> <a id="157" class="Symbol">→</a> <a id="159" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+    <a id="Effect.₀"></a><a id="169" href="Meta.Effect.Base.html#169" class="Field">₀</a>     <a id="175" class="Symbol">:</a> <a id="177" class="Symbol">∀</a> <a id="179" class="Symbol">{</a><a id="180" href="Meta.Effect.Base.html#180" class="Bound">ℓ</a><a id="181" class="Symbol">}</a> <a id="183" class="Symbol">→</a> <a id="185" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="190" href="Meta.Effect.Base.html#180" class="Bound">ℓ</a> <a id="192" class="Symbol">→</a> <a id="194" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="199" class="Symbol">(</a><a id="200" href="Meta.Effect.Base.html#144" class="Field">adj</a> <a id="204" href="Meta.Effect.Base.html#180" class="Bound">ℓ</a><a id="205" class="Symbol">)</a>
+</pre></body></html>

@@ -5,14 +5,15 @@
 <a id="73" class="Keyword">open</a> <a id="78" class="Keyword">import</a> <a id="85" href="Foundations.Base.html" class="Module">Foundations.Base</a>
 <a id="102" class="Keyword">open</a> <a id="107" class="Keyword">import</a> <a id="114" href="Foundations.HLevel.html" class="Module">Foundations.HLevel</a>
 
-<a id="134" class="Keyword">open</a> <a id="139" class="Keyword">import</a> <a id="146" href="Meta.Effect.Bind.html" class="Module">Meta.Effect.Bind</a>
-<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Meta.Inductive.html" class="Module">Meta.Inductive</a>
+<a id="134" class="Keyword">open</a> <a id="139" class="Keyword">import</a> <a id="146" href="Meta.Effect.Base.html" class="Module">Meta.Effect.Base</a>
+<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Meta.Effect.Bind.html" class="Module">Meta.Effect.Bind</a>
+<a id="192" class="Keyword">open</a> <a id="197" class="Keyword">import</a> <a id="204" href="Meta.Inductive.html" class="Module">Meta.Inductive</a>
 
-<a id="191" class="Keyword">open</a> <a id="196" class="Keyword">import</a> <a id="203" href="Data.Truncation.Set.Base.html" class="Module">Data.Truncation.Set.Base</a>
-<a id="228" class="Keyword">open</a> <a id="233" class="Keyword">import</a> <a id="240" href="Data.Truncation.Set.Instances.Idiom.html" class="Module">Data.Truncation.Set.Instances.Idiom</a> <a id="276" class="Keyword">public</a>
+<a id="220" class="Keyword">open</a> <a id="225" class="Keyword">import</a> <a id="232" href="Data.Truncation.Set.Base.html" class="Module">Data.Truncation.Set.Base</a>
+<a id="257" class="Keyword">open</a> <a id="262" class="Keyword">import</a> <a id="269" href="Data.Truncation.Set.Instances.Idiom.html" class="Module">Data.Truncation.Set.Instances.Idiom</a> <a id="305" class="Keyword">public</a>
 
-<a id="284" class="Keyword">instance</a>
-  <a id="Bind-∥-∥₂"></a><a id="295" href="Data.Truncation.Set.Instances.Bind.html#295" class="Function">Bind-∥-∥₂</a> <a id="305" class="Symbol">:</a> <a id="307" href="Meta.Effect.Bind.html#192" class="Record">Bind</a> <a id="312" class="Symbol">(</a><a id="313" href="Meta.Effect.Map.html#190" class="InductiveConstructor">eff</a> <a id="317" href="Data.Truncation.Set.Base.html#94" class="Datatype Operator">∥_∥₂</a><a id="321" class="Symbol">)</a>
-  <a id="325" href="Data.Truncation.Set.Instances.Bind.html#295" class="Function">Bind-∥-∥₂</a> <a id="335" class="Symbol">.</a><a id="336" href="Meta.Effect.Bind.html#283" class="Field Operator">Bind._&gt;&gt;=_</a> <a id="347" class="Symbol">=</a> <a id="349" href="Foundations.Pi.Base.html#1221" class="Function">flip</a> <a id="354" href="Meta.Inductive.html#1495" class="Function">rec!</a> <a id="359" class="Keyword">where</a>
-    <a id="369" class="Keyword">instance</a> <a id="378" href="Data.Truncation.Set.Instances.Bind.html#378" class="Function">_</a> <a id="380" class="Symbol">=</a> <a id="382" href="Foundations.HLevel.Base.html#9253" class="Function">hlevel-basic-instance</a> <a id="404" class="Number">2</a> <a id="406" href="Data.Truncation.Set.Base.html#156" class="InductiveConstructor">squash₂</a>
+<a id="313" class="Keyword">instance</a>
+  <a id="Bind-∥-∥₂"></a><a id="324" href="Data.Truncation.Set.Instances.Bind.html#324" class="Function">Bind-∥-∥₂</a> <a id="334" class="Symbol">:</a> <a id="336" href="Meta.Effect.Bind.html#214" class="Record">Bind</a> <a id="341" class="Symbol">(</a><a id="342" href="Meta.Effect.Base.html#127" class="InductiveConstructor">eff</a> <a id="346" href="Data.Truncation.Set.Base.html#94" class="Datatype Operator">∥_∥₂</a><a id="350" class="Symbol">)</a>
+  <a id="354" href="Data.Truncation.Set.Instances.Bind.html#324" class="Function">Bind-∥-∥₂</a> <a id="364" class="Symbol">.</a><a id="365" href="Meta.Effect.Bind.html#305" class="Field Operator">Bind._&gt;&gt;=_</a> <a id="376" class="Symbol">=</a> <a id="378" href="Foundations.Pi.Base.html#1221" class="Function">flip</a> <a id="383" href="Meta.Inductive.html#1495" class="Function">rec!</a> <a id="388" class="Keyword">where</a>
+    <a id="398" class="Keyword">instance</a> <a id="407" href="Data.Truncation.Set.Instances.Bind.html#407" class="Function">_</a> <a id="409" class="Symbol">=</a> <a id="411" href="Foundations.HLevel.Base.html#9253" class="Function">hlevel-basic-instance</a> <a id="433" class="Number">2</a> <a id="435" href="Data.Truncation.Set.Base.html#156" class="InductiveConstructor">squash₂</a>
 </pre></body></html>

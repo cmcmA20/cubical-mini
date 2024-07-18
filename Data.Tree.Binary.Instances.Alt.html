@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Tree.Binary.Instances.Alt</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Tree.Binary.Instances.Alt.html" class="Module">Data.Tree.Binary.Instances.Alt</a> <a id="62" class="Keyword">where</a>
+
+<a id="69" class="Keyword">open</a> <a id="74" class="Keyword">import</a> <a id="81" href="Meta.Effect.Alt.html" class="Module">Meta.Effect.Alt</a>
+<a id="97" class="Keyword">open</a> <a id="102" class="Keyword">import</a> <a id="109" href="Meta.Effect.Base.html" class="Module">Meta.Effect.Base</a>
+
+<a id="127" class="Keyword">open</a> <a id="132" class="Keyword">import</a> <a id="139" href="Data.Tree.Binary.Base.html" class="Module">Data.Tree.Binary.Base</a>
+
+<a id="162" class="Keyword">instance</a>
+  <a id="Alt-Tree"></a><a id="173" href="Data.Tree.Binary.Instances.Alt.html#173" class="Function">Alt-Tree</a> <a id="182" class="Symbol">:</a> <a id="184" href="Meta.Effect.Alt.html#251" class="Record">Alt</a> <a id="188" class="Symbol">(</a><a id="189" href="Meta.Effect.Base.html#127" class="InductiveConstructor">eff</a> <a id="193" href="Data.Tree.Binary.Base.html#95" class="Datatype">Tree</a><a id="197" class="Symbol">)</a>
+  <a id="201" href="Data.Tree.Binary.Instances.Alt.html#173" class="Function">Alt-Tree</a> <a id="210" class="Symbol">.</a><a id="211" href="Meta.Effect.Alt.html#324" class="Field">fail</a>  <a id="217" class="Symbol">=</a> <a id="219" href="Data.Tree.Binary.Base.html#128" class="InductiveConstructor">empty</a>
+  <a id="227" href="Data.Tree.Binary.Instances.Alt.html#173" class="Function">Alt-Tree</a> <a id="236" class="Symbol">.</a><a id="237" href="Meta.Effect.Alt.html#342" class="Field Operator">_&lt;|&gt;_</a> <a id="243" class="Symbol">=</a> <a id="245" href="Data.Tree.Binary.Base.html#166" class="InductiveConstructor">node</a>
+</pre></body></html>

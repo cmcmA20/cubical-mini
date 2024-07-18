@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Meta.Effect.Monoidal</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Meta.Effect.Monoidal.html" class="Module">Meta.Effect.Monoidal</a> <a id="52" class="Keyword">where</a>
+
+<a id="59" class="Keyword">open</a> <a id="64" class="Keyword">import</a> <a id="71" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="89" class="Keyword">open</a> <a id="94" class="Keyword">import</a> <a id="101" href="Meta.Effect.Base.html" class="Module">Meta.Effect.Base</a>
+<a id="118" class="Keyword">open</a> <a id="123" class="Keyword">import</a> <a id="130" href="Meta.Effect.Map.html" class="Module">Meta.Effect.Map</a>
+<a id="146" class="Keyword">open</a> <a id="151" class="Keyword">import</a> <a id="158" href="Meta.Effect.Idiom.html" class="Module">Meta.Effect.Idiom</a>
+
+<a id="177" class="Keyword">open</a> <a id="182" class="Keyword">import</a> <a id="189" href="Data.Unit.Base.html" class="Module">Data.Unit.Base</a>
+
+<a id="205" class="Keyword">private</a> <a id="213" class="Keyword">variable</a>
+  <a id="224" href="Meta.Effect.Monoidal.html#224" class="Generalizable">ℓᵃ</a> <a id="227" href="Meta.Effect.Monoidal.html#227" class="Generalizable">ℓᵇ</a> <a id="230" class="Symbol">:</a> <a id="232" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="240" href="Meta.Effect.Monoidal.html#240" class="Generalizable">A</a> <a id="242" class="Symbol">:</a> <a id="244" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="249" href="Meta.Effect.Monoidal.html#224" class="Generalizable">ℓᵃ</a>
+  <a id="254" href="Meta.Effect.Monoidal.html#254" class="Generalizable">B</a> <a id="256" class="Symbol">:</a> <a id="258" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="263" href="Meta.Effect.Monoidal.html#227" class="Generalizable">ℓᵇ</a>
+
+<a id="267" class="Keyword">record</a> <a id="Monoidal"></a><a id="274" href="Meta.Effect.Monoidal.html#274" class="Record">Monoidal</a> <a id="283" class="Symbol">(</a><a id="284" href="Meta.Effect.Monoidal.html#284" class="Bound">M</a> <a id="286" class="Symbol">:</a> <a id="288" href="Meta.Effect.Base.html#92" class="Record">Effect</a><a id="294" class="Symbol">)</a> <a id="296" class="Symbol">:</a> <a id="298" href="Foundations.Prim.Type.html#349" class="Primitive">Typeω</a> <a id="304" class="Keyword">where</a>
+  <a id="312" class="Keyword">private</a> <a id="320" class="Keyword">module</a> <a id="Monoidal.M"></a><a id="327" href="Meta.Effect.Monoidal.html#327" class="Module">M</a> <a id="329" class="Symbol">=</a> <a id="331" href="Meta.Effect.Base.html#92" class="Module">Effect</a> <a id="338" href="Meta.Effect.Monoidal.html#284" class="Bound">M</a>
+  <a id="342" class="Keyword">field</a>
+    <a id="Monoidal.unit"></a><a id="352" href="Meta.Effect.Monoidal.html#352" class="Field">unit</a>  <a id="358" class="Symbol">:</a> <a id="360" href="Meta.Effect.Base.html#169" class="Function">M.₀</a> <a id="364" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a>
+    <a id="Monoidal._&lt;,&gt;_"></a><a id="370" href="Meta.Effect.Monoidal.html#370" class="Field Operator">_&lt;,&gt;_</a> <a id="376" class="Symbol">:</a> <a id="378" href="Meta.Effect.Base.html#169" class="Function">M.₀</a> <a id="382" href="Meta.Effect.Monoidal.html#240" class="Generalizable">A</a> <a id="384" class="Symbol">→</a> <a id="386" href="Meta.Effect.Base.html#169" class="Function">M.₀</a> <a id="390" href="Meta.Effect.Monoidal.html#254" class="Generalizable">B</a> <a id="392" class="Symbol">→</a> <a id="394" href="Meta.Effect.Base.html#169" class="Function">M.₀</a> <a id="398" class="Symbol">(</a><a id="399" href="Meta.Effect.Monoidal.html#240" class="Generalizable">A</a> <a id="401" href="Foundations.Sigma.Base.html#621" class="Function Operator">×</a> <a id="403" href="Meta.Effect.Monoidal.html#254" class="Generalizable">B</a><a id="404" class="Symbol">)</a>
+
+  <a id="409" class="Keyword">infixr</a> <a id="416" class="Number">4</a> <a id="418" href="Meta.Effect.Monoidal.html#370" class="Field Operator">_&lt;,&gt;_</a>
+
+<a id="425" class="Keyword">open</a> <a id="430" href="Meta.Effect.Monoidal.html#274" class="Module">Monoidal</a> <a id="439" class="Symbol">⦃</a> <a id="441" class="Symbol">...</a> <a id="445" class="Symbol">⦄</a> <a id="447" class="Keyword">public</a>
+
+<a id="455" class="Keyword">instance</a>
+  <a id="Monoidal-Idiom"></a><a id="466" href="Meta.Effect.Monoidal.html#466" class="Function">Monoidal-Idiom</a> <a id="481" class="Symbol">:</a> <a id="483" class="Symbol">{</a><a id="484" href="Meta.Effect.Monoidal.html#484" class="Bound">M</a> <a id="486" class="Symbol">:</a> <a id="488" href="Meta.Effect.Base.html#92" class="Record">Effect</a><a id="494" class="Symbol">}</a> <a id="496" class="Symbol">→</a> <a id="498" class="Symbol">⦃</a> <a id="500" href="Meta.Effect.Idiom.html#275" class="Record">Idiom</a> <a id="506" href="Meta.Effect.Monoidal.html#484" class="Bound">M</a> <a id="508" class="Symbol">⦄</a> <a id="510" class="Symbol">→</a> <a id="512" href="Meta.Effect.Monoidal.html#274" class="Record">Monoidal</a> <a id="521" href="Meta.Effect.Monoidal.html#484" class="Bound">M</a>
+  <a id="525" href="Meta.Effect.Monoidal.html#466" class="Function">Monoidal-Idiom</a> <a id="540" class="Symbol">.</a><a id="541" href="Meta.Effect.Monoidal.html#352" class="Field">unit</a> <a id="546" class="Symbol">=</a> <a id="548" href="Meta.Effect.Idiom.html#376" class="Field">pure</a> <a id="553" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a>
+  <a id="558" href="Meta.Effect.Monoidal.html#466" class="Function">Monoidal-Idiom</a> <a id="573" class="Symbol">.</a><a id="574" href="Meta.Effect.Monoidal.html#370" class="Field Operator">_&lt;,&gt;_</a> <a id="580" href="Meta.Effect.Monoidal.html#580" class="Bound">ma</a> <a id="583" href="Meta.Effect.Monoidal.html#583" class="Bound">mb</a> <a id="586" class="Symbol">=</a> <a id="588" class="Symbol">⦇</a> <a id="590" href="Meta.Effect.Monoidal.html#580" class="Bound">ma</a> <a id="593" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="595" href="Meta.Effect.Monoidal.html#583" class="Bound">mb</a> <a id="598" class="Symbol">⦈</a>
+  <a id="602" class="Symbol">{-#</a> <a id="606" class="Keyword">OVERLAPPABLE</a> <a id="619" href="Meta.Effect.Monoidal.html#466" class="Function">Monoidal-Idiom</a> <a id="634" class="Symbol">#-}</a>
+</pre></body></html>
