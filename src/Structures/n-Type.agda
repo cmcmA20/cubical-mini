@@ -71,6 +71,18 @@ instance
   Extensional-n-Type .reflᵉ _ = refl
   Extensional-n-Type .idsᵉ .to-path = n-ua
   Extensional-n-Type .idsᵉ .to-path-over = Extensional-Type .idsᵉ .to-path-over
+  {-# OVERLAPPABLE Extensional-n-Type #-}
+
+  @0 Extensional-Prop : Extensional (n-Type ℓ 1) ℓ
+  Extensional-Prop .Pathᵉ (el A _) (el B _) = (A → B) × (B → A)
+  Extensional-Prop .reflᵉ _ = refl , refl
+  Extensional-Prop .idsᵉ .to-path {a = el A p} {b = el B q} (f , g) =
+    Equiv.injective (≅→≃ n-Type-iso) (ua (prop-extₑ! f g) ,ₚ prop!)
+    where instance _ = hlevel-prop-instance p
+                   _ = hlevel-prop-instance q
+  Extensional-Prop .idsᵉ .to-path-over {a = el _ p} _ = prop!
+    where instance _ = hlevel-prop-instance p
+  {-# OVERLAPPING Extensional-Prop #-}
 
 opaque
   unfolding ua
