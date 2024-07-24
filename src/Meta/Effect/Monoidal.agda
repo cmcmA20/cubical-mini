@@ -4,7 +4,7 @@ module Meta.Effect.Monoidal where
 open import Foundations.Base
 
 open import Meta.Effect.Base
-open import Meta.Effect.Map
+open import Meta.Effect.Map.Base
 open import Meta.Effect.Idiom
 
 open import Data.Unit.Base

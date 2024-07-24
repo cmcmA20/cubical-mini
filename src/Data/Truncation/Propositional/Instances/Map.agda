@@ -11,6 +11,16 @@ open import Meta.Inductive
 open import Data.Truncation.Propositional.Base
 
 instance
+  private
+    H-Level-∥-∥₁ : ∀ {n ℓ} {A : Type ℓ} → H-Level (suc n) ∥ A ∥₁
+    H-Level-∥-∥₁ = hlevel-prop-instance squash₁
+
   Map-∥-∥₁ : Map (eff ∥_∥₁)
-  Map-∥-∥₁ .map f = rec! (∣_∣₁ ∘ f) where
-    instance _ = hlevel-prop-instance squash₁
+  Map-∥-∥₁ .map f = rec! (∣_∣₁ ∘ f)
+
+  Lawful-Map-∥-∥₁ : Lawful-Map (eff ∥_∥₁)
+  Lawful-Map-∥-∥₁ .Lawful-Map.has-map = Map-∥-∥₁
+  Lawful-Map-∥-∥₁ .Lawful-Map.map-pres-id =
+    fun-ext (elim! λ _ → refl)
+  Lawful-Map-∥-∥₁ .Lawful-Map.map-pres-comp =
+    fun-ext (elim! λ _ → refl)

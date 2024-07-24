@@ -14,3 +14,12 @@ instance
     go : (A → B) → Maybe A → Maybe B
     go f (just x) = just (f x)
     go _ nothing  = nothing
+
+  Lawful-Map-Maybe : Lawful-Map (eff Maybe)
+  Lawful-Map-Maybe .Lawful-Map.has-map = Map-Maybe
+  Lawful-Map-Maybe .Lawful-Map.map-pres-id = fun-ext λ where
+    (just _) → refl
+    nothing → refl
+  Lawful-Map-Maybe .Lawful-Map.map-pres-comp = fun-ext λ where
+    (just _) → refl
+    nothing → refl

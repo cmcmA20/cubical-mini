@@ -19,3 +19,18 @@ instance
     go _ empty = empty
     go f (leaf x) = leaf (f x)
     go f (node l r) = node (go f l) (go f r)
+
+  Lawful-Map-Tree : Lawful-Map (eff Tree)
+  Lawful-Map-Tree .Lawful-Map.has-map = Map-Tree
+  Lawful-Map-Tree .Lawful-Map.map-pres-id {A} = fun-ext go
+    where
+    go : (xs : Tree A) → map refl xs ＝ xs
+    go empty = refl
+    go (leaf _) = refl
+    go (node l r) = ap² node (go l) (go r)
+  Lawful-Map-Tree .Lawful-Map.map-pres-comp {A} {f} {g} = fun-ext go
+    where
+    go : (xs : Tree A) → map (f ∙ g) xs ＝ (map f ∙ map g) xs
+    go empty = refl
+    go (leaf _) = refl
+    go (node l r) = ap² node (go l) (go r)
