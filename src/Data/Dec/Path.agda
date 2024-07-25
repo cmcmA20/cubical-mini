@@ -17,8 +17,8 @@ private variable
 instance
   Extensional-Dec : ⦃ sa : Extensional A ℓ′ ⦄ → Extensional (Dec A) ℓ′
   Extensional-Dec ⦃ sa ⦄ .Pathᵉ (_ because ofʸ p) (_ because ofʸ q) = Pathᵉ sa p q
-  Extensional-Dec        .Pathᵉ (_ because ofⁿ _) (_ because ofⁿ _) = Lift _ ⊤
-  Extensional-Dec        .Pathᵉ _                 _                 = Lift _ ⊥
+  Extensional-Dec        .Pathᵉ (_ because ofⁿ _) (_ because ofⁿ _) = ⊤
+  Extensional-Dec        .Pathᵉ _                 _                 = ⊥
   Extensional-Dec ⦃ sa ⦄ .reflᵉ (_ because ofʸ p) = reflᵉ sa p
   Extensional-Dec        .reflᵉ (_ because ofⁿ _) = _
   Extensional-Dec ⦃ sa ⦄ .idsᵉ .to-path {a = _ because ofʸ a} {b = _ because ofʸ b} =

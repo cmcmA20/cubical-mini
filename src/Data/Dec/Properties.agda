@@ -7,6 +7,7 @@ open import Meta.Effect.Idiom
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
+open import Data.Empty.Base
 open import Data.Empty.Properties
 open import Data.Sum.Properties
 import Data.Truncation.Propositional as ∥-∥₁

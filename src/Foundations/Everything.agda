@@ -9,10 +9,15 @@ open import Foundations.Prim.Kan
 open import Foundations.Prim.Equiv
 
 open import Foundations.Base
-open import Foundations.Correspondences.Binary.Equivalence
-open import Foundations.Correspondences.Binary.Reflexive
-open import Foundations.Correspondences.Binary.Symmetric
-open import Foundations.Correspondences.Binary.Transitive
+open import Foundations.Notation
+open import Foundations.Notation.Brackets
+open import Foundations.Notation.Equivalence
+open import Foundations.Notation.Logic
+open import Foundations.Notation.Membership
+open import Foundations.Notation.Reflexive
+open import Foundations.Notation.Symmetric
+open import Foundations.Notation.Transitive
+open import Foundations.Notation.Underlying
 open import Foundations.Cubes
 open import Foundations.Equiv
 open import Foundations.Erased

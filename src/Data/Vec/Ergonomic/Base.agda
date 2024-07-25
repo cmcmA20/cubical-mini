@@ -6,6 +6,7 @@ open import Foundations.Base
 open import Data.Nat.Base
   using (ℕ; zero; suc)
   public
+open import Data.Unit.Base
 open import Data.Vec.Interface
 
 private variable
@@ -14,7 +15,7 @@ private variable
   B : Type ℓᵇ
 
 Vec : Type ℓ → (n : ℕ) → Type ℓ
-Vec _ 0 = Lift _ ⊤
+Vec _ 0 = ⊤
 Vec A 1 = A
 Vec A (suc (suc n)) = A × Vec A (suc n)
 

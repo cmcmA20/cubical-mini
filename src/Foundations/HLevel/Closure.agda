@@ -74,7 +74,7 @@ is-equiv→is-of-hlevel h f eqv = is-iso→is-of-hlevel h f (is-equiv→is-iso e
 ≅→is-of-hlevel h (f , isic) = is-iso→is-of-hlevel h (isic .is-iso.inv) $
   iso f (isic .is-iso.linv) (isic .is-iso.rinv)
 
-Π-is-of-hlevel : {B : A → Type ℓ′} (h : HLevel)
+Π-is-of-hlevel : {A : Type ℓ} {B : A → Type ℓ′} (h : HLevel)
                  (Bhl : Π[ x ꞉ A ] is-of-hlevel h (B x))
                → is-of-hlevel h (Π[ x ꞉ A ] B x)
 Π-is-of-hlevel 0 bhl = (λ _ → bhl _ .fst) , λ x i a → bhl _ .snd (x a) i
@@ -169,19 +169,19 @@ opaque
 
 
 instance opaque
-  H-Level-Π : ∀ {h} {B : A → Type ℓ′}
+  H-Level-Π : ∀ {h} {A : Type ℓ} {B : A → Type ℓ′}
             → ⦃ {a : A} → H-Level h (B a) ⦄
             → H-Level h (Π[ a ꞉ A ] B a)
   H-Level-Π {h} .H-Level.has-of-hlevel = Π-is-of-hlevel h λ _ → hlevel h
   {-# OVERLAPPABLE H-Level-Π #-}
 
-  H-Level-∀ : ∀ {h} {B : A → Type ℓ′}
+  H-Level-∀ : ∀ {h} {A : Type ℓ} {B : A → Type ℓ′}
             → ⦃ {a : A} → H-Level h (B a) ⦄
             → H-Level h (∀[ a ꞉ A ] B a)
   H-Level-∀ {h} .H-Level.has-of-hlevel = ∀-is-of-hlevel h λ _ → hlevel h
   {-# OVERLAPPABLE H-Level-∀ #-}
 
-  H-Level-Σ : ∀ {h} {B : A → Type ℓ′}
+  H-Level-Σ : ∀ {h} {A : Type ℓ} {B : A → Type ℓ′}
             → ⦃ H-Level h A ⦄
             → ⦃ {a : A} → H-Level h (B a) ⦄
             → H-Level h (Σ[ a ꞉ A ] B a)

@@ -7,16 +7,16 @@ open import Foundations.Prim.Extension  public
 open import Foundations.Prim.Kan        public
 open import Foundations.Prim.Glue       public
 
-open import Foundations.Correspondences.Binary.Reflexive  public
-open import Foundations.Correspondences.Binary.Symmetric  public
-open import Foundations.Correspondences.Binary.Transitive public
-open import Foundations.Pi.Base                           public
-open import Foundations.Sigma.Base                        public
+open import Foundations.Notation   public
+open import Foundations.Pi.Base    public
+open import Foundations.Sigma.Base public
 
 open import Agda.Builtin.Nat
   using (zero; suc)
   renaming (Nat to ℕ)
-open import Agda.Builtin.Unit      public
+open import Agda.Builtin.Unit
+  renaming (⊤ to ⊤ₜ)
+  public
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ ℓᵃ ℓᵇ ℓᶜ : Level
@@ -38,7 +38,7 @@ Square : {a₀₀ a₀₁ : A} (p : a₀₀ ＝ a₀₁)
 Square p q r s = ＜ q ／ (λ j → p j ＝ r j) ＼ s ＞
 
 infix 0 Square-syntax
-Square-syntax : (d : ⊤)
+Square-syntax : (d : ⊤ₜ)
                 (a₀₀ a₀₁ a₁₀ a₁₁ : A)
                 (p : a₀₀ ＝ a₀₁) (q : a₀₀ ＝ a₁₀)
                 (r : a₁₀ ＝ a₁₁) (s : a₀₁ ＝ a₁₁)
@@ -79,9 +79,10 @@ apᴾ : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
 apᴾ f p i = f i (p i)
 {-# INLINE apᴾ #-}
 
-ap² : {C : Π[ a ꞉ A ] Π[ b ꞉ B a ] Type ℓ}
+ap² : {ℓ ℓ′ ℓ″ : Level}
+      {A : Type ℓ} {B : A → Type ℓ′} {C : Π[ a ꞉ A ] Π[ b ꞉ B a ] Type ℓ″}
       (f : Π[ a ꞉ A ] Π[ b ꞉ B a ] C a b)
-      (p : x ＝ y) {u : B x} {v : B y}
+      {x y : A} (p : x ＝ y) {u : B x} {v : B y}
       (q : ＜     u    ／ (λ i →          B (p i)) ＼        v ＞)
     →      ＜ f x u ／ (λ i    → C (p i) (q    i ))   ＼ f y v ＞
 ap² f p q i = f (p i) (q i)
@@ -155,7 +156,8 @@ opaque
       j (j = i0) → q i
 
   -- any two definitions of double composition are equal
-  ∙∙-unique : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
+  ∙∙-unique : {A : Type ℓᵃ} {x y z w : A}
+              (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
             → (α β : Σ[ s ꞉ w ＝ z ] Square (symₚ p) q r s)
             → α ＝ β
   ∙∙-unique p q r (α , α-fill) (β , β-fill) i =
@@ -171,7 +173,8 @@ opaque
       square : α ＝ β
       square i k = cube i i1 k
 
-  ∙∙-contract : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
+  ∙∙-contract : {A : Type ℓᵃ} {x y z w : A}
+                (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
               → (β : Σ[ s ꞉ w ＝ z ] Square (symₚ p) q r s)
               → (p ∙∙ q ∙∙ r , ∙∙-filler p q r) ＝ β
   ∙∙-contract p q r = ∙∙-unique p q r _
@@ -354,13 +357,13 @@ subst-refl = transport-refl
 
 -- Function extensionality
 
-fun-ext : {B : A → I → Type ℓ′}
+fun-ext : {A : Type ℓ} {B : A → I → Type ℓ′}
           {f : Π[ a ꞉ A ] B a i0} {g : Π[ a ꞉ A ] B a i1}
         → Π[ a ꞉ A ] ＜ f a    ／                B a  ＼    g a ＞
         →            ＜ f   ／ (λ i → Π[ x ꞉ A ] B x i)  ＼ g   ＞
 fun-ext p i x = p x i
 
-happly : {B : A → I → Type ℓ′}
+happly : {A : Type ℓ} {B : A → I → Type ℓ′}
          {f : Π[ a ꞉ A ] B a i0} {g : Π[ a ꞉ A ] B a i1}
        →            ＜ f      ／ (λ i → Π[ a ꞉ A ] B a i) ＼    g   ＞
        → Π[ x ꞉ A ] ＜ f x ／                      B x       ＼ g x ＞
@@ -462,14 +465,14 @@ HLevel : Type₀
 HLevel = ℕ
 
 _on-paths-of_ : (Type ℓ → Type ℓ′) → Type ℓ → Type (ℓ ⊔ ℓ′)
-S on-paths-of A = Π[ a ꞉ A ] Π[ a′ ꞉ A ] S (a ＝ a′)
+S on-paths-of A = (a a′ : A) → S (a ＝ a′)
 
 is-central : {A : Type ℓ} (c : A) → Type _
-is-central {A} c = Π[ x ꞉ A ] (c ＝ x)
+is-central {A} c = (x : A) → c ＝ x
 
 is-of-hlevel : HLevel → Type ℓ → Type ℓ
-is-of-hlevel 0 A = Σ[ x ꞉ A ] is-central x
-is-of-hlevel 1 A = Π[ x ꞉ A ] is-central x
+is-of-hlevel 0 A = Σ A λ x → is-central x
+is-of-hlevel 1 A = (x : A) → is-central x
 is-of-hlevel (suc (suc h)) A = is-of-hlevel (suc h) on-paths-of A
 
 is-contr : Type ℓ → Type ℓ
@@ -744,5 +747,12 @@ record Recall {A : Type ℓ} {B : A → Type ℓ′}
   constructor ⟪_⟫
   field eq : f x ＝ y
 
-recall : (f : Π[ x ꞉ A ] B x) (x : A) → Recall f x (f x)
+recall : {A : Type ℓ} {B : A → Type ℓ′}
+         (f : Π[ x ꞉ A ] B x) (x : A)
+       → Recall f x (f x)
 recall f x = ⟪ reflₚ ⟫
+
+infix 30 _∈!_
+_∈!_ : {A : Type ℓ} {ℙA : Type ℓ′} ⦃ m : Membership A ℙA ℓ″ ⦄
+     → A → ℙA → Type ℓ″
+x ∈! y = is-contr (x ∈ y)

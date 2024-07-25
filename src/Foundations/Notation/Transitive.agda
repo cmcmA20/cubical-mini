@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Correspondences.Binary.Transitive where
+module Foundations.Notation.Transitive where
 
 open import Foundations.Prim.Type
 open import Agda.Builtin.Unit

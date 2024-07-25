@@ -4,7 +4,18 @@ module Data.Unit.Base where
 open import Foundations.Base
 open import Foundations.HLevel.Base
 
-open import Agda.Builtin.Unit public
+open import Agda.Builtin.Unit
+  renaming (⊤ to ⊤ₜ)
+  public
+
+instance
+  ⊤-Type-small : ⊤-notation Type
+  ⊤-Type-small .⊤ = ⊤ₜ
+  {-# OVERLAPPING ⊤-Type-small #-}
+
+  ⊤-Type : ∀ {ℓ} → ⊤-notation (Type ℓ)
+  ⊤-Type .⊤ = Lift _ ⊤ₜ
+  {-# INCOHERENT ⊤-Type #-}
 
 private variable
   n : HLevel

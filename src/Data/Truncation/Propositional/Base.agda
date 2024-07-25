@@ -3,8 +3,7 @@ module Data.Truncation.Propositional.Base where
 
 open import Meta.Prelude
 
-open import Data.Sum.Base
-  using (_⊎_)
+open import Data.Sum.Base using ()
 
 data ∥_∥₁ {ℓ} (A : Type ℓ) : Type ℓ where
   ∣_∣₁    : A → ∥ A ∥₁
@@ -31,14 +30,9 @@ elim P-prop incc (squash₁ x y i) =
 ∃ : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
 ∃ A B = ∥ Σ[ B ] ∥₁
 
-infixr 6 ∃-syntax-und
-
-∃-syntax-und
-  : ⦃ _ : Underlying A ⦄ (X : A) (F : ⌞ X ⌟⁰ → Type ℓ′)
-  → Type _
-∃-syntax-und X F = ∃ ⌞ X ⌟⁰ F
-
-syntax ∃-syntax-und X (λ x → F) = ∃[ x ꞉ X ] F
+instance
+  ∃-Type : ∃-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
+  ∃-Type .∃-notation.∃ = ∃
 
 Existential₁ⁿ : Variadic-binding¹
 Existential₁ⁿ = ∥_∥₁ ∘ Existentialⁿ
@@ -48,9 +42,9 @@ macro ∃[_] = quantifier-macro (quote Existential₁ⁿ)
 
 
 -- Mere disjunction
-infixr 7 _⊎₁_
-_⊎₁_ : Type ℓ → Type ℓ′ → Type (ℓ ⊔ ℓ′)
-_⊎₁_ = mapⁿ 2 ∥_∥₁ _⊎_
+instance
+  ⊎₁-Type : ⊎₁-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
+  ⊎₁-Type ._⊎₁_ A B = ∥ A ⊎ B ∥₁
 
 Sum₁ⁿ : Variadic²
 Sum₁ⁿ {arity} P Q = mapⁿ arity ∥_∥₁ (Sumⁿ P Q)

@@ -31,9 +31,9 @@ private variable
 
 module _ {A : 𝒰 ℓᵃ} ⦃ sa : Extensional A ℓ ⦄ where
   Code-List : List A → List A → 𝒰 ℓ
-  Code-List []       []       = Lift _ ⊤
+  Code-List []       []       = ⊤
   Code-List (x ∷ xs) (y ∷ ys) = sa .Pathᵉ x y × Code-List xs ys
-  Code-List _ _ = Lift _ ⊥
+  Code-List _ _ = ⊥
 
   code-list-refl : (xs : List A) → Code-List xs xs
   code-list-refl []       = _

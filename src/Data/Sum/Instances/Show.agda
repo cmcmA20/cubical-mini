@@ -10,7 +10,7 @@ open import Data.String.Base
 open import Data.Sum.Base
 
 instance
-  unquoteDecl Show-⊎ = derive-show Show-⊎ (quote _⊎_)
+  unquoteDecl Show-⊎ = derive-show Show-⊎ (quote _⊎ₜ_)
 
 private module _ where
   open import Data.Nat.Instances.Show

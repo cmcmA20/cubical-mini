@@ -19,6 +19,7 @@ open import Data.Nat.Base
 open import Data.Nat.Properties
 open import Data.Reflection.Argument
 open import Data.Reflection.Term
+open import Data.Unit.Base
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Inductive.Operations.Computational
 

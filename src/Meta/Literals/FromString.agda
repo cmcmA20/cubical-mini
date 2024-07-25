@@ -1,6 +1,8 @@
 {-# OPTIONS --safe #-}
 module Meta.Literals.FromString where
 
+open import Foundations.Base
+
 open import Data.String.Base
 open import Data.Unit.Base
 

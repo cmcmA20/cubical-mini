@@ -3,6 +3,7 @@ module System.IO.Finite where
 open import Foundations.Base
 
 open import Data.String.Base
+open import Data.Unit.Base
 
 open import Meta.Show
 

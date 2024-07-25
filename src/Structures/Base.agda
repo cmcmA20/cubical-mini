@@ -3,6 +3,7 @@ module Structures.Base where
 
 open import Meta.Prelude
 
+open import Data.Unit.Base
 open import Data.Unit.Properties
 
 private variable

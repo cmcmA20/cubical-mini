@@ -4,6 +4,7 @@ open import Foundations.Base
 
 open import Data.Bool.Base
 open import Data.Maybe.Base
+open import Data.Unit.Base
 
 open import Agda.Builtin.IO public
   renaming (IO to IO′)

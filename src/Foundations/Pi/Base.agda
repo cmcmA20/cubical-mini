@@ -4,40 +4,37 @@ module Foundations.Pi.Base where
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 
-open import Foundations.Correspondences.Binary.Reflexive
-open import Foundations.Correspondences.Binary.Transitive
+open import Foundations.Notation.Logic
+open import Foundations.Notation.Reflexive
+open import Foundations.Notation.Transitive
+open import Foundations.Notation.Underlying
 open import Foundations.Sigma.Base
 
 private variable
-  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level
+  ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᶜ : Level
 
-infixr 6 Π-syntax
-Π-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
-Π-syntax A B = (x : A) → B x
-{-# INLINE Π-syntax #-}
+instance
+  Π-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
+         → Π-notation A (Type ℓ′) (Type (u .ℓ-underlying ⊔ ℓ′))
+  Π-Type .Π-notation.Π A B = (x : ⌞ A ⌟⁰) → B x
 
-syntax Π-syntax A (λ x → B) = Π[ x ꞉ A ] B
+  ∀-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
+         → ∀-notation A (Type ℓ′) (Type (u .ℓ-underlying ⊔ ℓ′))
+  ∀-Type .∀-notation.∀′ A B = {x : ⌞ A ⌟⁰} → B x
 
 infixr 6 Πᴱ-syntax
-Πᴱ-syntax : (A : Type ℓ) (B : @0 A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
-Πᴱ-syntax A B = (@0 x : A) → B x
-{-# INLINE Πᴱ-syntax #-}
-
-syntax Πᴱ-syntax A (λ x → B) = Πᴱ[ x ꞉ A ] B
-
-infixr 6 ∀-syntax
-∀-syntax : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
-∀-syntax A B = {x : A} → B x
-{-# INLINE ∀-syntax #-}
-
-syntax ∀-syntax A (λ x → B) = ∀[ x ꞉ A ] B
+Πᴱ-syntax
+  : {A : Type ℓ} ⦃ _ : Underlying A ⦄ (X : A) (F : @0 ⌞ X ⌟⁰ → Type ℓ′)
+  → Type _
+Πᴱ-syntax X F = (@0 x : ⌞ X ⌟⁰) → F x
+syntax Πᴱ-syntax X (λ x → F) = Πᴱ[ x ꞉ X ] F
 
 infixr 6 ∀ᴱ-syntax
-∀ᴱ-syntax : (A : Type ℓ) (B : @0 A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
-∀ᴱ-syntax A B = {@0 x : A} → B x
-{-# INLINE ∀ᴱ-syntax #-}
-
-syntax ∀ᴱ-syntax A (λ x → B) = ∀ᴱ[ x ꞉ A ] B
+∀ᴱ-syntax
+  : {A : Type ℓ} ⦃ _ : Underlying A ⦄ (X : A) (F : @0 ⌞ X ⌟⁰ → Type ℓ′)
+  → Type _
+∀ᴱ-syntax X F = {@0 x : ⌞ X ⌟⁰} → F x
+syntax ∀ᴱ-syntax X (λ x → F) = ∀ᴱ[ x ꞉ X ] F
 
 
 -- non-dependent stuff
@@ -89,10 +86,10 @@ module _ where
     B : A → Type ℓᵇ
     C : (a : A) → B a → Type ℓᶜ
 
-  infixr -1 _$_
-  _$_ : (f : (a : A) → B a) (x : A) → B x
-  f $ a = f a
-  {-# INLINE _$_ #-}
+  infixr -1 _$ₜ_
+  _$ₜ_ : (f : (a : A) → B a) (x : A) → B x
+  f $ₜ a = f a
+  {-# INLINE _$ₜ_ #-}
 
   infixl -1 _&_
   _&_ : (x : A) (f : (a : A) → B a) → B x
@@ -132,3 +129,7 @@ is-contrᴱ A = Σ[ x ꞉ A ] Erased (Π[ y ꞉ A ] (x ＝ y))
 
 is-equivᴱ : {A : Type ℓ} {B : Type ℓ′} (f : A → B) → Type _
 is-equivᴱ {B} f = Π[ b ꞉ B ] is-contrᴱ (fibreᴱ f b)
+
+instance
+  ⇒-Type : ⇒-notation (𝒰 ℓ) (𝒰 ℓ′) _
+  ⇒-Type ._⇒_ A B = A → B

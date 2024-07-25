@@ -70,23 +70,29 @@ instance
   Refl-Iso : Refl (Iso {ℓ})
   Refl-Iso .refl = id , id-is-iso
 
-  Refl-Isoᴱ : Refl (Isoᴱ {ℓ})
-  Refl-Isoᴱ .refl = id , is-iso→is-isoᴱ id-is-iso
+  Refl-Erased-Iso : Refl (Isoᴱ {ℓ})
+  Refl-Erased-Iso .refl = id , is-iso→is-isoᴱ id-is-iso
 
   Symm-Iso : Symm (Iso {ℓ} {ℓ′}) Iso
   Symm-Iso ._⁻¹ r = r .snd .inv , is-iso-inv (r .snd)
 
-  Symm-Isoᴱ : Symm (Isoᴱ {ℓ} {ℓ′}) Isoᴱ
-  Symm-Isoᴱ ._⁻¹ (f , g , r , l) = g , f , l , r
+  Symm-Erased-Iso : Symm (Isoᴱ {ℓ} {ℓ′}) Isoᴱ
+  Symm-Erased-Iso ._⁻¹ (f , g , r , l) = g , f , l , r
 
   Trans-Iso : Trans (Iso {ℓ} {ℓ′}) (Iso {ℓ′ = ℓ″}) Iso
   Trans-Iso ._∙_ (f , f-iso) (f′ , f′-iso) = f′ ∘ f , is-iso-comp f-iso f′-iso
 
-  Trans-Isoᴱ : Trans (Isoᴱ {ℓ} {ℓ′}) (Isoᴱ {ℓ′ = ℓ″}) Isoᴱ
-  Trans-Isoᴱ ._∙_ (f , g , erase r , erase l) (f′ , g′ , erase r′ , erase l′)
+  Trans-Erased-Iso : Trans (Isoᴱ {ℓ} {ℓ′}) (Isoᴱ {ℓ′ = ℓ″}) Isoᴱ
+  Trans-Erased-Iso ._∙_ (f , g , erase r , erase l) (f′ , g′ , erase r′ , erase l′)
     = f′ ∘ f  , g ∘ g′
     , erase (λ x → ap f′ (r (g′ x)) ∙ r′ x)
     , erase (λ x → ap g  (l′ (f x)) ∙ l  x)
+
+  Funlike-Iso : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (Iso A B) A (λ _ → B)
+  Funlike-Iso ._#_ = fst
+
+  Funlike-Erased-Iso : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (Isoᴱ A B) A (λ _ → B)
+  Funlike-Erased-Iso ._#_ = fst
 
 id-composition→is-iso : (r : is-iso f) (g : B → A) (p : f ∘ g ＝ id) → is-iso g
 id-composition→is-iso {f} r g p .inv = f

@@ -6,6 +6,7 @@ open import Meta.Prelude
 open import Combinatorics.Finiteness.Bishop.Manifest
 
 open import Data.Fin.Computational.Closure
+open import Data.Unit.Base
 open import Data.Unit.Properties
 
 instance

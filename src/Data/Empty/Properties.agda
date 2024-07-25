@@ -7,13 +7,13 @@ open import Foundations.HLevel
 
 open import Data.Unit.Base
 
-open import Data.Empty.Base public
+open import Data.Empty.Base
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
-  C : ⊥ → Type ℓᶜ
+  C : ⊥ₜ → Type ℓᶜ
   n : HLevel
 
 absurd-is-contr : is-contr (Π[ f ꞉ ⊥ ] C f)

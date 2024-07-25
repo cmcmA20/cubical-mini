@@ -25,6 +25,7 @@ open import Data.Maybe.Instances.Alt
 open import Data.Maybe.Instances.Traversable
 open import Data.Reflection
 open import Data.String.Instances.Append
+open import Data.Unit.Base
 
 {-
 A macro for generating induction principles for (higher, indexed) inductive types.

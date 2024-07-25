@@ -18,7 +18,7 @@ instance
   From-ℕ-ℕ .from-ℕ n = n
 
   From-ℕ-Type : ∀ {ℓ} → From-ℕ (Type ℓ)
-  From-ℕ-Type .From-ℕ.Constraint _ = Lift _ ⊤
+  From-ℕ-Type .From-ℕ.Constraint _ = ⊤
   From-ℕ-Type .from-ℕ n = Lift _ (Fin n)
 
   From-ℕ-Lift

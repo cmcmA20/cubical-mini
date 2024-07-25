@@ -7,6 +7,7 @@ open import Meta.Extensionality
 
 open import Data.Empty.Base
 open import Data.Sum.Base
+open import Data.Unit.Base
 
 private variable
   a b : Level
@@ -23,7 +24,7 @@ instance
     → Extensional (A ⊎ B) (ℓr ⊔ ℓs)
   Extensional-⊎ {ℓs} ⦃ sa ⦄ .Pathᵉ (inl x) (inl x′) = Lift ℓs (Pathᵉ sa x x′)
   Extensional-⊎ {ℓr} ⦃ sb ⦄ .Pathᵉ (inr y) (inr y′) = Lift ℓr (Pathᵉ sb y y′)
-  Extensional-⊎ .Pathᵉ _ _ = Lift _ ⊥
+  Extensional-⊎ .Pathᵉ _ _ = ⊥
   Extensional-⊎ ⦃ sa ⦄ .reflᵉ (inl x) = lift (reflᵉ sa x)
   Extensional-⊎ ⦃ sb ⦄ .reflᵉ (inr y) = lift (reflᵉ sb y)
   Extensional-⊎ ⦃ sa ⦄ .idsᵉ .to-path {inl x} {inl x′} (lift p) = ap inl $ sa .idsᵉ .to-path p

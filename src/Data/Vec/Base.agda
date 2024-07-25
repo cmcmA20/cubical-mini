@@ -6,15 +6,16 @@ open import Foundations.Base
 open import Data.Nat.Base
   using (ℕ; zero; suc)
   public
+open import Data.Unit.Base
 open import Data.Vec.Interface
 
 private variable
-  ℓ ℓᵃ ℓᵇ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
 
 Vec : Type ℓ → (n : ℕ) → Type ℓ
-Vec _ 0       = Lift _ ⊤
+Vec _ 0       = ⊤
 Vec A (suc n) = A × Vec A n
 
 infixr 5 _∷_
@@ -22,7 +23,7 @@ _∷_ : ∀ᴱ[ n ꞉ ℕ ] (A → Vec A n → Vec A (suc n))
 x ∷ xs = x , xs
 
 elim
-  : (P : ∀[ n ꞉ ℕ ] (Vec A n → Type ℓ))
+  : {A : Type ℓ} (P : ∀[ n ꞉ ℕ ] (Vec A n → Type ℓ′))
   → P (lift tt)
   → ∀[ n ꞉ ℕ ] ∀[ x ꞉ A ] ∀[ xs ꞉ Vec A n ] (P xs → P (x ∷ xs))
   → ∀[ n ꞉ ℕ ] Π[ xs ꞉ Vec A n ] P xs

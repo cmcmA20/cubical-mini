@@ -5,9 +5,9 @@ open import Foundations.Base
 open import Foundations.HLevel
 
 open import Data.Empty.Base
-  using ( ⊥ ; ⊥-is-prop )
+  using (⊥-is-prop)
 open import Data.Unit.Base
-  using ( ⊤ ; ⊤-is-contr )
+  using (⊤-is-contr)
 
 open import Agda.Builtin.Bool public
 

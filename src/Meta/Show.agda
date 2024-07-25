@@ -11,6 +11,7 @@ open import Data.Reflection.Fixity
 open import Data.Reflection.Name
 open import Data.String.Base public
 open import Data.String.Instances.Append
+open import Data.Unit.Base
 
 record ShowS : Type where
   constructor showS

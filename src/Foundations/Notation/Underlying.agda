@@ -1,13 +1,8 @@
 {-# OPTIONS --safe #-}
-module Meta.Notation.Underlying where
+module Foundations.Notation.Underlying where
 
-open import Foundations.Prelude
-  hiding (_$_)
-
-open import Data.Bool.Base
-open import Data.Empty.Base
-open import Data.List.Instances.FromProduct
-open import Data.Nat.Base
+open import Foundations.Prim.Kan
+open import Foundations.Prim.Type
 
 record Underlying {ℓ} (T : Type ℓ) : Typeω where
   field
@@ -25,10 +20,6 @@ private variable
   P : Type ℓ′
 
 instance
-  Underlying-Σ : ⦃ ua : Underlying A ⦄ → Underlying (Σ A B)
-  Underlying-Σ ⦃ ua ⦄ .ℓ-underlying = ua .ℓ-underlying
-  Underlying-Σ .⌞_⌟⁰ x = ⌞ x .fst ⌟⁰
-
   Underlying-Type : Underlying (Type ℓ)
   Underlying-Type {ℓ} .ℓ-underlying = ℓ
   Underlying-Type .⌞_⌟⁰ x = x
@@ -80,31 +71,22 @@ _$ₚ_
   : {A : Type ℓ} {B : A → Type ℓ′} {F : Type ℓ″}
   → ⦃ _ : Funlike ur F A B ⦄
   → {f g : F} → f ＝ g → (x : A) → f # x ＝ g # x
-f $ₚ x = ap² _$_ f refl
+_$ₚ_ p x i = p i # x
 
 instance
-  Funlike-Erased-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ≃ᴱ B) A (λ _ → B)
-  Funlike-Erased-≃ ._#_ = fst
-
-  Funlike-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ≃ B) A (λ _ → B)
-  Funlike-≃ ._#_ = fst
-
-  Funlike-Iso : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (Iso A B) A (λ _ → B)
-  Funlike-Iso ._#_ = fst
-
   Funlike-Irr-Π : {A : Type ℓ} {B : @irr A → Type ℓ′} → Funlike cirr ((@irr a : A) → B a) A B
-  Funlike-Irr-Π ._#_ = id
+  Funlike-Irr-Π ._#_ f = f
 
   Funlike-Erased-Π : {@0 A : Type ℓ} {B : @0 A → Type ℓ′} → Funlike rirr ((@0 a : A) → B a) A B
-  Funlike-Erased-Π ._#_ = id
+  Funlike-Erased-Π ._#_ f = f
 
   Funlike-Π : {A : Type ℓ} {B : A → Type ℓ′} → Funlike ur ((a : A) → B a) A B
-  Funlike-Π ._#_ = id
+  Funlike-Π ._#_ f = f
 
   Funlike-Homotopy
     : {A : Type ℓ} {B : A → Type ℓ′} {f g : ∀ x → B x}
     → Funlike ur (f ＝ g) A (λ x → f x ＝ g x)
-  Funlike-Homotopy ._#_ = happly
+  Funlike-Homotopy ._#_ p x i = p i x
 
 
 -- Generalised "sections" (e.g. of a presheaf) notation.
@@ -115,26 +97,3 @@ _ʻ_
   → F → (x : A) → ⦃ _ : Underlying (B x) ⦄
   → Type _
 F ʻ x = ⌞ F $ x ⌟⁰
-
-
-infixr 6 Σ-syntax-und
-Σ-syntax-und
-  : ⦃ _ : Underlying A ⦄ (X : A) (F : ⌞ X ⌟⁰ → Type ℓ′)
-  → Type _
-Σ-syntax-und X F = Σ ⌞ X ⌟⁰ F
-syntax Σ-syntax-und X (λ x → F) = Σ[ x ꞉ X ] F
-{-# DISPLAY Σ-syntax-und = Σ #-}
-
-infixr 6 Π-syntax-und
-Π-syntax-und
-  : ⦃ _ : Underlying A ⦄ (X : A) (F : ⌞ X ⌟⁰ → Type ℓ′)
-  → Type _
-Π-syntax-und X F = (x : ⌞ X ⌟⁰) → F x
-syntax Π-syntax-und X (λ x → F) = Π[ x ꞉ X ] F
-
-infixr 6 ∀-syntax-und
-∀-syntax-und
-  : ⦃ _ : Underlying A ⦄ (X : A) (F : ⌞ X ⌟⁰ → Type ℓ′)
-  → Type _
-∀-syntax-und X F = {x : ⌞ X ⌟⁰} → F x
-syntax ∀-syntax-und X (λ x → F) = ∀[ x ꞉ X ] F

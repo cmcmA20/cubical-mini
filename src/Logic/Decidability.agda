@@ -15,6 +15,7 @@ open import Data.Reflection.Term
 open import Data.Reflects.Path
 open import Data.Reflects.Properties
 open import Data.Truncation.Propositional.Base as ∥-∥₁
+open import Data.Unit.Base
 
 private variable
   ℓ ℓᵃ ℓᵇ : Level
@@ -63,7 +64,7 @@ instance
   {-# OVERLAPPABLE Dec-∥-∥₁ #-}
 
   Dec-universe : Dec (Type ℓ)
-  Dec-universe = yes (Lift _ ⊤)
+  Dec-universe = yes ⊤
 
   Dec-refl : ∀ {x : A} → Dec (x ＝ x)
   Dec-refl = yes refl
@@ -116,7 +117,7 @@ reflectsⁿ-is-of-hlevel {0} = reflects-is-of-hlevel _
 reflectsⁿ-is-of-hlevel {1} hl = Π-is-of-hlevel _ λ _ →
   reflects-is-of-hlevel _ (hl _)
 reflectsⁿ-is-of-hlevel {suc (suc arity)} hl = Π-is-of-hlevel _ λ _ →
-  reflectsⁿ-is-of-hlevel (hl _)
+  reflectsⁿ-is-of-hlevel {suc arity} (hl _)
 
 macro
   Reflects : Term → Term → Term → TC ⊤
@@ -146,7 +147,7 @@ reflects→decidable
   → Reflects P d → Decidable P
 reflects→decidable {0}          {d} p     = d because p
 reflects→decidable {1}          {d} f {x} = d x because f x
-reflects→decidable {suc (suc _)}    f {x} = reflects→decidable (f x)
+reflects→decidable {suc (suc a)}    f {x} = reflects→decidable {suc a} (f x)
 
 -- TODO move
 -- opaque

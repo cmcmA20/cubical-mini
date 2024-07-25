@@ -2,12 +2,11 @@
 module Meta.Extensionality where
 
 open import Foundations.Prelude
-  hiding (_$_)
 
 open import Meta.Effect.Alt
 open import Meta.Literals.FromProduct
-open import Meta.Notation.Variadic
 open import Meta.Reflection
+open import Meta.Variadic
 
 open import Data.Bool.Base
 open import Data.List.Base
@@ -16,6 +15,7 @@ open import Data.Maybe.Instances.Alt
 open import Data.Reflection.Error
 open import Data.Reflection.Instances.FromString
 open import Data.Reflection.Term
+open import Data.Unit.Base
 
 
 record Extensional {ℓ} (A : Type ℓ) (ℓ-rel : Level) : Type (ℓ ⊔ ℓsuc ℓ-rel) where

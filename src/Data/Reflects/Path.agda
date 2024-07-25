@@ -26,7 +26,7 @@ module _ {ℓᵃ ℓ} {A : Type ℓᵃ} ⦃ sa : Extensional A ℓ ⦄ where
 
   Code-reflects : (x y : Reflects⁰ A a) → Type ℓ
   Code-reflects (ofʸ p) (ofʸ  p′) = sa .Pathᵉ p p′
-  Code-reflects (ofⁿ _) (ofⁿ  _)  = Lift _ ⊤
+  Code-reflects (ofⁿ _) (ofⁿ  _)  = ⊤
 
   instance
     Extensional-Reflects : Extensional (Reflects⁰ A a) ℓ

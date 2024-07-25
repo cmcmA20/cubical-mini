@@ -32,6 +32,7 @@ open import Data.Reflection.Meta
 open import Data.Reflection.Name
 open import Data.Reflection.Term
 open import Data.String.Instances.Append
+open import Data.Unit.Base
 
 -- Look up a data type definition in the signature.
 get-data-type : Name → TC (ℕ × List Name)

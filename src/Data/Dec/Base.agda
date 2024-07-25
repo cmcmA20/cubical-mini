@@ -6,7 +6,7 @@ open import Foundations.Base
 open import Data.Bool.Base as Bool
   using (Bool; false; true; not; if_then_else_; is-true)
 open import Data.Empty.Base as ⊥
-  using (⊥; ¬_)
+  using ()
 
 open import Data.Reflects.Base as Reflects
   using (Reflects⁰; ofⁿ; ofʸ)
@@ -85,3 +85,17 @@ _~?_
     ⦃ d : {x : A} {y : B} → Dec (x ~ y) ⦄
   → (x : A) (y : B) → Dec (x ~ y)
 _~?_ ⦃ d ⦄ _ _ = d
+
+infix 30 _∈?_ _∈!?_
+
+_∈?_
+  : {A : Type ℓ} {ℙA : Type ℓ′} ⦃ m : Membership A ℙA ℓ″ ⦄
+  → ⦃ d : {y : A} {ys : ℙA} → Dec (y ∈ ys) ⦄
+  → (x : A) (xs : ℙA) → Dec (x ∈ xs)
+_∈?_ = _~?_
+
+_∈!?_
+  : {A : Type ℓ} {ℙA : Type ℓ′} ⦃ m : Membership A ℙA ℓ″ ⦄
+  → ⦃ d : {y : A} {ys : ℙA} → Dec (y ∈! ys) ⦄
+  → (x : A) (xs : ℙA) → Dec (x ∈! xs)
+_∈!?_ = _~?_

@@ -8,7 +8,6 @@ open import Meta.Literals.FromProduct public
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromNeg     public
 open import Meta.Literals.FromString  public
-open import Meta.Notation.Membership  public
 open import Meta.Show                 public
 open import Meta.Witness              public
 
@@ -34,12 +33,20 @@ open import Functions.Embedding  public
 open import Functions.Fibration  public
 open import Functions.Surjection public
 
+import Data.Empty
+module ⊥ = Data.Empty
+open ⊥ public
+  using (⊥ₜ)
+
+import Data.Unit
+module ⊤ = Data.Unit
+
 import Data.Truncation.Propositional
 module ∥-∥₁ = Data.Truncation.Propositional
 open ∥-∥₁ public
   using ( ∥_∥₁ ; ∣_∣₁ ; squash₁
-        ; ∃ ; ∃-syntax-und ; ∃[_]
-        ; _⊎₁_ ; _⊎̇₁_
+        ; ∃ ; ∃[_]
+        ; _⊎̇₁_
         ; fibre₁ ; Im )
 
 import Data.Truncation.Set

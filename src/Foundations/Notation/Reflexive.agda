@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Correspondences.Binary.Reflexive where
+module Foundations.Notation.Reflexive where
 
 open import Foundations.Prim.Type
 

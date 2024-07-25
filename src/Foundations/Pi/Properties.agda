@@ -9,7 +9,7 @@ open import Foundations.Isomorphism
 open import Foundations.Transport
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A B C D : Type ℓ
   P Q : A → Type ℓ′
 
@@ -24,10 +24,11 @@ private variable
 Π-cod-≃ k .snd .equiv-proof f .snd (g , p) i .snd j x =
   equiv-path (k x) (f x) (g x , λ k → p k x) i .snd j
 
-Π-dom-≃ : (e : B ≃ A)
+Π-dom-≃ : {A : Type ℓ} {B : Type ℓ′} {P : A → Type ℓ″}
+          (e : B ≃ A)
         → Π[ x ꞉ A ] P x
         ≃ Π[ x ꞉ B ] P (e .fst x)
-Π-dom-≃ {B} {A} {P} e = ≅→≃ $ to , iso from ri li where
+Π-dom-≃ {A} {B} {P} e = ≅→≃ $ to , iso from ri li where
   module e = Equiv e
   to : Π[ x ꞉ A ] P x → Π[ x ꞉ B ] P (e.to x)
   to k x = k (e.to x)
@@ -72,13 +73,13 @@ function-≃ dom rng = ≅→≃ the-iso where
                 ∙ ap f (dom-iso .is-iso.linv _)
 
 fun-ext-≃
-  : {f g : A → B}
+  : {A : Type ℓ} {B : Type ℓ′} {f g : A → B}
   → (f ＝ g) ≃ Π[ a ꞉ A ] (f a ＝ g a)
 fun-ext-≃ .fst = happly
 fun-ext-≃ .snd .equiv-proof = strict-contr-fibres fun-ext
 
 fun-ext-dep
-  : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′} →  ∀ {f g}
+  : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′} {f : (x : A i0) → B i0 x} {g : (x : A i1) → B i1 x}
   → ( ∀ {x₀ x₁} (p : ＜ x₀ ／ A ＼ x₁ ＞) → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   → ＜ f ／ (λ i → Π[ x ꞉ A i ] B i x) ＼ g ＞
 fun-ext-dep {A} {B} h i x = coei→1 (λ j → B i (coei→i A i x j)) (i ∨ ~ i) $
@@ -110,7 +111,8 @@ fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ isom where
       lemi→i : ＜ coei→i A i (p i) ／ (λ m → lemi→j i m ＝ p i) ＼ refl ＞
       lemi→i m k = coei→i A i (p i) (m ∨ k)
 
-Π-contract-dom : (A-c : is-contr A)
+Π-contract-dom : {A : Type ℓ} {P : A → Type ℓ′}
+                 (A-c : is-contr A)
                → Π[ x ꞉ A ] P x ≃ P (centre A-c)
 Π-contract-dom {A} {P} A-c = ≅→≃ go where
   go : Iso _ _

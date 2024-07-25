@@ -1,6 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Quotient.Set.Properties where
 
+open import Foundations.Notation.Equivalence -- FIXME
+
 open import Meta.Prelude
 open import Meta.Effect.Map
 open import Meta.Extensionality
@@ -16,7 +18,7 @@ import Data.Empty.Base as ⊥
 open import Data.Quotient.Set.Base
 open import Data.Quotient.Set.Path
 import Data.Truncation.Propositional as ∥-∥₁
-open ∥-∥₁ using (∃-syntax-und; ∥_∥₁ ; ∣_∣₁)
+open ∥-∥₁ using (∥_∥₁ ; ∣_∣₁)
 
 open import Functions.Surjection
 

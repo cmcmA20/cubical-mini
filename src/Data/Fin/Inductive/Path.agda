@@ -5,6 +5,7 @@ open import Meta.Prelude
 
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Inductive.Base
+open import Data.Unit.Base
 
 private variable
   @0 m n : ℕ

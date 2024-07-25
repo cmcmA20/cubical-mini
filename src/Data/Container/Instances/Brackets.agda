@@ -3,8 +3,6 @@ module Data.Container.Instances.Brackets where
 
 open import Foundations.Prelude
 
-open import Meta.Notation.Brackets
-
 open import Data.Container.Base
 
 instance

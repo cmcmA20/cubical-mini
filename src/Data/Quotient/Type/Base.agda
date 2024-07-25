@@ -11,11 +11,11 @@ private variable
   ℓᵃ ℓᵇ ℓʳ ℓᵖ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
-  P : A → Type ℓᵖ
   R : A → A → Type ℓʳ
 
 elim
-  : (f : Π[ a ꞉ A ] P ⦋ a ⦌)
+  : {A : Type ℓᵃ} {R : A → A → Type ℓʳ} {P : A / R → Type ℓᵖ}
+    (f : Π[ a ꞉ A ] P ⦋ a ⦌)
   → (∀ a b (r : R a b) → ＜ f a ／ (λ i → P (eq/ a b r i)) ＼ f b ＞)
   → Π[ q ꞉ A / R ] P q
 elim f _  ⦋ a ⦌ = f a

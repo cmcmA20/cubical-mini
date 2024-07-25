@@ -20,6 +20,7 @@ open import Data.Reflection.Argument
 open import Data.Reflection.Instances.FromString
 open import Data.Reflection.Name
 open import Data.Reflection.Term
+open import Data.Unit.Base
 
 
 private variable

@@ -16,6 +16,7 @@ open import Data.Reflection.Instances.FromString
 open import Data.Reflection.Name
 open import Data.Reflection.Term
 open import Data.String.Base
+open import Data.Unit.Base
 
 --------------------------------------------------------------------------------
 -- Macros for manipulating copattern definitions.
