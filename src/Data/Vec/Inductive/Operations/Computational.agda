@@ -28,7 +28,7 @@ replace : Fin n → A → Vec A n → Vec A n
 replace (mk-fin 0)             y (_ ∷ xs) = y ∷ xs
 replace (mk-fin (suc k) {(b)}) y (x ∷ xs) = x ∷ replace (mk-fin k {b}) y xs
 
-vec→list : Vec A n → Σ[ xs ꞉ List A ] Erased (length xs ＝ n)
+vec→list : {A : Type ℓ} → Vec A n → Σ[ xs ꞉ List A ] Erased (length xs ＝ n)
 vec→list [] = [] , erase refl
 vec→list (x ∷ xs) =
   let xs′ , erase p = vec→list xs

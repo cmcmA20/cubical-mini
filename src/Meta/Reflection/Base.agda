@@ -2,8 +2,6 @@
 module Meta.Reflection.Base where
 
 open import Foundations.Prelude
-  renaming ( _∘_ to _∘ₜ_
-           )
 
 open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromString  public
@@ -40,6 +38,7 @@ open import Data.Reflection.Meta
 open import Data.Reflection.Name
 open import Data.Reflection.Term
 open import Data.String.Base
+open import Data.Unit.Base
 
 open import Agda.Builtin.Reflection public
   using ( TC ; bindTC ; returnTC ; catchTC ; commitTC

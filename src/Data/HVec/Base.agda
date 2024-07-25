@@ -6,6 +6,7 @@ open import Foundations.Base
 open import Meta.Effect.Foldable
 open import Meta.Effect.Map
 
+open import Data.Unit.Base
 -- yes, it's the right one
 open import Data.Vec.Ergonomic.Base
 open import Data.Vec.Ergonomic.Instances.Foldable
@@ -26,7 +27,7 @@ Levels = Vec Level
 
 -- n-tuple of possibly different type universes
 Types : ∀ n (ls : Levels n) → Type (ℓsuc (ℓsup n ls))
-Types 0             _        = Lift _ ⊤
+Types 0             _        = ⊤
 Types 1             l        = Type l
 Types (suc (suc n)) (l , ls) = Type l × Types _ ls
 

@@ -1,8 +1,6 @@
 {-# OPTIONS --safe #-}
 module Foundations.Prelude where
 
-open import Foundations.Correspondences.Binary.Equivalence public
-
 open import Foundations.Base       public
 open import Foundations.Cubes      public
 open import Foundations.Erased     public

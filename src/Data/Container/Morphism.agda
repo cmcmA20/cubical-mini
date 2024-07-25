@@ -3,8 +3,6 @@ module Data.Container.Morphism where
 
 open import Foundations.Prelude
 
-open import Meta.Notation.Brackets
-
 open import Data.Container.Base
 open import Data.Container.Instances.Brackets
 
@@ -15,8 +13,8 @@ private variable
 open Container
 
 -- container morphism
-record _⇒_ (C : Container s p) (C′ : Container s′ p′)
-           : Type (s ⊔ p ⊔ s′ ⊔ p′) where
+record _⇒ᶜ_ (C : Container s p) (C′ : Container s′ p′)
+            : Type (s ⊔ p ⊔ s′ ⊔ p′) where
   constructor _▶_
   field
     shape    : Shape C → Shape C′
@@ -25,8 +23,11 @@ record _⇒_ (C : Container s p) (C′ : Container s′ p′)
   ⟪_⟫→ : ⟦ C ⟧ X → ⟦ C′ ⟧ X
   ⟪ x , g ⟫→ = shape x , g ∘ position
 
-open _⇒_
+open _⇒ᶜ_
 
+instance
+  ⇒-Container : ⇒-notation (Container s p) (Container s′ p′) (Type (s ⊔ p ⊔ s′ ⊔ p′))
+  ⇒-Container ._⇒_ = _⇒ᶜ_
 
 -- Linear/cartesian container morphism
 record _⊸_ (C : Container s p) (C′ : Container s′ p′)

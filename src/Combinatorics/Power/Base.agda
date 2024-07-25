@@ -1,8 +1,7 @@
-{-# OPTIONS --safe --backtracking-instance-search --instance-search-depth=3 #-}
+{-# OPTIONS --safe #-}
 module Combinatorics.Power.Base where
 
 open import Meta.Prelude
-open import Meta.Notation.Membership
 
 open import Structures.n-Type
 
@@ -41,17 +40,18 @@ infixr 21 _∪_
 _∪_ : ℙ X → ℙ X → ℙ X
 (A ∪ B) x = el! ((x ∈ A) ⊎₁ (x ∈ B))
 
-⟙ : ℙ X
-⟙ _ = el! (Lift _ ⊤)
+instance
+  ⊤-Pow : ⊤-notation (ℙ X)
+  ⊤-Pow .⊤ _ = ⊤
 
-⟘ : ℙ X
-⟘ _ = el! (Lift _ ⊥)
+  ⊥-Pow : ⊥-notation (ℙ X)
+  ⊥-Pow .⊥ _ = ⊥
 
-⟘⊆ : ⟘ ⊆ A
-⟘⊆ ()
+⊥⊆ : ⊥ ⊆ A
+⊥⊆ ()
 
-@0 ⊆⟘→⟘ : A ⊆ ⟘ → A ＝ ⟘
-⊆⟘→⟘ {A} p = ℙ-ext p (⟘⊆ {A = A})
+@0 ⊆⊥→⊥ : A ⊆ ⊥ → A ＝ ⊥
+⊆⊥→⊥ {A} p = ℙ-ext p (⊥⊆ {A = A})
 
-⟙⊆ : A ⊆ ⟙
-⟙⊆ = _
+⊤⊆ : A ⊆ ⊤
+⊤⊆ = _

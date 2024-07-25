@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
-module Meta.Notation.Brackets where
+module Foundations.Notation.Brackets where
 
-open import Foundations.Prelude
+open import Foundations.Prim.Type
 
 record ⟦⟧-notation {ℓ} (A : Type ℓ) : Typeω where
   constructor brackets

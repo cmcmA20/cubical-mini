@@ -1,5 +1,6 @@
 {-# OPTIONS --safe #-}
-module Foundations.Correspondences.Binary.Equivalence where
+-- FIXME move this somewhere!
+module Foundations.Notation.Equivalence where
 
 open import Foundations.Base
 open import Foundations.HLevel

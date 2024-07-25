@@ -3,7 +3,6 @@
 module Structures.Set.Base where
 
 open import Meta.Prelude
-open import Meta.Notation.Membership
 open import Meta.Record
 
 open import Data.Bool.Base

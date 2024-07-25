@@ -1,13 +1,11 @@
 {-# OPTIONS --safe --no-exact-split #-}
 -- -vtactic.variadic:20
-module Meta.Notation.Variadic where
+module Meta.Variadic where
 
 open import Foundations.Base
-  hiding (_$_)
 
 open import Meta.Effect.Idiom
 open import Meta.Effect.Map
-open import Meta.Notation.Underlying public
 open import Meta.Reflection.Base
 open import Meta.Reflection.Subst
 
@@ -28,6 +26,7 @@ open import Data.Reflection.Meta
 open import Data.Reflection.Name
 open import Data.Reflection.Term
 open import Data.Sum.Base
+open import Data.Unit.Base
 
 -- Correspondence valued in arbitrary structure
 SCorr

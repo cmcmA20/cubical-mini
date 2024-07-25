@@ -54,10 +54,10 @@ node-inj {xl} p = ap go₁ p , ap go₂ p where
 
 module _ {A : 𝒰 ℓᵃ} ⦃ sa : Extensional A ℓ ⦄ where
   Code-Tree : Tree A → Tree A → Type ℓ
-  Code-Tree empty empty = Lift _ ⊤
+  Code-Tree empty empty = ⊤
   Code-Tree (leaf x) (leaf y) = sa .Pathᵉ x y
   Code-Tree (node xl xr) (node yl yr) = Code-Tree xl yl × Code-Tree xr yr
-  Code-Tree _ _ = Lift _ ⊥
+  Code-Tree _ _ = ⊥
 
   code-tree-refl : (t : Tree A) → Code-Tree t t
   code-tree-refl empty = lift tt

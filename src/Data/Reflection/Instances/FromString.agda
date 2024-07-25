@@ -1,6 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Reflection.Instances.FromString where
 
+open import Foundations.Base
+
 open import Meta.Literals.FromString
 
 open import Data.List.Base

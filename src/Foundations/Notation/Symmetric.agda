@@ -1,9 +1,8 @@
 {-# OPTIONS --safe #-}
-module Foundations.Correspondences.Binary.Symmetric where
+module Foundations.Notation.Symmetric where
 
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
-open import Foundations.Pi.Base
 open import Agda.Builtin.Unit
 
 private variable

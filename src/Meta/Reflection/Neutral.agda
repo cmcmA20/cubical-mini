@@ -14,6 +14,7 @@ open import Data.Reflection.Literal
 open import Data.Reflection.Meta
 open import Data.Reflection.Name
 open import Data.Reflection.Term
+open import Data.Unit.Base
 
 -- Notation class for the reflected in reflected syntax which have a
 -- notion of neutrals, for which application is cheap. This is used to

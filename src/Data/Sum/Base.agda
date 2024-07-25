@@ -3,10 +3,10 @@ module Data.Sum.Base where
 
 open import Foundations.Base
 
-infixr 7 _⊎_
-data _⊎_ {ℓ ℓ′} (A : Type ℓ) (B : Type ℓ′) : Type (ℓ ⊔ ℓ′) where
-  inl : A → A ⊎ B
-  inr : B → A ⊎ B
+infixr 7 _⊎ₜ_
+data _⊎ₜ_ {ℓ ℓ′} (A : Type ℓ) (B : Type ℓ′) : Type (ℓ ⊔ ℓ′) where
+  inl : A → A ⊎ₜ B
+  inr : B → A ⊎ₜ B
 
 private variable
   a b c d : Level
@@ -14,6 +14,10 @@ private variable
   B : Type b
   C : Type c
   D : Type d
+
+instance
+  ⊎-Type : ⊎-notation (Type a) (Type b) (Type (a ⊔ b))
+  ⊎-Type ._⊎_ = _⊎ₜ_
 
 [_,_]ᵤ : (A → C) → (B → C) → (A ⊎ B) → C
 [ f , _ ]ᵤ (inl x) = f x

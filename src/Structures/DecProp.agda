@@ -18,6 +18,8 @@ open import Data.Empty.Base
 open import Data.Reflection.Argument
 open import Data.Reflection.Literal
 open import Data.Reflection.Term
+open import Data.Truncation.Propositional.Base
+open import Data.Unit.Base
 
 record DecProp (ℓ : Level) : Type (ℓsuc ℓ) where
   constructor el
@@ -53,6 +55,29 @@ instance
   ⇒-DecProp ._⇒_ (el A da _) (el B db q) =
     el (A ⇒ B) (Dec-fun ⦃ da ⦄ ⦃ db ⦄) (fun-is-of-hlevel 1 q)
 
+  ⊎₁-DecProp : ⊎₁-notation (DecProp ℓ) (DecProp ℓ′) (DecProp (ℓ ⊔ ℓ′))
+  ⊎₁-DecProp ._⊎₁_ (el A da p) (el B db q) =
+    el (A ⊎₁ B) (∥-∥₁∘dec≃dec∘∥-∥₁ $ ∣ da <+> db ∣₁) squash₁
+
+  ¬-DecProp : ¬-notation (DecProp ℓ) (DecProp ℓ)
+  ¬-DecProp .¬_ (el A da p) = el (¬ A) (Dec-¬ ⦃ da ⦄) (hlevel 1)
+
+  ⊥-DecProp-small : ⊥-notation (DecProp 0ℓ)
+  ⊥-DecProp-small .⊥ = el ⊥ auto (hlevel 1)
+  {-# OVERLAPPING ⊥-DecProp-small #-}
+
+  ⊥-DecProp : ⊥-notation (DecProp ℓ)
+  ⊥-DecProp .⊥ = el ⊥ auto (hlevel 1)
+  {-# INCOHERENT ⊥-DecProp #-}
+
+  ⊤-DecProp-small : ⊤-notation (DecProp 0ℓ)
+  ⊤-DecProp-small .⊤ = el ⊤ auto (hlevel 1)
+  {-# OVERLAPPING ⊤-DecProp-small #-}
+
+  ⊤-DecProp : ⊤-notation (DecProp ℓ)
+  ⊤-DecProp .⊤ = el ⊤ auto (hlevel 1)
+  {-# OVERLAPPABLE ⊤-DecProp #-}
+
   @0 Extensional-DecProp : Extensional (DecProp ℓ) ℓ
   Extensional-DecProp .Pathᵉ (el A da p) (el B db q) = (A → B) × (B → A)
   Extensional-DecProp .reflᵉ _ = refl , refl
@@ -66,10 +91,10 @@ instance
 dec-prop≃ᴱbool : DecProp ℓ ≃ᴱ Bool
 dec-prop≃ᴱbool .fst X = ⌊ X .carrier-is-dec ⌋
 dec-prop≃ᴱbool .snd = is-isoᴱ→is-equivᴱ go where
-  go : is-isoᴱ (⌊_⌋ ∘ carrier-is-dec )
-  go .fst false = el (Lift _ ⊥) auto (hlevel 1)
-  go .fst true  = el (Lift _ ⊤) auto (hlevel 1)
+  go : is-isoᴱ (⌊_⌋ ∘ carrier-is-dec)
+  go .fst false = ⊥-DecProp .⊥
+  go .fst true  = ⊤-DecProp .⊤
   go .snd .fst .erased false = refl
   go .snd .fst .erased true  = refl
-  go .snd .snd .erased (el A (no ¬a) _) = ext ((λ ())    , λ a → lift (¬a a))
+  go .snd .snd .erased (el A (no ¬a) _) = ext ((λ ()) , (λ a → lift (¬a a)))
   go .snd .snd .erased (el A (yes a) _) = ext ((λ _ → a) , λ _ → lift tt)

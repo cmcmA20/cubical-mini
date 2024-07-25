@@ -4,12 +4,21 @@ module Data.Empty.Base where
 open import Foundations.Base
 open import Foundations.HLevel.Base
 
-data ⊥ : Type where
+data ⊥ₜ : Type where
+
+instance
+  ⊥-Type-small : ⊥-notation Type
+  ⊥-Type-small .⊥ = ⊥ₜ
+  {-# OVERLAPPING ⊥-Type-small #-}
+
+  ⊥-Type : ∀ {ℓ} → ⊥-notation (Type ℓ)
+  ⊥-Type .⊥ = Lift _ ⊥ₜ
+  {-# INCOHERENT ⊥-Type #-}
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   @0 A : Type ℓ
-  @0 x y : ⊥
+  @0 x y : ⊥ₜ
   @0 Aω : Typeω
   n : HLevel
 
@@ -30,9 +39,13 @@ elim ()
 absurd-path : {@0 y : A} {@0 x : ⊥} → absurd x ＝ y
 absurd-path {x = ()}
 
-infixr 0 ¬_
-¬_ : Type ℓ → Type ℓ
-¬ A = A → ⊥
+infixr 0 ¬ₜ_
+¬ₜ_ : Type ℓ → Type ℓ
+¬ₜ A = A ⇒ ⊥
+
+instance
+  ¬-Type : ¬-notation (𝒰 ℓ) (𝒰 ℓ)
+  ¬-Type .¬_ = ¬ₜ_
 
 infix 4 _≠_
 _≠_ : ∀ {ℓ} {A : Type ℓ} → A → A → Type ℓ
@@ -74,3 +87,9 @@ recω-irr ()
 
 elimω : {@0 A : ⊥ω → Typeω} → (@0 x : ⊥ω) → A x
 elimω ()
+
+infix 30 _∉_ _∉!_
+_∉_ _∉!_ : {A : Type ℓ} {ℙA : Type ℓ′} ⦃ m : Membership A ℙA ℓ″ ⦄
+         → A → ℙA → Type ℓ″
+x ∉  y = ¬ x ∈ y
+x ∉! y = ¬ x ∈! y

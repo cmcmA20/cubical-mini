@@ -4,7 +4,7 @@ module Data.Fin.Base where
 open import Foundations.Base
 
 open import Data.Empty.Base as ⊥
-  using (⊥)
+  using ()
 open import Data.Fin.Interface
 open import Data.Maybe.Base
   using (Maybe; nothing; just)

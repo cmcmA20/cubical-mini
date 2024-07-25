@@ -3,8 +3,6 @@ module Categories.Constructions.Discrete where
 
 open import Categories.Prelude
 
-open import Data.Unit
-
 private variable
   ℓ ℓ′ o h : Level
   A : Type ℓ
@@ -50,7 +48,7 @@ instance
 
 Codisc : Type ℓ → Precategory ℓ ℓ′
 Codisc A .Ob = A
-Codisc _ .Hom _ _ = Lift _ ⊤
+Codisc _ .Hom _ _ = ⊤
 Codisc _ .Hom-set = hlevel!
 Codisc _ .id = _
 Codisc _ ._∘_ _ _ = _

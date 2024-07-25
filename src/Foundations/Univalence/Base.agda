@@ -2,7 +2,6 @@
 module Foundations.Univalence.Base where
 
 open import Foundations.Base
-open import Foundations.Correspondences.Binary.Reflexive
 open import Foundations.Equiv.Base
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
@@ -121,7 +120,8 @@ module @0 _ where
       subst (λ e → P (e .fst) (e .snd)) (equiv-is-contr _ .snd (_ , eqv)) pid
 
     unglue-is-equiv
-      : (φ : I)
+      : {A : Type ℓ}
+        (φ : I)
       → {B : Partial φ (Σ[ X ꞉ Type ℓ′ ] (X ≃ A))}
       → is-equiv {A = Glue A B} (unglue φ)
     unglue-is-equiv {A} φ {B} .equiv-proof y = extend→is-contr ctr where

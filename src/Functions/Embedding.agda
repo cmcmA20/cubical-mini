@@ -85,7 +85,7 @@ set-monic→is-embedding
   → is-embedding f
 set-monic→is-embedding {f} B-set monic =
   set-injective→is-embedding B-set λ {x} {y} p →
-    monic {C = el! $ Lift _ ⊤} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p)) $ₚ _
+    monic {C = ⊤} (λ _ → x) (λ _ → y) (fun-ext (λ _ → p)) $ₚ _
 
 
 preimage-is-prop→is-embedding : (∀ x → is-prop (fibre f (f x))) → is-embedding f

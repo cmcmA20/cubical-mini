@@ -3,7 +3,7 @@ module Data.Fin.Interface where
 
 open import Foundations.Base
 
-open import Data.Empty.Base using (¬_)
+open import Data.Empty.Base using ()
 open import Data.Nat.Base using (ℕ; zero; suc)
 open import Data.Sum.Base
 

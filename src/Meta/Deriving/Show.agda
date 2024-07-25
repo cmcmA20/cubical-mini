@@ -25,6 +25,7 @@ open import Data.Reflection.Name
 open import Data.Reflection.Term
 open import Data.String.Base
 open import Data.String.Instances.Append
+open import Data.Unit.Base
 
 
 private

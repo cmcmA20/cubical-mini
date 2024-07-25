@@ -18,17 +18,19 @@ private variable
   C : Type ℓ″
   f : A → B
 
-_is-left-inverse-of_ : (B → A) → (A → B) → Type _
-g is-left-inverse-of f = Π[ x ꞉ _ ] (g (f x) ＝ x)
+_is-left-inverse-of_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
+_is-left-inverse-of_ {A} g f = Π[ x ꞉ A ] (g (f x) ＝ x)
 retraction = _is-left-inverse-of_
 
-_is-right-inverse-of_ : (B → A) → (A → B) → Type _
-g is-right-inverse-of f = Π[ y ꞉ _ ] (f (g y) ＝ y)
+_is-right-inverse-of_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
+_is-right-inverse-of_ {B} g f = Π[ y ꞉ B ] (f (g y) ＝ y)
 section = _is-right-inverse-of_
 
 -- Helper function for constructing equivalences from pairs (f,g) that cancel each other up to definitional
 -- equality. For such (f,g), the result type simplifies to is-contr (fibre f b).
-strict-contr-fibres : (g : B → A) (b : B)
+strict-contr-fibres : {A : Type ℓ} {B : Type ℓ′}
+                      {f : A → B}
+                      (g : B → A) (b : B)
                     → Σ[ t        ꞉ fibre f (f (g b)) ]
                       Π[ (y′ , q) ꞉ fibre f       b   ]
                       Path (fibre f (f (g b))) t (g (f y′) , ap (f ∘ g) q)
@@ -41,6 +43,9 @@ id-is-equiv .equiv-proof = strict-contr-fibres id
 instance
   Refl-≃ : Refl (_≃_ {ℓ})
   Refl-≃ .refl = id , id-is-equiv
+
+  Funlike-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ≃ B) A (λ _ → B)
+  Funlike-≃ ._#_ = fst
 
 equiv-centre : (e : A ≃ B) (y : B) → fibre (e .fst) y
 equiv-centre e y = e .snd .equiv-proof y .fst
@@ -115,8 +120,11 @@ _≃ᴱ_ : (A : Type ℓ) (B : Type ℓ′) → Type _
 A ≃ᴱ B = Σ[ f ꞉ (A → B) ] is-equivᴱ f
 
 instance
-  Refl-≃ᴱ : Refl (_≃ᴱ_ {ℓ})
-  Refl-≃ᴱ .refl = id , λ y → (y , erase refl) , erase λ (z , erase w) i → w (~ i) , erase λ j → w (~ i ∨ j)
+  Refl-Erased-≃ : Refl (_≃ᴱ_ {ℓ})
+  Refl-Erased-≃ .refl = id , λ y → (y , erase refl) , erase λ (z , erase w) i → w (~ i) , erase λ j → w (~ i ∨ j)
+
+  Funlike-Erased-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ≃ᴱ B) A (λ _ → B)
+  Funlike-Erased-≃ ._#_ = fst
 
 is-equivᴱ→inverse : {A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B} → is-equivᴱ f → (B → A)
 is-equivᴱ→inverse eqv y = eqv y .fst .fst

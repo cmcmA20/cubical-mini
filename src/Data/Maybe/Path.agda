@@ -34,8 +34,8 @@ just-inj {x} = ap (from-just x)
 module _ ⦃ sa : Extensional A ℓ ⦄ where
   Code-Maybe : Maybe A → Maybe A → Type ℓ
   Code-Maybe (just x) (just y) = sa .Pathᵉ x y
-  Code-Maybe nothing  nothing  = Lift _ ⊤
-  Code-Maybe _ _ = Lift _ ⊥
+  Code-Maybe nothing  nothing  = ⊤
+  Code-Maybe _ _ = ⊥
 
   instance
     Extensional-Maybe : Extensional (Maybe A) ℓ

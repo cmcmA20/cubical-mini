@@ -112,14 +112,14 @@ is-equiv→is-equivᴱ fe y .snd .erased (c , erase p) i
 ≃→≃ᴱ = second is-equiv→is-equivᴱ
 
 instance
-  Symm-≃ᴱ : Symm (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) _≃ᴱ_
-  Symm-≃ᴱ ._⁻¹ e = is-equivᴱ→inverse (e .snd) , is-isoᴱ→is-equivᴱ
+  Symm-Erased-≃ : Symm (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) _≃ᴱ_
+  Symm-Erased-≃ ._⁻¹ e = is-equivᴱ→inverse (e .snd) , is-isoᴱ→is-equivᴱ
     ( e .fst
     , erase (λ x → is-equivᴱ→unit (e .snd) x .erased)
     , erase λ x → is-equivᴱ→counit (e .snd) x .erased )
 
-  Trans-≃ᴱ : Trans (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) (_≃ᴱ_ {ℓ′ = ℓᶜ}) _≃ᴱ_
-  Trans-≃ᴱ ._∙_  = _∙ᴱₑ_
+  Trans-Erased-≃ : Trans (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) (_≃ᴱ_ {ℓ′ = ℓᶜ}) _≃ᴱ_
+  Trans-Erased-≃ ._∙_  = _∙ᴱₑ_
 
 Σ-contract-sndᴱ
   : {A : Type ℓᵃ} {B : A → Type ℓᵇ}

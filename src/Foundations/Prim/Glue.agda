@@ -1,6 +1,8 @@
 {-# OPTIONS --safe #-}
 module Foundations.Prim.Glue where
 
+open import Foundations.Notation.Logic
+open import Foundations.Notation.Underlying
 open import Foundations.Prim.Type
 open import Foundations.Prim.Interval
 open import Foundations.Prim.Extension

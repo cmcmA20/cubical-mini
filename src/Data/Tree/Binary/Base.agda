@@ -15,7 +15,7 @@ private variable
   tl tr : Tree A
 
 elim
-  : {P : Tree A → 𝒰 ℓ′}
+  : {A : 𝒰 ℓ} {P : Tree A → 𝒰 ℓ′}
     (empty* : P empty)
     (leaf* : Π[ x ꞉ A ] P (leaf x))
     (node* : {tl tr : Tree A} → P tl → P tr → P (node tl tr))

@@ -2,7 +2,6 @@
 module Combinatorics.Power.Decidable where
 
 open import Meta.Prelude
-open import Meta.Notation.Membership
 
 open import Structures.n-Type
 
@@ -24,7 +23,7 @@ private variable
   x y : X
 
 is-complemented : (A : ℙ X) → Type _
-is-complemented {X} A = Σ[ A⁻¹ ꞉ ℙ X ] (A ∩ A⁻¹ ⊆ ⟘) × (⟙ ⊆ A ∪ A⁻¹)
+is-complemented {X} A = Σ[ A⁻¹ ꞉ ℙ X ] (A ∩ A⁻¹ ⊆ ⊥) × (⊤ ⊆ A ∪ A⁻¹)
 
 is-decidable-subset : (A : ℙ X) → Type (level-of-type X)
 is-decidable-subset {X} A = Decidableⁿ {1} (λ (x : X) → x ∈ A)

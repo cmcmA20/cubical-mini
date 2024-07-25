@@ -3,7 +3,6 @@ module Data.List.Membership where
 
 open import Meta.Prelude
 open import Meta.Extensionality
-open import Meta.Notation.Membership
 
 open import Logic.Discreteness
 
@@ -18,6 +17,7 @@ open import Data.List.Base
 open import Data.List.Operations
 open import Data.Maybe.Base
 open import Data.Maybe.Path using (just-inj)
+open import Data.Unit.Base
 
 private variable
   ℓᵃ ℓ : Level
@@ -74,7 +74,7 @@ module _ {A : 𝒰 ℓᵃ} ⦃ sa : ∀ {x y : A} → Extensional (x ＝ y) ℓ 
   Code-∈ₗ : {x : A} {xs : List A} (p q : x ∈ xs) → 𝒰 ℓ
   Code-∈ₗ (here  p) (here  p′) = sa .Pathᵉ p p′
   Code-∈ₗ (there q) (there q′) = Code-∈ₗ q q′
-  Code-∈ₗ _ _  = Lift _ ⊥
+  Code-∈ₗ _ _  = ⊥
 
   code-∈ₗ-refl : {x : A} {xs : List A} (p : x ∈ xs) → Code-∈ₗ p p
   code-∈ₗ-refl (here  p) = sa .reflᵉ p

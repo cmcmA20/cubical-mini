@@ -3,8 +3,8 @@ module Data.Maybe.Base where
 
 open import Foundations.Base
 
-open import Data.Empty.Base using (⊥)
-open import Data.Unit.Base using (⊤)
+open import Data.Empty.Base using ()
+open import Data.Unit.Base  using ()
 
 open import Agda.Builtin.Maybe public
 
@@ -16,7 +16,7 @@ rec : B → (A → B) → Maybe A → B
 rec b f (just x) = f x
 rec b _ nothing  = b
 
-elim : (B : Maybe A → Type ℓ′)
+elim : {A : Type ℓ} (B : Maybe A → Type ℓ′)
        (b : B nothing)
        (f : Π[ a ꞉ A ] B (just a))
      → (mx : Maybe A) → B mx

@@ -24,6 +24,7 @@ open import Data.Reflection.Literal
 open import Data.Reflection.Meta
 open import Data.Reflection.Name
 open import Data.Reflection.Term
+open import Data.Unit.Base
 
 private variable
   ℓ : Level
