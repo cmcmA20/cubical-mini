@@ -11,4 +11,6 @@ open import Foundations.Sigma      public
 open import Foundations.Transport  public
 open import Foundations.Univalence public
 
+open import Foundations.Notation.Equivalence public -- TODO move out
+
 open import Foundations.IdentitySystem.Interface public
