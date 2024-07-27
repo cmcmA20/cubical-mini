@@ -16,6 +16,12 @@ private variable
   C : ⊥ₜ → Type ℓᶜ
   n : HLevel
 
+¬-is-equiv : {f : ¬ A} → is-equiv f
+¬-is-equiv .equiv-proof ()
+
+¬→≃⊥ : (¬ A) → A ≃ ⊥
+¬→≃⊥ = _, ¬-is-equiv
+
 absurd-is-contr : is-contr (Π[ f ꞉ ⊥ ] C f)
 absurd-is-contr .fst ()
 absurd-is-contr .snd _ _ ()
@@ -29,8 +35,7 @@ universal : (Π[ f ꞉ ⊥ ] C f) ≃ ⊤
 universal = _ , is-contr→is-equiv absurd-is-contr ⊤-is-contr
 
 ¬-extₑ : ¬ A → ¬ B → A ≃ B
-¬-extₑ ¬a _  .fst a = absurd (¬a a)
-¬-extₑ _  ¬b .snd .equiv-proof b = absurd (¬b b)
+¬-extₑ ¬a ¬b = ¬→≃⊥ ¬a ∙ ¬→≃⊥ ¬b ⁻¹
 
 ¬-≃ : (A → B) → (B → A) → (¬ A) ≃ (¬ B)
 ¬-≃ ab ba = prop-extₑ! (_∘ ba) (_∘ ab)

@@ -16,8 +16,8 @@ C ×ᶜ D = go where
   module D = Precategory D
   open Precategory
   go : Precategory _ _
-  go .Ob = C.Ob ×ₜ D.Ob
-  go .Hom (c , d) (c′ , d′) = C.Hom c c′ ×ₜ D.Hom d d′
+  go .Ob = C.Ob × D.Ob
+  go .Hom (c , d) (c′ , d′) = (c ⇒ c′) × (d ⇒ d′)
   go .Hom-set = hlevel!
   go .id = C.id , D.id
   go ._∘_ (f , g) (f′ , g′) = f C.∘ f′ , g D.∘ g′
@@ -44,18 +44,18 @@ Snd .F₁ = snd
 Snd .F-id = refl
 Snd .F-∘ _ _ = refl
 
-Cat⟨_,_⟩ : Functor E C → Functor E D → Functor E (C × D)
+Cat⟨_,_⟩ : E ⇒ C → E ⇒ D → E ⇒ (C × D)
 Cat⟨ F , G ⟩ .F₀ = < F .F₀ , G .F₀ >
 Cat⟨ F , G ⟩ .F₁ = < F .F₁ , G .F₁ >
 Cat⟨ F , G ⟩ .F-id = ×-path (F .F-id) (G .F-id)
 Cat⟨ F , G ⟩ .F-∘ _ _ = ×-path (F .F-∘ _ _) (G .F-∘ _ _)
 
-_×ᶠ_ : Functor B D → Functor C E → Functor (B × C) (D × E)
+_×ᶠ_ : B ⇒ D → C ⇒ E → (B × C) ⇒ (D × E)
 (F ×ᶠ G) .F₀ = bimap (F .F₀) (G .F₀)
 (F ×ᶠ G) .F₁ = bimap (F .F₁) (G .F₁)
 (F ×ᶠ G) .F-id = ×-path (F .F-id) (G .F-id)
 (F ×ᶠ G) .F-∘ _ _ = ×-path (F .F-∘ _ _) (G .F-∘ _ _)
 
 instance
-  ×-Functor : ×-notation (Functor B D) (Functor C E) _
+  ×-Functor : ×-notation (B ⇒ D) (C ⇒ E) _
   ×-Functor .×-notation._×_ = _×ᶠ_

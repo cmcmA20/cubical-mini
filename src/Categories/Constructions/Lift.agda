@@ -11,7 +11,7 @@ Lift-cat o′ ℓ′ C = liftc where
   open Precategory C
   liftc : Precategory _ _
   liftc .Ob = Lift o′ Ob
-  liftc .Hom (lift x) (lift y) = Lift ℓ′ (Hom x y)
+  liftc .Hom (lift x) (lift y) = Lift ℓ′ (x ⇒ y)
   liftc .Hom-set = hlevel!
   liftc .id = lift id
   liftc ._∘_ (lift f) (lift g) = lift (f ∘ g)
@@ -21,8 +21,8 @@ Lift-cat o′ ℓ′ C = liftc where
 
 Lift-functor-l
   : ∀ o″ ℓ″ {C : Precategory o ℓ} {D : Precategory o′ ℓ′}
-  → Functor C D
-  → Functor (Lift-cat o″ ℓ″ C) D
+  → C ⇒ D
+  → Lift-cat o″ ℓ″ C ⇒ D
 Lift-functor-l bo bℓ G = F where
   open Functor
   F : Functor _ _
@@ -33,8 +33,8 @@ Lift-functor-l bo bℓ G = F where
 
 Lift-functor-r
   : ∀ o″ ℓ″ {C : Precategory o ℓ} {D : Precategory o′ ℓ′}
-  → Functor C D
-  → Functor C (Lift-cat o″ ℓ″ D)
+  → C ⇒ D
+  → C ⇒ Lift-cat o″ ℓ″ D
 Lift-functor-r bo bℓ G = F where
   open Functor
   F : Functor _ _

@@ -11,7 +11,7 @@ record /-Obj (c : Ob) : Type (o ⊔ ℓ) where
   constructor cut
   field
     {domain} : Ob
-    map      : Hom domain c
+    map      : domain ⇒ c
 
 open /-Obj using (domain)
 
@@ -33,7 +33,7 @@ record /-Hom (a b : /-Obj c) : Type ℓ where
     module a = /-Obj a
     module b = /-Obj b
   field
-    map      : Hom a.domain b.domain
+    map      : a.domain ⇒ b.domain
     commutes : b.map ∘ map ＝ a.map
 
 unquoteDecl H-Level-/-Hom =

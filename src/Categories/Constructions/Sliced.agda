@@ -16,7 +16,7 @@ record _⇑_ {ℓ} (T : Pred Ob ℓ) (c : Ob) : 𝒰 (ℓ ⊔ o ⊔ h) where
   field
     {support} : Ob
     thing     : T support
-    thinning  : Hom support c
+    thinning  : support ⇒ c
 
 unquoteDecl sliced-iso = declare-record-iso sliced-iso (quote _⇑_)
 

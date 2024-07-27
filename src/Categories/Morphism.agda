@@ -24,12 +24,12 @@ private variable
 
 -- Monomorphism (mono)
 
-is-monic : Hom a b → Type _
-is-monic {a} f = ∀ {c} → (g h : Hom c a) → f ∘ g ＝ f ∘ h → g ＝ h
+is-monic : a ⇒ b → Type _
+is-monic {a} f = {c : Ob} (g h : c ⇒ a) → f ∘ g ＝ f ∘ h → g ＝ h
 
 record _↪_ (a b : Ob) : Type (o ⊔ h) where
   field
-    mor   : Hom a b
+    mor   : a ⇒ b
     monic : is-monic mor
 
 open _↪_ public
@@ -37,8 +37,8 @@ open _↪_ public
 
 -- Epimorphism (epi)
 
-is-epic : Hom a b → Type _
-is-epic {b} f = ∀ {c} → (g h : Hom b c) → g ∘ f ＝ h ∘ f → g ＝ h
+is-epic : a ⇒ b → Type _
+is-epic {b} f = {c : Ob} (g h : b ⇒ c) → g ∘ f ＝ h ∘ f → g ＝ h
 
 record _↠_ (a b : Ob) : Type (o ⊔ h) where
   field
@@ -60,14 +60,14 @@ id-epic g h p = sym (id-r g) ∙∙ p ∙∙ id-r h
 -- Both monos and epis are closed under composition.
 
 monic-∘
-  : {f : Hom b c} {g : Hom a b}
+  : {f : b ⇒ c} {g : a ⇒ b}
   → is-monic f
   → is-monic g
   → is-monic (f ∘ g)
 monic-∘ fm gm a b α = gm _ _ (fm _ _ (assoc _ _ _ ∙∙ α ∙∙ sym (assoc _ _ _)))
 
 epic-∘
-  : {f : Hom b c} {g : Hom a b}
+  : {f : b ⇒ c} {g : a ⇒ b}
   → is-epic f
   → is-epic g
   → is-epic (f ∘ g)
@@ -81,11 +81,25 @@ _∘ₑ_ : b ↠ c → a ↠ b → a ↠ c
 (f ∘ₑ g) .mor = f .mor ∘ g .mor
 (f ∘ₑ g) .epic = epic-∘ (f .epic) (g .epic)
 
+instance
+  Refl-mono : Refl _↪_
+  Refl-mono .refl .mor = id
+  Refl-mono .refl .monic = id-monic
+
+  Refl-epi : Refl _↠_
+  Refl-epi .refl .mor = id
+  Refl-epi .refl .epic = id-epic
+
+  Trans-mono : Trans _↪_ _↪_ _↪_
+  Trans-mono ._∙_ f g = g ∘ₘ f
+
+  Trans-epi : Trans _↠_ _↠_ _↠_
+  Trans-epi ._∙_ f g = g ∘ₑ f
 
 -- If `f ∘ g` is monic, then `g` must also be monic.
 
 monic-cancel-l
-  : {f : Hom b c} {g : Hom a b}
+  : {f : b ⇒ c} {g : a ⇒ b}
   → is-monic (f ∘ g)
   → is-monic g
 monic-cancel-l {f} fg-monic h h′ p = fg-monic h h′ $
@@ -94,7 +108,7 @@ monic-cancel-l {f} fg-monic h h′ p = fg-monic h h′ $
 -- Dually, if `f ∘ g` is epic, then `f` must also be epic.
 
 epic-cancel-r
-  : {f : Hom b c} {g : Hom a b}
+  : {f : b ⇒ c} {g : a ⇒ b}
   → is-epic (f ∘ g)
   → is-epic f
 epic-cancel-r {g} fg-epic h h' p = fg-epic h h' $
@@ -104,31 +118,31 @@ epic-cancel-r {g} fg-epic h h' p = fg-epic h h' $
 -- Postcomposition with a mono is an embedding.
 
 monic-postcomp-is-embedding
-  : {f : Hom b c}
+  : {f : b ⇒ c}
   → is-monic f
-  → is-embedding {A = Hom a b} (f ∘_)
+  → is-embedding {A = a ⇒ b} (f ∘_)
 monic-postcomp-is-embedding monic =
   set-injective→is-embedding (Hom-set _ _) (monic _ _)
 
 -- Likewise, precomposition with an epi is an embedding.
 
 epic-precomp-embedding
-  : {f : Hom a b}
+  : {f : a ⇒ b}
   → is-epic f
-  → is-embedding {A = Hom b c} (_∘ f)
+  → is-embedding {A = b ⇒ c} (_∘ f)
 epic-precomp-embedding epic =
   set-injective→is-embedding (Hom-set _ _) (epic _ _)
 
 
 -- Sections
 
-_section-of_ : (s : Hom b a) (r : Hom a b) → Type _
+_section-of_ : (s : b ⇒ a) (r : a ⇒ b) → Type _
 s section-of r = r ∘ s ＝ id
 
-record has-section (r : Hom a b) : Type h where
+record has-section (r : a ⇒ b) : Type h where
   constructor make-section
   field
-    section    : Hom b a
+    section    : b ⇒ a
     is-section : section section-of r
 
 open has-section public
@@ -138,7 +152,7 @@ id-has-section .section = id
 id-has-section .is-section = id-l _
 
 section-of-∘
-  : {f : Hom c b} {g : Hom b c} {h : Hom b a} {i : Hom a b}
+  : {f : c ⇒ b} {g : b ⇒ c} {h : b ⇒ a} {i : a ⇒ b}
   → f section-of g → h section-of i
   → (h ∘ f) section-of (g ∘ i)
 section-of-∘ {f} {g} {h} {i} fg-sect hi-sect =
@@ -149,7 +163,7 @@ section-of-∘ {f} {g} {h} {i} fg-sect hi-sect =
   id                 ∎
 
 section-∘
-  : {f : Hom b c} {g : Hom a b}
+  : {f : b ⇒ c} {g : a ⇒ b}
   → has-section f → has-section g → has-section (f ∘ g)
 section-∘ f-sect g-sect .section = g-sect .section ∘ f-sect .section
 section-∘ {f} {g} f-sect g-sect .is-section =
@@ -175,13 +189,13 @@ has-section→epic {f = f} f-sect g h p =
 -- Retracts
 
 
-_retract-of_ : (r : Hom a b) (s : Hom b a) → Type _
+_retract-of_ : (r : a ⇒ b) (s : b ⇒ a) → Type _
 r retract-of s = r ∘ s ＝ id
 
-record has-retract (s : Hom b a) : Type h where
+record has-retract (s : b ⇒ a) : Type h where
   constructor make-retract
   field
-    retract : Hom a b
+    retract : a ⇒ b
     is-retract : retract retract-of s
 
 open has-retract public
@@ -191,13 +205,13 @@ id-has-retract .retract = id
 id-has-retract .is-retract = id-l _
 
 retract-of-∘
-  : {f : Hom c b} {g : Hom b c} {h : Hom b a} {i : Hom a b}
+  : {f : c ⇒ b} {g : b ⇒ c} {h : b ⇒ a} {i : a ⇒ b}
   → f retract-of g → h retract-of i
   → (h ∘ f) retract-of (g ∘ i)
 retract-of-∘ = flip section-of-∘
 
 retract-∘
-  : {f : Hom b c} {g : Hom a b}
+  : {f : b ⇒ c} {g : a ⇒ b}
   → has-retract f → has-retract g
   → has-retract (f ∘ g)
 retract-∘ f-ret g-ret .retract = g-ret .retract ∘ f-ret .retract
@@ -224,7 +238,7 @@ has-retract→monic {f} f-ret g h p =
 -- A section that is also epic is a retract.
 
 section-of+epic→retract-of
-  : {s : Hom b a} {r : Hom a b}
+  : {s : b ⇒ a} {r : a ⇒ b}
   → s section-of r
   → is-epic s
   → s retract-of r
@@ -239,7 +253,7 @@ section-of+epic→retract-of {s} {r} sect epic =
 -- Dually, a retract that is also monic is a section.
 
 retract-of+monic→section-of
-  : {s : Hom b a} {r : Hom a b}
+  : {s : b ⇒ a} {r : a ⇒ b}
   → r retract-of s
   → is-monic r
   → r section-of s
@@ -270,7 +284,7 @@ has-section+monic→has-retract sect monic .is-retract =
 
 -- Isomorphism (iso)
 
-record Inverses (f : Hom a b) (g : Hom b a) : Type h where
+record Inverses (f : a ⇒ b) (g : b ⇒ a) : Type h where
   constructor make-inverses
   field
     inv-l : f ∘ g ＝ id
@@ -282,13 +296,13 @@ private
   unquoteDecl H-Level-inverses =
     declare-record-hlevel 1 H-Level-inverses (quote Inverses)
 
-inverses-are-prop : {f : Hom a b} {g : Hom b a} → is-prop (Inverses f g)
+inverses-are-prop : {f : a ⇒ b} {g : b ⇒ a} → is-prop (Inverses f g)
 inverses-are-prop = hlevel 1
 
 
-record is-invertible (f : Hom a b) : Type h where
+record is-invertible (f : a ⇒ b) : Type h where
   field
-    inv : Hom b a
+    inv : b ⇒ a
     inverses : Inverses f inv
 
   open Inverses inverses public
@@ -299,7 +313,7 @@ record is-invertible (f : Hom a b) : Type h where
   op .inverses .inv-r = inv-l inverses
 
 opaque
-  is-invertible-is-prop : {f : Hom a b} → is-prop (is-invertible f)
+  is-invertible-is-prop : {f : a ⇒ b} → is-prop (is-invertible f)
   is-invertible-is-prop {a} {b} {f} g h = p where
     module g = is-invertible g
     module h = is-invertible h
@@ -323,8 +337,8 @@ id-invertible .is-invertible.inverses .inv-r = id-l id
 
 record _≅_ (a b : Ob) : Type h where
   field
-    to       : Hom a b
-    from     : Hom b a
+    to       : a ⇒ b
+    from     : b ⇒ a
     inverses : Inverses to from
 
   open Inverses inverses public
@@ -339,7 +353,7 @@ id-iso .inverses .inv-r = id-l id
 
 Isomorphism = _≅_
 
-Inverses-∘ : {f : Hom a b} {f⁻¹ : Hom b a} {g : Hom b c} {g⁻¹ : Hom c b}
+Inverses-∘ : {f : a ⇒ b} {f⁻¹ : b ⇒ a} {g : b ⇒ c} {g⁻¹ : c ⇒ b}
            → Inverses f f⁻¹ → Inverses g g⁻¹ → Inverses (g ∘ f) (f⁻¹ ∘ g⁻¹)
 Inverses-∘ {f} {f⁻¹} {g} {g⁻¹} finv ginv = record { inv-l = l ; inv-r = r } where
   module finv = Inverses finv
@@ -360,6 +374,7 @@ Inverses-∘ {f} {f⁻¹} {g} {g⁻¹} finv ginv = record { inv-l = l ; inv-r = 
         f⁻¹ ∘ f                ~⟨ finv.inv-r ⟩
         id                     ∎
 
+-- TODO direction seems wrong
 _∘ᵢ_ : a ≅ b → b ≅ c → a ≅ c
 (f ∘ᵢ g) .to = g .to ∘ f .to
 (f ∘ᵢ g) .from = f .from ∘ g .from
@@ -367,8 +382,15 @@ _∘ᵢ_ : a ≅ b → b ≅ c → a ≅ c
 
 infixr 40 _∘ᵢ_
 
+instance
+  Refl-iso : Refl _≅_
+  Refl-iso .refl = id-iso
+
+  Trans-iso : Trans _≅_ _≅_ _≅_
+  Trans-iso ._∙_ f g = f ∘ᵢ g
+
 invertible-∘
-  : {f : Hom b c} {g : Hom a b}
+  : {f : b ⇒ c} {g : a ⇒ b}
   → is-invertible f → is-invertible g
   → is-invertible (f ∘ g)
 invertible-∘ f-inv g-inv = record
@@ -394,28 +416,28 @@ _ᵢ⁻¹ : a ≅ b → b ≅ a
 (f ᵢ⁻¹) .inverses .inv-l = f .inverses .inv-r
 (f ᵢ⁻¹) .inverses .inv-r = f .inverses .inv-l
 
-make-invertible : {f : Hom a b} (g : Hom b a) → f ∘ g ＝ id → g ∘ f ＝ id → is-invertible f
+make-invertible : {f : a ⇒ b} (g : b ⇒ a) → f ∘ g ＝ id → g ∘ f ＝ id → is-invertible f
 make-invertible g _ _ .is-invertible.inv = g
 make-invertible _ p _ .is-invertible.inverses .inv-l = p
 make-invertible _ _ q .is-invertible.inverses .inv-r = q
 
-make-iso : (f : Hom a b) (g : Hom b a) → f ∘ g ＝ id → g ∘ f ＝ id → a ≅ b
+make-iso : (f : a ⇒ b) (g : b ⇒ a) → f ∘ g ＝ id → g ∘ f ＝ id → a ≅ b
 make-iso f _ _ _ ._≅_.to = f
 make-iso _ g _ _ ._≅_.from = g
 make-iso _ _ p _ ._≅_.inverses .inv-l = p
 make-iso _ _ _ q ._≅_.inverses .inv-r = q
 
-inverses→invertible : {f : Hom a b} {g : Hom b a} → Inverses f g → is-invertible f
+inverses→invertible : {f : a ⇒ b} {g : b ⇒ a} → Inverses f g → is-invertible f
 inverses→invertible x .is-invertible.inv = _
 inverses→invertible x .is-invertible.inverses = x
 
-invertible→iso : (f : Hom a b) → is-invertible f → a ≅ b
+invertible→iso : (f : a ⇒ b) → is-invertible f → a ≅ b
 invertible→iso f _ .to = f
 invertible→iso _ x .from = x .is-invertible.inv
 invertible→iso _ x .inverses = x .is-invertible.inverses
 
 is-invertible-inverse
-  : {f : Hom a b} (g : is-invertible f) → is-invertible (g .is-invertible.inv)
+  : {a b : Ob} {f : a ⇒ b} (g : is-invertible f) → is-invertible (g .is-invertible.inv)
 is-invertible-inverse g = make-invertible _ (inv-r g) (inv-l g) where
   open Inverses (g .is-invertible.inverses)
 

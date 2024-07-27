@@ -41,6 +41,9 @@ record ∞-magma-hom
     (e : ⌞ A ⌟ ≃ ⌞ B ⌟) → 𝒰 (ℓ ⊔ ℓ′)
 ∞-Magma≃ A B (f , _) = ∞-magma-hom (A .snd) (B .snd) f
 
+instance
+  ⇒-∞-Magma : ⇒-notation (Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (Σ[ Y ꞉ 𝒰 ℓ ] ∞-Magma-on Y) (𝒰 ℓ)
+  ⇒-∞-Magma ._⇒_ X Y = ∞-Magma[ X ⇒ Y ]
 
 -- n-truncated magmas
 
