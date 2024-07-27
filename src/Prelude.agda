@@ -46,7 +46,6 @@ module ∥-∥₁ = Data.Truncation.Propositional
 open ∥-∥₁ public
   using ( ∥_∥₁ ; ∣_∣₁ ; squash₁
         ; ∃ ; ∃[_]
-        ; _⊎̇₁_
         ; fibre₁ ; Im )
 
 import Data.Truncation.Set

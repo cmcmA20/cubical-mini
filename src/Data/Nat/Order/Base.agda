@@ -149,7 +149,7 @@ opaque
     = suc (δ₁ + δ₂)
     , nat! ∙ subst (λ φ → suc (φ + δ₂) ＝ _) (symₚ p) q
 
-  <-asym : ∀[ _<_ →̇ _≯_ ]
+  <-asym : ∀[ _<_ ⇒ _≯_ ]
   <-asym {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {n = n} {m = 1 + δ₂ + δ₁}
     (subst (λ φ → suc (φ + δ₁) ＝ n) (symₚ q) p ⁻¹ ∙ nat!)
 
@@ -184,33 +184,33 @@ opaque
 
 opaque
   unfolding _<_
-  <→≤ : ∀[ _<_ →̇ _≤_ ]
+  <→≤ : ∀[ _<_ ⇒ _≤_ ]
   <→≤ = bimap suc (nat! ∙_)
 
-  <→≠ : ∀[ _<_ →̇ _≠_ {A = ℕ} ]
+  <→≠ : ∀[ _<_ ⇒ _≠_ ]
   <→≠ m<n m=n = <-irr (subst (_ <_) (sym m=n) m<n)
 
-  ≤→≯ : ∀[ _≤_ →̇ _≯_ ]
+  ≤→≯ : ∀[ _≤_ ⇒ _≯_ ]
   ≤→≯ {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {m} {δ₁ + δ₂} $
     subst (λ φ → suc (φ + δ₂) ＝ m) (symₚ p) q ⁻¹ ∙ nat!
 
-  ≤→<⊎= : ∀[ _≤_ →̇ _<_ ⊎̇ _＝_ {A = ℕ} ]
+  ≤→<⊎= : ∀[ _≤_ ⇒ _<_ ⊎ _＝_ ]
   ≤→<⊎= (0     , p) = inr $ nat! ∙ p
   ≤→<⊎= (suc δ , p) = inl $ δ , nat! ∙ p
 
-  <⊎=→≤ : ∀[ _<_ ⊎̇ _＝_ {A = ℕ} →̇ _≤_ ]
+  <⊎=→≤ : ∀[ _<_ ⊎ _＝_ ⇒ _≤_ ]
   <⊎=→≤ (inl m<n) = <→≤ m<n
   <⊎=→≤ (inr m=n) = subst (_≤ _) (sym m=n) ≤-refl
 
-<→≱ : ∀[ _<_ →̇ _≱_ ]
+<→≱ : ∀[ _<_ ⇒ _≱_ ]
 <→≱ m<n m≥n = ≤→≯ m≥n m<n
 
-≯→≤ : ∀[ _≯_ →̇ _≤_ ]
+≯→≤ : ∀[ _≯_ ⇒ _≤_ ]
 ≯→≤ {0}     {_}     _ = z≤
 ≯→≤ {suc _} {0}     f = ⊥.rec $ f z<s
 ≯→≤ {suc _} {suc _} f = s≤s $ ≯→≤ (f ∘ s<s)
 
-≱→< : ∀[ _≱_ →̇ _<_ ]
+≱→< : ∀[ _≱_ ⇒ _<_ ]
 ≱→< {_}     {0}     f = ⊥.rec $ f z≤
 ≱→< {0}     {suc _} _ = z<s
 ≱→< {suc m} {suc n} f = s<s $ ≱→< (f ∘ s≤s)
@@ -254,7 +254,7 @@ opaque
 ≤-dec = reflects→decidable {2} {P = _≤_} ≤-reflects
 
 -- TODO use trichotomy
-≤-split : Π[ _<_ ⊎̇ _>_ ⊎̇ _＝_ {A = ℕ} ]
+≤-split : Π[ _<_ ⊎ _>_ ⊎ _＝_ ]
 ≤-split m n with <-dec {m} {n}
 ... | yes m<n = inl m<n
 ... | no  m≮n with <-dec {n} {m}

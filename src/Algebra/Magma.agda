@@ -34,7 +34,7 @@ record ∞-magma-hom
 
 ∞-Magma[_⇒_]
   : (A : Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (B : Σ[ X ꞉ 𝒰 ℓ′ ] ∞-Magma-on X) → 𝒰 (ℓ ⊔ ℓ′)
-∞-Magma[ A ⇒ B ] = Σ[ f ꞉ A →̇ B ] ∞-magma-hom (A .snd) (B .snd) f
+∞-Magma[ A ⇒ B ] = Σ[ f ꞉ ⌞ A ⌟ ⇒ ⌞ B ⌟ ] ∞-magma-hom (A .snd) (B .snd) f
 
 ∞-Magma≃
   : {ℓ ℓ′ : Level} (A : Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (B : Σ[ X ꞉ 𝒰 ℓ′ ] ∞-Magma-on X)

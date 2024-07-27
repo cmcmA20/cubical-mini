@@ -140,7 +140,7 @@ s<s = s≤s
 <-weaken-z : (x y : ℕ) → x < y → 0 < y
 <-weaken-z x (suc y) (s≤s _) = s≤s z≤
 
-<-asym : ∀[ _<_ →̇ _≯_ ]
+<-asym : ∀[ _<_ ⇒ _≯_ ]
 <-asym (s≤s p) (s≤s q) = <-asym p q
 
 <-suc-r : m < n → m < suc n

@@ -38,7 +38,7 @@ private variable
 instance
   Underlying-DecProp : Underlying (DecProp ℓ)
   Underlying-DecProp {ℓ} .ℓ-underlying = ℓ
-  Underlying-DecProp .⌞_⌟⁰ = carrier
+  Underlying-DecProp .⌞_⌟ = carrier
 
   hlevel-proj-DecProp : Struct-proj-desc true (quote carrier)
   hlevel-proj-DecProp .Struct-proj-desc.has-level = quote carrier-is-prop

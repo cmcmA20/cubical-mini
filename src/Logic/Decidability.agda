@@ -73,7 +73,7 @@ instance
 
 -- Decidability of a generalized predicate
 Decidableⁿ : Variadic-binding¹
-Decidableⁿ {arity} P = ∀[ mapⁿ arity Dec ⌞ P ⌟ ]
+Decidableⁿ {arity} P = ∀[ mapⁿ arity (Dec ∘ ⌞_⌟) P ]
 
 macro
   Decidable : Term → Term → TC ⊤
@@ -103,7 +103,7 @@ Reflectsⁿ
   : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
     {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
   → SCorr _ As U → DProc _ As → Type (u .ℓ-underlying ⊔ ℓsup _ ls)
-Reflectsⁿ {0}                         P d = Reflects⁰ ⌞ P ⌟⁰ d
+Reflectsⁿ {0}                         P d = Reflects⁰ ⌞ P ⌟ d
 Reflectsⁿ {1}           {As = A}      P d = Π[ x ꞉ A ] Reflectsⁿ (P x) (d x)
 Reflectsⁿ {suc (suc _)} {As = A , As} P d = Π[ x ꞉ A ] Reflectsⁿ (P x) (d x)
 
@@ -111,7 +111,7 @@ reflectsⁿ-is-of-hlevel
   : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
     {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
     {h : HLevel} {P : SCorr _ As U} {d : DProc _ As}
-  → Π[ mapⁿ arity (is-of-hlevel (suc h)) ⌞ P ⌟ ]
+  → Π[ mapⁿ arity (is-of-hlevel (suc h) ∘ ⌞_⌟) P ]
   → is-of-hlevel (suc h) (Reflectsⁿ P d)
 reflectsⁿ-is-of-hlevel {0} = reflects-is-of-hlevel _
 reflectsⁿ-is-of-hlevel {1} hl = Π-is-of-hlevel _ λ _ →

@@ -56,7 +56,7 @@ private variable
 instance
   Underlying-Poset : Underlying (Poset o ℓ)
   Underlying-Poset .Underlying.ℓ-underlying = _
-  Underlying-Poset .Underlying.⌞_⌟⁰ = Poset.Ob
+  Underlying-Poset .Underlying.⌞_⌟ = Poset.Ob
 
   open Struct-proj-desc
 
@@ -123,7 +123,7 @@ monotone-pathᴾ {P} {Q} {f} {g} q i .pres-≤ {x} {y} α =
 instance
   Extensional-Monotone
     : ∀ {ℓr} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-    → ⦃ sa : Extensional (P →̇ Q) ℓr ⦄
+    → ⦃ sa : Extensional (⌞ P ⌟ ⇒ ⌞ Q ⌟) ℓr ⦄
     → Extensional (Monotone P Q) ℓr
   Extensional-Monotone ⦃ sa ⦄ = set-injective→extensional! monotone-pathᴾ sa
 

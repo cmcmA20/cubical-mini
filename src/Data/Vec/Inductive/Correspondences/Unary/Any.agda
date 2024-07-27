@@ -35,7 +35,7 @@ any? {n = suc n} P? {x ∷ xs} =
 
 any-ap
   : {a a′ b b′ : Level} {A : Type a} {B : Type b} {P : Pred A a′} {Q : Pred B b′}
-    {f : A → B} (f′ : ∀[ P →̇ Q ∘ f ])
+    {f : A → B} (f′ : ∀[ P ⇒ Q ∘ f ])
     {n : ℕ} {xs : Vec A n}
   → Any P xs → Any Q (f <$> xs)
 any-ap         f′ {suc _} {_ ∷ _}  (fzero    , q) = fzero , f′ q

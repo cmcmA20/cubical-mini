@@ -66,23 +66,6 @@ Variadic¹ =
   → SCorr _ As U
   → Corr  _ As (u .ℓ-underlying)
 
-Lift-op¹⃑ⁿ
-  : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
-    {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
-  → ({ℓᵃ : Level} → Type ℓᵃ → Type ℓᵃ)
-  → SCorr _ As U
-  → Corr  _ As (u .ℓ-underlying)
-Lift-op¹⃑ⁿ {0}           f P = f ⌞ P ⌟⁰
-Lift-op¹⃑ⁿ {1}           f P = λ x → f ⌞ P x ⌟⁰
-Lift-op¹⃑ⁿ {suc (suc _)} f P = λ x → Lift-op¹⃑ⁿ f (P x)
-
-Carrierⁿ : Variadic¹
-Carrierⁿ = Lift-op¹⃑ⁿ id
-
-Negⁿ : Variadic¹
-Negⁿ = Lift-op¹⃑ⁿ ¬_
-
-
 Variadic-binding¹ : Typeω
 Variadic-binding¹ =
     {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
@@ -96,8 +79,8 @@ Quantⁿ
   → (∀ {ℓᵃ ℓᵇ} (A : Type ℓᵃ) → (A → Type ℓᵇ) → Type (ℓᵃ ⊔ ℓᵇ))
   → SCorr _ As U
   → Type (u .ℓ-underlying ⊔ ℓsup _ ls)
-Quantⁿ {0}           Q T = ⌞ T ⌟⁰
-Quantⁿ {1}           Q T = Q _ λ x → ⌞ T x ⌟⁰
+Quantⁿ {0}           Q T = ⌞ T ⌟
+Quantⁿ {1}           Q T = Q _ λ x → ⌞ T x ⌟
 Quantⁿ {suc (suc _)} Q T = Q _ λ x → Quantⁿ Q (T x)
 
 Universalⁿ : Variadic-binding¹
@@ -108,35 +91,6 @@ IUniversalⁿ = Quantⁿ ∀-syntax
 
 Existentialⁿ : Variadic-binding¹
 Existentialⁿ = Quantⁿ Σ-syntax
-
-
-Variadic² : Typeω
-Variadic² =
-    {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
-    {ℓ  : Level} {U : Type ℓ } ⦃ u : Underlying U ⦄
-    {ℓ′ : Level} {V : Type ℓ′} ⦃ v : Underlying V ⦄
-  → SCorr _ As U → SCorr _ As V
-  → Corr  _ As (u .ℓ-underlying ⊔ v .ℓ-underlying)
-
-Lift-op²⃑ⁿ
-  : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
-    {ℓ  : Level} {U : Type ℓ } ⦃ u : Underlying U ⦄
-    {ℓ′ : Level} {V : Type ℓ′} ⦃ v : Underlying V ⦄
-  → (∀ {ℓᵃ ℓᵇ } → Type ℓᵃ → Type ℓᵇ → Type (ℓᵃ ⊔ ℓᵇ))
-  → SCorr _ As U → SCorr _ As V
-  → Corr  _ As (u .ℓ-underlying ⊔ v .ℓ-underlying)
-Lift-op²⃑ⁿ {0}           f P Q = f ⌞ P ⌟⁰ ⌞ Q ⌟⁰
-Lift-op²⃑ⁿ {1}           f P Q = λ x → f ⌞ P x ⌟⁰ ⌞ Q x ⌟⁰
-Lift-op²⃑ⁿ {suc (suc _)} f P Q = λ x → Lift-op²⃑ⁿ f (P x) (Q x)
-
-Implⁿ : Variadic²
-Implⁿ = Lift-op²⃑ⁿ λ A B → (A → B)
-
-Prodⁿ : Variadic²
-Prodⁿ = Lift-op²⃑ⁿ _×_
-
-Sumⁿ : Variadic²
-Sumⁿ = Lift-op²⃑ⁿ _⊎_
 
 
 -- returns arity and codomain type
@@ -202,22 +156,6 @@ variadic-instance-worker r = do
   unify solved und
   pure und
 
-
-unop-macro : Name → Term → Term → TC ⊤
-unop-macro nam t hole = do
-  ar , r ← variadic-worker t
-  und ← variadic-instance-worker r
-  unify hole $ def nam
-    [ harg ar , harg unknown , harg unknown
-    , harg unknown , harg unknown , iarg und
-    , varg t ]
-
-infixr 0 ¬̇_
-macro
-  ⌞_⌟ = unop-macro (quote Carrierⁿ)
-  ¬̇_  = unop-macro (quote Negⁿ)
-
-
 quantifier-macro : Name → Term → Term → TC ⊤
 quantifier-macro nam t hole = do
   ar , r ← variadic-worker t
@@ -232,25 +170,3 @@ macro
   Π[_] = quantifier-macro (quote Universalⁿ)
   ∀[_] = quantifier-macro (quote IUniversalⁿ)
   Σ[_] = quantifier-macro (quote Existentialⁿ)
-
-
-binop-macro : Name → Term → Term → Term → TC ⊤
-binop-macro nam p q hole = do
-  par , pr ← variadic-worker p
-  qar , qr ← variadic-worker q
-  unify par qar
-  pund ← variadic-instance-worker pr
-  qund ← variadic-instance-worker qr
-  unify hole $ def nam
-    [ harg par , harg unknown , harg unknown
-    , harg unknown , harg unknown , iarg pund
-    , harg unknown , harg unknown , iarg qund
-    , varg p , varg q ]
-
-infixr -1 _→̇_
-infixr 8  _×̇_
-infixr 7  _⊎̇_
-macro
-  _→̇_ = binop-macro (quote Implⁿ)
-  _×̇_ = binop-macro (quote Prodⁿ)
-  _⊎̇_ = binop-macro (quote Sumⁿ)

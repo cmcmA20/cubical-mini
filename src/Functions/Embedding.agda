@@ -81,7 +81,7 @@ is-embedding→monic {f} emb g h p =
 
 set-monic→is-embedding
   : {A : Type ℓ} {B : Type ℓ′} {f : A → B} → is-set B
-  → (∀ {C : Set ℓ″} (g h : C →̇ A) → f ∘ g ＝ f ∘ h → g ＝ h)
+  → (∀ {C : Set ℓ″} (g h : ⌞ C ⌟ ⇒ A) → f ∘ g ＝ f ∘ h → g ＝ h)
   → is-embedding f
 set-monic→is-embedding {f} B-set monic =
   set-injective→is-embedding B-set λ {x} {y} p →

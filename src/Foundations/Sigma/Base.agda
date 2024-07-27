@@ -21,14 +21,14 @@ A ×ₜ B = Σ A λ _ → B
 instance
   Σ-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
          → Σ-notation A (𝒰 ℓ′) (𝒰 (u .ℓ-underlying ⊔ ℓ′))
-  Σ-Type .Σ-notation.Σ X = Σ ⌞ X ⌟⁰
+  Σ-Type .Σ-notation.Σ X = Σ ⌞ X ⌟
 
   ×-Type : ×-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
   ×-Type ._×_ = _×ₜ_
 
   Underlying-Σ : ⦃ ua : Underlying A ⦄ → Underlying (Σ A B)
   Underlying-Σ ⦃ ua ⦄ .ℓ-underlying = ua .ℓ-underlying
-  Underlying-Σ .⌞_⌟⁰ x = ⌞ x .fst ⌟⁰
+  Underlying-Σ .⌞_⌟ x = ⌞ x .fst ⌟
 
 <_,_> : {C : ∀ {a} → B a → Type ℓᶜ}
       → (f : (x : A) → B x)

@@ -116,7 +116,7 @@ instance opaque
                        → H-Level n (Semiring-hom M M′ f)
   H-Level-semiring-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance semiring-hom-is-prop
 
-semiring-on→additive-comm-monoid-on : ∀[ Semiring-on {ℓ} →̇ CMonoid-on {ℓ} ]
+semiring-on→additive-comm-monoid-on : ∀[ Semiring-on {ℓ} ⇒ CMonoid-on ]
 semiring-on→additive-comm-monoid-on S = to-comm-monoid-on go where
   open Semiring-on S
   go : make-comm-monoid _
@@ -128,7 +128,7 @@ semiring-on→additive-comm-monoid-on S = to-comm-monoid-on go where
   go .make-comm-monoid.assoc = +-assoc
   go .make-comm-monoid.comm = +-comm
 
-semiring-on→multiplicative-monoid-on : ∀[ Semiring-on {ℓ} →̇ Monoid-on {ℓ} ]
+semiring-on→multiplicative-monoid-on : ∀[ Semiring-on {ℓ} ⇒ Monoid-on ]
 semiring-on→multiplicative-monoid-on S = to-monoid-on go where
   open Semiring-on S
   go : make-monoid _

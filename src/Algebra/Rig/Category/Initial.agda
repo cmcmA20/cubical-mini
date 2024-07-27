@@ -38,7 +38,7 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
   ℕ-is-initial {ℓ} R = ℕ→R , λ x → ext $ uniq x where
     module R = Rig-on (R .snd)
 
-    f : ℕ → ⌞ R ⌟⁰
+    f : ℕ → ⌞ R ⌟
     f 0             = R.0a
     f 1             = R.1a
     f (suc (suc n)) = R.1a R.+ f (suc n)

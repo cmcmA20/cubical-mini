@@ -46,13 +46,6 @@ instance
   ⊎₁-Type : ⊎₁-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
   ⊎₁-Type ._⊎₁_ A B = ∥ A ⊎ B ∥₁
 
-Sum₁ⁿ : Variadic²
-Sum₁ⁿ {arity} P Q = mapⁿ arity ∥_∥₁ (Sumⁿ P Q)
-
-infixr 7 _⊎̇₁_
-macro _⊎̇₁_ = binop-macro (quote Sum₁ⁿ)
-
-
 fibre₁ : {A : Type ℓ} {B : Type ℓ′} (f : A → B) (y : B) → Type (ℓ ⊔ ℓ′)
 fibre₁ = mapⁿ 2 ∥_∥₁ fibre
 

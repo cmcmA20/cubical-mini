@@ -26,7 +26,7 @@ open import Data.Truncation.Propositional as ∥-∥₁
 open import Data.Truncation.Set as ∥-∥₂
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : Type ℓ
 
 record FinSet (ℓ : Level) : Type (ℓsuc ℓ) where
@@ -46,7 +46,7 @@ unquoteDecl fin-set-iso = declare-record-iso fin-set-iso (quote FinSet)
 instance
   Underlying-FinSet : Underlying (FinSet ℓ)
   Underlying-FinSet {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-FinSet .⌞_⌟⁰ = carrier
+  Underlying-FinSet .⌞_⌟ = carrier
 
   bf-proj-fin-ord : Struct-proj-desc false (quote carrier)
   bf-proj-fin-ord .Struct-proj-desc.has-level = quote has-bishop-finite
@@ -66,6 +66,27 @@ instance
   hlevel-proj-fin-ord .Struct-proj-desc.upwards-closure = quote is-of-hlevel-≤
   hlevel-proj-fin-ord .Struct-proj-desc.get-argument (_ ∷ x v∷ []) = pure x
   hlevel-proj-fin-ord .Struct-proj-desc.get-argument _ = type-error []
+
+  ×-FinSet : ×-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
+  ×-FinSet ._×_ X Y .carrier = ⌞ X ⌟ × ⌞ Y ⌟
+  ×-FinSet ._×_ _ _ .has-bishop-finite = auto
+
+  ⇒-FinSet : ⇒-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
+  ⇒-FinSet ._⇒_ X Y .carrier = ⌞ X ⌟ ⇒ ⌞ Y ⌟
+  ⇒-FinSet ._⇒_ _ _ .has-bishop-finite = auto
+
+  Π-FinSet : Π-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
+  Π-FinSet .Π-notation.Π A F .carrier = Π[ a ꞉ A ] ⌞ F a ⌟
+  Π-FinSet .Π-notation.Π _ _ .has-bishop-finite = auto
+
+  ∀-FinSet : ∀-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
+  ∀-FinSet .∀-notation.∀′ A F .carrier = ∀[ a ꞉ A ] ⌞ F a ⌟
+  ∀-FinSet .∀-notation.∀′ X F .has-bishop-finite = ≃→is-bishop-finite (Π≃∀ ⁻¹)
+    (Π-is-bishop-finite ⦃ X .has-bishop-finite ⦄ ⦃ λ {x} → F x .has-bishop-finite ⦄ )
+
+  Σ-FinSet : Σ-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
+  Σ-FinSet .Σ-notation.Σ A F .carrier = Σ[ a ꞉ A ] ⌞ F a ⌟
+  Σ-FinSet .Σ-notation.Σ _ _ .has-bishop-finite = auto
 
 
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
@@ -123,23 +144,23 @@ private
 
 
 -- Usage
-module _ {ℓᵃ ℓᵇ : Level} {A : FinSet ℓᵃ} {B : A →̇ FinSet ℓᵇ} where private
+module _ {ℓᵃ ℓᵇ : Level} {A : FinSet ℓᵃ} {B : ⌞ A ⌟ ⇒ FinSet ℓᵇ} where private
   open import Logic.Exhaustibility
   open import Logic.Omniscience
 
-  _ : is-groupoid (A →̇ A)
+  _ : is-groupoid ⌞ A ⇒ A ⌟
   _ = hlevel!
 
-  _ : is-discrete (A ×̇ A)
+  _ : is-discrete ⌞ A × A ⌟
   _ = auto
 
-  _ : is-bishop-finite (A →̇ A →̇ A)
+  _ : is-bishop-finite ⌞ A ⇒ A ⇒ A ⌟
   _ = auto
 
   _ : Omniscient₁ Π[ B ]
   _ = autoω
 
-  _ : Exhaustible (A ×̇ A)
+  _ : Exhaustible ⌞ A × A ⌟
   _ = autoω
 
   _ : {x y : ⌞ A ⌟} → is-bishop-finite (x ＝ y)

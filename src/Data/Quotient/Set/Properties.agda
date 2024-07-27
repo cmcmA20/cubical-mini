@@ -1,8 +1,6 @@
 {-# OPTIONS --safe #-}
 module Data.Quotient.Set.Properties where
 
-open import Foundations.Notation.Equivalence -- FIXME
-
 open import Meta.Prelude
 open import Meta.Effect.Map
 open import Meta.Extensionality
@@ -55,7 +53,7 @@ module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
     ext (_∙ r , _∙ r ⁻¹)
 
   encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
-  encode x _ p = subst ⌞ Code x ⌟ p refl
+  encode x _ p = subst (λ y → ⌞ Code x y ⌟) p refl
 
   decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
   decode = elim! ∘ glue/

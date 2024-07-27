@@ -18,7 +18,7 @@ private variable
 record Supported {ℓ} (X : 𝒰 ℓ) : 𝒰 (ℓᵃ ⊔ ℓ) where
   no-eta-equality
   field
-    support : X → A →̇ Bool
+    support : X ⇒ ⌞ A ⌟ ⇒ Bool
     support-is-finite : Π[ x ꞉ X ] is-bishop-finite (Σ[ a ꞉ A ] is-true (support x a))
 
 open Supported

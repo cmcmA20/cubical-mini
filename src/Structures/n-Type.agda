@@ -45,40 +45,40 @@ private variable
 instance
   Underlying-n-Type : Underlying (n-Type ℓ n)
   Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
-  Underlying-n-Type .⌞_⌟⁰ = carrier
+  Underlying-n-Type .⌞_⌟ = carrier
 
   ×-n-Type : ×-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
   ×-n-Type ._×_ (el A p) (el B q) = el (A × B) (×-is-of-hlevel _ p q)
 
   ⇒-n-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
            → ⇒-notation A (n-Type ℓ′ n) (n-Type (u .ℓ-underlying ⊔ ℓ′) n)
-  ⇒-n-Type ._⇒_ A (el B q) = el (⌞ A ⌟⁰ → B) (fun-is-of-hlevel _ q)
+  ⇒-n-Type ._⇒_ A (el B q) = el (⌞ A ⌟ → B) (fun-is-of-hlevel _ q)
 
   ⊎-n-Type : ⦃ 2 ≤ʰ n ⦄ → ⊎-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
   ⊎-n-Type ⦃ s≤ʰs (s≤ʰs _) ⦄ ._⊎_ (el A p) (el B q) = el (A ⊎ B) (⊎-is-of-hlevel _ p q)
 
   ⊎₁-n-Type : {A : Type ℓ} {B : Type ℓ′} ⦃ u : Underlying A ⦄ ⦃ v : Underlying B ⦄
               ⦃ z : 1 ≤ʰ k ⦄ → ⊎₁-notation A B (n-Type (u .ℓ-underlying ⊔ v .ℓ-underlying) k)
-  ⊎₁-n-Type ⦃ z = s≤ʰs _ ⦄ ._⊎₁_ A B = el (⌞ A ⌟⁰ ⊎₁ ⌞ B ⌟⁰) (is-prop→is-of-hlevel-suc squash₁)
+  ⊎₁-n-Type ⦃ z = s≤ʰs _ ⦄ ._⊎₁_ A B = el (⌞ A ⌟ ⊎₁ ⌞ B ⌟) (is-prop→is-of-hlevel-suc squash₁)
 
   ¬-n-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
              ⦃ z : 1 ≤ʰ n ⦄ → ¬-notation A (n-Type (u .ℓ-underlying) n)
-  ¬-n-Type ⦃ z = s≤ʰs _ ⦄ .¬_ A = el (¬ ⌞ A ⌟⁰) (fun-is-of-hlevel _ (hlevel _))
+  ¬-n-Type ⦃ z = s≤ʰs _ ⦄ .¬_ A = el (¬ ⌞ A ⌟) (fun-is-of-hlevel _ (hlevel _))
 
   Π-n-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
            → Π-notation A (n-Type ℓ′ n) (n-Type (u .ℓ-underlying ⊔ ℓ′) n)
-  Π-n-Type .Π-notation.Π A F = el (Π[ a ꞉ ⌞ A ⌟⁰ ] ⌞ F a ⌟⁰) (Π-is-of-hlevel _ λ x → F x .carrier-is-tr)
+  Π-n-Type .Π-notation.Π A F = el (Π[ a ꞉ ⌞ A ⌟ ] ⌞ F a ⌟) (Π-is-of-hlevel _ λ x → F x .carrier-is-tr)
 
   ∀-n-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
            → ∀-notation A (n-Type ℓ′ n) (n-Type (u .ℓ-underlying ⊔ ℓ′) n)
-  ∀-n-Type .∀-notation.∀′ A F = el (∀[ a ꞉ ⌞ A ⌟⁰ ] ⌞ F a ⌟⁰) (∀-is-of-hlevel _ λ x → F x .carrier-is-tr)
+  ∀-n-Type .∀-notation.∀′ A F = el (∀[ a ꞉ ⌞ A ⌟ ] ⌞ F a ⌟) (∀-is-of-hlevel _ λ x → F x .carrier-is-tr)
 
   Σ-n-Type : Σ-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
-  Σ-n-Type .Σ-notation.Σ A F = el (Σ[ a ꞉ ⌞ A ⌟⁰ ] ⌞ F a ⌟⁰) (Σ-is-of-hlevel _ (A .carrier-is-tr) (λ x → F x .carrier-is-tr))
+  Σ-n-Type .Σ-notation.Σ A F = el (Σ[ a ꞉ ⌞ A ⌟ ] ⌞ F a ⌟) (Σ-is-of-hlevel _ (A .carrier-is-tr) (λ x → F x .carrier-is-tr))
 
   ∃-n-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
              ⦃ z : 1 ≤ʰ k ⦄ → ∃-notation A (n-Type ℓ′ n) (n-Type (u .ℓ-underlying ⊔ ℓ′) k)
-  ∃-n-Type ⦃ z = s≤ʰs _ ⦄ .∃-notation.∃ A F = el (∃[ a ꞉ ⌞ A ⌟⁰ ] ⌞ F a ⌟⁰) (is-prop→is-of-hlevel-suc squash₁)
+  ∃-n-Type ⦃ z = s≤ʰs _ ⦄ .∃-notation.∃ A F = el (∃[ a ꞉ ⌞ A ⌟ ] ⌞ F a ⌟) (is-prop→is-of-hlevel-suc squash₁)
 
   ⊥-n-Type-small : ⦃ _ : 1 ≤ʰ n ⦄ → ⊥-notation (n-Type 0ℓ n)
   ⊥-n-Type-small ⦃ s≤ʰs _ ⦄ .⊥ = el ⊥ (hlevel _)
@@ -305,20 +305,20 @@ instance opaque
 
 -- Usage
 private
-  module _ {A : Set ℓ} {B : A →̇ n-Type ℓ′ 3} where
-    _ : is-set (A →̇ A)
+  module _ {A : Set ℓ} {B : ⌞ A ⌟ → n-Type ℓ′ 3} where
+    _ : is-set ⌞ A ⇒ A ⌟
     _ = hlevel!
 
-    _ : is-of-hlevel 2 (A →̇ A →̇ A →̇ A)
+    _ : is-of-hlevel 2 ⌞ A ⇒ A ⇒ A ⇒ A ⌟
     _ = hlevel!
 
-    _ : is-of-hlevel 3 Σ[ B ]
+    _ : is-of-hlevel 3 Σ[ B × B ]
     _ = hlevel!
 
-    _ : ∀ a → is-of-hlevel 5 (A ×̇ A ×̇ (ℕ →̇ B a))
+    _ : ∀ a → is-of-hlevel 5 (⌞ A ⌟ × ⌞ A ⌟ × ⌞ ℕ ⇒ B a ⌟)
     _ = hlevel!
 
-    _ : ∀ a → is-of-hlevel 3 (A ×̇ A ×̇ (ℕ →̇ B a))
+    _ : ∀ a → is-of-hlevel 3 (⌞ A × A ⌟ × ⌞ ℕ ⇒ B a ⌟)
     _ = hlevel!
 
     _ : (w z : Term) (x : ℕ) (r : ⌞ A ⌟) → is-of-hlevel 2 ⌞ A ⌟

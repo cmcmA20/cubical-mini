@@ -35,7 +35,7 @@ Disc₂ A = Disc! ⌞ A ⌟
 
 lift-disc₂
   : {A : Set ℓ} {B : Set ℓ′}
-  → A →̇ B
+  → ⌞ A ⇒ B ⌟
   → Functor (Disc₂ A) (Disc₂ B)
 lift-disc₂ f .F₀   = f
 lift-disc₂ f .F₁   = ap f

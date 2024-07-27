@@ -62,6 +62,8 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     Trans-Hom : Transitive Hom
     Trans-Hom ._∙_ f g = g ∘ f
 
+    ⇒-Hom : ⇒-notation Ob Ob (𝒰 h)
+    ⇒-Hom ._⇒_ = Hom
 
 private variable
   o h ℓ o′ h′ ℓ′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
@@ -73,7 +75,7 @@ open Precategory
 instance
   Underlying-precat : Underlying (Precategory o h)
   Underlying-precat {o} .Underlying.ℓ-underlying = o
-  Underlying-precat .Underlying.⌞_⌟⁰ = Ob
+  Underlying-precat .Underlying.⌞_⌟ = Ob
 
   open Struct-proj-desc
 
@@ -101,7 +103,7 @@ precat-double-dual = refl
 
 Sets : (o : Level) → Precategory (ℓsuc o) o
 Sets o .Ob = Set o
-Sets _ .Hom A B = A →̇ B
+Sets _ .Hom A B = ⌞ A ⇒ B ⌟
 Sets _ .Hom-set _ = hlevel!
 Sets _ .id x = x
 Sets _ ._∘_ f g x = f (g x)

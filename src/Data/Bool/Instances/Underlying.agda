@@ -8,4 +8,4 @@ open import Data.Bool.Base
 instance
   Underlying-Bool : Underlying Bool
   Underlying-Bool .Underlying.ℓ-underlying = 0ℓ
-  Underlying-Bool .Underlying.⌞_⌟⁰ = is-true
+  Underlying-Bool .Underlying.⌞_⌟ = is-true

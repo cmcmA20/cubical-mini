@@ -7,11 +7,11 @@ open import Foundations.Prim.Type
 record Underlying {ℓ} (T : Type ℓ) : Typeω where
   field
     ℓ-underlying : Level
-    ⌞_⌟⁰         : T → Type ℓ-underlying
+    ⌞_⌟         : T → Type ℓ-underlying
 
 open Underlying ⦃ ... ⦄ public
 
-{-# DISPLAY Underlying.⌞_⌟⁰ f x = ⌞ x ⌟⁰ #-}
+{-# DISPLAY Underlying.⌞_⌟ f x = ⌞ x ⌟ #-}
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -22,11 +22,11 @@ private variable
 instance
   Underlying-Type : Underlying (Type ℓ)
   Underlying-Type {ℓ} .ℓ-underlying = ℓ
-  Underlying-Type .⌞_⌟⁰ x = x
+  Underlying-Type .⌞_⌟ x = x
 
   Underlying-Lift : ⦃ ua : Underlying A ⦄ → Underlying (Lift ℓ′ A)
   Underlying-Lift ⦃ ua ⦄ .ℓ-underlying = ua .ℓ-underlying
-  Underlying-Lift .⌞_⌟⁰ x = ⌞ x .lower ⌟⁰
+  Underlying-Lift .⌞_⌟ x = ⌞ x .lower ⌟
 
 
 data Modality′ : Type where
@@ -96,4 +96,4 @@ _ʻ_
   → ⦃ _ : Funlike ur F A B ⦄
   → F → (x : A) → ⦃ _ : Underlying (B x) ⦄
   → Type _
-F ʻ x = ⌞ F $ x ⌟⁰
+F ʻ x = ⌞ F $ x ⌟
