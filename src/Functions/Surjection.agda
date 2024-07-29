@@ -68,6 +68,9 @@ is-left-inverse-of→is-surjective {g} s b = ∣ g b , s b ∣₁
 is-equiv→is-surjective : is-equiv f → is-surjective f
 is-equiv→is-surjective r y = ∣ equiv-proof r y .fst ∣₁
 
+≃→↠ : A ≃ B → A ↠ B
+≃→↠ = second is-equiv→is-surjective
+
 is-surjective-comp+is-surjective-inner→is-surjective-outer
   : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {f : A → B} {g : B → C}
   → is-surjective (g ∘ f) → is-surjective f → is-surjective g
