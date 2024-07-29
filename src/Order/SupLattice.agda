@@ -1,3 +1,4 @@
+{-# OPTIONS --safe #-}
 module Order.SupLattice where
 
 open import Categories.Prelude

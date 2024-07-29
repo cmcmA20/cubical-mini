@@ -1,3 +1,4 @@
+{-# OPTIONS --safe #-}
 open import Algebra.Semigroup
 open import Algebra.Magma
 

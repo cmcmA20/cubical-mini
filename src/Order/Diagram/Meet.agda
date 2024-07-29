@@ -1,3 +1,4 @@
+{-# OPTIONS --safe #-}
 -- open import Cat.Diagram.Product
 open import Categories.Prelude
 

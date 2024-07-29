@@ -1,3 +1,4 @@
+{-# OPTIONS --safe #-}
 module Order.Diagram.Glb where
 
 open import Categories.Diagram.Terminal

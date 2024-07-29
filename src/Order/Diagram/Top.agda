@@ -1,3 +1,4 @@
+{-# OPTIONS --safe #-}
 open import Categories.Diagram.Terminal
 open import Categories.Prelude
 
