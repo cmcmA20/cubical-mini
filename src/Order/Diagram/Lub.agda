@@ -52,7 +52,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
   instance
     H-Level-Lub
       : ∀ {ℓᵢ} {I : Type ℓᵢ} {F : I → Ob} {n}
-      → H-Level (suc n) (Lub P F) 
+      → H-Level (suc n) (Lub P F)
     H-Level-Lub = hlevel-basic-instance 1 Lub-is-prop
 
   lift-is-lub

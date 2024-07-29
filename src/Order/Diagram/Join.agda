@@ -72,7 +72,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
   instance
     H-Level-Join
       : ∀ {a b} {n}
-      → H-Level (suc n) (Join P a b) 
+      → H-Level (suc n) (Join P a b)
     H-Level-Join = hlevel-basic-instance 1 Join-is-prop
 
   Join→Lub : ∀ {a b} → Join P a b → Lub P (if_then a else b)

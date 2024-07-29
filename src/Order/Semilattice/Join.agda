@@ -7,7 +7,7 @@ open import Data.Fin.Indexed
 open import Data.Fin.Finite
 open import Data.Fin.Base hiding (_≤_)
 
---open import Order.Diagram.Lub 
+--open import Order.Diagram.Lub
 
 -}
 

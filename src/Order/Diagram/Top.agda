@@ -50,7 +50,7 @@ Top-is-prop p q i .Top.has-top =
 instance
   H-Level-Top
     : ∀ {n}
-    → H-Level (suc n) Top 
+    → H-Level (suc n) Top
   H-Level-Top = hlevel-basic-instance 1 Top-is-prop
 
 Top→Glb : ∀ {f : ⊥ → _} → Top → Glb P f

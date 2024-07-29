@@ -51,7 +51,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
   instance
     H-Level-Glb
       : ∀ {ℓᵢ} {I : Type ℓᵢ} {F : I → Ob} {n}
-      → H-Level (suc n) (Glb P F) 
+      → H-Level (suc n) (Glb P F)
     H-Level-Glb = hlevel-basic-instance 1 Glb-is-prop
 
   lift-is-glb

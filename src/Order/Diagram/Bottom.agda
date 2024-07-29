@@ -51,7 +51,7 @@ Bottom-is-prop p q i .Bottom.has-bottom =
 instance
   H-Level-Bottom
     : ∀ {n}
-    → H-Level (suc n) Bottom 
+    → H-Level (suc n) Bottom
   H-Level-Bottom = hlevel-basic-instance 1 Bottom-is-prop
 
 Bottom→Lub : ∀ {f : ⊥ → _} → Bottom → Lub P f
