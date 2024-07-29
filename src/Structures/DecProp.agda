@@ -13,7 +13,7 @@ open import Logic.Decidability
 open import Logic.Discreteness
 
 open import Data.Bool.Base
-open import Data.Dec
+open import Data.Dec as Dec
 open import Data.Empty.Base
 open import Data.Reflection.Argument
 open import Data.Reflection.Literal
@@ -25,7 +25,7 @@ record DecProp (ℓ : Level) : Type (ℓsuc ℓ) where
   constructor el
   field
     carrier         : Type ℓ
-    carrier-is-dec  : Dec carrier
+    carrier-is-dec  : Decidable carrier
     carrier-is-prop : is-prop carrier
 
 open DecProp
@@ -62,6 +62,12 @@ instance
   ¬-DecProp : ¬-notation (DecProp ℓ) (DecProp ℓ)
   ¬-DecProp .¬_ (el A da p) = el (¬ A) (Dec-¬ ⦃ da ⦄) (hlevel 1)
 
+  Σ-DecProp : Σ-notation (DecProp ℓ) (DecProp ℓ′) (DecProp (ℓ ⊔ ℓ′))
+  Σ-DecProp .Σ-notation.Σ (el A da p) F =
+    el (Σ[ a ꞉ A ] ⌞ F a ⌟)
+       (Dec-prop-Σ p da (λ {x} → F x .carrier-is-dec))
+       (Σ-is-of-hlevel 1 p (λ x → F x .carrier-is-prop))
+
   ⊥-DecProp-small : ⊥-notation (DecProp 0ℓ)
   ⊥-DecProp-small .⊥ = el ⊥ auto (hlevel 1)
   {-# OVERLAPPING ⊥-DecProp-small #-}
@@ -96,5 +102,5 @@ dec-prop≃ᴱbool .snd = is-isoᴱ→is-equivᴱ go where
   go .fst true  = ⊤-DecProp .⊤
   go .snd .fst .erased false = refl
   go .snd .fst .erased true  = refl
-  go .snd .snd .erased (el A (no ¬a) _) = ext ((λ ()) , (λ a → lift (¬a a)))
+  go .snd .snd .erased (el A (no ¬a) _) = ext ((λ ())    , lift ∘ ¬a)
   go .snd .snd .erased (el A (yes a) _) = ext ((λ _ → a) , λ _ → lift tt)

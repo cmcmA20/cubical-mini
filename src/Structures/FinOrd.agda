@@ -103,7 +103,7 @@ module _ {ℓᵃ ℓᵇ : Level} {A : FinOrd ℓᵃ} {B : ⌞ A ⌟ ⇒ FinOrd �
   _ : Omniscient Π[ B ]
   _ = autoω
 
-  _ : Omniscient₁ (⌞ A ⌟ × Π[ B ])
+  _ : Omniscient₁ ⌞ A × (Π[ a ꞉ A ] B a) ⌟
   _ = autoω
 
   _ : Exhaustible ⌞ A × A ⌟

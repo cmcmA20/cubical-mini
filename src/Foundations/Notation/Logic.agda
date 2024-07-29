@@ -30,6 +30,21 @@ infixr 6 Π-syntax
 syntax Π-syntax X (λ x → F) = Π[ x ꞉ X ] F
 
 
+record Πᴱ-notation {ℓᵃ ℓᵇ ℓ}
+  (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+  field Πᴱ : (X : A) (F : @0 ⌞ X ⌟ → B) → R
+
+infixr 6 Πᴱ-syntax
+Πᴱ-syntax
+  : {A : Type ℓ} ⦃ u : Underlying A ⦄
+    {B : Type ℓ′} {R : Type ℓ″}
+    ⦃ p : Πᴱ-notation A B R ⦄
+    (X : A) (F : @0 ⌞ X ⌟ → B)
+  → R
+Πᴱ-syntax ⦃ p ⦄ = p .Πᴱ-notation.Πᴱ
+syntax Πᴱ-syntax X (λ x → F) = Πᴱ[ x ꞉ X ] F
+
+
 record ∀-notation {ℓᵃ ℓᵇ ℓ}
   (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
   field ∀′ : (X : A) (F : ⌞ X ⌟ → B) → R
@@ -45,6 +60,21 @@ infixr 6 ∀-syntax
 syntax ∀-syntax X (λ x → F) = ∀[ x ꞉ X ] F
 
 
+record ∀ᴱ-notation {ℓᵃ ℓᵇ ℓ}
+  (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+  field ∀ᴱ′ : (X : A) (F : @0 ⌞ X ⌟ → B) → R
+
+infixr 6 ∀ᴱ-syntax
+∀ᴱ-syntax
+  : {A : Type ℓ} ⦃ u : Underlying A ⦄
+    {B : Type ℓ′} {R : Type ℓ″}
+    ⦃ p : ∀ᴱ-notation A B R ⦄
+    (X : A) (F : @0 ⌞ X ⌟ → B)
+  → R
+∀ᴱ-syntax ⦃ p ⦄ = p .∀ᴱ-notation.∀ᴱ′
+syntax ∀ᴱ-syntax X (λ x → F) = ∀ᴱ[ x ꞉ X ] F
+
+
 record Σ-notation {ℓᵃ ℓᵇ ℓ}
   (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
   field Σ : (X : A) (F : ⌞ X ⌟ → B) → R
@@ -53,7 +83,7 @@ infixr 6 Σ-syntax
 Σ-syntax
   : {A : Type ℓ} ⦃ u : Underlying A ⦄
     {B : Type ℓ′} {R : Type ℓ″}
-    ⦃ p : Σ-notation A B R ⦄
+    ⦃ p : Σ-notation ⌞ A ⌟ B R ⦄
     (X : A) (F : ⌞ X ⌟ → B)
   → R
 Σ-syntax ⦃ p ⦄ = p .Σ-notation.Σ

@@ -242,7 +242,7 @@ opaque
   Reflects.dmap s<s (_∘ <-peel) $ <-reflects m n
 
 <-dec : Decidable _<_
-<-dec = reflects→decidable {2} {P = _<_} <-reflects
+<-dec = _ because (<-reflects _ _)
 
 ≤-reflects : Reflects _≤_ _≤ᵇ_
 ≤-reflects 0       _       = ofʸ z≤
@@ -251,7 +251,7 @@ opaque
   Reflects.dmap s≤s (_∘ ≤-peel) $ ≤-reflects m n
 
 ≤-dec : Decidable _≤_
-≤-dec = reflects→decidable {2} {P = _≤_} ≤-reflects
+≤-dec = _ because (≤-reflects _ _)
 
 -- TODO use trichotomy
 ≤-split : Π[ _<_ ⊎ _>_ ⊎ _＝_ ]

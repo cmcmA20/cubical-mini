@@ -40,8 +40,7 @@ all-head (u ∷ _) = u
 all-tail : All P (x ∷ xs) → All P xs
 all-tail (_ ∷ us) = us
 
--- FIXME `Decidable` macro dies here, why?
-all? : Decidable P → Decidableⁿ {1} (λ (xs : Vec A n) → All P xs)
+all? : Decidable P → Decidable (λ (xs : Vec A n) → All P xs)
 all? P? {([])}   = yes []
 all? P? {x ∷ xs} =
   Dec.dmap (λ { (px , ps) → px ∷ ps })

@@ -371,7 +371,6 @@ make-rec-n n = make-elim-with (default-rec into n)
 
 -- Examples
 -- be careful, they consume about ~10GB of memory
--- TODO remove the warning after the fix
 -- module _ where private
   -- open import Data.Bool.Base
   -- unquoteDecl Bool-elim = make-elim Bool-elim (quote Bool)

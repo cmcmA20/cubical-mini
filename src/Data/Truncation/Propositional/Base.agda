@@ -31,8 +31,10 @@ elim P-prop incc (squash₁ x y i) =
 ∃ A B = ∥ Σ[ B ] ∥₁
 
 instance
-  ∃-Type : ∃-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
-  ∃-Type .∃-notation.∃ = ∃
+  ∃-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → ∃-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
+  ∃-Type .∃-notation.∃ X = ∃ ⌞ X ⌟
 
 Existential₁ⁿ : Variadic-binding¹
 Existential₁ⁿ = ∥_∥₁ ∘ Existentialⁿ

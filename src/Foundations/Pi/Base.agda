@@ -14,27 +14,25 @@ private variable
   ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᶜ : Level
 
 instance
-  Π-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
-         → Π-notation A (Type ℓ′) (Type (u .ℓ-underlying ⊔ ℓ′))
+  Π-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → Π-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
   Π-Type .Π-notation.Π A B = (x : ⌞ A ⌟) → B x
 
-  ∀-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
-         → ∀-notation A (Type ℓ′) (Type (u .ℓ-underlying ⊔ ℓ′))
+  Πᴱ-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → Πᴱ-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
+  Πᴱ-Type .Πᴱ-notation.Πᴱ A B = (@0 x : ⌞ A ⌟) → B x
+
+  ∀-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → ∀-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
   ∀-Type .∀-notation.∀′ A B = {x : ⌞ A ⌟} → B x
 
-infixr 6 Πᴱ-syntax
-Πᴱ-syntax
-  : {A : Type ℓ} ⦃ _ : Underlying A ⦄ (X : A) (F : @0 ⌞ X ⌟ → Type ℓ′)
-  → Type _
-Πᴱ-syntax X F = (@0 x : ⌞ X ⌟) → F x
-syntax Πᴱ-syntax X (λ x → F) = Πᴱ[ x ꞉ X ] F
-
-infixr 6 ∀ᴱ-syntax
-∀ᴱ-syntax
-  : {A : Type ℓ} ⦃ _ : Underlying A ⦄ (X : A) (F : @0 ⌞ X ⌟ → Type ℓ′)
-  → Type _
-∀ᴱ-syntax X F = {@0 x : ⌞ X ⌟} → F x
-syntax ∀ᴱ-syntax X (λ x → F) = ∀ᴱ[ x ꞉ X ] F
+  ∀ᴱ-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → ∀ᴱ-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
+  ∀ᴱ-Type .∀ᴱ-notation.∀ᴱ′ A B = {@0 x : ⌞ A ⌟} → B x
 
 
 -- non-dependent stuff

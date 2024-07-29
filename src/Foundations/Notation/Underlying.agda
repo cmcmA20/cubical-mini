@@ -7,7 +7,7 @@ open import Foundations.Prim.Type
 record Underlying {ℓ} (T : Type ℓ) : Typeω where
   field
     ℓ-underlying : Level
-    ⌞_⌟         : T → Type ℓ-underlying
+    ⌞_⌟          : T → Type ℓ-underlying
 
 open Underlying ⦃ ... ⦄ public
 

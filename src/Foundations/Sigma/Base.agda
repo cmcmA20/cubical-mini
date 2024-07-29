@@ -19,8 +19,9 @@ _×ₜ_ : (A : Type ℓ) (B : Type ℓ′) → Type (ℓ ⊔ ℓ′)
 A ×ₜ B = Σ A λ _ → B
 
 instance
-  Σ-Type : {A : Type ℓ} ⦃ u : Underlying A ⦄
-         → Σ-notation A (𝒰 ℓ′) (𝒰 (u .ℓ-underlying ⊔ ℓ′))
+  Σ-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → Σ-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
   Σ-Type .Σ-notation.Σ X = Σ ⌞ X ⌟
 
   ×-Type : ×-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))

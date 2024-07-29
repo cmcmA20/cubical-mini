@@ -76,21 +76,21 @@ instance
   ⇒-FinSet ._⇒_ _ _ .has-bishop-finite = auto
 
   Π-FinSet : Π-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
-  Π-FinSet .Π-notation.Π A F .carrier = Π[ a ꞉ A ] ⌞ F a ⌟
+  Π-FinSet .Π-notation.Π A F .carrier = Π[ a ꞉ ⌞ A ⌟ ] ⌞ F a ⌟
   Π-FinSet .Π-notation.Π _ _ .has-bishop-finite = auto
 
   ∀-FinSet : ∀-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
-  ∀-FinSet .∀-notation.∀′ A F .carrier = ∀[ a ꞉ A ] ⌞ F a ⌟
+  ∀-FinSet .∀-notation.∀′ A F .carrier = ∀[ a ꞉ ⌞ A ⌟ ] ⌞ F a ⌟
   ∀-FinSet .∀-notation.∀′ X F .has-bishop-finite = ≃→is-bishop-finite (Π≃∀ ⁻¹)
     (Π-is-bishop-finite ⦃ X .has-bishop-finite ⦄ ⦃ λ {x} → F x .has-bishop-finite ⦄ )
 
   Σ-FinSet : Σ-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
-  Σ-FinSet .Σ-notation.Σ A F .carrier = Σ[ a ꞉ A ] ⌞ F a ⌟
+  Σ-FinSet .Σ-notation.Σ A F .carrier = Σ[ a ꞉ ⌞ A ⌟ ] ⌞ F a ⌟
   Σ-FinSet .Σ-notation.Σ _ _ .has-bishop-finite = auto
 
 
 @0 FinSet-is-groupoid : is-groupoid (FinSet ℓ)
-FinSet-is-groupoid = ≃→is-of-hlevel 3 go (λ _ _ → hlevel!) where
+FinSet-is-groupoid = ≃→is-of-hlevel! 3 go where
   go = FinSet _
          ~⟨ ≅→≃ fin-set-iso ⟩
        Σ[ X ꞉ Type _ ] is-bishop-finite X
@@ -154,10 +154,10 @@ module _ {ℓᵃ ℓᵇ : Level} {A : FinSet ℓᵃ} {B : ⌞ A ⌟ ⇒ FinSet �
   _ : is-discrete ⌞ A × A ⌟
   _ = auto
 
-  _ : is-bishop-finite ⌞ A ⇒ A ⇒ A ⌟
+  _ : is-bishop-finite (⌞ A ⌟ ⇒ ⌞ A ⇒ A ⌟)
   _ = auto
 
-  _ : Omniscient₁ Π[ B ]
+  _ : Omniscient₁ ⌞ Π[ B ] ⌟
   _ = autoω
 
   _ : Exhaustible ⌞ A × A ⌟
