@@ -42,7 +42,7 @@ is-complemented→is-decidable-subset A (A⁻¹ , int , uni) {x} = case uni _ of
 
 is-decidable-subset→is-complemented : (A : ℙ X) → Decidable A → is-complemented A
 is-decidable-subset→is-complemented {X} A d
-  = (λ x → el! (¬ (x ∈ A)))
+  = (λ x → el! (¬ x ∈ A))
   , (λ z → lift (z .snd (z .fst)))
   , Dec.rec (λ x∈A _ → ∣ inl x∈A ∣₁) (λ x∈A⁻¹ _ → ∣ inr x∈A⁻¹ ∣₁) d
 

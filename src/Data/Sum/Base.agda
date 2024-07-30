@@ -19,6 +19,14 @@ instance
   ⊎-Type : ⊎-notation (Type a) (Type b) (Type (a ⊔ b))
   ⊎-Type ._⊎_ = _⊎ₜ_
 
+  Union-pow
+    : {A : Type a} {B : Type b} ⦃ ua : Underlying A ⦄ ⦃ ub : Underlying B ⦄
+      {P : Type c} {X : Type d}
+      ⦃ _ : ⊎-notation (Type (ua .ℓ-underlying)) (Type (ub .ℓ-underlying)) P ⦄
+    → Union (X → A) (X → B) (X → P)
+  Union-pow ._∪_ S T x = ⌞ S x ⌟ ⊎ ⌞ T x ⌟
+  {-# OVERLAPPABLE Union-pow #-}
+
 [_,_]ᵤ : (A → C) → (B → C) → (A ⊎ B) → C
 [ f , _ ]ᵤ (inl x) = f x
 [ _ , g ]ᵤ (inr x) = g x
