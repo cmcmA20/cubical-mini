@@ -77,6 +77,9 @@ instance
 𝕋 : ℙ X ℓ → 𝒰 (level-of-type X ⊔ ℓ)
 𝕋 {X} A = Σ[ x ꞉ X ] x ∈ A
 
+𝕋→carrier : (A : ℙ X ℓ) → 𝕋 A → X
+𝕋→carrier A = fst
+
 ℙ→fam : {X : Type ℓˣ} {Y : Type ℓ′}
       → (X → Y) → ℙ X ℓ → Σ[ I ꞉ 𝒰 (ℓ ⊔ level-of-type X) ] (I → Y)
 ℙ→fam m S = 𝕋 S , m ∘ fst

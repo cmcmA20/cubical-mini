@@ -65,22 +65,24 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
               → 𝓘 ϕ b
     𝓘-trunc : (b : B) → is-prop (𝓘 ϕ b)
 
-  𝓘nd : ℙ (B × Ob) (o ⊔ ℓ′) → ℙ B (o ⊔ ℓsuc ℓ′)
-  𝓘nd ϕ b = el (𝓘 ϕ b) (𝓘-trunc b)
+  module trunc-ind-def (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) where
 
-  𝓘nd-is-c-closed : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) → c-closure (𝓘nd ϕ)
-  𝓘nd-is-c-closed ϕ = c-closed
+    𝓘nd : ℙ B (o ⊔ ℓsuc ℓ′)
+    𝓘nd b = el (𝓘 ϕ b) (𝓘-trunc b)
 
-  𝓘nd-is-ϕ-closed : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) → (ϕ closure) (𝓘nd ϕ)
-  𝓘nd-is-ϕ-closed ϕ = ϕ-closed
+    𝓘nd-is-c-closed : c-closure 𝓘nd
+    𝓘nd-is-c-closed = c-closed
 
-  𝓘nd-is-initial : {ℓ″ : Level} (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) (P : ℙ B ℓ″)
-                 → c-closure P
-                 → (ϕ closure) P
-                 → 𝓘nd ϕ ⊆ P
-  𝓘nd-is-initial ϕ P cc ϕc (c-closed U sub b le) = cc U (λ ua → 𝓘nd-is-initial ϕ P cc ϕc (sub ua)) b le
-  𝓘nd-is-initial ϕ P cc ϕc (ϕ-closed a b m f)    = ϕc a b m (λ b' le → 𝓘nd-is-initial ϕ P cc ϕc (f b' le))
-  𝓘nd-is-initial ϕ P cc ϕc (𝓘-trunc b x y i)     = hlevel 1 (𝓘nd-is-initial ϕ P cc ϕc x) (𝓘nd-is-initial ϕ P cc ϕc y) i
+    𝓘nd-is-ϕ-closed : (ϕ closure) 𝓘nd
+    𝓘nd-is-ϕ-closed = ϕ-closed
+
+    𝓘nd-is-initial : {ℓ″ : Level} (P : ℙ B ℓ″)
+                   → c-closure P
+                   → (ϕ closure) P
+                   → 𝓘nd ⊆ P
+    𝓘nd-is-initial P cc ϕc (c-closed U sub b le) = cc U (λ ua → 𝓘nd-is-initial P cc ϕc (sub ua)) b le
+    𝓘nd-is-initial P cc ϕc (ϕ-closed a b m f)    = ϕc a b m (λ b' le → 𝓘nd-is-initial P cc ϕc (f b' le))
+    𝓘nd-is-initial P cc ϕc (𝓘-trunc b x y i)     = hlevel 1 (𝓘nd-is-initial P cc ϕc x) (𝓘nd-is-initial P cc ϕc y) i
 
 module local-inductive-definitions
          {o ℓ ℓ′} {B : 𝒰 ℓ′}
@@ -286,3 +288,58 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
           (fun-ext λ b → n-ua (prop-extₑ ≤ᴮ-is-prop (hlevel 1)
                                  (cc P refl b)
                                  λ r → ≤→≤ᴮ (suprema (ℙ→fam β P .snd) .fam≤lub (b , r))))
+
+    module small-𝓘nd-from-exists where
+
+      open trunc-ind-def P L β h ϕ
+
+      module smallness-assumption (j : (b : B) → has-size ℓ′ (b ∈ 𝓘nd)) where
+
+        private
+
+          𝓘' : B → 𝒰 ℓ′
+          𝓘' b = resized (j b)
+
+          𝓘'≃𝓘nd : (b : B) → 𝓘' b ≃ b ∈ 𝓘nd
+          𝓘'≃𝓘nd b = resizing-cond (j b)
+
+          𝓘'→𝓘nd : (b : B) → 𝓘' b → b ∈ 𝓘nd
+          𝓘'→𝓘nd b = 𝓘'≃𝓘nd b $_
+
+          𝓘nd→𝓘' : (b : B) → b ∈ 𝓘nd → 𝓘' b
+          𝓘nd→𝓘' b = 𝓘'≃𝓘nd b ⁻¹ $_
+
+          𝓘'-is-prop : {b : B} → is-prop (𝓘' b)
+          𝓘'-is-prop {b} = ≃→is-of-hlevel 1 (𝓘'≃𝓘nd b) (𝓘-trunc b)
+
+          𝓘'-subset : ℙ B ℓ′
+          𝓘'-subset b = el (𝓘' b) 𝓘'-is-prop
+
+          𝓘'-is-c-closed : (U : ℙ B ℓ′) → U ⊆ 𝓘'-subset
+                         → (b : B) → b ≤ᴮ sup (ℙ→fam β U .snd)
+                         → b ∈ 𝓘'-subset
+          𝓘'-is-c-closed U C b le = 𝓘nd→𝓘' b (𝓘nd-is-c-closed U (λ {x} → 𝓘'→𝓘nd x ∘ C) b le)
+
+          𝓘'-is-ϕ-closed : (a : Ob) → (b : B)
+                         → (b , a) ∈ ϕ
+                         → ((b' : B) → b' ≤ᴮ a → b' ∈ 𝓘'-subset)
+                         → b ∈ 𝓘'-subset
+          𝓘'-is-ϕ-closed a b p f = 𝓘nd→𝓘' b (𝓘nd-is-ϕ-closed a b p (λ b' → 𝓘'→𝓘nd b' ∘ f b'))
+
+          total-space-𝓘-is-small : has-size ℓ′ (𝕋 𝓘nd)
+          total-space-𝓘-is-small = 𝕋 𝓘'-subset , Σ-ap-snd 𝓘'≃𝓘nd
+
+          e : 𝕋 𝓘'-subset ≃ 𝕋 𝓘nd
+          e = resizing-cond total-space-𝓘-is-small
+
+          sup-𝓘 : Ob
+          sup-𝓘 = sup {I = 𝕋 𝓘'-subset} (β ∘ 𝕋→carrier 𝓘nd ∘ (e $_))
+
+          sup-𝓘-is-lub : is-lub P (ℙ→fam β 𝓘nd .snd) sup-𝓘
+          sup-𝓘-is-lub = sup-of-small-fam-is-lub L (β ∘ 𝕋→carrier 𝓘nd) total-space-𝓘-is-small
+
+        sup-𝓘-is-fixed-point : Γ ϕ loc sup-𝓘 ＝ sup-𝓘
+        sup-𝓘-is-fixed-point =
+          ≤-antisym
+            (small-closed-subsets→def-points (𝓘'-subset , 𝓘'-is-c-closed , 𝓘'-is-ϕ-closed) .snd)
+            ?
