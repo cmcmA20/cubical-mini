@@ -17,6 +17,7 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
                                  where
 
   open Poset P
+  open is-lub
   open is-sup-lattice L
 
   ↓ᴮ : ⌞ P ⌟ → 𝒰 (ℓ ⊔ ℓ′)
@@ -38,11 +39,17 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     _≤ᴮ_ : (b : B) → (x : ⌞ P ⌟) → 𝒰 ℓ′
     b ≤ᴮ x = resized (≤-is-small x b)
 
-    ≤ᴮ-≃-≤ : {b : B} {x : ⌞ P ⌟} → b ≤ᴮ x ≃ β b ≤ x
-    ≤ᴮ-≃-≤ {b} {x} = ≤-is-small x b .snd
+    ≤ᴮ≃≤ : {b : B} {x : ⌞ P ⌟} → b ≤ᴮ x ≃ β b ≤ x
+    ≤ᴮ≃≤ {b} {x} = ≤-is-small x b .snd
+
+    ≤ᴮ→≤ : {b : B} {x : ⌞ P ⌟} → b ≤ᴮ x → β b ≤ x
+    ≤ᴮ→≤ = ≤ᴮ≃≤ $_
+
+    ≤→≤ᴮ : {b : B} {x : ⌞ P ⌟} → β b ≤ x → b ≤ᴮ x
+    ≤→≤ᴮ = ≤ᴮ≃≤ ⁻¹ $_
 
     ≤ᴮ-is-prop : {b : B} {x : ⌞ P ⌟} → is-prop (b ≤ᴮ x)
-    ≤ᴮ-is-prop {b} {x} = ≃→is-of-hlevel 1 ≤ᴮ-≃-≤ ≤-thin
+    ≤ᴮ-is-prop {b} {x} = ≃→is-of-hlevel 1 ≤ᴮ≃≤ ≤-thin
 
     small-↓ᴮ : ⌞ P ⌟ → 𝒰 ℓ′
     small-↓ᴮ x = Σ[ b ꞉ B ] b ≤ᴮ x
@@ -51,14 +58,14 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     small-↓ᴮ-inclusion = β ∘ fst
 
     small-↓ᴮ-≃-↓ᴮ : {x : ⌞ P ⌟} → small-↓ᴮ x ≃ ↓ᴮ x
-    small-↓ᴮ-≃-↓ᴮ {x} = Σ-ap-snd λ _ → ≤ᴮ-≃-≤
+    small-↓ᴮ-≃-↓ᴮ {x} = Σ-ap-snd λ _ → ≤ᴮ≃≤
 
     ↓ᴮ-is-small : {x : ⌞ P ⌟} → has-size ℓ′ (↓ᴮ x)
     ↓ᴮ-is-small {x} = small-↓ᴮ x , small-↓ᴮ-≃-↓ᴮ
 
     is-supᴮ' : {x : ⌞ P ⌟} → x ＝ sup (small-↓ᴮ-inclusion {x})
     is-supᴮ' {x} =
-      reindexing-along-equiv-＝-sup {P = P}
+      reindexing-along-equiv-=-sup {P = P}
         small-↓ᴮ-≃-↓ᴮ (↓ᴮ-inclusion x) x (sup small-↓ᴮ-inclusion)
         (↓-is-sup x) (suprema small-↓ᴮ-inclusion)
 
@@ -67,10 +74,10 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
                         (is-supᴮ' {x} ⁻¹)
                         (suprema small-↓ᴮ-inclusion)
 
-    is-upper-boundᴮ : {x : ⌞ P ⌟}
-                    → (s : small-↓ᴮ x) → small-↓ᴮ-inclusion s ≤ x
-    is-upper-boundᴮ = is-lub.fam≤lub is-supᴮ
+    is-ubᴮ : {x : ⌞ P ⌟}
+           → (s : small-↓ᴮ x) → small-↓ᴮ-inclusion s ≤ x
+    is-ubᴮ = fam≤lub is-supᴮ
 
-    is-least-upper-boundᴮ : {x : ⌞ P ⌟}
-                         → (u' : Ob) → ((s : small-↓ᴮ x) → small-↓ᴮ-inclusion s ≤ u') → x ≤ u'
-    is-least-upper-boundᴮ = is-lub.least is-supᴮ
+    is-lubᴮ : {x : ⌞ P ⌟}
+            → (u' : Ob) → ((s : small-↓ᴮ x) → small-↓ᴮ-inclusion s ≤ u') → x ≤ u'
+    is-lubᴮ = least is-supᴮ
