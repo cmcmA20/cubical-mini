@@ -12,8 +12,8 @@ import Order.Reasoning
 
 module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
                                    (P : Poset o ℓ)
-                                   (β : B → ⌞ P ⌟)
                                    (L : is-sup-lattice P ℓ′)
+                                   (β : B → ⌞ P ⌟)
                                  where
 
   open Poset P
