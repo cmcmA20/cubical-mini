@@ -35,6 +35,9 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     Trans-≤ : Transitive _≤_
     Trans-≤ ._∙_ = ≤-trans
 
+    ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
+    ⇒-Hom ._⇒_ = _≤_
+
   opaque
     ob-is-set : is-set Ob
     ob-is-set = identity-system→is-of-hlevel! 1
@@ -94,7 +97,10 @@ private variable
   P Q R : Poset o ℓ
 
 instance
-  Funlike-Monotone : Funlike ur (Monotone P Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
+  ⇒-Poset : ⇒-notation (Poset o ℓ) (Poset o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Poset ._⇒_ = Monotone
+
+  Funlike-Monotone : Funlike ur (P ⇒ Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
   Funlike-Monotone ._#_ = hom
 
   Refl-Monotone : Refl {A = Poset o ℓ} Monotone
@@ -124,7 +130,7 @@ instance
   Extensional-Monotone
     : ∀ {ℓr} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
     → ⦃ sa : Extensional (⌞ P ⌟ ⇒ ⌞ Q ⌟) ℓr ⦄
-    → Extensional (Monotone P Q) ℓr
+    → Extensional (P ⇒ Q) ℓr
   Extensional-Monotone ⦃ sa ⦄ = set-injective→extensional! monotone-pathᴾ sa
 
 

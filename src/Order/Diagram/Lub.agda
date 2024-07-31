@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --no-exact-split #-}
+{-# OPTIONS --safe #-}
 module Order.Diagram.Lub where
 
 open import Categories.Prelude
@@ -26,6 +26,7 @@ module _ {o ℓ} (P : Poset o ℓ) where
     open is-lub has-lub public
 
 unquoteDecl H-Level-is-lub = declare-record-hlevel 1 H-Level-is-lub (quote is-lub)
+unquoteDecl lub-iso = declare-record-iso lub-iso (quote Lub)
 
 module _ {o ℓ} {P : Poset o ℓ} where
   open Order.Reasoning P
@@ -42,18 +43,13 @@ module _ {o ℓ} {P : Poset o ℓ} where
   Lub-is-prop
     : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob}
     → is-prop (Lub P F)
-  Lub-is-prop p q i .Lub.lub =
-    lub-unique (Lub.has-lub p) (Lub.has-lub q) i
-  Lub-is-prop {F = F} p q i .Lub.has-lub =
-    is-prop→pathᴾ
-      (λ i → hlevel {A = is-lub _ _ (lub-unique (Lub.has-lub p) (Lub.has-lub q) i)} 1)
-      (Lub.has-lub p) (Lub.has-lub q) i
+  Lub-is-prop = ≅→is-of-hlevel 1 lub-iso λ x y → lub-unique (x .snd) (y .snd) ,ₚ prop!
 
   instance
     H-Level-Lub
-      : ∀ {ℓᵢ} {I : Type ℓᵢ} {F : I → Ob} {n}
-      → H-Level (suc n) (Lub P F)
-    H-Level-Lub = hlevel-basic-instance 1 Lub-is-prop
+      : ∀ {ℓᵢ} {I : Type ℓᵢ} {F : I → Ob} {n} ⦃ _ : 1 ≤ʰ n ⦄
+      → H-Level n (Lub P F)
+    H-Level-Lub ⦃ s≤ʰs _ ⦄ = hlevel-basic-instance 1 Lub-is-prop
 
   lift-is-lub
     : ∀ {ℓᵢ ℓᵢ'} {I : Type ℓᵢ} {F : I → Ob} {lub}
@@ -89,7 +85,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
       cover-preserves-is-lub l .fam≤lub x = l .fam≤lub (f x)
       cover-preserves-is-lub l .least   ub' le = l .least ub' λ i → ∥-∥₁.proj! do
         (i' , p) ← surj i
-        pure (≤-trans (≤-refl′ (ap F (sym p))) (le i'))
+        pure (=→≤ (ap F (sym p)) ∙ le i')
 
       cover-preserves-lub : Lub P F → Lub P (F ∘ₜ f)
       cover-preserves-lub l .Lub.lub = _
@@ -98,7 +94,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
       cover-reflects-is-lub : ∀ {lub} → is-lub P (F ∘ₜ f) lub → is-lub P F lub
       cover-reflects-is-lub l .fam≤lub x = ∥-∥₁.proj! do
         (y , p) ← surj x
-        pure (≤-trans (≤-refl′ (ap F (sym p))) (l .fam≤lub y))
+        pure (=→≤ (ap F (sym p)) ∙ l .fam≤lub y)
       cover-reflects-is-lub l .least ub' le = l .least ub' λ i → le (f i)
 
       cover-reflects-lub : Lub P (F ∘ₜ f) → Lub P F
@@ -108,22 +104,21 @@ module _ {o ℓ} {P : Poset o ℓ} where
   cast-is-lub
     : ∀ {ℓᵢ ℓᵢ'} {I : 𝒰 ℓᵢ} {I' : 𝒰 ℓᵢ'} {F : I → Ob} {G : I' → Ob} {lub}
     → (e : I ≃ I')
-    → (∀ i → F i ＝ G (Equiv.to e i))
+    → (∀ i → F i ＝ G (e $ i))
     → is-lub P F lub
     → is-lub P G lub
-  cast-is-lub {G = G} e p has-lub .fam≤lub i' =
-    ≤-trans
-      (≤-refl′ (sym (p (Equiv.from e i') ∙ ap G (Equiv.ε e i'))))
-      (has-lub .fam≤lub (Equiv.from e i'))
+  cast-is-lub {G} e p has-lub .fam≤lub i'
+    = =→≤ (sym (p (e ⁻¹ $ i') ∙ ap G (Equiv.ε e i')))
+    ∙ has-lub .fam≤lub (e ⁻¹ $ i')
   cast-is-lub e p has-lub .least ub G≤ub =
-    has-lub .least ub (λ i → ≤-trans (≤-refl′ (p i)) (G≤ub (Equiv.to e i)))
+    has-lub .least ub (λ i → =→≤ (p i) ∙ G≤ub (e $ i))
 
   cast-is-lubᶠ
     : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F G : I → Ob} {lub}
     → (∀ i → F i ＝ G i)
     → is-lub P F lub
     → is-lub P G lub
-  cast-is-lubᶠ {lub = lub} p has-lub = cast-is-lub (_ , id-is-equiv) p has-lub
+  cast-is-lubᶠ = cast-is-lub refl
 
   fam-bound→is-lub
     : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob}
@@ -140,31 +135,30 @@ module _ {o ℓ} {P : Poset o ℓ} where
   lub-of-const-fam {F = F} is-const x-lub i =
     ≤-antisym
       (fam≤lub x-lub i)
-      (least x-lub (F i) λ j → ≤-refl′ (sym (is-const i j)))
+      (least x-lub (F i) λ j → =→≤ (sym (is-const i j)))
 
   const-inhabited-fam→is-lub
     : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob} {x}
     → (∀ i → F i ＝ x)
     → ∥ I ∥₁
     → is-lub P F x
-  const-inhabited-fam→is-lub {I = I} {F = F} {x = x} is-const =
+  const-inhabited-fam→is-lub {I} {F} {x} is-const =
     rec! mk-is-lub where
       mk-is-lub : I → is-lub P F x
-      mk-is-lub i .is-lub.fam≤lub j = ≤-refl′ (is-const j)
+      mk-is-lub i .is-lub.fam≤lub j = =→≤ (is-const j)
       mk-is-lub i .is-lub.least y le =
-        x   =⟨ is-const i ⟨
-        F i ≤⟨ le i ⟩
-        y ∎
+        x    =⟨ is-const i ⟨
+        F i  ≤⟨ le i ⟩
+        y    ∎
 
   const-inhabited-fam→lub
     : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob}
     → (∀ i j → F i ＝ F j)
     → ∥ I ∥₁
     → Lub P F
-  const-inhabited-fam→lub {I = I} {F = F} is-const =
+  const-inhabited-fam→lub {I} {F} is-const =
     rec! mk-lub where
       mk-lub : I → Lub P F
       mk-lub i .Lub.lub = F i
       mk-lub i .Lub.has-lub =
         const-inhabited-fam→is-lub (λ j → is-const j i) ∣ i ∣₁
-

@@ -11,20 +11,24 @@ module _ {o h} (C : Precategory o h) where
   is-terminal ob = (x : Ob) → is-contr (x ⇒ ob)
 
   record Terminal : Type (o ⊔ h) where
+    no-eta-equality
+    constructor mk-terminal
     field
       top : Ob
-      has⊤ : is-terminal top
+      has-⊤ : is-terminal top
 
     ! : {x : Ob} → x ⇒ top
-    ! = centre $ has⊤ _
+    ! = centre $ has-⊤ _
 
     !-unique : {x : Ob} (h : x ⇒ top) → ! ＝ h
-    !-unique = paths $ has⊤ _
+    !-unique = paths $ has-⊤ _
 
     !-unique² : {x : Ob} (f g : x ⇒ top) → f ＝ g
-    !-unique² =  is-contr→is-prop (has⊤ _)
+    !-unique² =  is-contr→is-prop (has-⊤ _)
 
   open Terminal
+
+  unquoteDecl Terminal-Iso = declare-record-iso Terminal-Iso (quote Terminal)
 
   !-invertible : (t₁ t₂ : Terminal) → is-invertible (! t₁ {top t₂})
   !-invertible t₁ t₂ = make-invertible (! t₂) (!-unique² t₁ _ _) (!-unique² t₂ _ _)
@@ -34,23 +38,19 @@ module _ {o h} (C : Precategory o h) where
 
   opaque
     ⊤-contractible : is-category C → is-prop Terminal
-    ⊤-contractible cat x₁ x₂ i .top =
-      cat .to-path (⊤-unique x₁ x₂) i
+    ⊤-contractible cat = ≅→is-of-hlevel 1 Terminal-Iso $
+      λ u v → cat .to-path (⊤-unique (mk-terminal $ₜ² u) (mk-terminal $ₜ² v))
+      ,ₚ prop!
 
-    ⊤-contractible cat x₁ x₂ i .has⊤ ob =
-      is-prop→pathᴾ
-        (λ i → is-contr-is-prop {A = Hom _
-          (cat .to-path (⊤-unique x₁ x₂) i)})
-        (x₁ .has⊤ ob) (x₂ .has⊤ ob) i
-
-    is-terminal-iso : ∀ {A B} → A ≅ B → is-terminal A → is-terminal B
-    is-terminal-iso isom term x = isom .to ∘ centre (term x) , λ h →
-      isom .to ∘ centre (term x)     ~⟨ ap (isom .to ∘_) (paths (term x) _) ⟩
+    ≅→is-terminal : ∀ {A B} → A ≅ B → is-terminal A → is-terminal B
+    ≅→is-terminal isom term x = isom .to ∘ centre (term x) , λ h →
+      isom .to ∘ ⌜ centre (term x) ⌝ ~⟨ ap! (paths (term x) _) ⟩
       isom .to ∘ isom .from ∘ h      ~⟨ assoc _ _ _ ⟩
       ⌜ isom .to ∘ isom .from ⌝ ∘ h  ~⟨ ap! (isom .inv-l) ⟩
       id ∘ h                         ~⟨ id-l _ ⟩
       h                              ∎
 
+
 instance
-  ⊤-Terminal : ∀ {o ℓ} {C : Precategory o ℓ} ⦃ ter : Terminal C ⦄ → ⊤-notation (Precategory.Ob C)
+  ⊤-Terminal : ∀ {o ℓ} {C : Precategory o ℓ} ⦃ ter : Terminal C ⦄ → ⊤-notation ⌞ C ⌟
   ⊤-Terminal ⦃ ter ⦄ .⊤ = ter .Terminal.top
