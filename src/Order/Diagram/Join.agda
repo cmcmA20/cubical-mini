@@ -27,7 +27,7 @@ record Join (P : Poset o ℓ) (a b : ⌞ P ⌟) : 𝒰 (o ⊔ ℓ) where
   open is-join has-join public
 
 Has-joins : Poset o ℓ → Type (o ⊔ ℓ)
-Has-joins P = ∀ x y → Join P x y
+Has-joins P = ∀{x y} → Join P x y
 
 open is-join
 
