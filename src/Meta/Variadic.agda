@@ -1,32 +1,10 @@
-{-# OPTIONS --safe --no-exact-split #-}
--- -vtactic.variadic:20
+{-# OPTIONS --safe #-}
 module Meta.Variadic where
 
 open import Foundations.Base
 
-open import Meta.Effect.Idiom
-open import Meta.Effect.Map
-open import Meta.Reflection.Base
-open import Meta.Reflection.Subst
-
-open import Data.Bool.Base
-open import Data.Empty.Base
 open import Data.HVec.Base public
-open import Data.List.Base
-open import Data.List.Instances.FromProduct
-open import Data.List.Operations
 open import Data.Nat.Base
-open import Data.Reflection.Abs
-open import Data.Reflection.Argument
-open import Data.Reflection.Error
-open import Data.Reflection.Fixity
-open import Data.Reflection.Instances.FromString
-open import Data.Reflection.Literal
-open import Data.Reflection.Meta
-open import Data.Reflection.Name
-open import Data.Reflection.Term
-open import Data.Sum.Base
-open import Data.Unit.Base
 
 -- Correspondence valued in arbitrary structure
 SCorr
@@ -91,82 +69,3 @@ IUniversalⁿ = Quantⁿ ∀-syntax
 
 Existentialⁿ : Variadic-binding¹
 Existentialⁿ = Quantⁿ Σ-syntax
-
-
--- returns arity and codomain type
-get-arity+type : ℕ → Type′ → Term × Type′
-get-arity+type ninv = go 0 where
-  clean-var  : ℕ → Term → Term
-  clean-vars : ℕ → List (Arg Term) → List (Arg Term)
-
-  -- variable references would be invalid in current context
-  clean-var nbind (var v args) =
-    if v <ᵇ nbind
-       then var v (clean-vars nbind args)
-       else var (v ∸ nbind) (clean-vars nbind args)
-  clean-var nbind (con c args) = con c (clean-vars nbind args)
-  clean-var nbind (def f args) = def f (clean-vars nbind args)
-  clean-var nbind (lam v (abs s x)) = lam v (abs s (clean-var (suc nbind) x))
-  clean-var nbind (pi (arg v a) (abs s b)) =
-    pi (arg v (clean-var nbind a)) (abs s (clean-var (suc nbind) b))
-  clean-var nbind x = x
-
-  clean-vars nbind [] = []
-  clean-vars nbind (arg ai x ∷ xs) = arg ai (clean-var nbind x) ∷ clean-vars nbind xs
-
-  go : ℕ → Term → Term × Type′
-  go nbind (def (quote Arrows) (ar v∷ l h∷ ls h∷ sig v∷ R v∷ [])) =
-    first (plus-term ar) $ go nbind R
-  go nbind (pi (varg t) (abs _ x)) = first suc-term $ go (suc nbind) x
-  go nbind (pi _ (abs _ x)) = go (suc nbind) x
-  go nbind (agda-sort (lit l)) = lit (nat 0) , agda-sort (lit l)
-  go nbind (agda-sort (set r)) = lit (nat 0) , agda-sort (set (clean-var nbind r))
-  go nbind x                   = lit (nat 0) , clean-var nbind x
-
--- returns inferred arity and codomain type
-variadic-worker : Term → TC (Term × Term)
-variadic-worker t = do
-  ty ← (infer-type t >>= reduce) >>= wait-just-a-bit
-  debug-print "tactic.variadic" 20 [ "Given type: " , term-err ty ]
-  let ty , invs = strip-invisible ty
-      ninv = length invs
-  ctx-len ← length <$> get-context
-  debug-print "tactic.variadic" 20 [ "Ctx len: " , term-err (lit (nat ctx-len)) ]
-  let θ = drop (ctx-len ∸ ninv) $ count-from-to 0 ctx-len
-  debug-print "tactic.variadic" 20 [ "Stripped type: " , term-err ty ]
-  ty ← renameTC θ ty
-  let ar , r = get-arity+type ninv ty
-  debug-print "tactic.variadic" 20
-    [ "Invisible args prefix length: " , term-err (lit (nat ninv)) , "\n"
-    , "Stripped+substituted type: " , term-err ty , "\n"
-    , "Inferred arity: " , term-err ar , "\n"
-    , "Codomain: " , term-err r ]
-  unify ty $ def (quote Arrows)
-    [ varg ar , harg unknown , harg unknown , varg unknown , varg unknown ]
-  pure $ ar , r
-
--- returns underlying instance
-variadic-instance-worker : Term → TC Term
-variadic-instance-worker r = do
-  solved@(meta mv _) ← new-meta (def (quote Underlying) [ harg unknown , varg r ])
-    where _ → type-error [ "Could not get `Underlying` instances: " , term-err r ]
-  (und ∷ []) ← get-instances mv where
-    [] → type-error [ "No `Underlying `instances for ", term-err r ]
-    _  → type-error [ "Multiple `Underlying` instances for ", term-err r ]
-  unify solved und
-  pure und
-
-quantifier-macro : Name → Term → Term → TC ⊤
-quantifier-macro nam t hole = do
-  ar , r ← variadic-worker t
-  und ← variadic-instance-worker r
-  unify hole $ def nam $
-    [ harg ar , harg unknown , harg unknown
-    , harg unknown , harg unknown , iarg und
-    , varg t ]
-
-infixr 6 Π[_] ∀[_] Σ[_]
-macro
-  Π[_] = quantifier-macro (quote Universalⁿ)
-  ∀[_] = quantifier-macro (quote IUniversalⁿ)
-  Σ[_] = quantifier-macro (quote Existentialⁿ)

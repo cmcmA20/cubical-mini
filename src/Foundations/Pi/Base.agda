@@ -6,6 +6,7 @@ open import Foundations.Prim.Type
 
 open import Foundations.Notation.Logic
 open import Foundations.Notation.Reflexive
+open import Foundations.Notation.Total
 open import Foundations.Notation.Transitive
 open import Foundations.Notation.Underlying
 open import Foundations.Sigma.Base
@@ -34,6 +35,21 @@ instance
     → ∀ᴱ-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
   ∀ᴱ-Type .∀ᴱ-notation.∀ᴱ′ A B = {@0 x : ⌞ A ⌟} → B x
 
+  Total-Π-Variadic
+    : {A : Type ℓ} {X : Type ℓ′}
+      ⦃ tp : Total-Π A ⦄
+    → Total-Π (X → A)
+  Total-Π-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-Π = ℓ′ ⊔ tp .ℓ-total-Π
+  Total-Π-Variadic {X} .Π[_] f = (x : X) → Π[ f x ]
+  {-# OVERLAPPING Total-Π-Variadic #-}
+
+  Total-∀-Variadic
+    : {A : Type ℓ} {X : Type ℓ′}
+      ⦃ tp : Total-∀ A ⦄
+    → Total-∀ (X → A)
+  Total-∀-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-∀ = ℓ′ ⊔ tp .ℓ-total-∀
+  Total-∀-Variadic {X} .∀[_] f = {x : X} → ∀[ f x ]
+  {-# OVERLAPPING Total-∀-Variadic #-}
 
 -- non-dependent stuff
 
@@ -129,5 +145,5 @@ is-equivᴱ : {A : Type ℓ} {B : Type ℓ′} (f : A → B) → Type _
 is-equivᴱ {B} f = Π[ b ꞉ B ] is-contrᴱ (fibreᴱ f b)
 
 instance
-  ⇒-Type : ⇒-notation (𝒰 ℓ) (𝒰 ℓ′) _
+  ⇒-Type : ⇒-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
   ⇒-Type ._⇒_ A B = A → B

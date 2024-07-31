@@ -40,7 +40,8 @@ Existential₁ⁿ : Variadic-binding¹
 Existential₁ⁿ = ∥_∥₁ ∘ Existentialⁿ
 
 infixr 6 ∃[_]
-macro ∃[_] = quantifier-macro (quote Existential₁ⁿ)
+∃[_] : ⦃ r : Total-Σ A ⦄ → A → Type (r .ℓ-total-Σ)
+∃[_] f = ∥ Σ[ f ] ∥₁
 
 
 -- Mere disjunction

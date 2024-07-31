@@ -5,6 +5,7 @@ open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 
 open import Foundations.Notation.Logic
+open import Foundations.Notation.Total
 open import Foundations.Notation.Underlying
 
 open import Agda.Builtin.Sigma public
@@ -30,6 +31,15 @@ instance
   Underlying-Σ : ⦃ ua : Underlying A ⦄ → Underlying (Σ A B)
   Underlying-Σ ⦃ ua ⦄ .ℓ-underlying = ua .ℓ-underlying
   Underlying-Σ .⌞_⌟ x = ⌞ x .fst ⌟
+
+  Total-Σ-Variadic
+    : {A : Type ℓ} {X : Type ℓ′}
+      ⦃ tp : Total-Σ A ⦄
+    → Total-Σ (X → A)
+  Total-Σ-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-Σ = ℓ′ ⊔ tp .ℓ-total-Σ
+  Total-Σ-Variadic {X} .Σ[_] f = Σ X λ x → Σ[ f x ]
+  {-# OVERLAPPING Total-Σ-Variadic #-}
+
 
 <_,_> : {C : ∀ {a} → B a → Type ℓᶜ}
       → (f : (x : A) → B x)

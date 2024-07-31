@@ -44,7 +44,7 @@ instance
     → Union (X → n-Type ℓ n) (X → n-Type ℓ′ n) (X → n-Type (ℓ ⊔ ℓ′) n)
   Union-n-Type ⦃ s≤ʰs (s≤ʰs _) ⦄ ._∪_ A B x = el! ((x ∈ A) ⊎ (x ∈ B))
   {-# OVERLAPS Union-n-Type #-}
-  
+
   Union-Prop
     : Union (X → Prop ℓ) (X → Prop ℓ′) (X → Prop (ℓ ⊔ ℓ′))
   Union-Prop ._∪_ A B x = el! ((x ∈ A) ⊎₁ (x ∈ B))

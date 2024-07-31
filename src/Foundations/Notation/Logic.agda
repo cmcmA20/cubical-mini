@@ -112,37 +112,30 @@ record ×-notation {ℓᵃ ℓᵇ ℓ}
   (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 8 _×_
   field _×_ : A → B → R
-
 open ×-notation ⦃ ... ⦄ public
 
 record ⊎-notation {ℓᵃ ℓᵇ ℓ}
   (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 7 _⊎_
   field _⊎_ : A → B → R
-
 open ⊎-notation ⦃ ... ⦄ public
 
 record ⊎₁-notation {ℓᵃ ℓᵇ ℓ}
   (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 7 _⊎₁_
   field _⊎₁_ : A → B → R
-
 open ⊎₁-notation ⦃ ... ⦄ public
-
 
 record ⇒-notation {ℓᵃ ℓᵇ ℓ}
   (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 5 _⇒_
   field _⇒_ : A → B → R
-
 open ⇒-notation ⦃ ... ⦄ public
-
 
 record ¬-notation {ℓᵃ ℓ}
   (A : 𝒰 ℓᵃ) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 0 ¬_
   field ¬_ : A → R
-
 open ¬-notation ⦃ ... ⦄ public
 
 
@@ -152,14 +145,12 @@ open ¬-notation ⦃ ... ⦄ public
 record ⊥-notation {ℓ}
   (R : 𝒰 ℓ) : 𝒰ω where
   field ⊥ : R
-
 open ⊥-notation ⦃ ... ⦄ public
 
 
 record ⊤-notation {ℓ}
   (R : 𝒰 ℓ) : 𝒰ω where
   field ⊤ : R
-
 open ⊤-notation ⦃ ... ⦄ public
 
 
