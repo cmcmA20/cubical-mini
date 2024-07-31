@@ -29,7 +29,7 @@ _≬_ {A} S T = Σ[ a ꞉ A ] (a ∈ S × a ∈ T)
 
 
 record Intersection {ℓ ℓ′ ℓ″} (A : Type ℓ) (B : Type ℓ′) (R : Type ℓ″) : Typeω where
-  infix 22 _∩_
+  infixr 22 _∩_
   field _∩_ : A → B → R
 open Intersection ⦃ ... ⦄ public
 

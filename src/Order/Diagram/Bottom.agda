@@ -27,7 +27,7 @@ module _ {o ℓ} (P : Poset o ℓ) where
     ¡ : ∀ {x} → bot ≤ x
     ¡ = has-⊥ _
 
-  unquoteDecl bottom-iso = declare-record-iso bottom-iso (quote Bottom)
+  unquoteDecl Bottom-Iso = declare-record-iso Bottom-Iso (quote Bottom)
 
   is-bottom→is-lub : ∀ {lub} {f : ⊥ → _} → is-bottom lub → is-lub P f lub
   is-bottom→is-lub is-bot .least x _ = is-bot x
@@ -35,14 +35,14 @@ module _ {o ℓ} (P : Poset o ℓ) where
   is-lub→is-bottom : ∀ {lub} {f : ⊥ → _} → is-lub P f lub → is-bottom lub
   is-lub→is-bottom lub x = lub .least x λ ()
 
-  is-bottom-is-prop : ∀ x → is-prop (is-bottom x)
-  is-bottom-is-prop _ = hlevel 1
+  is-bottom≃is-lub : ∀{lub} {f} → is-bottom lub ≃ is-lub P f lub
+  is-bottom≃is-lub = is-bottom→is-lub , biimp-is-equiv! _ is-lub→is-bottom
 
   bottom-unique : ∀ {x y} → is-bottom x → is-bottom y → x ＝ y
   bottom-unique p q = ≤-antisym (p _) (q _)
 
   Bottom-is-prop : is-prop Bottom
-  Bottom-is-prop = ≅→is-of-hlevel 1 bottom-iso λ x y → bottom-unique (x .snd) (y .snd) ,ₚ prop!
+  Bottom-is-prop = ≅→is-of-hlevel 1 Bottom-Iso λ x y → bottom-unique (x .snd) (y .snd) ,ₚ prop!
 
   instance
     H-Level-Bottom
@@ -58,18 +58,15 @@ module _ {o ℓ} (P : Poset o ℓ) where
   Lub→Bottom lub .Bottom.bot = Lub.lub lub
   Lub→Bottom lub .Bottom.has-⊥ = is-lub→is-bottom (Lub.has-lub lub)
 
-  is-bottom≃is-lub : ∀ {lub} {f} → is-equiv (is-bottom→is-lub {lub} {f})
-  is-bottom≃is-lub = biimp-is-equiv! _ is-lub→is-bottom
+  Bottom≃Lub : ∀{f} → Bottom ≃ Lub P f
+  Bottom≃Lub = Bottom→Lub , biimp-is-equiv! _ Lub→Bottom
 
-  Bottom≃Lub : ∀ {f} → is-equiv (Bottom→Lub {f})
-  Bottom≃Lub = biimp-is-equiv! _ Lub→Bottom
+  is-bottom→is-initial : ∀ {x} → is-bottom x → is-initial (poset→precategory P) x
+  is-bottom→is-initial is-bot x .fst   = is-bot x
+  is-bottom→is-initial is-bot x .snd _ = ≤-thin _ _
 
-  is-bottom→initial : ∀ {x} → is-bottom x → is-initial (poset→precategory P) x
-  is-bottom→initial is-bot x .fst   = is-bot x
-  is-bottom→initial is-bot x .snd _ = ≤-thin _ _
-
-  initial→is-bottom : ∀ {x} → is-initial (poset→precategory P) x → is-bottom x
-  initial→is-bottom initial x = initial x .fst
+  is-initial→is-bottom : ∀ {x} → is-initial (poset→precategory P) x → is-bottom x
+  is-initial→is-bottom initial x = initial x .fst
 
 
 instance

@@ -3,7 +3,7 @@ open import Order.Base
 open import Order.Diagram.Join
 
 module Order.Diagram.Join.Reasoning
-  {o ℓ} (P : Poset o ℓ) ⦃ hj : Has-joins  P ⦄
+  {o ℓ} (P : Poset o ℓ) ⦃ hj : Has-joins P ⦄
   where
 
 open import Algebra.Semigroup
@@ -24,7 +24,7 @@ module joins {x} {y} = Join (joins x y)
 open joins renaming
   ( l≤join to l≤∪
   ; r≤join to r≤∪
-  ; least to ∪-universal
+  ; least  to ∪-universal
   ) public
 
 opaque
@@ -47,7 +47,7 @@ opaque
         (∪-universal _ l≤∪ (l≤∪ ∙ r≤∪))
         (r≤∪ ∙ r≤∪))
 
-  ∪-is-semigroup : is-semigroup _∪_
+  ∪-is-semigroup : is-semigroup {A = Ob} _∪_
   ∪-is-semigroup .is-semigroup.has-magma .is-n-magma.has-is-of-hlevel = ob-is-set
   ∪-is-semigroup .is-semigroup.assoc _ _ _ = ∪-assoc
 
@@ -58,10 +58,10 @@ opaque
     → x ∪ y ≤ x′ ∪ y′
   ∪≤∪ p q = ∪-universal _ (p ∙ l≤∪) (q ∙ r≤∪)
 
-  ∪≤∪l : {x y x′ : Ob} → x ≤ x′ → (x ∪ y) ≤ (x′ ∪ y)
+  ∪≤∪l : {x y x′ : Ob} → x ≤ x′ → x ∪ y ≤ x′ ∪ y
   ∪≤∪l p = ∪≤∪ p refl
 
-  ∪≤∪r : {x y y′ : Ob} → y ≤ y′ → (x ∪ y) ≤ (x ∪ y′)
+  ∪≤∪r : {x y y′ : Ob} → y ≤ y′ → x ∪ y ≤ x ∪ y′
   ∪≤∪r p = ∪≤∪ refl p
 
   ∪→order : ∀ {x y} → x ∪ y ＝ y → x ≤ y

@@ -17,7 +17,7 @@ record is-join (P : Poset o ℓ) (a b lub : ⌞ P ⌟) : 𝒰 (o ⊔ ℓ) where
   field
     l≤join : a ≤ lub
     r≤join : b ≤ lub
-    least  : (ub' : Ob) → a ≤ ub' → b ≤ ub' → lub ≤ ub'
+    least  : (ub′ : Ob) → a ≤ ub′ → b ≤ ub′ → lub ≤ ub′
 
 record Join (P : Poset o ℓ) (a b : ⌞ P ⌟) : 𝒰 (o ⊔ ℓ) where
   no-eta-equality
@@ -41,14 +41,17 @@ module _ {o ℓ} {P : Poset o ℓ} where
   is-join→is-lub : ∀ {a b lub} → is-join P a b lub → is-lub P (if_then a else b) lub
   is-join→is-lub join .fam≤lub true = join .l≤join
   is-join→is-lub join .fam≤lub false = join .r≤join
-  is-join→is-lub join .least ub' x = join .least ub' (x true) (x false)
+  is-join→is-lub join .least ub′ x = join .least ub′ (x true) (x false)
 
   is-lub→is-join : ∀ {a b lub} → is-lub P (if_then a else b) lub → is-join P a b lub
   is-lub→is-join lub .l≤join = lub .fam≤lub true
   is-lub→is-join lub .r≤join = lub .fam≤lub false
-  is-lub→is-join lub .least ub' a<ub' b<ub' = lub .least ub' λ where
-    true  → a<ub'
-    false → b<ub'
+  is-lub→is-join lub .least ub′ a<ub′ b<ub′ = lub .least ub′ λ where
+    true  → a<ub′
+    false → b<ub′
+
+  is-join≃is-lub : ∀ {a b lub} → is-join P a b lub ≃ is-lub P (if_then a else b) lub
+  is-join≃is-lub = is-join→is-lub , biimp-is-equiv! _ is-lub→is-join
 
   join-unique
     : ∀ {a b x y}
@@ -74,16 +77,13 @@ module _ {o ℓ} {P : Poset o ℓ} where
   Lub→Join lub .Join.lub = Lub.lub lub
   Lub→Join lub .Join.has-join = is-lub→is-join (Lub.has-lub lub)
 
-  is-join≃is-lub : ∀ {a b lub} → is-join P a b lub ≃ is-lub P (if_then a else b) lub
-  is-join≃is-lub = is-join→is-lub , biimp-is-equiv! _ is-lub→is-join
-
   Join≃Lub : ∀ {a b} → Join P a b ≃ Lub P (if_then a else b)
   Join≃Lub = Join→Lub , biimp-is-equiv! _ Lub→Join
 
   gt→is-join : ∀ {a b} → a ≤ b → is-join P a b b
   gt→is-join a≤b .l≤join = a≤b
   gt→is-join a≤b .r≤join = ≤-refl
-  gt→is-join a≤b .least ub' _ b≤ub' = b≤ub'
+  gt→is-join a≤b .least ub′ _ b≤ub′ = b≤ub′
 
   gt-join : ∀ {a b l} → a ≤ b → is-join P a b l → b ＝ l
   gt-join a≤b l = join-unique (gt→is-join a≤b) l
