@@ -23,16 +23,15 @@ private variable
   x y : X
 
 is-complemented : {ℓ : Level} (A : ℙ X ℓ) → Type (level-of-type X ⊔ ℓsuc ℓ)
-is-complemented {X} {ℓ} A =
-  Σ[ A⁻¹ ꞉ ℙ X ℓ ] (_⊆_ ⦃ m₂ = Membership-pow {P = Prop ℓ} ⦄ (A ∩ A⁻¹) ⊥)
-                × (_⊆_ ⦃ m₁ = Membership-pow {P = Prop ℓ} ⦄ ⊤ (A ∪ A⁻¹))
+is-complemented {X} {ℓ} A = Σ[ A⁻¹ ꞉ ℙ X ℓ ] (A ∩ A⁻¹       ⊆ the (ℙ X ℓ) ⊥)
+                                           × (the (ℙ X ℓ) ⊤ ⊆ A ∪ A⁻¹)
 
 is-decidable-subset : (A : ℙ X ℓ) → Type (level-of-type X ⊔ ℓ)
 is-decidable-subset {X} A = Decidable (λ (x : X) → x ∈ A)
 
 instance
-  Decidability-subset : {X : Type ℓ} → Decidability (ℙ X ℓ)
-  Decidability-subset {ℓ} .ℓ-decidability = ℓ
+  Decidability-subset : Decidability (ℙ X ℓ)
+  Decidability-subset {ℓ} .ℓ-decidability = _
   Decidability-subset .Decidable = is-decidable-subset
   {-# OVERLAPPING Decidability-subset #-}
 

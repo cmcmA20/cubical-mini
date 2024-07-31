@@ -4,6 +4,7 @@ module Foundations.Notation.Membership where
 open import Foundations.Notation.Logic
 open import Foundations.Notation.Underlying
 open import Foundations.Prim.Type
+open import Foundations.Pi.Base
 open import Foundations.Sigma.Base
 
 -- generalizing powerset membership
@@ -23,8 +24,8 @@ infixr 20 _≬_
 _⊆_ _≬_
   : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
   → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
-_⊆_ {A} S T = {a : A} → a ∈ S → a ∈ T -- TODO generalize?
-_≬_ {A} S T = Σ A λ a → a ∈ S ×ₜ a ∈ T
+_⊆_ {A} S T = ∀[ a ꞉ A ] (a ∈ S ⇒ a ∈ T)
+_≬_ {A} S T = Σ[ a ꞉ A ] (a ∈ S × a ∈ T)
 
 
 record Intersection {ℓ ℓ′ ℓ″} (A : Type ℓ) (B : Type ℓ′) (R : Type ℓ″) : Typeω where

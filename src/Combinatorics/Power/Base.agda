@@ -25,11 +25,14 @@ private variable A B : ℙ X ℓ
 subst-∈ : (A : ℙ X ℓ) {x y : X} → x ＝ y → x ∈ A → y ∈ A
 subst-∈ A = subst (_∈ A)
 
-⊆-refl : (A : ℙ X ℓ) → A ⊆ A
-⊆-refl _ = id
+instance
+  Refl-⊆ : Refl {A = ℙ X ℓ} _⊆_
+  Refl-⊆ .refl = refl
+  {-# OVERLAPPING Refl-⊆ #-}
 
-⊆-trans : (A : ℙ X ℓ) (B : ℙ X ℓ′) (C : ℙ X ℓ″) → A ⊆ B → B ⊆ C → A ⊆ C
-⊆-trans _ _ _ ab bc = bc ∘ ab
+  Trans-⊆ : Trans {A = ℙ X ℓ} {B = ℙ X ℓ′} {C = ℙ X ℓ″} _⊆_ _⊆_ _⊆_
+  Trans-⊆ ._∙_ S T = S ∙ T
+  {-# OVERLAPPING Trans-⊆ #-}
 
 @0 ℙ-ext : A ⊆ B → B ⊆ A → A ＝ B
 ℙ-ext A⊆B B⊆A = ext λ _ → A⊆B , B⊆A
@@ -56,30 +59,25 @@ instance
   Union-Prop ._∪_ A B x = el! ((x ∈ A) ⊎₁ (x ∈ B))
   {-# OVERLAPPING Union-Prop #-}
 
-instance
   ⊤-Pow : ⊤-notation (ℙ X ℓ)
   ⊤-Pow .⊤ _ = ⊤
 
   ⊥-Pow : ⊥-notation (ℙ X ℓ)
   ⊥-Pow .⊥ _ = ⊥
 
-⊥⊆ : _⊆_ ⦃ m₁ = Membership-pow {P = Prop ℓ′} ⦄ ⊥ A
+⊥⊆ : {A : ℙ X ℓ} → the (ℙ X ℓ′) ⊥ ⊆ A
 ⊥⊆ ()
 
 @0 ⊆⊥→⊥ : A ⊆ ⊥ → A ＝ ⊥
 ⊆⊥→⊥ {A} p = ℙ-ext p (⊥⊆ {A = A})
 
-⊆⊤ : _⊆_ ⦃ m₂ = Membership-pow {P = Prop ℓ′} ⦄ A ⊤
+⊆⊤ : {A : ℙ X ℓ} → A ⊆ the (ℙ X ℓ′) ⊤
 ⊆⊤ = _
 
--- total space
-
-𝕋 : ℙ X ℓ → 𝒰 (level-of-type X ⊔ ℓ)
-𝕋 {X} A = Σ[ x ꞉ X ] x ∈ A
-
-𝕋→carrier : (A : ℙ X ℓ) → 𝕋 A → X
-𝕋→carrier A = fst
+-- FIXME what's the point?
+𝕋→carrier : (A : ℙ X ℓ) → Σ[ A ] → X
+𝕋→carrier _ = fst
 
 ℙ→fam : {X : Type ℓˣ} {Y : Type ℓ′}
-      → (X → Y) → ℙ X ℓ → Σ[ I ꞉ 𝒰 (ℓ ⊔ level-of-type X) ] (I → Y)
-ℙ→fam m S = 𝕋 S , m ∘ fst
+      → (X → Y) → ℙ X ℓ → Σ[ I ꞉ 𝒰 (ℓ ⊔ ℓˣ) ] (I → Y)
+ℙ→fam m S = Σ[ S ] , m ∘ fst
