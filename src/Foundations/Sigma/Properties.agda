@@ -5,6 +5,7 @@ open import Foundations.Base
 open import Foundations.Cubes
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
+open import Foundations.Equiv.Size
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 open import Foundations.Transport
@@ -51,6 +52,10 @@ open is-iso
 ×-path : {B : Type ℓ′} {a c : A} {b d : B}
        → a ＝ c → b ＝ d → (a , b) ＝ (c , d)
 ×-path ac bd i = (ac i , bd i)
+
+×-path-inv : {B : Type ℓ′} {a c : A} {b d : B}
+       → (a , b) ＝ (c , d) → (a ＝ c) × (b ＝ d)
+×-path-inv p = ap fst p , ap snd p
 
 Σ-ap-snd : {A : Type ℓ} {P : A → Type ℓ′} {Q : A → Type ℓ″}
          → Π[ x ꞉ A ] (P x ≃ Q x) → Σ A P ≃ Σ A Q
@@ -121,6 +126,10 @@ open is-iso
 Σ-assoc .fst (x , y , z) = (x , y) , z
 Σ-assoc .snd .equiv-proof y .fst = strict-contr-fibres (λ { ((x , y) , z) → x , y , z}) y .fst
 Σ-assoc .snd .equiv-proof y .snd = strict-contr-fibres (λ { ((x , y) , z) → x , y , z}) y .snd
+
+×-assoc : {B : Type ℓ′} {C : Type ℓ″}
+        → A × B × C ≃ (A × B) × C
+×-assoc = Σ-assoc
 
 Σ-Π-distrib : {A : Type ℓ} {B : A → Type ℓ′} {C : (x : A) → B x → Type ℓ″}
             → Π[ x ꞉ A ] Σ[ y ꞉ B x ] C x y
@@ -228,6 +237,15 @@ infixr 4 _,ₚ_
 ×-swap .fst (x , y) = y , x
 ×-swap .snd .equiv-proof = strict-contr-fibres _
 
+Σ-is-of-size : {X : 𝒰 ℓ} {A : X → 𝒰 ℓ′}
+             → is-of-size ℓ″ X
+             → ((x : X) → is-of-size ℓ‴ (A x))
+             → is-of-size (ℓ″ ⊔ ℓ‴) (Σ X A)
+Σ-is-of-size {ℓ‴} {X} (X' , e) sa =
+  Σ X' (A' ∘ (e $_)) , Σ-ap e λ x → resizing-cond (sa (e $ x))
+  where
+    A' : X → 𝒰 ℓ‴
+    A' x = ⌞ sa x ⌟
 
 -- Automation
 

@@ -36,10 +36,10 @@ module _ {o ℓ ℓ′ : Level}
   open is-lub
   open is-sup-lattice L
 
-  joins-preserve-containment : {P Q : ℙ T ℓ′}
+  joins-preserve-containment : (P Q : ℙ T ℓ′)
                              → P ⊆ Q
                              → sup (ℙ→fam m P .snd) ≤ sup (ℙ→fam m Q .snd)
-  joins-preserve-containment {P} {Q} C =
+  joins-preserve-containment P Q C =
     suprema (ℙ→fam m P .snd) .least (sup (ℙ→fam m Q .snd)) $
     suprema (ℙ→fam m Q .snd) .fam≤lub ∘ second C
 
