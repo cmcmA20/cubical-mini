@@ -117,13 +117,13 @@ module local-inductive-definitions
     lu1 .least s' $ lu2 .fam≤lub ∘ ↓-monotonicity-lemma ϕ x y le
 
   is-local : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) → 𝒰 (o ⊔ ℓ ⊔ ℓsuc ℓ′)
-  is-local ϕ = (a : Ob) → has-size ℓ′ (ϕ ↓ a)
+  is-local ϕ = (a : Ob) → is-of-size ℓ′ (ϕ ↓ a)
 
   module _ (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) (loc : is-local ϕ) where
 
     private
       S' : (a : Ob) → 𝒰 ℓ′
-      S' a = resized (loc a)
+      S' a = ⌞ loc a ⌟
 
       S'≃↓ : (a : Ob) → S' a ≃ ϕ ↓ a
       S'≃↓ a = resizing-cond (loc a)
@@ -293,12 +293,12 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
 
       open trunc-ind-def P L β h ϕ
 
-      module smallness-assumption (j : (b : B) → has-size ℓ′ (b ∈ 𝓘nd)) where
+      module smallness-assumption (j : (b : B) → is-of-size ℓ′ (b ∈ 𝓘nd)) where
 
         private
 
           𝓘' : B → 𝒰 ℓ′
-          𝓘' b = resized (j b)
+          𝓘' b = ⌞ j b ⌟
 
           𝓘'≃𝓘nd : (b : B) → 𝓘' b ≃ b ∈ 𝓘nd
           𝓘'≃𝓘nd b = resizing-cond (j b)
@@ -326,14 +326,14 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
                          → b ∈ 𝓘'-subset
           𝓘'-is-ϕ-closed a b p f = 𝓘nd→𝓘' b (𝓘nd-is-ϕ-closed a b p (λ b' → 𝓘'→𝓘nd b' ∘ f b'))
 
-          total-space-𝓘-is-small : has-size ℓ′ (𝕋 𝓘nd)
-          total-space-𝓘-is-small = 𝕋 𝓘'-subset , Σ-ap-snd 𝓘'≃𝓘nd
+          total-space-𝓘-is-small : is-of-size ℓ′ Σ[ 𝓘nd ]
+          total-space-𝓘-is-small = Σ[ 𝓘'-subset ] , Σ-ap-snd 𝓘'≃𝓘nd
 
-          e : 𝕋 𝓘'-subset ≃ 𝕋 𝓘nd
+          e : Σ[ 𝓘'-subset ] ≃ Σ[ 𝓘nd ]
           e = resizing-cond total-space-𝓘-is-small
 
           sup-𝓘 : Ob
-          sup-𝓘 = sup {I = 𝕋 𝓘'-subset} (β ∘ 𝕋→carrier 𝓘nd ∘ (e $_))
+          sup-𝓘 = sup {I = Σ[ 𝓘'-subset ]} (β ∘ 𝕋→carrier 𝓘nd ∘ (e $_))
 
           sup-𝓘-is-lub : is-lub P (ℙ→fam β 𝓘nd .snd) sup-𝓘
           sup-𝓘-is-lub = sup-of-small-fam-is-lub L (β ∘ 𝕋→carrier 𝓘nd) total-space-𝓘-is-small
@@ -342,4 +342,4 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
         sup-𝓘-is-fixed-point =
           ≤-antisym
             (small-closed-subsets→def-points (𝓘'-subset , 𝓘'-is-c-closed , 𝓘'-is-ϕ-closed) .snd)
-            ?
+            {!!}

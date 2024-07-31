@@ -48,7 +48,7 @@ module _ {o ℓ ℓ′ ℓ″ : Level}
          (L : is-sup-lattice P ℓ′)
          {T : 𝒰 ℓ″}
          (m : T → ⌞ P ⌟)
-         (T-sz : has-size ℓ′ T)
+         (T-sz : is-of-size ℓ′ T)
        where
 
   open Poset P
@@ -57,7 +57,7 @@ module _ {o ℓ ℓ′ ℓ″ : Level}
 
   private
     T' : 𝒰 ℓ′
-    T' = resized T-sz
+    T' = ⌞ T-sz ⌟
 
     T'≃T : T' ≃ T
     T'≃T = resizing-cond T-sz

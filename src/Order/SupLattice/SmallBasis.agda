@@ -33,11 +33,11 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     no-eta-equality
 
     field
-      ≤-is-small : (x : ⌞ P ⌟) (b : B) → has-size ℓ′ (β b ≤ x)
+      ≤-is-small : (x : ⌞ P ⌟) (b : B) → is-of-size ℓ′ (β b ≤ x)
       ↓-is-sup : (x : ⌞ P ⌟) → is-lub P (↓ᴮ-inclusion x) x
 
     _≤ᴮ_ : (b : B) → (x : ⌞ P ⌟) → 𝒰 ℓ′
-    b ≤ᴮ x = resized (≤-is-small x b)
+    b ≤ᴮ x = ⌞ ≤-is-small x b ⌟
 
     ≤ᴮ≃≤ : {b : B} {x : ⌞ P ⌟} → b ≤ᴮ x ≃ β b ≤ x
     ≤ᴮ≃≤ {b} {x} = ≤-is-small x b .snd
@@ -60,7 +60,7 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     small-↓ᴮ-≃-↓ᴮ : {x : ⌞ P ⌟} → small-↓ᴮ x ≃ ↓ᴮ x
     small-↓ᴮ-≃-↓ᴮ {x} = Σ-ap-snd λ _ → ≤ᴮ≃≤
 
-    ↓ᴮ-is-small : {x : ⌞ P ⌟} → has-size ℓ′ (↓ᴮ x)
+    ↓ᴮ-is-small : {x : ⌞ P ⌟} → is-of-size ℓ′ (↓ᴮ x)
     ↓ᴮ-is-small {x} = small-↓ᴮ x , small-↓ᴮ-≃-↓ᴮ
 
     is-supᴮ' : {x : ⌞ P ⌟} → x ＝ sup (small-↓ᴮ-inclusion {x})
