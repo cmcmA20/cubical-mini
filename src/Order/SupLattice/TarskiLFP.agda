@@ -15,6 +15,7 @@ open import Order.Base
 open import Order.Category
 open import Order.SupLattice
 open import Order.SupLattice.SmallBasis
+import Order.SupLattice.SmallPresentation as small-presentation-of-lattice
 import Order.Reasoning
 
 module _ {o ℓ} (P : Poset o ℓ) where
@@ -470,28 +471,6 @@ module bounded-inductive-definitions {o ℓ ℓ′}
       li : ↓→S₀ is-left-inverse-of S₀→↓
       li (b , e) = Σ-prop-path! refl
 
-module small-presentation-of-lattice {o ℓ ℓ′}
-         {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
-
-  open Poset P
-  open is-lub
-  open is-sup-lattice L
-  open is-basis h
-
-  _is-a-small-presentation : Σ[ J ꞉ 𝒰 ℓ′ ] (J → ℙ B ℓ′) × ℙ (B × ℙ B ℓ′) ℓ′ → 𝒰 (ℓsuc ℓ′)
-  (J , Y , R) is-a-small-presentation =
-      (b : B) → (X : ℙ B ℓ′)
-    → b ≤ᴮ (sup (ℙ→fam β X .snd)) ≃ ∃[ j ꞉ J ] Y j ⊆ X × (b , Y j) ∈ R
-
-  has-small-presentation : 𝒰 (ℓsuc ℓ′)
-  has-small-presentation =
-    Σ[ 𝓡 ꞉ Σ[ J ꞉ 𝒰 ℓ′ ] (J → ℙ B ℓ′) × ℙ (B × ℙ B ℓ′) ℓ′ ] 𝓡 is-a-small-presentation
-
 module _ {o ℓ ℓ′}
          {B : 𝒰 ℓ′}
          (P : Poset o ℓ)
@@ -519,7 +498,7 @@ module _ {o ℓ ℓ′}
     Y = small-pres .fst .snd .fst
     R : ℙ (B × ℙ B ℓ′) ℓ′
     R = small-pres .fst .snd .snd
-    is-small-pres : (I₁ , Y , R) is-a-small-presentation
+    is-small-pres : is-a-small-presentation (I₁ , Y , R)
     is-small-pres = small-pres .snd
 
     is-small-pres→ : (b : B) → (X : ℙ B ℓ′)
