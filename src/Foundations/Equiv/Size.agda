@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
 
-private variable ℓ ℓ′ ℓ″ : Level
+private variable ℓ ℓ′ ℓ″ ℓ‴ : Level
 
 -- Resizing of a type
 
@@ -27,3 +27,11 @@ resizing-cond {X} = snd
 
 resize-up : {X : 𝒰 ℓ} → is-of-size (ℓ ⊔ ℓ′) X
 resize-up {ℓ′} {X} = Lift ℓ′ X , lift≃id
+
+≃→is-of-size : {X : 𝒰 ℓ} {Y : 𝒰 ℓ′}
+             → X ≃ Y
+             → is-of-size ℓ″ X → is-of-size ℓ″ Y
+≃→is-of-size e (X' , ex) = (X' , ex ∙ e)
+
+is-locally-of-size : (ℓ′ : Level) → 𝒰 ℓ → 𝒰 (ℓ ⊔ ℓsuc ℓ′)
+is-locally-of-size ℓ′ X = (x y : X) → is-of-size ℓ′ (x ＝ y)
