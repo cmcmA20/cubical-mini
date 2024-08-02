@@ -82,6 +82,10 @@ rec-set! f-const = rec-set f-const (hlevel 2)
   (rec! λ a b → a , ∣ b ∣₁)
   where instance _ = hlevel-prop-instance A-prop
 
+∥-∥₁-is-of-size : {X : 𝒰 ℓ}
+                → is-of-size ℓ′ X → is-of-size ℓ′ ∥ X ∥₁
+∥-∥₁-is-of-size (X' , e) = ∥ X' ∥₁ , ae e
+
 instance
   Extensional-Σ-∥-∥₁
     : {A : Type ℓ} {B : A → Type ℓ′}
