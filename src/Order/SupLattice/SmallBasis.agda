@@ -84,3 +84,7 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     is-lubᴮ : {x : Ob} (u' : Ob)
             → ((s : small-↓ᴮ x) → small-↓ᴮ-inclusion s ≤ u') → x ≤ u'
     is-lubᴮ = least is-supᴮ
+
+    instance
+      H-Level-≤ᴮ : ∀{n} {b : B} {x : Ob} ⦃ _ : 1 ≤ʰ n ⦄ → H-Level n (b ≤ᴮ x)
+      H-Level-≤ᴮ ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance ≤ᴮ-is-prop

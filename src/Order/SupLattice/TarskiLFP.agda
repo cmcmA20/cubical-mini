@@ -45,8 +45,8 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
   c-closure S = (U : ℙ B ℓ′) → U ⊆ S → (b : B) → b ≤ᴮ (sup (ℙ→fam β U .snd)) → b ∈ S
 
   Φ-closure : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
-           → {ℓ″ : Level} (S : ℙ B ℓ″)
-           → 𝒰 (o ⊔ ℓ′ ⊔ ℓ″)
+            → {ℓ″ : Level} (S : ℙ B ℓ″)
+            → 𝒰 (o ⊔ ℓ′ ⊔ ℓ″)
   Φ-closure ϕ S = (a : Ob)
                 → (b : B)
                 → (b , a) ∈ ϕ
@@ -61,10 +61,14 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
               → 𝓘 ϕ b
     𝓘-trunc : (b : B) → is-prop (𝓘 ϕ b)
 
+  instance
+    H-Level-𝓘 : ∀{n} {ϕ} {b} ⦃ _ : 1 ≤ʰ n ⦄ → H-Level n (𝓘 ϕ b)
+    H-Level-𝓘 ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (𝓘-trunc _)
+
   module trunc-ind-def (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) where
 
     𝓘nd : ℙ B (o ⊔ ℓsuc ℓ′)
-    𝓘nd b = el (𝓘 ϕ b) (𝓘-trunc b)
+    𝓘nd b = el! (𝓘 ϕ b)
 
     𝓘nd-is-c-closed : c-closure 𝓘nd
     𝓘nd-is-c-closed = c-closed
@@ -73,12 +77,12 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
     𝓘nd-is-ϕ-closed = ϕ-closed
 
     𝓘nd-is-initial : {ℓ″ : Level} (P : ℙ B ℓ″)
-                   → c-closure P
-                   → Φ-closure ϕ P
-                   → 𝓘nd ⊆ P
+                    → c-closure P
+                    → Φ-closure ϕ P
+                    → 𝓘nd ⊆ P
     𝓘nd-is-initial P cc ϕc (c-closed U sub b le) = cc U (λ ua → 𝓘nd-is-initial P cc ϕc (sub ua)) b le
     𝓘nd-is-initial P cc ϕc (ϕ-closed a b m f)    = ϕc a b m (λ b' le → 𝓘nd-is-initial P cc ϕc (f b' le))
-    𝓘nd-is-initial P cc ϕc (𝓘-trunc b x y i)     = hlevel 1 (𝓘nd-is-initial P cc ϕc x) (𝓘nd-is-initial P cc ϕc y) i
+    𝓘nd-is-initial P cc ϕc (𝓘-trunc b x y i)    = hlevel 1 (𝓘nd-is-initial P cc ϕc x) (𝓘nd-is-initial P cc ϕc y) i
 
 module local-inductive-definitions
          {o ℓ ℓ′} {B : 𝒰 ℓ′}
@@ -102,7 +106,7 @@ module local-inductive-definitions
   ↓-monotonicity-lemma : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
                        → (x y : Ob) → x ≤ y
                        → ϕ ↓ x → ϕ ↓ y
-  ↓-monotonicity-lemma ϕ x y le (b , c) = b , map (second $ second λ le0 → ≤-trans le0 le) c
+  ↓-monotonicity-lemma ϕ x y le (b , c) = b , map (second $ second $ _∙ le) c
 
   ↓-has-sup-implies-monotone : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
                              → (x y s s' : Ob) → x ≤ y
@@ -150,21 +154,19 @@ module local-inductive-definitions
   monotone-map-give-local-ind-def f f-mono = ϕ , loc , H
     where
       ϕ : ℙ (B × Ob) (o ⊔ ℓ′)
-      ϕ (b , a) = el (Lift o (b ≤ᴮ f a)) (≃→is-of-hlevel 1 lift≃id ≤ᴮ-is-prop)
+      ϕ (b , a) = el! (Lift o (b ≤ᴮ f a))
 
       ↓ᴮf-equiv-↓-tot : (a : Ob) → small-↓ᴮ (f a) ≃ (ϕ ↓ a)
       ↓ᴮf-equiv-↓-tot a =
-        Σ-ap-snd λ b →
-          prop-extₑ ≤ᴮ-is-prop (hlevel 1)
+        Σ-ap-snd λ b → prop-extₑ!
             (λ le → ∣ a , lift le , refl ∣₁)
-            (∥-∥₁.elim (λ _ → ≤ᴮ-is-prop)
-               λ where (a' , lo , le') → ≤→≤ᴮ (≤-trans (≤ᴮ→≤ (lift≃id $ lo)) (f-mono le')))
+            (elim! λ a' lo le' → ≤→≤ᴮ (≤ᴮ→≤ lo ∙ f-mono le'))
 
       loc : is-local ϕ
       loc a = small-↓ᴮ (f a) , ↓ᴮf-equiv-↓-tot a
 
       G : (x : Ob) → is-lub P (β ∘ ↓→base ϕ x) (f x)
-      G x .fam≤lub (b , e) = elim! (λ a' lo le' → ≤-trans (≤ᴮ→≤ lo) (f-mono le')) e
+      G x .fam≤lub (b , e) = elim! (λ a' lo le' → ≤ᴮ→≤ lo ∙ f-mono le') e
       G x .least u' ub     = is-lubᴮ u' (ub ∘ (↓ᴮf-equiv-↓-tot x $_))
 
       H : (x : Ob) → Γ ϕ loc x ＝ f x
@@ -231,7 +233,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
                     rec! (λ a p le →
                            suprema (ℙ→fam β P .snd) .fam≤lub
                              (b , φc a b p λ b' le' →
-                                              cc P refl b' (≤→≤ᴮ (≤-trans (≤ᴮ→≤ le') le))))
+                                              cc P refl b' (≤→≤ᴮ (≤ᴮ→≤ le' ∙ le))))
                          e
       where
         sup-of-P : Ob
@@ -242,7 +244,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
       Q a , Q-c-closed , Q-φ-closed
       where
         Q : Ob → ℙ B ℓ′
-        Q x b = el (b ≤ᴮ x) ≤ᴮ-is-prop
+        Q x b = el! (b ≤ᴮ x)
 
         sup-Q : Ob → Ob
         sup-Q x = sup (ℙ→fam β (Q x) .snd)
@@ -251,19 +253,18 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
         is-sup-Q x = is-supᴮ' ⁻¹
 
         Q-c-closed : c-closure P L β h (Q a)
-        Q-c-closed U C b le =
-          ≤→≤ᴮ $ ≤-trans (≤ᴮ→≤ le) $
-          subst (sup (ℙ→fam β U .snd) ≤_) (is-sup-Q a)
-                (joins-preserve-containment L β U (Q a) C)
+        Q-c-closed U C b le = ≤→≤ᴮ
+          $ ≤ᴮ→≤ le
+          ∙ subst (sup (ℙ→fam β U .snd) ≤_) (is-sup-Q a)
+              (joins-preserve-containment L β U (Q a) C)
 
         Q-φ-closed : Φ-closure P L β h ϕ (Q a)
-        Q-φ-closed a' b p f =
-          ≤→≤ᴮ $ ≤-trans
-            (sup-of-small-fam-is-lub L (β ∘ ↓→base ϕ a) (loc a) .fam≤lub
+        Q-φ-closed a' b p f = ≤→≤ᴮ
+          $ sup-of-small-fam-is-lub L (β ∘ ↓→base ϕ a) (loc a) .fam≤lub
               (b , ∣ a' , p , subst (_≤ a) (is-sup-Q a')
                                 (subst (sup-Q a' ≤_) (is-sup-Q a)
-                                   (joins-preserve-containment L β (Q a') (Q a) (λ {z} → f z))) ∣₁))
-            isdef
+                                   (joins-preserve-containment L β (Q a') (Q a) (λ {z} → f z))) ∣₁)
+          ∙ isdef
 
     @0 small-closed-subsets≃def-points : small-closed-subsets ≃ deflationary-points
     small-closed-subsets≃def-points =
@@ -271,14 +272,12 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
       , is-iso→is-equiv (iso def-points→small-closed-subsets ri li)
       where
       ri : def-points→small-closed-subsets is-right-inverse-of small-closed-subsets→def-points
-      ri (a , isdef) = Σ-prop-path is-deflationary-is-prop (is-supᴮ' ⁻¹)
+      ri (a , isdef) = is-supᴮ' ⁻¹ ,ₚ prop!
 
       @0 li : def-points→small-closed-subsets is-left-inverse-of small-closed-subsets→def-points
-      li (P , cc , φc) =
-        Σ-prop-path is-small-closed-subset-is-prop
-          (fun-ext λ b → n-ua (prop-extₑ ≤ᴮ-is-prop (hlevel 1)
-                                 (cc P refl b)
-                                 λ r → ≤→≤ᴮ (suprema (ℙ→fam β P .snd) .fam≤lub (b , r))))
+      li (P , cc , φc)
+        =  ext (λ b → cc P refl b , λ r → ≤→≤ᴮ (suprema (ℙ→fam β P .snd) .fam≤lub (b , r)))
+        ,ₚ prop!
 
     open trunc-ind-def P L β h ϕ
 
@@ -415,8 +414,7 @@ module bounded-inductive-definitions {o ℓ ℓ′}
   bounded→local : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
                 → is-bounded ϕ → is-local ϕ
   bounded→local ϕ (ϕ-small , ϕ-has-bound) a =
-    ≃→is-of-size (≅→≃ (S₀→↓ , iso ↓→S₀ ri li))
-      S₀-is-small
+    ≃→is-of-size (≅→≃ (S₀→↓ , iso ↓→S₀ ri li)) S₀-is-small
     where
       T : 𝒰 ℓ′
       T = ϕ-has-bound .fst
@@ -466,10 +464,10 @@ module bounded-inductive-definitions {o ℓ ℓ′}
       ↓→S₀ = second (rec! cur-trunc-g)
 
       ri : ↓→S₀ is-right-inverse-of S₀→↓
-      ri (b , e) = Σ-prop-path! refl
+      ri _ = trivial!
 
       li : ↓→S₀ is-left-inverse-of S₀→↓
-      li (b , e) = Σ-prop-path! refl
+      li _ = trivial!
 
 module _ {o ℓ ℓ′}
          {B : 𝒰 ℓ′}
@@ -763,21 +761,12 @@ module _ {o ℓ ℓ′}
       ↓→↓ᴮ-fa : {a : Ob} {b : B}
               → ∃[ a' ꞉ Ob ] (b , a') ∈ φ × a' ≤ a
               → b ≤ᴮ f a
-      ↓→↓ᴮ-fa {a} {b} =
-         ∥-∥₁.elim {P = λ _ → b ≤ᴮ f a}
-                   (λ _ → ≤ᴮ-is-prop)
-                   (λ where (a' , ex , o) →
-                                ∥-∥₁.elim {P = λ _ → b ≤ᴮ f a}
-                                 (λ _ → ≤ᴮ-is-prop)
-                                 (λ where (i , r , path) →
-                                             ≤→≤ᴮ (  subst (β b ≤_) (ap f (=ˢ→= path)) (≤ᴮ→≤ r)
-                                                   ∙ f-mono o))
-                                 ex)
-        ∘ map λ (a' , e , r) → a' , (lift≃id $ e) , r
+      ↓→↓ᴮ-fa {a} {b}
+        = map (second $ first $ (lift≃id $_))
+        ∙ elim! λ _ _ r path o → ≤→≤ᴮ (subst (β b ≤_) (ap f (=ˢ→= path)) (≤ᴮ→≤ r) ∙ f-mono o)
 
       ↓ᴮ-fa≃↓ : {a : Ob} → small-↓ᴮ (f a) ≃ φ ↓ a
-      ↓ᴮ-fa≃↓ = Σ-ap-snd λ b →
-                 prop-extₑ ≤ᴮ-is-prop (hlevel 1) ↓ᴮ-fa→↓ ↓→↓ᴮ-fa
+      ↓ᴮ-fa≃↓ = Σ-ap-snd λ b → prop-extₑ! ↓ᴮ-fa→↓ ↓→↓ᴮ-fa
 
       H : (a : Ob) → Γ φ (bounded→local φ bnd) a ＝ f a
       H a = reindexing-along-equiv-=-sup
