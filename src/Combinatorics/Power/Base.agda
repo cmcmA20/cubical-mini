@@ -12,12 +12,13 @@ open import Data.Truncation.Propositional as ∥-∥₁
 open import Data.Unit.Base
 
 private variable
-  ℓˣ ℓ ℓ′ ℓ″ : Level
+  ℓˣ ℓʸ ℓ ℓ′ ℓ″ : Level
   X : Type ℓˣ
+  Y : Type ℓʸ
   x y : X
   m n k : HLevel
 
-ℙ : Type ℓˣ → (ℓ : Level) → Type (ℓˣ ⊔ ℓsuc ℓ)
+ℙ : {ℓˣ : Level} → Type ℓˣ → (ℓ : Level) → Type (ℓˣ ⊔ ℓsuc ℓ)
 ℙ X ℓ = X → Prop ℓ
 
 private variable A B : ℙ X ℓ
@@ -42,6 +43,12 @@ single x t = el! (x ＝ t)
 
 ⋁_ : {I : 𝒰 ℓ} → (I → ℙ X ℓ) → ℙ X ℓ
 ⋁_ {I} F x = el! (∃[ i ꞉ I ] x ∈ F i)
+
+ℙ-map' : {X X' : Type ℓˣ} → (X → X') → ℙ X ℓ → ℙ X' (ℓˣ ⊔ ℓ)
+ℙ-map' {X} f px x' = el! (∃[ x ꞉ X ] (x' ＝ f x) × ⌞ x ∈ px ⌟)
+
+ℙ-ctramap : (Y → X) → ℙ X ℓ → ℙ Y ℓ
+ℙ-ctramap f px = px ∘ f
 
 instance
   Intersection-n-Type
@@ -73,6 +80,15 @@ instance
 
 ⊆⊤ : {A : ℙ X ℓ} → A ⊆ the (ℙ X ℓ′) ⊤
 ⊆⊤ = _
+
+⊆-∪-r-l : {A B C : ℙ X ℓ} → C ⊆ A → C ⊆ A ∪ B
+⊆-∪-r-l ca cx = ∣ inl (ca cx) ∣₁
+
+⊆-∪-r-r : {A B C : ℙ X ℓ} → C ⊆ B → C ⊆ A ∪ B
+⊆-∪-r-r cb cx = ∣ inr (cb cx) ∣₁
+
+⊆-∪-l : {A B C : ℙ X ℓ} → A ⊆ C → B ⊆ C → A ∪ B ⊆ C
+⊆-∪-l ac bc = elim! [ ac , bc ]ᵤ
 
 -- FIXME what's the point?
 𝕋→carrier : (A : ℙ X ℓ) → Σ[ A ] → X

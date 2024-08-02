@@ -555,10 +555,14 @@ module _ {o ℓ ℓ′}
                       → Small-𝓘 b
       Small-𝓘-trunc : (b : B) → is-prop (Small-𝓘 b)
 
+    instance
+      H-Level-Small-𝓘 : ∀{n} {b} ⦃ _ : 1 ≤ʰ n ⦄ → H-Level n (Small-𝓘 b)
+      H-Level-Small-𝓘 ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (Small-𝓘-trunc _)
+
     module small-trunc-ind-def where
 
       Small-𝓘nd : ℙ B ℓ′
-      Small-𝓘nd b = el (Small-𝓘 b) (Small-𝓘-trunc b)
+      Small-𝓘nd b = el! (Small-𝓘 b)
 
       Small-𝓘nd-is-c-closed : Small-c-closure Small-𝓘nd
       Small-𝓘nd-is-c-closed = Small-c-closed
@@ -607,10 +611,9 @@ module _ {o ℓ ℓ′}
       where
       c-cl-sm : c-closure P L β h Small-𝓘nd
       c-cl-sm U C b le =
-        ∥-∥₁.elim {P = λ _ → ⌞ Small-𝓘nd b ⌟}
-                  (λ _ → Small-𝓘-trunc b)
-                  (λ where (j , C' , r) → Small-𝓘nd-is-c-closed j (λ b' → C ∘ C') b r)
-                  (is-small-pres→ b U le)
+        elim! {P = λ _ → ⌞ Small-𝓘nd b ⌟}
+              (λ j C' r → Small-𝓘nd-is-c-closed j (λ b' → C ∘ C') b r)
+              (is-small-pres→ b U le)
 
       Φ-cl-sm : Φ-closure P L β h ϕ Small-𝓘nd
       Φ-cl-sm a b p C =
@@ -645,7 +648,7 @@ module _ {o ℓ ℓ′}
     𝓘nd-is-small : (b : B) → is-of-size ℓ′ (b ∈ 𝓘nd)
     𝓘nd-is-small b =
         (b ∈ Small-𝓘nd)
-      , prop-extₑ (Small-𝓘-trunc b) (𝓘-trunc b)
+      , prop-extₑ (hlevel 1) (𝓘-trunc b)
           Small-𝓘nd-⊆-𝓘nd 𝓘nd-⊆-Small-𝓘nd
 
 module _ {o ℓ ℓ′}
@@ -736,7 +739,7 @@ module _ {o ℓ ℓ′}
       φ , bnd , H
       where
       φ : ℙ (B × Ob) (o ⊔ ℓ′)
-      φ (b , a') = el (Lift {ℓ = ℓ′} o (∃[ i ꞉ I ] b ≤ᴮ f (γ i) × γ i ＝ˢ a')) (Lift-is-of-hlevel 1 (hlevel 1))
+      φ (b , a') = el! (Lift {ℓ = ℓ′} o (∃[ i ꞉ I ] b ≤ᴮ f (γ i) × γ i ＝ˢ a'))
 
       ϕ-small : (a : Ob) → (b : B) → is-of-size ℓ′ ((b , a) ∈ φ)
       ϕ-small a b = (∃[ i ꞉ I ] b ≤ᴮ f (γ i) × γ i ＝ˢ a) , lift≃id ⁻¹
