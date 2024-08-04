@@ -6,7 +6,9 @@ open import Categories.Prelude
 open import Order.Base
 import Order.Reasoning
 
-module _ {o ℓ} (P : Poset o ℓ) where
+private variable o ℓ : Level
+
+module _ (P : Poset o ℓ) where
   open Order.Reasoning P
 
   record is-glb {ℓᵢ} {I : Type ℓᵢ} (F : I → Ob) (glb : Ob)
@@ -19,14 +21,17 @@ module _ {o ℓ} (P : Poset o ℓ) where
   record Glb {ℓᵢ} {I : Type ℓᵢ} (F : I → Ob) : Type (o ⊔ ℓ ⊔ ℓᵢ) where
     no-eta-equality
     field
-      glb : Ob
+      glb     : Ob
       has-glb : is-glb F glb
     open is-glb has-glb public
 
 unquoteDecl H-Level-is-glb = declare-record-hlevel 1 H-Level-is-glb (quote is-glb)
 unquoteDecl Glb-Iso = declare-record-iso Glb-Iso (quote Glb)
 
-module _ {o ℓ} {P : Poset o ℓ} where
+Has-glbs : Poset o ℓ → (ℓ′ : Level) → Type (o ⊔ ℓ ⊔ ℓsuc ℓ′)
+Has-glbs P ℓ′ = {I : Type ℓ′} {F : I → ⌞ P ⌟} → Glb P F
+
+module _ {P : Poset o ℓ} where
   open Order.Reasoning P
   open is-glb
 

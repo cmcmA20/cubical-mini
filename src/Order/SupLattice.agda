@@ -20,7 +20,6 @@ record is-sup-lattice (P : Poset o ℓ) (ℓ′ : Level) : 𝒰 (o ⊔ ℓ ⊔ �
     sup     : {I : 𝒰 ℓ′} (F : I → Ob) → Ob
     suprema : {I : 𝒰 ℓ′} (F : I → Ob) → is-lub P F (sup F)
 
-
 module _ {o ℓ ℓ′ : Level}
          {P : Poset o ℓ}
          (L : is-sup-lattice P ℓ′)

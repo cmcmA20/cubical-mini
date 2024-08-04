@@ -24,7 +24,6 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
          (β : B → ⌞ P ⌟)
          (h : is-basis P L β)
         where
-
   open Order.Reasoning P
   open is-sup-lattice L
   open is-basis h
@@ -45,8 +44,8 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
     c-closed : (U : ℙ B ℓ′) → ({b : B} → b ∈ U → 𝓘 ϕ b)
              → (b : B) → b ≤ᴮ (sup (ℙ→fam β U .snd)) → 𝓘 ϕ b
     ϕ-closed : (a : Ob) → (b : B) → (b , a) ∈ ϕ
-              → ((b' : B) → b' ≤ᴮ a → 𝓘 ϕ b')
-              → 𝓘 ϕ b
+             → ((b' : B) → b' ≤ᴮ a → 𝓘 ϕ b')
+             → 𝓘 ϕ b
     𝓘-trunc : (b : B) → is-prop (𝓘 ϕ b)
 
   instance

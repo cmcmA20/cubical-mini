@@ -32,7 +32,6 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
 
   record is-basis : 𝒰 (o ⊔ ℓ ⊔ ℓsuc ℓ′) where
     no-eta-equality
-
     field
       ≤-is-small : (x : Ob) (b : B) → is-of-size ℓ′ (β b ≤ x)
       ↓-is-sup : (x : Ob) → is-lub P (↓ᴮ-inclusion x) x
