@@ -1,7 +1,5 @@
 {-# OPTIONS --safe #-}
 open import Categories.Prelude
-open import Meta.Prelude
-open import Foundations.Equiv.Size
 
 open import Combinatorics.Power
 

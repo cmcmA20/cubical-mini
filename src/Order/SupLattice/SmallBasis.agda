@@ -1,7 +1,5 @@
 {-# OPTIONS --safe #-}
 open import Categories.Prelude
-open import Meta.Prelude
-open import Foundations.Equiv.Size
 
 open import Order.Diagram.Lub
 open import Order.Base
@@ -24,13 +22,13 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
   ↓ᴮ x = Σ[ b ꞉ B ] (β b ≤ x)
 
   ↓ᴮ→base : (x : Ob) → ↓ᴮ x → B
-  ↓ᴮ→base x = fst
+  ↓ᴮ→base _ = fst
 
   ↓ᴮ-inclusion : (x : Ob) → ↓ᴮ x → Ob
-  ↓ᴮ-inclusion x = β ∘ ↓ᴮ→base x
+  ↓ᴮ-inclusion x = β ∘ₜ ↓ᴮ→base x
 
   ↓ᴮ-≤ : {x y : Ob} → x ≤ y → ↓ᴮ x → ↓ᴮ y
-  ↓ᴮ-≤ le (b , r) = b , r ∙ le
+  ↓ᴮ-≤ le = second (_∙ le)
 
   record is-basis : 𝒰 (o ⊔ ℓ ⊔ ℓsuc ℓ′) where
     no-eta-equality
@@ -52,13 +50,13 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     ≤→≤ᴮ = ≤ᴮ≃≤ ⁻¹ $_
 
     ≤ᴮ-is-prop : {b : B} {x : Ob} → is-prop (b ≤ᴮ x)
-    ≤ᴮ-is-prop {b} {x} = ≃→is-of-hlevel 1 ≤ᴮ≃≤ ≤-thin
+    ≤ᴮ-is-prop = ≃→is-of-hlevel! 1 ≤ᴮ≃≤
 
     small-↓ᴮ : Ob → 𝒰 ℓ′
     small-↓ᴮ x = Σ[ b ꞉ B ] b ≤ᴮ x
 
     small-↓ᴮ-inclusion : {x : Ob} → small-↓ᴮ x → Ob
-    small-↓ᴮ-inclusion = β ∘ fst
+    small-↓ᴮ-inclusion = β ∘ₜ fst
 
     small-↓ᴮ-≃-↓ᴮ : {x : Ob} → small-↓ᴮ x ≃ ↓ᴮ x
     small-↓ᴮ-≃-↓ᴮ {x} = Σ-ap-snd λ _ → ≤ᴮ≃≤

@@ -4,7 +4,6 @@ module Foundations.Pi.Properties where
 open import Foundations.Base
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
-open import Foundations.Equiv.Size
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 open import Foundations.Transport
@@ -130,16 +129,6 @@ fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ isom where
     transport (ap P refl) p                      ~⟨ transport-refl _ ⟩
     p                                            ∎
   go .snd .is-iso.linv f = fun-ext λ x → from-pathᴾ $ ap f (paths A-c x)
-
-Π-is-of-size : {X : 𝒰 ℓ} {A : X → 𝒰 ℓ′}
-             → is-of-size ℓ″ X
-             → ((x : X) → is-of-size ℓ‴ (A x))
-             → is-of-size (ℓ″ ⊔ ℓ‴) (Π[ x ꞉ X ] A x)
-Π-is-of-size {ℓ‴} {X} (X' , e) sa =
-  Π[ x ꞉ X' ] (A' (e $ x)) , Π-ap e λ x → resizing-cond (sa (e $ x))
-  where
-    A' : X → 𝒰 ℓ‴
-    A' x = ⌞ sa x ⌟
 
 -- TODO opaque proofs of invertibility?
 hetero-homotopy≃homotopy

@@ -44,8 +44,8 @@ single x t = el! (x ＝ t)
 ⋁_ : {I : 𝒰 ℓ} → (I → ℙ X ℓ) → ℙ X ℓ
 ⋁_ {I} F x = el! (∃[ i ꞉ I ] x ∈ F i)
 
-ℙ-map' : {X X' : Type ℓˣ} → (X → X') → ℙ X ℓ → ℙ X' (ℓˣ ⊔ ℓ)
-ℙ-map' {X} f px x' = el! (∃[ x ꞉ X ] (x' ＝ f x) × ⌞ x ∈ px ⌟)
+ℙ-map : {X X′ : Type ℓˣ} → (X → X′) → ℙ X ℓ → ℙ X′ (ℓˣ ⊔ ℓ)
+ℙ-map {X} f px x′ = el! (∃[ x ꞉ X ] (x′ ＝ f x) × ⌞ x ∈ px ⌟)
 
 ℙ-ctramap : (Y → X) → ℙ X ℓ → ℙ Y ℓ
 ℙ-ctramap f px = px ∘ f
@@ -81,14 +81,14 @@ instance
 ⊆⊤ : {A : ℙ X ℓ} → A ⊆ the (ℙ X ℓ′) ⊤
 ⊆⊤ = _
 
-⊆-∪-r-l : {A B C : ℙ X ℓ} → C ⊆ A → C ⊆ A ∪ B
-⊆-∪-r-l ca cx = ∣ inl (ca cx) ∣₁
+ℙ-inl : {A B C : ℙ X ℓ} → C ⊆ A → C ⊆ A ∪ B
+ℙ-inl ca cx = ∣ inl (ca cx) ∣₁
 
-⊆-∪-r-r : {A B C : ℙ X ℓ} → C ⊆ B → C ⊆ A ∪ B
-⊆-∪-r-r cb cx = ∣ inr (cb cx) ∣₁
+ℙ-inr : {A B C : ℙ X ℓ} → C ⊆ B → C ⊆ A ∪ B
+ℙ-inr cb cx = ∣ inr (cb cx) ∣₁
 
-⊆-∪-l : {A B C : ℙ X ℓ} → A ⊆ C → B ⊆ C → A ∪ B ⊆ C
-⊆-∪-l ac bc = elim! [ ac , bc ]ᵤ
+∪-⊆ : {A B C : ℙ X ℓ} → A ⊆ C → B ⊆ C → A ∪ B ⊆ C
+∪-⊆ ac bc = elim! [ ac , bc ]ᵤ
 
 -- FIXME what's the point?
 𝕋→carrier : (A : ℙ X ℓ) → Σ[ A ] → X

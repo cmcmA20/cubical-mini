@@ -5,7 +5,6 @@ open import Foundations.Base
 open import Foundations.Cubes
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
-open import Foundations.Equiv.Size
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 open import Foundations.Transport
@@ -237,15 +236,6 @@ infixr 4 _,ₚ_
 ×-swap .fst (x , y) = y , x
 ×-swap .snd .equiv-proof = strict-contr-fibres _
 
-Σ-is-of-size : {X : 𝒰 ℓ} {A : X → 𝒰 ℓ′}
-             → is-of-size ℓ″ X
-             → ((x : X) → is-of-size ℓ‴ (A x))
-             → is-of-size (ℓ″ ⊔ ℓ‴) (Σ X A)
-Σ-is-of-size {ℓ‴} {X} (X' , e) sa =
-  Σ X' (A' ∘ (e $_)) , Σ-ap e λ x → resizing-cond (sa (e $ x))
-  where
-    A' : X → 𝒰 ℓ‴
-    A' x = ⌞ sa x ⌟
 
 -- Automation
 

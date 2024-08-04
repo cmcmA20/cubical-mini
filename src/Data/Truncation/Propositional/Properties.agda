@@ -84,9 +84,12 @@ rec-set! f-const = rec-set f-const (hlevel 2)
 
 ∥-∥₁-is-of-size : {X : 𝒰 ℓ}
                 → is-of-size ℓ′ X → is-of-size ℓ′ ∥ X ∥₁
-∥-∥₁-is-of-size (X' , e) = ∥ X' ∥₁ , ae e
+∥-∥₁-is-of-size = bimap ∥_∥₁ ae
 
 instance
+  Size-∥-∥₁ : {A : Type ℓ} → ⦃ _ : Size ℓ′ A ⦄ → Size ℓ′ ∥ A ∥₁
+  Size-∥-∥₁ {ℓ′} .Size.has-of-size = ∥-∥₁-is-of-size (size ℓ′)
+
   Extensional-Σ-∥-∥₁
     : {A : Type ℓ} {B : A → Type ℓ′}
       ⦃ ea : Extensional A ℓ″ ⦄

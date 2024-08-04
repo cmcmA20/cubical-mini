@@ -28,5 +28,6 @@ open import Foundations.Path
 open import Foundations.Pi
 open import Foundations.Prelude
 open import Foundations.Sigma
+open import Foundations.Size
 open import Foundations.Transport
 open import Foundations.Univalence
