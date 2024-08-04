@@ -113,7 +113,7 @@ open is-iso
        (e : A ≃ A′)
      → Π[ a ꞉ A ] (P a ≃ Q (e .fst a))
      → Σ A P ≃ Σ A′ Q
-Σ-ap e e′ = Σ-ap-snd e′ ∙ₑ Σ-ap-fst e
+Σ-ap e e′ = Σ-ap-snd e′ ∙ Σ-ap-fst e
 
 ×-ap : {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
      → A ≃ C → B ≃ D → A × B ≃ C × D

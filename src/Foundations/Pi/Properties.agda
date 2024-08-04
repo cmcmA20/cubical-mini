@@ -51,7 +51,7 @@ private variable
        (e : A ≃ A′)
      → Π[ a ꞉ A ] (P a ≃ Q (e $ a))
      → Π[ x ꞉ A ] P x ≃ Π[ y ꞉ A′ ] Q y
-Π-ap e e′ = Π-cod-≃ e′ ∙ₑ Π-dom-≃ e ⁻¹
+Π-ap e e′ = Π-cod-≃ e′ ∙ Π-dom-≃ e ⁻¹
 
 Π≃∀ : Π[ x ꞉ A ] P x
     ≃ ∀[ x ꞉ A ] P x
