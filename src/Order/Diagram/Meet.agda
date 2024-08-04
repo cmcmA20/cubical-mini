@@ -21,22 +21,20 @@ record is-meet (P : Poset o ℓ) (a b glb : ⌞ P ⌟) : Type (o ⊔ ℓ) where
 record Meet (P : Poset o ℓ) (a b : ⌞ P ⌟) : Type (o ⊔ ℓ) where
   no-eta-equality
   field
-    glb : ⌞ P ⌟
+    glb      : ⌞ P ⌟
     has-meet : is-meet P a b glb
   open is-meet has-meet public
-
-Has-meets : Poset o ℓ → Type (o ⊔ ℓ)
-Has-meets P = ∀{x y} → Meet P x y
-
-open is-meet
 
 unquoteDecl H-Level-is-meet = declare-record-hlevel 1 H-Level-is-meet (quote is-meet)
 unquoteDecl Meet-Iso = declare-record-iso Meet-Iso (quote Meet)
 
+Has-meets : Poset o ℓ → Type (o ⊔ ℓ)
+Has-meets P = ∀{x y} → Meet P x y
+
 module _ {o ℓ} {P : Poset o ℓ} where
   open Poset P
   open is-glb
-  open Glb
+  open is-meet
 
   is-meet→is-glb : ∀ {a b glb} → is-meet P a b glb → is-glb P (if_then a else b) glb
   is-meet→is-glb meet .glb≤fam true = meet .meet≤l

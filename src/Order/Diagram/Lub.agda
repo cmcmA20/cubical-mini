@@ -21,7 +21,7 @@ module _ {o ℓ} (P : Poset o ℓ) where
   record Lub {ℓᵢ} {I : 𝒰 ℓᵢ} (F : I → Ob) : 𝒰 (o ⊔ ℓ ⊔ ℓᵢ) where
     no-eta-equality
     field
-      lub : Ob
+      lub     : Ob
       has-lub : is-lub F lub
     open is-lub has-lub public
 
@@ -37,8 +37,8 @@ module _ {o ℓ} {P : Poset o ℓ} where
     → is-lub P F x → is-lub P F y
     → x ＝ y
   lub-unique {x} {y} lub lub′ = ≤-antisym
-    (lub .least y (lub′ .fam≤lub))
-    (lub′ .least x (lub .fam≤lub))
+    (lub  .least y (lub′ .fam≤lub))
+    (lub′ .least x (lub  .fam≤lub))
 
   Lub-is-prop
     : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob}
@@ -78,14 +78,13 @@ module _ {o ℓ} {P : Poset o ℓ} where
   module _
     {ℓᵢ ℓᵢ′} {Ix : Type ℓᵢ} {Im : Type ℓᵢ′}
     {f : Ix → Im}
-    {F : Im → Ob}
-    (surj : is-surjective f)
-    where
+    {F : Im → Ob} where
+    module _ (surj : is-surjective f) where
       cover-preserves-is-lub : ∀ {lub} → is-lub P F lub → is-lub P (F ∘ₜ f) lub
       cover-preserves-is-lub l .fam≤lub x = l .fam≤lub (f x)
       cover-preserves-is-lub l .least   ub′ le = l .least ub′ λ i → ∥-∥₁.proj! do
-        (i′ , p) ← surj i
-        pure (=→≤ (ap F (sym p)) ∙ le i′)
+        i′ , p ← surj i
+        pure (=→≤ (ap F (p ⁻¹)) ∙ le i′)
 
       cover-preserves-lub : Lub P F → Lub P (F ∘ₜ f)
       cover-preserves-lub l .Lub.lub = _
@@ -93,13 +92,22 @@ module _ {o ℓ} {P : Poset o ℓ} where
 
       cover-reflects-is-lub : ∀ {lub} → is-lub P (F ∘ₜ f) lub → is-lub P F lub
       cover-reflects-is-lub l .fam≤lub x = ∥-∥₁.proj! do
-        (y , p) ← surj x
-        pure (=→≤ (ap F (sym p)) ∙ l .fam≤lub y)
+        y , p ← surj x
+        pure (=→≤ (ap F (p ⁻¹)) ∙ l .fam≤lub y)
       cover-reflects-is-lub l .least ub′ le = l .least ub′ λ i → le (f i)
 
       cover-reflects-lub : Lub P (F ∘ₜ f) → Lub P F
       cover-reflects-lub l .Lub.lub     = _
       cover-reflects-lub l .Lub.has-lub = cover-reflects-is-lub (l .Lub.has-lub)
+
+      cover-reindexing : (s s′ : Ob) → is-lub P F s → is-lub P (F ∘ₜ f) s′ → s ＝ s′
+      cover-reindexing s s′ l l′ = ≤-antisym
+        (least l s′ λ t → elim! (λ x p → subst (λ φ → F φ ≤ s′) p (fam≤lub l′ x)) (surj t))
+        (least l′ s λ t′ → fam≤lub l (f t′))
+
+    module _ (is-eqv : is-equiv f) where
+      equiv-reindexing : (s s′ : Ob) → is-lub P F s → is-lub P (F ∘ₜ f) s′ → s ＝ s′
+      equiv-reindexing = cover-reindexing (is-equiv→is-surjective is-eqv)
 
   cast-is-lub
     : ∀ {ℓᵢ ℓᵢ′} {I : 𝒰 ℓᵢ} {I′ : 𝒰 ℓᵢ′} {F : I → Ob} {G : I′ → Ob} {lub}
@@ -108,7 +116,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
     → is-lub P F lub
     → is-lub P G lub
   cast-is-lub {G} e p has-lub .fam≤lub i′
-    = =→≤ (sym (p (e ⁻¹ $ i′) ∙ ap G (Equiv.ε e i′)))
+    = =→~⁻ (p (e ⁻¹ $ i′) ∙ ap G (Equiv.ε e i′))
     ∙ has-lub .fam≤lub (e ⁻¹ $ i′)
   cast-is-lub e p has-lub .least ub G≤ub =
     has-lub .least ub (λ i → =→≤ (p i) ∙ G≤ub (e $ i))
@@ -135,7 +143,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
   lub-of-const-fam {F = F} is-const x-lub i =
     ≤-antisym
       (fam≤lub x-lub i)
-      (least x-lub (F i) λ j → =→≤ (sym (is-const i j)))
+      (least x-lub (F i) λ j → =→≥ (is-const i j))
 
   const-inhabited-fam→is-lub
     : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob} {x}

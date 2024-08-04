@@ -169,8 +169,7 @@ module local-inductive-definitions
       G x .least u' ub     = is-lubᴮ u' (ub ∘ₜ (↓ᴮf-equiv-↓-tot x $_))
 
       H : (x : Ob) → Γ ϕ loc x ＝ f x
-      H x = reindexing-along-equiv-=-sup {P = P} refl (β ∘ₜ ↓→base ϕ x) (Γ ϕ loc x) (f x)
-             (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ x) (loc x)) (G x)
+      H x = equiv-reindexing id-is-equiv (Γ ϕ loc x) (f x) (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ x) (loc x)) (G x)
 
   ind-def-from-monotone-map : (f : Ob → Ob)
                             → (∀ {x y} → x ≤ y → f x ≤ f y)
@@ -455,9 +454,7 @@ module bounded-inductive-definitions {o ℓ ℓ′}
         g-m :  α t → ↓ᴮ P L β a
         g-m = ↓ᴮ-≤ P L β le ∘ₜ (α-c $_)
         g-path : a' ＝ sup (↓ᴮ-inclusion P L β a ∘ₜ g-m)
-        g-path = reindexing-along-surj-=-sup α-c (β ∘ₜ fst) a' (sup (↓ᴮ-inclusion P L β a ∘ₜ g-m))
-                   (↓-is-sup a')
-                   (suprema (↓ᴮ-inclusion P L β a' ∘ₜ α-c .fst))
+        g-path = cover-reindexing (α-c .snd) a' (sup (↓ᴮ-inclusion P L β a ∘ₜ g-m)) (↓-is-sup a') (suprema (↓ᴮ-inclusion P L β a' ∘ₜ α-c .fst))
 
       cur-trunc-g : {b : B} (a' : Ob) (p : (b , a') ∈ ϕ) (le : a' ≤ a)
                   → ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , sup (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
@@ -632,10 +629,7 @@ module _ {o ℓ ℓ′}
                                  λ b' → C b' ∘ₜ subst (b' ≤ᴮ_) (a=⋁α ⁻¹)
           where
           a=⋁α : a ＝ sup (↓ᴮ-inclusion P L β a ∘ₜ (s $_))
-          a=⋁α = reindexing-along-surj-=-sup
-                    s (↓ᴮ-inclusion P L β a) a (sup (↓ᴮ-inclusion P L β a ∘ₜ (s $_)))
-                    (↓-is-sup a)
-                    (suprema (↓ᴮ-inclusion P L β a ∘ₜ (s $_)))
+          a=⋁α = cover-reindexing (s .snd) a (sup (↓ᴮ-inclusion P L β a ∘ₜ (s $_))) (↓-is-sup a) (suprema (↓ᴮ-inclusion P L β a ∘ₜ (s $_)))
 
     Small-𝓘nd-⊆-𝓘nd : Small-𝓘nd ⊆ 𝓘nd
     Small-𝓘nd-⊆-𝓘nd = Small-𝓘nd-is-initial 𝓘nd c-cl-sm Φ-cl-sm
@@ -775,11 +769,7 @@ module _ {o ℓ ℓ′}
       ↓ᴮ-fa≃↓ = Σ-ap-snd λ b → prop-extₑ! ↓ᴮ-fa→↓ ↓→↓ᴮ-fa
 
       H : (a : Ob) → Γ φ (bounded→local φ bnd) a ＝ f a
-      H a = reindexing-along-equiv-=-sup
-                ↓ᴮ-fa≃↓ (β ∘ₜ ↓→base φ a)
-                (Γ φ (bounded→local φ bnd) a) (f a)
-                (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base φ a) (bounded→local φ bnd a))
-                is-supᴮ
+      H a = equiv-reindexing (↓ᴮ-fa≃↓ .snd) (Γ φ (bounded→local φ bnd) a) (f a) (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base φ a) (bounded→local φ bnd a)) is-supᴮ
 
 module _ {o ℓ ℓ′}
          {B : 𝒰 ℓ′}

@@ -65,10 +65,11 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     ↓ᴮ-is-small {x} = small-↓ᴮ x , small-↓ᴮ-≃-↓ᴮ
 
     is-supᴮ' : {x : Ob} → x ＝ sup (small-↓ᴮ-inclusion {x})
-    is-supᴮ' {x} =
-      reindexing-along-equiv-=-sup {P = P}
-        small-↓ᴮ-≃-↓ᴮ (↓ᴮ-inclusion x) x (sup small-↓ᴮ-inclusion)
-        (↓-is-sup x) (suprema small-↓ᴮ-inclusion)
+    is-supᴮ' {x} = equiv-reindexing (small-↓ᴮ-≃-↓ᴮ .snd)
+      x
+      (sup small-↓ᴮ-inclusion)
+      (↓-is-sup x)
+      (suprema small-↓ᴮ-inclusion)
 
     is-supᴮ : {x : Ob} → is-lub P (small-↓ᴮ-inclusion {x}) x
     is-supᴮ {x} = subst (is-lub P (small-↓ᴮ-inclusion {x}))

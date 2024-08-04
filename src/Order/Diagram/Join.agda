@@ -13,7 +13,6 @@ private variable o ℓ : Level
 record is-join (P : Poset o ℓ) (a b lub : ⌞ P ⌟) : 𝒰 (o ⊔ ℓ) where
   no-eta-equality
   open Poset P
-
   field
     l≤join : a ≤ lub
     r≤join : b ≤ lub
@@ -22,21 +21,20 @@ record is-join (P : Poset o ℓ) (a b lub : ⌞ P ⌟) : 𝒰 (o ⊔ ℓ) where
 record Join (P : Poset o ℓ) (a b : ⌞ P ⌟) : 𝒰 (o ⊔ ℓ) where
   no-eta-equality
   field
-    lub : ⌞ P ⌟
+    lub      : ⌞ P ⌟
     has-join : is-join P a b lub
   open is-join has-join public
-
-Has-joins : Poset o ℓ → Type (o ⊔ ℓ)
-Has-joins P = ∀{x y} → Join P x y
-
-open is-join
 
 unquoteDecl H-Level-is-join = declare-record-hlevel 1 H-Level-is-join (quote is-join)
 unquoteDecl Join-Iso = declare-record-iso Join-Iso (quote Join)
 
+Has-joins : Poset o ℓ → Type (o ⊔ ℓ)
+Has-joins P = ∀{x y} → Join P x y
+
 module _ {o ℓ} {P : Poset o ℓ} where
   open Poset P
   open is-lub
+  open is-join
 
   is-join→is-lub : ∀ {a b lub} → is-join P a b lub → is-lub P (if_then a else b) lub
   is-join→is-lub join .fam≤lub true = join .l≤join
