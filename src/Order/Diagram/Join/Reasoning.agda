@@ -58,11 +58,11 @@ opaque
     → x ∪ y ≤ x′ ∪ y′
   ∪≤∪ p q = ∪-universal _ (p ∙ l≤∪) (q ∙ r≤∪)
 
-  ∪≤∪l : {x y x′ : Ob} → x ≤ x′ → x ∪ y ≤ x′ ∪ y
-  ∪≤∪l p = ∪≤∪ p refl
+  ∪≤∪-l : {x y x′ : Ob} → x ≤ x′ → x ∪ y ≤ x′ ∪ y
+  ∪≤∪-l p = ∪≤∪ p refl
 
-  ∪≤∪r : {x y y′ : Ob} → y ≤ y′ → x ∪ y ≤ x ∪ y′
-  ∪≤∪r p = ∪≤∪ refl p
+  ∪≤∪-r : {x y y′ : Ob} → y ≤ y′ → x ∪ y ≤ x ∪ y′
+  ∪≤∪-r p = ∪≤∪ refl p
 
   ∪→order : ∀ {x y} → x ∪ y ＝ y → x ≤ y
   ∪→order {x} {y} p =

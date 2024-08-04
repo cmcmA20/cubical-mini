@@ -81,20 +81,21 @@ instance
 record Monotone {o o′ ℓ ℓ′}
   (P : Poset o ℓ) (Q : Poset o′ ℓ′) : 𝒰 (o ⊔ o′ ⊔ ℓ ⊔ ℓ′) where
   no-eta-equality
+  constructor mk-monotone
   private
     module P = Poset P
     module Q = Poset Q
   field
     hom    : P.Ob → Q.Ob
     pres-≤ : ∀ {x y} → x P.≤ y → hom x Q.≤ hom y
+{-# INLINE mk-monotone #-}
 
 open Monotone public
 
 unquoteDecl H-Level-Monotone =
   declare-record-hlevel 2 H-Level-Monotone (quote Monotone)
 
-private variable
-  P Q R : Poset o ℓ
+private variable P Q R : Poset o ℓ
 
 instance
   ⇒-Poset : ⇒-notation (Poset o ℓ) (Poset o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))

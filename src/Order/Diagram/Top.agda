@@ -17,7 +17,7 @@ module _ {o ℓ} (P : Poset o ℓ) where
 
   record Top : Type (o ⊔ ℓ) where
     field
-      top : Ob
+      top     : Ob
       has-top : is-top top
 
     instance

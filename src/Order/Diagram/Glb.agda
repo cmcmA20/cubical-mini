@@ -7,7 +7,7 @@ open import Order.Base
 import Order.Reasoning
 
 module _ {o ℓ} (P : Poset o ℓ) where
-  open Poset P
+  open Order.Reasoning P
 
   record is-glb {ℓᵢ} {I : Type ℓᵢ} (F : I → Ob) (glb : Ob)
           : Type (o ⊔ ℓ ⊔ ℓᵢ) where

@@ -8,7 +8,7 @@ import Order.Reasoning
 module _ {o ℓ} (P : Poset o ℓ) where
   open Order.Reasoning P
 
-  record is-lfp (f : P ⇒ P) (x : ⌞ P ⌟) : Type (o ⊔ ℓ) where
+  record is-lfp (f : P ⇒ P) (x : Ob) : Type (o ⊔ ℓ) where
     no-eta-equality
     field
       fixed : f # x ＝ x

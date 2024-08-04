@@ -9,6 +9,7 @@ open import Data.Unit
 open import Combinatorics.Power
 open import Functions.Surjection
 
+open import Order.Diagram.Fixpoint
 open import Order.Diagram.Lub
 open import Order.Base
 open import Order.Category
@@ -17,18 +18,6 @@ open import Order.SupLattice.SmallBasis
 import Order.SupLattice.SmallPresentation as small-presentation-of-lattice
 import Order.Reasoning
 
-module _ {o ℓ} (P : Poset o ℓ) where
-
-  open Poset P
-
-  has-lfp : (Ob → Ob) → 𝒰 (o ⊔ ℓ)
-  has-lfp f = Σ[ p ꞉ Ob ] (f p ＝ p) × ((a : Ob) → f a ＝ a → p ≤ a)
-
-  has-lfp-is-prop : (f : Ob → Ob) → is-prop (has-lfp f)
-  has-lfp-is-prop f (p₁ , fp₁ , l₁) (p₂ , fp₂ , l₂)
-    =  ≤-antisym (l₁ p₂ fp₂) (l₂ p₁ fp₁)
-    ,ₚ prop!
-
 module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
          (P : Poset o ℓ)
          (L : is-sup-lattice P ℓ′)
@@ -36,7 +25,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
          (h : is-basis P L β)
         where
 
-  open Poset P
+  open Order.Reasoning P
   open is-sup-lattice L
   open is-basis h
 
@@ -91,7 +80,7 @@ module local-inductive-definitions
          (h : is-basis P L β)
        where
 
-  open Poset P
+  open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -138,54 +127,46 @@ module local-inductive-definitions
       S'-monotone-ish x y o =
        ↓→S' y ∘ₜ ↓-monotonicity-lemma ϕ x y o ∘ₜ S'→↓ x
 
-    Γ : Ob → Ob
-    Γ a = sup (β ∘ₜ fst ∘ₜ S'→↓ a)
-
-    Γ-is-monotone : ∀ {x y} → x ≤ y → Γ x ≤ Γ y
-    Γ-is-monotone {x} {y} le =
-      ↓-has-sup-implies-monotone ϕ x y (Γ x) (Γ y) le
+    Γ : P ⇒ P
+    Γ .hom a = sup (β ∘ₜ fst ∘ₜ S'→↓ a)
+    Γ .pres-≤ {x} {y} le =
+      ↓-has-sup-implies-monotone ϕ x y _ _ le
          (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ x) (loc x))
          (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ y) (loc y))
 
-  monotone-map-give-local-ind-def : (f : Ob → Ob)
-                                  → (∀ {x y} → x ≤ y → f x ≤ f y)
-                                  → Σ[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ loc ꞉ is-local ϕ ] ((x : Ob) → Γ ϕ loc x ＝ f x)
-  monotone-map-give-local-ind-def f f-mono = ϕ , loc , H
+  monotone-map-give-local-ind-def : (f : P ⇒ P)
+                                  → Σ[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ loc ꞉ is-local ϕ ] ((x : Ob) → Γ ϕ loc # x ＝ f # x)
+  monotone-map-give-local-ind-def f = ϕ , loc , H
     where
       ϕ : ℙ (B × Ob) (o ⊔ ℓ′)
-      ϕ (b , a) = el! (Lift o (b ≤ᴮ f a))
+      ϕ (b , a) = el! (Lift o (b ≤ᴮ f # a))
 
-      ↓ᴮf-equiv-↓-tot : (a : Ob) → small-↓ᴮ (f a) ≃ (ϕ ↓ a)
+      ↓ᴮf-equiv-↓-tot : (a : Ob) → small-↓ᴮ (f # a) ≃ (ϕ ↓ a)
       ↓ᴮf-equiv-↓-tot a =
         Σ-ap-snd λ b → prop-extₑ!
             (λ le → ∣ a , lift le , refl ∣₁)
-            (elim! λ a' lo le' → ≤→≤ᴮ (≤ᴮ→≤ lo ∙ f-mono le'))
+            (elim! λ a' lo le' → ≤→≤ᴮ (≤ᴮ→≤ lo ∙ f .pres-≤ le'))
 
       loc : is-local ϕ
-      loc a = small-↓ᴮ (f a) , ↓ᴮf-equiv-↓-tot a
+      loc a = small-↓ᴮ (f # a) , ↓ᴮf-equiv-↓-tot a
 
-      G : (x : Ob) → is-lub P (β ∘ₜ ↓→base ϕ x) (f x)
-      G x .fam≤lub (b , e) = elim! (λ a' lo le' → ≤ᴮ→≤ lo ∙ f-mono le') e
+      G : (x : Ob) → is-lub P (β ∘ₜ ↓→base ϕ x) (f # x)
+      G x .fam≤lub (b , e) = elim! (λ a' lo le' → ≤ᴮ→≤ lo ∙ f .pres-≤ le') e
       G x .least u' ub     = is-lubᴮ u' (ub ∘ₜ (↓ᴮf-equiv-↓-tot x $_))
 
-      H : (x : Ob) → Γ ϕ loc x ＝ f x
-      H x = equiv-reindexing id-is-equiv (Γ ϕ loc x) (f x) (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ x) (loc x)) (G x)
+      H : (x : Ob) → Γ ϕ loc # x ＝ f # x
+      H x = equiv-reindexing id-is-equiv (Γ ϕ loc # x) (f # x) (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ x) (loc x)) (G x)
 
-  ind-def-from-monotone-map : (f : Ob → Ob)
-                            → (∀ {x y} → x ≤ y → f x ≤ f y)
-                            → ℙ (B × Ob) (o ⊔ ℓ′)
-  ind-def-from-monotone-map f f-mono = monotone-map-give-local-ind-def f f-mono .fst
+  ind-def-from-monotone-map : (f : P ⇒ P) → ℙ (B × Ob) (o ⊔ ℓ′)
+  ind-def-from-monotone-map f = monotone-map-give-local-ind-def f .fst
 
-  local-from-monotone-map : (f : Ob → Ob)
-                          → (f-mono : ∀ {x y} → x ≤ y → f x ≤ f y)
-                          → is-local (ind-def-from-monotone-map f f-mono)
-  local-from-monotone-map f f-mono = monotone-map-give-local-ind-def f f-mono .snd .fst
+  local-from-monotone-map : (f : P ⇒ P) → is-local (ind-def-from-monotone-map f)
+  local-from-monotone-map f = monotone-map-give-local-ind-def f .snd .fst
 
-  local-ind-def-is-section-of-Γ : (f : Ob → Ob)
-                                → (f-mono : ∀ {x y} → x ≤ y → f x ≤ f y)
+  local-ind-def-is-section-of-Γ : (f : P ⇒ P)
                                 → (x : Ob)
-                                → Γ (ind-def-from-monotone-map f f-mono) (local-from-monotone-map f f-mono) x ＝ f x
-  local-ind-def-is-section-of-Γ f f-mono = monotone-map-give-local-ind-def f f-mono .snd .snd
+                                → Γ (ind-def-from-monotone-map f) (local-from-monotone-map f) # x ＝ f # x
+  local-ind-def-is-section-of-Γ f = monotone-map-give-local-ind-def f .snd .snd
 
 module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
          (P : Poset o ℓ)
@@ -194,7 +175,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
          (h : is-basis P L β)
        where
 
-  open Poset P
+  open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -208,17 +189,17 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
     is-small-closed-subset : ℙ B ℓ′ → 𝒰 (o ⊔ ℓsuc ℓ′)
     is-small-closed-subset S = c-closure P L β h S × Φ-closure P L β h ϕ S
 
-    is-small-closed-subset-is-prop : (P : ℙ B ℓ′) → is-prop (is-small-closed-subset P)
-    is-small-closed-subset-is-prop P = hlevel 1
+    -- is-small-closed-subset-is-prop : (P : ℙ B ℓ′) → is-prop (is-small-closed-subset P)
+    -- is-small-closed-subset-is-prop P = hlevel 1
 
     small-closed-subsets : 𝒰 (o ⊔ ℓsuc ℓ′)
     small-closed-subsets = Σ[ P ꞉ ℙ B ℓ′ ] is-small-closed-subset P
 
     is-deflationary : Ob → 𝒰 ℓ
-    is-deflationary a = Γ ϕ loc a ≤ a
+    is-deflationary a = Γ ϕ loc # a ≤ a
 
-    is-deflationary-is-prop : (a : Ob) → is-prop (is-deflationary a)
-    is-deflationary-is-prop a = hlevel 1
+    -- is-deflationary-is-prop : (a : Ob) → is-prop (is-deflationary a)
+    -- is-deflationary-is-prop a = hlevel 1
 
     deflationary-points : 𝒰 (o ⊔ ℓ)
     deflationary-points = Σ[ a ꞉ Ob ] is-deflationary a
@@ -319,18 +300,18 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
         sup-𝓘-is-lub : is-lub P (ℙ→fam β 𝓘nd .snd) sup-𝓘
         sup-𝓘-is-lub = sup-of-small-fam-is-lub L (β ∘ₜ 𝕋→carrier 𝓘nd) total-space-𝓘-is-small
 
-      sup-𝓘-is-fixed-point : Γ ϕ loc sup-𝓘 ＝ sup-𝓘
+      sup-𝓘-is-fixed-point : Γ ϕ loc # sup-𝓘 ＝ sup-𝓘
       sup-𝓘-is-fixed-point =
         ≤-antisym Γ-sup-below-sup $
         subst (sup-𝓘 ≤_) sup-Q-is-Γ-sup sup-𝓘-below-sup-Q
         where
-        Γ-sup-below-sup : Γ ϕ loc sup-𝓘 ≤ sup-𝓘
+        Γ-sup-below-sup : Γ ϕ loc # sup-𝓘 ≤ sup-𝓘
         Γ-sup-below-sup =
           small-closed-subsets→def-points (𝓘'-subset , 𝓘'-is-c-closed , 𝓘'-is-ϕ-closed) .snd
 
         Q-Γ-sc-sub : small-closed-subsets
         Q-Γ-sc-sub = def-points→small-closed-subsets
-                       (Γ ϕ loc sup-𝓘 , Γ-is-monotone ϕ loc Γ-sup-below-sup)
+          (Γ ϕ loc # sup-𝓘 , Γ ϕ loc .pres-≤ Γ-sup-below-sup)
 
         Q-Γ-sup : ℙ B ℓ′
         Q-Γ-sup = Q-Γ-sc-sub .fst
@@ -342,7 +323,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
         sup-Q : Ob
         sup-Q = sup (ℙ→fam β Q-Γ-sup .snd)
 
-        sup-Q-is-Γ-sup : sup-Q ＝ Γ ϕ loc sup-𝓘
+        sup-Q-is-Γ-sup : sup-Q ＝ Γ ϕ loc # sup-𝓘
         sup-Q-is-Γ-sup = is-supᴮ' ⁻¹
 
         sup-𝓘-below-sup-Q : sup-𝓘 ≤ sup-Q
@@ -352,12 +333,12 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
 
 
       sup-𝓘-is-least-fixed-point : (a : Ob)
-                                 → Γ ϕ loc a ＝ a → sup-𝓘 ≤ a
+                                 → Γ ϕ loc # a ＝ a → sup-𝓘 ≤ a
       sup-𝓘-is-least-fixed-point a p =
         subst (sup-𝓘 ≤_) sup-P-is-a sup-𝓘-below-sup-P
         where
           P-sc-sub : small-closed-subsets
-          P-sc-sub = def-points→small-closed-subsets (a , subst (Γ ϕ loc a ≤_) p refl)
+          P-sc-sub = def-points→small-closed-subsets (a , subst (Γ ϕ loc # a ≤_) p refl)
 
           P-a : ℙ B ℓ′
           P-a = P-sc-sub .fst
@@ -377,9 +358,10 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
             joins-preserve-containment L β 𝓘'-subset P-a
                λ {x} → 𝓘nd-is-initial P-a P-is-c-closed P-is-ϕ-closed ∘ₜ 𝓘'→𝓘nd x
 
-      Γ-has-least-fixed-point : has-lfp P (Γ ϕ loc)
-      Γ-has-least-fixed-point =
-        (sup-𝓘 , sup-𝓘-is-fixed-point , sup-𝓘-is-least-fixed-point)
+      Γ-has-least-fixed-point : LFP P (Γ ϕ loc)
+      Γ-has-least-fixed-point .LFP.fixpoint = sup-𝓘
+      Γ-has-least-fixed-point .LFP.has-lfp .is-lfp.fixed = sup-𝓘-is-fixed-point
+      Γ-has-least-fixed-point .LFP.has-lfp .is-lfp.least = sup-𝓘-is-least-fixed-point
 
 module bounded-inductive-definitions {o ℓ ℓ′}
          {B : 𝒰 ℓ′}
@@ -389,7 +371,7 @@ module bounded-inductive-definitions {o ℓ ℓ′}
          (h : is-basis P L β)
        where
 
-  open Poset P
+  open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -477,7 +459,7 @@ module _ {o ℓ ℓ′}
          (h : is-basis P L β)
        where
 
-  open Poset P
+  open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -589,7 +571,7 @@ module _ {o ℓ ℓ′}
          (h : is-basis P L β)
        where
 
-  open Poset P
+  open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -656,7 +638,7 @@ module _ {o ℓ ℓ′}
          (h : is-basis P L β)
        where
 
-  open Poset P
+  open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -666,26 +648,20 @@ module _ {o ℓ ℓ′}
   open small-QIT-from-bounded-and-small-presentation P L β h
 
   Untruncated-LFP-Theorem : has-small-presentation
-                          → (f : Ob → Ob)
-                          → (f-mono : ∀ {x y} → x ≤ y → f x ≤ f y)
-                          → Σ[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ bnd ꞉ is-bounded ϕ ] ((x : Ob) → Γ ϕ (bounded→local ϕ bnd) x ＝ f x)
-                          → has-lfp P f
-  Untruncated-LFP-Theorem small-pres f f-mono (ϕ , bnd , H) =
-    subst (has-lfp P) (fun-ext H) Γ-has-least-fixed-point
+                          → (f : P ⇒ P)
+                          → Σ[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ bnd ꞉ is-bounded ϕ ] ((x : Ob) → Γ ϕ (bounded→local ϕ bnd) # x ＝ f # x)
+                          → LFP P f
+  Untruncated-LFP-Theorem small-pres f (ϕ , bnd , H) = subst (LFP P) (ext H) Γ-has-least-fixed-point
     where
      open correspondance-from-locally-small-ϕ P L β h ϕ (bounded→local ϕ bnd)
      open 𝓘nd-is-small-from-bounded-and-small-presentation P L β h small-pres ϕ bnd
      open smallness-assumption 𝓘nd-is-small
 
   LFP-Theorem : has-small-presentation
-              → (f : Ob → Ob)
-              → (∀ {x y} → x ≤ y → f x ≤ f y)
-              → ∃[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ bnd ꞉ is-bounded ϕ ] ((x : Ob) → Γ ϕ (bounded→local ϕ bnd) x ＝ f x)
-              → has-lfp P f
-  LFP-Theorem small-pres f f-mono =
-    ∥-∥₁.elim {P = λ _ → has-lfp P f}
-              (λ _ → has-lfp-is-prop P f)
-              (Untruncated-LFP-Theorem small-pres f f-mono)
+              → (f : P ⇒ P)
+              → ∃[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ bnd ꞉ is-bounded ϕ ] ((x : Ob) → Γ ϕ (bounded→local ϕ bnd) # x ＝ f # x)
+              → LFP P f
+  LFP-Theorem small-pres f = ∥-∥₁.elim hlevel! (Untruncated-LFP-Theorem small-pres f)
 
 module _ {o ℓ ℓ′}
          {B : 𝒰 ℓ′}
@@ -695,7 +671,7 @@ module _ {o ℓ ℓ′}
          (h : is-basis P L β)
        where
 
-  open Poset P
+  open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -728,18 +704,17 @@ module _ {o ℓ ℓ′}
       =ˢ-refl : {x : Ob} → x ＝ˢ x
       =ˢ-refl = =→=ˢ refl
 
-    dense→bounded : (f : Ob → Ob)
-                  → (∀ {x y} → x ≤ y → f x ≤ f y)
-                  → is-dense f
-                  → Σ[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ bnd ꞉ is-bounded ϕ ] ((x : Ob) → Γ ϕ (bounded→local ϕ bnd) x ＝ f x)
-    dense→bounded f f-mono (I , γ , f-dense) =
+    dense→bounded : (f : P ⇒ P)
+                  → is-dense (f $_)
+                  → Σ[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ bnd ꞉ is-bounded ϕ ] ((x : Ob) → Γ ϕ (bounded→local ϕ bnd) # x ＝ f # x)
+    dense→bounded f (I , γ , f-dense) =
       φ , bnd , H
       where
       φ : ℙ (B × Ob) (o ⊔ ℓ′)
-      φ (b , a') = el! (Lift {ℓ = ℓ′} o (∃[ i ꞉ I ] b ≤ᴮ f (γ i) × γ i ＝ˢ a'))
+      φ (b , a') = el! (Lift {ℓ = ℓ′} o (∃[ i ꞉ I ] b ≤ᴮ f # (γ i) × γ i ＝ˢ a'))
 
       ϕ-small : (a : Ob) → (b : B) → is-of-size ℓ′ ((b , a) ∈ φ)
-      ϕ-small a b = (∃[ i ꞉ I ] b ≤ᴮ f (γ i) × γ i ＝ˢ a) , lift≃id ⁻¹
+      ϕ-small a b = (∃[ i ꞉ I ] b ≤ᴮ f # (γ i) × γ i ＝ˢ a) , lift≃id ⁻¹
 
       ccond : covering-cond {ϕ = φ} I (small-↓ᴮ ∘ₜ γ)
       ccond a b = map (second λ {i} → (≃→↠ ∘ₜ λ where (o , eq) →
@@ -752,7 +727,7 @@ module _ {o ℓ ℓ′}
       bnd = ϕ-small , I , small-↓ᴮ ∘ₜ γ , ccond
 
       ↓ᴮ-fa→↓ : {a : Ob} {b : B}
-             → b ≤ᴮ f a
+             → b ≤ᴮ f # a
              → ∃[ a' ꞉ Ob ] (b , a') ∈ φ × a' ≤ a
       ↓ᴮ-fa→↓ {a} {b} = map (λ (i , o , r) →
                                   γ i , (lift≃id ⁻¹ $ ∣ i , o , =ˢ-refl ∣₁) , r)
@@ -760,16 +735,16 @@ module _ {o ℓ ℓ′}
 
       ↓→↓ᴮ-fa : {a : Ob} {b : B}
               → ∃[ a' ꞉ Ob ] (b , a') ∈ φ × a' ≤ a
-              → b ≤ᴮ f a
+              → b ≤ᴮ f # a
       ↓→↓ᴮ-fa {a} {b}
         = map (second $ first $ (lift≃id $_))
-        ∙ elim! λ _ _ r path o → ≤→≤ᴮ (subst (β b ≤_) (ap f (=ˢ→= path)) (≤ᴮ→≤ r) ∙ f-mono o)
+        ∙ elim! λ _ _ r path o → ≤→≤ᴮ (subst (β b ≤_) (ap$ f (=ˢ→= path)) (≤ᴮ→≤ r) ∙ f .pres-≤ o)
 
-      ↓ᴮ-fa≃↓ : {a : Ob} → small-↓ᴮ (f a) ≃ φ ↓ a
+      ↓ᴮ-fa≃↓ : {a : Ob} → small-↓ᴮ (f # a) ≃ φ ↓ a
       ↓ᴮ-fa≃↓ = Σ-ap-snd λ b → prop-extₑ! ↓ᴮ-fa→↓ ↓→↓ᴮ-fa
 
-      H : (a : Ob) → Γ φ (bounded→local φ bnd) a ＝ f a
-      H a = equiv-reindexing (↓ᴮ-fa≃↓ .snd) (Γ φ (bounded→local φ bnd) a) (f a) (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base φ a) (bounded→local φ bnd a)) is-supᴮ
+      H : (a : Ob) → Γ φ (bounded→local φ bnd) # a ＝ f # a
+      H a = equiv-reindexing (↓ᴮ-fa≃↓ .snd) (Γ φ (bounded→local φ bnd) # a) (f # a) (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base φ a) (bounded→local φ bnd a)) is-supᴮ
 
 module _ {o ℓ ℓ′}
          {B : 𝒰 ℓ′}
@@ -779,7 +754,7 @@ module _ {o ℓ ℓ′}
          (h : is-basis P L β)
        where
 
-  open Poset P
+  open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -789,12 +764,9 @@ module _ {o ℓ ℓ′}
 
   LFP-Theorem-from-Density : has-small-presentation
                            → is-locally-of-size ℓ′ Ob
-                           → (f : Ob → Ob)
-                           → (∀ {x y} → x ≤ y → f x ≤ f y)
-                           → is-dense P L β h f
-                           → has-lfp P f
-  LFP-Theorem-from-Density small-pres l-small f f-mono f-dense =
-    Untruncated-LFP-Theorem P L β h
-      small-pres f f-mono
-      (dense→bounded P L β h
-                     l-small f f-mono f-dense)
+                           → (f : P ⇒ P)
+                           → is-dense P L β h (f $_)
+                           → LFP P f
+  LFP-Theorem-from-Density small-pres l-small f f-dense =
+    Untruncated-LFP-Theorem P L β h small-pres f
+      (dense→bounded P L β h l-small f f-dense)
