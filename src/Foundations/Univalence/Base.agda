@@ -38,12 +38,12 @@ module @0 _ where opaque
 
   ua-pathᴾ→= : (e : A ≃ B) {x : A} {y : B}
              → ＜ x ／ (λ i → ua e i) ＼ y ＞
-             → e .fst x ＝ y
+             → e # x ＝ y
   ua-pathᴾ→= e p i = ua-unglue e i (p i)
 
   ua-glue : (e : A ≃ B) (i : I)
             (x : Partial (~ i) A)
-            (y : B [ _ ↦ (λ { (i = i0) → e .fst (x 1=1) }) ])
+            (y : B [ _ ↦ (λ { (i = i0) → e # (x 1=1) }) ])
           → ua e i [ _ ↦ (λ { (i = i0) → x 1=1
                             ; (i = i1) → outS y
                             }) ]
@@ -53,15 +53,25 @@ module @0 _ where opaque
                                    (outS y))
 
   =→ua-pathᴾ : (e : A ≃ B) {x : A} {y : B}
-             → e .fst x ＝ y
+             → e # x ＝ y
              → ＜ x ／ (λ i → ua e i) ＼ y ＞
   =→ua-pathᴾ e {x} p i = outS (ua-glue e i (λ { (i = i0) → x }) (inS (p i)))
 
   ua-pathᴾ≃= : (e : A ≃ B) {x : A} {y : B}
-             → (e .fst x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
+             → (e # x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
   ua-pathᴾ≃= eqv .fst = =→ua-pathᴾ eqv
   ua-pathᴾ≃= eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathᴾ→= eqv) y .fst
   ua-pathᴾ≃= eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathᴾ→= eqv) y .snd
+
+  ua→
+    : {A₀ A₁ : Type ℓ} {e : A₀ ≃ A₁} {B : (i : I) → Type ℓ′}
+      {f₀ : A₀ → B i0} {f₁ : A₁ → B i1}
+    → Π[ a ꞉ A₀ ] ＜ f₀ a ／ B ＼ f₁ (e # a) ＞
+    → ＜ f₀ ／ (λ i → ua e i → B i) ＼ f₁ ＞
+  ua→ {B} {f₀} {f₁} h i a = comp (λ j → B (i ∨ ~ j)) (∂ i) λ where
+    j (j = i0) → f₁ (unglue (∂ i) a)
+    j (i = i0) → h a (~ j)
+    j (i = i1) → f₁ a
 
 @0 ≅→= : Iso A B → A ＝ B
 ≅→= (f , r) = ua (f , is-iso→is-equiv r)
@@ -77,7 +87,7 @@ opaque
   @0 ua-idₑ : ua refl ＝ refl {x = A}
   ua-idₑ {A} i j = Glue A {φ = i ∨ ∂ j} (λ _ → A , refl)
 
-  ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e .fst x
+  ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e # x
   ua-β e x = transport-refl _
 
   @0 ua-η : (p : A ＝ B) → ua (=→≃ p) ＝ p
@@ -107,7 +117,7 @@ module @0 _ where
     equiv-is-contr A .fst             = A , refl
     equiv-is-contr A .snd (B , A≃B) i = ua A≃B i , p i , q i where
       p : ＜ id ／ (λ i → A → ua A≃B i) ＼ A≃B .fst ＞
-      p i x = outS (ua-glue A≃B i (λ { (i = i0) → x }) (inS (A≃B .fst x)))
+      p i x = outS (ua-glue A≃B i (λ { (i = i0) → x }) (inS (A≃B # x)))
 
       q : ＜ id-is-equiv ／ (λ i → is-equiv (p i)) ＼ A≃B .snd ＞
       q = is-prop→pathᴾ (λ i → is-equiv-is-prop (p i)) _ _
@@ -145,9 +155,9 @@ module @0 _ where
                  (f : A → B) → is-equiv f
                → {x y : A}
                → is-equiv (ap {x = x} {y = y} f)
-ap-is-equiv f eqv = Jₑ (λ B e → is-equiv (ap (e .fst))) id-is-equiv (f , eqv)
+ap-is-equiv f eqv = Jₑ (λ B e → is-equiv (ap$ e)) id-is-equiv (f , eqv)
 
-@0 ap-≃ : {A B : Type ℓ} {x y : A} (e : A ≃ B) → (x ＝ y) ≃ (e .fst x ＝ e .fst y)
+@0 ap-≃ : {A B : Type ℓ} {x y : A} (e : A ≃ B) → (x ＝ y) ≃ (e # x ＝ e # y)
 ap-≃ e = ap _ , ap-is-equiv _ (e .snd)
 
 -- TODO worth fixing?
