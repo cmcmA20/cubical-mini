@@ -62,17 +62,23 @@ instance
   ¬-n-Type : ⦃ z : 1 ≤ʰ n ⦄ → ¬-notation (n-Type ℓ m) (n-Type ℓ n)
   ¬-n-Type ⦃ z = s≤ʰs _ ⦄ .¬_ (el A _) = el (¬ A) (fun-is-of-hlevel _ (hlevel _))
 
-  Π-n-Type : Π-notation (n-Type ℓ m) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
-  Π-n-Type .Π-notation.Π A F = el (Π[ a ꞉ A ] ⌞ F a ⌟) (Π-is-of-hlevel _ λ x → F x .carrier-is-tr)
+  Π-n-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → Π-notation A (n-Type ℓ′ n) (n-Type (ua .ℓ-underlying ⊔ ℓ′) n)
+  Π-n-Type .Π-notation.Π X F = el (Π[ a ꞉ X ] ⌞ F a ⌟) (Π-is-of-hlevel _ λ x → F x .carrier-is-tr)
 
-  ∀-n-Type : ∀-notation (n-Type ℓ m) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
-  ∀-n-Type .∀-notation.∀′ A F = el (∀[ a ꞉ A ] ⌞ F a ⌟) (∀-is-of-hlevel _ λ x → F x .carrier-is-tr)
+  ∀-n-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → ∀-notation A (n-Type ℓ′ n) (n-Type (ua .ℓ-underlying ⊔ ℓ′) n)
+  ∀-n-Type .∀-notation.∀′ X F = el (∀[ a ꞉ X ] ⌞ F a ⌟) (∀-is-of-hlevel _ λ x → F x .carrier-is-tr)
 
   Σ-n-Type : Σ-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
   Σ-n-Type .Σ-notation.Σ A F = el (Σ[ a ꞉ A ] ⌞ F a ⌟) (Σ-is-of-hlevel _ (A .carrier-is-tr) (λ x → F x .carrier-is-tr))
 
-  ∃-n-Type : ⦃ z : 1 ≤ʰ k ⦄ → ∃-notation (n-Type ℓ m) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) k)
-  ∃-n-Type ⦃ z = s≤ʰs _ ⦄ .∃-notation.∃ A F = el (∃[ a ꞉ A ] ⌞ F a ⌟) (is-prop→is-of-hlevel-suc squash₁)
+  ∃-n-Type
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄ ⦃ z : 1 ≤ʰ k ⦄
+    → ∃-notation A (n-Type ℓ′ n) (n-Type (ua .ℓ-underlying ⊔ ℓ′) k)
+  ∃-n-Type ⦃ z = s≤ʰs _ ⦄ .∃-notation.∃ X F = el (∃[ a ꞉ X ] ⌞ F a ⌟) (is-prop→is-of-hlevel-suc squash₁)
 
   ⊥-n-Type-small : ⦃ _ : 1 ≤ʰ n ⦄ → ⊥-notation (n-Type 0ℓ n)
   ⊥-n-Type-small ⦃ s≤ʰs _ ⦄ .⊥ = el ⊥ (hlevel _)
