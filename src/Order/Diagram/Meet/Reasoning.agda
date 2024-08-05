@@ -3,7 +3,7 @@ open import Order.Base
 open import Order.Diagram.Meet
 
 module Order.Diagram.Meet.Reasoning
-  {o ℓ} (P : Poset o ℓ) ⦃ hm : Has-meets P ⦄
+  {o ℓ} (P : Poset o ℓ) (hm : Has-meets P)
   where
 
 open import Algebra.Semigroup

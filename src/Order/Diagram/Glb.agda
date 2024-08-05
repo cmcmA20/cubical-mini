@@ -6,7 +6,7 @@ open import Categories.Prelude
 open import Order.Base
 import Order.Reasoning
 
-private variable o ℓ : Level
+private variable o ℓ ℓ′ : Level
 
 module _ (P : Poset o ℓ) where
   open Order.Reasoning P
@@ -28,8 +28,8 @@ module _ (P : Poset o ℓ) where
 unquoteDecl H-Level-is-glb = declare-record-hlevel 1 H-Level-is-glb (quote is-glb)
 unquoteDecl Glb-Iso = declare-record-iso Glb-Iso (quote Glb)
 
-Has-glbs : Poset o ℓ → (ℓ′ : Level) → Type (o ⊔ ℓ ⊔ ℓsuc ℓ′)
-Has-glbs P ℓ′ = {I : Type ℓ′} {F : I → ⌞ P ⌟} → Glb P F
+Has-glbs-of-size : Poset o ℓ → (ℓ′ : Level) → Type (o ⊔ ℓ ⊔ ℓsuc ℓ′)
+Has-glbs-of-size P ℓ′ = {I : Type ℓ′} {F : I → ⌞ P ⌟} → Glb P F
 
 module _ {P : Poset o ℓ} where
   open Order.Reasoning P

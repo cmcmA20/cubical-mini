@@ -9,7 +9,9 @@ open import Order.Category
 open import Order.Diagram.Glb
 import Order.Reasoning
 
-module _ {o ℓ} (P : Poset o ℓ) where
+private variable o ℓ : Level
+
+module _ (P : Poset o ℓ) where
   open Order.Reasoning P
 
   is-top : Ob → Type _
@@ -30,7 +32,7 @@ module _ {o ℓ} (P : Poset o ℓ) where
 {-# DISPLAY Top.top = ⊤ #-}
 unquoteDecl Top-Iso = declare-record-iso Top-Iso (quote Top)
 
-module _ {o ℓ} {P : Poset o ℓ} where
+module _ {P : Poset o ℓ} where
   open Order.Reasoning P
 
   is-top→is-glb : ∀ {glb} {f : ⊥ → _} → is-top P glb → is-glb P f glb

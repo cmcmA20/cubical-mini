@@ -6,7 +6,7 @@ open import Categories.Prelude
 open import Order.Base
 import Order.Reasoning
 
-private variable o ℓ : Level
+private variable o ℓ ℓ′ : Level
 
 module _ (P : Poset o ℓ) where
   open Poset P
@@ -30,8 +30,8 @@ module _ (P : Poset o ℓ) where
 unquoteDecl H-Level-is-lub = declare-record-hlevel 1 H-Level-is-lub (quote is-lub)
 unquoteDecl Lub-Iso = declare-record-iso Lub-Iso (quote Lub)
 
-Has-lubs : Poset o ℓ → (ℓ′ : Level) → Type (o ⊔ ℓ ⊔ ℓsuc ℓ′)
-Has-lubs P ℓ′ = {I : Type ℓ′} {F : I → ⌞ P ⌟} → Lub P F
+Has-lubs-of-size : Poset o ℓ → (ℓ′ : Level) → Type (o ⊔ ℓ ⊔ ℓsuc ℓ′)
+Has-lubs-of-size P ℓ′ = {I : Type ℓ′} {F : I → ⌞ P ⌟} → Lub P F
 
 module _ {P : Poset o ℓ} where
   open Order.Reasoning P

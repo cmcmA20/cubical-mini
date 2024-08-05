@@ -3,7 +3,7 @@ open import Order.Base
 open import Order.Diagram.Join
 
 module Order.Diagram.Join.Reasoning
-  {o ℓ} (P : Poset o ℓ) ⦃ hj : Has-joins P ⦄
+  {o ℓ} (P : Poset o ℓ) (hj : Has-joins P)
   where
 
 open import Algebra.Semigroup

@@ -9,7 +9,9 @@ open import Order.Category
 open import Order.Diagram.Lub
 import Order.Reasoning
 
-module _ {o ℓ} (P : Poset o ℓ) where
+private variable o ℓ : Level
+
+module _ (P : Poset o ℓ) where
   open Order.Reasoning P
 
   is-bottom : Ob → Type _
@@ -31,7 +33,7 @@ module _ {o ℓ} (P : Poset o ℓ) where
 {-# DISPLAY Bottom.bot = ⊥ #-}
 unquoteDecl Bottom-Iso = declare-record-iso Bottom-Iso (quote Bottom)
 
-module _ {o ℓ} {P : Poset o ℓ} where
+module _ {P : Poset o ℓ} where
   open Order.Reasoning P
 
   is-bottom→is-lub : ∀ {lub} {f : ⊥ → _} → is-bottom P lub → is-lub P f lub
@@ -55,15 +57,15 @@ module _ {o ℓ} {P : Poset o ℓ} where
       → H-Level n (Bottom P)
     H-Level-Bottom ⦃ s≤ʰs _ ⦄ = hlevel-basic-instance 1 Bottom-is-prop
 
-  Bottom→Lub : ∀ {f : ⊥ → _} → Bottom P → Lub P f
+  Bottom→Lub : ∀ {f} → Bottom P → Lub P f
   Bottom→Lub bottom .Lub.lub = Bottom.bot bottom
   Bottom→Lub bottom .Lub.has-lub = is-bottom→is-lub (Bottom.has-bot bottom)
 
-  Lub→Bottom : ∀ {f : ⊥ → _} → Lub P f → Bottom P
+  Lub→Bottom : ∀ {f} → Lub P f → Bottom P
   Lub→Bottom lub .Bottom.bot = Lub.lub lub
   Lub→Bottom lub .Bottom.has-bot = is-lub→is-bottom (Lub.has-lub lub)
 
-  Bottom≃Lub : ∀{f} → Bottom P ≃ Lub P f
+  Bottom≃Lub : ∀ {f} → Bottom P ≃ Lub P f
   Bottom≃Lub = Bottom→Lub , biimp-is-equiv! _ Lub→Bottom
 
   is-bottom→is-initial : ∀ {x} → is-bottom P x → is-initial (poset→precategory P) x

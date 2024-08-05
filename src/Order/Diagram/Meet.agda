@@ -87,12 +87,6 @@ module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
   le-meet : ∀ {l} → a ≤ b → is-meet P a b l → a ＝ l
   le-meet a≤b l = meet-unique (le→is-meet a≤b) l
 
-
-instance
-  Has-glbs→Has-meets : {P : Poset o ℓ} ⦃ hl : Has-glbs P 0ℓ ⦄ → Has-meets P
-  Has-glbs→Has-meets = Glb→Meet auto
-  {-# OVERLAPPABLE Has-glbs→Has-meets #-}
-
 {-
   open is-product
   open Product

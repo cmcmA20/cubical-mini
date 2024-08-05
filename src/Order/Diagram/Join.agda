@@ -89,12 +89,6 @@ module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
   gt-join : ∀ {l} → a ≤ b → is-join P a b l → b ＝ l
   gt-join a≤b l = join-unique (gt→is-join a≤b) l
 
-
-instance
-  Has-lubs→Has-joins : {P : Poset o ℓ} ⦃ hl : Has-lubs P 0ℓ ⦄ → Has-joins P
-  Has-lubs→Has-joins = Lub→Join auto
-  {-# OVERLAPPABLE Has-lubs→Has-joins #-}
-
 {-
   open is-coproduct
   open Coproduct
