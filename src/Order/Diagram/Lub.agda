@@ -2,6 +2,7 @@
 module Order.Diagram.Lub where
 
 open import Categories.Prelude
+open import Functions.Surjection
 
 open import Order.Base
 import Order.Reasoning
@@ -82,37 +83,36 @@ module _ {P : Poset o ℓ} where
 
   module _
     {ℓᵢ ℓᵢ′} {Ix : Type ℓᵢ} {Im : Type ℓᵢ′}
-    {f : Ix → Im}
     {F : Im → Ob} where
-    module _ (surj : is-surjective f) where
-      cover-preserves-is-lub : ∀ {lub} → is-lub P F lub → is-lub P (F ∘ₜ f) lub
-      cover-preserves-is-lub l .fam≤lub x = l .fam≤lub (f x)
+    module _ (f : Ix ↠ Im) where
+      cover-preserves-is-lub : ∀ {lub} → is-lub P F lub → is-lub P (F ∘ₜ (f $_)) lub
+      cover-preserves-is-lub l .fam≤lub x = l .fam≤lub (f $ x)
       cover-preserves-is-lub l .least   ub′ le = l .least ub′ λ i → ∥-∥₁.proj! do
-        i′ , p ← surj i
+        i′ , p ← f .snd i
         pure (=→≤ (ap F (p ⁻¹)) ∙ le i′)
 
-      cover-preserves-lub : Lub P F → Lub P (F ∘ₜ f)
+      cover-preserves-lub : Lub P F → Lub P (F ∘ₜ (f $_))
       cover-preserves-lub l .Lub.lub = _
       cover-preserves-lub l .Lub.has-lub = cover-preserves-is-lub (l .Lub.has-lub)
 
-      cover-reflects-is-lub : ∀ {lub} → is-lub P (F ∘ₜ f) lub → is-lub P F lub
+      cover-reflects-is-lub : ∀ {lub} → is-lub P (F ∘ₜ (f $_)) lub → is-lub P F lub
       cover-reflects-is-lub l .fam≤lub x = ∥-∥₁.proj! do
-        y , p ← surj x
+        y , p ← f .snd x
         pure (=→≤ (ap F (p ⁻¹)) ∙ l .fam≤lub y)
-      cover-reflects-is-lub l .least ub′ le = l .least ub′ λ i → le (f i)
+      cover-reflects-is-lub l .least ub′ le = l .least ub′ λ i → le (f $ i)
 
-      cover-reflects-lub : Lub P (F ∘ₜ f) → Lub P F
+      cover-reflects-lub : Lub P (F ∘ₜ (f $_)) → Lub P F
       cover-reflects-lub l .Lub.lub     = _
       cover-reflects-lub l .Lub.has-lub = cover-reflects-is-lub (l .Lub.has-lub)
 
-      cover-reindexing : (s s′ : Ob) → is-lub P F s → is-lub P (F ∘ₜ f) s′ → s ＝ s′
+      cover-reindexing : (s s′ : Ob) → is-lub P F s → is-lub P (F ∘ₜ (f $_)) s′ → s ＝ s′
       cover-reindexing s s′ l l′ = ≤-antisym
-        (least l s′ λ t → elim! (λ x p → subst (λ φ → F φ ≤ s′) p (fam≤lub l′ x)) (surj t))
-        (least l′ s λ t′ → fam≤lub l (f t′))
+        (least l s′ λ t → elim! (λ x p → subst (λ φ → F φ ≤ s′) p (fam≤lub l′ x)) (f .snd t))
+        (least l′ s λ t′ → fam≤lub l (f $ t′))
 
-    module _ (is-eqv : is-equiv f) where
-      equiv-reindexing : (s s′ : Ob) → is-lub P F s → is-lub P (F ∘ₜ f) s′ → s ＝ s′
-      equiv-reindexing = cover-reindexing (is-equiv→is-surjective is-eqv)
+    module _ (f : Ix ≃ Im) where
+      equiv-reindexing : (s s′ : Ob) → is-lub P F s → is-lub P (F ∘ₜ (f $_)) s′ → s ＝ s′
+      equiv-reindexing = cover-reindexing (≃→↠ f)
 
   cast-is-lub
     : ∀ {ℓᵢ ℓᵢ′} {I : 𝒰 ℓᵢ} {I′ : 𝒰 ℓᵢ′} {F : I → Ob} {G : I′ → Ob} {lub}
