@@ -161,3 +161,16 @@ _ᵒᵖᵖ : Poset o ℓ → Poset o ℓ
 (P ᵒᵖᵖ) .Poset.≤-refl = Poset.≤-refl P
 (P ᵒᵖᵖ) .Poset.≤-trans = flip (Poset.≤-trans P)
 (P ᵒᵖᵖ) .Poset.≤-antisym = flip (Poset.≤-antisym P)
+
+𝟘ₚ : Poset o ℓ
+𝟘ₚ .Poset.Ob = ⊥
+𝟘ₚ .Poset._≤_ _ _ = ⊥
+𝟘ₚ .Poset.≤-thin = hlevel 1
+
+𝟙ₚ : Poset o ℓ
+𝟙ₚ .Poset.Ob = ⊤
+𝟙ₚ .Poset._≤_ _ _ = ⊤
+𝟙ₚ .Poset.≤-thin = hlevel 1
+𝟙ₚ .Poset.≤-refl = _
+𝟙ₚ .Poset.≤-trans = _
+𝟙ₚ .Poset.≤-antisym _ _ = refl
