@@ -44,12 +44,6 @@ single x t = el! (x ＝ t)
 ⋁_ : {I : 𝒰 ℓ} → (I → ℙ X ℓ) → ℙ X ℓ
 ⋁_ {I} F x = el! (∃[ i ꞉ I ] x ∈ F i)
 
-ℙ-map : {X X′ : Type ℓˣ} → (X → X′) → ℙ X ℓ → ℙ X′ (ℓˣ ⊔ ℓ)
-ℙ-map {X} f A x′ = el! (∃[ x ꞉ X ] (x′ ＝ f x) × ⌞ x ∈ A ⌟)
-
-ℙ-ctramap : (Y → X) → ℙ X ℓ → ℙ Y ℓ
-ℙ-ctramap f px = px ∘ f
-
 instance
   Intersection-n-Type
     : Intersection (X → n-Type ℓ n) (X → n-Type ℓ′ n) (X → n-Type (ℓ ⊔ ℓ′) n)
