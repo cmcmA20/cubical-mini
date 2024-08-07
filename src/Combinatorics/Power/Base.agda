@@ -45,7 +45,7 @@ single x t = el! (x ＝ t)
 ⋁_ {I} F x = el! (∃[ i ꞉ I ] x ∈ F i)
 
 ℙ-map : {X X′ : Type ℓˣ} → (X → X′) → ℙ X ℓ → ℙ X′ (ℓˣ ⊔ ℓ)
-ℙ-map {X} f px x′ = el! (∃[ x ꞉ X ] (x′ ＝ f x) × ⌞ x ∈ px ⌟)
+ℙ-map {X} f A x′ = el! (∃[ x ꞉ X ] (x′ ＝ f x) × ⌞ x ∈ A ⌟)
 
 ℙ-ctramap : (Y → X) → ℙ X ℓ → ℙ Y ℓ
 ℙ-ctramap f px = px ∘ f

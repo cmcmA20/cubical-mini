@@ -13,28 +13,25 @@ Pointwise : (I : Type ℓᵢ) (P : I → Poset o ℓ) → Poset (ℓᵢ ⊔ o) (
 Pointwise I P = po where
   open module P {i} = Order.Reasoning (P i)
   po : Poset _ _
-  po .Poset.Ob = (i : I) → ⌞ P i ⌟
-  po .Poset._≤_ f g = (i : I) → f i ⇒ g i
+  po .Poset.Ob = Π[ P ]
+  po .Poset._≤_ f g = ∀[ i ꞉ I ] (f i ⇒ g i)
   po .Poset.≤-thin = hlevel 1
-  po .Poset.≤-refl _ = refl
-  po .Poset.≤-trans f≤g g≤h i = f≤g i ∙ g≤h i
-  po .Poset.≤-antisym f≤g g≤f = ext (λ i → ≤-antisym (f≤g i) (g≤f i))
+  po .Poset.≤-refl = refl
+  po .Poset.≤-trans f≤g g≤h = f≤g ∙ g≤h
+  po .Poset.≤-antisym f≤g g≤h = ext (λ _ → ≤-antisym f≤g g≤h)
 
 tupleₚ
   : {I : Type ℓᵢ} {P : I → Poset o ℓ} {R : Poset o′ ℓ′}
   → (∀ i → R ⇒ P i)
   → R ⇒ Pointwise I P
 tupleₚ f .hom x i = f i # x
-tupleₚ f .pres-≤ x≤y i = f i .pres-≤ x≤y
+tupleₚ f .pres-≤ x≤y = f _ .pres-≤ x≤y
 
 projₚ
   : {I : Type ℓᵢ} {P : I → Poset o ℓ} (i : I)
   → Pointwise I P ⇒ P i
 projₚ i .hom f      = f i
-projₚ i .pres-≤ f≤g = f≤g i
-
-@0 Subsets : ∀ {ℓˣ} (X : Type ℓˣ) (ℓ : Level) → Poset (ℓˣ ⊔ ℓsuc ℓ) (ℓˣ ⊔ ℓ)
-Subsets X ℓ = Pointwise X (λ _ → Props ℓ)
+projₚ i .pres-≤ f≤g = f≤g
 
 Poset[_,_]
   : (P : Poset o ℓ) (Q : Poset o′ ℓ′)
