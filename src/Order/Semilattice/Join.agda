@@ -69,12 +69,12 @@ record
     f # x ∪ f # y  ~⟨ Qₗ.∪-universal lb fx≤lb fy≤lb ⟩
     lb             ∎
 
-unquoteDecl H-Level-is-join-slat-hom = declare-record-hlevel 1 H-Level-is-join-slat-hom (quote is-join-slat-hom)
-
-open is-join-slat-hom
+unquoteDecl H-Level-is-join-slat-hom =
+  declare-record-hlevel 1 H-Level-is-join-slat-hom (quote is-join-slat-hom)
 
 module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R
+  open is-join-slat-hom
 
   instance
     Refl-join-slat-hom : Refl (is-join-slat-hom {P = R} refl)

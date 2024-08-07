@@ -3,68 +3,84 @@ module Order.SupLattice where
 
 open import Categories.Prelude
 
-open import Functions.Surjection
-open import Combinatorics.Power
-
-open import Order.Diagram.Lub
 open import Order.Base
-open import Order.Category
+open import Order.Diagram.Lub
+import Order.Diagram.Lub.Reasoning
 import Order.Reasoning
 
-private variable o ℓ ℓ′ : Level
+open import Combinatorics.Power
 
-record is-sup-lattice (P : Poset o ℓ) (ℓ′ : Level) : 𝒰 (o ⊔ ℓ ⊔ ℓsuc ℓ′) where
+open import Functions.Surjection
+
+private variable ℓᵢ ℓⱼ o ℓ o′ ℓ′ o″ ℓ″ : Level
+
+record is-sup-lattice {o ℓ} (P : Poset o ℓ) (ℓᵢ : Level) : 𝒰 (o ⊔ ℓ ⊔ ℓsuc ℓᵢ) where
   no-eta-equality
-  open Poset P
+  field has-lubs : Has-lubs-of-size P ℓᵢ
+  open Order.Diagram.Lub.Reasoning P has-lubs public
+
+unquoteDecl H-Level-is-sup-lat =
+  declare-record-hlevel 1 H-Level-is-sup-lat (quote is-sup-lattice)
+
+record
+  is-sup-lat-hom
+    {P : Poset o ℓ} {Q : Poset o′ ℓ′} (f : P ⇒ Q)
+    (S : is-sup-lattice P ℓᵢ) (T : is-sup-lattice Q ℓᵢ) : Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′ ⊔ ℓsuc ℓᵢ)
+  where
+  no-eta-equality
+  private module P = Poset P
   field
-    sup     : {I : 𝒰 ℓ′} (F : I → Ob) → Ob
-    suprema : {I : 𝒰 ℓ′} (F : I → Ob) → is-lub P F (sup F)
+    pres-lubs
+      : {I : 𝒰 ℓᵢ} {F : I → P.Ob} (lb : P.Ob)
+      → is-lub P F lb → is-lub Q {I = I} (λ j → f # F j) (f # lb)
 
-module _ {o ℓ ℓ′ : Level}
-         {P : Poset o ℓ}
-         (L : is-sup-lattice P ℓ′)
-         {T : 𝒰 ℓ′}
-         (m : T → ⌞ P ⌟)
-       where
+unquoteDecl H-Level-is-sup-lat-hom =
+  declare-record-hlevel 1 H-Level-is-sup-lat-hom (quote is-sup-lat-hom)
 
-  open Poset P
-  open is-lub
+module _ {R : Poset o″ ℓ″} where
+  open Order.Reasoning R
+  open is-sup-lat-hom
+
+  instance
+    Refl-sup-lat-hom : Refl (is-sup-lat-hom {ℓᵢ = ℓᵢ} {P = R} refl)
+    Refl-sup-lat-hom .refl .pres-lubs _ = refl
+
+  module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where instance
+    Trans-sup-lat-hom
+      : {f : P ⇒ Q} {g : Q ⇒ R}
+      → Trans (is-sup-lat-hom {ℓᵢ = ℓᵢ} f) (is-sup-lat-hom g) (is-sup-lat-hom (f ∙ g))
+    Trans-sup-lat-hom {f} ._∙_ α β .pres-lubs x y = β .pres-lubs (f # x) (α .pres-lubs x y)
+
+module _
+  {o ℓ ℓ′ : Level}
+  {P : Poset o ℓ} (L : is-sup-lattice P ℓ′)
+  {T : 𝒰 ℓ′} (m : T → ⌞ P ⌟) where
+  open Order.Reasoning P
   open is-sup-lattice L
 
-  joins-preserve-containment : (P Q : ℙ T ℓ′)
-                             → P ⊆ Q
-                             → sup (ℙ→fam m P .snd) ≤ sup (ℙ→fam m Q .snd)
-  joins-preserve-containment P Q C =
-    suprema (ℙ→fam m P .snd) .least (sup (ℙ→fam m Q .snd)) $
-    suprema (ℙ→fam m Q .snd) .fam≤lub ∘ₜ second C
+  joins-preserve-containment : (A B : ℙ T ℓ′)
+                             → A ⊆ B
+                             → ⋃ (ℙ→fam m A .snd) ≤ ⋃ (ℙ→fam m B .snd)
+  joins-preserve-containment _ _ A⊆B = ⋃≤⋃-over (second A⊆B) λ _ → refl
 
-module _ {o ℓ ℓ′ ℓ″ : Level}
-         {P : Poset o ℓ}
-         (L : is-sup-lattice P ℓ′)
-         {T : 𝒰 ℓ″}
-         (m : T → ⌞ P ⌟)
-         (T-sz : is-of-size ℓ′ T)
-       where
-
-  open Poset P
-  open is-lub
+module _
+  {o ℓ ℓ′ : Level}
+  {P : Poset o ℓ} (L : is-sup-lattice P ℓ′)
+  {I : 𝒰 ℓᵢ} (m : I → ⌞ P ⌟)
+  (I-small : is-of-size ℓ′ I) where
+  open Order.Reasoning P
   open is-sup-lattice L
+  open is-lub
 
   private
-    T′ : 𝒰 ℓ′
-    T′ = ⌞ T-sz ⌟
+    T′≃T : ⌞ I-small ⌟ ≃ I
+    T′≃T = resizing-cond I-small
 
-    T′≃T : T′ ≃ T
-    T′≃T = resizing-cond T-sz
-
-    T′→T : T′ → T
+    T′→T : ⌞ I-small ⌟ → I
     T′→T = T′≃T $_
 
-    T′-inclusion : T′ → Ob
+    T′-inclusion : ⌞ I-small ⌟ → Ob
     T′-inclusion = m ∘ₜ T′→T
 
-  sup-of-small-fam-is-lub : is-lub P m (sup T′-inclusion)
-  sup-of-small-fam-is-lub .fam≤lub t = subst (λ q → m q ≤ sup T′-inclusion)
-                                             (is-equiv→unit ((T′≃T ⁻¹) .snd) t)
-                                             (suprema T′-inclusion .fam≤lub (T′≃T ⁻¹ $ t))
-  sup-of-small-fam-is-lub .least u′ ub = suprema T′-inclusion .least u′ (ub ∘ₜ T′→T)
+  sup-of-small-fam-is-lub : is-lub P m (⋃ T′-inclusion)
+  sup-of-small-fam-is-lub = cast-is-lub T′≃T (λ _ → refl) has-lub

@@ -8,15 +8,14 @@ open import Order.SupLattice
 
 import Order.Reasoning
 
-module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
-                                   (P : Poset o ℓ)
-                                   (L : is-sup-lattice P ℓ′)
-                                   (β : B → ⌞ P ⌟)
-                                 where
+module Order.SupLattice.SmallBasis
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) where
 
-  open Poset P
-  open is-lub
+  open Order.Reasoning P
   open is-sup-lattice L
+  open is-lub
 
   ↓ᴮ : Ob → 𝒰 (ℓ ⊔ ℓ′)
   ↓ᴮ x = Σ[ b ꞉ B ] (β b ≤ x)
@@ -34,7 +33,7 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     no-eta-equality
     field
       ≤-is-small : (x : Ob) (b : B) → is-of-size ℓ′ (β b ≤ x)
-      ↓-is-sup : (x : Ob) → is-lub P (↓ᴮ-inclusion x) x
+      ↓-is-sup   : (x : Ob) → is-lub P (↓ᴮ-inclusion x) x
 
     _≤ᴮ_ : (b : B) → (x : Ob) → 𝒰 ℓ′
     b ≤ᴮ x = ⌞ ≤-is-small x b ⌟
@@ -63,17 +62,17 @@ module Order.SupLattice.SmallBasis {o ℓ ℓ′} {B : 𝒰 ℓ′}
     ↓ᴮ-is-small : {x : Ob} → is-of-size ℓ′ (↓ᴮ x)
     ↓ᴮ-is-small {x} = small-↓ᴮ x , small-↓ᴮ-≃-↓ᴮ
 
-    is-supᴮ' : {x : Ob} → x ＝ sup (small-↓ᴮ-inclusion {x})
+    is-supᴮ' : {x : Ob} → x ＝ ⋃ (small-↓ᴮ-inclusion {x})
     is-supᴮ' {x} = equiv-reindexing (small-↓ᴮ-≃-↓ᴮ)
       x
-      (sup small-↓ᴮ-inclusion)
+      (⋃ small-↓ᴮ-inclusion)
       (↓-is-sup x)
-      (suprema small-↓ᴮ-inclusion)
+      has-lub
 
     is-supᴮ : {x : Ob} → is-lub P (small-↓ᴮ-inclusion {x}) x
     is-supᴮ {x} = subst (is-lub P (small-↓ᴮ-inclusion {x}))
                         (is-supᴮ' {x} ⁻¹)
-                        (suprema small-↓ᴮ-inclusion)
+                        has-lub
 
     is-ubᴮ : {x : Ob}
            → (s : small-↓ᴮ x) → small-↓ᴮ-inclusion s ≤ x

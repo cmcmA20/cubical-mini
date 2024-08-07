@@ -3,33 +3,33 @@ module Order.SupLattice.TarskiLFP where
 
 open import Categories.Prelude
 
+open import Order.Base
+open import Order.Category
+open import Order.Diagram.Fixpoint
+open import Order.Diagram.Lub
+open import Order.SupLattice
+open import Order.SupLattice.SmallBasis
+import Order.Reasoning
+import Order.SupLattice.SmallPresentation as small-presentation-of-lattice
+
 open import Data.Empty
 open import Data.Unit
 
 open import Combinatorics.Power
 open import Functions.Surjection
 
-open import Order.Diagram.Fixpoint
-open import Order.Diagram.Lub
-open import Order.Base
-open import Order.Category
-open import Order.SupLattice
-open import Order.SupLattice.SmallBasis
-import Order.SupLattice.SmallPresentation as small-presentation-of-lattice
-import Order.Reasoning
 
-module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-        where
+module _
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+
   open Order.Reasoning P
   open is-sup-lattice L
   open is-basis h
 
   c-closure : {ℓ″ : Level} (S : ℙ B ℓ″) → 𝒰 (ℓsuc ℓ′ ⊔ ℓ″)
-  c-closure S = (U : ℙ B ℓ′) → U ⊆ S → (b : B) → b ≤ᴮ (sup (ℙ→fam β U .snd)) → b ∈ S
+  c-closure S = (U : ℙ B ℓ′) → U ⊆ S → (b : B) → b ≤ᴮ (⋃ (ℙ→fam β U .snd)) → b ∈ S
 
   Φ-closure : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
             → {ℓ″ : Level} (S : ℙ B ℓ″)
@@ -42,7 +42,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
 
   data 𝓘 (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) : B → 𝒰 (o ⊔ ℓsuc ℓ′) where
     c-closed : (U : ℙ B ℓ′) → ({b : B} → b ∈ U → 𝓘 ϕ b)
-             → (b : B) → b ≤ᴮ (sup (ℙ→fam β U .snd)) → 𝓘 ϕ b
+             → (b : B) → b ≤ᴮ (⋃ (ℙ→fam β U .snd)) → 𝓘 ϕ b
     ϕ-closed : (a : Ob) → (b : B) → (b , a) ∈ ϕ
              → ((b' : B) → b' ≤ᴮ a → 𝓘 ϕ b')
              → 𝓘 ϕ b
@@ -72,12 +72,9 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
     𝓘nd-is-initial P cc ϕc (𝓘-trunc b x y i)    = hlevel 1 (𝓘nd-is-initial P cc ϕc x) (𝓘nd-is-initial P cc ϕc y) i
 
 module local-inductive-definitions
-         {o ℓ ℓ′} {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
 
   open Order.Reasoning P
   open is-lub
@@ -127,7 +124,7 @@ module local-inductive-definitions
        ↓→S' y ∘ₜ ↓-monotonicity-lemma ϕ x y o ∘ₜ S'→↓ x
 
     Γ : P ⇒ P
-    Γ .hom a = sup (β ∘ₜ fst ∘ₜ S'→↓ a)
+    Γ .hom a = ⋃ (β ∘ₜ fst ∘ₜ S'→↓ a)
     Γ .pres-≤ {x} {y} le =
       ↓-has-sup-implies-monotone ϕ x y _ _ le
          (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ x) (loc x))
@@ -167,12 +164,10 @@ module local-inductive-definitions
                                 → Γ (ind-def-from-monotone-map f) (local-from-monotone-map f) # x ＝ f # x
   local-ind-def-is-section-of-Γ f = monotone-map-give-local-ind-def f .snd .snd
 
-module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
+module _
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
 
   open Order.Reasoning P
   open is-lub
@@ -181,9 +176,8 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
   open local-inductive-definitions P L β h
 
   module correspondance-from-locally-small-ϕ
-           (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
-           (loc : is-local ϕ)
-        where
+    (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
+    (loc : is-local ϕ) where
 
     is-small-closed-subset : ℙ B ℓ′ → 𝒰 (o ⊔ ℓsuc ℓ′)
     is-small-closed-subset S = c-closure P L β h S × Φ-closure P L β h ϕ S
@@ -207,15 +201,13 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
     small-closed-subsets→def-points (P , cc , φc) =
         sup-of-P
       , sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ sup-of-P) (loc sup-of-P) .least sup-of-P
-          λ where (b , e) →
-                    rec! (λ a p le →
-                           suprema (ℙ→fam β P .snd) .fam≤lub
-                             (b , φc a b p λ b' le' →
-                                              cc P refl b' (≤→≤ᴮ (≤ᴮ→≤ le' ∙ le))))
-                         e
+          λ where (b , e) → rec! (λ a p le →
+                                   ⋃-inj (b , φc a b p (λ b′ le′ →
+                                     cc P refl b′ (≤→≤ᴮ (≤ᴮ→≤ le′ ∙ le)))))
+                                 e
       where
         sup-of-P : Ob
-        sup-of-P = sup (ℙ→fam β P .snd)
+        sup-of-P = ⋃ (ℙ→fam β P .snd)
 
     def-points→small-closed-subsets : deflationary-points → small-closed-subsets
     def-points→small-closed-subsets (a , isdef) =
@@ -225,7 +217,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
         Q x b = el! (b ≤ᴮ x)
 
         sup-Q : Ob → Ob
-        sup-Q x = sup (ℙ→fam β (Q x) .snd)
+        sup-Q x = ⋃ (ℙ→fam β (Q x) .snd)
 
         is-sup-Q : (x : Ob) → sup-Q x ＝ x
         is-sup-Q x = is-supᴮ' ⁻¹
@@ -233,7 +225,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
         Q-c-closed : c-closure P L β h (Q a)
         Q-c-closed U C b le = ≤→≤ᴮ
           $ ≤ᴮ→≤ le
-          ∙ subst (sup (ℙ→fam β U .snd) ≤_) (is-sup-Q a)
+          ∙ subst (⋃ (ℙ→fam β U .snd) ≤_) (is-sup-Q a)
               (joins-preserve-containment L β U (Q a) C)
 
         Q-φ-closed : Φ-closure P L β h ϕ (Q a)
@@ -254,7 +246,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
 
       @0 li : def-points→small-closed-subsets is-left-inverse-of small-closed-subsets→def-points
       li (P , cc , φc)
-        =  ext (λ b → cc P refl b , λ r → ≤→≤ᴮ (suprema (ℙ→fam β P .snd) .fam≤lub (b , r)))
+        =  ext (λ b → cc P refl b , λ r → ≤→≤ᴮ (⋃-inj (b , r)))
         ,ₚ prop!
 
     open trunc-ind-def P L β h ϕ
@@ -294,7 +286,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
         e = resizing-cond total-space-𝓘-is-small
 
         sup-𝓘 : Ob
-        sup-𝓘 = sup {I = Σ[ 𝓘'-subset ]} (β ∘ₜ 𝕋→carrier 𝓘nd ∘ₜ (e $_))
+        sup-𝓘 = ⋃ {I = Σ[ 𝓘'-subset ]} (β ∘ₜ 𝕋→carrier 𝓘nd ∘ₜ (e $_))
 
         sup-𝓘-is-lub : is-lub P (ℙ→fam β 𝓘nd .snd) sup-𝓘
         sup-𝓘-is-lub = sup-of-small-fam-is-lub L (β ∘ₜ 𝕋→carrier 𝓘nd) total-space-𝓘-is-small
@@ -320,7 +312,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
         Q-is-ϕ-closed = Q-Γ-sc-sub .snd .snd
 
         sup-Q : Ob
-        sup-Q = sup (ℙ→fam β Q-Γ-sup .snd)
+        sup-Q = ⋃ (ℙ→fam β Q-Γ-sup .snd)
 
         sup-Q-is-Γ-sup : sup-Q ＝ Γ ϕ loc # sup-𝓘
         sup-Q-is-Γ-sup = is-supᴮ' ⁻¹
@@ -347,7 +339,7 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
           P-is-ϕ-closed = P-sc-sub .snd .snd
 
           sup-P : Ob
-          sup-P = sup (ℙ→fam β P-a .snd)
+          sup-P = ⋃ (ℙ→fam β P-a .snd)
 
           sup-P-is-a : sup-P ＝ a
           sup-P-is-a = is-supᴮ' ⁻¹
@@ -362,13 +354,10 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
       Γ-has-least-fixed-point .LFP.has-lfp .is-lfp.fixed = sup-𝓘-is-fixed-point
       Γ-has-least-fixed-point .LFP.has-lfp .is-lfp.least = sup-𝓘-is-least-fixed-point
 
-module bounded-inductive-definitions {o ℓ ℓ′}
-         {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
+module bounded-inductive-definitions
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
 
   open Order.Reasoning P
   open is-lub
@@ -403,7 +392,7 @@ module bounded-inductive-definitions {o ℓ ℓ′}
       cov = ϕ-has-bound .snd .snd
 
       S₀ : 𝒰 (o ⊔ ℓ ⊔ ℓ′)
-      S₀ = Σ[ b ꞉ B ] ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , sup (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
+      S₀ = Σ[ b ꞉ B ] ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
 
       instance
         Size-α : ∀ {t} → Size ℓ′ (α t)
@@ -417,28 +406,28 @@ module bounded-inductive-definitions {o ℓ ℓ′}
         Size-ϕ {b} {z} .Size.has-of-size = ϕ-small z b
 
       S₀→↓-aux : {b : B}
-               → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , sup (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
+               → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
                → Σ[ a' ꞉ Ob ] ((b , a') ∈ ϕ × a' ≤ a)
       S₀→↓-aux (t , m , p) =
-          sup (↓ᴮ-inclusion P L β a ∘ₜ m) , p
-        , suprema (↓ᴮ-inclusion P L β a ∘ₜ m) .least a (↓-is-sup a .fam≤lub ∘ₜ m)
+          ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m) , p
+        , ⋃-universal _ (snd ∘ₜ m)
 
       S₀→↓ : S₀ → ϕ ↓ a
       S₀→↓ = second (map S₀→↓-aux)
 
       g : {b : B} (a' : Ob) (p : (b , a') ∈ ϕ) (le : a' ≤ a)
         → Σ[ t ꞉ T ] α t is-a-small-cover-of ↓ᴮ P L β a'
-        → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , sup (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
+        → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
       g {b} a' p le (t , α-c) =
           t , g-m , subst (λ z → (b , z) ∈ ϕ) g-path p
         where
         g-m :  α t → ↓ᴮ P L β a
         g-m = ↓ᴮ-≤ P L β le ∘ₜ (α-c $_)
-        g-path : a' ＝ sup (↓ᴮ-inclusion P L β a ∘ₜ g-m)
-        g-path = cover-reindexing α-c a' (sup (↓ᴮ-inclusion P L β a ∘ₜ g-m)) (↓-is-sup a') (suprema (↓ᴮ-inclusion P L β a' ∘ₜ α-c .fst))
+        g-path : a' ＝ ⋃ (↓ᴮ-inclusion P L β a ∘ₜ g-m)
+        g-path = cover-reindexing α-c a' (⋃ (↓ᴮ-inclusion P L β a ∘ₜ g-m)) (↓-is-sup a') has-lub
 
       cur-trunc-g : {b : B} (a' : Ob) (p : (b , a') ∈ ϕ) (le : a' ≤ a)
-                  → ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , sup (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
+                  → ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
       cur-trunc-g {b} a' p le = map (g a' p le) (cov a' b p)
 
       ↓→S₀ : ϕ ↓ a → S₀
@@ -450,13 +439,10 @@ module bounded-inductive-definitions {o ℓ ℓ′}
       li : ↓→S₀ is-left-inverse-of S₀→↓
       li _ = trivial!
 
-module _ {o ℓ ℓ′}
-         {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
+module _
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
 
   open Order.Reasoning P
   open is-lub
@@ -481,13 +467,13 @@ module _ {o ℓ ℓ′}
     is-small-pres = small-pres .snd
 
     is-small-pres→ : (b : B) → (X : ℙ B ℓ′)
-                   → b ≤ᴮ (sup (ℙ→fam β X .snd))
+                   → b ≤ᴮ (⋃ (ℙ→fam β X .snd))
                    → ∃[ j ꞉ I₁ ] Y j ⊆ X × (b , Y j) ∈ R
     is-small-pres→ b X = is-small-pres b X $_
 
     is-small-pres← : (b : B) → (X : ℙ B ℓ′)
                    → ∃[ j ꞉ I₁ ] Y j ⊆ X × (b , Y j) ∈ R
-                   → b ≤ᴮ (sup (ℙ→fam β X .snd))
+                   → b ≤ᴮ (⋃ (ℙ→fam β X .snd))
     is-small-pres← b X = is-small-pres b X ⁻¹ $_
 
     ϕ-is-small : (a : Ob) → (b : B) → is-of-size ℓ′ ((b , a) ∈ ϕ)
@@ -521,8 +507,8 @@ module _ {o ℓ ℓ′}
 
     Small-Φ-closure : {ℓ″ : Level} (S : ℙ B ℓ″) → 𝒰 (ℓ′ ⊔ ℓ″)
     Small-Φ-closure S = (j : I₂) → (m : α j → B) → (b : B)
-                      → small-ϕ b (sup (β ∘ₜ m))
-                      → ((b' : B) → b' ≤ᴮ sup (β ∘ₜ m) → b' ∈ S)
+                      → small-ϕ b (⋃ (β ∘ₜ m))
+                      → ((b' : B) → b' ≤ᴮ ⋃ (β ∘ₜ m) → b' ∈ S)
                       → b ∈ S
 
     data Small-𝓘 : B → 𝒰 ℓ′ where
@@ -531,9 +517,9 @@ module _ {o ℓ ℓ′}
                      → (b : B) → (b , Y j) ∈ R
                      → Small-𝓘 b
       Small-ϕ-closed : (j : I₂) → (m : α j → B) → (b : B)
-                      → small-ϕ b (sup (β ∘ₜ m))
-                      → ((b' : B) → b' ≤ᴮ sup (β ∘ₜ m) → Small-𝓘 b')
-                      → Small-𝓘 b
+                     → small-ϕ b (⋃ (β ∘ₜ m))
+                     → ((b' : B) → b' ≤ᴮ ⋃ (β ∘ₜ m) → Small-𝓘 b')
+                     → Small-𝓘 b
       Small-𝓘-trunc : (b : B) → is-prop (Small-𝓘 b)
 
     instance
@@ -562,13 +548,10 @@ module _ {o ℓ ℓ′}
       Small-𝓘nd-is-initial P cc ϕc (Small-𝓘-trunc b x y i)     =
         hlevel 1 (Small-𝓘nd-is-initial P cc ϕc x) (Small-𝓘nd-is-initial P cc ϕc y) i
 
-module _ {o ℓ ℓ′}
-         {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
+module _
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
 
   open Order.Reasoning P
   open is-lub
@@ -605,12 +588,12 @@ module _ {o ℓ ℓ′}
         where
         u : Σ[ i ꞉ I₂ ] α i is-a-small-cover-of ↓ᴮ P L β a → b ∈ Small-𝓘nd
         u (i₂ , s) = Small-𝓘nd-is-ϕ-closed i₂ (↓ᴮ→base P L β a ∘ₜ (s $_)) b
-                                 (ϕ→small-ϕ (sup (↓ᴮ-inclusion P L β a ∘ₜ (s $_))) b
+                                 (ϕ→small-ϕ (⋃ (↓ᴮ-inclusion P L β a ∘ₜ (s $_))) b
                                             (subst (λ q → (b , q) ∈ ϕ) a=⋁α p))
                                  λ b' → C b' ∘ₜ subst (b' ≤ᴮ_) (a=⋁α ⁻¹)
           where
-          a=⋁α : a ＝ sup (↓ᴮ-inclusion P L β a ∘ₜ (s $_))
-          a=⋁α = cover-reindexing s a (sup (↓ᴮ-inclusion P L β a ∘ₜ (s $_))) (↓-is-sup a) (suprema (↓ᴮ-inclusion P L β a ∘ₜ (s $_)))
+          a=⋁α : a ＝ ⋃ (↓ᴮ-inclusion P L β a ∘ₜ (s $_))
+          a=⋁α = cover-reindexing s a (⋃ (↓ᴮ-inclusion P L β a ∘ₜ (s $_))) (↓-is-sup a) has-lub
 
     Small-𝓘nd-⊆-𝓘nd : Small-𝓘nd ⊆ 𝓘nd
     Small-𝓘nd-⊆-𝓘nd = Small-𝓘nd-is-initial 𝓘nd c-cl-sm Φ-cl-sm
@@ -620,8 +603,8 @@ module _ {o ℓ ℓ′}
                           (is-small-pres← b (Y j) ∣ j , refl , r ∣₁)
 
       Φ-cl-sm : Small-Φ-closure 𝓘nd
-      Φ-cl-sm j m b s C = 𝓘nd-is-ϕ-closed (sup (β ∘ₜ m)) b
-                            (small-ϕ→ϕ (sup (β ∘ₜ m)) b s) C
+      Φ-cl-sm j m b s C = 𝓘nd-is-ϕ-closed (⋃ (β ∘ₜ m)) b
+                            (small-ϕ→ϕ (⋃ (β ∘ₜ m)) b s) C
 
     𝓘nd-is-small : (b : B) → is-of-size ℓ′ (b ∈ 𝓘nd)
     𝓘nd-is-small b =
@@ -629,13 +612,10 @@ module _ {o ℓ ℓ′}
       , prop-extₑ (hlevel 1) (𝓘-trunc b)
           Small-𝓘nd-⊆-𝓘nd 𝓘nd-⊆-Small-𝓘nd
 
-module _ {o ℓ ℓ′}
-         {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
+module _
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
 
   open Order.Reasoning P
   open is-lub
@@ -662,13 +642,10 @@ module _ {o ℓ ℓ′}
               → LFP P f
   LFP-Theorem small-pres f = ∥-∥₁.elim hlevel! (Untruncated-LFP-Theorem small-pres f)
 
-module _ {o ℓ ℓ′}
-         {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
+module _
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
 
   open Order.Reasoning P
   open is-lub
@@ -745,13 +722,10 @@ module _ {o ℓ ℓ′}
       H : (a : Ob) → Γ φ (bounded→local φ bnd) # a ＝ f # a
       H a = equiv-reindexing ↓ᴮ-fa≃↓ (Γ φ (bounded→local φ bnd) # a) (f # a) (sup-of-small-fam-is-lub L (β ∘ₜ ↓→base φ a) (bounded→local φ bnd a)) is-supᴮ
 
-module _ {o ℓ ℓ′}
-         {B : 𝒰 ℓ′}
-         (P : Poset o ℓ)
-         (L : is-sup-lattice P ℓ′)
-         (β : B → ⌞ P ⌟)
-         (h : is-basis P L β)
-       where
+module _
+  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
 
   open Order.Reasoning P
   open is-lub

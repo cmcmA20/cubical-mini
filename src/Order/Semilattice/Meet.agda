@@ -72,10 +72,9 @@ record
 unquoteDecl H-Level-is-meet-slat-hom =
   declare-record-hlevel 1 H-Level-is-meet-slat-hom (quote is-meet-slat-hom)
 
-open is-meet-slat-hom
-
 module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R
+  open is-meet-slat-hom
 
   instance
     Refl-meet-slat-hom : Refl (is-meet-slat-hom {P = R} refl)

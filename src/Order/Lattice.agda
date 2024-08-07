@@ -35,8 +35,6 @@ record
   where
   no-eta-equality
   private
-    module P = Poset P
-    module Q = Order.Reasoning Q
     module S = is-lattice S
     module T = is-lattice T
 
@@ -50,10 +48,9 @@ record
 unquoteDecl H-Level-is-lattice-hom =
   declare-record-hlevel 1 H-Level-is-lattice-hom (quote is-lattice-hom)
 
-open is-lattice-hom
-
 module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R
+  open is-lattice-hom
 
   instance
     Refl-lattice-hom : Refl (is-lattice-hom {P = R} refl)
