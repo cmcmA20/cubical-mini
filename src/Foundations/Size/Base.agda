@@ -44,8 +44,8 @@ size ℓ ⦃ s ⦄ = s .has-of-size
 instance
   Size-default : {A : Type ℓ} → Size ℓ A
   Size-default {A} .has-of-size = A , refl
-  {-# OVERLAPPING Size-default #-}
+  {-# OVERLAPPABLE Size-default #-}
 
   Size-big : {A : Type ℓ} → Size (ℓ ⊔ ℓ′) A
   Size-big {ℓ′} {A} .has-of-size = Lift ℓ′ A , lift≃id
-  {-# OVERLAPPABLE Size-big #-} -- TODO configure overlaps
+  {-# INCOHERENT Size-big #-} -- TODO configure overlaps
