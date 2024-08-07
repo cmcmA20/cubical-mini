@@ -73,7 +73,7 @@ unquoteDecl H-Level-is-join-slat-hom = declare-record-hlevel 1 H-Level-is-join-s
 
 open is-join-slat-hom
 
-module _ {R : Poset o ℓ} where
+module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R
 
   instance
@@ -81,7 +81,7 @@ module _ {R : Poset o ℓ} where
     Refl-join-slat-hom .refl .⊥-≤ = refl
     Refl-join-slat-hom .refl .∪-≤ _ _ = refl
 
-  module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
+  module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where instance
     Trans-join-slat-hom
       : {f : P ⇒ Q} {g : Q ⇒ R}
       → Trans (is-join-slat-hom f) (is-join-slat-hom g) (is-join-slat-hom (f ∙ g))

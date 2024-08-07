@@ -74,7 +74,7 @@ unquoteDecl H-Level-is-meet-slat-hom =
 
 open is-meet-slat-hom
 
-module _ {R : Poset o ℓ} where
+module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R
 
   instance
@@ -82,7 +82,7 @@ module _ {R : Poset o ℓ} where
     Refl-meet-slat-hom .refl .⊤-≤ = refl
     Refl-meet-slat-hom .refl .∩-≤ _ _ = refl
 
-  module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
+  module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where instance
     Trans-meet-slat-hom
       : {f : P ⇒ Q} {g : Q ⇒ R}
       → Trans (is-meet-slat-hom f) (is-meet-slat-hom g) (is-meet-slat-hom (f ∙ g))
