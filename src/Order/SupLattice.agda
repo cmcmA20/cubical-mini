@@ -4,11 +4,15 @@ module Order.SupLattice where
 open import Categories.Prelude
 
 open import Order.Base
+open import Order.Diagram.Join
 open import Order.Diagram.Lub
-import Order.Diagram.Lub.Reasoning
+open import Order.Semilattice.Join
+import Order.Diagram.Lub.Reasoning as Lubs
 import Order.Reasoning
 
 open import Combinatorics.Power
+
+open import Data.Bool as Bool
 
 open import Functions.Surjection
 
@@ -16,8 +20,14 @@ private variable ℓᵢ ℓⱼ o ℓ o′ ℓ′ o″ ℓ″ : Level
 
 record is-sup-lattice {o ℓ} (P : Poset o ℓ) (ℓᵢ : Level) : 𝒰 (o ⊔ ℓ ⊔ ℓsuc ℓᵢ) where
   no-eta-equality
-  field has-lubs : Has-lubs-of-size P ℓᵢ
-  open Order.Diagram.Lub.Reasoning P has-lubs public
+  field
+    has-lubs : Has-lubs-of-size P ℓᵢ
+
+  open Lubs P has-lubs public
+
+  has-join-semilattice : is-join-semilattice P
+  has-join-semilattice .is-join-semilattice.has-bottom = Bottom-Poset-Lub
+  has-join-semilattice .is-join-semilattice.has-joins = Join-Poset-Lub
 
 unquoteDecl H-Level-is-sup-lat =
   declare-record-hlevel 1 H-Level-is-sup-lat (quote is-sup-lattice)
@@ -25,14 +35,38 @@ unquoteDecl H-Level-is-sup-lat =
 record
   is-sup-lat-hom
     {P : Poset o ℓ} {Q : Poset o′ ℓ′} (f : P ⇒ Q)
-    (S : is-sup-lattice P ℓᵢ) (T : is-sup-lattice Q ℓᵢ) : Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′ ⊔ ℓsuc ℓᵢ)
+    (S : is-sup-lattice P ℓᵢ) (T : is-sup-lattice Q ℓᵢ) : Type (o ⊔ ℓ′ ⊔ ℓsuc ℓᵢ)
   where
   no-eta-equality
-  private module P = Poset P
+  private
+    module P = Poset P
+    module Q = Order.Reasoning Q
+    module Pₗ = is-sup-lattice S
+    module Qₗ = is-sup-lattice T
   field
-    pres-lubs
-      : {I : 𝒰 ℓᵢ} {F : I → P.Ob} (lb : P.Ob)
-      → is-lub P F lb → is-lub Q {I = I} (λ j → f # F j) (f # lb)
+    pres-⋃ : {I : 𝒰 ℓᵢ} (F : I → P.Ob) → f # Pₗ.⋃ F Q.≤ Qₗ.⋃ (f #_ ∘ₜ F)
+
+  has-join-slat-hom : is-join-slat-hom f Pₗ.has-join-semilattice Qₗ.has-join-semilattice
+  has-join-slat-hom .is-join-slat-hom.⊥-≤ =
+    f # ⊥   ~⟨ pres-⋃ (λ ()) ⟩
+    Qₗ.⋃ _  =⟨ ap Qₗ.⋃ (fun-ext λ()) ⟩
+    ⊥       ∎
+  has-join-slat-hom .is-join-slat-hom.∪-≤ x y =
+    f # (x ∪ y)    ~⟨ pres-⋃ _ ⟩
+    Qₗ.⋃ _         =⟨ ap Qₗ.⋃ (ext (Bool.elim refl refl)) ⟩
+    f # x ∪ f # y  ∎
+
+  open is-join-slat-hom has-join-slat-hom public
+
+  pres-lubs
+    : {I : 𝒰 ℓᵢ} {F : I → P.Ob} (lb : P.Ob)
+    → is-lub P F lb → is-lub Q {I = I} (f #_ ∘ₜ F) (f # lb)
+  pres-lubs lb z .is-lub.fam≤lub i = f .pres-≤ (is-lub.fam≤lub z i)
+  pres-lubs {I} {F} lb z .is-lub.least lb′ h =
+    f # lb            ~⟨ f .pres-≤ (is-lub.least z _ Pₗ.⋃-inj) ⟩
+    f # Pₗ.⋃ F        ~⟨ pres-⋃ F ⟩
+    Qₗ.⋃ (f #_ ∘ₜ F)  ~⟨ Qₗ.⋃-universal lb′ h ⟩
+    lb′               ∎
 
 unquoteDecl H-Level-is-sup-lat-hom =
   declare-record-hlevel 1 H-Level-is-sup-lat-hom (quote is-sup-lat-hom)
@@ -43,13 +77,14 @@ module _ {R : Poset o″ ℓ″} where
 
   instance
     Refl-sup-lat-hom : Refl (is-sup-lat-hom {ℓᵢ = ℓᵢ} {P = R} refl)
-    Refl-sup-lat-hom .refl .pres-lubs _ = refl
+    Refl-sup-lat-hom .refl .pres-⋃ _ = refl
 
   module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where instance
     Trans-sup-lat-hom
       : {f : P ⇒ Q} {g : Q ⇒ R}
       → Trans (is-sup-lat-hom {ℓᵢ = ℓᵢ} f) (is-sup-lat-hom g) (is-sup-lat-hom (f ∙ g))
-    Trans-sup-lat-hom {f} ._∙_ α β .pres-lubs x y = β .pres-lubs (f # x) (α .pres-lubs x y)
+    Trans-sup-lat-hom {f} {g} ._∙_ α β .pres-⋃ F =
+      g .pres-≤ (α .pres-⋃ F) ∙ β .pres-⋃ (f #_ ∘ₜ F)
 
 module _
   {o ℓ ℓ′ : Level}
