@@ -145,9 +145,6 @@ Posets o ℓ .Precategory.id-r _ = trivial!
 Posets o ℓ .Precategory.id-l _ = trivial!
 Posets o ℓ .Precategory.assoc _ _ _ = trivial!
 
--- TODO add `Reasoning` if needed
-module Posets {o ℓ} = Categories.Morphism (Posets o ℓ)
-
 Forget-poset : ∀ {o ℓ} → Functor (Posets o ℓ) (Sets o)
 Forget-poset .Functor.F₀ P = el! ⌞ P ⌟
 Forget-poset .Functor.F₁ = hom
