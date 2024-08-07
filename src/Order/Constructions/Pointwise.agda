@@ -33,7 +33,6 @@ projₚ
 projₚ i .hom f      = f i
 projₚ i .pres-≤ f≤g = f≤g i
 
--- TODO check against `Combinatorics.Power`
 @0 Subsets : ∀ {ℓˣ} (X : Type ℓˣ) (ℓ : Level) → Poset (ℓˣ ⊔ ℓsuc ℓ) (ℓˣ ⊔ ℓ)
 Subsets X ℓ = Pointwise X (λ _ → Props ℓ)
 
