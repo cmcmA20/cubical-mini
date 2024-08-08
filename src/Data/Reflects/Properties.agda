@@ -8,6 +8,7 @@ open import Data.Empty.Base as ⊥
 open import Data.Empty.Properties
 
 open import Data.Reflects.Base
+open import Data.Reflects.Path
 
 private variable
   ℓ ℓ′ : Level
@@ -24,6 +25,15 @@ reflects-bool-inj (ofʸ  p) (ofʸ  p′) = refl
 reflects-bool-inj (ofʸ  p) (ofⁿ ¬p′) = ⊥.rec $ ¬p′ p
 reflects-bool-inj (ofⁿ ¬p) (ofʸ  p′) = ⊥.rec $ ¬p p′
 reflects-bool-inj (ofⁿ ¬p) (ofⁿ ¬p′) = refl
+
+≃→reflects : P ≃ Q → Reflects⁰ P b → Reflects⁰ Q b
+≃→reflects e = dmap (e $_) (_∘ (e ⁻¹ $_))
+
+≃-reflects-≃ : is-prop P → P ≃ Q → Reflects⁰ P b ≃ Reflects⁰ Q b
+≃-reflects-≃ P-prop e =
+  prop-extₑ (reflects-is-of-hlevel 0 P-prop)
+            (reflects-is-of-hlevel 0 (≃→is-of-hlevel 1 (e ⁻¹) P-prop))
+            (≃→reflects e) (≃→reflects (e ⁻¹))
 
 reflects-injₑ
   : is-prop P → is-prop Q

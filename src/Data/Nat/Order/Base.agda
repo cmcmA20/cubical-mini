@@ -11,6 +11,8 @@ open import Data.Reflects.Base as Reflects
 open import Data.Empty.Properties
 open import Data.Sum.Base
 open import Data.Sum.Path
+open import Data.Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Path
 open import Data.Wellfounded.Base
 
 open import Data.Bool.Base
@@ -106,6 +108,9 @@ opaque
   s≰z : suc n ≰ 0
   s≰z = suc≠zero ∘ snd
 
+  ≤0→=0 : n ≤ 0 → n ＝ 0
+  ≤0→=0 {n} (k , p) = +＝0-2 n k p .fst
+
   ≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
   ≤-subst a=b c=d = second $ subst² (λ u v → u + _ ＝ v) a=b c=d
 
@@ -180,6 +185,9 @@ opaque
   ≤-<-trans : {x y z : ℕ} → x ≤ y → y < z → x < z
   ≤-<-trans p = ≤-trans (s≤s p)
 
+  <-≤-trans : {x y z : ℕ} → x < y → y ≤ z → x < z
+  <-≤-trans = ≤-trans
+  
 -- Conversion
 
 opaque
@@ -287,14 +295,27 @@ opaque
 ≤-+-l : m ≤ n + m
 ≤-+-l {m} {n} = subst (m ≤_) (+-comm m n) ≤-+-r
 
+<-+-l : m < n → m < k + n
+<-+-l m<n = <-≤-trans m<n ≤-+-l
+
+<-+-r : m < n → m < n + k
+<-+-r m<n = <-≤-trans m<n ≤-+-r
+
 opaque
   unfolding _<_
   <-+-lr : m < suc n + m
   <-+-lr {m} {n} = n , ap suc (+-comm m n)
 
 ≤-+ : ∀ {m n p q} → m ≤ p → n ≤ q → m + n ≤ p + q
-≤-+ m≤p n≤q = ≤-trans (≤≃≤+r .fst m≤p) (≤≃≤+l .fst n≤q)
+≤-+ m≤p n≤q = ≤-trans (≤≃≤+r $ m≤p) (≤≃≤+l $ n≤q)
 
+0<≃⊎₁ : ∀ {m n} → 0 < m + n ≃ (0 < m) ⊎₁ (0 < n)
+0<≃⊎₁ {m} {n} = prop-extₑ! (∣_∣₁ ∘ 0<→⊎ m n) (elim! [ <-+-r , <-+-l ]ᵤ)
+  where
+  0<→⊎ : ∀ x y → 0 < x + y → (0 < x) ⊎ (0 < y)
+  0<→⊎  zero   y h = inr h
+  0<→⊎ (suc x) y _ = inl z<s
+   
 -- subtraction
 
 m+[n∸m] : ∀ m n → m ≤ n → m + (n ∸ m) ＝ n

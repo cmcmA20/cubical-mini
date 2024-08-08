@@ -6,7 +6,8 @@ open import Meta.Prelude
 open import Data.Bool renaming (elim to elimᵇ)
 open import Data.Reflects.Base
 open import Data.Nat.Base
-open import Data.Nat.Order.Inductive
+open import Data.Nat.Order.Inductive.Base using ( _≤ᵇ_)
+open import Data.Nat.Order.Base
 open import Data.Nat.Properties
 
 min-if : ∀ {x y} → min x y ＝ (if x ≤ᵇ y then x else y)
@@ -25,6 +26,9 @@ max-if {x = suc x} {y = suc y} =
     ap suc (max-if {x = x} {y = y})
   ∙ elimᵇ {P = λ q → suc (if q then y else x) ＝ (if q then suc y else suc x)}
           refl refl (x ≤ᵇ y)
+
+min-+-l : ∀ {x y} → min x (x + y) ＝ x
+min-+-l {x} {y}  = min-if ∙ subst (λ q → (if q then x else x + y) ＝ x) ((is-true≃is-trueₚ $ reflects-true (≤-reflects x (x + y)) ≤-+-r) ⁻¹) refl 
 
 min-l : ∀ {x y} → is-true (min x y ≤ᵇ x)
 min-l {x = zero}              = tt

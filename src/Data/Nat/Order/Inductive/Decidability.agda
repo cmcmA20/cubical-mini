@@ -23,7 +23,7 @@ private variable m n k : ℕ
 <-reflects : (m n : ℕ) → Reflects⁰ (m < n) (m <ᵇ n)
 <-reflects  m       zero   = ofⁿ ≮z
 <-reflects  zero   (suc n) = ofʸ (s≤ʰs z≤ʰ)
-<-reflects (suc m) (suc n) = R.dmap s<s (λ ¬m<n → ¬m<n ∘ <-peel) (<-reflects m n)
+<-reflects (suc m) (suc n) = R.dmap s<s (_∘ <-peel) (<-reflects m n)
 
 instance
   Dec-≤ : {m n : ℕ} → Dec (m ≤ n)
