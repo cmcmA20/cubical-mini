@@ -106,29 +106,24 @@ instance
     Dec.dmap (ap lift) (_∘ ap lower) di
   {-# OVERLAPPING lift-is-discrete #-}
 
-discrete-eq : {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
-                  → {x y : A} {C : Dec (x ＝ y) → Type ℓ′}
-                  → (e : x ＝ y)
-                  → C (yes e)
-                  → C (x ≟ y)
-discrete-eq ⦃ A-dis ⦄ {x} {y} {C} e cy =
-  Dec.elim {C = C}
-    (λ p → subst (C ∘ yes) (path-is-of-hlevel 1 (is-discrete→is-set A-dis) x y e p) cy)
-    (λ ¬e → absurd (¬e e))
-    (x ≟ y)
-
-discrete-ne : {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
-            → {x y : A} {C : Dec (x ＝ y) → Type ℓ′}
-            → (ne : x ≠ y)
-            → C (no ne)
-            → C (x ≟ y)
-discrete-ne {x} {y} {C} ne cn =
-  Dec.elim {C = C}
-    (λ e → absurd (ne e))
-    (λ ¬e → subst (C ∘ no) (hlevel 1 ne ¬e) cn)
-    (x ≟ y)
 
 -- Automation
+
+caseᵈ-true_return_of_
+  : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
+    (a : A) (C : Dec A → Type ℓ′)
+  → C (yes a) → C d
+caseᵈ-true_return_of_ {A} a C cy = caseᵈ A return C of λ where
+  (yes a′) → subst C prop! cy
+  (no  ¬a) → absurd (¬a a)
+
+caseᵈ-false_return_of_
+  : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
+    (¬a : ¬ A) (C : Dec A → Type ℓ′)
+  → C (no ¬a) → C d
+caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
+  (yes a)   → absurd (¬a a)
+  (no  ¬a′) → subst (C ∘ no) prop! cy
 
 discrete-reflects! : ⦃ A-dis : is-discrete A ⦄
                    → {x y : A}

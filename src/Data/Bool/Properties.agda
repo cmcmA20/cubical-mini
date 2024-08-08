@@ -2,7 +2,6 @@
 module Data.Bool.Properties where
 
 open import Meta.Prelude
-
 open import Meta.Witness
 
 open import Logic.Decidability
@@ -18,7 +17,7 @@ open import Data.Bool.Path
 open import Data.Bool.Instances.Finite
 open import Data.Bool.Instances.Underlying
 open import Data.Maybe.Base
-open import Data.Reflects.Base renaming (dmap to dmapʳ)
+open import Data.Reflects.Base as Reflects
 open import Data.Reflects.Properties
 open import Data.Sum.Base
 open import Data.Sum.Path
@@ -87,9 +86,9 @@ reflects-not : ∀ {x} → Reflects (¬ is-true x) (not x)
 reflects-not {(false)} = ofʸ id
 reflects-not {(true)}  = ofⁿ (_$ tt)
 
-reflects-not1 : ∀ {ℓ} {x} {P : 𝒰 ℓ}
-              → Reflects P x → Reflects (¬ P) (not x)
-reflects-not1 rp = dmapʳ (_∘ reflects-true rp ) (_∘ _∘ true-reflects rp) reflects-not
+reflects-¬ : ∀ {ℓ} {x} {P : 𝒰 ℓ}
+           → Reflects P x → Reflects (¬ P) (not x)
+reflects-¬ rp = Reflects.dmap (_∘ reflects-true rp) (contra (_∘ true-reflects rp)) reflects-not
 
 not-invol : ∀ x → not (not x) ＝ x
 not-invol = witness!
@@ -123,21 +122,21 @@ reflects-and {x = false}            = ofⁿ fst
 reflects-and {x = true} {y = false} = ofⁿ snd
 reflects-and {x = true} {y = true}  = ofʸ (tt , tt)
 
-reflects-and2 : ∀ {ℓ ℓ′} {x y} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′}
-              → Reflects P x
-              → Reflects Q y
-              → Reflects (P × Q) (x and y)
-reflects-and2 {x} {y} rp rq =
-  dmapʳ (λ where (tx , ty) → (true-reflects rp tx , true-reflects rq ty))
+reflects-× : ∀ {ℓ ℓ′} {x y} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′}
+           → Reflects P x
+           → Reflects Q y
+           → Reflects (P × Q) (x and y)
+reflects-× {x} {y} rp rq =
+  Reflects.dmap (λ where (tx , ty) → (true-reflects rp tx , true-reflects rq ty))
         (λ c → λ where (p , q) → c (reflects-true rp p , reflects-true rq q))
         reflects-and
 
-reflects-and3 : ∀ {ℓ ℓ′ ℓ″} {x y z} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′} {R : 𝒰 ℓ″}
-              → Reflects P x
-              → Reflects Q y
-              → Reflects R z
-              → Reflects (P × Q × R) (x and y and z)
-reflects-and3 rp rq rr = reflects-and2 rp (reflects-and2 rq rr)             
+reflects-×³ : ∀ {ℓ ℓ′ ℓ″} {x y z} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′} {R : 𝒰 ℓ″}
+            → Reflects P x
+            → Reflects Q y
+            → Reflects R z
+            → Reflects (P × Q × R) (x and y and z)
+reflects-×³ rp rq rr = reflects-× rp (reflects-× rq rr)
 
 and-id-r : ∀ x → x and true ＝ x
 and-id-r = witness!
@@ -194,14 +193,14 @@ reflects-or {x = false} {y = false} = ofⁿ [ id , id ]ᵤ
 reflects-or {x = false} {y = true}  = ofʸ (inr tt)
 reflects-or {x = true}              = ofʸ (inl tt)
 
-reflects-or2 : ∀ {ℓ ℓ′} {x y} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′}
-              → Reflects P x
-              → Reflects Q y
-              → Reflects (P ⊎ Q) (x or y)
-reflects-or2 {x} {y} rp rq =
-  dmapʳ [ inl ∘ true-reflects rp , inr ∘ true-reflects rq ]ᵤ
-        (_∘ [ inl ∘ reflects-true rp , inr ∘ reflects-true rq ]ᵤ)
-        reflects-or
+reflects-⊎ : ∀ {ℓ ℓ′} {x y} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′}
+           → Reflects P x
+           → Reflects Q y
+           → Reflects (P ⊎ Q) (x or y)
+reflects-⊎ {x} {y} rp rq = Reflects.dmap
+  [ inl ∘ true-reflects rp , inr ∘ true-reflects rq ]ᵤ
+  (contra [ inl ∘ reflects-true rp , inr ∘ reflects-true rq ]ᵤ)
+  reflects-or
 
 or-id-r : ∀ x → x or false ＝ x
 or-id-r = witness!
@@ -257,7 +256,7 @@ and-distrib-or-r = witness!
 
 -- -- Testing witness tactic, uncomment if needed
 -- private module _ where
---   open import Truncation.Propositional.Base
+--   open import Data.Truncation.Propositional.Base
 
 --   _ : ∀[ x ꞉ Bool ] ∀[ y ꞉ Bool ] ∃[ z ꞉ Bool ] (z ＝ x or y)
 --   _ = witness!

@@ -18,8 +18,8 @@ open import Data.Wellfounded.Base
 open import Data.Bool.Base
 open import Data.Nat.Base
 open import Data.Nat.Order.Inductive.Base
-  using ( _≤ᵇ_ ; _<ᵇ_ ; _≥ᵇ_ ; _>ᵇ_
-        ; _≰ᵇ_ ; _≮ᵇ_ ; _≱ᵇ_ ; _≯ᵇ_
+  using ( _≤?_ ; _<?_ ; _≥?_ ; _>?_
+        ; _≰?_ ; _≮?_ ; _≱?_ ; _≯?_
         )
 open import Data.Nat.Path
 open import Data.Nat.Properties
@@ -187,7 +187,7 @@ opaque
 
   <-≤-trans : {x y z : ℕ} → x < y → y ≤ z → x < z
   <-≤-trans = ≤-trans
-  
+
 -- Conversion
 
 opaque
@@ -243,7 +243,7 @@ opaque
 
 -- Decidability
 
-<-reflects : Reflects _<_ _<ᵇ_
+<-reflects : Reflects _<_ _<?_
 <-reflects _       0       = ofⁿ ≮z
 <-reflects 0       (suc _) = ofʸ z<s
 <-reflects (suc m) (suc n) =
@@ -252,7 +252,7 @@ opaque
 <-dec : Decidable _<_
 <-dec = _ because (<-reflects _ _)
 
-≤-reflects : Reflects _≤_ _≤ᵇ_
+≤-reflects : Reflects _≤_ _≤?_
 ≤-reflects 0       _       = ofʸ z≤
 ≤-reflects (suc _) 0       = ofⁿ s≰z
 ≤-reflects (suc m) (suc n) =
@@ -315,36 +315,37 @@ opaque
   0<→⊎ : ∀ x y → 0 < x + y → (0 < x) ⊎ (0 < y)
   0<→⊎  zero   y h = inr h
   0<→⊎ (suc x) y _ = inl z<s
-   
+
+
 -- subtraction
 
-m+[n∸m] : ∀ m n → m ≤ n → m + (n ∸ m) ＝ n
-m+[n∸m]  zero    n      m≤n = refl
-m+[n∸m] (suc m)  zero   m≤n = absurd (s≰z m≤n)
-m+[n∸m] (suc m) (suc n) m≤n = ap suc (m+[n∸m] m n (≤-peel m≤n))
++∸=id : ∀ m n → m ≤ n → m + (n ∸ m) ＝ n
++∸=id  zero    n      m≤n = refl
++∸=id (suc m)  zero   m≤n = absurd (s≰z m≤n)
++∸=id (suc m) (suc n) m≤n = ap suc (+∸=id m n (≤-peel m≤n))
 
-[n∸m]+m : ∀ m n → m ≤ n → (n ∸ m) + m ＝ n
-[n∸m]+m m n m≤n = +-comm (n ∸ m) m ∙ m+[n∸m] m n m≤n
+∸+=id : ∀ m n → m ≤ n → (n ∸ m) + m ＝ n
+∸+=id m n m≤n = +-comm (n ∸ m) m ∙ +∸=id m n m≤n
 
-m+[n∸p]＝m+n∸p : ∀ m n p → p ≤ n → m + (n ∸ p) ＝ m + n ∸ p
-m+[n∸p]＝m+n∸p m n p p≤n =
++∸-assoc : ∀ m n p → p ≤ n → m + (n ∸ p) ＝ m + n ∸ p
++∸-assoc m n p p≤n =
     sym (+-cancel-∸-r (m + (n ∸ p)) p)
   ∙ ap (_∸ p) (sym (+-assoc m (n ∸ p) p))
-  ∙ ap (λ q → m + q ∸ p) (+-comm (n ∸ p) p ∙ m+[n∸m] p n p≤n)
+  ∙ ap (λ q → m + q ∸ p) (+-comm (n ∸ p) p ∙ +∸=id p n p≤n)
 
-m∸n+p＝m+p∸n : ∀ m n p → n ≤ m → m ∸ n + p ＝ m + p ∸ n
-m∸n+p＝m+p∸n m n p n≤m = +-comm (m ∸ n) p
-                      ∙ m+[n∸p]＝m+n∸p p m n n≤m
-                      ∙ ap (_∸ n) (+-comm p m)
+∸+-comm : ∀ m n p → n ≤ m → m ∸ n + p ＝ m + p ∸ n
+∸+-comm m n p n≤m = +-comm (m ∸ n) p
+                  ∙ +∸-assoc p m n n≤m
+                  ∙ ap (_∸ n) (+-comm p m)
 
-m∸[n∸p]＝m+p∸n : ∀ m n p → p ≤ n → m ∸ (n ∸ p) ＝ m + p ∸ n
-m∸[n∸p]＝m+p∸n m n p p≤n = sym (∸-cancel-+-r m p (n ∸ p)) ∙ ap ((m + p) ∸_) ([n∸m]+m p n p≤n)
+∸∸-assoc-swap : ∀ m n p → p ≤ n → m ∸ (n ∸ p) ＝ m + p ∸ n
+∸∸-assoc-swap m n p p≤n = sym (∸-cancel-+-r m p (n ∸ p)) ∙ ap ((m + p) ∸_) (∸+=id p n p≤n)
 
-m∸[n∸p]＝m∸n+p : ∀ m n p → p ≤ n → n ≤ m → m ∸ (n ∸ p) ＝ m ∸ n + p
-m∸[n∸p]＝m∸n+p m n p p≤n n≤m = m∸[n∸p]＝m+p∸n m n p p≤n ∙ sym (m∸n+p＝m+p∸n m n p n≤m)
+∸∸-assoc : ∀ m n p → p ≤ n → n ≤ m → m ∸ (n ∸ p) ＝ m ∸ n + p
+∸∸-assoc m n p p≤n n≤m = ∸∸-assoc-swap m n p p≤n ∙ sym (∸+-comm m n p n≤m)
 
 suc-∸ : ∀ m n → m ≤ n → suc (n ∸ m) ＝ (suc n) ∸ m
-suc-∸ m n = m+[n∸p]＝m+n∸p 1 n m
+suc-∸ m n = +∸-assoc 1 n m
 
 ∸=0→≤ : m ∸ n ＝ 0 → m ≤ n
 ∸=0→≤ {m = zero}              _ = z≤

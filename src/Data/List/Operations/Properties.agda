@@ -36,7 +36,7 @@ length=0→nil {xs = x ∷ xs} eq = absurd (suc≠zero eq)
 
 length=1→sng : {A : 𝒰 ℓ} {xs : List A}
              → length xs ＝ 1 → Σ[ x ꞉ A ] (xs ＝ x ∷ [])
-length=1→sng {xs = []}     eq = absurd (zero≠suc eq) 
+length=1→sng {xs = []}     eq = absurd (zero≠suc eq)
 length=1→sng {xs = x ∷ xs} eq = x , ap (x ∷_) (length=0→nil (suc-inj eq))
 
 ++-length : (xs ys : List A) → length (xs ++ ys) ＝ length xs + length ys
@@ -91,7 +91,7 @@ snoc-inj {A} {xs = x ∷ xs} {ys = y ∷ ys} e = let ih = snoc-inj (∷-tail-inj
 -- all
 
 reflects-all : ∀ (p : A → Bool) xs
-             → Reflects⁰ (All (is-true ∘ p) xs) (all p xs)
+             → Reflects (All (is-true ∘ p) xs) (all p xs)
 reflects-all p []       = ofʸ []
 reflects-all p (x ∷ xs) with p x | recall p x
 ... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → subst is-true e a)
@@ -100,7 +100,7 @@ reflects-all p (x ∷ xs) with p x | recall p x
                        (reflects-all p xs)
 
 all?-++ : ∀ {p : A → Bool} {xs ys : List A}
-       → all p (xs ++ ys) ＝ all p xs and all p ys
+        → all p (xs ++ ys) ＝ all p xs and all p ys
 all?-++ {p} {xs = []}     {ys} = refl
 all?-++ {p} {xs = x ∷ xs} {ys} = ap (p x and_) (all?-++ {xs = xs}) ∙ and-assoc (p x) (all p xs) (all p ys) ⁻¹
 
@@ -114,7 +114,7 @@ all-elem : ⦃ A-dis : is-discrete A ⦄
          → ∀ (P : A → 𝒰 ℓ′) xs
          → All P xs
          → (z : A) → is-true (elem= z xs) → P z
-all-elem P (x ∷ xs) (px ∷ a) z el with (true-reflects (reflects-or {x = ⌊ z ≟ x ⌋}) el)
+all-elem P (x ∷ xs) (px ∷ a) z el with true-reflects (reflects-or {x = ⌊ z ≟ x ⌋}) el
 ... | inl z=x = subst P (sym (true-reflects discrete-reflects! z=x)) px
 ... | inr els = all-elem P xs a z els
 
@@ -136,6 +136,7 @@ reflects-all-dis p xs =
     (λ na e → na (elem-all (is-true ∘ p) xs e))
     (reflects-all p xs)
 
+
 -- replicate
 
 replicate-+ : {n m : ℕ} {z : A}
@@ -152,6 +153,7 @@ All-replicate : {z : A} (xs : List A)
               → xs ＝ replicate (length xs) z
 All-replicate     []       []       = refl
 All-replicate {z} (x ∷ xs) (xa ∷ a) = ap² List._∷_ xa (All-replicate xs a)
+
 
 -- take & drop
 
@@ -190,24 +192,25 @@ drop-+ {n = suc n} {m} {xs = []}     = drop-nil {n = m} ⁻¹
 drop-+ {n = suc n}     {xs = x ∷ xs} = drop-+ {n = n}
 
 take-oversize : {n : ℕ} {xs : List A}
-              → length xs ≤ n 
+              → length xs ≤ n
               → take n xs ＝ xs
 take-oversize {n = zero}                le = length=0→nil (≤0→=0 le) ⁻¹
 take-oversize {n = suc n} {xs = []}     le = refl
-take-oversize {n = suc n} {xs = x ∷ xs} le = ap (x ∷_) (take-oversize (≤-peel le)) 
+take-oversize {n = suc n} {xs = x ∷ xs} le = ap (x ∷_) (take-oversize (≤-peel le))
 
 drop-oversize : {n : ℕ} {xs : List A}
-              → length xs ≤ n 
+              → length xs ≤ n
               → drop n xs ＝ []
 drop-oversize {n = zero}                le = length=0→nil (≤0→=0 le)
 drop-oversize {n = suc n} {xs = []}     le = refl
 drop-oversize {n = suc n} {xs = x ∷ xs} le = drop-oversize (≤-peel le)
 
-split-take-drop : (n : ℕ) {xs : List A} 
+split-take-drop : (n : ℕ) {xs : List A}
                 → xs ＝ take n xs ++ drop n xs
 split-take-drop  zero                 = refl
 split-take-drop (suc n) {xs = []}     = refl
 split-take-drop (suc n ){xs = x ∷ xs} = ap (x ∷_) (split-take-drop n)
+
 
 -- span
 
@@ -232,6 +235,7 @@ span-all p []       = []
 span-all p (x ∷ xs) with p x | recall p x
 ... | false | ⟪ e ⟫ = []
 ... | true  | ⟪ e ⟫ = subst is-true (sym e) tt ∷ (span-all p xs)
+
 
 -- zip-with
 

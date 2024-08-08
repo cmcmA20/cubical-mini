@@ -340,7 +340,7 @@ fv-dup = go 0 where
   go* : ℕ → Args → List ℕ
 
   go nbind (var v args) =
-    if nbind <ᵇ suc v
+    if nbind <? suc v
        then (v ∸ nbind) ∷_
        else id
      $ go* nbind args
@@ -358,4 +358,4 @@ fv-dup = go 0 where
     go nbind x List.++ go* nbind xs
 
 fv     = nub-slow _==_ ∘ˢ fv-dup
-fv-ord = nub-unsafe _==_ ∘ˢ insertion-sort (λ m n → m <ᵇ suc n) ∘ˢ fv-dup
+fv-ord = nub-unsafe _==_ ∘ˢ insertion-sort (λ m n → m <? suc n) ∘ˢ fv-dup

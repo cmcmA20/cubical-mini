@@ -29,8 +29,8 @@ reflects-bool-inj (ofⁿ ¬p) (ofⁿ ¬p′) = refl
 ≃→reflects : P ≃ Q → Reflects⁰ P b → Reflects⁰ Q b
 ≃→reflects e = dmap (e $_) (_∘ (e ⁻¹ $_))
 
-≃-reflects-≃ : is-prop P → P ≃ Q → Reflects⁰ P b ≃ Reflects⁰ Q b
-≃-reflects-≃ P-prop e =
+≃→reflects-≃ : is-prop P → P ≃ Q → Reflects⁰ P b ≃ Reflects⁰ Q b
+≃→reflects-≃ P-prop e =
   prop-extₑ (reflects-is-of-hlevel 0 P-prop)
             (reflects-is-of-hlevel 0 (≃→is-of-hlevel 1 (e ⁻¹) P-prop))
             (≃→reflects e) (≃→reflects (e ⁻¹))
