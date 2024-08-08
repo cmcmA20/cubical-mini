@@ -39,7 +39,7 @@ module Order.SupLattice.SmallBasis
     b ≤ᴮ x = ⌞ ≤-is-small x b ⌟
 
     ≤ᴮ≃≤ : {b : B} {x : Ob} → b ≤ᴮ x ≃ β b ≤ x
-    ≤ᴮ≃≤ {b} {x} = ≤-is-small x b .snd
+    ≤ᴮ≃≤ {b} {x} = resizing-cond (≤-is-small x b)
 
     ≤ᴮ→≤ : {b : B} {x : Ob} → b ≤ᴮ x → β b ≤ x
     ≤ᴮ→≤ = ≤ᴮ≃≤ $_
