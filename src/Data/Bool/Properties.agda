@@ -2,7 +2,6 @@
 module Data.Bool.Properties where
 
 open import Meta.Prelude
-
 open import Meta.Witness
 
 open import Logic.Decidability
@@ -18,14 +17,15 @@ open import Data.Bool.Path
 open import Data.Bool.Instances.Finite
 open import Data.Bool.Instances.Underlying
 open import Data.Maybe.Base
-open import Data.Reflects.Base
+open import Data.Reflects.Base as Reflects
+open import Data.Reflects.Properties
 open import Data.Sum.Base
 open import Data.Sum.Path
 open import Data.Unit.Base
 
 private variable
   ℓᵃ : Level
-  A : Type ℓᵃ
+  A  : Type ℓᵃ
   x y : Bool
 
 universal : (Bool → A)
@@ -65,6 +65,16 @@ boolean-pred-ext f g p q i a with f a | recall f a | g a | recall g a
   in ⊥.rec {A = true ＝ false} (p′ tt) i
 ... | true  | ⟪ _ ⟫ | true  | ⟪ _ ⟫ = true
 
+-- if
+
+if-true : ∀ {b} {t f : A} → is-true b → (if b then t else f) ＝ t
+if-true {b = false} tb = absurd tb
+if-true {b = true}  _  = refl
+
+if-false : ∀ {b} {t f : A} → is-true (not b) → (if b then t else f) ＝ f
+if-false {b = false} _  = refl
+if-false {b = true}  fb = absurd fb
+
 
 reflects-id : ∀ {x} → Reflects (is-true x) x
 reflects-id {(false)} = ofⁿ id
@@ -76,6 +86,10 @@ reflects-not : ∀ {x} → Reflects (¬ is-true x) (not x)
 reflects-not {(false)} = ofʸ id
 reflects-not {(true)}  = ofⁿ (_$ tt)
 
+reflects-¬ : ∀ {ℓ} {x} {P : 𝒰 ℓ}
+           → Reflects P x → Reflects (¬ P) (not x)
+reflects-¬ rp = Reflects.dmap (_∘ reflects-true rp) (contra (_∘ true-reflects rp)) reflects-not
+
 not-invol : ∀ x → not (not x) ＝ x
 not-invol = witness!
 
@@ -85,8 +99,8 @@ not-invol = witness!
 
 -- conjunction
 
-and-true-≃ : is-trueₚ (x and y) ≃ (is-trueₚ x × is-trueₚ y)
-and-true-≃ = prop-extₑ! to from where
+and-trueₚ-≃ : is-trueₚ (x and y) ≃ (is-trueₚ x × is-trueₚ y)
+and-trueₚ-≃ = prop-extₑ! to from where
   to : is-trueₚ (x and y) → (is-trueₚ x × is-trueₚ y)
   to {(false)} p = ⊥.rec $ false≠true p
   to {(true)}  p = refl , p
@@ -95,12 +109,34 @@ and-true-≃ = prop-extₑ! to from where
   from {(false)} p = p .fst
   from {(true)}  p = p .snd
 
+and-true-≃ : is-true (x and y) ≃ (is-true x × is-true y)
+and-true-≃ {x} {y} = is-true≃is-trueₚ ∙ and-trueₚ-≃ {x = x} {y = y}
+                   ∙ ×-ap (is-true≃is-trueₚ ⁻¹) (is-true≃is-trueₚ ⁻¹)
+
+module and-trueₚ-≃ {x} {y} = Equiv (and-trueₚ-≃ {x} {y})
+
 module and-true-≃ {x} {y} = Equiv (and-true-≃ {x} {y})
 
 reflects-and : ∀ {x y} → Reflects (is-true x × is-true y) (x and y)
 reflects-and {x = false}            = ofⁿ fst
 reflects-and {x = true} {y = false} = ofⁿ snd
 reflects-and {x = true} {y = true}  = ofʸ (tt , tt)
+
+reflects-× : ∀ {ℓ ℓ′} {x y} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′}
+           → Reflects P x
+           → Reflects Q y
+           → Reflects (P × Q) (x and y)
+reflects-× {x} {y} rp rq =
+  Reflects.dmap (λ where (tx , ty) → (true-reflects rp tx , true-reflects rq ty))
+        (λ c → λ where (p , q) → c (reflects-true rp p , reflects-true rq q))
+        reflects-and
+
+reflects-×³ : ∀ {ℓ ℓ′ ℓ″} {x y z} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′} {R : 𝒰 ℓ″}
+            → Reflects P x
+            → Reflects Q y
+            → Reflects R z
+            → Reflects (P × Q × R) (x and y and z)
+reflects-×³ rp rq rr = reflects-× rp (reflects-× rq rr)
 
 and-id-r : ∀ x → x and true ＝ x
 and-id-r = witness!
@@ -157,6 +193,15 @@ reflects-or {x = false} {y = false} = ofⁿ [ id , id ]ᵤ
 reflects-or {x = false} {y = true}  = ofʸ (inr tt)
 reflects-or {x = true}              = ofʸ (inl tt)
 
+reflects-⊎ : ∀ {ℓ ℓ′} {x y} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′}
+           → Reflects P x
+           → Reflects Q y
+           → Reflects (P ⊎ Q) (x or y)
+reflects-⊎ {x} {y} rp rq = Reflects.dmap
+  [ inl ∘ true-reflects rp , inr ∘ true-reflects rq ]ᵤ
+  (contra [ inl ∘ reflects-true rp , inr ∘ reflects-true rq ]ᵤ)
+  reflects-or
+
 or-id-r : ∀ x → x or false ＝ x
 or-id-r = witness!
 
@@ -211,7 +256,7 @@ and-distrib-or-r = witness!
 
 -- -- Testing witness tactic, uncomment if needed
 -- private module _ where
---   open import Truncation.Propositional.Base
+--   open import Data.Truncation.Propositional.Base
 
 --   _ : ∀[ x ꞉ Bool ] ∀[ y ꞉ Bool ] ∃[ z ꞉ Bool ] (z ＝ x or y)
 --   _ = witness!

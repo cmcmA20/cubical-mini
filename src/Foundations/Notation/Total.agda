@@ -20,6 +20,13 @@ record Total-∀ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
     ∀[_]      : A → Type ℓ-total-∀
 open Total-∀ ⦃ ... ⦄ public
 
+record Total-∀ᴱ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
+  infixr 6 ∀ᴱ[_]
+  field
+    ℓ-total-∀ᴱ : Level
+    ∀ᴱ[_]      : @0 A → Type ℓ-total-∀ᴱ
+open Total-∀ᴱ ⦃ ... ⦄ public
+
 record Total-Σ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
   infixr 6 Σ[_]
   field
@@ -47,6 +54,16 @@ instance
   Total-∀-Underlying ⦃ u ⦄ .ℓ-total-∀ = u .ℓ-underlying
   Total-∀-Underlying .∀[_] = ⌞_⌟
   {-# INCOHERENT Total-∀-Underlying #-}
+
+  @0 Total-∀ᴱ-Type : Total-∀ᴱ (Type ℓ)
+  Total-∀ᴱ-Type {ℓ} .ℓ-total-∀ᴱ = ℓ
+  Total-∀ᴱ-Type .∀ᴱ[_] f = f
+  {-# OVERLAPPING Total-∀ᴱ-Type #-}
+
+  @0 Total-∀ᴱ-Underlying : {A : Type ℓ} ⦃ u : Underlying A ⦄ → Total-∀ᴱ A
+  Total-∀ᴱ-Underlying ⦃ u ⦄ .ℓ-total-∀ᴱ = u .ℓ-underlying
+  Total-∀ᴱ-Underlying .∀ᴱ[_] z = ⌞ z ⌟
+  {-# INCOHERENT Total-∀ᴱ-Underlying #-}
 
   Total-Σ-Type : Total-Σ (Type ℓ)
   Total-Σ-Type {ℓ} .ℓ-total-Σ = ℓ

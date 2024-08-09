@@ -16,9 +16,10 @@ open import Data.List.Instances.Idiom
 open import Data.List.Instances.Map
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : Type ℓ
   B : Type ℓ′
+  C : Type ℓ″
 
 empty? : List A → Bool
 empty? []      = false
@@ -37,12 +38,6 @@ any p = List.rec false _or_ ∘ map p
 all : (A → Bool) → List A → Bool
 all p = List.rec true _and_ ∘ map p
 
-all=? : (A → A → Bool) → List A → List A → Bool
-all=? eq=? [] [] = true
-all=? eq=? [] (x ∷ ys) = false
-all=? eq=? (x ∷ xs) [] = false
-all=? eq=? (x ∷ xs) (y ∷ ys) = (eq=? x y) and (all=? eq=? xs ys)
-
 length : List A → ℕ
 length []       = 0
 length (_ ∷ xs) = suc (length xs)
@@ -51,6 +46,10 @@ _!ᵐ_ : List A → ℕ → Maybe A
 []       !ᵐ  _      = nothing
 (x ∷ _)  !ᵐ  zero   = just x
 (_ ∷ xs) !ᵐ (suc n) = xs !ᵐ n
+
+unconsᵐ : List A → Maybe (A × List A)
+unconsᵐ []       = nothing
+unconsᵐ (x ∷ xs) = just (x , xs)
 
 replicate : ℕ → A → List A
 replicate 0 _       = []
@@ -133,9 +132,15 @@ split-at 0       xs       = [] , xs
 split-at (suc n) []       = [] , []
 split-at (suc n) (x ∷ xs) = first (x ∷_) (split-at n xs)
 
+zip-with : (A → B → C) → List A → List B → List C
+zip-with f []       []       = []
+zip-with f []       (_ ∷ _)  = []
+zip-with f (_ ∷ _)  []       = []
+zip-with f (x ∷ xs) (y ∷ ys) = f x y ∷ zip-with f xs ys
+
 zip : List A → List B → List (A × B)
-zip [] _ = []
-zip _ [] = []
+zip []       _        = []
+zip _        []       = []
 zip (a ∷ as) (b ∷ bs) = (a , b) ∷ zip as bs
 
 unzip : List (A × B) → List A × List B

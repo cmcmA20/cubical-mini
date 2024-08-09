@@ -109,6 +109,22 @@ instance
 
 -- Automation
 
+caseᵈ-true_return_of_
+  : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
+    (a : A) (C : Dec A → Type ℓ′)
+  → C (yes a) → C d
+caseᵈ-true_return_of_ {A} a C cy = caseᵈ A return C of λ where
+  (yes a′) → subst C prop! cy
+  (no  ¬a) → absurd (¬a a)
+
+caseᵈ-false_return_of_
+  : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
+    (¬a : ¬ A) (C : Dec A → Type ℓ′)
+  → C (no ¬a) → C d
+caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
+  (yes a)   → absurd (¬a a)
+  (no  ¬a′) → subst (C ∘ no) prop! cy
+
 discrete-reflects! : ⦃ A-dis : is-discrete A ⦄
                    → {x y : A}
                    → Reflects (x ＝ y) ⌊ x ≟ y ⌋

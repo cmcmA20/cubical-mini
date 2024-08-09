@@ -22,7 +22,7 @@ unquoteDecl fin-iso = declare-record-iso fin-iso (quote Fin)
 unquoteDecl H-Level-Fin = declare-record-hlevel 2 H-Level-Fin (quote Fin)
 
 fin-ext : {k₁ k₂ : Fin n} → k₁ .index ＝ k₂ .index → k₁ ＝ k₂
-fin-ext {n} p = apˢ {A = Σ[ x ꞉ ℕ ] Erased (is-true (x <ᵇ n))} (≅→≃ fin-iso ⁻¹ $_) (p ,ₚ prop!)
+fin-ext {n} p = apˢ {A = Σ[ x ꞉ ℕ ] Erased (is-true (x <? n))} (≅→≃ fin-iso ⁻¹ $_) (p ,ₚ prop!)
 
 module _ {ℓ} ⦃ sa : Extensional ℕ ℓ ⦄ where instance
   Extensional-Fin : Extensional (Fin n) ℓ

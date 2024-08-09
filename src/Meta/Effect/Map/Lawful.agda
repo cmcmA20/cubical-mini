@@ -19,3 +19,5 @@ record Lawful-Map (M : Effect) : Typeω where
       : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
         {f : A → B} {g : B → C}
       → map (f ∙ g) ＝ the (M.₀ A → M.₀ C) (map f ∙ map g)
+
+open Lawful-Map ⦃ ... ⦄ public
