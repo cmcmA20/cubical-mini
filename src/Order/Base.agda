@@ -35,6 +35,9 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     Trans-≤ : Transitive _≤_
     Trans-≤ ._∙_ = ≤-trans
 
+    ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
+    ⇒-Hom ._⇒_ = _≤_
+
   opaque
     ob-is-set : is-set Ob
     ob-is-set = identity-system→is-of-hlevel! 1
@@ -78,23 +81,27 @@ instance
 record Monotone {o o′ ℓ ℓ′}
   (P : Poset o ℓ) (Q : Poset o′ ℓ′) : 𝒰 (o ⊔ o′ ⊔ ℓ ⊔ ℓ′) where
   no-eta-equality
+  constructor mk-monotone
   private
     module P = Poset P
     module Q = Poset Q
   field
     hom    : P.Ob → Q.Ob
     pres-≤ : ∀ {x y} → x P.≤ y → hom x Q.≤ hom y
+{-# INLINE mk-monotone #-}
 
 open Monotone public
 
 unquoteDecl H-Level-Monotone =
   declare-record-hlevel 2 H-Level-Monotone (quote Monotone)
 
-private variable
-  P Q R : Poset o ℓ
+private variable P Q R : Poset o ℓ
 
 instance
-  Funlike-Monotone : Funlike ur (Monotone P Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
+  ⇒-Poset : ⇒-notation (Poset o ℓ) (Poset o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Poset ._⇒_ = Monotone
+
+  Funlike-Monotone : Funlike ur (P ⇒ Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
   Funlike-Monotone ._#_ = hom
 
   Refl-Monotone : Refl {A = Poset o ℓ} Monotone
@@ -124,7 +131,7 @@ instance
   Extensional-Monotone
     : ∀ {ℓr} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
     → ⦃ sa : Extensional (⌞ P ⌟ ⇒ ⌞ Q ⌟) ℓr ⦄
-    → Extensional (Monotone P Q) ℓr
+    → Extensional (P ⇒ Q) ℓr
   Extensional-Monotone ⦃ sa ⦄ = set-injective→extensional! monotone-pathᴾ sa
 
 
@@ -137,9 +144,6 @@ Posets o ℓ .Precategory._∘_ = _∘ˢ_
 Posets o ℓ .Precategory.id-r _ = trivial!
 Posets o ℓ .Precategory.id-l _ = trivial!
 Posets o ℓ .Precategory.assoc _ _ _ = trivial!
-
--- TODO add `Reasoning` if needed
-module Posets {o ℓ} = Categories.Morphism (Posets o ℓ)
 
 Forget-poset : ∀ {o ℓ} → Functor (Posets o ℓ) (Sets o)
 Forget-poset .Functor.F₀ P = el! ⌞ P ⌟
@@ -154,3 +158,16 @@ _ᵒᵖᵖ : Poset o ℓ → Poset o ℓ
 (P ᵒᵖᵖ) .Poset.≤-refl = Poset.≤-refl P
 (P ᵒᵖᵖ) .Poset.≤-trans = flip (Poset.≤-trans P)
 (P ᵒᵖᵖ) .Poset.≤-antisym = flip (Poset.≤-antisym P)
+
+𝟘ₚ : Poset o ℓ
+𝟘ₚ .Poset.Ob = ⊥
+𝟘ₚ .Poset._≤_ _ _ = ⊥
+𝟘ₚ .Poset.≤-thin = hlevel 1
+
+𝟙ₚ : Poset o ℓ
+𝟙ₚ .Poset.Ob = ⊤
+𝟙ₚ .Poset._≤_ _ _ = ⊤
+𝟙ₚ .Poset.≤-thin = hlevel 1
+𝟙ₚ .Poset.≤-refl = _
+𝟙ₚ .Poset.≤-trans = _
+𝟙ₚ .Poset.≤-antisym _ _ = refl

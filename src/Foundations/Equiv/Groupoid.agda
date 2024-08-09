@@ -74,3 +74,7 @@ whisker-lₑ ac = ≅→≃ $ ac ⁻¹ ∙_ , iso (ac ∙_) (λ _ → ∙ₑ-can
 whisker-rₑ : (B ≃ C) → (A ≃ B) ≃ (A ≃ C)
 whisker-rₑ bc = ≅→≃ $ _∙ bc , iso (_∙ bc ⁻¹) (λ _ → ∙ₑ-cancel-r _ _) λ ab →
   ∙ₑ-assoc _ _ _ ⁻¹ ∙ ap (ab ∙_) (∙ₑ-inv-r _) ∙ ∙ₑ-id-r _
+
+whisker-bothₑ : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
+  → (A ≃ C) → (B ≃ D) → (A ≃ B) ≃ (C ≃ D)
+whisker-bothₑ ac bd = whisker-lₑ ac ∙ whisker-rₑ bd

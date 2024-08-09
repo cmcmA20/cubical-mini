@@ -119,6 +119,12 @@ instance
   Extensional-Type .reflᵉ _ = refl
   Extensional-Type .idsᵉ = univalence-identity-system
 
+  Extensional→Local-Size
+    : ∀ {ℓ ℓr} {A : Type ℓ} ⦃ sa : Extensional A ℓr ⦄
+    → {x y : A} → Size ℓr (x ＝ y)
+  Extensional→Local-Size ⦃ sa ⦄ {x} {y} .Size.has-of-size =
+    sa .Pathᵉ x y , identity-system-gives-path (sa .idsᵉ)
+  {-# OVERLAPPABLE Extensional→Local-Size #-}
 
 ext
   : ∀ {ℓ ℓr} {A : Type ℓ} {x y : A} ⦃ r : Extensional A ℓr ⦄

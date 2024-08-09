@@ -18,36 +18,37 @@ open import Data.Truncation.Propositional as ∥-∥₁
 
 
 private variable
-  ℓ : Level
-  X : Type ℓ
+  ℓˣ ℓ : Level
+  X : Type ℓˣ
   x y : X
 
-is-complemented : (A : ℙ X) → Type _
-is-complemented {X} A = Σ[ A⁻¹ ꞉ ℙ X ] (A ∩ A⁻¹ ⊆ ⊥) × (⊤ ⊆ A ∪ A⁻¹)
+is-complemented : {ℓ : Level} (A : ℙ X ℓ) → Type (level-of-type X ⊔ ℓsuc ℓ)
+is-complemented {X} {ℓ} A = Σ[ A⁻¹ ꞉ ℙ X ℓ ] (A ∩ A⁻¹       ⊆ the (ℙ X ℓ) ⊥)
+                                           × (the (ℙ X ℓ) ⊤ ⊆ A ∪ A⁻¹)
 
-is-decidable-subset : (A : ℙ X) → Type (level-of-type X)
+is-decidable-subset : (A : ℙ X ℓ) → Type (level-of-type X ⊔ ℓ)
 is-decidable-subset {X} A = Decidable (λ (x : X) → x ∈ A)
 
 instance
-  Decidability-subset : {X : Type ℓ} → Decidability (ℙ X)
-  Decidability-subset {ℓ} .ℓ-decidability = ℓ
+  Decidability-subset : Decidability (ℙ X ℓ)
+  Decidability-subset {ℓ} .ℓ-decidability = _
   Decidability-subset .Decidable = is-decidable-subset
   {-# OVERLAPPING Decidability-subset #-}
 
-is-complemented→is-decidable-subset : (A : ℙ X) → is-complemented A → Decidable A
+is-complemented→is-decidable-subset : (A : ℙ X ℓ) → is-complemented A → Decidable A
 is-complemented→is-decidable-subset A (A⁻¹ , int , uni) {x} = case uni _ of
   [ yes
   , (λ x∈A⁻¹ → no λ x∈A → int (x∈A , x∈A⁻¹) .lower)
   ]ᵤ
 
-is-decidable-subset→is-complemented : (A : ℙ X) → Decidable A → is-complemented A
+is-decidable-subset→is-complemented : (A : ℙ X ℓ) → Decidable A → is-complemented A
 is-decidable-subset→is-complemented {X} A d
   = (λ x → el! (¬ x ∈ A))
   , (λ z → lift (z .snd (z .fst)))
   , Dec.rec (λ x∈A _ → ∣ inl x∈A ∣₁) (λ x∈A⁻¹ _ → ∣ inr x∈A⁻¹ ∣₁) d
 
-ℙᵈ : Type ℓ → Type _
-ℙᵈ X = Σ[ A ꞉ ℙ X ] Decidable A
+ℙᵈ : {ℓ : Level} → Type ℓˣ → Type (ℓˣ ⊔ ℓsuc ℓ)
+ℙᵈ {ℓ} X = Σ[ A ꞉ ℙ X ℓ ] Decidable A
 
 @0 decidable-subobject-classifier : {X : 𝒰 ℓ} → (X → Bool) ≃ ℙᵈ X
 decidable-subobject-classifier {ℓ} {X} = ≅→≃ $ to , iso (λ pr x → from pr x .fst) ri li where

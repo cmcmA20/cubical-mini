@@ -13,15 +13,15 @@ open import Combinatorics.Power.Base
 open import Functions.Embedding
 
 private variable
-  ℓ ℓᵗ : Level
+  ℓ ℓ′ ℓᵗ : Level
   T : Type ℓᵗ
   n : HLevel
 
 -- TODO refactor as a record
-Subtype : (ℓ : Level) → Type ℓ → Type _
+Subtype : (ℓ : Level) → Type ℓ → Type (ℓsuc ℓ)
 Subtype ℓ T = Σ[ X ꞉ Type ℓ ] X ↪ T
 
-@0 subtype≃ℙ : Subtype ℓ T ≃ ℙ T
+@0 subtype≃ℙ : Subtype ℓ T ≃ ℙ T ℓ
 subtype≃ℙ = subtype-classifier ∙ Π-cod-≃ λ _ → ≅→≃ n-Type-iso ⁻¹
 
 @0 subtype-is-set : is-set (Subtype ℓ T)

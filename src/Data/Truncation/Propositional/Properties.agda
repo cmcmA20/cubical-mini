@@ -82,7 +82,14 @@ rec-set! f-const = rec-set f-const (hlevel 2)
   (rec! λ a b → a , ∣ b ∣₁)
   where instance _ = hlevel-prop-instance A-prop
 
+∥-∥₁-is-of-size : {X : 𝒰 ℓ}
+                → is-of-size ℓ′ X → is-of-size ℓ′ ∥ X ∥₁
+∥-∥₁-is-of-size = bimap ∥_∥₁ ae
+
 instance
+  Size-∥-∥₁ : {A : Type ℓ} → ⦃ _ : Size ℓ′ A ⦄ → Size ℓ′ ∥ A ∥₁
+  Size-∥-∥₁ {ℓ′} .Size.has-of-size = ∥-∥₁-is-of-size (size ℓ′)
+
   Extensional-Σ-∥-∥₁
     : {A : Type ℓ} {B : A → Type ℓ′}
       ⦃ ea : Extensional A ℓ″ ⦄
@@ -168,3 +175,13 @@ module Replacement
       go f⁻¹x = (⦋ f⁻¹x ⦌ , refl) , λ where
         (u , α) → quot (ls.encode (ap fst α ⁻¹)) ,ₚ Σ-prop-square!
           (commutes→square (ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹))
+
+instance
+  Size-Image
+    : ∀{ℓᵃ ℓᵗ ℓⁱ} {A : Type ℓᵃ} {T : Type ℓᵗ}
+      ⦃ et : Extensional T ℓⁱ ⦄
+      {f : A → T}
+    → Size (ℓᵃ ⊔ ℓⁱ) (Im f)
+  Size-Image {ℓⁱ} {A} ⦃ et ⦄ {f} .Size.has-of-size =
+    Replacement.Image (et .idsᵉ) f , Replacement.Image≃Im _ _
+  {-# OVERLAPPING Size-Image #-}

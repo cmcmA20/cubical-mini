@@ -62,11 +62,23 @@ instance
     u′ , v′ ← φ u
     pure (u′ , ap g v′ ∙ v)
 
+is-left-inverse-of→split-surjective : f is-left-inverse-of g → Split-surjective f
+is-left-inverse-of→split-surjective {g} s b = g b , s b
+
 is-left-inverse-of→is-surjective : f is-left-inverse-of g → is-surjective f
-is-left-inverse-of→is-surjective {g} s b = ∣ g b , s b ∣₁
+is-left-inverse-of→is-surjective s b = ∣ is-left-inverse-of→split-surjective s b ∣₁
+
+is-equiv→split-surjective : is-equiv f → Split-surjective f
+is-equiv→split-surjective r y = equiv-proof r y .fst
 
 is-equiv→is-surjective : is-equiv f → is-surjective f
-is-equiv→is-surjective r y = ∣ equiv-proof r y .fst ∣₁
+is-equiv→is-surjective r y = ∣ is-equiv→split-surjective r y ∣₁
+
+≃→↠! : A ≃ B → A ↠! B
+≃→↠! = second is-equiv→split-surjective
+
+≃→↠ : A ≃ B → A ↠ B
+≃→↠ = second is-equiv→is-surjective
 
 is-surjective-comp+is-surjective-inner→is-surjective-outer
   : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {f : A → B} {g : B → C}

@@ -150,6 +150,12 @@ is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
 ≅→↪ : A ≅ B → A ↪ B
 ≅→↪ = second is-iso→is-embedding
 
+@0 lift-is-embedding : is-embedding (Lift {ℓ} ℓ′)
+lift-is-embedding = cancellable→is-embedding λ {x} {y} →
+    (=→≃ , univalence)
+  ∙ whisker-bothₑ lift≃id lift≃id
+  ∙ (=→≃ , univalence) ⁻¹
+
 instance
   Refl-Inj : Refl (_↣_ {ℓ})
   Refl-Inj .refl = id , id
