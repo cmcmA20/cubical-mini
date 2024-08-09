@@ -2,24 +2,16 @@
 module Data.Quotient.Set.Properties where
 
 open import Meta.Prelude
-open import Meta.Effect.Map
 open import Meta.Extensionality
 
 open import Structures.n-Type
 
-open import Logic.Discreteness
-
-open import Data.Dec.Base as Dec
-  using (Dec)
-import Data.Dec.Path
-import Data.Empty.Base as ⊥
 open import Data.Quotient.Set.Base
 open import Data.Quotient.Set.Path
 import Data.Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∥_∥₁ ; ∣_∣₁)
 
 open import Functions.Surjection
-
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ ℓᵖ ℓʳ ℓˢ ℓᵗ ℓ : Level
@@ -44,24 +36,6 @@ universal {B} {A} {R} B-set = ≅→≃ $ trivial-iso! inc back where
   back : Σ[ f ꞉ (A → B) ] (∀ a b → R a b → f a ＝ f b) → A / R → B
   back = rec hlevel! $ₜ²_
 
-module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
-  open is-congruence congr
-  open Equivalence equivalence
-
-  Code : A → A / R → Prop ℓ
-  Code x = elim hlevel! (λ y → el! (R x y)) λ y z r →
-    ext (_∙ r , _∙ r ⁻¹)
-
-  encode : ∀ x y (p : ⦋ x ⦌ ＝ y) → ⌞ Code x y ⌟
-  encode x _ p = subst (λ y → ⌞ Code x y ⌟) p refl
-
-  decode : ∀ x y (p : ⌞ Code x y ⌟) → ⦋ x ⦌ ＝ y
-  decode = elim! ∘ glue/
-
-  effective : R x y
-            ≃ ⦋ x ⦌ ＝ ⦋ y ⦌
-  effective {x} {y} = prop-extₑ! (decode x ⦋ y ⦌) (encode x ⦋ y ⦌)
-
 @0 equivalence→effective₁
   : Equivalence R
   → ∥ R x y ∥₁
@@ -73,12 +47,3 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   ∥R∥₁-c .is-congruence.equivalence .symmetric ._⁻¹ = map _⁻¹
   ∥R∥₁-c .is-congruence.equivalence .transitive ._∙_ = elim! λ p q → ∣ p ∙ q ∣₁
   ∥R∥₁-c .is-congruence.has-prop = hlevel 1
-
-/₂-is-discrete
-  : (R-c : is-congruence R)
-  → ⦃ d : ∀ {x y} → Dec (R x y) ⦄
-  → is-discrete (A / R)
-/₂-is-discrete {A} {R} R-c ⦃ d ⦄ {x = x/} {y = y/} =
-  elim! {P = λ x → (y : A / R) → Dec (x ＝ y)}
-    (λ x y → Dec.dmap (glue/ x y) (λ f p → ⊥.rec $ f $ effective R-c ⁻¹ $ p) d)
-    x/ y/

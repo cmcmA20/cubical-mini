@@ -91,11 +91,11 @@ snoc-inj {A} {xs = x ∷ xs} {ys = y ∷ ys} e = let ih = snoc-inj (∷-tail-inj
 -- all
 
 reflects-all : ∀ (p : A → Bool) xs
-             → Reflects (All (is-true ∘ p) xs) (all p xs)
+             → Reflects (All (So ∘ p) xs) (all p xs)
 reflects-all p []       = ofʸ []
 reflects-all p (x ∷ xs) with p x | recall p x
-... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → subst is-true e a)
-... | true  | ⟪ e ⟫ = Reflects.dmap (λ a → (subst is-true (sym e) tt) ∷ a)
+... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → ¬-so-false (subst So e a))
+... | true  | ⟪ e ⟫ = Reflects.dmap (λ a → subst So (e ⁻¹) oh ∷ a)
                        (λ ne → λ where (px ∷ a) → ne a)
                        (reflects-all p xs)
 
@@ -113,27 +113,27 @@ elem= = elem (λ a b → ⌊ a ≟ b ⌋)
 all-elem : ⦃ A-dis : is-discrete A ⦄
          → ∀ (P : A → 𝒰 ℓ′) xs
          → All P xs
-         → (z : A) → is-true (elem= z xs) → P z
-all-elem P (x ∷ xs) (px ∷ a) z el with true-reflects (reflects-or {x = ⌊ z ≟ x ⌋}) el
-... | inl z=x = subst P (sym (true-reflects discrete-reflects! z=x)) px
+         → (z : A) → ⌞ elem= z xs ⌟ → P z
+all-elem P (x ∷ xs) (px ∷ a) z el with so→true! ⦃ reflects-or {x = ⌊ z ≟ x ⌋} ⦄ el
+... | inl z=x = subst P (sym $ so→true! z=x) px
 ... | inr els = all-elem P xs a z els
 
 elem-all : ⦃ di : is-discrete A ⦄
          → ∀ (P : A → 𝒰 ℓ′) xs
-         → ((z : A) → is-true (elem= z xs) → P z)
+         → ((z : A) → ⌞ elem= z xs ⌟ → P z)
          → All P xs
 elem-all        P []       f = []
-elem-all ⦃ di ⦄ P (x ∷ xs) f
-  = f x (reflects-true reflects-or (inl (reflects-true (discrete-reflects! ⦃ di ⦄) refl)))
-  ∷ elem-all P xs (λ z el → f z (reflects-true reflects-or (inr el)))
+elem-all {A} ⦃ di ⦄ P (x ∷ xs) f
+  = f x (true→so! ⦃ reflects-or ⦄ (inl (true→so! {P = x ＝ x} refl)))
+  ∷ elem-all P xs λ z el → f z (true→so! ⦃ reflects-or ⦄ (inr el))
 
 reflects-all-dis : ⦃ A-dis : is-discrete A ⦄
                  → ∀ (p : A → Bool) xs
-                 → Reflects⁰ (∀ x → is-true (elem= x xs) → is-true (p x)) (all p xs)
+                 → Reflects (∀ x → ⌞ elem= x xs ⌟ → ⌞ p x ⌟) (all p xs)
 reflects-all-dis p xs =
   Reflects.dmap
-    (all-elem (is-true ∘ p) xs)
-    (λ na e → na (elem-all (is-true ∘ p) xs e))
+    (all-elem (So ∘ p) xs)
+    (λ na e → na (elem-all (So ∘ p) xs e))
     (reflects-all p xs)
 
 
@@ -230,11 +230,11 @@ span-length p xs =
   ap length (span-append p xs) ∙ ++-length ys zs
 
 span-all : ∀ (p : A → Bool) xs
-         → All (is-true ∘ p) (span p xs .fst)
+         → All (So ∘ p) (span p xs .fst)
 span-all p []       = []
 span-all p (x ∷ xs) with p x | recall p x
 ... | false | ⟪ e ⟫ = []
-... | true  | ⟪ e ⟫ = subst is-true (sym e) tt ∷ (span-all p xs)
+... | true  | ⟪ e ⟫ = subst So (e ⁻¹) oh ∷ (span-all p xs)
 
 
 -- zip-with

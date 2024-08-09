@@ -18,7 +18,7 @@ open import Meta.Inductive public
 open import Meta.Variadic  public
 
 open import Data.Bool.Base
-  using ( H-Level-is-true )
+  using ( H-Level-So )
 open import Data.Nat.Order.Inductive.Base -- for H-Levels
   using ()
   renaming ( _≤_       to _≤ʰ_

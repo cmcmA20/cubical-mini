@@ -17,9 +17,9 @@ open import Data.Dec.Path
 open import Data.Empty.Base
 open import Data.Empty.Properties
 open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Path
 open import Data.Fin.Computational.Properties
 open import Data.Fin.Computational.Closure
-open import Data.Fin.Computational.Instances.Discrete
 open import Data.Nat.Path
 open import Data.Truncation.Propositional as ∥-∥₁
 
@@ -93,7 +93,7 @@ instance
     go : ∥ is-discrete A ∥₁
     go = do
       e ← bf .enumeration₁
-      pure $ λ {x} {y} → ≃→is-discrete e fin-is-discrete
+      pure $ λ {x} {y} → ≃→is-discrete e Fin-is-discrete
   {-# OVERLAPS is-bishop-finite→is-discrete #-}
 
   is-bishop-finite→omniscient₁ : ⦃ bf : is-bishop-finite A ⦄ → Omniscient₁ A

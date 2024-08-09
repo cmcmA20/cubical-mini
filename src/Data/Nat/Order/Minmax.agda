@@ -28,34 +28,34 @@ max-if {x = suc x} {y = suc y} =
               refl refl (x ≤? y)
 
 min-+-l : ∀ {x y} → min x (x + y) ＝ x
-min-+-l {x} {y}  = min-if ∙ subst (λ q → (if q then x else x + y) ＝ x) ((is-true≃is-trueₚ $ reflects-true (≤-reflects x (x + y)) ≤-+-r) ⁻¹) refl
+min-+-l {x} {y}  = min-if ∙ subst (λ q → (if q then x else x + y) ＝ x) ((so≃is-true $ true→so! (≤-+-r {m = x})) ⁻¹) refl
 
-min-l : ∀ {x y} → is-true (min x y ≤? x)
-min-l {x = zero}              = tt
-min-l {x = suc x} {y = zero}  = tt
+min-l : ∀ {x y} → ⌞ min x y ≤? x ⌟
+min-l {x = zero}              = oh
+min-l {x = suc x} {y = zero}  = oh
 min-l {x = suc x} {y = suc y} = min-l {x = x} {y = y}
 
-min-r : ∀ {x y} → is-true (min x y ≤? y)
-min-r {x = zero}              = tt
-min-r {x = suc x} {y = zero}  = tt
+min-r : ∀ {x y} → ⌞ min x y ≤? y ⌟
+min-r {x = zero}              = oh
+min-r {x = suc x} {y = zero}  = oh
 min-r {x = suc x} {y = suc y} = min-r {x = x} {y = y}
 
-max-l : ∀ {x y} → is-true (x ≤? max x y)
-max-l {x = zero}  {y = zero}  = tt
-max-l {x = zero}  {y = suc y} = tt
-max-l {x = suc x} {y = zero}  = reflects-true (≤-reflects x x) ≤-refl
+max-l : ∀ {x y} → ⌞ x ≤? max x y ⌟
+max-l {x = zero}  {y = zero}  = oh
+max-l {x = zero}  {y = suc y} = oh
+max-l {x = suc x} {y = zero}  = true→so! (≤-refl {n = x})
 max-l {x = suc x} {y = suc y} = max-l {x = x} {y = y}
 
-max-r : ∀ {x y} → is-true (y ≤? max x y)
-max-r {x = zero}  {y = zero}  = tt
-max-r {x = zero}  {y = suc y} = reflects-true (≤-reflects y y) ≤-refl
-max-r {x = suc x} {y = zero}  = tt
+max-r : ∀ {x y} → ⌞ y ≤? max x y ⌟
+max-r {x = zero}  {y = zero}  = oh
+max-r {x = zero}  {y = suc y} = true→so! (≤-refl {n = y})
+max-r {x = suc x} {y = zero}  = oh
 max-r {x = suc x} {y = suc y} = max-r {x = x} {y = y}
 
-≤ᵇ-min : ∀ {x y z} → (x ≤? min y z) ＝ (x ≤? y) and (x ≤? z)
-≤ᵇ-min {x = zero}  {y = zero}              = refl
-≤ᵇ-min {x = suc x} {y = zero}              = refl
-≤ᵇ-min {x = zero}  {y = suc y} {z = zero}  = refl
-≤ᵇ-min {x = suc x} {y = suc y} {z = zero}  = and-absorb-r (x <? suc y) ⁻¹
-≤ᵇ-min {x = zero}  {y = suc y} {z = suc z} = refl
-≤ᵇ-min {x = suc x} {y = suc y} {z = suc z} = ≤ᵇ-min {x = x} {y = y} {z = z}
+≤-min : ∀ {x y z} → (x ≤? min y z) ＝ (x ≤? y) and (x ≤? z)
+≤-min {x = zero}  {y = zero}              = refl
+≤-min {x = suc x} {y = zero}              = refl
+≤-min {x = zero}  {y = suc y} {z = zero}  = refl
+≤-min {x = suc x} {y = suc y} {z = zero}  = and-absorb-r (x <? suc y) ⁻¹
+≤-min {x = zero}  {y = suc y} {z = suc z} = refl
+≤-min {x = suc x} {y = suc y} {z = suc z} = ≤-min {x = x} {y = y} {z = z}

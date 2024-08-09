@@ -740,7 +740,7 @@ the : (A : Type ℓ) → A → A
 the _ a = a
 
 inspect : (x : A) → Singletonₚ x
-inspect x = x , reflₚ
+inspect x = x , refl
 
 record Recall {A : Type ℓ} {B : A → Type ℓ′}
   (f : Π[ x ꞉ A ] B x) (x : A) (y : B x) : Type (ℓ ⊔ ℓ′) where
@@ -750,7 +750,7 @@ record Recall {A : Type ℓ} {B : A → Type ℓ′}
 recall : {A : Type ℓ} {B : A → Type ℓ′}
          (f : Π[ x ꞉ A ] B x) (x : A)
        → Recall f x (f x)
-recall f x = ⟪ reflₚ ⟫
+recall f x = ⟪ refl ⟫
 
 infix 30 _∈!_
 _∈!_ : {A : Type ℓ} {ℙA : Type ℓ′} ⦃ m : Membership A ℙA ℓ″ ⦄

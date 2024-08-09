@@ -11,8 +11,6 @@ open import Data.Dec.Instances.Alternative
 open import Data.Dec.Instances.Monoidal
 open import Data.Empty.Base as ⊥
 open import Data.Reflection.Term
-open import Data.Reflects.Path
-open import Data.Reflects.Properties
 open import Data.Truncation.Propositional.Base as ∥-∥₁
 open import Data.Unit.Base
 
@@ -21,24 +19,6 @@ private variable
   A : Type ℓᵃ
   B : Type ℓᵇ
   n : HLevel
-
--- Evidence of a correspondence being reflected by a decision procedure
-
-instance
-  Decidability-Underlying
-    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
-    → Decidability A
-  Decidability-Underlying ⦃ ua ⦄ .ℓ-decidability = ua .Underlying.ℓ-underlying
-  Decidability-Underlying .Decidable X = Dec ⌞ X ⌟
-  {-# OVERLAPPABLE Decidability-Underlying #-}
-
-  Reflectance-Underlying
-    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
-    → Reflectance A Bool
-  Reflectance-Underlying ⦃ ua ⦄ .ℓ-reflectance = ua .Underlying.ℓ-underlying
-  Reflectance-Underlying .Reflects X = Reflects⁰ ⌞ X ⌟
-  {-# OVERLAPPABLE Reflectance-Underlying #-}
-
 
 dec→essentially-classical : Dec A → Essentially-classical A
 dec→essentially-classical = Dec.rec

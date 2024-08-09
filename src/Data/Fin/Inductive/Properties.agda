@@ -24,12 +24,11 @@ cast {suc m} {suc n} _ fzero    = fzero
 cast {suc m} {suc n} p (fsuc k) = fsuc $ cast (suc-inj p) k
 
 cast-is-equiv : {m : ℕ} (n : ℕ) (p : m ＝ n) → is-equiv (cast p)
-cast-is-equiv = J>! subst is-equiv id=cast-refl id-is-equiv
-  where
-    id=cast-refl : {n : ℕ} → id ＝ cast (λ _ → n)
-    id=cast-refl {0}     _ ()
-    id=cast-refl {suc n} _ fzero    = fzero
-    id=cast-refl {suc n} i (fsuc k) = fsuc $ id=cast-refl i k
+cast-is-equiv = J>! subst is-equiv id=cast-refl id-is-equiv where
+  id=cast-refl : {n : ℕ} → id ＝ cast (λ _ → n)
+  id=cast-refl {0}     _ ()
+  id=cast-refl {suc n} _ fzero    = fzero
+  id=cast-refl {suc n} i (fsuc k) = fsuc $ id=cast-refl i k
 
 cast-equiv : {m n : ℕ} → m ＝ n → Fin m ≃ Fin n
 cast-equiv p = cast p , cast-is-equiv _ p

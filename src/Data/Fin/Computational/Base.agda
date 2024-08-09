@@ -20,7 +20,7 @@ record Fin (@0 n : ℕ) : Type where
   constructor mk-fin
   field
     index     : ℕ
-    { bound } : Erased (is-true (index <? n))
+    { bound } : Erased ⌞ index <? n ⌟
 
 open Fin
 

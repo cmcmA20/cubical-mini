@@ -243,23 +243,24 @@ opaque
 
 -- Decidability
 
-<-reflects : Reflects _<_ _<?_
-<-reflects _       0       = ofⁿ ≮z
-<-reflects 0       (suc _) = ofʸ z<s
-<-reflects (suc m) (suc n) =
-  Reflects.dmap s<s (_∘ <-peel) $ <-reflects m n
+instance
+  <-reflects : Reflects (m < n) (m <? n)
+  <-reflects {_}     {0}     = ofⁿ ≮z
+  <-reflects {0}     {suc _} = ofʸ z<s
+  <-reflects {suc m} {suc n} =
+    Reflects.dmap s<s (_∘ <-peel) $ <-reflects {m} {n}
+
+  ≤-reflects : Reflects (m ≤ n) (m ≤? n)
+  ≤-reflects {0}     {_}     = ofʸ z≤
+  ≤-reflects {suc _} {0}     = ofⁿ s≰z
+  ≤-reflects {suc m} {suc n} =
+    Reflects.dmap s≤s (_∘ ≤-peel) $ ≤-reflects {m} {n}
 
 <-dec : Decidable _<_
-<-dec = _ because (<-reflects _ _)
-
-≤-reflects : Reflects _≤_ _≤?_
-≤-reflects 0       _       = ofʸ z≤
-≤-reflects (suc _) 0       = ofⁿ s≰z
-≤-reflects (suc m) (suc n) =
-  Reflects.dmap s≤s (_∘ ≤-peel) $ ≤-reflects m n
+<-dec = _ because <-reflects
 
 ≤-dec : Decidable _≤_
-≤-dec = _ because (≤-reflects _ _)
+≤-dec = _ because ≤-reflects
 
 -- TODO use trichotomy
 ≤-split : Π[ _<_ ⊎ _>_ ⊎ _＝_ ]

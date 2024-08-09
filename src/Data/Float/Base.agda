@@ -5,15 +5,15 @@ open import Agda.Builtin.Float public
   using ( Float )
   renaming
     ( -- Relations
-      primFloatInequality     to _≠?_                   -- Float → Float → Bool
-    ; primFloatEquality       to _==_                   -- Float → Float → Bool
+      primFloatInequality     to _float≠?_              -- Float → Float → Bool
+    ; primFloatEquality       to _float=?_              -- Float → Float → Bool
     ; primFloatLess           to _<ᵇ_                   -- Float → Float → Bool
     ; primFloatIsInfinite     to is-infinite?           -- Float → Bool
     ; primFloatIsNaN          to is-NaN?                -- Float → Bool
     ; primFloatIsNegativeZero to is-negative-zero?      -- Float → Bool
     ; primFloatIsSafeInteger  to is-safe-integer?       -- Float → Bool
       -- Conversions
-    ; primFloatToWord64 to float→maybe-word64 -- Float → Maybe Word64
+    ; primFloatToWord64 to float→word64ᵐ      -- Float → Maybe Word64
     ; primNatToFloat    to ℕ→float            -- ℕ → Float
     ; primIntToFloat    to ℤ→float            -- ℤ → Float
     ; primFloatRound    to round              -- Float → Maybe ℤ

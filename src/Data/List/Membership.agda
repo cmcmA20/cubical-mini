@@ -8,15 +8,16 @@ open import Logic.Discreteness
 
 open import Functions.Embedding
 
+open import Data.Bool.Base
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
-open import Data.Fin.Computational.Instances.Discrete
 open import Data.List.Base
 open import Data.List.Operations
 open import Data.Maybe.Base
 open import Data.Maybe.Path using (just-inj)
+open import Data.Reflects.Base as Reflects
 open import Data.Unit.Base
 
 private variable
@@ -24,19 +25,20 @@ private variable
   A : Type ℓ
   a x y : A
   xs : List A
+  b b₁ b₂ : Bool
 
 data _∈ₗ_ {ℓ} {A : Type ℓ} (x : A) : List A → Type ℓ where
   here  : (p : x ＝ y) → x ∈ₗ (y ∷ xs)
   there : x ∈ₗ xs      → x ∈ₗ (y ∷ xs)
 
-here≠there : {p : x ＝ y} {q : x ∈ₗ xs} → here p ≠ there q
-here≠there {q} w = subst discrim w tt where
-  discrim : x ∈ₗ xs → Type
-  discrim (here  _) = ⊤
-  discrim (there _) = ⊥
+instance
+  Membership-List : {A : Type ℓ} → Membership A (List A) ℓ
+  Membership-List ._∈_ = _∈ₗ_
 
-there≠here : {p : x ＝ y} {q : x ∈ₗ xs} → there q ≠ here p
-there≠here = here≠there ∘ sym
+is-here? is-there? : x ∈ₗ xs → Bool
+is-here? (here  _) = true
+is-here? (there _) = false
+is-there? = not ∘ is-here?
 
 here-inj : {p p′ : x ＝ y} → here {xs = xs} p ＝ here p′ → p ＝ p′
 here-inj = just-inj ∘ ap unhere where
@@ -51,24 +53,45 @@ there-inj = just-inj ∘ ap unthere where
   unthere (there q) = just q
 
 instance
-  Membership-List : ∀{ℓ} {A : Type ℓ}
-                  → Membership A (List A) ℓ
-  Membership-List ._∈_ = _∈ₗ_
+  Reflects-here≠there
+    : {p : x ＝ y} {q : x ∈ₗ xs}
+    → Reflects (here p ＝ there q) false
+  Reflects-here≠there = ofⁿ (λ z → ¬-so-false (subst So (ap is-here? z) oh))
 
-  ∈ₗ-head
-    : ∀ {ℓ} {A : Type ℓ} {x : A} {xs : List A}
-    → x ∈ (x ∷ xs)
-  ∈ₗ-head = here refl
+  Reflects-there≠here
+    : {p : x ＝ y} {q : x ∈ₗ xs}
+    → Reflects (there q ＝ here p) false
+  Reflects-there≠here = ofⁿ (λ z → ¬-so-false (subst So (ap is-there? z) oh))
+
+  Reflects-here=here
+    : {p p′ : x ＝ y} ⦃ _ : Reflects (p ＝ p′) b ⦄
+    → Reflects (Path (x ∈ₗ (y ∷ xs)) (here p) (here p′)) b
+  Reflects-here=here = Reflects.dmap (ap here) (contra here-inj) auto
+
+  Reflects-there=there
+    : {q q′ : x ∈ₗ xs} ⦃ _ : Reflects (q ＝ q′) b ⦄
+    → Reflects (Path (x ∈ₗ (y ∷ xs)) (there q) (there q′)) b
+  Reflects-there=there = Reflects.dmap (ap there) (contra there-inj) auto
+
+opaque
+  here≠there : {p : x ＝ y} {q : x ∈ₗ xs} → here p ≠ there q
+  here≠there = false!
+
+opaque
+  there≠here : {p : x ＝ y} {q : x ∈ₗ xs} → there q ≠ here p
+  there≠here = false!
+
+instance
+  ∈ₗ-head : {xs : List A} → Reflects (x ∈ₗ (x ∷ xs)) true
+  ∈ₗ-head = ofʸ (here refl)
   {-# OVERLAPPING ∈ₗ-head #-}
 
-  ∈ₗ-tail
-    : ∀ {ℓ} {A : Type ℓ} {x y : A} {xs : List A}
-    → ⦃ x ∈ xs ⦄ → x ∈ (y ∷ xs)
-  ∈ₗ-tail = there auto
+  ∈ₗ-tail : {xs : List A} → ⦃ Reflects (x ∈ₗ xs) true ⦄ → Reflects (x ∈ₗ (y ∷ xs)) true
+  ∈ₗ-tail = ofʸ (there true!)
   {-# OVERLAPPABLE ∈ₗ-tail #-}
 
-∉ₗ[] : x ∉ []
-∉ₗ[] ()
+  ∉ₗ[] : Reflects (x ∈ₗ []) false
+  ∉ₗ[] = ofⁿ λ ()
 
 module _ {A : 𝒰 ℓᵃ} ⦃ sa : ∀ {x y : A} → Extensional (x ＝ y) ℓ ⦄ where
   Code-∈ₗ : {x : A} {xs : List A} (p q : x ∈ xs) → 𝒰 ℓ
@@ -125,12 +148,13 @@ instance
     → ⦃ di : is-discrete A ⦄
     → Dec (a ∈ xs)
   Dec-∈ₗ {xs = []} = no λ()
-  Dec-∈ₗ {a} {xs = x ∷ xs} =
-    caseᵈ a ＝ x of λ where
-      (yes a=x) → yes (here a=x)
-      (no  a≠x) → case Dec-∈ₗ {a = a} {xs = xs} of λ where
-        (yes a∈xs) → yes (there a∈xs)
-        (no  a∉xs) → no λ where
+  Dec-∈ₗ {a} {xs = x ∷ xs} .does = (a =? x) or ⌊ Dec-∈ₗ {a = a} {xs = xs} ⌋
+  Dec-∈ₗ {a} {xs = x ∷ xs} .proof =
+    caseᵈ a ＝ x return (λ d → Reflects (a ∈ (x ∷ xs)) (⌊ d ⌋ or ⌊ Dec-∈ₗ {a = a} {xs = xs} ⌋)) of λ where
+      (yes a=x) → ofʸ (here a=x)
+      (no  a≠x) → case Dec-∈ₗ {a = a} {xs = xs} return (λ d → Reflects (a ∈ (x ∷ xs)) ⌊ d ⌋) of λ where
+        (yes a∈xs) → ofʸ (there a∈xs)
+        (no  a∉xs) → ofⁿ λ where
           (here  a=x)  → a≠x a=x
           (there a∈xs) → a∉xs a∈xs
   {-# OVERLAPPING Dec-∈ₗ #-}
@@ -140,8 +164,8 @@ instance
     → ⦃ A-set : H-Level 2 A ⦄
     → is-discrete (a ∈ xs)
   ∈ₗ-is-discrete {a} {xs = x ∷ xs} {x = here p}  {here p′}  = yes (ap here prop!)
-  ∈ₗ-is-discrete {a} {xs = x ∷ xs} {x = here p}  {there q}  = no here≠there
-  ∈ₗ-is-discrete {a} {xs = x ∷ xs} {x = there q} {here p′}  = no there≠here
+  ∈ₗ-is-discrete {a} {xs = x ∷ xs} {x = here p}  {there q}  = no false!
+  ∈ₗ-is-discrete {a} {xs = x ∷ xs} {x = there q} {here p′}  = no false!
   ∈ₗ-is-discrete {a} {xs = x ∷ xs} {x = there q} {there q′} =
     case (∈ₗ-is-discrete {a = a} {xs = xs} {q} {q′}) of λ where
       (yes q=q′) → yes (ap there q=q′)

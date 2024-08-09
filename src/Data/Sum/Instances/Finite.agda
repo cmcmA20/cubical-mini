@@ -9,6 +9,7 @@ open import Combinatorics.Finiteness.Bishop.Manifest
 open import Combinatorics.Finiteness.Bishop.Weak
 
 open import Data.Fin.Computational.Closure
+open import Data.Sum.Base
 open import Data.Sum.Properties
 open import Data.Truncation.Propositional.Instances.Bind
 

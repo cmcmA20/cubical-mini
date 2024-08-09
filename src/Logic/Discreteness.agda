@@ -7,7 +7,6 @@ open import Logic.Decidability
 open import Logic.DoubleNegation
 
 open import Data.Bool.Base as Bool
-open import Data.Bool.Path
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
 open import Data.Empty.Base as ⊥
@@ -43,9 +42,11 @@ opaque
 is-discrete : Type ℓ → Type ℓ
 is-discrete A = {x y : A} → Dec (x ＝ y)
 
-_≟_ : {ℓ : Level} {A : Type ℓ} ⦃ di : is-discrete A ⦄
-    → (x y : A) → Dec (x ＝ y)
+_≟_ : ⦃ di : is-discrete A ⦄ (x y : A) → Dec (x ＝ y)
 _≟_ ⦃ di ⦄ x y = di
+
+_=?_ : ⦃ di : is-discrete A ⦄ (x y : A) → Bool
+_=?_ x y = ⌊ x ≟ y ⌋
 
 is-discrete→is-¬¬-separated : is-discrete A → is-¬¬-separated A
 is-discrete→is-¬¬-separated di _ _ = dec→essentially-classical di
@@ -109,6 +110,11 @@ instance
 
 -- Automation
 
+instance
+  Reflects-Discrete : ⦃ di : is-discrete A ⦄ {x y : A} → Reflects (x ＝ y) ⌊ x ≟ y ⌋
+  Reflects-Discrete {x} {y} = Dec.elim {C = λ d → Reflects (x ＝ y) ⌊ d ⌋} ofʸ ofⁿ (x ≟ y)
+  {-# INCOHERENT Reflects-Discrete #-}
+
 caseᵈ-true_return_of_
   : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
     (a : A) (C : Dec A → Type ℓ′)
@@ -125,30 +131,6 @@ caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
   (yes a)   → absurd (¬a a)
   (no  ¬a′) → subst (C ∘ no) prop! cy
 
-discrete-reflects! : ⦃ A-dis : is-discrete A ⦄
-                   → {x y : A}
-                   → Reflects (x ＝ y) ⌊ x ≟ y ⌋
-discrete-reflects! {x} {y} =
-  Dec.elim {C = λ d → Reflects (x ＝ y) ⌊ d ⌋} ofʸ ofⁿ (x ≟ y)
-
-Refl-is-true : ⦃ A-dis : is-discrete A ⦄ → Refl {A = A} (λ x y → is-true ⌊ x ≟ y ⌋)
-Refl-is-true .refl {x} = reflects-true (discrete-reflects! {x = x}) reflₚ
-
-Refl-is-trueₚ : ⦃ A-dis : is-discrete A ⦄ → Refl {A = A} (λ x y → is-trueₚ ⌊ x ≟ y ⌋)
-Refl-is-trueₚ .refl {x} = Dec.elim {C = λ d → is-trueₚ (d .does)} (λ _ → refl) (λ ¬refl → ⊥.rec (¬refl refl)) (x ≟ x)
-
-discrete-identity-system
-  : {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
-  → is-identity-system {A = A} (λ x y → is-true ⌊ x ≟ y ⌋) (λ _ → Refl-is-true ⦃ A-dis ⦄ .refl)
-discrete-identity-system .to-path = true-reflects discrete-reflects!
-discrete-identity-system .to-path-over _ = prop!
-
-discrete-identity-systemₚ
-  : {A : Type ℓ} ⦃ A-dis : is-discrete A ⦄
-  → is-identity-system {A = A} (λ x y → is-trueₚ ⌊ x ≟ y ⌋) (λ _ → Refl-is-trueₚ ⦃ A-dis ⦄ .refl)
-discrete-identity-systemₚ = transfer-identity-system discrete-identity-system
-  (λ _ _ → is-true≃is-trueₚ) (λ _ → prop!)
-
 ↣→is-discrete! : (A ↣ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ↣→is-discrete! f = ↣→is-discrete f auto
 
@@ -158,24 +140,28 @@ discrete-identity-systemₚ = transfer-identity-system discrete-identity-system
 ≃→is-discrete! : (A ≃ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ≃→is-discrete! f = ≃→is-discrete f auto
 
+reflects-path→is-discrete!
+  : {_==_ : A → A → Bool} ⦃ re : {x y : A} → Reflects (x ＝ y) (x == y) ⦄
+  → is-discrete A
+reflects-path→is-discrete! {_==_} {x} {y} = (x == y) because auto
 
--- Usage
-private
-  module _ {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} ⦃ A-dis : is-discrete A ⦄ {B : A → Type ℓᵇ} ⦃ B-dis : ∀[ mapⁿ 1 is-discrete B ] ⦄ where
-    _ : is-discrete (A × A × A × A)
-    _ = auto
+-- -- Usage
+-- private
+--   module _ {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} ⦃ A-dis : is-discrete A ⦄ {B : A → Type ℓᵇ} ⦃ B-dis : ∀[ mapⁿ 1 is-discrete B ] ⦄ where
+--     _ : is-discrete (A × A × A × A)
+--     _ = auto
 
-    _ : is-discrete (Σ[ B ] × Lift ℓᵇ A)
-    _ = auto
+--     _ : is-discrete (Σ[ B ] × Lift ℓᵇ A)
+--     _ = auto
 
-    _ : is-set (Σ[ B ] ≃ Lift ℓᵇ A)
-    _ = hlevel 2
+--     _ : is-set (Σ[ B ] ≃ Lift ℓᵇ A)
+--     _ = hlevel 2
 
-    _ : is-groupoid (Lift ℓᵇ A ≃ Σ[ B ])
-    _ = hlevel 3
+--     _ : is-groupoid (Lift ℓᵇ A ≃ Σ[ B ])
+--     _ = hlevel 3
 
-    _ : {a₁ a₂ : A} (p : is-trueᵈ (a₁ ≟ a₂)) → a₁ ＝ a₂
-    _ = true-reflects discrete-reflects!
+--     _ : {a₁ a₂ : A} (p : Soᵈ (a₁ ≟ a₂)) → a₁ ＝ a₂
+--     _ = so→true!
 
-    _ : {a₁ a₂ : A} (p : is-trueₚ ⌊ a₁ ≟ a₂ ⌋) → a₁ ＝ a₂
-    _ = λ p → true-reflects discrete-reflects! (is-true≃is-trueₚ ⁻¹ $ p)
+--     _ : {a₁ a₂ : A} (p : is-true ⌊ a₁ ≟ a₂ ⌋) → a₁ ＝ a₂
+--     _ = λ p → so→true! (so≃is-true ⁻¹ $ p)

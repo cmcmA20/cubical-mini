@@ -2,23 +2,30 @@
 module Data.Sum.Path where
 
 open import Meta.Prelude
-
 open import Meta.Extensionality
 
+open import Logic.Discreteness
+
+open import Functions.Embedding
+
+open import Data.Bool.Base
+open import Data.Dec.Base as Dec
 open import Data.Empty.Base
+open import Data.Reflects.Base as Reflects
 open import Data.Sum.Base
 open import Data.Unit.Base
 
 private variable
-  a b : Level
-  A : Type a
-  B : Type b
+  ℓᵃ ℓᵇ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
   x : A
   y : B
+  b : Bool
 
 instance
   Extensional-⊎
-    : ∀ {ℓ ℓ′ ℓr ℓs} {A : Type ℓ} {B : Type ℓ′}
+    : ∀ {ℓr ℓs} {A : Type ℓᵃ} {B : Type ℓᵇ}
     → ⦃ sa : Extensional A ℓr ⦄
     → ⦃ sb : Extensional B ℓs ⦄
     → Extensional (A ⊎ B) (ℓr ⊔ ℓs)
@@ -76,24 +83,49 @@ opaque
     (is-contr→is-prop B-contr)
 
 inl-inj : {x y : A} → inl {B = B} x ＝ inl y → x ＝ y
-inl-inj {A} {x} path = ap f path where
-  f : A ⊎ B → A
-  f (inl a) = a
-  f (inr _) = x
+inl-inj {A} {x} = ap [ id , (λ _ → x) ]ᵤ
 
 inr-inj : {x y : B} → inr {A = A} x ＝ inr y → x ＝ y
-inr-inj {B} {x} path = ap f path where
-  f : A ⊎ B → B
-  f (inl _) = x
-  f (inr b) = b
+inr-inj {B} {x} = ap [ (λ _ → x) , id ]ᵤ
 
-⊎-disjoint : inl x ≠ inr y
-⊎-disjoint p = subst ⊎-discrim p tt
-  where
-  ⊎-discrim : A ⊎ B → Type
-  ⊎-discrim (inl _) = ⊤
-  ⊎-discrim (inr _) = ⊥
+inl-cancellable : {A : Type ℓᵃ} {B : Type ℓᵇ} → Cancellable {A = A} {B = A ⊎ B} inl
+inl-cancellable = identity-system-gives-path (Extensional-⊎ .idsᵉ) ⁻¹ ∙ lift≃id
 
+inl-is-embedding : {A : Type ℓᵃ} → is-embedding {A = A} {B = A ⊎ B} inl
+inl-is-embedding = cancellable→is-embedding inl-cancellable
+
+inr-cancellable : {A : Type ℓᵃ} {B : Type ℓᵇ} → Cancellable {A = B} {B = A ⊎ B} inr
+inr-cancellable = identity-system-gives-path (Extensional-⊎ .idsᵉ) ⁻¹ ∙ lift≃id
+
+inr-is-embedding : {B : Type ℓᵇ} → is-embedding {A = B} {B = A ⊎ B} inr
+inr-is-embedding = cancellable→is-embedding inr-cancellable
+
+instance
+  Reflects-inl≠inr : Reflects (inl x ＝ inr y) false
+  Reflects-inl≠inr = ofⁿ λ p → ¬-so-false (subst So (ap is-inl? p) oh)
+
+  Reflects-inr≠inl : Reflects (inr y ＝ inl x) false
+  Reflects-inr≠inl = ofⁿ λ p → ¬-so-false (subst So (ap is-inr? p) oh)
+
+  Reflects-inl=inl : ⦃ Reflects (Path A x y) b ⦄ → Reflects (Path (A ⊎ B) (inl x) (inl y)) b
+  Reflects-inl=inl = Reflects.dmap (ap inl) (contra inl-inj) auto
+
+  Reflects-inr=inr : ⦃ Reflects (Path B x y) b ⦄ → Reflects (Path (A ⊎ B) (inr x) (inr y)) b
+  Reflects-inr=inr = Reflects.dmap (ap inr) (contra inr-inj) auto
+
+  ⊎-is-discrete : ⦃ _ : is-discrete A ⦄ ⦃ _ : is-discrete B ⦄ → is-discrete (A ⊎ B)
+  ⊎-is-discrete {x = inl x} {inl x′} = x =? x′ because auto
+  ⊎-is-discrete {x = inl x} {inr y}  = false because auto
+  ⊎-is-discrete {x = inr y} {inl x}  = false because auto
+  ⊎-is-discrete {x = inr y} {inr y′} = y =? y′ because auto
+
+opaque
+  inl≠inr : inl x ≠ inr y
+  inl≠inr = false!
+
+opaque
+  inr≠inl : inr y ≠ inl x
+  inr≠inl = false!
 
 -- Automation
 instance opaque

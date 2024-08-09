@@ -4,12 +4,12 @@ module Data.Dec.Base where
 open import Foundations.Base
 
 open import Data.Bool.Base as Bool
-  using (Bool; false; true; not; if_then_else_; is-true)
+  using (Bool; false; true; not; if_then_else_; is-true; So; oh; Underlying-Bool)
 open import Data.Empty.Base as ⊥
   using ()
 
 open import Data.Reflects.Base as Reflects
-  using (Reflects⁰; ofⁿ; ofʸ)
+  using (Reflects⁰; ofⁿ; ofʸ; Reflectance-Underlying)
   public
 
 private variable
@@ -64,10 +64,10 @@ rec : (P → Q) → (¬ P → Q) → Dec P → Q
 rec {Q} = elim {C = λ _ → Q}
 
 ⌊_⌋ : Dec P → Bool
-⌊ b because _ ⌋ = b
+⌊_⌋ = does
 
-is-trueᵈ : Dec P → Type
-is-trueᵈ = is-true ∘ ⌊_⌋
+Soᵈ : Dec P → Type
+Soᵈ = So ∘ ⌊_⌋
 
 caseᵈ_of_ : (A : Type ℓ) ⦃ d : Dec A ⦄ {B : Type ℓ′}
           → (Dec A → B) → B
@@ -99,3 +99,18 @@ _∈!?_
   → ⦃ d : {y : A} {ys : ℙA} → Dec (y ∈! ys) ⦄
   → (x : A) (xs : ℙA) → Dec (x ∈! xs)
 _∈!?_ = _~?_
+
+oh? : ∀ b → Dec (So b)
+oh? false = no λ()
+oh? true  = yes oh
+
+instance
+  Decidability-Underlying
+    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
+    → Decidability A
+  Decidability-Underlying ⦃ ua ⦄ .ℓ-decidability = ua .Underlying.ℓ-underlying
+  Decidability-Underlying .Decidable X = Dec ⌞ X ⌟
+  {-# OVERLAPPABLE Decidability-Underlying #-}
+
+  Dec-So : ∀ {b} → Dec (So b)
+  Dec-So = oh? _

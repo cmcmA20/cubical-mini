@@ -6,7 +6,7 @@ open import Foundations.Equiv
 
 open import Data.Id.Inductive
 
-open import Data.Char.Base public
+open import Data.Char.Base
 
 open import Agda.Builtin.Char.Properties public
   using ()

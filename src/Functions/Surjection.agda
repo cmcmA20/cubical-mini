@@ -2,7 +2,6 @@
 module Functions.Surjection where
 
 open import Meta.Prelude
-open import Meta.Effect.Bind
 open import Meta.Extensionality
 
 open import Functions.Embedding

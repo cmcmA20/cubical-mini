@@ -7,8 +7,9 @@ open import Data.Empty.Base
 open import Data.Nat.Base
 open import Data.Maybe.Base
   using ()
-  renaming ( is-just    to is-fsuc
-           ; is-nothing to is-fzero)
+  renaming ( is-just?    to is-fsuc?
+           ; is-nothing? to is-fzero?
+           )
   public
 open import Data.Maybe.Path
   using ( maybe-is-of-hlevel

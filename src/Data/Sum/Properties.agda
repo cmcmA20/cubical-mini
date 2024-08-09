@@ -3,19 +3,23 @@ module Data.Sum.Properties where
 
 open import Meta.Prelude
 
-open import Data.Empty.Base
+open import Functions.Embedding
 
-open import Data.Sum.Base public
+open import Data.Empty.Base
+open import Data.Empty.Properties
+  using (¬→≃⊥)
+open import Data.Sum.Base
+open import Data.Sum.Path
 
 private variable
-  a b c d : Level
-  A : Type a
-  B : Type b
-  C : Type c
-  D : Type d
+  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
+  C : Type ℓᶜ
+  D : Type ℓᵈ
 
-universal : {a b c : Level} {A : Type a} {B : Type b}
-            {C : A ⊎ B → Type c}
+universal : {A : Type ℓᵃ} {B : Type ℓᵇ}
+            {C : A ⊎ B → Type ℓᶜ}
           → (Π[ x ꞉ A ⊎ B ] C x)
           ≃ ( (Π[ x ꞉ A ] C (inl x))
             × (Π[ y ꞉ B ] C (inr y))
@@ -103,3 +107,11 @@ universal = ≅→≃ the-iso where
   i .snd .is-iso.rinv (inr x) = refl
   i .snd .is-iso.linv (inl x , _) = refl
   i .snd .is-iso.linv (inr x , _) = refl
+
+⊎↪ : A ↪ C → B ↪ D → (A ⊎ B) ↪ (C ⊎ D)
+⊎↪ f g .fst = [ inl ∘ f #_ , inr ∘ g #_ ]ᵤ
+⊎↪ f g .snd = cancellable→is-embedding λ where
+  {inl a} {inl a′} → inl-cancellable ∙ is-embedding→cancellable (f .snd) ∙ inl-cancellable ⁻¹
+  {inl a} {inr b}  → ¬→≃⊥ inl≠inr ∙ ¬→≃⊥ inl≠inr ⁻¹
+  {inr b} {inl a}  → ¬→≃⊥ inr≠inl ∙ ¬→≃⊥ inr≠inl ⁻¹
+  {inr b} {inr b′} → inr-cancellable ∙ is-embedding→cancellable (g .snd) ∙ inr-cancellable ⁻¹

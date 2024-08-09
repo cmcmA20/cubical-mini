@@ -11,7 +11,6 @@ open import Data.Dec as Dec
 open import Data.Empty.Base
 open import Data.Fin.Inductive.Base
 open import Data.Sum.Base
-open import Data.Sum.Instances.Decidable
 open import Data.Vec.Inductive.Operations
 
 private variable

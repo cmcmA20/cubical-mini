@@ -11,6 +11,7 @@ open import Data.Empty.Properties as ⊥
 open import Data.Fin.Computational.Properties
 open import Data.Nat.Base
 open import Data.Nat.Order.Inductive.Base
+open import Data.Sum.Base as ⊎
 open import Data.Sum.Properties as ⊎
 open import Data.Unit.Base
 open import Data.Unit.Properties as ⊤

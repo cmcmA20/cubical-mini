@@ -3,8 +3,8 @@ module Data.Truncation.Propositional.Path where
 
 open import Meta.Prelude
 
-open import Meta.Effect.Map
-
+open import Data.Bool.Base
+open import Data.Reflects.Base
 open import Data.Truncation.Propositional.Base
 open import Data.Truncation.Propositional.Instances.Map
 open import Data.Unit.Base
@@ -19,6 +19,10 @@ instance opaque
   H-Level-∥-∥₁ : ∀ {n} → ⦃ n ≥ʰ 1 ⦄ → H-Level n ∥ A ∥₁
   H-Level-∥-∥₁ ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance squash₁
   {-# OVERLAPPING H-Level-∥-∥₁ #-}
+
+instance
+  Reflects-∥-∥₁-Path : {a b : ∥ A ∥₁} → Reflects (a ＝ b) true
+  Reflects-∥-∥₁-Path = ofʸ prop!
 
 ae : A ≃ B → ∥ A ∥₁ ≃ ∥ B ∥₁
 ae {A} {B} e = ≅→≃ $ to , iso from ri li where

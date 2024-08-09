@@ -13,7 +13,7 @@ open import Data.Empty.Base
 open import Data.Dec.Base as Dec
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Closure
-open import Data.Fin.Computational.Instances.Discrete
+open import Data.Fin.Computational.Path
 open import Data.Fin.Computational.Instances.Ord
 open import Data.Nat.Base
 open import Data.Nat.Path

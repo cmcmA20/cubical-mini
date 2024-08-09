@@ -12,23 +12,18 @@ open import Data.Sum.Base
 
 private variable m n k : ℕ
 
-≤-reflects : (m n : ℕ) → Reflects⁰ (m ≤ n) (m ≤? n)
-≤-reflects 0        _      = ofʸ z≤
-≤-reflects (suc _)  0      = ofⁿ λ ()
-≤-reflects (suc m) (suc n) with m ≤? n | recall (m ≤?_) n
-... | false | ⟪ p ⟫ = ofⁿ λ where
-  (s≤s m≤n) → false-reflects (≤-reflects m n) (subst is-true (ap not p ⁻¹) tt) m≤n
-... | true  | ⟪ p ⟫ = ofʸ (s≤s (true-reflects (≤-reflects m n) (subst is-true (p ⁻¹) _)))
-
-<-reflects : (m n : ℕ) → Reflects⁰ (m < n) (m <? n)
-<-reflects  m       zero   = ofⁿ ≮z
-<-reflects  zero   (suc n) = ofʸ (s≤ʰs z≤ʰ)
-<-reflects (suc m) (suc n) = R.dmap s<s (contra <-peel) (<-reflects m n)
-
 instance
+  ≤-reflects : {m n : ℕ} → Reflects⁰ (m ≤ n) (m ≤? n)
+  ≤-reflects {0}     {_}      = ofʸ z≤
+  ≤-reflects {suc _} {0}      = ofⁿ λ ()
+  ≤-reflects {suc m} {suc n} with m ≤? n | recall (m ≤?_) n
+  ... | false | ⟪ p ⟫ = ofⁿ λ where
+    (s≤s m≤n) → so→false! ⦃ ≤-reflects {m} {n} ⦄ (subst So (ap not p ⁻¹) oh) m≤n
+  ... | true  | ⟪ p ⟫ = ofʸ (s≤s (so→true! ⦃ ≤-reflects {m} {n} ⦄ (subst So (sym p) oh)))
+
   Dec-≤ : {m n : ℕ} → Dec (m ≤ n)
   Dec-≤ {m} {n} .does  = m ≤? n
-  Dec-≤ {m} {n} .proof = ≤-reflects m n
+  Dec-≤ {m} {n} .proof = ≤-reflects
   {-# OVERLAPPING Dec-≤ #-}
 
 ≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
