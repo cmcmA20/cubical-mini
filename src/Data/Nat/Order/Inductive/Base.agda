@@ -8,7 +8,7 @@ open import Meta.Variadic
 open import Data.Bool.Base
 open import Data.Empty.Base
 open import Data.Nat.Base
-  using (_<ᵇ_)
+  using (_<?_)
   public
 open import Data.Nat.Path
 open import Data.Nat.Properties
@@ -16,18 +16,18 @@ open import Data.Sum.Base
 
 private variable m n k : ℕ
 
-infix 3 _≤ᵇ_      _≥ᵇ_ _>ᵇ_
-        _≰ᵇ_ _≮ᵇ_ _≱ᵇ_ _≯ᵇ_
+infix 3 _≤?_      _≥?_ _>?_
+        _≰?_ _≮?_ _≱?_ _≯?_
 
-_≤ᵇ_ _≥ᵇ_ _>ᵇ_ _≰ᵇ_ _≮ᵇ_ _≱ᵇ_ _≯ᵇ_ : ℕ → ℕ → Bool
+_≤?_ _≥?_ _>?_ _≰?_ _≮?_ _≱?_ _≯?_ : ℕ → ℕ → Bool
 
-m ≤ᵇ n =      m <ᵇ suc n
-m ≥ᵇ n =      n ≤ᵇ m
-m >ᵇ n =      n <ᵇ m
-m ≰ᵇ n = not (m ≤ᵇ n)
-m ≮ᵇ n = not (m <ᵇ n)
-m ≱ᵇ n = not (m ≥ᵇ n)
-m ≯ᵇ n = not (m >ᵇ n)
+m ≤? n =      m <? suc n
+m ≥? n =      n ≤? m
+m >? n =      n <? m
+m ≰? n = not (m ≤? n)
+m ≮? n = not (m <? n)
+m ≱? n = not (m ≥? n)
+m ≯? n = not (m >? n)
 
 infix 3 _≤_ _<_ _≥_ _>_
         _≰_ _≮_ _≱_ _≯_

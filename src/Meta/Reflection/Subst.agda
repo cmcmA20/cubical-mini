@@ -142,10 +142,10 @@ lookup-tm (suc fuel) (wk n ρ) i = do
 lookup-tm (suc fuel) (x ∷ₛ ρ) i with (i == 0)
 … | true  = pure x
 … | false = lookup-tm fuel ρ (i ∸ 1)
-lookup-tm (suc fuel) (strengthen n ρ) i with (i <ᵇ n)
+lookup-tm (suc fuel) (strengthen n ρ) i with (i <? n)
 … | true  = pure unknown
 … | false = lookup-tm fuel ρ (i ∸ n)
-lookup-tm (suc fuel) (lift n σ) i with (i <ᵇ n)
+lookup-tm (suc fuel) (lift n σ) i with (i <? n)
 … | true  = pure $ var i []
 … | false = do
   t ← lookup-tm fuel σ (i ∸ n)
@@ -254,7 +254,7 @@ Ren = List ℕ
 
 -- TODO refactor
 inverseR : Ren → Ren
-inverseR = go 0 ∘ insertion-sort (λ x y → x .fst <ᵇ suc (y .fst)) ∘ (λ vs → zip vs (count-from-to 0 (length vs))) where
+inverseR = go 0 ∘ insertion-sort (λ x y → x .fst <? suc (y .fst)) ∘ (λ vs → zip vs (count-from-to 0 (length vs))) where
   go : ℕ → List (ℕ × ℕ) → Ren
   go n [] = []
   go n ((k , v) ∷ ss) = count-from-to n k ++ (v ∷ go (suc k) ss)

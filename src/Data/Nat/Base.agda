@@ -18,7 +18,7 @@ open import Agda.Builtin.Nat public
     ( Nat to ℕ
     ; _-_ to _∸_
     ; _*_ to _·_
-    ; _<_ to infix 3 _<ᵇ_ )
+    ; _<_ to infix 3 _<?_ )
 
 private variable
   ℓ : Level

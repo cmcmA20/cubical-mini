@@ -51,6 +51,15 @@ instance
   Total-∀-Variadic {X} .∀[_] f = {x : X} → ∀[ f x ]
   {-# OVERLAPPING Total-∀-Variadic #-}
 
+  Total-∀ᴱ-Variadic
+    : {A : Type ℓ} {X : Type ℓ′}
+      ⦃ tp : Total-∀ᴱ A ⦄
+    → Total-∀ᴱ (X → A)
+  Total-∀ᴱ-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-∀ᴱ = ℓ′ ⊔ tp .ℓ-total-∀ᴱ
+  Total-∀ᴱ-Variadic {X} .∀ᴱ[_] f = {@0 x : X} → ∀ᴱ[ f x ]
+  {-# OVERLAPPING Total-∀ᴱ-Variadic #-}
+
+
 -- non-dependent stuff
 
 module _ where
