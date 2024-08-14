@@ -145,28 +145,25 @@ instance
   Trans-All² : ⦃ Transitive P ⦄ → Transitive (λ xs ys → All² P xs ys)
   Trans-All² ._∙_ = all²-∙
 
--- TODO uncomment after merging size
--- all²-is-of-size : {P : A → B → 𝒰 ℓ¹} {as : List A} {bs : List B}
---                 → (∀ a b → is-of-size ℓ² (P a b))
---                 → is-of-size ℓ² (All² P as bs)
--- all²-is-of-size {ℓ²} {as = []}     {bs = []}     psz =
---   Lift ℓ² ⊤ , lift≃id ∙ is-contr→equiv-⊤ ([] , (λ where [] → refl)) ⁻¹
--- all²-is-of-size {ℓ²} {as = []}     {bs = b ∷ bs} psz =
---   Lift ℓ² ⊥ , lift≃id ∙ ¬→≃⊥ (λ where ()) ⁻¹
--- all²-is-of-size {ℓ²} {as = a ∷ as} {bs = []}     psz =
---   Lift ℓ² ⊥ , lift≃id ∙ ¬→≃⊥ (λ where ()) ⁻¹
--- all²-is-of-size {ℓ²} {P} {as = a ∷ as} {bs = b ∷ bs} psz =
---   let ih = all²-is-of-size {as = as} {bs = bs} psz in
---   ≃→is-of-size {A = P a b × All² P as bs}
---     (≅→≃ ((λ where (p , as) → p ∷ as) , iso (λ where (p ∷ as) → p , as)
---          (λ where (p ∷ as) → refl)
---          λ where (p , as) → refl))
---     (×-is-of-size (psz a b) ih)
+all²-is-of-size : {P : A → B → 𝒰 ℓ¹} {as : List A} {bs : List B}
+                → (∀ a b → is-of-size ℓ² (P a b))
+                → is-of-size ℓ² (All² P as bs)
+all²-is-of-size {ℓ²} {as = []}     {bs = []}     psz =
+  ⊤ , lift≃id ∙ is-contr→equiv-⊤ ([] , (λ where [] → refl)) ⁻¹
+all²-is-of-size {ℓ²} {as = []}     {bs = b ∷ bs} psz =
+  ⊥ , lift≃id ∙ ¬→≃⊥ (λ where ()) ⁻¹
+all²-is-of-size {ℓ²} {as = a ∷ as} {bs = []}     psz =
+  ⊥ , lift≃id ∙ ¬→≃⊥ (λ where ()) ⁻¹
+all²-is-of-size {ℓ²} {P} {as = a ∷ as} {bs = b ∷ bs} psz =
+  ≃→is-of-size {A = P a b × All² P as bs}
+    (≅→≃ ((λ where (p , as) → p ∷ as) , iso (λ where (p ∷ as) → p , as)
+         (λ where (p ∷ as) → refl) λ where (p , as) → refl))
+    (×-is-of-size (psz a b) (all²-is-of-size {as = as} {bs = bs} psz))
 
--- instance
---   Size-All²
---       : {A : Type ℓᵃ} {B : Type ℓᵇ} {P : A → B → 𝒰 ℓ¹} {as : List A} {bs : List B}
---         ⦃ sp : ∀{a b} → Size ℓ² (P a b) ⦄
---       → Size ℓ² (All² P as bs)
---   Size-All² {ℓ²} .Size.has-of-size = all²-is-of-size λ a b → size ℓ²
---   {-# OVERLAPPABLE Size-All² #-}
+instance
+  Size-All²
+      : {A : Type ℓᵃ} {B : Type ℓᵇ} {P : A → B → 𝒰 ℓ¹} {as : List A} {bs : List B}
+        ⦃ sp : ∀{a b} → Size ℓ² (P a b) ⦄
+      → Size ℓ² (All² P as bs)
+  Size-All² {ℓ²} .Size.has-of-size = all²-is-of-size λ a b → size ℓ²
+  {-# OVERLAPPABLE Size-All² #-}
