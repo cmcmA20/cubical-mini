@@ -175,3 +175,33 @@ module _ {P : Poset o ℓ} where
       mk-lub i .Lub.lub = F i
       mk-lub i .Lub.has-lub =
         const-inhabited-fam→is-lub (λ j → is-const j i) ∣ i ∣₁
+
+𝟙ₚ-lub : ∀ {o ℓ ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → the (𝒰 o) ⊤}
+       → is-lub {o} {ℓ} 𝟙ₚ F (lift tt)
+𝟙ₚ-lub .is-lub.fam≤lub _ = lift tt
+𝟙ₚ-lub .is-lub.least _ _ = lift tt
+
+𝟙ₚ-Lub : ∀ {o ℓ ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → the (𝒰 o) ⊤}
+       → Lub {o} {ℓ} 𝟙ₚ F
+𝟙ₚ-Lub .Lub.lub = lift tt
+𝟙ₚ-Lub .Lub.has-lub = 𝟙ₚ-lub
+
+×ₚ-lub : ∀ {o o′ ℓ ℓ′ ℓᵢ} {I : 𝒰 ℓᵢ}
+        {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+        {Fp : I → ⌞ P ⌟} {Fq : I → ⌞ Q ⌟}
+        {x : ⌞ P ⌟} {y : ⌞ Q ⌟}
+       → is-lub P Fp x
+       → is-lub Q Fq y
+       → is-lub (P ×ₚ Q) (λ i → Fp i , Fq i) (x , y)
+×ₚ-lub lp lq .is-lub.fam≤lub i            = lp .is-lub.fam≤lub i , lq .is-lub.fam≤lub i
+×ₚ-lub lp lq .is-lub.least (ubx , uby) le =   (lp .is-lub.least ubx λ i → le i .fst)
+                                            , lq .is-lub.least uby λ i → le i .snd
+
+×ₚ-Lub : ∀ {o o′ ℓ ℓ′ ℓᵢ} {I : 𝒰 ℓᵢ}
+        {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+        {Fp : I → ⌞ P ⌟} {Fq : I → ⌞ Q ⌟}
+       → Lub P Fp
+       → Lub Q Fq
+       → Lub (P ×ₚ Q) (λ i → Fp i , Fq i)
+×ₚ-Lub Lp Lq .Lub.lub     = Lp .Lub.lub , Lq .Lub.lub
+×ₚ-Lub Lp Lq .Lub.has-lub = ×ₚ-lub (Lp .Lub.has-lub) (Lq .Lub.has-lub)
