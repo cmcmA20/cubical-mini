@@ -11,6 +11,12 @@ open import Data.Sum
 
 private variable o ℓ o′ ℓ′ o″ ℓ″ : Level
 
+Initial-Poset : Initial (Posets o ℓ)
+Initial-Poset .Initial.bot = 𝟘ₚ
+Initial-Poset .Initial.has-⊥ _ .fst .hom ()
+Initial-Poset .Initial.has-⊥ _ .fst .pres-≤ ()
+Initial-Poset .Initial.has-⊥ _ .snd _ = ext λ()
+
 _⊎ₚ_ : Poset o ℓ → Poset o′ ℓ′ → Poset (o ⊔ o′) (ℓ ⊔ ℓ′)
 _⊎ₚ_ {ℓ} {ℓ′} P Q = po module ⊎ₚ where
   module P = Order.Reasoning P
@@ -36,7 +42,6 @@ instance
   ⊎-Poset ._⊎_ = _⊎ₚ_
 
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
-
   Inl : P ⇒ P ⊎ Q
   Inl .hom = inl
   Inl .pres-≤ = lift
@@ -49,9 +54,3 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   [ F , G ]ₚ .hom = [ F .hom , G .hom ]ᵤ
   [ F , G ]ₚ .pres-≤ {inl p} {inl p′} (lift u) = F .pres-≤ u
   [ F , G ]ₚ .pres-≤ {inr q} {inr q′} (lift v) = G .pres-≤ v
-
-Initial-Poset : Initial (Posets o ℓ)
-Initial-Poset .Initial.bot = 𝟘ₚ
-Initial-Poset .Initial.has-⊥ _ .fst .hom ()
-Initial-Poset .Initial.has-⊥ _ .fst .pres-≤ ()
-Initial-Poset .Initial.has-⊥ _ .snd _ = ext λ()

@@ -103,33 +103,3 @@ module _ {P : Poset o ℓ} where
       cover-reflects-glb : Glb P (F ∘ₜ f) → Glb P F
       cover-reflects-glb g .Glb.glb = _
       cover-reflects-glb g .Glb.has-glb = cover-reflects-is-glb (g .Glb.has-glb)
-
-𝟙ₚ-glb : ∀ {o ℓ ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → the (𝒰 o) ⊤}
-       → is-glb {o} {ℓ} 𝟙ₚ F (lift tt)
-𝟙ₚ-glb .is-glb.glb≤fam _ = lift tt
-𝟙ₚ-glb .is-glb.greatest _ _ = lift tt
-
-𝟙ₚ-Glb : ∀ {o ℓ ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → the (𝒰 o) ⊤}
-       → Glb {o} {ℓ} 𝟙ₚ F
-𝟙ₚ-Glb .Glb.glb = lift tt
-𝟙ₚ-Glb .Glb.has-glb = 𝟙ₚ-glb
-
-×ₚ-glb : ∀ {o o′ ℓ ℓ′ ℓᵢ} {I : 𝒰 ℓᵢ}
-        {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-        {Fp : I → ⌞ P ⌟} {Fq : I → ⌞ Q ⌟}
-        {x : ⌞ P ⌟} {y : ⌞ Q ⌟}
-       → is-glb P Fp x
-       → is-glb Q Fq y
-       → is-glb (P ×ₚ Q) (λ i → Fp i , Fq i) (x , y)
-×ₚ-glb gp gq .is-glb.glb≤fam i               = gp .is-glb.glb≤fam i , gq .is-glb.glb≤fam i
-×ₚ-glb gp gq .is-glb.greatest (lbx , lby) ge =   (gp .is-glb.greatest lbx λ i → ge i .fst)
-                                               , gq .is-glb.greatest lby λ i → ge i .snd
-
-×ₚ-Glb : ∀ {o o′ ℓ ℓ′ ℓᵢ} {I : 𝒰 ℓᵢ}
-        {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-        {Fp : I → ⌞ P ⌟} {Fq : I → ⌞ Q ⌟}
-       → Glb P Fp
-       → Glb Q Fq
-       → Glb (P ×ₚ Q) (λ i → Fp i , Fq i)
-×ₚ-Glb Gp Gq .Glb.glb     = Gp .Glb.glb , Gq .Glb.glb
-×ₚ-Glb Gp Gq .Glb.has-glb = ×ₚ-glb (Gp .Glb.has-glb) (Gq .Glb.has-glb)

@@ -172,26 +172,3 @@ _ᵒᵖᵖ : Poset o ℓ → Poset o ℓ
 𝟙ₚ .Poset.≤-refl = _
 𝟙ₚ .Poset.≤-trans = _
 𝟙ₚ .Poset.≤-antisym _ _ = refl
-
-_×ₚ_ : Poset o ℓ → Poset o′ ℓ′ → Poset (o ⊔ o′) (ℓ ⊔ ℓ′)
-(P ×ₚ Q) .Poset.Ob                                = Poset.Ob P × Poset.Ob Q
-(P ×ₚ Q) .Poset._≤_ (xp , xq) (yp , yq)           = Poset._≤_ P xp yp × Poset._≤_ Q xq yq
-(P ×ₚ Q) .Poset.≤-thin                            = ×-is-of-hlevel 1 (Poset.≤-thin P) (Poset.≤-thin Q)
-(P ×ₚ Q) .Poset.≤-refl                            = (Poset.≤-refl P) , (Poset.≤-refl Q)
-(P ×ₚ Q) .Poset.≤-trans (xyp , xyq) (yzp , yzq)   = (Poset.≤-trans P xyp yzp) , (Poset.≤-trans Q xyq yzq)
-(P ×ₚ Q) .Poset.≤-antisym (xyp , xyq) (yxp , yxq) = ×-path (Poset.≤-antisym P xyp yxp) (Poset.≤-antisym Q xyq yxq)
-
-_⊎ₚ_ : Poset o ℓ → Poset o′ ℓ′ → Poset (o ⊔ o′) (ℓ ⊔ ℓ′)
-(P ⊎ₚ Q)      .Poset.Ob                                                                   = Poset.Ob P ⊎ Poset.Ob Q
-_⊎ₚ_ {ℓ′} P Q .Poset._≤_ (inl xp) (inl yp)                                                = Lift ℓ′ (Poset._≤_ P xp yp)
-(P ⊎ₚ Q)      .Poset._≤_ (inl _)  (inr _)                                                 = ⊥
-(P ⊎ₚ Q)      .Poset._≤_ (inr _)  (inl _)                                                 = ⊥
-_⊎ₚ_ {ℓ}  P Q .Poset._≤_ (inr xq) (inr yq)                                                = Lift ℓ (Poset._≤_ Q xq yq)
-(P ⊎ₚ Q)      .Poset.≤-thin {x = inl xp} {y = inl yp} (lift p₁) (lift p₂)                 = lift-ext (Poset.≤-thin P p₁ p₂)
-(P ⊎ₚ Q)      .Poset.≤-thin {x = inr xq} {y = inr yq} (lift p₁) (lift p₂)                 = lift-ext (Poset.≤-thin Q p₁ p₂)
-(P ⊎ₚ Q)      .Poset.≤-refl {x = inl xp}                                                  = lift (Poset.≤-refl P)
-(P ⊎ₚ Q)      .Poset.≤-refl {x = inr xq}                                                  = lift (Poset.≤-refl Q)
-(P ⊎ₚ Q)      .Poset.≤-trans {x = inl xp} {y = inl yp} {z = inl zp} (lift pxy) (lift pyz) = lift (Poset.≤-trans P pxy pyz)
-(P ⊎ₚ Q)      .Poset.≤-trans {x = inr xq} {y = inr yq} {z = inr zq} (lift pxy) (lift pyz) = lift (Poset.≤-trans Q pxy pyz)
-(P ⊎ₚ Q)      .Poset.≤-antisym {x = inl xp} {y = inl yp} (lift pxy) (lift pyx)            = ap inl (Poset.≤-antisym P pxy pyx)
-(P ⊎ₚ Q)      .Poset.≤-antisym {x = inr xq} {y = inr yq} (lift pxy) (lift pyx)            = ap inr (Poset.≤-antisym Q pxy pyx)
