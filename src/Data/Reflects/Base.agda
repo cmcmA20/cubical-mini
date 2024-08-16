@@ -59,6 +59,7 @@ instance
   Reflects-¬ : ⦃ rp : Reflects P a ⦄ → Reflects (¬ P) (not a)
   Reflects-¬ {a = false} ⦃ ofⁿ  p ⦄ = ofʸ p
   Reflects-¬ {a = true}  ⦃ ofʸ ¬p ⦄ = ofⁿ (_$ ¬p)
+  {-# INCOHERENT Reflects-¬ #-}
 
   Reflects-× : ⦃ rp : Reflects P a ⦄ ⦃ rq : Reflects Q b ⦄ → Reflects (P × Q) (a and b)
   Reflects-× {a = false} {b}         ⦃ ofⁿ ¬p ⦄            = ofⁿ (¬p ∘ fst)

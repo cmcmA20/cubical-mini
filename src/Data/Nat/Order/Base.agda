@@ -256,19 +256,20 @@ instance
   ≤-reflects {suc m} {suc n} =
     Reflects.dmap s≤s (_∘ ≤-peel) $ ≤-reflects {m} {n}
 
-<-dec : Decidable _<_
-<-dec = _ because <-reflects
+  <-dec : Decidable _<_
+  <-dec = _ because auto
 
-≤-dec : Decidable _≤_
-≤-dec = _ because ≤-reflects
+  ≤-dec : Decidable _≤_
+  ≤-dec = _ because auto
 
 -- TODO use trichotomy
 ≤-split : Π[ _<_ ⊎ _>_ ⊎ _＝_ ]
-≤-split m n with <-dec {m} {n}
-... | yes m<n = inl m<n
-... | no  m≮n with <-dec {n} {m}
-... | yes n<m = inr $ inl n<m
-... | no  n≮m = inr $ inr $ ≤-antisym (≤≃≯ ⁻¹ $ n≮m) (≤≃≯ ⁻¹ $ m≮n)
+≤-split m n = caseᵈ m < n of λ where
+  (yes m<n) → inl m<n
+  (no  m≮n) → caseᵈ n < m of λ where
+    (yes n<m) → inr $ inl n<m
+    (no  n≮m) → inr $ inr $ ≤-antisym (≤≃≯ ⁻¹ $ n≮m) (≤≃≯ ⁻¹ $ m≮n)
+
 
 -- well-foundedness
 

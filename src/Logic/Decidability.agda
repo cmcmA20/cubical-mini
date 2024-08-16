@@ -63,10 +63,6 @@ instance
   Dec-universe : Dec (Type ℓ)
   Dec-universe = yes ⊤
 
-  Dec-refl : ∀ {x : A} → Dec (x ＝ x)
-  Dec-refl = yes refl
-  {-# OVERLAPPING Dec-refl #-}
-
 Dec-prop-Σ
   : {A : Type ℓᵃ} {B : A → Type ℓᵇ}
   → is-prop A

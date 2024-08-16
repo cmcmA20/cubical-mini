@@ -85,6 +85,9 @@ so-inj : So b₁ ＝ So b₂ → b₁ ＝ b₂
 so-inj = so-injₑ ∘ =→≃
 
 instance
+  Oh : So true
+  Oh = oh
+
   H-Level-So : ∀ {b n} → H-Level (suc n) (So b)
   H-Level-So {(false)} = hlevel-prop-instance λ ()
   H-Level-So {(true)}  = hlevel-prop-instance λ where oh oh → refl

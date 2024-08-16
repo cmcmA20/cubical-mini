@@ -13,20 +13,19 @@ open import Data.Sum.Base
 private variable m n k : ℕ
 
 instance
-  ≤-reflects : {m n : ℕ} → Reflects⁰ (m ≤ n) (m ≤? n)
+  ≤-reflects : {m n : ℕ} → Reflects (m ≤ n) (m ≤? n)
   ≤-reflects {0}     {_}      = ofʸ z≤
   ≤-reflects {suc _} {0}      = ofⁿ λ ()
   ≤-reflects {suc m} {suc n} with m ≤? n | recall (m ≤?_) n
   ... | false | ⟪ p ⟫ = ofⁿ λ where
-    (s≤s m≤n) → so→false! ⦃ ≤-reflects {m} {n} ⦄ (subst So (ap not p ⁻¹) oh) m≤n
-  ... | true  | ⟪ p ⟫ = ofʸ (s≤s (so→true! ⦃ ≤-reflects {m} {n} ⦄ (subst So (sym p) oh)))
+    (s≤s m≤n) → so→false! (subst So (ap not p ⁻¹) oh) m≤n
+  ... | true  | ⟪ p ⟫ = ofʸ (s≤s (so→true! (subst So (sym p) oh)))
 
   Dec-≤ : {m n : ℕ} → Dec (m ≤ n)
-  Dec-≤ {m} {n} .does  = m ≤? n
-  Dec-≤ {m} {n} .proof = ≤-reflects
+  Dec-≤ = _ because auto
   {-# OVERLAPPING Dec-≤ #-}
 
-≤-split : (m n : ℕ) → (m < n) ⊎ (n < m) ⊎ (m ＝ n)
+≤-split : Π[ _<_ ⊎ _>_ ⊎ _＝_ ]
 ≤-split m n with Dec-≤ {suc m} {n}
 ≤-split m n | yes m<n = inl m<n
 ≤-split m n | no m≥n with Dec-≤ {suc n} {m}
