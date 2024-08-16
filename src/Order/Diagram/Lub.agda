@@ -1,6 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.Diagram.Lub where
 
+open import Foundations.Equiv
 open import Categories.Prelude
 open import Functions.Surjection
 
@@ -175,3 +176,38 @@ module _ {P : Poset o ℓ} where
       mk-lub i .Lub.lub = F i
       mk-lub i .Lub.has-lub =
         const-inhabited-fam→is-lub (λ j → is-const j i) ∣ i ∣₁
+
+≃→is-lub : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+             {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} {x : ⌞ P ⌟}
+         → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
+         → (∀ {x y} → Poset._≤_ P x y → Poset._≤_ Q (e $ x) (e $ y))
+         → (∀ {x y} → Poset._≤_ Q (e $ x) (e $ y) → Poset._≤_ P x y)
+         → is-lub P F x
+         → is-lub Q (λ i → e .fst (F i)) (e $ x)
+≃→is-lub                 e mt mf l .is-lub.fam≤lub i   = mt $ l .is-lub.fam≤lub i
+≃→is-lub {P} {Q} {F} {x} e mt mf l .is-lub.least ub′ f =
+  subst (Poset._≤_ Q (e $ x)) (is-equiv→unit ((e ⁻¹) .snd) ub′) $
+  mt $
+  l .is-lub.least (e ⁻¹ $ ub′)
+  λ i → mf $ subst (Poset._≤_ Q (e $ F i)) (is-equiv→counit (e .snd) ub′ ⁻¹) $ f i
+
+≃→Lub : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+          {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟}
+         → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
+         → (∀ {x y} → Poset._≤_ P x y → Poset._≤_ Q (e $ x) (e $ y))
+         → (∀ {x y} → Poset._≤_ Q (e $ x) (e $ y) → Poset._≤_ P x y)
+         → Lub P F
+         → Lub Q (λ i → e .fst (F i))
+≃→Lub e mt mf l .Lub.lub     = e $ l .Lub.lub
+≃→Lub e mt mf l .Lub.has-lub = ≃→is-lub e mt mf (l .Lub.has-lub)
+
+≃→Lub′ : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+          {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟}
+         → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
+         → (∀ {x y} → Poset._≤_ P x y → Poset._≤_ Q (e $ x) (e $ y))
+         → (∀ {x y} → Poset._≤_ Q (e $ x) (e $ y) → Poset._≤_ P x y)
+         → Lub P (λ i → is-equiv→inverse (e .snd) (F i))
+         → Lub Q F
+≃→Lub′ {Q} {F} e mt mf l =
+ subst (Lub Q) (fun-ext λ i → is-equiv→counit (e .snd) (F i)) $
+ ≃→Lub e mt mf l
