@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Sum.Exclusive.Instances.Finite</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Sum.Exclusive.Instances.Finite.html" class="Module">Data.Sum.Exclusive.Instances.Finite</a> <a id="67" class="Keyword">where</a>
+
+<a id="74" class="Keyword">open</a> <a id="79" class="Keyword">import</a> <a id="86" href="Meta.Prelude.html" class="Module">Meta.Prelude</a>
+
+<a id="100" class="Keyword">open</a> <a id="105" class="Keyword">import</a> <a id="112" href="Meta.Effect.Bind.html" class="Module">Meta.Effect.Bind</a>
+
+<a id="130" class="Keyword">open</a> <a id="135" class="Keyword">import</a> <a id="142" href="Combinatorics.Finiteness.Bishop.Manifest.html" class="Module">Combinatorics.Finiteness.Bishop.Manifest</a>
+<a id="183" class="Keyword">open</a> <a id="188" class="Keyword">import</a> <a id="195" href="Combinatorics.Finiteness.Bishop.Weak.html" class="Module">Combinatorics.Finiteness.Bishop.Weak</a>
+
+<a id="233" class="Keyword">open</a> <a id="238" class="Keyword">import</a> <a id="245" href="Data.Fin.Computational.Closure.html" class="Module">Data.Fin.Computational.Closure</a>
+<a id="276" class="Keyword">open</a> <a id="281" class="Keyword">import</a> <a id="288" href="Data.Sum.Exclusive.Base.html" class="Module">Data.Sum.Exclusive.Base</a>
+<a id="312" class="Keyword">open</a> <a id="317" class="Keyword">import</a> <a id="324" href="Data.Sum.Exclusive.Properties.html" class="Module">Data.Sum.Exclusive.Properties</a>
+<a id="354" class="Keyword">open</a> <a id="359" class="Keyword">import</a> <a id="366" href="Data.Truncation.Propositional.Instances.Bind.html" class="Module">Data.Truncation.Propositional.Instances.Bind</a>
+
+<a id="412" class="Keyword">private</a> <a id="420" class="Keyword">variable</a>
+  <a id="431" href="Data.Sum.Exclusive.Instances.Finite.html#431" class="Generalizable">ℓ</a> <a id="433" href="Data.Sum.Exclusive.Instances.Finite.html#433" class="Generalizable">ℓ′</a> <a id="436" class="Symbol">:</a> <a id="438" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="446" href="Data.Sum.Exclusive.Instances.Finite.html#446" class="Generalizable">A</a> <a id="448" class="Symbol">:</a> <a id="450" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="455" href="Data.Sum.Exclusive.Instances.Finite.html#431" class="Generalizable">ℓ</a>
+  <a id="459" href="Data.Sum.Exclusive.Instances.Finite.html#459" class="Generalizable">B</a> <a id="461" class="Symbol">:</a> <a id="463" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="468" href="Data.Sum.Exclusive.Instances.Finite.html#433" class="Generalizable">ℓ′</a>
+
+<a id="472" class="Comment">-- TODO</a>
+<a id="480" class="Comment">-- instance</a>
+<a id="492" class="Comment">--   ⊻-manifest-bishop-finite</a>
+<a id="522" class="Comment">--     : ⦃ A-mbf : Manifest-bishop-finite A ⦄ ⦃ B-mbf : Manifest-bishop-finite B ⦄</a>
+<a id="605" class="Comment">--     → Manifest-bishop-finite (A ⊻ B)</a>
+<a id="645" class="Comment">--   ⊻-manifest-bishop-finite = finite $ ⊻-ap (enumeration auto) (enumeration auto) ∙ {!!}</a>
+<a id="736" class="Comment">--   {-# OVERLAPPING ⊻-manifest-bishop-finite #-}</a>
+
+<a id="787" class="Comment">--   ⊻-is-bishop-finite</a>
+<a id="811" class="Comment">--     : ⦃ A-bf : is-bishop-finite A ⦄ → ⦃ B-bf : is-bishop-finite B ⦄</a>
+<a id="882" class="Comment">--     → is-bishop-finite (A ⊻ B)</a>
+<a id="916" class="Comment">--   ⊻-is-bishop-finite = finite₁ do</a>
+<a id="953" class="Comment">--     aeq ← enumeration₁ auto</a>
+<a id="984" class="Comment">--     beq ← enumeration₁ auto</a>
+<a id="1015" class="Comment">--     pure $ ⊻-ap aeq beq ∙ {!!}</a>
+<a id="1049" class="Comment">--   {-# OVERLAPPING ⊻-is-bishop-finite #-}</a>
+</pre></body></html>

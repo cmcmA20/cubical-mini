@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Data.Sum.Exclusive.Instances.Show</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Data.Sum.Exclusive.Instances.Show.html" class="Module">Data.Sum.Exclusive.Instances.Show</a> <a id="65" class="Keyword">where</a>
+
+<a id="72" class="Keyword">open</a> <a id="77" class="Keyword">import</a> <a id="84" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="102" class="Keyword">open</a> <a id="107" class="Keyword">import</a> <a id="114" href="Meta.Deriving.Show.html" class="Module">Meta.Deriving.Show</a>
+
+<a id="134" class="Keyword">open</a> <a id="139" class="Keyword">import</a> <a id="146" href="Data.Empty.Base.html" class="Module">Data.Empty.Base</a>
+<a id="162" class="Keyword">open</a> <a id="167" class="Keyword">import</a> <a id="174" href="Data.Empty.Instances.Show.html" class="Module">Data.Empty.Instances.Show</a>
+<a id="200" class="Keyword">open</a> <a id="205" class="Keyword">import</a> <a id="212" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a>
+<a id="226" class="Keyword">open</a> <a id="231" class="Keyword">import</a> <a id="238" href="Data.Sum.Exclusive.Base.html" class="Module">Data.Sum.Exclusive.Base</a>
+
+<a id="263" class="Keyword">instance</a>
+  <a id="274" class="Keyword">unquoteDecl</a> <a id="Show-⊻"></a><a id="286" href="Data.Sum.Exclusive.Instances.Show.html#286" class="Function">Show-⊻</a> <a id="293" class="Symbol">=</a> <a id="295" href="Meta.Deriving.Show.html#6617" class="Function">derive-show</a> <a id="307" href="Data.Sum.Exclusive.Instances.Show.html#286" class="Function">Show-⊻</a> <a id="314" class="Symbol">(</a><a id="315" class="Keyword">quote</a> <a id="321" href="Data.Sum.Exclusive.Base.html#222" class="Datatype Operator">_⊻ₜ_</a><a id="325" class="Symbol">)</a>
+
+<a id="328" class="Keyword">private</a> <a id="336" class="Keyword">module</a> <a id="343" href="Data.Sum.Exclusive.Instances.Show.html#343" class="Module">_</a> <a id="345" class="Keyword">where</a>
+  <a id="353" class="Keyword">open</a> <a id="358" class="Keyword">import</a> <a id="365" href="Data.Nat.Instances.Show.html" class="Module">Data.Nat.Instances.Show</a>
+
+  <a id="392" href="Data.Sum.Exclusive.Instances.Show.html#392" class="Function">_</a> <a id="394" class="Symbol">:</a> <a id="396" href="Meta.Show.html#822" class="Field">show</a> <a id="401" class="Symbol">(</a><a id="402" href="Foundations.Base.html#22427" class="Function">the</a> <a id="406" class="Symbol">(</a><a id="407" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="409" href="Foundations.Notation.Logic.html#3193" class="Field Operator">⊻</a> <a id="411" href="Foundations.Notation.Logic.html#3578" class="Field">⊥</a><a id="412" class="Symbol">)</a> <a id="414" class="Symbol">(</a><a id="415" href="Data.Sum.Exclusive.Base.html#285" class="InductiveConstructor">inxl</a> <a id="420" class="Number">0</a> <a id="422" href="Foundations.Pi.Base.html#2288" class="Function">id</a><a id="424" class="Symbol">))</a> <a id="427" href="Foundations.Prim.Kan.html#1264" class="Function Operator">＝</a> <a id="429" class="String">&quot;inxl 0 &lt;↯&gt;&quot;</a>
+  <a id="444" class="Symbol">_</a> <a id="446" class="Symbol">=</a> <a id="448" href="Foundations.Notation.Reflexive.html#323" class="Field">refl</a>
+
+  <a id="456" href="Data.Sum.Exclusive.Instances.Show.html#456" class="Function">_</a> <a id="458" class="Symbol">:</a> <a id="460" href="Meta.Show.html#822" class="Field">show</a> <a id="465" class="Symbol">(</a><a id="466" href="Foundations.Base.html#22427" class="Function">the</a> <a id="470" class="Symbol">((</a><a id="472" href="Foundations.Notation.Logic.html#3578" class="Field">⊥</a> <a id="474" href="Foundations.Notation.Logic.html#3193" class="Field Operator">⊻</a> <a id="476" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a><a id="477" class="Symbol">)</a> <a id="479" href="Foundations.Notation.Logic.html#3193" class="Field Operator">⊻</a> <a id="481" href="Foundations.Notation.Logic.html#3578" class="Field">⊥</a><a id="482" class="Symbol">)</a> <a id="484" class="Symbol">(</a><a id="485" href="Data.Sum.Exclusive.Base.html#285" class="InductiveConstructor">inxl</a> <a id="490" class="Symbol">(</a><a id="491" href="Data.Sum.Exclusive.Base.html#311" class="InductiveConstructor">inxr</a> <a id="496" class="Number">0</a> <a id="498" href="Foundations.Pi.Base.html#2288" class="Function">id</a><a id="500" class="Symbol">)</a> <a id="502" href="Foundations.Pi.Base.html#2288" class="Function">id</a><a id="504" class="Symbol">))</a> <a id="507" href="Foundations.Prim.Kan.html#1264" class="Function Operator">＝</a> <a id="509" class="String">&quot;inxl (inxr 0 &lt;↯&gt;) &lt;↯&gt;&quot;</a>
+  <a id="535" class="Symbol">_</a> <a id="537" class="Symbol">=</a> <a id="539" href="Foundations.Notation.Reflexive.html#323" class="Field">refl</a>
+</pre></body></html>

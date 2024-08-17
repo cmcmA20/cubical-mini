@@ -8,34 +8,35 @@
 <a id="106" class="Keyword">open</a> <a id="111" class="Keyword">import</a> <a id="118" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a>
 <a id="132" class="Keyword">open</a> <a id="137" class="Keyword">import</a> <a id="144" href="Data.Maybe.Base.html" class="Module">Data.Maybe.Base</a>
   <a id="162" class="Keyword">using</a> <a id="168" class="Symbol">()</a>
-  <a id="173" class="Keyword">renaming</a> <a id="182" class="Symbol">(</a> <a id="184" href="Data.Maybe.Base.html#669" class="Function">is-just</a>    <a id="195" class="Symbol">to</a> <a id="198" class="Function">is-fsuc</a>
-           <a id="217" class="Symbol">;</a> <a id="219" href="Data.Maybe.Base.html#592" class="Function">is-nothing</a> <a id="230" class="Symbol">to</a> <a id="233" class="Function">is-fzero</a><a id="241" class="Symbol">)</a>
-  <a id="245" class="Keyword">public</a>
-<a id="252" class="Keyword">open</a> <a id="257" class="Keyword">import</a> <a id="264" href="Data.Maybe.Path.html" class="Module">Data.Maybe.Path</a>
-  <a id="282" class="Keyword">using</a> <a id="288" class="Symbol">(</a> <a id="290" href="Data.Maybe.Path.html#1900" class="Function">maybe-is-of-hlevel</a>
-        <a id="317" class="Symbol">;</a> <a id="319" href="Data.Maybe.Path.html#516" class="Function">¬→maybe-is-contr</a> <a id="336" class="Symbol">)</a>
-<a id="338" class="Keyword">open</a> <a id="343" class="Keyword">import</a> <a id="350" href="Data.Maybe.Path.html" class="Module">Data.Maybe.Path</a>
-  <a id="368" class="Keyword">renaming</a> <a id="377" class="Symbol">(</a> <a id="379" href="Data.Maybe.Path.html#308" class="Function">nothing≠just</a>      <a id="397" class="Symbol">to</a> <a id="400" class="Function">fzero≠fsuc</a>
-           <a id="422" class="Symbol">;</a> <a id="424" href="Data.Maybe.Path.html#380" class="Function">just≠nothing</a>      <a id="442" class="Symbol">to</a> <a id="445" class="Function">fsuc≠fzero</a>
-           <a id="467" class="Symbol">;</a> <a id="469" href="Data.Maybe.Path.html#448" class="Function">just-inj</a>          <a id="487" class="Symbol">to</a> <a id="490" class="Function">fsuc-inj</a>
-           <a id="510" class="Symbol">;</a> <a id="512" href="Data.Maybe.Path.html#2126" class="Function">just-cancellable</a>  <a id="530" class="Symbol">to</a> <a id="533" class="Function">fsuc-cancellable</a>
-           <a id="561" class="Symbol">;</a> <a id="563" href="Data.Maybe.Path.html#2246" class="Function">just-is-embedding</a> <a id="581" class="Symbol">to</a> <a id="584" class="Function">fsuc-is-embedding</a>
-           <a id="613" class="Symbol">)</a>
-  <a id="617" class="Keyword">public</a>
+  <a id="173" class="Keyword">renaming</a> <a id="182" class="Symbol">(</a> <a id="184" href="Data.Maybe.Base.html#650" class="Function">is-just?</a>    <a id="196" class="Symbol">to</a> <a id="199" class="Function">is-fsuc?</a>
+           <a id="219" class="Symbol">;</a> <a id="221" href="Data.Maybe.Base.html#728" class="Function">is-nothing?</a> <a id="233" class="Symbol">to</a> <a id="236" class="Function">is-fzero?</a>
+           <a id="257" class="Symbol">)</a>
+  <a id="261" class="Keyword">public</a>
+<a id="268" class="Keyword">open</a> <a id="273" class="Keyword">import</a> <a id="280" href="Data.Maybe.Path.html" class="Module">Data.Maybe.Path</a>
+  <a id="298" class="Keyword">using</a> <a id="304" class="Symbol">(</a> <a id="306" href="Data.Maybe.Path.html#1906" class="Function">maybe-is-of-hlevel</a>
+        <a id="333" class="Symbol">;</a> <a id="335" href="Data.Maybe.Path.html#522" class="Function">¬→maybe-is-contr</a> <a id="352" class="Symbol">)</a>
+<a id="354" class="Keyword">open</a> <a id="359" class="Keyword">import</a> <a id="366" href="Data.Maybe.Path.html" class="Module">Data.Maybe.Path</a>
+  <a id="384" class="Keyword">renaming</a> <a id="393" class="Symbol">(</a> <a id="395" href="Data.Maybe.Path.html#3397" class="Function">nothing≠just</a>      <a id="413" class="Symbol">to</a> <a id="416" class="Function">fzero≠fsuc</a>
+           <a id="438" class="Symbol">;</a> <a id="440" href="Data.Maybe.Path.html#3463" class="Function">just≠nothing</a>      <a id="458" class="Symbol">to</a> <a id="461" class="Function">fsuc≠fzero</a>
+           <a id="483" class="Symbol">;</a> <a id="485" href="Data.Maybe.Path.html#454" class="Function">just-inj</a>          <a id="503" class="Symbol">to</a> <a id="506" class="Function">fsuc-inj</a>
+           <a id="526" class="Symbol">;</a> <a id="528" href="Data.Maybe.Path.html#2132" class="Function">just-cancellable</a>  <a id="546" class="Symbol">to</a> <a id="549" class="Function">fsuc-cancellable</a>
+           <a id="577" class="Symbol">;</a> <a id="579" href="Data.Maybe.Path.html#2252" class="Function">just-is-embedding</a> <a id="597" class="Symbol">to</a> <a id="600" class="Function">fsuc-is-embedding</a>
+           <a id="629" class="Symbol">)</a>
+  <a id="633" class="Keyword">public</a>
 
-<a id="625" class="Keyword">open</a> <a id="630" class="Keyword">import</a> <a id="637" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>
+<a id="641" class="Keyword">open</a> <a id="646" class="Keyword">import</a> <a id="653" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>
 
-<a id="652" class="Keyword">private</a> <a id="660" class="Keyword">variable</a>
-  <a id="671" href="Data.Fin.Path.html#671" class="Generalizable">n</a> <a id="673" class="Symbol">:</a> <a id="675" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
-  <a id="679" href="Data.Fin.Path.html#679" class="Generalizable">k</a> <a id="681" class="Symbol">:</a> <a id="683" href="Foundations.Base.html#13763" class="Function">HLevel</a>
+<a id="668" class="Keyword">private</a> <a id="676" class="Keyword">variable</a>
+  <a id="687" href="Data.Fin.Path.html#687" class="Generalizable">n</a> <a id="689" class="Symbol">:</a> <a id="691" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+  <a id="695" href="Data.Fin.Path.html#695" class="Generalizable">k</a> <a id="697" class="Symbol">:</a> <a id="699" href="Foundations.Base.html#13763" class="Function">HLevel</a>
 
-<a id="691" class="Keyword">opaque</a>
-  <a id="fin-is-set"></a><a id="700" href="Data.Fin.Path.html#700" class="Function">fin-is-set</a> <a id="711" class="Symbol">:</a> <a id="713" href="Foundations.Base.html#14415" class="Function">is-set</a> <a id="720" class="Symbol">(</a><a id="721" href="Data.Fin.Base.html#332" class="Function">Fin</a> <a id="725" href="Data.Fin.Path.html#671" class="Generalizable">n</a><a id="726" class="Symbol">)</a>
-  <a id="730" href="Data.Fin.Path.html#700" class="Function">fin-is-set</a> <a id="741" class="Symbol">{</a><a id="742" class="Number">0</a><a id="743" class="Symbol">}</a>     <a id="749" class="Symbol">=</a> <a id="751" href="Foundations.HLevel.Base.html#8782" class="Function">hlevel</a> <a id="758" class="Number">2</a>
-  <a id="762" href="Data.Fin.Path.html#700" class="Function">fin-is-set</a> <a id="773" class="Symbol">{</a><a id="774" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="778" href="Data.Fin.Path.html#778" class="Bound">n</a><a id="779" class="Symbol">}</a> <a id="781" class="Symbol">=</a> <a id="783" href="Data.Maybe.Path.html#1900" class="Function">maybe-is-of-hlevel</a> <a id="802" class="Number">0</a> <a id="804" href="Data.Fin.Path.html#700" class="Function">fin-is-set</a>
+<a id="707" class="Keyword">opaque</a>
+  <a id="fin-is-set"></a><a id="716" href="Data.Fin.Path.html#716" class="Function">fin-is-set</a> <a id="727" class="Symbol">:</a> <a id="729" href="Foundations.Base.html#14415" class="Function">is-set</a> <a id="736" class="Symbol">(</a><a id="737" href="Data.Fin.Base.html#332" class="Function">Fin</a> <a id="741" href="Data.Fin.Path.html#687" class="Generalizable">n</a><a id="742" class="Symbol">)</a>
+  <a id="746" href="Data.Fin.Path.html#716" class="Function">fin-is-set</a> <a id="757" class="Symbol">{</a><a id="758" class="Number">0</a><a id="759" class="Symbol">}</a>     <a id="765" class="Symbol">=</a> <a id="767" href="Foundations.HLevel.Base.html#8782" class="Function">hlevel</a> <a id="774" class="Number">2</a>
+  <a id="778" href="Data.Fin.Path.html#716" class="Function">fin-is-set</a> <a id="789" class="Symbol">{</a><a id="790" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="794" href="Data.Fin.Path.html#794" class="Bound">n</a><a id="795" class="Symbol">}</a> <a id="797" class="Symbol">=</a> <a id="799" href="Data.Maybe.Path.html#1906" class="Function">maybe-is-of-hlevel</a> <a id="818" class="Number">0</a> <a id="820" href="Data.Fin.Path.html#716" class="Function">fin-is-set</a>
 
-<a id="816" class="Keyword">instance</a>
-  <a id="H-Level-Fin1"></a><a id="827" href="Data.Fin.Path.html#827" class="Function">H-Level-Fin1</a> <a id="840" class="Symbol">:</a> <a id="842" href="Foundations.HLevel.Base.html#8603" class="Record">H-Level</a> <a id="850" href="Data.Fin.Path.html#679" class="Generalizable">k</a> <a id="852" class="Symbol">(</a><a id="853" href="Data.Fin.Base.html#332" class="Function">Fin</a> <a id="857" class="Number">1</a><a id="858" class="Symbol">)</a>
-  <a id="862" href="Data.Fin.Path.html#827" class="Function">H-Level-Fin1</a> <a id="875" class="Symbol">=</a> <a id="877" href="Foundations.HLevel.Base.html#9253" class="Function">hlevel-basic-instance</a> <a id="899" class="Number">0</a> <a id="901" class="Symbol">(</a><a id="902" href="Data.Maybe.Path.html#516" class="Function">¬→maybe-is-contr</a> <a id="919" class="Symbol">λ</a> <a id="921" class="Symbol">())</a>
-  <a id="927" class="Symbol">{-#</a> <a id="931" class="Keyword">INCOHERENT</a> <a id="942" href="Data.Fin.Path.html#827" class="Function">H-Level-Fin1</a> <a id="955" class="Symbol">#-}</a>
+<a id="832" class="Keyword">instance</a>
+  <a id="H-Level-Fin1"></a><a id="843" href="Data.Fin.Path.html#843" class="Function">H-Level-Fin1</a> <a id="856" class="Symbol">:</a> <a id="858" href="Foundations.HLevel.Base.html#8603" class="Record">H-Level</a> <a id="866" href="Data.Fin.Path.html#695" class="Generalizable">k</a> <a id="868" class="Symbol">(</a><a id="869" href="Data.Fin.Base.html#332" class="Function">Fin</a> <a id="873" class="Number">1</a><a id="874" class="Symbol">)</a>
+  <a id="878" href="Data.Fin.Path.html#843" class="Function">H-Level-Fin1</a> <a id="891" class="Symbol">=</a> <a id="893" href="Foundations.HLevel.Base.html#9253" class="Function">hlevel-basic-instance</a> <a id="915" class="Number">0</a> <a id="917" class="Symbol">(</a><a id="918" href="Data.Maybe.Path.html#522" class="Function">¬→maybe-is-contr</a> <a id="935" class="Symbol">λ</a> <a id="937" class="Symbol">())</a>
+  <a id="943" class="Symbol">{-#</a> <a id="947" class="Keyword">INCOHERENT</a> <a id="958" href="Data.Fin.Path.html#843" class="Function">H-Level-Fin1</a> <a id="971" class="Symbol">#-}</a>
 </pre></body></html>
