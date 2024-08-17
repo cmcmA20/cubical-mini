@@ -17,7 +17,7 @@ open import Data.Unit.Base
 instance
   Reflects-⊤-Path : {x y : ⊤} → Reflects (x ＝ y) true
   Reflects-⊤-Path = ofʸ refl
+  {-# OVERLAPPING Reflects-⊤-Path #-}
 
   ⊤-is-discrete : is-discrete ⊤
-  ⊤-is-discrete = true because auto
-  {-# OVERLAPPING ⊤-is-discrete #-}
+  ⊤-is-discrete = reflects-path→is-discrete!

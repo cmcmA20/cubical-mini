@@ -59,19 +59,19 @@ module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
 
 instance
   Reflects-⦋-⦌=⦋-⦌ : ⦃ r : Reflects (R a b) true ⦄ → Reflects (Path (A / R) ⦋ a ⦌ ⦋ b ⦌) true
-  Reflects-⦋-⦌=⦋-⦌ = Reflects.dmap (glue/ _ _) (λ f _ → ⊥.rec $ f $ true!) auto
+  Reflects-⦋-⦌=⦋-⦌ = Reflects.dmap (glue/ _ _) false! auto
 
   Reflects-⦋-⦌≠⦋-⦌
     : ⦃ c : is-congruence R ⦄ ⦃ a≠b : Reflects (a ＝ b) false ⦄ ⦃ r : Reflects (R a b) false ⦄
     → Reflects (Path (A / R) ⦋ a ⦌ ⦋ b ⦌) false
   Reflects-⦋-⦌≠⦋-⦌ ⦃ a≠b ⦄ = Reflects.dmap
     (glue/ _ _ ∘ snd)
-    (λ f p → ⊥.rec (¬-so-false (true→so! $ effective auto ⁻¹ $ p)))
+    (λ f p → falseᴱ! $ ¬-so-false $ true→so! $ effective auto ⁻¹ $ p)
     (Reflects-× ⦃ a≠b ⦄)
 
   /₂-is-discrete
     : ⦃ c : is-congruence R ⦄ ⦃ d : ∀ {x y} → Dec (R x y) ⦄
     → is-discrete (A / R)
   /₂-is-discrete {A} {R} {x = x/} {y = y/} = elim! {P = λ x → (y : A / R) → Dec (x ＝ y)}
-    (λ x y → Dec.dmap (glue/ x y) (λ f p → ⊥.rec $ f $ effective auto ⁻¹ $ p) auto)
+    (λ x y → Dec.dmap (glue/ x y) (λ f p → falseᴱ! $ f $ effective auto ⁻¹ $ p) auto)
     x/ y/

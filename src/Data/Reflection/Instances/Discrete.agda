@@ -12,7 +12,7 @@ open import Data.Float.Path
 open import Data.Id.Inductive
 open import Data.List.Base
 open import Data.List.Path
-open import Data.Nat.Instances.Discrete
+open import Data.Nat.Path
 open import Data.String.Path
 open import Data.Word.Path
 

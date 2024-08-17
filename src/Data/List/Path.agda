@@ -10,6 +10,7 @@ open import Data.Bool.Base
 open import Data.Dec.Base
 open import Data.Empty.Base
 open import Data.List.Base
+open import Data.List.Operations
 open import Data.Reflects.Base as Reflects
 open import Data.Unit.Base
 
@@ -81,10 +82,19 @@ instance
   Reflects-∷≠[] = ofⁿ λ p → ¬-so-false (subst So (ap is-cons? p) oh)
 
   Reflects-[]≠∷ : Reflects ([] ＝ x ∷ xs) false
-  Reflects-[]≠∷ = ofⁿ λ p → ¬-so-false (subst So (ap is-nil? p) oh)
+  Reflects-[]≠∷ = reflects-sym auto
+
+  Reflects-List-≠-head : ⦃ Reflects (x ＝ y) false ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) false
+  Reflects-List-≠-head {x} = ofⁿ (false! ∘ ap (head x))
+  {-# OVERLAPPING Reflects-List-≠-head #-}
+
+  Reflects-List-≠-tail : ⦃ Reflects (xs ＝ ys) false ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) false
+  Reflects-List-≠-tail {x} = ofⁿ (false! ∘ ap tail)
+  {-# OVERLAPS Reflects-List-≠-tail #-}
 
   Reflects-∷=∷ : ⦃ rh : Reflects (x ＝ y) b₁ ⦄ ⦃ rt : Reflects (xs ＝ ys) b₂ ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) (b₁ and b₂)
   Reflects-∷=∷ = Reflects.dmap (λ p → ap² _∷_ (p .fst) (p .snd)) (contra < ∷-head-inj , ∷-tail-inj >) auto
+  {-# OVERLAPPABLE Reflects-∷=∷ #-}
 
   List-is-discrete : ⦃ d : is-discrete A ⦄ → is-discrete (List A)
   List-is-discrete {x = []}     {([])}   = true because auto
@@ -93,10 +103,11 @@ instance
   List-is-discrete {x = x ∷ xs} {y ∷ ys} .does  = (x =? y) and ⌊ List-is-discrete {x = xs} {y = ys} ⌋
   List-is-discrete {x = x ∷ xs} {y ∷ ys} .proof = Reflects-∷=∷ ⦃ auto ⦄ ⦃ List-is-discrete {x = xs} {y = ys} .proof ⦄
 
-opaque
-  ∷≠[] : x ∷ xs ≠ []
-  ∷≠[] = false!
+  Reflects-snoc≠[] : Reflects (xs ∷r x ＝ []) false
+  Reflects-snoc≠[] {xs = []} = Reflects-∷≠[]
+  Reflects-snoc≠[] {xs = x ∷ xs} = Reflects-∷≠[]
+  {-# INCOHERENT Reflects-snoc≠[] #-}
 
-opaque
-  []≠∷ : [] ≠ x ∷ xs
-  []≠∷ = false!
+  Reflects-[]≠snoc : Reflects ([] ＝ xs ∷r x) false
+  Reflects-[]≠snoc = reflects-sym auto
+  {-# INCOHERENT Reflects-[]≠snoc #-}

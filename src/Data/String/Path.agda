@@ -27,7 +27,6 @@ instance
 
   String-is-discrete : is-discrete String
   String-is-discrete = reflects-path→is-discrete!
-  {-# OVERLAPPING String-is-discrete #-}
 
 Extensional-String : Extensional String 0ℓ
 Extensional-String = reflects-path→extensional!

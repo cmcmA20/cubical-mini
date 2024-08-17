@@ -10,6 +10,7 @@ open import Logic.Discreteness
 open import Data.Bool.Base
 open import Data.Dec.Base
 open import Data.Empty.Base as ⊥
+open import Data.Reflects.Base as Reflects
 
 module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
 
@@ -42,12 +43,12 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     lookup-insert : Erased (lookup (insert s x) x ＝ true)
     lookup-insert {x} .erased with x ≟ x
     ... | yes _   = refl
-    ... | no  x≠x = ⊥.rec $ x≠x refl
+    ... | no  x≠x = false! x≠x
 
     lookup-remove : Erased (lookup (remove s x) x ＝ false)
     lookup-remove {x} .erased with x ≟ x
     ... | yes _   = refl
-    ... | no  x≠x = ⊥.rec $ x≠x refl
+    ... | no  x≠x = false! x≠x
 
     insert-nop    : lookup s x ＝ true
                   → Erased (insert s x ＝ s)
@@ -61,11 +62,11 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     ... | yes _   = true
     ... | no  y≠a with x ≟ a
     ... | yes _   = true
-    ... | no  x≠a = ⊥.rec {A = s a ＝ true} (x≠a x=a) i
+    ... | no  x≠a = false! {Q = s a ＝ true} (x≠a x=a) i
     insert-insert {s} {x} {y} .erased i a | no  x≠a with y ≟ a
     ... | yes _ = true
     ... | no  y≠a with x ≟ a
-    ... | yes x=a = ⊥.rec {A = true ＝ s a} (x≠a x=a) i
+    ... | yes x=a = false! {Q = true ＝ s a} (x≠a x=a) i
     ... | no  _ = s a
 
 
@@ -74,7 +75,7 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     insert-remove {s} {x} p .erased i a with x ≟ a
     ... | yes x=a = (p ⁻¹ ∙ ap s x=a ) i
     ... | no  x≠a with x ≟ a
-    ... | yes x=a = ⊥.rec {A = false ＝ s a} (x≠a x=a) i
+    ... | yes x=a = false! {Q = false ＝ s a} (x≠a x=a) i
     ... | no  x≠a = s a
 
     remove-nop    : lookup s x ＝ false
@@ -89,11 +90,11 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     ... | yes _ = false
     ... | no  y≠a with x ≟ a
     ... | yes _ = false
-    ... | no  x≠a = ⊥.rec {A = s a ＝ false} (x≠a x=a) i
+    ... | no  x≠a = false! {Q = s a ＝ false} (x≠a x=a) i
     remove-remove {s} {x} {y} .erased i a | no x≠a with y ≟ a
     ... | yes _ = false
     ... | no  y≠a with x ≟ a
-    ... | yes x=a = ⊥.rec {A = false ＝ s a} (x≠a x=a) i
+    ... | yes x=a = false! {Q = false ＝ s a} (x≠a x=a) i
     ... | no  _ = s a
 
     remove-insert : lookup s x ＝ false
@@ -101,7 +102,7 @@ module _ {ℓ} {A : 𝒰 ℓ} ⦃ _ : is-discrete A ⦄ where
     remove-insert {s} {x} p .erased i a with x ≟ a
     ... | yes x=a = (p ⁻¹ ∙ ap s x=a ) i
     ... | no  x≠a with x ≟ a
-    ... | yes x=a = ⊥.rec {A = true ＝ s a} (x≠a x=a) i
+    ... | yes x=a = false! {Q = true ＝ s a} (x≠a x=a) i
     ... | no  _ = s a
 
   impl : SetI A (A → Bool)

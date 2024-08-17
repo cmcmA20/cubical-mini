@@ -1,4 +1,4 @@
-{-# OPTIONS --safe #-}
+{-# OPTIONS --safe --backtracking-instance-search --instance-search-depth=3 #-}
 module Data.List.Operations.Properties where
 
 open import Foundations.Base
@@ -32,11 +32,11 @@ private variable
 
 length=0→nil : {xs : List A} → length xs ＝ 0 → xs ＝ []
 length=0→nil {xs = []}     eq = refl
-length=0→nil {xs = x ∷ xs} eq = absurd (suc≠zero eq)
+length=0→nil {xs = x ∷ xs} eq = false! eq
 
 length=1→sng : {A : 𝒰 ℓ} {xs : List A}
              → length xs ＝ 1 → Σ[ x ꞉ A ] (xs ＝ x ∷ [])
-length=1→sng {xs = []}     eq = absurd (zero≠suc eq)
+length=1→sng {xs = []}     eq = false! eq
 length=1→sng {xs = x ∷ xs} eq = x , ap (x ∷_) (length=0→nil (suc-inj eq))
 
 ++-length : (xs ys : List A) → length (xs ++ ys) ＝ length xs + length ys
@@ -48,8 +48,8 @@ length=1→sng {xs = x ∷ xs} eq = x , ap (x ∷_) (length=0→nil (suc-inj eq)
             → as ++ bs ＝ xs ++ ys
             → (as ＝ xs) × (bs ＝ ys)
 ++-same-inj     []       []       el e = refl , e
-++-same-inj     []       (x ∷ xs) el e = absurd (zero≠suc el)
-++-same-inj     (a ∷ as) []       el e = absurd (suc≠zero el)
+++-same-inj     []       (x ∷ xs) el e = false! el
+++-same-inj     (a ∷ as) []       el e = false! el
 ++-same-inj {A} (a ∷ as) (x ∷ xs) el e =
   let ih = ++-same-inj as xs (suc-inj el) (∷-tail-inj e) in
   ap² {C = λ _ _ → List A} _∷_ (∷-head-inj e) (ih .fst) , ih .snd
@@ -82,11 +82,12 @@ snoc-length : (xs : List A) {x : A} → length (snoc xs x) ＝ suc (length xs)
 snoc-length xs {x} = ap length (snoc-append xs) ∙ ++-length xs (x ∷ []) ∙ +-comm (length xs) 1
 
 snoc-inj : {xs ys : List A} {z w : A} → snoc xs z ＝ snoc ys w → (xs ＝ ys) × (z ＝ w)
-snoc-inj     {xs = []}     {ys = []}     e = refl , (∷-head-inj e)
-snoc-inj     {xs = []}     {ys = y ∷ ys} e = absurd (zero≠suc (suc-inj (ap length e ∙ ap suc (snoc-length ys))))
-snoc-inj     {xs = x ∷ xs} {ys = []}     e = absurd (suc≠zero (suc-inj (ap suc (snoc-length xs ⁻¹) ∙ ap length e)))
-snoc-inj {A} {xs = x ∷ xs} {ys = y ∷ ys} e = let ih = snoc-inj (∷-tail-inj e) in
-                                             ap² {C = λ _ _ → List A} _∷_ (∷-head-inj e) (ih .fst) , ih .snd
+snoc-inj {xs = []}     {ys = []}     e = refl , (∷-head-inj e)
+snoc-inj {xs = []}     {ys = y ∷ ys} e = false! e
+snoc-inj {xs = x ∷ xs} {ys = []}     e = false! e
+snoc-inj {xs = x ∷ xs} {ys = y ∷ ys} e =
+  first (ap² {C = λ _ _ → List _} _∷_ (∷-head-inj e)) $ snoc-inj (∷-tail-inj e)
+
 
 -- all
 
@@ -244,6 +245,6 @@ zip-with-++ : {f : A → B → C}
             → length as ＝ length xs
             → zip-with f (as ++ bs) (xs ++ ys) ＝ zip-with f as xs ++ zip-with f bs ys
 zip-with-++ {f} {as = []}     {xs = []}     e = refl
-zip-with-++ {f} {as = []}     {xs = x ∷ xs} e = absurd (zero≠suc e)
-zip-with-++ {f} {as = a ∷ as} {xs = []}     e = absurd (suc≠zero e)
+zip-with-++ {f} {as = []}     {xs = x ∷ xs} e = false! e
+zip-with-++ {f} {as = a ∷ as} {xs = []}     e = false! e
 zip-with-++ {f} {as = a ∷ as} {xs = x ∷ xs} e = ap (f a x ∷_) (zip-with-++ (suc-inj e))

@@ -4,10 +4,13 @@ module Data.Fin.Inductive.Base where
 open import Foundations.Base
 open import Foundations.Equiv
 
+open import Data.Bool.Base
+  using (false; true)
 open import Data.Fin.Interface
 open import Data.Nat.Base as ℕ
   using (ℕ; zero; suc)
   public
+open import Data.Reflects.Base
 open import Data.Sum.Base
 
 private variable
@@ -80,3 +83,10 @@ module _ where
     li {suc _} (fsucᵈ _) = ap fsucᵈ (li _)
 
   module default≃inductive {n} = Equiv (default≃inductive {n})
+
+instance
+  Reflects-Fin-0 : Reflects (Fin 0) false
+  Reflects-Fin-0 = ofⁿ λ ()
+
+  Reflects-Fin-1 : Reflects (Fin 1) true
+  Reflects-Fin-1 = ofʸ fzero

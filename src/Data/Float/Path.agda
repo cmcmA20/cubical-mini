@@ -27,7 +27,6 @@ instance
 
   Float-is-discrete : is-discrete Float
   Float-is-discrete = reflects-path→is-discrete!
-  {-# OVERLAPPING Float-is-discrete #-}
 
 Extensional-Float : Extensional Float 0ℓ
 Extensional-Float = reflects-path→extensional!

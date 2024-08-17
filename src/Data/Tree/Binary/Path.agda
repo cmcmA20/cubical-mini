@@ -43,19 +43,27 @@ instance
   Reflects-empty≠leaf = ofⁿ (λ p → ¬-so-false (subst So (ap is-empty? p) oh))
 
   Reflects-leaf≠empty : Reflects (leaf x ＝ Tree.empty) false
-  Reflects-leaf≠empty = ofⁿ (λ p → ¬-so-false (subst So (ap is-leaf? p) oh))
+  Reflects-leaf≠empty = reflects-sym auto
 
   Reflects-empty≠node : Reflects (Tree.empty ＝ node tl tr) false
   Reflects-empty≠node = ofⁿ (λ p → ¬-so-false (subst So (ap is-empty? p) oh))
 
   Reflects-node≠empty : Reflects (node tl tr ＝ Tree.empty) false
-  Reflects-node≠empty = ofⁿ (λ p → ¬-so-false (subst So (ap is-node? p) oh))
+  Reflects-node≠empty = reflects-sym auto
 
   Reflects-leaf≠node : Reflects (leaf x ＝ node tl tr) false
   Reflects-leaf≠node = ofⁿ (λ p → ¬-so-false (subst So (ap is-leaf? p) oh))
 
   Reflects-node≠leaf : Reflects (node tl tr ＝ leaf x) false
-  Reflects-node≠leaf = ofⁿ (λ p → ¬-so-false (subst So (ap is-node? p) oh))
+  Reflects-node≠leaf = reflects-sym auto
+
+  Reflects-Tree-≠-node-l : ⦃ Reflects (xl ＝ yl) false ⦄ → Reflects (node xl xr ＝ node yl yr) false
+  Reflects-Tree-≠-node-l = ofⁿ (false! ∘ fst ∘ node-inj)
+  {-# OVERLAPPING Reflects-Tree-≠-node-l #-}
+
+  Reflects-Tree-≠-node-r : ⦃ Reflects (xr ＝ yr) false ⦄ → Reflects (node xl xr ＝ node yl yr) false
+  Reflects-Tree-≠-node-r = ofⁿ (false! ∘ snd ∘ node-inj)
+  {-# OVERLAPS Reflects-Tree-≠-node-r #-} -- arbitrary choice, left bias
 
   Reflects-leaf=leaf : ⦃ Reflects (Path A x y) b ⦄ → Reflects (leaf x ＝ leaf y) b
   Reflects-leaf=leaf = Reflects.dmap (ap leaf) (contra leaf-inj) auto
@@ -65,6 +73,7 @@ instance
     → Reflects (node xl xr ＝ node yl yr) (b₁ and b₂)
   Reflects-node=node =
     Reflects.dmap (λ p → ap² node (p .fst) (p .snd)) (contra < fst ∘ node-inj , snd ∘ node-inj >) auto
+  {-# OVERLAPPABLE Reflects-node=node #-}
 
   Tree-is-discrete : ⦃ d : is-discrete A ⦄ → is-discrete (Tree A)
   Tree-is-discrete {x = Tree.empty} {(Tree.empty)} = true because auto
@@ -80,17 +89,6 @@ instance
   Tree-is-discrete {x = node xl xr} {node yl yr} .proof =
     Reflects-node=node ⦃ Tree-is-discrete .proof ⦄ ⦃ Tree-is-discrete .proof ⦄
 
-opaque
-  empty≠leaf : Tree.empty ≠ leaf x
-  empty≠leaf = false!
-
-opaque
-  empty≠node : Tree.empty ≠ node tl tr
-  empty≠node = false!
-
-opaque
-  leaf≠node : leaf x ≠ node tl tr
-  leaf≠node = false!
 
 module _ {A : 𝒰 ℓᵃ} ⦃ sa : Extensional A ℓ ⦄ where
   Code-Tree : Tree A → Tree A → Type ℓ

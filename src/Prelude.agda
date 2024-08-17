@@ -36,7 +36,7 @@ open import Functions.Surjection public
 import Data.Empty
 module ⊥ = Data.Empty
 open ⊥ public
-  using (⊥ₜ)
+  using ( ⊥ₜ ; ¬ₜ_ ; _≠_ )
 
 import Data.Unit
 module ⊤ = Data.Unit

@@ -8,8 +8,7 @@ open import Meta.Record
 
 open import Logic.Discreteness
 
-open import Data.Nat.Instances.Discrete
-
+open import Data.Nat.Path
 open import Data.Truncation.Propositional as ∥-∥₁
 
 private variable
@@ -33,7 +32,7 @@ is-countable→is-discrete {A} cn = ∥-∥₁.proj! go where
   go : ∥ is-discrete A ∥₁
   go = do
     e ← enumeration₁ cn
-    pure $ λ {x} {y} → ≃→is-discrete e ℕ-is-discrete
+    pure $ λ {x} {y} → ≃→is-discrete! e
 
 ≃→is-countable : B ≃ A → is-countable A → is-countable B
 ≃→is-countable e c .enumeration₁ = do

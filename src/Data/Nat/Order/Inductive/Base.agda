@@ -12,6 +12,7 @@ open import Data.Nat.Base
   public
 open import Data.Nat.Path
 open import Data.Nat.Properties
+open import Data.Reflects.Base
 open import Data.Sum.Base
 
 private variable m n k : ℕ
@@ -107,6 +108,15 @@ instance
 suc≰id : suc n ≰ n
 suc≰id (s≤s p) = suc≰id p
 
+instance
+  Reflects-suc≰id : Reflects (suc n ≤ n) false
+  Reflects-suc≰id = ofⁿ suc≰id
+  {-# INCOHERENT Reflects-suc≰id #-}
+
+  Reflects-s≰z : Reflects (suc n ≤ 0) false
+  Reflects-s≰z = ofⁿ λ()
+  {-# INCOHERENT Reflects-s≰z #-}
+
 s≰z : suc n ≰ 0
 s≰z = λ ()
 
@@ -153,7 +163,7 @@ s<s = s≤s
 <-ascend = refl
 
 ≮z : n ≮ 0
-≮z = s≰z
+≮z = false!
 
 z<s : 0 < suc n
 z<s = s≤s z≤
@@ -201,8 +211,8 @@ suc-pred (suc _) _ = refl
 ·-inj-r : (x y z : ℕ) → 0 < z → x · z ＝ y · z → x ＝ y
 ·-inj-r zero y .(suc z) (s≤s {n = z} _) H with (·-zero y (suc z) (sym H))
 ... | inl prf = sym prf
-... | inr prf = absurd (suc≠zero prf)
-·-inj-r (suc x) zero .(suc z) (s≤s {n = z} prf) H = absurd (suc≠zero H)
+... | inr prf = false! prf
+·-inj-r (suc x) zero .(suc z) (s≤s {n = z} prf) H = false! H
 ·-inj-r (suc x) (suc y) .(suc z) (s≤s {n = z} prf) H =
   ap suc $ ·-inj-r x y (suc z) (s≤s prf) (+-inj-l z (x · suc z) (y · suc z) (suc-inj H))
 
@@ -210,5 +220,5 @@ suc-pred (suc _) _ = refl
 ·-inj-l x y z 0<x p = ·-inj-r _ _ _ 0<x (·-comm y x ∙ p ∙ ·-comm x z)
 
 z<· : (m n : ℕ) → (0 < m · n) → (0 < m) × (0 < n)
-z<· (suc m) zero    0<mn = absurd (s≰z (subst (0 <_) (·-absorb-r m) 0<mn))
+z<· (suc m) zero    0<mn = false! $ subst (0 <_) (·-absorb-r m) 0<mn
 z<· (suc _) (suc _) _    = s≤s z≤ , s≤s z≤

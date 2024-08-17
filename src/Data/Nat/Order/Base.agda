@@ -93,8 +93,8 @@ opaque
   ≤-antisym : m ≤ n → n ≤ m → m ＝ n
   ≤-antisym (0      , p) (_      , _) = sym (+-zero-r _) ∙ p
   ≤-antisym (suc _  , _) (0      , q) = sym q ∙ +-zero-r _
-  ≤-antisym {m} (suc δ₁ , p) (suc δ₂ , q) = ⊥.rec $ suc≠zero {m = δ₁ + suc δ₂} $ +-inj-l m _ 0 $
-       +-assoc m (suc δ₁) (suc δ₂) ∙ subst (λ φ → φ + suc δ₂ ＝ m) (sym p) q ∙ nat!
+  ≤-antisym {m} (suc δ₁ , p) (suc δ₂ , q) =
+    false! $ (+-assoc m _ _ ∙ subst (λ φ → φ + suc δ₂ ＝ m) (sym p) q) ⁻¹
 
   ≤-suc-r : m ≤ n → m ≤ suc n
   ≤-suc-r = bimap suc λ p → nat! ∙ ap suc p
@@ -102,14 +102,23 @@ opaque
   ≤-ascend : n ≤ suc n
   ≤-ascend = 1 , nat!
 
+  instance
+    Reflects-suc≰id : Reflects (suc n ≤ n) false
+    Reflects-suc≰id = ofⁿ λ where (k , p) → false! ((+-suc-r _ k ∙ p) ⁻¹)
+    {-# INCOHERENT Reflects-suc≰id #-}
+
+    Reflects-suc≰z : Reflects (suc n ≤ 0) false
+    Reflects-suc≰z = ofⁿ (false! ∘ snd)
+    {-# INCOHERENT Reflects-suc≰z #-}
+
   suc≰id : suc n ≰ n
-  suc≰id (k , p) = id≠plus-suc {m = k} (sym p ∙ nat!)
+  suc≰id = false!
 
   s≰z : suc n ≰ 0
-  s≰z = suc≠zero ∘ snd
+  s≰z = false!
 
   ≤0→=0 : n ≤ 0 → n ＝ 0
-  ≤0→=0 {n} (k , p) = +＝0-2 n k p .fst
+  ≤0→=0 {n} (k , p) = +=0-2 n k p .fst
 
   ≤-subst : {a b c d : ℕ} → a ＝ b → c ＝ d → a ≤ c → b ≤ d
   ≤-subst a=b c=d = second $ subst² (λ u v → u + _ ＝ v) a=b c=d
@@ -138,7 +147,7 @@ opaque
   unfolding _<_
 
   <-irr : n ≮ n
-  <-irr = (λ p → id≠plus-suc (sym p ∙ nat!)) ∘ snd
+  <-irr = false!
 
   s<s : m < n → suc m < suc n
   s<s = s≤s
@@ -155,8 +164,9 @@ opaque
     , nat! ∙ subst (λ φ → suc (φ + δ₂) ＝ _) (symₚ p) q
 
   <-asym : ∀[ _<_ ⇒ _≯_ ]
-  <-asym {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {n = n} {m = 1 + δ₂ + δ₁}
-    (subst (λ φ → suc (φ + δ₁) ＝ n) (symₚ q) p ⁻¹ ∙ nat!)
+  <-asym {x = m} {x = n} (δ₁ , p) (δ₂ , q) = false! u where
+    u : m ＝ m + (2 + δ₁ + δ₂)
+    u = subst (λ φ → suc (φ + δ₂) ＝ m) (p ⁻¹) q ⁻¹ ∙ nat!
 
   <-suc-r : m < n → m < suc n
   <-suc-r = ≤-suc-r
@@ -168,7 +178,7 @@ opaque
   <-ascend = 0 , +-zero-r _
 
   ≮z : n ≮ 0
-  ≮z = s≰z
+  ≮z = false!
 
   z<s : 0 < suc n
   z<s = _ , refl
@@ -196,11 +206,12 @@ opaque
   <→≤ = bimap suc (nat! ∙_)
 
   <→≠ : ∀[ _<_ ⇒ _≠_ ]
-  <→≠ m<n m=n = <-irr (subst (_ <_) (sym m=n) m<n)
+  <→≠ m<n m=n = false! $ subst (_ <_) (sym m=n) m<n
 
   ≤→≯ : ∀[ _≤_ ⇒ _≯_ ]
-  ≤→≯ {x = m} {x = n} (δ₁ , p) (δ₂ , q) = id≠plus-suc {m} {δ₁ + δ₂} $
-    subst (λ φ → suc (φ + δ₂) ＝ m) (symₚ p) q ⁻¹ ∙ nat!
+  ≤→≯ {x = m} {x = n} (δ₁ , p) (δ₂ , q) = false! u where
+    u : m ＝ m + suc (δ₁ + δ₂)
+    u = subst (λ φ → suc (φ + δ₂) ＝ m) (symₚ p) q ⁻¹ ∙ nat!
 
   ≤→<⊎= : ∀[ _≤_ ⇒ _<_ ⊎ _＝_ ]
   ≤→<⊎= (0     , p) = inr $ nat! ∙ p
@@ -215,11 +226,11 @@ opaque
 
 ≯→≤ : ∀[ _≯_ ⇒ _≤_ ]
 ≯→≤ {0}     {_}     _ = z≤
-≯→≤ {suc _} {0}     f = ⊥.rec $ f z<s
+≯→≤ {suc _} {0}     f = false! $ f z<s
 ≯→≤ {suc _} {suc _} f = s≤s $ ≯→≤ (f ∘ s<s)
 
 ≱→< : ∀[ _≱_ ⇒ _<_ ]
-≱→< {_}     {0}     f = ⊥.rec $ f z≤
+≱→< {_}     {0}     f = false! $ f z≤
 ≱→< {0}     {suc _} _ = z<s
 ≱→< {suc m} {suc n} f = s<s $ ≱→< (f ∘ s≤s)
 
@@ -252,7 +263,7 @@ instance
 
   ≤-reflects : Reflects (m ≤ n) (m ≤? n)
   ≤-reflects {0}     {_}     = ofʸ z≤
-  ≤-reflects {suc _} {0}     = ofⁿ s≰z
+  ≤-reflects {suc _} {0}     = ofⁿ false!
   ≤-reflects {suc m} {suc n} =
     Reflects.dmap s≤s (_∘ ≤-peel) $ ≤-reflects {m} {n}
 
@@ -281,7 +292,7 @@ opaque
   <-ind {P} ih x = go x (suc x) <-ascend
     where
     go : ∀ m n → m < n → P m
-    go m  zero   m<n     = ⊥.rec $ ≮z m<n
+    go m  zero   m<n     = false! m<n
     go m (suc n) (q , e) = ih m λ y y<m → go y n (≤-trans y<m (q , suc-inj e))
 
 <-wf : Wf _<_
@@ -323,7 +334,7 @@ opaque
 
 +∸=id : ∀ m n → m ≤ n → m + (n ∸ m) ＝ n
 +∸=id  zero    n      m≤n = refl
-+∸=id (suc m)  zero   m≤n = absurd (s≰z m≤n)
++∸=id (suc m)  zero   m≤n = false! m≤n
 +∸=id (suc m) (suc n) m≤n = ap suc (+∸=id m n (≤-peel m≤n))
 
 ∸+=id : ∀ m n → m ≤ n → (n ∸ m) + m ＝ n
@@ -351,7 +362,7 @@ suc-∸ m n = +∸-assoc 1 n m
 
 ∸=0→≤ : m ∸ n ＝ 0 → m ≤ n
 ∸=0→≤ {m = zero}              _ = z≤
-∸=0→≤ {m = suc m} {n = zero}  e = absurd (suc≠zero e)
+∸=0→≤ {m = suc m} {n = zero}  e = false! e
 ∸=0→≤ {m = suc m} {n = suc n} e = s≤s (∸=0→≤ {m} {n} e)
 
 opaque
@@ -372,7 +383,7 @@ opaque
 <-∸-r-≃ {m} {n} {p} = <≃≱ ∙ ¬-≃ (∸≤≃≤+ .fst) ((∸≤≃≤+ ⁻¹) .fst) ∙ <≃≱ ⁻¹
 
 ≤-∸-r-≃ : ∀ {m n p} → 0 < n → (n ≤ p ∸ m) ≃ (m + n ≤ p)
-≤-∸-r-≃     {n = zero}      n>0 = absurd (≮z n>0)
+≤-∸-r-≃     {n = zero}      n>0 = false! n>0
 ≤-∸-r-≃ {m} {n = suc n} {p} n>0 = <≃suc≤ ∙ <-∸-r-≃ ∙ <≃suc≤ ⁻¹
                                 ∙ subst (λ q → q ≤ p ≃ m + suc n ≤ p) (+-suc-r m n) refl
 

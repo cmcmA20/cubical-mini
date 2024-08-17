@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.Dec.Base where
 
-open import Foundations.Base
+open import Foundations.Prelude
 
 open import Data.Bool.Base as Bool
   using (Bool; false; true; not; if_then_else_; is-true; So; oh; Underlying-Bool)
@@ -52,14 +52,6 @@ dmap : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
 dmap to fro dec .does  = dec .does
 dmap to fro dec .proof = Reflects.dmap to fro (dec .proof)
 
-recover : Dec P → Recomputable P
-recover (yes p) _  = p
-recover (no ¬p) (erase 0p) = ⊥.rec (¬p 0p)
-
-recover′ : Dec P → @irr P → P
-recover′ (yes p) _ = p
-recover′ (no ¬p) p = ⊥.rec′ (¬p p)
-
 rec : (P → Q) → (¬ P → Q) → Dec P → Q
 rec {Q} = elim {C = λ _ → Q}
 
@@ -104,13 +96,23 @@ oh? : ∀ b → Dec (So b)
 oh? false = no λ()
 oh? true  = yes oh
 
+is-discrete : Type ℓ → Type ℓ
+is-discrete A = {x y : A} → Dec (x ＝ y)
+
+reflects-path→is-discrete!
+  : {_==_ : P → P → Bool} ⦃ re : ∀ {x y : P} → Reflects (x ＝ y) (x == y) ⦄
+  → is-discrete P
+reflects-path→is-discrete! = _ because auto
+
 instance
-  Decidability-Underlying
-    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
-    → Decidability A
+  Decidability-Underlying : ⦃ ua : Underlying P ⦄ → Decidability P
   Decidability-Underlying ⦃ ua ⦄ .ℓ-decidability = ua .Underlying.ℓ-underlying
   Decidability-Underlying .Decidable X = Dec ⌞ X ⌟
   {-# OVERLAPPABLE Decidability-Underlying #-}
+
+  Recomputable-Dec : ⦃ d : Dec P ⦄ → Recomputable P
+  Recomputable-Dec ⦃ yes p ⦄ .recompute _ = p
+  Recomputable-Dec ⦃ no ¬p ⦄ .recompute (erase p₀) = Reflects.falseᴱ! (¬p p₀)
 
   Dec-So : ∀ {b} → Dec (So b)
   Dec-So = oh? _

@@ -45,14 +45,14 @@ opaque
 
 dec-is-contr : is-contr A → is-contr (Dec A)
 dec-is-contr (a , _) .fst = yes a
-dec-is-contr (a , p) .snd (no ¬a)  = absurd (¬a a)
+dec-is-contr (a , p) .snd (no ¬a)  = false! (¬a a)
 dec-is-contr (a , p) .snd (yes a′) = ap yes (p a′)
 
 opaque
   dec-is-prop : is-prop A → is-prop (Dec A)
   dec-is-prop A-pr (yes a₁) (yes a₂) = ap yes (A-pr a₁ a₂)
-  dec-is-prop A-pr (yes a ) (no ¬a ) = ⊥.rec (¬a a)
-  dec-is-prop A-pr (no ¬a ) (yes a ) = ⊥.rec (¬a a)
+  dec-is-prop A-pr (yes a ) (no ¬a ) = false! $ ¬a a
+  dec-is-prop A-pr (no ¬a ) (yes a ) = false! $ ¬a a
   dec-is-prop A-pr (no ¬a₁) (no ¬a₂) = ap no prop!
 
 dec-is-of-hlevel : (n : HLevel) → is-of-hlevel n A → is-of-hlevel n (Dec A)
@@ -72,18 +72,10 @@ instance
   Reflects-yes≠no = ofⁿ (λ p → subst (Dec.rec (λ _ → ⊤) λ _ → ⊥) p tt)
 
   Reflects-no≠yes : {a : A} {¬a : ¬ A} → Reflects (no ¬a ＝ yes a) false
-  Reflects-no≠yes = ofⁿ (λ p → subst (Dec.rec (λ _ → ⊤) λ _ → ⊥) (p ⁻¹) tt)
+  Reflects-no≠yes = reflects-sym auto
 
   Reflects-no=no : {p q : ¬ A} → Reflects (no p ＝ no q) true
   Reflects-no=no = ofʸ (ap no prop!)
 
   Reflects-yes=yes : {a₁ a₂ : A} ⦃ r : Reflects (a₁ ＝ a₂) b ⦄ → Reflects (yes a₁ ＝ yes a₂) b
   Reflects-yes=yes = Reflects.dmap (ap yes) (contra yes-inj) auto
-
-opaque
-  no≠yes : {a : A} {¬a : ¬ A} → no ¬a ≠ yes a
-  no≠yes = false!
-
-opaque
-  yes≠no : {a : A} {¬a : ¬ A} → yes a ≠ no ¬a
-  yes≠no = false!

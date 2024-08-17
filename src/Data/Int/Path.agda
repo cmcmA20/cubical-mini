@@ -21,6 +21,7 @@ negsuc m int=? negsuc n = m == n
 private variable
   k l : ℤ
   m n : ℕ
+  b : Bool
 
 pos-inj : pos m ＝ pos n → m ＝ n
 pos-inj = ap ℤ→ℕ
@@ -29,6 +30,14 @@ negsuc-inj : negsuc m ＝ negsuc n → m ＝ n
 negsuc-inj = suc-inj ∘ ap ℤ→ℕ
 
 instance
+  Reflects-negsuc : ⦃ Reflects (m ＝ n) b ⦄ → Reflects (negsuc m ＝ negsuc n) b
+  Reflects-negsuc = Reflects.dmap (ap negsuc) (contra negsuc-inj) auto
+  {-# INCOHERENT Reflects-negsuc #-}
+
+  Reflects-pos : ⦃ Reflects (m ＝ n) b ⦄ → Reflects (pos m ＝ pos n) b
+  Reflects-pos = Reflects.dmap (ap pos) (contra pos-inj) auto
+  {-# INCOHERENT Reflects-pos #-}
+
   Reflects-ℤ-Path : Reflects (k ＝ l) (k int=? l)
   Reflects-ℤ-Path {pos _}    {pos _}    = Reflects.dmap (ap pos) (contra pos-inj) auto
   Reflects-ℤ-Path {pos m}    {negsuc n} = ofⁿ λ p → ¬-so-false $ subst So (ap is-negative? (p ⁻¹)) oh
@@ -37,20 +46,11 @@ instance
 
   ℤ-is-discrete : is-discrete ℤ
   ℤ-is-discrete = reflects-path→is-discrete!
-  {-# OVERLAPPING ℤ-is-discrete #-}
 
 ℤ-identity-system : is-identity-system (λ k l → ⌞ k int=? l ⌟) _
 ℤ-identity-system = reflects-path→identity-system!
 
-instance
+instance opaque
   H-Level-ℤ : H-Level (2 + n) ℤ
   H-Level-ℤ = hlevel-basic-instance 2 $ identity-system→is-of-hlevel! 1 ℤ-identity-system
   {-# OVERLAPPING H-Level-ℤ #-}
-
-opaque
-  pos≠negsuc : pos m ≠ negsuc n
-  pos≠negsuc = false!
-
-opaque
-  negsuc≠pos : negsuc n ≠ pos m
-  negsuc≠pos = false!

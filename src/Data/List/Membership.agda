@@ -186,11 +186,11 @@ here+¬there→∈!ₗ
   → a ＝ x → a ∉ xs → a ∈! (x ∷ xs)
 here+¬there→∈!ₗ a=x a∉xs = here a=x , λ where
   (here  _)    → ap here prop!
-  (there a∈xs) → ⊥.rec (a∉xs a∈xs)
+  (there a∈xs) → false! $ a∉xs a∈xs
 
 ¬here+there!→∈!ₗ : a ≠ x → a ∈! xs → a ∈! (x ∷ xs)
 ¬here+there!→∈!ₗ a≠x (a∈xs , uniq) = there a∈xs , λ where
-  (here  a=x)   → ⊥.rec (a≠x a=x)
+  (here  a=x)   → false! $ a≠x a=x
   (there a∈xs′) → ap there (uniq a∈xs′)
 
 instance
@@ -221,8 +221,8 @@ instance
   → ∈ₗ→fin u ＝ ∈ₗ→fin v
   → a ＝ b
 ∈ₗ→fin-almost-injective (here p)  (here p′)  _ = p ∙ p′ ⁻¹
-∈ₗ→fin-almost-injective (here p)  (there q)  r = ⊥.rec (fzero≠fsuc r)
-∈ₗ→fin-almost-injective (there q) (here p)   r = ⊥.rec (fsuc≠fzero r)
+∈ₗ→fin-almost-injective (here p)  (there q)  r = false! r
+∈ₗ→fin-almost-injective (there q) (here p)   r = false! r
 ∈ₗ→fin-almost-injective (there q) (there q′) r = ∈ₗ→fin-almost-injective q q′ (fsuc-inj r)
 
 ∈!ₗ↪fin
@@ -246,8 +246,8 @@ instance
   → ∈ₗ→fin u ＝ ∈ₗ→fin v
 ∈ₗ→fin-respects-∈!ₗ (here  p) _ (here  p′) _ _ = refl
 ∈ₗ→fin-respects-∈!ₗ (here  p) _ (there q) v r =
-  ⊥.rec (there≠here (v (here (r ⁻¹ ∙ p))))
+  false! $ v $ here $ r ⁻¹ ∙ p
 ∈ₗ→fin-respects-∈!ₗ (there q) u (here  p) _ r =
-  ⊥.rec (there≠here (u (here (r ∙ p))))
+  false! $ u $ here $ r ∙ p
 ∈ₗ→fin-respects-∈!ₗ (there q) u (there q′) v r =
   ap fsuc (∈ₗ→fin-respects-∈!ₗ q (there-inj ∘ u ∘ there) q′ (there-inj ∘ v ∘ there) r)

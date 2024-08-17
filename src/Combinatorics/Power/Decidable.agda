@@ -12,9 +12,10 @@ open import Combinatorics.Power.Base
 open import Data.Bool as Bool
 open import Data.Dec as Dec
 open import Data.Empty as ⊥
+open import Data.Reflects.Base as Reflects
 open import Data.Sum.Base
-open import Data.Unit.Base
 open import Data.Truncation.Propositional as ∥-∥₁
+open import Data.Unit.Base
 
 
 private variable
@@ -56,7 +57,7 @@ decidable-subobject-classifier {ℓ} {X} = ≅→≃ $ to , iso (λ pr x → fro
 
   from : (pr : ℙᵈ X) (x : X) → Σ[ b ꞉ Bool ] (⌞ b ⌟ ≃ (x ∈ pr .fst))
   from (A , d) x = Dec.elim (λ x∈A → true  , prop-extₑ! (λ _ → x∈A) (λ _ → oh))
-                            (λ x∉A → false , prop-extₑ! (λ ()) λ x∈A → ⊥.rec (x∉A x∈A)) d
+                            (λ x∉A → false , prop-extₑ! (λ ()) λ x∈A → false! (x∉A x∈A)) d
 
   ri : _
   ri A = ℙ-ext (from A _ .snd .fst ∘ lower) (lift ∘ (from A _ .snd ⁻¹ $_)) ,ₚ prop!

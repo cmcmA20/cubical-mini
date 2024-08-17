@@ -6,6 +6,7 @@ open import Meta.Extensionality
 
 open import Logic.Discreteness
 
+open import Data.Bool.Base as Bool
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Inductive.Base as Fin
 open import Data.Nat.Base
@@ -14,6 +15,7 @@ open import Data.Unit.Base
 
 private variable
   @0 m n : ℕ
+  b : Bool
   k l : Fin m
 
 fsuc-inj : {k l : Fin m} → fsuc k ＝ fsuc l → k ＝ l
@@ -23,6 +25,10 @@ fsuc-inj {m} {k} = ap pred′ where
   pred′ (fsuc x) = x
 
 instance
+  Reflects-fsuc=fsuc : ⦃ Reflects (k ＝ l) b ⦄ → Reflects (fsuc k ＝ fsuc l) b
+  Reflects-fsuc=fsuc = Reflects.dmap (ap fsuc) (contra fsuc-inj) auto
+  {-# INCOHERENT Reflects-fsuc=fsuc #-}
+
   Reflects-Fin-Path : {k l : Fin n} → Reflects (k ＝ l) (fin→ℕ k == fin→ℕ l)
   Reflects-Fin-Path {k = fzero}  {(fzero)} = ofʸ refl
   Reflects-Fin-Path {k = fzero}  {fsuc l}  = ofⁿ (λ p → subst (Fin.rec ⊤ λ _ _ → ⊥) p tt)
@@ -34,14 +40,6 @@ instance
 
 Extensional-Fin : Extensional (Fin n) 0ℓ
 Extensional-Fin = reflects-path→extensional!
-
-opaque
-  fzero≠fsuc : fzero ≠ fsuc k
-  fzero≠fsuc = false!
-
-opaque
-  fsuc≠fzero : fsuc k ≠ fzero
-  fsuc≠fzero = false!
 
 fin0-is-initial : Fin 0 ≃ ⊥
 fin0-is-initial .fst ()

@@ -15,9 +15,7 @@ open import Data.Maybe.Path
   using ( maybe-is-of-hlevel
         ; ¬→maybe-is-contr )
 open import Data.Maybe.Path
-  renaming ( nothing≠just      to fzero≠fsuc
-           ; just≠nothing      to fsuc≠fzero
-           ; just-inj          to fsuc-inj
+  renaming ( just-inj          to fsuc-inj
            ; just-cancellable  to fsuc-cancellable
            ; just-is-embedding to fsuc-is-embedding
            )

@@ -17,10 +17,11 @@ open import Data.Fin.Computational.Path
 open import Data.Fin.Computational.Instances.Ord
 open import Data.Nat.Base
 open import Data.Nat.Path
+open import Data.Reflects.Base as Reflects
+open import Data.Truncation.Propositional as ∥-∥₁
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Inductive.Operations.Computational
 open import Data.Vec.Inductive.Correspondences.Unary.Any.Computational
-open import Data.Truncation.Propositional as ∥-∥₁
 
 open import Functions.Embedding
 
@@ -74,7 +75,7 @@ private
     ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
     ff _ = fzero
     gg : Fin 1 → Π[ x ꞉ Fin 0 ] P x
-    gg _ f₀ = absurd $ fin-0-is-initial $ f₀
+    gg _ f₀ = false! f₀
     ri : gg is-right-inverse-of ff
     ri (mk-fin 0) = refl
     li : gg is-left-inverse-of ff

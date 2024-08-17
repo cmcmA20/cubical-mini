@@ -74,22 +74,31 @@ instance
 so→true! : ⦃ Reflects P a ⦄ → ⌞ a ⌟ → P
 so→true! ⦃ ofʸ p ⦄ oh = p
 
-so→false! : ⦃ Reflects P a ⦄ → ⌞ not a ⌟ → ¬ P
-so→false! ⦃ ofⁿ ¬p ⦄ oh = ¬p
+so→falseᴱ! : ⦃ _ : Reflects P a ⦄ (@0 _ : ⌞ not a ⌟) → @0 P → Q
+so→falseᴱ! ⦃ ofⁿ ¬p ⦄ oh p = ⊥.rec (¬p p)
+
+so→false! : ⦃ Reflects P a ⦄ → ⌞ not a ⌟ → P → Q
+so→false! n p = so→falseᴱ! n p
 
 true→so! : ⦃ Reflects P a ⦄ → P → ⌞ a ⌟
 true→so! ⦃ ofʸ  p ⦄ _ = oh
 true→so! ⦃ ofⁿ ¬p ⦄ p = ⊥.rec (¬p p)
 
+false→soᴱ! : ⦃ _ : Reflects P a ⦄ (@0 _ : ¬ P) → ⌞ not a ⌟
+false→soᴱ! ⦃ ofʸ  p ⦄ ¬p = ⊥.rec (¬p p)
+false→soᴱ! ⦃ ofⁿ ¬p ⦄ _  = oh
+
 false→so! : ⦃ Reflects P a ⦄ → ¬ P → ⌞ not a ⌟
-false→so! ⦃ ofʸ  p ⦄ ¬p = ⊥.rec (¬p p)
-false→so! ⦃ ofⁿ ¬p ⦄ _  = oh
+false→so! ¬p = false→soᴱ! ¬p
 
 true! : ⦃ Reflects P true ⦄ → P
 true! = so→true! oh
 
-false! : ⦃ Reflects P false ⦄ → ¬ P
-false! = so→false! oh
+falseᴱ! : ⦃ Reflects P false ⦄ → @0 P → Q
+falseᴱ! p = ⊥.rec (so→false! oh p)
+
+false! : ⦃ Reflects P false ⦄ → P → Q
+false! p = falseᴱ! p
 
 reflects-not : Reflects (¬ ⌞ a ⌟) (not a)
 reflects-not = auto
@@ -108,6 +117,9 @@ invert (ofⁿ ¬p) = ¬p
 dmap : (P → Q) → (¬ P → ¬ Q) → Reflects P b → Reflects Q b
 dmap to fro (ofʸ  p) = ofʸ (to p)
 dmap to fro (ofⁿ ¬p) = ofⁿ (fro ¬p)
+
+reflects-sym : {x y : P} → Reflects (x ＝ y) b → Reflects (y ＝ x) b
+reflects-sym = dmap sym (contra sym)
 
 
 module _ {A : Type ℓ} {_==_ : A → A → Bool} ⦃ re : ∀ {x y : A} → Reflects (x ＝ y) (x == y) ⦄ where

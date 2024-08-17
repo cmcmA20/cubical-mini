@@ -74,6 +74,14 @@ instance opaque
   {-# OVERLAPPING H-Level-Vec #-}
 
 instance
+  Reflects-Vec-≠-head : ⦃ Reflects (x ＝ y) false ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) false
+  Reflects-Vec-≠-head = ofⁿ (false! ∘ ap head)
+  {-# OVERLAPPING Reflects-Vec-≠-head #-}
+
+  Reflects-Vec-≠-tail : ⦃ Reflects (xs ＝ ys) false ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) false
+  Reflects-Vec-≠-tail {x} = ofⁿ (false! ∘ ap tail)
+  {-# OVERLAPPABLE Reflects-Vec-≠-tail #-}
+
   Reflects-∷=∷ : ⦃ rh : Reflects (x ＝ y) b₁ ⦄ ⦃ rt : Reflects (xs ＝ ys) b₂ ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) (b₁ and b₂)
   Reflects-∷=∷ = Reflects.dmap (λ p → ap² _∷_ (p .fst) (p .snd)) (contra < ∷-head-inj , ∷-tail-inj >) auto
 

@@ -18,7 +18,9 @@ open import Data.Nat.Path
 open import Data.Nat.Order.Inductive.Base
 open import Data.Reflects.Base as Reflects
 
-private variable @0 n : ℕ
+private variable
+ @0 n : ℕ
+ b : Bool
 
 open Fin
 
@@ -37,6 +39,10 @@ fsuc-inj : ∀ {k l} → fsuc {n} k ＝ fsuc l → k ＝ l
 fsuc-inj = fin-ext ∘ suc-inj ∘ mk-fin-inj
 
 instance
+  Reflects-fsuc=fsuc : {k l : Fin n} ⦃ _ : Reflects (k ＝ l) b ⦄ → Reflects (fsuc k ＝ fsuc l) b
+  Reflects-fsuc=fsuc = Reflects.dmap (ap fsuc) (contra fsuc-inj) auto
+  {-# INCOHERENT Reflects-fsuc=fsuc #-}
+
   Reflects-Fin-Path : {k l : Fin n} → Reflects (k ＝ l) (k .index == l .index)
   Reflects-Fin-Path {k} {l} = Reflects.dmap fin-ext (contra $ ap index)
     (Reflects-ℕ-Path {m = k .index} {n = l .index})
@@ -51,14 +57,6 @@ module _ {ℓ} ⦃ sa : Extensional ℕ ℓ ⦄ where instance
   Extensional-Fin .idsᵉ .to-path = fin-ext ∘ sa .idsᵉ .to-path
   Extensional-Fin .idsᵉ .to-path-over = sa .idsᵉ .to-path-over
 
-
-opaque
-  fzero≠fsuc : ∀{k} → fzero {n} ≠ fsuc k
-  fzero≠fsuc = false!
-
-opaque
-  fsuc≠fzero : ∀{k} → fsuc {n} k ≠ fzero
-  fsuc≠fzero = false!
 
 instance opaque
   H-Level-Fin0 : ∀ {k} → ⦃ k ≥ʰ 1 ⦄ → H-Level k (Fin 0)

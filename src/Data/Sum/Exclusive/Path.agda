@@ -54,8 +54,8 @@ opaque
                  → is-of-hlevel (1 + n) B
                  → is-of-hlevel (1 + n) (A ⊻ B)
   ⊻-is-of-hlevel 0 A-pr B-pr (inxl a ¬b) (inxl a′ ¬b′) = ap² inxl (A-pr a a′) prop!
-  ⊻-is-of-hlevel 0 A-pr B-pr (inxl a ¬b) (inxr b  ¬a)  = ⊥.rec (¬a a)
-  ⊻-is-of-hlevel 0 A-pr B-pr (inxr b ¬a) (inxl a  ¬b)  = ⊥.rec (¬b b)
+  ⊻-is-of-hlevel 0 A-pr B-pr (inxl a ¬b) (inxr b  ¬a)  = false! $ ¬a a
+  ⊻-is-of-hlevel 0 A-pr B-pr (inxr b ¬a) (inxl a  ¬b)  = false! $ ¬b b
   ⊻-is-of-hlevel 0 A-pr B-pr (inxr b ¬a) (inxr b′ ¬a′) = ap² inxr (B-pr b b′) prop!
   ⊻-is-of-hlevel (suc n) ahl bhl s₁ s₂ =
     ≃→is-of-hlevel (1 + n) (identity-system-gives-path (Extensional-⊻ .idsᵉ) ⁻¹)
@@ -88,7 +88,7 @@ instance
   Reflects-inxl≠inxr = ofⁿ (λ p → ¬-so-false (subst So (ap is-inxl? p) oh))
 
   Reflects-inxr≠inxl : {a : A} {b : B} {¬a : ¬ A} {¬b : ¬ B} → Reflects (inxr b ¬a ＝ inxl a ¬b) false
-  Reflects-inxr≠inxl = ofⁿ (λ p → ¬-so-false (subst So (ap is-inxr? p) oh))
+  Reflects-inxr≠inxl = reflects-sym auto
 
   Reflects-inxl=inxl
     : {a a′ : A} {¬b ¬b′ : ¬ B}
@@ -105,14 +105,6 @@ instance
   ⊻-is-discrete {x = inxl a ¬b} {inxr b  ¬a}  = false because auto
   ⊻-is-discrete {x = inxr b ¬a} {inxl a  ¬b}  = false because auto
   ⊻-is-discrete {x = inxr b ¬a} {inxr b′ ¬a′} = b =? b′ because auto
-
-opaque
-  inxl≠inxr : {a : A} {¬b : ¬ B} {¬a : ¬ A} {b : B} → inxl a ¬b ≠ inxr b ¬a
-  inxl≠inxr = false!
-
-opaque
-  inxr≠inxl : {a : A} {¬b : ¬ B} {¬a : ¬ A} {b : B} → inxr b ¬a ≠ inxl a ¬b
-  inxr≠inxl = false!
 
 instance opaque
   H-Level-⊻

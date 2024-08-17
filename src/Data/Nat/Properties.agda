@@ -58,10 +58,11 @@ s＝s≃ = prop-extₑ! (ap suc) suc-inj
 +-cancel-r : ∀ m1 m2 n → m1 + n ＝ m2 + n → m1 ＝ m2
 +-cancel-r m1 m2 n e = +-cancel-l n m1 m2 (+-comm n m1 ∙ e ∙ +-comm m2 n)
 
-+＝0-2 : ∀ m n → m + n ＝ 0 → (m ＝ 0) × (n ＝ 0)
-+＝0-2  zero    zero   e = refl , refl
-+＝0-2  zero   (suc n) e = absurd (suc≠zero e)
-+＝0-2 (suc m)  n      e = absurd (suc≠zero e)
++=0-2 : ∀ m n → m + n ＝ 0 → (m ＝ 0) × (n ＝ 0)
++=0-2  zero    zero   e = refl , refl
++=0-2  zero   (suc n) e = false! e
++=0-2 (suc m)  n      e = false! e
+
 
 -- subtraction
 
@@ -97,7 +98,7 @@ s＝s≃ = prop-extₑ! (ap suc) suc-inj
 ·-zero : (x y : ℕ) → x · y ＝ 0 → (x ＝ 0) ⊎ (y ＝ 0)
 ·-zero 0       _       _ = inl refl
 ·-zero (suc _) 0       _ = inr refl
-·-zero (suc _) (suc _) p = absurd (suc≠zero p)
+·-zero (suc _) (suc _) p = false! p
 
 ·-suc-r : (x y : ℕ) → x · suc y ＝ x + x · y
 ·-suc-r 0       _ = refl
@@ -134,8 +135,8 @@ s＝s≃ = prop-extₑ! (ap suc) suc-inj
 
 ·-cancel-r : ∀ m1 m2 n → m1 · n ＝ m2 · n → (m1 ＝ m2) ⊎ (n ＝ 0)
 ·-cancel-r  zero     zero    n e = inl refl
-·-cancel-r  zero    (suc m2) n e = inr (+＝0-2 n (m2 · n) (sym e) .fst)
-·-cancel-r (suc m1)  zero    n e = inr (+＝0-2 n (m1 · n) e .fst)
+·-cancel-r  zero    (suc m2) n e = inr (+=0-2 n (m2 · n) (sym e) .fst)
+·-cancel-r (suc m1)  zero    n e = inr (+=0-2 n (m1 · n) e .fst)
 ·-cancel-r (suc m1) (suc m2) n e = [ inl ∘ ap suc , inr ]ᵤ (·-cancel-r m1 m2 n (+-cancel-l n (m1 · n) (m2 · n) e))
 
 ·-cancel-l : ∀ m n1 n2 → m · n1 ＝ m · n2 → (n1 ＝ n2) ⊎ (m ＝ 0)

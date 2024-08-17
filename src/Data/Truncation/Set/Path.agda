@@ -45,7 +45,7 @@ instance opaque
 
 instance
   Reflects-∣-∣₂=∣-∣₂ : ⦃ Reflects (x ＝ y) b ⦄ → Reflects (∣ x ∣₂ ＝ ∣ y ∣₂) b
-  Reflects-∣-∣₂=∣-∣₂ = Reflects.dmap (ap ∣_∣₂) (λ x≠y p → ⊥.rec (rec! x≠y (=∘∣-∣₂≃∥-∥₁∘= $ p))) auto
+  Reflects-∣-∣₂=∣-∣₂ = Reflects.dmap (ap ∣_∣₂) (λ x≠y p → ⊥.rec $ rec! x≠y $ =∘∣-∣₂≃∥-∥₁∘= $ p) auto
 
 ae : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
 ae e = to , is-iso→is-equiv (iso from ri li)

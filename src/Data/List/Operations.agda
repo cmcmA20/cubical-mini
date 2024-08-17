@@ -10,6 +10,7 @@ open import Meta.Effect.Idiom
 open import Data.Bool.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
+open import Data.Reflects.Base as Reflects
 
 open import Data.List.Base as List
 open import Data.List.Instances.Idiom
@@ -20,6 +21,8 @@ private variable
   A : Type ℓ
   B : Type ℓ′
   C : Type ℓ″
+  x : A
+  xs : List A
 
 empty? : List A → Bool
 empty? []      = false

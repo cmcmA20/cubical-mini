@@ -8,6 +8,9 @@ open import Logic.DoubleNegation
 
 open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec
+open import Data.Dec.Base
+  using ( is-discrete ; reflects-path→is-discrete! )
+  public
 open import Data.Dec.Path
 open import Data.Empty.Base as ⊥
 open import Data.Reflects.Base
@@ -38,9 +41,6 @@ opaque
   is-¬¬-separated-is-prop As As′ =
     fun-ext λ x i y p j → (is-¬¬-separated→is-set As) x y (As _ _ p) (As′ _ _ p) i j
 
-
-is-discrete : Type ℓ → Type ℓ
-is-discrete A = {x y : A} → Dec (x ＝ y)
 
 _≟_ : ⦃ di : is-discrete A ⦄ (x y : A) → Dec (x ＝ y)
 _≟_ ⦃ di ⦄ x y = di
@@ -121,14 +121,14 @@ caseᵈ-true_return_of_
   → C (yes a) → C d
 caseᵈ-true_return_of_ {A} a C cy = caseᵈ A return C of λ where
   (yes a′) → subst C prop! cy
-  (no  ¬a) → absurd (¬a a)
+  (no  ¬a) → false! (¬a a)
 
 caseᵈ-false_return_of_
   : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
     (¬a : ¬ A) (C : Dec A → Type ℓ′)
   → C (no ¬a) → C d
 caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
-  (yes a)   → absurd (¬a a)
+  (yes a)   → false! (¬a a)
   (no  ¬a′) → subst (C ∘ no) prop! cy
 
 ↣→is-discrete! : (A ↣ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
@@ -139,11 +139,6 @@ caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
 
 ≃→is-discrete! : (A ≃ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ≃→is-discrete! f = ≃→is-discrete f auto
-
-reflects-path→is-discrete!
-  : {_==_ : A → A → Bool} ⦃ re : {x y : A} → Reflects (x ＝ y) (x == y) ⦄
-  → is-discrete A
-reflects-path→is-discrete! {_==_} {x} {y} = (x == y) because auto
 
 -- -- Usage
 -- private

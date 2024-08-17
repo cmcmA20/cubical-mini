@@ -25,7 +25,6 @@ instance
 
   Bool-is-discrete : is-discrete Bool
   Bool-is-discrete = reflects-path→is-discrete!
-  {-# OVERLAPPING Bool-is-discrete #-}
 
 Extensional-Bool : Extensional Bool 0ℓ
 Extensional-Bool = reflects-path→extensional!
@@ -41,14 +40,6 @@ not-inj {(false)} {(true)}  e = e ⁻¹
 not-inj {(true)}  {(false)} e = e ⁻¹
 not-inj {(true)}  {(true)}  e = refl
 
-opaque
-  true≠false : true ≠ false
-  true≠false = false!
-
-opaque
-  false≠true : false ≠ true
-  false≠true = false!
-
 so≃is-true : So b ≃ is-true b
 so≃is-true = go ∙ identity-system-gives-path (Extensional-Bool .idsᵉ) where
   go : ⌞ b ⌟ ≃ ⌞ b equals true ⌟
@@ -59,4 +50,4 @@ so≃is-true = go ∙ identity-system-gives-path (Extensional-Bool .idsᵉ) wher
 ¬so≃is-false = go ∙ identity-system-gives-path (Extensional-Bool .idsᵉ) where
   go : (¬ ⌞ b ⌟) ≃ ⌞ b equals false ⌟
   go {(false)} = prop-extₑ! _ λ _ → λ ()
-  go {(true)}  = prop-extₑ! (λ f → ⊥.rec (f oh)) λ()
+  go {(true)}  = prop-extₑ! false! λ()

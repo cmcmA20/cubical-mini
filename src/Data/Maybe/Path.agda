@@ -27,8 +27,8 @@ just-inj {x} = ap (from-just x)
 ¬→maybe-is-contr : (¬ A) → is-contr (Maybe A)
 ¬→maybe-is-contr ¬a = inhabited-prop-is-contr nothing λ where
   nothing  nothing  → refl
-  nothing  (just a) → ⊥.rec $ ¬a a
-  (just a) _        → ⊥.rec $ ¬a a
+  nothing  (just a) → false! $ ¬a a
+  (just a) _        → false! $ ¬a a
 
 
 module _ ⦃ sa : Extensional A ℓ ⦄ where
@@ -77,7 +77,7 @@ instance
   Reflects-just≠nothing = ofⁿ (λ p → ¬-so-false (subst So (ap is-just? p) oh))
 
   Reflects-nothing≠just : Reflects (nothing ＝ just x) false
-  Reflects-nothing≠just = ofⁿ (λ p → ¬-so-false (subst So (ap is-nothing? p) oh))
+  Reflects-nothing≠just = reflects-sym auto
 
   Reflects-just=just : ⦃ Reflects (x ＝ y) b ⦄ → Reflects (just x ＝ just y) b
   Reflects-just=just = Reflects.dmap (ap just) (contra just-inj) auto
@@ -87,11 +87,3 @@ instance
   Maybe-is-discrete {x = just _}  {(nothing)} = false  because auto
   Maybe-is-discrete {x = nothing} {just _}    = false  because auto
   Maybe-is-discrete {x = just x}  {just y}    = x =? y because auto
-
-opaque
-  nothing≠just : nothing ≠ just x
-  nothing≠just = false!
-
-opaque
-  just≠nothing : just x ≠ nothing
-  just≠nothing = false!

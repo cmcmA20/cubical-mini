@@ -8,6 +8,7 @@ open import Data.Nat.Order.Inductive.Base
 open import Data.Nat.Order.Inductive.Decidability
 open import Data.Nat.Path
 open import Data.Nat.Properties
+open import Data.Reflects.Base
 open import Data.Sum.Base as ⊎
 open import Data.Sum.Path as ⊎
 
@@ -20,7 +21,7 @@ private variable m n k : ℕ
 <→≤ p = ≤-ascend ∙ p
 
 <→≠ : ∀[ _<_ ⇒ _≠_ ]
-<→≠ {x = m} {x = n} m<n m=n = suc≰id (subst (_≤ n) (ap suc m=n) m<n)
+<→≠ {x = m} {x = n} m<n m=n = false! $ subst (_≤ n) (ap suc m=n) m<n
 
 ≤≃≯ : (m ≤ n) ≃ (m ≯ n)
 ≤≃≯ = prop-extₑ! ≤→≯ ≯→≤ where
@@ -29,9 +30,9 @@ private variable m n k : ℕ
 
   ≯→≤ : ∀[ _≯_ ⇒ _≤_ ]
   ≯→≤ {x = m} {x = n} f =
-    [ (λ p → absurd $ f $ <→≤ p)
+    [ (λ p → false! $ f $ <→≤ p)
     , [ ≤-peel
-      , (λ p → absurd $ f $ =→≤ p)
+      , (λ p → false! $ f $ =→≤ p)
       ]ᵤ
     ]ᵤ $ ≤-split (suc n) m
 

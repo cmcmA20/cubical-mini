@@ -60,10 +60,10 @@ opaque
   disjoint-⊎-is-prop
     : is-prop A → is-prop B → ¬ A × B
     → is-prop (A ⊎ B)
-  disjoint-⊎-is-prop Ap Bp notab (inl x₁) (inl x₂) = ap inl (Ap x₁ x₂)
-  disjoint-⊎-is-prop Ap Bp notab (inl x)  (inr y)  = absurd $ notab (x , y)
-  disjoint-⊎-is-prop Ap Bp notab (inr x)  (inl y)  = absurd $ notab (y , x)
-  disjoint-⊎-is-prop Ap Bp notab (inr y₁) (inr y₂) = ap inr (Bp y₁ y₂)
+  disjoint-⊎-is-prop Ap Bp ¬ab (inl x₁) (inl x₂) = ap inl (Ap x₁ x₂)
+  disjoint-⊎-is-prop Ap Bp ¬ab (inl x)  (inr y)  = false! (¬ab (x , y))
+  disjoint-⊎-is-prop Ap Bp ¬ab (inr x)  (inl y)  = false! (¬ab (y , x))
+  disjoint-⊎-is-prop Ap Bp ¬ab (inr y₁) (inr y₂) = ap inr (Bp y₁ y₂)
 
   prop-⊎-is-set
     : is-prop A → is-prop B
@@ -105,7 +105,7 @@ instance
   Reflects-inl≠inr = ofⁿ λ p → ¬-so-false (subst So (ap is-inl? p) oh)
 
   Reflects-inr≠inl : Reflects (inr y ＝ inl x) false
-  Reflects-inr≠inl = ofⁿ λ p → ¬-so-false (subst So (ap is-inr? p) oh)
+  Reflects-inr≠inl = reflects-sym auto
 
   Reflects-inl=inl : ⦃ Reflects (Path A x y) b ⦄ → Reflects (Path (A ⊎ B) (inl x) (inl y)) b
   Reflects-inl=inl = Reflects.dmap (ap inl) (contra inl-inj) auto
@@ -119,13 +119,6 @@ instance
   ⊎-is-discrete {x = inr y} {inl x}  = false because auto
   ⊎-is-discrete {x = inr y} {inr y′} = y =? y′ because auto
 
-opaque
-  inl≠inr : inl x ≠ inr y
-  inl≠inr = false!
-
-opaque
-  inr≠inl : inr y ≠ inl x
-  inr≠inl = false!
 
 -- Automation
 instance opaque

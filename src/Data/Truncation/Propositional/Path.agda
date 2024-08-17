@@ -23,6 +23,7 @@ instance opaque
 instance
   Reflects-∥-∥₁-Path : {a b : ∥ A ∥₁} → Reflects (a ＝ b) true
   Reflects-∥-∥₁-Path = ofʸ prop!
+  {-# OVERLAPPING Reflects-∥-∥₁-Path #-}
 
 ae : A ≃ B → ∥ A ∥₁ ≃ ∥ B ∥₁
 ae {A} {B} e = ≅→≃ $ to , iso from ri li where

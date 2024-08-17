@@ -8,7 +8,8 @@ open import Functions.Embedding
 open import Data.Empty.Base
 open import Data.Empty.Properties
   using (¬→≃⊥)
-open import Data.Sum.Base
+open import Data.Reflects.Base as Reflects
+open import Data.Sum.Base as ⊎
 open import Data.Sum.Path
 
 private variable
@@ -39,7 +40,7 @@ universal = ≅→≃ the-iso where
   g-iso = is-equiv→is-iso g-eqv
 
   cong′ : Iso _ _
-  cong′ .fst = dmap f g
+  cong′ .fst = ⊎.dmap f g
   cong′ .snd .is-iso.inv  (inl x) = inl (f-iso .is-iso.inv x)
   cong′ .snd .is-iso.inv  (inr x) = inr (g-iso .is-iso.inv x)
   cong′ .snd .is-iso.rinv (inl x) = ap inl (f-iso .is-iso.rinv x)
@@ -112,6 +113,6 @@ universal = ≅→≃ the-iso where
 ⊎↪ f g .fst = [ inl ∘ f #_ , inr ∘ g #_ ]ᵤ
 ⊎↪ f g .snd = cancellable→is-embedding λ where
   {inl a} {inl a′} → inl-cancellable ∙ is-embedding→cancellable (f .snd) ∙ inl-cancellable ⁻¹
-  {inl a} {inr b}  → ¬→≃⊥ inl≠inr ∙ ¬→≃⊥ inl≠inr ⁻¹
-  {inr b} {inl a}  → ¬→≃⊥ inr≠inl ∙ ¬→≃⊥ inr≠inl ⁻¹
+  {inl a} {inr b}  → ¬→≃⊥ false! ∙ ¬→≃⊥ false! ⁻¹
+  {inr b} {inl a}  → ¬→≃⊥ false! ∙ ¬→≃⊥ false! ⁻¹
   {inr b} {inr b′} → inr-cancellable ∙ is-embedding→cancellable (g .snd) ∙ inr-cancellable ⁻¹

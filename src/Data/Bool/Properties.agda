@@ -142,7 +142,7 @@ or-true-≃
 or-true-≃ = prop-extₑ (hlevel 1) go to from where
   to : is-true (x or y)
      → ((is-true x × is-false y) ⊎ (is-false x × is-true y) ⊎ (is-true x × is-true y))
-  to {(false)} {(false)} p = ⊥.rec $ false≠true p
+  to {(false)} {(false)} p = false! p
   to {(false)} {(true)}  _ = inr (inl (refl , refl))
   to {(true)}  {(false)} _ = inl (refl , refl)
   to {(true)}  {(true)}  _ = inr (inr (refl , refl))
@@ -155,8 +155,10 @@ or-true-≃ = prop-extₑ (hlevel 1) go to from where
 
   go : is-prop (is-true x × is-false y ⊎ is-false x × is-true y ⊎ is-true x × is-true y)
   go {x} {y} = disjoint-⊎-is-prop (hlevel 1)
-    (disjoint-⊎-is-prop! λ z → false≠true (z .fst .fst ⁻¹ ∙ z .snd .fst))
-    λ z → [ (λ w → false≠true (w .fst ⁻¹ ∙ z .fst .fst)) , (λ w → false≠true (z .fst .snd ⁻¹ ∙ w .snd)) ]ᵤ (z .snd)
+    (disjoint-⊎-is-prop! (λ z → false! (z .fst .fst ⁻¹ ∙ z .snd .fst)))
+    λ z → [ (λ w → false! (w .fst ⁻¹ ∙ z .fst .fst))
+          , (λ w → false! (z .fst .snd ⁻¹ ∙ w .snd)) ]ᵤ
+        (z .snd)
 
 or-id-r : ∀ x → x or false ＝ x
 or-id-r = witness!
@@ -184,10 +186,8 @@ not-or = witness!
 
 -- FIXME XXX
 reflects-xor : ∀ {x y} → Reflects (not x ＝ y) (x xor y)
-reflects-xor {x = false} {y = false} = ofⁿ true≠false
-reflects-xor {x = false} {y = true}  = ofʸ refl
-reflects-xor {x = true}  {y = false} = ofʸ refl
-reflects-xor {x = true}  {y = true}  = ofⁿ false≠true
+reflects-xor {(false)} = auto
+reflects-xor {(true)}  = auto
 
 xor-assoc : ∀ x y z → (x xor y) xor z ＝ x xor y xor z
 xor-assoc = witness!
