@@ -116,3 +116,16 @@ universal = ≅→≃ the-iso where
   {inl a} {inr b}  → ¬→≃⊥ false! ∙ ¬→≃⊥ false! ⁻¹
   {inr b} {inl a}  → ¬→≃⊥ false! ∙ ¬→≃⊥ false! ⁻¹
   {inr b} {inr b′} → inr-cancellable ∙ is-embedding→cancellable (g .snd) ∙ inr-cancellable ⁻¹
+
+⊎-is-of-size : is-of-size ℓᶜ A → is-of-size ℓᵈ B
+             → is-of-size (ℓᶜ ⊔ ℓᵈ) (A ⊎ B)
+⊎-is-of-size {ℓᶜ} {ℓᵈ} Asz Bsz =
+  Asz .fst ⊎ Bsz .fst , ⊎-ap (Asz .snd) (Bsz .snd)
+
+instance
+  Size-⊎ : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+           ⦃ sa : Size ℓᶜ A ⦄
+           ⦃ sb : Size ℓᵈ B ⦄
+         → Size (ℓᶜ ⊔ ℓᵈ) (A ⊎ B)
+  Size-⊎ {ℓᶜ} {ℓᵈ} .Size.has-of-size = ⊎-is-of-size (size ℓᶜ) (size ℓᵈ)
+  {-# OVERLAPPABLE Size-⊎ #-}

@@ -4,9 +4,12 @@ module Order.Constructions.Product where
 open import Categories.Prelude
 open import Categories.Diagram.Terminal
 
+open import Functions.Surjection
+
 open import Order.Base
 open import Order.Diagram.Glb
 open import Order.Diagram.Lub
+open import Order.SupLattice
 import Order.Reasoning
 
 private variable o ℓ o′ ℓ′ o″ ℓ″ : Level
@@ -66,3 +69,29 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
     ×-Glb : ×-notation (Glb P Fp) (Glb Q Fq) (Glb (P × Q) < Fp , Fq >)
     ×-Glb ._×_ Gp Gq .Glb.glb     = Gp .Glb.glb , Gq .Glb.glb
     ×-Glb ._×_ Gp Gq .Glb.has-glb = Gp .Glb.has-glb × Gq .Glb.has-glb
+
+  module _ {ℓᵢ ℓᵢ₁ ℓᵢ₂} {I : 𝒰 ℓᵢ} {I₁ : 𝒰 ℓᵢ₁} {I₂ : 𝒰 ℓᵢ₂} {Fp : I₁ → ⌞ P ⌟} {Fq : I₂ → ⌞ Q ⌟}
+           (f₁ : I ↠ I₁) (f₂ : I ↠ I₂)
+           where
+    ×-is-lub-surj : {x : ⌞ P ⌟} {y : ⌞ Q ⌟}
+                  → is-lub P Fp x
+                  → is-lub Q Fq y
+                  → is-lub (P × Q) {I = I} < Fp ∘ₜ f₁ #_ , Fq ∘ₜ f₂ #_ > (x , y)
+    ×-is-lub-surj lp lq .is-lub.fam≤lub = < (is-lub.fam≤lub lp ∘ₜ f₁ #_) , is-lub.fam≤lub lq ∘ₜ f₂ #_ >
+    ×-is-lub-surj lp lq .is-lub.least (ubx , uby) f =
+        lp .is-lub.least ubx (λ i₁ → rec! (λ i e → subst (λ q → P .Poset._≤_ (Fp q) ubx) e (f i .fst)) (f₁ .snd i₁))
+      , lq .is-lub.least uby (λ i₂ → rec! (λ i e → subst (λ q → Q .Poset._≤_ (Fq q) uby) e (f i .snd)) (f₂ .snd i₂))
+
+    ×-Lub-surj : Lub P Fp
+               → Lub Q Fq
+               → Lub (P × Q) {I = I} < Fp ∘ₜ f₁ #_ , Fq ∘ₜ f₂ #_ >
+    ×-Lub-surj Lp Lq .Lub.lub = Lp .Lub.lub , Lq .Lub.lub
+    ×-Lub-surj Lp Lq .Lub.has-lub = ×-is-lub-surj (Lp .Lub.has-lub) (Lq .Lub.has-lub)
+
+    -- TODO glb-surj
+
+  module _ {ℓᵢ} where instance
+    ×-is-sup-lattice : ×-notation (is-sup-lattice P ℓᵢ) (is-sup-lattice Q ℓᵢ) (is-sup-lattice (P ×ₚ Q) ℓᵢ)
+    ×-is-sup-lattice ._×_ sx sy .is-sup-lattice.has-lubs {I} {F} =
+      cast-lub refl (λ i → ×-path refl refl) $
+      sx .is-sup-lattice.has-lubs {F = λ i → F i .fst} × sy .is-sup-lattice.has-lubs {F = λ i → F i .snd}

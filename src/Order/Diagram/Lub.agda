@@ -127,6 +127,15 @@ module _ {P : Poset o ℓ} where
   cast-is-lub e p has-lub .least ub G≤ub =
     has-lub .least ub (λ i → =→≤ (p i) ∙ G≤ub (e $ i))
 
+  cast-lub
+    : ∀ {ℓᵢ ℓᵢ′} {I : 𝒰 ℓᵢ} {I′ : 𝒰 ℓᵢ′} {F : I → Ob} {G : I′ → Ob}
+    → (e : I ≃ I′)
+    → (∀ i → F i ＝ G (e $ i))
+    → Lub P F
+    → Lub P G
+  cast-lub e p l .Lub.lub     = l .Lub.lub
+  cast-lub e p l .Lub.has-lub = cast-is-lub e p (l .Lub.has-lub)
+
   cast-is-lubᶠ
     : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F G : I → Ob} {lub}
     → (∀ i → F i ＝ G i)
