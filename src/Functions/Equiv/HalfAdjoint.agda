@@ -31,7 +31,7 @@ is-iso→is-half-adjoint-equiv {f} iiso =
     zig : (x : _) → ε′ (f x) ＝ ap f (η x)
     zig x =
       ε′ (f x)                                                 ~⟨⟩
-      ε (f (g (f x))) ⁻¹ ∙ ap f ⌜ η (g (f x)) ⌝ ∙ₚ ε (f x)     ~⟨ ap! (homotopy-invert η) ⟩
+      ε (f (g (f x))) ⁻¹ ∙ ap f ⌜ η (g (f x)) ⌝ ∙ ε (f x)      ~⟨ ap! (homotopy-invert η) ⟩
       ε (f (g (f x))) ⁻¹ ∙ ⌜ ap (f ∘ g ∘ f) (η x) ∙ ε (f x) ⌝  ~⟨ ap¡ (homotopy-natural ε (ap f (η x))) ⟨
       ε (f (g (f x))) ⁻¹ ∙ ε (f (g (f x))) ∙ ap f (η x)        ~⟨ ∙-cancel-l (ε (f (g (f x)))) (ap f (η x)) ⟩
       ap f (η x)                                               ∎
@@ -54,12 +54,12 @@ is-half-adjoint-equiv→is-equiv {f} (g , η , ε , zig) .equiv-proof y = fib , 
     path : ap f (ap g (p ⁻¹) ∙ η x) ∙ p ＝ ε y
     path =
       ⌜ ap f (ap g (p ⁻¹) ∙ η x) ⌝ ∙ p             ~⟨ ap! (ap-comp-∙ f (ap g (p ⁻¹)) (η x)) ⟩
-      (ap (f ∘ g) (p ⁻¹) ∙ ap f (η x)) ∙ p         ~⟨ ∙-assoc _ _ _ ⟨
-      ap (f ∘ g) (p ⁻¹) ∙ ⌜ ap f (η x) ⌝ ∙ₚ p      ~⟨ ap! (zig _) ⟩ -- by the triangle identity
+      (ap (f ∘ g) (p ⁻¹) ∙ ap f (η x)) ∙ p         ~⟨ ∙-assoc _ _ p ⟨
+      ap (f ∘ g) (p ⁻¹) ∙ ⌜ ap f (η x) ⌝ ∙ p       ~⟨ ap! (zig x) ⟩ -- by the triangle identity
       ap (f ∘ g) (p ⁻¹) ∙ ⌜ ε (f x) ∙ p ⌝          ~⟨ ap! (homotopy-natural ε p)  ⟩ -- by naturality of ε
-      ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ∙ ε y       ~⟨ ∙-assoc _ _ _ ⟩
-      ⌜ ap (f ∘ g) (p ⁻¹) ∙ₚ ap (f ∘ g) p ⌝ ∙ ε y  ~⟨ ap¡ (ap-comp-∙ (f ∘ g) (p ⁻¹) p) ⟨
-      ap (f ∘ g) ⌜ p ⁻¹ ∙ p ⌝ ∙ ε y                ~⟨ ap! (∙-inv-r _) ⟩
+      ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ∙ ε y       ~⟨ ∙-assoc _ _ (ε y) ⟩
+      ⌜ ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ⌝ ∙ ε y   ~⟨ ap¡ (ap-comp-∙ (f ∘ g) (p ⁻¹) p) ⟨
+      ap (f ∘ g) ⌜ p ⁻¹ ∙ p ⌝ ∙ ε y                ~⟨ ap! (∙-inv-r (p ⁻¹)) ⟩
       ap (f ∘ g) refl ∙ ε y                        ~⟨⟩
       refl ∙ ε y                                   ~⟨ ∙-id-l (ε y) ⟩
       ε y                                          ∎
