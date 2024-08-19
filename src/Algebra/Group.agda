@@ -79,14 +79,14 @@ record Group-hom
 
     field pres-⋆  : (x y : A) → e (x ∙ y) ＝ e x ∙ e y
 
-    pres-id : e refl ＝ refl
+    pres-id : e A.id ＝ B.id
     pres-id =
-      e refl                           ~⟨ B.id-r _ ⟨
-      e refl ∙ ⌜ refl ⌝                ~⟨ ap¡ (B.inverse-r _) ⟨
-      e refl ∙ (e refl ∙ e refl ⁻¹)    ~⟨ B.assoc _ _ _ ⟩
-      ⌜ e refl ∙ e refl ⌝ ∙ e refl ⁻¹  ~⟨ ap! (sym (pres-⋆ _ _) ∙ ap e (A.id-l _)) ⟩
-      e refl ∙ e refl ⁻¹               ~⟨ B.inverse-r _ ⟩
-      the B refl                       ∎
+      e A.id                           ~⟨ B.id-r _ ⟨
+      e A.id ∙ ⌜ B.id ⌝                ~⟨ ap¡ (B.inverse-r (e A.id)) ⟨
+      e A.id ∙ (e A.id ∙ e A.id ⁻¹)    ~⟨ B.assoc _ _ _ ⟩
+      ⌜ e A.id ∙ e A.id ⌝ ∙ e A.id ⁻¹  ~⟨ ap! (pres-⋆ A.id A.id ⁻¹ ∙ ap e (A.id-l _)) ⟩
+      e A.id ∙ e A.id ⁻¹               ~⟨ B.inverse-r _ ⟩
+      B.id                             ∎
 
     pres-inv : (x : A) → e (x ⁻¹) ＝ (e x) ⁻¹
     pres-inv x = monoid-inverse-unique {IM = B.has-monoid} (e x) _ _
@@ -140,20 +140,20 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   inverse-r : Inverse-right id _⋆_ inverse
   inverse-r x =
     x ∙ x ⁻¹                         ~⟨ id-l _ ⟨
-    ⌜ refl ⌝ ∙ (x ∙ x ⁻¹)            ~⟨ ap¡ (inverse-l _) ⟨
+    ⌜ id ⌝ ∙ (x ∙ x ⁻¹)              ~⟨ ap¡ (inverse-l (x ⁻¹)) ⟨
     (x ⁻¹ ⁻¹ ∙ x ⁻¹) ∙ (x ∙ x ⁻¹)    ~⟨ assoc _ _ _ ⟨
-    x ⁻¹ ⁻¹ ∙ ⌜ x ⁻¹ ∙ (x ∙ x ⁻¹) ⌝  ~⟨ ap! (assoc _ _ _) ⟩
-    x ⁻¹ ⁻¹ ∙ (⌜ x ⁻¹ ∙ x ⌝ ∙ x ⁻¹)  ~⟨ ap! (inverse-l _) ⟩
-    x ⁻¹ ⁻¹ ∙ ⌜ refl ∙ x ⁻¹ ⌝        ~⟨ ap! (id-l _) ⟩
+    x ⁻¹ ⁻¹ ∙ ⌜ x ⁻¹ ∙ (x ∙ x ⁻¹) ⌝  ~⟨ ap! (assoc (x ⁻¹) x (x ⁻¹)) ⟩
+    x ⁻¹ ⁻¹ ∙ (⌜ x ⁻¹ ∙ x ⌝ ∙ x ⁻¹)  ~⟨ ap! (inverse-l x) ⟩
+    x ⁻¹ ⁻¹ ∙ ⌜ id ∙ x ⁻¹ ⌝          ~⟨ ap! (id-l (x ⁻¹)) ⟩
     x ⁻¹ ⁻¹ ∙ x ⁻¹                   ~⟨ inverse-l _ ⟩
-    the X refl                       ∎
+    id                               ∎
 
   id-r : Unital-right id _⋆_
   id-r x =
-    x ∙ ⌜ refl ⌝      ~⟨ ap¡ (inverse-l _) ⟨
+    x ∙ ⌜ id ⌝        ~⟨ ap¡ (inverse-l _) ⟨
     x ∙ (x ⁻¹ ∙ x)    ~⟨ assoc _ _ _ ⟩
     ⌜ x ∙ x ⁻¹ ⌝ ∙ x  ~⟨ ap! (inverse-r _) ⟩
-    refl ∙ x          ~⟨ id-l _ ⟩
+    id ∙ x            ~⟨ id-l _ ⟩
     x                 ∎
 
   to-is-group : is-group _⋆_

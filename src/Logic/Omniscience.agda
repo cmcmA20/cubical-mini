@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search --instance-search-depth=3 #-}
+{-# OPTIONS --safe #-}
 module Logic.Omniscience where
 
 open import Meta.Prelude
@@ -88,6 +88,7 @@ instance
   Dec-∃ ⦃ omn₁ ⦄ = omniscient₁-β omn₁ auto
   {-# OVERLAPPABLE Dec-∃ #-}
 
+  -- TODO remove this trash?
   Dec-omni₁-prop
     : ∀{ℓᵃ ℓᵇ} {A : Type ℓᵃ} {B : Pred A ℓᵇ}
     → ⦃ ΣAB-prop : H-Level 1 Σ[ B ] ⦄
@@ -110,7 +111,7 @@ module _
   _ = autoω
 
   _ : Dec (Σ[ a ꞉ A ] B a)
-  _ = auto
+  _ = auto ⦃ Dec-omni₁-prop ⦄
 
   _ : Dec (∃[ a ꞉ A ] B a)
   _ = auto

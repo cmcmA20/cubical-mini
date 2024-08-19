@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --backtracking-instance-search --instance-search-depth=3 #-}
+{-# OPTIONS --safe #-}
 module Data.List.Operations.Properties where
 
 open import Foundations.Base
@@ -83,8 +83,8 @@ snoc-length xs {x} = ap length (snoc-append xs) ∙ ++-length xs (x ∷ []) ∙ 
 
 snoc-inj : {xs ys : List A} {z w : A} → snoc xs z ＝ snoc ys w → (xs ＝ ys) × (z ＝ w)
 snoc-inj {xs = []}     {ys = []}     e = refl , (∷-head-inj e)
-snoc-inj {xs = []}     {ys = y ∷ ys} e = false! e
-snoc-inj {xs = x ∷ xs} {ys = []}     e = false! e
+snoc-inj {xs = []}     {ys = y ∷ ys} e = false! ⦃ Reflects-List-≠-tail ⦄ e
+snoc-inj {xs = x ∷ xs} {ys = []}     e = false! ⦃ Reflects-List-≠-tail ⦄ e
 snoc-inj {xs = x ∷ xs} {ys = y ∷ ys} e =
   first (ap² {C = λ _ _ → List _} _∷_ (∷-head-inj e)) $ snoc-inj (∷-tail-inj e)
 
