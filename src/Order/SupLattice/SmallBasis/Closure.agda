@@ -53,3 +53,19 @@ module _ {o₁ ℓ₁ o₂ ℓ₂ ℓ} {B₁ B₂ : 𝒰 ℓ}
                               fb₁)
        (H₁ .is-basis.↓-is-sup x₁)
        (H₂ .is-basis.↓-is-sup x₂)
+
+module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
+         (P : Poset o ℓ)
+         (L : is-sup-lattice P ℓ′)
+         (β : B → ⌞ P ⌟)
+         (H : is-basis P L β)
+         where
+
+  -- to guarantee that β has a fiber at ⊥, we can freely add it via Maybe
+  maybe-basis : is-basis {B = Maybe B} P L (recᵐ (is-sup-lattice.bot L) β)
+  maybe-basis .is-basis.≤-is-small x (just b) = H .is-basis.≤-is-small x b
+  maybe-basis .is-basis.≤-is-small x nothing = ⊤ , lift≃id ∙ is-contr→equiv-⊤
+                                                     (inhabited-prop-is-contr (is-sup-lattice.has-bot L x) (P .Poset.≤-thin)) ⁻¹
+  maybe-basis .is-basis.↓-is-sup x .is-lub.fam≤lub (mb , le) = le
+  maybe-basis .is-basis.↓-is-sup x .is-lub.least ub f =
+    H .is-basis.↓-is-sup x .is-lub.least ub λ where (b , le) → f (just b , le)
