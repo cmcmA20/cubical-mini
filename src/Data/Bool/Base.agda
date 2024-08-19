@@ -1,10 +1,9 @@
 {-# OPTIONS --safe --no-exact-split #-}
 module Data.Bool.Base where
 
-open import Foundations.Base
-open import Foundations.HLevel
+open import Foundations.Prelude
 
-open import Data.Empty.Base
+open import Data.Empty.Base as ⊥
   using (⊥-is-prop)
 open import Data.Unit.Base
   using (⊤-is-contr)
@@ -14,6 +13,7 @@ open import Agda.Builtin.Bool public
 private variable
   ℓ : Level
   A : Type ℓ
+  b b₁ b₂ : Bool
 
 elim : {P : Bool → Type ℓ} (t : P true) (f : P false) (b : Bool) → P b
 elim _ f false = f
@@ -54,18 +54,50 @@ if b then tr else fa = rec tr fa b
 {-# NOINLINE if_then_else_ #-}
 
 is-true : Bool → Type
-is-true b = if b then ⊤ else ⊥
+is-true b = b ＝ true
 
-is-trueₚ : Bool → Type
-is-trueₚ b = b ＝ true
+is-false : Bool → Type
+is-false b = b ＝ false
 
-is-falseₚ : Bool → Type
-is-falseₚ b = b ＝ false
+
+-- Automation
+
+-- Idris vibes
+record So (b : Bool) : Type where
+  field is-so : if b then ⊤ else ⊥
+
+pattern oh = record { is-so = tt }
+
+¬-so-false : ¬ So false
+¬-so-false ()
+
+not-so : ∀{b} → ¬ So b → So (not b)
+not-so {(false)} _ = oh
+not-so {(true)} f = ⊥.rec (f oh)
+
+so-injₑ : So b₁ ≃ So b₂ → b₁ ＝ b₂
+so-injₑ {(false)} {(false)} _ = refl
+so-injₑ {(false)} {(true)}  f = ⊥.rec $ ¬-so-false (f ⁻¹ $ oh)
+so-injₑ {(true)}  {(false)} f = ⊥.rec $ ¬-so-false (f    $ oh)
+so-injₑ {(true)}  {(true)}  _ = refl
+
+so-inj : So b₁ ＝ So b₂ → b₁ ＝ b₂
+so-inj = so-injₑ ∘ =→≃
 
 instance
-  H-Level-is-true : ∀ {b n} → H-Level (suc n) (is-true b)
-  H-Level-is-true = hlevel-prop-instance $
-    elim {P = is-prop ∘ is-true}
-      (is-contr→is-prop ⊤-is-contr)
-      ⊥-is-prop _
-  {-# INCOHERENT H-Level-is-true #-}
+  Oh : So true
+  Oh = oh
+
+  H-Level-So : ∀ {b n} → H-Level (suc n) (So b)
+  H-Level-So {(false)} = hlevel-prop-instance λ ()
+  H-Level-So {(true)}  = hlevel-prop-instance λ where oh oh → refl
+
+  Underlying-Bool : Underlying Bool
+  Underlying-Bool .Underlying.ℓ-underlying = 0ℓ
+  Underlying-Bool .Underlying.⌞_⌟ = So
+
+  ×-So : ×-notation (So b₁) (So b₂) (So (b₁ and b₂))
+  ×-So {b₁ = true} {b₂} ._×_ _ = refl
+
+  ⇒-So : ⇒-notation (So b₁) (So b₂) (So (b₁ implies b₂))
+  ⇒-So {b₁ = true} {b₂ = true} ._⇒_ _ _ = oh

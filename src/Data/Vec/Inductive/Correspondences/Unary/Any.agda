@@ -10,11 +10,10 @@ open import Logic.Discreteness
 
 open import Data.Dec as Dec
 open import Data.Fin.Inductive.Base
-open import Data.Fin.Inductive.Instances.Discrete
 open import Data.Vec.Inductive.Instances.Idiom
 open import Data.Vec.Inductive.Operations
+open import Data.Fin.Inductive.Path
 open import Data.Sum.Base
-open import Data.Sum.Instances.Decidable
 
 private variable
   a a′ : Level

@@ -16,7 +16,7 @@ open import Data.Dec.Base
 open import Data.Empty.Base as ⊥
 open import Data.Dec.Properties
 open import Data.Fin.Computational.Base as Fin
-open import Data.Fin.Computational.Instances.Discrete
+open import Data.Fin.Computational.Path as Fin
 open import Data.List.Base
 open import Data.List.Operations
 open import Data.List.Path

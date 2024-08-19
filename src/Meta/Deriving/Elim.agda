@@ -15,12 +15,12 @@ open import Data.Nat.Base
 open import Data.List.Base
 open import Data.List.Instances.Alt
 open import Data.List.Instances.Append
-open import Data.List.Instances.Discrete
 open import Data.List.Instances.FromProduct
 open import Data.List.Instances.Idiom
 open import Data.List.Instances.Map
 open import Data.List.Instances.Traversable
 open import Data.List.Operations
+open import Data.List.Path
 open import Data.Maybe.Instances.Alt
 open import Data.Maybe.Instances.Traversable
 open import Data.Reflection

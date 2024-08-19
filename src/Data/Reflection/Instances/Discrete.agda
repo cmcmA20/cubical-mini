@@ -6,15 +6,15 @@ open import Foundations.Prelude
 open import Logic.Decidability
 open import Logic.Discreteness
 
-open import Data.Char.Instances.Discrete
+open import Data.Char.Path
 open import Data.Dec.Base as Dec
-open import Data.Float.Instances.Discrete
+open import Data.Float.Path
 open import Data.Id.Inductive
 open import Data.List.Base
-open import Data.List.Instances.Discrete
-open import Data.Nat.Instances.Discrete
-open import Data.String.Instances.Discrete
-open import Data.Word.Instances.Discrete
+open import Data.List.Path
+open import Data.Nat.Path
+open import Data.String.Path
+open import Data.Word.Path
 
 open import Data.Reflection.Abs
 open import Data.Reflection.Argument

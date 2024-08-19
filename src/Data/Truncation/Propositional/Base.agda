@@ -3,6 +3,9 @@ module Data.Truncation.Propositional.Base where
 
 open import Meta.Prelude
 
+open import Data.Bool.Base using (Bool)
+open import Data.Empty.Base using ()
+open import Data.Reflects.Base as Reflects
 open import Data.Sum.Base using ()
 
 data ∥_∥₁ {ℓ} (A : Type ℓ) : Type ℓ where
@@ -66,6 +69,9 @@ instance
     → Inductive (∀ x → P x) ℓm
   Inductive-∥-∥₁ ⦃ i ⦄ .Inductive.methods = i .Inductive.methods
   Inductive-∥-∥₁ ⦃ i ⦄ .Inductive.from f = elim (λ _ → hlevel 1) (i .Inductive.from f)
+
+  Reflects-∥-∥₁ : {b : Bool} → ⦃ Reflects A b ⦄ → Reflects ∥ A ∥₁ b
+  Reflects-∥-∥₁ = Reflects.dmap ∣_∣₁ rec! auto
 
 proj!
   : ⦃ A-prop : H-Level 1 A ⦄

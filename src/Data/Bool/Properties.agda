@@ -15,7 +15,6 @@ open import Data.Empty.Base as ⊥
 open import Data.Bool.Base as Bool public
 open import Data.Bool.Path
 open import Data.Bool.Instances.Finite
-open import Data.Bool.Instances.Underlying
 open import Data.Maybe.Base
 open import Data.Reflects.Base as Reflects
 open import Data.Reflects.Properties
@@ -24,9 +23,12 @@ open import Data.Sum.Path
 open import Data.Unit.Base
 
 private variable
-  ℓᵃ : Level
-  A  : Type ℓᵃ
-  x y : Bool
+  ℓᵃ ℓ ℓ′ ℓ″ : Level
+  A : Type ℓᵃ
+  P : Type ℓ
+  Q : Type ℓ′
+  R : Type ℓ″
+  x y z b : Bool
 
 universal : (Bool → A)
           ≃ A × A
@@ -55,40 +57,18 @@ bool≃maybe⊤ = ≅→≃ $ to , iso from ri li where
   li true  = refl
 
 boolean-pred-ext : (f g : A → Bool) → f ⊆ g → g ⊆ f → f ＝ g
-boolean-pred-ext f g p q i a with f a | recall f a | g a | recall g a
-... | false | ⟪ _ ⟫ | false | ⟪ _ ⟫ = false
-... | false | ⟪ u ⟫ | true  | ⟪ v ⟫ =
-  let q′ = subst² (λ φ ψ → is-true φ → is-true ψ) v u (q {a})
-  in ⊥.rec {A = false ＝ true} (q′ tt) i
-... | true  | ⟪ u ⟫ | false | ⟪ v ⟫ =
-  let p′ = subst² (λ φ ψ → is-true φ → is-true ψ) u v (p {a})
-  in ⊥.rec {A = true ＝ false} (p′ tt) i
-... | true  | ⟪ _ ⟫ | true  | ⟪ _ ⟫ = true
+boolean-pred-ext f g p q = fun-ext λ _ → so-injₑ (prop-extₑ! p q)
 
 -- if
 
-if-true : ∀ {b} {t f : A} → is-true b → (if b then t else f) ＝ t
-if-true {b = false} tb = absurd tb
+if-true : ∀ {b} {t f : A} → ⌞ b ⌟ → (if b then t else f) ＝ t
 if-true {b = true}  _  = refl
 
-if-false : ∀ {b} {t f : A} → is-true (not b) → (if b then t else f) ＝ f
+if-false : ∀ {b} {t f : A} → ⌞ not b ⌟ → (if b then t else f) ＝ f
 if-false {b = false} _  = refl
-if-false {b = true}  fb = absurd fb
 
-
-reflects-id : ∀ {x} → Reflects (is-true x) x
-reflects-id {(false)} = ofⁿ id
-reflects-id {(true)}  = ofʸ tt
 
 -- negation
-
-reflects-not : ∀ {x} → Reflects (¬ is-true x) (not x)
-reflects-not {(false)} = ofʸ id
-reflects-not {(true)}  = ofⁿ (_$ tt)
-
-reflects-¬ : ∀ {ℓ} {x} {P : 𝒰 ℓ}
-           → Reflects P x → Reflects (¬ P) (not x)
-reflects-¬ rp = Reflects.dmap (_∘ reflects-true rp) (contra (_∘ true-reflects rp)) reflects-not
 
 not-invol : ∀ x → not (not x) ＝ x
 not-invol = witness!
@@ -99,44 +79,15 @@ not-invol = witness!
 
 -- conjunction
 
-and-trueₚ-≃ : is-trueₚ (x and y) ≃ (is-trueₚ x × is-trueₚ y)
-and-trueₚ-≃ = prop-extₑ! to from where
-  to : is-trueₚ (x and y) → (is-trueₚ x × is-trueₚ y)
-  to {(false)} p = ⊥.rec $ false≠true p
-  to {(true)}  p = refl , p
-
-  from : (is-trueₚ x × is-trueₚ y) → is-trueₚ (x and y)
-  from {(false)} p = p .fst
-  from {(true)}  p = p .snd
+and-so-≃ : ⌞ x and y ⌟ ≃ ⌞ x ⌟ × ⌞ y ⌟
+and-so-≃ = prop-extₑ! to from where
+  to : ⌞ x and y ⌟ → ⌞ x ⌟ × ⌞ y ⌟
+  to {(true)} = oh ,_
+  from : ⌞ x ⌟ × ⌞ y ⌟ → ⌞ x and y ⌟
+  from {(true)} = snd
 
 and-true-≃ : is-true (x and y) ≃ (is-true x × is-true y)
-and-true-≃ {x} {y} = is-true≃is-trueₚ ∙ and-trueₚ-≃ {x = x} {y = y}
-                   ∙ ×-ap (is-true≃is-trueₚ ⁻¹) (is-true≃is-trueₚ ⁻¹)
-
-module and-trueₚ-≃ {x} {y} = Equiv (and-trueₚ-≃ {x} {y})
-
-module and-true-≃ {x} {y} = Equiv (and-true-≃ {x} {y})
-
-reflects-and : ∀ {x y} → Reflects (is-true x × is-true y) (x and y)
-reflects-and {x = false}            = ofⁿ fst
-reflects-and {x = true} {y = false} = ofⁿ snd
-reflects-and {x = true} {y = true}  = ofʸ (tt , tt)
-
-reflects-× : ∀ {ℓ ℓ′} {x y} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′}
-           → Reflects P x
-           → Reflects Q y
-           → Reflects (P × Q) (x and y)
-reflects-× {x} {y} rp rq =
-  Reflects.dmap (λ where (tx , ty) → (true-reflects rp tx , true-reflects rq ty))
-        (λ c → λ where (p , q) → c (reflects-true rp p , reflects-true rq q))
-        reflects-and
-
-reflects-×³ : ∀ {ℓ ℓ′ ℓ″} {x y z} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′} {R : 𝒰 ℓ″}
-            → Reflects P x
-            → Reflects Q y
-            → Reflects R z
-            → Reflects (P × Q × R) (x and y and z)
-reflects-×³ rp rq rr = reflects-× rp (reflects-× rq rr)
+and-true-≃ = so≃is-true ⁻¹ ∙ and-so-≃ ∙ ×-ap so≃is-true so≃is-true
 
 and-id-r : ∀ x → x and true ＝ x
 and-id-r = witness!
@@ -159,48 +110,55 @@ and-compl = witness!
 not-and : ∀ x y → not (x and y) ＝ not x or not y
 not-and = witness!
 
+
 -- disjunction
 
+or-so-≃
+  : ⌞ x or y ⌟
+  ≃ ( ⌞ x ⌟     × ⌞ not y ⌟
+  ⊎   ⌞ not x ⌟ × ⌞ y ⌟
+  ⊎   ⌞ x ⌟     × ⌞ y ⌟ )
+or-so-≃ = prop-extₑ (hlevel 1) go to from where
+  to : ⌞ x or y ⌟ → ⌞ x ⌟ × ⌞ not y ⌟ ⊎ ⌞ not x ⌟ × ⌞ y ⌟ ⊎ ⌞ x ⌟ × ⌞ y ⌟
+  to {(false)}          p = inr (inl (oh , p))
+  to {(true)} {(false)} p = inl (oh , oh)
+  to {(true)} {(true)}  p = inr (inr (oh , oh))
+
+  from : ⌞ x ⌟ × ⌞ not y ⌟ ⊎ ⌞ not x ⌟ × ⌞ y ⌟ ⊎ ⌞ x ⌟ × ⌞ y ⌟ → ⌞ x or y ⌟
+  from {(false)} (inr (inl p)) = p .snd
+  from {(true)} _ = oh
+
+  go : is-prop (⌞ x ⌟ × ⌞ not y ⌟ ⊎ ⌞ not x ⌟ × ⌞ y ⌟ ⊎ ⌞ x ⌟ × ⌞ y ⌟)
+  go {(false)} = disjoint-⊎-is-prop (hlevel 1) (disjoint-⊎-is-prop! λ ()) λ ()
+  go {(true)} {(false)} = disjoint-⊎-is-prop (hlevel 1) (disjoint-⊎-is-prop! λ ()) ([ (λ()) , (λ()) ]ᵤ ∘ snd)
+  go {(true)} {(true)} = disjoint-⊎-is-prop (hlevel 1) (disjoint-⊎-is-prop! λ ()) λ ()
+
+-- TODO refactor
 or-true-≃
-  : is-trueₚ (x or y)
-  ≃ ( (is-trueₚ  x × is-falseₚ y)
-  ⊎   (is-falseₚ x × is-trueₚ  y)
-  ⊎   (is-trueₚ  x × is-trueₚ  y) )
+  : is-true (x or y)
+  ≃ ( (is-true  x × is-false y)
+  ⊎   (is-false x × is-true  y)
+  ⊎   (is-true  x × is-true  y) )
 or-true-≃ = prop-extₑ (hlevel 1) go to from where
-  to : is-trueₚ (x or y)
-     → ((is-trueₚ x × is-falseₚ y) ⊎ (is-falseₚ x × is-trueₚ y) ⊎ (is-trueₚ x × is-trueₚ y))
-  to {(false)} {(false)} p = ⊥.rec $ false≠true p
+  to : is-true (x or y)
+     → ((is-true x × is-false y) ⊎ (is-false x × is-true y) ⊎ (is-true x × is-true y))
+  to {(false)} {(false)} p = false! p
   to {(false)} {(true)}  _ = inr (inl (refl , refl))
   to {(true)}  {(false)} _ = inl (refl , refl)
   to {(true)}  {(true)}  _ = inr (inr (refl , refl))
 
-  from : ((is-trueₚ x × is-falseₚ y) ⊎ (is-falseₚ x × is-trueₚ y) ⊎ (is-trueₚ x × is-trueₚ y))
-       → is-trueₚ (x or y)
+  from : ((is-true x × is-false y) ⊎ (is-false x × is-true y) ⊎ (is-true x × is-true y))
+       → is-true (x or y)
   from {(false)} {(false)}   = [ fst , [ snd , snd ]ᵤ ]ᵤ
   from {(false)} {(true)}  _ = refl
   from {(true)}            _ = refl
 
-  go : is-prop (is-trueₚ x × is-falseₚ y ⊎ is-falseₚ x × is-trueₚ y ⊎ is-trueₚ x × is-trueₚ y)
+  go : is-prop (is-true x × is-false y ⊎ is-false x × is-true y ⊎ is-true x × is-true y)
   go {x} {y} = disjoint-⊎-is-prop (hlevel 1)
-    (disjoint-⊎-is-prop! λ z → false≠true (z .fst .fst ⁻¹ ∙ z .snd .fst))
-    λ z → [ (λ w → false≠true (w .fst ⁻¹ ∙ z .fst .fst)) , (λ w → false≠true (z .fst .snd ⁻¹ ∙ w .snd)) ]ᵤ (z .snd)
-
-module or-true-≃ {x} {y} = Equiv (or-true-≃ {x} {y})
-
--- TODO reflection to a These structure
-reflects-or : ∀ {x y} → Reflects (is-true x ⊎ is-true y) (x or y)
-reflects-or {x = false} {y = false} = ofⁿ [ id , id ]ᵤ
-reflects-or {x = false} {y = true}  = ofʸ (inr tt)
-reflects-or {x = true}              = ofʸ (inl tt)
-
-reflects-⊎ : ∀ {ℓ ℓ′} {x y} {P : 𝒰 ℓ} {Q : 𝒰 ℓ′}
-           → Reflects P x
-           → Reflects Q y
-           → Reflects (P ⊎ Q) (x or y)
-reflects-⊎ {x} {y} rp rq = Reflects.dmap
-  [ inl ∘ true-reflects rp , inr ∘ true-reflects rq ]ᵤ
-  (contra [ inl ∘ reflects-true rp , inr ∘ reflects-true rq ]ᵤ)
-  reflects-or
+    (disjoint-⊎-is-prop! (λ z → false! (z .fst .fst ⁻¹ ∙ z .snd .fst)))
+    λ z → [ (λ w → false! (w .fst ⁻¹ ∙ z .fst .fst))
+          , (λ w → false! (z .fst .snd ⁻¹ ∙ w .snd)) ]ᵤ
+        (z .snd)
 
 or-id-r : ∀ x → x or false ＝ x
 or-id-r = witness!
@@ -223,12 +181,13 @@ or-compl = witness!
 not-or : ∀ x y → not (x or y) ＝ not x and not y
 not-or = witness!
 
+
 -- xor
+
+-- FIXME XXX
 reflects-xor : ∀ {x y} → Reflects (not x ＝ y) (x xor y)
-reflects-xor {x = false} {y = false} = ofⁿ true≠false
-reflects-xor {x = false} {y = true}  = ofʸ refl
-reflects-xor {x = true}  {y = false} = ofʸ refl
-reflects-xor {x = true}  {y = true}  = ofⁿ false≠true
+reflects-xor {(false)} = auto
+reflects-xor {(true)}  = auto
 
 xor-assoc : ∀ x y z → (x xor y) xor z ＝ x xor y xor z
 xor-assoc = witness!
@@ -238,6 +197,7 @@ not-xor-l = witness!
 
 not-xor-r : ∀ x y → not (x xor y) ＝ x xor not y
 not-xor-r = witness!
+
 
 -- distributivity
 

@@ -9,7 +9,6 @@ open import Data.Dec as Dec
 open import Data.Fin.Computational.Base
 open import Data.Vec.Inductive.Operations.Computational
 open import Data.Sum.Base
-open import Data.Sum.Instances.Decidable
 
 private variable
   a a′ : Level

@@ -4,22 +4,22 @@ module Data.Maybe.Path where
 open import Meta.Prelude
 open import Meta.Extensionality
 
+open import Logic.Discreteness
+
 open import Functions.Embedding
 
+open import Data.Bool.Base
+open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
+open import Data.Reflects.Base as Reflects
 open import Data.Unit.Base
 
 private variable
   ℓ ℓᵃ : Level
   A : Type ℓᵃ
   x y : A
-
-nothing≠just : nothing ≠ just x
-nothing≠just p = subst is-nothing p tt
-
-just≠nothing : just x ≠ nothing
-just≠nothing = nothing≠just ∘ symₚ
+  b : Bool
 
 just-inj : just x ＝ just y → x ＝ y
 just-inj {x} = ap (from-just x)
@@ -27,8 +27,8 @@ just-inj {x} = ap (from-just x)
 ¬→maybe-is-contr : (¬ A) → is-contr (Maybe A)
 ¬→maybe-is-contr ¬a = inhabited-prop-is-contr nothing λ where
   nothing  nothing  → refl
-  nothing  (just a) → ⊥.rec $ ¬a a
-  (just a) _        → ⊥.rec $ ¬a a
+  nothing  (just a) → false! $ ¬a a
+  (just a) _        → false! $ ¬a a
 
 
 module _ ⦃ sa : Extensional A ℓ ⦄ where
@@ -71,3 +71,19 @@ instance opaque
   H-Level-Maybe : ∀ {ℓ} {A : Type ℓ} {n} → ⦃ n ≥ʰ 2 ⦄ → ⦃ A-hl : H-Level n A ⦄ → H-Level n (Maybe A)
   H-Level-Maybe {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = maybe-is-of-hlevel _ (hlevel n)
   {-# OVERLAPS H-Level-Maybe #-}
+
+instance
+  Reflects-just≠nothing : Reflects (just x ＝ nothing) false
+  Reflects-just≠nothing = ofⁿ (λ p → ¬-so-false (subst So (ap is-just? p) oh))
+
+  Reflects-nothing≠just : Reflects (nothing ＝ just x) false
+  Reflects-nothing≠just = reflects-sym auto
+
+  Reflects-just=just : ⦃ Reflects (x ＝ y) b ⦄ → Reflects (just x ＝ just y) b
+  Reflects-just=just = Reflects.dmap (ap just) (contra just-inj) auto
+
+  Maybe-is-discrete : ⦃ d : is-discrete A ⦄ → is-discrete (Maybe A)
+  Maybe-is-discrete {x = nothing} {(nothing)} = true   because auto
+  Maybe-is-discrete {x = just _}  {(nothing)} = false  because auto
+  Maybe-is-discrete {x = nothing} {just _}    = false  because auto
+  Maybe-is-discrete {x = just x}  {just y}    = x =? y because auto

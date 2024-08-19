@@ -7,15 +7,16 @@ open import Meta.Extensionality
 open import Logic.Decidability
 open import Logic.Discreteness
 
+open import Data.Dec as Dec
 open import Data.Empty.Base
-open import Data.Empty.Properties as ⊥p
-open import Data.Unit.Base
-open import Data.Unit.Properties
-open import Data.Nat.Base
-open import Data.Nat.Path
+open import Data.Empty.Properties as ⊥
 open import Data.List.Base
 open import Data.List.Operations
-open import Data.Dec as Dec
+open import Data.Nat.Base
+open import Data.Nat.Path
+open import Data.Reflects.Base
+open import Data.Unit.Base
+open import Data.Unit.Properties
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ ℓ¹ ℓ² ℓ³ : Level
@@ -93,8 +94,8 @@ all²-split : {as : List A} {@0 xs : List A} {bs : List B} {@0 ys : List B}
            → length as ＝ length bs
            → All² R (as ++ xs) (bs ++ ys) → All² R as bs × All² R xs ys
 all²-split {as = []}     {bs = []}     _  rs      = [] , rs
-all²-split {as = []}     {bs = b ∷ bs} e  rs      = absurd (zero≠suc e)
-all²-split {as = a ∷ as} {bs = []}     e  rs      = absurd (suc≠zero e)
+all²-split {as = []}     {bs = b ∷ bs} e  rs      = false! e
+all²-split {as = a ∷ as} {bs = []}     e  rs      = false! e
 all²-split {as = a ∷ as} {bs = x ∷ bs} e (r ∷ rs) =
   let (rab , rxy) = all²-split (suc-inj e) rs in (r ∷ rab) , rxy
 

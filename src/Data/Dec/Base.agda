@@ -1,15 +1,15 @@
 {-# OPTIONS --safe #-}
 module Data.Dec.Base where
 
-open import Foundations.Base
+open import Foundations.Prelude
 
 open import Data.Bool.Base as Bool
-  using (Bool; false; true; not; if_then_else_; is-true)
+  using (Bool; false; true; not; if_then_else_; is-true; So; oh; Underlying-Bool)
 open import Data.Empty.Base as ⊥
   using ()
 
 open import Data.Reflects.Base as Reflects
-  using (Reflects⁰; ofⁿ; ofʸ)
+  using (Reflects⁰; ofⁿ; ofʸ; Reflectance-Underlying)
   public
 
 private variable
@@ -52,22 +52,14 @@ dmap : (P → Q) → (¬ P → ¬ Q) → Dec P → Dec Q
 dmap to fro dec .does  = dec .does
 dmap to fro dec .proof = Reflects.dmap to fro (dec .proof)
 
-recover : Dec P → Recomputable P
-recover (yes p) _  = p
-recover (no ¬p) (erase 0p) = ⊥.rec (¬p 0p)
-
-recover′ : Dec P → @irr P → P
-recover′ (yes p) _ = p
-recover′ (no ¬p) p = ⊥.rec′ (¬p p)
-
 rec : (P → Q) → (¬ P → Q) → Dec P → Q
 rec {Q} = elim {C = λ _ → Q}
 
 ⌊_⌋ : Dec P → Bool
-⌊ b because _ ⌋ = b
+⌊_⌋ = does
 
-is-trueᵈ : Dec P → Type
-is-trueᵈ = is-true ∘ ⌊_⌋
+Soᵈ : Dec P → Type
+Soᵈ = So ∘ ⌊_⌋
 
 caseᵈ_of_ : (A : Type ℓ) ⦃ d : Dec A ⦄ {B : Type ℓ′}
           → (Dec A → B) → B
@@ -99,3 +91,28 @@ _∈!?_
   → ⦃ d : {y : A} {ys : ℙA} → Dec (y ∈! ys) ⦄
   → (x : A) (xs : ℙA) → Dec (x ∈! xs)
 _∈!?_ = _~?_
+
+oh? : ∀ b → Dec (So b)
+oh? false = no λ()
+oh? true  = yes oh
+
+is-discrete : Type ℓ → Type ℓ
+is-discrete A = {x y : A} → Dec (x ＝ y)
+
+reflects-path→is-discrete!
+  : {_==_ : P → P → Bool} ⦃ re : ∀ {x y : P} → Reflects (x ＝ y) (x == y) ⦄
+  → is-discrete P
+reflects-path→is-discrete! = _ because auto
+
+instance
+  Decidability-Underlying : ⦃ ua : Underlying P ⦄ → Decidability P
+  Decidability-Underlying ⦃ ua ⦄ .ℓ-decidability = ua .Underlying.ℓ-underlying
+  Decidability-Underlying .Decidable X = Dec ⌞ X ⌟
+  {-# OVERLAPPABLE Decidability-Underlying #-}
+
+  Recomputable-Dec : ⦃ d : Dec P ⦄ → Recomputable P
+  Recomputable-Dec ⦃ yes p ⦄ .recompute _ = p
+  Recomputable-Dec ⦃ no ¬p ⦄ .recompute (erase p₀) = Reflects.falseᴱ! (¬p p₀)
+
+  Dec-So : ∀ {b} → Dec (So b)
+  Dec-So = oh? _

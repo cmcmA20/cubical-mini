@@ -8,7 +8,7 @@ open import Meta.Extensionality
 open import Data.Bool.Base
 open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
-open import Data.Reflects.Base
+open import Data.Reflects.Base as Reflects
 open import Data.Unit.Base
 
 private variable
@@ -17,13 +17,12 @@ private variable
   A : Type ℓᵃ
 
 ofʸ-inj : ∀ {x y : A} → ofʸ x ＝ ofʸ y → x ＝ y
-ofʸ-inj = ap invert-true
+ofʸ-inj = ap λ p → true! ⦃ p ⦄
 
 ofⁿ-inj : ∀ {x y : ¬ A} → ofⁿ x ＝ ofⁿ y → x ＝ y
 ofⁿ-inj _ = prop!
 
 module _ {ℓᵃ ℓ} {A : Type ℓᵃ} ⦃ sa : Extensional A ℓ ⦄ where
-
   Code-reflects : (x y : Reflects⁰ A a) → Type ℓ
   Code-reflects (ofʸ p) (ofʸ  p′) = sa .Pathᵉ p p′
   Code-reflects (ofⁿ _) (ofⁿ  _)  = ⊤
@@ -59,3 +58,10 @@ instance opaque
   H-Level-Reflects : ∀ {n} → ⦃ n ≥ʰ 1 ⦄ → ⦃ H-Level n A ⦄ → H-Level n (Reflects⁰ A a)
   H-Level-Reflects ⦃ s≤ʰs _ ⦄ .H-Level.has-of-hlevel = reflects-is-of-hlevel _ (hlevel _)
   {-# OVERLAPS H-Level-Reflects #-}
+
+instance
+  Reflects-ofⁿ=ofⁿ : {x y : ¬ A} → Reflects (ofⁿ x ＝ ofⁿ y) true
+  Reflects-ofⁿ=ofⁿ = ofʸ (ap ofⁿ prop!)
+
+  Reflects-ofʸ=ofʸ : {x y : A} → ⦃ Reflects (x ＝ y) b ⦄ → Reflects (ofʸ x ＝ ofʸ y) b
+  Reflects-ofʸ=ofʸ = Reflects.dmap (ap ofʸ) (contra ofʸ-inj) auto

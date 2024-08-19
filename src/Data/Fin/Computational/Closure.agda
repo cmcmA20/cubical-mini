@@ -6,11 +6,14 @@ open import Meta.Prelude
 open import Meta.Marker
 open import Meta.Regularity
 
+open import Data.Bool.Base as Bool
 open import Data.Empty.Base as ⊥
 open import Data.Empty.Properties as ⊥
 open import Data.Fin.Computational.Properties
 open import Data.Nat.Base
 open import Data.Nat.Order.Inductive.Base
+open import Data.Reflects.Base
+open import Data.Sum.Base as ⊎
 open import Data.Sum.Properties as ⊎
 open import Data.Unit.Base
 open import Data.Unit.Properties as ⊤
@@ -20,8 +23,7 @@ private variable
   @0 m n : ℕ
 
 fin-0-is-initial : Fin 0 ≃ ⊥
-fin-0-is-initial .fst ()
-fin-0-is-initial .snd .equiv-proof ()
+fin-0-is-initial = ¬→≃⊥ false!
 
 fin-1-is-contr : is-contr (Fin 1)
 fin-1-is-contr .fst = fzero

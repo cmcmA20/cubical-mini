@@ -8,6 +8,9 @@ open import Meta.Effect.Map
 
 open import Structures.n-Type
 
+open import Data.Bool.Base
+open import Data.Empty.Base as ⊥
+open import Data.Reflects.Base as Reflects
 open import Data.Truncation.Propositional as ∥-∥₁
   using (∥_∥₁; ∣_∣₁)
 open import Data.Truncation.Set.Base public
@@ -19,6 +22,7 @@ private variable
   A : Type ℓ
   B : Type ℓ′
   x y : A
+  b : Bool
 
 instance opaque
   H-Level-∥-∥₂ : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → H-Level n ∥ A ∥₂
@@ -38,6 +42,10 @@ instance opaque
 
   decode : ∀ x y → ⌞ Code x y ⌟ → ∣ x ∣₂ ＝ y
   decode x = elim! λ _ → ap ∣_∣₂
+
+instance
+  Reflects-∣-∣₂=∣-∣₂ : ⦃ Reflects (x ＝ y) b ⦄ → Reflects (∣ x ∣₂ ＝ ∣ y ∣₂) b
+  Reflects-∣-∣₂=∣-∣₂ = Reflects.dmap (ap ∣_∣₂) (λ x≠y p → ⊥.rec $ rec! x≠y $ =∘∣-∣₂≃∥-∥₁∘= $ p) auto
 
 ae : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
 ae e = to , is-iso→is-equiv (iso from ri li)

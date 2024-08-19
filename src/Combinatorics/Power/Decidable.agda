@@ -12,9 +12,10 @@ open import Combinatorics.Power.Base
 open import Data.Bool as Bool
 open import Data.Dec as Dec
 open import Data.Empty as ⊥
+open import Data.Reflects.Base as Reflects
 open import Data.Sum.Base
-open import Data.Unit.Base
 open import Data.Truncation.Propositional as ∥-∥₁
+open import Data.Unit.Base
 
 
 private variable
@@ -53,15 +54,14 @@ is-decidable-subset→is-complemented {X} A d
 @0 decidable-subobject-classifier : {X : 𝒰 ℓ} → (X → Bool) ≃ ℙᵈ X
 decidable-subobject-classifier {ℓ} {X} = ≅→≃ $ to , iso (λ pr x → from pr x .fst) ri li where
   to : (X → Bool) → ℙᵈ X
-  to ch = (λ x → el (Lift ℓ (is-true (ch x))) (Bool.elim {P = λ b → is-prop (Lift ℓ (is-true b))} hlevel! hlevel! (ch x)))
-        , λ {x} → Bool.elim {P = λ x → Dec (Lift ℓ (is-true x))} auto auto (ch x)
+  to ch = (λ x → el! (Lift ℓ ⌞ ch x ⌟)) , auto
 
-  from : (pr : ℙᵈ X) (x : X) → Σ[ b ꞉ Bool ] (is-true b ≃ (x ∈ pr .fst))
-  from (A , d) x = Dec.elim (λ x∈A → true  , prop-extₑ! (λ _ → x∈A) _)
-                            (λ x∉A → false , prop-extₑ! (⊥.rec $_) x∉A) d
+  from : (pr : ℙᵈ X) (x : X) → Σ[ b ꞉ Bool ] (⌞ b ⌟ ≃ (x ∈ pr .fst))
+  from (A , d) x = Dec.elim (λ x∈A → true  , prop-extₑ! (λ _ → x∈A) (λ _ → oh))
+                            (λ x∉A → false , prop-extₑ! (λ ()) λ x∈A → false! (x∉A x∈A)) d
 
   ri : _
-  ri A = Σ-prop-path! (ℙ-ext (from A _ .snd .fst ∘ lower) (lift ∘ Equiv.from (from A _ .snd)))
+  ri A = ℙ-ext (from A _ .snd .fst ∘ lower) (lift ∘ (from A _ .snd ⁻¹ $_)) ,ₚ prop!
 
   li : _
   li ch = fun-ext λ x → Bool.elim {P = λ p → from (to λ _ → p) x .fst ＝ p} refl refl (ch x)

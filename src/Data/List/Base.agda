@@ -3,6 +3,8 @@ module Data.List.Base where
 
 open import Foundations.Base
 
+open import Data.Bool.Base using (Bool; false; true; not)
+
 open import Agda.Builtin.List public
 
 private variable
@@ -59,3 +61,10 @@ intercalate : (x : A) (xs : List A) → List A
 intercalate x []           = []
 intercalate x (y ∷ [])     = y ∷ []
 intercalate x (y ∷ z ∷ xs) = y ∷ x ∷ intercalate x (z ∷ xs)
+
+is-nil? : List A → Bool
+is-nil? [] = true
+is-nil? (_ ∷ _) = false
+
+is-cons? : List A → Bool
+is-cons? = not ∘ is-nil?

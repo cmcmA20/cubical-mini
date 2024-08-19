@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Functions.Constant where
 
-open import Meta.Prelude
+open import Foundations.Prelude
 
 private variable
   ℓ ℓ′ : Level

@@ -17,10 +17,11 @@ open import Data.Dec.Path
 open import Data.Empty.Base
 open import Data.Empty.Properties
 open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Path
 open import Data.Fin.Computational.Properties
 open import Data.Fin.Computational.Closure
-open import Data.Fin.Computational.Instances.Discrete
 open import Data.Nat.Path
+open import Data.Reflects.Base as Reflects
 open import Data.Truncation.Propositional as ∥-∥₁
 
 open import Functions.Embedding
@@ -93,7 +94,7 @@ instance
     go : ∥ is-discrete A ∥₁
     go = do
       e ← bf .enumeration₁
-      pure $ λ {x} {y} → ≃→is-discrete e fin-is-discrete
+      pure $ λ {x} {y} → ≃→is-discrete e (_ because auto)
   {-# OVERLAPS is-bishop-finite→is-discrete #-}
 
   is-bishop-finite→omniscient₁ : ⦃ bf : is-bishop-finite A ⦄ → Omniscient₁ A
@@ -122,7 +123,7 @@ private
     ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
     ff _ = fzero
     gg : _
-    gg _ f0 = absurd (fin-0-is-initial $ f0)
+    gg _ f₀ = false! f₀
     ri : gg is-right-inverse-of ff
     ri (mk-fin 0) = refl
     li : gg is-left-inverse-of ff

@@ -10,9 +10,7 @@ open import Data.Dec.Base as Dec
 open import Data.Dec.Instances.Alternative
 open import Data.Dec.Instances.Monoidal
 open import Data.Empty.Base as ⊥
-open import Data.Reflection.Term
-open import Data.Reflects.Path
-open import Data.Reflects.Properties
+open import Data.Reflects.Base
 open import Data.Truncation.Propositional.Base as ∥-∥₁
 open import Data.Unit.Base
 
@@ -22,28 +20,10 @@ private variable
   B : Type ℓᵇ
   n : HLevel
 
--- Evidence of a correspondence being reflected by a decision procedure
-
-instance
-  Decidability-Underlying
-    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
-    → Decidability A
-  Decidability-Underlying ⦃ ua ⦄ .ℓ-decidability = ua .Underlying.ℓ-underlying
-  Decidability-Underlying .Decidable X = Dec ⌞ X ⌟
-  {-# OVERLAPPABLE Decidability-Underlying #-}
-
-  Reflectance-Underlying
-    : {A : Type ℓ} ⦃ ua : Underlying A ⦄
-    → Reflectance A Bool
-  Reflectance-Underlying ⦃ ua ⦄ .ℓ-reflectance = ua .Underlying.ℓ-underlying
-  Reflectance-Underlying .Reflects X = Reflects⁰ ⌞ X ⌟
-  {-# OVERLAPPABLE Reflectance-Underlying #-}
-
-
 dec→essentially-classical : Dec A → Essentially-classical A
 dec→essentially-classical = Dec.rec
   (λ a _ → a)
-  (λ ¬a f → ⊥.rec $ f ¬a)
+  (λ ¬a f → false! $ f ¬a)
 
 instance
   Dec-⊥ : Dec ⊥
@@ -55,37 +35,29 @@ instance
   {-# OVERLAPPING Dec-⊤ #-}
 
   Dec-× : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A × B)
-  Dec-× ⦃ da ⦄ ⦃ db ⦄ = da <,> db
+  Dec-× ⦃ da ⦄ ⦃ db ⦄ .does = ⌊ da ⌋ and ⌊ db ⌋
+  Dec-× ⦃ da ⦄ ⦃ db ⦄ .proof = Reflects-× ⦃ da .proof ⦄ ⦃ db .proof ⦄
 
   Dec-fun : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A → B)
-  Dec-fun ⦃ da ⦄    ⦃ db ⦄ .does = not (da .does) or db .does
-  Dec-fun ⦃ no ¬a ⦄ ⦃ db ⦄ .proof = ofʸ $ λ a → ⊥.rec $ ¬a a
-  Dec-fun ⦃ yes a ⦄ ⦃ no ¬b ⦄ .proof = ofⁿ $ ¬b ∘ (_$ a)
-  Dec-fun ⦃ yes a ⦄ ⦃ yes b ⦄ .proof = ofʸ λ _ → b
+  Dec-fun ⦃ da ⦄ ⦃ db ⦄ .does = ⌊ da ⌋ implies ⌊ db ⌋
+  Dec-fun ⦃ da ⦄ ⦃ db ⦄ .proof = Reflects-⇒ ⦃ da .proof ⦄ ⦃ db .proof ⦄
   {-# OVERLAPPABLE Dec-fun #-}
 
   Dec-¬ : ⦃ da : Dec A ⦄ → Dec (¬ A)
-  Dec-¬ ⦃ da ⦄ .does = not (da .does)
-  Dec-¬ ⦃ yes a ⦄ .proof = ofⁿ (_$ a)
-  Dec-¬ ⦃ no ¬a ⦄ .proof = ofʸ ¬a
+  Dec-¬ ⦃ da ⦄ .does = not ⌊ da ⌋
+  Dec-¬ ⦃ da ⦄ .proof = Reflects-¬ ⦃ da .proof ⦄
 
   Dec-lift : ⦃ da : Dec A ⦄ → Dec (Lift ℓ A)
   Dec-lift ⦃ da ⦄ .does = da .does
-  Dec-lift ⦃ yes a ⦄ .proof = ofʸ (lift a)
-  Dec-lift ⦃ no ¬a ⦄ .proof = ofⁿ (¬a ∘ lower)
+  Dec-lift ⦃ da ⦄ .proof = Reflects-Lift ⦃ da .proof ⦄
 
   Dec-∥-∥₁ : ⦃ da : Dec A ⦄ → Dec ∥ A ∥₁
-  Dec-∥-∥₁ ⦃ da ⦄ .does = da .does
-  Dec-∥-∥₁ ⦃ yes a ⦄ .proof = ofʸ ∣ a ∣₁
-  Dec-∥-∥₁ ⦃ no ¬a ⦄ .proof = ofⁿ $ rec! ¬a
+  Dec-∥-∥₁ ⦃ da ⦄ .does = ⌊ da ⌋
+  Dec-∥-∥₁ ⦃ da ⦄ .proof = Reflects-∥-∥₁ ⦃ da .proof ⦄
   {-# OVERLAPPABLE Dec-∥-∥₁ #-}
 
   Dec-universe : Dec (Type ℓ)
   Dec-universe = yes ⊤
-
-  Dec-refl : ∀ {x : A} → Dec (x ＝ x)
-  Dec-refl = yes refl
-  {-# OVERLAPPING Dec-refl #-}
 
 Dec-prop-Σ
   : {A : Type ℓᵃ} {B : A → Type ℓᵇ}

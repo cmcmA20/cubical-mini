@@ -4,10 +4,15 @@ module Data.List.Path where
 open import Meta.Prelude
 open import Meta.Extensionality
 
-open import Data.Empty.Base
-open import Data.Unit.Base
+open import Logic.Discreteness
 
+open import Data.Bool.Base
+open import Data.Dec.Base
+open import Data.Empty.Base
 open import Data.List.Base
+open import Data.List.Operations
+open import Data.Reflects.Base as Reflects
+open import Data.Unit.Base
 
 private variable
   ℓ ℓ′ ℓᵃ : Level
@@ -15,19 +20,13 @@ private variable
   A : Type ℓᵃ
   x y : A
   xs ys : List A
+  b₁ b₂ : Bool
 
 ∷-head-inj : x ∷ xs ＝ y ∷ ys → x ＝ y
 ∷-head-inj {x} = ap (head x)
 
 ∷-tail-inj : x ∷ xs ＝ y ∷ ys → xs ＝ ys
 ∷-tail-inj = ap tail
-
-∷≠[] : ¬ (x ∷ xs) ＝ []
-∷≠[] p = subst discrim p tt
-  where
-  discrim : List _ → Type
-  discrim []      = ⊥
-  discrim (_ ∷ _) = ⊤
 
 module _ {A : 𝒰 ℓᵃ} ⦃ sa : Extensional A ℓ ⦄ where
   Code-List : List A → List A → 𝒰 ℓ
@@ -77,3 +76,38 @@ instance opaque
   H-Level-List : ∀ {n} → ⦃ n ≥ʰ 2 ⦄ → ⦃ A-hl : H-Level n A ⦄ → H-Level n (List A)
   H-Level-List {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = list-is-of-hlevel _ (hlevel n)
   {-# OVERLAPPING H-Level-List #-}
+
+instance
+  Reflects-∷≠[] : Reflects (x ∷ xs ＝ []) false
+  Reflects-∷≠[] = ofⁿ λ p → ¬-so-false (subst So (ap is-cons? p) oh)
+
+  Reflects-[]≠∷ : Reflects ([] ＝ x ∷ xs) false
+  Reflects-[]≠∷ = reflects-sym auto
+
+  Reflects-List-≠-head : ⦃ Reflects (x ＝ y) false ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) false
+  Reflects-List-≠-head {x} = ofⁿ (false! ∘ ap (head x))
+  {-# OVERLAPPING Reflects-List-≠-head #-}
+
+  Reflects-List-≠-tail : ⦃ Reflects (xs ＝ ys) false ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) false
+  Reflects-List-≠-tail {x} = ofⁿ (false! ∘ ap tail)
+  {-# OVERLAPS Reflects-List-≠-tail #-}
+
+  Reflects-∷=∷ : ⦃ rh : Reflects (x ＝ y) b₁ ⦄ ⦃ rt : Reflects (xs ＝ ys) b₂ ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) (b₁ and b₂)
+  Reflects-∷=∷ = Reflects.dmap (λ p → ap² _∷_ (p .fst) (p .snd)) (contra < ∷-head-inj , ∷-tail-inj >) auto
+  {-# OVERLAPPABLE Reflects-∷=∷ #-}
+
+  List-is-discrete : ⦃ d : is-discrete A ⦄ → is-discrete (List A)
+  List-is-discrete {x = []}     {([])}   = true because auto
+  List-is-discrete {x = []}     {_ ∷ _}  = false because auto
+  List-is-discrete {x = _ ∷ _}  {([])}   = false because auto
+  List-is-discrete {x = x ∷ xs} {y ∷ ys} .does  = (x =? y) and ⌊ List-is-discrete {x = xs} {y = ys} ⌋
+  List-is-discrete {x = x ∷ xs} {y ∷ ys} .proof = Reflects-∷=∷ ⦃ auto ⦄ ⦃ List-is-discrete {x = xs} {y = ys} .proof ⦄
+
+  Reflects-snoc≠[] : Reflects (xs ∷r x ＝ []) false
+  Reflects-snoc≠[] {xs = []} = Reflects-∷≠[]
+  Reflects-snoc≠[] {xs = x ∷ xs} = Reflects-∷≠[]
+  {-# INCOHERENT Reflects-snoc≠[] #-}
+
+  Reflects-[]≠snoc : Reflects ([] ＝ xs ∷r x) false
+  Reflects-[]≠snoc = reflects-sym auto
+  {-# INCOHERENT Reflects-[]≠snoc #-}

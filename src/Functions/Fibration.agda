@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Functions.Fibration where
 
-open import Meta.Prelude
+open import Foundations.Prelude
 
 private variable
   ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᶜ ℓᵉ ℓᵖ : Level

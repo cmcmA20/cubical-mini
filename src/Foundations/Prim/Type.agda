@@ -53,8 +53,6 @@ record Erased {ℓ} (@0 A : Type ℓ) : Type ℓ where
 open Erased public
 
 instance
-  erased-inst : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → Erased A
-  erased-inst ⦃ (a) ⦄ .erased = a
-
-Recomputable : ∀ {ℓ} → Type ℓ → Type ℓ
-Recomputable A = Erased A → A
+  Erased-default : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → Erased A
+  Erased-default ⦃ (a) ⦄ .erased = a
+  {-# INCOHERENT Erased-default #-}

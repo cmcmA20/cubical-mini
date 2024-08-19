@@ -14,6 +14,12 @@ private variable
   @0 B : Type ℓᵇ
   @0 C : Type ℓᶜ
 
+record Recomputable {ℓ} (A : Type ℓ) : Type ℓ where
+  no-eta-equality
+  field recompute : Erased A → A
+
+open Recomputable public
+
 @0 fibreᴱ≃fibre : {@0 f : A → B} {@0 y : B} → fibreᴱ f y ≃ fibre f y
 fibreᴱ≃fibre = Σ-ap-snd λ _ → erased≃id
 

@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Functions.Equiv.HalfAdjoint where
 
-open import Meta.Prelude
+open import Foundations.Prelude
 
 open import Meta.Marker
 
