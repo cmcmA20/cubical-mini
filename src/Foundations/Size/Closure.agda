@@ -27,6 +27,12 @@ private variable ℓ ℓ′ ℓ″ ℓ‴ : Level
   = Σ[ x ꞉ X ] ⌞ sa (e $ x) ⌟
   , Σ-ap e λ z → resizing-cond (sa (e $ z))
 
+×-is-of-size : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+             → is-of-size ℓ″ A
+             → is-of-size ℓ‴ B
+             → is-of-size (ℓ″ ⊔ ℓ‴) (A × B)
+×-is-of-size sa sb = Σ-is-of-size sa λ _ → sb
+
 Π-is-of-size : {A : 𝒰 ℓ} {B : A → 𝒰 ℓ′}
              → is-of-size ℓ″ A
              → ((a : A) → is-of-size ℓ‴ (B a))
