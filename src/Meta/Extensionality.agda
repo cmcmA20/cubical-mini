@@ -125,7 +125,7 @@ instance
     → {x y : A} → Size ℓr (x ＝ y)
   Extensional→Local-Size ⦃ sa ⦄ {x} {y} .Size.has-of-size =
     sa .Pathᵉ x y , identity-system-gives-path (sa .idsᵉ)
-  {-# OVERLAPPABLE Extensional→Local-Size #-}
+  {-# INCOHERENT Extensional→Local-Size #-}
 
 ext
   : ∀ {ℓ ℓr} {A : Type ℓ} {x y : A} ⦃ r : Extensional A ℓr ⦄

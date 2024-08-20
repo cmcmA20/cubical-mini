@@ -176,12 +176,5 @@ module Replacement
         (u , α) → quot (ls.encode (ap fst α ⁻¹)) ,ₚ Σ-prop-square!
           (commutes→square (ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹))
 
-instance
-  Size-Image
-    : ∀{ℓᵃ ℓᵗ ℓⁱ} {A : Type ℓᵃ} {T : Type ℓᵗ}
-      ⦃ et : Extensional T ℓⁱ ⦄
-      {f : A → T}
-    → Size (ℓᵃ ⊔ ℓⁱ) (Im f)
-  Size-Image {ℓⁱ} {A} ⦃ et ⦄ {f} .Size.has-of-size =
-    Replacement.Image (et .idsᵉ) f , Replacement.Image≃Im _ _
-  {-# OVERLAPPING Size-Image #-}
+  Size-Image : Size (ℓᵃ ⊔ ℓⁱ) (Im f)
+  Size-Image .Size.has-of-size = Image , Image≃Im
