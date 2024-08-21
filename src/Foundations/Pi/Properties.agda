@@ -9,7 +9,7 @@ open import Foundations.Isomorphism
 open import Foundations.Transport
 
 private variable
-  ℓ ℓ′ ℓ″ : Level
+  ℓ ℓ′ ℓ″ ℓ‴ : Level
   A B C D : Type ℓ
   P Q : A → Type ℓ′
 
@@ -27,7 +27,7 @@ private variable
 Π-dom-≃ : {A : Type ℓ} {B : Type ℓ′} {P : A → Type ℓ″}
           (e : B ≃ A)
         → Π[ x ꞉ A ] P x
-        ≃ Π[ x ꞉ B ] P (e .fst x)
+        ≃ Π[ x ꞉ B ] P (e $ x)
 Π-dom-≃ {A} {B} {P} e = ≅→≃ $ to , iso from ri li where
   module e = Equiv e
   to : Π[ x ꞉ A ] P x → Π[ x ꞉ B ] P (e.to x)
@@ -46,6 +46,12 @@ private variable
   li k = fun-ext λ x →
            ap (subst P _) (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x))) ⁻¹)
          ∙ transport⁻-transport (ap P (e.ε x) ⁻¹) _
+
+Π-ap : {A : Type ℓ} {A′ : Type ℓ′} {P : A → Type ℓ″} {Q : A′ → Type ℓ‴}
+       (e : A ≃ A′)
+     → Π[ a ꞉ A ] (P a ≃ Q (e $ a))
+     → Π[ x ꞉ A ] P x ≃ Π[ y ꞉ A′ ] Q y
+Π-ap e e′ = Π-cod-≃ e′ ∙ Π-dom-≃ e ⁻¹
 
 Π≃∀ : Π[ x ꞉ A ] P x
     ≃ ∀[ x ꞉ A ] P x

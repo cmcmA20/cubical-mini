@@ -52,6 +52,10 @@ open is-iso
        → a ＝ c → b ＝ d → (a , b) ＝ (c , d)
 ×-path ac bd i = (ac i , bd i)
 
+×-path-inv : {B : Type ℓ′} {a c : A} {b d : B}
+       → (a , b) ＝ (c , d) → (a ＝ c) × (b ＝ d)
+×-path-inv p = ap fst p , ap snd p
+
 Σ-ap-snd : {A : Type ℓ} {P : A → Type ℓ′} {Q : A → Type ℓ″}
          → Π[ x ꞉ A ] (P x ≃ Q x) → Σ A P ≃ Σ A Q
 Σ-ap-snd {A} {P} {Q} pointwise = ≅→≃ morp where
@@ -109,7 +113,7 @@ open is-iso
        (e : A ≃ A′)
      → Π[ a ꞉ A ] (P a ≃ Q (e .fst a))
      → Σ A P ≃ Σ A′ Q
-Σ-ap e e′ = Σ-ap-snd e′ ∙ₑ Σ-ap-fst e
+Σ-ap e e′ = Σ-ap-snd e′ ∙ Σ-ap-fst e
 
 ×-ap : {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
      → A ≃ C → B ≃ D → A × B ≃ C × D
@@ -121,6 +125,10 @@ open is-iso
 Σ-assoc .fst (x , y , z) = (x , y) , z
 Σ-assoc .snd .equiv-proof y .fst = strict-contr-fibres (λ { ((x , y) , z) → x , y , z}) y .fst
 Σ-assoc .snd .equiv-proof y .snd = strict-contr-fibres (λ { ((x , y) , z) → x , y , z}) y .snd
+
+×-assoc : {B : Type ℓ′} {C : Type ℓ″}
+        → A × B × C ≃ (A × B) × C
+×-assoc = Σ-assoc
 
 Σ-Π-distrib : {A : Type ℓ} {B : A → Type ℓ′} {C : (x : A) → B x → Type ℓ″}
             → Π[ x ꞉ A ] Σ[ y ꞉ B x ] C x y
