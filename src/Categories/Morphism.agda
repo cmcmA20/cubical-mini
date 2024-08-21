@@ -523,3 +523,24 @@ opaque
     {B = λ i → (f′ g′ : Hom (b i) c) → f′ ∘ pa i ＝ g′ ∘ pa i → f′ ＝ g′}
     (λ _ → hlevel 1)
     (f .epic) (g .epic) i
+
+
+invertible→to-has-section : is-invertible f → has-section f
+invertible→to-has-section f-inv .section = is-invertible.inv f-inv
+invertible→to-has-section f-inv .is-section = is-invertible.inv-l f-inv
+
+iso→to-has-section : (f : a ≅ b) → has-section (f .to)
+iso→to-has-section f .section = f .from
+iso→to-has-section f .is-section = f .inv-l
+
+iso→from-has-section : (f : a ≅ b) → has-section (f .from)
+iso→from-has-section f .section = f .to
+iso→from-has-section f .is-section = f .inv-r
+
+iso→to-has-retract : (f : a ≅ b) → has-retract (f .to)
+iso→to-has-retract f .retract = f .from
+iso→to-has-retract f .is-retract = f .inv-r
+
+iso→from-has-retract : (f : a ≅ b) → has-retract (f .from)
+iso→from-has-retract f .retract = f .to
+iso→from-has-retract f .is-retract = f .inv-l
