@@ -12,7 +12,7 @@ open import Data.Sum
 private variable o ℓ o′ ℓ′ o″ ℓ″ : Level
 
 Initial-Poset : Initial (Posets o ℓ)
-Initial-Poset .Initial.bot = 𝟘ₚ
+Initial-Poset .Initial.bot = ⊥
 Initial-Poset .Initial.has-⊥ _ .fst .hom ()
 Initial-Poset .Initial.has-⊥ _ .fst .pres-≤ ()
 Initial-Poset .Initial.has-⊥ _ .snd _ = ext λ()

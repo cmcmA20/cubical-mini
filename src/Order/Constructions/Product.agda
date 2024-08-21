@@ -15,7 +15,7 @@ import Order.Reasoning
 private variable o ℓ o′ ℓ′ o″ ℓ″ : Level
 
 Terminal-Poset : Terminal (Posets o ℓ)
-Terminal-Poset .Terminal.top = 𝟙ₚ
+Terminal-Poset .Terminal.top = ⊤
 Terminal-Poset .Terminal.has-⊤ _ .fst .hom = _
 Terminal-Poset .Terminal.has-⊤ _ .fst .pres-≤ = _
 Terminal-Poset .Terminal.has-⊤ _ .snd _ = trivial!

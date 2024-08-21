@@ -26,10 +26,11 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     ≤-trans   : ∀ {x y z} → x ≤ y → y ≤ z → x ≤ z
     ≤-antisym : ∀ {x y} → x ≤ y → y ≤ x → x ＝ y
 
-  instance
+  instance opaque
     H-Level-≤-prop : ∀ {x y} → H-Level (suc n) (x ≤ y)
     H-Level-≤-prop = hlevel-prop-instance ≤-thin
 
+  instance
     Refl-≤ : Refl _≤_
     Refl-≤ .refl = ≤-refl
 
@@ -38,6 +39,7 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
     ⇒-Hom ._⇒_ = _≤_
+    {-# INCOHERENT ⇒-Hom #-}
 
   opaque
     ob-is-set : is-set Ob
@@ -45,17 +47,13 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
       {r = λ _ → ≤-refl , ≤-refl}
       (set-identity-system! (≤-antisym $ₜ²_))
 
-    ≤-refl′ : ∀ {x y} → x ＝ y → x ≤ y
-    ≤-refl′ {x} p = subst (x ≤_) p ≤-refl
-
-  instance
+  instance opaque
     H-Level-poset-ob : ⦃ n ≥ʰ 2 ⦄ → H-Level n Ob
     H-Level-poset-ob ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 ob-is-set
 
 unquoteDecl poset-iso = declare-record-iso poset-iso (quote Poset)
 
-private variable
-  o o′ o″ ℓ ℓ′ ℓ″ : Level
+private variable o o′ o″ ℓ ℓ′ ℓ″ : Level
 
 instance
   Underlying-Poset : Underlying (Poset o ℓ)
@@ -79,17 +77,21 @@ instance
   hlevel-proj-poset-hom .get-argument _ = type-error []
 
 
-record Monotone {o o′ ℓ ℓ′}
-  (P : Poset o ℓ) (Q : Poset o′ ℓ′) : 𝒰 (o ⊔ o′ ⊔ ℓ ⊔ ℓ′) where
-  no-eta-equality
-  constructor mk-monotone
+module _ (P : Poset o ℓ) (Q : Poset o′ ℓ′) where
   private
     module P = Poset P
     module Q = Poset Q
-  field
-    hom    : P.Ob → Q.Ob
-    pres-≤ : ∀ {x y} → x P.≤ y → hom x Q.≤ hom y
-{-# INLINE mk-monotone #-}
+
+  is-monotone : (f : ⌞ P ⌟ → ⌞ Q ⌟) → Type _
+  is-monotone f = ∀{x y} → x ⇒ y → f x ⇒ f y
+
+  record Monotone : 𝒰 (o ⊔ o′ ⊔ ℓ ⊔ ℓ′) where
+    no-eta-equality
+    constructor mk-monotone
+    field
+      hom    : P.Ob → Q.Ob
+      pres-≤ : is-monotone hom
+  {-# INLINE mk-monotone #-}
 
 open Monotone public
 
@@ -160,15 +162,15 @@ _ᵒᵖᵖ : Poset o ℓ → Poset o ℓ
 (P ᵒᵖᵖ) .Poset.≤-trans = flip (Poset.≤-trans P)
 (P ᵒᵖᵖ) .Poset.≤-antisym = flip (Poset.≤-antisym P)
 
-𝟘ₚ : Poset o ℓ
-𝟘ₚ .Poset.Ob = ⊥
-𝟘ₚ .Poset._≤_ _ _ = ⊥
-𝟘ₚ .Poset.≤-thin = hlevel 1
+instance
+  ⊥-Poset : ⊥-notation (Poset o ℓ)
+  ⊥-Poset .⊥ .Poset.Ob = ⊥
+  ⊥-Poset .⊥ .Poset._≤_ _ _ = ⊥
 
-𝟙ₚ : Poset o ℓ
-𝟙ₚ .Poset.Ob = ⊤
-𝟙ₚ .Poset._≤_ _ _ = ⊤
-𝟙ₚ .Poset.≤-thin = hlevel 1
-𝟙ₚ .Poset.≤-refl = _
-𝟙ₚ .Poset.≤-trans = _
-𝟙ₚ .Poset.≤-antisym _ _ = refl
+  ⊤-Poset : ⊤-notation (Poset o ℓ)
+  ⊤-Poset .⊤ .Poset.Ob = ⊤
+  ⊤-Poset .⊤ .Poset._≤_ _ _ = ⊤
+  ⊤-Poset .⊤ .Poset.≤-thin = hlevel 1
+  ⊤-Poset .⊤ .Poset.≤-refl = _
+  ⊤-Poset .⊤ .Poset.≤-trans = _
+  ⊤-Poset .⊤ .Poset.≤-antisym _ _ = refl

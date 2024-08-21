@@ -14,10 +14,12 @@ open import Meta.Reflection.Base
 open import Structures.n-Type
 
 open import Data.Bool.Base
+open import Data.Empty.Base
 open import Data.Reflection.Argument
 open import Data.Reflection.Literal
 open import Data.Reflection.Term
 open import Data.Truncation.Propositional.Base
+open import Data.Unit.Base
 
 open import Functions.Embedding using (Injective)
 
@@ -392,3 +394,18 @@ module _ {C : Precategory oᶜ hᶜ}
         (λ i → Π-is-of-hlevel 1
           λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa .idsᵉ)) (D .Hom-set _ _ _ _))
         _ _
+
+instance
+  ⊥-Cat : ⊥-notation (Precategory o ℓ)
+  ⊥-Cat .⊥ .Ob = ⊥
+  ⊥-Cat .⊥ .Hom _ _ = ⊥
+
+  ⊤-Cat : ⊤-notation (Precategory o ℓ)
+  ⊤-Cat .⊤ .Ob = ⊤
+  ⊤-Cat .⊤ .Hom _ _ = ⊤
+  ⊤-Cat .⊤ .Hom-set _ _ = hlevel 2
+  ⊤-Cat .⊤ .id = _
+  ⊤-Cat .⊤ ._∘_ _ _ = _
+  ⊤-Cat .⊤ .id-l _ = refl
+  ⊤-Cat .⊤ .id-r _ = refl
+  ⊤-Cat .⊤ .assoc _ _ _ = refl
