@@ -38,9 +38,6 @@ instance
 single : ⦃ X-set : H-Level 2 X ⦄ → X → ℙ X (level-of-type X)
 single x t = el! (x ＝ t)
 
-⋁_ : {I : 𝒰 ℓ} → (I → ℙ X ℓ) → ℙ X ℓ
-⋁_ {I} F x = el! (∃[ i ꞉ I ] x ∈ F i)
-
 instance
   ∃-ℙ
     : {A : Type ℓ′} ⦃ ua : Underlying A ⦄

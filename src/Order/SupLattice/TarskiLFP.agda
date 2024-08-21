@@ -286,10 +286,10 @@ module _
         e = resizing-cond total-space-𝓘-is-small
 
         sup-𝓘 : Ob
-        sup-𝓘 = ⋃ {I = Σ[ 𝓘'-subset ]} (β ∘ₜ 𝕋→carrier 𝓘nd ∘ₜ (e $_))
+        sup-𝓘 = ⋃ {I = Σ[ 𝓘'-subset ]} (β ∘ₜ fst ∘ₜ (e $_))
 
         sup-𝓘-is-lub : is-lub P (ℙ→fam β 𝓘nd .snd) sup-𝓘
-        sup-𝓘-is-lub = sup-of-small-fam-is-lub L (β ∘ₜ 𝕋→carrier 𝓘nd) total-space-𝓘-is-small
+        sup-𝓘-is-lub = sup-of-small-fam-is-lub L (β ∘ₜ fst) total-space-𝓘-is-small
 
       sup-𝓘-is-fixed-point : Γ ϕ loc # sup-𝓘 ＝ sup-𝓘
       sup-𝓘-is-fixed-point =
