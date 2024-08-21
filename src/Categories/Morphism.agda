@@ -386,7 +386,7 @@ instance
   Refl-iso : Refl _≅_
   Refl-iso .refl = id-iso
 
-  Trans-iso : Trans _≅_ _≅_ _≅_
+  Trans-iso : Transitive _≅_
   Trans-iso ._∙_ f g = f ∘ᵢ g
 
 invertible-∘
@@ -415,6 +415,10 @@ _ᵢ⁻¹ : a ≅ b → b ≅ a
 (f ᵢ⁻¹) .from = f .to
 (f ᵢ⁻¹) .inverses .inv-l = f .inverses .inv-r
 (f ᵢ⁻¹) .inverses .inv-r = f .inverses .inv-l
+
+instance
+  Symm-iso : Symmetric _≅_
+  Symm-iso ._⁻¹ = _ᵢ⁻¹
 
 make-invertible : {f : a ⇒ b} (g : b ⇒ a) → f ∘ g ＝ id → g ∘ f ＝ id → is-invertible f
 make-invertible g _ _ .is-invertible.inv = g
