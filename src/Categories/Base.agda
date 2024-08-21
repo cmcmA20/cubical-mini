@@ -49,13 +49,15 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
            → f ＝ g
   Mor-path p q r i = p i , q i , r i
 
-  hom-set′ : ∀ {x y} → is-set (Hom x y)
-  hom-set′ = Hom-set _ _
+  opaque
+    hom-set′ : ∀ {x y} → is-set (Hom x y)
+    hom-set′ = Hom-set _ _
 
-  instance
+  instance opaque
     H-Level-Hom : ∀ {x y} {k} → H-Level (2 + k) (Hom x y)
     H-Level-Hom = hlevel-basic-instance 2 hom-set′
 
+  instance
     Refl-Hom : Refl Hom
     Refl-Hom .refl = id
 
@@ -64,6 +66,7 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 h)
     ⇒-Hom ._⇒_ = Hom
+    {-# INCOHERENT ⇒-Hom #-}
 
 private variable
   o h ℓ o′ h′ ℓ′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level

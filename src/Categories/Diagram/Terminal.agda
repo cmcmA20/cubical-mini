@@ -20,6 +20,7 @@ module _ {o h} (C : Precategory o h) where
     instance
       ⊤-Terminal : ⊤-notation Ob
       ⊤-Terminal .⊤ = top
+    {-# INCOHERENT ⊤-Terminal #-}
 
     ! : {x : Ob} → x ⇒ ⊤
     ! = centre $ has-⊤ _
@@ -57,7 +58,7 @@ module _ {o h} {C : Precategory o h} where
       id ∘ h                         ~⟨ id-l _ ⟩
       h                              ∎
 
-  instance
+  instance opaque
     H-Level-Terminal
       : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄ ⦃ _ : is-category C ⦄
       → H-Level n (Terminal C)

@@ -20,6 +20,7 @@ module _ {o h} (C : Precategory o h) where
     instance
       ⊥-Initial : ⊥-notation Ob
       ⊥-Initial .⊥ = bot
+    {-# INCOHERENT ⊥-Initial #-}
 
     ¡ : {x : Ob} → ⊥ ⇒ x
     ¡ = centre $ has-⊥ _
@@ -45,7 +46,7 @@ module _ {o h} {C : Precategory o h} where
     initial-is-prop cat = ≅→is-of-hlevel 1 Initial-Iso $
       λ x y → cat .to-path (⊥-unique (mk-initial $ₜ² x) (mk-initial $ₜ² y)) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Initial
       : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄ ⦃ _ : is-category C ⦄
       → H-Level n (Initial C)
