@@ -66,7 +66,7 @@ module Order.SupLattice.SmallBasis
 
     ↓ᴮ-is-small : {x : Ob} → is-of-size ℓ′ (↓ᴮ x)
     ↓ᴮ-is-small {x} = small-↓ᴮ x , small-↓ᴮ-≃-↓ᴮ
-     
+
     -- this is the only part that suplattice is required for
     is-supᴮ' : {x : Ob} → x ＝ ⋃ (small-↓ᴮ-inclusion {x})
     is-supᴮ' {x} = equiv-reindexing (small-↓ᴮ-≃-↓ᴮ)
