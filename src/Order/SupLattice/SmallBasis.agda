@@ -10,7 +10,8 @@ import Order.Reasoning
 
 module Order.SupLattice.SmallBasis
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
+  (P : Poset o ℓ)
+  (L : is-sup-lattice P ℓ′)
   (β : B → ⌞ P ⌟) where
 
   open Order.Reasoning P
@@ -50,6 +51,10 @@ module Order.SupLattice.SmallBasis
     ≤ᴮ-is-prop : {b : B} {x : Ob} → is-prop (b ≤ᴮ x)
     ≤ᴮ-is-prop = ≃→is-of-hlevel! 1 ≤ᴮ≃≤
 
+    instance
+      H-Level-≤ᴮ : ∀{n} {b : B} {x : Ob} ⦃ _ : 1 ≤ʰ n ⦄ → H-Level n (b ≤ᴮ x)
+      H-Level-≤ᴮ ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance ≤ᴮ-is-prop
+
     small-↓ᴮ : Ob → 𝒰 ℓ′
     small-↓ᴮ x = Σ[ b ꞉ B ] b ≤ᴮ x
 
@@ -61,7 +66,8 @@ module Order.SupLattice.SmallBasis
 
     ↓ᴮ-is-small : {x : Ob} → is-of-size ℓ′ (↓ᴮ x)
     ↓ᴮ-is-small {x} = small-↓ᴮ x , small-↓ᴮ-≃-↓ᴮ
-
+     
+    -- this is the only part that suplattice is required for
     is-supᴮ' : {x : Ob} → x ＝ ⋃ (small-↓ᴮ-inclusion {x})
     is-supᴮ' {x} = equiv-reindexing (small-↓ᴮ-≃-↓ᴮ)
       x
@@ -81,7 +87,3 @@ module Order.SupLattice.SmallBasis
     is-lubᴮ : {x : Ob} (u' : Ob)
             → ((s : small-↓ᴮ x) → small-↓ᴮ-inclusion s ≤ u') → x ≤ u'
     is-lubᴮ = least is-supᴮ
-
-    instance
-      H-Level-≤ᴮ : ∀{n} {b : B} {x : Ob} ⦃ _ : 1 ≤ʰ n ⦄ → H-Level n (b ≤ᴮ x)
-      H-Level-≤ᴮ ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance ≤ᴮ-is-prop

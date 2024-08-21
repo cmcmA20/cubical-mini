@@ -186,6 +186,8 @@ module _ {P : Poset o ℓ} where
       mk-lub i .Lub.has-lub =
         const-inhabited-fam→is-lub (λ j → is-const j i) ∣ i ∣₁
 
+-- TODO use order embeddings from 1lab
+
 ≃→is-lub : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
              {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} {x : ⌞ P ⌟}
          → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
@@ -199,6 +201,18 @@ module _ {P : Poset o ℓ} where
   mt $
   l .is-lub.least (e ⁻¹ $ ub′)
   λ i → mf $ subst (Poset._≤_ Q (e $ F i)) (is-equiv→counit (e .snd) ub′ ⁻¹) $ f i
+
+≃→is-lub′ : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+             {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} {x : ⌞ Q ⌟}
+         → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
+         → (∀ {x y} → Poset._≤_ P x y → Poset._≤_ Q (e $ x) (e $ y))
+         → (∀ {x y} → Poset._≤_ Q (e $ x) (e $ y) → Poset._≤_ P x y)
+         → is-lub P (λ i → is-equiv→inverse (e .snd) (F i)) (is-equiv→inverse (e .snd) x)
+         → is-lub Q F x
+≃→is-lub′ {P} {Q} {F} {x} e mt mf l =
+  subst (λ q → is-lub Q q x) (fun-ext λ i → is-equiv→counit (e .snd) (F i)) $
+  subst (is-lub Q (λ i → e .fst (is-equiv→inverse (e .snd) (F i)))) (is-equiv→counit (e .snd) x) $
+  ≃→is-lub {P = P} {Q = Q} e mt mf l
 
 ≃→Lub : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
           {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟}
@@ -218,5 +232,5 @@ module _ {P : Poset o ℓ} where
          → Lub P (λ i → is-equiv→inverse (e .snd) (F i))
          → Lub Q F
 ≃→Lub′ {Q} {F} e mt mf l =
- subst (Lub Q) (fun-ext λ i → is-equiv→counit (e .snd) (F i)) $
- ≃→Lub e mt mf l
+  subst (Lub Q) (fun-ext λ i → is-equiv→counit (e .snd) (F i)) $
+  ≃→Lub e mt mf l
