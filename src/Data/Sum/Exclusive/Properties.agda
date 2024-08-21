@@ -74,3 +74,14 @@ universal = ≅→≃ the-iso where
 
 ⊻↪⊎ : (A ⊻ B) ↪ (A ⊎ B)
 ⊻↪⊎ = ≃→↪ ⊻≃×¬⊎×¬ ∙ ⊎↪ (fst , subset-proj-is-embedding (λ _ → hlevel 1)) (fst , subset-proj-is-embedding (λ _ → hlevel 1))
+
+⊻-is-of-size : is-of-size ℓᶜ A → is-of-size ℓᵈ B
+             → is-of-size (ℓᶜ ⊔ ℓᵈ) (A ⊻ B)
+⊻-is-of-size {ℓᶜ} {ℓᵈ} (A , as) (B , bs) = A ⊻ B , ⊻-ap as bs
+
+instance
+  Size-⊻ : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+           ⦃ sa : Size ℓᶜ A ⦄
+           ⦃ sb : Size ℓᵈ B ⦄
+         → Size (ℓᶜ ⊔ ℓᵈ) (A ⊻ B)
+  Size-⊻ {ℓᶜ} {ℓᵈ} .Size.has-of-size = ⊻-is-of-size (size ℓᶜ) (size ℓᵈ)

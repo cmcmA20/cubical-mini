@@ -19,11 +19,11 @@ open import Data.Unit.Base
 open import Data.Unit.Properties
 
 private variable
-  ℓᵃ ℓᵇ ℓᶜ ℓ¹ ℓ² ℓ³ : Level
+  ℓᵃ ℓᵇ ℓᶜ ℓ ℓ′ ℓ″ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
   C : Type ℓᶜ
-  P Q R : A → B → 𝒰 ℓ¹
+  P Q R : A → B → 𝒰 ℓ
   x : A
   y : B
   @0 xs : List A
@@ -35,9 +35,9 @@ data All² {ℓᵃ ℓᵇ ℓ¹} {A : Type ℓᵃ} {B : Type ℓᵇ}
   []  : All² R [] []
   _∷_ : R x y → All² R xs ys → All² R (x ∷ xs) (y ∷ ys)
 
-module _ {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {R : A → B → 𝒰 ℓ¹}
-         ⦃ ep : {a : A} {b : B} → Extensional (R a b) ℓ¹ ⦄ where
-  Code-All² : {xs : List A} {ys : List B} (p q : All² R xs ys) → 𝒰 ℓ¹
+module _ {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {R : A → B → 𝒰 ℓ}
+         ⦃ ep : {a : A} {b : B} → Extensional (R a b) ℓ ⦄ where
+  Code-All² : {xs : List A} {ys : List B} (p q : All² R xs ys) → 𝒰 ℓ
   Code-All² {xs = []}     {ys = []}     []       []       = ⊤
   Code-All² {xs = x ∷ xs} {ys = y ∷ ys} (px ∷ p) (qx ∷ q) = ep .Pathᵉ px qx × Code-All² p q
 
@@ -57,7 +57,7 @@ module _ {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {R : A → B → 𝒰 ℓ¹}
   decode-all²-refl {xs = x ∷ xs} {ys = y ∷ ys} {p = px ∷ p} {q = qx ∷ q} (cx , c)  =
     ep .idsᵉ .to-path-over cx ,ₚ decode-all²-refl c
 
-  Extensional-All² : {xs : List A} {ys : List B} → Extensional (All² R xs ys) ℓ¹
+  Extensional-All² : {xs : List A} {ys : List B} → Extensional (All² R xs ys) ℓ
   Extensional-All² .Pathᵉ              = Code-All²
   Extensional-All² .reflᵉ              = code-all²-refl
   Extensional-All² .idsᵉ .to-path      = decode-all²
@@ -97,7 +97,7 @@ all²-split {as = []}     {bs = []}     _  rs      = [] , rs
 all²-split {as = []}     {bs = b ∷ bs} e  rs      = false! e
 all²-split {as = a ∷ as} {bs = []}     e  rs      = false! e
 all²-split {as = a ∷ as} {bs = x ∷ bs} e (r ∷ rs) =
-  let (rab , rxy) = all²-split (suc-inj e) rs in (r ∷ rab) , rxy
+  first (r ∷_) (all²-split (suc-inj e) rs)
 
 all²-map : {@0 xs : List A} {@0 ys : List B}
          → ∀ᴱ[ R ⇒ Q ]
@@ -118,14 +118,14 @@ all²-replicate-r {xs = []}     h = []
 all²-replicate-r {xs = x ∷ xs} h = h x ∷ all²-replicate-r h
 
 all²-antisym : {as bs : List A}
-               {P : A → A → 𝒰 ℓ¹}
+               {P : A → A → 𝒰 ℓ}
              → (∀ a b → P a b → P b a → a ＝ b)
              → All² P as bs → All² P bs as → as ＝ bs
 all²-antisym     {as = []}     {bs = []}     pa []        []          = refl
 all²-antisym {A} {as = a ∷ as} {bs = b ∷ bs} pa (ab ∷ abs) (ba ∷ bas) =
   ap² {C = λ _ _ → List A} _∷_ (pa a b ab ba) (all²-antisym pa abs bas)
 
-all²-refl : {as : List A} {P : A → A → 𝒰 ℓ¹}
+all²-refl : {as : List A} {P : A → A → 𝒰 ℓ}
           → ⦃ Reflexive P ⦄
           → All² P as as
 all²-refl {as = []}     = []
@@ -133,7 +133,7 @@ all²-refl {as = a ∷ as} = refl ∷ all²-refl
 
 -- monotype version
 all²-∙ : {@0 as bs cs : List A}
-         {P : A → A → 𝒰 ℓ¹}
+         {P : A → A → 𝒰 ℓ}
        → ⦃ Transitive P ⦄
        → All² P as bs → All² P bs cs → All² P as cs
 all²-∙ []         []         = []
@@ -146,25 +146,27 @@ instance
   Trans-All² : ⦃ Transitive P ⦄ → Transitive (λ xs ys → All² P xs ys)
   Trans-All² ._∙_ = all²-∙
 
-all²-is-of-size : {P : A → B → 𝒰 ℓ¹} {as : List A} {bs : List B}
-                → (∀ a b → is-of-size ℓ² (P a b))
-                → is-of-size ℓ² (All² P as bs)
-all²-is-of-size {ℓ²} {as = []}     {bs = []}     psz =
+all²-is-of-size : {P : A → B → 𝒰 ℓ} {as : List A} {bs : List B}
+                → (∀ a b → is-of-size ℓ′ (P a b))
+                → is-of-size ℓ′ (All² P as bs)
+all²-is-of-size {as = []}     {bs = []}     psz =
   ⊤ , lift≃id ∙ is-contr→equiv-⊤ ([] , (λ where [] → refl)) ⁻¹
-all²-is-of-size {ℓ²} {as = []}     {bs = b ∷ bs} psz =
+all²-is-of-size {as = []}     {bs = b ∷ bs} psz =
   ⊥ , lift≃id ∙ ¬→≃⊥ (λ where ()) ⁻¹
-all²-is-of-size {ℓ²} {as = a ∷ as} {bs = []}     psz =
+all²-is-of-size {as = a ∷ as} {bs = []}     psz =
   ⊥ , lift≃id ∙ ¬→≃⊥ (λ where ()) ⁻¹
-all²-is-of-size {ℓ²} {P} {as = a ∷ as} {bs = b ∷ bs} psz =
-  ≃→is-of-size {A = P a b × All² P as bs}
-    (≅→≃ ((λ where (p , as) → p ∷ as) , iso (λ where (p ∷ as) → p , as)
-         (λ where (p ∷ as) → refl) λ where (p , as) → refl))
-    (×-is-of-size (psz a b) (all²-is-of-size {as = as} {bs = bs} psz))
+all²-is-of-size {P} {as = a ∷ as} {bs = b ∷ bs} psz =
+  ≃→is-of-size (≅→≃ go) (×-is-of-size (psz a b) (all²-is-of-size psz))
+  where
+  go : Iso (P a b × All² P as bs) (All² P (a ∷ as) (b ∷ bs))
+  go .fst = _∷_ $ₜ²_
+  go .snd .is-iso.inv (p ∷ as) = p , as
+  go .snd .is-iso.rinv (_ ∷ _) = refl
+  go .snd .is-iso.linv _ = refl
 
 instance
   Size-All²
-      : {A : Type ℓᵃ} {B : Type ℓᵇ} {P : A → B → 𝒰 ℓ¹} {as : List A} {bs : List B}
-        ⦃ sp : ∀{a b} → Size ℓ² (P a b) ⦄
-      → Size ℓ² (All² P as bs)
-  Size-All² {ℓ²} .Size.has-of-size = all²-is-of-size λ a b → size ℓ²
-  {-# OVERLAPPABLE Size-All² #-}
+      : {A : Type ℓᵃ} {B : Type ℓᵇ} {P : A → B → 𝒰 ℓ} {as : List A} {bs : List B}
+        ⦃ sp : ∀{a b} → Size ℓ′ (P a b) ⦄
+      → Size ℓ′ (All² P as bs)
+  Size-All² .Size.has-of-size = all²-is-of-size λ a b → size _

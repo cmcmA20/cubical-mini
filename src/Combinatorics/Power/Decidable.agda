@@ -2,6 +2,7 @@
 module Combinatorics.Power.Decidable where
 
 open import Meta.Prelude
+open import Meta.Extensionality
 
 open import Structures.n-Type
 
@@ -26,15 +27,6 @@ private variable
 is-complemented : {ℓ : Level} (A : ℙ X ℓ) → Type (level-of-type X ⊔ ℓsuc ℓ)
 is-complemented {X} {ℓ} A = Σ[ A⁻¹ ꞉ ℙ X ℓ ] (A ∩ A⁻¹       ⊆ the (ℙ X ℓ) ⊥)
                                            × (the (ℙ X ℓ) ⊤ ⊆ A ∪ A⁻¹)
-
-is-decidable-subset : (A : ℙ X ℓ) → Type (level-of-type X ⊔ ℓ)
-is-decidable-subset {X} A = Decidable (λ (x : X) → x ∈ A)
-
-instance
-  Decidability-subset : Decidability (ℙ X ℓ)
-  Decidability-subset {ℓ} .ℓ-decidability = _
-  Decidability-subset .Decidable = is-decidable-subset
-  {-# OVERLAPPING Decidability-subset #-}
 
 is-complemented→is-decidable-subset : (A : ℙ X ℓ) → is-complemented A → Decidable A
 is-complemented→is-decidable-subset A (A⁻¹ , int , uni) {x} = case uni _ of
@@ -61,7 +53,7 @@ decidable-subobject-classifier {ℓ} {X} = ≅→≃ $ to , iso (λ pr x → fro
                             (λ x∉A → false , prop-extₑ! (λ ()) λ x∈A → false! (x∉A x∈A)) d
 
   ri : _
-  ri A = ℙ-ext (from A _ .snd .fst ∘ lower) (lift ∘ (from A _ .snd ⁻¹ $_)) ,ₚ prop!
+  ri A = ext (λ a → (lower ∙ from A a .snd .fst) , (from A a .snd ⁻¹) #_ ∙ lift) ,ₚ prop!
 
   li : _
   li ch = fun-ext λ x → Bool.elim {P = λ p → from (to λ _ → p) x .fst ＝ p} refl refl (ch x)

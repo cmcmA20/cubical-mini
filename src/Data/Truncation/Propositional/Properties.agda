@@ -87,7 +87,7 @@ rec-set! f-const = rec-set f-const (hlevel 2)
 ∥-∥₁-is-of-size = bimap ∥_∥₁ ae
 
 instance
-  Size-∥-∥₁ : {A : Type ℓ} → ⦃ _ : Size ℓ′ A ⦄ → Size ℓ′ ∥ A ∥₁
+  Size-∥-∥₁ : {A : Type ℓ} ⦃ _ : Size ℓ′ A ⦄ → Size ℓ′ ∥ A ∥₁
   Size-∥-∥₁ {ℓ′} .Size.has-of-size = ∥-∥₁-is-of-size (size ℓ′)
 
   Extensional-Σ-∥-∥₁
@@ -176,5 +176,5 @@ module Replacement
         (u , α) → quot (ls.encode (ap fst α ⁻¹)) ,ₚ Σ-prop-square!
           (commutes→square (ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹))
 
-  Size-Image : Size (ℓᵃ ⊔ ℓⁱ) (Im f)
-  Size-Image .Size.has-of-size = Image , Image≃Im
+  Size-Im : Size (ℓᵃ ⊔ ℓⁱ) (Im f)
+  Size-Im .Size.has-of-size = Image , Image≃Im

@@ -19,8 +19,7 @@ private variable
   ℙA₁ : Type ℓ′
   ℙA₂ : Type ℓ″
 
-infix  20 _⊆_
-infixr 20 _≬_
+infix 20 _⊆_ _≬_
 _⊆_ _≬_
   : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
   → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)

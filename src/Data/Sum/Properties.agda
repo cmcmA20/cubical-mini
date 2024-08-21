@@ -119,8 +119,7 @@ universal = ≅→≃ the-iso where
 
 ⊎-is-of-size : is-of-size ℓᶜ A → is-of-size ℓᵈ B
              → is-of-size (ℓᶜ ⊔ ℓᵈ) (A ⊎ B)
-⊎-is-of-size {ℓᶜ} {ℓᵈ} Asz Bsz =
-  Asz .fst ⊎ Bsz .fst , ⊎-ap (Asz .snd) (Bsz .snd)
+⊎-is-of-size {ℓᶜ} {ℓᵈ} (A , as) (B , bs) = A ⊎ B , ⊎-ap as bs
 
 instance
   Size-⊎ : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
@@ -128,4 +127,3 @@ instance
            ⦃ sb : Size ℓᵈ B ⦄
          → Size (ℓᶜ ⊔ ℓᵈ) (A ⊎ B)
   Size-⊎ {ℓᶜ} {ℓᵈ} .Size.has-of-size = ⊎-is-of-size (size ℓᶜ) (size ℓᵈ)
-  {-# OVERLAPPABLE Size-⊎ #-}
