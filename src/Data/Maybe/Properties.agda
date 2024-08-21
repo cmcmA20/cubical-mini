@@ -43,4 +43,3 @@ instance
                ⦃ sa : Size ℓ′ A ⦄
              → Size ℓ′ (Maybe A)
   Size-Maybe {ℓ′} .Size.has-of-size = maybe-is-of-size (size ℓ′)
-  {-# OVERLAPPABLE Size-Maybe #-}

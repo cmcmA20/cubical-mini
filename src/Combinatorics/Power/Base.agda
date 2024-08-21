@@ -35,42 +35,41 @@ instance
   Trans-⊆ ._∙_ S T = S ∙ T
   {-# OVERLAPPING Trans-⊆ #-}
 
-@0 ℙ-ext : A ⊆ B → B ⊆ A → A ＝ B
-ℙ-ext A⊆B B⊆A = ext λ _ → A⊆B , B⊆A
-
 single : ⦃ X-set : H-Level 2 X ⦄ → X → ℙ X (level-of-type X)
 single x t = el! (x ＝ t)
 
-⋁_ : {I : 𝒰 ℓ} → (I → ℙ X ℓ) → ℙ X ℓ
-⋁_ {I} F x = el! (∃[ i ꞉ I ] x ∈ F i)
-
 instance
-  Intersection-n-Type
-    : Intersection (X → n-Type ℓ n) (X → n-Type ℓ′ n) (X → n-Type (ℓ ⊔ ℓ′) n)
-  Intersection-n-Type ._∩_ A B x = el! ((x ∈ A) × (x ∈ B))
+  ∃-ℙ
+    : {A : Type ℓ′} ⦃ ua : Underlying A ⦄
+    → ∃-notation A (ℙ X ℓ) (ℙ X (ℓ ⊔ ua .ℓ-underlying))
+  ∃-ℙ .∃-notation.∃ A′ F x = el! (∃[ i ꞉ ⌞ A′ ⌟ ] x ∈ F i)
 
-  Union-n-Type
+  Intersection-pow-n-Type
+    : Intersection (X → n-Type ℓ n) (X → n-Type ℓ′ n) (X → n-Type (ℓ ⊔ ℓ′) n)
+  Intersection-pow-n-Type ._∩_ A B x = el! ((x ∈ A) × (x ∈ B))
+
+  Union-pow-n-Type
     : ⦃ _ : 2 ≤ʰ n ⦄
     → Union (X → n-Type ℓ n) (X → n-Type ℓ′ n) (X → n-Type (ℓ ⊔ ℓ′) n)
-  Union-n-Type ⦃ s≤ʰs (s≤ʰs _) ⦄ ._∪_ A B x = el! ((x ∈ A) ⊎ (x ∈ B))
-  {-# OVERLAPS Union-n-Type #-}
+  Union-pow-n-Type ⦃ s≤ʰs (s≤ʰs _) ⦄ ._∪_ A B x = el! ((x ∈ A) ⊎ (x ∈ B))
+  {-# OVERLAPS Union-pow-n-Type #-}
 
-  Union-Prop
-    : Union (X → Prop ℓ) (X → Prop ℓ′) (X → Prop (ℓ ⊔ ℓ′))
-  Union-Prop ._∪_ A B x = el! ((x ∈ A) ⊎₁ (x ∈ B))
-  {-# OVERLAPPING Union-Prop #-}
+  Union-ℙ
+    : Union (ℙ X ℓ) (ℙ X ℓ′) (ℙ X (ℓ ⊔ ℓ′))
+  Union-ℙ ._∪_ A B x = el! ((x ∈ A) ⊎₁ (x ∈ B))
+  {-# OVERLAPPING Union-ℙ #-}
 
-  ⊤-Pow : ⊤-notation (ℙ X ℓ)
-  ⊤-Pow .⊤ _ = ⊤
+  ⊤-ℙ : ⊤-notation (ℙ X ℓ)
+  ⊤-ℙ .⊤ _ = ⊤
 
-  ⊥-Pow : ⊥-notation (ℙ X ℓ)
-  ⊥-Pow .⊥ _ = ⊥
+  ⊥-ℙ : ⊥-notation (ℙ X ℓ)
+  ⊥-ℙ .⊥ _ = ⊥
 
 ⊥⊆ : {A : ℙ X ℓ} → the (ℙ X ℓ′) ⊥ ⊆ A
 ⊥⊆ ()
 
 @0 ⊆⊥→⊥ : A ⊆ ⊥ → A ＝ ⊥
-⊆⊥→⊥ {A} p = ℙ-ext p (⊥⊆ {A = A})
+⊆⊥→⊥ p = ext λ _ → p , λ()
 
 ⊆⊤ : {A : ℙ X ℓ} → A ⊆ the (ℙ X ℓ′) ⊤
 ⊆⊤ = _
@@ -84,10 +83,7 @@ instance
 ∪-⊆ : {A B C : ℙ X ℓ} → A ⊆ C → B ⊆ C → A ∪ B ⊆ C
 ∪-⊆ ac bc = elim! [ ac , bc ]ᵤ
 
--- FIXME what's the point?
-𝕋→carrier : (A : ℙ X ℓ) → Σ[ A ] → X
-𝕋→carrier _ = fst
-
-ℙ→fam : {X : Type ℓˣ} {Y : Type ℓ′}
-      → (X → Y) → ℙ X ℓ → Σ[ I ꞉ 𝒰 (ℓ ⊔ ℓˣ) ] (I → Y)
-ℙ→fam m S = Σ[ S ] , m ∘ 𝕋→carrier S
+ℙ→fam : {X : Type ℓˣ} {Y : Type ℓʸ}
+      → (X → Y) → ℙ X ℓ
+      → Σ[ I ꞉ 𝒰 (ℓ ⊔ ℓˣ) ] (I → Y)
+ℙ→fam m S = Σ[ S ] , m ∘ fst

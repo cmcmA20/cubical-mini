@@ -48,4 +48,4 @@ instance
 
   Size-big : {A : Type ℓ} → Size (ℓ ⊔ ℓ′) A
   Size-big {ℓ′} {A} .has-of-size = Lift ℓ′ A , lift≃id
-  {-# INCOHERENT Size-big #-} -- TODO configure overlaps
+  {-# INCOHERENT Size-big #-}
