@@ -24,18 +24,6 @@ module _ (P : Poset o ℓ) (Q : Poset o′ ℓ′) (f : ⌞ P ⌟ → ⌞ Q ⌟)
   is-order-embedding : Type _
   is-order-embedding = ∀ {x y} → (x ⇒ y) ≃ (f x ⇒ f y)
 
-  is-order-embedding→is-embedding : is-order-embedding → is-embedding f
-  is-order-embedding→is-embedding e = set-injective→is-embedding! λ fx=fy →
-    let
-      x≤y = e ⁻¹ $ =→~ fx=fy
-      y≤x = e ⁻¹ $ =→~ $ sym fx=fy
-    in P.≤-antisym x≤y y≤x
-
-  monotone-reflection→is-order-embedding
-    : is-monotone P Q f → is-order-reflection → is-order-embedding
-  monotone-reflection→is-order-embedding p _ .fst = p
-  monotone-reflection→is-order-embedding p q .snd = biimp-is-equiv! p q
-
 
 module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   private
@@ -44,23 +32,36 @@ module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
 
   open Order.Reasoning P
 
-  section→order-reflection
+  is-order-embedding→is-embedding : (f : ⌞ P ⌟ → ⌞ Q ⌟) → is-order-embedding P Q f → is-embedding f
+  is-order-embedding→is-embedding f e = set-injective→is-embedding! λ fx=fy →
+    let
+      x≤y = e ⁻¹ $ =→~ $ fx=fy
+      y≤x = e ⁻¹ $ =→~ $ fx=fy ⁻¹
+    in P.≤-antisym x≤y y≤x
+
+  monotone-reflection→is-order-embedding
+    : (f : ⌞ P ⌟ → ⌞ Q ⌟) → is-monotone P Q f → is-order-reflection P Q f → is-order-embedding P Q f
+  monotone-reflection→is-order-embedding f p _ .fst = p
+  monotone-reflection→is-order-embedding f p q .snd = biimp-is-equiv! p q
+
+  section→is-order-reflection
     : (f : ⌞ P ⌟ → ⌞ Q ⌟) (g : Q ⇒ P)
     → f is-right-inverse-of (g #_)
     → is-order-reflection P Q f
-  section→order-reflection f g sect {x = x} {y = y} fx≤fy =
+  section→is-order-reflection f g sect {x = x} {y = y} fx≤fy =
     x         =⟨ sect x ⟨
     g # f x   ≤⟨ g .pres-≤ fx≤fy ⟩
     g # f y   =⟨ sect y ⟩
     y         ∎
 
-  section→order-embedding
+  section→is-order-embedding
     : (f : P ⇒ Q) (g : Q ⇒ P)
     → f #_ is-right-inverse-of g #_
     → is-order-embedding P Q (f #_)
-  section→order-embedding f g sect =
-    monotone-reflection→is-order-embedding P Q _
-      (f .pres-≤) (section→order-reflection (f #_) g sect)
+  section→is-order-embedding f g sect =
+    monotone-reflection→is-order-embedding (f #_) (f .pres-≤)
+      (section→is-order-reflection (f #_) g sect)
+
 
 module _ {o ℓ} {P Q : Poset o ℓ} where
   private
@@ -74,14 +75,14 @@ module _ {o ℓ} {P Q : Poset o ℓ} where
     → has-retract f
     → is-order-reflection P Q (f #_)
   has-retract→is-order-reflection f f-ret =
-    section→order-reflection (f #_) (f-ret .retract) (f-ret .is-retract $ₚ_)
+    section→is-order-reflection (f #_) (f-ret .retract) (f-ret .is-retract $ₚ_)
 
   has-retract→is-order-embedding
     : (f : P ⇒ Q)
     → has-retract f
     → is-order-embedding P Q (f #_)
   has-retract→is-order-embedding f f-ret =
-    section→order-embedding f (f-ret .retract) (f-ret .is-retract $ₚ_)
+    section→is-order-embedding f (f-ret .retract) (f-ret .is-retract $ₚ_)
 
   order-iso-is-order-embedding
     : (f : P ≅ Q) → is-order-embedding P Q (f .to #_)
