@@ -9,11 +9,13 @@ private variable
   ℓᵃ ℓ : Level
   A : 𝒰 ℓᵃ
 
--- level-polymorphic, for automation
-record Refl {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ : Level}
-  (_~_ : A → A → 𝒰 ℓ) : 𝒰 (ℓᵃ ⊔ ℓ) where
-  no-eta-equality
-  field refl : ∀ {x} → x ~ x
+module _ {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ : Level} (_~_ : A → A → 𝒰 ℓ) where
+  Reflexivity : 𝒰 (ℓᵃ ⊔ ℓ)
+  Reflexivity = ∀ {x} → x ~ x
+
+  record Refl : 𝒰 (ℓᵃ ⊔ ℓ) where
+    no-eta-equality
+    field refl : Reflexivity
 
 open Refl ⦃ ... ⦄ public
 

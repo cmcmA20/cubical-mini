@@ -14,12 +14,6 @@ private variable
   _✦_ : A → A → A
   n : HLevel
 
-Inverse-left : (id : A) (_⋆_ : A → A → A) (inv : A → A) → 𝒰 _
-Inverse-left {A} id _⋆_ inv = Π[ x ꞉ A ] (inv x ⋆ x ＝ id)
-
-Inverse-right : (id : A) (_⋆_ : A → A → A) (inv : A → A) → 𝒰 _
-Inverse-right {A} id _⋆_ inv = Π[ x ꞉ A ] (x ⋆ inv x ＝ id)
-
 -- monoids
 
 record is-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
@@ -29,8 +23,8 @@ record is-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 
   field
     id   : A
-    id-l : Unital-left  id _⋆_
-    id-r : Unital-right id _⋆_
+    id-l : Unitality-lᵘ A id _⋆_
+    id-r : Unitality-rᵘ A id _⋆_
 
   instance
     Reflᵘ-is-monoid : Reflᵘ A
@@ -131,9 +125,9 @@ record make-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     monoid-is-set : is-set X
     id  : X
     _⋆_ : X → X → X
-    id-l : Unital-left  id _⋆_
-    id-r : Unital-right id _⋆_
-    assoc : Associative _⋆_
+    id-l : Unitality-lᵘ X id _⋆_
+    id-r : Unitality-rᵘ X id _⋆_
+    assoc : Associativityᵘ X _⋆_
 
   to-is-monoid : is-monoid _⋆_
   to-is-monoid .is-monoid.has-semigroup = to-is-semigroup sg where

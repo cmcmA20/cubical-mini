@@ -146,13 +146,13 @@ record make-semiring {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     semiring-is-set : is-set X
     0a 1a : X
     _+_ _·_ : X → X → X
-    +-id-l  : Unital-left  0a _+_
-    +-id-r  : Unital-right 0a _+_
-    +-assoc : Associative _+_
-    +-comm  : Commutative _+_
-    ·-id-l  : Unital-left  1a _·_
-    ·-id-r  : Unital-right 1a _·_
-    ·-assoc : Associative _·_
+    +-id-l  : Unitality-lᵘ X 0a _+_
+    +-id-r  : Unitality-rᵘ X 0a _+_
+    +-assoc : Associativityᵘ X _+_
+    +-comm  : Commutativityᵘ X _+_
+    ·-id-l  : Unitality-lᵘ X 1a _·_
+    ·-id-r  : Unitality-rᵘ X 1a _·_
+    ·-assoc : Associativityᵘ X _·_
     ·-distrib-+-l : Distrib-left  _·_ _+_
     ·-distrib-+-r : Distrib-right _·_ _+_
 

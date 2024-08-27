@@ -2,7 +2,6 @@
 module Foundations.HLevel.Closure where
 
 open import Foundations.Base
-  hiding (inv)
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
 open import Foundations.HLevel.Base

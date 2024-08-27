@@ -2,7 +2,6 @@
 module Foundations.Isomorphism where
 
 open import Foundations.Base
-  hiding (inv)
 open import Foundations.Equiv.Base
 
 private variable
@@ -74,10 +73,10 @@ instance
   Refl-Erased-Iso .refl = id , is-iso→is-isoᴱ id-is-iso
 
   Symm-Iso : Symm (Iso {ℓ} {ℓ′}) Iso
-  Symm-Iso ._⁻¹ r = r .snd .inv , is-iso-inv (r .snd)
+  Symm-Iso .sym r = r .snd .inv , is-iso-inv (r .snd)
 
   Symm-Erased-Iso : Symm (Isoᴱ {ℓ} {ℓ′}) Isoᴱ
-  Symm-Erased-Iso ._⁻¹ (f , g , r , l) = g , f , l , r
+  Symm-Erased-Iso .sym (f , g , r , l) = g , f , l , r
 
   Trans-Iso : Trans (Iso {ℓ} {ℓ′}) (Iso {ℓ′ = ℓ″}) Iso
   Trans-Iso ._∙_ (f , f-iso) (f′ , f′-iso) = f′ ∘ f , is-iso-comp f-iso f′-iso

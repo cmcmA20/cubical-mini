@@ -23,7 +23,7 @@ instance
   Refl-＝ .refl _ = id
 
   Symm-＝ : Symmetric (_＝_ {A = A})
-  Symm-＝ ._⁻¹ p _ q = q ∙ p _ refl ⁻¹
+  Symm-＝ .sym p _ q = q ∙ p _ refl ⁻¹
 
   Trans-＝ : Transitive (_＝_ {A = A})
   Trans-＝ ._∙_ p q _ = q _ ∘ p _

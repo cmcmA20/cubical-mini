@@ -20,13 +20,15 @@ open import Agda.Builtin.Reflection
   using ( Term ; var ; con ; def ; lam ; pat-lam ; pi ; agda-sort
           ; lit ; unknown
         ; Sort ; set ; prop ; inf
-        ; Pattern ; dot ; proj ; absurd
+        ; Pattern ; dot ; proj
         ; Clause ; clause ; absurd-clause
         ; Definition ; function ; data-type ; record-type ; data-cons
           ; axiom ; prim-fun
         )
   renaming ( propLit to prop-lit
-           ; Type    to Type′ )
+           ; absurd  to absurd′
+           ; Type    to Type′
+           )
 
 Telescope = List (String × Arg Term)
 

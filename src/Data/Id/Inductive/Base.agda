@@ -39,7 +39,7 @@ instance
   Refl-Idⁱ .refl = reflⁱ
 
   Symm-Idⁱ : Symmetric (_＝ⁱ_ {A = A})
-  Symm-Idⁱ ._⁻¹ reflⁱ = reflⁱ
+  Symm-Idⁱ .sym reflⁱ = reflⁱ
 
   Trans-Idⁱ : Transitive (_＝ⁱ_ {A = A})
   Trans-Idⁱ ._∙_ reflⁱ reflⁱ = reflⁱ

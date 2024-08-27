@@ -12,9 +12,6 @@ private variable
   _✦_ : A → A → A
   n : HLevel
 
-Commutative : (_⋆_ : A → A → A) → 𝒰 _
-Commutative {A} _⋆_ = Π[ x ꞉ A ] Π[ y ꞉ A ] (y ⋆ x ＝ x ⋆ y)
-
 -- commutative monoids
 
 record is-comm-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
@@ -22,7 +19,7 @@ record is-comm-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   field has-monoid : is-monoid _⋆_
   open is-monoid has-monoid public
 
-  field comm : Commutative _⋆_
+  field comm : Commutativityᵘ A _⋆_
 
 unquoteDecl is-comm-monoid-iso = declare-record-iso is-comm-monoid-iso (quote is-comm-monoid)
 
@@ -62,10 +59,10 @@ record make-comm-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     monoid-is-set : is-set X
     id  : X
     _⋆_ : X → X → X
-    id-l  : Unital-left  id _⋆_
-    id-r  : Unital-right id _⋆_
-    assoc : Associative _⋆_
-    comm  : Commutative _⋆_
+    id-l  : Unitality-lᵘ X id _⋆_
+    id-r  : Unitality-rᵘ X id _⋆_
+    assoc : Associativityᵘ X _⋆_
+    comm  : Commutativityᵘ X _⋆_
 
   to-is-comm-monoid : is-comm-monoid _⋆_
   to-is-comm-monoid .is-comm-monoid.has-monoid = to-is-monoid go where

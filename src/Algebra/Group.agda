@@ -23,12 +23,12 @@ record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   open is-monoid has-monoid public
 
   field
-    inverse-l : Inverse-left  id _⋆_ inverse
-    inverse-r : Inverse-right id _⋆_ inverse
+    inverse-l : Invertibility-lᵘ A id inverse _⋆_
+    inverse-r : Invertibility-rᵘ A id inverse _⋆_
 
   instance
     Symmᵘ-is-group : Symmᵘ A
-    Symmᵘ-is-group .inv = inverse
+    Symmᵘ-is-group .minv = inverse
 
 unquoteDecl is-group-iso = declare-record-iso is-group-iso (quote is-group)
 
@@ -123,21 +123,21 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     id  : X
     _⋆_ : X → X → X
     inverse : X → X
-    id-l      : Unital-left  id _⋆_
-    inverse-l : Inverse-left id _⋆_ inverse
-    assoc     : Associative _⋆_
+    id-l      : Unitality-lᵘ X id _⋆_
+    inverse-l : Invertibility-lᵘ X id inverse _⋆_
+    assoc     : Associativityᵘ X _⋆_
 
   private instance
     Reflᵘ-make-group : Reflᵘ X
     Reflᵘ-make-group .mempty = id
 
     Symmᵘ-make-group : Symmᵘ X
-    Symmᵘ-make-group .inv = inverse
+    Symmᵘ-make-group .minv = inverse
 
     Transᵘ-make-group : Transᵘ X
     Transᵘ-make-group ._<>_ = _⋆_
 
-  inverse-r : Inverse-right id _⋆_ inverse
+  inverse-r : Invertibility-rᵘ X id inverse _⋆_
   inverse-r x =
     x ∙ x ⁻¹                         ~⟨ id-l _ ⟨
     ⌜ id ⌝ ∙ (x ∙ x ⁻¹)              ~⟨ ap¡ (inverse-l (x ⁻¹)) ⟨
@@ -148,7 +148,7 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     x ⁻¹ ⁻¹ ∙ x ⁻¹                   ~⟨ inverse-l _ ⟩
     id                               ∎
 
-  id-r : Unital-right id _⋆_
+  id-r : Unitality-rᵘ X id _⋆_
   id-r x =
     x ∙ ⌜ id ⌝        ~⟨ ap¡ (inverse-l _) ⟨
     x ∙ (x ⁻¹ ∙ x)    ~⟨ assoc _ _ _ ⟩

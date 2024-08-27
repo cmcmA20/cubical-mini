@@ -91,17 +91,19 @@ instance
   hlevel-proj-precat .get-argument (_ ∷ _ ∷ x v∷ _) = pure x
   hlevel-proj-precat .get-argument _ = type-error []
 
+_^opᶜ : Precategory o h → Precategory o h
+(C ^opᶜ) .Ob = Ob C
+(C ^opᶜ) .Hom x y = Hom C y x
+(C ^opᶜ) .Hom-set x y = Hom-set C y x
+(C ^opᶜ) .id = C .id
+(C ^opᶜ) ._∘_ f g = C ._∘_ g f
+(C ^opᶜ) .id-l = C .id-r
+(C ^opᶜ) .id-r = C .id-l
+(C ^opᶜ) .assoc f g h i = assoc C h g f (~ i)
 
-infixl 60 _ᵒᵖ
-_ᵒᵖ : Precategory o h → Precategory o h
-(C ᵒᵖ) .Ob = Ob C
-(C ᵒᵖ) .Hom x y = Hom C y x
-(C ᵒᵖ) .Hom-set x y = Hom-set C y x
-(C ᵒᵖ) .id = id C
-(C ᵒᵖ) ._∘_ f g = C ._∘_ g f
-(C ᵒᵖ) .id-l x = C .id-r x
-(C ᵒᵖ) .id-r x = C .id-l x
-(C ᵒᵖ) .assoc f g h i = assoc C h g f (~ i)
+instance
+  Op-category : Symmᵘ (Precategory o ℓ)
+  Op-category .minv = _^opᶜ
 
 precat-double-dual : {C : Precategory oᶜ hᶜ} → C ᵒᵖ ᵒᵖ ＝ C
 precat-double-dual = refl
@@ -150,6 +152,9 @@ record Functor
 unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
 
 instance
+  Op-functor : Symm {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)
+  Op-functor .sym = Functor.op
+
   Funlike-Functor
     : ∀ {o ℓ o' ℓ'} {C : Precategory o ℓ} {D : Precategory o' ℓ'}
     → Funlike ur (Functor C D) ⌞ C ⌟ (λ _ → ⌞ D ⌟)
@@ -273,6 +278,11 @@ unquoteDecl H-Level-NT = declare-record-hlevel 2 H-Level-NT (quote _=>_)
 instance
   ⇒-natural-transformation : ⇒-notation (C ⇒ D) (C ⇒ D) _
   ⇒-natural-transformation ._⇒_ = _=>_
+
+  Op-natural-transformation
+    : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
+    → Symm {A = Functor C D} {B = Functor C D} _=>_ λ G F → G ᵒᵖ => F ᵒᵖ
+  Op-natural-transformation .sym = _=>_.op
 
   Funlike-natural-transformation
     : {C : Precategory o ℓ} {D : Precategory o′ ℓ′} {F G : C ⇒ D}

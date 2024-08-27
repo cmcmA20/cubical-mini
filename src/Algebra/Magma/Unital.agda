@@ -13,12 +13,6 @@ private variable
   _✦_ : A → A → A
   n : HLevel
 
-Unital-left : (id : A) (_⋆_ : A → A → A) → 𝒰 _
-Unital-left {A} id _⋆_ = Π[ x ꞉ A ] (id ⋆ x ＝ x)
-
-Unital-right : (id : A) (_⋆_ : A → A → A) → 𝒰 _
-Unital-right {A} id _⋆_ = Π[ x ꞉ A ] (x ⋆ id ＝ x)
-
 -- unital magmas
 
 record is-unital-magma {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
@@ -28,8 +22,8 @@ record is-unital-magma {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 
   field
     id   : A
-    id-l : Unital-left  id _⋆_
-    id-r : Unital-right id _⋆_
+    id-l : Unitality-lᵘ A id _⋆_
+    id-r : Unitality-rᵘ A id _⋆_
 
   instance
     Reflᵘ-is-unital-magma : Reflᵘ A
@@ -119,8 +113,8 @@ record make-unital-magma {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     unital-magma-is-set : is-set X
     id  : X
     _⋆_ : X → X → X
-    id-l  : Unital-left  id _⋆_
-    id-r  : Unital-right id _⋆_
+    id-l  : Unitality-lᵘ X id _⋆_
+    id-r  : Unitality-rᵘ X id _⋆_
 
   to-is-unital-magma : is-unital-magma _⋆_
   to-is-unital-magma .is-unital-magma.has-magma .is-n-magma.has-is-of-hlevel =
