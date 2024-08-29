@@ -18,6 +18,7 @@ open import Meta.Marker          public
 open import Meta.Record          public
 open import Meta.SIP             public
 
+open import Structures.Base   public
 open import Structures.n-Type public
 
 open import Logic.Decidability   public

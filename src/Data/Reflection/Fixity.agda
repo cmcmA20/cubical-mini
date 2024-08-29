@@ -6,10 +6,11 @@ open import Data.Float.Base
 
 open import Agda.Builtin.Reflection
   public
-  using ( Associativity ; left-assoc ; right-assoc; non-assoc
+  using ( left-assoc ; right-assoc; non-assoc
         ; Precedence ; related ; unrelated
         ; Fixity ; fixity
         )
+  renaming ( Associativity to Associativity′ )
 
 suc-precedence : Precedence → Precedence
 suc-precedence (related x) = related (float-plus x (ℕ→float 1))
@@ -21,7 +22,7 @@ prec-parens unrelated   (related _) = true
 prec-parens (related _) unrelated   = false
 prec-parens unrelated   unrelated   = true
 
-fixity→associativity : Fixity → Associativity
+fixity→associativity : Fixity → Associativity′
 fixity→associativity (fixity a _) = a
 
 fixity→precedence : Fixity → Precedence

@@ -418,7 +418,7 @@ _ᵢ⁻¹ : a ≅ b → b ≅ a
 
 instance
   Symm-iso : Symmetric _≅_
-  Symm-iso ._⁻¹ = _ᵢ⁻¹
+  Symm-iso .sym = _ᵢ⁻¹
 
 make-invertible : {f : a ⇒ b} (g : b ⇒ a) → f ∘ g ＝ id → g ∘ f ＝ id → is-invertible f
 make-invertible g _ _ .is-invertible.inv = g

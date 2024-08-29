@@ -86,8 +86,8 @@ opaque
 
 
 record Semiring-hom
-  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
-  (M : Semiring-on A) (M′ : Semiring-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
+  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′} (e : A → B)
+  (M : Semiring-on A) (M′ : Semiring-on B) : 𝒰 (ℓ ⊔ ℓ′)
   where
     no-eta-equality
     private
@@ -104,7 +104,7 @@ unquoteDecl semiring-hom-iso = declare-record-iso semiring-hom-iso (quote Semiri
 
 opaque
   semiring-hom-is-prop : ∀ {M : Semiring-on A} {M′ : Semiring-on B} {f}
-                       → is-prop (Semiring-hom M M′ f)
+                       → is-prop (Semiring-hom f M M′)
   semiring-hom-is-prop {M′} = ≅→is-of-hlevel! 1 semiring-hom-iso where
     open Semiring-on M′
 
@@ -113,7 +113,7 @@ instance opaque
   H-Level-semiring-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 semiring-on-is-set
 
   H-Level-semiring-hom : ⦃ n ≥ʰ 1 ⦄ → ∀ {M : Semiring-on A} {M′ : Semiring-on B} {f}
-                       → H-Level n (Semiring-hom M M′ f)
+                       → H-Level n (Semiring-hom f M M′)
   H-Level-semiring-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance semiring-hom-is-prop
 
 semiring-on→additive-comm-monoid-on : ∀[ Semiring-on {ℓ} ⇒ CMonoid-on ]
@@ -146,13 +146,13 @@ record make-semiring {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     semiring-is-set : is-set X
     0a 1a : X
     _+_ _·_ : X → X → X
-    +-id-l  : Unital-left  0a _+_
-    +-id-r  : Unital-right 0a _+_
-    +-assoc : Associative _+_
-    +-comm  : Commutative _+_
-    ·-id-l  : Unital-left  1a _·_
-    ·-id-r  : Unital-right 1a _·_
-    ·-assoc : Associative _·_
+    +-id-l  : Unitality-lᵘ X 0a _+_
+    +-id-r  : Unitality-rᵘ X 0a _+_
+    +-assoc : Associativityᵘ X _+_
+    +-comm  : Commutativityᵘ X _+_
+    ·-id-l  : Unitality-lᵘ X 1a _·_
+    ·-id-r  : Unitality-rᵘ X 1a _·_
+    ·-assoc : Associativityᵘ X _·_
     ·-distrib-+-l : Distrib-left  _·_ _+_
     ·-distrib-+-r : Distrib-right _·_ _+_
 

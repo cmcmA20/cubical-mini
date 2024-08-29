@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 open import Foundations.Path.Reasoning
-open import Foundations.Univalence.Base
+open import Foundations.Univalence
 
 open import Foundations.Equiv.Base
 
@@ -40,7 +40,10 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
 
 instance
   Symm-≃ : Symm (_≃_ {ℓ} {ℓ′}) _≃_
-  Symm-≃ ._⁻¹ e = ≅→≃ (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
+  Symm-≃ .sym e = ≅→≃ (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
+
+  Invol-≃ : Invol (_≃_ {ℓ} {ℓ′}) _≃_
+  Invol-≃ .sym-invol _ = equiv-ext refl
 
   Trans-≃ : Trans (_≃_ {ℓ} {ℓ′}) (_≃_ {ℓ' = ℓ″}) _≃_
   Trans-≃ ._∙_  = _∙ₑ_
@@ -49,12 +52,8 @@ is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is
 is-equiv-comp fe ge = ((_ , fe) ∙ (_ , ge)) .snd
 
 inv-≃ : (A ≃ B) ≃ (B ≃ A)
-inv-≃ .fst = _
-inv-≃ .snd = is-iso→is-equiv go where
-  go : is-iso _⁻¹
-  go .inv = _⁻¹
-  go .rinv _ = equiv-ext refl
-  go .linv _ = equiv-ext refl
+inv-≃ .fst = _⁻¹
+inv-≃ .snd = is-iso→is-equiv $ iso _⁻¹ sym-invol sym-invol
 
 is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
 is-equiv-inv fe = ((_ , fe) ⁻¹) .snd

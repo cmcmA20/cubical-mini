@@ -245,7 +245,10 @@ instance
   Refl-Path .refl = reflₚ
 
   Symm-Path : Symmetric (Path A)
-  Symm-Path ._⁻¹ = symₚ
+  Symm-Path .sym = symₚ
+
+  Invol-Path : Involutive (Path A)
+  Invol-Path .sym-invol _ = refl
 
   Trans-Path : Transitive (Path A)
   Trans-Path ._∙_ = _∙ₚ_

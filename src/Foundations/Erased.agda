@@ -119,7 +119,7 @@ is-equiv→is-equivᴱ fe y .snd .erased (c , erase p) i
 
 instance
   Symm-Erased-≃ : Symm (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) _≃ᴱ_
-  Symm-Erased-≃ ._⁻¹ e = is-equivᴱ→inverse (e .snd) , is-isoᴱ→is-equivᴱ
+  Symm-Erased-≃ .sym e = is-equivᴱ→inverse (e .snd) , is-isoᴱ→is-equivᴱ
     ( e .fst
     , erase (λ x → is-equivᴱ→unit (e .snd) x .erased)
     , erase λ x → is-equivᴱ→counit (e .snd) x .erased )

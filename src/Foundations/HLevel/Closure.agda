@@ -2,14 +2,13 @@
 module Foundations.HLevel.Closure where
 
 open import Foundations.Base
-  hiding (inv)
 open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 open import Foundations.Path.Groupoid
 open import Foundations.Sigma.Properties
-open import Foundations.Univalence.Base
+open import Foundations.Univalence
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level

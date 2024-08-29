@@ -22,8 +22,8 @@ record ∞-Magma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     Transᵘ-∞-Magma-on ._<>_ = _⋆_
 
 record ∞-magma-hom
-  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
-  (M : ∞-Magma-on A) (M′ : ∞-Magma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
+  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′} (e : A → B)
+  (M : ∞-Magma-on A) (M′ : ∞-Magma-on B) : 𝒰 (ℓ ⊔ ℓ′)
   where
     no-eta-equality
     private
@@ -32,18 +32,15 @@ record ∞-magma-hom
 
     field pres-⋆ : (x y : A) → e (x ∙ y) ＝ e x ∙ e y
 
-∞-Magma[_⇒_]
-  : (A : Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (B : Σ[ X ꞉ 𝒰 ℓ′ ] ∞-Magma-on X) → 𝒰 (ℓ ⊔ ℓ′)
-∞-Magma[ A ⇒ B ] = Σ[ f ꞉ ⌞ A ⌟ ⇒ ⌞ B ⌟ ] ∞-magma-hom (A .snd) (B .snd) f
-
 ∞-Magma≃
   : {ℓ ℓ′ : Level} (A : Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (B : Σ[ X ꞉ 𝒰 ℓ′ ] ∞-Magma-on X)
     (e : ⌞ A ⌟ ≃ ⌞ B ⌟) → 𝒰 (ℓ ⊔ ℓ′)
-∞-Magma≃ A B (f , _) = ∞-magma-hom (A .snd) (B .snd) f
+∞-Magma≃ A B (f , _) = ∞-magma-hom f (A .snd) (B .snd)
 
 instance
   ⇒-∞-Magma : ⇒-notation (Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (Σ[ Y ꞉ 𝒰 ℓ ] ∞-Magma-on Y) (𝒰 ℓ)
-  ⇒-∞-Magma ._⇒_ X Y = ∞-Magma[ X ⇒ Y ]
+  ⇒-∞-Magma ._⇒_ X Y = Total-hom Fun ∞-magma-hom (X .snd) (Y .snd)
+
 
 -- n-truncated magmas
 
@@ -85,8 +82,8 @@ module _ (n : HLevel) where
   unquoteDecl n-magma-on-iso = declare-record-iso n-magma-on-iso (quote n-Magma-on)
 
   record n-Magma-hom
-    {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
-    (M : n-Magma-on A) (M′ : n-Magma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
+    {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′} (e : A → B)
+    (M : n-Magma-on A) (M′ : n-Magma-on B) : 𝒰 (ℓ ⊔ ℓ′)
     where
       no-eta-equality
       private
@@ -107,7 +104,7 @@ opaque
     open n-Magma-on M
 
 n-magma-hom-is-of-hlevel : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
-                         → is-of-hlevel n (n-Magma-hom (suc n) M M′ f)
+                         → is-of-hlevel n (n-Magma-hom (suc n) f M M′)
 n-magma-hom-is-of-hlevel {M′} = ≅→is-of-hlevel! _ (n-magma-hom-iso _) where
   open n-Magma-on M′
 
@@ -117,5 +114,5 @@ instance opaque
 
 instance
   H-Level-n-magma-hom : ∀ {M : n-Magma-on (suc n) A} {M′ : n-Magma-on (suc n) B} {f}
-                      → H-Level n (n-Magma-hom (suc n) M M′ f)
+                      → H-Level n (n-Magma-hom (suc n) f M M′)
   H-Level-n-magma-hom .H-Level.has-of-hlevel = n-magma-hom-is-of-hlevel

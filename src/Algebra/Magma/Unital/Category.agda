@@ -12,7 +12,7 @@ open n-Magma-hom
 open UMagma-hom
 
 UMagma-structure : ∀ ℓ → Thin-structure ℓ UMagma-on
-UMagma-structure ℓ .is-hom f A B = el! (UMagma-hom A B f)
+UMagma-structure ℓ .is-hom f A B = el! (UMagma-hom f A B)
 UMagma-structure ℓ .id-is-hom .pres-id = refl
 UMagma-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 UMagma-structure ℓ .∘-is-hom f g p q .pres-id =
@@ -37,15 +37,15 @@ instance
   UMagmas-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
   UMagmas-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Functor (UMagmas ℓ) (Sets ℓ)
+Forget : UMagmas ℓ ⇒ Sets ℓ
 Forget = Forget-structure (UMagma-structure _)
 
-Forget-unit : Functor (UMagmas ℓ) (Magmas ℓ)
+Forget-unit : UMagmas ℓ ⇒ Magmas ℓ
 Forget-unit .Functor.F₀ = second (unital-magma-on↪magma-on $_)
 Forget-unit .Functor.F₁ f .hom x = f $ x
 Forget-unit .Functor.F₁ f .preserves .pres-⋆ = f .preserves .pres-⋆
-Forget-unit .Functor.F-id = trivial!
-Forget-unit .Functor.F-∘ _ _ = trivial!
+Forget-unit .Functor.F-id = ext λ _ → refl
+Forget-unit .Functor.F-∘ _ _ = ext λ _ → refl
 
 forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
 forget-unit-is-faithful p = ext (p $ₚ_)

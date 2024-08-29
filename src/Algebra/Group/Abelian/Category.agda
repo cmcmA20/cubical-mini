@@ -29,10 +29,10 @@ instance
   AGroups-equational : is-equational (AGroup-structure ℓ)
   AGroups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Functor (AGroups ℓ) (Sets ℓ)
+Forget : AGroups ℓ ⇒ Sets ℓ
 Forget = Forget-structure (AGroup-structure _)
 
-Forget-comm : Functor (AGroups ℓ) (Groups ℓ)
+Forget-comm : AGroups ℓ ⇒ Groups ℓ
 Forget-comm .Functor.F₀ = second (abelian-group-on↪group-on $_)
 Forget-comm .Functor.F₁ f .hom = f $_
 Forget-comm .Functor.F₁ f .preserves = f .preserves

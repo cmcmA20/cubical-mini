@@ -11,7 +11,7 @@ open Semiring-hom
 open Semiring-on
 
 Semiring-structure : ∀ ℓ → Thin-structure ℓ Semiring-on
-Semiring-structure ℓ .is-hom f A B = el! (Semiring-hom A B f)
+Semiring-structure ℓ .is-hom f A B = el! (Semiring-hom f A B)
 Semiring-structure ℓ .id-is-hom .pres-0 = refl
 Semiring-structure ℓ .id-is-hom .pres-1 = refl
 Semiring-structure ℓ .id-is-hom .pres-+ _ _ = refl
@@ -44,5 +44,5 @@ instance
   Semirings-equational .invert-id-hom p .pres-+ _ _ = sym (p .pres-+ _ _)
   Semirings-equational .invert-id-hom p .pres-· _ _ = sym (p .pres-· _ _)
 
-Forget : Functor (Semirings ℓ) (Sets ℓ)
+Forget : Semirings ℓ ⇒ Sets ℓ
 Forget = Forget-structure (Semiring-structure _)

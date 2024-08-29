@@ -3,8 +3,6 @@ module Meta.SIP where
 
 open import Meta.Prelude
 
-open import Foundations.Univalence.SIP public
-
 open import Meta.Effect.Alt
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct

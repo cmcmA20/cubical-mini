@@ -13,12 +13,6 @@ private variable
   _✦_ : A → A → A
   n : HLevel
 
-Unital-left : (id : A) (_⋆_ : A → A → A) → 𝒰 _
-Unital-left {A} id _⋆_ = Π[ x ꞉ A ] (id ⋆ x ＝ x)
-
-Unital-right : (id : A) (_⋆_ : A → A → A) → 𝒰 _
-Unital-right {A} id _⋆_ = Π[ x ꞉ A ] (x ⋆ id ＝ x)
-
 -- unital magmas
 
 record is-unital-magma {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
@@ -28,8 +22,8 @@ record is-unital-magma {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 
   field
     id   : A
-    id-l : Unital-left  id _⋆_
-    id-r : Unital-right id _⋆_
+    id-l : Unitality-lᵘ A id _⋆_
+    id-r : Unitality-rᵘ A id _⋆_
 
   instance
     Reflᵘ-is-unital-magma : Reflᵘ A
@@ -81,8 +75,8 @@ instance opaque
 
 
 record UMagma-hom
-  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
-  (M : UMagma-on A) (M′ : UMagma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
+  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′} (e : A → B)
+  (M : UMagma-on A) (M′ : UMagma-on B) : 𝒰 (ℓ ⊔ ℓ′)
   where
     no-eta-equality
     private
@@ -97,13 +91,13 @@ unquoteDecl umagma-hom-iso = declare-record-iso umagma-hom-iso (quote UMagma-hom
 
 opaque
   umagma-hom-is-prop : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
-                     → is-prop (UMagma-hom M M′ f)
+                     → is-prop (UMagma-hom f M M′)
   umagma-hom-is-prop {M′} = ≅→is-of-hlevel! 1 umagma-hom-iso where
     open UMagma-on M′
 
 instance opaque
   H-Level-umagma-hom : ⦃ n ≥ʰ 1 ⦄ → ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
-                     → H-Level n (UMagma-hom M M′ f)
+                     → H-Level n (UMagma-hom f M M′)
   H-Level-umagma-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance umagma-hom-is-prop
 
 unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A
@@ -119,8 +113,8 @@ record make-unital-magma {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     unital-magma-is-set : is-set X
     id  : X
     _⋆_ : X → X → X
-    id-l  : Unital-left  id _⋆_
-    id-r  : Unital-right id _⋆_
+    id-l  : Unitality-lᵘ X id _⋆_
+    id-r  : Unitality-rᵘ X id _⋆_
 
   to-is-unital-magma : is-unital-magma _⋆_
   to-is-unital-magma .is-unital-magma.has-magma .is-n-magma.has-is-of-hlevel =

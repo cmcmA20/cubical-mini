@@ -28,8 +28,8 @@ module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
       → (x , A) ∫E.≅ (y , B)
     piece-together p f =
       ∫E.make-iso (total-hom (p .B.to) (f .toᵈ)) (total-hom (p .B.from) (f .fromᵈ))
-        (total-hom-path E (p .B.inv-l) (f .inv-lᵈ))
-        (total-hom-path E (p .B.inv-r) (f .inv-rᵈ))
+        (total-hom-path (p .B.inv-l) (f .inv-lᵈ))
+        (total-hom-path (p .B.inv-r) (f .inv-rᵈ))
 
     contract-vertical-iso
       : ∀ {x} {A : Ob[ x ]} (B : Ob[ x ]) (f : A ≅↓ B)
@@ -37,7 +37,7 @@ module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
           ((x , B) , piece-together B.id-iso f)
     contract-vertical-iso {x} {A} B f
       =  (λ i → x , pair i .fst)
-      ,ₚ (∫E.≅-pathᴾ refl _ (total-hom-pathp E _ _ refl λ i → pair i .snd .toᵈ))
+      ,ₚ (∫E.≅-pathᴾ refl _ (total-hom-pathᴾ refl refl refl (λ i → pair i .fst) refl (λ i → pair i .snd .toᵈ)))
       where
         pair = disp-c B.id-iso A
           (A , id-iso↓)

@@ -94,7 +94,7 @@ private
   -- rather than `(1 , (2 , 3))`, since the second argument of `_,_`
   -- will be rendered with the same precedence as the overall
   -- expression.
-  assoc-name-parts : Associativity → Precedence → Precedence → List Name-part → List Name-part
+  assoc-name-parts : Associativity′ → Precedence → Precedence → List Name-part → List Name-part
   assoc-name-parts left-assoc thisp argp (hole _ ∷ p ∷ hole _ ∷ []) =
     hole thisp ∷ p ∷ hole argp ∷ []
   assoc-name-parts right-assoc thisp argp (hole _ ∷ p ∷ hole _ ∷ []) =

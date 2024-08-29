@@ -11,16 +11,13 @@ private variable
   _✦_ : A → A → A
   n : HLevel
 
-Associative : (_⋆_ : A → A → A) → 𝒰 _
-Associative {A} _⋆_ = (x y z : A) → x ⋆ (y ⋆ z) ＝ (x ⋆ y) ⋆ z
-
 -- semigroups
 
 record is-semigroup {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   no-eta-equality
   field
     has-magma : is-magma _⋆_
-    assoc     : Associative _⋆_
+    assoc     : Associativityᵘ A _⋆_
 
   open is-n-magma has-magma public
 
@@ -51,7 +48,7 @@ semigroup-on↪magma-on .fst S .n-Magma-on._⋆_ = S .Semigroup-on._⋆_
 semigroup-on↪magma-on .fst S .n-Magma-on.has-n-magma =
   S .Semigroup-on.has-semigroup .is-semigroup.has-magma
 semigroup-on↪magma-on .snd = set-injective→is-embedding! λ p →
-  Equiv.injective (≅ₜ→≃ semigroup-on-iso) $ Σ-prop-pathᴾ! (ap n-Magma-on._⋆_ p)
+  Equiv.injective (≅ₜ→≃ semigroup-on-iso) $ ap n-Magma-on._⋆_ p ,ₚ prop!
 
 instance opaque
   H-Level-semigroup-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Semigroup-on A)
@@ -63,7 +60,7 @@ record make-semigroup {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   field
     semigroup-is-set : is-set X
     _⋆_   : X → X → X
-    assoc : Associative _⋆_
+    assoc : Associativityᵘ X _⋆_
 
   to-is-semigroup : is-semigroup _⋆_
   to-is-semigroup .is-semigroup.has-magma .is-n-magma.has-is-of-hlevel = semigroup-is-set
