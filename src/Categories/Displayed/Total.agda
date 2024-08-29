@@ -90,6 +90,6 @@ module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} {E : Displayed B o′ ℓ�
   instance
     Funlike-Hom
       : ∀{ℓ″ ℓ‴} {A : Type ℓ″} {B : A → Type ℓ‴}
-        {X Y : Total E} ⦃ i : Funlike ur (Hom (X .fst) (Y .fst)) A B ⦄
-      → Funlike ur (Total-hom E X Y) A B
+        {X Y : Total E} ⦃ i : Funlike ur (Hom (X .fst) (Y .fst)) A λ z → B (z .snd) ⦄
+      → Funlike ur (Total-hom E X Y) A λ z → B (z .snd)
     Funlike-Hom ._#_ f x = f .Total-hom.hom # x

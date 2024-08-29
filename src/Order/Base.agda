@@ -104,8 +104,13 @@ instance
   ⇒-Poset : ⇒-notation (Poset o ℓ) (Poset o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
   ⇒-Poset ._⇒_ = Monotone
 
-  Funlike-Monotone : Funlike ur (P ⇒ Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
-  Funlike-Monotone ._#_ = hom
+  Funlike-Monotone₀ : Funlike ur (P ⇒ Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
+  Funlike-Monotone₀ ._#_ = hom
+
+  Funlike-Monotone₁
+    : {x y : ⌞ P ⌟}
+    → Funlike ur (P ⇒ Q) (Poset._≤_ P x y) (λ (f , _) → Poset._≤_ Q (f # x) (f # y))
+  Funlike-Monotone₁ ._#_ x≤y = x≤y .pres-≤
 
   Refl-Monotone : Refl {A = Poset o ℓ} Monotone
   Refl-Monotone .refl .hom = refl
@@ -115,7 +120,7 @@ instance
                          (Monotone {o′ = o″} {ℓ′ = ℓ″})
                          Monotone
   Trans-Monotone ._∙_ f g .hom x = g $ f $ x
-  Trans-Monotone ._∙_ f g .pres-≤ x≤y = g .pres-≤ (f .pres-≤ x≤y)
+  Trans-Monotone ._∙_ f g .pres-≤ x≤y = g $ f $ x≤y
 
 monotone-pathᴾ
   : {P : I → Poset o ℓ} {Q : I → Poset o′ ℓ′}

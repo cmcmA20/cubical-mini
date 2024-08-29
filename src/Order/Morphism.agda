@@ -50,7 +50,7 @@ module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
     → is-order-reflection P Q f
   section→is-order-reflection f g sect {x = x} {y = y} fx≤fy =
     x         =⟨ sect x ⟨
-    g # f x   ≤⟨ g .pres-≤ fx≤fy ⟩
+    g # f x   ≤⟨ g # fx≤fy ⟩
     g # f y   =⟨ sect y ⟩
     y         ∎
 
@@ -59,7 +59,7 @@ module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
     → f #_ is-right-inverse-of g #_
     → is-order-embedding P Q (f #_)
   section→is-order-embedding f g sect =
-    monotone-reflection→is-order-embedding (f #_) (f .pres-≤)
+    monotone-reflection→is-order-embedding (f #_) (f #_)
       (section→is-order-reflection (f #_) g sect)
 
 
