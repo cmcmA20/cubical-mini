@@ -23,15 +23,25 @@ module _ {o ℓ ℓ′} {A B : 𝒰 ℓ′}
          (f : A ↠ B)
          where
 
-  surj-basis : is-basis P L β → is-basis {B = A} P L (β ∘ₜ f #_)
-  surj-basis H .is-basis.≤-is-small x a = H .is-basis.≤-is-small x (f # a)
-  surj-basis H .is-basis.↓-is-sup x .is-lub.fam≤lub (a , le) = le
-  surj-basis H .is-basis.↓-is-sup x .is-lub.least ub g =
-    H .is-basis.↓-is-sup x .is-lub.least ub
-      λ where (b , le) →
-                 rec! (λ a e → subst (λ q → P .Poset._≤_ (β q) ub) e $
-                               g (a , subst (λ q → P .Poset._≤_ (β q) x) (e ⁻¹) le))
-                      (f .snd b)
+  ↓ᴮ-surj : {x : ⌞ P ⌟}
+         → ↓ᴮ {B = A} P L (β ∘ₜ f #_) x ↠ ↓ᴮ P L β x
+  ↓ᴮ-surj {x} =
+      (λ where (a , le) → f # a , le)
+    , λ where (b , le) → rec! (λ a e → ∣ (a , subst (λ q → P .Poset._≤_ (β q) x) (e ⁻¹) le) , Σ-prop-path! e ∣₁) (f .snd b)
+
+  cover-preserves-basis : is-basis P L β → is-basis {B = A} P L (β ∘ₜ f #_)
+  cover-preserves-basis H .is-basis.≤-is-small x a = H .is-basis.≤-is-small x (f # a)
+  cover-preserves-basis H .is-basis.↓-is-sup x =
+    cover-preserves-is-lub ↓ᴮ-surj (H .is-basis.↓-is-sup x)
+
+{-
+  -- TODO this requires is-of-size-is-prop
+  @0 cover-reflects-basis : is-basis {B = A} P L (β ∘ₜ f #_) → is-basis P L β
+  cover-reflects-basis H .is-basis.≤-is-small x b =
+    rec! ? (f .snd b)
+  cover-reflects-basis H .is-basis.↓-is-sup x =
+    cover-reflects-is-lub ↓ᴮ-surj (H .is-basis.↓-is-sup x)
+-}
 
 module _ {o₁ o₂ ℓ₁ ℓ₂ ℓ′} {B : 𝒰 ℓ′}
          {P₁ : Poset o₁ ℓ₁} {P₂ : Poset o₂ ℓ₂}
