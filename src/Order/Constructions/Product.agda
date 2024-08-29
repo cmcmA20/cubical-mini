@@ -77,7 +77,7 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
                   → is-lub P Fp x
                   → is-lub Q Fq y
                   → is-lub (P × Q) {I = I} < Fp ∘ₜ f₁ #_ , Fq ∘ₜ f₂ #_ > (x , y)
-    ×-is-lub-surj lp lq .is-lub.fam≤lub = < (is-lub.fam≤lub lp ∘ₜ f₁ #_) , is-lub.fam≤lub lq ∘ₜ f₂ #_ >
+    ×-is-lub-surj lp lq .is-lub.fam≤lub = < (lp .is-lub.fam≤lub ∘ₜ f₁ #_) , lq .is-lub.fam≤lub ∘ₜ f₂ #_ >
     ×-is-lub-surj lp lq .is-lub.least (ubx , uby) f =
         lp .is-lub.least ubx (λ i₁ → rec! (λ i e → subst (λ q → P .Poset._≤_ (Fp q) ubx) e (f i .fst)) (f₁ .snd i₁))
       , lq .is-lub.least uby (λ i₂ → rec! (λ i e → subst (λ q → Q .Poset._≤_ (Fq q) uby) e (f i .snd)) (f₂ .snd i₂))

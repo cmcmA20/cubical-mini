@@ -2,7 +2,6 @@
 module Order.SupLattice.SmallBasis.Closure where
 
 open import Categories.Prelude
-
 open import Functions.Surjection
 
 open import Data.Unit
@@ -17,13 +16,30 @@ open import Order.SupLattice.SmallBasis
 
 import Order.Reasoning
 
+module _ {o ℓ ℓ′} {A B : 𝒰 ℓ′}
+         {P : Poset o ℓ}
+         {L : is-sup-lattice P ℓ′}
+         {β : B → ⌞ P ⌟}
+         (f : A ↠ B)
+         where
+
+  surj-basis : is-basis P L β → is-basis {B = A} P L (β ∘ₜ f #_)
+  surj-basis H .is-basis.≤-is-small x a = H .is-basis.≤-is-small x (f # a)
+  surj-basis H .is-basis.↓-is-sup x .is-lub.fam≤lub (a , le) = le
+  surj-basis H .is-basis.↓-is-sup x .is-lub.least ub g =
+    H .is-basis.↓-is-sup x .is-lub.least ub
+      λ where (b , le) →
+                 rec! (λ a e → subst (λ q → P .Poset._≤_ (β q) ub) e $
+                               g (a , subst (λ q → P .Poset._≤_ (β q) x) (e ⁻¹) le))
+                      (f .snd b)
+
 module _ {o₁ o₂ ℓ₁ ℓ₂ ℓ′} {B : 𝒰 ℓ′}
          {P₁ : Poset o₁ ℓ₁} {P₂ : Poset o₂ ℓ₂}
          {L₁ : is-sup-lattice P₁ ℓ′} {L₂ : is-sup-lattice P₂ ℓ′}
          {β₁ : B → ⌞ P₁ ⌟}
   where
 
-  -- TODO use order embeddings from 1lab
+  -- TODO use proper order equivalences
 
   ≃→is-basis : (e : ⌞ P₁ ⌟ ≃ ⌞ P₂ ⌟)
              → (∀ {x y} → Poset._≤_ P₁ x y → Poset._≤_ P₂ (e $ x) (e $ y))
@@ -106,9 +122,3 @@ module _ {o ℓ ℓ′} {B : 𝒰 ℓ′}
   maybe-basis H .is-basis.↓-is-sup x .is-lub.fam≤lub (mb , le) = le
   maybe-basis H .is-basis.↓-is-sup x .is-lub.least ub f =
     H .is-basis.↓-is-sup x .is-lub.least ub λ where (b , le) → f (just b , le)
-
-  fstream-basis : ∀ n → is-basis P L β → is-basis {B = ℕ → B} P L (λ f → β (f n))
-  fstream-basis n H .is-basis.≤-is-small x f = H .is-basis.≤-is-small x (f n)
-  fstream-basis n H .is-basis.↓-is-sup x .is-lub.fam≤lub (fb , le) = le
-  fstream-basis n H .is-basis.↓-is-sup x .is-lub.least ub f =
-    H .is-basis.↓-is-sup x .is-lub.least ub (λ where (b , le) → f ((λ _ → b) , le))
