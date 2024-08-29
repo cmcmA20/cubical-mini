@@ -5,7 +5,7 @@ open import Foundations.Base
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 open import Foundations.Path.Reasoning
-open import Foundations.Univalence.Base
+open import Foundations.Univalence
 
 open import Foundations.Equiv.Base
 

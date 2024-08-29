@@ -69,8 +69,8 @@ opaque
 
 
 record Group-hom
-  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
-  (M : Group-on A) (M′ : Group-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
+  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′} (e : A → B)
+  (M : Group-on A) (M′ : Group-on B) : 𝒰 (ℓ ⊔ ℓ′)
   where
     no-eta-equality
     private
@@ -97,7 +97,7 @@ unquoteDecl group-hom-iso = declare-record-iso group-hom-iso (quote Group-hom)
 
 opaque
   group-hom-is-prop : ∀ {M : Group-on A} {M′ : Group-on B} {f}
-                    → is-prop (Group-hom M M′ f)
+                    → is-prop (Group-hom f M M′)
   group-hom-is-prop {M′} = ≅→is-of-hlevel! 1 group-hom-iso where
     open Group-on M′
 
@@ -106,7 +106,7 @@ instance opaque
   H-Level-group-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 group-on-is-set
 
   H-Level-group-hom : ⦃ n ≥ʰ 1 ⦄ → ∀ {M : Group-on A} {M′ : Group-on B} {f}
-                    → H-Level n (Group-hom M M′ f)
+                    → H-Level n (Group-hom f M M′)
   H-Level-group-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance group-hom-is-prop
 
 group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A

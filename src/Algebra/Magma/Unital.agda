@@ -75,8 +75,8 @@ instance opaque
 
 
 record UMagma-hom
-  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
-  (M : UMagma-on A) (M′ : UMagma-on B) (e : A → B) : 𝒰 (ℓ ⊔ ℓ′)
+  {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′} (e : A → B)
+  (M : UMagma-on A) (M′ : UMagma-on B) : 𝒰 (ℓ ⊔ ℓ′)
   where
     no-eta-equality
     private
@@ -91,13 +91,13 @@ unquoteDecl umagma-hom-iso = declare-record-iso umagma-hom-iso (quote UMagma-hom
 
 opaque
   umagma-hom-is-prop : ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
-                     → is-prop (UMagma-hom M M′ f)
+                     → is-prop (UMagma-hom f M M′)
   umagma-hom-is-prop {M′} = ≅→is-of-hlevel! 1 umagma-hom-iso where
     open UMagma-on M′
 
 instance opaque
   H-Level-umagma-hom : ⦃ n ≥ʰ 1 ⦄ → ∀ {M : UMagma-on A} {M′ : UMagma-on B} {f}
-                     → H-Level n (UMagma-hom M M′ f)
+                     → H-Level n (UMagma-hom f M M′)
   H-Level-umagma-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance umagma-hom-is-prop
 
 unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A

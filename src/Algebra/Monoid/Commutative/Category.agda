@@ -30,10 +30,10 @@ instance
   CMonoids-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
   CMonoids-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Functor (CMonoids ℓ) (Sets ℓ)
+Forget : CMonoids ℓ ⇒ Sets ℓ
 Forget = Forget-structure (CMonoid-structure _)
 
-Forget-comm : Functor (CMonoids ℓ) (Monoids ℓ)
+Forget-comm : CMonoids ℓ ⇒ Monoids ℓ
 Forget-comm .Functor.F₀ = second (comm-monoid-on↪monoid-on $_)
 Forget-comm .Functor.F₁ f .hom x = f $ x
 Forget-comm .Functor.F₁ f .preserves = f .preserves

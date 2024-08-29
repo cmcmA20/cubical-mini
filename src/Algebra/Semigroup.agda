@@ -48,7 +48,7 @@ semigroup-on↪magma-on .fst S .n-Magma-on._⋆_ = S .Semigroup-on._⋆_
 semigroup-on↪magma-on .fst S .n-Magma-on.has-n-magma =
   S .Semigroup-on.has-semigroup .is-semigroup.has-magma
 semigroup-on↪magma-on .snd = set-injective→is-embedding! λ p →
-  Equiv.injective (≅ₜ→≃ semigroup-on-iso) $ Σ-prop-pathᴾ! (ap n-Magma-on._⋆_ p)
+  Equiv.injective (≅ₜ→≃ semigroup-on-iso) $ ap n-Magma-on._⋆_ p ,ₚ prop!
 
 instance opaque
   H-Level-semigroup-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Semigroup-on A)

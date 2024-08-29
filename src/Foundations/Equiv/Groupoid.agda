@@ -6,7 +6,7 @@ open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
 open import Foundations.Isomorphism
 open import Foundations.Path
-open import Foundations.Univalence.Base
+open import Foundations.Univalence
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level

@@ -29,10 +29,10 @@ instance
   Semigroups-equational : is-equational (Semigroup-structure ℓ)
   Semigroups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Functor (Semigroups ℓ) (Sets ℓ)
+Forget : Semigroups ℓ ⇒ Sets ℓ
 Forget = Forget-structure (Semigroup-structure _)
 
-Forget-assoc : Functor (Semigroups ℓ) (Magmas ℓ)
+Forget-assoc : Semigroups ℓ ⇒ Magmas ℓ
 Forget-assoc .Functor.F₀ = second (semigroup-on↪magma-on $_)
 Forget-assoc .Functor.F₁ f .hom = f $_
 Forget-assoc .Functor.F₁ f .preserves = f .preserves

@@ -3,6 +3,7 @@ module Foundations.Prelude where
 
 open import Foundations.Base       public
 open import Foundations.Cubes      public
+open import Foundations.Equiv      public
 open import Foundations.Erased     public
 open import Foundations.HLevel     public
 open import Foundations.Path       public

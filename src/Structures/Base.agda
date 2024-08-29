@@ -2,6 +2,11 @@
 module Structures.Base where
 
 open import Meta.Prelude
+open import Meta.Extensionality
+open import Meta.Record
+
+open import Functions.Embedding
+open import Functions.Equiv.Weak
 
 open import Data.Unit.Base
 open import Data.Unit.Properties
@@ -10,6 +15,161 @@ private variable
   ℓ ℓ₁ ℓ₂ ℓ₃ : Level
   A : Type ℓ
   S T : Type ℓ → Type ℓ₁
+
+-- surprise tool that will help us later
+record Total-hom
+  {ℓᵃ ℓᵃ̇ ℓᵇ ℓᵇ̇ o ℓ}
+  {A : Type ℓᵃ} {B : Type ℓᵇ}
+  (F : A → B → Type o)
+  {M : A → Type ℓᵃ̇} {N : B → Type ℓᵇ̇}
+  (H : {x : A} {y : B} → F x y → M x → N y → 𝒰 ℓ)
+  {a : A} {b : B} (S : M a) (T : N b) : Type (o ⊔ ℓ) where
+  constructor total-hom
+  field
+    hom       : F a b
+    preserves : H hom S T
+
+unquoteDecl Total-hom-Iso = declare-record-iso Total-hom-Iso (quote Total-hom)
+
+open Total-hom
+
+total-hom-path
+  : ∀ {ℓᵃ ℓᵃ̇ ℓᵇ ℓᵇ̇ o ℓ}
+    {A : Type ℓᵃ} {B : Type ℓᵇ}
+    {F : A → B → Type o}
+    {M : A → Type ℓᵃ̇} {N : B → Type ℓᵇ̇}
+    {H : {x : A} {y : B} → F x y → M x → N y → 𝒰 ℓ}
+    {a : A} {b : B} {S : M a} {T : N b}
+    {f g : Total-hom F H S T}
+  → (p : f .hom ＝ g .hom)
+  → ＜ f .preserves ／ (λ i → H (p i) S T) ＼ g .preserves ＞
+  → f ＝ g
+total-hom-path p _  i .hom = p i
+total-hom-path _ p′ i .preserves = p′ i
+
+total-hom-pathᴾ
+  : ∀ {ℓᵃ ℓᵃ̇ ℓᵇ ℓᵇ̇ o ℓ}
+    {A : Type ℓᵃ} {B : Type ℓᵇ}
+    {F : A → B → Type o}
+    {M : A → Type ℓᵃ̇} {N : B → Type ℓᵇ̇}
+    {H : {x : A} {y : B} → F x y → M x → N y → 𝒰 ℓ}
+    {a a′ : A} {b b′ : B} {S : M a} {T : N b} {S′ : M a′} {T′ : N b′}
+    {f : Total-hom F H S T} {g : Total-hom F H S′ T′}
+  → (p : a ＝ a′) (p′ : ＜ S ／ (λ i → M (p i)) ＼ S′ ＞)
+  → (q : b ＝ b′) (q′ : ＜ T ／ (λ i → N (q i)) ＼ T′ ＞)
+  → (r : ＜ f .hom ／ (λ i → F (p i) (q i)) ＼ g .hom ＞)
+  → ＜ f .preserves ／ (λ i → H (r i) (p′ i) (q′ i)) ＼ g .preserves ＞
+  → ＜ f ／ (λ i → Total-hom F H (p′ i) (q′ i)) ＼ g ＞
+total-hom-pathᴾ p p′ q q′ r r′ i .hom = r i
+total-hom-pathᴾ p p′ q q′ r r′ i .preserves = r′ i
+
+instance
+  Funlike-Total-hom
+    : ∀{ℓᵃ ℓᵇ ℓᵃ̇ ℓᵇ̇ o ℓ ℓˣ ℓʸ} {A : Type ℓᵃ} {B : Type ℓᵇ}
+      {M : A → Type ℓᵃ̇} {N : B → Type ℓᵇ̇}
+      {F : A → B → Type o}
+      {a : A} {b : B} {H : ∀{x y} → F x y → M x → N y → 𝒰 ℓ}
+      {m : M a} {n : N b}
+      {X : Type ℓˣ} {Y : F a b × X → Type ℓʸ}
+    → ⦃ i : Funlike ur (F a b) X Y ⦄
+    → Funlike ur (Total-hom F H m n) X (Y ∘ first hom)
+  Funlike-Total-hom ._#_ f x = f .Total-hom.hom # x
+
+  Extensional-Total-hom
+    : ∀{ℓᵃ ℓᵇ ℓᵃ̇ ℓᵇ̇ o ℓ ℓʳ} {A : Type ℓᵃ} {B : Type ℓᵇ}
+      {M : A → Type ℓᵃ̇} {N : B → Type ℓᵇ̇}
+      {F : A → B → Type o}
+      {a : A} {b : B} {H : ∀{x y} → F x y → M x → N y → 𝒰 ℓ}
+      {m : M a} {n : N b}
+      ⦃ sa : Extensional (F a b) ℓʳ ⦄
+      ⦃ h : ∀ {x} → H-Level 1 (H x m n) ⦄
+    → Extensional (Total-hom F H m n) ℓʳ
+  Extensional-Total-hom ⦃ sa ⦄ = ≅→extensional Total-hom-Iso (Σ-prop→extensional! sa)
+
+
+
+record Structure {ℓ₁ ℓ₂} (ℓ₃ : _)
+  (S : Type ℓ₁ → Type ℓ₂) : Type (ℓsuc (ℓ₁ ⊔ ℓ₃) ⊔ ℓ₂) where
+
+  constructor HomT→Str
+  field is-hom : (A B : Σ _ S) → (A .fst ≃ B .fst) → Type ℓ₃
+
+open Structure public
+
+Type-with : Structure ℓ S → Type _
+Type-with {S} _ = Σ _ S
+
+@0 is-univalent : Structure ℓ S → Type _
+is-univalent {S} ι =
+  ∀ {X Y}
+  → (f : X .fst ≃ Y .fst)
+  → ι .is-hom X Y f ≃ ＜ X .snd ／ (λ i → S (ua f i)) ＼ Y .snd ＞
+
+-- σ-homomorphic equivalences
+_≃s[_]_ : Σ _ S → Structure ℓ S → Σ _ S → Type _
+A ≃s[ σ ] B = Σ[ f ꞉ A .fst ≃ B .fst ] (σ .is-hom A B f)
+
+private variable σ : Structure ℓ S
+
+-- The Structure Identity Principle says that, if `S` is a `univalent
+-- structure`, then the path space of `Σ S` is equivalent to the space of
+-- S-homomorphic equivalences of types. Using groups as a grounding
+-- example: identification of groups is group isomorphism.
+@0 SIP : is-univalent σ → {X Y : Σ _ S}
+       → (X ≃s[ σ ] Y) ≃ (X ＝ Y)
+SIP {S} {σ} is-univ {X} {Y} =
+  X ≃s[ σ ] Y                                                          ~⟨⟩
+  Σ[ e ꞉ X .fst ≃  Y .fst ] (σ .is-hom X Y e)                          ~⟨ Σ-ap (ua , univalence⁻¹) is-univ ⟩
+  Σ[ p ꞉ X .fst ＝ Y .fst ] ＜ X .snd ／ (λ i → S (p i)) ＼ Y .snd ＞  ~⟨ ≅→≃ Σ-pathᴾ-iso ⟩
+  X ＝ Y                                                               ∎
+
+@0 sip : is-univalent σ → {X Y : Σ _ S} → (X ≃s[ σ ] Y) → (X ＝ Y)
+sip is-univ = SIP is-univ .fst
+
+Equiv-action : (S : Type ℓ → Type ℓ₁) → Type _
+Equiv-action {ℓ} S = {X Y : Type ℓ} → (X ≃ Y) → (S X ≃ S Y)
+
+action→structure : Equiv-action S → Structure _ S
+action→structure act .is-hom (A , x) (B , y) f = act f .fst x ＝ y
+
+@0 is-transport-str : {S : Type ℓ → Type ℓ₁} → Equiv-action S → Type _
+is-transport-str {ℓ} {S} act =
+  {X Y : Type ℓ} (e : X ≃ Y) (s : S X) → act e .fst s ＝ subst S (ua e) s
+
+preserves-id : {S : Type ℓ → Type ℓ} → Equiv-action S → Type _
+preserves-id {ℓ} {S} act =
+  {X : Type ℓ} (s : S X) → act refl .fst s ＝ s
+
+@0 preserves-id→is-transport-str
+  : (σ : Equiv-action S)
+  → preserves-id σ → is-transport-str σ
+preserves-id→is-transport-str {S} σ pres-id e s =
+  Jₑ (λ _ e → σ e .fst s ＝ subst S (ua e) s) lemma′ e where
+    lemma′ : σ refl .fst s ＝ subst S (ua refl) s
+    lemma′ =
+      σ refl .fst s        ~⟨ pres-id s ⟩
+      s                    ~⟨ transport-refl _ ⟨
+      transport refl s     ~⟨ ap (λ p → subst S p s) ua-idₑ ⟨
+      subst S (ua refl) s  ∎
+
+@0 sym-transport-str
+  : (α : Equiv-action S) (τ : is-transport-str α)
+    {X Y : Type ℓ} (e : X ≃ Y) (t : S Y)
+  → is-equiv→inverse (α e .snd) t ＝ subst S (sym (ua e)) t
+sym-transport-str {S} α τ e t =
+     sym (transport⁻-transport (ap S (ua e)) (from t))
+  ∙∙ sym (ap (subst S (sym (ua e))) (τ e (from t)))
+  ∙∙ ap (subst S (sym (ua e))) (ε t)
+  where open module ae = Equiv (α e)
+
+@0 is-transport→is-univalent : (a : Equiv-action S)
+                             → is-transport-str a
+                             → is-univalent (action→structure a)
+is-transport→is-univalent {S} act is-tr {X , s} {Y , t} eqv =
+  act eqv .fst s ＝ t                   ~⟨ =→≃ (ap (_＝ t) (is-tr eqv s)) ⟩
+  subst S (ua eqv) s ＝ t               ~⟨ =→≃ (pathᴾ=path (λ i → S (ua eqv i)) s t) ⟨
+  ＜ s ／ (λ i → S (ua eqv i)) ＼ t ＞  ∎
+
 
 constant-str : (A : Type ℓ) → Structure {ℓ₁} ℓ (λ _ → A)
 constant-str T .is-hom (A , x) (B , y) f = x ＝ y

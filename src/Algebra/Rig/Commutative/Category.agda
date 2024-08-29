@@ -32,10 +32,10 @@ instance
   CRigs-equational .invert-id-hom p .pres-+ _ _ = p .pres-+ _ _ ⁻¹
   CRigs-equational .invert-id-hom p .pres-· _ _ = p .pres-· _ _ ⁻¹
 
-Forget : Functor (CRigs ℓ) (Sets ℓ)
+Forget : CRigs ℓ ⇒ Sets ℓ
 Forget = Forget-structure (CRig-structure _)
 
-Forget-comm : Functor (CRigs ℓ) (Rigs ℓ)
+Forget-comm : CRigs ℓ ⇒ Rigs ℓ
 Forget-comm .Functor.F₀ = second (comm-rig-on↪rig-on $_)
 Forget-comm .Functor.F₁ f .hom = f $_
 Forget-comm .Functor.F₁ f .preserves = f .preserves

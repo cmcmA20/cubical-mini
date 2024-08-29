@@ -12,12 +12,12 @@ open Group-hom
 open Group-on
 
 Group-structure : ∀ ℓ → Thin-structure ℓ Group-on
-Group-structure ℓ .is-hom f A B = el! (Group-hom A B f)
+Group-structure ℓ .is-hom f A B = el! (Group-hom f A B)
 Group-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 Group-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =
   ap f (q .pres-⋆ _ _) ∙ p .pres-⋆ _ _
 Group-structure ℓ .id-hom-unique p q .erased = Equiv.injective
-  (≅ₜ→≃ group-on-iso) $ Σ-prop-path! $ ext (p .pres-⋆)
+  (≅ₜ→≃ group-on-iso) $ ext (p .pres-⋆) ,ₚ prop!
 
 Groups : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Groups ℓ = Structured-objects (Group-structure ℓ)
@@ -33,18 +33,18 @@ instance
   Groups-equational : is-equational (Group-structure ℓ)
   Groups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Functor (Groups ℓ) (Sets ℓ)
+Forget : Groups ℓ ⇒ Sets ℓ
 Forget = Forget-structure (Group-structure _)
 
-Forget-inverse : Functor (Groups ℓ) (Monoids ℓ)
+Forget-inverse : Groups ℓ ⇒ Monoids ℓ
 Forget-inverse .Functor.F₀ = second (group-on↪monoid-on $_)
 Forget-inverse .Functor.F₁ f .hom = f $_
 Forget-inverse .Functor.F₁ f .preserves .Monoid-hom.pres-id =
   pres-id (f .preserves)
 Forget-inverse .Functor.F₁ f .preserves .Monoid-hom.pres-⋆ =
   f .preserves .pres-⋆
-Forget-inverse .Functor.F-id = trivial!
-Forget-inverse .Functor.F-∘ _ _ = trivial!
+Forget-inverse .Functor.F-id = ext λ _ → refl
+Forget-inverse .Functor.F-∘ _ _ = ext λ _ → refl
 
 forget-inverse-is-faithful : is-faithful (Forget-inverse {ℓ})
 forget-inverse-is-faithful p = ext (p $ₚ_)

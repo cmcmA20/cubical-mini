@@ -32,10 +32,10 @@ instance
   Rigs-equational .invert-id-hom p .pres-+ _ _ = p .pres-+ _ _ ⁻¹
   Rigs-equational .invert-id-hom p .pres-· _ _ = p .pres-· _ _ ⁻¹
 
-Forget : Functor (Rigs ℓ) (Sets ℓ)
+Forget : Rigs ℓ ⇒ Sets ℓ
 Forget = Forget-structure (Rig-structure _)
 
-Forget-absorb : Functor (Rigs ℓ) (Semirings ℓ)
+Forget-absorb : Rigs ℓ ⇒ Semirings ℓ
 Forget-absorb .Functor.F₀ = second (rig-on↪semiring-on $_)
 Forget-absorb .Functor.F₁ f .hom = f $_
 Forget-absorb .Functor.F₁ f .preserves = f .preserves

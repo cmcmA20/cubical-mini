@@ -23,16 +23,16 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
     go .make-rig._+_ (lift m) (lift n) = lift (m + n)
     go .make-rig._·_ (lift m) (lift n) = lift (m · n)
     go .make-rig.+-id-l _ = refl
-    go .make-rig.+-id-r (lift m) = ap lift (+-zero-r m)
-    go .make-rig.+-assoc (lift m) (lift n) (lift k) = ap lift (+-assoc m n k)
-    go .make-rig.+-comm (lift m) (lift n) = ap lift (+-comm n m)
-    go .make-rig.·-id-l (lift m) = ap lift (·-id-l m)
-    go .make-rig.·-id-r (lift m) = ap lift (·-id-r m)
-    go .make-rig.·-assoc (lift m) (lift n) (lift k) = ap lift (·-assoc m n k)
-    go .make-rig.·-distrib-+-l (lift m) (lift n) (lift k) = ap lift (·-distrib-+-l m n k)
-    go .make-rig.·-distrib-+-r (lift m) (lift n) (lift k) = ap lift (·-distrib-+-r n k m)
+    go .make-rig.+-id-r (lift m) = lift $ +-zero-r m
+    go .make-rig.+-assoc (lift m) (lift n) (lift k) = lift $ +-assoc m n k
+    go .make-rig.+-comm (lift m) (lift n) = lift $ +-comm n m
+    go .make-rig.·-id-l (lift m) = lift $ ·-id-l m
+    go .make-rig.·-id-r (lift m) = lift $ ·-id-r m
+    go .make-rig.·-assoc (lift m) (lift n) (lift k) = lift $ ·-assoc m n k
+    go .make-rig.·-distrib-+-l (lift m) (lift n) (lift k) = lift $ ·-distrib-+-l m n k
+    go .make-rig.·-distrib-+-r (lift m) (lift n) (lift k) = lift $ ·-distrib-+-r n k m
     go .make-rig.·-absorb-l _ = refl
-    go .make-rig.·-absorb-r (lift m) = ap lift (·-absorb-r m)
+    go .make-rig.·-absorb-r (lift m) = lift $ ·-absorb-r m
 
   ℕ-is-initial : is-initial (Rigs ℓ) ℕᵣ
   ℕ-is-initial {ℓ} R = ℕ→R , λ x → ext $ uniq x where
@@ -66,14 +66,14 @@ Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
       ⌜ f 1 R.+ f m ⌝ R.· f n      ~⟨ ap¡ (f-suc m) ⟨
       f (suc m) R.· f n            ∎
 
-    ℕ→R : Rigs.Hom ℕᵣ R
+    ℕ→R : ℕᵣ ⇒ R
     ℕ→R .hom (lift m) = f m
     ℕ→R .preserves .Semiring-hom.pres-0 = refl
     ℕ→R .preserves .Semiring-hom.pres-1 = refl
     ℕ→R .preserves .Semiring-hom.pres-+ (lift m) (lift n) = f-plus m n
     ℕ→R .preserves .Semiring-hom.pres-· (lift m) (lift n) = f-mul m n
 
-    uniq : (g : Rigs.Hom ℕᵣ R) (m : ℕ) → ℕ→R # lift m ＝ g # lift m
+    uniq : (g : ℕᵣ ⇒ R) (m : ℕ) → ℕ→R # lift m ＝ g # lift m
     uniq g 0       = sym (g .preserves .Semiring-hom.pres-0)
     uniq g (suc m) =
       f (suc m)                            ~⟨ f-suc m ⟩
