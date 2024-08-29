@@ -105,6 +105,10 @@ instance opaque
                      → H-Level n (Monoid-hom f M M′)
   H-Level-monoid-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance monoid-hom-is-prop
 
+instance
+  ⇒-Monoid : ⇒-notation (Σ[ X ꞉ Set ℓ ] Monoid-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Monoid-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Monoid ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Monoid-hom {a = A} {b = B} X Y
+
 monoid-on↪semigroup-on : Monoid-on A ↪ₜ Semigroup-on A
 monoid-on↪semigroup-on .fst M .Semigroup-on._⋆_ = M .Monoid-on._⋆_
 monoid-on↪semigroup-on .fst M .Semigroup-on.has-semigroup =

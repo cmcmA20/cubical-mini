@@ -6,7 +6,7 @@ open import Categories.Prelude hiding (_+_)
 open import Algebra.Rig public
 
 private variable
-  ℓ     : Level
+  ℓ ℓ′  : Level
   A     : 𝒰 ℓ
   e x y z u : A
   _✦_ _✧_ : A → A → A
@@ -59,6 +59,12 @@ comm-rig-on↪rig-on .snd = set-injective→is-embedding! λ p →
 instance opaque
   H-Level-comm-rig-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (CRig-on A)
   H-Level-comm-rig-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 comm-rig-on↪rig-on
+
+instance
+  ⇒-CRig : ⇒-notation (Σ[ X ꞉ Set ℓ ] CRig-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] CRig-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-CRig ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
+    (λ f P Q → Semiring-hom f (rig-on↪semiring-on .fst (comm-rig-on↪rig-on .fst P))
+                              (rig-on↪semiring-on .fst (comm-rig-on↪rig-on .fst Q))) {a = A} {b = B} X Y
 
 
 record make-comm-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

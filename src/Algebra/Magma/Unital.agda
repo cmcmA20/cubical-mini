@@ -100,6 +100,10 @@ instance opaque
                      → H-Level n (UMagma-hom f M M′)
   H-Level-umagma-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance umagma-hom-is-prop
 
+instance
+  ⇒-UMagma : ⇒-notation (Σ[ X ꞉ Set ℓ ] UMagma-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] UMagma-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-UMagma ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) UMagma-hom {a = A} {b = B} X Y
+
 unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A
 unital-magma-on↪magma-on .fst M .n-Magma-on._⋆_ = M .UMagma-on._⋆_
 unital-magma-on↪magma-on .fst M .n-Magma-on.has-n-magma = M .UMagma-on.has-magma
