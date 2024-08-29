@@ -6,7 +6,7 @@ open import Categories.Prelude
 open import Algebra.Monoid public
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ : Level
   A : 𝒰 ℓ
   e x y z : A
   _✦_ : A → A → A
@@ -51,6 +51,11 @@ comm-monoid-on↪monoid-on .fst M .Monoid-on.has-monoid =
 comm-monoid-on↪monoid-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ cmonoid-on-iso) $
     ap Monoid-on._⋆_ p ,ₚ prop!
+
+instance
+  ⇒-CMonoid : ⇒-notation (Σ[ X ꞉ Set ℓ ] CMonoid-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] CMonoid-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-CMonoid ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
+    (λ f P Q → Monoid-hom f (comm-monoid-on↪monoid-on .fst P) (comm-monoid-on↪monoid-on .fst Q)) {a = A} {b = B} X Y
 
 
 record make-comm-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

@@ -38,7 +38,7 @@ record ∞-magma-hom
 ∞-Magma≃ A B (f , _) = ∞-magma-hom f (A .snd) (B .snd)
 
 instance
-  ⇒-∞-Magma : ⇒-notation (Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (Σ[ Y ꞉ 𝒰 ℓ ] ∞-Magma-on Y) (𝒰 ℓ)
+  ⇒-∞-Magma : ⇒-notation (Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (Σ[ Y ꞉ 𝒰 ℓ′ ] ∞-Magma-on Y) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-∞-Magma ._⇒_ X Y = Total-hom Fun ∞-magma-hom (X .snd) (Y .snd)
 
 
@@ -96,6 +96,10 @@ module _ (n : HLevel) where
 
 Magma-on = n-Magma-on 2
 2-Magma-on = n-Magma-on 3
+
+instance
+  ⇒-n-Magma : {n : HLevel} → ⇒-notation (Σ[ X ꞉ Set ℓ ] n-Magma-on n ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] n-Magma-on n ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-n-Magma {n} ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) (n-Magma-hom n) {a = A} {b = B} X Y
 
 -- TODO generalize
 opaque

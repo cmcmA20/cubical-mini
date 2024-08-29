@@ -116,6 +116,10 @@ instance opaque
                        → H-Level n (Semiring-hom f M M′)
   H-Level-semiring-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance semiring-hom-is-prop
 
+instance
+  ⇒-Semiring : ⇒-notation (Σ[ X ꞉ Set ℓ ] Semiring-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Semiring-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Semiring ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Semiring-hom {a = A} {b = B} X Y
+
 semiring-on→additive-comm-monoid-on : ∀[ Semiring-on {ℓ} ⇒ CMonoid-on ]
 semiring-on→additive-comm-monoid-on S = to-comm-monoid-on go where
   open Semiring-on S

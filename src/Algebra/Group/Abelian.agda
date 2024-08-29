@@ -7,7 +7,7 @@ open import Algebra.Group public
 open import Algebra.Monoid.Commutative public
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ : Level
   A : 𝒰 ℓ
   e x y z : A
   _✦_ : A → A → A
@@ -51,6 +51,11 @@ abelian-group-on↪group-on .fst G .Group-on.has-group =
   G .AGroup-on.has-abelian-group .is-abelian-group.has-group
 abelian-group-on↪group-on .snd = set-injective→is-embedding! λ p →
   Equiv.injective (≅ₜ→≃ agroup-on-iso) $ ap Group-on._⋆_ p ,ₚ prop!
+
+instance
+  ⇒-AGroup : ⇒-notation (Σ[ X ꞉ Set ℓ ] AGroup-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] AGroup-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-AGroup ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
+    (λ f P Q → Group-hom f (abelian-group-on↪group-on .fst P) (abelian-group-on↪group-on .fst Q)) {a = A} {b = B} X Y
 
 
 record make-abelian-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

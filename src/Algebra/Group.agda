@@ -109,6 +109,10 @@ instance opaque
                     → H-Level n (Group-hom f M M′)
   H-Level-group-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance group-hom-is-prop
 
+instance
+  ⇒-Group : ⇒-notation (Σ[ X ꞉ Set ℓ ] Group-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Group-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Group ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Group-hom {a = A} {b = B} X Y
+
 group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A
 group-on↪monoid-on .fst G .Monoid-on._⋆_ = G .Group-on._⋆_
 group-on↪monoid-on .fst G .Monoid-on.has-monoid = G .Group-on.has-monoid

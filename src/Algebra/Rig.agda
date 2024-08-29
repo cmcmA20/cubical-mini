@@ -6,7 +6,7 @@ open import Categories.Prelude hiding (_+_)
 open import Algebra.Semiring public
 
 private variable
-  ℓ     : Level
+  ℓ ℓ′  : Level
   A     : 𝒰 ℓ
   e x y z u : A
   _✦_ _✧_ : A → A → A
@@ -68,6 +68,11 @@ rig-on↪semiring-on .snd = set-injective→is-embedding! λ p →
 instance opaque
   H-Level-rig-on : ⦃ n ≥ʰ 2 ⦄ → H-Level n (Rig-on A)
   H-Level-rig-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 rig-on↪semiring-on
+
+instance
+  ⇒-Rig : ⇒-notation (Σ[ X ꞉ Set ℓ ] Rig-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Rig-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Rig ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
+    (λ f P Q → Semiring-hom f (rig-on↪semiring-on .fst P) (rig-on↪semiring-on .fst Q)) {a = A} {b = B} X Y
 
 
 record make-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
