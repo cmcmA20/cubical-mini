@@ -6,7 +6,6 @@ open import Foundations.Prelude
   renaming ( _$²_ to _$ₜ²_
            ; _$³_ to _$ₜ³_
            ; _$⁴_ to _$ₜ⁴_
-           ; _$⁵_ to _$ₜ⁵_
            )
   hiding ( case_of_
          ; case_return_of_

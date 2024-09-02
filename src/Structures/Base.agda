@@ -64,6 +64,29 @@ total-hom-pathᴾ p p′ q q′ r r′ i .hom = r i
 total-hom-pathᴾ p p′ q q′ r r′ i .preserves = r′ i
 
 instance
+  Refl-Total-hom
+    : ∀{ℓᵃ ℓᵃ̇ o ℓ} {A : Type ℓᵃ} {M : A → Type ℓᵃ̇}
+      {F : A → A → Type o}
+      {a : A} {H : ∀{x y} → F x y → M x → M y → 𝒰 ℓ}
+      ⦃ _ : Refl F ⦄ ⦃ _ : Refl (H {a} refl) ⦄
+    → Refl {A = M a} (Total-hom F H)
+  Refl-Total-hom .refl .hom = refl
+  Refl-Total-hom .refl .preserves = refl
+
+  Trans-Total-hom
+    : ∀{ℓᵃ ℓᵇ ℓᶜ ℓᵃ̇ ℓᵇ̇ ℓᶜ̇ ℓf ℓg ℓfg ℓ ℓ′ ℓ″} {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
+      {M : A → Type ℓᵃ̇} {N : B → Type ℓᵇ̇} {K : C → Type ℓᶜ̇}
+      {F : A → B → Type ℓf} {G : B → C → Type ℓg}
+      {F∙G : A → C → Type ℓfg}
+      {a : A} {b : B} {c : C}
+      {H  : ∀{x y} → F x y → M x → N y → 𝒰 ℓ}
+      {H′ : ∀{x y} → G x y → N x → K y → 𝒰 ℓ′}
+      {H″ : ∀{x y} → F∙G x y → M x → K y → 𝒰 ℓ″}
+      ⦃ _ : Trans F G F∙G ⦄ ⦃ _ : ∀ {x y f g} → Trans (H {x} f) (H′ {y} g) (H″ (f ∙ g)) ⦄
+    → Trans {A = M a} {B = N b} {C = K c} (Total-hom F H) (Total-hom G H′) (Total-hom F∙G H″)
+  Trans-Total-hom ._∙_ p q .hom = p .hom ∙ q .hom
+  Trans-Total-hom ._∙_ p q .preserves = p .preserves ∙ q .preserves
+
   Funlike-Total-hom
     : ∀{ℓᵃ ℓᵇ ℓᵃ̇ ℓᵇ̇ o ℓ ℓˣ ℓʸ} {A : Type ℓᵃ} {B : Type ℓᵇ}
       {M : A → Type ℓᵃ̇} {N : B → Type ℓᵇ̇}

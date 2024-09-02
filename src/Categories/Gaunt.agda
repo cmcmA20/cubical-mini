@@ -53,7 +53,7 @@ module _ {o ℓ} {C : Precategory o ℓ} where
   open Categories.Morphism C
   skeletal+trivial-automorphisms→gaunt
     : is-skeletal C
-    → (∀ {x} → (f : x ≅ x) → f ＝ id-iso)
+    → (∀ {x : Ob} → (f : x ≅ x) → f ＝ refl)
     → is-gaunt C
   skeletal+trivial-automorphisms→gaunt skel trivial-aut =
     skeletal+category→gaunt skel $
@@ -61,12 +61,13 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     where
       open is-gaunt
 
-      path-iso : ∀ {x y} → Isoₜ (x ≅ y) (x ＝ y)
-      path-iso .fst f = skel .to-path ∣ f ∣₁
-      path-iso .snd .is-iso.inv f = path→iso f
-      path-iso .snd .is-iso.rinv _ =
+      path-iso : {x y : Ob} → (x ≅ y) ≅ (x ＝ y)
+      path-iso .Iso.to f = skel .to-path ∣ f ∣₁
+      path-iso .Iso.from = path→iso
+      path-iso .Iso.inverses .Inverses.inv-o = fun-ext λ _ →
         is-skeletal→is-strict _ skel _ _ _ _
-      path-iso {x} .snd .is-iso.linv f = IdS.J
+      path-iso {x} .Iso.inverses .Inverses.inv-i = fun-ext λ f →
+        IdS.J
         skel
         (λ y′ ∥f∥₁ → ∀(f : x ≅ y′) → path→iso ((skel .to-path ∥f∥₁)) ＝ f)
         (λ f → trivial-aut _ ∙ trivial-aut _ ⁻¹)

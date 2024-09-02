@@ -73,7 +73,7 @@ is-embedding→monic
   : is-embedding f
   → ∀ {C : Type ℓ″} (g h : C → A) → f ∘ g ＝ f ∘ h → g ＝ h
 is-embedding→monic {f} emb g h p =
-  fun-ext λ x → ap fst (emb _ (g x , refl) (h x , p ⁻¹ $ₚ x))
+  fun-ext λ x → ap fst (emb _ (g x , refl) (h x , (p ⁻¹ $ x)))
 
 -- TODO move
 -- set-monic→is-embedding
@@ -144,11 +144,11 @@ is-equiv→is-embedding r y = is-contr→is-prop $ r .equiv-proof y
 ≃→↪ : A ≃ B → A ↪ B
 ≃→↪ = second is-equiv→is-embedding
 
-is-iso→is-embedding : is-iso f → is-embedding f
-is-iso→is-embedding = is-equiv→is-embedding ∘ is-iso→is-equiv
+is-inv→is-embedding : {f : A → B} → is-invertible f → is-embedding f
+is-inv→is-embedding = is-equiv→is-embedding ∘ is-inv→is-equiv
 
 ≅→↪ : A ≅ B → A ↪ B
-≅→↪ = second is-iso→is-embedding
+≅→↪ = ≅→≃ ∙ ≃→↪
 
 @0 lift-is-embedding : is-embedding (Lift {ℓ} ℓ′)
 lift-is-embedding = cancellable→is-embedding λ {x} {y} →

@@ -102,22 +102,19 @@ identity-system-gives-path
   : {r : ∀ a → R a a}
   → is-identity-system R r
   → ∀ {x y} → R x y ≃ (x ＝ y)
-identity-system-gives-path {R} {r} ids =
-  ≅→≃ (ids .to-path , iso from ri li) where
-    from : ∀ {a b} → a ＝ b → R a b
-    from {a} p = transport (λ i → R a (p i)) (r a)
+identity-system-gives-path {R} {r} ids = ≅→≃ $ iso (ids .to-path) bw (fun-ext ri) (fun-ext li) where
+  bw : ∀ {a b} → a ＝ b → R a b
+  bw {a} p = transport (λ i → R a (p i)) (r a)
 
-    ri : ∀ {a b} → (from {a} {b}) is-right-inverse-of (ids .to-path)
-    ri = Jₚ (λ y p → ids .to-path (from p) ＝ p)
-            ( ap (ids .to-path) (transport-refl _)
-            ∙ to-path-refl ids)
+  ri : ∀ {a b} → (bw {a} {b}) section-of′ (ids .to-path)
+  ri = Jₚ (λ y p → ids .to-path (bw p) ＝ p)
+          ( ap (ids .to-path) (transport-refl _)
+          ∙ to-path-refl ids)
 
-    li : ∀ {a b} → (from {a} {b}) is-left-inverse-of (ids .to-path)
-    li = J ids (λ y p → from (ids .to-path p) ＝ p)
-               ( ap from (to-path-refl ids)
-               ∙ transport-refl _ )
-
-
+  li : ∀ {a b} → (bw {a} {b}) retract-of′ (ids .to-path)
+  li = J ids (λ y p → bw (ids .to-path p) ＝ p)
+             ( ap bw (to-path-refl ids)
+             ∙ transport-refl _ )
 
 
 module _
@@ -150,7 +147,7 @@ opaque
     : {R : A → A → Type ℓ′} {r : ∀ a → R a a}
     → is-prop (is-identity-system R r)
   is-identity-system-is-prop {A} {R} {r} =
-    retract→is-of-hlevel 1 from to cancel λ x y i a → is-contr-is-prop (x a) (y a) i
+    retract→is-of-hlevel 1 from to (fun-ext cancel) λ x y i a → is-contr-is-prop (x a) (y a) i
     where
       to : is-identity-system R r → ∀ x → is-contr (Σ A (R x))
       to ids x = singleton-is-contr ids
@@ -165,7 +162,7 @@ opaque
             (singleton-is-contr x .snd (b , s))
       cancel′ x s = is-prop→squareᴾ (λ _ _ → is-contr→is-prop (singleton-is-contr x)) _ _ _ _
 
-      cancel : from is-left-inverse-of to
+      cancel : from retract-of′ to
       cancel x i .to-path s = ap fst (cancel′ x s i)
       cancel x i .to-path-over s = ap snd (cancel′ x s i)
 

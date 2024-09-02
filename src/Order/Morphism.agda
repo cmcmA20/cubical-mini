@@ -46,45 +46,46 @@ module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
 
   section→is-order-reflection
     : (f : ⌞ P ⌟ → ⌞ Q ⌟) (g : Q ⇒ P)
-    → f is-right-inverse-of (g #_)
+    → f section-of (g #_)
     → is-order-reflection P Q f
   section→is-order-reflection f g sect {x = x} {y = y} fx≤fy =
-    x         =⟨ sect x ⟨
+    x         =⟨ sect # x ⟨
     g # f x   ≤⟨ g # fx≤fy ⟩
-    g # f y   =⟨ sect y ⟩
+    g # f y   =⟨ sect # y ⟩
     y         ∎
 
   section→is-order-embedding
     : (f : P ⇒ Q) (g : Q ⇒ P)
-    → f #_ is-right-inverse-of g #_
+    → (f #_) section-of (g #_)
     → is-order-embedding P Q (f #_)
   section→is-order-embedding f g sect =
     monotone-reflection→is-order-embedding (f #_) (f #_)
       (section→is-order-reflection (f #_) g sect)
 
 
-module _ {o ℓ} {P Q : Poset o ℓ} where
+module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   private
     module P = Order.Reasoning P
     module Q = Order.Reasoning Q
-
-  open Categories.Morphism (Posets o ℓ)
 
   has-retract→is-order-reflection
     : (f : P ⇒ Q)
     → has-retract f
     → is-order-reflection P Q (f #_)
   has-retract→is-order-reflection f f-ret =
-    section→is-order-reflection (f #_) (f-ret .retract) (f-ret .is-retract $ₚ_)
+    section→is-order-reflection (f .hom) (f-ret .retract)
+      (fun-ext $ ap hom (f-ret .is-retract) #_)
 
   has-retract→is-order-embedding
     : (f : P ⇒ Q)
     → has-retract f
     → is-order-embedding P Q (f #_)
   has-retract→is-order-embedding f f-ret =
-    section→is-order-embedding f (f-ret .retract) (f-ret .is-retract $ₚ_)
+    section→is-order-embedding f (f-ret .retract)
+      (fun-ext $ ap hom (f-ret .is-retract) #_)
 
-  order-iso-is-order-embedding
-    : (f : P ≅ Q) → is-order-embedding P Q (f .to #_)
-  order-iso-is-order-embedding f =
-    has-retract→is-order-embedding (f .to) (iso→to-has-retract f)
+  ≅→is-order-embedding
+    : (f : P ≅ Q) → is-order-embedding P Q (f #_)
+  ≅→is-order-embedding f =
+    has-retract→is-order-embedding (f .to) (≅→to-has-retract f)
+    where open Iso

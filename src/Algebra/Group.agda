@@ -6,9 +6,10 @@ open import Categories.Prelude
 open import Algebra.Monoid public
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : 𝒰 ℓ
-  B : 𝒰 ℓ
+  B : 𝒰 ℓ′
+  C : 𝒰 ℓ″
   e x y : A
   _✦_ : A → A → A
   n : HLevel
@@ -27,8 +28,8 @@ record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
     inverse-r : Invertibility-rᵘ A id inverse _⋆_
 
   instance
-    Symmᵘ-is-group : Symmᵘ A
-    Symmᵘ-is-group .minv = inverse
+    Symᵘ-is-group : Symᵘ A
+    Symᵘ-is-group .minv = inverse
 
 unquoteDecl is-group-iso = declare-record-iso is-group-iso (quote is-group)
 
@@ -113,6 +114,15 @@ instance
   ⇒-Group : ⇒-notation (Σ[ X ꞉ Set ℓ ] Group-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Group-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-Group ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Group-hom {a = A} {b = B} X Y
 
+  Refl-Group-hom : Refl {A = Group-on A} (Group-hom refl)
+  Refl-Group-hom .refl .Group-hom.pres-⋆ _ _ = refl
+
+  Trans-Group-hom
+    : {f : A → B} {g : B → C}
+    → Trans (Group-hom f) (Group-hom g) (Group-hom (f ∙ g))
+  Trans-Group-hom {f} {g} ._∙_ p q .Group-hom.pres-⋆ a a′ =
+    ap g (p .Group-hom.pres-⋆ a a′) ∙ q .Group-hom.pres-⋆ (f a) (f a′)
+
 group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A
 group-on↪monoid-on .fst G .Monoid-on._⋆_ = G .Group-on._⋆_
 group-on↪monoid-on .fst G .Monoid-on.has-monoid = G .Group-on.has-monoid
@@ -135,8 +145,8 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     Reflᵘ-make-group : Reflᵘ X
     Reflᵘ-make-group .mempty = id
 
-    Symmᵘ-make-group : Symmᵘ X
-    Symmᵘ-make-group .minv = inverse
+    Symᵘ-make-group : Symᵘ X
+    Symᵘ-make-group .minv = inverse
 
     Transᵘ-make-group : Transᵘ X
     Transᵘ-make-group ._<>_ = _⋆_

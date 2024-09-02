@@ -48,14 +48,14 @@ instance
   Reflects-∣-∣₂=∣-∣₂ = Reflects.dmap (ap ∣_∣₂) (λ x≠y p → ⊥.rec $ rec! x≠y $ =∘∣-∣₂≃∥-∥₁∘= $ p) auto
 
 ae : A ≃ B → ∥ A ∥₂ ≃ ∥ B ∥₂
-ae e = to , is-iso→is-equiv (iso from ri li)
+ae e = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li)
   where
   module e = Equiv e
   to = map e.to
   from = map e.from
 
-  ri : from is-right-inverse-of to
+  ri : from section-of′ to
   ri = elim! (ap ∣_∣₂ ∘ e.ε)
 
-  li : from is-left-inverse-of to
+  li : from retract-of′ to
   li = elim! (ap ∣_∣₂ ∘ e.η)

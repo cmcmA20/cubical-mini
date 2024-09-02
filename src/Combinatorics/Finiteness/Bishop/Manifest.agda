@@ -71,14 +71,14 @@ private
     : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
     → (∀ x → Manifest-bishop-finite (P x))
     → Manifest-bishop-finite Π[ P ]
-  finite-pi-fin 0 {P} fam = finite $ ≅→≃ $ ff , iso gg ri li where
+  finite-pi-fin 0 {P} fam = finite $ ≅→≃ $ iso ff gg (fun-ext ri) (fun-ext li) where
     ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
     ff _ = fzero
     gg : Fin 1 → Π[ x ꞉ Fin 0 ] P x
     gg _ f₀ = false! f₀
-    ri : gg is-right-inverse-of ff
+    ri : gg section-of′ ff
     ri (mk-fin 0) = refl
-    li : gg is-left-inverse-of ff
+    li : gg retract-of′ ff
     li _ = fun-ext λ ()
 
   finite-pi-fin (suc sz) {P} fam =

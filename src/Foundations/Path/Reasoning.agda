@@ -93,10 +93,10 @@ module _
 
 module _ {A : Type ℓ} {x y : A} {p : x ＝ y} {q : y ＝ x} (inv : p ∙ q ＝ refl) where opaque
   ∙-cancel-l′ : {z : A} {r : x ＝ z} → p ∙ (q ∙ r) ＝ r
-  ∙-cancel-l′ = ∙-pull-l inv ∙ ∙-id-l _
+  ∙-cancel-l′ = ∙-pull-l inv ∙ ∙-id-o _
 
   ∙-cancel-r′ : {z : A} {r : z ＝ x} → (r ∙ p) ∙ q ＝ r
-  ∙-cancel-r′ = ∙-pull-r inv ∙ ∙-id-r _
+  ∙-cancel-r′ = ∙-pull-r inv ∙ ∙-id-i _
 
   ∙-insert-l : {z : A} {r : x ＝ z} → r ＝ p ∙ (q ∙ r)
   ∙-insert-l = sym ∙-cancel-l′

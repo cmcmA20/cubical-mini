@@ -4,34 +4,53 @@ module Categories.Morphism.Instances where
 open import Prelude
   renaming ( _↪_ to ↪ₜ
            ; _↠_ to ↠ₜ
-           ; _≅_ to _≅ₜ_
            ; Extensional-↪ to Extensional-↪ₜ
            ; Extensional-↠ to Extensional-↠ₜ
            )
 
 open import Categories.Base
 open import Categories.Morphism
+open import Categories.Morphism
+  using (H-Level-inverses ; ≅-Hom) public
 
 unquoteDecl H-Level-mono = declare-record-hlevel 2 H-Level-mono (quote _↪_)
 unquoteDecl H-Level-epi = declare-record-hlevel 2 H-Level-epi (quote _↠_)
-unquoteDecl H-Level-section = declare-record-hlevel 2 H-Level-section (quote has-section)
-unquoteDecl H-Level-retract = declare-record-hlevel 2 H-Level-retract (quote has-retract)
-unquoteDecl H-Level-inverses = declare-record-hlevel 1 H-Level-inverses (quote Inverses)
 
-instance opaque
-  H-Level-is-invertible
-    : ∀ {o ℓ} {C : Precategory o ℓ} {a b} {f : C .Hom a b} {n : HLevel} → ⦃ n ≥ʰ 1 ⦄
-    → H-Level n (is-invertible C f)
-  H-Level-is-invertible ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (is-invertible-is-prop _)
+module _ {o ℓ} {C : Precategory o ℓ} where
+  open Precategory C
 
-unquoteDecl H-Level-≅ = declare-record-hlevel 2 H-Level-≅ (quote _≅_)
+  instance opaque
+    H-Level-has-section
+      : {a b : ⌞ C ⌟} {f : a ⇒ b} {n : HLevel} ⦃ _ : n ≥ʰ 2 ⦄
+      → H-Level n (has-section f)
+    H-Level-has-section ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 has-section-Iso
 
-module _ {o ℓ} {C : Precategory o ℓ} where instance
-  Extensional-↪
-    : ∀ {ℓr} {a b}
-    → ⦃ sa : Extensional (C .Hom a b) ℓr ⦄
-    → Extensional (_↪_ C a b) ℓr
-  Extensional-↪ ⦃ sa ⦄ = set-injective→extensional! (↪-pathᴾ C) sa
+    H-Level-has-retract
+      : {a b : ⌞ C ⌟} {f : a ⇒ b} {n : HLevel} ⦃ _ : n ≥ʰ 2 ⦄
+      → H-Level n (has-retract f)
+    H-Level-has-retract ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 has-retract-Iso
+
+    H-Level-is-invertible
+      : {a b : ⌞ C ⌟} {f : a ⇒ b} {n : HLevel} → ⦃ n ≥ʰ 1 ⦄
+      → H-Level n (is-invertible f)
+    H-Level-is-invertible ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (is-invertible-is-prop _)
+
+    H-Level-Inverses
+      : {a b : ⌞ C ⌟} {f : a ⇒ b} {g : b ⇒ a} {n : HLevel} → ⦃ n ≥ʰ 2 ⦄
+      → H-Level n (Inverses f g)
+    H-Level-Inverses ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 Inverses-Iso
+
+    H-Level-≅
+      : {a b : ⌞ C ⌟} {n : HLevel} → ⦃ n ≥ʰ 2 ⦄
+      → H-Level n (_≅_ ⦃ ≅-Hom C ⦄ a b)
+    H-Level-≅ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 Iso-Iso
+
+  instance
+    Extensional-↪
+      : ∀ {ℓr} {a b}
+      → ⦃ sa : Extensional (C .Hom a b) ℓr ⦄
+      → Extensional (_↪_ C a b) ℓr
+    Extensional-↪ ⦃ sa ⦄ = set-injective→extensional! (↪-pathᴾ C) sa
 
   Extensional-↠
     : ∀ {ℓr} {a b}
@@ -42,5 +61,5 @@ module _ {o ℓ} {C : Precategory o ℓ} where instance
   Extensional-≅
     : ∀ {ℓr} {a b}
     → ⦃ sa : Extensional (C .Hom a b) ℓr ⦄
-    → Extensional (_≅_ C a b) ℓr
+    → Extensional (_≅_ ⦃ ≅-Hom C ⦄ a b) ℓr
   Extensional-≅ ⦃ sa ⦄ = set-injective→extensional! (≅-path C) sa

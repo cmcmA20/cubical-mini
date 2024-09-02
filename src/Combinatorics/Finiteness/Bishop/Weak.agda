@@ -119,14 +119,14 @@ private
     : {ℓ′ : Level} (n : ℕ) {P : Fin n → Type ℓ′}
     → (∀ x → is-bishop-finite (P x))
     → is-bishop-finite Π[ P ]
-  bishop-finite-pi-fin 0 {P} fam = finite₁ $ pure $ ≅→≃ $ ff , iso gg ri li where
+  bishop-finite-pi-fin 0 {P} fam = finite₁ $ pure $ ≅→≃ $ iso ff gg (fun-ext ri) (fun-ext li) where
     ff : Π[ x ꞉ Fin 0 ] P x → Fin 1
     ff _ = fzero
     gg : _
     gg _ f₀ = false! f₀
-    ri : gg is-right-inverse-of ff
+    ri : gg section-of′ ff
     ri (mk-fin 0) = refl
-    li : gg is-left-inverse-of ff
+    li : gg retract-of′ ff
     li _ = fun-ext λ ()
 
   bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do

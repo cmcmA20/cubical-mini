@@ -131,10 +131,10 @@ private
     pure $ sip fin-set-str-is-univalent (u ∙ =→≃ (ap (λ n → Fin n) p) ∙ v ⁻¹ , p)
 
   ∥FinSet′∥₂≃ᴱℕ : ∥ FinSet′ ℓ ∥₂ ≃ᴱ ℕ
-  ∥FinSet′∥₂≃ᴱℕ {ℓ} = rec! ⦃ Inductive-∥-∥₂ ⦃ Inductive-default ⦄ ⦄ (fst ∘ snd) , is-isoᴱ→is-equivᴱ {B = ℕ}
+  ∥FinSet′∥₂≃ᴱℕ {ℓ} = rec! ⦃ Inductive-∥-∥₂ ⦃ Inductive-default ⦄ ⦄ (fst ∘ snd) , is-invᴱ→is-equivᴱ {B = ℕ}
     ( (λ n → pure $ Lift ℓ (Fin n) , n , pure lift≃id)
-    , erase (λ _ → refl)
-    , erase (elim! λ X n e → =∘∣-∣₂≃∥-∥₁∘= ⁻¹ $ fin-set′-ext refl) )
+    , erase refl
+    , erase (fun-ext $ elim! λ X n e → =∘∣-∣₂≃∥-∥₁∘= ⁻¹ $ fin-set′-ext refl) )
 
 ∥FinSet∥₂≃ᴱℕ : ∥ FinSet ℓ ∥₂ ≃ᴱ ℕ
 ∥FinSet∥₂≃ᴱℕ {ℓ} =

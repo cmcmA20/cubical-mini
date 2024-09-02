@@ -6,9 +6,10 @@ open import Categories.Prelude
 open import Algebra.Magma public
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : 𝒰 ℓ
   B : 𝒰 ℓ′
+  C : 𝒰 ℓ″
   e x y z : A
   _✦_ : A → A → A
   n : HLevel
@@ -103,6 +104,18 @@ instance opaque
 instance
   ⇒-UMagma : ⇒-notation (Σ[ X ꞉ Set ℓ ] UMagma-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] UMagma-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-UMagma ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) UMagma-hom {a = A} {b = B} X Y
+
+  Refl-UMagma-hom : Refl {A = UMagma-on A} (UMagma-hom refl)
+  Refl-UMagma-hom .refl .UMagma-hom.pres-⋆ _ _ = refl
+  Refl-UMagma-hom .refl .UMagma-hom.pres-id = refl
+
+  Trans-UMagma-hom
+    : {f : A → B} {g : B → C}
+    → Trans (UMagma-hom f) (UMagma-hom g) (UMagma-hom (f ∙ g))
+  Trans-UMagma-hom {f} {g} ._∙_ p q .UMagma-hom.pres-⋆ a a′ =
+    ap g (p .UMagma-hom.pres-⋆ a a′) ∙ q .UMagma-hom.pres-⋆ (f a) (f a′)
+  Trans-UMagma-hom {f} {g} ._∙_ p q .UMagma-hom.pres-id =
+    ap g (p .UMagma-hom.pres-id) ∙ q .UMagma-hom.pres-id
 
 unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A
 unital-magma-on↪magma-on .fst M .n-Magma-on._⋆_ = M .UMagma-on._⋆_

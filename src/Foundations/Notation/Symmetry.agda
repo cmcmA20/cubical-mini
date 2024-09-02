@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Notation.Symmetric where
+module Foundations.Notation.Symmetry where
 
 open import Foundations.Prim.Type
 open import Agda.Builtin.Unit
@@ -16,7 +16,7 @@ module _
   Symmetry : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ′)
   Symmetry = {x : A} {y : B} → I x y → O y x
 
-  record Symm : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ′) where
+  record Sym : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ′) where
     no-eta-equality
     field sym : Symmetry
 
@@ -27,22 +27,22 @@ module _
     _ᵒᵖ = sym
 
 
-open Symm ⦃ ... ⦄ public
+open Sym ⦃ ... ⦄ public
 
-Symmetric : (A → A → 𝒰 ℓ) → 𝒰 _
-Symmetric R = Symm R R
+Symʰ : (A → A → 𝒰 ℓ) → 𝒰 _
+Symʰ R = Sym R R
 
 
 -- "untyped" raw symmetry is just having an automorphism
-record Symmᵘ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
+record Symᵘ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
   no-eta-equality
   field minv : A → A
 
-open Symmᵘ ⦃ ... ⦄ public
+open Symᵘ ⦃ ... ⦄ public
 
 instance
-  Symmᵘ→Symm
-    : ⦃ Symmᵘ A ⦄
-    → Symm {A = ⊤} {B = ⊤} (λ _ _ → A) (λ _ _ → A)
-  Symmᵘ→Symm .sym = minv
-  {-# INCOHERENT Symmᵘ→Symm #-}
+  Symᵘ→Sym
+    : ⦃ Symᵘ A ⦄
+    → Sym {A = ⊤} {B = ⊤} (λ _ _ → A) (λ _ _ → A)
+  Symᵘ→Sym .sym = minv
+  {-# INCOHERENT Symᵘ→Sym #-}

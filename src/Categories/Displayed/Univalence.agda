@@ -19,49 +19,59 @@ open Total-hom
 
 is-categoryᵈ : Type _
 is-categoryᵈ =
-  ∀ {x y} (f : x B.≅ y) (A : Ob[ x ]) → is-prop (Σ[ B ꞉ Ob[ y ] ] (A ≅[ f ] B))
+  ∀ {x y} (f : x ≅ y) (A : Ob[ x ]) → is-prop (Σ[ B ꞉ Ob[ y ] ] (A ≅[ f ] B))
+
+open Iso
 
 module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
   private
     piece-together
-      : ∀ {x y} (p : x B.≅ y) {A : Ob[ x ]} {B : Ob[ y ]} (f : A ≅[ p ] B)
-      → (x , A) ∫E.≅ (y , B)
-    piece-together p f =
-      ∫E.make-iso (total-hom (p .B.to) (f .toᵈ)) (total-hom (p .B.from) (f .fromᵈ))
-        (total-hom-path (p .B.inv-l) (f .inv-lᵈ))
-        (total-hom-path (p .B.inv-r) (f .inv-rᵈ))
+      : ∀ {x y} (p : x ≅ y) {A : Ob[ x ]} {B : Ob[ y ]} (f : A ≅[ p ] B)
+      → (x , A) ≅ (y , B)
+    piece-together p f = iso
+      (total-hom (p .to) (f .toᵈ))
+      (total-hom (p .from) (f .fromᵈ))
+      (total-hom-path (p .inv-o) (f .inv-lᵈ))
+      (total-hom-path (p .inv-i) (f .inv-rᵈ))
 
     contract-vertical-iso
-      : ∀ {x} {A : Ob[ x ]} (B : Ob[ x ]) (f : A ≅↓ B)
-      → Path (Σ _ ((x , A) ∫E.≅_)) ((x , A) , ∫E.id-iso)
-          ((x , B) , piece-together B.id-iso f)
+      : ∀ {x : B.Ob} {A : Ob[ x ]} (B : Ob[ x ]) (f : A ≅↓ B)
+      → Path (Σ[ z ꞉ ∫E.Ob ] ((x , A) ≅ z))
+          ((x , A) , refl)
+          ((x , B) , piece-together refl f)
     contract-vertical-iso {x} {A} B f
       =  (λ i → x , pair i .fst)
       ,ₚ (∫E.≅-pathᴾ refl _ (total-hom-pathᴾ refl refl refl (λ i → pair i .fst) refl (λ i → pair i .snd .toᵈ)))
       where
-        pair = disp-c B.id-iso A
+        pair = disp-c refl A
           (A , id-iso↓)
           (B , f)
 
   is-category-total : is-category (∫ E)
   is-category-total = total-cat where
     wrapper
-      : ∀ {x y} (p : x B.≅ y) (A : Ob[ x ]) (B : Ob[ y ]) (f : A ≅[ p ] B)
-      → Path (Σ _ ((x , A) ∫E.≅_))
-        ((x , A) , ∫E.id-iso)
-        ((y , B) , piece-together p f)
+      : ∀ {x y} (p : x ≅ y) (A : Ob[ x ]) (B : Ob[ y ]) (f : A ≅[ p ] B)
+      → Path (Σ[ z ꞉ ∫E.Ob ] ((x , A) ≅ z))
+          ((x , A) , refl)
+          ((y , B) , piece-together p f)
     wrapper p A =
       Univalent.J-iso base-c
         (λ y p → (B : Ob[ y ]) (f : A ≅[ p ] B)
-               → ((_ , A) , ∫E.id-iso) ＝ (((y , B) , piece-together p f)))
+               → ((_ , A) , refl) ＝ (((y , B) , piece-together p f)))
         contract-vertical-iso
         p
 
     total-cat : is-category (∫ E)
     total-cat .to-path p = ap fst $
-        wrapper (total-iso→iso E p) _ _ (total-iso→iso[] E p)
-    total-cat .to-path-over p = ap snd $
-        wrapper (total-iso→iso E p) _ _ (total-iso→iso[] E p)
+      wrapper (total-iso→iso E p) _ _ (total-iso→iso[] E p)
+    total-cat .to-path-over p i .to =
+      wrapper (total-iso→iso E p) _ _ (total-iso→iso[] E p) i .snd .to
+    total-cat .to-path-over p i .from =
+      wrapper (total-iso→iso E p) _ _ (total-iso→iso[] E p) i .snd .from
+    total-cat .to-path-over p i .inverses .Inverses.inv-o =
+      wrapper (total-iso→iso E p) _ _ (total-iso→iso[] E p) i .snd .inv-o
+    total-cat .to-path-over p i .inverses .Inverses.inv-i =
+      wrapper (total-iso→iso E p) _ _ (total-iso→iso[] E p) i .snd .inv-i
 
 is-category-fibrewise
   : is-category B

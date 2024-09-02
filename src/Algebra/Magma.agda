@@ -4,9 +4,10 @@ module Algebra.Magma where
 open import Categories.Prelude
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : 𝒰 ℓ
   B : 𝒰 ℓ′
+  C : 𝒰 ℓ″
   _✦_ : A → A → A
   n : HLevel
 
@@ -40,6 +41,15 @@ record ∞-magma-hom
 instance
   ⇒-∞-Magma : ⇒-notation (Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (Σ[ Y ꞉ 𝒰 ℓ′ ] ∞-Magma-on Y) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-∞-Magma ._⇒_ X Y = Total-hom Fun ∞-magma-hom (X .snd) (Y .snd)
+
+  Refl-∞-magma-hom : Refl {A = ∞-Magma-on A} (∞-magma-hom refl)
+  Refl-∞-magma-hom .refl .∞-magma-hom.pres-⋆ _ _ = refl
+
+  Trans-∞-magma-hom
+    : {f : A → B} {g : B → C}
+    → Trans (∞-magma-hom f) (∞-magma-hom g) (∞-magma-hom (f ∙ g))
+  Trans-∞-magma-hom {f} {g} ._∙_ p q .∞-magma-hom.pres-⋆ a a′ =
+    ap g (p .∞-magma-hom.pres-⋆ a a′) ∙ q .∞-magma-hom.pres-⋆ (f a) (f a′)
 
 
 -- n-truncated magmas
@@ -100,6 +110,16 @@ Magma-on = n-Magma-on 2
 instance
   ⇒-n-Magma : {n : HLevel} → ⇒-notation (Σ[ X ꞉ Set ℓ ] n-Magma-on n ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] n-Magma-on n ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-n-Magma {n} ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) (n-Magma-hom n) {a = A} {b = B} X Y
+
+  Refl-n-Magma-hom : Refl {A = n-Magma-on n A} (n-Magma-hom n refl)
+  Refl-n-Magma-hom .refl .n-Magma-hom.pres-⋆ _ _ = refl
+
+  Trans-n-Magma-hom
+    : {f : A → B} {g : B → C}
+    → Trans (n-Magma-hom n f) (n-Magma-hom n g) (n-Magma-hom n (f ∙ g))
+  Trans-n-Magma-hom {f} {g} ._∙_ p q .n-Magma-hom.pres-⋆ a a′ =
+    ap g (p .n-Magma-hom.pres-⋆ a a′) ∙ q .n-Magma-hom.pres-⋆ (f a) (f a′)
+
 
 -- TODO generalize
 opaque

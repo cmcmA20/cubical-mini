@@ -50,16 +50,18 @@ module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ�
 
   private variable x y : ∫E.Ob
 
-  total-iso→iso : x ∫E.≅ y → x .fst ≅ y .fst
-  total-iso→iso f = make-iso
-      (∫E._≅_.to f .hom)
-      (∫E._≅_.from f .hom)
-      (hom $ ∫E._≅_.inv-l f)
-      (hom $ ∫E._≅_.inv-r f)
+  open Iso
 
-  total-iso→iso[] : ∀ {x y} → (f : x ∫E.≅ y) → x .snd ≅[ total-iso→iso f ] y .snd
+  total-iso→iso : x ≅ y → x .fst ≅ y .fst
+  total-iso→iso f = iso
+    (f .to .hom)
+    (f .from .hom)
+    (hom # f .inv-o)
+    (hom # f .inv-i)
+
+  total-iso→iso[] : ∀ {x y : ∫E.Ob} → (f : x ≅ y) → x .snd ≅[ total-iso→iso f ] y .snd
   total-iso→iso[] f = make-iso[ total-iso→iso f ]
-      (∫E._≅_.to f .preserves)
-      (∫E._≅_.from f .preserves)
-      (preserves $ ∫E._≅_.inv-l f)
-      (preserves $ ∫E._≅_.inv-r f)
+    (f .to .preserves)
+    (f .from .preserves)
+    (preserves # f .inv-o)
+    (preserves # f .inv-i)

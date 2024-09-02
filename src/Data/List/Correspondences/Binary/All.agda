@@ -126,7 +126,7 @@ all²-antisym {A} {as = a ∷ as} {bs = b ∷ bs} pa (ab ∷ abs) (ba ∷ bas) =
   ap² {C = λ _ _ → List A} _∷_ (pa a b ab ba) (all²-antisym pa abs bas)
 
 all²-refl : {as : List A} {P : A → A → 𝒰 ℓ}
-          → ⦃ Reflexive P ⦄
+          → ⦃ Refl P ⦄
           → All² P as as
 all²-refl {as = []}     = []
 all²-refl {as = a ∷ as} = refl ∷ all²-refl
@@ -134,16 +134,16 @@ all²-refl {as = a ∷ as} = refl ∷ all²-refl
 -- monotype version
 all²-∙ : {@0 as bs cs : List A}
          {P : A → A → 𝒰 ℓ}
-       → ⦃ Transitive P ⦄
+       → ⦃ Transʰ P ⦄
        → All² P as bs → All² P bs cs → All² P as cs
 all²-∙ []         []         = []
 all²-∙ (ab ∷ abs) (bc ∷ bcs) = ab ∙ bc ∷ all²-∙ abs bcs
 
 instance
-  Refl-All² : ⦃ Reflexive P ⦄ → Reflexive (λ xs ys → All² P xs ys)
+  Refl-All² : ⦃ Refl P ⦄ → Refl (λ xs ys → All² P xs ys)
   Refl-All² .refl = all²-refl
 
-  Trans-All² : ⦃ Transitive P ⦄ → Transitive (λ xs ys → All² P xs ys)
+  Trans-All² : ⦃ Transʰ P ⦄ → Transʰ (λ xs ys → All² P xs ys)
   Trans-All² ._∙_ = all²-∙
 
 all²-is-of-size : {P : A → B → 𝒰 ℓ} {as : List A} {bs : List B}
@@ -158,11 +158,11 @@ all²-is-of-size {as = a ∷ as} {bs = []}     psz =
 all²-is-of-size {P} {as = a ∷ as} {bs = b ∷ bs} psz =
   ≃→is-of-size (≅→≃ go) (×-is-of-size (psz a b) (all²-is-of-size psz))
   where
-  go : Iso (P a b × All² P as bs) (All² P (a ∷ as) (b ∷ bs))
-  go .fst = _∷_ $ₜ²_
-  go .snd .is-iso.inv (p ∷ as) = p , as
-  go .snd .is-iso.rinv (_ ∷ _) = refl
-  go .snd .is-iso.linv _ = refl
+  go : P a b × All² P as bs ≅ All² P (a ∷ as) (b ∷ bs)
+  go .Iso.to = _∷_ $ₜ²_
+  go .Iso.from (p ∷ as) = p , as
+  go .Iso.inverses .Inverses.inv-o i (x ∷ xs) = x ∷ xs
+  go .Iso.inverses .Inverses.inv-i = refl
 
 instance
   Size-All²

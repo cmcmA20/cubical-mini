@@ -57,7 +57,7 @@ listed-embedding lis .snd (c , c∈l , u) (a , p) (b , q)
   lemma =
     ⌜ ap fst (p ∙ q ⁻¹) ⌝ ∙ ap fst q       ~⟨ ap! (ap-comp-∙ fst p _) ⟩
     (ap fst p ∙ ap fst (q ⁻¹)) ∙ ap fst q  ~⟨ ∙-cancel-r _ _ ⟩
-    ap fst p                               ~⟨ ∙-id-r _ ⟨
+    ap fst p                               ~⟨ ∙-id-i _ ⟨
     ap fst p ∙ refl                        ∎
 
 listed→is-discrete : Listed A → is-discrete A

@@ -64,8 +64,9 @@ fin→ℕ (fsuc k) = suc (fin→ℕ k)
 module _ where
   open import Data.Fin.Base
     renaming (Fin to Finᵈ; fzero to fzeroᵈ; fsuc to fsucᵈ)
+
   default≃inductive : ∀{n} → Finᵈ n ≃ Fin n
-  default≃inductive = ≅→≃ $ to , iso from ri li where
+  default≃inductive = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
     to : ∀{n} → Finᵈ n → Fin n
     to {suc _} fzeroᵈ    = fzero
     to {suc _} (fsucᵈ k) = fsuc (to k)

@@ -1,12 +1,12 @@
 {-# OPTIONS --safe #-}
-module Foundations.Notation.Commutative where
+module Foundations.Notation.Commutativity where
 
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 open import Agda.Builtin.Unit
 
-open import Foundations.Notation.Symmetric
-open import Foundations.Notation.Transitive
+open import Foundations.Notation.Symmetry
+open import Foundations.Notation.Transitivity
 
 private variable
   ℓᵃ ℓ : Level
@@ -28,6 +28,7 @@ module _
 
   record Braid
     ⦃ t₁ : Trans X Y U ⦄ ⦃ t₂ : Trans Y X V ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓx ⊔ ℓy ⊔ ℓf) where
+    no-eta-equality
     field ∙-braid : Braidedness (t₁ ._∙_) (t₂ ._∙_)
 
 open Braid ⦃ ... ⦄ public
@@ -42,6 +43,7 @@ module _ {ℓᵃ} (A : 𝒰 ℓᵃ) where
   Commutativityᵘ t = (x y : A) → t y x ＝ t x y
 
   record Commᵘ ⦃ t : Transᵘ A ⦄ : 𝒰 ℓᵃ where
+    no-eta-equality
     field <>-comm : Commutativityᵘ (t ._<>_)
 
 open Commᵘ ⦃ ... ⦄ public

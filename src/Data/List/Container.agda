@@ -47,5 +47,6 @@ container→list→container (suc n) f = Σ-path (ap (suc ∘ fst) ih) $ fun-ext
   go (fsuc k) = happly (from-pathᴾ (ap snd ih)) k
 
 list-container-equiv : Listⁱ A ≃ List A
-list-container-equiv =
-  ≅→≃ (list→container , iso (container→list′ $²_) (container→list→container $²_) list→container→list)
+list-container-equiv = ≅→≃ $ iso list→container (container→list′ $²_)
+  (fun-ext $ container→list→container $²_)
+  (fun-ext list→container→list)

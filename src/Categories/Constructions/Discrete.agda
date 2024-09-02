@@ -18,8 +18,8 @@ Disc _ .Hom = _＝_
 Disc A-is-grp .Hom-set = path-is-of-hlevel 2 A-is-grp
 Disc _ .id = refl
 Disc _ ._∘_ f g = g ∙ f
-Disc _ .id-r = ∙-id-l
-Disc _ .id-l = ∙-id-r
+Disc _ .id-r = ∙-id-o
+Disc _ .id-l = ∙-id-i
 Disc _ .assoc _ _ _ = ∙-assoc _ _ _ ⁻¹
 
 Disc! : (A : Type ℓ) ⦃ A-is-grp : H-Level 3 A ⦄

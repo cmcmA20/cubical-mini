@@ -18,13 +18,11 @@ private variable
   C : Type ℓ″
   f : A → B
 
-_is-left-inverse-of_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
-_is-left-inverse-of_ {A} g f = Π[ x ꞉ A ] (g (f x) ＝ x)
-retraction = _is-left-inverse-of_
+_retract-of′_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
+_retract-of′_ {A} g f = Π[ x ꞉ A ] (g (f x) ＝ x)
 
-_is-right-inverse-of_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
-_is-right-inverse-of_ {B} g f = Π[ y ꞉ B ] (f (g y) ＝ y)
-section = _is-right-inverse-of_
+_section-of′_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
+_section-of′_ {B} g f = Π[ y ꞉ B ] (f (g y) ＝ y)
 
 -- Helper function for constructing equivalences from pairs (f,g) that cancel each other up to definitional
 -- equality. For such (f,g), the result type simplifies to is-contr (fibre f b).

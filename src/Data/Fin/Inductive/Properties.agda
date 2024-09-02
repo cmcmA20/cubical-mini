@@ -42,7 +42,7 @@ inject (s≤s _)  fzero    = fzero
 inject (s≤s le) (fsuc x) = fsuc $ inject le x
 
 fin-peel : Fin (suc m) ≃ Fin (suc n) → Fin m ≃ Fin n
-fin-peel {m} {n} sm≃sn = ≅→≃ $ m→n , iso n→m b→a→b a→b→a where
+fin-peel {m} {n} sm≃sn = ≅→≃ $ iso m→n n→m (fun-ext b→a→b) (fun-ext a→b→a) where
   sn≃sm : Fin (suc n) ≃ Fin (suc m)
   sn≃sm = sm≃sn ⁻¹
   module sm≃sn = Equiv sm≃sn

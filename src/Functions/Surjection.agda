@@ -61,11 +61,15 @@ instance
     u′ , v′ ← φ u
     pure (u′ , ap g v′ ∙ v)
 
-is-left-inverse-of→split-surjective : f is-left-inverse-of g → Split-surjective f
-is-left-inverse-of→split-surjective {g} s b = g b , s b
+retract→split-surjective
+  : {f : A → B} {g : B → A}
+  → f retract-of g → Split-surjective f
+retract→split-surjective {g} s b = g b , s # b
 
-is-left-inverse-of→is-surjective : f is-left-inverse-of g → is-surjective f
-is-left-inverse-of→is-surjective s b = ∣ is-left-inverse-of→split-surjective s b ∣₁
+retract→is-surjective
+  : {f : A → B} {g : B → A}
+  → f retract-of g → is-surjective f
+retract→is-surjective s b = ∣ retract→split-surjective s b ∣₁
 
 is-equiv→split-surjective : is-equiv f → Split-surjective f
 is-equiv→split-surjective r y = equiv-proof r y .fst
@@ -81,7 +85,7 @@ is-equiv→is-surjective r y = ∣ is-equiv→split-surjective r y ∣₁
 
 is-surjective-comp+is-surjective-inner→is-surjective-outer
   : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {f : A → B} {g : B → C}
-  → is-surjective (g ∘ f) → is-surjective f → is-surjective g
+  → is-surjective (f ∙ g) → is-surjective f → is-surjective g
 is-surjective-comp+is-surjective-inner→is-surjective-outer {f} {g} gfs gs z = do
   a , p ← gfs z
   b , q ← gs (f a)

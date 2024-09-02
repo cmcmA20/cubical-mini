@@ -35,13 +35,13 @@ apⁱ³
 apⁱ³ f reflⁱ reflⁱ reflⁱ = reflⁱ
 
 instance
-  Refl-Idⁱ : Reflexive (_＝ⁱ_ {A = A})
+  Refl-Idⁱ : Refl (_＝ⁱ_ {A = A})
   Refl-Idⁱ .refl = reflⁱ
 
-  Symm-Idⁱ : Symmetric (_＝ⁱ_ {A = A})
-  Symm-Idⁱ .sym reflⁱ = reflⁱ
+  Sym-Idⁱ : Symʰ (_＝ⁱ_ {A = A})
+  Sym-Idⁱ .sym reflⁱ = reflⁱ
 
-  Trans-Idⁱ : Transitive (_＝ⁱ_ {A = A})
+  Trans-Idⁱ : Transʰ (_＝ⁱ_ {A = A})
   Trans-Idⁱ ._∙_ reflⁱ reflⁱ = reflⁱ
 
 transportⁱ : A ＝ⁱ B → A → B

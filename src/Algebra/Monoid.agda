@@ -7,9 +7,10 @@ open import Algebra.Magma.Unital public
 open import Algebra.Semigroup public
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : 𝒰 ℓ
-  B : 𝒰 ℓ
+  B : 𝒰 ℓ′
+  C : 𝒰 ℓ″
   e x y : A
   _✦_ : A → A → A
   n : HLevel
@@ -108,6 +109,18 @@ instance opaque
 instance
   ⇒-Monoid : ⇒-notation (Σ[ X ꞉ Set ℓ ] Monoid-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Monoid-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-Monoid ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Monoid-hom {a = A} {b = B} X Y
+
+  Refl-Monoid-hom : Refl {A = Monoid-on A} (Monoid-hom refl)
+  Refl-Monoid-hom .refl .Monoid-hom.pres-⋆ _ _ = refl
+  Refl-Monoid-hom .refl .Monoid-hom.pres-id = refl
+
+  Trans-Monoid-hom
+    : {f : A → B} {g : B → C}
+    → Trans (Monoid-hom f) (Monoid-hom g) (Monoid-hom (f ∙ g))
+  Trans-Monoid-hom {f} {g} ._∙_ p q .Monoid-hom.pres-⋆ a a′ =
+    ap g (p .Monoid-hom.pres-⋆ a a′) ∙ q .Monoid-hom.pres-⋆ (f a) (f a′)
+  Trans-Monoid-hom {f} {g} ._∙_ p q .Monoid-hom.pres-id =
+    ap g (p .Monoid-hom.pres-id) ∙ q .Monoid-hom.pres-id
 
 monoid-on↪semigroup-on : Monoid-on A ↪ₜ Semigroup-on A
 monoid-on↪semigroup-on .fst M .Semigroup-on._⋆_ = M .Monoid-on._⋆_

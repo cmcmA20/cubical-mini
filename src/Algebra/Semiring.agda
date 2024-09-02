@@ -8,9 +8,10 @@ open import Algebra.Monoid.Category
 open import Algebra.Monoid.Commutative.Category
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : 𝒰 ℓ
   B : 𝒰 ℓ′
+  C : 𝒰 ℓ″
   e x y z u : A
   _✦_ _✧_ : A → A → A
   n : HLevel
@@ -119,6 +120,24 @@ instance opaque
 instance
   ⇒-Semiring : ⇒-notation (Σ[ X ꞉ Set ℓ ] Semiring-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Semiring-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-Semiring ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Semiring-hom {a = A} {b = B} X Y
+
+  Refl-Semiring-hom : Refl {A = Semiring-on A} (Semiring-hom refl)
+  Refl-Semiring-hom .refl .Semiring-hom.pres-+ _ _ = refl
+  Refl-Semiring-hom .refl .Semiring-hom.pres-· _ _ = refl
+  Refl-Semiring-hom .refl .Semiring-hom.pres-0 = refl
+  Refl-Semiring-hom .refl .Semiring-hom.pres-1 = refl
+
+  Trans-Semiring-hom
+    : {f : A → B} {g : B → C}
+    → Trans (Semiring-hom f) (Semiring-hom g) (Semiring-hom (f ∙ g))
+  Trans-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-+ a a′ =
+    ap g (p .Semiring-hom.pres-+ a a′) ∙ q .Semiring-hom.pres-+ (f a) (f a′)
+  Trans-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-· a a′ =
+    ap g (p .Semiring-hom.pres-· a a′) ∙ q .Semiring-hom.pres-· (f a) (f a′)
+  Trans-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-0 =
+    ap g (p .Semiring-hom.pres-0) ∙ q .Semiring-hom.pres-0
+  Trans-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-1 =
+    ap g (p .Semiring-hom.pres-1) ∙ q .Semiring-hom.pres-1
 
 semiring-on→additive-comm-monoid-on : ∀[ Semiring-on {ℓ} ⇒ CMonoid-on ]
 semiring-on→additive-comm-monoid-on S = to-comm-monoid-on go where

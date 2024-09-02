@@ -39,7 +39,7 @@ module _ {o h} {C : Precategory o h} where
   open Initial
 
   ⊥-unique : (i i′ : Initial C) → bot i ≅ bot i′
-  ⊥-unique i i′ = make-iso (¡ i) (¡ i′) (¡-unique² i′ _ _) (¡-unique² i _ _)
+  ⊥-unique i i′ = iso (¡ i) (¡ i′) (¡-unique² i′ _ _) (¡-unique² i _ _)
 
   opaque
     initial-is-prop : is-category C → is-prop (Initial C)

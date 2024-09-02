@@ -11,24 +11,24 @@ opaque
   unfolding _∙ₚ_
 
   instance
-    Unit-l-Path : {A : Type ℓ} → Unital-left (Path A)
-    Unit-l-Path .∙-id-l p = ∙-filler-r refl p ⁻¹
+    Unit-o-Path : {A : Type ℓ} → Unit-oʰ (Path A)
+    Unit-o-Path .∙-id-o p = ∙-filler-r refl p ⁻¹
 
-    Unit-r-Path : {A : Type ℓ} → Unital-right (Path A)
-    Unit-r-Path .∙-id-r p = ∙-filler-l p refl ⁻¹
+    Unit-i-Path : {A : Type ℓ} → Unit-iʰ (Path A)
+    Unit-i-Path .∙-id-i p = ∙-filler-l p refl ⁻¹
 
-    Assoc-Path : {A : Type ℓ} → Associative (Path A)
+    Assoc-Path : {A : Type ℓ} → Assocʰ (Path A)
     Assoc-Path .∙-assoc p q r i = ∙-filler-l p q i ∙ ∙-filler-r q r (~ i)
 
-    Inv-l-Path : {A : Type ℓ} → Inverse-left (Path A)
-    Inv-l-Path .∙-inv-l {y} p i j = hcomp (∂ j ∨ i) λ where
+    Inv-o-Path : {A : Type ℓ} → Inv-oʰ (Path A)
+    Inv-o-Path .∙-inv-o {x} p i j = hcomp (∂ j ∨ i) λ where
       k (j = i0) → p (k ∨ i)
       k (j = i1) → p (k ∨ i)
-      k (i = i1) → y
+      k (i = i1) → x
       k (k = i0) → p i
 
-    Inv-r-Path : {A : Type ℓ} → Inverse-right (Path A)
-    Inv-r-Path .∙-inv-r p = ∙-inv-l (sym p)
+    Inv-i-Path : {A : Type ℓ} → Inv-iʰ (Path A)
+    Inv-i-Path .∙-inv-i p = ∙-inv-o (sym p)
 
   ∙-cancel-l : {A : Type ℓ} {x y z : A}
                (p : x ＝ y) (q : y ＝ z)

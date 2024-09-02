@@ -19,13 +19,13 @@ private variable
   x y z : A
 
 instance
-  Refl-＝ : Reflexive (_＝_ {A = A})
+  Refl-＝ : Refl (_＝_ {A = A})
   Refl-＝ .refl _ = id
 
-  Symm-＝ : Symmetric (_＝_ {A = A})
-  Symm-＝ .sym p _ q = q ∙ p _ refl ⁻¹
+  Sym-＝ : Symʰ (_＝_ {A = A})
+  Sym-＝ .sym p _ q = q ∙ p _ refl ⁻¹
 
-  Trans-＝ : Transitive (_＝_ {A = A})
+  Trans-＝ : Transʰ (_＝_ {A = A})
   Trans-＝ ._∙_ p q _ = q _ ∘ p _
 
 transportˢ : A ＝ B → A → B

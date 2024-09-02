@@ -4,15 +4,17 @@ module Foundations.Pi.Base where
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 
+open import Foundations.Notation.Associativity
 open import Foundations.Notation.Logic
-open import Foundations.Notation.Reflexive
+open import Foundations.Notation.Reflexivity
 open import Foundations.Notation.Total
-open import Foundations.Notation.Transitive
+open import Foundations.Notation.Transitivity
 open import Foundations.Notation.Underlying
+open import Foundations.Notation.Unital.Inner
+open import Foundations.Notation.Unital.Outer
 open import Foundations.Sigma.Base
 
-private variable
-  ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᶜ : Level
+private variable ℓ ℓ′ ℓ″ ℓ‴ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
 
 instance
   Π-Type
@@ -97,7 +99,36 @@ instance
   Refl-Fun .refl = id
 
   Trans-Fun : Trans (Fun {ℓᵃ} {ℓᵇ}) (Fun {ℓᵇ = ℓᶜ}) Fun
-  Trans-Fun ._∙_ f g = g ∘ₜˢ f
+  Trans-Fun ._∙_ f g x = g (f x)
+
+  Assoc-Fun : Assoc (Fun {ℓᵃ} {ℓᵇ}) (Fun {ℓᵇ = ℓᶜ}) (Fun {ℓᵇ = ℓᵈ}) Fun Fun Fun
+  Assoc-Fun .∙-assoc f g h _ a = h (g (f a))
+
+  Unit-i-Fun : Unit-i (Fun {ℓᵃ} {ℓᵇ}) Fun
+  Unit-i-Fun .∙-id-i f _ a = f a
+
+  Unit-o-Fun : Unit-o Fun (Fun {ℓᵃ} {ℓᵇ})
+  Unit-o-Fun .∙-id-o f _ a = f a
+
+apᶠ
+  : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
+  → (h : A → B) {f g : B → C} (p : f ＝ g) (k : C → D)
+  → h ∙ f ∙ k ＝ h ∙ g ∙ k
+apᶠ h p k i a = k (p i (h a))
+
+ap-o
+  : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
+  → (h : B → C) {f g : A → B} (p : f ＝ g)
+  → f ∙ h ＝ g ∙ h
+ap-o h p = apᶠ refl p h
+{-# INLINE ap-o #-}
+
+ap-i
+  : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
+  → {f g : B → C} (p : f ＝ g) (h : A → B)
+  → h ∙ f ＝ h ∙ g
+ap-i p h = apᶠ h p refl
+{-# INLINE ap-i #-}
 
 
 -- dependent stuff

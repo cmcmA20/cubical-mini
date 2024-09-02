@@ -17,94 +17,11 @@ private variable
   D : Type ℓ‴
   x y : A
 
-open is-iso
-
-infixr 30 _∙ₑ_
-_∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
-(f , fe) ∙ₑ (g , ge) = g ∘ˢ f , e where
-  fi = is-equiv→is-iso fe
-  f⁻¹ = fi .inv
-
-  gi = is-equiv→is-iso ge
-  g⁻¹ = gi .inv
-
-  opaque
-    right : (f⁻¹ ∘ g⁻¹) is-right-inverse-of (g ∘ f)
-    right _ = ap g (fi .rinv _) ∙ gi .rinv _
-
-    left : (f⁻¹ ∘ g⁻¹) is-left-inverse-of (g ∘ f)
-    left _ = ap f⁻¹ (gi .linv _) ∙ fi .linv _
-
-  e : is-equiv (g ∘ˢ f)
-  e = is-iso→is-equiv $ iso (f⁻¹ ∘ g⁻¹) right left
-
 instance
-  Symm-≃ : Symm (_≃_ {ℓ} {ℓ′}) _≃_
-  Symm-≃ .sym e = ≅→≃ (is-equiv→inverse (e .snd) , iso (e .fst) (is-equiv→unit (e .snd)) (is-equiv→counit (e .snd)))
-
-  Invol-≃ : Invol (_≃_ {ℓ} {ℓ′}) _≃_
-  Invol-≃ .sym-invol _ = equiv-ext refl
-
-  Trans-≃ : Trans (_≃_ {ℓ} {ℓ′}) (_≃_ {ℓ' = ℓ″}) _≃_
-  Trans-≃ ._∙_  = _∙ₑ_
-
-is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
-is-equiv-comp fe ge = ((_ , fe) ∙ (_ , ge)) .snd
-
-inv-≃ : (A ≃ B) ≃ (B ≃ A)
-inv-≃ .fst = _⁻¹
-inv-≃ .snd = is-iso→is-equiv $ iso _⁻¹ sym-invol sym-invol
-
-is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
-is-equiv-inv fe = ((_ , fe) ⁻¹) .snd
-
--- action on equivalences by univalence
-@0 generic-ae : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
-generic-ae F e = =→≃ (ap F (ua e))
-
-
-sym-≃ : (x ＝ y) ≃ (y ＝ x)
-sym-≃ .fst = sym
-sym-≃ .snd .equiv-proof = strict-contr-fibres sym
-
-is-contr→is-equiv : is-contr A → is-contr B
-                  → {f : A → B} → is-equiv f
-is-contr→is-equiv contr-A contr-B {f} = is-iso→is-equiv f-is-iso where
-  f-is-iso : is-iso f
-  f-is-iso .inv  _ = contr-A .fst
-  f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
-  f-is-iso .linv _ = is-contr→is-prop contr-A _ _
-
-is-contr→≃ : is-contr A → is-contr B → A ≃ B
-is-contr→≃ {A} contr-A contr-B = (λ _ → contr-B .fst) , is-iso→is-equiv f-is-iso where
-  f-is-iso : is-iso {A = A} (λ _ → contr-B .fst)
-  f-is-iso .inv  _ = contr-A .fst
-  f-is-iso .rinv _ = is-contr→is-prop contr-B _ _
-  f-is-iso .linv _ = is-contr→is-prop contr-A _ _
-
-is-equiv→pre-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = C → A} (f ∘_)
-is-equiv→pre-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
-  f-iso : is-iso f
-  f-iso = is-equiv→is-iso f-eqv
-
-  f⁻¹ = f-iso .is-iso.inv
-
-  isiso : is-iso (_∘_ f)
-  isiso .is-iso.inv f x = f⁻¹ (f x)
-  isiso .is-iso.rinv f = fun-ext λ _ → f-iso .is-iso.rinv _
-  isiso .is-iso.linv f = fun-ext λ _ → f-iso .is-iso.linv _
-
-is-equiv→post-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = B → C} (_∘ f)
-is-equiv→post-is-equiv {f} f-eqv = is-iso→is-equiv isiso where
-  f-iso : is-iso f
-  f-iso = is-equiv→is-iso f-eqv
-
-  f⁻¹ = f-iso .is-iso.inv
-
-  isiso : is-iso _
-  isiso .is-iso.inv f x = f (f⁻¹ x)
-  isiso .is-iso.rinv f = fun-ext λ x → ap f (f-iso .is-iso.linv _)
-  isiso .is-iso.linv f = fun-ext λ x → ap f (f-iso .is-iso.rinv _)
+  Sym-≃ : Sym (_≃_ {ℓ} {ℓ′}) _≃_
+  Sym-≃ .sym (f , e) = ≅→≃ $ iso (is-equiv→inverse e) f
+    (fun-ext $ is-equiv→unit e)
+    (fun-ext $ is-equiv→counit e)
 
 module Equiv (e : A ≃ B) where
   to = e .fst
@@ -130,11 +47,85 @@ module Equiv (e : A ≃ B) where
   inverse : B ≃ A
   inverse = e ⁻¹
 
+module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
+
+open is-invertible
+
+infixr 30 _∙ₑ_
+_∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
+(f , fe) ∙ₑ (g , ge) = f ∙ g , e where
+  fi = is-equiv→is-inv fe
+  gi = is-equiv→is-inv ge
+
+  f⁻¹ = fi .inv
+  g⁻¹ = gi .inv
+
+  opaque
+    s : (g⁻¹ ∙ f⁻¹) section-of (f ∙ g)
+    s = apᶠ g⁻¹ (fi .inverses .Inverses.inv-o) g ∙ gi .inverses .Inverses.inv-o
+
+    r : (g⁻¹ ∙ f⁻¹) retract-of (f ∙ g)
+    r = apᶠ f (gi .inverses .Inverses.inv-i) f⁻¹ ∙ fi .inverses .Inverses.inv-i
+
+  e : is-equiv (f ∙ g)
+  e = is-inv→is-equiv $ invertible (g⁻¹ ∙ f⁻¹) s r
+
+instance
+  Invol-≃ : Invol (_≃_ {ℓ} {ℓ′}) _≃_
+  Invol-≃ .sym-invol _ = equiv-ext refl
+
+  Trans-≃ : Trans (_≃_ {ℓ} {ℓ′}) (_≃_ {ℓ' = ℓ″}) _≃_
+  Trans-≃ ._∙_  = _∙ₑ_
+
+is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
+is-equiv-comp fe ge = ((_ , fe) ∙ (_ , ge)) .snd
+
+inv-≃ : (A ≃ B) ≃ (B ≃ A)
+inv-≃ = ≅→≃ $ iso _⁻¹ _⁻¹ (fun-ext sym-invol) (fun-ext sym-invol)
+
+is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
+is-equiv-inv fe = ((_ , fe) ⁻¹) .snd
+
+-- action on equivalences by univalence
+@0 generic-ae : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
+generic-ae F e = =→≃ (ap F (ua e))
+
+
+sym-≃ : (x ＝ y) ≃ (y ＝ x)
+sym-≃ .fst = sym
+sym-≃ .snd .equiv-proof = strict-contr-fibres sym
+
+is-contr→is-equiv : is-contr A → is-contr B
+                  → {f : A → B} → is-equiv f
+is-contr→is-equiv contr-A contr-B {f} = is-inv→is-equiv $ invertible
+  (λ _ → contr-A .fst)
+  (fun-ext λ _ → is-contr→is-prop contr-B _ _)
+  (fun-ext λ _ → is-contr→is-prop contr-A _ _)
+
+is-contr→≃ : is-contr A → is-contr B → A ≃ B
+is-contr→≃ {A} contr-A contr-B = (λ _ → contr-B .fst) , is-contr→is-equiv contr-A contr-B
+
+is-equiv→pre-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = C → A} (_∙ f) -- (f ∘_)
+is-equiv→pre-is-equiv {f} f-eqv = is-inv→is-equiv $ invertible (_∙ f⁻¹)
+  (fun-ext λ _ → fun-ext λ _ → fi .inverses .Inverses.inv-o # _)
+  (fun-ext λ _ → fun-ext λ _ → fi .inverses .Inverses.inv-i # _)
+    where
+    fi : is-invertible f
+    fi = is-equiv→is-inv f-eqv
+    f⁻¹ = fi .inv
+
+is-equiv→post-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = B → C} (f ∙_) -- (_∘ f)
+is-equiv→post-is-equiv {f} f-eqv = is-inv→is-equiv $ invertible (f⁻¹ ∙_)
+  (fun-ext λ z → ap-o z (fi .inverses .Inverses.inv-i))
+  (fun-ext λ z → ap-o z (fi .inverses .Inverses.inv-o))
+    where
+    fi : is-invertible f
+    fi = is-equiv→is-inv f-eqv
+    f⁻¹ = fi .inv
+
 lift≃id : Lift ℓ′ A ≃ A
 lift≃id .fst = lower
 lift≃id .snd .equiv-proof = strict-contr-fibres lift
-
-module @0 ua {ℓ} {A B : Type ℓ} = Equiv (ua {A = A} {B} , univalence⁻¹)
 
 module _
   (A-pr : is-prop A) (B-pr : is-prop B)

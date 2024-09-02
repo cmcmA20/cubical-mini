@@ -41,7 +41,7 @@ list→vec (x ∷ xs) =
   in suc len′ , x ∷ xs′ , ap suc p
 
 vec-fun-equiv : {n : ℕ} → Vec A n ≃ (Fin n → A)
-vec-fun-equiv {n} = ≅→≃ (lookup , iso tabulate (lemma₁ {n = n}) lemma₂) where
+vec-fun-equiv {n} = ≅→≃ $ iso lookup tabulate (fun-ext $ lemma₁ {n = n}) (fun-ext lemma₂) where
   lemma₁ : {n : ℕ} → Π[ f ꞉ (Fin n → A) ] (lookup {n = n} (tabulate f) ＝ f)
   lemma₁ {n = zero} _ = fun-ext λ()
   lemma₁ {n = suc n} f = fun-ext λ where
