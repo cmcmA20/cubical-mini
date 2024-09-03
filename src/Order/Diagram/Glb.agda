@@ -6,7 +6,7 @@ open import Categories.Prelude
 open import Order.Base
 import Order.Reasoning
 
-private variable o ℓ ℓ′ : Level
+private variable o o′ ℓ ℓ′ ℓᵢ : Level
 
 module _ (P : Poset o ℓ) where
   open Order.Reasoning P
@@ -103,3 +103,45 @@ module _ {P : Poset o ℓ} where
       cover-reflects-glb : Glb P (F ∘ₜ f) → Glb P F
       cover-reflects-glb g .Glb.glb = _
       cover-reflects-glb g .Glb.has-glb = cover-reflects-is-glb (g .Glb.has-glb)
+
+
+module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} where
+  private
+    module P = Poset P
+    module Q = Order.Reasoning Q
+
+  open Iso
+
+  ≅→is-glb : (e : P ≅ Q) {x : ⌞ P ⌟}
+           → is-glb P F x → is-glb Q (F ∙ e #_) (e # x)
+  ≅→is-glb e     g .is-glb.glb≤fam i = e .to # is-glb.glb≤fam g i
+  ≅→is-glb e {x} g .is-glb.greatest lb′ f
+    = subst (Q._≤ (e # x)) (e .inv-o #ₚ lb′) -- TODO Galois connections
+    $ e .to $ g .is-glb.greatest (e .from # lb′) λ i
+    → e .from # f i ∙ =→~ (e .inv-i #ₚ F i)
+
+  ≅→Glb : (e : P ≅ Q)
+        → Glb P F → Glb Q (F ∙ e #_)
+  ≅→Glb e l .Glb.glb = e # l .Glb.glb
+  ≅→Glb e l .Glb.has-glb = ≅→is-glb e (l .Glb.has-glb)
+
+
+module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} where
+  private
+    module P = Poset P
+    module Q = Order.Reasoning Q
+  open Iso
+
+  ≅→is-glb⁻ : (e : P ≅ Q) {y : ⌞ Q ⌟}
+            → is-glb P (F ∙ e .from #_) (e .from # y) → is-glb Q F y
+  ≅→is-glb⁻ e {y} l = subst² (is-glb Q)
+    (fun-ext λ i → e .inv-o #ₚ F i) (e .inv-o #ₚ y)
+      (≅→is-glb e l)
+
+  ≅→Glb⁻ : (e : P ≅ Q)
+         → Glb P (F ∙ e .from #_) → Glb Q F
+  ≅→Glb⁻ e l .Glb.glb = e .to # l .Glb.glb
+  ≅→Glb⁻ e l .Glb.has-glb = ≅→is-glb⁻ e $
+    subst (is-glb P (F ∙ e .from #_))
+      (e .inv-i #ₚ l .Glb.glb ⁻¹)
+      (l .Glb.has-glb)

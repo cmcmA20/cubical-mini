@@ -8,7 +8,7 @@ open import Functions.Surjection
 open import Order.Base
 import Order.Reasoning
 
-private variable o ℓ ℓ′ : Level
+private variable o o′ ℓ ℓ′ ℓᵢ : Level
 
 module _ (P : Poset o ℓ) where
   open Poset P
@@ -186,51 +186,43 @@ module _ {P : Poset o ℓ} where
       mk-lub i .Lub.has-lub =
         const-inhabited-fam→is-lub (λ j → is-const j i) ∣ i ∣₁
 
--- TODO use order embeddings from 1lab
 
-≃→is-lub : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-             {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} {x : ⌞ P ⌟}
-         → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
-         → (∀ {x y} → Poset._≤_ P x y → Poset._≤_ Q (e $ x) (e $ y))
-         → (∀ {x y} → Poset._≤_ Q (e $ x) (e $ y) → Poset._≤_ P x y)
-         → is-lub P F x
-         → is-lub Q (λ i → e .fst (F i)) (e $ x)
-≃→is-lub                 e mt mf l .is-lub.fam≤lub i   = mt $ l .is-lub.fam≤lub i
-≃→is-lub {P} {Q} {F} {x} e mt mf l .is-lub.least ub′ f =
-  subst (Poset._≤_ Q (e $ x)) (is-equiv→unit ((e ⁻¹) .snd) ub′) $
-  mt $
-  l .is-lub.least (e ⁻¹ $ ub′)
-  λ i → mf $ subst (Poset._≤_ Q (e $ F i)) (is-equiv→counit (e .snd) ub′ ⁻¹) $ f i
+module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} where
+  private
+    module P = Poset P
+    module Q = Order.Reasoning Q
+  open Iso
 
-≃→is-lub′ : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-             {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} {x : ⌞ Q ⌟}
-         → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
-         → (∀ {x y} → Poset._≤_ P x y → Poset._≤_ Q (e $ x) (e $ y))
-         → (∀ {x y} → Poset._≤_ Q (e $ x) (e $ y) → Poset._≤_ P x y)
-         → is-lub P (λ i → is-equiv→inverse (e .snd) (F i)) (is-equiv→inverse (e .snd) x)
-         → is-lub Q F x
-≃→is-lub′ {P} {Q} {F} {x} e mt mf l =
-  subst (λ q → is-lub Q q x) (fun-ext λ i → is-equiv→counit (e .snd) (F i)) $
-  subst (is-lub Q (λ i → e .fst (is-equiv→inverse (e .snd) (F i)))) (is-equiv→counit (e .snd) x) $
-  ≃→is-lub {P = P} {Q = Q} e mt mf l
+  ≅→is-lub : (e : P ≅ Q) {x : ⌞ P ⌟}
+           → is-lub P F x → is-lub Q (F ∙ e #_) (e # x)
+  ≅→is-lub e     l .is-lub.fam≤lub i = e .to # l .is-lub.fam≤lub i
+  ≅→is-lub e {x} l .is-lub.least ub′ f
+    = subst (e # x Q.≤_) (e .inv-o #ₚ ub′) -- TODO Galois connections
+    $ e .to $ l .is-lub.least (e .from # ub′) λ i
+    → =→~ (e .inv-i #ₚ F i ⁻¹) ∙ e .from # f i
 
-≃→Lub : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-          {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟}
-         → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
-         → (∀ {x y} → Poset._≤_ P x y → Poset._≤_ Q (e $ x) (e $ y))
-         → (∀ {x y} → Poset._≤_ Q (e $ x) (e $ y) → Poset._≤_ P x y)
-         → Lub P F
-         → Lub Q (λ i → e .fst (F i))
-≃→Lub e mt mf l .Lub.lub     = e $ l .Lub.lub
-≃→Lub e mt mf l .Lub.has-lub = ≃→is-lub e mt mf (l .Lub.has-lub)
+  ≅→Lub : (e : P ≅ Q)
+        → Lub P F → Lub Q (F ∙ e #_)
+  ≅→Lub e l .Lub.lub = e # l .Lub.lub
+  ≅→Lub e l .Lub.has-lub = ≅→is-lub e (l .Lub.has-lub)
 
-≃→Lub′ : ∀ {o′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-          {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟}
-         → (e : ⌞ P ⌟ ≃ ⌞ Q ⌟)
-         → (∀ {x y} → Poset._≤_ P x y → Poset._≤_ Q (e $ x) (e $ y))
-         → (∀ {x y} → Poset._≤_ Q (e $ x) (e $ y) → Poset._≤_ P x y)
-         → Lub P (λ i → is-equiv→inverse (e .snd) (F i))
-         → Lub Q F
-≃→Lub′ {Q} {F} e mt mf l =
-  subst (Lub Q) (fun-ext λ i → is-equiv→counit (e .snd) (F i)) $
-  ≃→Lub e mt mf l
+
+module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} where
+  private
+    module P = Poset P
+    module Q = Order.Reasoning Q
+  open Iso
+
+  ≅→is-lub⁻ : (e : P ≅ Q) {y : ⌞ Q ⌟}
+            → is-lub P (F ∙ e .from #_) (e .from # y) → is-lub Q F y
+  ≅→is-lub⁻ e {y} l = subst² (is-lub Q)
+    (fun-ext λ i → e .inv-o #ₚ F i) (e .inv-o #ₚ y)
+      (≅→is-lub e l)
+
+  ≅→Lub⁻ : (e : P ≅ Q)
+         → Lub P (F ∙ e .from #_) → Lub Q F
+  ≅→Lub⁻ e l .Lub.lub = e .to # l .Lub.lub
+  ≅→Lub⁻ e l .Lub.has-lub = ≅→is-lub⁻ e $
+    subst (is-lub P (F ∙ e .from #_))
+      (e .inv-i #ₚ l .Lub.lub ⁻¹)
+      (l .Lub.has-lub)
