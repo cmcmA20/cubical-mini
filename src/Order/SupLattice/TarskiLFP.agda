@@ -238,13 +238,12 @@ module _
 
     @0 small-closed-subsets≃def-points : small-closed-subsets ≃ deflationary-points
     small-closed-subsets≃def-points =
-        small-closed-subsets→def-points
-      , is-iso→is-equiv (iso def-points→small-closed-subsets ri li)
+      ≅ₜ→≃ $ iso small-closed-subsets→def-points def-points→small-closed-subsets (fun-ext ri) (fun-ext li)
       where
-      ri : def-points→small-closed-subsets is-right-inverse-of small-closed-subsets→def-points
+      ri : def-points→small-closed-subsets section-of′ small-closed-subsets→def-points
       ri (a , isdef) = is-supᴮ' ⁻¹ ,ₚ prop!
 
-      @0 li : def-points→small-closed-subsets is-left-inverse-of small-closed-subsets→def-points
+      @0 li : def-points→small-closed-subsets retract-of′ small-closed-subsets→def-points
       li (P , cc , φc)
         =  ext (λ b → cc P refl b , λ r → ≤→≤ᴮ (⋃-inj (b , r)))
         ,ₚ prop!
@@ -382,7 +381,7 @@ module bounded-inductive-definitions
   bounded→local : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
                 → is-bounded ϕ → is-local ϕ
   bounded→local ϕ (ϕ-small , ϕ-has-bound) a =
-    ≃→is-of-size! (≅ₜ→≃ (S₀→↓ , iso ↓→S₀ ri li))
+    ≃→is-of-size! (≅ₜ→≃ (iso S₀→↓ ↓→S₀ (fun-ext ri) (fun-ext li)))
     where
       T : 𝒰 ℓ′
       T = ϕ-has-bound .fst
@@ -433,10 +432,10 @@ module bounded-inductive-definitions
       ↓→S₀ : ϕ ↓ a → S₀
       ↓→S₀ = second (rec! cur-trunc-g)
 
-      ri : ↓→S₀ is-right-inverse-of S₀→↓
+      ri : ↓→S₀ section-of′ S₀→↓
       ri _ = trivial!
 
-      li : ↓→S₀ is-left-inverse-of S₀→↓
+      li : ↓→S₀ retract-of′ S₀→↓
       li _ = trivial!
 
 module _
