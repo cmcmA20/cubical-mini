@@ -28,7 +28,7 @@ private variable
           (e : B ≃ A)
         → Π[ x ꞉ A ] P x
         ≃ Π[ x ꞉ B ] P (e $ x)
-Π-dom-≃ {A} {B} {P} e = ≅→≃ $ to , iso from ri li where
+Π-dom-≃ {A} {B} {P} e = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
   module e = Equiv e
   to : Π[ x ꞉ A ] P x → Π[ x ꞉ B ] P (e.to x)
   to k x = k (e.to x)
@@ -36,13 +36,13 @@ private variable
   from : Π[ x ꞉ B ] P (e.to x) → Π[ x ꞉ A ] P x
   from k x = subst P (e.ε x) (k (e.from x))
 
-  ri : from is-right-inverse-of to
+  ri : from section-of′ to
   ri k = fun-ext λ x →
            ap² (subst P) (e.zig x ⁻¹)
             (from-pathᴾ (symᴾ-from-goal (ap k (e.η x))) ⁻¹)
           ∙ transport⁻-transport (ap P (ap e.to (e.η x ⁻¹))) (k x)
 
-  li : from is-left-inverse-of to
+  li : from retract-of′ to
   li k = fun-ext λ x →
            ap (subst P _) (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x))) ⁻¹)
          ∙ transport⁻-transport (ap P (e.ε x) ⁻¹) _
@@ -64,19 +64,16 @@ private variable
 ∀-cod-≃ k = Π≃∀ ⁻¹ ∙ Π-cod-≃ k ∙ Π≃∀
 
 function-≃ : (A ≃ B) → (C ≃ D) → (A → C) ≃ (B → D)
-function-≃ dom rng = ≅→≃ the-iso where
-  rng-iso = is-equiv→is-iso (rng .snd)
-  dom-iso = is-equiv→is-iso (dom .snd)
-
-  the-iso : Iso _ _
-  the-iso .fst f x = rng .fst (f (dom-iso .is-iso.inv x))
-  the-iso .snd .is-iso.inv f x = rng-iso .is-iso.inv (f (dom .fst x))
-  the-iso .snd .is-iso.rinv f =
-    fun-ext λ x → rng-iso .is-iso.rinv _
-                ∙ ap f (dom-iso .is-iso.rinv _)
-  the-iso .snd .is-iso.linv f =
-    fun-ext λ x → rng-iso .is-iso.linv _
-                ∙ ap f (dom-iso .is-iso.linv _)
+function-≃ {A} {B} {C} {D} dom rng = ≅→≃ $ iso to from
+  (fun-ext λ f → fun-ext λ x → rngi .Iso.inv-o # _  ∙ ap f (domi .Iso.inv-o # x))
+  (fun-ext λ f → fun-ext λ x → rngi .Iso.inv-i # _  ∙ ap f (domi .Iso.inv-i # x))
+  where
+  rngi = ≃→≅ rng
+  domi = ≃→≅ dom
+  to : (A → C) → B → D
+  to f b = rng $ f $ domi ⁻¹ $ b
+  from : (B → D) → A → C
+  from g a = rng ⁻¹ $ g $ domi $ a
 
 fun-ext-≃
   : {A : Type ℓ} {B : Type ℓ′} {f g : A → B}
@@ -98,37 +95,18 @@ fun-ext-dep-≃
   → ( {x₀ : A i0} {x₁ : A i1} (p : ＜ x₀ ／ A ＼ x₁ ＞)
     → ＜ f x₀ ／ (λ i → B i (p i)) ＼ g x₁ ＞ )
   ≃ ＜ f ／ (λ i → Π[ x ꞉ A i ] B i x) ＼ g ＞
-fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ isom where
-  open is-iso
-  isom : Iso _ _
-  isom .fst = fun-ext-dep
-  isom .snd .is-iso.inv q p i = q i (p i)
-
-  isom .snd .rinv q m i x =
-    coei→1 (λ k → B i (coei→i A i x (k ∨ m))) (m ∨ ∂ i) $
-      q i (coei→i A i x m)
-
-  isom .snd .linv h m p i =
-    coei→1 (λ k → B i (lemi→i m k)) (m ∨ ∂ i) $ h (λ j → lemi→j j m) i
-    where
-      lemi→j : ∀ j → coe A i j (p i) ＝ p j
-      lemi→j j k = coe-path A (λ i → p i) i j k
-
-      lemi→i : ＜ coei→i A i (p i) ／ (λ m → lemi→j i m ＝ p i) ＼ refl ＞
-      lemi→i m k = coei→i A i (p i) (m ∨ k)
+fun-ext-dep-≃ {A} {B} {f} {g} = ≅→≃ $ iso fun-ext-dep (λ q p i → q i (p i))
+  (λ m q i x → coei→1 (λ k → B i (coei→i A i x (k ∨ m))) (m ∨ ∂ i) $
+    q i $ coei→i A i x m)
+  (λ m h p i → coei→1 (λ k → B i (coei→i A i (p i) (m ∨ k))) (m ∨ ∂ i) $
+    h (λ j → coe-path A (λ i → p i) i j m) i)
 
 Π-contract-dom : {A : Type ℓ} {P : A → Type ℓ′}
                  (A-c : is-contr A)
                → Π[ x ꞉ A ] P x ≃ P (centre A-c)
-Π-contract-dom {A} {P} A-c = ≅→≃ go where
-  go : Iso _ _
-  go .fst f = f $ centre A-c
-  go .snd .is-iso.inv p x = subst P (paths A-c x) p
-  go .snd .is-iso.rinv p =
-    transport (ap P (paths A-c (centre A-c))) p  ~⟨ ap (λ φ → transport (ap P φ) p) (is-contr→is-set A-c _ _ _ _) ⟩
-    transport (ap P refl) p                      ~⟨ transport-refl _ ⟩
-    p                                            ∎
-  go .snd .is-iso.linv f = fun-ext λ x → from-pathᴾ $ ap f (paths A-c x)
+Π-contract-dom {A} {P} A-c = ≅→≃ $ iso (λ f → f $ centre A-c) (λ p x → subst P (paths A-c x) p)
+  (fun-ext λ p → ap (λ φ → transport (ap P φ) p) (is-contr→is-set A-c _ _ _ _) ∙ transport-refl _)
+  (fun-ext λ f → fun-ext λ x → from-pathᴾ $ ap f (paths A-c x))
 
 -- TODO opaque proofs of invertibility?
 hetero-homotopy≃homotopy
@@ -137,22 +115,21 @@ hetero-homotopy≃homotopy
   → ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
   ≃ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
 hetero-homotopy≃homotopy {A} {B} {f} {g} = ≅→≃ isom where
-  open is-iso
   c : {x₀ : A i0} → is-contr (Singletonᴾ A x₀)
   c {x₀} = singletonᴾ-is-contr A x₀
 
+  open Iso
+
   isom : ({x₀ : A i0} {x₁ : A i1} → ＜ x₀ ／ A ＼ x₁ ＞ → ＜ f x₀ ／ B ＼ g x₁ ＞)
        ≅ (Π[ x₀ ꞉ A i0 ] ＜ f x₀ ／ B ＼ g (coe0→1 A x₀) ＞)
-  isom .fst h x₀ = h $ c .fst .snd
-  isom .snd .inv k {x₀} {x₁} p =
+  isom .to h x₀ = h $ c .fst .snd
+  isom .from k {x₀} {x₁} p =
     subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) (c .snd (x₁ , p)) (k x₀)
-
-  isom .snd .rinv k = fun-ext λ x₀ →
-    ap (λ α → subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) α (k x₀))
+  isom .inverses .Inverses.inv-o = fun-ext λ k → fun-ext λ x₀
+    → ap (λ α → subst (λ fib → ＜ f x₀ ／ B ＼ g (fib .fst) ＞) α (k x₀))
       (is-contr→is-set c (c .fst) (c .fst) (c .snd $ c .fst) refl)
     ∙ transport-refl (k x₀)
-
-  isom .snd .linv h j {x₀} {x₁} p =
-    coei→1
-      (λ i → ＜ f x₀ ／ B ＼ g (c .snd (x₁ , p) (i ∨ j) .fst) ＞)
-      j $ h $ c .snd (x₁ , p) j .snd
+  isom .inverses .Inverses.inv-i j h {x₀} {x₁} p =
+    coei→1 (λ i → ＜ f x₀ ／ B ＼ g (c .snd (x₁ , p) (i ∨ j) .fst) ＞)
+      j
+      (h $ c .snd (x₁ , p) j .snd)

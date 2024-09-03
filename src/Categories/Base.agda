@@ -63,8 +63,17 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     Refl-Hom : Refl Hom
     Refl-Hom .refl = id
 
-    Trans-Hom : Transitive Hom
+    Trans-Hom : Transʰ Hom
     Trans-Hom ._∙_ f g = g ∘ f
+
+    Assoc-Hom : Assocʰ Hom
+    Assoc-Hom .∙-assoc f g h = assoc h g f ⁻¹
+
+    Unit-o-Hom : Unit-oʰ Hom
+    Unit-o-Hom .∙-id-o = id-r
+
+    Unit-i-Hom : Unit-iʰ Hom
+    Unit-i-Hom .∙-id-i = id-l
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 h)
     ⇒-Hom ._⇒_ = Hom
@@ -91,7 +100,7 @@ instance
   hlevel-proj-precat .get-argument (_ ∷ _ ∷ x v∷ _) = pure x
   hlevel-proj-precat .get-argument _ = type-error []
 
-  Op-Cat : Symmᵘ (Precategory o ℓ)
+  Op-Cat : Symᵘ (Precategory o ℓ)
   Op-Cat .minv C .Ob = Ob C
   Op-Cat .minv C .Hom x y = Hom C y x
   Op-Cat .minv C .Hom-set x y = Hom-set C y x
@@ -136,13 +145,13 @@ record Functor
 unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
 
 instance
-  Op-Functor : Symm {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)
+  Op-Functor : Sym {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)
   Op-Functor .sym F .Functor.F₀ = F .Functor.F₀
   Op-Functor .sym F .Functor.F₁ = F .Functor.F₁
   Op-Functor .sym F .Functor.F-id = F .Functor.F-id
   Op-Functor .sym F .Functor.F-∘ f g = F .Functor.F-∘ g f
 
-  Op-Functor⁻ : Symm {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} (λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)) Functor
+  Op-Functor⁻ : Sym {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} (λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)) Functor
   Op-Functor⁻ .sym F = Op-Functor .sym F
   {-# INCOHERENT Op-Functor⁻ #-}
 
@@ -268,7 +277,7 @@ instance
 
   Op-natural-transformation
     : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
-    → Symm {A = Functor C D} {B = Functor C D} _=>_ λ G F → G ᵒᵖ => F ᵒᵖ
+    → Sym {A = Functor C D} {B = Functor C D} _=>_ λ G F → G ᵒᵖ => F ᵒᵖ
   Op-natural-transformation .sym α ._=>_.η = α ._=>_.η
   Op-natural-transformation .sym α ._=>_.is-natural x y f = _=>_.is-natural α y x f ⁻¹
 

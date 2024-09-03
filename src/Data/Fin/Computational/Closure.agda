@@ -30,17 +30,17 @@ fin-1-is-contr .fst = fzero
 fin-1-is-contr .snd (mk-fin 0) = refl
 
 fin-suc : Fin (suc n) ≃ ⊤ ⊎ Fin n
-fin-suc = ≅→≃ $ f , iso g rinv linv where
+fin-suc = ≅→≃ $ iso f g (fun-ext rinv) (fun-ext linv) where
   f : Fin (suc n) → ⊤ ⊎ Fin n
   f (mk-fin 0)       = inl tt
   f (mk-fin (suc k)) = inr (mk-fin k)
   g : ⊤ ⊎ Fin n → Fin (suc n)
   g (inl _) = fzero
   g (inr x) = fsuc x
-  rinv : g is-right-inverse-of f
+  rinv : g section-of′ f
   rinv (inl _) = refl
   rinv (inr _) = refl
-  linv : g is-left-inverse-of f
+  linv : g retract-of′ f
   linv (mk-fin 0)       = refl
   linv (mk-fin (suc _)) = refl
 
@@ -48,7 +48,7 @@ fin-suc-universal
   : {n : ℕ} → {A : Fin (suc n) → Type ℓ}
   → Π[ x ꞉ Fin (suc n) ] A x
   ≃ A fzero × (∀ x → A (fsuc x))
-fin-suc-universal {n} {A} = ≅→≃ $ ff , iso gg ri li where
+fin-suc-universal {n} {A} = ≅→≃ $ iso ff gg refl (fun-ext li) where
   ff : Π[ x ꞉ Fin _ ] A x → A fzero × (∀ x → A (fsuc x))
   ff f = f fzero , f ∘ fsuc
 
@@ -56,10 +56,7 @@ fin-suc-universal {n} {A} = ≅→≃ $ ff , iso gg ri li where
   gg (z , f) (mk-fin 0)       = z
   gg (z , f) (mk-fin (suc k)) = f (mk-fin k)
 
-  ri : gg is-right-inverse-of ff
-  ri _ = refl
-
-  li : gg is-left-inverse-of ff
+  li : gg retract-of′ ff
   li w = fun-ext λ where
     (mk-fin 0)       → refl
     (mk-fin (suc k)) → refl
@@ -90,7 +87,7 @@ fin-sum {0} _ .fst ()
 fin-sum {0} _ .snd .equiv-proof ()
 fin-sum {suc n} B =
   fin-coproduct {n = B fzero} .fst ∘ f ,
-  is-equiv-comp (is-iso→is-equiv $ f-iso) (fin-coproduct {n = B fzero} .snd)
+  is-equiv-comp (is-inv→is-equiv f-inv) (fin-coproduct {n = B fzero} .snd)
     where
       rec″ : Σ[ k ꞉ Fin n ] Fin (B (fsuc k)) ≃ Fin (sum n (B ∘ fsuc))
       rec″ = fin-sum {n = n} (B ∘ fsuc)
@@ -100,19 +97,16 @@ fin-sum {suc n} B =
       f (mk-fin 0       , x) = inl x
       f (mk-fin (suc k) , y) = inr (mrec.to (mk-fin k , y))
 
-      f-iso : is-iso f
-      f-iso .is-iso.inv (inl x) = fzero , x
-      f-iso .is-iso.inv (inr x) with mrec.from x
+      f-inv : is-invertible f
+      f-inv .is-invertible.inv (inl x) = fzero , x
+      f-inv .is-invertible.inv (inr x) with mrec.from x
       ... | x , y = fsuc x , y
-
-      f-iso .is-iso.rinv (inl x) = refl
-      f-iso .is-iso.rinv (inr x) = ap inr (mrec.ε _)
-
-      f-iso .is-iso.linv (mk-fin 0       , _) = refl
-      f-iso .is-iso.linv (mk-fin (suc k) , s)
-        =  ap (fsuc ∘ fst) (mrec.η _)
-        ,ₚ ap snd (mrec.η _)
-
+      f-inv .is-invertible.inverses .Inverses.inv-o i (inl x) = inl x
+      f-inv .is-invertible.inverses .Inverses.inv-o i (inr x) = inr (mrec.ε x i)
+      f-inv .is-invertible.inverses .Inverses.inv-i i (mk-fin 0 , s) = mk-fin 0 , s
+      f-inv .is-invertible.inverses .Inverses.inv-i i (mk-fin (suc k) , s)
+        = fsuc (fst (mrec.η (mk-fin k , s) i))
+        , snd (mrec.η (mk-fin k , s) i)
 
 fin-product : {n m : ℕ}
             → Fin n × Fin m

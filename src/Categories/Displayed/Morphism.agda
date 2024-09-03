@@ -26,8 +26,8 @@ record Inverses[_]
   where
   no-eta-equality
   field
-    inv-lᵈ : f′ ∘ᵈ g′ ＝[ Inverses.inv-l inv ] idᵈ
-    inv-rᵈ : g′ ∘ᵈ f′ ＝[ Inverses.inv-r inv ] idᵈ
+    inv-lᵈ : f′ ∘ᵈ g′ ＝[ Inverses.inv-o inv ] idᵈ
+    inv-rᵈ : g′ ∘ᵈ f′ ＝[ Inverses.inv-i inv ] idᵈ
 
 record is-invertible[_]
   {a b a′ b′} {f : Hom a b}
@@ -41,6 +41,8 @@ record is-invertible[_]
     inversesᵈ : Inverses[ is-invertible.inverses f-inv ] f′ invᵈ
 
   open Inverses[_] inversesᵈ public
+
+open Iso
 
 record _≅[_]_
   {a b} (a′ : Ob[ a ]) (i : a ≅ b) (b′ : Ob[ b ])
@@ -57,7 +59,7 @@ record _≅[_]_
 open _≅[_]_ public
 
 _≅↓_ : {x : Ob} (A B : Ob[ x ]) → Type ℓ′
-_≅↓_ = _≅[ id-iso ]_
+_≅↓_ = _≅[ refl ]_
 
 is-invertible↓ : {x : Ob} {x′ x″ : Ob[ x ]} → Hom[ id ] x′ x″ → Type _
 is-invertible↓ = is-invertible[ id-invertible ]
@@ -79,10 +81,10 @@ opaque
     → (f′ : Hom[ f ] a′ b′) (g′ : Hom[ g ] b′ a′)
     → is-prop (Inverses[ inv ] f′ g′)
   Inverses[]-are-prop inv f′ g′ inv[] inv[]′ i .Inverses[_].inv-lᵈ =
-    is-set→squareᴾ (λ i j → Hom[ Inverses.inv-l inv j ]-set _ _)
+    is-set→squareᴾ (λ i j → Hom[ Inverses.inv-o inv j ]-set _ _)
       refl (Inverses[_].inv-lᵈ inv[]) (Inverses[_].inv-lᵈ inv[]′) refl i
   Inverses[]-are-prop inv f′ g′ inv[] inv[]′ i .Inverses[_].inv-rᵈ =
-    is-set→squareᴾ (λ i j → Hom[ Inverses.inv-r inv j ]-set _ _)
+    is-set→squareᴾ (λ i j → Hom[ Inverses.inv-i inv j ]-set _ _)
       refl (Inverses[_].inv-rᵈ inv[]) (Inverses[_].inv-rᵈ inv[]′) refl i
 
   -- TODO
@@ -93,11 +95,11 @@ opaque
   --   → is-prop (is-invertible[ f-inv ] f′)
 
 make-iso[_]
-  : ∀ {a b a′ b′}
+  : ∀ {a b : Ob} {a′ b′}
   → (iso : a ≅ b)
   → (f′ : Hom[ iso .to ] a′ b′) (g′ : Hom[ iso .from ] b′ a′)
-  → f′ ∘ᵈ g′ ＝[ iso .inv-l ] idᵈ
-  → g′ ∘ᵈ f′ ＝[ iso .inv-r ] idᵈ
+  → f′ ∘ᵈ g′ ＝[ iso .inv-o ] idᵈ
+  → g′ ∘ᵈ f′ ＝[ iso .inv-i ] idᵈ
   → a′ ≅[ iso ] b′
 make-iso[ inv ] f′ g′ p q .toᵈ = f′
 make-iso[ inv ] f′ g′ p q .fromᵈ = g′
@@ -107,16 +109,16 @@ make-iso[ inv ] f′ g′ p q .inversesᵈ .Inverses[_].inv-rᵈ = q
 make-vertical-iso
   : ∀ {x} {x′ x″ : Ob[ x ]}
   → (f′ : Hom[ id ] x′ x″) (g′ : Hom[ id ] x″ x′)
-  → f′ ∘ᵈ g′ ＝[ id-l _ ] idᵈ
-  → g′ ∘ᵈ f′ ＝[ id-l _ ] idᵈ
+  → f′ ∘ᵈ g′ ＝[ id-r _ ] idᵈ
+  → g′ ∘ᵈ f′ ＝[ id-r _ ] idᵈ
   → x′ ≅↓ x″
-make-vertical-iso = make-iso[ id-iso ]
+make-vertical-iso = make-iso[ refl ]
 
 invertible[]→iso[]
   : ∀ {a b a′ b′} {f : Hom a b} {f′ : Hom[ f ] a′ b′}
   → {i : is-invertible f}
   → is-invertible[ i ] f′
-  → a′ ≅[ invertible→iso f i ] b′
+  → a′ ≅[ is-inv→≅ f i ] b′
 invertible[]→iso[] {f′ = f′} i =
   make-iso[ _ ]
     f′
@@ -132,4 +134,4 @@ invertible[]→iso[] {f′ = f′} i =
 --   → p ＝ q
 
 id-iso↓ : ∀ {x} {x′ : Ob[ x ]} → x′ ≅↓ x′
-id-iso↓ = make-iso[ id-iso ] idᵈ idᵈ (id-lᵈ idᵈ) (id-lᵈ idᵈ)
+id-iso↓ = make-iso[ refl ] idᵈ idᵈ (id-rᵈ idᵈ) (id-rᵈ idᵈ)

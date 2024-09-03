@@ -193,9 +193,9 @@ trivial-iso!
   → (g : B → A)
   → {@(tactic trivial-worker r (g ∘ f) id) p : Pathᵉ r (g ∘ f) id}
   → {@(tactic trivial-worker s (f ∘ g) id) q : Pathᵉ s (f ∘ g) id}
-  → Iso A B
+  → A ≅ B
 trivial-iso! ⦃ r ⦄ ⦃ s ⦄ f g {p} {q} =
-  f , iso g (s .idsᵉ .to-path q $ₚ_) (r .idsᵉ .to-path p $ₚ_)
+  iso f g (s .idsᵉ .to-path q) (r .idsᵉ .to-path p)
 
 macro
   reext!

@@ -37,12 +37,13 @@ unquoteDecl Terminal-Iso = declare-record-iso Terminal-Iso (quote Terminal)
 module _ {o h} {C : Precategory o h} where
   open Categories.Morphism C
   open Terminal
+  open Iso
 
   !-invertible : (t₁ t₂ : Terminal C) → is-invertible (! t₁ {top t₂})
-  !-invertible t₁ t₂ = make-invertible (! t₂) (!-unique² t₁ _ _) (!-unique² t₂ _ _)
+  !-invertible t₁ t₂ = invertible (! t₂) (!-unique² t₁ _ _) (!-unique² t₂ _ _)
 
   ⊤-unique : (t₁ t₂ : Terminal C) → top t₁ ≅ top t₂
-  ⊤-unique t₁ t₂ = invertible→iso (! t₂) (!-invertible t₂ t₁)
+  ⊤-unique t₁ t₂ = is-inv→≅ (! t₂) (!-invertible t₂ t₁)
 
   opaque
     terminal-is-prop : is-category C → is-prop (Terminal C)
@@ -54,7 +55,7 @@ module _ {o h} {C : Precategory o h} where
     ≅→is-terminal isom term x = isom .to ∘ centre (term x) , λ h →
       isom .to ∘ ⌜ centre (term x) ⌝ ~⟨ ap! (paths (term x) _) ⟩
       isom .to ∘ isom .from ∘ h      ~⟨ assoc _ _ _ ⟩
-      ⌜ isom .to ∘ isom .from ⌝ ∘ h  ~⟨ ap! (isom .inv-l) ⟩
+      ⌜ isom .to ∘ isom .from ⌝ ∘ h  ~⟨ ap! (isom .inv-o) ⟩
       id ∘ h                         ~⟨ id-l _ ⟩
       h                              ∎
 

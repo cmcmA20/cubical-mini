@@ -37,11 +37,9 @@ record is-pullback {P : Ob} (p₁ : P ⇒ X) (f : X ⇒ Z) (p₂ : P ⇒ Y) (g :
     → O ⇒ P
     ≃ Σ[ h ꞉ O ⇒ X ] Σ[ h′ ꞉ O ⇒ Y ] (f ∘ h ＝ g ∘ h′)
   pullback-univ .fst h = p₁ ∘ h , p₂ ∘ h , cat! C ∙ ap (_∘ h) square ∙ cat! C
-  pullback-univ .snd = is-iso→is-equiv λ where
-    .is-iso.inv (f , g , α) → universal α
-    .is-iso.rinv x → p₁∘universal
-      ,ₚ Σ-prop-pathᴾ (λ _ _ → path-is-of-hlevel 1 hlevel! _ _) p₂∘universal
-    .is-iso.linv _ → unique refl refl ⁻¹
+  pullback-univ .snd = is-inv→is-equiv $ invertible (λ (f , g , α) → universal α)
+    (fun-ext λ _ → p₁∘universal ,ₚ p₂∘universal ,ₚ prop!)
+    (fun-ext λ _ → unique refl refl ⁻¹)
 
 
 record Pullback {X Y Z : Ob} (f : X ⇒ Z) (g : Y ⇒ Z) : Type (ℓ ⊔ ℓ′) where

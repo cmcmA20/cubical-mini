@@ -69,7 +69,7 @@ instance
   Refl-≤ .refl = ≤-refl
   {-# OVERLAPPING Refl-≤ #-}
 
-  Trans-≤ : Transitive _≤_
+  Trans-≤ : Transʰ _≤_
   Trans-≤ ._∙_ = ≤-trans
   {-# OVERLAPPING Trans-≤ #-}
 

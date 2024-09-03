@@ -14,6 +14,8 @@ private variable
   @0 B : Type ℓᵇ
   @0 C : Type ℓᶜ
 
+open Iso
+
 record Recomputable {ℓ} (A : Type ℓ) : Type ℓ where
   no-eta-equality
   field recompute : Erased A → A
@@ -26,50 +28,54 @@ fibreᴱ≃fibre = Σ-ap-snd λ _ → erased≃id
 is-contr→is-contrᴱ : is-contr A → is-contrᴱ A
 is-contr→is-contrᴱ (c , p) = (c , erase p)
 
-opaque
-  @0 is-of-hlevelᴱ≃is-of-hlevel : {n : HLevel} → is-of-hlevelᴱ n A ≃ is-of-hlevel n A
-  is-of-hlevelᴱ≃is-of-hlevel {n = 0} = Σ-ap-snd λ _ → erased≃id
-  is-of-hlevelᴱ≃is-of-hlevel {n = 1} = ≅→≃ $ to , iso from (λ _ → refl) li where
-    to : is-propᴱ A → is-prop A
-    to pr x y = pr x y .fst
-    from : is-prop A → is-propᴱ A
-    from pr x y = pr _ _ , erase (is-prop→is-set pr _ _ _)
-    li : (pr : is-propᴱ A) → from (to pr) ＝ pr
-    li {A} pr = fun-ext λ _ → fun-ext λ _ → Σ-prop-path go refl where
-      go : {x y : A} (p : x ＝ y) → is-prop (Erased (is-central p))
-      go {x} {y} p (erase u) (erase v) = let _ , erase w  = pr x y
-        in congᴱ $ erase (fun-ext (λ _ → is-of-hlevel-+ 1 2 (to pr) _ _ _ _ _ _))
-  is-of-hlevelᴱ≃is-of-hlevel {n = suc (suc n)} = Π-cod-≃ λ _ → Π-cod-≃ λ _ → is-of-hlevelᴱ≃is-of-hlevel
+@0 is-of-hlevelᴱ≃is-of-hlevel : {n : HLevel} → is-of-hlevelᴱ n A ≃ is-of-hlevel n A
+is-of-hlevelᴱ≃is-of-hlevel {n = 0} = Σ-ap-snd λ _ → erased≃id
+is-of-hlevelᴱ≃is-of-hlevel {n = 1} = ≅→≃ $ iso
+  (λ pr x y → pr x y .fst)
+  (λ pr x y → pr _ _ , erase (is-prop→is-set pr _ _ _))
+  refl
+  (fun-ext λ pr → fun-ext λ x → fun-ext λ y → Σ-prop-path (go pr) refl)
+  where
+  go : (pr : (a b : A) → is-contrᴱ (a ＝ b)) {x y : A} (p : x ＝ y) → is-prop (Erased (is-central p))
+  go pr {x} {y} p (erase u) (erase v) = let _ , erase w  = pr x y
+    in congᴱ $ erase (fun-ext (λ _ → is-of-hlevel-+ 1 2 (λ w z → pr w z .fst) _ _ _ _ _ _))
+is-of-hlevelᴱ≃is-of-hlevel {n = suc (suc n)} = Π-cod-≃ λ _ → Π-cod-≃ λ _ → is-of-hlevelᴱ≃is-of-hlevel
 
 @0 is-equivᴱ≃is-equiv : {f : A → B} → is-equivᴱ f ≃ is-equiv f
 is-equivᴱ≃is-equiv {B} {f} =
   Π-cod-≃ (λ _ → is-of-hlevelᴱ≃is-of-hlevel ∙ generic-ae is-contr fibreᴱ≃fibre ) ∙ ≅→≃ go where
     go : Π[ b ꞉ B ] (is-contr (fibre f b)) ≅ is-equiv f
-    go .fst h .equiv-proof = h
-    go .snd .is-iso.inv eqv = eqv .equiv-proof
-    go .snd .is-iso.rinv eqv i .equiv-proof = eqv .equiv-proof
-    go .snd .is-iso.linv _ = refl
+    go .to h .equiv-proof = h
+    go .from = equiv-proof
+    go .inverses .Inverses.inv-o i x .equiv-proof = x .equiv-proof
+    go .inverses .Inverses.inv-i = refl
 
 
 @0 equivᴱ≃equiv : (A ≃ᴱ B) ≃ (A ≃ B)
 equivᴱ≃equiv = Σ-ap-snd λ _ → is-equivᴱ≃is-equiv
 
-@0 is-isoᴱ≃is-iso : {@0 f : A → B} → is-isoᴱ f ≃ is-iso f
-is-isoᴱ≃is-iso = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ ≅→≃ λ where
-  .fst → iso $³_
-  .snd .is-iso.inv isi → is-iso.inv isi , is-iso.rinv isi , is-iso.linv isi
-  .snd .is-iso.rinv isi _ .is-iso.inv x → isi .is-iso.inv x
-  .snd .is-iso.rinv isi _ .is-iso.rinv x → isi .is-iso.rinv x
-  .snd .is-iso.rinv isi _ .is-iso.linv x → isi .is-iso.linv x
-  .snd .is-iso.linv x _ → x
+@0 is-invᴱ≃is-inv : {@0 f : A → B} → is-invertibleᴱ f ≃ is-invertible f
+is-invᴱ≃is-inv {f} = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ ≅→≃ go where
+  go : _ ≅ is-invertible f
+  go .to = invertible $³_
+  go .from x
+    = x .is-invertible.inv
+    , x .is-invertible.inverses .Inverses.inv-o
+    , x .is-invertible.inverses .Inverses.inv-i
+  go .inverses .Inverses.inv-o i x .is-invertible.inv = x .is-invertible.inv
+  go .inverses .Inverses.inv-o i x .is-invertible.inverses .Inverses.inv-o =
+    x .is-invertible.inverses .Inverses.inv-o
+  go .inverses .Inverses.inv-o i x .is-invertible.inverses .Inverses.inv-i =
+    x .is-invertible.inverses .Inverses.inv-i
+  go .inverses .Inverses.inv-i = refl
 
-is-isoᴱ→is-equivᴱ : {@0 f : A → B} → is-isoᴱ f → is-equivᴱ f
-is-isoᴱ→is-equivᴱ {f} (inv , erase ri , erase li) y = (inv y , erase (eqv y .fst .snd)) , erase go where
+is-invᴱ→is-equivᴱ : {@0 f : A → B} → is-invertibleᴱ f → is-equivᴱ f
+is-invᴱ→is-equivᴱ {f} (inv , erase ri , erase li) y = (inv y , erase (eqv y .fst .snd)) , erase go where
   @0 eqv : _
-  eqv = is-iso→is-equiv (iso inv ri li) .equiv-proof
-  @0 go : is-central (inv y , erase (eqv y .fst .snd))
+  eqv = is-inv→is-equiv (invertible inv ri li) .equiv-proof
+  @ 0 go : is-central (inv y , erase (eqv y .fst .snd))
   go (c , erase p) i =
-    let r = is-iso→fibre-is-prop (iso inv ri li) y (inv y) c (ri y) p
+    let r = is-inv→fibre-is-prop (invertible inv ri li) y (inv y) c (ri # y) p
     in r i .fst , erase (r i .snd)
 
 erased-path : {@0 A : Type ℓᵃ} {@0 x y : A} → Erased (x ＝ y) ≃ (erase x ＝ erase y)
@@ -87,23 +93,23 @@ erased-is-of-hlevel (suc (suc n)) hl (erase x) (erase y) = ≃→is-of-hlevel (s
 -- awful notation
 infixr 30 _∙ᴱₑ_
 _∙ᴱₑ_ : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ B → B ≃ᴱ C → A ≃ᴱ C
-(f , fe) ∙ᴱₑ (g , ge) = g ∘ f , e where
-  fi = is-equivᴱ→is-isoᴱ fe
-  f⁻¹ = fi .fst
+(f , fe) ∙ᴱₑ (g , ge) = f ∙ g , e where
+  open is-invertible
+  fi = is-equivᴱ→is-invᴱ fe
+  gi = is-equivᴱ→is-invᴱ ge
 
-  gi = is-equivᴱ→is-isoᴱ ge
+  f⁻¹ = fi .fst
   g⁻¹ = gi .fst
 
   opaque
-    @0 right : (f⁻¹ ∘ g⁻¹) is-right-inverse-of (g ∘ f)
-    right _ = ap g (fi .snd .fst .erased _) ∙ gi .snd .fst .erased _
+    @0 s : (g⁻¹ ∙ f⁻¹) section-of (f ∙ g)
+    s = apᶠ g⁻¹ (fi .snd .fst .erased) g ∙ gi .snd .fst .erased
 
-    @0 left : (f⁻¹ ∘ g⁻¹) is-left-inverse-of (g ∘ f)
-    left _ = ap f⁻¹ (gi .snd .snd .erased _) ∙ fi .snd .snd .erased _
+    @0 r : (g⁻¹ ∙ f⁻¹) retract-of (f ∙ g)
+    r = apᶠ f (gi .snd .snd .erased) f⁻¹ ∙ fi .snd .snd .erased
 
-  e : is-equivᴱ (g ∘ f)
-  e = is-isoᴱ→is-equivᴱ $ (f⁻¹ ∘ g⁻¹) , erase right , erase left
-
+  e : is-equivᴱ (f ∙ g)
+  e = is-invᴱ→is-equivᴱ $ (g⁻¹ ∙ f⁻¹) , erase s , erase r
 
 fibre→fibreᴱ : {A : Type ℓᵃ} {B : Type ℓᵇ} {f : A → B} {y : B} → fibre f y → fibreᴱ f y
 fibre→fibreᴱ = second (λ x → erase x)
@@ -118,11 +124,11 @@ is-equiv→is-equivᴱ fe y .snd .erased (c , erase p) i
 ≃→≃ᴱ = second is-equiv→is-equivᴱ
 
 instance
-  Symm-Erased-≃ : Symm (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) _≃ᴱ_
-  Symm-Erased-≃ .sym e = is-equivᴱ→inverse (e .snd) , is-isoᴱ→is-equivᴱ
-    ( e .fst
-    , erase (λ x → is-equivᴱ→unit (e .snd) x .erased)
-    , erase λ x → is-equivᴱ→counit (e .snd) x .erased )
+  Sym-Erased-≃ : Sym (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) _≃ᴱ_
+  Sym-Erased-≃ .sym e = is-equivᴱ→inverse (e .snd) , is-invᴱ→is-equivᴱ
+    (e .fst
+    , erase (fun-ext λ x → is-equivᴱ→unit (e .snd) x .erased)
+    , erase (fun-ext λ x → is-equivᴱ→counit (e .snd) x .erased) )
 
   Trans-Erased-≃ : Trans (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) (_≃ᴱ_ {ℓ′ = ℓᶜ}) _≃ᴱ_
   Trans-Erased-≃ ._∙_  = _∙ᴱₑ_
@@ -130,10 +136,10 @@ instance
 Σ-contract-sndᴱ
   : {A : Type ℓᵃ} {B : A → Type ℓᵇ}
   → (∀ x → is-contrᴱ (B x)) → Σ A B ≃ᴱ A
-Σ-contract-sndᴱ B-contr = fst , is-isoᴱ→is-equivᴱ
+Σ-contract-sndᴱ B-contr = fst , is-invᴱ→is-equivᴱ
   ( (λ x → x , B-contr x .fst)
-  , erase (λ _ → refl)
-  , erase λ (a , b) i → a , B-contr a .snd .erased b i )
+  , erase refl
+  , erase λ i (a , b) → a , B-contr a .snd .erased b i )
 
 opaque
   unfolding ua

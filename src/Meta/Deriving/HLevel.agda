@@ -27,7 +27,7 @@ private variable
 private
   record-hlevel-instance
     : {A : Type ℓ} {B : Type ℓ′} (n : ℕ) ⦃ A-hl : H-Level n A ⦄
-    → Iso B A
+    → B ≅ A
     → ∀ {k} ⦃ p : n ≤ k ⦄
     → H-Level k B
   record-hlevel-instance n im ⦃ p ⦄ = hlevel-instance $

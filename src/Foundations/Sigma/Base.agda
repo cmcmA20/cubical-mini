@@ -97,11 +97,11 @@ module _ {A : Type ℓᵃ} {B : A → Type ℓᵇ} {C : (a : A) (b : B a) → Ty
            → E (p .fst) (p .snd .fst) (p .snd .snd .fst) (p .snd .snd .snd)
       f $⁴ (x , y , z , w) = f x y z w
 
-      _$⁵_ : {F : (a : A) (b : B a) (c : C a b) (d : D a b c) (e : E a b c d) → Type ℓᶠ}
-             (f : (a : A) (b : B a) (c : C a b) (d : D a b c) (e : E a b c d) → F a b c d e)
-             (p : Σ[ x ꞉ A ] Σ[ y ꞉ B x ] Σ[ z ꞉ C x y ] Σ[ w ꞉ D x y z ] E x y z w)
-           → F (p .fst) (p .snd .fst) (p .snd .snd .fst) (p .snd .snd .snd .fst) (p .snd .snd .snd .snd)
-      f $⁵ (x , y , z , w , u) = f x y z w u
+      -- _$⁵_ : {F : (a : A) (b : B a) (c : C a b) (d : D a b c) (e : E a b c d) → Type ℓᶠ}
+      --        (f : (a : A) (b : B a) (c : C a b) (d : D a b c) (e : E a b c d) → F a b c d e)
+      --        (p : Σ[ x ꞉ A ] Σ[ y ꞉ B x ] Σ[ z ꞉ C x y ] Σ[ w ꞉ D x y z ] E x y z w)
+      --      → F (p .fst) (p .snd .fst) (p .snd .snd .fst) (p .snd .snd .snd .fst) (p .snd .snd .snd .snd)
+      -- f $⁵ (x , y , z , w , u) = f x y z w u
 
 
 fibreᴱ : {A  : Type ℓᵃ} {@0 B : Type ℓᵇ} (f : A → B) (@0 y : B) → Type _

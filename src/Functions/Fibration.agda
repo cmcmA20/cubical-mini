@@ -15,23 +15,21 @@ private variable
 
 Σ-fibre-equiv : (B : A → Type ℓᵇ) (a : A)
               → fibre fst a ≃ B a
-Σ-fibre-equiv B a = ≅→≃ isom where
-  isom : Iso _ _
-  isom .fst ((_ , y) , p) = subst B p y
-  isom .snd .is-iso.inv x       = (a , x) , refl
-  isom .snd .is-iso.rinv _      = transport-refl _
-  isom .snd .is-iso.linv ((_ , y) , p) i =
+Σ-fibre-equiv {A} B a = ≅→≃ isom where
+  open Iso
+  isom : fibre fst a ≅ B a
+  isom .to ((_ , y) , p) = subst B p y
+  isom .from x = (a , x) , refl
+  isom .inverses .Inverses.inv-o = fun-ext transport-refl
+  isom .inverses .Inverses.inv-i i ((_ , y) , p) =
     (p (~ i) , coe1→i (λ j → B (p (~ i ∧ ~ j))) i y) , λ j → p (~ i ∨ j)
 
 total-equiv
   : {E : Type ℓᵉ} {B : Type ℓᵇ}
     (p : E → B) → E ≃ Σ[ b ꞉ B ] fibre p b
-total-equiv p = ≅→≃ isom where
-  isom : Iso _ (Σ _ (fibre p))
-  isom .fst x                   = p x , x , refl
-  isom .snd .is-iso.inv (_ , x , _)    = x
-  isom .snd .is-iso.rinv (_ , x , q) i = q i , x , λ j → q (i ∧ j)
-  isom .snd .is-iso.linv _             = refl
+total-equiv p = ≅→≃ $ iso < p , _, refl > (fst ∘ snd)
+  (λ i (_ , x , q) → q i , x , λ j → q (i ∧  j))
+  refl
 
 _/[_]_ : (ℓ : Level) → (Type (ℓ ⊔ ℓ′) → Type ℓ″) → Type ℓ′ → Type (ℓsuc (ℓ ⊔ ℓ′) ⊔ ℓ″ )
 _/[_]_ {ℓ′} ℓ P B =
@@ -46,9 +44,9 @@ fibre-paths : {A : Type ℓᵃ} {B : Type ℓᵇ}
             → z ＝ z′
             ≃ Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)
 fibre-paths {f} {y} {z = a , p} {z′ = a′ , p′} =
-  (a , p) ＝ (a′ , p′)                                ~⟨ ≅→≃ Σ-path-iso ⟨
-  Σ[ q ꞉ a ＝ a′ ] (subst (λ v → f v ＝ y) q p ＝ p′) ~⟨ Σ-ap-snd (whisker-path-lₑ ∘ subst-path-left p ∘ ap f) ⟩
-  Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)           ∎
+  (a , p) ＝ (a′ , p′)                                 ~⟨ ≅→≃ Σ-path-iso ⟨
+  Σ[ q ꞉ a ＝ a′ ] (subst (λ v → f v ＝ y) q p ＝ p′)  ~⟨ Σ-ap-snd (whisker-path-lₑ ∘ subst-path-left p ∘ ap f) ⟩
+  Σ[ q ꞉ a ＝ a′ ] (sym (ap f q) ∙ p ＝ p′)            ∎
 
 module @0 _ where
   opaque
@@ -57,11 +55,12 @@ module @0 _ where
                     → Σ[ E ꞉ Type (ℓᵇ ⊔ ℓ) ] (E → B)
                     ≃ (B → Type (ℓᵇ ⊔ ℓ))
     fibration-equiv {B} {ℓ} = ≅→≃ isom where
+      open Iso
       isom : Σ[ E ꞉ Type (level-of-type B ⊔ ℓ) ] (E → B) ≅ (B → Type (level-of-type B ⊔ ℓ))
-      isom .fst (E , p)       = fibre p
-      isom .snd .is-iso.inv p⁻¹      = Σ _ p⁻¹ , fst
-      isom .snd .is-iso.rinv prep i x = ua (Σ-fibre-equiv prep x) i
-      isom .snd .is-iso.linv (E , p) i = ua e (~ i) , λ x → fst (ua-unglue e (~ i) x)
+      isom .to (E , p) = fibre p
+      isom .from p⁻¹ = Σ[ b ꞉ B ] p⁻¹ b , fst
+      isom .inverses .Inverses.inv-o i prep x = ua (Σ-fibre-equiv prep x) i
+      isom .inverses .Inverses.inv-i i (E , p) = ua e (~ i) , λ x → fst (ua-unglue e (~ i) x)
         where
         e : E ≃ Σ[ b ꞉ B ] fibre p b
         e = total-equiv p
@@ -88,15 +87,15 @@ module @0 _ where
 -- ultra fast
 fibre-comp : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
              {g : B → C} {f : A → B} {c : C}
-           → fibre (g ∘ f) c
+           → fibre (f ∙ g) c
            ≃ Σ[ w ꞉ fibre g c ] fibre f (w .fst)
-fibre-comp {g} {f} {c} = ≅→≃ $ to , iso from ri li where
+fibre-comp {g} {f} {c} = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
   to : fibre (g ∘ f) c → Σ[ w ꞉ fibre g c ] fibre f (w .fst)
   to (a , p) = (f a , p) , a , refl
   from : Σ[ w ꞉ fibre g c ] fibre f (w .fst) → fibre (g ∘ f) c
   from ((c′ , p) , a , q) = a , ap g q ∙ p
-  ri : from is-right-inverse-of to
+  ri : from section-of′ to
   ri ((c′ , p) , a , q) i =
     (q i , ∙-filler-r (ap g q) p (~ i)) , a , λ j → q (i ∧ j)
-  li : from is-left-inverse-of to
+  li : from retract-of′ to
   li (a , p) i = a , ∙-filler-r refl p (~ i)

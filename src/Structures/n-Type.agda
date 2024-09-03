@@ -24,7 +24,7 @@ open import Data.Truncation.Propositional.Base
 open import Data.Unit.Base
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : Type ℓ
   B : Type ℓ′
   m n k : HLevel
@@ -46,6 +46,16 @@ instance
   Underlying-n-Type : Underlying (n-Type ℓ n)
   Underlying-n-Type {ℓ} .Underlying.ℓ-underlying = ℓ
   Underlying-n-Type .⌞_⌟ = carrier
+
+  Refl-n-Fun : Refl {A = n-Type ℓ n} λ X Y → Fun ⌞ X ⌟ ⌞ Y ⌟
+  Refl-n-Fun .refl x = x
+  {-# INCOHERENT Refl-n-Fun #-}
+
+  Trans-n-Fun
+    : Trans {A = n-Type ℓ n} {B = n-Type ℓ′ n} {C = n-Type ℓ″ n}
+        (λ X Y → Fun ⌞ X ⌟ ⌞ Y ⌟) (λ X Y → Fun ⌞ X ⌟ ⌞ Y ⌟) (λ X Y → Fun ⌞ X ⌟ ⌞ Y ⌟)
+  Trans-n-Fun ._∙_ f g x = g (f x)
+  {-# INCOHERENT Trans-n-Fun #-}
 
   ×-n-Type : ×-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
   ×-n-Type ._×_ (el A p) (el B q) = el (A × B) (×-is-of-hlevel _ p q)
@@ -134,16 +144,16 @@ instance
 opaque
   unfolding ua
   @0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
-  n-univalence {n} {X} {Y} = n-ua , is-iso→is-equiv isic where
-    inv′ : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
-    inv′ p = =→≃ (ap carrier p)
+  n-univalence {ℓ} {n} {X} {Y} = n-ua , is-inv→is-equiv (invertible inv (fun-ext rinv) (fun-ext (linv {Y}))) where
+    inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
+    inv p = =→≃ (ap carrier p)
 
-    linv : ∀ {Y} → (inv′ {Y}) is-left-inverse-of n-ua
-    linv x = Σ-prop-path is-equiv-is-prop (fun-ext λ x → transport-refl _)
+    linv : {Y : n-Type ℓ n} → inv {Y} retract-of′ n-ua
+    linv x = fun-ext (λ z → transport-refl _) ,ₚ prop!
 
-    rinv : ∀ {Y} → (inv′ {Y}) is-right-inverse-of n-ua
-    rinv = Jₚ (λ y p → n-ua (inv′ p) ＝ p) path where
-      path : n-ua {X = X} (inv′ {X} refl) ＝ refl
+    rinv : ∀ {Y} → (inv {Y}) section-of′ n-ua
+    rinv = Jₚ (λ y p → n-ua (inv p) ＝ p) path where
+      path : n-ua {X = X} (inv {X} refl) ＝ refl
       path i j .carrier = ua.ε refl i j
       path i j .carrier-is-tr = is-prop→squareᴾ
         (λ i j → is-of-hlevel-is-prop
@@ -153,9 +163,6 @@ opaque
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)
         i j
-
-    isic : is-iso (n-ua {X = X} {Y = Y})
-    isic = iso inv′ rinv (linv {Y})
 
 -- FIXME disgusting! rewrite it without resorting to direct cube manipulations
 opaque

@@ -16,25 +16,25 @@ private variable
 is-half-adjoint-equiv : (f : A → B) → Type _
 is-half-adjoint-equiv {A} {B} f =
   Σ[ g ꞉ (B → A) ]
-  Σ[ η ꞉ g is-left-inverse-of f ]
-  Σ[ ε ꞉ g is-right-inverse-of f ]
+  Σ[ η ꞉ g retract-of′ f ]
+  Σ[ ε ꞉ g section-of′ f ]
   Π[ x ꞉ A ] (ap f (η x) ＝ ε (f x))
 
-is-iso→is-half-adjoint-equiv : is-iso f → is-half-adjoint-equiv f
-is-iso→is-half-adjoint-equiv {f} iiso =
-  g , η , ε′ , λ x → zig x ⁻¹
+is-inv→is-half-adjoint-equiv : {f : A → B} → is-invertible f → is-half-adjoint-equiv f
+is-inv→is-half-adjoint-equiv {A} {B} {f} iiso =
+  g , η #_ , ε′ , λ x → zig x ⁻¹
   where
-    open is-iso iiso renaming (inv to g ; linv to η ; rinv to ε)
-    ε′ : (y : _) → f (g y) ＝ y
-    ε′ y = ε (f (g y)) ⁻¹ ∙ ap f (η (g y)) ∙ ε y
+    open is-invertible iiso renaming (inv to g ; inv-i to η ; inv-o to ε)
+    ε′ : (y : B) → f (g y) ＝ y
+    ε′ y = ε # (f (g y)) ⁻¹ ∙ ap f (η # g y) ∙ ε # y
 
-    zig : (x : _) → ε′ (f x) ＝ ap f (η x)
+    zig : (x : A) → ε′ (f x) ＝ ap f (η # x)
     zig x =
-      ε′ (f x)                                                 ~⟨⟩
-      ε (f (g (f x))) ⁻¹ ∙ ap f ⌜ η (g (f x)) ⌝ ∙ ε (f x)      ~⟨ ap! (homotopy-invert η) ⟩
-      ε (f (g (f x))) ⁻¹ ∙ ⌜ ap (f ∘ g ∘ f) (η x) ∙ ε (f x) ⌝  ~⟨ ap¡ (homotopy-natural ε (ap f (η x))) ⟨
-      ε (f (g (f x))) ⁻¹ ∙ ε (f (g (f x))) ∙ ap f (η x)        ~⟨ ∙-cancel-l (ε (f (g (f x)))) (ap f (η x)) ⟩
-      ap f (η x)                                               ∎
+      ε′ (f x)                                                       ~⟨⟩
+      ε # (f (g (f x))) ⁻¹ ∙ ap f ⌜ η # (g (f x)) ⌝ ∙ ε # (f x)      ~⟨ ap! (homotopy-invert (η #_)) ⟩
+      ε # (f (g (f x))) ⁻¹ ∙ ⌜ ap (f ∘ g ∘ f) (η # x) ∙ ε # (f x) ⌝  ~⟨ ap¡ (homotopy-natural (ε #_) (ap f (η # x))) ⟨
+      ε # (f (g (f x))) ⁻¹ ∙ ε # (f (g (f x))) ∙ ap f (η # x)        ~⟨ ∙-cancel-l (ε # (f (g (f x)))) (ap f (η # x)) ⟩
+      ap f (η # x)                                                   ∎
 
 
 @0 is-half-adjoint-equiv→is-equiv : is-half-adjoint-equiv f → is-equiv f
@@ -59,13 +59,13 @@ is-half-adjoint-equiv→is-equiv {f} (g , η , ε , zig) .equiv-proof y = fib , 
       ap (f ∘ g) (p ⁻¹) ∙ ⌜ ε (f x) ∙ p ⌝          ~⟨ ap! (homotopy-natural ε p)  ⟩ -- by naturality of ε
       ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ∙ ε y       ~⟨ ∙-assoc _ _ (ε y) ⟩
       ⌜ ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ⌝ ∙ ε y   ~⟨ ap¡ (ap-comp-∙ (f ∘ g) (p ⁻¹) p) ⟨
-      ap (f ∘ g) ⌜ p ⁻¹ ∙ p ⌝ ∙ ε y                ~⟨ ap! (∙-inv-r (p ⁻¹)) ⟩
+      ap (f ∘ g) ⌜ p ⁻¹ ∙ p ⌝ ∙ ε y                ~⟨ ap! (∙-inv-i (p ⁻¹)) ⟩
       ap (f ∘ g) refl ∙ ε y                        ~⟨⟩
-      refl ∙ ε y                                   ~⟨ ∙-id-l (ε y) ⟩
+      refl ∙ ε y                                   ~⟨ ∙-id-o (ε y) ⟩
       ε y                                          ∎
 
-@0 is-iso→is-equiv′ : is-iso f → is-equiv f
-is-iso→is-equiv′ = is-half-adjoint-equiv→is-equiv ∘ is-iso→is-half-adjoint-equiv
+@0 is-inv→is-equiv′ : {f : A → B} → is-invertible f → is-equiv f
+is-inv→is-equiv′ = is-half-adjoint-equiv→is-equiv ∘ is-inv→is-half-adjoint-equiv
 
 is-equiv→is-half-adjoint-equiv : is-equiv f → is-half-adjoint-equiv f
 is-equiv→is-half-adjoint-equiv {f} eqv =

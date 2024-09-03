@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Notation.Reflexive where
+module Foundations.Notation.Reflexivity where
 
 open import Foundations.Prim.Type
 
@@ -18,10 +18,6 @@ module _ {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ : Level} (_~_ : A → A → 𝒰 ℓ) w
     field refl : Reflexivity
 
 open Refl ⦃ ... ⦄ public
-
--- homogeneous
-Reflexive : (A → A → 𝒰 ℓ) → 𝒰 _
-Reflexive = Refl
 
 
 -- "untyped" raw reflexivity is just being pointed

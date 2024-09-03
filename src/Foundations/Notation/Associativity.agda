@@ -1,11 +1,11 @@
 {-# OPTIONS --safe #-}
-module Foundations.Notation.Associative where
+module Foundations.Notation.Associativity where
 
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 open import Agda.Builtin.Unit
 
-open import Foundations.Notation.Transitive
+open import Foundations.Notation.Transitivity
 
 private variable
   ℓᵃ ℓ : Level
@@ -28,12 +28,13 @@ module _
   record Assoc
     ⦃ tu  : Trans X Y U ⦄ ⦃ tv  : Trans Y Z V ⦄
     ⦃ tw₁ : Trans X V W ⦄ ⦃ tw₂ : Trans U Z W ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓᶜ ⊔ ℓᵈ ⊔ ℓx ⊔ ℓy ⊔ ℓz ⊔ ℓw) where
+    no-eta-equality
     field ∙-assoc : Associativity (tu ._∙_) (tv ._∙_) (tw₁ ._∙_) (tw₂ ._∙_)
 
 open Assoc ⦃ ... ⦄ public
 
-Associative : (R : A → A → 𝒰 ℓ) ⦃ t : Transitive R ⦄ → Type _
-Associative R = Assoc R R R R R R
+Assocʰ : (R : A → A → 𝒰 ℓ) ⦃ t : Transʰ R ⦄ → Type _
+Assocʰ R = Assoc R R R R R R
 
 
 module _ {ℓᵃ} (A : 𝒰 ℓᵃ) where
@@ -42,6 +43,7 @@ module _ {ℓᵃ} (A : 𝒰 ℓᵃ) where
   Associativityᵘ t = (x y z : A) → t x (t y z) ＝ t (t x y) z
 
   record Assocᵘ ⦃ t : Transᵘ A ⦄ : 𝒰 ℓᵃ where
+    no-eta-equality
     field <>-assoc : Associativityᵘ (t ._<>_)
 
 open Assocᵘ ⦃ ... ⦄ public

@@ -244,13 +244,13 @@ instance
   Refl-Path : Refl (Path A)
   Refl-Path .refl = reflₚ
 
-  Symm-Path : Symmetric (Path A)
-  Symm-Path .sym = symₚ
+  Sym-Path : Symʰ (Path A)
+  Sym-Path .sym = symₚ
 
-  Invol-Path : Involutive (Path A)
+  Invol-Path : Involʰ (Path A)
   Invol-Path .sym-invol _ = refl
 
-  Trans-Path : Transitive (Path A)
+  Trans-Path : Transʰ (Path A)
   Trans-Path ._∙_ = _∙ₚ_
 
 
@@ -387,7 +387,7 @@ infixr 2 _~⟨⟩_ _=⟨⟩_
 _~⟨⟩_
   : {A : Type ℓᵃ} {B : Type ℓᵇ}
     {_~I_ : A → B → 𝒰 ℓ} {_~O_ : B → A → 𝒰 ℓ′}
-    ⦃ sy : Symm _~I_ _~O_ ⦄ -- for inference TODO improve
+    ⦃ sy : Sym _~I_ _~O_ ⦄ -- for inference TODO improve
   → (x : B) {y : A} → x ~O y → x ~O y
 _~⟨⟩_ _ xy = xy
 {-# INLINE _~⟨⟩_ #-}
@@ -433,7 +433,7 @@ infixr 2 _~⟨_⟨_ _=⟨_⟨_
 _~⟨_⟨_
   : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
     {_~L_ : A → B → 𝒰 ℓ} {_~L′_ : B → A → 𝒰 ℓ′} {_~R_ : B → C → 𝒰 ℓ″} {_~O_ : A → C → 𝒰 ℓ‴}
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄ ⦃ sy : Symm _~L′_ _~L_ ⦄
+    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄ ⦃ sy : Sym _~L′_ _~L_ ⦄
   → (x : A) {y : B} {z : C} → y ~L′ x → y ~R z → x ~O z
 x ~⟨ p ⟨ q = p ⁻¹ ∙ q
 {-# INLINE _~⟨_⟨_ #-}

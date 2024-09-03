@@ -13,7 +13,7 @@ private variable
   n : ℕ
 
 vec-of-types≃types : ∀ n → Vec (Type ℓ) n ≃ Types n (replicate n ℓ)
-vec-of-types≃types _ = ≅→≃ $ to , iso from ri li where
+vec-of-types≃types _ = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
   to : ∀ {n} → Vec (Type ℓ) n → Types n (replicate n ℓ)
   to {n = 0} _ = _
   to {n = 1} A = A

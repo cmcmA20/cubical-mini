@@ -78,7 +78,7 @@ module _ where
     renaming (Fin to Finᵈ; fzero to fzeroᵈ; fsuc to fsucᵈ)
 
   default≃computational : ∀{n} → Finᵈ n ≃ Fin n
-  default≃computational = ≅→≃ $ to , iso from ri li where
+  default≃computational = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
     to : ∀{n} → Finᵈ n → Fin n
     to {suc _} fzeroᵈ    = fzero
     to {suc _} (fsucᵈ k) = fsuc (to k)

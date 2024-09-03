@@ -13,13 +13,14 @@ open import Data.List.Base
 instance
   bool-manifest-bishop-finite : Manifest-bishop-finite Bool
   bool-manifest-bishop-finite = finite $ ≅→≃ go where
+    open Iso
     go : Bool ≅ Fin 2
-    go .fst false = fzero
-    go .fst true = fsuc fzero
-    go .snd .is-iso.inv (mk-fin 0) = false
-    go .snd .is-iso.inv (mk-fin 1) = true
-    go .snd .is-iso.rinv (mk-fin 0) = refl
-    go .snd .is-iso.rinv (mk-fin 1) = refl
-    go .snd .is-iso.linv false = refl
-    go .snd .is-iso.linv true = refl
+    go .to false = mk-fin 0
+    go .to true  = mk-fin 1
+    go .from (mk-fin 0) = false
+    go .from (mk-fin 1) = true
+    go .inverses .Inverses.inv-o _ (mk-fin 0) = mk-fin 0
+    go .inverses .Inverses.inv-o _ (mk-fin 1) = mk-fin 1
+    go .inverses .Inverses.inv-i _ false = false
+    go .inverses .Inverses.inv-i _ true = true
   {-# OVERLAPPING bool-manifest-bishop-finite #-}

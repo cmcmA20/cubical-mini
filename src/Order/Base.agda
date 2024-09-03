@@ -34,7 +34,7 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     Refl-≤ : Refl _≤_
     Refl-≤ .refl = ≤-refl
 
-    Trans-≤ : Transitive _≤_
+    Trans-≤ : Transʰ _≤_
     Trans-≤ ._∙_ = ≤-trans
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
@@ -121,6 +121,9 @@ instance
                          Monotone
   Trans-Monotone ._∙_ f g .hom x = g $ f $ x
   Trans-Monotone ._∙_ f g .pres-≤ x≤y = g $ f $ x≤y
+
+  ≅-Poset : ≅-notation (Poset o ℓ) (Poset o′ ℓ′) _
+  ≅-Poset ._≅_ = Iso Monotone Monotone
 
 monotone-pathᴾ
   : {P : I → Poset o ℓ} {Q : I → Poset o′ ℓ′}

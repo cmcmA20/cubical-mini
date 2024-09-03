@@ -73,8 +73,8 @@ module @0 _ where opaque
     j (i = i0) → h a (~ j)
     j (i = i1) → f₁ a
 
-@0 ≅→= : Iso A B → A ＝ B
-≅→= (f , r) = ua (f , is-iso→is-equiv r)
+@0 ≅→= : A ≅ B → A ＝ B
+≅→= = ≅→≃ ∙ ua
 
 =→≃ : A ＝ B → A ≃ B
 =→≃ p = line→≃ (λ i → p i)
@@ -98,18 +98,16 @@ opaque
     ω (j = i1) = B   , refl
 
 module @0 _ where
+  open Iso
+
   path≅equiv : (A ＝ B) ≅ (A ≃ B)
-  path≅equiv {A} {B} = =→≃ , r where
-    r : is-iso {A = A ＝ B} =→≃
-    r .is-iso.inv  = ua
-    r .is-iso.rinv = equiv-ext ∘ fun-ext ∘ ua-β
-    r .is-iso.linv = ua-η
+  path≅equiv {A} {B} = iso =→≃ ua (fun-ext $ equiv-ext ∘ fun-ext ∘ ua-β) (fun-ext ua-η)
 
   univalence : is-equiv (=→≃ {A = A} {B = B})
-  univalence = is-iso→is-equiv (path≅equiv .snd)
+  univalence = is-inv→is-equiv (make-invertible _ (path≅equiv .inverses))
 
   univalence⁻¹ : is-equiv (ua {A = A} {B = B})
-  univalence⁻¹ = is-iso→is-equiv (is-iso-inv (path≅equiv .snd))
+  univalence⁻¹ = is-inv→is-equiv (is-invertible.op (make-invertible _ (path≅equiv .inverses)))
 
   opaque
     unfolding ua

@@ -35,7 +35,7 @@ is-surjective-embedding≃is-equiv = prop-extₑ!
 
 -- TODO move?
 ≅→extensional
-  : Iso B A
+  : B ≅ A
   → Extensional A ℓ″
   → Extensional B ℓ″
 ≅→extensional f = ≃→extensional (≅→≃ f)

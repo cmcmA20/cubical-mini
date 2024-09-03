@@ -32,14 +32,14 @@ private variable
 
 universal : (Bool → A)
           ≃ A × A
-universal = ≅→≃
-  $ (λ ch → ch true , ch false)
-  , iso (flip (Bool.rec fst snd))
-        (λ _ → refl)
-        (λ _ → fun-ext $ Bool.elim refl refl)
+universal = ≅→≃ $ iso
+ (λ ch → ch true , ch false)
+ (flip (Bool.rec fst snd))
+ refl
+ (fun-ext λ _ → fun-ext $ Bool.elim refl refl)
 
 bool≃maybe⊤ : Bool ≃ Maybe ⊤
-bool≃maybe⊤ = ≅→≃ $ to , iso from ri li where
+bool≃maybe⊤ = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
   to : Bool → Maybe ⊤
   to false = nothing
   to true  = just tt
@@ -48,11 +48,11 @@ bool≃maybe⊤ = ≅→≃ $ to , iso from ri li where
   from (just _) = true
   from nothing  = false
 
-  ri : from is-right-inverse-of to
+  ri : from section-of′ to
   ri (just _) = refl
   ri nothing  = refl
 
-  li : from is-left-inverse-of to
+  li : from retract-of′ to
   li false = refl
   li true  = refl
 

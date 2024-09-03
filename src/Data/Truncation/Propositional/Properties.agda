@@ -21,7 +21,7 @@ private variable
   C : Type ℓ″
 
 universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
-universal {B} {A} B-prop = ≅→≃ $ inc′ , iso rec′ (λ _ → refl) beta where
+universal {B} {A} B-prop = ≅→≃ $ iso inc′ rec′ refl (fun-ext beta) where
   instance _ = hlevel-prop-instance B-prop
   inc′ : (x : ∥ A ∥₁ → B) → A → B
   inc′ f x = f ∣ x ∣₁
@@ -30,7 +30,7 @@ universal {B} {A} B-prop = ≅→≃ $ inc′ , iso rec′ (λ _ → refl) beta 
   rec′ f ∣ x ∣₁ = f x
   rec′ f (squash₁ x y i) = B-prop (rec′ f x) (rec′ f y) i
 
-  beta : rec′ is-left-inverse-of inc′
+  beta : rec′ retract-of′ inc′
   beta f = fun-ext $ elim! λ _ → refl
 
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)
@@ -146,7 +146,7 @@ module Replacement
     go : (t : Image) (u v : Σ[ z ꞉ Image ] (embed z ＝ embed t)) → u ＝ v
     go t (x , p) (y , q) = quot (ls.from (p ∙ q ⁻¹)) ,ₚ commutes→square coh where opaque
       coh : ls.to (ls.from (p ∙ q ⁻¹)) ∙ q ＝ p ∙ refl
-      coh = ap (_∙ q) (ls.ε (p ∙ q ⁻¹)) ∙ ∙-cancel-r p q ∙ ∙-id-r p ⁻¹
+      coh = ap (_∙ q) (ls.ε (p ∙ q ⁻¹)) ∙ ∙-cancel-r p q ∙ ∙-id-i p ⁻¹
 
   elim-prop
     : ∀ {ℓ′} {P : Image → Type ℓ′}
@@ -174,7 +174,7 @@ module Replacement
       go : (f⁻¹x : A) → is-contr _
       go f⁻¹x = (⦋ f⁻¹x ⦌ , refl) , λ where
         (u , α) → quot (ls.encode (ap fst α ⁻¹)) ,ₚ Σ-prop-square!
-          (commutes→square (ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-l _ ∙ ∙-id-l _ ⁻¹))
+          (commutes→square (ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-o _ ∙ ∙-id-o _ ⁻¹))
 
   Size-Im : Size (ℓᵃ ⊔ ℓⁱ) (Im f)
   Size-Im .Size.has-of-size = Image , Image≃Im

@@ -12,7 +12,7 @@ open import Structures.n-Type
 open import Logic.Decidability
 open import Logic.Discreteness
 
-open import Data.Bool.Base
+open import Data.Bool.Base as Bool
 open import Data.Dec as Dec
 open import Data.Empty.Base
 open import Data.Reflection.Argument
@@ -96,11 +96,11 @@ instance
 
 dec-prop≃ᴱbool : DecProp ℓ ≃ᴱ Bool
 dec-prop≃ᴱbool .fst X = ⌊ X .carrier-is-dec ⌋
-dec-prop≃ᴱbool .snd = is-isoᴱ→is-equivᴱ go where
-  go : is-isoᴱ (⌊_⌋ ∘ carrier-is-dec)
-  go .fst false = ⊥-DecProp .⊥
-  go .fst true  = ⊤-DecProp .⊤
-  go .snd .fst .erased false = refl
-  go .snd .fst .erased true  = refl
-  go .snd .snd .erased (el A (no ¬a) _) = ext ((λ ())    , lift ∘ ¬a)
-  go .snd .snd .erased (el A (yes a) _) = ext ((λ _ → a) , λ _ → lift tt)
+dec-prop≃ᴱbool .snd = is-invᴱ→is-equivᴱ
+  $ (if_then ⊤-DecProp .⊤ else ⊥-DecProp .⊥)
+  , erase (fun-ext (Bool.elim refl refl))
+  , erase (fun-ext li)
+  where
+  @0 li : _
+  li (el A (no ¬a) z) = ext ((λ ())    , lift ∘ ¬a)
+  li (el A (yes a) z) = ext ((λ _ → a) , λ _ → lift tt)

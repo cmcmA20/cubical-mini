@@ -56,7 +56,7 @@ record→iso namen unfolded =
   go acc (agda-sort _) = do
     let rec = def namen (makeArgs 0 [] acc)
     unfolded ← unfolded (implicitArgs 0 [] acc)
-    pure $ def (quote Iso) (rec v∷ unfolded v∷ [])
+    pure $ def (quote Isoₜ) (rec v∷ unfolded v∷ [])
     where
       makeArgs : ℕ → List (Arg Term) → List Arg-info → List (Arg Term)
       makeArgs n acc [] = acc
@@ -70,8 +70,7 @@ record→iso namen unfolded =
 undo-clause : Name × List Name → Clause
 undo-clause (r-field , sel-path) = clause
   (("sig" , argN unknown) ∷ [])
-  [ argN (proj (quote snd))
-  , argN (proj (quote is-iso.inv))
+  [ argN (proj (quote Iso.from))
   , argN (var 0)
   , argN (proj r-field)
   ]
@@ -80,21 +79,21 @@ undo-clause (r-field , sel-path) = clause
 redo-clause : Name × List Name → Clause
 redo-clause (r-field , sel-path) = clause
   (("rec" , argN unknown) ∷ [])
-  (argN (proj (quote fst)) ∷ argN (var 0) ∷ map (argN ∘ˢ proj) sel-path)
+  (argN (proj (quote Iso.to)) ∷ argN (var 0) ∷ map (proj ∙ argN) sel-path)
   (def r-field (var 0 [] v∷ []))
 
 undo-redo-clause : Name × List Name → Clause
 undo-redo-clause ((r-field , _)) = clause
   (("sig" , argN unknown) ∷ ("i" , argN (quoteTerm I)) ∷ [])
-  ( argN (proj (quote snd)) ∷ argN (proj (quote is-iso.linv))
-  ∷ argN (var 1) ∷ argN (var 0) ∷ argN (proj r-field) ∷ [])
+  ( argN (proj (quote Iso.inverses)) ∷ argN (proj (quote Inverses.inv-i))
+  ∷ argN (var 0) ∷ argN (var 1) ∷ argN (proj r-field) ∷ [])
   (def r-field (var 1 [] v∷ []))
 
 redo-undo-clause : Name × List Name → Clause
 redo-undo-clause (r-field , sel-path) = clause
   (("rec" , argN unknown) ∷ ("i" , argN (quoteTerm I)) ∷ [])
-  (  [ argN (proj (quote snd)) , argN (proj (quote is-iso.rinv)) , argN (var 1) , argN (var 0) ]
-  <> map (argN ∘ˢ proj) sel-path)
+  (  [ argN (proj (quote Iso.inverses)) , argN (proj (quote Inverses.inv-o)) , argN (var 0) , argN (var 1) ]
+  <> map (proj ∙ argN) sel-path)
   (fold-r (λ n t → def n (t v∷ [])) (var 1 []) (reverse sel-path))
 
 pi-term→sigma : Term → TC Term
@@ -147,6 +146,53 @@ define-record-iso nm rec = do
   pure tt
 
 
+-- TODO move this
+
+has-section-Iso
+  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
+    {I : B → A → 𝒰 ℓ′} {O : A → B → 𝒰 ℓ} {I∙O : B → B → 𝒰 ℓ″}
+    ⦃ _ : Refl I∙O ⦄ ⦃ _ : Trans I O I∙O ⦄ {x : A} {y : B} {r : O x y}
+  → has-section r ≅ Σ[ s ꞉ I y x ] s section-of r
+unquoteDef has-section-Iso = define-record-iso has-section-Iso (quote has-section)
+
+has-retract-Iso
+  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
+    {I : A → B → 𝒰 ℓ′} {O : B → A → 𝒰 ℓ} {I∙O : A → A → 𝒰 ℓ″}
+    ⦃ _ : Refl I∙O ⦄ ⦃ _ : Trans I O I∙O ⦄ {x : A} {y : B} {s : I x y}
+  → has-retract s ≅ Σ[ r ꞉ O y x ] r retract-of s
+unquoteDef has-retract-Iso = define-record-iso has-retract-Iso (quote has-retract)
+
+Inverses-Iso
+  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
+    {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
+    {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
+    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
+    {x : A} {y : B} {f : F x y} {g : G y x}
+  → Inverses f g ≅ (f retract-of g) × (f section-of g)
+unquoteDef Inverses-Iso = define-record-iso Inverses-Iso (quote Inverses)
+
+is-invertible-Iso
+  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
+    {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
+    {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
+    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
+    {x : A} {y : B} {f : F x y}
+  → is-invertible f ≅ Σ[ g ꞉ G y x ] Inverses f g
+unquoteDef is-invertible-Iso = define-record-iso is-invertible-Iso (quote is-invertible)
+
+Iso-Iso
+  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
+    {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
+    {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
+    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
+    {x : A} {y : B}
+  → Iso F G x y ≅ Σ[ f ꞉ F x y ] Σ[ g ꞉ G y x ] Inverses f g
+unquoteDef Iso-Iso = define-record-iso Iso-Iso (quote Iso)
+
+
 -- Usage
 private
   module _ {ℓ} (A : Type ℓ) where
@@ -159,19 +205,19 @@ private
 
     unquoteDecl eqv = declare-record-iso eqv (quote T)
 
-    _ : Iso T (Σ A (λ fp → Σ (A → A) (λ f → f fp ＝ fp)))
+    _ : T ≅ Σ A (λ fp → Σ (A → A) (λ f → f fp ＝ fp))
     _ = eqv
 
   unquoteDecl eqv-outside = declare-record-iso eqv-outside (quote T)
 
-  _ : {ℓ : Level} {A : Type ℓ} → Iso (T A) (Σ A (λ fp → Σ (A → A) (λ f → f fp ＝ fp)))
+  _ : {ℓ : Level} {A : Type ℓ} → T A ≅ Σ A (λ fp → Σ (A → A) (λ f → f fp ＝ fp))
   _ = eqv-outside
 
   module _ (x : ℕ) where
     unquoteDecl eqv-extra = declare-record-iso eqv-extra (quote T)
 
   _ : ℕ → {ℓ : Level} {A : Type ℓ}
-    → Iso (T A) (Σ A (λ fp → Σ (A → A) (λ f → f fp ＝ fp)))
+    → T A ≅ Σ A (λ fp → Σ (A → A) (λ f → f fp ＝ fp))
   _ = eqv-extra
 
   record T2 : Type where
@@ -179,7 +225,7 @@ private
     field
       some-field : ℕ
 
-  s-eqv : Iso T2 ℕ
+  s-eqv : T2 ≅ ℕ
   unquoteDef s-eqv = define-record-iso s-eqv (quote T2)
 
   Bar : Type
@@ -197,7 +243,7 @@ private
 
   -- works only with a full signature
   -- see agda/cubical issue #995
-  foo-iso : Iso Foo ({A : Bar} → Baz A)
+  foo-iso : Foo ≅ ({A : Bar} → Baz A)
   unquoteDef foo-iso = define-record-iso foo-iso (quote Foo)
 
 

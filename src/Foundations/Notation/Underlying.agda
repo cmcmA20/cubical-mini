@@ -77,11 +77,15 @@ ap$
 ap$ f = ap (f $_)
 
 -- Generalised happly.
+infixr -1 _$ₚ_
 _$ₚ_
   : {A : Type ℓ} {F : Type ℓ′} {B : (Σ F λ _ → A) → Type ℓ″}
   → ⦃ _ : Funlike ur F A B ⦄
   → {f g : F} (p : f ＝ g) (x : A) → ＜ f # x ／ (λ i → B (p i , x)) ＼ g # x ＞
 _$ₚ_ p x i = p i # x
+
+infixl 999 _#ₚ_
+_#ₚ_ = _$ₚ_
 
 instance
   Funlike-Irr-Π₀ : {A : Type ℓ} {B : @irr A → Type ℓ′} → Funlike cirr ((@irr a : A) → B a) A λ z → B (z .snd)
