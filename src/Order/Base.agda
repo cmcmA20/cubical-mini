@@ -37,6 +37,15 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     Trans-≤ : Transʰ _≤_
     Trans-≤ ._∙_ = ≤-trans
 
+    Assoc-≤ : Assocʰ _≤_
+    Assoc-≤ .∙-assoc _ _ _ = prop!
+
+    Unit-o-≤ : Unit-oʰ _≤_
+    Unit-o-≤ .∙-id-o _ = prop!
+
+    Unit-i-≤ : Unit-iʰ _≤_
+    Unit-i-≤ .∙-id-i _ = prop!
+
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
     ⇒-Hom ._⇒_ = _≤_
     {-# INCOHERENT ⇒-Hom #-}
@@ -162,15 +171,23 @@ Forget-poset .Functor.F₁ = hom
 Forget-poset .Functor.F-id = refl
 Forget-poset .Functor.F-∘ _ _ = refl
 
-_ᵒᵖᵖ : Poset o ℓ → Poset o ℓ
-(P ᵒᵖᵖ) .Poset.Ob = Poset.Ob P
-(P ᵒᵖᵖ) .Poset._≤_ = flip (Poset._≤_ P)
-(P ᵒᵖᵖ) .Poset.≤-thin = Poset.≤-thin P
-(P ᵒᵖᵖ) .Poset.≤-refl = Poset.≤-refl P
-(P ᵒᵖᵖ) .Poset.≤-trans = flip (Poset.≤-trans P)
-(P ᵒᵖᵖ) .Poset.≤-antisym = flip (Poset.≤-antisym P)
-
 instance
+  Op-Poset : Symᵘ (Poset o ℓ)
+  Op-Poset .minv P .Poset.Ob = P .Poset.Ob
+  Op-Poset .minv P .Poset._≤_ = flip (P .Poset._≤_)
+  Op-Poset .minv P .Poset.≤-thin = P. Poset.≤-thin
+  Op-Poset .minv P .Poset.≤-refl = P .Poset.≤-refl
+  Op-Poset .minv P .Poset.≤-trans = flip (P. Poset.≤-trans)
+  Op-Poset .minv P .Poset.≤-antisym = flip (P .Poset.≤-antisym)
+
+  Invol-Op-Poset : Involᵘ (Poset o ℓ)
+  Invol-Op-Poset .minv-invol P _ .Poset.Ob = P .Poset.Ob
+  Invol-Op-Poset .minv-invol P _ .Poset._≤_ = P .Poset._≤_
+  Invol-Op-Poset .minv-invol P _ .Poset.≤-thin = P .Poset.≤-thin
+  Invol-Op-Poset .minv-invol P _ .Poset.≤-refl = P .Poset.≤-refl
+  Invol-Op-Poset .minv-invol P _ .Poset.≤-trans = P .Poset.≤-trans
+  Invol-Op-Poset .minv-invol P _ .Poset.≤-antisym = P .Poset.≤-antisym
+
   ⊥-Poset : ⊥-notation (Poset o ℓ)
   ⊥-Poset .⊥ .Poset.Ob = ⊥
   ⊥-Poset .⊥ .Poset._≤_ _ _ = ⊥

@@ -305,9 +305,9 @@ Isoᶜ : Ob → Ob → Type h
 Isoᶜ = Iso Hom Hom
 
 instance
-  ≅-Hom : ≅-notation Ob Ob (𝒰 h)
-  ≅-Hom ._≅_ = Isoᶜ
-  {-# INCOHERENT ≅-Hom #-}
+  ≅-Cat-Ob : ≅-notation Ob Ob (𝒰 h)
+  ≅-Cat-Ob ._≅_ = Isoᶜ
+  {-# INCOHERENT ≅-Cat-Ob #-}
 
 Inverses-∘ : {f : a ⇒ b} {f⁻¹ : b ⇒ a} {g : b ⇒ c} {g⁻¹ : c ⇒ b}
            → Inverses f f⁻¹ → Inverses g g⁻¹ → Inverses (g ∘ f) (f⁻¹ ∘ g⁻¹)
