@@ -80,7 +80,7 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     {-# INCOHERENT ⇒-Hom #-}
 
 private variable
-  o h ℓ o′ h′ ℓ′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
+  o h ℓ o′ h′ ℓ′ o″ h″ ℓ″ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
   C : Precategory oᶜ hᵈ
   D : Precategory oᵈ hᵈ
 
@@ -227,6 +227,20 @@ instance
   Trans-Functor : Trans (Functor {oᶜ} {hᶜ}) (Functor {oᵈ} {hᵈ} {oᵉ} {hᵉ}) Functor
   Trans-Functor ._∙_ F G = G ∘ᶠ F
 
+  Assoc-Functor
+    : Assoc {A = Precategory o h} {B = Precategory o′ h′}
+            {C = Precategory oᶜ hᶜ} {D = Precategory oᵈ hᵈ}
+            Functor Functor Functor Functor Functor Functor
+  Assoc-Functor .∙-assoc F G H = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
+
+  Unit-o-Functor : Unit-o {A = Precategory o ℓ} {B = Precategory o′ ℓ′} Functor Functor
+  Unit-o-Functor .∙-id-o F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
+
+  Unit-i-Functor : Unit-i {A = Precategory o ℓ} {B = Precategory o′ ℓ′} Functor Functor
+  Unit-i-Functor .∙-id-i F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
+
+  ≅-Cat : ≅-notation (Precategory o ℓ) (Precategory o′ ℓ′) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ≅-Cat ._≅_ = Iso Functor Functor
 
 -- basic properties of functors
 
@@ -270,6 +284,7 @@ record _=>_ {C : Precategory oᶜ hᶜ}
 {-# INLINE NT #-}
 
 unquoteDecl H-Level-NT = declare-record-hlevel 2 H-Level-NT (quote _=>_)
+unquoteDecl NT-iso = declare-record-iso NT-iso (quote _=>_)
 
 instance
   ⇒-natural-transformation : ⇒-notation (C ⇒ D) (C ⇒ D) _
@@ -316,6 +331,29 @@ _∘ⁿᵗ_ {C} {D} {F} {G} {H} α β = comps
 instance
   Trans-natural-transformation : Trans (_=>_ {C = C} {D = D}) _=>_ _=>_
   Trans-natural-transformation ._∙_ α β = β ∘ⁿᵗ α
+
+module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
+  private module D = Precategory D
+
+  instance
+    Assoc-natural-transformation
+      : Assoc {A = Functor C D} _=>_ _=>_ _=>_ _=>_ _=>_ _=>_
+    Assoc-natural-transformation .∙-assoc α β γ = Equiv.injective (≅→≃ NT-iso)
+      $  fun-ext (λ c → D.assoc (γ # c) (β # c) (α # c) ⁻¹)
+      ,ₚ prop!
+
+    Unit-o-natural-transformation : Unit-o {A = Functor C D} _=>_ _=>_
+    Unit-o-natural-transformation .∙-id-o α = Equiv.injective (≅→≃ NT-iso)
+      $  fun-ext (λ c → D.id-r (α # c))
+      ,ₚ prop!
+
+    Unit-i-natural-transformation : Unit-i {A = Functor C D} _=>_ _=>_
+    Unit-i-natural-transformation .∙-id-i α = Equiv.injective (≅→≃ NT-iso)
+      $  fun-ext (λ c → D.id-l (α # c))
+      ,ₚ prop!
+
+    ≅-Functor : ≅-notation (Functor C D) (Functor C D) (𝒰 (oᶜ ⊔ hᶜ ⊔ hᵈ))
+    ≅-Functor ._≅_ = Iso _=>_ _=>_
 
 is-natural-transformation
   : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
