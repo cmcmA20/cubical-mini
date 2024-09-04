@@ -586,7 +586,7 @@ module _
                   (cover-condition a b p)
         where
         u : Σ[ i ꞉ I₂ ] α i is-a-small-cover-of ↓ᴮ P L β a → b ∈ Small-𝓘nd
-        u (i₂ , s) = Small-𝓘nd-is-ϕ-closed i₂ (↓ᴮ→base P L β a ∘ₜ (s $_)) b
+        u (i₂ , s) = Small-𝓘nd-is-ϕ-closed i₂ (fst ∘ₜ s #_) b
                                  (ϕ→small-ϕ (⋃ (↓ᴮ-inclusion P L β a ∘ₜ (s $_))) b
                                             (subst (λ q → (b , q) ∈ ϕ) a=⋁α p))
                                  λ b' → C b' ∘ₜ subst (b' ≤ᴮ_) (a=⋁α ⁻¹)

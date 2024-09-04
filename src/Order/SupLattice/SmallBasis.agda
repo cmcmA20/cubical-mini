@@ -21,11 +21,8 @@ module Order.SupLattice.SmallBasis
   ↓ᴮ : Ob → 𝒰 (ℓ ⊔ ℓ′)
   ↓ᴮ x = Σ[ b ꞉ B ] (β b ≤ x)
 
-  ↓ᴮ→base : (x : Ob) → ↓ᴮ x → B
-  ↓ᴮ→base _ = fst
-
   ↓ᴮ-inclusion : (x : Ob) → ↓ᴮ x → Ob
-  ↓ᴮ-inclusion x = β ∘ₜ ↓ᴮ→base x
+  ↓ᴮ-inclusion x = β ∘ₜ fst
 
   ↓ᴮ-≤ : {x y : Ob} → x ≤ y → ↓ᴮ x → ↓ᴮ y
   ↓ᴮ-≤ le = second (_∙ le)
