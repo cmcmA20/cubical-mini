@@ -4,6 +4,7 @@ module Order.SupLattice where
 open import Categories.Prelude
 
 open import Order.Base
+open import Order.Constructions.Product
 open import Order.Diagram.Join
 open import Order.Diagram.Lub
 open import Order.Semilattice.Join
@@ -31,6 +32,14 @@ record is-sup-lattice {o ℓ} (P : Poset o ℓ) (ℓᵢ : Level) : 𝒰 (o ⊔ �
 
 unquoteDecl H-Level-is-sup-lat =
   declare-record-hlevel 1 H-Level-is-sup-lat (quote is-sup-lattice)
+
+instance
+  ×-is-sup-lattice
+    : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+    → ×-notation (is-sup-lattice P ℓᵢ) (is-sup-lattice Q ℓᵢ) (is-sup-lattice (P × Q) ℓᵢ)
+  ×-is-sup-lattice ._×_ sx sy .is-sup-lattice.has-lubs =
+    sx .is-sup-lattice.has-lubs × sy .is-sup-lattice.has-lubs
+
 
 record
   is-sup-lat-hom
@@ -76,6 +85,12 @@ instance
     (Σ[ P ꞉ Poset o ℓ ] is-sup-lattice P ℓᵢ) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-sup-lattice Q ℓᵢ)
     (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′ ⊔ ℓsuc ℓᵢ))
   ⇒-sup-lat ._⇒_ (P , slp) (Q , slq) = Total-hom Monotone is-sup-lat-hom slp slq
+
+  ×-sup-lat : ×-notation
+    (Σ[ P ꞉ Poset o ℓ ] is-sup-lattice P ℓᵢ) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-sup-lattice Q ℓᵢ)
+    (Σ[ R ꞉ Poset (o ⊔ o′) (ℓ ⊔ ℓ′) ] is-sup-lattice R ℓᵢ)
+  ×-sup-lat ._×_ (P , slp) (Q , slq) = P × Q , slp × slq
+
 
 module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R

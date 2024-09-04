@@ -9,10 +9,9 @@ open import Functions.Surjection
 open import Order.Base
 open import Order.Diagram.Glb
 open import Order.Diagram.Lub
-open import Order.SupLattice
 import Order.Reasoning
 
-private variable o ℓ o′ ℓ′ o″ ℓ″ : Level
+private variable o ℓ o′ ℓ′ o″ ℓ″ ℓᵢ ℓⱼ ℓₖ : Level
 
 Terminal-Poset : Terminal (Posets o ℓ)
 Terminal-Poset .Terminal.top = ⊤
@@ -39,6 +38,10 @@ instance
   ×-Poset ._×_ = _×ₚ_
 
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
+  private
+    module P = Poset P
+    module Q = Poset Q
+
   Fst : P × Q ⇒ P
   Fst .hom = fst
   Fst .pres-≤ = fst
@@ -51,47 +54,41 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   Poset⟨ F , G ⟩ .hom = < F .hom , G .hom >
   Poset⟨ F , G ⟩ .pres-≤ = < F .pres-≤ , G .pres-≤ >
 
-  module _ {ℓᵢ} {I : 𝒰 ℓᵢ} {Fp : I → ⌞ P ⌟} {Fq : I → ⌞ Q ⌟} where instance
-    ×-is-lub : {x : ⌞ P ⌟} {y : ⌞ Q ⌟} → ×-notation (is-lub P Fp x) (is-lub Q Fq y) (is-lub (P × Q) < Fp , Fq > (x , y))
+  module _ {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} {G : I → ⌞ Q ⌟} where instance
+    ×-is-lub : {x : ⌞ P ⌟} {y : ⌞ Q ⌟} → ×-notation (is-lub P F x) (is-lub Q G y) (is-lub (P × Q) < F , G > (x , y))
     ×-is-lub ._×_ lp lq .is-lub.fam≤lub = < is-lub.fam≤lub lp , is-lub.fam≤lub lq >
     ×-is-lub ._×_ lp lq .is-lub.least (ubx , uby) =
-      < lp .is-lub.least ubx ∘ₜ (λ a i → a i .fst) , lq .is-lub.least uby ∘ₜ (λ a i → a i .snd) >
+      < (λ a i → a i .fst) ∙ lp .is-lub.least ubx , (λ a i → a i .snd) ∙ lq .is-lub.least uby >
 
-    ×-Lub : ×-notation (Lub P Fp) (Lub Q Fq) (Lub (P × Q) < Fp , Fq >)
+    ×-Lub : ×-notation (Lub P F) (Lub Q G) (Lub (P × Q) < F , G >)
     ×-Lub ._×_ Lp Lq .Lub.lub = Lp .Lub.lub , Lq .Lub.lub
     ×-Lub ._×_ Lp Lq .Lub.has-lub = Lp .Lub.has-lub × Lq .Lub.has-lub
 
-    ×-is-glb : {x : ⌞ P ⌟} {y : ⌞ Q ⌟} → ×-notation (is-glb P Fp x) (is-glb Q Fq y) (is-glb (P × Q) < Fp , Fq > (x , y))
+    ×-is-glb : {x : ⌞ P ⌟} {y : ⌞ Q ⌟} → ×-notation (is-glb P F x) (is-glb Q G y) (is-glb (P × Q) < F , G > (x , y))
     ×-is-glb ._×_ gp gq .is-glb.glb≤fam = < gp .is-glb.glb≤fam , gq .is-glb.glb≤fam >
     ×-is-glb ._×_ gp gq .is-glb.greatest (lbx , lby) =
-      < gp .is-glb.greatest lbx ∘ₜ (λ a i → a i .fst) , gq .is-glb.greatest lby ∘ₜ (λ a i → a i .snd) >
+      < (λ a i → a i .fst) ∙ gp .is-glb.greatest lbx , (λ a i → a i .snd) ∙ gq .is-glb.greatest lby >
 
-    ×-Glb : ×-notation (Glb P Fp) (Glb Q Fq) (Glb (P × Q) < Fp , Fq >)
+    ×-Glb : ×-notation (Glb P F) (Glb Q G) (Glb (P × Q) < F , G >)
     ×-Glb ._×_ Gp Gq .Glb.glb     = Gp .Glb.glb , Gq .Glb.glb
     ×-Glb ._×_ Gp Gq .Glb.has-glb = Gp .Glb.has-glb × Gq .Glb.has-glb
 
-  module _ {ℓᵢ ℓᵢ₁ ℓᵢ₂} {I : 𝒰 ℓᵢ} {I₁ : 𝒰 ℓᵢ₁} {I₂ : 𝒰 ℓᵢ₂} {Fp : I₁ → ⌞ P ⌟} {Fq : I₂ → ⌞ Q ⌟}
-           (f₁ : I ↠ I₁) (f₂ : I ↠ I₂)
+  module _ {I : 𝒰 ℓᵢ} {J : 𝒰 ℓⱼ} {K : 𝒰 ℓₖ} {F : J → ⌞ P ⌟} {G : K → ⌞ Q ⌟}
+           (f₁ : I ↠ J) (f₂ : I ↠ K)
            where
     ×-is-lub-surj : {x : ⌞ P ⌟} {y : ⌞ Q ⌟}
-                  → is-lub P Fp x
-                  → is-lub Q Fq y
-                  → is-lub (P × Q) {I = I} < Fp ∘ₜ f₁ #_ , Fq ∘ₜ f₂ #_ > (x , y)
-    ×-is-lub-surj lp lq .is-lub.fam≤lub = < (lp .is-lub.fam≤lub ∘ₜ f₁ #_) , lq .is-lub.fam≤lub ∘ₜ f₂ #_ >
+                  → is-lub P F x
+                  → is-lub Q G y
+                  → is-lub (P × Q) < f₁ #_ ∙ F , f₂ #_ ∙ G > (x , y)
+    ×-is-lub-surj lp lq .is-lub.fam≤lub = < lp .is-lub.fam≤lub ∘ₜ f₁ #_ , lq .is-lub.fam≤lub ∘ₜ f₂ #_ >
     ×-is-lub-surj lp lq .is-lub.least (ubx , uby) f =
-        lp .is-lub.least ubx (λ i₁ → rec! (λ i e → subst (λ q → P .Poset._≤_ (Fp q) ubx) e (f i .fst)) (f₁ .snd i₁))
-      , lq .is-lub.least uby (λ i₂ → rec! (λ i e → subst (λ q → Q .Poset._≤_ (Fq q) uby) e (f i .snd)) (f₂ .snd i₂))
+        lp .is-lub.least ubx (λ j → case f₁ .snd j of λ j₁ e → =→~⁻ (F # e) ∙ f j₁ .fst)
+      , lq .is-lub.least uby (λ k → case f₂ .snd k of λ k₁ e → =→~⁻ (G # e) ∙ f k₁ .snd)
 
-    ×-Lub-surj : Lub P Fp
-               → Lub Q Fq
-               → Lub (P × Q) {I = I} < Fp ∘ₜ f₁ #_ , Fq ∘ₜ f₂ #_ >
+    ×-Lub-surj : Lub P F
+               → Lub Q G
+               → Lub (P × Q) < f₁ #_ ∙ F , f₂ #_ ∙ G >
     ×-Lub-surj Lp Lq .Lub.lub = Lp .Lub.lub , Lq .Lub.lub
     ×-Lub-surj Lp Lq .Lub.has-lub = ×-is-lub-surj (Lp .Lub.has-lub) (Lq .Lub.has-lub)
 
     -- TODO glb-surj
-
-  module _ {ℓᵢ} where instance
-    ×-is-sup-lattice : ×-notation (is-sup-lattice P ℓᵢ) (is-sup-lattice Q ℓᵢ) (is-sup-lattice (P ×ₚ Q) ℓᵢ)
-    ×-is-sup-lattice ._×_ sx sy .is-sup-lattice.has-lubs {I} {F} =
-      cast-lub refl (λ i → ×-path refl refl) $
-      sx .is-sup-lattice.has-lubs {F = λ i → F i .fst} × sy .is-sup-lattice.has-lubs {F = λ i → F i .snd}
