@@ -20,7 +20,7 @@ private variable o ℓ ℓ′ : Level
 
 module @0 _ (P : Poset o ℓ) (ℓ′ : Level) where
   Lower-sets : Poset (o ⊔ ℓ ⊔ ℓsuc ℓ′) (o ⊔ ℓ′)
-  Lower-sets = P ᵒᵖᵖ ⇒ Props ℓ′
+  Lower-sets = P ᵒᵖ ⇒ Props ℓ′
 
   Lower-set : Type (o ⊔ ℓ ⊔ ℓsuc ℓ′)
   Lower-set = ⌞ Lower-sets ⌟
