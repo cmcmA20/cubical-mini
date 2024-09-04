@@ -44,7 +44,7 @@ record
     module Pₗ = is-sup-lattice S
     module Qₗ = is-sup-lattice T
   field
-    pres-⋃ : {I : 𝒰 ℓᵢ} (F : I → P.Ob) → f # Pₗ.⋃ F Q.≤ Qₗ.⋃ (f #_ ∘ₜ F)
+    pres-⋃ : {I : 𝒰 ℓᵢ} (F : I → P.Ob) → f # Pₗ.⋃ F Q.≤ Qₗ.⋃ (F ∙ f #_)
 
   has-join-slat-hom : is-join-slat-hom f Pₗ.has-join-semilattice Qₗ.has-join-semilattice
   has-join-slat-hom .is-join-slat-hom.⊥-≤ =
@@ -60,16 +60,22 @@ record
 
   pres-lubs
     : {I : 𝒰 ℓᵢ} {F : I → P.Ob} (lb : P.Ob)
-    → is-lub P F lb → is-lub Q {I = I} (f #_ ∘ₜ F) (f # lb)
-  pres-lubs lb z .is-lub.fam≤lub i = f .pres-≤ (is-lub.fam≤lub z i)
+    → is-lub P F lb → is-lub Q {I = I} (F ∙ f #_) (f # lb)
+  pres-lubs lb z .is-lub.fam≤lub i = f # is-lub.fam≤lub z i
   pres-lubs {I} {F} lb z .is-lub.least lb′ h =
-    f # lb            ~⟨ f .pres-≤ (is-lub.least z _ Pₗ.⋃-inj) ⟩
-    f # Pₗ.⋃ F        ~⟨ pres-⋃ F ⟩
-    Qₗ.⋃ (f #_ ∘ₜ F)  ~⟨ Qₗ.⋃-universal lb′ h ⟩
-    lb′               ∎
+    f # lb           ~⟨ f # is-lub.least z _ Pₗ.⋃-inj ⟩
+    f # Pₗ.⋃ F       ~⟨ pres-⋃ F ⟩
+    Qₗ.⋃ (F ∙ f #_)  ~⟨ Qₗ.⋃-universal lb′ h ⟩
+    lb′              ∎
 
 unquoteDecl H-Level-is-sup-lat-hom =
   declare-record-hlevel 1 H-Level-is-sup-lat-hom (quote is-sup-lat-hom)
+
+instance
+  ⇒-sup-lat : ⇒-notation
+    (Σ[ P ꞉ Poset o ℓ ] is-sup-lattice P ℓᵢ) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-sup-lattice Q ℓᵢ)
+    (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′ ⊔ ℓsuc ℓᵢ))
+  ⇒-sup-lat ._⇒_ (P , slp) (Q , slq) = Total-hom Monotone is-sup-lat-hom slp slq
 
 module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R
@@ -84,7 +90,7 @@ module _ {R : Poset o″ ℓ″} where
       : {f : P ⇒ Q} {g : Q ⇒ R}
       → Trans (is-sup-lat-hom {ℓᵢ = ℓᵢ} f) (is-sup-lat-hom g) (is-sup-lat-hom (f ∙ g))
     Trans-sup-lat-hom {f} {g} ._∙_ α β .pres-⋃ F =
-      g .pres-≤ (α .pres-⋃ F) ∙ β .pres-⋃ (f #_ ∘ₜ F)
+      g # α .pres-⋃ F ∙ β .pres-⋃ (F ∙ f #_)
 
 module _
   {o ℓ ℓ′ : Level}
@@ -115,7 +121,7 @@ module _
     T′→T = T′≃T $_
 
     T′-inclusion : ⌞ I-small ⌟ → Ob
-    T′-inclusion = m ∘ₜ T′→T
+    T′-inclusion = T′→T ∙ m
 
   sup-of-small-fam-is-lub : is-lub P m (⋃ T′-inclusion)
   sup-of-small-fam-is-lub = cast-is-lub T′≃T (λ _ → refl) has-lub

@@ -33,8 +33,8 @@ _⊎ₚ_ {ℓ} {ℓ′} P Q = po module ⊎ₚ where
   po .Poset.≤-refl {inr q} = lift refl
   po .Poset.≤-trans {inl p} {inl p′} {inl p″} (lift u) (lift v) = lift (u ∙ v)
   po .Poset.≤-trans {inr q} {inr q′} {inr q″} (lift u) (lift v) = lift (u ∙ v)
-  po .Poset.≤-antisym {inl p} {inl p′} (lift u) (lift v) = ap inl (P.≤-antisym u v)
-  po .Poset.≤-antisym {inr q} {inr q′} (lift u) (lift v) = ap inr (Q.≤-antisym u v)
+  po .Poset.≤-antisym {inl p} {inl p′} (lift u) (lift v) = inl # P.≤-antisym u v
+  po .Poset.≤-antisym {inr q} {inr q′} (lift u) (lift v) = inr # Q.≤-antisym u v
 {-# DISPLAY ⊎ₚ.po a b = a ⊎ₚ b #-}
 
 instance
@@ -52,5 +52,5 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
 
   [_,_]ₚ : {R : Poset o″ ℓ″} → P ⇒ R → Q ⇒ R → P ⊎ Q ⇒ R
   [ F , G ]ₚ .hom = [ F .hom , G .hom ]ᵤ
-  [ F , G ]ₚ .pres-≤ {inl p} {inl p′} (lift u) = F .pres-≤ u
-  [ F , G ]ₚ .pres-≤ {inr q} {inr q′} (lift v) = G .pres-≤ v
+  [ F , G ]ₚ .pres-≤ {inl p} {inl p′} (lift u) = F # u
+  [ F , G ]ₚ .pres-≤ {inr q} {inr q′} (lift v) = G # v

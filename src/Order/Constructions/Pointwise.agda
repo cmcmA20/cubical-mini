@@ -31,7 +31,7 @@ tupleₚ
   → (∀ i → R ⇒ P i)
   → R ⇒ Pointwise I P
 tupleₚ f .hom x i = f i # x
-tupleₚ f .pres-≤ x≤y = f _ .pres-≤ x≤y
+tupleₚ f .pres-≤ x≤y = f _ # x≤y
 
 projₚ
   : {I : Type ℓᵢ} {P : I → Poset o ℓ} (i : I)

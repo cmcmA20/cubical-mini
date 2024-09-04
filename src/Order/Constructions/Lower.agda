@@ -48,26 +48,26 @@ module _ {P : Poset o ℓ} where
 
     @0 Lower-sets-have-joins : Has-joins (Lower-sets P ℓ′)
     Lower-sets-have-joins {x = A} {y = B} .Join.lub .hom t = A # t ⊎₁ B # t
-    Lower-sets-have-joins {x = A} {y = B} .Join.lub .pres-≤ p = map [ A .pres-≤ p ∙ inl , B .pres-≤ p ∙ inr ]ᵤ
+    Lower-sets-have-joins {x = A} {y = B} .Join.lub .pres-≤ p = map [ A # p ∙ inl , B # p ∙ inr ]ᵤ
     Lower-sets-have-joins .Join.has-join .is-join.l≤join x x∈A = ∣ inl x∈A ∣₁
     Lower-sets-have-joins .Join.has-join .is-join.r≤join x x∈B = ∣ inr x∈B ∣₁
     Lower-sets-have-joins .Join.has-join .is-join.least _ f g x = rec! [ f x , g x ]ᵤ
 
     @0 Lower-sets-have-meets : Has-meets (Lower-sets P ℓ′)
     Lower-sets-have-meets {x = A} {y = B} .Meet.glb .hom t = A # t × B # t
-    Lower-sets-have-meets {x = A} {y = B} .Meet.glb .pres-≤ p = bimap (A .pres-≤ p) (B .pres-≤ p)
+    Lower-sets-have-meets {x = A} {y = B} .Meet.glb .pres-≤ p = bimap (A # p) (B # p)
     Lower-sets-have-meets .Meet.has-meet .is-meet.meet≤l _ = fst
     Lower-sets-have-meets .Meet.has-meet .is-meet.meet≤r _ = snd
     Lower-sets-have-meets .Meet.has-meet .is-meet.greatest _ f g x p = f x p , g x p
 
     @0 Lower-sets-have-lubs : Has-lubs-of-size (Lower-sets P ℓ′) ℓ′
     Lower-sets-have-lubs {I} {F} .Lub.lub .hom i = el! (∃[ j ꞉ I ] i ∈ (F j $_))
-    Lower-sets-have-lubs {F} .Lub.lub .pres-≤ y≤x = map (second λ {i} → F i .pres-≤ y≤x)
+    Lower-sets-have-lubs {F} .Lub.lub .pres-≤ y≤x = map (second λ {i} → F i # y≤x)
     Lower-sets-have-lubs .Lub.has-lub .is-lub.fam≤lub i _ z = ∣ i , z ∣₁
     Lower-sets-have-lubs .Lub.has-lub .is-lub.least x f y = rec! λ z → f z y
 
     @0 Lower-sets-have-glbs : Has-glbs-of-size (Lower-sets P ℓ′) ℓ′
     Lower-sets-have-glbs {I} {F} .Glb.glb .hom i = el! (Π[ j ꞉ I ] i ∈ (F j $_))
-    Lower-sets-have-glbs {F} .Glb.glb .pres-≤ y≤x f j = F j .pres-≤ y≤x (f j)
+    Lower-sets-have-glbs {F} .Glb.glb .pres-≤ y≤x f j = (F j # y≤x) $ f j
     Lower-sets-have-glbs .Glb.has-glb .is-glb.glb≤fam i _ f = f i
     Lower-sets-have-glbs .Glb.has-glb .is-glb.greatest _ f x w i = f i x w

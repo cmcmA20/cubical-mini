@@ -48,6 +48,11 @@ record
 unquoteDecl H-Level-is-lattice-hom =
   declare-record-hlevel 1 H-Level-is-lattice-hom (quote is-lattice-hom)
 
+instance
+  ⇒-Lattice : ⇒-notation
+    (Σ[ P ꞉ Poset o ℓ ] is-lattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-lattice Q) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Lattice ._⇒_ (P , lp) (Q , lq) = Total-hom Monotone is-lattice-hom lp lq
+
 module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R
   open is-lattice-hom
@@ -65,20 +70,3 @@ module _ {R : Poset o″ ℓ″} where
       α .has-join-slat-hom ∙ β .has-join-slat-hom
     Trans-lattice-hom ._∙_ α β .has-meet-slat-hom =
       α .has-meet-slat-hom ∙ β .has-meet-slat-hom
-
-
--- TODO
--- Lattices-subcat : ∀ o ℓ → Subcat (Posets o ℓ) _ _
--- Lattices-subcat o ℓ .Subcat.is-ob = is-lattice
--- Lattices-subcat o ℓ .Subcat.is-hom = is-lattice-hom
--- Lattices-subcat o ℓ .Subcat.is-hom-prop _ _ _ = hlevel 1
--- Lattices-subcat o ℓ .Subcat.is-hom-id = id-lattice-hom
--- Lattices-subcat o ℓ .Subcat.is-hom-∘ = ∘-lattice-hom
-
--- Lattices : ∀ o ℓ → Precategory _ _
--- Lattices o ℓ = Subcategory (Lattices-subcat o ℓ)
-
--- module Lattices {o} {ℓ} = Cat.Reasoning (Lattices o ℓ)
-
--- Lattice : ∀ o ℓ → Type _
--- Lattice o ℓ = Lattices.Ob {o} {ℓ}

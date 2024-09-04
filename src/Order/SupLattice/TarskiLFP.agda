@@ -141,13 +141,13 @@ module local-inductive-definitions
       ↓ᴮf-equiv-↓-tot a =
         Σ-ap-snd λ b → prop-extₑ!
             (λ le → ∣ a , lift le , refl ∣₁)
-            (elim! λ a' lo le' → ≤→≤ᴮ (≤ᴮ→≤ lo ∙ f .pres-≤ le'))
+            (elim! λ a' lo le' → ≤→≤ᴮ (≤ᴮ→≤ lo ∙ f # le'))
 
       loc : is-local ϕ
       loc a = small-↓ᴮ (f # a) , ↓ᴮf-equiv-↓-tot a
 
       G : (x : Ob) → is-lub P (β ∘ₜ ↓→base ϕ x) (f # x)
-      G x .fam≤lub (b , e) = elim! (λ a' lo le' → ≤ᴮ→≤ lo ∙ f .pres-≤ le') e
+      G x .fam≤lub (b , e) = elim! (λ a' lo le' → ≤ᴮ→≤ lo ∙ f # le') e
       G x .least u' ub     = is-lubᴮ u' (ub ∘ₜ (↓ᴮf-equiv-↓-tot x $_))
 
       H : (x : Ob) → Γ ϕ loc # x ＝ f # x
@@ -301,7 +301,7 @@ module _
 
         Q-Γ-sc-sub : small-closed-subsets
         Q-Γ-sc-sub = def-points→small-closed-subsets
-          (Γ ϕ loc # sup-𝓘 , Γ ϕ loc .pres-≤ Γ-sup-below-sup)
+          (Γ ϕ loc # sup-𝓘 , Γ ϕ loc # Γ-sup-below-sup)
 
         Q-Γ-sup : ℙ B ℓ′
         Q-Γ-sup = Q-Γ-sc-sub .fst
@@ -713,7 +713,7 @@ module _
               → b ≤ᴮ f # a
       ↓→↓ᴮ-fa {a} {b}
         = map (second $ first $ (lift≃id $_))
-        ∙ elim! λ _ _ r path o → ≤→≤ᴮ (subst (β b ≤_) (ap$ f (=ˢ→= path)) (≤ᴮ→≤ r) ∙ f .pres-≤ o)
+        ∙ elim! λ _ _ r path o → ≤→≤ᴮ (subst (β b ≤_) (ap$ f (=ˢ→= path)) (≤ᴮ→≤ r) ∙ f # o)
 
       ↓ᴮ-fa≃↓ : {a : Ob} → small-↓ᴮ (f # a) ≃ φ ↓ a
       ↓ᴮ-fa≃↓ = Σ-ap-snd λ b → prop-extₑ! ↓ᴮ-fa→↓ ↓→↓ᴮ-fa

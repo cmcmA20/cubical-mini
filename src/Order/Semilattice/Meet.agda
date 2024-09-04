@@ -44,7 +44,7 @@ record
 
   pres-∩ : (x y : P.Ob) → f # (x ∩ y) ＝ (f # x) ∩ (f # y)
   pres-∩ x y = Q.≤-antisym
-    (Qₗ.∩-universal _ (f .pres-≤ Pₗ.∩≤l) (f .pres-≤ Pₗ.∩≤r))
+    (Qₗ.∩-universal _ (f # Pₗ.∩≤l) (f # Pₗ.∩≤r))
     (∩-≤ x y)
 
   pres-tops
@@ -54,23 +54,28 @@ record
   pres-tops {t} t-top x =
     x      ~⟨ Qₗ.! ⟩
     ⊤      ~⟨ ⊤-≤ ⟩
-    f # ⊤  ~⟨ f .pres-≤ (t-top _) ⟩
+    f # ⊤  ~⟨ f # t-top _ ⟩
     f # t  ∎
 
   pres-meets
     : ∀ {x y m}
     → is-meet P x y m
     → is-meet Q (f # x) (f # y) (f # m)
-  pres-meets j .is-meet.meet≤l = f .pres-≤ (is-meet.meet≤l j)
-  pres-meets j .is-meet.meet≤r = f .pres-≤ (is-meet.meet≤r j)
+  pres-meets j .is-meet.meet≤l = f # is-meet.meet≤l j
+  pres-meets j .is-meet.meet≤r = f # is-meet.meet≤r j
   pres-meets {x} {y} {m} j .is-meet.greatest ub ub≤fx ub≤fy =
     ub             ~⟨ Qₗ.∩-universal ub ub≤fx ub≤fy ⟩
     f # x ∩ f # y  ~⟨ ∩-≤ x y ⟩
-    f # (x ∩ y)    ~⟨ f .pres-≤ (j .is-meet.greatest _ Pₗ.∩≤l Pₗ.∩≤r) ⟩
+    f # (x ∩ y)    ~⟨ f # j .is-meet.greatest _ Pₗ.∩≤l Pₗ.∩≤r ⟩
     f # m          ∎
 
 unquoteDecl H-Level-is-meet-slat-hom =
   declare-record-hlevel 1 H-Level-is-meet-slat-hom (quote is-meet-slat-hom)
+
+instance
+  ⇒-meet-slat : ⇒-notation
+    (Σ[ P ꞉ Poset o ℓ ] is-meet-semilattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-meet-semilattice Q) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-meet-slat ._⇒_ (P , mp) (Q , mq) = Total-hom Monotone is-meet-slat-hom mp mq
 
 module _ {R : Poset o″ ℓ″} where
   open Order.Reasoning R
@@ -85,22 +90,5 @@ module _ {R : Poset o″ ℓ″} where
     Trans-meet-slat-hom
       : {f : P ⇒ Q} {g : Q ⇒ R}
       → Trans (is-meet-slat-hom f) (is-meet-slat-hom g) (is-meet-slat-hom (f ∙ g))
-    Trans-meet-slat-hom {g} ._∙_ α β .⊤-≤ = β .⊤-≤ ∙ g .pres-≤ (α .⊤-≤)
-    Trans-meet-slat-hom {f} {g} ._∙_ α β .∩-≤ x y = β .∩-≤ (f # x) (f # y) ∙ g .pres-≤ (α .∩-≤ x y)
-
-
--- TODO
--- Meet-slats-subcat : ∀ o ℓ → Subcat (Posets o ℓ) (o ⊔ ℓ) (o ⊔ ℓ)
--- Meet-slats-subcat o ℓ .Subcat.is-ob = is-meet-semilattice
--- Meet-slats-subcat o ℓ .Subcat.is-hom = is-meet-slat-hom
--- Meet-slats-subcat o ℓ .Subcat.is-hom-prop _ _ _ = hlevel 1
--- Meet-slats-subcat o ℓ .Subcat.is-hom-id = id-meet-slat-hom
--- Meet-slats-subcat o ℓ .Subcat.is-hom-∘ = ∘-meet-slat-hom
-
--- Meet-slats : ∀ o ℓ → Precategory (lsuc o ⊔ lsuc ℓ) (o ⊔ ℓ)
--- Meet-slats o ℓ = Subcategory (Meet-slats-subcat o ℓ)
-
--- module Meet-slats {o} {ℓ} = Cat.Reasoning (Meet-slats o ℓ)
-
--- Meet-semilattice : ∀ o ℓ → Type _
--- Meet-semilattice o ℓ = Meet-slats.Ob {o} {ℓ}
+    Trans-meet-slat-hom {g} ._∙_ α β .⊤-≤ = β .⊤-≤ ∙ g # α .⊤-≤
+    Trans-meet-slat-hom {f} {g} ._∙_ α β .∩-≤ x y = β .∩-≤ (f # x) (f # y) ∙ g # α .∩-≤ x y
