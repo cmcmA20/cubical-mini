@@ -11,7 +11,7 @@ open import Prelude
 open import Categories.Base
 open import Categories.Morphism
 open import Categories.Morphism
-  using (H-Level-inverses ; ≅-Hom) public
+  using (H-Level-inverses ; ≅-Cat-Ob) public
 
 unquoteDecl H-Level-mono = declare-record-hlevel 2 H-Level-mono (quote _↪_)
 unquoteDecl H-Level-epi = declare-record-hlevel 2 H-Level-epi (quote _↠_)
@@ -42,7 +42,7 @@ module _ {o ℓ} {C : Precategory o ℓ} where
 
     H-Level-≅
       : {a b : ⌞ C ⌟} {n : HLevel} → ⦃ n ≥ʰ 2 ⦄
-      → H-Level n (_≅_ ⦃ ≅-Hom C ⦄ a b)
+      → H-Level n (_≅_ ⦃ ≅-Cat-Ob C ⦄ a b)
     H-Level-≅ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 Iso-Iso
 
   instance
@@ -61,5 +61,5 @@ module _ {o ℓ} {C : Precategory o ℓ} where
   Extensional-≅
     : ∀ {ℓr} {a b}
     → ⦃ sa : Extensional (C .Hom a b) ℓr ⦄
-    → Extensional (_≅_ ⦃ ≅-Hom C ⦄ a b) ℓr
+    → Extensional (_≅_ ⦃ ≅-Cat-Ob C ⦄ a b) ℓr
   Extensional-≅ ⦃ sa ⦄ = set-injective→extensional! (≅-path C) sa

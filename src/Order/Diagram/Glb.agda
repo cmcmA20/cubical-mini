@@ -104,6 +104,7 @@ module _ {P : Poset o ℓ} where
       cover-reflects-glb g .Glb.glb = _
       cover-reflects-glb g .Glb.has-glb = cover-reflects-is-glb (g .Glb.has-glb)
 
+
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} where
   private
     module P = Poset P
