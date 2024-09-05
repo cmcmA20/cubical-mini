@@ -67,7 +67,7 @@ record Displayed {o ℓ} (B : Precategory o ℓ)
   _＝[]⟨_⟨_ : ∀ {a b x y} {f g h : Hom a b} {p : g ＝ f} {q : g ＝ h}
              → (f′ : Hom[ f ] x y) {g′ : Hom[ g ] x y} {h′ : Hom[ h ] x y}
              → g′ ＝[ p ] f′ → g′ ＝[ q ] h′ → f′ ＝[ sym p ∙ q ] h′
-  f′ ＝[]⟨ p′ ⟨ q′ = symᴾ p′ ∙[] q′
+  f′ ＝[]⟨ p′ ⟨ q′ = sym p′ ∙[] q′
 
   syntax ∙[-]-syntax p p′ q′ = p′ ∙[ p ] q′
   syntax ＝[]⟨⟩-syntax f′ q′ p′ = f′ ＝[]⟨ p′ ⟩ q′

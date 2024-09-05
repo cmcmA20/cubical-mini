@@ -9,47 +9,6 @@ private variable
   B : Type ℓ′
   w x y z : A
 
-module _ where private
-
-  -- We could have also defined single composition by taking `refl` on the right
-  infixr 30 _∙′_
-  _∙′_ : x ＝ y → y ＝ z → x ＝ z
-  p ∙′ q = p ∙∙ q ∙∙ reflₚ
-
-  ∙′-filler-r : {A : Type ℓ} {x y z : A} (p : x ＝ y) (q : y ＝ z)
-              →  y  ̇      q       ̇ z
-                     ┌─    ̇   ─┐
-
-            symₚ p   │    _    │   reflₚ
-
-                     └─    ̇   ─┘
-                 x  ̇    p ∙′ q    ̇ z
-  ∙′-filler-r p q = ∙∙-filler p q reflₚ
-
-  -- From this, we can show that these two notions of composition are the same
-  ∙=∙′ : (p : x ＝ y) (q : y ＝ z) → p ∙ₚ q ＝ p ∙′ q
-  ∙=∙′ p q j = ∙∙-unique p q reflₚ (p ∙ₚ q , ∙-filler-r p q) (p ∙′ q , ∙′-filler-r p q) j .fst
-
-  -- We could define double composition with left side `refl`
-  -- (classic cubical library way)
-  infixr 30 _∙″_
-  _∙″_ : x ＝ y → y ＝ z → x ＝ z
-  p ∙″ q = reflₚ ∙∙ p ∙∙ q
-
-  ∙″-filler-l : (p : x ＝ y) (q : y ＝ z)
-              →  x  ̇      p      ̇ y
-                     ┌─    ̇   ─┐
-
-             reflₚ   │    _    │   q
-
-                     └─    ̇   ─┘
-                 x  ̇    p ∙″ q    ̇ z
-  ∙″-filler-l = ∙∙-filler reflₚ
-
-  ∙=∙″ : (p : x ＝ y) (q : y ＝ z) → p ∙ₚ q ＝ p ∙″ q
-  ∙=∙″ p q j = ∙∙-unique reflₚ p q (p ∙ₚ q , ∙-filler-l p q) (p ∙″ q , ∙″-filler-l p q) j .fst
-
-
 opaque
   unfolding _∙ₚ_
   sym-∙ : (p : x ＝ y) (q : y ＝ z) → symₚ (p ∙ₚ q) ＝ symₚ q ∙ₚ symₚ p
