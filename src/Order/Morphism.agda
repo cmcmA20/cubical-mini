@@ -93,8 +93,42 @@ module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
     section→is-order-embedding f (f-ret .retract)
       (fun-ext $ ap hom (f-ret .is-retract) #_)
 
+  reflection-retract→is-monotone
+    : (f : ⌞ P ⌟ → ⌞ Q ⌟) (g : ⌞ Q ⌟ → ⌞ P ⌟)
+    → f retract-of g
+    → is-order-reflection P Q f
+    → is-monotone Q P g
+  reflection-retract→is-monotone f g r or {x} {y} le =
+    or $
+    subst (f (g x) Q.≤_) (happly (r ⁻¹) y) $
+    subst (Q._≤ y) (happly (r ⁻¹) x) le
+
   ≅→is-order-embedding
     : (f : P ≅ Q) → is-order-embedding P Q (f #_)
   ≅→is-order-embedding f =
     has-retract→is-order-embedding (f .to) (≅→to-has-retract f)
     where open Iso
+
+  iso-order-embedding→≅
+    : (f : ⌞ P ⌟ ≅ ⌞ Q ⌟)
+    → is-order-embedding P Q (f #_)
+    → P ≅ Q
+  iso-order-embedding→≅ f oe .Iso.to .hom = f #_
+  iso-order-embedding→≅ f oe .Iso.to .pres-≤ = oe #_
+  iso-order-embedding→≅ f oe .Iso.from .hom = f ⁻¹ $_
+  iso-order-embedding→≅ f oe .Iso.from .pres-≤ =
+    reflection-retract→is-monotone (f #_) (f ⁻¹ $_)
+     (f .Iso.inverses .Inverses.inv-o) (oe ⁻¹ $_)
+  iso-order-embedding→≅ f oe .Iso.inverses .Inverses.inv-o =
+    ext $ happly (f .Iso.inverses .Inverses.inv-o)
+  iso-order-embedding→≅ f oe .Iso.inverses .Inverses.inv-i =
+    ext $ happly (f .Iso.inverses .Inverses.inv-i)
+
+  iso-mono-refl→≅
+    : (f : ⌞ P ⌟ ≅ ⌞ Q ⌟)
+    → is-monotone P Q (f #_)
+    → is-order-reflection P Q (f #_)
+    → P ≅ Q
+  iso-mono-refl→≅ f mo or =
+    iso-order-embedding→≅ f $
+    monotone-reflection→is-order-embedding {P = P} {Q = Q} (f #_) mo or
