@@ -27,9 +27,6 @@ infixr 6 ∃!-syntax
 
 syntax ∃!-syntax A (λ x → B) = ∃![ x ꞉ A ] B
 
-_,ₚ_ = Σ-pathᴾ
-infixr 4 _,ₚ_
-
 open Iso
 
 Σ-pathᴾ-iso
