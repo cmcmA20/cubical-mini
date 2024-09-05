@@ -4,9 +4,11 @@ module Foundations.Path.Base where
 open import Foundations.Base
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ ℓ‴ : Level
   A : Type ℓ
   B : Type ℓ′
+  C : Type ℓ″
+  D : Type ℓ‴
   w x y z : A
 
 opaque
@@ -18,11 +20,11 @@ opaque
   -- Whiskering a dependent path by a path
 
   -- Double whiskering
-  infix 8 _◁_▷_
-  _◁_▷_ : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
-        →    a₀ ＝ a₀′ → ＜ a₀′ ／ A ＼ a₁ ＞ → a₁ ＝ a₁′
-        → ＜ a₀              ／    A    ＼            a₁′ ＞
-  (p ◁ P ▷ q) i = hcomp (∂ i) λ where
+  infix 8 _◁_▷′_
+  _◁_▷′_ : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
+         →    a₀ ＝ a₀′ → ＜ a₀′ ／ A ＼ a₁ ＞ → a₁ ＝ a₁′
+         → ＜ a₀              ／    A    ＼            a₁′ ＞
+  (p ◁ P ▷′ q) i = hcomp (∂ i) λ where
     j (i = i0) → p (~ j)
     j (i = i1) → q j
     j (j = i0) → P i
@@ -30,24 +32,28 @@ opaque
   double-whiskering-filler
     : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
     → (p : a₀ ＝ a₀′) (pq : ＜ a₀′ ／ A ＼ a₁ ＞) (q : a₁ ＝ a₁′)
-    → ＜ pq ／ (λ i → ＜ p (~ i) ／ A ＼ q i ＞) ＼ p ◁ pq ▷ q ＞
+    → ＜ pq ／ (λ i → ＜ p (~ i) ／ A ＼ q i ＞) ＼ p ◁ pq ▷′ q ＞
   double-whiskering-filler p pq q k i = hfill (∂ i) k λ where
     j (i = i0) → p (~ j)
     j (i = i1) → q j
     j (j = i0) → pq i
 
-  infix 24 _◁_
-  _◁_ : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ : A i1}
-      →    a₀ ＝ a₀′ → ＜ a₀′ ／ A ＼    a₁ ＞
-      → ＜ a₀              ／    A    ＼ a₁ ＞
-  (p ◁ q) = p ◁ q ▷ refl
+  instance
+    Whisker-i-Path-Pathᵖ
+      : {A : I → Type ℓ}
+      → Whisker-i _＝_
+          (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ)
+          (λ x y _ _ → ＜ x ／ A ＼ y ＞)
+          (λ x y _ _ → ＜ x ／ A ＼ y ＞)
+    Whisker-i-Path-Pathᵖ ._◁_ p P = p ◁ P ▷′ refl
 
-  infix 24 _▷_
-  _▷_ : {A : I → Type ℓ} {a₀ : A i0} {a₁ a₁′ : A i1}
-      → ＜ a₀    ／ A ＼ a₁ ＞ → a₁ ＝ a₁′
-      → ＜ a₀ ／    A    ＼            a₁′ ＞
-  p ▷ q  = refl ◁ p ▷ q
-
+    Whisker-o-Pathᴾ-Path
+      : {A : I → Type ℓ}
+      → Whisker-o _＝_
+          (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ)
+          (λ x y _ _ → ＜ x ／ A ＼ y ＞)
+          (λ x y _ _ → ＜ x ／ A ＼ y ＞)
+    Whisker-o-Pathᴾ-Path ._▷_ P q = refl ◁ P ▷′ q
 
 opaque
   unfolding _∙ₚ_

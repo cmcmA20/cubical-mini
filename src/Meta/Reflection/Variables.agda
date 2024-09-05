@@ -2,6 +2,7 @@
 module Meta.Reflection.Variables where
 
 open import Foundations.Base
+  hiding ( _◁_ ; _▷_ )
 
 open import Meta.Effect.Idiom
 open import Meta.Reflection.Base

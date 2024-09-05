@@ -320,6 +320,28 @@ instance
   Refl-natural-transformation {D} .refl {(F)} ._=>_.is-natural _ _ _ =
     D .id-l _ ∙ D .id-r _ ⁻¹
 
+  Whisker-i-Functor-nt
+    : Whisker-i {A = Precategory o h} {B = Precategory oᶜ hᶜ}
+      {C = Precategory oᵈ hᵈ}
+      Functor Functor Functor Functor Functor
+      (λ _ _ → _=>_)
+      (λ _ _ → _=>_)
+  Whisker-i-Functor-nt ._◁_ H α ._=>_.η x = α # (H # x)
+  Whisker-i-Functor-nt ._◁_ H α ._=>_.is-natural x y f =
+    α ._=>_.is-natural (H # x) (H # y) (H # f)
+
+  Whisker-o-Functor-nt
+    : Whisker-o {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ}
+      {C = Precategory o h}
+      Functor Functor Functor Functor Functor
+      (λ _ _ → _=>_)
+      (λ _ _ → _=>_)
+  Whisker-o-Functor-nt ._▷_ α K ._=>_.η x = K # (α # x)
+  Whisker-o-Functor-nt ._▷_ α K ._=>_.is-natural x y f
+    = Functor.F-∘ K (α # y) _ ⁻¹
+    ∙ ap$ K (α ._=>_.is-natural x y f)
+    ∙ Functor.F-∘ K _ (α # x)
+
 _∘ⁿᵗ_ : {F G H : Functor C D} → G ⇒ H → F ⇒ G → F ⇒ H
 _∘ⁿᵗ_ {C} {D} {F} {G} {H} α β = comps
   module =>∘ where
@@ -345,6 +367,7 @@ _∘ⁿᵗ_ {C} {D} {F} {G} {H} α β = comps
 instance
   Trans-natural-transformation : Trans (_=>_ {C = C} {D = D}) _=>_ _=>_
   Trans-natural-transformation ._∙_ α β = β ∘ⁿᵗ α
+
 
 is-natural-transformation
   : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
