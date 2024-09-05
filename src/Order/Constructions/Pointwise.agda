@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.Constructions.Pointwise where
 
-open import Categories.Prelude
+open import Cat.Prelude
 open import Order.Base
 open import Order.Constructions.Product
 open import Order.Constructions.Props

@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.Constructions.Lower where
 
-open import Categories.Prelude
+open import Cat.Prelude
 open import Order.Base
 open import Order.Constructions.Pointwise
 open import Order.Constructions.Product

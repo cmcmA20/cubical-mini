@@ -4,9 +4,9 @@ module Algebra.Magma.Unital.Category where
 open import Algebra.Magma.Category using (Magma-structure; Magmas)
 open import Algebra.Magma.Unital
 
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
+import Cat.Morphism
 
 open n-Magma-hom
 open UMagma-hom
@@ -25,7 +25,7 @@ UMagma-structure ℓ .id-hom-unique p q .erased = Equiv.injective
 UMagmas : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 UMagmas ℓ = Structured-objects (UMagma-structure ℓ)
 
-module UMagmas {ℓ} = Categories.Morphism (UMagmas ℓ)
+module UMagmas {ℓ} = Cat.Morphism (UMagmas ℓ)
 
 UMagma : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 UMagma ℓ = Precategory.Ob (UMagmas ℓ)

@@ -1,8 +1,8 @@
 {-# OPTIONS --safe #-}
 module Order.Constructions.Product where
 
-open import Categories.Prelude
-open import Categories.Diagram.Terminal
+open import Cat.Prelude
+open import Cat.Diagram.Terminal
 
 open import Functions.Surjection
 

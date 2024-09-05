@@ -1,8 +1,8 @@
 {-# OPTIONS --safe #-}
 module Order.Diagram.Top where
 
-open import Categories.Prelude
-open import Categories.Diagram.Terminal
+open import Cat.Prelude
+open import Cat.Diagram.Terminal
 
 open import Order.Base
 open import Order.Category

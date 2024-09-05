@@ -4,9 +4,9 @@ module Algebra.Rig.Category.Initial where
 open import Algebra.Rig
 open import Algebra.Rig.Category.Base
 
-open import Categories.Diagram.Initial
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
+open import Cat.Diagram.Initial
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
 
 open import Data.Nat as ℕ
 

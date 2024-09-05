@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.Diagram.Fixpoint where
 
-open import Categories.Prelude
+open import Cat.Prelude
 open import Order.Base
 import Order.Reasoning
 

@@ -7,7 +7,7 @@ module Order.Diagram.Lub.Reasoning
   where
 
 open import Algebra.Monoid.Commutative
-open import Categories.Prelude
+open import Cat.Prelude
 
 open import Order.Diagram.Bottom
 open import Order.Diagram.Join

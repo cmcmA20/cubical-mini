@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Semiring where
 
-open import Categories.Prelude hiding (_+_)
+open import Cat.Prelude hiding (_+_)
 
 open import Algebra.Monoid.Commutative public
 open import Algebra.Monoid.Category

@@ -5,9 +5,9 @@ open import Algebra.Magma.Unital.Category using (UMagmas)
 open import Algebra.Monoid
 open import Algebra.Semigroup.Category using (Semigroups)
 
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
+import Cat.Morphism
 
 open Monoid-hom
 open Monoid-on
@@ -26,7 +26,7 @@ Monoid-structure ℓ .id-hom-unique p q .erased = Equiv.injective
 Monoids : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Monoids ℓ = Structured-objects (Monoid-structure ℓ)
 
-module Monoids {ℓ} = Categories.Morphism (Monoids ℓ)
+module Monoids {ℓ} = Cat.Morphism (Monoids ℓ)
 
 Monoid : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 Monoid ℓ = Precategory.Ob (Monoids ℓ)

@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.Semilattice.Join where
 
-open import Categories.Prelude
+open import Cat.Prelude
 
 open import Order.Base
 open import Order.Diagram.Bottom

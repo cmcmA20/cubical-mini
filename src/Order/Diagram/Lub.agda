@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.Diagram.Lub where
 
-open import Foundations.Equiv
-open import Categories.Prelude
+open import Cat.Prelude
 open import Functions.Surjection
 
 open import Order.Base

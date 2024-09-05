@@ -1,8 +1,8 @@
 {-# OPTIONS --safe --no-exact-split #-}
 module Order.Base where
 
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Prelude
+import Cat.Morphism
 
 open import Meta.Projection
 open import Meta.Reflection.Base

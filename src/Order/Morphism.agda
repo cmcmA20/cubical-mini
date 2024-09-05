@@ -1,8 +1,8 @@
 {-# OPTIONS --safe #-}
 module Order.Morphism where
 
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Prelude
+import Cat.Morphism
 open import Order.Base
 import Order.Reasoning
 

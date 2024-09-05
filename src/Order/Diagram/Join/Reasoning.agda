@@ -7,7 +7,7 @@ module Order.Diagram.Join.Reasoning
   where
 
 open import Algebra.Semigroup
-open import Categories.Prelude
+open import Cat.Prelude
 
 open import Order.Reasoning P
 open Join

@@ -1,8 +1,8 @@
 {-# OPTIONS --safe --no-exact-split #-}
 module Order.Constructions.Coproduct where
 
-open import Categories.Prelude
-open import Categories.Diagram.Initial
+open import Cat.Prelude
+open import Cat.Diagram.Initial
 
 open import Order.Base
 import Order.Reasoning

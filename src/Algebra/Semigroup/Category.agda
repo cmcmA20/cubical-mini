@@ -4,9 +4,9 @@ module Algebra.Semigroup.Category where
 open import Algebra.Magma.Category using (Magma-structure; Magmas)
 open import Algebra.Semigroup
 
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
+import Cat.Morphism
 
 open n-Magma-hom
 open Semigroup-on
@@ -18,7 +18,7 @@ Semigroup-structure ℓ = Full-substructure ℓ Semigroup-on Magma-on
 Semigroups : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Semigroups ℓ = Structured-objects (Semigroup-structure ℓ)
 
-module Semigroups {ℓ} = Categories.Morphism (Semigroups ℓ)
+module Semigroups {ℓ} = Cat.Morphism (Semigroups ℓ)
 
 Semigroup : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 Semigroup ℓ = Precategory.Ob (Semigroups ℓ)

@@ -3,9 +3,9 @@ module Algebra.Semiring.Category where
 
 open import Algebra.Semiring
 
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
+import Cat.Morphism
 
 open Semiring-hom
 open Semiring-on
@@ -30,7 +30,7 @@ Semiring-structure ℓ .id-hom-unique p q .erased = Equiv.injective (≅ₜ→�
 Semirings : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Semirings ℓ = Structured-objects (Semiring-structure ℓ)
 
-module Semirings {ℓ} = Categories.Morphism (Semirings ℓ)
+module Semirings {ℓ} = Cat.Morphism (Semirings ℓ)
 
 Semiring : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 Semiring ℓ = Precategory.Ob (Semirings ℓ)
