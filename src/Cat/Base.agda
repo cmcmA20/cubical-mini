@@ -113,6 +113,20 @@ instance
   Invol-Op-Cat : Involᵘ (Precategory o ℓ)
   Invol-Op-Cat .minv-invol _ = refl
 
+  ⊥-Cat : ⊥-notation (Precategory o ℓ)
+  ⊥-Cat .⊥ .Ob = ⊥
+  ⊥-Cat .⊥ .Hom _ _ = ⊥
+
+  ⊤-Cat : ⊤-notation (Precategory o ℓ)
+  ⊤-Cat .⊤ .Ob = ⊤
+  ⊤-Cat .⊤ .Hom _ _ = ⊤
+  ⊤-Cat .⊤ .Hom-set _ _ = hlevel 2
+  ⊤-Cat .⊤ .id = _
+  ⊤-Cat .⊤ ._∘_ _ _ = _
+  ⊤-Cat .⊤ .id-l _ = refl
+  ⊤-Cat .⊤ .id-r _ = refl
+  ⊤-Cat .⊤ .assoc _ _ _ = refl
+
 Sets : (o : Level) → Precategory (ℓsuc o) o
 Sets o .Ob = Set o
 Sets _ .Hom A B = ⌞ A ⇒ B ⌟
@@ -332,29 +346,6 @@ instance
   Trans-natural-transformation : Trans (_=>_ {C = C} {D = D}) _=>_ _=>_
   Trans-natural-transformation ._∙_ α β = β ∘ⁿᵗ α
 
-module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
-  private module D = Precategory D
-
-  instance
-    Assoc-natural-transformation
-      : Assoc {A = Functor C D} _=>_ _=>_ _=>_ _=>_ _=>_ _=>_
-    Assoc-natural-transformation .∙-assoc α β γ = Equiv.injective (≅→≃ NT-iso)
-      $  fun-ext (λ c → D.assoc (γ # c) (β # c) (α # c) ⁻¹)
-      ,ₚ prop!
-
-    Unit-o-natural-transformation : Unit-o {A = Functor C D} _=>_ _=>_
-    Unit-o-natural-transformation .∙-id-o α = Equiv.injective (≅→≃ NT-iso)
-      $  fun-ext (λ c → D.id-r (α # c))
-      ,ₚ prop!
-
-    Unit-i-natural-transformation : Unit-i {A = Functor C D} _=>_ _=>_
-    Unit-i-natural-transformation .∙-id-i α = Equiv.injective (≅→≃ NT-iso)
-      $  fun-ext (λ c → D.id-l (α # c))
-      ,ₚ prop!
-
-    ≅-Functor : ≅-notation (Functor C D) (Functor C D) (𝒰 (oᶜ ⊔ hᶜ ⊔ hᵈ))
-    ≅-Functor ._≅_ = Iso _=>_ _=>_
-
 is-natural-transformation
   : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
   → (F G : C ⇒ D)
@@ -386,7 +377,7 @@ module _ where
 
 
 module _ {C : Precategory oᶜ hᶜ}
-         {D : Precategory oᶜ hᵈ}
+         {D : Precategory oᵈ hᵈ}
          {F G : C ⇒ D} where
   private
     module F = Functor F
@@ -397,9 +388,9 @@ module _ {C : Precategory oᶜ hᶜ}
   open Functor
   open _=>_
 
-  nat-pathᴾ : {F' G' : Functor C D}
-            → (p : F ＝ F') (q : G ＝ G')
-            → {a : F ⇒ G} {b : F' ⇒ G'}
+  nat-pathᴾ : {F′ G′ : Functor C D}
+            → (p : F ＝ F′) (q : G ＝ G′)
+            → {a : F ⇒ G} {b : F′ ⇒ G′}
             → (∀ x → ＜ a $ x ／ _ ＼ b $ x ＞)
             → ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
   nat-pathᴾ p q path i .η x = path x i
@@ -410,30 +401,25 @@ module _ {C : Precategory oᶜ hᶜ}
       (a .is-natural x y f)
       (b .is-natural x y f) i
 
-  nat-path : {a b : F ⇒ G}
-           → ((x : _) → a # x ＝ b # x)
-           → a ＝ b
-  nat-path = nat-pathᴾ refl refl
-
-  _ηₚ_ : ∀ {a b : F ⇒ G} → a ＝ b → (x : C.Ob) → a # x ＝ b # x
-  p ηₚ x = ap (_$ x) p
-
-  _ηᵈ_ : {F' G' : C ⇒ D} {p : F ＝ F'} {q : G ＝ G'}
-       → {a : F ⇒ G} {b : F' ⇒ G'}
+  _ηᵈ_ : {F′ G′ : C ⇒ D} {p : F ＝ F′} {q : G ＝ G′}
+       → {a : F ⇒ G} {b : F′ ⇒ G′}
        →                      ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
        → (x : C.Ob) → ＜ a $ x ／ (λ i → D.Hom (p i $ x) (q i $ x)) ＼ b $ x ＞
   p ηᵈ x = apᴾ (λ i e → e $ x) p
 
-  infixl 45 _ηₚ_
-
   instance
+    Funlike-nt-homotopy
+      : {α β : F ⇒ G}
+      → Funlike ur (α ＝ β) C.Ob λ (p , x) → α # x ＝ β # x
+    Funlike-nt-homotopy ._#_ p x = ap (_$ x) p
+
     Extensional-natural-transformation
       : ∀ {ℓr}
       → ⦃ sa : {x : ⌞ C ⌟} → Extensional (D .Hom (F $ x) (G $ x)) ℓr ⦄
       → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
     Extensional-natural-transformation ⦃ sa ⦄ .Pathᵉ f g = ∀ i → Pathᵉ sa (f $ i) (g $ i)
     Extensional-natural-transformation ⦃ sa ⦄ .reflᵉ x i = reflᵉ sa (x $ i)
-    Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path x = nat-path
+    Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path x = nat-pathᴾ refl refl
       λ i → sa .idsᵉ .to-path (x i)
     Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path-over h =
       is-prop→pathᴾ
@@ -441,17 +427,20 @@ module _ {C : Precategory oᶜ hᶜ}
           λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa .idsᵉ)) (D .Hom-set _ _ _ _))
         _ _
 
-instance
-  ⊥-Cat : ⊥-notation (Precategory o ℓ)
-  ⊥-Cat .⊥ .Ob = ⊥
-  ⊥-Cat .⊥ .Hom _ _ = ⊥
+module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
+  private module D = Precategory D
 
-  ⊤-Cat : ⊤-notation (Precategory o ℓ)
-  ⊤-Cat .⊤ .Ob = ⊤
-  ⊤-Cat .⊤ .Hom _ _ = ⊤
-  ⊤-Cat .⊤ .Hom-set _ _ = hlevel 2
-  ⊤-Cat .⊤ .id = _
-  ⊤-Cat .⊤ ._∘_ _ _ = _
-  ⊤-Cat .⊤ .id-l _ = refl
-  ⊤-Cat .⊤ .id-r _ = refl
-  ⊤-Cat .⊤ .assoc _ _ _ = refl
+  instance
+    Assoc-natural-transformation
+      : Assoc {A = Functor C D} _=>_ _=>_ _=>_ _=>_ _=>_ _=>_
+    Assoc-natural-transformation .∙-assoc α β γ = ext λ c →
+      D.assoc (γ # c) (β # c) (α # c) ⁻¹
+
+    Unit-o-natural-transformation : Unit-o {A = Functor C D} _=>_ _=>_
+    Unit-o-natural-transformation .∙-id-o α = ext λ c → D.id-r (α # c)
+
+    Unit-i-natural-transformation : Unit-i {A = Functor C D} _=>_ _=>_
+    Unit-i-natural-transformation .∙-id-i α = ext λ c → D.id-l (α # c)
+
+    ≅-Functor : ≅-notation (Functor C D) (Functor C D) (𝒰 (oᶜ ⊔ hᶜ ⊔ hᵈ))
+    ≅-Functor ._≅_ = Iso _=>_ _=>_
