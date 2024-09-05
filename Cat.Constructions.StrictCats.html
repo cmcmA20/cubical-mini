@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cat.Constructions.StrictCats</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cat.Constructions.StrictCats.html" class="Module">Cat.Constructions.StrictCats</a> <a id="60" class="Keyword">where</a>
+
+<a id="67" class="Keyword">open</a> <a id="72" class="Keyword">import</a> <a id="79" href="Cat.Prelude.html" class="Module">Cat.Prelude</a>
+<a id="91" class="Keyword">open</a> <a id="96" class="Keyword">import</a> <a id="103" href="Cat.Strict.html" class="Module">Cat.Strict</a>
+
+<a id="115" class="Keyword">private</a> <a id="123" class="Keyword">variable</a>
+  <a id="134" href="Cat.Constructions.StrictCats.html#134" class="Generalizable">o</a> <a id="136" href="Cat.Constructions.StrictCats.html#136" class="Generalizable">o′</a> <a id="139" href="Cat.Constructions.StrictCats.html#139" class="Generalizable">h</a> <a id="141" href="Cat.Constructions.StrictCats.html#141" class="Generalizable">h′</a> <a id="144" class="Symbol">:</a> <a id="146" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="154" href="Cat.Constructions.StrictCats.html#154" class="Generalizable">C</a> <a id="156" class="Symbol">:</a> <a id="158" href="Cat.Base.html#649" class="Record">Precategory</a> <a id="170" href="Cat.Constructions.StrictCats.html#134" class="Generalizable">o</a> <a id="172" href="Cat.Constructions.StrictCats.html#139" class="Generalizable">h</a>
+  <a id="176" href="Cat.Constructions.StrictCats.html#176" class="Generalizable">D</a> <a id="178" class="Symbol">:</a> <a id="180" href="Cat.Base.html#649" class="Record">Precategory</a> <a id="192" href="Cat.Constructions.StrictCats.html#136" class="Generalizable">o′</a> <a id="195" href="Cat.Constructions.StrictCats.html#141" class="Generalizable">h′</a>
+
+<a id="199" class="Keyword">open</a> <a id="204" href="Cat.Base.html#649" class="Module">Precategory</a>
+
+<a id="Functor-is-set"></a><a id="217" href="Cat.Constructions.StrictCats.html#217" class="Function">Functor-is-set</a> <a id="232" class="Symbol">:</a> <a id="234" class="Symbol">⦃</a> <a id="236" href="Cat.Constructions.StrictCats.html#236" class="Bound">ds</a> <a id="239" class="Symbol">:</a> <a id="241" href="Foundations.HLevel.Base.html#8603" class="Record">H-Level</a> <a id="249" class="Number">2</a> <a id="251" class="Symbol">(</a><a id="252" href="Cat.Constructions.StrictCats.html#176" class="Generalizable">D</a> <a id="254" class="Symbol">.</a><a id="255" href="Cat.Base.html#803" class="Field">Ob</a><a id="257" class="Symbol">)</a> <a id="259" class="Symbol">⦄</a> <a id="261" class="Symbol">→</a> <a id="263" href="Foundations.Base.html#14358" class="Function">is-set</a> <a id="270" class="Symbol">(</a><a id="271" href="Cat.Constructions.StrictCats.html#154" class="Generalizable">C</a> <a id="273" href="Foundations.Notation.Logic.html#3337" class="Field Operator">⇒</a> <a id="275" href="Cat.Constructions.StrictCats.html#176" class="Generalizable">D</a><a id="276" class="Symbol">)</a>
+<a id="278" href="Cat.Constructions.StrictCats.html#217" class="Function">Functor-is-set</a> <a id="293" class="Symbol">=</a> <a id="295" href="Foundations.HLevel.Closure.html#9139" class="Function">≅→is-of-hlevel!</a> <a id="311" class="Number">2</a> <a id="313" href="Cat.Base.html#4181" class="Function">functor-iso</a>
+
+
+<a id="327" class="Comment">-- TODO</a>
+<a id="335" class="Comment">-- Strict-cats : ∀ o h → Precategory _ _</a>
+<a id="376" class="Comment">-- Strict-cats o h .Ob = Σ[ C ꞉ Precategory o h ] is-strict C</a>
+<a id="438" class="Comment">-- Strict-cats o h .Hom (C , _) (D , _) = Functor C D</a>
+<a id="492" class="Comment">-- Strict-cats o h .id  = Id</a>
+<a id="521" class="Comment">-- Strict-cats o h ._∘_ = _∘ᶠ_</a>
+<a id="552" class="Comment">-- Strict-cats o h .id-r _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="631" class="Comment">-- Strict-cats o h .id-l _      = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="710" class="Comment">-- Strict-cats o h .assoc _ _ _ = {!!} -- Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="789" class="Comment">-- Strict-cats o h .Hom-set _ (_ , ds) = Functor-is-set ds</a>
+</pre></body></html>

@@ -2,32 +2,32 @@
 <html><head><meta charset="utf-8"><title>Order.Category</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
 <a id="24" class="Keyword">module</a> <a id="31" href="Order.Category.html" class="Module">Order.Category</a> <a id="46" class="Keyword">where</a>
 
-<a id="53" class="Keyword">open</a> <a id="58" class="Keyword">import</a> <a id="65" href="Categories.Prelude.html" class="Module">Categories.Prelude</a>
+<a id="53" class="Keyword">open</a> <a id="58" class="Keyword">import</a> <a id="65" href="Cat.Prelude.html" class="Module">Cat.Prelude</a>
 
-<a id="85" class="Keyword">open</a> <a id="90" class="Keyword">import</a> <a id="97" href="Order.Base.html" class="Module">Order.Base</a>
+<a id="78" class="Keyword">open</a> <a id="83" class="Keyword">import</a> <a id="90" href="Order.Base.html" class="Module">Order.Base</a>
 
-<a id="poset→precategory"></a><a id="109" href="Order.Category.html#109" class="Function">poset→precategory</a> <a id="127" class="Symbol">:</a> <a id="129" class="Symbol">∀</a> <a id="131" class="Symbol">{</a><a id="132" href="Order.Category.html#132" class="Bound">ℓ</a> <a id="134" href="Order.Category.html#134" class="Bound">ℓ′</a><a id="136" class="Symbol">}</a> <a id="138" class="Symbol">→</a> <a id="140" href="Order.Base.html#416" class="Record">Poset</a> <a id="146" href="Order.Category.html#132" class="Bound">ℓ</a> <a id="148" href="Order.Category.html#134" class="Bound">ℓ′</a> <a id="151" class="Symbol">→</a> <a id="153" href="Categories.Base.html#656" class="Record">Precategory</a> <a id="165" href="Order.Category.html#132" class="Bound">ℓ</a> <a id="167" href="Order.Category.html#134" class="Bound">ℓ′</a>
-<a id="170" href="Order.Category.html#109" class="Function">poset→precategory</a> <a id="188" href="Order.Category.html#188" class="Bound">P</a> <a id="190" class="Symbol">=</a> <a id="192" href="Order.Category.html#238" class="Function">cat</a> <a id="196" class="Keyword">where</a>
-  <a id="204" class="Keyword">open</a> <a id="209" href="Order.Base.html#416" class="Module">Poset</a> <a id="215" href="Order.Category.html#188" class="Bound">P</a>
-  <a id="219" class="Keyword">open</a> <a id="224" href="Categories.Base.html#656" class="Module">Precategory</a>
-  <a id="238" href="Order.Category.html#238" class="Function">cat</a> <a id="242" class="Symbol">:</a> <a id="244" href="Categories.Base.html#656" class="Record">Precategory</a> <a id="256" class="Symbol">_</a> <a id="258" class="Symbol">_</a>
-  <a id="262" href="Order.Category.html#238" class="Function">cat</a> <a id="266" class="Symbol">.</a><a id="267" href="Categories.Base.html#810" class="Field">Ob</a>  <a id="271" class="Symbol">=</a> <a id="273" href="Order.Category.html#188" class="Bound">P</a> <a id="275" class="Symbol">.</a><a id="276" href="Order.Base.html#481" class="Field">Ob</a>
-  <a id="281" href="Order.Category.html#238" class="Function">cat</a> <a id="285" class="Symbol">.</a><a id="286" href="Categories.Base.html#827" class="Field">Hom</a> <a id="290" class="Symbol">=</a> <a id="292" href="Order.Base.html#495" class="Field Operator">_≤_</a>
-  <a id="298" href="Order.Category.html#238" class="Function">cat</a> <a id="302" class="Symbol">.</a><a id="303" href="Categories.Base.html#898" class="Field">id</a>  <a id="307" class="Symbol">=</a> <a id="309" href="Order.Base.html#561" class="Field">≤-refl</a>
-  <a id="318" href="Order.Category.html#238" class="Function">cat</a> <a id="322" class="Symbol">.</a><a id="323" href="Categories.Base.html#925" class="Field Operator">_∘_</a> <a id="327" class="Symbol">=</a> <a id="329" href="Foundations.Pi.Base.html#2179" class="Function">flip</a> <a id="334" href="Order.Base.html#591" class="Field">≤-trans</a>
-  <a id="344" href="Order.Category.html#238" class="Function">cat</a> <a id="348" class="Symbol">.</a><a id="349" href="Categories.Base.html#1022" class="Field">id-r</a> <a id="354" class="Symbol">_</a>      <a id="361" class="Symbol">=</a> <a id="363" href="Foundations.HLevel.Base.html#8903" class="Function">prop!</a>
-  <a id="371" href="Order.Category.html#238" class="Function">cat</a> <a id="375" class="Symbol">.</a><a id="376" href="Categories.Base.html#976" class="Field">id-l</a> <a id="381" class="Symbol">_</a>      <a id="388" class="Symbol">=</a> <a id="390" href="Foundations.HLevel.Base.html#8903" class="Function">prop!</a>
-  <a id="398" href="Order.Category.html#238" class="Function">cat</a> <a id="402" class="Symbol">.</a><a id="403" href="Categories.Base.html#1068" class="Field">assoc</a> <a id="409" class="Symbol">_</a> <a id="411" class="Symbol">_</a> <a id="413" class="Symbol">_</a> <a id="415" class="Symbol">=</a> <a id="417" href="Foundations.HLevel.Base.html#8903" class="Function">prop!</a>
-  <a id="425" href="Order.Category.html#238" class="Function">cat</a> <a id="429" class="Symbol">.</a><a id="430" href="Categories.Base.html#854" class="Field">Hom-set</a> <a id="438" class="Symbol">_</a> <a id="440" class="Symbol">_</a> <a id="442" class="Symbol">=</a> <a id="444" href="Structures.n-Type.html#9482" class="Macro">hlevel!</a>
+<a id="poset→precategory"></a><a id="102" href="Order.Category.html#102" class="Function">poset→precategory</a> <a id="120" class="Symbol">:</a> <a id="122" class="Symbol">∀</a> <a id="124" class="Symbol">{</a><a id="125" href="Order.Category.html#125" class="Bound">ℓ</a> <a id="127" href="Order.Category.html#127" class="Bound">ℓ′</a><a id="129" class="Symbol">}</a> <a id="131" class="Symbol">→</a> <a id="133" href="Order.Base.html#402" class="Record">Poset</a> <a id="139" href="Order.Category.html#125" class="Bound">ℓ</a> <a id="141" href="Order.Category.html#127" class="Bound">ℓ′</a> <a id="144" class="Symbol">→</a> <a id="146" href="Cat.Base.html#649" class="Record">Precategory</a> <a id="158" href="Order.Category.html#125" class="Bound">ℓ</a> <a id="160" href="Order.Category.html#127" class="Bound">ℓ′</a>
+<a id="163" href="Order.Category.html#102" class="Function">poset→precategory</a> <a id="181" href="Order.Category.html#181" class="Bound">P</a> <a id="183" class="Symbol">=</a> <a id="185" href="Order.Category.html#231" class="Function">cat</a> <a id="189" class="Keyword">where</a>
+  <a id="197" class="Keyword">open</a> <a id="202" href="Order.Base.html#402" class="Module">Poset</a> <a id="208" href="Order.Category.html#181" class="Bound">P</a>
+  <a id="212" class="Keyword">open</a> <a id="217" href="Cat.Base.html#649" class="Module">Precategory</a>
+  <a id="231" href="Order.Category.html#231" class="Function">cat</a> <a id="235" class="Symbol">:</a> <a id="237" href="Cat.Base.html#649" class="Record">Precategory</a> <a id="249" class="Symbol">_</a> <a id="251" class="Symbol">_</a>
+  <a id="255" href="Order.Category.html#231" class="Function">cat</a> <a id="259" class="Symbol">.</a><a id="260" href="Cat.Base.html#803" class="Field">Ob</a>  <a id="264" class="Symbol">=</a> <a id="266" href="Order.Category.html#181" class="Bound">P</a> <a id="268" class="Symbol">.</a><a id="269" href="Order.Base.html#467" class="Field">Ob</a>
+  <a id="274" href="Order.Category.html#231" class="Function">cat</a> <a id="278" class="Symbol">.</a><a id="279" href="Cat.Base.html#820" class="Field">Hom</a> <a id="283" class="Symbol">=</a> <a id="285" href="Order.Base.html#481" class="Field Operator">_≤_</a>
+  <a id="291" href="Order.Category.html#231" class="Function">cat</a> <a id="295" class="Symbol">.</a><a id="296" href="Cat.Base.html#891" class="Field">id</a>  <a id="300" class="Symbol">=</a> <a id="302" href="Order.Base.html#547" class="Field">≤-refl</a>
+  <a id="311" href="Order.Category.html#231" class="Function">cat</a> <a id="315" class="Symbol">.</a><a id="316" href="Cat.Base.html#918" class="Field Operator">_∘_</a> <a id="320" class="Symbol">=</a> <a id="322" href="Foundations.Pi.Base.html#2179" class="Function">flip</a> <a id="327" href="Order.Base.html#577" class="Field">≤-trans</a>
+  <a id="337" href="Order.Category.html#231" class="Function">cat</a> <a id="341" class="Symbol">.</a><a id="342" href="Cat.Base.html#1015" class="Field">id-r</a> <a id="347" class="Symbol">_</a>      <a id="354" class="Symbol">=</a> <a id="356" href="Foundations.HLevel.Base.html#8903" class="Function">prop!</a>
+  <a id="364" href="Order.Category.html#231" class="Function">cat</a> <a id="368" class="Symbol">.</a><a id="369" href="Cat.Base.html#969" class="Field">id-l</a> <a id="374" class="Symbol">_</a>      <a id="381" class="Symbol">=</a> <a id="383" href="Foundations.HLevel.Base.html#8903" class="Function">prop!</a>
+  <a id="391" href="Order.Category.html#231" class="Function">cat</a> <a id="395" class="Symbol">.</a><a id="396" href="Cat.Base.html#1061" class="Field">assoc</a> <a id="402" class="Symbol">_</a> <a id="404" class="Symbol">_</a> <a id="406" class="Symbol">_</a> <a id="408" class="Symbol">=</a> <a id="410" href="Foundations.HLevel.Base.html#8903" class="Function">prop!</a>
+  <a id="418" href="Order.Category.html#231" class="Function">cat</a> <a id="422" class="Symbol">.</a><a id="423" href="Cat.Base.html#847" class="Field">Hom-set</a> <a id="431" class="Symbol">_</a> <a id="433" class="Symbol">_</a> <a id="435" class="Symbol">=</a> <a id="437" href="Structures.n-Type.html#9482" class="Macro">hlevel!</a>
 
-<a id="453" class="Comment">-- TODO</a>
-<a id="461" class="Comment">-- open Functor</a>
-<a id="477" class="Comment">-- Posets↪Strict-cats : ∀ {ℓ ℓ&#39;} → Functor (Posets ℓ ℓ&#39;) (Strict-cats ℓ ℓ&#39;)</a>
-<a id="553" class="Comment">-- Posets↪Strict-cats .F₀ P = poset→category P , Poset.Ob-is-set P</a>
-<a id="620" class="Comment">-- Posets↪Strict-cats .F₁ f .F₀ = f .hom</a>
-<a id="661" class="Comment">-- Posets↪Strict-cats .F₁ f .F₁ = f .pres-≤</a>
-<a id="705" class="Comment">-- Posets↪Strict-cats .F₁ {y = y} f .F-id    = Poset.≤-thin y _ _</a>
-<a id="771" class="Comment">-- Posets↪Strict-cats .F₁ {y = y} f .F-∘ g h = Poset.≤-thin y _ _</a>
-<a id="837" class="Comment">-- Posets↪Strict-cats .F-id    = Functor-path (λ _ → refl) λ _ → refl</a>
-<a id="907" class="Comment">-- Posets↪Strict-cats .F-∘ f g = Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="446" class="Comment">-- TODO</a>
+<a id="454" class="Comment">-- open Functor</a>
+<a id="470" class="Comment">-- Posets↪Strict-cats : ∀ {ℓ ℓ&#39;} → Functor (Posets ℓ ℓ&#39;) (Strict-cats ℓ ℓ&#39;)</a>
+<a id="546" class="Comment">-- Posets↪Strict-cats .F₀ P = poset→category P , Poset.Ob-is-set P</a>
+<a id="613" class="Comment">-- Posets↪Strict-cats .F₁ f .F₀ = f .hom</a>
+<a id="654" class="Comment">-- Posets↪Strict-cats .F₁ f .F₁ = f .pres-≤</a>
+<a id="698" class="Comment">-- Posets↪Strict-cats .F₁ {y = y} f .F-id    = Poset.≤-thin y _ _</a>
+<a id="764" class="Comment">-- Posets↪Strict-cats .F₁ {y = y} f .F-∘ g h = Poset.≤-thin y _ _</a>
+<a id="830" class="Comment">-- Posets↪Strict-cats .F-id    = Functor-path (λ _ → refl) λ _ → refl</a>
+<a id="900" class="Comment">-- Posets↪Strict-cats .F-∘ f g = Functor-path (λ _ → refl) λ _ → refl</a>
 </pre></body></html>
