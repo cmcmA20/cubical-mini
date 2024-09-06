@@ -73,19 +73,19 @@ module _ {o h} (C : Precategory o h) where
   Hom-transport-id
     : {a b d : Ob} (p : a ＝ b) (q : a ＝ d)
     → transport (λ i → Hom (p i) (q i)) id ＝ path→iso q .to ∘ path→iso p .from
-  Hom-transport-id p q = Hom-transport p q _ ∙ ap (path→iso q .to ∘_) (id-l _)
+  Hom-transport-id p q = Hom-transport p q _ ∙ (id-l _ ▷ path→iso q .to)
 
   Hom-transport-refl-l-id
     : (q : a ＝ b)
     → transport (λ i → Hom a (q i)) id ＝ path→iso q .to
   Hom-transport-refl-l-id p =
-    Hom-transport-id refl p ∙ ap (path→iso p .to ∘_) (transport-refl _) ∙ id-r _
+    Hom-transport-id refl p ∙ (transport-refl _ ▷ path→iso p .to) ∙ id-r _
 
   Hom-transport-refl-r-id
     : (p : a ＝ b)
     → transport (λ i → Hom (p i) a) id ＝ path→iso p .from
   Hom-transport-refl-r-id p =
-    Hom-transport-id p refl ∙ ap (_∘ path→iso p .from) (transport-refl _) ∙ id-l _
+    Hom-transport-id p refl ∙ (path→iso p .from ◁ transport-refl _) ∙ id-l _
 
   Hom-pathᴾ-refl-l
     : {p : a ＝ d} {h : Hom a b} {h′ : Hom d b}

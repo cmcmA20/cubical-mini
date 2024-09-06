@@ -36,18 +36,18 @@ instance
   : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
     (f : A ≃ B) (g : B ≃ C)
   → f ⁻¹ ∙ f ∙ g ＝ g
-∙ₑ-cancel-l f g = ∙-assoc (f ⁻¹) f g ∙ ap (_∙ g) (∙-inv-o f) ∙ ∙-id-o g
+∙ₑ-cancel-l f g = ∙-assoc (f ⁻¹) f g ∙ (∙-inv-o f ▷ g) ∙ ∙-id-o g
 
 ∙ₑ-cancel-r
   : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
     (f : A ≃ B) (g : C ≃ B) → (f ∙ g ⁻¹) ∙ g ＝ f
-∙ₑ-cancel-r f g = ∙-assoc f _ g ⁻¹ ∙ ap (f ∙_) (∙-inv-o g) ∙ ∙-id-i f
+∙ₑ-cancel-r f g = ∙-assoc f _ g ⁻¹ ∙ (f ◁ ∙-inv-o g) ∙ ∙-id-i f
 
 @0 ua-∙ₑ : {A B C : Type ℓ}
            (f : A ≃ B) (g : B ≃ C)
          → ua (f ∙ g) ＝ ua f ∙ ua g
 ua-∙ₑ {C} = Jₑ (λ B′ f → Π[ g ꞉ B′ ≃ C ] (ua (f ∙ g) ＝ ua f ∙ ua g))
-  λ g → ap ua (∙-id-o g) ∙ sym (∙-id-o (ua g)) ∙ (ap (_∙ ua g) $ sym ua-idₑ)
+  λ g → ap ua (∙-id-o g) ∙ ((ua-idₑ ▷ ua g) ∙ ∙-id-o (ua g)) ⁻¹
 
 whisker-path-lₑ : (a ＝ c) → (a ＝ b) ≃ (c ＝ b)
 whisker-path-lₑ ac = ≅→≃ $ iso (ac ⁻¹ ∙_) (ac ∙_)
@@ -64,12 +64,12 @@ whisker-lₑ
   → (A ≃ C) → (A ≃ B) ≃ (C ≃ B)
 whisker-lₑ ac = ≅→≃ $ iso (ac ⁻¹ ∙_) (ac ∙_)
   (fun-ext $ ∙ₑ-cancel-l ac)
-  (fun-ext λ ab → ∙-assoc ac _ ab ∙ ap (_∙ ab) (∙-inv-i ac) ∙ ∙-id-o ab)
+  (fun-ext λ ab → ∙-assoc ac _ ab ∙ (∙-inv-i ac ▷ ab) ∙ ∙-id-o ab)
 
 whisker-rₑ : (B ≃ C) → (A ≃ B) ≃ (A ≃ C)
 whisker-rₑ bc = ≅→≃ $ iso (_∙ bc) (_∙ bc ⁻¹)
   (fun-ext λ ac → ∙ₑ-cancel-r ac bc)
-  (fun-ext λ ab → ∙-assoc ab bc _ ⁻¹ ∙ ap (ab ∙_) (∙-inv-i bc) ∙ ∙-id-i ab)
+  (fun-ext λ ab → ∙-assoc ab bc _ ⁻¹ ∙ (ab ◁ ∙-inv-i bc) ∙ ∙-id-i ab)
 
 whisker-bothₑ : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
   → (A ≃ C) → (B ≃ D) → (A ≃ B) ≃ (C ≃ D)

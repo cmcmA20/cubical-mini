@@ -6,6 +6,7 @@ open import Foundations.Equiv.Base
 open import Foundations.Equiv.Properties
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
+open import Foundations.Path.Base
 open import Foundations.Path.Groupoid
 open import Foundations.Sigma.Properties
 open import Foundations.Univalence
@@ -55,10 +56,10 @@ retract→is-of-hlevel (suc (suc h)) f g p hlevel x y =
 
     inv : sect retract-of (ap g)
     inv = fun-ext λ path →
-      p # x ⁻¹ ∙ ap (g ∙ f) path ∙ p # y ∙ refl  ~⟨ ap (λ φ → p # x ⁻¹ ∙ _ ∙ φ) (∙-id-i (p # y)) ⟩
-      p # x ⁻¹ ∙ ap (g ∙ f) path ∙ p # y         ~⟨ ap² _∙_ refl (homotopy-natural (p #_) path ⁻¹) ⟩
+      p # x ⁻¹ ∙ ap (g ∙ f) path ∙ p # y ∙ refl  ~⟨ p # x ⁻¹ ◁ ap (g ∙ f) path ◁ ∙-id-i (p # y) ⟩
+      p # x ⁻¹ ∙ ap (g ∙ f) path ∙ p # y         ~⟨ p # x ⁻¹ ◁ homotopy-natural (p #_) path ⁻¹ ⟩
       p # x ⁻¹ ∙ p # x ∙ path                    ~⟨ ∙-assoc _ _ _ ⟩
-      (p # x ⁻¹ ∙ p # x) ∙ path                  ~⟨ ap² _∙_ (∙-inv-o (p # x)) refl ⟩
+      (p # x ⁻¹ ∙ p # x) ∙ path                  ~⟨ ∙-inv-o (p # x) ▷ path ⟩
       refl ∙ path                                ~⟨ ∙-id-o path ⟩
       path                                       ∎
 

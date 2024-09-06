@@ -86,21 +86,19 @@ apᴾ² f p q i = f i (p i) (q i)
 
 opaque
   infix 6 _∙∙_∙∙_
-  _∙∙_∙∙_ : w ＝ x → x ＝ y → y ＝ z
-          → w ＝ z
+   -- Double whiskering
+  _∙∙_∙∙_ : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
+          →    a₀ ＝ a₀′ → ＜ a₀′ ／ A ＼ a₁ ＞ → a₁ ＝ a₁′
+          → ＜ a₀              ／    A    ＼            a₁′ ＞
   (p ∙∙ q ∙∙ r) i = hcomp (∂ i) λ where
     j (i = i0) → p (~ j)
     j (i = i1) → r j
     j (j = i0) → q i
 
-  ∙∙-filler : (p : w ＝ x) (q : x ＝ y) (r : y ＝ z)
-            →   x  ̇       q        ̇ y
-                    ┌─     ̇    ─┐
-
-           symₚ p   │     _     │   r
-
-                    └─     ̇    ─┘
-                w  ̇  p ∙∙ q ∙∙ r   ̇ z
+  ∙∙-filler
+    : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
+    → (p : a₀ ＝ a₀′) (q : ＜ a₀′ ／ A ＼ a₁ ＞) (r : a₁ ＝ a₁′)
+    → ＜ q ／ (λ i → ＜ p (~ i) ／ A ＼ r i ＞) ＼ p ∙∙ q ∙∙ r ＞
   ∙∙-filler p q r k i =
     hfill (∂ i) k λ where
       j (i = i0) → p (~ j)

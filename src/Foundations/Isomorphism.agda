@@ -3,6 +3,7 @@ module Foundations.Isomorphism where
 
 open import Foundations.Base
 open import Foundations.Equiv.Base
+open import Foundations.Path.Base
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -46,7 +47,7 @@ id-is-inv .inverses .Inverses.inv-i = refl
 is-inv-comp : {f : A → B} {g : B → C} → is-invertible f → is-invertible g → is-invertible (f ∙ g)
 is-inv-comp fi gi .inv = gi .inv ∙ fi .inv
 is-inv-comp {f} {g} fi gi .inverses .Inverses.inv-o =
-  ap (λ φ → gi .inv ∙ φ ∙ g) (fi .inv-o) ∙ gi .inv-o
+  (gi .inv ◁ fi .inv-o ▷ g) ∙ gi .inv-o
 is-inv-comp {f} {g} fi gi .inverses .Inverses.inv-i =
   (f ◁ gi .inv-i ▷ fi .inv) ∙ fi .inv-i
 
@@ -77,9 +78,9 @@ private
     → (x ∙ y) ∙ (z ∙ w) ＝ refl
   ≅∙-helper x y z w p q =
       (x ∙ y) ∙ (z ∙ w)  ~⟨ ∙-assoc x y (z ∙ w) ⟨
-      x ∙ (y ∙ z ∙ w)    ~⟨ ap (x ∙_) (∙-assoc y z w) ⟩
-      x ∙ (y ∙ z) ∙ w    ~⟨ ap (λ φ → x ∙ φ ∙ w) p ⟩
-      x ∙ refl ∙ w       ~⟨ ap (x ∙_) (∙-id-o w) ⟩
+      x ∙ (y ∙ z ∙ w)    ~⟨ x ◁ ∙-assoc y z w ⟩
+      x ∙ (y ∙ z) ∙ w    ~⟨ x ◁ p ▷ w ⟩
+      x ∙ refl ∙ w       ~⟨ x ◁ ∙-id-o w ⟩
       x ∙ w              ~⟨ q ⟩
       _                  ∎
 

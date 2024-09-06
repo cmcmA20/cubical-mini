@@ -12,8 +12,6 @@ open import Foundations.Notation.Transitivity
 open import Foundations.Notation.Underlying
 open import Foundations.Notation.Unital.Inner
 open import Foundations.Notation.Unital.Outer
-open import Foundations.Notation.Whiskering.Inner
-open import Foundations.Notation.Whiskering.Outer
 open import Foundations.Sigma.Base
 
 private variable ℓ ℓ′ ℓ″ ℓ‴ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
@@ -111,18 +109,6 @@ instance
 
   Unit-o-Fun : Unit-o Fun (Fun {ℓᵃ} {ℓᵇ})
   Unit-o-Fun .∙-id-o f _ a = f a
-
-  Whisker-i-Fun-Homotopy
-    : Whisker-i {A = 𝒰 ℓ} {B = 𝒰 ℓ′} {C = 𝒰 ℓ″}
-        Fun Fun Fun Fun Fun
-        (λ _ _ → _＝_) (λ _ _ → _＝_)
-  Whisker-i-Fun-Homotopy ._◁_ h p i a = p i (h a)
-
-  Whisker-o-Homotopy-Fun
-    : Whisker-o {A = 𝒰 ℓ} {B = 𝒰 ℓ′} {C = 𝒰 ℓ″}
-        Fun Fun Fun Fun Fun
-        (λ _ _ → _＝_) (λ _ _ → _＝_)
-  Whisker-o-Homotopy-Fun ._▷_ p k i a = k (p i a)
 
 
 -- dependent stuff

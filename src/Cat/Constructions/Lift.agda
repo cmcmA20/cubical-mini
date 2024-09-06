@@ -15,9 +15,9 @@ Lift-cat o′ ℓ′ C = liftc where
   liftc .Hom-set = hlevel!
   liftc .id = lift id
   liftc ._∘_ (lift f) (lift g) = lift (f ∘ g)
-  liftc .id-r (lift f) = ap lift (id-r f)
-  liftc .id-l (lift f) = ap lift (id-l f)
-  liftc .assoc (lift f) (lift g) (lift h) = ap lift (assoc f g h)
+  liftc .id-r (lift f) = lift $ id-r f
+  liftc .id-l (lift f) = lift $ id-l f
+  liftc .assoc (lift f) (lift g) (lift h) = lift $ assoc f g h
 
 Lift-functor-l
   : ∀ o″ ℓ″ {C : Precategory o ℓ} {D : Precategory o′ ℓ′}
@@ -40,5 +40,5 @@ Lift-functor-r bo bℓ G = F where
   F : Functor _ _
   F .F₀ x = lift $ F₀ G x
   F .F₁ f = lift $ F₁ G f
-  F .F-id = ap lift $ F-id G
-  F .F-∘ f g = ap lift $ F-∘ G f g
+  F .F-id = lift $ F-id G
+  F .F-∘ f g = lift $ F-∘ G f g

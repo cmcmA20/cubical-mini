@@ -3,10 +3,11 @@ module Foundations.Erased where
 
 open import Foundations.Base
 open import Foundations.Equiv
-open import Foundations.Univalence
 open import Foundations.HLevel
+open import Foundations.Path.Base
 open import Foundations.Pi
 open import Foundations.Sigma
+open import Foundations.Univalence
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ : Level

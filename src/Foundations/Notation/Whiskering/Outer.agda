@@ -12,15 +12,15 @@ private variable
   C : 𝒰 ℓᶜ
 
 module _
-  {ℓᵃ ℓᵇ ℓᶜ ℓh ℓf ℓg ℓhf ℓhg ℓfg ℓo : Level}
+  {ℓᵃ ℓᵇ ℓᶜ ℓk ℓf ℓg ℓhf ℓhg ℓfg ℓo : Level}
   {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
-  (K : B → C → 𝒰 ℓh)
+  (K : B → C → 𝒰 ℓk)
   (F : A → B → 𝒰 ℓf) (F∙K : A → C → 𝒰 ℓhf) ⦃ _ : Trans F K F∙K ⦄
   (G : A → B → 𝒰 ℓg) (G∙K : A → C → 𝒰 ℓhg) ⦃ _ : Trans G K G∙K ⦄
   (FG : ∀ a b → F a b → G a b → 𝒰 ℓfg)
   (O : (a : A) (c : C) → F∙K a c → G∙K a c → 𝒰 ℓo) where
 
-  record Whisker-o : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓᶜ ⊔ ℓf ⊔ ℓg ⊔ ℓfg ⊔ ℓh ⊔ ℓo) where
+  record Whisker-o : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓᶜ ⊔ ℓf ⊔ ℓg ⊔ ℓfg ⊔ ℓk ⊔ ℓo) where
     no-eta-equality
     infixr 24 _▷_
     field

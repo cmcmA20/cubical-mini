@@ -72,7 +72,7 @@ Slice c = go where
   go ._∘_ f g .map = f .map C.∘ g .map
   go ._∘_ f g .commutes =
       C.assoc _ _ _
-    ∙ ap (C._∘ g .map) (f .commutes)
+    ∙ (g .map ◁ f .commutes)
     ∙ g .commutes
   go .id-l _ = ext (C.id-l _)
   go .id-r _ = ext (C.id-r _)
