@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-open import Categories.Prelude
+open import Cat.Prelude
 
 open import Order.Diagram.Lub
 open import Order.Base

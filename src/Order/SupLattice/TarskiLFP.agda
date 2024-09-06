@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.SupLattice.TarskiLFP where
 
-open import Categories.Prelude
+open import Cat.Prelude
 
 open import Order.Base
 open import Order.Category

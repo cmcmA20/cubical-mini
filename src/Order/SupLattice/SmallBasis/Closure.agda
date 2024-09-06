@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.SupLattice.SmallBasis.Closure where
 
-open import Categories.Prelude
+open import Cat.Prelude
 open import Functions.Surjection
 
 open import Data.Unit
