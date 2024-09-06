@@ -83,7 +83,7 @@ record Group-hom
     pres-id : e A.id ＝ B.id
     pres-id =
       e A.id                           ~⟨ B.id-r _ ⟨
-      e A.id ∙ ⌜ B.id ⌝                ~⟨ ap¡ (B.inverse-r (e A.id)) ⟨
+      e A.id ∙ B.id                    ~⟨ e A.id ◁ B.inverse-r (e A.id) ⟨
       e A.id ∙ (e A.id ∙ e A.id ⁻¹)    ~⟨ B.assoc _ _ _ ⟩
       ⌜ e A.id ∙ e A.id ⌝ ∙ e A.id ⁻¹  ~⟨ ap! (pres-⋆ A.id A.id ⁻¹ ∙ ap e (A.id-l _)) ⟩
       e A.id ∙ e A.id ⁻¹               ~⟨ B.inverse-r _ ⟩
@@ -153,22 +153,22 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
 
   inverse-r : Invertibility-rᵘ X id inverse _⋆_
   inverse-r x =
-    x ∙ x ⁻¹                         ~⟨ id-l _ ⟨
-    ⌜ id ⌝ ∙ (x ∙ x ⁻¹)              ~⟨ ap¡ (inverse-l (x ⁻¹)) ⟨
-    (x ⁻¹ ⁻¹ ∙ x ⁻¹) ∙ (x ∙ x ⁻¹)    ~⟨ assoc _ _ _ ⟨
-    x ⁻¹ ⁻¹ ∙ ⌜ x ⁻¹ ∙ (x ∙ x ⁻¹) ⌝  ~⟨ ap! (assoc (x ⁻¹) x (x ⁻¹)) ⟩
-    x ⁻¹ ⁻¹ ∙ (⌜ x ⁻¹ ∙ x ⌝ ∙ x ⁻¹)  ~⟨ ap! (inverse-l x) ⟩
-    x ⁻¹ ⁻¹ ∙ ⌜ id ∙ x ⁻¹ ⌝          ~⟨ ap! (id-l (x ⁻¹)) ⟩
-    x ⁻¹ ⁻¹ ∙ x ⁻¹                   ~⟨ inverse-l _ ⟩
-    id                               ∎
+    x ∙ x ⁻¹                       ~⟨ id-l _ ⟨
+    id ∙ (x ∙ x ⁻¹)                ~⟨ inverse-l (x ⁻¹) ▷ _ ⟨
+    (x ⁻¹ ⁻¹ ∙ x ⁻¹) ∙ (x ∙ x ⁻¹)  ~⟨ assoc _ _ _ ⟨
+    x ⁻¹ ⁻¹ ∙ (x ⁻¹ ∙ (x ∙ x ⁻¹))  ~⟨ _ ◁ assoc (x ⁻¹) x (x ⁻¹) ⟩
+    x ⁻¹ ⁻¹ ∙ (x ⁻¹ ∙ x) ∙ x ⁻¹    ~⟨ (x ⁻¹ ⁻¹) ◁ inverse-l x ▷ (x ⁻¹) ⟩
+    x ⁻¹ ⁻¹ ∙ (id ∙ x ⁻¹)          ~⟨ _ ◁ id-l (x ⁻¹) ⟩
+    x ⁻¹ ⁻¹ ∙ x ⁻¹                 ~⟨ inverse-l _ ⟩
+    id                             ∎
 
   id-r : Unitality-rᵘ X id _⋆_
   id-r x =
-    x ∙ ⌜ id ⌝        ~⟨ ap¡ (inverse-l _) ⟨
-    x ∙ (x ⁻¹ ∙ x)    ~⟨ assoc _ _ _ ⟩
-    ⌜ x ∙ x ⁻¹ ⌝ ∙ x  ~⟨ ap! (inverse-r _) ⟩
-    id ∙ x            ~⟨ id-l _ ⟩
-    x                 ∎
+    x ∙ id          ~⟨ x ◁ inverse-l _ ⟨
+    x ∙ (x ⁻¹ ∙ x)  ~⟨ assoc _ _ _ ⟩
+    (x ∙ x ⁻¹) ∙ x  ~⟨ inverse-r _ ▷ x ⟩
+    id ∙ x          ~⟨ id-l _ ⟩
+    x               ∎
 
   to-is-group : is-group _⋆_
   to-is-group .is-group.has-monoid = to-is-monoid m where

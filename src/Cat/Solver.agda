@@ -1,7 +1,7 @@
 {-# OPTIONS --safe --no-exact-split #-}
 module Cat.Solver where
 
-open import Foundations.Base hiding (id; _∘_)
+open import Foundations.Prelude hiding (id; _∘_)
 
 open import Meta.Effect.Idiom
 open import Meta.Marker
@@ -51,10 +51,10 @@ module NbE (Cat : Precategory o h) where
   eval-sound-k `id f = sym (id-l _) -- f ＝ id ∘ f
   eval-sound-k (f `∘ g) h =
     eval f (eval g h)        ~⟨ eval-sound-k f _ ⟩
-    embed f ∘ eval g h       ~⟨ ap (embed f ∘_) (eval-sound-k g _) ⟩
+    embed f ∘ eval g h       ~⟨ eval-sound-k g h ▷ embed f ⟩
     embed f ∘ embed g ∘ h    ~⟨ assoc _ _ _ ⟩
     (embed f ∘ embed g) ∘ h  ∎
-  eval-sound-k (x ↑) f = refl -- x ∘ f ＝ x ∘ f
+  eval-sound-k (x ↑) f = refl
 
   eval-sound : (e : Expr A B) → nf e ＝ embed e
   eval-sound e = eval-sound-k e id ∙ id-r _

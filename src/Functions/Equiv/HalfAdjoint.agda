@@ -3,8 +3,6 @@ module Functions.Equiv.HalfAdjoint where
 
 open import Foundations.Prelude
 
-open import Meta.Marker
-
 open import Functions.Fibration
 
 private variable
@@ -30,11 +28,11 @@ is-inv→is-half-adjoint-equiv {A} {B} {f} iiso =
 
     zig : (x : A) → ε′ (f x) ＝ ap f (η # x)
     zig x =
-      ε′ (f x)                                                       ~⟨⟩
-      ε # (f (g (f x))) ⁻¹ ∙ ap f ⌜ η # (g (f x)) ⌝ ∙ ε # (f x)      ~⟨ ap! (homotopy-invert (η #_)) ⟩
-      ε # (f (g (f x))) ⁻¹ ∙ ⌜ ap (f ∘ g ∘ f) (η # x) ∙ ε # (f x) ⌝  ~⟨ ap¡ (homotopy-natural (ε #_) (ap f (η # x))) ⟨
-      ε # (f (g (f x))) ⁻¹ ∙ ε # (f (g (f x))) ∙ ap f (η # x)        ~⟨ ∙-cancel-l (ε # (f (g (f x)))) (ap f (η # x)) ⟩
-      ap f (η # x)                                                   ∎
+      ε′ (f x)                                                   ~⟨⟩
+      ε # (f (g (f x))) ⁻¹ ∙ ap f (η # (g (f x))) ∙ ε # (f x)    ~⟨ _ ◁ ap (ap f) (homotopy-invert (η #_)) ▷ ε # f x ⟩
+      ε # (f (g (f x))) ⁻¹ ∙ ap (f ∘ g ∘ f) (η # x) ∙ ε # (f x)  ~⟨ _ ◁ homotopy-natural (ε #_) (ap f (η # x)) ⟨
+      ε # (f (g (f x))) ⁻¹ ∙ ε # (f (g (f x))) ∙ ap f (η # x)    ~⟨ ∙-cancel-l (ε # (f (g (f x)))) (ap f (η # x)) ⟩
+      ap f (η # x)                                               ∎
 
 
 @0 is-half-adjoint-equiv→is-equiv : is-half-adjoint-equiv f → is-equiv f
@@ -53,16 +51,16 @@ is-half-adjoint-equiv→is-equiv {f} (g , η , ε , zig) .equiv-proof y = fib , 
 
     path : ap f (ap g (p ⁻¹) ∙ η x) ∙ p ＝ ε y
     path =
-      ⌜ ap f (ap g (p ⁻¹) ∙ η x) ⌝ ∙ p             ~⟨ ap! (ap-comp-∙ f (ap g (p ⁻¹)) (η x)) ⟩
-      (ap (f ∘ g) (p ⁻¹) ∙ ap f (η x)) ∙ p         ~⟨ ∙-assoc _ _ p ⟨
-      ap (f ∘ g) (p ⁻¹) ∙ ⌜ ap f (η x) ⌝ ∙ p       ~⟨ ap! (zig x) ⟩ -- by the triangle identity
-      ap (f ∘ g) (p ⁻¹) ∙ ⌜ ε (f x) ∙ p ⌝          ~⟨ ap! (homotopy-natural ε p)  ⟩ -- by naturality of ε
-      ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ∙ ε y       ~⟨ ∙-assoc _ _ (ε y) ⟩
-      ⌜ ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ⌝ ∙ ε y   ~⟨ ap¡ (ap-comp-∙ (f ∘ g) (p ⁻¹) p) ⟨
-      ap (f ∘ g) ⌜ p ⁻¹ ∙ p ⌝ ∙ ε y                ~⟨ ap! (∙-inv-i (p ⁻¹)) ⟩
-      ap (f ∘ g) refl ∙ ε y                        ~⟨⟩
-      refl ∙ ε y                                   ~⟨ ∙-id-o (ε y) ⟩
-      ε y                                          ∎
+      ap f (ap g (p ⁻¹) ∙ η x) ∙ p              ~⟨ ap-comp-∙ f _ (η x) ▷ p ⟩
+      (ap (f ∘ g) (p ⁻¹) ∙ ap f (η x)) ∙ p      ~⟨ ∙-assoc _ _ p ⟨
+      ap (f ∘ g) (p ⁻¹) ∙ ap f (η x) ∙ p        ~⟨ _ ◁ zig x ▷ p ⟩
+      ap (f ∘ g) (p ⁻¹) ∙ (ε (f x) ∙ p)         ~⟨ _ ◁ homotopy-natural ε p ⟩
+      ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p ∙ ε y    ~⟨ ∙-assoc _ _ (ε y) ⟩
+      (ap (f ∘ g) (p ⁻¹) ∙ ap (f ∘ g) p) ∙ ε y  ~⟨ ap-comp-∙ (f ∘ g) (p ⁻¹) p ▷ ε y ⟨
+      ap (f ∘ g) (p ⁻¹ ∙ p) ∙ ε y               ~⟨ ap (ap (f ∘ g)) (∙-inv-i (p ⁻¹)) ▷ ε y ⟩
+      ap (f ∘ g) refl ∙ ε y                     ~⟨⟩
+      refl ∙ ε y                                ~⟨ ∙-id-o (ε y) ⟩
+      ε y                                       ∎
 
 @0 is-inv→is-equiv′ : {f : A → B} → is-invertible f → is-equiv f
 is-inv→is-equiv′ = is-half-adjoint-equiv→is-equiv ∘ is-inv→is-half-adjoint-equiv

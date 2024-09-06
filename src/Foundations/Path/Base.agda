@@ -16,44 +16,22 @@ opaque
   sym-∙ : (p : x ＝ y) (q : y ＝ z) → symₚ (p ∙ₚ q) ＝ symₚ q ∙ₚ symₚ p
   sym-∙ p q _ j = (p ∙ₚ q) (~ j)
 
+instance
+  Whisker-i-Path
+    : {ℓh ℓf ℓhf : Level} {H : A → B → 𝒰 ℓh}
+      {F : B → C → 𝒰 ℓf} {H∙F : A → C → 𝒰 ℓhf} ⦃ _ : Trans H F H∙F ⦄
+    → Whisker-i H F H∙F F H∙F
+      (λ _ _ → _＝_) (λ _ _ → _＝_)
+  Whisker-i-Path ._◁_ r h = ap (r ∙_) h
+  {-# INCOHERENT Whisker-i-Path #-}
 
-  -- Whiskering a dependent path by a path
-
-  -- Double whiskering
-  infix 8 _◁_▷′_
-  _◁_▷′_ : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
-         →    a₀ ＝ a₀′ → ＜ a₀′ ／ A ＼ a₁ ＞ → a₁ ＝ a₁′
-         → ＜ a₀              ／    A    ＼            a₁′ ＞
-  (p ◁ P ▷′ q) i = hcomp (∂ i) λ where
-    j (i = i0) → p (~ j)
-    j (i = i1) → q j
-    j (j = i0) → P i
-
-  double-whiskering-filler
-    : {A : I → Type ℓ} {a₀ a₀′ : A i0} {a₁ a₁′ : A i1}
-    → (p : a₀ ＝ a₀′) (pq : ＜ a₀′ ／ A ＼ a₁ ＞) (q : a₁ ＝ a₁′)
-    → ＜ pq ／ (λ i → ＜ p (~ i) ／ A ＼ q i ＞) ＼ p ◁ pq ▷′ q ＞
-  double-whiskering-filler p pq q k i = hfill (∂ i) k λ where
-    j (i = i0) → p (~ j)
-    j (i = i1) → q j
-    j (j = i0) → pq i
-
-  instance
-    Whisker-i-Path-Pathᵖ
-      : {A : I → Type ℓ}
-      → Whisker-i _＝_
-          (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ)
-          (λ x y _ _ → ＜ x ／ A ＼ y ＞)
-          (λ x y _ _ → ＜ x ／ A ＼ y ＞)
-    Whisker-i-Path-Pathᵖ ._◁_ p P = p ◁ P ▷′ refl
-
-    Whisker-o-Pathᴾ-Path
-      : {A : I → Type ℓ}
-      → Whisker-o _＝_
-          (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ) (λ _ _ → ⊤ₜ)
-          (λ x y _ _ → ＜ x ／ A ＼ y ＞)
-          (λ x y _ _ → ＜ x ／ A ＼ y ＞)
-    Whisker-o-Pathᴾ-Path ._▷_ P q = refl ◁ P ▷′ q
+  Whisker-o-Path
+    : {ℓk ℓf ℓfk : Level} {K : B → C → 𝒰 ℓk}
+      {F : A → B → 𝒰 ℓf} {F∙K : A → C → 𝒰 ℓfk} ⦃ _ : Trans F K F∙K ⦄
+    → Whisker-o K F F∙K F F∙K
+      (λ _ _ → _＝_) (λ _ _ → _＝_)
+  Whisker-o-Path ._▷_ h r = ap (_∙ r) h
+  {-# INCOHERENT Whisker-o-Path #-}
 
 opaque
   unfolding _∙ₚ_

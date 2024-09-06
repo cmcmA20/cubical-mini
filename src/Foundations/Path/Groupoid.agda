@@ -2,6 +2,7 @@
 module Foundations.Path.Groupoid where
 
 open import Foundations.Base
+open import Foundations.Path.Base
 open import Foundations.Transport
 
 private variable
@@ -90,7 +91,7 @@ opaque
               → q ＝ r
   ∙-cancel′-l p q r sq =
        sym (∙-cancel-l p q)
-    ∙∙ ap (sym p ∙_) sq
+    ∙∙ sym p ◁ sq
     ∙∙ ∙-cancel-l p r
 
   ∙-cancel′-r : {A : Type ℓ} {x y z : A}
@@ -99,7 +100,7 @@ opaque
               → q ＝ r
   ∙-cancel′-r p q r sq =
        sym (∙-cancel-r q (sym p))
-    ∙∙ ap (_∙ sym p) sq
+    ∙∙ sq ▷ sym p
     ∙∙ ∙-cancel-r r (sym p)
 
   whisker-path-l : {A : Type ℓ} {x y z : A}

@@ -4,6 +4,7 @@ module Foundations.Equiv.Properties where
 open import Foundations.Base
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
+open import Foundations.Path.Base
 open import Foundations.Path.Reasoning
 open import Foundations.Univalence
 

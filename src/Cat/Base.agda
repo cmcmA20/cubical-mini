@@ -355,9 +355,9 @@ _∘ⁿᵗ_ {C} {D} {F} {G} {H} α β = comps
     comps ._=>_.η x = β # x ∙ α # x
     comps ._=>_.is-natural x y f =
       F # f ∙ β # y ∙ α # y      ~⟨ D.assoc _ _ _ ⟨
-      (F # f ∙ β # y) ∙ α # y    ~⟨ ap (_∙ α # y) (β ._=>_.is-natural x y f) ⟩
+      (F # f ∙ β # y) ∙ α # y    ~⟨ β ._=>_.is-natural x y f ▷ α # y ⟩
       (β # x ∙ G # f) ∙ α # y    ~⟨ D.assoc _ _ _ ⟩
-      β # x ∙ G # f ∙ α # y      ~⟨ ap (β # x ∙_) (α ._=>_.is-natural x y f) ⟩
+      β # x ∙ G # f ∙ α # y      ~⟨ β # x ◁ α ._=>_.is-natural x y f ⟩
       β # x ∙ α # x ∙ H # f      ~⟨ D.assoc _ _ _ ⟨
       (β # x ∙ α # x) ∙ H # f    ∎
 

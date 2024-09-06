@@ -46,7 +46,3 @@ instance
     → Trans {A = ⊤} {B = ⊤} {C = ⊤} (λ _ _ → A) (λ _ _ → A) (λ _ _ → A)
   Transᵘ→Trans ._∙_ = _<>_
   {-# INCOHERENT Transᵘ→Trans #-}
-
-  Trans-⊤ : {D : A → B → 𝒰 ℓ} {E : B → C → 𝒰 ℓ′} → Trans {C = C} D E (λ _ _ → ⊤)
-  Trans-⊤ ._∙_ _ _ = tt
-  {-# INCOHERENT Trans-⊤ #-}
