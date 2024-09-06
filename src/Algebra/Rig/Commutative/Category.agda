@@ -4,9 +4,9 @@ module Algebra.Rig.Commutative.Category where
 open import Algebra.Rig.Commutative
 open import Algebra.Rig.Category.Base using (Rig-structure; Rigs)
 
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
+import Cat.Morphism
 
 open Semiring-hom
 open CRig-on
@@ -18,7 +18,7 @@ CRig-structure ℓ = Full-substructure ℓ CRig-on Rig-on
 CRigs : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 CRigs ℓ = Structured-objects (CRig-structure ℓ)
 
-module CRigs {ℓ} = Categories.Morphism (CRigs ℓ)
+module CRigs {ℓ} = Cat.Morphism (CRigs ℓ)
 
 CRig : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 CRig ℓ = Precategory.Ob (CRigs ℓ)

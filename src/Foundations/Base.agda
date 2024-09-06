@@ -28,9 +28,6 @@ private variable
 -- inlined. This module also makes equational reasoning work with
 -- (non-dependent) paths.
 
-lift-ext : {a b : Lift {ℓ} ℓ′ A} → (lower a ＝ lower b) → a ＝ b
-lift-ext x i = lift (x i)
-
 Square : {a₀₀ a₀₁ : A} (p : a₀₀ ＝ a₀₁)
          {a₁₀ : A} (q : a₀₀ ＝ a₁₀)
          {a₁₁ : A} (r : a₁₀ ＝ a₁₁) (s : a₀₁ ＝ a₁₁)
@@ -53,18 +50,6 @@ private variable
   q : x ＝ y
   r : y ＝ z
   s : w ＝ z
-
--- symᴾ infers the type of its argument from the type of its output
-symᴾ : {A : I → Type ℓ} {x : A i1} {y : A i0}
-       (p : ＜ x    ／ (λ i → A (~ i)) ＼    y ＞)
-     →      ＜ y ／    (λ i → A    i )    ＼ x ＞
-symᴾ p j = p (~ j)
-
--- symᴾ infers the type of its output from the type of its argument
-symᴾ-from-goal : {A : I → Type ℓ} {x : A i0} {y : A i1}
-                 (p : ＜ x    ／ (λ i → A    i ) ＼    y ＞)
-               →      ＜ y ／    (λ i → A (~ i))    ＼ x ＞
-symᴾ-from-goal p j = p (~ j)
 
 apˢ : {B : Type ℓ′} (f : A → B)
       (p : x ＝ y) → f x ＝ f y
@@ -98,39 +83,6 @@ apᴾ² : {A : I → Type ℓ} {B : (i : I) → A i → Type ℓ′}
 apᴾ² f p q i = f i (p i) (q i)
 {-# INLINE apᴾ² #-}
 
-{- Observe an "open box".
-
-        i              x       q i       y
-     ∙ —-- >               ┌────────→┐
-   j |                     │         │
-     v           sym p j   │         │   r j
-                           ↓         ↓
-                           └         ┘
-                       w                 z
-
--}
-
--- formal definition of an open box
-module _ {w x y z : A} {p : w ＝ x} {q : x ＝ y} {r : y ＝ z} where private
-  double-comp-tube : (i j : I) → Partial (∂ i ∨ ~ j) A
-  double-comp-tube i j (i = i0) = symₚ p j
-  double-comp-tube i j (i = i1) = r j
-  double-comp-tube i j (j = i0) = q i
-
-{- The most natural notion of homogenous path composition
-    in a cubical setting is double composition:
-
-        i           x        q        y
-     ∙ ---→             ┌────────→┐
-   j ∣                  │         │
-     ↓            p⁻¹   │         │   r
-                        ↓         ↓
-                        └ ─ ─ ─ -→┘
-                    w   p ∙∙ q ∙∙ r   z
-
-   `p ∙∙ q ∙∙ r` gives the line at the bottom,
-   `∙∙-filler p q r` gives the whole square.
--}
 
 opaque
   infix 6 _∙∙_∙∙_
@@ -204,7 +156,7 @@ opaque
               x  ̇      r       ̇ z
            → r ＝ p ∙ₚ q
   ∙-unique {p} {q} r square i =
-    ∙∙-unique p reflₚ q (_ , square) (_ , (∙-filler p q)) i .fst
+    ∙∙-unique p reflₚ q (_ , square) (_ , ∙-filler p q) i .fst
 
   ∙-filler-r : (p : x ＝ y) (q : y ＝ z)
             →  y  ̇      q       ̇ z
@@ -241,11 +193,13 @@ opaque
       k (k = i0) → q (~ j ∧ i)
 
 instance
-  Refl-Path : Refl (Path A)
-  Refl-Path .refl = reflₚ
+  Refl-Pathᴾ : Refl λ x y → ＜ x ／ (λ _ → A) ＼ y ＞
+  Refl-Pathᴾ .refl {x} _ = x
 
-  Sym-Path : Symʰ (Path A)
-  Sym-Path .sym = symₚ
+  Sym-Pathᴾ
+    : {A : I → Type ℓ}
+    → Sym (λ x y → ＜ x ／ A ＼ y ＞) (λ x y → ＜ x ／ (λ i → A (~ i)) ＼ y ＞)
+  Sym-Pathᴾ .sym p i = p (~ i)
 
   Invol-Path : Involʰ (Path A)
   Invol-Path .sym-invol _ = refl
@@ -639,7 +593,7 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
   unfolding to-pathᴾ
   to-pathᴾ⁻ : x ＝ coe1→0 A y → ＜ x ／ A ＼ y ＞
-  to-pathᴾ⁻ p = symᴾ $ to-pathᴾ {A = λ j → A (~ j)} (λ i → p (~ i))
+  to-pathᴾ⁻ p = sym $ to-pathᴾ {A = λ j → A (~ j)} (λ i → p (~ i))
 
   from-pathᴾ⁻ : ＜ x ／ A ＼ y ＞ → x ＝ coe1→0 A y
   from-pathᴾ⁻ p = symₚ $ from-pathᴾ (λ i → p (~ i))
@@ -686,11 +640,14 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
   → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞
 Σ-pathᴾ p q i = p i , q i
 
+_,ₚ_ = Σ-pathᴾ
+infixr 4 _,ₚ_
+
 Σ-path : {x y : Σ A B}
          (p : x .fst ＝ y .fst)
        → subst B p (x .snd) ＝ (y .snd)
        → x ＝ y
-Σ-path p q = Σ-pathᴾ p (to-pathᴾ q)
+Σ-path p q = p ,ₚ to-pathᴾ q
 
 
 -- Path transport

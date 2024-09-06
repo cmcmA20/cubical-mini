@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Order.Category where
 
-open import Categories.Prelude
+open import Cat.Prelude
 
 open import Order.Base
 

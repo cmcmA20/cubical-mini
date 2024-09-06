@@ -4,9 +4,9 @@ module Algebra.Group.Category where
 open import Algebra.Group
 open import Algebra.Monoid.Category using (Monoids)
 
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
+import Cat.Morphism
 
 open Group-hom
 open Group-on
@@ -22,7 +22,7 @@ Group-structure ℓ .id-hom-unique p q .erased = Equiv.injective
 Groups : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Groups ℓ = Structured-objects (Group-structure ℓ)
 
-module Groups {ℓ} = Categories.Morphism (Groups ℓ)
+module Groups {ℓ} = Cat.Morphism (Groups ℓ)
 
 Group : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 Group ℓ = Precategory.Ob (Groups ℓ)

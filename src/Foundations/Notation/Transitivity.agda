@@ -5,7 +5,7 @@ open import Foundations.Prim.Type
 open import Agda.Builtin.Unit
 
 private variable
-  ℓᵃ ℓᵇ ℓᶜ ℓ : Level
+  ℓᵃ ℓᵇ ℓᶜ ℓ ℓ′ : Level
   A : 𝒰 ℓᵃ
   B : 𝒰 ℓᵇ
   C : 𝒰 ℓᶜ
@@ -46,3 +46,7 @@ instance
     → Trans {A = ⊤} {B = ⊤} {C = ⊤} (λ _ _ → A) (λ _ _ → A) (λ _ _ → A)
   Transᵘ→Trans ._∙_ = _<>_
   {-# INCOHERENT Transᵘ→Trans #-}
+
+  Trans-⊤ : {D : A → B → 𝒰 ℓ} {E : B → C → 𝒰 ℓ′} → Trans {C = C} D E (λ _ _ → ⊤)
+  Trans-⊤ ._∙_ _ _ = tt
+  {-# INCOHERENT Trans-⊤ #-}

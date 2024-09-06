@@ -62,10 +62,10 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
 
   opaque
     s : (g⁻¹ ∙ f⁻¹) section-of (f ∙ g)
-    s = apᶠ g⁻¹ (fi .inverses .Inverses.inv-o) g ∙ gi .inverses .Inverses.inv-o
+    s = (g⁻¹ ◁ fi .inv-o ▷ g) ∙ gi .inv-o
 
     r : (g⁻¹ ∙ f⁻¹) retract-of (f ∙ g)
-    r = apᶠ f (gi .inverses .Inverses.inv-i) f⁻¹ ∙ fi .inverses .Inverses.inv-i
+    r = (f ◁ gi .inv-i ▷ f⁻¹) ∙ fi .inv-i
 
   e : is-equiv (f ∙ g)
   e = is-inv→is-equiv $ invertible (g⁻¹ ∙ f⁻¹) s r
@@ -107,19 +107,17 @@ is-contr→≃ {A} contr-A contr-B = (λ _ → contr-B .fst) , is-contr→is-equ
 
 is-equiv→pre-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = C → A} (_∙ f) -- (f ∘_)
 is-equiv→pre-is-equiv {f} f-eqv = is-inv→is-equiv $ invertible (_∙ f⁻¹)
-  (fun-ext λ _ → fun-ext λ _ → fi .inverses .Inverses.inv-o # _)
-  (fun-ext λ _ → fun-ext λ _ → fi .inverses .Inverses.inv-i # _)
+  (fun-ext $ _◁ fi .inv-o)
+  (fun-ext $ _◁ fi .inv-i)
     where
-    fi : is-invertible f
     fi = is-equiv→is-inv f-eqv
     f⁻¹ = fi .inv
 
 is-equiv→post-is-equiv : {f : A → B} → is-equiv f → is-equiv {A = B → C} (f ∙_) -- (_∘ f)
 is-equiv→post-is-equiv {f} f-eqv = is-inv→is-equiv $ invertible (f⁻¹ ∙_)
-  (fun-ext λ z → ap-o z (fi .inverses .Inverses.inv-i))
-  (fun-ext λ z → ap-o z (fi .inverses .Inverses.inv-o))
+  (fun-ext $ fi .inv-i ▷_)
+  (fun-ext $ fi .inv-o ▷_)
     where
-    fi : is-invertible f
     fi = is-equiv→is-inv f-eqv
     f⁻¹ = fi .inv
 

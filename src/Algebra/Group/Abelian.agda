@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Group.Abelian where
 
-open import Categories.Prelude
+open import Cat.Prelude
 
 open import Algebra.Group public
 open import Algebra.Monoid.Commutative public

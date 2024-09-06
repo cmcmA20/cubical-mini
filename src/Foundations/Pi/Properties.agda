@@ -39,12 +39,12 @@ private variable
   ri : from section-of′ to
   ri k = fun-ext λ x →
            ap² (subst P) (e.zig x ⁻¹)
-            (from-pathᴾ (symᴾ-from-goal (ap k (e.η x))) ⁻¹)
-          ∙ transport⁻-transport (ap P (ap e.to (e.η x ⁻¹))) (k x)
+            (from-pathᴾ⁻ (ap k (e.η x)))
+          ∙ transport⁻-transport (ap (P ∘ e.to) (e.η x ⁻¹)) (k x)
 
   li : from retract-of′ to
   li k = fun-ext λ x →
-           ap (subst P _) (from-pathᴾ (symᴾ-from-goal (ap k (e.ε x))) ⁻¹)
+           ap (subst P _) (from-pathᴾ⁻ (ap k (e.ε x)))
          ∙ transport⁻-transport (ap P (e.ε x) ⁻¹) _
 
 Π-ap : {A : Type ℓ} {A′ : Type ℓ′} {P : A → Type ℓ″} {Q : A′ → Type ℓ‴}

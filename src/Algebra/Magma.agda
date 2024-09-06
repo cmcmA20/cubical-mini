@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Magma where
 
-open import Categories.Prelude
+open import Cat.Prelude
 
 private variable
   ℓ ℓ′ ℓ″ : Level

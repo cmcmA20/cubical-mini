@@ -48,7 +48,7 @@ is-inv-comp fi gi .inv = gi .inv ∙ fi .inv
 is-inv-comp {f} {g} fi gi .inverses .Inverses.inv-o =
   ap (λ φ → gi .inv ∙ φ ∙ g) (fi .inv-o) ∙ gi .inv-o
 is-inv-comp {f} {g} fi gi .inverses .Inverses.inv-i =
-  apᶠ f (gi .inv-i) (fi .inv) ∙ fi .inv-i
+  (f ◁ gi .inv-i ▷ fi .inv) ∙ fi .inv-i
 
 instance
   Refl-Erased-Iso : Refl (Isoᴱ {ℓ})
@@ -118,7 +118,7 @@ instance
 id-composition→is-inv : (r : is-invertible f) (g : B → A) (p : f ∘ g ＝ id) → is-invertible g
 id-composition→is-inv {f} r g p .inv = f
 id-composition→is-inv {f} r g p .inverses .Inverses.inv-o =
-  ap-i (r .inv-i) (f ∙ g) ⁻¹ ∙∙ apᶠ f p (r .inv) ∙∙ r .inv-i
+  f ∙ g ◁ r .inv-i ⁻¹ ∙∙ f ◁ p ▷ r .inv ∙∙ r .inv-i
 id-composition→is-inv {f} r g p .inverses .Inverses.inv-i = p
 
 is-equiv→is-inv : {f : A → B} → is-equiv f → is-invertible f

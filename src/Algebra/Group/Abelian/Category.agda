@@ -4,9 +4,9 @@ module Algebra.Group.Abelian.Category where
 open import Algebra.Group.Category using (Group-structure; Groups)
 open import Algebra.Group.Abelian
 
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
+import Cat.Morphism
 
 open Group-hom
 open AGroup-on
@@ -18,7 +18,7 @@ AGroup-structure ℓ = Full-substructure ℓ AGroup-on Group-on
 AGroups : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 AGroups ℓ = Structured-objects (AGroup-structure ℓ)
 
-module AGroups {ℓ} = Categories.Morphism (AGroups ℓ)
+module AGroups {ℓ} = Cat.Morphism (AGroups ℓ)
 
 AGroup : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 AGroup ℓ = Precategory.Ob (AGroups ℓ)

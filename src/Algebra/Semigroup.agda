@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Semigroup where
 
-open import Categories.Prelude
+open import Cat.Prelude
 
 open import Algebra.Magma public
 

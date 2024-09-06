@@ -68,7 +68,7 @@ subst-slice : {A : Type ℓ} (B : A → Type ℓ′) (C : A → Type ℓ″)
               (F : ∀[ a ꞉ A ] (B a → C a))
               {x y : A} (p : x ＝ y) (b : B x)
             → subst C p (F b) ＝ F (subst B p b)
-subst-slice B C F p b i = (symᴾ $ transport⁻-filler-ext $ ap C (sym p)) i $ₜ
+subst-slice B C F p b i = (sym $ transport⁻-filler-ext $ ap C (sym p)) i $ₜ
   F {p i} (transport-filler-ext (ap B p) i b)
 
 subst-slice-filler : {ℓ ℓ′ ℓ″ : Level}

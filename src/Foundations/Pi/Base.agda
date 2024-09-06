@@ -12,6 +12,8 @@ open import Foundations.Notation.Transitivity
 open import Foundations.Notation.Underlying
 open import Foundations.Notation.Unital.Inner
 open import Foundations.Notation.Unital.Outer
+open import Foundations.Notation.Whiskering.Inner
+open import Foundations.Notation.Whiskering.Outer
 open import Foundations.Sigma.Base
 
 private variable ℓ ℓ′ ℓ″ ℓ‴ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
@@ -110,25 +112,17 @@ instance
   Unit-o-Fun : Unit-o Fun (Fun {ℓᵃ} {ℓᵇ})
   Unit-o-Fun .∙-id-o f _ a = f a
 
-apᶠ
-  : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″} {D : Type ℓ‴}
-  → (h : A → B) {f g : B → C} (p : f ＝ g) (k : C → D)
-  → h ∙ f ∙ k ＝ h ∙ g ∙ k
-apᶠ h p k i a = k (p i (h a))
+  Whisker-i-Fun-Homotopy
+    : Whisker-i {A = 𝒰 ℓ} {B = 𝒰 ℓ′} {C = 𝒰 ℓ″}
+        Fun Fun Fun Fun Fun
+        (λ _ _ → _＝_) (λ _ _ → _＝_)
+  Whisker-i-Fun-Homotopy ._◁_ h p i a = p i (h a)
 
-ap-o
-  : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
-  → (h : B → C) {f g : A → B} (p : f ＝ g)
-  → f ∙ h ＝ g ∙ h
-ap-o h p = apᶠ refl p h
-{-# INLINE ap-o #-}
-
-ap-i
-  : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
-  → {f g : B → C} (p : f ＝ g) (h : A → B)
-  → h ∙ f ＝ h ∙ g
-ap-i p h = apᶠ h p refl
-{-# INLINE ap-i #-}
+  Whisker-o-Homotopy-Fun
+    : Whisker-o {A = 𝒰 ℓ} {B = 𝒰 ℓ′} {C = 𝒰 ℓ″}
+        Fun Fun Fun Fun Fun
+        (λ _ _ → _＝_) (λ _ _ → _＝_)
+  Whisker-o-Homotopy-Fun ._▷_ p k i a = k (p i a)
 
 
 -- dependent stuff

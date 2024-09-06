@@ -3,7 +3,7 @@ open import Order.Base
 
 module Order.Reasoning {ℓ ℓ′} (P : Poset ℓ ℓ′) where
 
-open import Categories.Prelude
+open import Cat.Prelude
 
 open Poset P public
 

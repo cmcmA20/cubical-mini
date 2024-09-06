@@ -30,7 +30,7 @@ import Combinatorics.Everything
 import Homotopy.Everything
 
 -- Category theory.
-import Categories.Everything
+import Cat.Everything
 
 -- (Higher) algebra library.
 import Algebra.Everything

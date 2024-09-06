@@ -4,9 +4,9 @@ module Algebra.Rig.Category.Base where
 open import Algebra.Rig
 open import Algebra.Semiring.Category using (Semiring-structure; Semirings)
 
-open import Categories.Displayed.Univalence.Thin
-open import Categories.Prelude
-import Categories.Morphism
+open import Cat.Displayed.Univalence.Thin
+open import Cat.Prelude
+import Cat.Morphism
 
 open Semiring-hom
 open Rig-on
@@ -18,7 +18,7 @@ Rig-structure ℓ = Full-substructure ℓ Rig-on Semiring-on
 Rigs : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Rigs ℓ = Structured-objects (Rig-structure ℓ)
 
-module Rigs {ℓ} = Categories.Morphism (Rigs ℓ)
+module Rigs {ℓ} = Cat.Morphism (Rigs ℓ)
 
 Rig : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 Rig ℓ = Precategory.Ob (Rigs ℓ)

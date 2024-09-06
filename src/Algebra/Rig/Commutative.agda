@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Algebra.Rig.Commutative where
 
-open import Categories.Prelude hiding (_+_)
+open import Cat.Prelude hiding (_+_)
 
 open import Algebra.Rig public
 

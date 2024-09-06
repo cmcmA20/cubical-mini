@@ -27,9 +27,6 @@ infixr 6 ∃!-syntax
 
 syntax ∃!-syntax A (λ x → B) = ∃![ x ꞉ A ] B
 
-_,ₚ_ = Σ-pathᴾ
-infixr 4 _,ₚ_
-
 open Iso
 
 Σ-pathᴾ-iso
@@ -204,7 +201,7 @@ open Iso
     $ subst-filler B refl b′
     ∙ ap (λ f → subst B f b′) (is-contr→is-prop (path-is-of-hlevel-same 0 A-c) _ _)
   the-iso .inverses .Inverses.inv-i = fun-ext λ (x , b) →
-    paths A-c x ,ₚ symᴾ (subst-filler B (paths A-c x ⁻¹) b)
+    paths A-c x ,ₚ sym (subst-filler B (paths A-c x ⁻¹) b)
 
 Σ-contract-snd : (∀ x → is-contr (B x)) → Σ A B ≃ A
 Σ-contract-snd B-contr = ≅→≃ $ iso fst (_, centre (B-contr _)) refl

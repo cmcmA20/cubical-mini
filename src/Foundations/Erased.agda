@@ -103,10 +103,10 @@ _∙ᴱₑ_ : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ
 
   opaque
     @0 s : (g⁻¹ ∙ f⁻¹) section-of (f ∙ g)
-    s = apᶠ g⁻¹ (fi .snd .fst .erased) g ∙ gi .snd .fst .erased
+    s = (g⁻¹ ◁ fi .snd .fst .erased ▷ g) ∙ gi .snd .fst .erased
 
     @0 r : (g⁻¹ ∙ f⁻¹) retract-of (f ∙ g)
-    r = apᶠ f (gi .snd .snd .erased) f⁻¹ ∙ fi .snd .snd .erased
+    r = (f ◁ gi .snd .snd .erased ▷ f⁻¹) ∙ fi .snd .snd .erased
 
   e : is-equivᴱ (f ∙ g)
   e = is-invᴱ→is-equivᴱ $ (g⁻¹ ∙ f⁻¹) , erase s , erase r

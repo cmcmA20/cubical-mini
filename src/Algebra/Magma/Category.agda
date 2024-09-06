@@ -3,9 +3,9 @@ module Algebra.Magma.Category where
 
 open import Algebra.Magma
 
-open import Categories.Prelude
-open import Categories.Displayed.Univalence.Thin
-import Categories.Morphism
+open import Cat.Prelude
+open import Cat.Displayed.Univalence.Thin
+import Cat.Morphism
 
 open n-Magma-on
 open n-Magma-hom
@@ -21,7 +21,7 @@ Magma-structure ℓ .id-hom-unique p _ = pure $ Equiv.injective
 Magmas : ∀ ℓ → Precategory (ℓsuc ℓ) ℓ
 Magmas ℓ = Structured-objects (Magma-structure ℓ)
 
-module Magmas {ℓ} = Categories.Morphism (Magmas ℓ)
+module Magmas {ℓ} = Cat.Morphism (Magmas ℓ)
 
 Magma : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 Magma ℓ = Precategory.Ob (Magmas ℓ)
