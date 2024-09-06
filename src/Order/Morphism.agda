@@ -3,6 +3,7 @@ module Order.Morphism where
 
 open import Cat.Prelude
 import Cat.Morphism
+open import Functions.Surjection
 open import Order.Base
 import Order.Reasoning
 
@@ -132,3 +133,13 @@ module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   iso-mono-refl→≅ f mo or =
     iso-order-embedding→≅ f $
     monotone-reflection→is-order-embedding {P = P} {Q = Q} (f #_) mo or
+
+  surj-order-embedding→≅
+    : (f : ⌞ P ⌟ ↠ ⌞ Q ⌟)
+    → is-order-embedding P Q (f #_)
+    → P ≅ Q
+  surj-order-embedding→≅ f oe =
+    iso-order-embedding→≅
+      (≃→≅ $ f #_ , is-surjective-embedding→is-equiv (f .snd)
+                       (is-order-embedding→is-embedding {P = P} {Q = Q} (f #_) oe))
+      oe
