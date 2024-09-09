@@ -3,7 +3,7 @@ module Data.Fin.Inductive.Instances.FromNat where
 
 open import Foundations.Base
 
-open import Meta.Literals.FromNat public
+open import Meta.Literals.FromNat
 
 open import Data.Fin.Inductive.Base
 open import Data.Nat.Order.Inductive

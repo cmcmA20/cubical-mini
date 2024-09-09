@@ -30,3 +30,4 @@ open import Data.Nat.Order.Inductive.Base -- for H-Levels
            ; H-Level-≤ to H-Level-ℕ-≤
            )
   public
+open import Data.Nat.Instances.FromNat public

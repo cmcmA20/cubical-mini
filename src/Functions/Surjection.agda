@@ -35,12 +35,6 @@ _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f
 
 instance
-  Funlike-Split-surj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↠! B) A (λ _ → B)
-  Funlike-Split-surj ._#_ = fst
-
-  Funlike-Surj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↠ B) A (λ _ → B)
-  Funlike-Surj ._#_ = fst
-
   Refl-Split-surj :  Refl (_↠!_ {ℓ})
   Refl-Split-surj .refl = refl , (_, refl)
 

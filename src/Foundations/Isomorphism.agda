@@ -113,9 +113,6 @@ instance
     , erase (fun-ext λ x → f′ # (s  # g′ x) ∙ s′ # x)
     , erase (fun-ext λ x → g  # (r′ # f  x) ∙ r  # x)
 
-  Funlike-Erased-Iso : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (Isoᴱ A B) A (λ _ → B)
-  Funlike-Erased-Iso ._#_ = fst
-
 id-composition→is-inv : (r : is-invertible f) (g : B → A) (p : f ∘ g ＝ id) → is-invertible g
 id-composition→is-inv {f} r g p .inv = f
 id-composition→is-inv {f} r g p .inverses .Inverses.inv-o =

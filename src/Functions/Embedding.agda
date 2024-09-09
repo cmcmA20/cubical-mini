@@ -26,13 +26,6 @@ is-embedding f = ∀ y → is-prop (fibre f y)
 _↪_ : Type ℓ → Type ℓ′ → Type _
 A ↪ B = Σ[ f ꞉ (A → B) ] is-embedding f
 
-instance
-  Funlike-Inj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↣ B) A (λ _ → B)
-  Funlike-Inj ._#_ = fst
-
-  Funlike-Emb : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↪ B) A (λ _ → B)
-  Funlike-Emb ._#_ = fst
-
 set-injective→is-embedding
   : {f : A → B} → is-set B → Injective f
   → is-embedding f

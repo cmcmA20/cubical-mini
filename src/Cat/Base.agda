@@ -159,6 +159,9 @@ record Functor
 unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
 
 instance
+  ⇒-Precat : ⇒-notation (Precategory o ℓ) (Precategory o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Precat ._⇒_ = Functor
+
   Op-Functor : Sym {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)
   Op-Functor .sym F .Functor.F₀ = F .Functor.F₀
   Op-Functor .sym F .Functor.F₁ = F .Functor.F₁
@@ -179,9 +182,6 @@ instance
       {x y : ⌞ C ⌟}
     → Funlike ur (Functor C D) (Hom C x y) λ (F , _) → Hom D (F # x) (F # y)
   Funlike-Functor₁ ._#_ F = F .Functor.F₁
-
-  ⇒-Precat : ⇒-notation (Precategory o ℓ) (Precategory o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
-  ⇒-Precat ._⇒_ = Functor
 
   Invol-Op-Functor : Invol {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor (λ D′ C′ → Functor (C′ ᵒᵖ) (D′ ᵒᵖ))
   Invol-Op-Functor .sym-invol F _ .Functor.F₀ = F .Functor.F₀

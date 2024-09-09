@@ -3,7 +3,7 @@ module Data.Float.Instances.FromNat where
 
 open import Foundations.Base
 
-open import Meta.Literals.FromNat public
+open import Meta.Literals.FromNat
 
 open import Data.Float.Base
 open import Data.Unit.Base

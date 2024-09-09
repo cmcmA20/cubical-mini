@@ -4,7 +4,6 @@ module Meta.Literals.FromNat where
 open import Foundations.Base
 
 open import Data.Fin.Inductive.Base -- TODO sure?
-open import Data.Nat.Base
 open import Data.Unit.Base
 
 open import Agda.Builtin.FromNat public
@@ -13,10 +12,6 @@ open import Agda.Builtin.FromNat public
            ; fromNat to from-ℕ )
 
 instance
-  From-ℕ-ℕ : From-ℕ ℕ
-  From-ℕ-ℕ .From-ℕ.Constraint _ = ⊤
-  From-ℕ-ℕ .from-ℕ n = n
-
   From-ℕ-Type : ∀ {ℓ} → From-ℕ (Type ℓ)
   From-ℕ-Type .From-ℕ.Constraint _ = ⊤
   From-ℕ-Type .from-ℕ n = Lift _ (Fin n)
