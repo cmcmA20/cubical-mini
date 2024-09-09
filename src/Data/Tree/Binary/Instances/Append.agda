@@ -10,8 +10,8 @@ private variable
   A : Type ℓ
 
 instance
-  Reflᵘ-Tree : Reflᵘ (Tree A)
-  Reflᵘ-Tree .mempty = empty
+  Pointed-Tree : Pointed (Tree A)
+  Pointed-Tree .mempty = empty
 
-  Transᵘ-Tree : Transᵘ (Tree A)
-  Transᵘ-Tree ._<>_ = node
+  Has-binary-op-Tree : Has-binary-op (Tree A)
+  Has-binary-op-Tree ._<>_ = node

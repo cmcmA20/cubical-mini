@@ -28,6 +28,6 @@ module _ {X : Type ℓ} {M : Monoid-on X} where private
   module Mon = Monoid-on M
   module Cat = Precategory (𝑩 M)
 
-  _ :  _∙_ ⦃ Transᵘ→Trans ⦃ Mon.Transᵘ-is-n-magma ⦄ ⦄
+  _ :  _∙_ ⦃ Has-binary-op→Trans ⦃ Mon.Has-binary-op-is-n-magma ⦄ ⦄
     ＝ _∙_ ⦃ Cat.Trans-Hom ⦄
   _ = λ _ → Mon._⋆_

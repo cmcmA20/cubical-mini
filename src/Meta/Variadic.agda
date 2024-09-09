@@ -76,35 +76,35 @@ instance
   Refl-Corr² : Refl (λ A B → A → B → 𝒰 ℓ)
   Refl-Corr² .refl = _＝_
 
-  Sym-Corr² : Sym {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ}  (λ A B → A → B → 𝒰 ℓ) (λ A B → A → B → 𝒰 ℓ)
-  Sym-Corr² .sym = flip
+  Dual-Corr² : Dual {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ}  (λ A B → A → B → 𝒰 ℓ) (λ A B → A → B → 𝒰 ℓ)
+  Dual-Corr² ._ᵒᵖ = flip
 
   -- TODO generalize to SCorr
-  Trans-Corr²
-    : Trans {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ} {C = 𝒰 ℓᶜ}
+  Comp-Corr²
+    : Comp {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ} {C = 𝒰 ℓᶜ}
         (λ A B → A → B → 𝒰 ℓ)
         (λ B C → B → C → 𝒰 ℓ′)
         (λ A C → A → C → Type (ℓ ⊔ ℓᵇ ⊔ ℓ′))
-  Trans-Corr² ._∙_ {x = A} {y = B} {z = C} R S a c = Σ[ b ꞉ B ] R a b × S b c
-  {-# OVERLAPPING Trans-Corr² #-}
+  Comp-Corr² ._∙_ {x = A} {y = B} {z = C} R S a c = Σ[ b ꞉ B ] R a b × S b c
+  {-# OVERLAPPING Comp-Corr² #-}
 
-  @0 Assoc-Corr²
-    : Assoc {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ} {C = 𝒰 ℓᶜ} {D = 𝒰 ℓᵈ}
+  @0 GAssoc-Corr²
+    : GAssoc {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ} {C = 𝒰 ℓᶜ} {D = 𝒰 ℓᵈ}
         (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ′) (λ C D → C → D → 𝒰 ℓ″)
         _ _ _
-  Assoc-Corr² .∙-assoc {a = A} {b = B} {c = C} {d = D} R S T = fun-ext λ a → fun-ext λ d → ua $
+  GAssoc-Corr² .∙-assoc {a = A} {b = B} {c = C} {d = D} R S T = fun-ext λ a → fun-ext λ d → ua $
     (Σ[ b ꞉ B ] R a b × (Σ[ c ꞉ C ] S b c × T c d))                ~⟨ Σ-assoc ∙ Σ-swap ⟩
     (Σ[ c ꞉ C ] Σ[ f ꞉ Σ[ b ꞉ B ] R a b ] S (f .fst) c × T c d)    ~⟨ Σ-ap-snd (λ c → Σ-assoc ∙ Σ-ap-fst (Σ-assoc ⁻¹)) ⟩
     (Σ[ c ꞉ C ] (Σ[ b ꞉ B ] R a b × S b c) × T c d)                ∎
 
-  @0 Unit-i-Corr² : Unit-i {A = 𝒰 ℓᵃ} (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ)
-  Unit-i-Corr² .∙-id-i {x = A} {y = B} R = fun-ext λ a → fun-ext λ b → ua
+  @0 GUnit-i-Corr² : GUnit-i {A = 𝒰 ℓᵃ} (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ)
+  GUnit-i-Corr² .∙-id-i {x = A} {y = B} R = fun-ext λ a → fun-ext λ b → ua
     $ Σ-ap-snd (λ _ → ×-swap)
     ∙ Σ-assoc
     ∙ Σ-contract-fst (≃→is-of-hlevel 0 (Σ-ap-snd (λ _ → sym-≃)) (singletonₚ-is-contr (b , refl)))
 
-  @0 Unit-o-Corr² : Unit-o {A = 𝒰 ℓ} {B = 𝒰 ℓ′} (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ)
-  Unit-o-Corr² .∙-id-o {x = A} {y = B} R = fun-ext λ a → fun-ext λ b → ua $
+  @0 GUnit-o-Corr² : GUnit-o {A = 𝒰 ℓ} {B = 𝒰 ℓ′} (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ)
+  GUnit-o-Corr² .∙-id-o {x = A} {y = B} R = fun-ext λ a → fun-ext λ b → ua $
     Σ-assoc ∙ Σ-contract-fst (singletonₚ-is-contr (a , refl))
 
   Whisker-i-Corr-Fun

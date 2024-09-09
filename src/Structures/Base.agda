@@ -73,7 +73,7 @@ instance
   Refl-Total-hom .refl .hom = refl
   Refl-Total-hom .refl .preserves = refl
 
-  Trans-Total-hom
+  Comp-Total-hom
     : ∀{ℓᵃ ℓᵇ ℓᶜ ℓᵃ̇ ℓᵇ̇ ℓᶜ̇ ℓf ℓg ℓfg ℓ ℓ′ ℓ″} {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
       {M : A → Type ℓᵃ̇} {N : B → Type ℓᵇ̇} {K : C → Type ℓᶜ̇}
       {F : A → B → Type ℓf} {G : B → C → Type ℓg}
@@ -82,10 +82,10 @@ instance
       {H  : ∀{x y} → F x y → M x → N y → 𝒰 ℓ}
       {H′ : ∀{x y} → G x y → N x → K y → 𝒰 ℓ′}
       {H″ : ∀{x y} → F∙G x y → M x → K y → 𝒰 ℓ″}
-      ⦃ _ : Trans F G F∙G ⦄ ⦃ _ : ∀ {x y f g} → Trans (H {x} f) (H′ {y} g) (H″ (f ∙ g)) ⦄
-    → Trans {A = M a} {B = N b} {C = K c} (Total-hom F H) (Total-hom G H′) (Total-hom F∙G H″)
-  Trans-Total-hom ._∙_ p q .hom = p .hom ∙ q .hom
-  Trans-Total-hom ._∙_ p q .preserves = p .preserves ∙ q .preserves
+      ⦃ _ : Comp F G F∙G ⦄ ⦃ _ : ∀ {x y f g} → Comp (H {x} f) (H′ {y} g) (H″ (f ∙ g)) ⦄
+    → Comp {A = M a} {B = N b} {C = K c} (Total-hom F H) (Total-hom G H′) (Total-hom F∙G H″)
+  Comp-Total-hom ._∙_ p q .hom = p .hom ∙ q .hom
+  Comp-Total-hom ._∙_ p q .preserves = p .preserves ∙ q .preserves
 
   Funlike-Total-hom
     : ∀{ℓᵃ ℓᵇ ℓᵃ̇ ℓᵇ̇ o ℓ ℓˣ ℓʸ} {A : Type ℓᵃ} {B : Type ℓᵇ}
@@ -288,7 +288,7 @@ property : (S : Type ℓ → Type ℓ₁) → (∀ A → is-prop (S A)) → Stru
 property _ _ .is-hom _ _ _ = ⊤
 
 @0 property-is-univalent : {S-prop : _} → is-univalent {S = S} (property S S-prop)
-property-is-univalent {S-prop} {X = _ , s} {Y = _ , t} _ = sym $ is-contr→equiv-⊤ $
+property-is-univalent {S-prop} {X = _ , s} {Y = _ , t} _ = _ᵒᵖ $ is-contr→equiv-⊤ $
   inhabited-prop-is-contr (is-prop→pathᴾ (λ _ → S-prop _) s t)
                           (pathᴾ-is-of-hlevel-same 1 (S-prop _))
 

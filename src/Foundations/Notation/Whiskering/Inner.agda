@@ -3,7 +3,7 @@ module Foundations.Notation.Whiskering.Inner where
 
 open import Foundations.Prim.Type
 
-open import Foundations.Notation.Transitivity
+open import Foundations.Notation.Composition
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ ℓ : Level
@@ -15,8 +15,8 @@ module _
   {ℓᵃ ℓᵇ ℓᶜ ℓh ℓf ℓg ℓhf ℓhg ℓfg ℓo : Level}
   {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
   (H : A → B → 𝒰 ℓh)
-  (F : B → C → 𝒰 ℓf) (H∙F : A → C → 𝒰 ℓhf) ⦃ _ : Trans H F H∙F ⦄
-  (G : B → C → 𝒰 ℓg) (H∙G : A → C → 𝒰 ℓhg) ⦃ _ : Trans H G H∙G ⦄
+  (F : B → C → 𝒰 ℓf) (H∙F : A → C → 𝒰 ℓhf) ⦃ _ : Comp H F H∙F ⦄
+  (G : B → C → 𝒰 ℓg) (H∙G : A → C → 𝒰 ℓhg) ⦃ _ : Comp H G H∙G ⦄
   (FG : ∀ b c → F b c → G b c → 𝒰 ℓfg)
   (O : (a : A) (c : C) → H∙F a c → H∙G a c → 𝒰 ℓo) where
 

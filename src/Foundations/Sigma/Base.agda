@@ -4,8 +4,8 @@ module Foundations.Sigma.Base where
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 
+open import Foundations.Notation.Closure
 open import Foundations.Notation.Logic
-open import Foundations.Notation.Total
 open import Foundations.Notation.Underlying
 
 open import Agda.Builtin.Sigma public

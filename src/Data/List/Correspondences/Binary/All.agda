@@ -134,7 +134,7 @@ all²-refl {as = a ∷ as} = refl ∷ all²-refl
 -- monotype version
 all²-∙ : {@0 as bs cs : List A}
          {P : A → A → 𝒰 ℓ}
-       → ⦃ Transʰ P ⦄
+       → ⦃ Trans P ⦄
        → All² P as bs → All² P bs cs → All² P as cs
 all²-∙ []         []         = []
 all²-∙ (ab ∷ abs) (bc ∷ bcs) = ab ∙ bc ∷ all²-∙ abs bcs
@@ -143,7 +143,7 @@ instance
   Refl-All² : ⦃ Refl P ⦄ → Refl (λ xs ys → All² P xs ys)
   Refl-All² .refl = all²-refl
 
-  Trans-All² : ⦃ Transʰ P ⦄ → Transʰ (λ xs ys → All² P xs ys)
+  Trans-All² : ⦃ Trans P ⦄ → Trans (λ xs ys → All² P xs ys)
   Trans-All² ._∙_ = all²-∙
 
 all²-is-of-size : {P : A → B → 𝒰 ℓ} {as : List A} {bs : List B}

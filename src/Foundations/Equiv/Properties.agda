@@ -19,8 +19,8 @@ private variable
   x y : A
 
 instance
-  Sym-≃ : Sym (_≃_ {ℓ} {ℓ′}) _≃_
-  Sym-≃ .sym (f , e) = ≅→≃ $ iso (is-equiv→inverse e) f
+  Dual-≃ : Dual (_≃_ {ℓ} {ℓ′}) _≃_
+  Dual-≃ ._ᵒᵖ (f , e) = ≅→≃ $ iso (is-equiv→inverse e) f
     (fun-ext $ is-equiv→unit e)
     (fun-ext $ is-equiv→counit e)
 
@@ -72,17 +72,17 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
   e = is-inv→is-equiv $ invertible (g⁻¹ ∙ f⁻¹) s r
 
 instance
-  Invol-≃ : Invol (_≃_ {ℓ} {ℓ′}) _≃_
-  Invol-≃ .sym-invol _ = equiv-ext refl
+  GInvol-≃ : GInvol (_≃_ {ℓ} {ℓ′}) _≃_
+  GInvol-≃ .invol _ = equiv-ext refl
 
-  Trans-≃ : Trans (_≃_ {ℓ} {ℓ′}) (_≃_ {ℓ' = ℓ″}) _≃_
-  Trans-≃ ._∙_  = _∙ₑ_
+  Comp-≃ : Comp (_≃_ {ℓ} {ℓ′}) (_≃_ {ℓ' = ℓ″}) _≃_
+  Comp-≃ ._∙_  = _∙ₑ_
 
 is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
 is-equiv-comp fe ge = ((_ , fe) ∙ (_ , ge)) .snd
 
 inv-≃ : (A ≃ B) ≃ (B ≃ A)
-inv-≃ = ≅→≃ $ iso _⁻¹ _⁻¹ (fun-ext sym-invol) (fun-ext sym-invol)
+inv-≃ = ≅→≃ $ iso _⁻¹ _⁻¹ (fun-ext invol) (fun-ext invol)
 
 is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
 is-equiv-inv fe = ((_ , fe) ⁻¹) .snd

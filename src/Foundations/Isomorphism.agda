@@ -55,8 +55,8 @@ instance
   Refl-Erased-Iso : Refl (Isoᴱ {ℓ})
   Refl-Erased-Iso .refl = id , is-inv→is-invᴱ id-is-inv
 
-  Sym-Erased-Iso : Sym (Isoᴱ {ℓ} {ℓ′}) Isoᴱ
-  Sym-Erased-Iso .sym (f , g , s , r) = g , f , r , s
+  Dual-Erased-Iso : Dual (Isoᴱ {ℓ} {ℓ′}) Isoᴱ
+  Dual-Erased-Iso ._ᵒᵖ (f , g , s , r) = g , f , r , s
 
 private
   ≅∙-helper
@@ -67,11 +67,11 @@ private
       {F   : A → B → 𝒰 ℓf}  {F⁻    : B → A → 𝒰 ℓf⁻}
       {G   : B → C → 𝒰 ℓg}  {G⁻    : C → B → 𝒰 ℓg⁻}
       {F∙G : A → C → 𝒰 ℓfg} {G⁻∙F⁻ : C → A → 𝒰 ℓg⁻f⁻}
-      ⦃ _ : Trans F⁻ F  B∙ ⦄ ⦃ _ : Trans G⁻ G  C∙ ⦄
-      ⦃ _ : Trans F G  F∙G ⦄ ⦃ _ : Trans G⁻ F⁻ G⁻∙F⁻ ⦄ ⦃ _ : Trans G⁻∙F⁻ F∙G  C∙ ⦄
-      ⦃ _ : Trans B∙ G  G ⦄ ⦃ _ : Trans F⁻ F∙G  G ⦄
-      ⦃ _ : Assoc F⁻ F  G  B∙  F∙G  G ⦄ ⦃ _ : Assoc G⁻ F⁻ F∙G  G⁻∙F⁻ G  C∙  ⦄
-      ⦃ _ : Unit-o B∙ G  ⦄
+      ⦃ _ : Comp F⁻ F  B∙ ⦄ ⦃ _ : Comp G⁻ G  C∙ ⦄
+      ⦃ _ : Comp F G  F∙G ⦄ ⦃ _ : Comp G⁻ F⁻ G⁻∙F⁻ ⦄ ⦃ _ : Comp G⁻∙F⁻ F∙G  C∙ ⦄
+      ⦃ _ : Comp B∙ G  G ⦄ ⦃ _ : Comp F⁻ F∙G  G ⦄
+      ⦃ _ : GAssoc F⁻ F  G  B∙  F∙G  G ⦄ ⦃ _ : GAssoc G⁻ F⁻ F∙G  G⁻∙F⁻ G  C∙  ⦄
+      ⦃ _ : GUnit-o B∙ G  ⦄
       {a : A} {b : B} {c : C}
       (x : G⁻ c b) (y : F⁻ b a) (z : F a b) (w : G b c)
       (p : y ∙ z ＝ refl) (q : x ∙ w ＝ refl)
@@ -85,30 +85,30 @@ private
       _                  ∎
 
 instance
-  Trans-≅
+  Comp-≅
     : ∀ {ℓᵃ ℓᵇ ℓᶜ ℓᵃ̇ ℓᵇ̇ ℓᶜ̇ ℓf ℓf⁻ ℓg ℓg⁻ ℓfg ℓg⁻f⁻}
       {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
       {F : A → B → 𝒰 ℓf}  {F⁻ : B → A → 𝒰 ℓf⁻}
       {G : B → C → 𝒰 ℓg} {G⁻ : C → B → 𝒰 ℓg⁻}
       {F∙G : A → C → 𝒰 ℓfg} {G⁻∙F⁻ : C → A → 𝒰 ℓg⁻f⁻}
       {A∙ : A → A → 𝒰 ℓᵃ̇} {B∙ : B → B → 𝒰 ℓᵇ̇} {C∙ : C → C → 𝒰 ℓᶜ̇}
-      ⦃ _ : Trans F F⁻ A∙ ⦄ ⦃ _ : Trans F⁻ F  B∙ ⦄
-      ⦃ _ : Trans G G⁻ B∙ ⦄ ⦃ _ : Trans G⁻ G  C∙ ⦄
-      ⦃ _ : Trans F∙G G⁻∙F⁻ A∙ ⦄ ⦃ _ : Trans G⁻∙F⁻ F∙G  C∙ ⦄
-      ⦃ _ : Trans F G  F∙G ⦄ ⦃ _ : Trans G⁻ F⁻ G⁻∙F⁻ ⦄
-      ⦃ _ : Trans B∙ G  G ⦄ ⦃ _ : Trans F⁻ F∙G  G ⦄
-      ⦃ _ : Assoc F⁻ F  G  B∙  F∙G  G ⦄ ⦃ _ : Assoc G⁻ F⁻ F∙G  G⁻∙F⁻ G  C∙  ⦄
-      ⦃ _ : Trans G G⁻∙F⁻ F⁻ ⦄ ⦃ _ : Trans B∙ F⁻ F⁻ ⦄
-      ⦃ _ : Assoc F  G  G⁻∙F⁻ F∙G  F⁻ A∙ ⦄ ⦃ _ : Assoc G  G⁻ F⁻ B∙  G⁻∙F⁻ F⁻ ⦄
+      ⦃ _ : Comp F F⁻ A∙ ⦄ ⦃ _ : Comp F⁻ F  B∙ ⦄
+      ⦃ _ : Comp G G⁻ B∙ ⦄ ⦃ _ : Comp G⁻ G  C∙ ⦄
+      ⦃ _ : Comp F∙G G⁻∙F⁻ A∙ ⦄ ⦃ _ : Comp G⁻∙F⁻ F∙G  C∙ ⦄
+      ⦃ _ : Comp F G  F∙G ⦄ ⦃ _ : Comp G⁻ F⁻ G⁻∙F⁻ ⦄
+      ⦃ _ : Comp B∙ G  G ⦄ ⦃ _ : Comp F⁻ F∙G  G ⦄
+      ⦃ _ : GAssoc F⁻ F  G  B∙  F∙G  G ⦄ ⦃ _ : GAssoc G⁻ F⁻ F∙G  G⁻∙F⁻ G  C∙  ⦄
+      ⦃ _ : Comp G G⁻∙F⁻ F⁻ ⦄ ⦃ _ : Comp B∙ F⁻ F⁻ ⦄
+      ⦃ _ : GAssoc F  G  G⁻∙F⁻ F∙G  F⁻ A∙ ⦄ ⦃ _ : GAssoc G  G⁻ F⁻ B∙  G⁻∙F⁻ F⁻ ⦄
       ⦃ _ : Refl A∙ ⦄ ⦃ _ : Refl B∙ ⦄ ⦃ _ : Refl C∙ ⦄
-      ⦃ _ : Unit-o B∙ G  ⦄ ⦃ _ : Unit-o B∙ F⁻ ⦄
-    → Trans (Iso F F⁻) (Iso G G⁻) (Iso F∙G G⁻∙F⁻)
-  Trans-≅ ._∙_ i j = iso (i .to ∙ j .to) (j .from ∙ i .from)
+      ⦃ _ : GUnit-o B∙ G  ⦄ ⦃ _ : GUnit-o B∙ F⁻ ⦄
+    → Comp (Iso F F⁻) (Iso G G⁻) (Iso F∙G G⁻∙F⁻)
+  Comp-≅ ._∙_ i j = iso (i .to ∙ j .to) (j .from ∙ i .from)
     (≅∙-helper (j .from) (i .from) (i .to) (j .to) (i .inv-o) (j .inv-o))
     (≅∙-helper (i .to) (j .to) (j .from) (i .from) (j .inv-i) (i .inv-i))
 
-  Trans-Erased-Iso : Trans (Isoᴱ {ℓ} {ℓ′}) (Isoᴱ {ℓ′ = ℓ″}) Isoᴱ
-  Trans-Erased-Iso ._∙_ (f , g , erase s , erase r) (f′ , g′ , erase s′ , erase r′)
+  Comp-Erased-Iso : Comp (Isoᴱ {ℓ} {ℓ′}) (Isoᴱ {ℓ′ = ℓ″}) Isoᴱ
+  Comp-Erased-Iso ._∙_ (f , g , erase s , erase r) (f′ , g′ , erase s′ , erase r′)
     = f ∙ f′  , g′ ∙ g
     , erase (fun-ext λ x → f′ # (s  # g′ x) ∙ s′ # x)
     , erase (fun-ext λ x → g  # (r′ # f  x) ∙ r  # x)

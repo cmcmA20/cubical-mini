@@ -44,16 +44,16 @@ instance
   Refl-Surj :  Refl (_↠_ {ℓ})
   Refl-Surj .refl = refl , λ a → ∣ a , refl ∣₁
 
-  Trans-Split-surj : Trans (_↠!_ {ℓ} {ℓ′}) (_↠!_ {ℓ′ = ℓ″}) _↠!_
-  Trans-Split-surj ._∙_ (f , _) (g , _) .fst = f ∙ g
-  Trans-Split-surj ._∙_ (f , φ) (g , ψ) .snd c =
+  Comp-Split-surj : Comp (_↠!_ {ℓ} {ℓ′}) (_↠!_ {ℓ′ = ℓ″}) _↠!_
+  Comp-Split-surj ._∙_ (f , _) (g , _) .fst = f ∙ g
+  Comp-Split-surj ._∙_ (f , φ) (g , ψ) .snd c =
     let u  , v  = ψ c
         u′ , v′ = φ u
     in u′ , ap g v′ ∙ v
 
-  Trans-Surj : Trans (_↠_ {ℓ} {ℓ′}) (_↠_ {ℓ′ = ℓ″}) _↠_
-  Trans-Surj ._∙_ (f , _) (g , _) .fst = f ∙ g
-  Trans-Surj ._∙_ (f , φ) (g , ψ) .snd c = do
+  Comp-Surj : Comp (_↠_ {ℓ} {ℓ′}) (_↠_ {ℓ′ = ℓ″}) _↠_
+  Comp-Surj ._∙_ (f , _) (g , _) .fst = f ∙ g
+  Comp-Surj ._∙_ (f , φ) (g , ψ) .snd c = do
     u  , v  ← ψ c
     u′ , v′ ← φ u
     pure (u′ , ap g v′ ∙ v)

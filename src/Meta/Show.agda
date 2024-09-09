@@ -22,11 +22,11 @@ instance
   From-string-ShowS .From-string.Constraint _ = ⊤
   From-string-ShowS .from-string s = showS (s <>_)
 
-  Reflᵘ-ShowS : Reflᵘ ShowS
-  Reflᵘ-ShowS .mempty = showS id
+  Pointed-ShowS : Pointed ShowS
+  Pointed-ShowS .mempty = showS id
 
-  Transᵘ-ShowS : Transᵘ ShowS
-  Transᵘ-ShowS ._<>_ (showS k₁) (showS k₂) = showS (k₁ ∘ˢ k₂)
+  Has-binary-op-ShowS : Has-binary-op ShowS
+  Has-binary-op-ShowS ._<>_ (showS k₁) (showS k₂) = showS (k₁ ∘ˢ k₂)
 
 
 record Show {ℓ} (T : Type ℓ) : Type ℓ where

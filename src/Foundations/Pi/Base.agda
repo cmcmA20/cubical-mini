@@ -5,10 +5,10 @@ open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 
 open import Foundations.Notation.Associativity
+open import Foundations.Notation.Closure
+open import Foundations.Notation.Composition
 open import Foundations.Notation.Logic
 open import Foundations.Notation.Reflexivity
-open import Foundations.Notation.Total
-open import Foundations.Notation.Transitivity
 open import Foundations.Notation.Underlying
 open import Foundations.Notation.Unital.Inner
 open import Foundations.Notation.Unital.Outer
@@ -37,29 +37,29 @@ instance
     → ∀ᴱ-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
   ∀ᴱ-Type .∀ᴱ-notation.∀ᴱ′ A B = {@0 x : ⌞ A ⌟} → B x
 
-  Total-Π-Variadic
+  Closure-Π-Variadic
     : {A : Type ℓ} {X : Type ℓ′}
-      ⦃ tp : Total-Π A ⦄
-    → Total-Π (X → A)
-  Total-Π-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-Π = ℓ′ ⊔ tp .ℓ-total-Π
-  Total-Π-Variadic {X} .Π[_] f = (x : X) → Π[ f x ]
-  {-# OVERLAPPING Total-Π-Variadic #-}
+      ⦃ tp : Closure-Π A ⦄
+    → Closure-Π (X → A)
+  Closure-Π-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-Π = ℓ′ ⊔ tp .ℓ-total-Π
+  Closure-Π-Variadic {X} .Π[_] f = (x : X) → Π[ f x ]
+  {-# OVERLAPPING Closure-Π-Variadic #-}
 
-  Total-∀-Variadic
+  Closure-∀-Variadic
     : {A : Type ℓ} {X : Type ℓ′}
-      ⦃ tp : Total-∀ A ⦄
-    → Total-∀ (X → A)
-  Total-∀-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-∀ = ℓ′ ⊔ tp .ℓ-total-∀
-  Total-∀-Variadic {X} .∀[_] f = {x : X} → ∀[ f x ]
-  {-# OVERLAPPING Total-∀-Variadic #-}
+      ⦃ tp : Closure-∀ A ⦄
+    → Closure-∀ (X → A)
+  Closure-∀-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-∀ = ℓ′ ⊔ tp .ℓ-total-∀
+  Closure-∀-Variadic {X} .∀[_] f = {x : X} → ∀[ f x ]
+  {-# OVERLAPPING Closure-∀-Variadic #-}
 
-  Total-∀ᴱ-Variadic
+  Closure-∀ᴱ-Variadic
     : {A : Type ℓ} {X : Type ℓ′}
-      ⦃ tp : Total-∀ᴱ A ⦄
-    → Total-∀ᴱ (X → A)
-  Total-∀ᴱ-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-∀ᴱ = ℓ′ ⊔ tp .ℓ-total-∀ᴱ
-  Total-∀ᴱ-Variadic {X} .∀ᴱ[_] f = {@0 x : X} → ∀ᴱ[ f x ]
-  {-# OVERLAPPING Total-∀ᴱ-Variadic #-}
+      ⦃ tp : Closure-∀ᴱ A ⦄
+    → Closure-∀ᴱ (X → A)
+  Closure-∀ᴱ-Variadic {ℓ′} ⦃ tp ⦄ .ℓ-total-∀ᴱ = ℓ′ ⊔ tp .ℓ-total-∀ᴱ
+  Closure-∀ᴱ-Variadic {X} .∀ᴱ[_] f = {@0 x : X} → ∀ᴱ[ f x ]
+  {-# OVERLAPPING Closure-∀ᴱ-Variadic #-}
 
 
 -- non-dependent stuff
@@ -98,17 +98,17 @@ instance
   Refl-Fun : Refl (Fun {ℓ})
   Refl-Fun .refl = id
 
-  Trans-Fun : Trans (Fun {ℓᵃ} {ℓᵇ}) (Fun {ℓᵇ = ℓᶜ}) Fun
-  Trans-Fun ._∙_ f g x = g (f x)
+  Comp-Fun : Comp (Fun {ℓᵃ} {ℓᵇ}) (Fun {ℓᵇ = ℓᶜ}) Fun
+  Comp-Fun ._∙_ f g x = g (f x)
 
-  Assoc-Fun : Assoc (Fun {ℓᵃ} {ℓᵇ}) (Fun {ℓᵇ = ℓᶜ}) (Fun {ℓᵇ = ℓᵈ}) Fun Fun Fun
-  Assoc-Fun .∙-assoc f g h _ a = h (g (f a))
+  GAssoc-Fun : GAssoc (Fun {ℓᵃ} {ℓᵇ}) (Fun {ℓᵇ = ℓᶜ}) (Fun {ℓᵇ = ℓᵈ}) Fun Fun Fun
+  GAssoc-Fun .∙-assoc f g h _ a = h (g (f a))
 
-  Unit-i-Fun : Unit-i (Fun {ℓᵃ} {ℓᵇ}) Fun
-  Unit-i-Fun .∙-id-i f _ a = f a
+  GUnit-i-Fun : GUnit-i (Fun {ℓᵃ} {ℓᵇ}) Fun
+  GUnit-i-Fun .∙-id-i f _ a = f a
 
-  Unit-o-Fun : Unit-o Fun (Fun {ℓᵃ} {ℓᵇ})
-  Unit-o-Fun .∙-id-o f _ a = f a
+  GUnit-o-Fun : GUnit-o Fun (Fun {ℓᵃ} {ℓᵇ})
+  GUnit-o-Fun .∙-id-o f _ a = f a
 
 
 -- dependent stuff

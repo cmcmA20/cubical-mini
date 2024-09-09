@@ -23,12 +23,12 @@ record is-unital-magma {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 
   field
     id   : A
-    id-l : Unitality-lᵘ A id _⋆_
-    id-r : Unitality-rᵘ A id _⋆_
+    id-l : Π[ Unitality-l A id _⋆_ ]
+    id-r : Π[ Unitality-r A id _⋆_ ]
 
   instance
-    Reflᵘ-is-unital-magma : Reflᵘ A
-    Reflᵘ-is-unital-magma .mempty = id
+    Pointed-is-unital-magma : Pointed A
+    Pointed-is-unital-magma .mempty = id
 
 unquoteDecl is-unital-magma-iso = declare-record-iso is-unital-magma-iso (quote is-unital-magma)
 
@@ -109,12 +109,12 @@ instance
   Refl-UMagma-hom .refl .UMagma-hom.pres-⋆ _ _ = refl
   Refl-UMagma-hom .refl .UMagma-hom.pres-id = refl
 
-  Trans-UMagma-hom
+  Comp-UMagma-hom
     : {f : A → B} {g : B → C}
-    → Trans (UMagma-hom f) (UMagma-hom g) (UMagma-hom (f ∙ g))
-  Trans-UMagma-hom {f} {g} ._∙_ p q .UMagma-hom.pres-⋆ a a′ =
+    → Comp (UMagma-hom f) (UMagma-hom g) (UMagma-hom (f ∙ g))
+  Comp-UMagma-hom {f} {g} ._∙_ p q .UMagma-hom.pres-⋆ a a′ =
     ap g (p .UMagma-hom.pres-⋆ a a′) ∙ q .UMagma-hom.pres-⋆ (f a) (f a′)
-  Trans-UMagma-hom {f} {g} ._∙_ p q .UMagma-hom.pres-id =
+  Comp-UMagma-hom {f} {g} ._∙_ p q .UMagma-hom.pres-id =
     ap g (p .UMagma-hom.pres-id) ∙ q .UMagma-hom.pres-id
 
 unital-magma-on↪magma-on : UMagma-on A ↪ₜ Magma-on A
@@ -130,8 +130,8 @@ record make-unital-magma {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     unital-magma-is-set : is-set X
     id  : X
     _⋆_ : X → X → X
-    id-l  : Unitality-lᵘ X id _⋆_
-    id-r  : Unitality-rᵘ X id _⋆_
+    id-l  : Π[ Unitality-l X id _⋆_ ]
+    id-r  : Π[ Unitality-r X id _⋆_ ]
 
   to-is-unital-magma : is-unital-magma _⋆_
   to-is-unital-magma .is-unital-magma.has-magma .is-n-magma.has-is-of-hlevel =

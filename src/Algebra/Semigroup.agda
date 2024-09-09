@@ -17,9 +17,13 @@ record is-semigroup {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   no-eta-equality
   field
     has-magma : is-magma _⋆_
-    assoc     : Associativityᵘ A _⋆_
+    assoc     : Π[ Associativity A _⋆_ ]
 
   open is-n-magma has-magma public
+
+  instance
+    Assoc-semigroup : Assoc A
+    Assoc-semigroup .<>-assoc = assoc
 
 unquoteDecl is-semigroup-iso = declare-record-iso is-semigroup-iso (quote is-semigroup)
 
@@ -65,7 +69,7 @@ record make-semigroup {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   field
     semigroup-is-set : is-set X
     _⋆_   : X → X → X
-    assoc : Associativityᵘ X _⋆_
+    assoc : Π[ Associativity X _⋆_ ]
 
   to-is-semigroup : is-semigroup _⋆_
   to-is-semigroup .is-semigroup.has-magma .is-n-magma.has-is-of-hlevel = semigroup-is-set

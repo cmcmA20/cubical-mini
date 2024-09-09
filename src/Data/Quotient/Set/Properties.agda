@@ -44,6 +44,6 @@ equivalence→effective₁ {R} R-eq = effective ∥R∥₁-c where
   open Equivalence R-eq
   ∥R∥₁-c : is-congruence λ x y → ∥ R x y ∥₁
   ∥R∥₁-c .is-congruence.equivalence .reflexive .refl = ∣ refl ∣₁
-  ∥R∥₁-c .is-congruence.equivalence .symmetric .sym = map sym
+  ∥R∥₁-c .is-congruence.equivalence .symmetric ._ᵒᵖ = map sym
   ∥R∥₁-c .is-congruence.equivalence .transitive ._∙_ = elim! λ p q → ∣ p ∙ q ∣₁
   ∥R∥₁-c .is-congruence.has-prop = hlevel 1

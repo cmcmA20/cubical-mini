@@ -51,11 +51,11 @@ instance
   Refl-n-Fun .refl x = x
   {-# INCOHERENT Refl-n-Fun #-}
 
-  Trans-n-Fun
-    : Trans {A = n-Type ℓ n} {B = n-Type ℓ′ n} {C = n-Type ℓ″ n}
+  Comp-n-Fun
+    : Comp {A = n-Type ℓ n} {B = n-Type ℓ′ n} {C = n-Type ℓ″ n}
         (λ X Y → Fun ⌞ X ⌟ ⌞ Y ⌟) (λ X Y → Fun ⌞ X ⌟ ⌞ Y ⌟) (λ X Y → Fun ⌞ X ⌟ ⌞ Y ⌟)
-  Trans-n-Fun ._∙_ f g x = g (f x)
-  {-# INCOHERENT Trans-n-Fun #-}
+  Comp-n-Fun ._∙_ f g x = g (f x)
+  {-# INCOHERENT Comp-n-Fun #-}
 
   ×-n-Type : ×-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
   ×-n-Type ._×_ (el A p) (el B q) = el (A × B) (×-is-of-hlevel _ p q)

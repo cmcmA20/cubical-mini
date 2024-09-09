@@ -10,8 +10,8 @@ private variable
   A : 𝒰 ℓ
 
 instance
-  Reflᵘ-List : Reflᵘ (List A)
-  Reflᵘ-List .mempty = []
+  Pointed-List : Pointed (List A)
+  Pointed-List .mempty = []
 
-  Transᵘ-List : Transᵘ (List A)
-  Transᵘ-List ._<>_ = _++_
+  Has-binary-op-List : Has-binary-op (List A)
+  Has-binary-op-List ._<>_ = _++_

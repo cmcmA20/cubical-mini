@@ -12,24 +12,24 @@ opaque
   unfolding _∙ₚ_
 
   instance
-    Unit-o-Path : {A : Type ℓ} → Unit-oʰ (Path A)
-    Unit-o-Path .∙-id-o p = ∙-filler-r refl p ⁻¹
+    HUnit-o-Path : {A : Type ℓ} → HUnit-o (Path A)
+    HUnit-o-Path .∙-id-o p = ∙-filler-r refl p ⁻¹
 
-    Unit-i-Path : {A : Type ℓ} → Unit-iʰ (Path A)
-    Unit-i-Path .∙-id-i p = ∙-filler-l p refl ⁻¹
+    HUnit-i-Path : {A : Type ℓ} → HUnit-i (Path A)
+    HUnit-i-Path .∙-id-i p = ∙-filler-l p refl ⁻¹
 
-    Assoc-Path : {A : Type ℓ} → Assocʰ (Path A)
-    Assoc-Path .∙-assoc p q r i = ∙-filler-l p q i ∙ ∙-filler-r q r (~ i)
+    HAssoc-Path : {A : Type ℓ} → HAssoc (Path A)
+    HAssoc-Path .∙-assoc p q r i = ∙-filler-l p q i ∙ ∙-filler-r q r (~ i)
 
-    Inv-o-Path : {A : Type ℓ} → Inv-oʰ (Path A)
-    Inv-o-Path .∙-inv-o {x} p i j = hcomp (∂ j ∨ i) λ where
+    HInv-o-Path : {A : Type ℓ} → HInv-o (Path A)
+    HInv-o-Path .∙-inv-o {x} p i j = hcomp (∂ j ∨ i) λ where
       k (j = i0) → p (k ∨ i)
       k (j = i1) → p (k ∨ i)
       k (i = i1) → x
       k (k = i0) → p i
 
-    Inv-i-Path : {A : Type ℓ} → Inv-iʰ (Path A)
-    Inv-i-Path .∙-inv-i p = ∙-inv-o (sym p)
+    HInv-i-Path : {A : Type ℓ} → HInv-i (Path A)
+    HInv-i-Path .∙-inv-i p = ∙-inv-o (sym p)
 
   ∙-cancel-l : {A : Type ℓ} {x y z : A}
                (p : x ＝ y) (q : y ＝ z)

@@ -194,15 +194,17 @@ instance
   Refl-Pathᴾ : Refl λ x y → ＜ x ／ (λ _ → A) ＼ y ＞
   Refl-Pathᴾ .refl {x} _ = x
 
-  Sym-Pathᴾ
+  Dual-Pathᴾ
     : {A : I → Type ℓ}
-    → Sym (λ x y → ＜ x ／ A ＼ y ＞) (λ x y → ＜ x ／ (λ i → A (~ i)) ＼ y ＞)
-  Sym-Pathᴾ .sym p i = p (~ i)
+    → Dual (λ x y → ＜ x ／ A ＼ y ＞) (λ x y → ＜ x ／ (λ i → A (~ i)) ＼ y ＞)
+  Dual-Pathᴾ ._ᵒᵖ p i = p (~ i)
 
-  Invol-Path : Involʰ (Path A)
-  Invol-Path .sym-invol _ = refl
+  GInvol-Pathᴾ
+    : {A : I → Type ℓ}
+    → GInvol (λ x y → ＜ x ／ A ＼ y ＞) (λ x y → ＜ x ／ (λ i → A (~ i)) ＼ y ＞)
+  GInvol-Pathᴾ .invol p _ = p
 
-  Trans-Path : Transʰ (Path A)
+  Trans-Path : Trans (Path A)
   Trans-Path ._∙_ = _∙ₚ_
 
 
@@ -339,7 +341,7 @@ infixr 2 _~⟨⟩_ _=⟨⟩_
 _~⟨⟩_
   : {A : Type ℓᵃ} {B : Type ℓᵇ}
     {_~I_ : A → B → 𝒰 ℓ} {_~O_ : B → A → 𝒰 ℓ′}
-    ⦃ sy : Sym _~I_ _~O_ ⦄ -- for inference TODO improve
+    ⦃ sy : Dual _~I_ _~O_ ⦄ -- for inference TODO improve
   → (x : B) {y : A} → x ~O y → x ~O y
 _~⟨⟩_ _ xy = xy
 {-# INLINE _~⟨⟩_ #-}
@@ -367,7 +369,7 @@ infixr 2 _~⟨_⟩_ _=⟨_⟩_
 _~⟨_⟩_
   : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
     {_~L_ : A → B → 𝒰 ℓ} {_~R_ : B → C → 𝒰 ℓ′} {_~O_ : A → C → 𝒰 ℓ″}
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
+    ⦃ tra : Comp _~L_ _~R_ _~O_ ⦄
   → (x : A) {y : B} {z : C} → x ~L y → y ~R z → x ~O z
 _ ~⟨ x~y ⟩ y~z = x~y ∙ y~z
 {-# INLINE _~⟨_⟩_ #-}
@@ -376,7 +378,7 @@ _=⟨_⟩_
   : {A : Type ℓᵃ} {B : Type ℓᵇ}
     {_~L_ : A → A → 𝒰 ℓ} {_~R_ : A → B → 𝒰 ℓ′} {_~O_ : A → B → 𝒰 ℓ″}
     ⦃ rfl : Refl _~L_ ⦄
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
+    ⦃ tra : Comp _~L_ _~R_ _~O_ ⦄
   → (x : A) {y : A} {z : B} → x ＝ y → y ~R z → x ~O z
 _=⟨_⟩_ {_~L_} x {y} x=y = x ~⟨ =→~ x=y ⟩_
 {-# INLINE _=⟨_⟩_ #-}
@@ -385,7 +387,7 @@ infixr 2 _~⟨_⟨_ _=⟨_⟨_
 _~⟨_⟨_
   : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
     {_~L_ : A → B → 𝒰 ℓ} {_~L′_ : B → A → 𝒰 ℓ′} {_~R_ : B → C → 𝒰 ℓ″} {_~O_ : A → C → 𝒰 ℓ‴}
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄ ⦃ sy : Sym _~L′_ _~L_ ⦄
+    ⦃ tra : Comp _~L_ _~R_ _~O_ ⦄ ⦃ sy : Dual _~L′_ _~L_ ⦄
   → (x : A) {y : B} {z : C} → y ~L′ x → y ~R z → x ~O z
 x ~⟨ p ⟨ q = p ⁻¹ ∙ q
 {-# INLINE _~⟨_⟨_ #-}
@@ -394,7 +396,7 @@ _=⟨_⟨_
   : {A : Type ℓᵃ} {B : Type ℓᵇ}
     {_~L_ : A → A → 𝒰 ℓ} {_~R_ : A → B → 𝒰 ℓ′} {_~O_ : A → B → 𝒰 ℓ″}
     ⦃ rfl : Refl _~L_ ⦄
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
+    ⦃ tra : Comp _~L_ _~R_ _~O_ ⦄
   → (x : A) {y : A} {z : B} → y ＝ x → y ~R z → x ~O z
 _=⟨_⟨_ {_~L_} x {y} y=x = x ~⟨ =→~⁻ y=x ⟩_
 {-# INLINE _=⟨_⟨_ #-}
@@ -403,7 +405,7 @@ infixr 2 ~⟨⟩-syntax =⟨⟩-syntax
 ~⟨⟩-syntax
   : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
     {_~L_ : A → B → 𝒰 ℓ} {_~R_ : B → C → 𝒰 ℓ′} {_~O_ : A → C → 𝒰 ℓ″}
-    ⦃ tra : Trans _~L_ _~R_ _~O_ ⦄
+    ⦃ tra : Comp _~L_ _~R_ _~O_ ⦄
   → (x : A) {y : B} {z : C} → x ~L y → y ~R z → x ~O z
 ~⟨⟩-syntax = _~⟨_⟩_
 syntax ~⟨⟩-syntax x (λ i → B) y = x ~[ i ]⟨ B ⟩ y
@@ -591,10 +593,10 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
   unfolding to-pathᴾ
   to-pathᴾ⁻ : x ＝ coe1→0 A y → ＜ x ／ A ＼ y ＞
-  to-pathᴾ⁻ p = sym $ to-pathᴾ {A = λ j → A (~ j)} (λ i → p (~ i))
+  to-pathᴾ⁻ p = to-pathᴾ {A = λ j → A (~ j)} (λ i → p (~ i)) ⁻¹
 
   from-pathᴾ⁻ : ＜ x ／ A ＼ y ＞ → x ＝ coe1→0 A y
-  from-pathᴾ⁻ p = symₚ $ from-pathᴾ (λ i → p (~ i))
+  from-pathᴾ⁻ p = from-pathᴾ (λ i → p (~ i)) ⁻¹
 
   to-from-pathᴾ : (p : ＜ x ／ A ＼ y ＞) → to-pathᴾ (from-pathᴾ p) ＝ p
   to-from-pathᴾ p i j = hcomp (i ∨ ∂ j) λ where

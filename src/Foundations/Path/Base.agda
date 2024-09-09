@@ -19,7 +19,7 @@ opaque
 instance
   Whisker-i-Path
     : {ℓh ℓf ℓhf : Level} {H : A → B → 𝒰 ℓh}
-      {F : B → C → 𝒰 ℓf} {H∙F : A → C → 𝒰 ℓhf} ⦃ _ : Trans H F H∙F ⦄
+      {F : B → C → 𝒰 ℓf} {H∙F : A → C → 𝒰 ℓhf} ⦃ _ : Comp H F H∙F ⦄
     → Whisker-i H F H∙F F H∙F
       (λ _ _ → _＝_) (λ _ _ → _＝_)
   Whisker-i-Path ._◁_ r h = ap (r ∙_) h
@@ -27,7 +27,7 @@ instance
 
   Whisker-o-Path
     : {ℓk ℓf ℓfk : Level} {K : B → C → 𝒰 ℓk}
-      {F : A → B → 𝒰 ℓf} {F∙K : A → C → 𝒰 ℓfk} ⦃ _ : Trans F K F∙K ⦄
+      {F : A → B → 𝒰 ℓf} {F∙K : A → C → 𝒰 ℓfk} ⦃ _ : Comp F K F∙K ⦄
     → Whisker-o K F F∙K F F∙K
       (λ _ _ → _＝_) (λ _ _ → _＝_)
   Whisker-o-Path ._▷_ h r = ap (_∙ r) h

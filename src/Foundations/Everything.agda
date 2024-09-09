@@ -11,12 +11,12 @@ open import Foundations.Prim.Equiv
 open import Foundations.Base
 open import Foundations.Notation
 open import Foundations.Notation.Brackets
+open import Foundations.Notation.Composition
+open import Foundations.Notation.Duality
 open import Foundations.Notation.Equivalence
 open import Foundations.Notation.Logic
 open import Foundations.Notation.Membership
 open import Foundations.Notation.Reflexivity
-open import Foundations.Notation.Symmetry
-open import Foundations.Notation.Transitivity
 open import Foundations.Notation.Underlying
 open import Foundations.Cubes
 open import Foundations.Equiv

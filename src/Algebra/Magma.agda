@@ -19,8 +19,8 @@ record ∞-Magma-on {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   infixr 20 _⋆_
 
   instance
-    Transᵘ-∞-Magma-on : Transᵘ X
-    Transᵘ-∞-Magma-on ._<>_ = _⋆_
+    Has-binary-op-∞-Magma-on : Has-binary-op X
+    Has-binary-op-∞-Magma-on ._<>_ = _⋆_
 
 record ∞-magma-hom
   {ℓ ℓ′} {A : 𝒰 ℓ} {B : 𝒰 ℓ′} (e : A → B)
@@ -45,10 +45,10 @@ instance
   Refl-∞-magma-hom : Refl {A = ∞-Magma-on A} (∞-magma-hom refl)
   Refl-∞-magma-hom .refl .∞-magma-hom.pres-⋆ _ _ = refl
 
-  Trans-∞-magma-hom
+  Comp-∞-magma-hom
     : {f : A → B} {g : B → C}
-    → Trans (∞-magma-hom f) (∞-magma-hom g) (∞-magma-hom (f ∙ g))
-  Trans-∞-magma-hom {f} {g} ._∙_ p q .∞-magma-hom.pres-⋆ a a′ =
+    → Comp (∞-magma-hom f) (∞-magma-hom g) (∞-magma-hom (f ∙ g))
+  Comp-∞-magma-hom {f} {g} ._∙_ p q .∞-magma-hom.pres-⋆ a a′ =
     ap g (p .∞-magma-hom.pres-⋆ a a′) ∙ q .∞-magma-hom.pres-⋆ (f a) (f a′)
 
 
@@ -62,8 +62,8 @@ record is-n-magma (n : HLevel) {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ
     H-Level-magma-carrier : H-Level n A
     H-Level-magma-carrier .H-Level.has-of-hlevel = has-is-of-hlevel
 
-    Transᵘ-is-n-magma : Transᵘ A
-    Transᵘ-is-n-magma ._<>_ = _⋆_
+    Has-binary-op-is-n-magma : Has-binary-op A
+    Has-binary-op-is-n-magma ._<>_ = _⋆_
 
 unquoteDecl is-n-magma-iso = declare-record-iso is-n-magma-iso (quote is-n-magma)
 
@@ -114,10 +114,10 @@ instance
   Refl-n-Magma-hom : Refl {A = n-Magma-on n A} (n-Magma-hom n refl)
   Refl-n-Magma-hom .refl .n-Magma-hom.pres-⋆ _ _ = refl
 
-  Trans-n-Magma-hom
+  Comp-n-Magma-hom
     : {f : A → B} {g : B → C}
-    → Trans (n-Magma-hom n f) (n-Magma-hom n g) (n-Magma-hom n (f ∙ g))
-  Trans-n-Magma-hom {f} {g} ._∙_ p q .n-Magma-hom.pres-⋆ a a′ =
+    → Comp (n-Magma-hom n f) (n-Magma-hom n g) (n-Magma-hom n (f ∙ g))
+  Comp-n-Magma-hom {f} {g} ._∙_ p q .n-Magma-hom.pres-⋆ a a′ =
     ap g (p .n-Magma-hom.pres-⋆ a a′) ∙ q .n-Magma-hom.pres-⋆ (f a) (f a′)
 
 

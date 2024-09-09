@@ -34,17 +34,17 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     Refl-≤ : Refl _≤_
     Refl-≤ .refl = ≤-refl
 
-    Trans-≤ : Transʰ _≤_
+    Trans-≤ : Trans _≤_
     Trans-≤ ._∙_ = ≤-trans
 
-    Assoc-≤ : Assocʰ _≤_
-    Assoc-≤ .∙-assoc _ _ _ = prop!
+    HAssoc-≤ : HAssoc _≤_
+    HAssoc-≤ .∙-assoc _ _ _ = prop!
 
-    Unit-o-≤ : Unit-oʰ _≤_
-    Unit-o-≤ .∙-id-o _ = prop!
+    HUnit-o-≤ : HUnit-o _≤_
+    HUnit-o-≤ .∙-id-o _ = prop!
 
-    Unit-i-≤ : Unit-iʰ _≤_
-    Unit-i-≤ .∙-id-i _ = prop!
+    HUnit-i-≤ : HUnit-i _≤_
+    HUnit-i-≤ .∙-id-i _ = prop!
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
     ⇒-Hom ._⇒_ = _≤_
@@ -85,21 +85,21 @@ instance
   hlevel-proj-poset-hom .get-argument (_ ∷ _ ∷ x v∷ _) = pure x
   hlevel-proj-poset-hom .get-argument _ = type-error []
 
-  Op-Poset : Symᵘ (Poset o ℓ)
-  Op-Poset .minv P .Poset.Ob = P .Poset.Ob
-  Op-Poset .minv P .Poset._≤_ = flip (P .Poset._≤_)
-  Op-Poset .minv P .Poset.≤-thin = P. Poset.≤-thin
-  Op-Poset .minv P .Poset.≤-refl = P .Poset.≤-refl
-  Op-Poset .minv P .Poset.≤-trans = flip (P. Poset.≤-trans)
-  Op-Poset .minv P .Poset.≤-antisym = flip (P .Poset.≤-antisym)
+  Dual-Poset : Has-unary-op (Poset o ℓ)
+  Dual-Poset .minv P .Poset.Ob = P .Poset.Ob
+  Dual-Poset .minv P .Poset._≤_ = flip (P .Poset._≤_)
+  Dual-Poset .minv P .Poset.≤-thin = P. Poset.≤-thin
+  Dual-Poset .minv P .Poset.≤-refl = P .Poset.≤-refl
+  Dual-Poset .minv P .Poset.≤-trans = flip (P. Poset.≤-trans)
+  Dual-Poset .minv P .Poset.≤-antisym = flip (P .Poset.≤-antisym)
 
-  Invol-Op-Poset : Involᵘ (Poset o ℓ)
-  Invol-Op-Poset .minv-invol P _ .Poset.Ob = P .Poset.Ob
-  Invol-Op-Poset .minv-invol P _ .Poset._≤_ = P .Poset._≤_
-  Invol-Op-Poset .minv-invol P _ .Poset.≤-thin = P .Poset.≤-thin
-  Invol-Op-Poset .minv-invol P _ .Poset.≤-refl = P .Poset.≤-refl
-  Invol-Op-Poset .minv-invol P _ .Poset.≤-trans = P .Poset.≤-trans
-  Invol-Op-Poset .minv-invol P _ .Poset.≤-antisym = P .Poset.≤-antisym
+  Invol-Dual-Poset : Invol (Poset o ℓ)
+  Invol-Dual-Poset .minv-invol P _ .Poset.Ob = P .Poset.Ob
+  Invol-Dual-Poset .minv-invol P _ .Poset._≤_ = P .Poset._≤_
+  Invol-Dual-Poset .minv-invol P _ .Poset.≤-thin = P .Poset.≤-thin
+  Invol-Dual-Poset .minv-invol P _ .Poset.≤-refl = P .Poset.≤-refl
+  Invol-Dual-Poset .minv-invol P _ .Poset.≤-trans = P .Poset.≤-trans
+  Invol-Dual-Poset .minv-invol P _ .Poset.≤-antisym = P .Poset.≤-antisym
 
   ⊥-Poset : ⊥-notation (Poset o ℓ)
   ⊥-Poset .⊥ .Poset.Ob = ⊥
@@ -142,14 +142,14 @@ instance
   ⇒-Poset : ⇒-notation (Poset o ℓ) (Poset o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
   ⇒-Poset ._⇒_ = Monotone
 
-  Op-Monotone : Sym {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone λ Q P → Monotone (P ᵒᵖ) (Q ᵒᵖ)
-  Op-Monotone .sym F .hom = F .hom
-  Op-Monotone .sym F .pres-≤ = F .pres-≤
+  Dual-Monotone : Dual {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone λ Q P → Monotone (P ᵒᵖ) (Q ᵒᵖ)
+  Dual-Monotone ._ᵒᵖ F .hom = F .hom
+  Dual-Monotone ._ᵒᵖ F .pres-≤ = F .pres-≤
 
-  Op-Monotone⁻ : Sym {A = Poset o ℓ} {B = Poset o′ ℓ′} (λ Q P → Monotone (P ᵒᵖ) (Q ᵒᵖ)) Monotone
-  Op-Monotone⁻ .sym F .hom = F .hom
-  Op-Monotone⁻ .sym F .pres-≤ = F .pres-≤
-  {-# INCOHERENT Op-Monotone⁻ #-}
+  Dual-Monotone⁻ : Dual {A = Poset o ℓ} {B = Poset o′ ℓ′} (λ Q P → Monotone (P ᵒᵖ) (Q ᵒᵖ)) Monotone
+  Dual-Monotone⁻ ._ᵒᵖ F .hom = F .hom
+  Dual-Monotone⁻ ._ᵒᵖ F .pres-≤ = F .pres-≤
+  {-# INCOHERENT Dual-Monotone⁻ #-}
 
   Funlike-Monotone₀ : Funlike ur (P ⇒ Q) ⌞ P ⌟ (λ _ → ⌞ Q ⌟)
   Funlike-Monotone₀ ._#_ = hom
@@ -159,31 +159,31 @@ instance
     → Funlike ur (P ⇒ Q) (Poset._≤_ P x y) (λ (f , _) → Poset._≤_ Q (f # x) (f # y))
   Funlike-Monotone₁ ._#_ x≤y = x≤y .pres-≤
 
-  Invol-Op-Monotone : Invol {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone (λ Q′ P′ → Monotone (P′ ᵒᵖ) (Q′ ᵒᵖ))
-  Invol-Op-Monotone .sym-invol F _ .hom = F .hom
-  Invol-Op-Monotone .sym-invol F _ .pres-≤ = F .pres-≤
+  GInvol-Dual-Monotone : GInvol {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone (λ Q′ P′ → Monotone (P′ ᵒᵖ) (Q′ ᵒᵖ))
+  GInvol-Dual-Monotone .invol F _ .hom = F .hom
+  GInvol-Dual-Monotone .invol F _ .pres-≤ = F .pres-≤
 
   Refl-Monotone : Refl {A = Poset o ℓ} Monotone
   Refl-Monotone .refl .hom = refl
   Refl-Monotone .refl .pres-≤ = refl
 
-  Trans-Monotone : Trans (Monotone {o} {o′} {ℓ} {ℓ′})
+  Comp-Monotone : Comp (Monotone {o} {o′} {ℓ} {ℓ′})
                          (Monotone {o′ = o″} {ℓ′ = ℓ″})
                          Monotone
-  Trans-Monotone ._∙_ f g .hom x = g $ f $ x
-  Trans-Monotone ._∙_ f g .pres-≤ x≤y = g $ f $ x≤y
+  Comp-Monotone ._∙_ f g .hom x = g $ f $ x
+  Comp-Monotone ._∙_ f g .pres-≤ x≤y = g $ f $ x≤y
 
-  Assoc-Monotone
-    : Assoc {A = Poset o ℓ} {B = Poset o′ ℓ′}
-            {C = Poset o″ ℓ″} {D = Poset o‴ ℓ‴}
-            Monotone Monotone Monotone Monotone Monotone Monotone
-  Assoc-Monotone .∙-assoc F G H = Equiv.injective (≅ₜ→≃ Monotone-Iso) (refl ,ₚ prop!)
+  GAssoc-Monotone
+    : GAssoc {A = Poset o ℓ} {B = Poset o′ ℓ′}
+             {C = Poset o″ ℓ″} {D = Poset o‴ ℓ‴}
+             Monotone Monotone Monotone Monotone Monotone Monotone
+  GAssoc-Monotone .∙-assoc F G H = Equiv.injective (≅ₜ→≃ Monotone-Iso) (refl ,ₚ prop!)
 
-  Unit-o-Monotone : Unit-o {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone Monotone
-  Unit-o-Monotone .∙-id-o F = Equiv.injective (≅ₜ→≃ Monotone-Iso) (refl ,ₚ prop!)
+  GUnit-o-Monotone : GUnit-o {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone Monotone
+  GUnit-o-Monotone .∙-id-o F = Equiv.injective (≅ₜ→≃ Monotone-Iso) (refl ,ₚ prop!)
 
-  Unit-i-Monotone : Unit-i {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone Monotone
-  Unit-i-Monotone .∙-id-i F = Equiv.injective (≅ₜ→≃ Monotone-Iso) (refl ,ₚ prop!)
+  GUnit-i-Monotone : GUnit-i {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone Monotone
+  GUnit-i-Monotone .∙-id-i F = Equiv.injective (≅ₜ→≃ Monotone-Iso) (refl ,ₚ prop!)
 
   ≅-Poset : ≅-notation (Poset o ℓ) (Poset o′ ℓ′) _
   ≅-Poset ._≅_ = Iso Monotone Monotone
@@ -229,10 +229,10 @@ instance
   ⇒-ntₚ : ⇒-notation (P ⇒ Q) (P ⇒ Q) _
   ⇒-ntₚ ._⇒_ = _=>ₚ_
 
-  Op-ntₚ
+  Dual-ntₚ
     : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-    → Sym {A = Monotone P Q} {B = Monotone P Q} _=>ₚ_ λ G F → G ᵒᵖ =>ₚ F ᵒᵖ
-  Op-ntₚ .sym α ._=>ₚ_.η = α ._=>ₚ_.η
+    → Dual {A = Monotone P Q} {B = Monotone P Q} _=>ₚ_ λ G F → G ᵒᵖ =>ₚ F ᵒᵖ
+  Dual-ntₚ ._ᵒᵖ α ._=>ₚ_.η = α ._=>ₚ_.η
 
   Funlike-ntₚ
     : {P : Poset o ℓ} {Q : Poset o′ ℓ′} {F G : P ⇒ Q}
@@ -242,8 +242,8 @@ instance
   Refl-ntₚ : Refl (_=>ₚ_ {P = P} {Q = Q})
   Refl-ntₚ {Q} .refl ._=>ₚ_.η _ = Poset.≤-refl Q
 
-  Trans-ntₚ : Trans (_=>ₚ_ {P = P} {Q = Q}) _=>ₚ_ _=>ₚ_
-  Trans-ntₚ {Q} ._∙_ α β ._=>ₚ_.η x = α # x ∙ β # x
+  Comp-ntₚ : Comp (_=>ₚ_ {P = P} {Q = Q}) _=>ₚ_ _=>ₚ_
+  Comp-ntₚ {Q} ._∙_ α β ._=>ₚ_.η x = α # x ∙ β # x
     where open Poset Q
 
   Whisker-i-Monotone-ntₚ

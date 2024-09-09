@@ -151,14 +151,14 @@ define-record-iso nm rec = do
 has-section-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
     {I : B → A → 𝒰 ℓ′} {O : A → B → 𝒰 ℓ} {I∙O : B → B → 𝒰 ℓ″}
-    ⦃ _ : Refl I∙O ⦄ ⦃ _ : Trans I O I∙O ⦄ {x : A} {y : B} {r : O x y}
+    ⦃ _ : Refl I∙O ⦄ ⦃ _ : Comp I O I∙O ⦄ {x : A} {y : B} {r : O x y}
   → has-section r ≅ Σ[ s ꞉ I y x ] s section-of r
 unquoteDef has-section-Iso = define-record-iso has-section-Iso (quote has-section)
 
 has-retract-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
     {I : A → B → 𝒰 ℓ′} {O : B → A → 𝒰 ℓ} {I∙O : A → A → 𝒰 ℓ″}
-    ⦃ _ : Refl I∙O ⦄ ⦃ _ : Trans I O I∙O ⦄ {x : A} {y : B} {s : I x y}
+    ⦃ _ : Refl I∙O ⦄ ⦃ _ : Comp I O I∙O ⦄ {x : A} {y : B} {s : I x y}
   → has-retract s ≅ Σ[ r ꞉ O y x ] r retract-of s
 unquoteDef has-retract-Iso = define-record-iso has-retract-Iso (quote has-retract)
 
@@ -166,8 +166,8 @@ Inverses-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
     {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
     {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
+    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
+    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B} {f : F x y} {g : G y x}
   → Inverses f g ≅ (f retract-of g) × (f section-of g)
 unquoteDef Inverses-Iso = define-record-iso Inverses-Iso (quote Inverses)
@@ -176,8 +176,8 @@ is-invertible-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
     {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
     {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
+    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
+    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B} {f : F x y}
   → is-invertible f ≅ Σ[ g ꞉ G y x ] Inverses f g
 unquoteDef is-invertible-Iso = define-record-iso is-invertible-Iso (quote is-invertible)
@@ -186,8 +186,8 @@ Iso-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
     {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
     {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
+    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
+    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B}
   → Iso F G x y ≅ Σ[ f ꞉ F x y ] Σ[ g ꞉ G y x ] Inverses f g
 unquoteDef Iso-Iso = define-record-iso Iso-Iso (quote Iso)
