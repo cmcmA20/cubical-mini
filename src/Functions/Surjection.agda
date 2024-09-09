@@ -20,6 +20,9 @@ private variable
 Split-surjective : (A → B) → Type _
 Split-surjective {B} f = Π[ y ꞉ B ] fibre f y
 
+Split-surjectiveᴱ : (A → B) → Type _
+Split-surjectiveᴱ {B} f = Π[ y ꞉ B ] fibreᴱ f y
+
 _↠!_ : Type ℓ → Type ℓ′ → Type _
 A ↠! B = Σ[ f ꞉ (A → B) ] Split-surjective f
 
