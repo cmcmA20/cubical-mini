@@ -19,6 +19,7 @@ private variable
   x : A
   @0 xs ys : List A
 
+infixr 5 _∷_
 data All {ℓ ℓᵃ} {A : Type ℓᵃ} (P : Pred A ℓ) : @0 List A → Type (ℓ ⊔ ℓᵃ) where
   []  : All P []
   _∷_ : P x → All P xs → All P (x ∷ xs)

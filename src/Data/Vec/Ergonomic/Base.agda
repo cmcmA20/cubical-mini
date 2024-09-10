@@ -10,7 +10,7 @@ open import Data.Unit.Base
 open import Data.Vec.Interface
 
 private variable
-  ℓ ℓᵃ ℓᵇ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
 
@@ -51,3 +51,11 @@ tail {n = suc _} (_ , xs) = xs
 replicate : Π[ n ꞉ ℕ ] (A → Vec A n)
 replicate 0       _ = _
 replicate (suc n) x = x ∷ replicate n x
+
+
+-- vector displayed over another vector
+
+Vecᵈ : (B : A → Type ℓ′) {n : ℕ} (xs : Vec A n) → Type ℓ′
+Vecᵈ B {0} _ = ⊤
+Vecᵈ B {1} x = B x
+Vecᵈ B {suc (suc n)} (x , xs) = B x × Vecᵈ B xs

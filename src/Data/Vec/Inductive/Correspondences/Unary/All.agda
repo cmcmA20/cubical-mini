@@ -2,12 +2,14 @@
 module Data.Vec.Inductive.Correspondences.Unary.All where
 
 open import Meta.Prelude
+open import Meta.Literals.FromProduct
 
 open import Logic.Decidability
 open import Logic.Discreteness
 
 open import Data.Dec as Dec
 open import Data.Vec.Inductive.Base
+open import Data.Vec.Inductive.Instances.FromProduct
 open import Data.Vec.Inductive.Correspondences.Unary.Any
 
 private variable
@@ -18,9 +20,20 @@ private variable
   @0 m n : ℕ
   @0 xs ys : Vec A n
 
+infixr 5 _∷_
 data All {ℓ ℓ′} {A : Type ℓ} (P : Pred A ℓ′) : @0 Vec A n → Type (ℓ ⊔ ℓ′) where
   []  : All P []
   _∷_ : P x → All P xs → All P (x ∷ xs)
+
+instance
+  From-prodᵈ-All
+    : ∀{ℓ ℓ′} {A : Type ℓ} {P : A → Type ℓ′}
+    → From-productᵈ P λ xs → All P xs
+  From-prodᵈ-All {A} {P} .from-prodᵈ = go where
+    go : (n : ℕ) (xs : Product A n) (ds : Productᵈ P xs) → All P (from-prod n xs)
+    go 0 _ _ = []
+    go 1 _ p = p ∷ []
+    go (suc (suc n)) (x , xs) (p , ps) = p ∷ go (suc n) xs ps
 
 all-++ : {m : ℕ} {@0 xs : Vec A m} → All P xs → All P ys → All P (xs ++ ys)
 all-++ {m = 0}     []         pys = pys
