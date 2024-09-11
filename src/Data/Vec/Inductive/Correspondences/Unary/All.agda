@@ -13,9 +13,10 @@ open import Data.Vec.Inductive.Instances.FromProduct
 open import Data.Vec.Inductive.Correspondences.Unary.Any
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : Type ℓ
   P : Pred A ℓ′
+  Q : Pred A ℓ″
   x : A
   @0 m n : ℕ
   @0 xs ys : Vec A n
@@ -52,6 +53,10 @@ all-head (u ∷ _) = u
 
 all-tail : All P (x ∷ xs) → All P xs
 all-tail (_ ∷ us) = us
+
+all-map : {n : ℕ} {@0 xs : Vec A n} → ∀ᴱ[ P ⇒ Q ] → All P xs → All Q xs
+all-map {n = 0}     _ []       = []
+all-map {n = suc n} f (p ∷ ps) = f p ∷ all-map (λ {x} → f {x}) ps
 
 all? : Decidable P → Decidable (λ (xs : Vec A n) → All P xs)
 all? P? {([])}   = yes []

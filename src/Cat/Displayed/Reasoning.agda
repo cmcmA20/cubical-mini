@@ -1,5 +1,6 @@
 {-# OPTIONS --safe #-}
 open import Cat.Displayed.Base
+open import Cat.Displayed.Total
 open import Cat.Prelude
 
 module Cat.Displayed.Reasoning {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ′) where
@@ -43,5 +44,22 @@ duplicate p q r = reindex _ _ ∙ sym (hom[]-∙ r q)
 
 hom[] : ∀ {a b x y} {f g : B.Hom a b} {p : f ＝ g} → E.Hom[ f ] x y → E.Hom[ g ] x y
 hom[] {p} f′ = hom[ p ] f′
+
+=↑ : {x y : B.Ob} {f g : x ⇒ y}
+     {x′ : E.Ob[ x ]} {y′ : E.Ob[ y ]}
+     {f′ : E.Hom[ f ] x′ y′}
+     {g′ : E.Hom[ g ] x′ y′}
+     {p : f ＝ g}
+   → (f′ E.＝[ p ] g′)
+   → (f , f′) ＝ (g , g′)
+=↑ = Σ-pathᴾ _
+
+=↓ : {x y : B.Ob} {f g : x ⇒ y}
+     {x′ : E.Ob[ x ]} {y′ : E.Ob[ y ]}
+     {f′ : E.Hom[ f ] x′ y′}
+     {g′ : E.Hom[ g ] x′ y′}
+   → (Σp : (f , f′) ＝ (g , g′))
+   → f′ E.＝[ ap fst Σp ] g′
+=↓ = ap snd
 
 -- TODO a ton of combinators

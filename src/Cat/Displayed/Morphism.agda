@@ -5,11 +5,9 @@ open import Cat.Prelude
 module Cat.Displayed.Morphism {o ℓ o′ ℓ′} {ℬ : Precategory o ℓ} (ℰ : Displayed ℬ o′ ℓ′) where
 
 import Cat.Morphism
-import Cat.Displayed.Reasoning
 
 open Displayed ℰ
 open Cat.Morphism ℬ
-open Cat.Displayed.Reasoning ℰ
 
 private variable
   a b c d : Ob
@@ -19,7 +17,8 @@ private variable
 -- TODO mono, epi
 
 record Inverses[_]
-  {a b a′ b′} {f : Hom a b} {g : Hom b a}
+  {a b : Ob} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
+  {f : Hom a b} {g : Hom b a}
   (inv : Inverses f g)
   (f′ : Hom[ f ] a′ b′) (g′ : Hom[ g ] b′ a′)
   : Type ℓ′

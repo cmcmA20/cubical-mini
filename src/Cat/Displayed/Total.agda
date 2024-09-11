@@ -6,13 +6,11 @@ open import Cat.Prelude
 
 import Cat.Morphism
 import Cat.Displayed.Morphism as DM
-import Cat.Displayed.Reasoning as DR
 
 module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ′) where
   open Cat.Morphism B
   open Displayed E
   open DM E
-  open DR E
 
   Total : Type (o ⊔ o′)
   Total = Σ[ Carrier ꞉ Ob ] Ob[ Carrier ]

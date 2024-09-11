@@ -76,18 +76,23 @@ record Displayed {o ℓ} (B : Precategory o ℓ)
   infixr 30 _∙[]_ ∙[-]-syntax
   infixr 2 ＝[]⟨⟩-syntax ＝[-]⟨⟩-syntax _＝[]⟨_⟨_
 
-  hom[-]-set′ : ∀ {x y} {f : Hom x y} {x′ y′} → is-set (Hom[ f ] x′ y′)
-  hom[-]-set′ = Hom[ _ ]-set _ _
+  opaque
+    hom[-]-set′ : ∀ {x y} {f : Hom x y} {x′ y′} → is-set (Hom[ f ] x′ y′)
+    hom[-]-set′ = Hom[ _ ]-set _ _
+
+    instance
+      H-Level-Hom[-] : ∀ {n} {a b} {f : Hom a b} {a′ b′} → H-Level (2 + n) (Hom[ f ] a′ b′)
+      H-Level-Hom[-] = hlevel-basic-instance 2 hom[-]-set′
 
   instance
-    H-Level-Hom[-] : ∀ {n} {a b} {f : Hom a b} {a′ b′} → H-Level (2 + n) (Hom[ f ] a′ b′)
-    H-Level-Hom[-] = hlevel-basic-instance 2 hom[-]-set′
-
     Refl-Hom[-] : ∀ {a} → Refl Hom[ id {a} ]
     Refl-Hom[-] .refl = idᵈ
 
     Trans-Hom[-] : ∀ {a b c} {f : Hom a b} {g : Hom b c} → Trans Hom[ f ] Hom[ g ] Hom[ f ∙ g ]
     Trans-Hom[-] ._∙_ f′ g′ = g′ ∘ᵈ f′
+
+    ⇒-Hom[-] : ∀ {x y} {f : Hom x y} → ⇒-notation (Ob[ x ]) (Ob[ y ]) (Type ℓ′)
+    ⇒-Hom[-] {f} ._⇒_ = Hom[ f ]
 
 instance
   open Struct-proj-desc
