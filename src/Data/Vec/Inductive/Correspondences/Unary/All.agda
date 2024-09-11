@@ -54,9 +54,9 @@ all-head (u ∷ _) = u
 all-tail : All P (x ∷ xs) → All P xs
 all-tail (_ ∷ us) = us
 
-all-map : {n : ℕ} {@0 xs : Vec A n} → ∀ᴱ[ P ⇒ Q ] → All P xs → All Q xs
+all-map : {n : ℕ} {@0 xs : Vec A n} → ∀[ P ⇒ Q ] → All P xs → All Q xs
 all-map {n = 0}     _ []       = []
-all-map {n = suc n} f (p ∷ ps) = f p ∷ all-map (λ {x} → f {x}) ps
+all-map {n = suc n} f (p ∷ ps) = f p ∷ all-map f ps
 
 all? : Decidable P → Decidable (λ (xs : Vec A n) → All P xs)
 all? P? {([])}   = yes []

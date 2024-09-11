@@ -102,9 +102,9 @@ all-++-left = fst ∘ all-split
 all-++-right : {xs : List A} → All P (xs ++ ys) → All P ys
 all-++-right = snd ∘ all-split
 
-all-map : {@0 xs : List A} → ∀ᴱ[ P ⇒ Q ] → All P xs → All Q xs
+all-map : {@0 xs : List A} → ∀[ P ⇒ Q ] → All P xs → All Q xs
 all-map     f []       = []
-all-map {P} f (p ∷ ps) = f p ∷ all-map {P = P} f ps
+all-map {P} f (p ∷ ps) = f p ∷ all-map f ps
 
 all-zip-with : {@0 xs : List A} → ∀ᴱ[ P ⇒ Q ⇒ R ] → All P xs → All Q xs → All R xs
 all-zip-with     f [] [] = []
