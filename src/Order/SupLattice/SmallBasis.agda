@@ -10,8 +10,7 @@ import Order.Reasoning
 
 module Order.SupLattice.SmallBasis
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ)
-  (L : is-sup-lattice P ℓ′)
+  {P : Poset o ℓ} (L : is-sup-lattice P ℓ′)
   (β : B → ⌞ P ⌟) where
 
   open Order.Reasoning P
@@ -31,6 +30,7 @@ module Order.SupLattice.SmallBasis
     no-eta-equality
     field
       ≤-is-small : (x : Ob) (b : B) → is-of-size ℓ′ (β b ≤ x)
+      -- technically we only need the least part of is-lub, as fam≤lub holds by definition of ↓ᴮ
       ↓-is-sup   : (x : Ob) → is-lub P (↓ᴮ-inclusion x) x
 
     _≤ᴮ_ : (b : B) → (x : Ob) → 𝒰 ℓ′
@@ -84,3 +84,15 @@ module Order.SupLattice.SmallBasis
     is-lubᴮ : {x : Ob} (u' : Ob)
             → ((s : small-↓ᴮ x) → small-↓ᴮ-inclusion s ≤ u') → x ≤ u'
     is-lubᴮ = least is-supᴮ
+
+  unquoteDecl is-basis-Iso = declare-record-iso is-basis-Iso (quote is-basis)
+
+  -- TODO requires is-of-size-is-prop
+  -- @0 is-basis-is-prop : is-prop is-basis
+  -- is-basis-is-prop = ≅→is-of-hlevel 1 is-basis-Iso (×-is-of-hlevel 1 {!!} hlevel!)
+
+  ≤-from-≤ᴮ : is-basis
+           → {x y : Ob}
+           → ((b : B) → β b ≤ x → β b ≤ y)
+           → x ≤ y
+  ≤-from-≤ᴮ bas {x} {y} h = is-basis.↓-is-sup bas x .least y λ i → h (fst i) (snd i)

@@ -21,8 +21,8 @@ open import Functions.Surjection
 
 module _
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-sup-lattice L
@@ -73,8 +73,8 @@ module _
 
 module local-inductive-definitions
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-lub
@@ -166,21 +166,21 @@ module local-inductive-definitions
 
 module _
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
-  open local-inductive-definitions P L β h
+  open local-inductive-definitions h
 
   module correspondance-from-locally-small-ϕ
     (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
     (loc : is-local ϕ) where
 
     is-small-closed-subset : ℙ B ℓ′ → 𝒰 (o ⊔ ℓsuc ℓ′)
-    is-small-closed-subset S = c-closure P L β h S × Φ-closure P L β h ϕ S
+    is-small-closed-subset S = c-closure h S × Φ-closure h ϕ S
 
     -- is-small-closed-subset-is-prop : (P : ℙ B ℓ′) → is-prop (is-small-closed-subset P)
     -- is-small-closed-subset-is-prop P = hlevel 1
@@ -222,13 +222,13 @@ module _
         is-sup-Q : (x : Ob) → sup-Q x ＝ x
         is-sup-Q x = is-supᴮ' ⁻¹
 
-        Q-c-closed : c-closure P L β h (Q a)
+        Q-c-closed : c-closure h (Q a)
         Q-c-closed U C b le = ≤→≤ᴮ
           $ ≤ᴮ→≤ le
           ∙ subst (⋃ (ℙ→fam β U .snd) ≤_) (is-sup-Q a)
               (joins-preserve-containment L β U (Q a) C)
 
-        Q-φ-closed : Φ-closure P L β h ϕ (Q a)
+        Q-φ-closed : Φ-closure h ϕ (Q a)
         Q-φ-closed a' b p f = ≤→≤ᴮ
           $ sup-of-small-fam-is-lub L (β ∘ₜ ↓→base ϕ a) (loc a) .fam≤lub
               (b , ∣ a' , p , subst (_≤ a) (is-sup-Q a')
@@ -248,7 +248,7 @@ module _
         =  ext (λ b → cc P refl b , λ r → ≤→≤ᴮ (⋃-inj (b , r)))
         ,ₚ prop!
 
-    open trunc-ind-def P L β h ϕ
+    open trunc-ind-def h ϕ
 
     module smallness-assumption (j : (b : B) → is-of-size ℓ′ (b ∈ 𝓘nd)) where
 
@@ -272,10 +272,10 @@ module _
         𝓘'-subset : ℙ B ℓ′
         𝓘'-subset b = el (𝓘' b) 𝓘'-is-prop
 
-        𝓘'-is-c-closed : c-closure P L β h 𝓘'-subset
+        𝓘'-is-c-closed : c-closure h 𝓘'-subset
         𝓘'-is-c-closed U C b le = 𝓘nd→𝓘' b (𝓘nd-is-c-closed U (λ {x} → 𝓘'→𝓘nd x ∘ₜ C) b le)
 
-        𝓘'-is-ϕ-closed : Φ-closure P L β h ϕ 𝓘'-subset
+        𝓘'-is-ϕ-closed : Φ-closure h ϕ 𝓘'-subset
         𝓘'-is-ϕ-closed a b p f = 𝓘nd→𝓘' b (𝓘nd-is-ϕ-closed a b p (λ b' → 𝓘'→𝓘nd b' ∘ₜ f b'))
 
         total-space-𝓘-is-small : is-of-size ℓ′ Σ[ 𝓘nd ]
@@ -305,9 +305,9 @@ module _
 
         Q-Γ-sup : ℙ B ℓ′
         Q-Γ-sup = Q-Γ-sc-sub .fst
-        Q-is-c-closed : c-closure P L β h Q-Γ-sup
+        Q-is-c-closed : c-closure h Q-Γ-sup
         Q-is-c-closed = Q-Γ-sc-sub .snd .fst
-        Q-is-ϕ-closed : Φ-closure P L β h ϕ Q-Γ-sup
+        Q-is-ϕ-closed : Φ-closure h ϕ Q-Γ-sup
         Q-is-ϕ-closed = Q-Γ-sc-sub .snd .snd
 
         sup-Q : Ob
@@ -332,9 +332,9 @@ module _
 
           P-a : ℙ B ℓ′
           P-a = P-sc-sub .fst
-          P-is-c-closed : c-closure P L β h P-a
+          P-is-c-closed : c-closure h P-a
           P-is-c-closed = P-sc-sub .snd .fst
-          P-is-ϕ-closed : Φ-closure P L β h ϕ P-a
+          P-is-ϕ-closed : Φ-closure h ϕ P-a
           P-is-ϕ-closed = P-sc-sub .snd .snd
 
           sup-P : Ob
@@ -355,14 +355,14 @@ module _
 
 module bounded-inductive-definitions
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
-  open local-inductive-definitions P L β h
+  open local-inductive-definitions h
 
   _is-a-small-cover-of_ : ∀ {ℓ″} → 𝒰 ℓ′ → 𝒰 ℓ″ → 𝒰 (ℓ′ ⊔ ℓ″)
   X is-a-small-cover-of Y = X ↠ Y
@@ -370,7 +370,7 @@ module bounded-inductive-definitions
   covering-cond : {ϕ : ℙ (B × Ob) (o ⊔ ℓ′)}
                 → (T : 𝒰 ℓ′) → (T → 𝒰 ℓ′) → 𝒰 (o ⊔ ℓ ⊔ ℓ′)
   covering-cond {ϕ} T α = (a : Ob) → (b : B) → (b , a) ∈ ϕ
-                        → ∃[ t ꞉ T ] α t is-a-small-cover-of ↓ᴮ P L β a
+                        → ∃[ t ꞉ T ] α t is-a-small-cover-of ↓ᴮ L β a
 
   has-a-bound : ℙ (B × Ob) (o ⊔ ℓ′) → 𝒰 (o ⊔ ℓ ⊔ ℓsuc ℓ′)
   has-a-bound ϕ = Σ[ T ꞉ 𝒰 ℓ′ ] Σ[ α ꞉ (T → 𝒰 ℓ′) ] covering-cond {ϕ} T α
@@ -391,42 +391,42 @@ module bounded-inductive-definitions
       cov = ϕ-has-bound .snd .snd
 
       S₀ : 𝒰 (o ⊔ ℓ ⊔ ℓ′)
-      S₀ = Σ[ b ꞉ B ] ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
+      S₀ = Σ[ b ꞉ B ] ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (↓ᴮ-inclusion L β a ∘ₜ m)) ∈ ϕ
 
       instance
         Size-α : ∀ {t} → Size ℓ′ (α t)
         Size-α {t} .Size.has-of-size = α t , refl
         {-# OVERLAPPING Size-α #-}
 
-        Size-↓ᴮ : Size ℓ′ (↓ᴮ P L β a)
+        Size-↓ᴮ : Size ℓ′ (↓ᴮ L β a)
         Size-↓ᴮ .Size.has-of-size = ↓ᴮ-is-small
 
         Size-ϕ : {b : B} {z : Ob} → Size ℓ′ ((b , z) ∈ ϕ)
         Size-ϕ {b} {z} .Size.has-of-size = ϕ-small z b
 
       S₀→↓-aux : {b : B}
-               → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
+               → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (↓ᴮ-inclusion L β a ∘ₜ m)) ∈ ϕ
                → Σ[ a' ꞉ Ob ] ((b , a') ∈ ϕ × a' ≤ a)
       S₀→↓-aux (t , m , p) =
-          ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m) , p
+          ⋃ (↓ᴮ-inclusion L β a ∘ₜ m) , p
         , ⋃-universal _ (snd ∘ₜ m)
 
       S₀→↓ : S₀ → ϕ ↓ a
       S₀→↓ = second (map S₀→↓-aux)
 
       g : {b : B} (a' : Ob) (p : (b , a') ∈ ϕ) (le : a' ≤ a)
-        → Σ[ t ꞉ T ] α t is-a-small-cover-of ↓ᴮ P L β a'
-        → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
+        → Σ[ t ꞉ T ] α t is-a-small-cover-of ↓ᴮ L β a'
+        → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (↓ᴮ-inclusion L β a ∘ₜ m)) ∈ ϕ
       g {b} a' p le (t , α-c) =
           t , g-m , subst (λ z → (b , z) ∈ ϕ) g-path p
         where
-        g-m :  α t → ↓ᴮ P L β a
-        g-m = ↓ᴮ-≤ P L β le ∘ₜ (α-c $_)
-        g-path : a' ＝ ⋃ (↓ᴮ-inclusion P L β a ∘ₜ g-m)
-        g-path = cover-reindexing α-c a' (⋃ (↓ᴮ-inclusion P L β a ∘ₜ g-m)) (↓-is-sup a') has-lub
+        g-m :  α t → ↓ᴮ L β a
+        g-m = ↓ᴮ-≤ L β le ∘ₜ (α-c $_)
+        g-path : a' ＝ ⋃ (↓ᴮ-inclusion L β a ∘ₜ g-m)
+        g-path = cover-reindexing α-c a' (⋃ (↓ᴮ-inclusion L β a ∘ₜ g-m)) (↓-is-sup a') has-lub
 
       cur-trunc-g : {b : B} (a' : Ob) (p : (b , a') ∈ ϕ) (le : a' ≤ a)
-                  → ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ P L β a) ] (b , ⋃ (↓ᴮ-inclusion P L β a ∘ₜ m)) ∈ ϕ
+                  → ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (↓ᴮ-inclusion L β a ∘ₜ m)) ∈ ϕ
       cur-trunc-g {b} a' p le = map (g a' p le) (cov a' b p)
 
       ↓→S₀ : ϕ ↓ a → S₀
@@ -440,15 +440,15 @@ module bounded-inductive-definitions
 
 module _
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
-  open bounded-inductive-definitions P L β h
-  open small-presentation-of-lattice P L β h
+  open bounded-inductive-definitions h
+  open small-presentation-of-lattice h
 
   module small-QIT-from-bounded-and-small-presentation
            (small-pres : has-small-presentation)
@@ -495,7 +495,7 @@ module _
     α : I₂ → 𝒰 ℓ′
     α = bnd .snd .snd .fst
     cover-condition : (a : Ob) → (b : B) → (b , a) ∈ ϕ
-                    → ∃[ j ꞉ I₂ ] α j is-a-small-cover-of ↓ᴮ P L β a
+                    → ∃[ j ꞉ I₂ ] α j is-a-small-cover-of ↓ᴮ L β a
     cover-condition = bnd .snd .snd .snd
 
     Small-c-closure : {ℓ″ : Level} (S : ℙ B ℓ″) → 𝒰 (ℓ′ ⊔ ℓ″)
@@ -549,15 +549,15 @@ module _
 
 module _
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
-  open bounded-inductive-definitions P L β h
-  open small-presentation-of-lattice P L β h
+  open bounded-inductive-definitions h
+  open small-presentation-of-lattice h
 
   module 𝓘nd-is-small-from-bounded-and-small-presentation
           (small-pres : has-small-presentation)
@@ -565,34 +565,34 @@ module _
           (bnd : is-bounded ϕ)
          where
 
-    open small-QIT-from-bounded-and-small-presentation P L β h small-pres ϕ bnd
-    open trunc-ind-def P L β h ϕ
+    open small-QIT-from-bounded-and-small-presentation h small-pres ϕ bnd
+    open trunc-ind-def h ϕ
     open small-trunc-ind-def
 
     𝓘nd-⊆-Small-𝓘nd : 𝓘nd ⊆ Small-𝓘nd
     𝓘nd-⊆-Small-𝓘nd = 𝓘nd-is-initial Small-𝓘nd c-cl-sm Φ-cl-sm
       where
-      c-cl-sm : c-closure P L β h Small-𝓘nd
+      c-cl-sm : c-closure h Small-𝓘nd
       c-cl-sm U C b le =
         elim! {P = λ _ → ⌞ Small-𝓘nd b ⌟}
               (λ j C' r → Small-𝓘nd-is-c-closed j (λ b' → C ∘ₜ C') b r)
               (is-small-pres→ b U le)
 
-      Φ-cl-sm : Φ-closure P L β h ϕ Small-𝓘nd
+      Φ-cl-sm : Φ-closure h ϕ Small-𝓘nd
       Φ-cl-sm a b p C =
         ∥-∥₁.elim {P = λ _ → ⌞ Small-𝓘nd b ⌟}
                   (λ _ → Small-𝓘-trunc b)
                   u
                   (cover-condition a b p)
         where
-        u : Σ[ i ꞉ I₂ ] α i is-a-small-cover-of ↓ᴮ P L β a → b ∈ Small-𝓘nd
+        u : Σ[ i ꞉ I₂ ] α i is-a-small-cover-of ↓ᴮ L β a → b ∈ Small-𝓘nd
         u (i₂ , s) = Small-𝓘nd-is-ϕ-closed i₂ (fst ∘ₜ s #_) b
-                                 (ϕ→small-ϕ (⋃ (↓ᴮ-inclusion P L β a ∘ₜ (s $_))) b
+                                 (ϕ→small-ϕ (⋃ (↓ᴮ-inclusion L β a ∘ₜ (s $_))) b
                                             (subst (λ q → (b , q) ∈ ϕ) a=⋁α p))
                                  λ b' → C b' ∘ₜ subst (b' ≤ᴮ_) (a=⋁α ⁻¹)
           where
-          a=⋁α : a ＝ ⋃ (↓ᴮ-inclusion P L β a ∘ₜ (s $_))
-          a=⋁α = cover-reindexing s a (⋃ (↓ᴮ-inclusion P L β a ∘ₜ (s $_))) (↓-is-sup a) has-lub
+          a=⋁α : a ＝ ⋃ (↓ᴮ-inclusion L β a ∘ₜ (s $_))
+          a=⋁α = cover-reindexing s a (⋃ (↓ᴮ-inclusion L β a ∘ₜ (s $_))) (↓-is-sup a) has-lub
 
     Small-𝓘nd-⊆-𝓘nd : Small-𝓘nd ⊆ 𝓘nd
     Small-𝓘nd-⊆-𝓘nd = Small-𝓘nd-is-initial 𝓘nd c-cl-sm Φ-cl-sm
@@ -613,17 +613,17 @@ module _
 
 module _
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
-  open local-inductive-definitions P L β h
-  open bounded-inductive-definitions P L β h
-  open small-presentation-of-lattice P L β h
-  open small-QIT-from-bounded-and-small-presentation P L β h
+  open local-inductive-definitions h
+  open bounded-inductive-definitions h
+  open small-presentation-of-lattice h
+  open small-QIT-from-bounded-and-small-presentation h
 
   Untruncated-LFP-Theorem : has-small-presentation
                           → (f : P ⇒ P)
@@ -631,8 +631,8 @@ module _
                           → LFP P f
   Untruncated-LFP-Theorem small-pres f (ϕ , bnd , H) = subst (LFP P) (ext H) Γ-has-least-fixed-point
     where
-     open correspondance-from-locally-small-ϕ P L β h ϕ (bounded→local ϕ bnd)
-     open 𝓘nd-is-small-from-bounded-and-small-presentation P L β h small-pres ϕ bnd
+     open correspondance-from-locally-small-ϕ h ϕ (bounded→local ϕ bnd)
+     open 𝓘nd-is-small-from-bounded-and-small-presentation h small-pres ϕ bnd
      open smallness-assumption 𝓘nd-is-small
 
   LFP-Theorem : has-small-presentation
@@ -643,15 +643,15 @@ module _
 
 module _
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
-  open local-inductive-definitions P L β h
-  open bounded-inductive-definitions P L β h
+  open local-inductive-definitions h
+  open bounded-inductive-definitions h
 
   density-condition : (Ob → Ob) → (I : 𝒰 ℓ′) → (I → Ob)
                     → 𝒰 (o ⊔ ℓ ⊔ ℓ′)
@@ -693,7 +693,7 @@ module _
 
       ccond : covering-cond {ϕ = φ} I (small-↓ᴮ ∘ₜ γ)
       ccond a b = map (second λ {i} → (≃→↠ ∘ₜ λ where (o , eq) →
-                                                       subst (λ q → small-↓ᴮ (γ i) ≃ ↓ᴮ P L β q)
+                                                       subst (λ q → small-↓ᴮ (γ i) ≃ ↓ᴮ L β q)
                                                              (=ˢ→= eq)
                                                              small-↓ᴮ-≃-↓ᴮ))
                 ∘ₜ (lift≃id $_)
@@ -723,22 +723,22 @@ module _
 
 module _
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open Order.Reasoning P
   open is-lub
   open is-sup-lattice L
   open is-basis h
-  open bounded-inductive-definitions P L β h
-  open small-presentation-of-lattice P L β h
-  open small-QIT-from-bounded-and-small-presentation P L β h
+  open bounded-inductive-definitions h
+  open small-presentation-of-lattice h
+  open small-QIT-from-bounded-and-small-presentation h
 
   LFP-Theorem-from-Density : has-small-presentation
                            → is-locally-of-size ℓ′ Ob
                            → (f : P ⇒ P)
-                           → is-dense P L β h (f $_)
+                           → is-dense h (f $_)
                            → LFP P f
   LFP-Theorem-from-Density small-pres l-small f f-dense =
-    Untruncated-LFP-Theorem P L β h small-pres f
-      (dense→bounded P L β h l-small f f-dense)
+    Untruncated-LFP-Theorem h small-pres f
+      (dense→bounded h l-small f f-dense)

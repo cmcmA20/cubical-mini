@@ -9,8 +9,8 @@ open import Combinatorics.Power
 
 module Order.SupLattice.SmallPresentation
   {o ℓ ℓ′} {B : 𝒰 ℓ′}
-  (P : Poset o ℓ) (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) (h : is-basis P L β) where
+  {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
+  {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
   open is-sup-lattice L
   open is-basis h
