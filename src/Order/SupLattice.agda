@@ -110,13 +110,15 @@ module _ {R : Poset o″ ℓ″} where
 module _
   {o ℓ ℓ′ : Level}
   {P : Poset o ℓ} (L : is-sup-lattice P ℓ′)
-  {T : 𝒰 ℓ′} (m : T → ⌞ P ⌟) where
+  {T : 𝒰 ℓ′} (β : T → ⌞ P ⌟) where
   open Order.Reasoning P
   open is-sup-lattice L
 
+  ℙ⋃ : ℙ T ℓ′ → ⌞ P ⌟
+  ℙ⋃ P = ⋃ (ℙ→fam β P .snd)
+
   joins-preserve-containment : (A B : ℙ T ℓ′)
-                             → A ⊆ B
-                             → ⋃ (ℙ→fam m A .snd) ≤ ⋃ (ℙ→fam m B .snd)
+                             → A ⊆ B → ℙ⋃ A ≤ ℙ⋃ B
   joins-preserve-containment _ _ A⊆B = ⋃≤⋃-over (second A⊆B) λ _ → refl
 
 module _

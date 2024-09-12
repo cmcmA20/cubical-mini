@@ -9,9 +9,9 @@ open import Order.SupLattice
 import Order.Reasoning
 
 module Order.SupLattice.SmallBasis
-  {o ℓ ℓ′} {B : 𝒰 ℓ′}
+  {o ℓ ℓ′}
   {P : Poset o ℓ} (L : is-sup-lattice P ℓ′)
-  (β : B → ⌞ P ⌟) where
+  {B : 𝒰 ℓ′} (β : B → ⌞ P ⌟) where
 
   open Order.Reasoning P
   open is-sup-lattice L
