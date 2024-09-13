@@ -728,3 +728,8 @@ infix 30 _∈!_
 _∈!_ : {A : Type ℓ} {ℙA : Type ℓ′} ⦃ m : Membership A ℙA ℓ″ ⦄
      → A → ℙA → Type ℓ″
 x ∈! y = is-contr (x ∈ y)
+
+instance
+  refl-helper : {A : Type ℓ} {x : A} → x ＝ x
+  refl-helper {x} i = x
+  {-# INCOHERENT refl-helper #-}

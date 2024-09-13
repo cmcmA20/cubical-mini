@@ -247,19 +247,20 @@ instance
     where open Poset Q
 
   Whisker-i-Monotone-ntₚ
-    : Whisker-i {A = Poset o ℓ} {B = Poset o′ ℓ′}
-      {C = Poset o″ ℓ″}
-      Monotone Monotone Monotone Monotone Monotone
-      (λ _ _ → _=>ₚ_)
-      (λ _ _ → _=>ₚ_)
+    : {X : Poset o ℓ} {P : Poset o′ ℓ′} {Q : Poset o″ ℓ″}
+    → Whisker-i
+        Monotone Monotone Monotone (λ _ _ → ⊤) _ _
+        X P Q Q
+        (λ _ → _=>ₚ_) (λ _ → _=>ₚ_)
   Whisker-i-Monotone-ntₚ ._◁_ H α ._=>ₚ_.η x = α # (H # x)
 
   Whisker-o-Monotone-ntₚ
-    : Whisker-o {A = Poset o ℓ} {B = Poset o′ ℓ′}
-      {C = Poset o″ ℓ″}
-      Monotone Monotone Monotone Monotone Monotone
-      (λ _ _ → _=>ₚ_)
-      (λ _ _ → _=>ₚ_)
+    : {P : Poset o ℓ} {Q : Poset o′ ℓ′} {X : Poset o″ ℓ″}
+    → Whisker-o
+        Monotone Monotone (λ _ _ → ⊤) Monotone _ _
+        P P Q X
+        (λ _ → _=>ₚ_)
+        (λ _ → _=>ₚ_)
   Whisker-o-Monotone-ntₚ ._▷_ α K ._=>ₚ_.η x = K # (α # x)
 
 Posets : (o ℓ : Level) → Precategory (ℓsuc o ⊔ ℓsuc ℓ) (o ⊔ ℓ)

@@ -321,21 +321,23 @@ instance
     D .id-l _ ∙ D .id-r _ ⁻¹
 
   Whisker-i-Functor-nt
-    : Whisker-i {A = Precategory o h} {B = Precategory oᶜ hᶜ}
-      {C = Precategory oᵈ hᵈ}
-      Functor Functor Functor Functor Functor
-      (λ _ _ → _=>_)
-      (λ _ _ → _=>_)
+    : {X : Precategory o h} {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
+    → Whisker-i
+        Functor Functor Functor (λ _ _ → ⊤) _ _
+        X C D D
+        (λ _ → _=>_)
+        (λ _ → _=>_)
   Whisker-i-Functor-nt ._◁_ H α ._=>_.η x = α # (H # x)
   Whisker-i-Functor-nt ._◁_ H α ._=>_.is-natural x y f =
     α ._=>_.is-natural (H # x) (H # y) (H # f)
 
   Whisker-o-Functor-nt
-    : Whisker-o {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ}
-      {C = Precategory o h}
-      Functor Functor Functor Functor Functor
-      (λ _ _ → _=>_)
-      (λ _ _ → _=>_)
+    : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {X : Precategory o h}
+    → Whisker-o
+        Functor Functor (λ _ _ → ⊤) Functor _ _
+        C C D X
+        (λ _ → _=>_)
+        (λ _ → _=>_)
   Whisker-o-Functor-nt ._▷_ α K ._=>_.η x = K # (α # x)
   Whisker-o-Functor-nt ._▷_ α K ._=>_.is-natural x y f
     = Functor.F-∘ K (α # y) _ ⁻¹

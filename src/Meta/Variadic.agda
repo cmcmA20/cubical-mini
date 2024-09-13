@@ -70,7 +70,7 @@ IUniversalⁿ = Quantⁿ ∀-syntax
 Existentialⁿ : Variadic-binding¹
 Existentialⁿ = Quantⁿ Σ-syntax
 
-private variable ℓᵃ ℓᵇ ℓᶜ ℓᵈ ℓ ℓ′ ℓ″ : Level
+private variable ℓᵃ ℓᵇ ℓᶜ ℓᵈ ℓˣ ℓ ℓ′ ℓ″ : Level
 
 instance
   Refl-Corr² : Refl (λ A B → A → B → 𝒰 ℓ)
@@ -108,21 +108,24 @@ instance
     Σ-assoc ∙ Σ-contract-fst (singletonₚ-is-contr (a , refl))
 
   Whisker-i-Corr-Fun
-    : Whisker-i {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ} {C = 𝒰 ℓᶜ}
-        (λ A B → A → B → 𝒰 ℓ)
-        (λ B C → B → C → 𝒰 ℓ′) _
-        (λ B C → B → C → 𝒰 ℓ″) _
-        (λ B C R S → ∀[ R ⇒ S ])
-        (λ A C R S → ∀[ R ⇒ S ])
-  Whisker-i-Corr-Fun ._◁_ _ α = second $ second $ α
+    : {X : 𝒰 ℓˣ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+    → Whisker-i
+        (λ X A → X → A → 𝒰 ℓ) (λ A B → A → B → 𝒰 ℓ′) (λ A C → A → C → 𝒰 ℓ′) (λ _ _ → ⊤ₜ) _ _
+        X A B B
+        (λ _ R S → Π[ R ⇒ S ])
+        (λ _ R S → Π[ R ⇒ S ])
+  Whisker-i-Corr-Fun ._◁_ w α x b = second $ second $ α _ b
   {-# OVERLAPPING Whisker-i-Corr-Fun #-}
 
   Whisker-o-Corr-Fun
-    : Whisker-o {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ} {C = 𝒰 ℓᶜ}
-        (λ A B → A → B → 𝒰 ℓ)
-        (λ B C → B → C → 𝒰 ℓ′) _
-        (λ B C → B → C → 𝒰 ℓ″) _
-        (λ B C R S → ∀[ R ⇒ S ])
-        (λ A C R S → ∀[ R ⇒ S ])
-  Whisker-o-Corr-Fun ._▷_ α _ = second $ first $ α
+    : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {X : 𝒰 ℓˣ}
+    → Whisker-o
+        (λ A C → A → C → 𝒰 ℓ)
+        (λ B C → B → C → 𝒰 ℓ)
+        (λ _ _ → ⊤ₜ)
+        (λ C X → C → X → 𝒰 ℓ′) _ _
+        A A B X
+        (λ _ R S → Π[ R ⇒ S ])
+        (λ _ R S → Π[ R ⇒ S ])
+  Whisker-o-Corr-Fun ._▷_ α w a x = second $ first $ α a _
   {-# OVERLAPPING Whisker-o-Corr-Fun #-}
