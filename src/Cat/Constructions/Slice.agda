@@ -17,14 +17,16 @@ open /-Obj using (domain)
 
 unquoteDecl /-Obj-iso = declare-record-iso /-Obj-iso (quote /-Obj)
 
-private variable
-  a a′ b b′ x y : /-Obj c
+private variable a a′ b b′ x x′ y y′ : /-Obj c
 
-/-Obj-path : (p : x .domain ＝ y .domain)
-           → ＜ x ./-Obj.map ／ (λ i → Hom (p i) c) ＼ y ./-Obj.map ＞
-           → x ＝ y
-/-Obj-path p _ i .domain = p i
-/-Obj-path _ q i ./-Obj.map = q i
+/-Obj-pathᴾ
+  : {x y : Ob} {x′ : /-Obj x} {y′ : /-Obj y}
+  → (p : x ＝ y)
+  → (q : x′ .domain ＝ y′ .domain)
+  → ＜ x′ ./-Obj.map ／ (λ i → Hom (q i) (p i)) ＼ y′ ./-Obj.map ＞
+  → ＜ x′ ／ (λ i → /-Obj (p i)) ＼ y′ ＞
+/-Obj-pathᴾ p q r i .domain = q i
+/-Obj-pathᴾ p q r i ./-Obj.map = r i
 
 
 record /-Hom (a b : /-Obj c) : Type ℓ where

@@ -310,10 +310,10 @@ instance
   Dual-nt ._ᵒᵖ α ._=>_.η = α ._=>_.η
   Dual-nt ._ᵒᵖ α ._=>_.is-natural x y f = _=>_.is-natural α y x f ⁻¹
 
-  Funlike-nt
+  Funlike-nt₀
     : {C : Precategory o ℓ} {D : Precategory o′ ℓ′} {F G : C ⇒ D}
     → Funlike ur (F ⇒ G) ⌞ C ⌟ (λ (_ , x) → D .Precategory.Hom (F $ x) (G $ x))
-  Funlike-nt ._#_ = _=>_.η
+  Funlike-nt₀ ._#_ = _=>_.η
 
   Refl-nt : Refl (_=>_ {C = C} {D = D})
   Refl-nt {D} .refl ._=>_.η _ = D .id
@@ -469,3 +469,8 @@ module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
 
     ≅-Functor : ≅-notation (Functor C D) (Functor C D) (𝒰 (oᶜ ⊔ hᶜ ⊔ hᵈ))
     ≅-Functor ._≅_ = Iso _=>_ _=>_
+
+    Funlike-nt₁
+      : {F G : C ⇒ D} {x y : ⌞ C ⌟}
+      → Funlike ur (F ⇒ G) (C .Precategory.Hom x y) λ (α , f) → F # f ∙ α # y ＝ α # x ∙ G # f
+    Funlike-nt₁ ._#_ α = _=>_.is-natural α _ _
