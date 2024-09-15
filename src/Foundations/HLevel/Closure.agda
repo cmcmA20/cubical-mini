@@ -152,13 +152,13 @@ Lift-is-of-hlevel n a-hl = retract→is-of-hlevel n lift lower (λ _ → refl) a
 opaque
   ≃-is-of-hlevel-left-suc : (n : HLevel) → is-of-hlevel (suc n) A → is-of-hlevel (suc n) (A ≃ B)
   ≃-is-of-hlevel-left-suc zero    A-hl e =
-    ≃-is-of-hlevel 1 A-hl (retract→is-prop (e $_) (e ⁻¹ $_) (fun-ext $ Equiv.ε e) A-hl) e
+    ≃-is-of-hlevel 1 A-hl (retract→is-prop (e $_) (e ⁻¹ $_) (Equiv.ε e) A-hl) e
   ≃-is-of-hlevel-left-suc (suc n) A-hl e =
     ≃-is-of-hlevel (suc (suc n)) A-hl (≃→is-of-hlevel (suc (suc n)) (e ⁻¹) A-hl) e
 
   ≃-is-of-hlevel-right-suc : (n : HLevel) → is-of-hlevel (suc n) B → is-of-hlevel (suc n) (A ≃ B)
   ≃-is-of-hlevel-right-suc zero    B-hl e =
-    ≃-is-of-hlevel 1 (retract→is-prop (e ⁻¹ $_) (e $_) (fun-ext $ Equiv.η e) B-hl) B-hl e
+    ≃-is-of-hlevel 1 (retract→is-prop (e ⁻¹ $_) (e $_) (Equiv.η e ⁻¹) B-hl) B-hl e
   ≃-is-of-hlevel-right-suc (suc n) B-hl e =
     ≃-is-of-hlevel (suc (suc n)) (≃→is-of-hlevel (suc (suc n)) e B-hl) B-hl e
 

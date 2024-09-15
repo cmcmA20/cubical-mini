@@ -131,6 +131,13 @@ is-equivᴱ→unit
     (eqv : is-equivᴱ f) (@0 x : A) → Erased (is-equivᴱ→inverse eqv (f x) ＝ x)
 is-equivᴱ→unit {f} eqv x .erased i = eqv (f x) .snd .erased (x , erase refl) i .fst
 
+Adjᶠ : (f : A → B) (g : B → A) → 𝒰 _
+Adjᶠ {A} {B} f g = Adjoint Fun Fun Fun Fun A _＝_ B _＝_ f g _＝_ _＝_
+
+instance
+  ⊣-Fun : ⊣-notation (A → B) (B → A) (𝒰 _)
+  ⊣-Fun ._⊣_ = Adjᶠ
+
 
 module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where
 

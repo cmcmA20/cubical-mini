@@ -453,7 +453,9 @@ module _ {C : Precategory oᶜ hᶜ}
         _ _
 
 module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
-  private module D = Precategory D
+  private
+    module C = Precategory C
+    module D = Precategory D
 
   instance
     GAssoc-nt
@@ -474,3 +476,6 @@ module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
       : {F G : C ⇒ D} {x y : ⌞ C ⌟}
       → Funlike ur (F ⇒ G) (C .Precategory.Hom x y) λ (α , f) → F # f ∙ α # y ＝ α # x ∙ G # f
     Funlike-nt₁ ._#_ α = _=>_.is-natural α _ _
+
+    ⊣-Functor : ⊣-notation (Functor C D) (Functor D C) (𝒰 (oᶜ ⊔ hᶜ ⊔ oᵈ ⊔ hᵈ))
+    ⊣-Functor ._⊣_ L R = Adjoint Functor Functor Functor Functor C C.Hom D D.Hom L R _=>_ _=>_

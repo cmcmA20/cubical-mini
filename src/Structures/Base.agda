@@ -182,7 +182,7 @@ preserves-id→is-transport-str {S} σ pres-id e s =
 sym-transport-str {S} α τ e t =
      sym (transport⁻-transport (ap S (ua e)) (from t))
   ∙∙ sym (ap (subst S (sym (ua e))) (τ e (from t)))
-  ∙∙ ap (subst S (sym (ua e))) (ε t)
+  ∙∙ ap (subst S (sym (ua e))) (ε # t)
   where open module ae = Equiv (α e)
 
 @0 is-transport→is-univalent : (a : Equiv-action S)

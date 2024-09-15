@@ -40,11 +40,11 @@ universal = ≅→≃ the-iso where
   to = ⊎.dmap (f #_) (g #_)
   from = [ inl ∘ (f ⁻¹ $_) , inr ∘ (g ⁻¹ $_) ]ᵤ
   ri : _
-  ri (inl x) = inl # Equiv.ε f x
-  ri (inr x) = inr # Equiv.ε g x
+  ri (inl x) = inl $ Equiv.ε f $ x
+  ri (inr x) = inr $ Equiv.ε g $ x
   li : _
-  li (inl x) = inl # Equiv.η f x
-  li (inr x) = inr # Equiv.η g x
+  li (inl x) = inl $ sym $ Equiv.η f $ x
+  li (inr x) = inr $ sym $ Equiv.η g $ x
 
 ⊎-ap-l : A ≃ B → (A ⊎ C) ≃ (B ⊎ C)
 ⊎-ap-l f = ⊎-ap f refl

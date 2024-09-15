@@ -263,6 +263,14 @@ instance
         (λ _ → _=>ₚ_)
   Whisker-o-Monotone-ntₚ ._▷_ α K ._=>ₚ_.η x = K # (α # x)
 
+  ⊣-Monotone
+    : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
+    → ⊣-notation (Monotone P Q) (Monotone Q P) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⊣-Monotone {P} {Q} ._⊣_ L R = Adjoint Monotone Monotone Monotone Monotone P P._≤_ Q Q._≤_ L R _=>ₚ_ _=>ₚ_
+    where
+    module P = Poset P
+    module Q = Poset Q
+
 Posets : (o ℓ : Level) → Precategory (ℓsuc o ⊔ ℓsuc ℓ) (o ⊔ ℓ)
 Posets o ℓ .Precategory.Ob = Poset o ℓ
 Posets o ℓ .Precategory.Hom = Monotone

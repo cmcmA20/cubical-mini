@@ -33,7 +33,7 @@ ae {A} {B} e = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
 
   module e = Equiv e
   ri : from section-of′ to
-  ri = elim! (ap ∣_∣₁ ∘ e.ε)
+  ri = elim! $ happly $ e.ε ▷ ∣_∣₁
 
   li : from retract-of′ to
-  li = elim! (ap ∣_∣₁ ∘ e.η)
+  li = elim! $ happly $ sym $ e.η ▷ ∣_∣₁

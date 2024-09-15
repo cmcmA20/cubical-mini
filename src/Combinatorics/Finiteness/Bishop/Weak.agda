@@ -112,7 +112,7 @@ finite-choice {P} fi k = do
   e ← enumeration₁ fi
   let module e = Equiv e
   choose ← fin-choice (cardinality fi) (k ∘ e.from)
-  pure $ λ x → subst P (e.η x) (choose (e $ x))
+  pure $ λ x → subst P (e.η # x ⁻¹) (choose (e $ x))
 
 private
   bishop-finite-pi-fin
@@ -164,7 +164,7 @@ instance
       work = do
         t ← finite-choice A-bf $ enumeration₁ ∘ (λ z → fam {z})
         pure $ Σ-ap aeq λ x → t x
-             ∙ =→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
+             ∙ =→≃ (aeq.η ▷ ((λ T → Fin T) ∘ cardinality ∘ λ z → fam {z}) $ x)
 
     pure $ finite₁ ⦇ work ∙ₑ pure fs ⦈
   {-# OVERLAPS Σ-is-bishop-finite #-}

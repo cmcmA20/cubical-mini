@@ -154,10 +154,10 @@ opaque
     rinv : ∀ {Y} → (inv {Y}) section-of′ n-ua
     rinv = Jₚ (λ y p → n-ua (inv p) ＝ p) path where
       path : n-ua {X = X} (inv {X} refl) ＝ refl
-      path i j .carrier = ua.ε refl i j
+      path i j .carrier = ua.ε i refl j
       path i j .carrier-is-tr = is-prop→squareᴾ
         (λ i j → is-of-hlevel-is-prop
-          {A = ua.ε {A = ⌞ X ⌟} refl i j } n)
+          {A = ua.ε {A = ⌞ X ⌟} i refl j} n)
         (λ j → carrier-is-tr $ n-ua {X = X} {Y = X} (=→≃ refl) j)
         (λ _ → carrier-is-tr X)
         (λ _ → carrier-is-tr X)

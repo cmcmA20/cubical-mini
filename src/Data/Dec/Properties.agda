@@ -31,10 +31,10 @@ ae {A} {B} e = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
   module e = Equiv e
 
   ri : from section-of′ to
-  ri = Dec.elim (ap yes ∘ e.ε) (ap no ∘ λ _ → prop!)
+  ri = Dec.elim (ap yes ∘ e.ε #_) (ap no ∘ λ _ → prop!)
 
   li : from retract-of′ to
-  li = Dec.elim (ap yes ∘ e.η) (ap no ∘ λ _ → prop!)
+  li = Dec.elim (ap yes ∘ sym ∘ e.η #_) (ap no ∘ λ _ → prop!)
 
 ≃→dec : (B ≃ A) → Dec A → Dec B
 ≃→dec e = ae e ⁻¹ $_

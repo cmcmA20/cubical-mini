@@ -1,6 +1,7 @@
 {-# OPTIONS --safe #-}
 module Foundations.Notation where
 
+open import Foundations.Notation.Adjunction       public
 open import Foundations.Notation.Associativity    public
 open import Foundations.Notation.Brackets         public
 open import Foundations.Notation.Closure          public
