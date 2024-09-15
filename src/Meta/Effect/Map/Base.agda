@@ -29,6 +29,13 @@ module _ {M : Effect} (let module M = Effect M) ⦃ _ : Map M ⦄ where
   _<&>_ : M.₀ A → (A → B) → M.₀ B
   x <&> f = map f x
 
+  instance
+    Funlike-Effect-Map
+      : ∀ {ℓᵃ ℓᵇ} {A : Type ℓᵃ} {B : Type ℓᵇ}
+      → Funlike ur (Type ℓᵃ → Type (M.adj ℓᵃ)) (A → B) λ (_ , f) → M.₀ A → M.₀ B
+    Funlike-Effect-Map ._#_ _ = map
+
+
 module _ {M N : Effect} (let module M = Effect M; module N = Effect N)
          ⦃ _ : Map M ⦄ ⦃ _ : Map N ⦄ where
 
