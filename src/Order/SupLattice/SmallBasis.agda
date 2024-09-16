@@ -20,9 +20,6 @@ module Order.SupLattice.SmallBasis
   ↓ᴮ : Ob → 𝒰 (ℓ ⊔ ℓ′)
   ↓ᴮ x = Σ[ b ꞉ B ] (β b ≤ x)
 
-  ↓ᴮ-inclusion : (x : Ob) → ↓ᴮ x → Ob
-  ↓ᴮ-inclusion x = β ∘ₜ fst
-
   ↓ᴮ-≤ : {x y : Ob} → x ≤ y → ↓ᴮ x → ↓ᴮ y
   ↓ᴮ-≤ le = second (_∙ le)
 
@@ -31,7 +28,7 @@ module Order.SupLattice.SmallBasis
     field
       ≤-is-small : (x : Ob) (b : B) → is-of-size ℓ′ (β b ≤ x)
       -- technically we only need the least part of is-lub, as fam≤lub holds by definition of ↓ᴮ
-      ↓-is-sup   : (x : Ob) → is-lub P (↓ᴮ-inclusion x) x
+      ↓-is-sup   : (x : Ob) → is-lub P (β ∘ₜ fst) x
 
     _≤ᴮ_ : (b : B) → (x : Ob) → 𝒰 ℓ′
     b ≤ᴮ x = ⌞ ≤-is-small x b ⌟

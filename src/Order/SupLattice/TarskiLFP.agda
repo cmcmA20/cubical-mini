@@ -395,7 +395,7 @@ module bounded-inductive-definitions
       cov = ϕ-has-bound .snd .snd
 
       S₀ : 𝒰 (o ⊔ ℓ ⊔ ℓ′)
-      S₀ = Σ[ b ꞉ B ] ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (↓ᴮ-inclusion L β a ∘ₜ m)) ∈ ϕ
+      S₀ = Σ[ b ꞉ B ] ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (m ∙ fst ∙ β)) ∈ ϕ
 
       instance
         Size-α : ∀ {t} → Size ℓ′ (α t)
@@ -409,10 +409,10 @@ module bounded-inductive-definitions
         Size-ϕ {b} {z} .Size.has-of-size = ϕ-small z b
 
       S₀→↓-aux : {b : B}
-               → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (↓ᴮ-inclusion L β a ∘ₜ m)) ∈ ϕ
+               → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (m ∙ fst ∙ β)) ∈ ϕ
                → Σ[ a' ꞉ Ob ] ((b , a') ∈ ϕ × a' ≤ a)
       S₀→↓-aux (t , m , p) =
-          ⋃ (↓ᴮ-inclusion L β a ∘ₜ m) , p
+          ⋃ (m ∙ fst ∙ β) , p
         , ⋃-universal _ (snd ∘ₜ m)
 
       S₀→↓ : S₀ → ϕ ↓ a
@@ -420,17 +420,17 @@ module bounded-inductive-definitions
 
       g : {b : B} (a' : Ob) (p : (b , a') ∈ ϕ) (le : a' ≤ a)
         → Σ[ t ꞉ T ] α t is-a-small-cover-of ↓ᴮ L β a'
-        → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (↓ᴮ-inclusion L β a ∘ₜ m)) ∈ ϕ
+        → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (m ∙ fst ∙ β)) ∈ ϕ
       g {b} a' p le (t , α-c) =
           t , g-m , subst (λ z → (b , z) ∈ ϕ) g-path p
         where
         g-m :  α t → ↓ᴮ L β a
         g-m = ↓ᴮ-≤ L β le ∘ₜ (α-c $_)
-        g-path : a' ＝ ⋃ (↓ᴮ-inclusion L β a ∘ₜ g-m)
-        g-path = cover-reindexing α-c a' (⋃ (↓ᴮ-inclusion L β a ∘ₜ g-m)) (↓-is-sup a') has-lub
+        g-path : a' ＝ ⋃ (g-m ∙ fst ∙ β)
+        g-path = cover-reindexing α-c a' (⋃ (g-m ∙ fst ∙ β)) (↓-is-sup a') has-lub
 
       cur-trunc-g : {b : B} (a' : Ob) (p : (b , a') ∈ ϕ) (le : a' ≤ a)
-                  → ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (↓ᴮ-inclusion L β a ∘ₜ m)) ∈ ϕ
+                  → ∃[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (m ∙ fst ∙ β)) ∈ ϕ
       cur-trunc-g {b} a' p le = map (g a' p le) (cov a' b p)
 
       ↓→S₀ : ϕ ↓ a → S₀
@@ -593,12 +593,12 @@ module _
         where
         u : Σ[ i ꞉ I₂ ] α i is-a-small-cover-of ↓ᴮ L β a → b ∈ Small-𝓘nd
         u (i₂ , s) = Small-𝓘nd-is-ϕ-closed i₂ (fst ∘ₜ s #_) b
-                                 (ϕ→small-ϕ (⋃ (↓ᴮ-inclusion L β a ∘ₜ (s $_))) b
+                                 (ϕ→small-ϕ (⋃ (s #_ ∙ fst ∙ β)) b
                                             (subst (λ q → (b , q) ∈ ϕ) a=⋁α p))
                                  λ b' → C b' ∘ₜ subst (b' ≤ᴮ_) (a=⋁α ⁻¹)
           where
-          a=⋁α : a ＝ ⋃ (↓ᴮ-inclusion L β a ∘ₜ (s $_))
-          a=⋁α = cover-reindexing s a (⋃ (↓ᴮ-inclusion L β a ∘ₜ (s $_))) (↓-is-sup a) has-lub
+          a=⋁α : a ＝ ⋃ (s #_ ∙ fst ∙ β)
+          a=⋁α = cover-reindexing s a (⋃ (s #_ ∙ fst ∙ β)) (↓-is-sup a) has-lub
 
     Small-𝓘nd-⊆-𝓘nd : Small-𝓘nd ⊆ 𝓘nd
     Small-𝓘nd-⊆-𝓘nd = Small-𝓘nd-is-initial 𝓘nd c-cl-sm Φ-cl-sm

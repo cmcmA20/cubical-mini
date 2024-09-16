@@ -5,6 +5,7 @@ open import Cat.Prelude
 open import Functions.Surjection
 
 open import Order.Base
+open import Order.Morphism
 import Order.Reasoning
 
 private variable o o′ ℓ ℓ′ ℓᵢ : Level
@@ -190,38 +191,42 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → 
   private
     module P = Poset P
     module Q = Order.Reasoning Q
-  open Iso
 
-  ≅→is-lub : (e : P ≅ Q) {x : ⌞ P ⌟}
-           → is-lub P F x → is-lub Q (F ∙ e #_) (e # x)
-  ≅→is-lub e     l .is-lub.fam≤lub i = e .to # l .is-lub.fam≤lub i
-  ≅→is-lub e {x} l .is-lub.least ub′ f
-    = subst (e # x Q.≤_) (e .inv-o #ₚ ub′) -- TODO Galois connections
-    $ e .to $ l .is-lub.least (e .from # ub′) λ i
-    → =→~ (e .inv-i #ₚ F i ⁻¹) ∙ e .from # f i
+  module _ {L : P ⇒ Q} {R : Q ⇒ P} (gc : L ⊣ R) where
+    open Adjoint gc
+    adjoint-l→is-lub : {x : ⌞ P ⌟} → is-lub P F x → is-lub Q (F ∙ L #_) (L # x)
+    adjoint-l→is-lub {x} l .is-lub.fam≤lub i = L # (l .is-lub.fam≤lub i)
+    adjoint-l→is-lub {x} l .is-lub.least ub′ f = adjunct-r (l .is-lub.least (R # ub′) λ i → η # F i ∙ R # f i)
 
-  ≅→Lub : (e : P ≅ Q)
-        → Lub P F → Lub Q (F ∙ e #_)
-  ≅→Lub e l .Lub.lub = e # l .Lub.lub
-  ≅→Lub e l .Lub.has-lub = ≅→is-lub e (l .Lub.has-lub)
+    adjoint-l→Lub : Lub P F → Lub Q (F ∙ L #_)
+    adjoint-l→Lub l .Lub.lub = L # (l .Lub.lub)
+    adjoint-l→Lub l .Lub.has-lub = adjoint-l→is-lub (l .Lub.has-lub)
+
+  module _ (e : P ≅ Q) where
+    ≅→is-lub : {x : ⌞ P ⌟} → is-lub P F x → is-lub Q (F ∙ e #_) (e # x)
+    ≅→is-lub = adjoint-l→is-lub (≅ₚ→⊣ e)
+
+    ≅→Lub : Lub P F → Lub Q (F ∙ e #_)
+    ≅→Lub = adjoint-l→Lub (≅ₚ→⊣ e)
 
 
-module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} where
+module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} (e : P ≅ Q) where
   private
     module P = Poset P
     module Q = Order.Reasoning Q
+    module A = Adjoint (≅ₚ→⊣ (e ⁻¹))
+    module B = Adjoint (≅ₚ→⊣ e)
   open Iso
 
-  ≅→is-lub⁻ : (e : P ≅ Q) {y : ⌞ Q ⌟}
-            → is-lub P (F ∙ e .from #_) (e .from # y) → is-lub Q F y
-  ≅→is-lub⁻ e {y} l = subst² (is-lub Q)
-    (fun-ext λ i → e .inv-o #ₚ F i) (e .inv-o #ₚ y)
-      (≅→is-lub e l)
+  ≅→is-lub⁻ : {y : ⌞ Q ⌟} → is-lub P (F ∙ e .from #_) (e .from # y) → is-lub Q F y
+  ≅→is-lub⁻ {y} l .is-lub.fam≤lub i = A.η # F i ∙ (e .to # l .is-lub.fam≤lub i) ∙ B.ε # y
+  ≅→is-lub⁻ {y} l .is-lub.least ub′ f
+    = A.η # y
+    ∙ e .to # (l .is-lub.least (e .from # ub′) (λ i → e .from $ f i))
+    ∙ B.ε # ub′
 
-  ≅→Lub⁻ : (e : P ≅ Q)
-         → Lub P (F ∙ e .from #_) → Lub Q F
-  ≅→Lub⁻ e l .Lub.lub = e .to # l .Lub.lub
-  ≅→Lub⁻ e l .Lub.has-lub = ≅→is-lub⁻ e $
-    subst (is-lub P (F ∙ e .from #_))
-      (e .inv-i #ₚ l .Lub.lub ⁻¹)
-      (l .Lub.has-lub)
+  ≅→Lub⁻ : Lub P (F ∙ e .from #_) → Lub Q F
+  ≅→Lub⁻ l .Lub.lub = e .to # (l .Lub.lub)
+  ≅→Lub⁻ l .Lub.has-lub
+    = ≅→is-lub⁻ $ subst (is-lub P _) (sym (e .inv-i #ₚ _))
+    $ l .Lub.has-lub

@@ -7,11 +7,11 @@ open import Functions.Surjection
 open import Data.Unit
 open import Data.Maybe renaming (rec to recᵐ)
 
-open import Order.Diagram.Lub
 open import Order.Base
-open import Order.Category
-open import Order.SupLattice
 open import Order.Constructions.Product
+open import Order.Diagram.Lub
+open import Order.Morphism
+open import Order.SupLattice
 open import Order.SupLattice.SmallBasis
 
 import Order.Reasoning
@@ -45,28 +45,21 @@ module _ {o ℓ ℓ′}
 module _ {o₁ o₂ ℓ₁ ℓ₂ ℓ′}
          {P₁ : Poset o₁ ℓ₁} {P₂ : Poset o₂ ℓ₂}
          {L₁ : is-sup-lattice P₁ ℓ′} {L₂ : is-sup-lattice P₂ ℓ′}
-         {B : 𝒰 ℓ′} {β₁ : B → ⌞ P₁ ⌟}
+         {B : 𝒰 ℓ′} {β₁ : B → ⌞ P₁ ⌟} (e : P₁ ≅ P₂)
   where
   private
     module P₁ = Poset P₁
     module P₂ = Poset P₂
+    module A = Adjoint (≅ₚ→⊣ e)
   open Iso
 
-  ≅→is-basis : (e : P₁ ≅ P₂)
-             → is-basis L₁ β₁ → is-basis L₂ (β₁ ∙ e #_)
-  ≅→is-basis e H₁ .is-basis.≤-is-small x b = H₁ .is-basis.≤-is-small (e .from # x) b & second
-    (_∙ prop-extₑ!
-          (e .to #_)
-          (λ z → =→~⁻ (e .inv-i #ₚ β₁ b) ∙ e .from # z ∙ =→~ (ap (e .from #_) (e .inv-o #ₚ x)))
-      ∙ =→≃ (ap (e # β₁ b P₂.≤_) (e .inv-o #ₚ x)))
-  ≅→is-basis e H₁ .is-basis.↓-is-sup x = cast-is-lub
-    (Σ-ap-snd λ b
-      → prop-extₑ!
-          (e .to #_)
-          (λ z → =→~⁻ (e .inv-i #ₚ β₁ b) ∙ e .from # z ∙ =→~ (ap (e .from #_) (e .inv-o #ₚ x)))
-      ∙ =→≃ (ap (e # β₁ b P₂.≤_) (e .inv-o #ₚ x)))
-    (λ _ → refl) $
-      subst (is-lub P₂ _) (e .inv-o #ₚ x) $ ≅→is-lub e $ H₁ .is-basis.↓-is-sup (e .from # x)
+  ≅→is-basis : is-basis L₁ β₁ → is-basis L₂ (β₁ ∙ e #_)
+  ≅→is-basis H₁ .is-basis.≤-is-small x b = H₁ .is-basis.≤-is-small (e .from # x) b & second
+    (_∙ prop-extₑ! A.adjunct-r A.adjunct-l)
+  ≅→is-basis H₁ .is-basis.↓-is-sup x = cast-is-lub
+    (Σ-ap-snd λ _ → prop-extₑ! A.adjunct-r A.adjunct-l)
+    (λ _ → refl)
+    (subst (is-lub P₂ _) (e .inv-o #ₚ x) $ ≅→is-lub e $ H₁ .is-basis.↓-is-sup (e .from # x))
 
 module _ {o₁ o₂ ℓ₁ ℓ₂ ℓ′}
          {P₁ : Poset o₁ ℓ₁} {L₁ : is-sup-lattice P₁ ℓ′}
@@ -75,11 +68,9 @@ module _ {o₁ o₂ ℓ₁ ℓ₂ ℓ′}
   where
   open Iso
 
-  ≅→is-basis⁻ : (e : P₁ ≅ P₂)
-              → is-basis L₁ (β₂ ∙ e .from #_) → is-basis L₂ β₂
+  ≅→is-basis⁻ : (e : P₁ ≅ P₂) → is-basis L₁ (β₂ ∙ e .from #_) → is-basis L₂ β₂
   ≅→is-basis⁻ e H₁ = subst (is-basis L₂)
-    -- incredible bullshit
-    (fun-ext λ b → e .to .hom # (e .inv-i #ₚ _ ⁻¹) ∙ e .to .hom # (e .from .hom # (e .inv-o #ₚ β₂ b)) ∙ e .inv-o #ₚ β₂ b)
+    (fun-ext λ b → e .inv-o #ₚ β₂ b)
     (≅→is-basis e H₁)
 
 module _ {o₁ ℓ₁ o₂ ℓ₂ ℓ}

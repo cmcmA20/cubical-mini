@@ -101,10 +101,10 @@ module _ {R : Poset o″ ℓ″} where
     Refl-sup-lat-hom .refl .pres-⋃ _ = refl
 
   module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where instance
-    Trans-sup-lat-hom
+    Comp-sup-lat-hom
       : {f : P ⇒ Q} {g : Q ⇒ R}
-      → Trans (is-sup-lat-hom {ℓᵢ = ℓᵢ} f) (is-sup-lat-hom g) (is-sup-lat-hom (f ∙ g))
-    Trans-sup-lat-hom {f} {g} ._∙_ α β .pres-⋃ F =
+      → Comp (is-sup-lat-hom {ℓᵢ = ℓᵢ} f) (is-sup-lat-hom g) (is-sup-lat-hom (f ∙ g))
+    Comp-sup-lat-hom {f} {g} ._∙_ α β .pres-⋃ F =
       g # α .pres-⋃ F ∙ β .pres-⋃ (F ∙ f #_)
 
 module _

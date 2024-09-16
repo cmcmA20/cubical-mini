@@ -104,6 +104,12 @@ module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   reflection-retract→is-monotone f g r or {x} {y} le =
     or $ =→~⁻ (r ⁻¹ $ x) ∙ le ∙ =→~ (r ⁻¹ $ y)
 
+  ≅ₚ→⊣ : (f : P ≅ Q) → f .to ⊣ f .from
+  ≅ₚ→⊣ f .Adjoint.η ._=>ₚ_.η x = =→~⁻ λ i → f .inv-i i .hom x
+  ≅ₚ→⊣ f .Adjoint.ε ._=>ₚ_.η y = =→~ λ i → f .inv-o i .hom y
+  ≅ₚ→⊣ f .Adjoint.zig _ = prop!
+  ≅ₚ→⊣ f .Adjoint.zag _ = prop!
+
   ≅→is-order-embedding
     : (f : P ≅ Q) → is-order-embedding P Q (f #_)
   ≅→is-order-embedding f =
