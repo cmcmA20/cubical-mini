@@ -42,11 +42,11 @@ universal = ≅→≃ the-iso where
   to = qmap (f #_) (λ ¬a b → ¬a (f ⁻¹ $ b)) (g #_) (λ ¬c d → ¬c (g ⁻¹ $ d))
   from = [ (λ b ¬d → inxl (f ⁻¹ $ b) (¬d ∘ g #_)) , (λ d ¬b → inxr (g ⁻¹ $ d) (¬b ∘ f #_)) ]ₓ
   ri : _
-  ri (inxl b ¬d) = ap² inxl (Equiv.ε f b) prop!
-  ri (inxr d ¬b) = ap² inxr (Equiv.ε g d) prop!
+  ri (inxl b ¬d) = ap² inxl (Equiv.ε f # b) prop!
+  ri (inxr d ¬b) = ap² inxr (Equiv.ε g # d) prop!
   li : _
-  li (inxl a ¬c) = ap² inxl (Equiv.η f a) prop!
-  li (inxr c ¬a) = ap² inxr (Equiv.η g c) prop!
+  li (inxl a ¬c) = sym $ ap² inxl (Equiv.η f # a) prop!
+  li (inxr c ¬a) = sym $ ap² inxr (Equiv.η g # c) prop!
 
 ⊻-ap-l : A ≃ B → (A ⊻ C) ≃ (B ⊻ C)
 ⊻-ap-l f = ⊻-ap f refl

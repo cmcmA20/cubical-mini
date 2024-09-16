@@ -146,7 +146,7 @@ module Replacement
     go : (t : Image) (u v : Σ[ z ꞉ Image ] (embed z ＝ embed t)) → u ＝ v
     go t (x , p) (y , q) = quot (ls.from (p ∙ q ⁻¹)) ,ₚ commutes→square coh where opaque
       coh : ls.to (ls.from (p ∙ q ⁻¹)) ∙ q ＝ p ∙ refl
-      coh = ap (_∙ q) (ls.ε (p ∙ q ⁻¹)) ∙ ∙-cancel-r p q ∙ ∙-id-i p ⁻¹
+      coh = (ls.ε # (p ∙ q ⁻¹) ▷ q) ∙ ∙-cancel-r p q ∙ ∙-id-i p ⁻¹
 
   elim-prop
     : ∀ {ℓ′} {P : Image → Type ℓ′}
@@ -174,7 +174,7 @@ module Replacement
       go : (f⁻¹x : A) → is-contr _
       go f⁻¹x = (⦋ f⁻¹x ⦌ , refl) , λ where
         (u , α) → quot (ls.encode (ap fst α ⁻¹)) ,ₚ Σ-prop-square!
-          (commutes→square (ap² _∙ₚ_ (ls.ε (sym (ap fst α))) refl ∙ ∙-inv-o _ ∙ ∙-id-o _ ⁻¹))
+          (commutes→square (ap² _∙ₚ_ (ls.ε # sym (ap fst α)) refl ∙ ∙-inv-o _ ∙ ∙-id-o _ ⁻¹))
 
   Size-Im : Size (ℓᵃ ⊔ ℓⁱ) (Im f)
   Size-Im .Size.has-of-size = Image , Image≃Im

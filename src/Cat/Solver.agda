@@ -11,6 +11,7 @@ open import Meta.Reflection.Solver
 open import Cat.Base
 
 open import Data.List.Base
+open import Data.Nat.Instances.FromNat
 open import Data.Reflection.Argument
 open import Data.Reflection.Literal
 open import Data.Reflection.Name

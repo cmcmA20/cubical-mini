@@ -42,9 +42,6 @@ instance
   Refl-≃ : Refl (_≃_ {ℓ})
   Refl-≃ .refl = id , id-is-equiv
 
-  Funlike-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ≃ B) A (λ _ → B)
-  Funlike-≃ ._#_ = fst
-
 equiv-centre : (e : A ≃ B) (y : B) → fibre (e .fst) y
 equiv-centre e y = e .snd .equiv-proof y .fst
 
@@ -121,9 +118,6 @@ instance
   Refl-Erased-≃ : Refl (_≃ᴱ_ {ℓ})
   Refl-Erased-≃ .refl = id , λ y → (y , erase refl) , erase λ (z , erase w) i → w (~ i) , erase λ j → w (~ i ∨ j)
 
-  Funlike-Erased-≃ : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ≃ᴱ B) A (λ _ → B)
-  Funlike-Erased-≃ ._#_ = fst
-
 is-equivᴱ→inverse : {A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B} → is-equivᴱ f → (B → A)
 is-equivᴱ→inverse eqv y = eqv y .fst .fst
 
@@ -136,6 +130,13 @@ is-equivᴱ→unit
   : {@0 A : Type ℓ} {@0 B : Type ℓ′} {@0 f : A → B}
     (eqv : is-equivᴱ f) (@0 x : A) → Erased (is-equivᴱ→inverse eqv (f x) ＝ x)
 is-equivᴱ→unit {f} eqv x .erased i = eqv (f x) .snd .erased (x , erase refl) i .fst
+
+Adjᶠ : (f : A → B) (g : B → A) → 𝒰 _
+Adjᶠ {A} {B} f g = Adjoint Fun Fun Fun Fun A _＝_ B _＝_ f g _＝_ _＝_
+
+instance
+  ⊣-Fun : ⊣-notation (A → B) (B → A) (𝒰 _)
+  ⊣-Fun ._⊣_ = Adjᶠ
 
 
 module _ {ℓ̂ : I → Level} (P : (i : I) → Type (ℓ̂ i)) where

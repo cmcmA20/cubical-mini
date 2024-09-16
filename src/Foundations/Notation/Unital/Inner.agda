@@ -5,8 +5,8 @@ open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 open import Agda.Builtin.Unit
 
+open import Foundations.Notation.Composition
 open import Foundations.Notation.Reflexivity
-open import Foundations.Notation.Transitivity
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ ℓ : Level
@@ -18,33 +18,38 @@ module _
   {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓl ℓr : Level}
   (L : A → B → 𝒰 ℓl) (R : B → B → 𝒰 ℓr) where
 
-  Unitality-i : (r : Reflexivity R) (t : Transitivity L R L) → 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓl)
-  Unitality-i r t = {x : A} {y : B} (p : L x y) → t p r ＝ p
+  GUnitality-i
+    : (r : Reflexivity R) (t : Composition L R L)
+    → {x : A} {y : B} (p : L x y)
+    → 𝒰 ℓl
+  GUnitality-i r t p = t p r ＝ p
 
-  record Unit-i ⦃ r : Refl R ⦄ ⦃ t : Trans L R L ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓl ⊔ ℓr) where
+  record GUnit-i ⦃ r : Refl R ⦄ ⦃ t : Comp L R L ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓl ⊔ ℓr) where
     no-eta-equality
-    field ∙-id-i : Unitality-i (r .refl) (t ._∙_)
+    field ∙-id-i : ∀{x y} (p : L x y) → GUnitality-i (r .refl) (t ._∙_) p
 
-open Unit-i ⦃ ... ⦄ public
+open GUnit-i ⦃ ... ⦄ public
 
-Unit-iʰ : (R : A → A → 𝒰 ℓ) ⦃ r : Refl R ⦄ ⦃ t : Transʰ R ⦄ → Type _
-Unit-iʰ R = Unit-i R R
+-- inner unitality of homogeneous correspondence
+HUnit-i : (R : A → A → 𝒰 ℓ) ⦃ r : Refl R ⦄ ⦃ t : Trans R ⦄ → Type _
+HUnit-i R = GUnit-i R R
 
 
+-- right unitality of binary operator
 module _ {ℓᵃ} (A : 𝒰 ℓᵃ) where
 
-  Unitality-rᵘ : (r : A) (t : A → A → A) → 𝒰 ℓᵃ
-  Unitality-rᵘ r t = (x : A) → t x r ＝ x
+  Unitality-r : (r : A) (t : A → A → A) (x : A) → 𝒰 ℓᵃ
+  Unitality-r r t x = t x r ＝ x
 
-  record Unit-rᵘ ⦃ r : Reflᵘ A ⦄ ⦃ t : Transᵘ A ⦄ : 𝒰 ℓᵃ where
+  record Unit-r ⦃ r : Pointed A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓᵃ where
     no-eta-equality
-    field <>-id-r : Unitality-rᵘ (r .mempty) (t ._<>_)
+    field <>-id-r : ∀ x → Unitality-r (r .mempty) (t ._<>_) x
 
-open Unit-rᵘ ⦃ ... ⦄ public
+open Unit-r ⦃ ... ⦄ public
 
 instance
-  Unit-rᵘ→Unit-i
-    : ⦃ _ : Reflᵘ A ⦄ ⦃ _ : Transᵘ A ⦄ ⦃ _ : Unit-rᵘ A ⦄
-    → Unit-i {A = ⊤} {B = ⊤} (λ _ _ → A) (λ _ _ → A)
-  Unit-rᵘ→Unit-i .∙-id-i = <>-id-r
-  {-# INCOHERENT Unit-rᵘ→Unit-i #-}
+  Unit-r→HUnit-i
+    : ⦃ _ : Pointed A ⦄ ⦃ _ : Has-binary-op A ⦄ ⦃ _ : Unit-r A ⦄
+    → HUnit-i {A = ⊤} (λ _ _ → A)
+  Unit-r→HUnit-i .∙-id-i = <>-id-r
+  {-# INCOHERENT Unit-r→HUnit-i #-}

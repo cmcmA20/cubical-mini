@@ -102,11 +102,11 @@ fin-sum {suc n} B =
       f-inv .is-invertible.inv (inr x) with mrec.from x
       ... | x , y = fsuc x , y
       f-inv .is-invertible.inverses .Inverses.inv-o i (inl x) = inl x
-      f-inv .is-invertible.inverses .Inverses.inv-o i (inr x) = inr (mrec.ε x i)
+      f-inv .is-invertible.inverses .Inverses.inv-o i (inr x) = inr (mrec.ε i x)
       f-inv .is-invertible.inverses .Inverses.inv-i i (mk-fin 0 , s) = mk-fin 0 , s
       f-inv .is-invertible.inverses .Inverses.inv-i i (mk-fin (suc k) , s)
-        = fsuc (fst (mrec.η (mk-fin k , s) i))
-        , snd (mrec.η (mk-fin k , s) i)
+        = fsuc (fst (mrec.η (~ i) (mk-fin k , s)))
+        , snd (mrec.η (~ i) (mk-fin k , s))
 
 fin-product : {n m : ℕ}
             → Fin n × Fin m

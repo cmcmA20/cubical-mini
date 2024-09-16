@@ -16,6 +16,7 @@ open import Data.Fin.Computational.Base
 open import Data.List.Instances.FromProduct
 open import Data.Maybe.Base
 open import Data.Nat.Base
+open import Data.Nat.Instances.FromNat
 open import Data.Nat.Properties
 open import Data.Reflection.Argument
 open import Data.Reflection.Term

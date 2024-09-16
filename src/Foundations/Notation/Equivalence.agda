@@ -10,9 +10,9 @@ open import Foundations.HLevel
 record Equivalence {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ}
   (_~_ : A → A → 𝒰 ℓ) : 𝒰 (level-of-type A ⊔ ℓ) where
   field instance
-    reflexive  : Refl   _~_
-    symmetric  : Symʰ   _~_
-    transitive : Transʰ _~_
+    reflexive  : Refl  _~_
+    symmetric  : Sym   _~_
+    transitive : Trans _~_
 
 open Equivalence public
 

@@ -19,6 +19,9 @@ private variable
   D : Type ℓᵈ
   x y z : A
 
+Pathⁱ : (A : Type ℓ) (x y : A) → Type _
+Pathⁱ A x y = x ＝ⁱ y
+
 apⁱ : (f : A → B) → x ＝ⁱ y → f x ＝ⁱ f y
 apⁱ f reflⁱ = reflⁱ
 
@@ -35,13 +38,13 @@ apⁱ³
 apⁱ³ f reflⁱ reflⁱ reflⁱ = reflⁱ
 
 instance
-  Refl-Idⁱ : Refl (_＝ⁱ_ {A = A})
+  Refl-Idⁱ : Refl (Pathⁱ A)
   Refl-Idⁱ .refl = reflⁱ
 
-  Sym-Idⁱ : Symʰ (_＝ⁱ_ {A = A})
-  Sym-Idⁱ .sym reflⁱ = reflⁱ
+  Sym-Idⁱ : Sym (Pathⁱ A)
+  Sym-Idⁱ ._ᵒᵖ reflⁱ = reflⁱ
 
-  Trans-Idⁱ : Transʰ (_＝ⁱ_ {A = A})
+  Trans-Idⁱ : Trans (Pathⁱ A)
   Trans-Idⁱ ._∙_ reflⁱ reflⁱ = reflⁱ
 
 transportⁱ : A ＝ⁱ B → A → B

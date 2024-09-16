@@ -90,11 +90,11 @@ instance
   Refl-epi .refl .mor = id
   Refl-epi .refl .epic = id-epic
 
-  Trans-mono : Trans _↪_ _↪_ _↪_
-  Trans-mono ._∙_ f g = g ∘ₘ f
+  Comp-mono : Comp _↪_ _↪_ _↪_
+  Comp-mono ._∙_ f g = g ∘ₘ f
 
-  Trans-epi : Trans _↠_ _↠_ _↠_
-  Trans-epi ._∙_ f g = g ∘ₑ f
+  Comp-epi : Comp _↠_ _↠_ _↠_
+  Comp-epi ._∙_ f g = g ∘ₑ f
 
 -- If `f ∘ g` is monic, then `g` must also be monic.
 

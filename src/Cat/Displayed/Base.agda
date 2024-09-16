@@ -67,7 +67,7 @@ record Displayed {o ℓ} (B : Precategory o ℓ)
   _＝[]⟨_⟨_ : ∀ {a b x y} {f g h : Hom a b} {p : g ＝ f} {q : g ＝ h}
              → (f′ : Hom[ f ] x y) {g′ : Hom[ g ] x y} {h′ : Hom[ h ] x y}
              → g′ ＝[ p ] f′ → g′ ＝[ q ] h′ → f′ ＝[ sym p ∙ q ] h′
-  f′ ＝[]⟨ p′ ⟨ q′ = sym p′ ∙[] q′
+  f′ ＝[]⟨ p′ ⟨ q′ = p′ ⁻¹ ∙[] q′
 
   syntax ∙[-]-syntax p p′ q′ = p′ ∙[ p ] q′
   syntax ＝[]⟨⟩-syntax f′ q′ p′ = f′ ＝[]⟨ p′ ⟩ q′
@@ -76,18 +76,23 @@ record Displayed {o ℓ} (B : Precategory o ℓ)
   infixr 30 _∙[]_ ∙[-]-syntax
   infixr 2 ＝[]⟨⟩-syntax ＝[-]⟨⟩-syntax _＝[]⟨_⟨_
 
-  hom[-]-set′ : ∀ {x y} {f : Hom x y} {x′ y′} → is-set (Hom[ f ] x′ y′)
-  hom[-]-set′ = Hom[ _ ]-set _ _
+  opaque
+    hom[-]-set′ : ∀ {x y} {f : Hom x y} {x′ y′} → is-set (Hom[ f ] x′ y′)
+    hom[-]-set′ = Hom[ _ ]-set _ _
+
+    instance
+      H-Level-Hom[-] : ∀ {n} {a b} {f : Hom a b} {a′ b′} → H-Level (2 + n) (Hom[ f ] a′ b′)
+      H-Level-Hom[-] = hlevel-basic-instance 2 hom[-]-set′
 
   instance
-    H-Level-Hom[-] : ∀ {n} {a b} {f : Hom a b} {a′ b′} → H-Level (2 + n) (Hom[ f ] a′ b′)
-    H-Level-Hom[-] = hlevel-basic-instance 2 hom[-]-set′
-
     Refl-Hom[-] : ∀ {a} → Refl Hom[ id {a} ]
     Refl-Hom[-] .refl = idᵈ
 
-    Trans-Hom[-] : ∀ {a b c} {f : Hom a b} {g : Hom b c} → Trans Hom[ f ] Hom[ g ] Hom[ f ∙ g ]
-    Trans-Hom[-] ._∙_ f′ g′ = g′ ∘ᵈ f′
+    Comp-Hom[-] : ∀ {a b c} {f : Hom a b} {g : Hom b c} → Comp Hom[ f ] Hom[ g ] Hom[ f ∙ g ]
+    Comp-Hom[-] ._∙_ f′ g′ = g′ ∘ᵈ f′
+
+    ⇒-Hom[-] : ∀ {x y} {f : Hom x y} → ⇒-notation (Ob[ x ]) (Ob[ y ]) (Type ℓ′)
+    ⇒-Hom[-] {f} ._⇒_ = Hom[ f ]
 
 instance
   open Struct-proj-desc

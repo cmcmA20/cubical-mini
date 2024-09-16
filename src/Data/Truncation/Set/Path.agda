@@ -55,7 +55,7 @@ ae e = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li)
   from = map e.from
 
   ri : from section-of′ to
-  ri = elim! (ap ∣_∣₂ ∘ e.ε)
+  ri = elim! $ happly $ e.ε ▷ ∣_∣₂
 
   li : from retract-of′ to
-  li = elim! (ap ∣_∣₂ ∘ e.η)
+  li = elim! $ happly $ sym $ e.η ▷ ∣_∣₂

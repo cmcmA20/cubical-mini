@@ -22,10 +22,10 @@ instance
   Refl-＝ : Refl (_＝_ {A = A})
   Refl-＝ .refl _ = id
 
-  Sym-＝ : Symʰ (_＝_ {A = A})
-  Sym-＝ .sym p _ q = q ∙ p _ refl ⁻¹
+  Sym-＝ : Sym (_＝_ {A = A})
+  Sym-＝ ._ᵒᵖ p _ q = q ∙ p _ refl ⁻¹
 
-  Trans-＝ : Transʰ (_＝_ {A = A})
+  Trans-＝ : Trans (_＝_ {A = A})
   Trans-＝ ._∙_ p q _ = q _ ∘ p _
 
 transportˢ : A ＝ B → A → B

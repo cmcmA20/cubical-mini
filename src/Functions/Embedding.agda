@@ -26,13 +26,6 @@ is-embedding f = ∀ y → is-prop (fibre f y)
 _↪_ : Type ℓ → Type ℓ′ → Type _
 A ↪ B = Σ[ f ꞉ (A → B) ] is-embedding f
 
-instance
-  Funlike-Inj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↣ B) A (λ _ → B)
-  Funlike-Inj ._#_ = fst
-
-  Funlike-Emb : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↪ B) A (λ _ → B)
-  Funlike-Emb ._#_ = fst
-
 set-injective→is-embedding
   : {f : A → B} → is-set B → Injective f
   → is-embedding f
@@ -163,11 +156,11 @@ instance
   Refl-Emb : Refl (_↪_ {ℓ})
   Refl-Emb .refl = id , is-equiv→is-embedding id-is-equiv
 
-  Trans-Inj : Trans (_↣_ {ℓ} {ℓ′}) (_↣_ {ℓ′ = ℓ″}) _↣_
-  Trans-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ f , f-inj ∘ g-inj
+  Comp-Inj : Comp (_↣_ {ℓ} {ℓ′}) (_↣_ {ℓ′ = ℓ″}) _↣_
+  Comp-Inj ._∙_ (f , f-inj) (g , g-inj) = g ∘ f , f-inj ∘ g-inj
 
-  Trans-Emb : Trans (_↪_ {ℓ} {ℓ′}) (_↪_ {ℓ′ = ℓ″}) _↪_
-  Trans-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
+  Comp-Emb : Comp (_↪_ {ℓ} {ℓ′}) (_↪_ {ℓ′ = ℓ″}) _↪_
+  Comp-Emb ._∙_ (f , f-emb) (g , g-emb) = g ∘ f , λ c →
     ≃→is-of-hlevel 1 fibre-comp (Σ-is-of-hlevel 1 (g-emb c) (f-emb ∘ fst))
 
 is-embedding-comp+is-embedding-outer→is-embedding-inner

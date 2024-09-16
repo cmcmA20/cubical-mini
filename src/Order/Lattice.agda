@@ -63,10 +63,10 @@ module _ {R : Poset o″ ℓ″} where
     Refl-lattice-hom .refl .has-meet-slat-hom = refl
 
   module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where instance
-    Trans-lattice-hom
+    Comp-lattice-hom
       : {f : P ⇒ Q} {g : Q ⇒ R}
-      → Trans (is-lattice-hom f) (is-lattice-hom g) (is-lattice-hom (f ∙ g))
-    Trans-lattice-hom {f} {g} ._∙_ α β .has-join-slat-hom =
+      → Comp (is-lattice-hom f) (is-lattice-hom g) (is-lattice-hom (f ∙ g))
+    Comp-lattice-hom {f} {g} ._∙_ α β .has-join-slat-hom =
       α .has-join-slat-hom ∙ β .has-join-slat-hom
-    Trans-lattice-hom ._∙_ α β .has-meet-slat-hom =
+    Comp-lattice-hom ._∙_ α β .has-meet-slat-hom =
       α .has-meet-slat-hom ∙ β .has-meet-slat-hom

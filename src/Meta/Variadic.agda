@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 module Meta.Variadic where
 
-open import Foundations.Base
+open import Foundations.Prelude
 
 open import Data.HVec.Base public
 open import Data.Nat.Base
@@ -69,3 +69,63 @@ IUniversalⁿ = Quantⁿ ∀-syntax
 
 Existentialⁿ : Variadic-binding¹
 Existentialⁿ = Quantⁿ Σ-syntax
+
+private variable ℓᵃ ℓᵇ ℓᶜ ℓᵈ ℓˣ ℓ ℓ′ ℓ″ : Level
+
+instance
+  Refl-Corr² : Refl (λ A B → A → B → 𝒰 ℓ)
+  Refl-Corr² .refl = _＝_
+
+  Dual-Corr² : Dual {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ}  (λ A B → A → B → 𝒰 ℓ) (λ A B → A → B → 𝒰 ℓ)
+  Dual-Corr² ._ᵒᵖ = flip
+
+  -- TODO generalize to SCorr
+  Comp-Corr²
+    : Comp {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ} {C = 𝒰 ℓᶜ}
+        (λ A B → A → B → 𝒰 ℓ)
+        (λ B C → B → C → 𝒰 ℓ′)
+        (λ A C → A → C → Type (ℓ ⊔ ℓᵇ ⊔ ℓ′))
+  Comp-Corr² ._∙_ {x = A} {y = B} {z = C} R S a c = Σ[ b ꞉ B ] R a b × S b c
+  {-# OVERLAPPING Comp-Corr² #-}
+
+  @0 GAssoc-Corr²
+    : GAssoc {A = 𝒰 ℓᵃ} {B = 𝒰 ℓᵇ} {C = 𝒰 ℓᶜ} {D = 𝒰 ℓᵈ}
+        (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ′) (λ C D → C → D → 𝒰 ℓ″)
+        _ _ _
+  GAssoc-Corr² .∙-assoc {a = A} {b = B} {c = C} {d = D} R S T = fun-ext λ a → fun-ext λ d → ua $
+    (Σ[ b ꞉ B ] R a b × (Σ[ c ꞉ C ] S b c × T c d))                ~⟨ Σ-assoc ∙ Σ-swap ⟩
+    (Σ[ c ꞉ C ] Σ[ f ꞉ Σ[ b ꞉ B ] R a b ] S (f .fst) c × T c d)    ~⟨ Σ-ap-snd (λ c → Σ-assoc ∙ Σ-ap-fst (Σ-assoc ⁻¹)) ⟩
+    (Σ[ c ꞉ C ] (Σ[ b ꞉ B ] R a b × S b c) × T c d)                ∎
+
+  @0 GUnit-i-Corr² : GUnit-i {A = 𝒰 ℓᵃ} (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ)
+  GUnit-i-Corr² .∙-id-i {x = A} {y = B} R = fun-ext λ a → fun-ext λ b → ua
+    $ Σ-ap-snd (λ _ → ×-swap)
+    ∙ Σ-assoc
+    ∙ Σ-contract-fst (≃→is-of-hlevel 0 (Σ-ap-snd (λ _ → sym-≃)) (singletonₚ-is-contr (b , refl)))
+
+  @0 GUnit-o-Corr² : GUnit-o {A = 𝒰 ℓ} {B = 𝒰 ℓ′} (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ)
+  GUnit-o-Corr² .∙-id-o {x = A} {y = B} R = fun-ext λ a → fun-ext λ b → ua $
+    Σ-assoc ∙ Σ-contract-fst (singletonₚ-is-contr (a , refl))
+
+  Whisker-i-Corr-Fun
+    : {X : 𝒰 ℓˣ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+    → Whisker-i
+        (λ X A → X → A → 𝒰 ℓ) (λ A B → A → B → 𝒰 ℓ′) (λ A C → A → C → 𝒰 ℓ′) (λ _ _ → ⊤ₜ) _ _
+        X A B B
+        (λ _ R S → Π[ R ⇒ S ])
+        (λ _ R S → Π[ R ⇒ S ])
+  Whisker-i-Corr-Fun ._◁_ w α x b = second $ second $ α _ b
+  {-# OVERLAPPING Whisker-i-Corr-Fun #-}
+
+  Whisker-o-Corr-Fun
+    : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {X : 𝒰 ℓˣ}
+    → Whisker-o
+        (λ A C → A → C → 𝒰 ℓ)
+        (λ B C → B → C → 𝒰 ℓ)
+        (λ _ _ → ⊤ₜ)
+        (λ C X → C → X → 𝒰 ℓ′) _ _
+        A A B X
+        (λ _ R S → Π[ R ⇒ S ])
+        (λ _ R S → Π[ R ⇒ S ])
+  Whisker-o-Corr-Fun ._▷_ α w a x = second $ first $ α a _
+  {-# OVERLAPPING Whisker-o-Corr-Fun #-}

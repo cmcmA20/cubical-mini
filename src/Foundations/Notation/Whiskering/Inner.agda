@@ -3,28 +3,36 @@ module Foundations.Notation.Whiskering.Inner where
 
 open import Foundations.Prim.Type
 
-open import Foundations.Notation.Transitivity
+open import Foundations.Notation.Composition
 
-private variable
-  ℓᵃ ℓᵇ ℓᶜ ℓ : Level
-  A : 𝒰 ℓᵃ
-  B : 𝒰 ℓᵇ
-  C : 𝒰 ℓᶜ
+-- aka left whiskering
+--             f                       h ∙ f
+--        A ---|--> B               X ---|--> B
+--    h   ∥         |               ∥         |
+-- X ---> ∥    α    | k             ∥  h ◁ α  | k
+--        ∥         v               ∥         v
+--        A ---|--> C               X ---|--> C
+--             g                       h ∙ g
+
 
 module _
-  {ℓᵃ ℓᵇ ℓᶜ ℓh ℓf ℓg ℓhf ℓhg ℓfg ℓo : Level}
-  {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
-  (H : A → B → 𝒰 ℓh)
-  (F : B → C → 𝒰 ℓf) (H∙F : A → C → 𝒰 ℓhf) ⦃ _ : Trans H F H∙F ⦄
-  (G : B → C → 𝒰 ℓg) (H∙G : A → C → 𝒰 ℓhg) ⦃ _ : Trans H G H∙G ⦄
-  (FG : ∀ b c → F b c → G b c → 𝒰 ℓfg)
-  (O : (a : A) (c : C) → H∙F a c → H∙G a c → 𝒰 ℓo) where
+  {ℓx ℓa ℓb ℓc ℓf ℓg ℓh ℓhf ℓhg ℓk ℓis ℓos : Level}
+  {X : 𝒰 ℓx} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {C : 𝒰 ℓc}
+  (H : X → A → 𝒰 ℓh)
+  (F : A → B → 𝒰 ℓf) (G : A → C → 𝒰 ℓg) (K : B → C → 𝒰 ℓk)
+  (H∙F : X → B → 𝒰 ℓhf) ⦃ _ : Comp H F H∙F ⦄
+  (H∙G : X → C → 𝒰 ℓhg) ⦃ _ : Comp H G H∙G ⦄
+  (x : X) (a : A) (b : B) (c : C)
+  (IS : (k : K b c) (f : F   a b) (g : G   a c) → 𝒰 ℓis)
+  (OS : (k : K b c) (f : H∙F x b) (g : H∙G x c) → 𝒰 ℓos)
+  where
 
-  record Whisker-i : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓᶜ ⊔ ℓf ⊔ ℓg ⊔ ℓfg ⊔ ℓh ⊔ ℓo) where
+  record Whisker-i : 𝒰 (ℓx ⊔ ℓa ⊔ ℓb ⊔ ℓc ⊔ ℓf ⊔ ℓg ⊔ ℓh ⊔ ℓk ⊔ ℓis ⊔ ℓos) where
     no-eta-equality
     infixr 24 _◁_
     field
-      _◁_ : {a : A} {b : B} {c : C} {f : F b c} {g : G b c}
-          → (h : H a b) → FG b c f g → O a c (h ∙ f) (h ∙ g)
+      _◁_ : (h : H x a)
+          → {f : F a b} {g : G a c} ⦃ k : K b c ⦄ → IS k f g
+          → OS k (h ∙ f) (h ∙ g)
 
 open Whisker-i ⦃ ... ⦄ public

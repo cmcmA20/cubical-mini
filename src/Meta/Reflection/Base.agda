@@ -28,6 +28,7 @@ open import Data.List.Operations as List
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Idiom
 open import Data.Nat.Base
+open import Data.Nat.Instances.FromNat
 open import Data.Reflection.Abs
 open import Data.Reflection.Argument
 open import Data.Reflection.Error

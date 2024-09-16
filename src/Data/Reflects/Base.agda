@@ -31,12 +31,12 @@ instance
     → Refl (λ a b → Reflects (R a b) true)
   Refl-Reflects .refl = ofʸ refl
 
-  Trans-Reflects
+  Comp-Reflects
     : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
       {L : A → B → Type ℓ} {R : B → C → Type ℓ′} {O : A → C → Type ℓ″}
-      ⦃ t : Trans L R O ⦄
-    → Trans (λ a b → Reflects (L a b) true) (λ a b → Reflects (R a b) true) (λ a b → Reflects (O a b) true)
-  Trans-Reflects ._∙_ (ofʸ p) (ofʸ q) = ofʸ (p ∙ q)
+      ⦃ t : Comp L R O ⦄
+    → Comp (λ a b → Reflects (L a b) true) (λ a b → Reflects (R a b) true) (λ a b → Reflects (O a b) true)
+  Comp-Reflects ._∙_ (ofʸ p) (ofʸ q) = ofʸ (p ∙ q)
 
   Reflects-Lift : ⦃ Reflects P b ⦄ → Reflects (Lift ℓ′ P) b
   Reflects-Lift {b = false} ⦃ ofⁿ ¬p ⦄ = ofⁿ (¬p ∘ lower)

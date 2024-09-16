@@ -55,25 +55,25 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     hom-set′ : ∀ {x y} → is-set (Hom x y)
     hom-set′ = Hom-set _ _
 
-  instance opaque
-    H-Level-Hom : ∀ {x y} {k} → H-Level (2 + k) (Hom x y)
-    H-Level-Hom = hlevel-basic-instance 2 hom-set′
+    instance
+      H-Level-Hom : ∀ {x y} {k} → H-Level (2 + k) (Hom x y)
+      H-Level-Hom = hlevel-basic-instance 2 hom-set′
 
   instance
     Refl-Hom : Refl Hom
     Refl-Hom .refl = id
 
-    Trans-Hom : Transʰ Hom
+    Trans-Hom : Trans Hom
     Trans-Hom ._∙_ f g = g ∘ f
 
-    Assoc-Hom : Assocʰ Hom
-    Assoc-Hom .∙-assoc f g h = assoc h g f ⁻¹
+    HAssoc-Hom : HAssoc Hom
+    HAssoc-Hom .∙-assoc f g h = assoc h g f ⁻¹
 
-    Unit-o-Hom : Unit-oʰ Hom
-    Unit-o-Hom .∙-id-o = id-r
+    HUnit-o-Hom : HUnit-o Hom
+    HUnit-o-Hom .∙-id-o = id-r
 
-    Unit-i-Hom : Unit-iʰ Hom
-    Unit-i-Hom .∙-id-i = id-l
+    HUnit-i-Hom : HUnit-i Hom
+    HUnit-i-Hom .∙-id-i = id-l
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 h)
     ⇒-Hom ._⇒_ = Hom
@@ -100,18 +100,18 @@ instance
   hlevel-proj-precat .get-argument (_ ∷ _ ∷ x v∷ _) = pure x
   hlevel-proj-precat .get-argument _ = type-error []
 
-  Op-Cat : Symᵘ (Precategory o ℓ)
-  Op-Cat .minv C .Ob = Ob C
-  Op-Cat .minv C .Hom x y = Hom C y x
-  Op-Cat .minv C .Hom-set x y = Hom-set C y x
-  Op-Cat .minv C .id = C .id
-  Op-Cat .minv C ._∘_ f g = C ._∘_ g f
-  Op-Cat .minv C .id-l = C .id-r
-  Op-Cat .minv C .id-r = C .id-l
-  Op-Cat .minv C .assoc f g h i = assoc C h g f (~ i)
+  Dual-Cat : Has-unary-op (Precategory o ℓ)
+  Dual-Cat .minv C .Ob = Ob C
+  Dual-Cat .minv C .Hom x y = Hom C y x
+  Dual-Cat .minv C .Hom-set x y = Hom-set C y x
+  Dual-Cat .minv C .id = C .id
+  Dual-Cat .minv C ._∘_ f g = C ._∘_ g f
+  Dual-Cat .minv C .id-l = C .id-r
+  Dual-Cat .minv C .id-r = C .id-l
+  Dual-Cat .minv C .assoc f g h i = assoc C h g f (~ i)
 
-  Invol-Op-Cat : Involᵘ (Precategory o ℓ)
-  Invol-Op-Cat .minv-invol _ = refl
+  Invol-Dual-Cat : Invol (Precategory o ℓ)
+  Invol-Dual-Cat .minv-invol _ = refl
 
   ⊥-Cat : ⊥-notation (Precategory o ℓ)
   ⊥-Cat .⊥ .Ob = ⊥
@@ -159,15 +159,18 @@ record Functor
 unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
 
 instance
-  Op-Functor : Sym {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)
-  Op-Functor .sym F .Functor.F₀ = F .Functor.F₀
-  Op-Functor .sym F .Functor.F₁ = F .Functor.F₁
-  Op-Functor .sym F .Functor.F-id = F .Functor.F-id
-  Op-Functor .sym F .Functor.F-∘ f g = F .Functor.F-∘ g f
+  ⇒-Precat : ⇒-notation (Precategory o ℓ) (Precategory o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Precat ._⇒_ = Functor
 
-  Op-Functor⁻ : Sym {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} (λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)) Functor
-  Op-Functor⁻ .sym F = Op-Functor .sym F
-  {-# INCOHERENT Op-Functor⁻ #-}
+  Dual-Functor : Dual {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)
+  Dual-Functor ._ᵒᵖ F .Functor.F₀ = F .Functor.F₀
+  Dual-Functor ._ᵒᵖ F .Functor.F₁ = F .Functor.F₁
+  Dual-Functor ._ᵒᵖ F .Functor.F-id = F .Functor.F-id
+  Dual-Functor ._ᵒᵖ F .Functor.F-∘ f g = F .Functor.F-∘ g f
+
+  Dual-Functor⁻ : Dual {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} (λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)) Functor
+  Dual-Functor⁻ ._ᵒᵖ F = Dual-Functor ._ᵒᵖ F
+  {-# INCOHERENT Dual-Functor⁻ #-}
 
   Funlike-Functor₀
     : ∀ {o ℓ o′ ℓ′} {C : Precategory o ℓ} {D : Precategory o′ ℓ′}
@@ -180,14 +183,11 @@ instance
     → Funlike ur (Functor C D) (Hom C x y) λ (F , _) → Hom D (F # x) (F # y)
   Funlike-Functor₁ ._#_ F = F .Functor.F₁
 
-  ⇒-Precat : ⇒-notation (Precategory o ℓ) (Precategory o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
-  ⇒-Precat ._⇒_ = Functor
-
-  Invol-Op-Functor : Invol {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor (λ D′ C′ → Functor (C′ ᵒᵖ) (D′ ᵒᵖ))
-  Invol-Op-Functor .sym-invol F _ .Functor.F₀ = F .Functor.F₀
-  Invol-Op-Functor .sym-invol F _ .Functor.F₁ = F .Functor.F₁
-  Invol-Op-Functor .sym-invol F _ .Functor.F-id = F .Functor.F-id
-  Invol-Op-Functor .sym-invol F _ .Functor.F-∘ = F .Functor.F-∘
+  GInvol-Dual-Functor : GInvol {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor (λ D′ C′ → Functor (C′ ᵒᵖ) (D′ ᵒᵖ))
+  GInvol-Dual-Functor .invol F _ .Functor.F₀ = F .Functor.F₀
+  GInvol-Dual-Functor .invol F _ .Functor.F₁ = F .Functor.F₁
+  GInvol-Dual-Functor .invol F _ .Functor.F-id = F .Functor.F-id
+  GInvol-Dual-Functor .invol F _ .Functor.F-∘ = F .Functor.F-∘
 
 _∘ᶠ_ : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {E : Precategory oᵉ hᵉ}
      → D ⇒ E → C ⇒ D → C ⇒ E
@@ -238,20 +238,20 @@ instance
   Refl-Functor : Refl (Functor {oᶜ} {hᶜ})
   Refl-Functor .refl = Id
 
-  Trans-Functor : Trans (Functor {oᶜ} {hᶜ}) (Functor {oᵈ} {hᵈ} {oᵉ} {hᵉ}) Functor
-  Trans-Functor ._∙_ F G = G ∘ᶠ F
+  Comp-Functor : Comp (Functor {oᶜ} {hᶜ}) (Functor {oᵈ} {hᵈ} {oᵉ} {hᵉ}) Functor
+  Comp-Functor ._∙_ F G = G ∘ᶠ F
 
-  Assoc-Functor
-    : Assoc {A = Precategory o h} {B = Precategory o′ h′}
-            {C = Precategory oᶜ hᶜ} {D = Precategory oᵈ hᵈ}
-            Functor Functor Functor Functor Functor Functor
-  Assoc-Functor .∙-assoc F G H = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
+  GAssoc-Functor
+    : GAssoc {A = Precategory o h} {B = Precategory o′ h′}
+             {C = Precategory oᶜ hᶜ} {D = Precategory oᵈ hᵈ}
+             Functor Functor Functor Functor Functor Functor
+  GAssoc-Functor .∙-assoc F G H = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
 
-  Unit-o-Functor : Unit-o {A = Precategory o ℓ} {B = Precategory o′ ℓ′} Functor Functor
-  Unit-o-Functor .∙-id-o F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
+  GUnit-o-Functor : GUnit-o {A = Precategory o ℓ} {B = Precategory o′ ℓ′} Functor Functor
+  GUnit-o-Functor .∙-id-o F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
 
-  Unit-i-Functor : Unit-i {A = Precategory o ℓ} {B = Precategory o′ ℓ′} Functor Functor
-  Unit-i-Functor .∙-id-i F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
+  GUnit-i-Functor : GUnit-i {A = Precategory o ℓ} {B = Precategory o′ ℓ′} Functor Functor
+  GUnit-i-Functor .∙-id-i F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
 
   ≅-Cat : ≅-notation (Precategory o ℓ) (Precategory o′ ℓ′) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
   ≅-Cat ._≅_ = Iso Functor Functor
@@ -301,41 +301,43 @@ unquoteDecl H-Level-NT = declare-record-hlevel 2 H-Level-NT (quote _=>_)
 unquoteDecl NT-iso = declare-record-iso NT-iso (quote _=>_)
 
 instance
-  ⇒-natural-transformation : ⇒-notation (C ⇒ D) (C ⇒ D) _
-  ⇒-natural-transformation ._⇒_ = _=>_
+  ⇒-nt : ⇒-notation (C ⇒ D) (C ⇒ D) _
+  ⇒-nt ._⇒_ = _=>_
 
-  Op-natural-transformation
+  Dual-nt
     : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
-    → Sym {A = Functor C D} {B = Functor C D} _=>_ λ G F → G ᵒᵖ => F ᵒᵖ
-  Op-natural-transformation .sym α ._=>_.η = α ._=>_.η
-  Op-natural-transformation .sym α ._=>_.is-natural x y f = _=>_.is-natural α y x f ⁻¹
+    → Dual {A = Functor C D} {B = Functor C D} _=>_ λ G F → G ᵒᵖ => F ᵒᵖ
+  Dual-nt ._ᵒᵖ α ._=>_.η = α ._=>_.η
+  Dual-nt ._ᵒᵖ α ._=>_.is-natural x y f = _=>_.is-natural α y x f ⁻¹
 
-  Funlike-natural-transformation
+  Funlike-nt₀
     : {C : Precategory o ℓ} {D : Precategory o′ ℓ′} {F G : C ⇒ D}
     → Funlike ur (F ⇒ G) ⌞ C ⌟ (λ (_ , x) → D .Precategory.Hom (F $ x) (G $ x))
-  Funlike-natural-transformation ._#_ = _=>_.η
+  Funlike-nt₀ ._#_ = _=>_.η
 
-  Refl-natural-transformation : Refl (_=>_ {C = C} {D = D})
-  Refl-natural-transformation {D} .refl ._=>_.η _ = D .id
-  Refl-natural-transformation {D} .refl {(F)} ._=>_.is-natural _ _ _ =
+  Refl-nt : Refl (_=>_ {C = C} {D = D})
+  Refl-nt {D} .refl ._=>_.η _ = D .id
+  Refl-nt {D} .refl {(F)} ._=>_.is-natural _ _ _ =
     D .id-l _ ∙ D .id-r _ ⁻¹
 
   Whisker-i-Functor-nt
-    : Whisker-i {A = Precategory o h} {B = Precategory oᶜ hᶜ}
-      {C = Precategory oᵈ hᵈ}
-      Functor Functor Functor Functor Functor
-      (λ _ _ → _=>_)
-      (λ _ _ → _=>_)
+    : {X : Precategory o h} {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ}
+    → Whisker-i
+        Functor Functor Functor (λ _ _ → ⊤) _ _
+        X C D D
+        (λ _ → _=>_)
+        (λ _ → _=>_)
   Whisker-i-Functor-nt ._◁_ H α ._=>_.η x = α # (H # x)
   Whisker-i-Functor-nt ._◁_ H α ._=>_.is-natural x y f =
     α ._=>_.is-natural (H # x) (H # y) (H # f)
 
   Whisker-o-Functor-nt
-    : Whisker-o {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ}
-      {C = Precategory o h}
-      Functor Functor Functor Functor Functor
-      (λ _ _ → _=>_)
-      (λ _ _ → _=>_)
+    : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {X : Precategory o h}
+    → Whisker-o
+        Functor Functor (λ _ _ → ⊤) Functor _ _
+        C C D X
+        (λ _ → _=>_)
+        (λ _ → _=>_)
   Whisker-o-Functor-nt ._▷_ α K ._=>_.η x = K # (α # x)
   Whisker-o-Functor-nt ._▷_ α K ._=>_.is-natural x y f
     = Functor.F-∘ K (α # y) _ ⁻¹
@@ -365,8 +367,8 @@ _∘ⁿᵗ_ {C} {D} {F} {G} {H} α β = comps
 {-# DISPLAY =>∘.comps F G = F ∘ⁿᵗ G #-}
 
 instance
-  Trans-natural-transformation : Trans (_=>_ {C = C} {D = D}) _=>_ _=>_
-  Trans-natural-transformation ._∙_ α β = β ∘ⁿᵗ α
+  Comp-nt : Comp (_=>_ {C = C} {D = D}) _=>_ _=>_
+  Comp-nt ._∙_ α β = β ∘ⁿᵗ α
 
 
 is-natural-transformation
@@ -411,13 +413,13 @@ module _ {C : Precategory oᶜ hᶜ}
   open Functor
   open _=>_
 
-  nat-pathᴾ : {F′ G′ : Functor C D}
-            → (p : F ＝ F′) (q : G ＝ G′)
-            → {a : F ⇒ G} {b : F′ ⇒ G′}
-            → (∀ x → ＜ a $ x ／ _ ＼ b $ x ＞)
-            → ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
-  nat-pathᴾ p q path i .η x = path x i
-  nat-pathᴾ p q {a} {b} path i .is-natural x y f =
+  nt-pathᴾ : {F′ G′ : Functor C D}
+           → (p : F ＝ F′) (q : G ＝ G′)
+           → {a : F ⇒ G} {b : F′ ⇒ G′}
+           → (∀ x → ＜ a $ x ／ _ ＼ b $ x ＞)
+           → ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
+  nt-pathᴾ p q path i .η x = path x i
+  nt-pathᴾ p q {a} {b} path i .is-natural x y f =
     is-prop→pathᴾ
       (λ i → (D.Hom-set _ _)
         (path y i D.∘ Functor.F₁ (p i) f) (Functor.F₁ (q i) f D.∘ path x i))
@@ -436,34 +438,44 @@ module _ {C : Precategory oᶜ hᶜ}
       → Funlike ur (α ＝ β) C.Ob λ (p , x) → α # x ＝ β # x
     Funlike-nt-homotopy ._#_ p x = ap (_$ x) p
 
-    Extensional-natural-transformation
+    Extensional-nt
       : ∀ {ℓr}
       → ⦃ sa : {x : ⌞ C ⌟} → Extensional (D .Hom (F $ x) (G $ x)) ℓr ⦄
       → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
-    Extensional-natural-transformation ⦃ sa ⦄ .Pathᵉ f g = ∀ i → Pathᵉ sa (f $ i) (g $ i)
-    Extensional-natural-transformation ⦃ sa ⦄ .reflᵉ x i = reflᵉ sa (x $ i)
-    Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path x = nat-pathᴾ refl refl
+    Extensional-nt ⦃ sa ⦄ .Pathᵉ f g = ∀ i → Pathᵉ sa (f $ i) (g $ i)
+    Extensional-nt ⦃ sa ⦄ .reflᵉ x i = reflᵉ sa (x $ i)
+    Extensional-nt ⦃ sa ⦄ .idsᵉ .to-path x = nt-pathᴾ refl refl
       λ i → sa .idsᵉ .to-path (x i)
-    Extensional-natural-transformation ⦃ sa ⦄ .idsᵉ .to-path-over h =
+    Extensional-nt ⦃ sa ⦄ .idsᵉ .to-path-over h =
       is-prop→pathᴾ
         (λ i → Π-is-of-hlevel 1
           λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa .idsᵉ)) (D .Hom-set _ _ _ _))
         _ _
 
 module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
-  private module D = Precategory D
+  private
+    module C = Precategory C
+    module D = Precategory D
 
   instance
-    Assoc-natural-transformation
-      : Assoc {A = Functor C D} _=>_ _=>_ _=>_ _=>_ _=>_ _=>_
-    Assoc-natural-transformation .∙-assoc α β γ = ext λ c →
+    GAssoc-nt
+      : GAssoc {A = Functor C D} _=>_ _=>_ _=>_ _=>_ _=>_ _=>_
+    GAssoc-nt .∙-assoc α β γ = ext λ c →
       D.assoc (γ # c) (β # c) (α # c) ⁻¹
 
-    Unit-o-natural-transformation : Unit-o {A = Functor C D} _=>_ _=>_
-    Unit-o-natural-transformation .∙-id-o α = ext λ c → D.id-r (α # c)
+    GUnit-o-nt : GUnit-o {A = Functor C D} _=>_ _=>_
+    GUnit-o-nt .∙-id-o α = ext λ c → D.id-r (α # c)
 
-    Unit-i-natural-transformation : Unit-i {A = Functor C D} _=>_ _=>_
-    Unit-i-natural-transformation .∙-id-i α = ext λ c → D.id-l (α # c)
+    GUnit-i-nt : GUnit-i {A = Functor C D} _=>_ _=>_
+    GUnit-i-nt .∙-id-i α = ext λ c → D.id-l (α # c)
 
     ≅-Functor : ≅-notation (Functor C D) (Functor C D) (𝒰 (oᶜ ⊔ hᶜ ⊔ hᵈ))
     ≅-Functor ._≅_ = Iso _=>_ _=>_
+
+    Funlike-nt₁
+      : {F G : C ⇒ D} {x y : ⌞ C ⌟}
+      → Funlike ur (F ⇒ G) (C .Precategory.Hom x y) λ (α , f) → F # f ∙ α # y ＝ α # x ∙ G # f
+    Funlike-nt₁ ._#_ α = _=>_.is-natural α _ _
+
+    ⊣-Functor : ⊣-notation (Functor C D) (Functor D C) (𝒰 (oᶜ ⊔ hᶜ ⊔ oᵈ ⊔ hᵈ))
+    ⊣-Functor ._⊣_ L R = Adjoint Functor Functor Functor Functor C C.Hom D D.Hom L R _=>_ _=>_

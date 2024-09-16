@@ -16,6 +16,7 @@ open import Data.List.Base
 open import Data.List.Instances.FromProduct
   public
 open import Data.Maybe.Base
+open import Data.Nat.Instances.FromNat
 open import Data.Reflection.Abs
 open import Data.Reflection.Argument
 open import Data.Reflection.Error

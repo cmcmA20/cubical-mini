@@ -114,6 +114,13 @@ instance
     → Funlike ur (f ＝ g) A (λ z → f (z .snd) ＝ g (z .snd))
   Funlike-Homotopy ._#_ p x i = p i x
 
+  Funlike-Σ
+    : {X : Type ℓ} {B : Σ X (λ _ → A) → Type ℓ′} {P : X → Type ℓ″}
+    → ⦃ Funlike ur X A B ⦄
+    → Funlike ur (Σ X P) A λ (w , z) → B (w .fst , z)
+  Funlike-Σ ._#_ (f , _) = f #_
+  {-# OVERLAPPABLE Funlike-Σ #-}
+
 
 -- Generalised "sections" (e.g. of a presheaf) notation.
 infix 999 _ʻ_

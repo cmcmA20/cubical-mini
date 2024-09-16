@@ -2,13 +2,13 @@
 module Foundations.Equiv.Properties where
 
 open import Foundations.Base
+open import Foundations.Equiv.Base
 open import Foundations.HLevel.Base
 open import Foundations.Isomorphism
 open import Foundations.Path.Base
+open import Foundations.Path.Groupoid
 open import Foundations.Path.Reasoning
 open import Foundations.Univalence
-
-open import Foundations.Equiv.Base
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ : Level
@@ -19,18 +19,58 @@ private variable
   x y : A
 
 instance
-  Sym-≃ : Sym (_≃_ {ℓ} {ℓ′}) _≃_
-  Sym-≃ .sym (f , e) = ≅→≃ $ iso (is-equiv→inverse e) f
+  Dual-≃ : Dual (_≃_ {ℓ} {ℓ′}) _≃_
+  Dual-≃ ._ᵒᵖ (f , e) = ≅→≃ $ iso (is-equiv→inverse e) f
     (fun-ext $ is-equiv→unit e)
     (fun-ext $ is-equiv→counit e)
+
+module _ (e : A ≃ B) where
+  private
+    f : A → B
+    f = e .fst
+    g : B → A
+    g = e ⁻¹ $_
+
+    η : id ＝ g ∘ f
+    η = sym $ fun-ext (is-equiv→unit (e .snd))
+
+    ε : f ∘ g ＝ id
+    ε = fun-ext (is-equiv→counit (e .snd))
+
+    zig : (x : A) → ap f (η # x) ∙ ε # f x ＝ refl
+    zig x =
+      ap f (η # x) ∙ ε # (f x)  ~⟨ ap sym (is-equiv→zig (e .snd) x) ▷ ε # (f x) ⟩
+      ε # (f x) ⁻¹ ∙ ε # (f x)  ~⟨ ∙-inv-o (ε # f x) ⟩
+      the (f x ＝ f x) refl     ∎
+
+    zag : (y : B) → η # g y ∙ ap g (ε # y) ＝ refl
+    zag y =
+      η # (g y) ∙ ap g (ε # y)  ~⟨ η # (g y) ◁ is-equiv→zag (e .snd) y ⟩
+      η # (g y) ∙ η # (g y) ⁻¹  ~⟨ ∙-inv-i (η # g y) ⟩
+      the (g y ＝ g y) refl     ∎
+
+  ≃→⊣ : (e $_) ⊣ (e ⁻¹ $_)
+  ≃→⊣ .Adjoint.η = η
+  ≃→⊣ .Adjoint.ε = ε
+  ≃→⊣ .Adjoint.zig = zig
+  ≃→⊣ .Adjoint.zag = zag
+
+-- TODO generalize to arbitrary iso
+≅ₜ→⊣ : (i : A ≅ B) → i .Iso.to ⊣ i .Iso.from
+≅ₜ→⊣ i = ≃→⊣ (≅→≃ i)
+
 
 module Equiv (e : A ≃ B) where
   to = e .fst
   from = is-equiv→inverse (e .snd)
-  η = is-equiv→unit (e .snd)
-  ε = is-equiv→counit (e .snd)
-  zig = is-equiv→zig (e .snd)
-  zag = is-equiv→zag (e .snd)
+
+  open Adjoint (≃→⊣ e) public
+
+  zig′ : (x : A) → ap to (η # x) ⁻¹ ＝ ε # to x
+  zig′ = is-equiv→zig (e .snd)
+
+  zag′ : (y : B) → ap from (ε # y) ＝ η # from y ⁻¹
+  zag′ = is-equiv→zag (e .snd)
 
   opaque
     injective : ∀ {x y} → to x ＝ to y → x ＝ y
@@ -38,12 +78,6 @@ module Equiv (e : A ≃ B) where
 
     injective₂ : ∀ {x y z} → to x ＝ z → to y ＝ z → x ＝ y
     injective₂ p q = ap fst $ is-contr→is-prop (e .snd .equiv-proof _) (_ , p) (_ , q)
-
-    adjunct-l : ∀ {x y} → to x ＝ y → x ＝ from y
-    adjunct-l p = sym (η _) ∙ ap from p
-
-    adjunct-r : ∀ {x y} → x ＝ from y → to x ＝ y
-    adjunct-r p = ap to p ∙ ε _
 
   inverse : B ≃ A
   inverse = e ⁻¹
@@ -72,17 +106,17 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
   e = is-inv→is-equiv $ invertible (g⁻¹ ∙ f⁻¹) s r
 
 instance
-  Invol-≃ : Invol (_≃_ {ℓ} {ℓ′}) _≃_
-  Invol-≃ .sym-invol _ = equiv-ext refl
+  GInvol-≃ : GInvol (_≃_ {ℓ} {ℓ′}) _≃_
+  GInvol-≃ .invol _ = equiv-ext refl
 
-  Trans-≃ : Trans (_≃_ {ℓ} {ℓ′}) (_≃_ {ℓ' = ℓ″}) _≃_
-  Trans-≃ ._∙_  = _∙ₑ_
+  Comp-≃ : Comp (_≃_ {ℓ} {ℓ′}) (_≃_ {ℓ' = ℓ″}) _≃_
+  Comp-≃ ._∙_  = _∙ₑ_
 
 is-equiv-comp : {f : A → B} {g : B → C} → is-equiv f → is-equiv g → is-equiv (g ∘ f)
 is-equiv-comp fe ge = ((_ , fe) ∙ (_ , ge)) .snd
 
 inv-≃ : (A ≃ B) ≃ (B ≃ A)
-inv-≃ = ≅→≃ $ iso _⁻¹ _⁻¹ (fun-ext sym-invol) (fun-ext sym-invol)
+inv-≃ = ≅→≃ $ iso _⁻¹ _⁻¹ (fun-ext invol) (fun-ext invol)
 
 is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
 is-equiv-inv fe = ((_ , fe) ⁻¹) .snd

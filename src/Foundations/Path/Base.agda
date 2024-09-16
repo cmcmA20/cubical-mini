@@ -17,21 +17,31 @@ opaque
   sym-∙ p q _ j = (p ∙ₚ q) (~ j)
 
 instance
-  Whisker-i-Path
-    : {ℓh ℓf ℓhf : Level} {H : A → B → 𝒰 ℓh}
-      {F : B → C → 𝒰 ℓf} {H∙F : A → C → 𝒰 ℓhf} ⦃ _ : Trans H F H∙F ⦄
-    → Whisker-i H F H∙F F H∙F
-      (λ _ _ → _＝_) (λ _ _ → _＝_)
-  Whisker-i-Path ._◁_ r h = ap (r ∙_) h
-  {-# INCOHERENT Whisker-i-Path #-}
+  Whisker-i-Pathᴾ
+    : {ℓx ℓa ℓb ℓh ℓf ℓhf : Level}
+      {X : 𝒰 ℓx} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+      {H : X → A → 𝒰 ℓh} {F : A → B → 𝒰 ℓf}
+      {H∙F : X → B → 𝒰 ℓhf} ⦃ _ : Comp H F H∙F ⦄
+      {x : X} {a : A} {b b′ : B}
+    → Whisker-i H F F _＝_ H∙F H∙F
+        x a b b′
+        (λ p → Pathᴾ λ i → F   a (p i))
+        (λ p → Pathᴾ λ i → H∙F x (p i))
+  Whisker-i-Pathᴾ ._◁_ h s i = h ∙ s i
+  {-# INCOHERENT Whisker-i-Pathᴾ #-}
 
-  Whisker-o-Path
-    : {ℓk ℓf ℓfk : Level} {K : B → C → 𝒰 ℓk}
-      {F : A → B → 𝒰 ℓf} {F∙K : A → C → 𝒰 ℓfk} ⦃ _ : Trans F K F∙K ⦄
-    → Whisker-o K F F∙K F F∙K
-      (λ _ _ → _＝_) (λ _ _ → _＝_)
-  Whisker-o-Path ._▷_ h r = ap (_∙ r) h
-  {-# INCOHERENT Whisker-o-Path #-}
+  Whisker-o-Pathᴾ
+    : {ℓx ℓa ℓb ℓk ℓf ℓfk : Level}
+      {X : 𝒰 ℓx} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+      {K : B → X → 𝒰 ℓk} {F : A → B → 𝒰 ℓf}
+      {F∙K : A → X → 𝒰 ℓfk} ⦃ _ : Comp F K F∙K ⦄
+      {a a′ : A} {b : B} {x : X}
+    → Whisker-o F F _＝_ K F∙K F∙K
+        a a′ b x
+        (λ p → Pathᴾ λ i → F   (p i) b)
+        (λ p → Pathᴾ λ i → F∙K (p i) x)
+  Whisker-o-Pathᴾ ._▷_ s k i = s i ∙ k
+  {-# INCOHERENT Whisker-o-Pathᴾ #-}
 
 opaque
   unfolding _∙ₚ_

@@ -24,12 +24,12 @@ record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   open is-monoid has-monoid public
 
   field
-    inverse-l : Invertibility-lᵘ A id inverse _⋆_
-    inverse-r : Invertibility-rᵘ A id inverse _⋆_
+    inverse-l : ∀ x → x retract-of inverse x
+    inverse-r : ∀ x → x section-of inverse x
 
   instance
-    Symᵘ-is-group : Symᵘ A
-    Symᵘ-is-group .minv = inverse
+    Has-unary-op-is-group : Has-unary-op A
+    Has-unary-op-is-group .minv = inverse
 
 unquoteDecl is-group-iso = declare-record-iso is-group-iso (quote is-group)
 
@@ -117,10 +117,10 @@ instance
   Refl-Group-hom : Refl {A = Group-on A} (Group-hom refl)
   Refl-Group-hom .refl .Group-hom.pres-⋆ _ _ = refl
 
-  Trans-Group-hom
+  Comp-Group-hom
     : {f : A → B} {g : B → C}
-    → Trans (Group-hom f) (Group-hom g) (Group-hom (f ∙ g))
-  Trans-Group-hom {f} {g} ._∙_ p q .Group-hom.pres-⋆ a a′ =
+    → Comp (Group-hom f) (Group-hom g) (Group-hom (f ∙ g))
+  Comp-Group-hom {f} {g} ._∙_ p q .Group-hom.pres-⋆ a a′ =
     ap g (p .Group-hom.pres-⋆ a a′) ∙ q .Group-hom.pres-⋆ (f a) (f a′)
 
 group-on↪monoid-on : Group-on A ↪ₜ Monoid-on A
@@ -137,21 +137,21 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     id  : X
     _⋆_ : X → X → X
     inverse : X → X
-    id-l      : Unitality-lᵘ X id _⋆_
-    inverse-l : Invertibility-lᵘ X id inverse _⋆_
-    assoc     : Associativityᵘ X _⋆_
+    id-l      : Π[ Unitality-l X id _⋆_ ]
+    inverse-l : ∀ x → inverse x ⋆ x ＝ id
+    assoc     : Π[ Associativity X _⋆_ ]
 
   private instance
-    Reflᵘ-make-group : Reflᵘ X
-    Reflᵘ-make-group .mempty = id
+    Pointed-make-group : Pointed X
+    Pointed-make-group .mempty = id
 
-    Symᵘ-make-group : Symᵘ X
-    Symᵘ-make-group .minv = inverse
+    Has-unary-op-make-group : Has-unary-op X
+    Has-unary-op-make-group .minv = inverse
 
-    Transᵘ-make-group : Transᵘ X
-    Transᵘ-make-group ._<>_ = _⋆_
+    Has-binary-op-make-group : Has-binary-op X
+    Has-binary-op-make-group ._<>_ = _⋆_
 
-  inverse-r : Invertibility-rᵘ X id inverse _⋆_
+  inverse-r : ∀ x → x ⋆ inverse x ＝ id
   inverse-r x =
     x ∙ x ⁻¹                       ~⟨ id-l _ ⟨
     id ∙ (x ∙ x ⁻¹)                ~⟨ inverse-l (x ⁻¹) ▷ _ ⟨
@@ -162,7 +162,7 @@ record make-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     x ⁻¹ ⁻¹ ∙ x ⁻¹                 ~⟨ inverse-l _ ⟩
     id                             ∎
 
-  id-r : Unitality-rᵘ X id _⋆_
+  id-r : ∀ x → Unitality-r X id _⋆_ x
   id-r x =
     x ∙ id          ~⟨ x ◁ inverse-l _ ⟨
     x ∙ (x ⁻¹ ∙ x)  ~⟨ assoc _ _ _ ⟩

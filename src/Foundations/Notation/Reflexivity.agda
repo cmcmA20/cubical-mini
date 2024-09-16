@@ -20,14 +20,14 @@ module _ {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ : Level} (_~_ : A → A → 𝒰 ℓ) w
 open Refl ⦃ ... ⦄ public
 
 
--- "untyped" raw reflexivity is just being pointed
-record Reflᵘ {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
+-- unindexed reflexivity is being pointed
+record Pointed {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
   no-eta-equality
   field mempty : A
 
-open Reflᵘ ⦃ ... ⦄ public
+open Pointed ⦃ ... ⦄ public
 
 instance
-  Reflᵘ→Refl : ⦃ Reflᵘ A ⦄ → Refl {A = ⊤} λ _ _ → A
-  Reflᵘ→Refl .refl = mempty
-  {-# INCOHERENT Reflᵘ→Refl #-}
+  Pointed→Refl : ⦃ Pointed A ⦄ → Refl {A = ⊤} λ _ _ → A
+  Pointed→Refl .refl = mempty
+  {-# INCOHERENT Pointed→Refl #-}

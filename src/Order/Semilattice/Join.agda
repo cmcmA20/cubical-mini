@@ -87,8 +87,8 @@ module _ {R : Poset o″ ℓ″} where
     Refl-join-slat-hom .refl .∪-≤ _ _ = refl
 
   module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where instance
-    Trans-join-slat-hom
+    Comp-join-slat-hom
       : {f : P ⇒ Q} {g : Q ⇒ R}
-      → Trans (is-join-slat-hom f) (is-join-slat-hom g) (is-join-slat-hom (f ∙ g))
-    Trans-join-slat-hom {g} ._∙_ α β .⊥-≤ = g # α .⊥-≤ ∙ β .⊥-≤
-    Trans-join-slat-hom {f} {g} ._∙_ α β .∪-≤ x y = g # α .∪-≤ x y ∙ β .∪-≤ (f # x) (f # y)
+      → Comp (is-join-slat-hom f) (is-join-slat-hom g) (is-join-slat-hom (f ∙ g))
+    Comp-join-slat-hom {g} ._∙_ α β .⊥-≤ = g # α .⊥-≤ ∙ β .⊥-≤
+    Comp-join-slat-hom {f} {g} ._∙_ α β .∪-≤ x y = g # α .∪-≤ x y ∙ β .∪-≤ (f # x) (f # y)

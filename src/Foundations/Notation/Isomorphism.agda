@@ -1,14 +1,14 @@
 {-# OPTIONS --safe #-}
 module Foundations.Notation.Isomorphism where
 
-open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 
+open import Foundations.Notation.Composition
+open import Foundations.Notation.Duality
+open import Foundations.Notation.Inverse
 open import Foundations.Notation.Reflexivity
 open import Foundations.Notation.Retract
 open import Foundations.Notation.Section
-open import Foundations.Notation.Symmetry
-open import Foundations.Notation.Transitivity
 open import Foundations.Notation.Underlying
 open import Foundations.Notation.Unital.Outer
 
@@ -16,73 +16,10 @@ open import Agda.Builtin.Sigma
 
 module _
   {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-  {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-  {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄ where
-
-  record Inverses {x : A} {y : B} (f : F x y) (g : G y x) : 𝒰 (ℓ″ ⊔ ℓ‴) where
-    no-eta-equality
-    constructor make-inverses
-    field
-      inv-o : f retract-of g
-      inv-i : f section-of g
-  {-# INLINE make-inverses #-}
-
-record is-invertible
-  {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-  {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-  {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
-  {x : A} {y : B} (f : F x y) : 𝒰 (ℓ ⊔ ℓ″ ⊔ ℓ‴) where
-  no-eta-equality
-  constructor make-invertible
-  field
-    inv      : G y x
-    inverses : Inverses f inv
-
-  open Inverses inverses public
-
-  op : is-invertible inv
-  op .inv = f
-  op .inverses .Inverses.inv-o = inv-i
-  op .inverses .Inverses.inv-i = inv-o
-{-# INLINE make-invertible #-}
-
-
-module _
-  {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-  {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-  {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
-  {x : A} {y : B} {f : F x y} where
-
-  invertible : (g : G y x) → f retract-of g → f section-of g
-             → is-invertible f
-  invertible g r s .is-invertible.inv = g
-  invertible g r s .is-invertible.inverses .Inverses.inv-o = r
-  invertible g r s .is-invertible.inverses .Inverses.inv-i = s
-  {-# INLINE invertible #-}
-
-  inverses→is-inv : {g : G y x} → Inverses f g → is-invertible f
-  inverses→is-inv {g} i .is-invertible.inv = g
-  inverses→is-inv     i .is-invertible.inverses = i
-  {-# INLINE inverses→is-inv #-}
-
-  is-inv→has-section : is-invertible f → has-section f
-  is-inv→has-section i .section = i .is-invertible.inv
-  is-inv→has-section i .is-section = i .is-invertible.inverses .Inverses.inv-o
-  {-# INLINE is-inv→has-section #-}
-
-
-module _
-  {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
   (F : A → B → 𝒰 ℓ′) (G : B → A → 𝒰 ℓ)
   {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄ where
+  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
+  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄ where
 
   record Iso (x : A) (y : B) : 𝒰 (ℓ ⊔ ℓ′ ⊔ ℓ″ ⊔ ℓ‴) where
     no-eta-equality
@@ -101,8 +38,8 @@ module _
   {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
   {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
   {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
+  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
+  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
   {x : A} {y : B} where
 
   iso : (f : F x y) (g : G y x) → f retract-of g → f section-of g
@@ -144,10 +81,12 @@ module _
   ≅→from-has-retract i .is-retract = i .inv-o
   {-# INLINE ≅→from-has-retract #-}
 
-Isoʰ
-  : ∀ {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} (R : A → A → 𝒰 ℓ) ⦃ _ : Refl R ⦄ ⦃ _ : Transʰ R ⦄
+
+-- homogeneous isomorphism
+HIso
+  : ∀ {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} (R : A → A → 𝒰 ℓ) ⦃ _ : Refl R ⦄ ⦃ _ : Trans R ⦄
   → (x y : A) → 𝒰 ℓ
-Isoʰ R = Iso R R
+HIso R = Iso R R
 
 
 record ≅-notation {ℓᵃ ℓᵇ ℓ}
@@ -158,17 +97,6 @@ open ≅-notation ⦃ ... ⦄ public
 
 
 instance
-  Sym-Inverses
-    : ∀ {ℓᵃ ℓᵇ ℓᵃ̇ ℓᵇ̇ ℓ ℓ′} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
-      {F : A → B → 𝒰 ℓ}  {G : B → A → 𝒰 ℓ′}
-      {U : A → A → 𝒰 ℓᵃ̇} {V : B → B → 𝒰 ℓᵇ̇}
-      ⦃ _ : Trans F G U ⦄ ⦃ _ : Trans G F V ⦄
-      ⦃ _ : Refl U ⦄      ⦃ _ : Refl V ⦄
-      {x : A} {y : B}
-    → Sym (Inverses {F = F} {G = G} {x = x} {y = y}) Inverses
-  Sym-Inverses .sym i .Inverses.inv-o = Inverses.inv-i i
-  Sym-Inverses .sym i .Inverses.inv-i = Inverses.inv-o i
-
   Funlike-≅
     : {ℓᵃ ℓᵇ ℓᶜ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
       {ℓ ℓ′ ℓ″ ℓ‴ : Level}
@@ -176,28 +104,28 @@ instance
       {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
       {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
       {x : A} {y : B} {C : Σ (F x y) (λ _ → ⌞ x ⌟) → 𝒰 ℓᶜ}
-      ⦃ _ : Refl F∙G ⦄ ⦃ _ : Trans F G F∙G ⦄
-      ⦃ _ : Refl G∙F ⦄ ⦃ _ : Trans G F G∙F ⦄
+      ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
+      ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
       ⦃ f : Funlike ur (F x y) ⌞ x ⌟ C ⦄
     → Funlike ur (Iso F G x y) ⌞ x ⌟ λ (i , a) → C (i .to , a)
   Funlike-≅ ._#_ i a = i .to # a
 
   Refl-≅
     : ∀ {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} {R : A → A → 𝒰 ℓ}
-      ⦃ _ : Refl R ⦄ ⦃ _ : Transʰ R ⦄ ⦃ _ : Unit-oʰ R ⦄
+      ⦃ _ : Refl R ⦄ ⦃ _ : Trans R ⦄ ⦃ _ : HUnit-o R ⦄
     → Refl (Iso R R)
   Refl-≅ .refl .to = refl
   Refl-≅ .refl .from = refl
   Refl-≅ .refl .inverses .Inverses.inv-o = ∙-id-o _
   Refl-≅ .refl .inverses .Inverses.inv-i = ∙-id-o _
 
-  Sym-≅
+  Dual-≅
     : ∀ {ℓᵃ ℓᵇ ℓᵃ̇ ℓᵇ̇ ℓ ℓ′} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
       {F : A → B → 𝒰 ℓ}  {G : B → A → 𝒰 ℓ′}
       {U : A → A → 𝒰 ℓᵃ̇} {V : B → B → 𝒰 ℓᵇ̇}
-      ⦃ _ : Trans F G U ⦄ ⦃ _ : Trans G F V ⦄
-      ⦃ _ : Refl U ⦄      ⦃ _ : Refl V ⦄
-    → Sym (Iso F G) (Iso G F)
-  Sym-≅ .sym i .to = i .from
-  Sym-≅ .sym i .from = i .to
-  Sym-≅ .sym i .inverses = sym (i .inverses)
+      ⦃ _ : Comp F G U ⦄ ⦃ _ : Comp G F V ⦄
+      ⦃ _ : Refl U ⦄     ⦃ _ : Refl V ⦄
+    → Dual (Iso F G) (Iso G F)
+  Dual-≅ ._ᵒᵖ i .to = i .from
+  Dual-≅ ._ᵒᵖ i .from = i .to
+  Dual-≅ ._ᵒᵖ i .inverses = i .inverses ᵒᵖ

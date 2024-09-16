@@ -19,6 +19,7 @@ private variable
   x : A
   @0 xs ys : List A
 
+infixr 5 _∷_
 data All {ℓ ℓᵃ} {A : Type ℓᵃ} (P : Pred A ℓ) : @0 List A → Type (ℓ ⊔ ℓᵃ) where
   []  : All P []
   _∷_ : P x → All P xs → All P (x ∷ xs)
@@ -101,9 +102,9 @@ all-++-left = fst ∘ all-split
 all-++-right : {xs : List A} → All P (xs ++ ys) → All P ys
 all-++-right = snd ∘ all-split
 
-all-map : {@0 xs : List A} → ∀ᴱ[ P ⇒ Q ] → All P xs → All Q xs
+all-map : {@0 xs : List A} → ∀[ P ⇒ Q ] → All P xs → All Q xs
 all-map     f []       = []
-all-map {P} f (p ∷ ps) = f p ∷ all-map {P = P} f ps
+all-map {P} f (p ∷ ps) = f p ∷ all-map f ps
 
 all-zip-with : {@0 xs : List A} → ∀ᴱ[ P ⇒ Q ⇒ R ] → All P xs → All Q xs → All R xs
 all-zip-with     f [] [] = []

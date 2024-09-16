@@ -89,6 +89,16 @@ record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin
     module So = Precategory (Structured-objects spec)
     module Som = Cat.Morphism (Structured-objects spec)
 
+  opaque
+    @0 equiv-hom→inverse-hom
+      : {a b : So.Ob}
+      → (f : ⌞ a ⌟ ≃ ⌞ b ⌟)
+      → ⌞ spec .is-hom (f    $_) (a .snd) (b .snd) ⌟
+      → ⌞ spec .is-hom (f ⁻¹ $_) (b .snd) (a .snd) ⌟
+    equiv-hom→inverse-hom {a} {b} f e =
+      Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e $_) (a .snd) st ⌟ → ⌞ spec .is-hom (e ⁻¹ $_) st (a .snd) ⌟)
+         (λ _ → invert-id-hom) f (b .snd) e
+
   ∫-Path
     : ∀ {a b : So.Ob}
     → (f : So.Hom a b)
@@ -103,7 +113,7 @@ record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin
                   ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
         (f .hom , eqv) (b .snd) (f .preserves)
 
-open is-equational public
+open is-equational ⦃ ... ⦄ public
 
 Full-substructure
   : ∀ {ℓ o′} ℓ′ (R S : Type ℓ → Type o′)

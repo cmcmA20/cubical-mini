@@ -119,20 +119,20 @@ module Univalent {o h} {C : Precategory o h} (r : is-category C) where
     → h ∘ p .from ＝ h′
     → ＜ h ／ (λ i → Hom (iso→path p i) b) ＼ h′ ＞
   Hom-pathᴾ-refl-l-iso prf =
-    Hom-pathᴾ-refl-l C (ap² _∘_ refl (ap from (iso→path→iso _)) ∙ prf)
+    Hom-pathᴾ-refl-l C (ap² _∘_ refl (ap from (iso→path→iso # _ ⁻¹)) ∙ prf)
 
   Hom-pathᴾ-refl-r-iso
     : {q : b ≅ d} {h : Hom a b} {h′ : Hom a d}
     → q .to ∘ h ＝ h′
     → ＜ h ／ (λ i → Hom a (iso→path q i)) ＼ h′ ＞
   Hom-pathᴾ-refl-r-iso prf =
-    Hom-pathᴾ-refl-r C (ap² _∘_ (ap to (iso→path→iso _)) refl ∙ prf)
+    Hom-pathᴾ-refl-r C (ap² _∘_ (ap to (iso→path→iso # _ ⁻¹)) refl ∙ prf)
 
   Hom-pathᴾ-iso
     : {p : a ≅ d} {q : b ≅ e} {h : Hom a b} {h′ : Hom d e}
     → q .to ∘ h ∘ p .from ＝ h′
     → ＜ h ／ (λ i → Hom (iso→path p i) (iso→path q i)) ＼ h′ ＞
   Hom-pathᴾ-iso {p} {q} {h} {h′} prf =
-    Hom-pathᴾ C (ap² _∘_ (ap to (iso→path→iso _))
-                (ap² _∘_ refl (ap from (iso→path→iso _)))
+    Hom-pathᴾ C (ap² _∘_ (ap to (iso→path→iso # _ ⁻¹))
+                (ap² _∘_ refl (ap from (iso→path→iso # _ ⁻¹)))
               ∙ prf)

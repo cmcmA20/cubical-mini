@@ -129,7 +129,7 @@ module _
   transfer-identity-system .to-path sab = ids .to-path (e.from _ _ sab)
   transfer-identity-system .to-path-over {a} {b} p i = hcomp (∂ i) λ where
     j (i = i0) → pres a j
-    j (i = i1) → e.ε _ _ p j
+    j (i = i1) → e.ε a _ j p
     j (j = i0) → e.to _ _ (ids .to-path-over (e.from _ _ p) i)
 
 @0 univalence-identity-system

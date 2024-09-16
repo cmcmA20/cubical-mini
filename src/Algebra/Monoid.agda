@@ -24,12 +24,18 @@ record is-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
 
   field
     id   : A
-    id-l : Unitality-lᵘ A id _⋆_
-    id-r : Unitality-rᵘ A id _⋆_
+    id-l : Π[ Unitality-l A id _⋆_ ]
+    id-r : Π[ Unitality-r A id _⋆_ ]
 
   instance
-    Reflᵘ-is-monoid : Reflᵘ A
-    Reflᵘ-is-monoid .mempty = id
+    Pointed-is-monoid : Pointed A
+    Pointed-is-monoid .mempty = id
+
+    Unit-l-monoid : Unit-l A
+    Unit-l-monoid .<>-id-l = id-l
+
+    Unit-r-monoid : Unit-r A
+    Unit-r-monoid .<>-id-r = id-r
 
   has-unital-magma : is-unital-magma _⋆_
   has-unital-magma .is-unital-magma.has-magma = has-magma
@@ -114,12 +120,12 @@ instance
   Refl-Monoid-hom .refl .Monoid-hom.pres-⋆ _ _ = refl
   Refl-Monoid-hom .refl .Monoid-hom.pres-id = refl
 
-  Trans-Monoid-hom
+  Comp-Monoid-hom
     : {f : A → B} {g : B → C}
-    → Trans (Monoid-hom f) (Monoid-hom g) (Monoid-hom (f ∙ g))
-  Trans-Monoid-hom {f} {g} ._∙_ p q .Monoid-hom.pres-⋆ a a′ =
+    → Comp (Monoid-hom f) (Monoid-hom g) (Monoid-hom (f ∙ g))
+  Comp-Monoid-hom {f} {g} ._∙_ p q .Monoid-hom.pres-⋆ a a′ =
     ap g (p .Monoid-hom.pres-⋆ a a′) ∙ q .Monoid-hom.pres-⋆ (f a) (f a′)
-  Trans-Monoid-hom {f} {g} ._∙_ p q .Monoid-hom.pres-id =
+  Comp-Monoid-hom {f} {g} ._∙_ p q .Monoid-hom.pres-id =
     ap g (p .Monoid-hom.pres-id) ∙ q .Monoid-hom.pres-id
 
 monoid-on↪semigroup-on : Monoid-on A ↪ₜ Semigroup-on A
@@ -142,9 +148,9 @@ record make-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     monoid-is-set : is-set X
     id  : X
     _⋆_ : X → X → X
-    id-l : Unitality-lᵘ X id _⋆_
-    id-r : Unitality-rᵘ X id _⋆_
-    assoc : Associativityᵘ X _⋆_
+    id-l : Π[ Unitality-l X id _⋆_ ]
+    id-r : Π[ Unitality-r X id _⋆_ ]
+    assoc : Π[ Associativity X _⋆_ ]
 
   to-is-monoid : is-monoid _⋆_
   to-is-monoid .is-monoid.has-semigroup = to-is-semigroup sg where

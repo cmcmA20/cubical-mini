@@ -17,20 +17,20 @@ private variable
   D : Type ℓ‴
 
 instance
-  Unit-o-≃ : Unit-o _≃_ (_≃_ {ℓ} {ℓ′})
-  Unit-o-≃ .∙-id-o _ = equiv-ext refl
+  GUnit-o-≃ : GUnit-o _≃_ (_≃_ {ℓ} {ℓ′})
+  GUnit-o-≃ .∙-id-o _ = equiv-ext refl
 
-  Unit-i-≃ : Unit-i (_≃_ {ℓ} {ℓ′}) _≃_
-  Unit-i-≃ .∙-id-i _ = equiv-ext refl
+  GUnit-i-≃ : GUnit-i (_≃_ {ℓ} {ℓ′}) _≃_
+  GUnit-i-≃ .∙-id-i _ = equiv-ext refl
 
-  Assoc-≃ : Assoc (_≃_ {ℓ} {ℓ′}) (_≃_ {_} {ℓ″}) (_≃_ {_} {ℓ‴}) _≃_ _≃_ _≃_
-  Assoc-≃ .∙-assoc _ _ _ = equiv-ext refl
+  GAssoc-≃ : GAssoc (_≃_ {ℓ} {ℓ′}) (_≃_ {_} {ℓ″}) (_≃_ {_} {ℓ‴}) _≃_ _≃_ _≃_
+  GAssoc-≃ .∙-assoc _ _ _ = equiv-ext refl
 
-  Inv-o-≃ : Inv-o (_≃_ {ℓ} {ℓ′}) _≃_ _≃_
-  Inv-o-≃ .∙-inv-o f = equiv-ext $ fun-ext $ is-equiv→counit (f .snd)
+  GInv-o-≃ : GInv-o (_≃_ {ℓ} {ℓ′}) _≃_ _≃_
+  GInv-o-≃ .∙-inv-o f = equiv-ext $ fun-ext $ is-equiv→counit (f .snd)
 
-  Inv-i-≃ : Inv-i (_≃_ {ℓ} {ℓ′}) _≃_ _≃_
-  Inv-i-≃ .∙-inv-i f = equiv-ext $ fun-ext $ is-equiv→unit (f .snd)
+  GInv-i-≃ : GInv-i (_≃_ {ℓ} {ℓ′}) _≃_ _≃_
+  GInv-i-≃ .∙-inv-i f = equiv-ext $ fun-ext $ is-equiv→unit (f .snd)
 
 ∙ₑ-cancel-l
   : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}

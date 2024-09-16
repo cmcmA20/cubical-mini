@@ -31,9 +31,9 @@ instance
   Refl-⊆ .refl = refl
   {-# OVERLAPPING Refl-⊆ #-}
 
-  Trans-⊆ : Trans {A = ℙ X ℓ} {B = ℙ X ℓ′} {C = ℙ X ℓ″} _⊆_ _⊆_ _⊆_
-  Trans-⊆ ._∙_ S T = S ∙ T
-  {-# OVERLAPPING Trans-⊆ #-}
+  Comp-⊆ : Comp {A = ℙ X ℓ} {B = ℙ X ℓ′} {C = ℙ X ℓ″} _⊆_ _⊆_ _⊆_
+  Comp-⊆ ._∙_ S T = S ∙ T
+  {-# OVERLAPPING Comp-⊆ #-}
 
 single : ⦃ X-set : H-Level 2 X ⦄ → X → ℙ X (level-of-type X)
 single x t = el! (x ＝ t)

@@ -121,7 +121,7 @@ module _ {P : Poset o ℓ} where
     → is-lub P F lub
     → is-lub P G lub
   cast-is-lub {G} e p has-lub .fam≤lub i′
-    = =→~⁻ (p (e ⁻¹ $ i′) ∙ ap G (Equiv.ε e i′))
+    = =→~⁻ (p (e ⁻¹ $ i′) ∙ ap G (Equiv.ε e # i′))
     ∙ has-lub .fam≤lub (e ⁻¹ $ i′)
   cast-is-lub e p has-lub .least ub G≤ub =
     has-lub .least ub (λ i → =→≤ (p i) ∙ G≤ub (e $ i))

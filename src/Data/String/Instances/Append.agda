@@ -6,8 +6,8 @@ open import Foundations.Base
 open import Data.String.Base as String
 
 instance
-  Reflᵘ-String : Reflᵘ String
-  Reflᵘ-String .mempty = ""
+  Pointed-String : Pointed String
+  Pointed-String .mempty = ""
 
-  Transᵘ-String : Transᵘ String
-  Transᵘ-String ._<>_ = _++ₛ_
+  Has-binary-op-String : Has-binary-op String
+  Has-binary-op-String ._<>_ = _++ₛ_

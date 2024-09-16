@@ -4,8 +4,6 @@ module Algebra.Semiring where
 open import Cat.Prelude hiding (_+_)
 
 open import Algebra.Monoid.Commutative public
-open import Algebra.Monoid.Category
-open import Algebra.Monoid.Commutative.Category
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -16,11 +14,11 @@ private variable
   _✦_ _✧_ : A → A → A
   n : HLevel
 
-Distrib-left : (_·_ _+_ : A → A → A) → _
-Distrib-left {A} _·_ _+_ = (x y z : A) → x · (y + z) ＝ (x · y) + (x · z)
+Distrib-l : (_·_ _+_ : A → A → A) (x y z : A) → _
+Distrib-l {A} _·_ _+_ x y z = x · (y + z) ＝ (x · y) + (x · z)
 
-Distrib-right : (_·_ _+_ : A → A → A) → _
-Distrib-right {A} _·_ _+_ = (x y z : A) → (y + z) · x ＝ (y · x) + (z · x)
+Distrib-r : (_·_ _+_ : A → A → A) (x y z : A) → _
+Distrib-r {A} _·_ _+_ x y z = (y + z) · x ＝ (y · x) + (z · x)
 
 -- semirings (nonabsorptive)
 
@@ -30,7 +28,8 @@ record is-semiring {A : 𝒰 ℓ}
   no-eta-equality
   field +-comm-monoid : is-comm-monoid _+_
   open is-comm-monoid +-comm-monoid public
-    hiding ( Reflᵘ-is-monoid ; Transᵘ-is-n-magma
+    hiding ( Pointed-is-monoid ; Has-binary-op-is-n-magma
+           ; Assoc-semigroup ; Unit-l-monoid ; Unit-r-monoid
            )
     renaming ( id    to 0a
              ; assoc to +-assoc
@@ -43,7 +42,8 @@ record is-semiring {A : 𝒰 ℓ}
   field ·-monoid : is-monoid _·_
   open is-monoid ·-monoid public
     hiding ( has-is-of-hlevel ; H-Level-magma-carrier
-           ; Reflᵘ-is-monoid ; Transᵘ-is-n-magma
+           ; Pointed-is-monoid ; Has-binary-op-is-n-magma
+           ; Assoc-semigroup ; Unit-l-monoid ; Unit-r-monoid
            )
     renaming ( id    to 1a
              ; assoc to ·-assoc
@@ -53,8 +53,8 @@ record is-semiring {A : 𝒰 ℓ}
              )
 
   field
-    ·-distrib-+-l : Distrib-left  _·_ _+_
-    ·-distrib-+-r : Distrib-right _·_ _+_
+    ·-distrib-+-l : Π[ Distrib-l _·_ _+_ ]
+    ·-distrib-+-r : Π[ Distrib-r _·_ _+_ ]
 
 unquoteDecl is-semiring-iso = declare-record-iso is-semiring-iso (quote is-semiring)
 
@@ -127,16 +127,16 @@ instance
   Refl-Semiring-hom .refl .Semiring-hom.pres-0 = refl
   Refl-Semiring-hom .refl .Semiring-hom.pres-1 = refl
 
-  Trans-Semiring-hom
+  Comp-Semiring-hom
     : {f : A → B} {g : B → C}
-    → Trans (Semiring-hom f) (Semiring-hom g) (Semiring-hom (f ∙ g))
-  Trans-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-+ a a′ =
+    → Comp (Semiring-hom f) (Semiring-hom g) (Semiring-hom (f ∙ g))
+  Comp-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-+ a a′ =
     ap g (p .Semiring-hom.pres-+ a a′) ∙ q .Semiring-hom.pres-+ (f a) (f a′)
-  Trans-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-· a a′ =
+  Comp-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-· a a′ =
     ap g (p .Semiring-hom.pres-· a a′) ∙ q .Semiring-hom.pres-· (f a) (f a′)
-  Trans-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-0 =
+  Comp-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-0 =
     ap g (p .Semiring-hom.pres-0) ∙ q .Semiring-hom.pres-0
-  Trans-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-1 =
+  Comp-Semiring-hom {f} {g} ._∙_ p q .Semiring-hom.pres-1 =
     ap g (p .Semiring-hom.pres-1) ∙ q .Semiring-hom.pres-1
 
 semiring-on→additive-comm-monoid-on : ∀[ Semiring-on {ℓ} ⇒ CMonoid-on ]
@@ -169,15 +169,15 @@ record make-semiring {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     semiring-is-set : is-set X
     0a 1a : X
     _+_ _·_ : X → X → X
-    +-id-l  : Unitality-lᵘ X 0a _+_
-    +-id-r  : Unitality-rᵘ X 0a _+_
-    +-assoc : Associativityᵘ X _+_
-    +-comm  : Commutativityᵘ X _+_
-    ·-id-l  : Unitality-lᵘ X 1a _·_
-    ·-id-r  : Unitality-rᵘ X 1a _·_
-    ·-assoc : Associativityᵘ X _·_
-    ·-distrib-+-l : Distrib-left  _·_ _+_
-    ·-distrib-+-r : Distrib-right _·_ _+_
+    +-id-l  : Π[ Unitality-l X 0a _+_ ]
+    +-id-r  : Π[ Unitality-r X 0a _+_ ]
+    +-assoc : Π[ Associativity X _+_ ]
+    +-comm  : Π[ Commutativity X _+_ ]
+    ·-id-l  : Π[ Unitality-l X 1a _·_ ]
+    ·-id-r  : Π[ Unitality-r X 1a _·_ ]
+    ·-assoc : Π[ Associativity X _·_ ]
+    ·-distrib-+-l : Π[ Distrib-l _·_ _+_ ]
+    ·-distrib-+-r : Π[ Distrib-r _·_ _+_ ]
 
   to-is-semiring : is-semiring _+_ _·_
   to-is-semiring .is-semiring.+-comm-monoid = to-is-comm-monoid go where

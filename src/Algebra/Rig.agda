@@ -12,11 +12,11 @@ private variable
   _✦_ _✧_ : A → A → A
   n : HLevel
 
-Absorb-left : (e : A) (_✧_ : A → A → A) → _
-Absorb-left {A} e _✧_ = Π[ x ꞉ A ] (e ✧ x ＝ e)
+Absorb-l : (e : A) (_✧_ : A → A → A) (x : A) → _
+Absorb-l {A} e _✧_ x = e ✧ x ＝ e
 
-Absorb-right : (e : A) (_✧_ : A → A → A) → _
-Absorb-right {A} e _✧_ = Π[ x ꞉ A ] (x ✧ e ＝ e)
+Absorb-r : (e : A) (_✧_ : A → A → A) (x : A) → _
+Absorb-r {A} e _✧_ x = x ✧ e ＝ e
 
 -- rigs (absorptive semirings)
 
@@ -28,8 +28,8 @@ record is-rig {A : 𝒰 ℓ}
   open is-semiring has-semiring public
 
   field
-    ·-absorb-l : Absorb-left  0a _·_
-    ·-absorb-r : Absorb-right 0a _·_
+    ·-absorb-l : Π[ Absorb-l 0a _·_ ]
+    ·-absorb-r : Π[ Absorb-r 0a _·_ ]
 
 unquoteDecl is-rig-iso = declare-record-iso is-rig-iso (quote is-rig)
 
@@ -81,17 +81,17 @@ record make-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     rig-is-set : is-set X
     0a 1a : X
     _+_ _·_ : X → X → X
-    +-id-l  : Unitality-lᵘ X  0a _+_
-    +-id-r  : Unitality-rᵘ X 0a _+_
-    +-assoc : Associativityᵘ X _+_
-    +-comm  : Commutativityᵘ X _+_
-    ·-id-l  : Unitality-lᵘ X  1a _·_
-    ·-id-r  : Unitality-rᵘ X 1a _·_
-    ·-assoc : Associativityᵘ X _·_
-    ·-distrib-+-l : Distrib-left  _·_ _+_
-    ·-distrib-+-r : Distrib-right _·_ _+_
-    ·-absorb-l : Absorb-left  0a _·_
-    ·-absorb-r : Absorb-right 0a _·_
+    +-id-l  : Π[ Unitality-l X  0a _+_ ]
+    +-id-r  : Π[ Unitality-r X 0a _+_ ]
+    +-assoc : Π[ Associativity X _+_ ]
+    +-comm  : Π[ Commutativity X _+_ ]
+    ·-id-l  : Π[ Unitality-l X 1a _·_ ]
+    ·-id-r  : Π[ Unitality-r X 1a _·_ ]
+    ·-assoc : Π[ Associativity X _·_ ]
+    ·-distrib-+-l : Π[ Distrib-l _·_ _+_ ]
+    ·-distrib-+-r : Π[ Distrib-r _·_ _+_ ]
+    ·-absorb-l : Π[ Absorb-l 0a _·_ ]
+    ·-absorb-r : Π[ Absorb-r 0a _·_ ]
 
   to-is-rig : is-rig _+_ _·_
   to-is-rig .is-rig.has-semiring = to-is-semiring go where

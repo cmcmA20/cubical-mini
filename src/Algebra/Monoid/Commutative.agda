@@ -19,7 +19,7 @@ record is-comm-monoid {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   field has-monoid : is-monoid _⋆_
   open is-monoid has-monoid public
 
-  field comm : Commutativityᵘ A _⋆_
+  field comm : Π[ Commutativity A _⋆_ ]
 
 unquoteDecl is-comm-monoid-iso = declare-record-iso is-comm-monoid-iso (quote is-comm-monoid)
 
@@ -64,10 +64,10 @@ record make-comm-monoid {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     monoid-is-set : is-set X
     id  : X
     _⋆_ : X → X → X
-    id-l  : Unitality-lᵘ X id _⋆_
-    id-r  : Unitality-rᵘ X id _⋆_
-    assoc : Associativityᵘ X _⋆_
-    comm  : Commutativityᵘ X _⋆_
+    id-l  : Π[ Unitality-l X id _⋆_ ]
+    id-r  : Π[ Unitality-r X id _⋆_ ]
+    assoc : Π[ Associativity X _⋆_ ]
+    comm  : Π[ Commutativity X _⋆_ ]
 
   to-is-comm-monoid : is-comm-monoid _⋆_
   to-is-comm-monoid .is-comm-monoid.has-monoid = to-is-monoid go where

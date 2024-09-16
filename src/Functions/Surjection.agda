@@ -20,6 +20,9 @@ private variable
 Split-surjective : (A → B) → Type _
 Split-surjective {B} f = Π[ y ꞉ B ] fibre f y
 
+Split-surjectiveᴱ : (A → B) → Type _
+Split-surjectiveᴱ {B} f = Π[ y ꞉ B ] fibreᴱ f y
+
 _↠!_ : Type ℓ → Type ℓ′ → Type _
 A ↠! B = Σ[ f ꞉ (A → B) ] Split-surjective f
 
@@ -35,28 +38,22 @@ _↠_ : Type ℓ → Type ℓ′ → Type _
 A ↠ B = Σ[ f ꞉ (A → B) ] is-surjective f
 
 instance
-  Funlike-Split-surj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↠! B) A (λ _ → B)
-  Funlike-Split-surj ._#_ = fst
-
-  Funlike-Surj : {A : Type ℓ} {B : Type ℓ′} → Funlike ur (A ↠ B) A (λ _ → B)
-  Funlike-Surj ._#_ = fst
-
   Refl-Split-surj :  Refl (_↠!_ {ℓ})
   Refl-Split-surj .refl = refl , (_, refl)
 
   Refl-Surj :  Refl (_↠_ {ℓ})
   Refl-Surj .refl = refl , λ a → ∣ a , refl ∣₁
 
-  Trans-Split-surj : Trans (_↠!_ {ℓ} {ℓ′}) (_↠!_ {ℓ′ = ℓ″}) _↠!_
-  Trans-Split-surj ._∙_ (f , _) (g , _) .fst = f ∙ g
-  Trans-Split-surj ._∙_ (f , φ) (g , ψ) .snd c =
+  Comp-Split-surj : Comp (_↠!_ {ℓ} {ℓ′}) (_↠!_ {ℓ′ = ℓ″}) _↠!_
+  Comp-Split-surj ._∙_ (f , _) (g , _) .fst = f ∙ g
+  Comp-Split-surj ._∙_ (f , φ) (g , ψ) .snd c =
     let u  , v  = ψ c
         u′ , v′ = φ u
     in u′ , ap g v′ ∙ v
 
-  Trans-Surj : Trans (_↠_ {ℓ} {ℓ′}) (_↠_ {ℓ′ = ℓ″}) _↠_
-  Trans-Surj ._∙_ (f , _) (g , _) .fst = f ∙ g
-  Trans-Surj ._∙_ (f , φ) (g , ψ) .snd c = do
+  Comp-Surj : Comp (_↠_ {ℓ} {ℓ′}) (_↠_ {ℓ′ = ℓ″}) _↠_
+  Comp-Surj ._∙_ (f , _) (g , _) .fst = f ∙ g
+  Comp-Surj ._∙_ (f , φ) (g , ψ) .snd c = do
     u  , v  ← ψ c
     u′ , v′ ← φ u
     pure (u′ , ap g v′ ∙ v)

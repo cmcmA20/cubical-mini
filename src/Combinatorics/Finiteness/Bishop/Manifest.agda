@@ -100,7 +100,7 @@ instance
         fs = fin-sum $ cardinality ∘ (λ z → fam {z}) ∘ aeq.from
         work = Σ-ap aeq λ x
           → enumeration (fam {x})
-          ∙ =→≃ (ap (λ T → Fin T) (ap (cardinality ∘ (λ z → fam {z})) (sym (aeq.η x))))
+          ∙ =→≃ (aeq.η ▷ ((λ T → Fin T) ∘ cardinality ∘ λ z → fam {z}) $ x)
     in finite $ work ∙ fs
   {-# OVERLAPPABLE Σ-manifest-bishop-finite #-}
 
@@ -145,7 +145,7 @@ instance
 
       lemma₂ : ¬ Σ[ i ꞉ Fin n ] P (lookup xs i) → ¬ Σ[ a ꞉ A ] P a
       lemma₂ = contra $ bimap Ã.to λ {a} →
-        subst P $ (happly (Ṽ.ε Ã.from) (Ã.to a) ∙ Ã.η a) ⁻¹
+        subst P $ Ã.η # a ∙ (Ṽ.ε # Ã.from) # Ã.to a ⁻¹
   {-# INCOHERENT manifest-bishop-finite→omniscient #-}
 
 ≃→manifest-bishop-finite : (B ≃ A) → Manifest-bishop-finite A → Manifest-bishop-finite B

@@ -20,7 +20,7 @@ record is-abelian-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   field has-group : is-group _⋆_
   open is-group has-group public
 
-  field comm : Commutativityᵘ A _⋆_
+  field comm : Π[ Commutativity A _⋆_ ]
 
 unquoteDecl is-abelian-group-iso = declare-record-iso is-abelian-group-iso (quote is-abelian-group)
 
@@ -65,10 +65,10 @@ record make-abelian-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
     id  : X
     _⋆_ : X → X → X
     inverse : X → X
-    id-l  : Unitality-lᵘ X id _⋆_
-    assoc : Associativityᵘ X _⋆_
-    comm  : Commutativityᵘ X _⋆_
-    inverse-l : Invertibility-lᵘ X id inverse _⋆_
+    id-l  : Π[ Unitality-l X id _⋆_ ]
+    assoc : Π[ Associativity X _⋆_ ]
+    comm  : Π[ Commutativity X _⋆_ ]
+    inverse-l : ∀ x → inverse x ⋆ x ＝ id
 
   private
     go : make-group X
@@ -88,10 +88,10 @@ record make-abelian-group {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where
   to-abelian-group-on .AGroup-on._⋆_ = _⋆_
   to-abelian-group-on .AGroup-on.has-abelian-group = to-is-abelian-group
 
-  id-r : Unitality-rᵘ X id _⋆_
+  id-r : ∀ x → Unitality-r X id _⋆_ x
   id-r = Group-on.id-r (to-group-on go)
 
-  inverse-r : Invertibility-rᵘ X id inverse _⋆_
+  inverse-r : ∀ x → x ⋆ inverse x ＝ id
   inverse-r = Group-on.inverse-r (to-group-on go)
 
 open make-abelian-group using (to-is-abelian-group ; to-abelian-group-on) public

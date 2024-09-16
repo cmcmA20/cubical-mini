@@ -5,53 +5,36 @@ open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
 open import Agda.Builtin.Unit
 
-open import Foundations.Notation.Symmetry
-open import Foundations.Notation.Transitivity
+open import Foundations.Notation.Composition
+open import Foundations.Notation.Duality
 
 private variable
   ℓᵃ ℓ : Level
   A : 𝒰 ℓᵃ
 
-module _
-  {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
-  {ℓx ℓy ℓu ℓv ℓf : Level}
-  (X : A → B → 𝒰 ℓx) (Y : B → A → 𝒰 ℓy)
-  (U : A → A → 𝒰 ℓu) (V : B → B → 𝒰 ℓv)
-  (F : {x : A} {y : B} → V y y → U x x → 𝒰 ℓf) where
+-- A ---|--> C
+-- |         |
+-- |         |
+-- v         v
+-- B ---|--> D
 
-  Braidedness
-    : (u : Transitivity X Y U) (v : Transitivity Y X V)
-    → 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓx ⊔ ℓy ⊔ ℓf)
-  Braidedness u v = {a : A} {b : B}
-                    (p : X a b) (q : Y b a)
-                  → F (v q p) (u p q)
+-- most generic square
+-- module _
+--   {ℓa ℓb ℓc ℓd ℓf ℓg ℓh ℓk ℓs : Level}
+--   {A : 𝒰 ℓa} {B : 𝒰 ℓb} {C : 𝒰 ℓc} {D : 𝒰 ℓd}
+--   (F : A → B → 𝒰 ℓf) (G : A → C → 𝒰 ℓg)
+--   (H : C → D → 𝒰 ℓh) (K : B → D → 𝒰 ℓk)
+--   (S : ∀{a b c d} (f : F a b) (g : G a c) (h : H c d) (k : K b d) → 𝒰 ℓs) where
 
-  record Braid
-    ⦃ t₁ : Trans X Y U ⦄ ⦃ t₂ : Trans Y X V ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓx ⊔ ℓy ⊔ ℓf) where
-    no-eta-equality
-    field ∙-braid : Braidedness (t₁ ._∙_) (t₂ ._∙_)
-
-open Braid ⦃ ... ⦄ public
-
--- TODO something funny
--- Braided : (R : A → A → 𝒰 ℓ) ⦃ t : Transitive R ⦄ → Type _
--- Braided R = Braid R R R R {!!}
-
+-- damn, generalized commutativity got hands
+-- what should it be, naturality?
 
 module _ {ℓᵃ} (A : 𝒰 ℓᵃ) where
-  Commutativityᵘ : (t : A → A → A) → 𝒰 ℓᵃ
-  Commutativityᵘ t = (x y : A) → t y x ＝ t x y
+  Commutativity : (t : A → A → A) (x y : A) → 𝒰 ℓᵃ
+  Commutativity t x y = t y x ＝ t x y
 
-  record Commᵘ ⦃ t : Transᵘ A ⦄ : 𝒰 ℓᵃ where
+  record Comm ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓᵃ where
     no-eta-equality
-    field <>-comm : Commutativityᵘ (t ._<>_)
+    field <>-comm : ∀ x y → Commutativity (t ._<>_) x y
 
-open Commᵘ ⦃ ... ⦄ public
-
-instance
-  Commᵘ→Braid
-    : ⦃ _ : Transᵘ A ⦄ ⦃ _ : Commᵘ A ⦄
-    → Braid {A = ⊤} {B = ⊤}
-        (λ _ _ → A) (λ _ _ → A) (λ _ _ → A) (λ _ _ → A) _＝_
-  Commᵘ→Braid .∙-braid = <>-comm
-  {-# INCOHERENT Commᵘ→Braid #-}
+open Comm ⦃ ... ⦄ public
