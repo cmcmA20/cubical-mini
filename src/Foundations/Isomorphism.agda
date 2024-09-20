@@ -14,6 +14,9 @@ private variable
 
 open Iso
 
+Retractₜ : 𝒰 ℓ → 𝒰 ℓ′ → 𝒰 (ℓ ⊔ ℓ′)
+Retractₜ = Retract Fun
+
 Isoₜ : 𝒰 ℓ → 𝒰 ℓ′ → 𝒰 (ℓ ⊔ ℓ′)
 Isoₜ = Iso Fun Fun
 
@@ -24,7 +27,7 @@ instance
 is-invertibleᴱ : (f : A → B) → Type _
 is-invertibleᴱ {A} {B} f = Σ[ inv ꞉ (B → A) ]
   ( Erased (inv section-of f)
-  × Erased (inv retract-of f) )
+  × Erased (inv retraction-of f) )
 
 Isoᴱ : Type ℓ → Type ℓ′ → Type _
 Isoᴱ A B = Σ[ f ꞉ (A → B) ] is-invertibleᴱ f
@@ -51,16 +54,9 @@ is-inv-comp {f} {g} fi gi .inverses .Inverses.inv-o =
 is-inv-comp {f} {g} fi gi .inverses .Inverses.inv-i =
   (f ◁ gi .inv-i ▷ fi .inv) ∙ fi .inv-i
 
-instance
-  Refl-Erased-Iso : Refl (Isoᴱ {ℓ})
-  Refl-Erased-Iso .refl = id , is-inv→is-invᴱ id-is-inv
-
-  Dual-Erased-Iso : Dual (Isoᴱ {ℓ} {ℓ′}) Isoᴱ
-  Dual-Erased-Iso ._ᵒᵖ (f , g , s , r) = g , f , r , s
-
 private
-  ≅∙-helper
-    : ∀ {ℓᵃ ℓᵇ ℓᶜ ℓᵇ̇ ℓᶜ̇ ℓf ℓf⁻ ℓg ℓg⁻ ℓfg ℓg⁻f⁻}
+  retract-comp-helper
+    : {ℓᵃ ℓᵇ ℓᶜ ℓᵇ̇ ℓᶜ̇ ℓf ℓf⁻ ℓg ℓg⁻ ℓfg ℓg⁻f⁻ : Level}
       {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
       {B∙ : B → B → 𝒰 ℓᵇ̇} {C∙ : C → C → 𝒰 ℓᶜ̇}
       ⦃ _ : Refl B∙ ⦄      ⦃ _ : Refl C∙ ⦄
@@ -76,7 +72,7 @@ private
       (x : G⁻ c b) (y : F⁻ b a) (z : F a b) (w : G b c)
       (p : y ∙ z ＝ refl) (q : x ∙ w ＝ refl)
     → (x ∙ y) ∙ (z ∙ w) ＝ refl
-  ≅∙-helper x y z w p q =
+  retract-comp-helper x y z w p q =
       (x ∙ y) ∙ (z ∙ w)  ~⟨ ∙-assoc x y (z ∙ w) ⟨
       x ∙ (y ∙ z ∙ w)    ~⟨ x ◁ ∙-assoc y z w ⟩
       x ∙ (y ∙ z) ∙ w    ~⟨ x ◁ p ▷ w ⟩
@@ -84,7 +80,33 @@ private
       x ∙ w              ~⟨ q ⟩
       _                  ∎
 
+
 instance
+  Comp-Retract
+    : {ℓᵃ ℓᵇ ℓᶜ ℓᵃ̇ ℓᵇ̇ ℓf ℓf⁻ ℓg ℓg⁻ ℓfg ℓg⁻f⁻ : Level}
+      {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
+      {A∙ : A → A → 𝒰 ℓᵃ̇} {B∙ : B → B → 𝒰 ℓᵇ̇}
+      ⦃ _ : Refl A∙ ⦄ ⦃ _ : Refl B∙ ⦄
+      {F   : A → B → 𝒰 ℓf}  {F⁻    : B → A → 𝒰 ℓf⁻}
+      {G   : B → C → 𝒰 ℓg}  {G⁻    : C → B → 𝒰 ℓg⁻}
+      {F∙G : A → C → 𝒰 ℓfg} {G⁻∙F⁻ : C → A → 𝒰 ℓg⁻f⁻}
+      ⦃ _ : Comp F F⁻ A∙ ⦄ ⦃ _ : Comp G G⁻ B∙ ⦄
+      ⦃ _ : Comp F G  F∙G ⦄ ⦃ _ : Comp G⁻ F⁻ G⁻∙F⁻ ⦄ ⦃ _ : Comp F∙G G⁻∙F⁻ A∙ ⦄
+      ⦃ _ : Comp B∙ F⁻  F⁻ ⦄ ⦃ _ : Comp G G⁻∙F⁻  F⁻ ⦄
+      ⦃ _ : GAssoc G G⁻  F⁻  B∙  G⁻∙F⁻  F⁻ ⦄ ⦃ _ : GAssoc F G G⁻∙F⁻ F∙G F⁻ A∙  ⦄
+      ⦃ _ : GUnit-o B∙ F⁻  ⦄
+    → Comp (Retract F⁻) (Retract G⁻) (Retract G⁻∙F⁻)
+  Comp-Retract ._∙_ (r₁ , hs₁) (r₂ , hs₂) .fst = r₂ ∙ r₁
+  Comp-Retract ._∙_ (r₁ , hs₁) (r₂ , hs₂) .snd .section = hs₁ .section ∙ hs₂ .section
+  Comp-Retract ._∙_ (r₁ , hs₁) (r₂ , hs₂) .snd .is-section =
+    retract-comp-helper (hs₁ .section) (hs₂ .section) r₂ r₁ (hs₂ .is-section) (hs₁ .is-section)
+
+  Refl-Erased-Iso : Refl (Isoᴱ {ℓ})
+  Refl-Erased-Iso .refl = id , is-inv→is-invᴱ id-is-inv
+
+  Dual-Erased-Iso : Dual (Isoᴱ {ℓ} {ℓ′}) Isoᴱ
+  Dual-Erased-Iso ._ᵒᵖ (f , g , s , r) = g , f , r , s
+
   Comp-≅
     : ∀ {ℓᵃ ℓᵇ ℓᶜ ℓᵃ̇ ℓᵇ̇ ℓᶜ̇ ℓf ℓf⁻ ℓg ℓg⁻ ℓfg ℓg⁻f⁻}
       {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
@@ -103,9 +125,12 @@ instance
       ⦃ _ : Refl A∙ ⦄ ⦃ _ : Refl B∙ ⦄ ⦃ _ : Refl C∙ ⦄
       ⦃ _ : GUnit-o B∙ G  ⦄ ⦃ _ : GUnit-o B∙ F⁻ ⦄
     → Comp (Iso F F⁻) (Iso G G⁻) (Iso F∙G G⁻∙F⁻)
-  Comp-≅ ._∙_ i j = iso (i .to ∙ j .to) (j .from ∙ i .from)
-    (≅∙-helper (j .from) (i .from) (i .to) (j .to) (i .inv-o) (j .inv-o))
-    (≅∙-helper (i .to) (j .to) (j .from) (i .from) (j .inv-i) (i .inv-i))
+  Comp-≅ ._∙_ i j = iso (u .fst) (v .fst) (u .snd .is-section) (v .snd .is-section)
+    where
+      u : Retract _ _ _
+      u = (j .to , make-section (j .from) (j .inv-o)) ∙ (i .to , make-section (i .from) (i .inv-o))
+      v : Retract _ _ _
+      v = (i .from , make-section (i .to) (i .inv-i)) ∙ (j .from , make-section (j .to) (j .inv-i))
 
   Comp-Erased-Iso : Comp (Isoᴱ {ℓ} {ℓ′}) (Isoᴱ {ℓ′ = ℓ″}) Isoᴱ
   Comp-Erased-Iso ._∙_ (f , g , erase s , erase r) (f′ , g′ , erase s′ , erase r′)
@@ -113,11 +138,14 @@ instance
     , erase (fun-ext λ x → f′ # (s  # g′ x) ∙ s′ # x)
     , erase (fun-ext λ x → g  # (r′ # f  x) ∙ r  # x)
 
-id-composition→is-inv : (r : is-invertible f) (g : B → A) (p : f ∘ g ＝ id) → is-invertible g
-id-composition→is-inv {f} r g p .inv = f
-id-composition→is-inv {f} r g p .inverses .Inverses.inv-o =
-  f ∙ g ◁ r .inv-i ⁻¹ ∙∙ f ◁ p ▷ r .inv ∙∙ r .inv-i
-id-composition→is-inv {f} r g p .inverses .Inverses.inv-i = p
+
+retract-is-inv→section-is-inv
+  : {A : Type ℓ} {B : Type ℓ′}
+  → (r : Retractₜ A B) (ii : is-invertible (r .fst)) → is-invertible (r .snd .section)
+retract-is-inv→section-is-inv (g , hs) ii .inv = g
+retract-is-inv→section-is-inv (g , hs) ii .inverses .Inverses.inv-o =
+  g ∙ hs .section ◁ ii .inv-i ⁻¹ ∙∙ g ◁ hs .is-section ▷ ii .inv ∙∙ ii .inv-i
+retract-is-inv→section-is-inv r ii .inverses .Inverses.inv-i = r .snd .is-section
 
 is-equiv→is-inv : {f : A → B} → is-equiv f → is-invertible f
 is-equiv→is-inv eqv .inv = is-equiv→inverse eqv

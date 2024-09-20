@@ -176,52 +176,52 @@ has-section→epic {f} f-sect g h p =
   h                          ∎
 
 
--- Retracts
+-- Retractions
 
-id-has-retract : has-retract (id {a})
-id-has-retract .retract = id
-id-has-retract .is-retract = id-l _
+id-has-retraction : has-retraction (id {a})
+id-has-retraction .retraction = id
+id-has-retraction .is-retraction = id-l _
 
-retract-of-∘
+retraction-of-∘
   : {f : c ⇒ b} {g : b ⇒ c} {h : b ⇒ a} {i : a ⇒ b}
-  → f retract-of g → h retract-of i
-  → (h ∘ f) retract-of (g ∘ i)
-retract-of-∘ = flip section-of-∘
+  → f retraction-of g → h retraction-of i
+  → (h ∘ f) retraction-of (g ∘ i)
+retraction-of-∘ = flip section-of-∘
 
-retract-∘
+retraction-∘
   : {f : b ⇒ c} {g : a ⇒ b}
-  → has-retract f → has-retract g
-  → has-retract (f ∘ g)
-retract-∘ f-ret g-ret .retract = g-ret .retract ∘ f-ret .retract
-retract-∘ f-ret g-ret .is-retract =
-  retract-of-∘ (f-ret .is-retract) (g-ret .is-retract)
+  → has-retraction f → has-retraction g
+  → has-retraction (f ∘ g)
+retraction-∘ f-ret g-ret .retraction = g-ret .retraction ∘ f-ret .retraction
+retraction-∘ f-ret g-ret .is-retraction =
+  retraction-of-∘ (f-ret .is-retraction) (g-ret .is-retraction)
 
 
--- If `f` has a retract, then `f` is monic.
+-- If `f` has a retraction, then `f` is monic.
 
-has-retract→monic
+has-retraction→monic
   : {f : Hom a b}
-  → has-retract f
+  → has-retraction f
   → is-monic f
-has-retract→monic {f} f-ret g h p =
-  g                         ~⟨ id-l _ ⟨
-  id ∘ g                    ~⟨ g ◁ f-ret .is-retract ⟨
-  (f-ret .retract ∘ f) ∘ g  ~⟨ assoc _ _ _ ⟨
-  f-ret .retract ∘ (f ∘ g)  ~⟨ p ▷ f-ret .retract ⟩
-  f-ret .retract ∘ f ∘ h    ~⟨ assoc _ _ _ ⟩
-  (f-ret .retract ∘ f) ∘ h  ~⟨ h ◁ f-ret .is-retract ⟩
-  id ∘ h                    ~⟨ id-l _ ⟩
-  h                         ∎
+has-retraction→monic {f} f-ret g h p =
+  g                            ~⟨ id-l _ ⟨
+  id ∘ g                       ~⟨ g ◁ f-ret .is-retraction ⟨
+  (f-ret .retraction ∘ f) ∘ g  ~⟨ assoc _ _ _ ⟨
+  f-ret .retraction ∘ (f ∘ g)  ~⟨ p ▷ f-ret .retraction ⟩
+  f-ret .retraction ∘ f ∘ h    ~⟨ assoc _ _ _ ⟩
+  (f-ret .retraction ∘ f) ∘ h  ~⟨ h ◁ f-ret .is-retraction ⟩
+  id ∘ h                       ~⟨ id-l _ ⟩
+  h                            ∎
 
 
 -- A section that is also epic is a retract.
 
-section-of+epic→retract-of
+section-of+epic→retraction-of
   : {s : b ⇒ a} {r : a ⇒ b}
   → s section-of r
   → is-epic s
-  → s retract-of r
-section-of+epic→retract-of {s} {r} sect epic =
+  → s retraction-of r
+section-of+epic→retraction-of {s} {r} sect epic =
   epic (s ∘ r) id $
     (s ∘ r) ∘ s  ~⟨ assoc s r s ⟨
     s ∘ (r ∘ s)  ~⟨ sect ▷ s ⟩
@@ -229,14 +229,14 @@ section-of+epic→retract-of {s} {r} sect epic =
     id ∘ s       ∎
 
 
--- Dually, a retract that is also monic is a section.
+-- Dually, a retraction that is also monic is a section.
 
-retract-of+monic→section-of
+retraction-of+monic→section-of
   : {s : b ⇒ a} {r : a ⇒ b}
-  → r retract-of s
+  → r retraction-of s
   → is-monic r
   → r section-of s
-retract-of+monic→section-of {s = s} {r = r} ret monic =
+retraction-of+monic→section-of {s = s} {r = r} ret monic =
   monic (s ∘ r) id $
     r ∘ s ∘ r    ~⟨ assoc r s r ⟩
     (r ∘ s) ∘ r  ~⟨ r ◁ ret ⟩
@@ -244,23 +244,23 @@ retract-of+monic→section-of {s = s} {r = r} ret monic =
     r ∘ id       ∎
 
 
-has-retract+epic→has-section
+has-retraction+epic→has-section
   : {f : Hom a b}
-  → has-retract f
+  → has-retraction f
   → is-epic f
   → has-section f
-has-retract+epic→has-section ret epic .section = ret .retract
-has-retract+epic→has-section ret epic .is-section =
-  section-of+epic→retract-of (ret .is-retract) epic
+has-retraction+epic→has-section ret epic .section = ret .retraction
+has-retraction+epic→has-section ret epic .is-section =
+  section-of+epic→retraction-of (ret .is-retraction) epic
 
-has-section+monic→has-retract
+has-section+monic→has-retraction
   : {f : Hom a b}
   → has-section f
   → is-monic f
-  → has-retract f
-has-section+monic→has-retract sect monic .retract = sect .section
-has-section+monic→has-retract sect monic .is-retract =
-  retract-of+monic→section-of (sect .is-section) monic
+  → has-retraction f
+has-section+monic→has-retraction sect monic .retraction = sect .section
+has-section+monic→has-retraction sect monic .is-retraction =
+  retraction-of+monic→section-of (sect .is-section) monic
 
 
 -- Isomorphism (iso)

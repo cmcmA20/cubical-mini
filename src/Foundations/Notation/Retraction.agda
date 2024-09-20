@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Foundations.Notation.Retract where
+module Foundations.Notation.Retraction where
 
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
@@ -21,16 +21,16 @@ module _
   _outer-inverse-of_ : (f : O y x) (g : I x y) → 𝒰 ℓ″
   f outer-inverse-of g = g ∙ f ＝ refl
 
-  _retract-of_ = _outer-inverse-of_
+  _retraction-of_ = _outer-inverse-of_
 
-  record has-retract (s : I x y) : 𝒰 (ℓ ⊔ ℓ″) where
+  record has-retraction (s : I x y) : 𝒰 (ℓ ⊔ ℓ″) where
     no-eta-equality
     constructor make-retract
     field
-      retract    : O y x
-      is-retract : retract retract-of s
+      retraction    : O y x
+      is-retraction : retraction retraction-of s
 
-open has-retract public
+open has-retraction public
 
 
 module _
@@ -39,7 +39,7 @@ module _
 
   record GInv-o ⦃ r : Refl I∙O ⦄ ⦃ s : Dual O I ⦄ ⦃ t : Comp I O I∙O ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ′ ⊔ ℓ″) where
     no-eta-equality
-    field ∙-inv-o : {x : A} {y : B} (p : O y x) → p retract-of p ⁻¹
+    field ∙-inv-o : {x : A} {y : B} (p : O y x) → p retraction-of p ⁻¹
 
 open GInv-o ⦃ ... ⦄ public
 
@@ -53,7 +53,7 @@ record Inv-l
   {ℓᵃ} (A : 𝒰 ℓᵃ)
   ⦃ r : Pointed A ⦄ ⦃ s : Has-unary-op A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓᵃ where
   no-eta-equality
-  field <>-inv-l : (x : A) → x retract-of (minv x)
+  field <>-inv-l : (x : A) → x retraction-of (minv x)
 
 open Inv-l ⦃ ... ⦄ public
 

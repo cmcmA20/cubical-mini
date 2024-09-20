@@ -77,24 +77,24 @@ module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
     module P = Order.Reasoning P
     module Q = Order.Reasoning Q
 
-  has-retract→is-order-reflection
+  has-retraction→is-order-reflection
     : (f : P ⇒ Q)
-    → has-retract f
+    → has-retraction f
     → is-order-reflection P Q (f #_)
-  has-retract→is-order-reflection f f-ret =
-    section→is-order-reflection (f .hom) (f-ret .retract)
-      (fun-ext $ ap hom (f-ret .is-retract) #_)
+  has-retraction→is-order-reflection f f-ret =
+    section→is-order-reflection (f .hom) (f-ret .retraction)
+      (fun-ext $ ap hom (f-ret .is-retraction) #_)
 
-  has-retract→is-order-embedding
+  has-retraction→is-order-embedding
     : (f : P ⇒ Q)
-    → has-retract f
+    → has-retraction f
     → is-order-embedding P Q (f #_)
-  has-retract→is-order-embedding f f-ret =
-    section→is-order-embedding f (f-ret .retract)
-      (fun-ext $ ap hom (f-ret .is-retract) #_)
+  has-retraction→is-order-embedding f f-ret =
+    section→is-order-embedding f (f-ret .retraction)
+      (fun-ext $ ap hom (f-ret .is-retraction) #_)
 
   ≅→is-order-embedding
     : (f : P ≅ Q) → is-order-embedding P Q (f #_)
   ≅→is-order-embedding f =
-    has-retract→is-order-embedding (f .to) (≅→to-has-retract f)
+    has-retraction→is-order-embedding (f .to) (≅→to-has-retraction f)
     where open Iso

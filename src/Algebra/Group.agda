@@ -24,8 +24,8 @@ record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   open is-monoid has-monoid public
 
   field
-    inverse-l : ∀ x → x retract-of inverse x
-    inverse-r : ∀ x → x section-of inverse x
+    inverse-l : ∀ x → x retraction-of inverse x
+    inverse-r : ∀ x → x section-of    inverse x
 
   instance
     Has-unary-op-is-group : Has-unary-op A

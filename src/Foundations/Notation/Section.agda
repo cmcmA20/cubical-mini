@@ -3,11 +3,13 @@ module Foundations.Notation.Section where
 
 open import Foundations.Prim.Kan
 open import Foundations.Prim.Type
+open import Agda.Builtin.Sigma
 open import Agda.Builtin.Unit
 
 open import Foundations.Notation.Composition
 open import Foundations.Notation.Duality
 open import Foundations.Notation.Reflexivity
+open import Foundations.Notation.Unital.Outer
 
 private variable
   ℓᵃ ℓᵇ ℓ ℓ′ : Level
@@ -33,6 +35,13 @@ module _
 
 open has-section public
 
+-- aka split epimorphism
+Retract
+  : {ℓa ℓb ℓf ℓg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+    (F : B → A → 𝒰 ℓf) {G : A → B → 𝒰 ℓg} {G∙F : A → A → 𝒰 ℓgf}
+    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
+    (x : A) (y : B) → 𝒰 (ℓf ⊔ ℓg ⊔ ℓgf)
+Retract F x y = Σ (F y x) has-section
 
 module _
   {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
@@ -66,3 +75,11 @@ instance
     → HInv-i {A = ⊤} (λ _ _ → A)
   Inv-r→HInv-i .∙-inv-i = <>-inv-r
   {-# INCOHERENT Inv-r→HInv-i #-}
+
+  Refl-Retract
+    : ∀ {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} {R : A → A → 𝒰 ℓ}
+      ⦃ _ : Refl R ⦄ ⦃ _ : Trans R ⦄ ⦃ _ : HUnit-o R ⦄
+    → Refl (Retract R)
+  Refl-Retract .refl .fst = refl
+  Refl-Retract .refl .snd .section = refl
+  Refl-Retract .refl .snd .is-section = ∙-id-o _

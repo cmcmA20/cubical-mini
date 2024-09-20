@@ -25,10 +25,10 @@ module _ {o ℓ} {C : Precategory o ℓ} where
       → H-Level n (has-section f)
     H-Level-has-section ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 has-section-Iso
 
-    H-Level-has-retract
+    H-Level-has-retraction
       : {a b : ⌞ C ⌟} {f : a ⇒ b} {n : HLevel} ⦃ _ : n ≥ʰ 2 ⦄
-      → H-Level n (has-retract f)
-    H-Level-has-retract ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 has-retract-Iso
+      → H-Level n (has-retraction f)
+    H-Level-has-retraction ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 has-retraction-Iso
 
     H-Level-is-invertible
       : {a b : ⌞ C ⌟} {f : a ⇒ b} {n : HLevel} → ⦃ n ≥ʰ 1 ⦄

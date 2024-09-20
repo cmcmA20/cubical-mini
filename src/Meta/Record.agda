@@ -155,12 +155,12 @@ has-section-Iso
   → has-section r ≅ Σ[ s ꞉ I y x ] s section-of r
 unquoteDef has-section-Iso = define-record-iso has-section-Iso (quote has-section)
 
-has-retract-Iso
+has-retraction-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
     {I : A → B → 𝒰 ℓ′} {O : B → A → 𝒰 ℓ} {I∙O : A → A → 𝒰 ℓ″}
     ⦃ _ : Refl I∙O ⦄ ⦃ _ : Comp I O I∙O ⦄ {x : A} {y : B} {s : I x y}
-  → has-retract s ≅ Σ[ r ꞉ O y x ] r retract-of s
-unquoteDef has-retract-Iso = define-record-iso has-retract-Iso (quote has-retract)
+  → has-retraction s ≅ Σ[ r ꞉ O y x ] r retraction-of s
+unquoteDef has-retraction-Iso = define-record-iso has-retraction-Iso (quote has-retraction)
 
 Inverses-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
@@ -169,7 +169,7 @@ Inverses-Iso
     ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
     ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B} {f : F x y} {g : G y x}
-  → Inverses f g ≅ (f retract-of g) × (f section-of g)
+  → Inverses f g ≅ (f retraction-of g) × (f section-of g)
 unquoteDef Inverses-Iso = define-record-iso Inverses-Iso (quote Inverses)
 
 is-invertible-Iso

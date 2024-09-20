@@ -106,7 +106,7 @@ _∙ᴱₑ_ : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ
     @0 s : (g⁻¹ ∙ f⁻¹) section-of (f ∙ g)
     s = (g⁻¹ ◁ fi .snd .fst .erased ▷ g) ∙ gi .snd .fst .erased
 
-    @0 r : (g⁻¹ ∙ f⁻¹) retract-of (f ∙ g)
+    @0 r : (g⁻¹ ∙ f⁻¹) retraction-of (f ∙ g)
     r = (f ◁ gi .snd .snd .erased ▷ f⁻¹) ∙ fi .snd .snd .erased
 
   e : is-equivᴱ (f ∙ g)

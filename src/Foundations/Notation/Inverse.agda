@@ -6,7 +6,7 @@ open import Foundations.Prim.Type
 open import Foundations.Notation.Composition
 open import Foundations.Notation.Duality
 open import Foundations.Notation.Reflexivity
-open import Foundations.Notation.Retract
+open import Foundations.Notation.Retraction
 open import Foundations.Notation.Section
 
 module _
@@ -20,7 +20,7 @@ module _
     no-eta-equality
     constructor make-inverses
     field
-      inv-o : f retract-of g
+      inv-o : f retraction-of g
       inv-i : f section-of g
   {-# INLINE make-inverses #-}
 
@@ -54,7 +54,7 @@ module _
   ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
   {x : A} {y : B} {f : F x y} where
 
-  invertible : (g : G y x) → f retract-of g → f section-of g
+  invertible : (g : G y x) → f retraction-of g → f section-of g
              → is-invertible f
   invertible g r s .is-invertible.inv = g
   invertible g r s .is-invertible.inverses .Inverses.inv-o = r

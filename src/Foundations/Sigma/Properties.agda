@@ -119,6 +119,20 @@ open Iso
      → A ≃ C → B ≃ D → A × B ≃ C × D
 ×-ap ac bd = Σ-ap ac (λ _ → bd)
 
+Σ-retract-fst : (r : Retractₜ A A′) → Retractₜ (Σ A B) (Σ A′ (B ∘ r .fst))
+Σ-retract-fst {B} (f , hs) .fst (a′ , b) = f a′ , b
+Σ-retract-fst {B} (f , hs) .snd .section (a , b) =
+  hs .section a , subst B (sym (hs .is-section # a)) b
+Σ-retract-fst {B} (f , hs) .snd .is-section = fun-ext λ (a , b)
+  →  hs .is-section # a
+  ,ₚ subst⁻-filler B (hs .is-section # a) b ⁻¹
+
+Σ-retract-snd : {A : Type ℓ} {P : A → Type ℓ′} {Q : A → Type ℓ″}
+              → Π[ x ꞉ A ] Retractₜ (P x) (Q x) → Retractₜ (Σ A P) (Σ A Q)
+Σ-retract-snd pw .fst = second λ {x} → pw x .fst
+Σ-retract-snd pw .snd .section = second (λ {x} → pw x .snd .section)
+Σ-retract-snd pw .snd .is-section = fun-ext λ (a , p) → refl ,ₚ pw a .snd .is-section # p
+
 Σ-assoc : {A : Type ℓ} {B : A → Type ℓ′} {C : (a : A) → B a → Type ℓ″}
         → Σ[ x ꞉ A ] Σ[ y ꞉ B x ] C x y
         ≃ Σ[ (x , y) ꞉ Σ _ B ] C x y

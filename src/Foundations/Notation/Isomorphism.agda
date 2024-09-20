@@ -7,7 +7,7 @@ open import Foundations.Notation.Composition
 open import Foundations.Notation.Duality
 open import Foundations.Notation.Inverse
 open import Foundations.Notation.Reflexivity
-open import Foundations.Notation.Retract
+open import Foundations.Notation.Retraction
 open import Foundations.Notation.Section
 open import Foundations.Notation.Underlying
 open import Foundations.Notation.Unital.Outer
@@ -42,7 +42,7 @@ module _
   ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
   {x : A} {y : B} where
 
-  iso : (f : F x y) (g : G y x) → f retract-of g → f section-of g
+  iso : (f : F x y) (g : G y x) → f retraction-of g → f section-of g
       → Iso F G x y
   iso f g r s .to = f
   iso f g r s .from = g
@@ -71,16 +71,32 @@ module _
   ≅→from-has-section i .is-section = i .inv-i
   {-# INLINE ≅→from-has-section #-}
 
-  ≅→to-has-retract : (i : Iso F G x y) → has-retract (i .to)
-  ≅→to-has-retract i .retract = i .from
-  ≅→to-has-retract i .is-retract = i .inv-i
-  {-# INLINE ≅→to-has-retract #-}
+  ≅→to-has-retraction : (i : Iso F G x y) → has-retraction (i .to)
+  ≅→to-has-retraction i .retraction = i .from
+  ≅→to-has-retraction i .is-retraction = i .inv-i
+  {-# INLINE ≅→to-has-retraction #-}
 
-  ≅→from-has-retract : (i : Iso F G x y) → has-retract (i .from)
-  ≅→from-has-retract i .retract = i .to
-  ≅→from-has-retract i .is-retract = i .inv-o
-  {-# INLINE ≅→from-has-retract #-}
+  ≅→from-has-retraction : (i : Iso F G x y) → has-retraction (i .from)
+  ≅→from-has-retraction i .retraction = i .to
+  ≅→from-has-retraction i .is-retraction = i .inv-o
+  {-# INLINE ≅→from-has-retraction #-}
 
+  is-inv→retract : (f : F x y) → is-invertible f → Retract G x y
+  is-inv→retract _ fi .fst = fi .is-invertible.inv
+  is-inv→retract f _ .snd .section = f
+  is-inv→retract _ fi .snd .is-section = fi .is-invertible.inverses .Inverses.inv-i
+  {-# INLINE is-inv→retract #-}
+
+  is-inv→retract⁻ : (f : F x y) → is-invertible f → Retract F y x
+  is-inv→retract⁻ f _ .fst = f
+  is-inv→retract⁻ _ fi .snd .section = fi .is-invertible.inv
+  is-inv→retract⁻ _ fi .snd .is-section = fi .is-invertible.inverses .Inverses.inv-o
+  {-# INLINE is-inv→retract⁻ #-}
+
+  ≅→retract : Iso F G x y → Retract F y x
+  ≅→retract i .fst = i .to
+  ≅→retract i .snd = ≅→to-has-section i
+  {-# INLINE ≅→retract #-}
 
 -- homogeneous isomorphism
 HIso

@@ -18,11 +18,12 @@ private variable
   D : Type ℓ‴
   x y : A
 
+is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
+is-equiv-inv {f} fe = is-inv→is-equiv (invertible f (fun-ext (is-equiv→unit fe)) (fun-ext (is-equiv→counit fe)))
+
 instance
   Dual-≃ : Dual (_≃_ {ℓ} {ℓ′}) _≃_
-  Dual-≃ ._ᵒᵖ (f , e) = ≅→≃ $ iso (is-equiv→inverse e) f
-    (fun-ext $ is-equiv→unit e)
-    (fun-ext $ is-equiv→counit e)
+  Dual-≃ ._ᵒᵖ (f , fe) = is-equiv→inverse fe , is-equiv-inv fe
 
 module _ (e : A ≃ B) where
   private
@@ -99,7 +100,7 @@ _∙ₑ_ : A ≃ B → B ≃ C → A ≃ C
     s : (g⁻¹ ∙ f⁻¹) section-of (f ∙ g)
     s = (g⁻¹ ◁ fi .inv-o ▷ g) ∙ gi .inv-o
 
-    r : (g⁻¹ ∙ f⁻¹) retract-of (f ∙ g)
+    r : (g⁻¹ ∙ f⁻¹) retraction-of (f ∙ g)
     r = (f ◁ gi .inv-i ▷ f⁻¹) ∙ fi .inv-i
 
   e : is-equiv (f ∙ g)
@@ -117,9 +118,6 @@ is-equiv-comp fe ge = ((_ , fe) ∙ (_ , ge)) .snd
 
 inv-≃ : (A ≃ B) ≃ (B ≃ A)
 inv-≃ = ≅→≃ $ iso _⁻¹ _⁻¹ (fun-ext invol) (fun-ext invol)
-
-is-equiv-inv : {f : A → B} (fe : is-equiv f) → is-equiv (is-equiv→inverse fe)
-is-equiv-inv fe = ((_ , fe) ⁻¹) .snd
 
 -- action on equivalences by univalence
 @0 generic-ae : (F : Type ℓ → Type ℓ′) → A ≃ B → F A ≃ F B
