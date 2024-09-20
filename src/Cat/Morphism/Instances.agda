@@ -36,9 +36,9 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     H-Level-is-invertible ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (is-invertible-is-prop _)
 
     H-Level-Inverses
-      : {a b : ⌞ C ⌟} {f : a ⇒ b} {g : b ⇒ a} {n : HLevel} → ⦃ n ≥ʰ 2 ⦄
+      : {a b : ⌞ C ⌟} {f : a ⇒ b} {g : b ⇒ a} {n : HLevel} → ⦃ n ≥ʰ 1 ⦄
       → H-Level n (Inverses f g)
-    H-Level-Inverses ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 Inverses-Iso
+    H-Level-Inverses ⦃ s≤ʰs _ ⦄ = hlevel-basic-instance 1 $ ≅→is-of-hlevel! 1 Inverses-Iso
 
     H-Level-≅
       : {a b : ⌞ C ⌟} {n : HLevel} → ⦃ n ≥ʰ 2 ⦄
