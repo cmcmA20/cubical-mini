@@ -30,7 +30,7 @@ module _ (C : Precategory o h) where
 
     ⟨⟩∘ : {Q R : Ob} {f : Q ⇒ A} {g : Q ⇒ B} (h : R ⇒ Q)
         → ⟨ f , g ⟩ₓ ∘ h ＝ ⟨ f ∘ h , g ∘ h ⟩ₓ
-    ⟨⟩∘ f = unique (assoc _ _ _ ∙ (_ ◁ π₁∘⟨⟩)) (assoc _ _ _ ∙ (_ ◁ π₂∘⟨⟩))
+    ⟨⟩∘ f = unique (sym (assoc _ _ _) ∙ (_ ◁ π₁∘⟨⟩)) (sym (assoc _ _ _) ∙ (_ ◁ π₂∘⟨⟩))
 
     ⟨⟩-η : ⟨ π₁ , π₂ ⟩ₓ ＝ id
     ⟨⟩-η = sym $ unique (id-r _) (id-r _)
@@ -69,14 +69,14 @@ module _ {C : Precategory o h} where
 
       p₁→p₂→p₁ : p₁→p₂ ∘ p₂→p₁ ＝ id
       p₁→p₂→p₁ = p₂.unique₂
-        (assoc _ _ _ ∙ (_ ◁ p₂.π₁∘⟨⟩) ∙ p₁.π₁∘⟨⟩)
-        (assoc _ _ _ ∙ (_ ◁ p₂.π₂∘⟨⟩) ∙ p₁.π₂∘⟨⟩)
+        (sym (assoc _ _ _) ∙ (_ ◁ p₂.π₁∘⟨⟩) ∙ p₁.π₁∘⟨⟩)
+        (sym (assoc _ _ _) ∙ (_ ◁ p₂.π₂∘⟨⟩) ∙ p₁.π₂∘⟨⟩)
         (id-r _) (id-r _)
 
       p₂→p₁→p₂ : p₂→p₁ ∘ p₁→p₂ ＝ id
       p₂→p₁→p₂ = p₁.unique₂
-        (assoc _ _ _ ∙ (_ ◁ p₁.π₁∘⟨⟩) ∙ p₂.π₁∘⟨⟩)
-        (assoc _ _ _ ∙ (_ ◁ p₁.π₂∘⟨⟩) ∙ p₂.π₂∘⟨⟩)
+        (sym (assoc _ _ _) ∙ (_ ◁ p₁.π₁∘⟨⟩) ∙ p₂.π₁∘⟨⟩)
+        (sym (assoc _ _ _) ∙ (_ ◁ p₁.π₂∘⟨⟩) ∙ p₂.π₂∘⟨⟩)
         (id-r _) (id-r _)
 
 

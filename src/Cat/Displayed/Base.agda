@@ -41,8 +41,8 @@ record Displayed {o ℓ} (B : Precategory o ℓ)
     id-rᵈ : ∀ {a b x y} {f : Hom a b} (f′ : Hom[ f ] x y) → (f′ ∘ᵈ idᵈ) ＝[ id-r f ] f′
     id-lᵈ : ∀ {a b x y} {f : Hom a b} (f′ : Hom[ f ] x y) → (idᵈ ∘ᵈ f′) ＝[ id-l f ] f′
     assocᵈ : ∀ {a b c d w x y z} {f : Hom c d} {g : Hom b c} {h : Hom a b}
-           → (f′ : Hom[ f ] y z) (g′ : Hom[ g ] x y) (h′ : Hom[ h ] w x)
-           → f′ ∘ᵈ (g′ ∘ᵈ h′) ＝[ assoc f g h ] ((f′ ∘ᵈ g′) ∘ᵈ h′)
+           → (h′ : Hom[ h ] w x) (g′ : Hom[ g ] x y) (f′ : Hom[ f ] y z)
+           → (f′ ∘ᵈ g′) ∘ᵈ h′ ＝[ assoc h g f ] f′ ∘ᵈ (g′ ∘ᵈ h′)
 
   _∙[]_ : ∀ {a b x y} {f g h : Hom a b} {p : f ＝ g} {q : g ＝ h}
         → {f′ : Hom[ f ] x y} {g′ : Hom[ g ] x y} {h′ : Hom[ h ] x y}

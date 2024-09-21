@@ -64,14 +64,14 @@ monic-∘
   → is-monic f
   → is-monic g
   → is-monic (f ∘ g)
-monic-∘ fm gm a b α = gm _ _ (fm _ _ (assoc _ _ _ ∙∙ α ∙∙ sym (assoc _ _ _)))
+monic-∘ fm gm a b α = gm _ _ (fm _ _ (sym (assoc _ _ _) ∙∙ α ∙∙ assoc _ _ _))
 
 epic-∘
   : {f : b ⇒ c} {g : a ⇒ b}
   → is-epic f
   → is-epic g
   → is-epic (f ∘ g)
-epic-∘ fe ge a b α = fe _ _ (ge _ _ (sym (assoc _ _ _) ∙∙ α ∙∙ (assoc _ _ _)))
+epic-∘ fe ge a b α = fe _ _ (ge _ _ (assoc _ _ _ ∙∙ α ∙∙ sym (assoc _ _ _)))
 
 _∘ₘ_ : b ↪ c → a ↪ b → a ↪ c
 (f ∘ₘ g) .mor   = f .mor ∘ g .mor
@@ -103,7 +103,7 @@ monic-cancel-l
   → is-monic (f ∘ g)
   → is-monic g
 monic-cancel-l {f} fg-monic h h′ p = fg-monic h h′ $
-  sym (assoc _ _ _) ∙∙ p ▷ f ∙∙ assoc _ _ _
+  assoc _ _ _ ∙∙ p ▷ f ∙∙ sym (assoc _ _ _)
 
 -- Dually, if `f ∘ g` is epic, then `f` must also be epic.
 
@@ -112,7 +112,7 @@ epic-cancel-r
   → is-epic (f ∘ g)
   → is-epic f
 epic-cancel-r {g} fg-epic h h' p = fg-epic h h' $
-  assoc _ _ _ ∙∙ g ◁ p ∙∙ sym (assoc _ _ _)
+  sym (assoc _ _ _) ∙∙ g ◁ p ∙∙ assoc _ _ _
 
 
 -- Postcomposition with a mono is an embedding.
@@ -168,9 +168,9 @@ has-section→epic
 has-section→epic {f} f-sect g h p =
   g                          ~⟨ id-r _ ⟨
   g ∘ id                     ~⟨ f-sect .is-section ▷ g ⟨
-  g ∘ f ∘ f-sect .section    ~⟨ assoc _ _ _ ⟩
+  g ∘ f ∘ f-sect .section    ~⟨ assoc _ _ _ ⟨
   (g ∘ f) ∘ f-sect .section  ~⟨ f-sect .section ◁ p ⟩
-  (h ∘ f) ∘ f-sect .section  ~⟨ assoc _ _ _ ⟨
+  (h ∘ f) ∘ f-sect .section  ~⟨ assoc _ _ _ ⟩
   h ∘ (f ∘ f-sect .section)  ~⟨ f-sect .is-section ▷ h ⟩
   h ∘ id                     ~⟨ id-r _ ⟩
   h                          ∎
@@ -206,9 +206,9 @@ has-retraction→monic
 has-retraction→monic {f} f-ret g h p =
   g                            ~⟨ id-l _ ⟨
   id ∘ g                       ~⟨ g ◁ f-ret .is-retraction ⟨
-  (f-ret .retraction ∘ f) ∘ g  ~⟨ assoc _ _ _ ⟨
+  (f-ret .retraction ∘ f) ∘ g  ~⟨ assoc _ _ _ ⟩
   f-ret .retraction ∘ (f ∘ g)  ~⟨ p ▷ f-ret .retraction ⟩
-  f-ret .retraction ∘ f ∘ h    ~⟨ assoc _ _ _ ⟩
+  f-ret .retraction ∘ f ∘ h    ~⟨ assoc _ _ _ ⟨
   (f-ret .retraction ∘ f) ∘ h  ~⟨ h ◁ f-ret .is-retraction ⟩
   id ∘ h                       ~⟨ id-l _ ⟩
   h                            ∎
@@ -223,7 +223,7 @@ section-of+epic→retraction-of
   → s retraction-of r
 section-of+epic→retraction-of {s} {r} sect epic =
   epic (s ∘ r) id $
-    (s ∘ r) ∘ s  ~⟨ assoc s r s ⟨
+    (s ∘ r) ∘ s  ~⟨ assoc s r s ⟩
     s ∘ (r ∘ s)  ~⟨ sect ▷ s ⟩
     s ∘ id       ~⟨ cat! C ⟩
     id ∘ s       ∎
@@ -238,7 +238,7 @@ retraction-of+monic→section-of
   → r section-of s
 retraction-of+monic→section-of {s = s} {r = r} ret monic =
   monic (s ∘ r) id $
-    r ∘ s ∘ r    ~⟨ assoc r s r ⟩
+    r ∘ s ∘ r    ~⟨ assoc r s r ⟨
     (r ∘ s) ∘ r  ~⟨ r ◁ ret ⟩
     id ∘ r       ~⟨ cat! C ⟩
     r ∘ id       ∎
@@ -285,7 +285,7 @@ opaque
     g~h : g.inv ＝ h.inv
     g~h =
       g.inv              ~⟨ (h.inv-o ▷ g.inv) ∙ id-r _ ⟨
-      g.inv ∘ f ∘ h.inv  ~⟨ assoc _ _ _ ∙∙ h.inv ◁ g.inv-i ∙∙ id-l _ ⟩
+      g.inv ∘ f ∘ h.inv  ~⟨ sym (assoc _ _ _) ∙∙ h.inv ◁ g.inv-i ∙∙ id-l _ ⟩
       h.inv              ∎
 
     p : g ＝ h
@@ -376,7 +376,7 @@ opaque
     inverse-unique-internal x = J>! λ y → J>! λ {f} {g} d →
       f .from                      ~⟨ f .from .id-r ⟨
       f .from ∘ id                 ~⟨ g .inv-o ▷ f .from ⟨
-      f .from ∘ g .to ∘ g .from    ~⟨ assoc _ _ _ ⟩
+      f .from ∘ g .to ∘ g .from    ~⟨ assoc _ _ _ ⟨
       (f .from ∘ g .to) ∘ g .from  ~⟨ g .from ◁ (sym d ▷ f .from) ∙ f .inv-i ⟩
       id ∘ g .from                 ~⟨ g .from .id-l ⟩
       g .from                      ∎

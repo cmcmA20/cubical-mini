@@ -62,14 +62,14 @@ module _ {C : Precategory o h} where
 
       c₁→c₂→c₁ : c₁→c₂ ∘ c₂→c₁ ＝ id
       c₁→c₂→c₁ = c₂.unique₂
-        (sym (assoc _ _ _) ∙ (c₂.[]∘ι₁ ▷ _) ∙ c₁.[]∘ι₁)
-        (sym (assoc _ _ _) ∙ (c₂.[]∘ι₂ ▷ _) ∙ c₁.[]∘ι₂)
+        (assoc _ _ _ ∙ (c₂.[]∘ι₁ ▷ _) ∙ c₁.[]∘ι₁)
+        (assoc _ _ _ ∙ (c₂.[]∘ι₂ ▷ _) ∙ c₁.[]∘ι₂)
         (id-l _) (id-l _)
 
       c₂→c₁→c₂ : c₂→c₁ ∘ c₁→c₂ ＝ id
       c₂→c₁→c₂ = c₁.unique₂
-        (sym (assoc _ _ _) ∙ (c₁.[]∘ι₁ ▷ _) ∙ c₂.[]∘ι₁)
-        (sym (assoc _ _ _) ∙ (c₁.[]∘ι₂ ▷ _) ∙ c₂.[]∘ι₂)
+        (assoc _ _ _ ∙ (c₁.[]∘ι₁ ▷ _) ∙ c₂.[]∘ι₁)
+        (assoc _ _ _ ∙ (c₁.[]∘ι₂ ▷ _) ∙ c₂.[]∘ι₂)
         (id-l _) (id-l _)
 
 

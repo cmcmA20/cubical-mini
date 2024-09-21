@@ -58,7 +58,7 @@ module _ {o h} {C : Precategory o h} where
     ≅→is-terminal : {a b : Ob} → a ≅ b → is-terminal C a → is-terminal C b
     ≅→is-terminal isom term x = isom .to ∘ centre (term x) , λ h →
       isom .to ∘ centre (term x)   ~⟨ paths (term x) _ ▷ isom .to ⟩
-      isom .to ∘ isom .from ∘ h    ~⟨ assoc _ _ _ ⟩
+      isom .to ∘ isom .from ∘ h    ~⟨ assoc _ _ _ ⟨
       (isom .to ∘ isom .from) ∘ h  ~⟨ h ◁ isom .inv-o ⟩
       id ∘ h                       ~⟨ id-l _ ⟩
       h                            ∎

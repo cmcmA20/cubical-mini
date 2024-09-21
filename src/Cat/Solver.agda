@@ -53,7 +53,7 @@ module NbE (Cat : Precategory o h) where
   eval-sound-k (f `∘ g) h =
     eval f (eval g h)        ~⟨ eval-sound-k f _ ⟩
     embed f ∘ eval g h       ~⟨ eval-sound-k g h ▷ embed f ⟩
-    embed f ∘ embed g ∘ h    ~⟨ assoc _ _ _ ⟩
+    embed f ∘ embed g ∘ h    ~⟨ assoc _ _ _ ⟨
     (embed f ∘ embed g) ∘ h  ∎
   eval-sound-k (x ↑) f = refl
 

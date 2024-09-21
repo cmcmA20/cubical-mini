@@ -35,8 +35,8 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     _∘_  : ∀ {x y z} → Hom y z → Hom x y → Hom x z
     id-l : ∀ {x y} (f : Hom x y) → id ∘ f ＝ f
     id-r : ∀ {x y} (f : Hom x y) → f ∘ id ＝ f
-    assoc : ∀ {w x y z} (f : Hom y z) (g : Hom x y) (h : Hom w x)
-          → f ∘ (g ∘ h) ＝ (f ∘ g) ∘ h
+    assoc : ∀ {w x y z} (h : Hom w x) (g : Hom x y) (f : Hom y z)
+          → (f ∘ g) ∘ h ＝ f ∘ (g ∘ h)
 
   Mor : Type (o ⊔ h)
   Mor = Σ[ a ꞉ Ob ] Σ[ b ꞉ Ob ] Hom a b
@@ -69,7 +69,7 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     {-# OVERLAPPING Trans-Hom #-}
 
     HAssoc-Hom : HAssoc Hom
-    HAssoc-Hom .∙-assoc f g h = assoc h g f ⁻¹
+    HAssoc-Hom .∙-assoc = assoc
     {-# OVERLAPPING HAssoc-Hom #-}
 
     HUnit-o-Hom : HUnit-o Hom
@@ -361,11 +361,11 @@ _∘ⁿᵗ_ {C} {D} {F} {G} {H} α β = comps
     comps : F => H
     comps ._=>_.η x = β # x ∙ α # x
     comps ._=>_.is-natural x y f =
-      F # f ∙ β # y ∙ α # y      ~⟨ D.assoc _ _ _ ⟨
+      F # f ∙ β # y ∙ α # y      ~⟨ D.assoc _ _ _ ⟩
       (F # f ∙ β # y) ∙ α # y    ~⟨ β ._=>_.is-natural x y f ▷ α # y ⟩
-      (β # x ∙ G # f) ∙ α # y    ~⟨ D.assoc _ _ _ ⟩
+      (β # x ∙ G # f) ∙ α # y    ~⟨ D.assoc _ _ _ ⟨
       β # x ∙ G # f ∙ α # y      ~⟨ β # x ◁ α ._=>_.is-natural x y f ⟩
-      β # x ∙ α # x ∙ H # f      ~⟨ D.assoc _ _ _ ⟨
+      β # x ∙ α # x ∙ H # f      ~⟨ D.assoc _ _ _ ⟩
       (β # x ∙ α # x) ∙ H # f    ∎
 
 
@@ -465,8 +465,7 @@ module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
   instance
     GAssoc-nt
       : GAssoc {A = Functor C D} _=>_ _=>_ _=>_ _=>_ _=>_ _=>_
-    GAssoc-nt .∙-assoc α β γ = ext λ c →
-      D.assoc (γ # c) (β # c) (α # c) ⁻¹
+    GAssoc-nt .∙-assoc α β γ = ext λ c → D.assoc (α # c) (β # c) (γ # c)
 
     GUnit-o-nt : GUnit-o {A = Functor C D} _=>_ _=>_
     GUnit-o-nt .∙-id-o α = ext λ c → D.id-r (α # c)
@@ -484,3 +483,20 @@ module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
 
     ⊣-Functor : ⊣-notation (Functor C D) (Functor D C) (𝒰 (oᶜ ⊔ hᶜ ⊔ oᵈ ⊔ hᵈ))
     ⊣-Functor ._⊣_ L R = Adjoint Functor Functor Functor Functor C C.Hom D D.Hom L R _=>_ _=>_
+
+Cat[_,_] : Precategory o h → Precategory o′ h′ → Precategory (o ⊔ h ⊔ o′ ⊔ h′) (o ⊔ h ⊔ h′)
+Cat[ C , D ] .Ob = C ⇒ D
+Cat[ C , D ] .Hom = _=>_
+Cat[ C , D ] .Hom-set = hlevel!
+Cat[ C , D ] .id = refl
+Cat[ C , D ] ._∘_ α β = β ∙ α
+Cat[ C , D ] .id-l = ∙-id-i
+Cat[ C , D ] .id-r = ∙-id-o
+Cat[ C , D ] .assoc = ∙-assoc
+
+instance
+  ⇒-Precat-exp : ⇒-notation (Precategory o h) (Precategory o′ h′) (Precategory (o ⊔ h ⊔ o′ ⊔ h′) (o ⊔ h ⊔ h′))
+  ⇒-Precat-exp ._⇒_ = Cat[_,_]
+
+PSh : ∀ κ {o ℓ} → Precategory o ℓ → Precategory (o ⊔ ℓ ⊔ ℓsuc κ) (o ⊔ ℓ ⊔ κ)
+PSh κ C = C ⇒ Sets κ
