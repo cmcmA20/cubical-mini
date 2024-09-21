@@ -175,3 +175,32 @@ jobs:
         with:
           branch: gh-pages
           folder: html
+
+      ########################################################################
+      ## FULL SOURCE CODE RELEASE GENERATION
+      ########################################################################
+
+      - name: Generate full source archive
+        if: |
+          github.event_name == 'push' && github.ref_name == 'master' &&
+          matrix.agda-tag == 'nightly' && steps.cache-library-restore.outputs.cache-hit != 'true'
+        run: |
+          make gen-everythings \
+            AGDA_EXEC='~/.cabal/bin/agda' \
+            FIX_WHITESPACE='~/.cabal/bin/fix-whitespace' \
+            EVERYTHINGS='cabal run Everythings'
+          tar czf cm-full-source.tar.gz *.md LICENSE fix-whitespace.yaml cubical-mini.agda-lib src/
+
+      - name: Update Nightly Release
+        if: |
+          github.event_name == 'push' && github.ref_name == 'master' &&
+          matrix.agda-tag == 'nightly' && steps.cache-library-restore.outputs.cache-hit != 'true'
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: nightly
+          name: 'nightly-$$'
+          prerelease: true
+          files: |
+            ./cm-full-source.tar.gz

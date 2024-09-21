@@ -15,7 +15,7 @@ build :
 	$(MAKE) AGDA_EXEC=$(AGDA_BIN) gen-everythings check
 
 .PHONY : test
-test : check-whitespace gen-instances gen-and-check-everythings check-README check
+test : check-whitespace gen-and-check-everythings check-README check
 
 # checking and fixing whitespace
 
@@ -33,14 +33,11 @@ check-whitespace:
 check-everythings:
 	$(EVERYTHINGS) check-except System
 
-.PHONY : gen-instances
-gen-instances:
-	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
-
 .PHONY : gen-everythings
 gen-everythings:
 	$(EVERYTHINGS) gen-except System
 	$(EVERYTHINGS) gen-unsafe System
+	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
 
 .PHONY : gen-and-check-everythings
 gen-and-check-everythings: gen-everythings check-everythings
