@@ -9,23 +9,24 @@
            <a id="156" class="Symbol">;</a> <a id="158" href="Foundations.Pi.Base.html#2472" class="Function">id</a>  <a id="162" class="Symbol">to</a> <a id="165" class="Function">idₜ</a>
            <a id="180" class="Symbol">;</a> <a id="182" href="Foundations.Isomorphism.html#8296" class="Function">≅→≃</a> <a id="186" class="Symbol">to</a> <a id="189" class="Function">≅ₜ→≃</a>
            <a id="205" class="Symbol">;</a> <a id="207" href="Foundations.Univalence.html#2597" class="Function">≅→=</a> <a id="211" class="Symbol">to</a> <a id="214" class="Function">≅ₜ→=</a>
+           <a id="230" class="Symbol">;</a> <a id="232" href="Foundations.Sigma.Properties.html#4875" class="Function">×-assoc</a> <a id="240" class="Symbol">to</a> <a id="243" class="Function">×ₜ-assoc</a>
 
-           <a id="231" class="Symbol">;</a> <a id="233" href="Functions.Embedding.html#7736" class="Function">Extensional-↪</a> <a id="247" class="Symbol">to</a> <a id="250" class="Function">Extensional-↪ₜ</a>
-           <a id="276" class="Symbol">;</a> <a id="278" href="Functions.Surjection.html#2499" class="Function">Extensional-↠</a> <a id="292" class="Symbol">to</a> <a id="295" class="Function">Extensional-↠ₜ</a>
-           <a id="321" class="Symbol">)</a>
-  <a id="325" class="Keyword">public</a>
+           <a id="264" class="Symbol">;</a> <a id="266" href="Functions.Embedding.html#7736" class="Function">Extensional-↪</a> <a id="280" class="Symbol">to</a> <a id="283" class="Function">Extensional-↪ₜ</a>
+           <a id="309" class="Symbol">;</a> <a id="311" href="Functions.Surjection.html#2499" class="Function">Extensional-↠</a> <a id="325" class="Symbol">to</a> <a id="328" class="Function">Extensional-↠ₜ</a>
+           <a id="354" class="Symbol">)</a>
+  <a id="358" class="Keyword">public</a>
 
-<a id="333" class="Keyword">open</a> <a id="338" class="Keyword">import</a> <a id="345" href="Structures.n-Type.html" class="Module">Structures.n-Type</a> <a id="363" class="Keyword">public</a>
+<a id="366" class="Keyword">open</a> <a id="371" class="Keyword">import</a> <a id="378" href="Structures.n-Type.html" class="Module">Structures.n-Type</a> <a id="396" class="Keyword">public</a>
 
-<a id="371" class="Keyword">open</a> <a id="376" class="Keyword">import</a> <a id="383" href="Cat.Base.html" class="Module">Cat.Base</a> <a id="392" class="Keyword">public</a>
-<a id="399" class="Keyword">open</a> <a id="404" class="Keyword">import</a> <a id="411" href="Cat.Solver.html" class="Module">Cat.Solver</a>
-  <a id="424" class="Keyword">hiding</a> <a id="431" class="Symbol">(</a> <a id="433" class="Keyword">module</a> <a id="440" href="Cat.Solver.html#533" class="Module">NbE</a> <a id="444" class="Symbol">;</a> <a id="446" class="Keyword">module</a> <a id="453" href="Cat.Solver.html#1861" class="Module">Reflection</a> <a id="464" class="Symbol">)</a>
-  <a id="468" class="Keyword">public</a>
-<a id="475" class="Keyword">open</a> <a id="480" class="Keyword">import</a> <a id="487" href="Cat.Univalent.html" class="Module">Cat.Univalent</a>
-  <a id="503" class="Keyword">using</a> <a id="509" class="Symbol">(</a> <a id="511" href="Cat.Univalent.html#180" class="Function">is-category</a> <a id="523" class="Symbol">;</a> <a id="525" href="Cat.Univalent.html#327" class="Function">path→iso</a> <a id="534" class="Symbol">;</a> <a id="536" href="Cat.Univalent.html#1927" class="Function">Hom-pathᴾ</a>
-        <a id="554" class="Symbol">;</a> <a id="556" href="Cat.Univalent.html#1196" class="Function">Hom-transport</a> <a id="570" class="Symbol">;</a> <a id="572" href="Cat.Univalent.html#2830" class="Function">Hom-pathᴾ-refl-l</a> <a id="589" class="Symbol">;</a> <a id="591" href="Cat.Univalent.html#3059" class="Function">Hom-pathᴾ-refl-r</a>
-        <a id="616" class="Symbol">;</a> <a id="618" class="Keyword">module</a> <a id="625" href="Cat.Univalent.html#3382" class="Module">Univalent</a> <a id="635" class="Symbol">)</a>
-  <a id="639" class="Keyword">public</a>
+<a id="404" class="Keyword">open</a> <a id="409" class="Keyword">import</a> <a id="416" href="Cat.Base.html" class="Module">Cat.Base</a> <a id="425" class="Keyword">public</a>
+<a id="432" class="Keyword">open</a> <a id="437" class="Keyword">import</a> <a id="444" href="Cat.Solver.html" class="Module">Cat.Solver</a>
+  <a id="457" class="Keyword">hiding</a> <a id="464" class="Symbol">(</a> <a id="466" class="Keyword">module</a> <a id="473" href="Cat.Solver.html#533" class="Module">NbE</a> <a id="477" class="Symbol">;</a> <a id="479" class="Keyword">module</a> <a id="486" href="Cat.Solver.html#1861" class="Module">Reflection</a> <a id="497" class="Symbol">)</a>
+  <a id="501" class="Keyword">public</a>
+<a id="508" class="Keyword">open</a> <a id="513" class="Keyword">import</a> <a id="520" href="Cat.Univalent.html" class="Module">Cat.Univalent</a>
+  <a id="536" class="Keyword">using</a> <a id="542" class="Symbol">(</a> <a id="544" href="Cat.Univalent.html#180" class="Function">is-category</a> <a id="556" class="Symbol">;</a> <a id="558" href="Cat.Univalent.html#327" class="Function">path→iso</a> <a id="567" class="Symbol">;</a> <a id="569" href="Cat.Univalent.html#1927" class="Function">Hom-pathᴾ</a>
+        <a id="587" class="Symbol">;</a> <a id="589" href="Cat.Univalent.html#1196" class="Function">Hom-transport</a> <a id="603" class="Symbol">;</a> <a id="605" href="Cat.Univalent.html#2830" class="Function">Hom-pathᴾ-refl-l</a> <a id="622" class="Symbol">;</a> <a id="624" href="Cat.Univalent.html#3059" class="Function">Hom-pathᴾ-refl-r</a>
+        <a id="649" class="Symbol">;</a> <a id="651" class="Keyword">module</a> <a id="658" href="Cat.Univalent.html#3382" class="Module">Univalent</a> <a id="668" class="Symbol">)</a>
+  <a id="672" class="Keyword">public</a>
 
-<a id="647" class="Keyword">open</a> <a id="652" class="Keyword">import</a> <a id="659" href="Cat.Morphism.Instances.html" class="Module">Cat.Morphism.Instances</a> <a id="682" class="Keyword">public</a>
+<a id="680" class="Keyword">open</a> <a id="685" class="Keyword">import</a> <a id="692" href="Cat.Morphism.Instances.html" class="Module">Cat.Morphism.Instances</a> <a id="715" class="Keyword">public</a>
 </pre></body></html>
