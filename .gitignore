@@ -3,7 +3,6 @@
 \.*#*
 \#*
 Everything.agda
-!src/Foundations/Everything.agda
 dist-newstyle/
 _build/
 MAlonzo/
