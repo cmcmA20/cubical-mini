@@ -51,7 +51,7 @@ module _ {P : Poset o ℓ} where
     → is-prop (Lub P F)
   Lub-is-prop = ≅→is-of-hlevel 1 Lub-Iso λ x y → lub-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Lub
       : ∀ {ℓᵢ} {I : Type ℓᵢ} {F : I → Ob} {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Lub P F)

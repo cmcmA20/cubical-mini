@@ -48,7 +48,7 @@ module _ {P : Poset o ℓ} where
     → is-prop (Glb P F)
   Glb-is-prop = ≅→is-of-hlevel 1 Glb-Iso λ x y → glb-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Glb
       : ∀ {ℓᵢ} {I : Type ℓᵢ} {F : I → Ob} {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Glb P F)

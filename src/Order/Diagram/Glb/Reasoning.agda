@@ -28,7 +28,7 @@ open glbs renaming
   ) public
 
 Top-Poset-Lub : Top P
-Top-Poset-Lub .Top.top = ⋂ {I = Lift ℓ′ ⊥} λ()
+Top-Poset-Lub .Top.top = ⋂ {I = ⊥} λ()
 Top-Poset-Lub .Top.has-top _ = ⋂-universal _ λ ()
 
 Meet-Poset-Glb : Has-meets P

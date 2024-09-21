@@ -62,22 +62,27 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
   instance
     Refl-Hom : Refl Hom
     Refl-Hom .refl = id
+    {-# OVERLAPPING Refl-Hom #-}
 
     Trans-Hom : Trans Hom
     Trans-Hom ._∙_ f g = g ∘ f
+    {-# OVERLAPPING Trans-Hom #-}
 
     HAssoc-Hom : HAssoc Hom
     HAssoc-Hom .∙-assoc f g h = assoc h g f ⁻¹
+    {-# OVERLAPPING HAssoc-Hom #-}
 
     HUnit-o-Hom : HUnit-o Hom
     HUnit-o-Hom .∙-id-o = id-r
+    {-# OVERLAPPING HUnit-o-Hom #-}
 
     HUnit-i-Hom : HUnit-i Hom
     HUnit-i-Hom .∙-id-i = id-l
+    {-# OVERLAPPING HUnit-i-Hom #-}
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 h)
     ⇒-Hom ._⇒_ = Hom
-    {-# INCOHERENT ⇒-Hom #-}
+    {-# OVERLAPPING ⇒-Hom #-}
 
 private variable
   o h ℓ o′ h′ ℓ′ o″ h″ ℓ″ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level

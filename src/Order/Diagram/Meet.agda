@@ -62,7 +62,7 @@ module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
   Meet-is-prop : is-prop (Meet P a b)
   Meet-is-prop = ≅→is-of-hlevel 1 Meet-Iso λ x y → meet-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Meet
       : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Meet P a b)

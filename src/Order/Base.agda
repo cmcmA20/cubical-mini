@@ -33,9 +33,11 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   instance
     Refl-≤ : Refl _≤_
     Refl-≤ .refl = ≤-refl
+    {-# OVERLAPPING Refl-≤ #-}
 
     Trans-≤ : Trans _≤_
     Trans-≤ ._∙_ = ≤-trans
+    {-# OVERLAPPING Trans-≤ #-}
 
     HAssoc-≤ : HAssoc _≤_
     HAssoc-≤ .∙-assoc _ _ _ = prop!
@@ -48,7 +50,7 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
     ⇒-Hom ._⇒_ = _≤_
-    {-# INCOHERENT ⇒-Hom #-}
+    {-# OVERLAPPING ⇒-Hom #-}
 
   opaque
     ob-is-set : is-set Ob

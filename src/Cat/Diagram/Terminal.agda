@@ -20,7 +20,7 @@ module _ {o h} (C : Precategory o h) where
     instance
       ⊤-Terminal : ⊤-notation Ob
       ⊤-Terminal .⊤ = top
-    {-# INCOHERENT ⊤-Terminal #-}
+    {-# OVERLAPPING ⊤-Terminal #-}
 
     ! : {x : Ob} → x ⇒ ⊤
     ! = centre $ has-⊤ _
@@ -30,6 +30,10 @@ module _ {o h} (C : Precategory o h) where
 
     !-unique² : {x : Ob} (f g : x ⇒ ⊤) → f ＝ g
     !-unique² =  is-contr→is-prop (has-⊤ _)
+
+    instance opaque
+      H-Level-! : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄ {x : Ob} → H-Level n (x ⇒ ⊤)
+      H-Level-! ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance !-unique²
 
 {-# DISPLAY Terminal.top = ⊤ #-}
 unquoteDecl Terminal-Iso = declare-record-iso Terminal-Iso (quote Terminal)

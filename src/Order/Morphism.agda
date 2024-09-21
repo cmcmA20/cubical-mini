@@ -10,15 +10,6 @@ private variable
   o o′ ℓ ℓ′ : Level
   P Q : Poset o ℓ
 
-module _ {P : Poset o ℓ} where
-  open Poset P
-
-  instance
-    ≅-Poset-Ob : ≅-notation Ob Ob (𝒰 ℓ)
-    ≅-Poset-Ob ._≅_ = Iso _≤_ _≤_
-    {-# INCOHERENT ≅-Poset-Ob #-}
-
-
 module _ (P : Poset o ℓ) (Q : Poset o′ ℓ′) (f : ⌞ P ⌟ → ⌞ Q ⌟) where
   private
     module P = Poset P

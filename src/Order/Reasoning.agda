@@ -1,7 +1,7 @@
 {-# OPTIONS --safe #-}
 open import Order.Base
 
-module Order.Reasoning {ℓ ℓ′} (P : Poset ℓ ℓ′) where
+module Order.Reasoning {o ℓ} (P : Poset o ℓ) where
 
 open import Cat.Prelude
 
@@ -18,3 +18,8 @@ f ≤⟨ p ⟩ q = p ∙ q
 
 =→≥ : ∀ {x y} → x ＝ y → y ≤ x
 =→≥ = =→~⁻
+
+instance
+  ≅-Poset-Ob : ≅-notation Ob Ob (𝒰 ℓ)
+  ≅-Poset-Ob ._≅_ = Iso _≤_ _≤_
+  {-# OVERLAPPING ≅-Poset-Ob #-}

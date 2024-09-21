@@ -87,12 +87,15 @@ record Displayed {o ℓ} (B : Precategory o ℓ)
   instance
     Refl-Hom[-] : ∀ {a} → Refl Hom[ id {a} ]
     Refl-Hom[-] .refl = idᵈ
+    {-# OVERLAPPING Refl-Hom[-] #-}
 
     Comp-Hom[-] : ∀ {a b c} {f : Hom a b} {g : Hom b c} → Comp Hom[ f ] Hom[ g ] Hom[ f ∙ g ]
     Comp-Hom[-] ._∙_ f′ g′ = g′ ∘ᵈ f′
+    {-# OVERLAPPING Comp-Hom[-] #-}
 
     ⇒-Hom[-] : ∀ {x y} {f : Hom x y} → ⇒-notation (Ob[ x ]) (Ob[ y ]) (Type ℓ′)
     ⇒-Hom[-] {f} ._⇒_ = Hom[ f ]
+    {-# OVERLAPPING ⇒-Hom[-] #-}
 
 instance
   open Struct-proj-desc

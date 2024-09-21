@@ -5,7 +5,7 @@ open import Cat.Prelude
 
 open import Order.Base
 
-poset→precategory : ∀ {ℓ ℓ′} → Poset ℓ ℓ′ → Precategory ℓ ℓ′
+poset→precategory : ∀ {o ℓ} → Poset o ℓ → Precategory o ℓ
 poset→precategory P = cat where
   open Poset P
   open Precategory

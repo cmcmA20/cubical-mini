@@ -64,7 +64,7 @@ module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
   Join-is-prop : is-prop (Join P a b)
   Join-is-prop = ≅→is-of-hlevel 1 Join-Iso λ x y → join-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Join
       : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Join P a b)

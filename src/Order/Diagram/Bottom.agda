@@ -26,6 +26,7 @@ module _ (P : Poset o ℓ) where
     instance
       ⊥-Bottom : ⊥-notation Ob
       ⊥-Bottom .⊥ = bot
+    {-# OVERLAPPING ⊥-Bottom #-}
 
     ¡ : ∀{x} → ⊥ ≤ x
     ¡ = has-bot _
@@ -51,7 +52,7 @@ module _ {P : Poset o ℓ} where
   Bottom-is-prop : is-prop (Bottom P)
   Bottom-is-prop = ≅→is-of-hlevel 1 Bottom-Iso λ x y → bottom-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Bottom
       : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Bottom P)

@@ -20,7 +20,7 @@ module _ {o h} (C : Precategory o h) where
     instance
       ⊥-Initial : ⊥-notation Ob
       ⊥-Initial .⊥ = bot
-    {-# INCOHERENT ⊥-Initial #-}
+    {-# OVERLAPPING ⊥-Initial #-}
 
     ¡ : {x : Ob} → ⊥ ⇒ x
     ¡ = centre $ has-⊥ _
@@ -30,6 +30,10 @@ module _ {o h} (C : Precategory o h) where
 
     ¡-unique² : {x : Ob} (f g : ⊥ ⇒ x) → f ＝ g
     ¡-unique² = is-contr→is-prop (has-⊥ _)
+
+    instance opaque
+      H-Level-¡ : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄ {x : Ob} → H-Level n (⊥ ⇒ x)
+      H-Level-¡ ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance ¡-unique²
 
 {-# DISPLAY Initial.bot = ⊥ #-}
 unquoteDecl Initial-Iso = declare-record-iso Initial-Iso (quote Initial)

@@ -267,7 +267,7 @@ has-section+monic→has-retraction sect monic .is-retraction =
 
 open Inverses
 
-instance
+private instance
   H-Level-inverses
     : {f : a ⇒ b} {g : b ⇒ a} {n : HLevel} ⦃ _ : n ≥ʰ 1 ⦄
     → H-Level n (Inverses f g)
@@ -307,7 +307,7 @@ Isoᶜ = Iso Hom Hom
 instance
   ≅-Cat-Ob : ≅-notation Ob Ob (𝒰 h)
   ≅-Cat-Ob ._≅_ = Isoᶜ
-  {-# INCOHERENT ≅-Cat-Ob #-}
+  {-# OVERLAPPING ≅-Cat-Ob #-}
 
 Inverses-∘ : {f : a ⇒ b} {f⁻¹ : b ⇒ a} {g : b ⇒ c} {g⁻¹ : c ⇒ b}
            → Inverses f f⁻¹ → Inverses g g⁻¹ → Inverses (g ∘ f) (f⁻¹ ∘ g⁻¹)

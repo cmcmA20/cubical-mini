@@ -23,16 +23,15 @@ module _ {o ℓ} (P : Poset o ℓ) where
 unquoteDecl H-Level-is-lfp = declare-record-hlevel 1 H-Level-is-lfp (quote is-lfp)
 unquoteDecl LFP-Iso = declare-record-iso LFP-Iso (quote LFP)
 
-module _ {o ℓ} {P : Poset o ℓ} where
+module _ {o ℓ} {P : Poset o ℓ} where opaque
   open Order.Reasoning P
   open is-lfp
 
-  opaque
-    lfp-unique : ∀{f x y} → is-lfp P f x → is-lfp P f y → x ＝ y
-    lfp-unique xl yl = ≤-antisym (xl .least _ (yl .fixed)) (yl .least _ (xl .fixed))
+  lfp-unique : ∀{f x y} → is-lfp P f x → is-lfp P f y → x ＝ y
+  lfp-unique xl yl = ≤-antisym (xl .least _ (yl .fixed)) (yl .least _ (xl .fixed))
 
-    LFP-is-prop : ∀{f} → is-prop (LFP P f)
-    LFP-is-prop = ≅→is-of-hlevel 1 LFP-Iso (λ xl yl → lfp-unique (xl .snd) (yl .snd) ,ₚ prop!)
+  LFP-is-prop : ∀{f} → is-prop (LFP P f)
+  LFP-is-prop = ≅→is-of-hlevel 1 LFP-Iso (λ xl yl → lfp-unique (xl .snd) (yl .snd) ,ₚ prop!)
 
   instance
     H-Level-LFP

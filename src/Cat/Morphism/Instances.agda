@@ -10,8 +10,6 @@ open import Prelude
 
 open import Cat.Base
 open import Cat.Morphism
-open import Cat.Morphism
-  using (H-Level-inverses ; ≅-Cat-Ob) public
 
 unquoteDecl H-Level-mono = declare-record-hlevel 2 H-Level-mono (quote _↪_)
 unquoteDecl H-Level-epi = declare-record-hlevel 2 H-Level-epi (quote _↠_)
