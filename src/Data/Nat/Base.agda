@@ -43,8 +43,7 @@ x ^ zero  = 1
 x ^ suc y = x · (x ^ y)
 
 max : ℕ → ℕ → ℕ
-max zero    zero    = zero
-max zero    (suc y) = suc y
+max zero    y       = y
 max (suc x) zero    = suc x
 max (suc x) (suc y) = suc (max x y)
 
