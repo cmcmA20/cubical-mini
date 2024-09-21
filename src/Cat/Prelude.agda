@@ -8,6 +8,7 @@ open import Prelude
            ; id  to idₜ
            ; ≅→≃ to ≅ₜ→≃
            ; ≅→= to ≅ₜ→=
+           ; ×-assoc to ×ₜ-assoc
 
            ; Extensional-↪ to Extensional-↪ₜ
            ; Extensional-↠ to Extensional-↠ₜ

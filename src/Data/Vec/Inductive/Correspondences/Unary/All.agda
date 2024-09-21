@@ -31,7 +31,7 @@ instance
     : ∀{ℓ ℓ′} {A : Type ℓ} {P : A → Type ℓ′}
     → From-productᵈ P λ xs → All P xs
   From-prodᵈ-All {A} {P} .from-prodᵈ = go where
-    go : (n : ℕ) (xs : Product A n) (ds : Productᵈ P xs) → All P (from-prod n xs)
+    go : (n : ℕ) (xs : Prod A n) (ds : Prodᵈ P xs) → All P (from-prod n xs)
     go 0 _ _ = []
     go 1 _ p = p ∷ []
     go (suc (suc n)) (x , xs) (p , ps) = p ∷ go (suc n) xs ps

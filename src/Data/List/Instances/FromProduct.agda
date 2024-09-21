@@ -17,7 +17,7 @@ private variable
 instance
   From-prod-List : From-product A (λ _ → List A)
   From-prod-List .From-product.from-prod = go where
-    go : ∀ n → Product A n → List A
+    go : ∀ n → Prod A n → List A
     go 0 _ = []
     go 1 x = x ∷ []
     go (suc (suc n)) (x , xs) = x ∷ go (suc n) xs

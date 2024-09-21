@@ -114,6 +114,12 @@ record ×-notation {ℓᵃ ℓᵇ ℓ}
   field _×_ : A → B → R
 open ×-notation ⦃ ... ⦄ public
 
+record ⊕-notation {ℓᵃ ℓᵇ ℓ}
+  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+  infixr 7 _⊕_
+  field _⊕_ : A → B → R
+open ⊕-notation ⦃ ... ⦄ public
+
 record ⊎-notation {ℓᵃ ℓᵇ ℓ}
   (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 7 _⊎_
@@ -169,6 +175,13 @@ instance
     → ⦃ im : ×-notation A B R ⦄
     → ×-notation (X → A) (X → B) (X → R)
   ×-Variadic ._×_ f g x = f x × g x
+
+  ⊕-Variadic
+    : {A : Type ℓ} {B : Type ℓ′} {R : Type ℓ″}
+      {X : Type ℓ‴}
+    → ⦃ im : ⊕-notation A B R ⦄
+    → ⊕-notation (X → A) (X → B) (X → R)
+  ⊕-Variadic ._⊕_ f g x = f x ⊕ g x
 
   ⊎-Variadic
     : {A : Type ℓ} {B : Type ℓ′} {R : Type ℓ″}
