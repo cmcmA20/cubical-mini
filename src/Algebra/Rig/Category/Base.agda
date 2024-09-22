@@ -4,6 +4,7 @@ module Algebra.Rig.Category.Base where
 open import Algebra.Rig
 open import Algebra.Semiring.Category using (Semiring-structure; Semirings)
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism

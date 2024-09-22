@@ -4,6 +4,7 @@ module Algebra.Group.Category where
 open import Algebra.Group
 open import Algebra.Monoid.Category using (Monoids)
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism

@@ -5,6 +5,7 @@ open import Algebra.Magma.Unital.Category using (UMagmas)
 open import Algebra.Monoid
 open import Algebra.Semigroup.Category using (Semigroups)
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism

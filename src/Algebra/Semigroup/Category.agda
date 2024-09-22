@@ -4,6 +4,7 @@ module Algebra.Semigroup.Category where
 open import Algebra.Magma.Category using (Magma-structure; Magmas)
 open import Algebra.Semigroup
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism

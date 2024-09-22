@@ -18,6 +18,8 @@ open import Prelude
 open import Structures.n-Type public
 
 open import Cat.Base public
+open import Cat.Functor.Base public
+open import Cat.NT public
 open import Cat.Solver
   hiding ( module NbE ; module Reflection )
   public

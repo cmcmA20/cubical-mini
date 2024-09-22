@@ -4,6 +4,7 @@ module Algebra.Rig.Commutative.Category where
 open import Algebra.Rig.Commutative
 open import Algebra.Rig.Category.Base using (Rig-structure; Rigs)
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism

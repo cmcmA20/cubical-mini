@@ -1,8 +1,9 @@
 {-# OPTIONS --safe #-}
 module Cat.Displayed.Univalence.Thin where
 
-open import Cat.Displayed.Base public
-open import Cat.Displayed.Total public
+open import Cat.Functor.Properties
+open import Cat.Displayed.Base
+open import Cat.Displayed.Total
 open import Cat.Displayed.Univalence
 open import Cat.Prelude
 

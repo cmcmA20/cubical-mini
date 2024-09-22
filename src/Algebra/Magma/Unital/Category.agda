@@ -4,6 +4,7 @@ module Algebra.Magma.Unital.Category where
 open import Algebra.Magma.Category using (Magma-structure; Magmas)
 open import Algebra.Magma.Unital
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism

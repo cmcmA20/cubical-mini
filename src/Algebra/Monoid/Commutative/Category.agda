@@ -4,6 +4,7 @@ module Algebra.Monoid.Commutative.Category where
 open import Algebra.Monoid.Category using (Monoid-structure; Monoids)
 open import Algebra.Monoid.Commutative
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism
