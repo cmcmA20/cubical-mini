@@ -35,9 +35,9 @@ check-everythings:
 
 .PHONY : gen-everythings
 gen-everythings:
+	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
 	$(EVERYTHINGS) gen-except System
 	$(EVERYTHINGS) gen-unsafe System
-	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
 
 .PHONY : gen-and-check-everythings
 gen-and-check-everythings: gen-everythings check-everythings
