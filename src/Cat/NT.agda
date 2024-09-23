@@ -211,10 +211,10 @@ module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
 
 Cat[_,_] : Precategory o h → Precategory o′ h′ → Precategory (o ⊔ h ⊔ o′ ⊔ h′) (o ⊔ h ⊔ h′)
 Cat[ C , D ] .Ob = C ⇒ D
-Cat[ C , D ] .Hom = _=>_
+Cat[ C , D ] .Hom = _⇒_
 Cat[ C , D ] .Hom-set = hlevel!
 Cat[ C , D ] .id = refl
-Cat[ C , D ] ._∘_ α β = β ∙ α
+Cat[ C , D ] ._∘_ = flip _∙_
 Cat[ C , D ] .id-l = ∙-id-i
 Cat[ C , D ] .id-r = ∙-id-o
 Cat[ C , D ] .assoc = ∙-assoc
@@ -224,4 +224,4 @@ instance
   ⇒-Precat-exp ._⇒_ = Cat[_,_]
 
 PSh : ∀ κ {o ℓ} → Precategory o ℓ → Precategory (o ⊔ ℓ ⊔ ℓsuc κ) (o ⊔ ℓ ⊔ κ)
-PSh κ C = C ⇒ Sets κ
+PSh κ C = C ᵒᵖ ⇒ Sets κ
