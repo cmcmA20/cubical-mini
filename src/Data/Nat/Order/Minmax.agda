@@ -54,8 +54,14 @@ max-r {x = suc x} {y = suc y} = max-r {x = x} {y = y}
 
 ≤-min : ∀ {x y z} → (x ≤? min y z) ＝ (x ≤? y) and (x ≤? z)
 ≤-min {x = zero}  {y = zero}              = refl
+≤-min {x = zero}  {y = suc y}             = refl
 ≤-min {x = suc x} {y = zero}              = refl
-≤-min {x = zero}  {y = suc y} {z = zero}  = refl
 ≤-min {x = suc x} {y = suc y} {z = zero}  = and-absorb-r (x <? suc y) ⁻¹
-≤-min {x = zero}  {y = suc y} {z = suc z} = refl
 ≤-min {x = suc x} {y = suc y} {z = suc z} = ≤-min {x = x} {y = y} {z = z}
+
+max-≤ : ∀ {x y z} → (max x y ≤? z) ＝ (x ≤? z) and (y ≤? z)
+max-≤ {x = zero}  {y = zero}              = refl
+max-≤ {x = zero}  {y = suc y}             = refl
+max-≤ {x = suc x} {y = zero}  {z}         = and-id-r (x <? z) ⁻¹
+max-≤ {x = suc x} {y = suc y} {z = zero}  = refl
+max-≤ {x = suc x} {y = suc y} {z = suc z} = max-≤ {x} {y} {z}
