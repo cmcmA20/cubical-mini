@@ -6,6 +6,7 @@ open import Meta.Prelude
 open import Meta.Extensionality
 open import Meta.Ord
 
+open import Data.Tri.Base
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
 open import Data.Nat.Instances.Ord
