@@ -7,7 +7,6 @@ open Precategory C
 private variable c : Ob
 
 record /-Obj (c : Ob) : Type (o ⊔ ℓ) where
-  no-eta-equality
   constructor cut
   field
     {domain} : Ob
@@ -31,6 +30,7 @@ private variable a a′ b b′ x x′ y y′ : /-Obj c
 
 record /-Hom (a b : /-Obj c) : Type ℓ where
   no-eta-equality
+  constructor cut→
   private
     module a = /-Obj a
     module b = /-Obj b
