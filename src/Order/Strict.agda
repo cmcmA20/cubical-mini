@@ -32,6 +32,12 @@ record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   <-asym : ∀ {x y} → x < y → ¬ (y < x)
   <-asym x<y y<x = <-irrefl (<-trans x<y y<x)
 
+  <→≠ : ∀ {x y} → x < y → x ≠ y
+  <→≠ {x} x<y x=y = <-irrefl (subst (x <_) (x=y ⁻¹) x<y)
+
+  =→≮ : ∀ {x y} → x ＝ y → ¬ (x < y)
+  =→≮ {x} x=y x<y = <-irrefl (subst (x <_) (x=y ⁻¹) x<y)
+
 unquoteDecl strictposet-iso = declare-record-iso strictposet-iso (quote StrictPoset)
 
 private variable o ℓ : Level
