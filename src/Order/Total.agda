@@ -3,10 +3,12 @@ module Order.Total where
 
 open import Cat.Prelude
 
+open import Data.Empty
 open import Data.Sum
 open import Data.Dec
 
 open import Order.Base
+open import Order.Strict
 open import Order.Diagram.Join
 open import Order.Diagram.Meet
 
@@ -46,19 +48,17 @@ module minmax {o ℓ} {P : Poset o ℓ} (to : is-total-order P) where
   min-is-meet x y .is-meet.greatest =  min-univ x y
 
   max : (x y : ⌞ P ⌟) → ⌞ P ⌟
-  max x y with compare x y
-  ... | inl p = y
-  ... | inr q = x
+  max x y = [ (λ _ → y) , (λ _ → x) ]ᵤ (compare x y)
 
   abstract
     max-≤l : ∀ x y → x ≤ max x y
     max-≤l x y with compare x y
     ... | inl p = p
-    ... | inr q = ≤-refl
+    ... | inr _ = ≤-refl
 
     max-≤r : ∀ x y → y ≤ max x y
     max-≤r x y with compare x y
-    ... | inl p = ≤-refl
+    ... | inl _ = ≤-refl
     ... | inr q = q
 
     max-univ : ∀ x y z → x ≤ z → y ≤ z → max x y ≤ z
@@ -75,7 +75,7 @@ is-decidable-poset : ∀ {o ℓ} (P : Poset o ℓ) → 𝒰 (o ⊔ ℓ)
 is-decidable-poset P = ∀ {x y} → Dec (x ≤ y)
   where open Poset P
 
-record is-decidable-total-order {o ℓ} (P : Poset o ℓ) : Type (o ⊔ ℓ) where
+record is-decidable-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
   field
     has-is-total : is-total-order P
 
@@ -112,3 +112,24 @@ module _ {o ℓ} {P : Poset o ℓ} ⦃ di : is-discrete ⌞ P ⌟ ⦄ ⦃ de : i
     ... | no ¬x≤y = inr $ wto .is-weak-total-order.from-nleq ¬x≤y
   from-weak-total-order wto .is-decidable-total-order.dec-≤ = de
   from-weak-total-order wto .is-decidable-total-order.discrete = di
+
+record is-strict-total-order {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) where
+  open StrictPoset S public
+
+  field
+    weak-linear : ∀ x y z → x < z → x < y ⊎ y < z
+    connex      : ∀ x y → ¬ (x < y) → ¬ (y < x) → x ＝ y
+
+is-decidable-strictposet : ∀ {o ℓ} (S : StrictPoset o ℓ) → 𝒰 (o ⊔ ℓ)
+is-decidable-strictposet S = ∀ {x y} → Dec (x < y)
+  where open StrictPoset S
+
+record is-decidable-strict-total-order {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) where
+  field
+    has-is-strict-total : is-strict-total-order S
+
+  open is-strict-total-order has-is-strict-total public
+
+  field
+    ⦃ dec-<    ⦄ : is-decidable-strictposet S
+    ⦃ discrete ⦄ : is-discrete ⌞ S ⌟
