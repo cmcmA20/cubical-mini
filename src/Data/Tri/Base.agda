@@ -23,6 +23,67 @@ Tri-elim tlt _   _   (lt x<y x≠y y≮x) = tlt x<y x≠y y≮x
 Tri-elim _   teq _   (eq x≮y x=y y≮x) = teq x≮y x=y y≮x
 Tri-elim _   _   tgt (gt x≮y x≠y y<x) = tgt x≮y x≠y y<x
 
+Tri-rec : {T : 𝒰 ℓ} {_<_ : T → T → 𝒰 o} {x y : T} {A : 𝒰 ℓ′}
+         → A → A → A → Tri _<_ x y → A
+Tri-rec alt aeq agt t =
+  Tri-elim (λ _ _ _ → alt) (λ _ _ _ → aeq) (λ _ _ _ → agt) t
+
+{- TODO specialize for StrictPoset -}
+
+caseᵗ-lt_&_&_return_of_ :
+    {T : 𝒰 ℓ}
+    {_<_ : T → T → 𝒰 o} ⦃ <-pr : ∀ {x y} → H-Level 1 (x < y) ⦄
+    {x y : T} 
+  → (x<y : x < y) (x≠y : x ≠ y) (y≮x : ¬ y < x)
+  → (C : Tri _<_ x y → 𝒰 ℓ′)
+  → C (lt x<y x≠y y≮x)
+  → {t : Tri _<_ x y} → C t
+caseᵗ-lt_&_&_return_of_ x<y x≠y y≮x C clt {t} =
+  Tri-elim {C = C}
+    (λ x<y′ x≠y′ y≮x′ →
+      subst (λ q → C (lt q x≠y′ y≮x′)) prop! $
+      subst (λ q → C (lt x<y q y≮x′)) prop! $
+      subst (C ∘ lt x<y x≠y) prop! clt)
+    (λ _ x=y _ → absurd (x≠y x=y))
+    (λ x≮y _ _ → absurd (x≮y x<y))
+    t
+
+caseᵗ-eq_&_&_return_of_ :
+    {T : 𝒰 ℓ} ⦃ T-st : H-Level 2 T ⦄
+    {_<_ : T → T → 𝒰 o} ⦃ <-pr : ∀ {x y} → H-Level 1 (x < y) ⦄
+    {x y : T} 
+  → (x≮y : ¬ x < y) (x=y : x ＝ y) (y≮x : ¬ y < x)
+  → (C : Tri _<_ x y → 𝒰 ℓ′)
+  → C (eq x≮y x=y y≮x)
+  → {t : Tri _<_ x y} → C t
+caseᵗ-eq_&_&_return_of_ x≮y x=y y≮x C ceq {t} =
+  Tri-elim {C = C}
+    (λ _ x≠y _ → absurd (x≠y x=y))
+    (λ x≮y′ x=y′ y≮x′ →
+      subst (λ q → C (eq q x=y′ y≮x′)) prop! $
+      subst (λ q → C (eq x≮y q y≮x′)) prop! $
+      subst (C ∘ eq x≮y x=y) prop! ceq)
+    (λ _ x≠y _ → absurd (x≠y x=y))
+    t
+
+caseᵗ-gt_&_&_return_of_ :
+    {T : 𝒰 ℓ}
+    {_<_ : T → T → 𝒰 o} ⦃ <-pr : ∀ {x y} → H-Level 1 (x < y) ⦄
+    {x y : T} 
+  → (x≮y : ¬ x < y) (x≠y : x ≠ y) (y<x : y < x)
+  → (C : Tri _<_ x y → 𝒰 ℓ′)
+  → C (gt x≮y x≠y y<x)
+  → {t : Tri _<_ x y} → C t
+caseᵗ-gt_&_&_return_of_ x≮y x≠y y<x C cgt {t} =
+  Tri-elim {C = C}
+    (λ _ _ y≮x → absurd (y≮x y<x))
+    (λ _ x=y _ → absurd (x≠y x=y))
+    (λ x≮y′ x≠y′ y<x′ →
+      subst (λ q → C (gt q x≠y′ y<x′)) prop! $
+      subst (λ q → C (gt x≮y q y<x′)) prop! $
+      subst (C ∘ gt x≮y x≠y) prop! cgt)
+    t
+
 {-
 asym-connex→Tri : {T : 𝒰 ℓ} {_<_ : T → T → 𝒰 o}
                    → (∀ {x y} → x < y → ¬ (y < x))
