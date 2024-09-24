@@ -9,7 +9,7 @@ open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Truncation.Propositional.Base as ∥-∥₁
-open import Data.Tri.Base
+open import Data.Tri.Base renaming (elim to elimᵗ)
 
 record Ord {ℓ} (T : Type ℓ) : Typeω where
   no-eta-equality
@@ -44,7 +44,7 @@ instance
 ≃→ord e o .Ord._<_ x y = o .Ord._<_ (e $ x) (e $ y)
 ≃→ord e o .<-thin = o .<-thin
 ≃→ord e o .<-trans = o .<-trans
-≃→ord e o .Ord._≤?_ x y = Tri-elim
+≃→ord e o .Ord._≤?_ x y = elimᵗ
   {C = λ _ → Tri (≃→ord e o .Ord._<_) _ _}
   (λ x<y x≠y y≮x → lt x<y (λ x=y → x≠y (ap$ e x=y)) y≮x)
   (λ x≮y x=y y≮x → eq x≮y (Equiv.injective e x=y) y≮x)

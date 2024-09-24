@@ -6,7 +6,7 @@ open import Meta.Prelude
 open import Meta.Extensionality
 open import Meta.Ord
 
-open import Data.Tri.Base
+open import Data.Tri.Base renaming (elim to elimᵗ)
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
 open import Data.Nat.Instances.Ord
@@ -19,7 +19,7 @@ instance
     Ord-ℕ .Ord.<-thin {x} {y}
   Ord-Fin .Ord.<-trans {mk-fin x} {mk-fin y} {mk-fin z} =
     Ord-ℕ .Ord.<-trans {x} {y} {z}
-  Ord-Fin .Ord._≤?_ (mk-fin x) (mk-fin y) = Tri-elim
+  Ord-Fin .Ord._≤?_ (mk-fin x) (mk-fin y) = elimᵗ
     {C = λ _ → Tri _ _ _}
     (λ x<y x≠y y≮x → lt x<y (λ x=y → x≠y (mk-fin-inj x=y)) y≮x)
     (λ x≮y x=y y≮x → eq x≮y (ext x=y) y≮x)

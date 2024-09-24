@@ -61,6 +61,9 @@ rec {Q} = elim {C = λ _ → Q}
 Soᵈ : Dec P → Type
 Soᵈ = So ∘ ⌊_⌋
 
+does-reflects : (P? : Dec P) → Reflects⁰ P ⌊ P? ⌋
+does-reflects {P} = elim {C = Reflects⁰ P ∘ does} ofʸ ofⁿ
+  
 caseᵈ_of_ : (A : Type ℓ) ⦃ d : Dec A ⦄ {B : Type ℓ′}
           → (Dec A → B) → B
 caseᵈ_of_ A ⦃ d ⦄ f = f d
