@@ -118,6 +118,8 @@ instance
   Reflects-Discrete {x} {y} = does-reflects (x ≟ y)
   {-# INCOHERENT Reflects-Discrete #-}
 
+{- TODO move these 2 to Dec and have another here versions specialized to equalities? -}
+
 given-yes_return_then_
   : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
     (a : A) (C : Dec A → Type ℓ′)
