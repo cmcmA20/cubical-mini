@@ -47,23 +47,15 @@ module _ {o ℓ} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
           (t .is-trichotomous.trisect x y)
 
   Tri→dec-strict-poset : is-decidable-strictposet S
-  Tri→dec-strict-poset {x} {y} =
-    elimᵗ (λ x<y _ _ → yes x<y)
-          (λ x≮y _ _ → no x≮y)
-          (λ x≮y _ _ → no x≮y)
-          (t .is-trichotomous.trisect x y)
+  Tri→dec-strict-poset {x} {y} = ⌊ t .is-trichotomous.trisect x y ⌋<¿
 
   Tri→discrete : is-discrete Ob
-  Tri→discrete {x} {y} =
-    elimᵗ (λ _ x≠y _ → no x≠y)
-          (λ _ x=y _ → yes x=y)
-          (λ _ x≠y _ → no x≠y)
-          (t .is-trichotomous.trisect x y)
+  Tri→discrete {x} {y} = ⌊ t .is-trichotomous.trisect x y ⌋≟
 
   Tri→DSTO : is-decidable-strict-total-order S
   Tri→DSTO .is-decidable-strict-total-order.has-is-strict-total = Tri→strict-total
-  Tri→DSTO .is-decidable-strict-total-order.dec-< = Tri→dec-strict-poset
-  Tri→DSTO .is-decidable-strict-total-order.discrete = Tri→discrete
+  Tri→DSTO .is-decidable-strict-total-order.dec-<               = Tri→dec-strict-poset
+  Tri→DSTO .is-decidable-strict-total-order.discrete            = Tri→discrete
 
   caseᵗ_>=<_of_ : {ℓᵃ : Level} {A : 𝒰 ℓᵃ}
                 → (x y : Ob)
