@@ -63,10 +63,12 @@ instance
   {-# OVERLAPS mbf-projection #-}
 
   ×-FinOrd : ×-notation (FinOrd ℓ) (FinOrd ℓ′) (FinOrd (ℓ ⊔ ℓ′))
+  ×-FinOrd .×-notation.Constraint _ _ = ⊤ₜ
   ×-FinOrd ._×_ X Y .carrier = ⌞ X ⌟ × ⌞ Y ⌟
   ×-FinOrd ._×_ _ _ .has-manifest-bishop-finite = auto
 
   ⇒-FinOrd : ⇒-notation (FinOrd ℓ) (FinOrd ℓ′) (FinOrd (ℓ ⊔ ℓ′))
+  ⇒-FinOrd .⇒-notation.Constraint _ _ = ⊤ₜ
   ⇒-FinOrd ._⇒_ X Y .carrier = ⌞ X ⌟ ⇒ ⌞ Y ⌟
   ⇒-FinOrd ._⇒_ _ _ .has-manifest-bishop-finite = auto
 

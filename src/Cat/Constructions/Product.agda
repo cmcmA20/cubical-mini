@@ -28,7 +28,8 @@ C ×ᶜ D = go where
 
 instance
   ×-Precategory : ×-notation (Precategory o h) (Precategory o′ h′) _
-  ×-Precategory .×-notation._×_ = _×ᶜ_
+  ×-Precategory .×-notation.Constraint _ _ = ⊤
+  ×-Precategory .×-notation._×_ C D = C ×ᶜ D
 
 open Functor
 
@@ -58,4 +59,5 @@ _×ᶠ_ : B ⇒ D → C ⇒ E → (B × C) ⇒ (D × E)
 
 instance
   ×-Functor : ×-notation (B ⇒ D) (C ⇒ E) _
-  ×-Functor .×-notation._×_ = _×ᶠ_
+  ×-Functor .×-notation.Constraint _ _ = ⊤
+  ×-Functor .×-notation._×_ F G = F ×ᶠ G

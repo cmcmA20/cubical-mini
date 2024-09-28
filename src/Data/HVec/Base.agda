@@ -29,13 +29,13 @@ Levels = Vec Level
 Types : ∀ n (ls : Levels n) → Type (ℓsuc (ℓsup n ls))
 Types 0             _        = ⊤
 Types 1             l        = Type l
-Types (suc (suc n)) (l , ls) = Type l × Types _ ls
+Types (suc (suc n)) (l , ls) = Type l ×ₜ Types _ ls
 
 -- n-tuple of possibly different types
 HVec : ∀ n {ls} → Types n ls → Type (ℓsup n ls)
 HVec 0             _        = ⊤
 HVec 1             A        = A
-HVec (suc (suc n)) (A , As) = A × HVec (suc n) As
+HVec (suc (suc n)) (A , As) = A ×ₜ HVec (suc n) As
 
 Arrows : ∀ n {ℓ ls} → Types n ls → Type ℓ → Type (ℓ ⊔ ℓsup n ls)
 Arrows 0             _        B = B

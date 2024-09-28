@@ -93,8 +93,11 @@ record Displayed {o ℓ} (B : Precategory o ℓ)
     Comp-Hom[-] ._∙_ f′ g′ = g′ ∘ᵈ f′
     {-# OVERLAPPING Comp-Hom[-] #-}
 
-    ⇒-Hom[-] : ∀ {x y} {f : Hom x y} → ⇒-notation (Ob[ x ]) (Ob[ y ]) (Type ℓ′)
-    ⇒-Hom[-] {f} ._⇒_ = Hom[ f ]
+    ⇒-Hom[-]
+      : ∀ {x y} {f : Hom x y}
+      → ⇒-notation (Ob[ x ]) (Ob[ y ]) (Type ℓ′)
+    ⇒-Hom[-] .⇒-notation.Constraint _ _ = ⊤ₜ
+    ⇒-Hom[-] {f} ._⇒_ x′ y′ = Hom[ f ] x′ y′
     {-# OVERLAPPING ⇒-Hom[-] #-}
 
 instance

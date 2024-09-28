@@ -49,8 +49,10 @@ unquoteDecl H-Level-is-lattice-hom =
   declare-record-hlevel 1 H-Level-is-lattice-hom (quote is-lattice-hom)
 
 instance
-  ⇒-Lattice : ⇒-notation
-    (Σ[ P ꞉ Poset o ℓ ] is-lattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-lattice Q) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Lattice
+    : ⇒-notation (Σ[ P ꞉ Poset o ℓ ] is-lattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-lattice Q)
+        (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Lattice .⇒-notation.Constraint _ _ = ⊤
   ⇒-Lattice ._⇒_ (P , lp) (Q , lq) = Total-hom Monotone is-lattice-hom lp lq
 
 module _ {R : Poset o″ ℓ″} where

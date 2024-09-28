@@ -54,6 +54,7 @@ abelian-group-on↪group-on .snd = set-injective→is-embedding! λ p →
 
 instance
   ⇒-AGroup : ⇒-notation (Σ[ X ꞉ Set ℓ ] AGroup-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] AGroup-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-AGroup .⇒-notation.Constraint _ _ = ⊤
   ⇒-AGroup ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
     (λ f P Q → Group-hom f (abelian-group-on↪group-on .fst P) (abelian-group-on↪group-on .fst Q)) {a = A} {b = B} X Y
 

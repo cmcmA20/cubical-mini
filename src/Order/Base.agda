@@ -49,7 +49,8 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     HUnit-i-≤ .∙-id-i _ = prop!
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
-    ⇒-Hom ._⇒_ = _≤_
+    ⇒-Hom .⇒-notation.Constraint _ _ = ⊤
+    ⇒-Hom ._⇒_ x y = x ≤ y
     {-# OVERLAPPING ⇒-Hom #-}
 
   opaque
@@ -142,7 +143,8 @@ private variable P Q R : Poset o ℓ
 
 instance
   ⇒-Poset : ⇒-notation (Poset o ℓ) (Poset o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
-  ⇒-Poset ._⇒_ = Monotone
+  ⇒-Poset .⇒-notation.Constraint _ _ = ⊤
+  ⇒-Poset ._⇒_ P Q = Monotone P Q
 
   Dual-Monotone : Dual {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone λ Q P → Monotone (P ᵒᵖ) (Q ᵒᵖ)
   Dual-Monotone ._ᵒᵖ F .hom = F .hom
@@ -229,11 +231,12 @@ unquoteDecl H-Level-NTₚ = declare-record-hlevel 1 H-Level-NTₚ (quote _=>ₚ_
 
 instance
   ⇒-ntₚ : ⇒-notation (P ⇒ Q) (P ⇒ Q) _
-  ⇒-ntₚ ._⇒_ = _=>ₚ_
+  ⇒-ntₚ .⇒-notation.Constraint _ _ = ⊤
+  ⇒-ntₚ ._⇒_ α β = α =>ₚ β
 
   Dual-ntₚ
     : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-    → Dual {A = Monotone P Q} {B = Monotone P Q} _=>ₚ_ λ G F → G ᵒᵖ =>ₚ F ᵒᵖ
+    → Dual {A = Monotone P Q} {B = Monotone P Q} _=>ₚ_ λ G F → G ᵒᵖ ⇒ F ᵒᵖ
   Dual-ntₚ ._ᵒᵖ α ._=>ₚ_.η = α ._=>ₚ_.η
 
   Funlike-ntₚ

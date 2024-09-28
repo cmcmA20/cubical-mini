@@ -39,7 +39,7 @@ module _ {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {R : A → B → 𝒰 ℓ}
          ⦃ ep : {a : A} {b : B} → Extensional (R a b) ℓ ⦄ where
   Code-All² : {xs : List A} {ys : List B} (p q : All² R xs ys) → 𝒰 ℓ
   Code-All² {xs = []}     {ys = []}     []       []       = ⊤
-  Code-All² {xs = x ∷ xs} {ys = y ∷ ys} (px ∷ p) (qx ∷ q) = ep .Pathᵉ px qx × Code-All² p q
+  Code-All² {xs = x ∷ xs} {ys = y ∷ ys} (px ∷ p) (qx ∷ q) = ep .Pathᵉ px qx ×ₜ Code-All² p q
 
   code-all²-refl : {xs : List A} {ys : List B} (p : All² R xs ys) → Code-All² p p
   code-all²-refl {xs = []}     {ys = []}     []       = _

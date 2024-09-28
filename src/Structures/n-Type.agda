@@ -58,18 +58,23 @@ instance
   {-# INCOHERENT Comp-n-Fun #-}
 
   ×-n-Type : ×-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
+  ×-n-Type .×-notation.Constraint _ _ = ⊤
   ×-n-Type ._×_ (el A p) (el B q) = el (A × B) (×-is-of-hlevel _ p q)
 
   ⇒-n-Type : ⇒-notation (n-Type ℓ m) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
+  ⇒-n-Type .⇒-notation.Constraint _ _ = ⊤
   ⇒-n-Type ._⇒_ (el A _) (el B q) = el (A ⇒ B) (fun-is-of-hlevel _ q)
 
   ⊎-n-Type : ⦃ 2 ≤ʰ n ⦄ → ⊎-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
+  ⊎-n-Type .⊎-notation.Constraint _ _ = ⊤
   ⊎-n-Type ⦃ s≤ʰs (s≤ʰs _) ⦄ ._⊎_ (el A p) (el B q) = el (A ⊎ B) (⊎-is-of-hlevel _ p q)
 
   ⊎₁-n-Type : ⦃ z : 1 ≤ʰ k ⦄ → ⊎₁-notation (n-Type ℓ m) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) k)
+  ⊎₁-n-Type .⊎₁-notation.Constraint _ _ = ⊤
   ⊎₁-n-Type ⦃ z = s≤ʰs _ ⦄ ._⊎₁_ (el A _) (el B _) = el (A ⊎₁ B) (is-prop→is-of-hlevel-suc squash₁)
 
   ¬-n-Type : ⦃ z : 1 ≤ʰ n ⦄ → ¬-notation (n-Type ℓ m) (n-Type ℓ n)
+  ¬-n-Type .¬-notation.Constraint _ = ⊤
   ¬-n-Type ⦃ z = s≤ʰs _ ⦄ .¬_ (el A _) = el (¬ A) (fun-is-of-hlevel _ (hlevel _))
 
   Π-n-Type

@@ -119,6 +119,7 @@ instance opaque
 
 instance
   ⇒-Semiring : ⇒-notation (Σ[ X ꞉ Set ℓ ] Semiring-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Semiring-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Semiring .⇒-notation.Constraint _ _ = ⊤
   ⇒-Semiring ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Semiring-hom {a = A} {b = B} X Y
 
   Refl-Semiring-hom : Refl {A = Semiring-on A} (Semiring-hom refl)

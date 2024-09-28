@@ -37,7 +37,8 @@ unquoteDecl functor-iso = declare-record-iso functor-iso (quote Functor)
 
 instance
   ⇒-Precat : ⇒-notation (Precategory o h) (Precategory o′ h′) (Type (o ⊔ h ⊔ o′ ⊔ h′))
-  ⇒-Precat ._⇒_ = Functor
+  ⇒-Precat .⇒-notation.Constraint _ _ = ⊤ₜ
+  ⇒-Precat ._⇒_ C D = Functor C D
 
   Dual-Functor : Dual {A = Precategory oᶜ hᶜ} {B = Precategory oᵈ hᵈ} Functor λ D C → Functor (C ᵒᵖ) (D ᵒᵖ)
   Dual-Functor ._ᵒᵖ F .Functor.F₀ = F .Functor.F₀

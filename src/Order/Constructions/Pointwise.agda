@@ -55,7 +55,8 @@ Poset[_,_] P Q = po module Poset[_,_] where
 
 instance
   ⇒-Poset-exp : ⇒-notation (Poset o ℓ) (Poset o′ ℓ′) (Poset (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) (o ⊔ ℓ′))
-  ⇒-Poset-exp ._⇒_ = Poset[_,_]
+  ⇒-Poset-exp .⇒-notation.Constraint _ _ = ⊤
+  ⇒-Poset-exp ._⇒_ P Q = Poset[ P , Q ]
 
 -- FIXME erasure really gets in the way!
 module _ {I : Type ℓᵢ} {@0 P : Poset o ℓ} where instance
