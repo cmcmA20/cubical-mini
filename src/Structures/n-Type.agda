@@ -214,7 +214,7 @@ Grpd ℓ = n-Type ℓ 3
 
 -- n-truncated correspondence
 n-Corr
-  : (arity : ℕ) (n : HLevel) {ls : Levels arity} (As : Types arity ls) (ℓ : Level)
+  : (arity : ℕ) (n : HLevel) {ls : Levels arity} (As : TyVec arity ls) (ℓ : Level)
   → Type (ℓsuc ℓ ⊔ ℓsup arity ls)
 n-Corr arity n As ℓ = SCorr arity As (n-Type ℓ n)
 
@@ -228,7 +228,7 @@ n-Corr⁵ = n-Corr 5
 
 -- Propositionally valued correspondence is called a relation
 Rel
-  : (arity : ℕ) {ls : Levels arity} (As : Types arity ls) (ℓ : Level)
+  : (arity : ℕ) {ls : Levels arity} (As : TyVec arity ls) (ℓ : Level)
   → Type (ℓsuc ℓ ⊔ ℓsup arity ls)
 Rel arity = n-Corr arity 1
 
@@ -351,7 +351,7 @@ private
 
 -- TODO restore
 -- corr→is-of-hlevelⁿ
---   : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+--   : {arity : ℕ} {ls : Levels arity} {As : TyVec _ ls}
 --     {ℓ : Level} {h : HLevel} {P : n-Corr _ h As ℓ}
 --   → Π[ mapⁿ arity (is-of-hlevel h) ⌞ P ⌟ ]
 -- corr→is-of-hlevelⁿ {0} = hlevel!

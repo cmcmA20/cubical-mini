@@ -8,7 +8,7 @@ open import Data.Nat.Base
 
 -- Correspondence valued in arbitrary structure
 SCorr
-  : (arity : ℕ) {ls : Levels arity} (As : Types _ ls)
+  : (arity : ℕ) {ls : Levels arity} (As : TyVec _ ls)
     {ℓ : Level} (U : Type ℓ) ⦃ u : Underlying U ⦄
   → Type (ℓ ⊔ ℓsup _ ls)
 SCorr arity As U = Arrows arity As U
@@ -24,7 +24,7 @@ SPred = SCorr¹
 
 -- Type-valued correspondence
 Corr
-  : (arity : ℕ) {ls : Levels arity} (As : Types _ ls) (ℓ : Level)
+  : (arity : ℕ) {ls : Levels arity} (As : TyVec _ ls) (ℓ : Level)
   → Type (ℓsuc ℓ ⊔ ℓsup _ ls)
 Corr arity As ℓ = SCorr arity As (Type ℓ)
 
@@ -39,20 +39,20 @@ Pred = Corr¹
 
 Variadic¹ : Typeω
 Variadic¹ =
-    {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+    {arity : ℕ} {ls : Levels arity} {As : TyVec _ ls}
     {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
   → SCorr _ As U
   → Corr  _ As (u .ℓ-underlying)
 
 Variadic-binding¹ : Typeω
 Variadic-binding¹ =
-    {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+    {arity : ℕ} {ls : Levels arity} {As : TyVec _ ls}
     {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
   → SCorr _ As U
   → Type (u .ℓ-underlying ⊔ ℓsup _ ls)
 
 Quantⁿ
-  : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+  : {arity : ℕ} {ls : Levels arity} {As : TyVec _ ls}
     {ℓ : Level} {U : Type ℓ} ⦃ u : Underlying U ⦄
   → (∀ {ℓᵃ ℓᵇ} (A : Type ℓᵃ) → (A → Type ℓᵇ) → Type (ℓᵃ ⊔ ℓᵇ))
   → SCorr _ As U
