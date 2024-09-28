@@ -73,7 +73,8 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     {-# OVERLAPPING HUnit-i-Hom #-}
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 h)
-    ⇒-Hom ._⇒_ = Hom
+    ⇒-Hom .⇒-notation.Constraint _ _ = ⊤
+    ⇒-Hom ._⇒_ x y = Hom x y
     {-# OVERLAPPING ⇒-Hom #-}
 
 private variable o h : Level

@@ -17,7 +17,7 @@ private variable
 Vec : Type ℓ → (n : ℕ) → Type ℓ
 Vec _ 0 = ⊤
 Vec A 1 = A
-Vec A (suc (suc n)) = A × Vec A (suc n)
+Vec A (suc (suc n)) = A ×ₜ Vec A (suc n)
 
 infixr 5 _∷_
 _∷_ : ∀{n} → A → Vec A n → Vec A (suc n)

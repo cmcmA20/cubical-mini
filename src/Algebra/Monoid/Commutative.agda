@@ -54,6 +54,7 @@ comm-monoid-on↪monoid-on .snd = set-injective→is-embedding! λ p →
 
 instance
   ⇒-CMonoid : ⇒-notation (Σ[ X ꞉ Set ℓ ] CMonoid-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] CMonoid-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-CMonoid .⇒-notation.Constraint _ _ = ⊤
   ⇒-CMonoid ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
     (λ f P Q → Monoid-hom f (comm-monoid-on↪monoid-on .fst P) (comm-monoid-on↪monoid-on .fst Q)) {a = A} {b = B} X Y
 

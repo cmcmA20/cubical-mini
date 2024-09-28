@@ -62,6 +62,7 @@ instance opaque
 
 instance
   ⇒-CRig : ⇒-notation (Σ[ X ꞉ Set ℓ ] CRig-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] CRig-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-CRig .⇒-notation.Constraint _ _ = ⊤
   ⇒-CRig ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
     (λ f P Q → Semiring-hom f (rig-on↪semiring-on .fst (comm-rig-on↪rig-on .fst P))
                               (rig-on↪semiring-on .fst (comm-rig-on↪rig-on .fst Q))) {a = A} {b = B} X Y

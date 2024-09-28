@@ -68,7 +68,7 @@ instance
   {-# INCOHERENT omniscient→omniscient₁ #-}
 
   omniscient₁→exhaustible : ⦃ omn₁ : Omniscient₁ A ⦄ → Exhaustible A
-  omniscient₁→exhaustible ⦃ omn₁ ⦄ .exhaustible-β {P} P? = Dec.dmap {P = ¬ ∃[ mapⁿ 1 ¬_ P ]}
+  omniscient₁→exhaustible ⦃ omn₁ ⦄ .exhaustible-β {P} P? = Dec.dmap {P = ¬ ∃[ ¬ P ]}
     (λ ¬∃p x → dec→essentially-classical P? (¬∃p ∘ ∣_∣₁ ∘ (x ,_)))
     (contra λ ∀p → rec! λ a ¬p → ¬p (∀p a))
     (Dec-¬ ⦃ omn₁ .omniscient₁-β λ {z} → Dec-¬ ⦃ P? ⦄ ⦄)

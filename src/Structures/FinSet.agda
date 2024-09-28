@@ -68,10 +68,12 @@ instance
   hlevel-proj-fin-ord .Struct-proj-desc.get-argument _ = type-error []
 
   ×-FinSet : ×-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
+  ×-FinSet .×-notation.Constraint _ _ = ⊤ₜ
   ×-FinSet ._×_ X Y .carrier = ⌞ X ⌟ × ⌞ Y ⌟
   ×-FinSet ._×_ _ _ .has-bishop-finite = auto
 
   ⇒-FinSet : ⇒-notation (FinSet ℓ) (FinSet ℓ′) (FinSet (ℓ ⊔ ℓ′))
+  ⇒-FinSet .⇒-notation.Constraint _ _ = ⊤ₜ
   ⇒-FinSet ._⇒_ X Y .carrier = ⌞ X ⌟ ⇒ ⌞ Y ⌟
   ⇒-FinSet ._⇒_ _ _ .has-bishop-finite = auto
 

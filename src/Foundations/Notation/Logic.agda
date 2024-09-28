@@ -5,7 +5,8 @@ open import Foundations.Notation.Underlying
 open import Foundations.Prim.Type
 
 private variable
-  ℓ ℓ′ ℓ″ ℓ‴ : Level
+  ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ : Level
+  ℓa ℓb ℓr ℓx : Level
   U : 𝒰 ℓ
   V : 𝒰 ℓ′
   W : 𝒰 ℓ″
@@ -15,8 +16,8 @@ private variable
 
 -- Quantifiers
 
-record Π-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record Π-notation {ℓa ℓb ℓ}
+  (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   field Π : (X : A) (F : ⌞ X ⌟ → B) → R
 
 infixr 6 Π-syntax
@@ -30,8 +31,8 @@ infixr 6 Π-syntax
 syntax Π-syntax X (λ x → F) = Π[ x ꞉ X ] F
 
 
-record Πᴱ-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record Πᴱ-notation {ℓa ℓb ℓ}
+  (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   field Πᴱ : (X : A) (F : @0 ⌞ X ⌟ → B) → R
 
 infixr 6 Πᴱ-syntax
@@ -45,8 +46,8 @@ infixr 6 Πᴱ-syntax
 syntax Πᴱ-syntax X (λ x → F) = Πᴱ[ x ꞉ X ] F
 
 
-record ∀-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ∀-notation {ℓa ℓb ℓ}
+  (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   field ∀′ : (X : A) (F : ⌞ X ⌟ → B) → R
 
 infixr 6 ∀-syntax
@@ -60,8 +61,8 @@ infixr 6 ∀-syntax
 syntax ∀-syntax X (λ x → F) = ∀[ x ꞉ X ] F
 
 
-record ∀ᴱ-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ∀ᴱ-notation {ℓa ℓb ℓ}
+  (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   field ∀ᴱ′ : (X : A) (F : @0 ⌞ X ⌟ → B) → R
 
 infixr 6 ∀ᴱ-syntax
@@ -75,8 +76,8 @@ infixr 6 ∀ᴱ-syntax
 syntax ∀ᴱ-syntax X (λ x → F) = ∀ᴱ[ x ꞉ X ] F
 
 
-record Σ-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record Σ-notation {ℓa ℓb ℓ}
+  (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   field Σ : (X : A) (F : ⌞ X ⌟ → B) → R
 
 infixr 6 Σ-syntax
@@ -90,8 +91,8 @@ infixr 6 Σ-syntax
 syntax Σ-syntax X (λ x → F) = Σ[ x ꞉ X ] F
 
 
-record ∃-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ∃-notation {ℓa ℓb ℓ}
+  (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   field ∃ : (X : A) (F : ⌞ X ⌟ → B) → R
 
 infixr 6 ∃-syntax
@@ -108,46 +109,60 @@ syntax ∃-syntax X (λ x → F) = ∃[ x ꞉ X ] F
 
 -- Connectives
 
-record ×-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ×-notation {ℓa ℓb ℓ ℓ′}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
   infixr 8 _×_
-  field _×_ : A → B → R
-open ×-notation ⦃ ... ⦄ public
+  field
+    Constraint : A → B → Type ℓ′
+    _×_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
+open ×-notation ⦃ ... ⦄ public using (_×_)
 
-record ⊕-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ⊕-notation {ℓa ℓb ℓ ℓ′}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
   infixr 7 _⊕_
-  field _⊕_ : A → B → R
-open ⊕-notation ⦃ ... ⦄ public
+  field
+    Constraint : A → B → Type ℓ′
+    _⊕_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
+open ⊕-notation ⦃ ... ⦄ public using (_⊕_)
 
-record ⊎-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ⊎-notation {ℓa ℓb ℓ ℓ′}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
   infixr 7 _⊎_
-  field _⊎_ : A → B → R
-open ⊎-notation ⦃ ... ⦄ public
+  field
+    Constraint : A → B → Type ℓ′
+    _⊎_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
+open ⊎-notation ⦃ ... ⦄ public using (_⊎_)
 
-record ⊎₁-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ⊎₁-notation {ℓa ℓb ℓ ℓ′}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
   infixr 7 _⊎₁_
-  field _⊎₁_ : A → B → R
-open ⊎₁-notation ⦃ ... ⦄ public
+  field
+    Constraint : A → B → Type ℓ′
+    _⊎₁_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
+open ⊎₁-notation ⦃ ... ⦄ public using (_⊎₁_)
 
-record ⊻-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ⊻-notation {ℓa ℓb ℓ ℓ′}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
   infixr 7 _⊻_
-  field _⊻_ : A → B → R
-open ⊻-notation ⦃ ... ⦄ public
+  field
+    Constraint : A → B → Type ℓ′
+    _⊻_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
+open ⊻-notation ⦃ ... ⦄ public using (_⊻_)
 
-record ⇒-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ⇒-notation {ℓa ℓb ℓ ℓ′}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
   infixr 5 _⇒_
-  field _⇒_ : A → B → R
-open ⇒-notation ⦃ ... ⦄ public
+  field
+    Constraint : A → B → Type ℓ′
+    _⇒_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
+open ⇒-notation ⦃ ... ⦄ public using (_⇒_)
 
-record ¬-notation {ℓᵃ ℓ}
-  (A : 𝒰 ℓᵃ) (R : 𝒰 ℓ) : 𝒰ω where
+record ¬-notation {ℓa ℓ ℓ′}
+  (A : 𝒰 ℓa) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓ ⊔ ℓsuc ℓ′) where
   infixr 0 ¬_
-  field ¬_ : A → R
+  field
+    Constraint : A → Type ℓ′
+    ¬_ : (a : A) ⦃ _ : Constraint a ⦄ → R
 open ¬-notation ⦃ ... ⦄ public
 
 
@@ -170,50 +185,57 @@ open ⊤-notation ⦃ ... ⦄ public
 
 instance
   ×-Variadic
-    : {A : Type ℓ} {B : Type ℓ′} {R : Type ℓ″}
-      {X : Type ℓ‴}
-    → ⦃ im : ×-notation A B R ⦄
+    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
+      {X : Type ℓx} ⦃ im : ×-notation {ℓ′ = ℓ} A B R ⦄
     → ×-notation (X → A) (X → B) (X → R)
-  ×-Variadic ._×_ f g x = f x × g x
+  ×-Variadic ⦃ im ⦄ .×-notation.Constraint f g =
+    ∀ {x} → im .×-notation.Constraint (f x) (g x)
+  ×-Variadic .×-notation._×_ f g x = f x × g x
 
   ⊕-Variadic
-    : {A : Type ℓ} {B : Type ℓ′} {R : Type ℓ″}
-      {X : Type ℓ‴}
-    → ⦃ im : ⊕-notation A B R ⦄
+    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
+      {X : Type ℓx} ⦃ im : ⊕-notation {ℓ′ = ℓ} A B R ⦄
     → ⊕-notation (X → A) (X → B) (X → R)
-  ⊕-Variadic ._⊕_ f g x = f x ⊕ g x
+  ⊕-Variadic ⦃ im ⦄ .⊕-notation.Constraint f g =
+    ∀ {x} → im .⊕-notation.Constraint (f x) (g x)
+  ⊕-Variadic .⊕-notation._⊕_ f g x = f x ⊕ g x
 
   ⊎-Variadic
-    : {A : Type ℓ} {B : Type ℓ′} {R : Type ℓ″}
-      {X : Type ℓ‴}
-    → ⦃ im : ⊎-notation A B R ⦄
+    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
+      {X : Type ℓx} ⦃ im : ⊎-notation {ℓ′ = ℓ} A B R ⦄
     → ⊎-notation (X → A) (X → B) (X → R)
-  ⊎-Variadic ._⊎_ f g x = f x ⊎ g x
+  ⊎-Variadic ⦃ im ⦄ .⊎-notation.Constraint f g =
+    ∀ {x} → im .⊎-notation.Constraint (f x) (g x)
+  ⊎-Variadic .⊎-notation._⊎_ f g x = f x ⊎ g x
 
   ⊎₁-Variadic
-    : {A : Type ℓ} {B : Type ℓ′} {R : Type ℓ″}
-      {X : Type ℓ‴}
-    → ⦃ im : ⊎₁-notation A B R ⦄
+    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
+      {X : Type ℓx} ⦃ im : ⊎₁-notation {ℓ′ = ℓ} A B R ⦄
     → ⊎₁-notation (X → A) (X → B) (X → R)
-  ⊎₁-Variadic ._⊎₁_ f g x = f x ⊎₁ g x
+  ⊎₁-Variadic ⦃ im ⦄ .⊎₁-notation.Constraint f g =
+    ∀ {x} → im .⊎₁-notation.Constraint (f x) (g x)
+  ⊎₁-Variadic .⊎₁-notation._⊎₁_ f g x = f x ⊎₁ g x
 
   ⊻-Variadic
-    : {A : Type ℓ} {B : Type ℓ′} {R : Type ℓ″}
-      {X : Type ℓ‴}
-    → ⦃ im : ⊻-notation A B R ⦄
+    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
+      {X : Type ℓx} ⦃ im : ⊻-notation {ℓ′ = ℓ} A B R ⦄
     → ⊻-notation (X → A) (X → B) (X → R)
-  ⊻-Variadic ._⊻_ f g x = f x ⊻ g x
+  ⊻-Variadic ⦃ im ⦄ .⊻-notation.Constraint f g =
+    ∀ {x} → im .⊻-notation.Constraint (f x) (g x)
+  ⊻-Variadic .⊻-notation._⊻_ f g x = f x ⊻ g x
 
   ⇒-Variadic
-    : {A : Type ℓ} {B : Type ℓ′} {R : Type ℓ″}
-      {X : Type ℓ‴}
-    → ⦃ im : ⇒-notation A B R ⦄
+    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
+      {X : Type ℓx} ⦃ im : ⇒-notation {ℓ′ = ℓ} A B R ⦄
     → ⇒-notation (X → A) (X → B) (X → R)
-  ⇒-Variadic ._⇒_ f g x = f x ⇒ g x
+  ⇒-Variadic ⦃ im ⦄ .⇒-notation.Constraint f g =
+    ∀ {x} → im .⇒-notation.Constraint (f x) (g x)
+  ⇒-Variadic .⇒-notation._⇒_ f g x = f x ⇒ g x
 
   ¬-Variadic
-    : {A : Type ℓ} {R : Type ℓ′}
-      {X : Type ℓ″}
-    → ⦃ im : ¬-notation A R ⦄
+    : {A : Type ℓa} {R : Type ℓr}
+      {X : Type ℓx} ⦃ im : ¬-notation {ℓ′ = ℓ} A R ⦄
     → ¬-notation (X → A) (X → R)
+  ¬-Variadic ⦃ im ⦄ .¬-notation.Constraint f =
+    ∀ {x} → im .¬-notation.Constraint (f x)
   ¬-Variadic .¬_ f x = ¬ f x

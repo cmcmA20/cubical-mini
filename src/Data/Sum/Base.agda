@@ -14,7 +14,7 @@ data _⊎ₜ_ {ℓ ℓ′} (A : Type ℓ) (B : Type ℓ′) : Type (ℓ ⊔ ℓ�
   inr : B → A ⊎ₜ B
 
 private variable
-  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
+  ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
   C : Type ℓᶜ
@@ -22,11 +22,14 @@ private variable
 
 instance
   ⊎-Type : ⊎-notation (Type ℓᵃ) (Type ℓᵇ) (Type (ℓᵃ ⊔ ℓᵇ))
-  ⊎-Type ._⊎_ = _⊎ₜ_
+  ⊎-Type .⊎-notation.Constraint _ _ = ⊤ₜ
+  ⊎-Type ._⊎_ A B = A ⊎ₜ B
 
   Union-pow
-    : ⦃ ua : Underlying A ⦄ ⦃ ub : Underlying B ⦄ {P : Type ℓ} {X : Type ℓ′}
-      ⦃ _ : ⊎-notation (Type (ua .ℓ-underlying)) (Type (ub .ℓ-underlying)) P ⦄
+    : ⦃ ua : Underlying A ⦄ ⦃ ub : Underlying B ⦄
+      {X : Type ℓ′} {P : Type ℓ} ⦃ up : Underlying P ⦄
+      ⦃ un : ⊎-notation {ℓ′ = ℓ″} (Type (ua .ℓ-underlying)) (Type (ub .ℓ-underlying)) P ⦄
+      ⦃ _ : ∀ {x y} → un .⊎-notation.Constraint x y ⦄
     → Union (X → A) (X → B) (X → P)
   Union-pow ._∪_ S T x = ⌞ S x ⌟ ⊎ ⌞ T x ⌟
   {-# OVERLAPPABLE Union-pow #-}
@@ -61,6 +64,7 @@ map-r f = dmap id f
 
 instance
   ⊎-So : {x y : Bool} → ⊎-notation (So x) (So y) (So (x or y))
+  ⊎-So .⊎-notation.Constraint _ _ = ⊤ₜ
   ⊎-So {x = true} ._⊎_ _ _ = oh
 
   Reflects-⊎

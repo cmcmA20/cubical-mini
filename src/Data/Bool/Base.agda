@@ -97,7 +97,9 @@ instance
   Underlying-Bool .Underlying.⌞_⌟ = So
 
   ×-So : ×-notation (So b₁) (So b₂) (So (b₁ and b₂))
-  ×-So {b₁ = true} {b₂} ._×_ _ = refl
+  ×-So .×-notation.Constraint _ _ = ⊤
+  ×-So {b₁ = true} {b₂} ._×_ _ b = b
 
-  ⇒-So : ⇒-notation (So b₁) (So b₂) (So (b₁ implies b₂))
-  ⇒-So {b₁ = true} {b₂ = true} ._⇒_ _ _ = oh
+  ⇒-So : ⇒-notation (So b₁) (So b₂) (So (b₁ and b₂))
+  ⇒-So .⇒-notation.Constraint _ _ = ⊤
+  ⇒-So {b₁ = true} {b₂ = true} .⇒-notation._⇒_ _ _ = oh

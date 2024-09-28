@@ -14,6 +14,8 @@ open import Foundations.Notation.Unital.Inner
 open import Foundations.Notation.Unital.Outer
 open import Foundations.Sigma.Base
 
+open import Agda.Builtin.Unit as BU
+
 private variable ℓ ℓ′ ℓ″ ℓ‴ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
 
 instance
@@ -166,4 +168,5 @@ is-equivᴱ {B} f = Π[ b ꞉ B ] is-contrᴱ (fibreᴱ f b)
 
 instance
   ⇒-Type : ⇒-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
-  ⇒-Type ._⇒_ A B = A → B
+  ⇒-Type .⇒-notation.Constraint _ _ = BU.⊤
+  ⇒-Type .⇒-notation._⇒_ A B = A → B

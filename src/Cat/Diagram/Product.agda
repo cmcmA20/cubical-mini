@@ -87,10 +87,12 @@ module _ {C : Precategory o h} where
 
     instance
       ×-Ob : ×-notation Ob Ob Ob
+      ×-Ob .×-notation.Constraint _ _ = ⊤
       ×-Ob ._×_ A B = apex {A} {B}
       {-# OVERLAPPING ×-Ob #-}
 
       ×-Hom : {A B X Y : Ob} → ×-notation (A ⇒ X) (B ⇒ Y) (A × B ⇒ X × Y)
+      ×-Hom .×-notation.Constraint _ _ = ⊤
       ×-Hom ._×_ f g = ⟨ f ∘ π₁ , g ∘ π₂ ⟩ₓ
       {-# OVERLAPPING ×-Hom #-}
 

@@ -73,8 +73,10 @@ unquoteDecl H-Level-is-meet-slat-hom =
   declare-record-hlevel 1 H-Level-is-meet-slat-hom (quote is-meet-slat-hom)
 
 instance
-  ⇒-meet-slat : ⇒-notation
-    (Σ[ P ꞉ Poset o ℓ ] is-meet-semilattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-meet-semilattice Q) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-meet-slat
+    : ⇒-notation (Σ[ P ꞉ Poset o ℓ ] is-meet-semilattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-meet-semilattice Q)
+        (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-meet-slat .⇒-notation.Constraint _ _ = ⊤
   ⇒-meet-slat ._⇒_ (P , mp) (Q , mq) = Total-hom Monotone is-meet-slat-hom mp mq
 
 module _ {R : Poset o″ ℓ″} where

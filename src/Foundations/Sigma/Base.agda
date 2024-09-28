@@ -9,6 +9,7 @@ open import Foundations.Notation.Logic
 open import Foundations.Notation.Underlying
 
 open import Agda.Builtin.Sigma public
+open import Agda.Builtin.Unit as BU
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ ℓᵈ ℓᵉ ℓᶠ : Level
@@ -26,7 +27,8 @@ instance
   Σ-Type .Σ-notation.Σ X = Σ ⌞ X ⌟
 
   ×-Type : ×-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
-  ×-Type ._×_ = _×ₜ_
+  ×-Type .×-notation.Constraint _ _ = BU.⊤
+  ×-Type .×-notation._×_ A B = A ×ₜ B
 
   Underlying-Σ : ⦃ ua : Underlying A ⦄ → Underlying (Σ A B)
   Underlying-Σ ⦃ ua ⦄ .ℓ-underlying = ua .ℓ-underlying

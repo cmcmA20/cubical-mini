@@ -39,7 +39,8 @@ _⊎ₚ_ {ℓ} {ℓ′} P Q = po module ⊎ₚ where
 
 instance
   ⊎-Poset : ⊎-notation (Poset o ℓ) (Poset o′ ℓ′) _
-  ⊎-Poset ._⊎_ = _⊎ₚ_
+  ⊎-Poset .⊎-notation.Constraint _ _ = ⊤
+  ⊎-Poset ._⊎_ P Q = P ⊎ₚ Q
 
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   Inl : P ⇒ P ⊎ Q

@@ -60,6 +60,7 @@ instance opaque
 
 instance
   ⇒-Semigroup : ⇒-notation (Σ[ X ꞉ Set ℓ ] Semigroup-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Semigroup-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Semigroup .⇒-notation.Constraint _ _ = ⊤
   ⇒-Semigroup ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
     (λ f P Q → n-Magma-hom _ f (semigroup-on↪magma-on .fst P) (semigroup-on↪magma-on .fst Q)) {a = A} {b = B} X Y
 

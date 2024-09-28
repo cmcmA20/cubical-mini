@@ -73,8 +73,10 @@ unquoteDecl H-Level-is-join-slat-hom =
   declare-record-hlevel 1 H-Level-is-join-slat-hom (quote is-join-slat-hom)
 
 instance
-  ⇒-join-slat : ⇒-notation
-    (Σ[ P ꞉ Poset o ℓ ] is-join-semilattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-join-semilattice Q) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-join-slat
+    : ⇒-notation (Σ[ P ꞉ Poset o ℓ ] is-join-semilattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-join-semilattice Q)
+        (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-join-slat .⇒-notation.Constraint _ _ = ⊤
   ⇒-join-slat ._⇒_ (P , jp) (Q , jq) = Total-hom Monotone is-join-slat-hom jp jq
 
 module _ {R : Poset o″ ℓ″} where

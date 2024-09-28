@@ -27,7 +27,8 @@ open _⇒ᶜ_
 
 instance
   ⇒-Container : ⇒-notation (Container s p) (Container s′ p′) (Type (s ⊔ p ⊔ s′ ⊔ p′))
-  ⇒-Container ._⇒_ = _⇒ᶜ_
+  ⇒-Container .⇒-notation.Constraint _ _ = ⊤ₜ
+  ⇒-Container ._⇒_ c d = c ⇒ᶜ d
 
 -- Linear/cartesian container morphism
 record _⊸_ (C : Container s p) (C′ : Container s′ p′)

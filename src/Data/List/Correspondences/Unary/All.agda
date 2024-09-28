@@ -33,7 +33,7 @@ all-tail (_ ∷ xs) = xs
 module _ {A : 𝒰 ℓᵃ} {P : Pred A ℓ} ⦃ ep : {a : A} → Extensional (P a) ℓ ⦄ where
   Code-All : {xs : List A} (p q : All P xs) → 𝒰 ℓ
   Code-All {xs = []}     []       []       = ⊤
-  Code-All {xs = x ∷ xs} (px ∷ p) (qx ∷ q) = ep .Pathᵉ px qx × Code-All p q
+  Code-All {xs = x ∷ xs} (px ∷ p) (qx ∷ q) = ep .Pathᵉ px qx ×ₜ Code-All p q
 
   code-all-refl : {xs : List A} (p : All P xs) → Code-All p p
   code-all-refl {xs = []}     []       = _

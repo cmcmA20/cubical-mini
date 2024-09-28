@@ -50,6 +50,7 @@ infixr 6 ∃[_]
 -- Mere disjunction
 instance
   ⊎₁-Type : ⊎₁-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
+  ⊎₁-Type .⊎₁-notation.Constraint _ _ = ⊤ₜ
   ⊎₁-Type ._⊎₁_ A B = ∥ A ⊎ B ∥₁
 
 fibre₁ : {A : Type ℓ} {B : Type ℓ′} (f : A → B) (y : B) → Type (ℓ ⊔ ℓ′)
