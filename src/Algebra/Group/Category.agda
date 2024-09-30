@@ -34,7 +34,7 @@ instance
   Groups-equational : is-equational (Group-structure ℓ)
   Groups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Groups ℓ ⇒ Sets ℓ
+Forget : Groups ℓ ⇒ Types ℓ
 Forget = Forget-structure (Group-structure _)
 
 Forget-inverse : Groups ℓ ⇒ Monoids ℓ

@@ -61,11 +61,11 @@ instance opaque
   H-Level-comm-rig-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 comm-rig-on↪rig-on
 
 instance
-  ⇒-CRig : ⇒-notation (Σ[ X ꞉ Set ℓ ] CRig-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] CRig-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-CRig : ⇒-notation (Σ[ X ꞉ Type ℓ ] CRig-on X) (Σ[ Y ꞉ Type ℓ′ ] CRig-on Y) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-CRig .⇒-notation.Constraint _ _ = ⊤
-  ⇒-CRig ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
+  ⇒-CRig ._⇒_ (A , X) (B , Y) = Total-hom Fun
     (λ f P Q → Semiring-hom f (rig-on↪semiring-on .fst (comm-rig-on↪rig-on .fst P))
-                              (rig-on↪semiring-on .fst (comm-rig-on↪rig-on .fst Q))) {a = A} {b = B} X Y
+                              (rig-on↪semiring-on .fst (comm-rig-on↪rig-on .fst Q))) X Y
 
 
 record make-comm-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

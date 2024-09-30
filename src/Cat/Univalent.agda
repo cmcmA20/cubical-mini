@@ -34,8 +34,10 @@ module _ {o h} {C : Precategory o h} where
       using ( iso→path ; J-iso ; iso→path-id ; iso→path→iso ; path→iso→path )
       public
 
-    Ob-is-groupoid : is-groupoid (C .Precategory.Ob)
-    Ob-is-groupoid = path→iso.hlevel′ 2 λ _ _ → hlevel 2
+    instance
+      H-Level-Ob-univalent : ∀ {n} ⦃ _ : n ≥ʰ 2 ⦄ ⦃ hl : ∀ {x y} → H-Level n (Hom x y) ⦄ → H-Level (suc n) (C .Precategory.Ob)
+      H-Level-Ob-univalent {n = suc (suc m)} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = path→iso.hlevel′ (2 + m) λ _ _ → hlevel (2 + m)
+      {-# INCOHERENT H-Level-Ob-univalent #-}
 
 
 module _ {o h} (C : Precategory o h) where

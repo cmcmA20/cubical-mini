@@ -30,7 +30,7 @@ instance
   Semigroups-equational : is-equational (Semigroup-structure ℓ)
   Semigroups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Semigroups ℓ ⇒ Sets ℓ
+Forget : Semigroups ℓ ⇒ Types ℓ
 Forget = Forget-structure (Semigroup-structure _)
 
 Forget-assoc : Semigroups ℓ ⇒ Magmas ℓ

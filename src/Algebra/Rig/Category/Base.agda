@@ -33,7 +33,7 @@ instance
   Rigs-equational .invert-id-hom p .pres-+ _ _ = p .pres-+ _ _ ⁻¹
   Rigs-equational .invert-id-hom p .pres-· _ _ = p .pres-· _ _ ⁻¹
 
-Forget : Rigs ℓ ⇒ Sets ℓ
+Forget : Rigs ℓ ⇒ Types ℓ
 Forget = Forget-structure (Rig-structure _)
 
 Forget-absorb : Rigs ℓ ⇒ Semirings ℓ

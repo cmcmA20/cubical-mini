@@ -279,7 +279,6 @@ instance
 Posets : (o ℓ : Level) → Precategory (ℓsuc o ⊔ ℓsuc ℓ) (o ⊔ ℓ)
 Posets o ℓ .Precategory.Ob = Poset o ℓ
 Posets o ℓ .Precategory.Hom = Monotone
-Posets o ℓ .Precategory.Hom-set = hlevel!
 Posets o ℓ .Precategory.id  = refl
 Posets o ℓ .Precategory._∘_ = _∘ˢ_
 Posets o ℓ .Precategory.id-r _ = trivial!

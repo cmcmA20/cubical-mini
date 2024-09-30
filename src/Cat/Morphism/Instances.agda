@@ -6,58 +6,84 @@ open import Prelude
            ; _↠_ to ↠ₜ
            ; Extensional-↪ to Extensional-↪ₜ
            ; Extensional-↠ to Extensional-↠ₜ
+           ; _∘_ to _∘ₜ_
            )
 
 open import Cat.Base
-open import Cat.Morphism
-
-unquoteDecl H-Level-mono = declare-record-hlevel 2 H-Level-mono (quote _↪_)
-unquoteDecl H-Level-epi = declare-record-hlevel 2 H-Level-epi (quote _↠_)
+import Cat.Morphism
 
 module _ {o ℓ} {C : Precategory o ℓ} where
-  open Precategory C
+  open Cat.Morphism C
 
-  instance opaque
-    H-Level-has-section
-      : {a b : ⌞ C ⌟} {f : a ⇒ b} {n : HLevel} ⦃ _ : n ≥ʰ 2 ⦄
-      → H-Level n (has-section f)
-    H-Level-has-section ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 has-section-Iso
-
-    H-Level-has-retraction
-      : {a b : ⌞ C ⌟} {f : a ⇒ b} {n : HLevel} ⦃ _ : n ≥ʰ 2 ⦄
-      → H-Level n (has-retraction f)
-    H-Level-has-retraction ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 has-retraction-Iso
-
-    H-Level-is-invertible
-      : {a b : ⌞ C ⌟} {f : a ⇒ b} {n : HLevel} → ⦃ n ≥ʰ 1 ⦄
-      → H-Level n (is-invertible f)
-    H-Level-is-invertible ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (is-invertible-is-prop _)
-
-    H-Level-Inverses
-      : {a b : ⌞ C ⌟} {f : a ⇒ b} {g : b ⇒ a} {n : HLevel} → ⦃ n ≥ʰ 1 ⦄
-      → H-Level n (Inverses f g)
-    H-Level-Inverses ⦃ s≤ʰs _ ⦄ = hlevel-basic-instance 1 $ ≅→is-of-hlevel! 1 Inverses-Iso
-
-    H-Level-≅
-      : {a b : ⌞ C ⌟} {n : HLevel} → ⦃ n ≥ʰ 2 ⦄
-      → H-Level n (_≅_ ⦃ ≅-Cat-Ob C ⦄ a b)
-    H-Level-≅ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ≅→is-of-hlevel! 2 Iso-Iso
+  private variable
+    n : HLevel
+    a b : Ob
 
   instance
+    H-Level-inverses
+      : ⦃ hl : ∀{x y} → H-Level (suc n) (Hom x y) ⦄ {f : a ⇒ b} {g : b ⇒ a}
+      → H-Level n (Inverses f g)
+    H-Level-inverses .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ Inverses-Iso
+
+    opaque private
+      helper : ⦃ hl : ∀ {x y} → H-Level n (Hom x y) ⦄ → H-Level (suc n) (Hom a b)
+      helper .H-Level.has-of-hlevel = is-of-hlevel-suc _ (hlevel _)
+      {-# INCOHERENT helper #-}
+
+
+  module _ ⦃ hl : ∀ {x y} → H-Level 2 (Hom x y) ⦄ where instance
     Extensional-↪
-      : ∀ {ℓr} {a b}
-      → ⦃ sa : Extensional (C .Hom a b) ℓr ⦄
-      → Extensional (_↪_ C a b) ℓr
-    Extensional-↪ ⦃ sa ⦄ = set-injective→extensional! (↪-pathᴾ C) sa
+      : ∀ {ℓr} ⦃ sa : Extensional (Hom a b) ℓr ⦄
+      → Extensional (a ↪ b) ℓr
+    Extensional-↪ ⦃ sa ⦄ = set-injective→extensional! ↪-pathᴾ sa
 
-  Extensional-↠
-    : ∀ {ℓr} {a b}
-    → ⦃ sa : Extensional (C .Hom a b) ℓr ⦄
-    → Extensional (_↠_ C a b) ℓr
-  Extensional-↠ ⦃ sa ⦄ = set-injective→extensional! (↠-pathᴾ C) sa
+    Extensional-↠
+      : ∀ {ℓr} → ⦃ sa : Extensional (Hom a b) ℓr ⦄
+      → Extensional (a ↠ b) ℓr
+    Extensional-↠ ⦃ sa ⦄ = set-injective→extensional! ↠-pathᴾ sa
 
-  Extensional-≅
-    : ∀ {ℓr} {a b}
-    → ⦃ sa : Extensional (C .Hom a b) ℓr ⦄
-    → Extensional (_≅_ ⦃ ≅-Cat-Ob C ⦄ a b) ℓr
-  Extensional-≅ ⦃ sa ⦄ = set-injective→extensional! (≅-path C) sa
+    Extensional-≅
+      : ∀ {ℓr} ⦃ sa : Extensional (Hom a b) ℓr ⦄
+      → Extensional (a ≅ b) ℓr
+    Extensional-≅ ⦃ sa ⦄ = set-injective→extensional! ≅-path sa
+
+    opaque
+      H-Level-is-inv-prop : {f : a ⇒ b} → H-Level 1 (is-invertible f)
+      H-Level-is-inv-prop {f} = hlevel-prop-instance go where
+        go : is-prop (is-invertible f)
+        go g h = p where
+          module g = is-invertible g
+          module h = is-invertible h
+          g~h : g.inv ＝ h.inv
+          g~h =
+            g.inv              ~⟨ (h.inv-o ▷ g.inv) ∙ id-r _ ⟨
+            g.inv ∘ f ∘ h.inv  ~⟨ sym (assoc _ _ _) ∙∙ h.inv ◁ g.inv-i ∙∙ id-l _ ⟩
+            h.inv              ∎
+
+          p : g ＝ h
+          p i .is-invertible.inv = g~h i
+          p i .is-invertible.inverses =
+            is-prop→pathᴾ (λ i → hlevel 1 ⦃ H-Level-inverses {g = g~h i} ⦄) g.inverses h.inverses i
+      {-# OVERLAPPING H-Level-is-inv-prop #-}
+
+
+  module _ ⦃ hl : ∀{x y} → H-Level n (Hom x y) ⦄ where instance
+    H-Level-mono : H-Level n (a ↪ b)
+    H-Level-mono .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ ↪-Iso
+
+    H-Level-epi : H-Level n (a ↠ b)
+    H-Level-epi .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ ↠-Iso
+
+    H-Level-has-section : {f : a ⇒ b} → H-Level n (has-section f)
+    H-Level-has-section .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ has-section-Iso
+
+    H-Level-has-retraction : {f : a ⇒ b} → H-Level n (has-retraction f)
+    H-Level-has-retraction .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ has-retraction-Iso
+
+    H-Level-≅ : H-Level n (a ≅ b)
+    H-Level-≅ .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ Iso-Iso
+
+    opaque
+      H-Level-is-inv-default : {f : a ⇒ b} ⦃ _ : n ≥ʰ 2 ⦄ → H-Level n (is-invertible f)
+      H-Level-is-inv-default .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ is-invertible-Iso
+      {-# INCOHERENT H-Level-is-inv-default #-}

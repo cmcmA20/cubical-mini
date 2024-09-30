@@ -17,7 +17,6 @@ private variable ℓ : Level
   r : Precategory _ _
   r .Ob = ⊤
   r .Hom _ _ = X
-  r .Hom-set _ _ = hlevel!
   r .Precategory.id = mm.id
   r .Precategory._∘_ = flip mm._⋆_
   r .id-r = mm.id-l

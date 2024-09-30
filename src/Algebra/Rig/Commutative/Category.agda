@@ -33,7 +33,7 @@ instance
   CRigs-equational .invert-id-hom p .pres-+ _ _ = p .pres-+ _ _ ⁻¹
   CRigs-equational .invert-id-hom p .pres-· _ _ = p .pres-· _ _ ⁻¹
 
-Forget : CRigs ℓ ⇒ Sets ℓ
+Forget : CRigs ℓ ⇒ Types ℓ
 Forget = Forget-structure (CRig-structure _)
 
 Forget-comm : CRigs ℓ ⇒ Rigs ℓ

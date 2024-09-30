@@ -18,7 +18,6 @@ C ×ᶜ D = go where
   go : Precategory _ _
   go .Ob = C.Ob × D.Ob
   go .Hom (c , d) (c′ , d′) = (c ⇒ c′) × (d ⇒ d′)
-  go .Hom-set = hlevel!
   go .id = C.id , D.id
   go ._∘_ (f , g) (f′ , g′) = f C.∘ f′ , g D.∘ g′
   go .id-l (f , g) = ×-path (C.id-l f) (D.id-l g)

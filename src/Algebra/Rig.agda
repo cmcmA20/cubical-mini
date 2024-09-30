@@ -70,10 +70,10 @@ instance opaque
   H-Level-rig-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 rig-on↪semiring-on
 
 instance
-  ⇒-Rig : ⇒-notation (Σ[ X ꞉ Set ℓ ] Rig-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Rig-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Rig : ⇒-notation (Σ[ X ꞉ Type ℓ ] Rig-on X) (Σ[ Y ꞉ Type ℓ′ ] Rig-on Y) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-Rig .⇒-notation.Constraint _ _ = ⊤
-  ⇒-Rig ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
-    (λ f P Q → Semiring-hom f (rig-on↪semiring-on .fst P) (rig-on↪semiring-on .fst Q)) {a = A} {b = B} X Y
+  ⇒-Rig ._⇒_ (A , X) (B , Y) = Total-hom Fun
+    (λ f P Q → Semiring-hom f (rig-on↪semiring-on .fst P) (rig-on↪semiring-on .fst Q)) X Y
 
 
 record make-rig {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

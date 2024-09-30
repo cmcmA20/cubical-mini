@@ -11,7 +11,7 @@ open Cat.Morphism ℬ
 
 private variable
   a b c d : Ob
-  f : Hom a b
+  f g : Hom a b
   a′ b′ c′ : Ob[ a ]
 
 -- TODO mono, epi
@@ -75,15 +75,16 @@ make-invertible↓ g′ p q .is-invertible[_].inversesᵈ .Inverses[_].inv-rᵈ 
 
 opaque
   Inverses[]-are-prop
-    : ∀ {a b a′ b′} {f : Hom a b} {g : Hom b a}
+    : ⦃ _ : ∀ {h} → H-Level 2 (Hom[ h ] a′ a′) ⦄
+      ⦃ _ : ∀ {h} → H-Level 2 (Hom[ h ] b′ b′) ⦄
     → (inv : Inverses f g)
     → (f′ : Hom[ f ] a′ b′) (g′ : Hom[ g ] b′ a′)
     → is-prop (Inverses[ inv ] f′ g′)
   Inverses[]-are-prop inv f′ g′ inv[] inv[]′ i .Inverses[_].inv-lᵈ =
-    is-set→squareᴾ (λ i j → Hom[ Inverses.inv-o inv j ]-set _ _)
+    is-set→squareᴾ (λ i j → hlevel 2)
       refl (Inverses[_].inv-lᵈ inv[]) (Inverses[_].inv-lᵈ inv[]′) refl i
   Inverses[]-are-prop inv f′ g′ inv[] inv[]′ i .Inverses[_].inv-rᵈ =
-    is-set→squareᴾ (λ i j → Hom[ Inverses.inv-i inv j ]-set _ _)
+    is-set→squareᴾ (λ i j → hlevel 2)
       refl (Inverses[_].inv-rᵈ inv[]) (Inverses[_].inv-rᵈ inv[]′) refl i
 
   -- TODO

@@ -102,9 +102,9 @@ instance opaque
   H-Level-umagma-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance umagma-hom-is-prop
 
 instance
-  ⇒-UMagma : ⇒-notation (Σ[ X ꞉ Set ℓ ] UMagma-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] UMagma-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-UMagma : ⇒-notation (Σ[ X ꞉ Type ℓ ] UMagma-on X) (Σ[ Y ꞉ Type ℓ′ ] UMagma-on Y) (𝒰 (ℓ ⊔ ℓ′))
   ⇒-UMagma .⇒-notation.Constraint _ _ = ⊤
-  ⇒-UMagma ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) UMagma-hom {a = A} {b = B} X Y
+  ⇒-UMagma ._⇒_ (A , X) (B , Y) = Total-hom Fun UMagma-hom X Y
 
   Refl-UMagma-hom : Refl {A = UMagma-on A} (UMagma-hom refl)
   Refl-UMagma-hom .refl .UMagma-hom.pres-⋆ _ _ = refl

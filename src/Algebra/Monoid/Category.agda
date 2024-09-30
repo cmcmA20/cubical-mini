@@ -39,7 +39,7 @@ instance
   Monoids-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
   Monoids-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Monoids ℓ ⇒ Sets ℓ
+Forget : Monoids ℓ ⇒ Types ℓ
 Forget = Forget-structure (Monoid-structure _)
 
 Forget-unit : Monoids ℓ ⇒ Semigroups ℓ

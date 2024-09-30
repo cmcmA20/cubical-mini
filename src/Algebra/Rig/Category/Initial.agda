@@ -15,7 +15,7 @@ private variable ℓ : Level
 Initial-rig : Initial (Rigs ℓ)
 Initial-rig = mk-initial ℕᵣ ℕ-is-initial where
   ℕᵣ : Rig ℓ
-  ℕᵣ = el! (Lift _ ℕ) , to-rig-on go where
+  ℕᵣ = Lift _ ℕ , to-rig-on go where
     go : make-rig _
     go .make-rig.rig-is-set = hlevel!
     go .make-rig.0a = lift 0

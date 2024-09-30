@@ -34,6 +34,8 @@ record _↪_ (a b : Ob) : Type (o ⊔ h) where
 
 open _↪_ public
 
+unquoteDecl ↪-Iso = declare-record-iso ↪-Iso (quote _↪_)
+
 
 -- Epimorphism (epi)
 
@@ -47,6 +49,7 @@ record _↠_ (a b : Ob) : Type (o ⊔ h) where
 
 open _↠_ public
 
+unquoteDecl ↠-Iso = declare-record-iso ↠-Iso (quote _↠_)
 
 -- The identity morphism is monic and epic.
 
@@ -118,20 +121,20 @@ epic-cancel-r {g} fg-epic h h' p = fg-epic h h' $
 -- Postcomposition with a mono is an embedding.
 
 monic-postcomp-is-embedding
-  : {f : b ⇒ c}
+  : ⦃ _ : H-Level 2 (Hom a c) ⦄ {f : b ⇒ c}
   → is-monic f
   → is-embedding {A = a ⇒ b} (f ∘_)
 monic-postcomp-is-embedding monic =
-  set-injective→is-embedding (Hom-set _ _) (monic _ _)
+  set-injective→is-embedding (hlevel 2) (monic _ _)
 
 -- Likewise, precomposition with an epi is an embedding.
 
 epic-precomp-embedding
-  : {f : a ⇒ b}
+  : ⦃ _ : H-Level 2 (Hom a c) ⦄ {f : a ⇒ b}
   → is-epic f
   → is-embedding {A = b ⇒ c} (_∘ f)
 epic-precomp-embedding epic =
-  set-injective→is-embedding (Hom-set _ _) (epic _ _)
+  set-injective→is-embedding (hlevel 2) (epic _ _)
 
 
 -- Sections
@@ -267,32 +270,6 @@ has-section+monic→has-retraction sect monic .is-retraction =
 
 open Inverses
 
-private instance
-  H-Level-inverses
-    : {f : a ⇒ b} {g : b ⇒ a} {n : HLevel} ⦃ _ : n ≥ʰ 1 ⦄
-    → H-Level n (Inverses f g)
-  H-Level-inverses ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (≅→is-of-hlevel! 1 Inverses-Iso)
-
-inverses-are-prop : {f : a ⇒ b} {g : b ⇒ a} → is-prop (Inverses f g)
-inverses-are-prop = hlevel 1
-
-opaque
-  is-invertible-is-prop : {f : a ⇒ b} → is-prop (is-invertible f)
-  is-invertible-is-prop {a} {b} {f} g h = p where
-    module g = is-invertible g
-    module h = is-invertible h
-
-    g~h : g.inv ＝ h.inv
-    g~h =
-      g.inv              ~⟨ (h.inv-o ▷ g.inv) ∙ id-r _ ⟨
-      g.inv ∘ f ∘ h.inv  ~⟨ sym (assoc _ _ _) ∙∙ h.inv ◁ g.inv-i ∙∙ id-l _ ⟩
-      h.inv              ∎
-
-    p : g ＝ h
-    p i .is-invertible.inv = g~h i
-    p i .is-invertible.inverses =
-     is-prop→pathᴾ (λ i → inverses-are-prop {g = g~h i}) g.inverses h.inverses i
-
 id-invertible : is-invertible (id {a})
 id-invertible .is-invertible.inv = id
 id-invertible .is-invertible.inverses .inv-o = id-l id
@@ -353,20 +330,6 @@ _invertible⁻¹ f-inv .is-invertible.inverses .inv-o =
 _invertible⁻¹ f-inv .is-invertible.inverses .inv-i =
   is-invertible.inv-o f-inv
 
-
-private
-  ≅-pathᴾ-internal
-    : (p : a ＝ c) (q : b ＝ d)
-    → {f : a ≅ b} {g : c ≅ d}
-    → ＜ f .to   ／ (λ i → Hom (p i) (q i)) ＼ g .to   ＞
-    → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
-    → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-  ≅-pathᴾ-internal p q r s i .to = r i
-  ≅-pathᴾ-internal p q r s i .from = s i
-  ≅-pathᴾ-internal p q {f} {g} r s i .inverses =
-    is-prop→pathᴾ (λ j → inverses-are-prop {f = r j} {g = s j})
-      (f .inverses) (g .inverses) i
-
 opaque
   private
     inverse-unique-internal
@@ -387,44 +350,62 @@ opaque
     → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
   inverse-unique p = inverse-unique-internal _ _ p _ _
 
-≅-pathᴾ
-  : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
-  → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
-  → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-≅-pathᴾ p q {f} {g} r = ≅-pathᴾ-internal p q r (inverse-unique p q {f = f} {g = g} r)
 
-≅-pathᴾ-from
-  : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
-  → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
-  → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-≅-pathᴾ-from p q {f} {g} r = ≅-pathᴾ-internal p q (inverse-unique q p {f = f ⁻¹} {g = g ⁻¹} r) r
+module _ ⦃ _ : ∀ {x y} → H-Level 2 (Hom x y) ⦄ where
+  private
+    inverses-are-prop : {f : a ⇒ b} {g : b ⇒ a} → is-prop (Inverses f g)
+    inverses-are-prop = ≅→is-of-hlevel! 1 Inverses-Iso
 
-≅-path : {f g : a ≅ b} → f .to ＝ g .to → f ＝ g
-≅-path = ≅-pathᴾ refl refl
+    ≅-pathᴾ-internal
+      : (p : a ＝ c) (q : b ＝ d)
+      → {f : a ≅ b} {g : c ≅ d}
+      → ＜ f .to   ／ (λ i → Hom (p i) (q i)) ＼ g .to   ＞
+      → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
+      → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
+    ≅-pathᴾ-internal p q r s i .to = r i
+    ≅-pathᴾ-internal p q r s i .from = s i
+    ≅-pathᴾ-internal p q {f} {g} r s i .inverses =
+      is-prop→pathᴾ (λ j → inverses-are-prop {f = r j} {g = s j})
+        (f .inverses) (g .inverses) i
 
-≅-path-from : {f g : a ≅ b} → f .from ＝ g .from → f ＝ g
-≅-path-from = ≅-pathᴾ-from refl refl
+  ≅-pathᴾ
+    : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
+    → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
+    → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
+  ≅-pathᴾ p q {f} {g} r = ≅-pathᴾ-internal p q r (inverse-unique p q {f = f} {g = g} r)
 
-↪-pathᴾ
-  : {a b : I → Ob} {f : a i0 ↪ b i0} {g : a i1 ↪ b i1}
-  → ＜ f .mor ／ (λ i → Hom (a i) (b i)) ＼ g .mor ＞
-  → ＜ f ／ (λ i → a i ↪ b i) ＼ g ＞
-↪-pathᴾ {a} {b} {f} {g} pa = go where
-  go : ＜ f ／ (λ i → a i ↪ b i) ＼ g ＞
-  go i .mor = pa i
-  go i .monic {c} = is-prop→pathᴾ
-    {B = λ i → (f′ g′ : Hom c (a i)) → pa i ∘ f′ ＝ pa i ∘ g′ → f′ ＝ g′}
-    (λ _ → hlevel 1)
-    (f .monic) (g .monic) i
+  ≅-pathᴾ-from
+    : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
+    → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
+    → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
+  ≅-pathᴾ-from p q {f} {g} r = ≅-pathᴾ-internal p q (inverse-unique q p {f = f ⁻¹} {g = g ⁻¹} r) r
 
-↠-pathᴾ
-  : {a b : I → Ob} {f : a i0 ↠ b i0} {g : a i1 ↠ b i1}
-  → ＜ f .mor ／ (λ i → Hom (a i) (b i)) ＼ g .mor ＞
-  → ＜ f ／ (λ i → a i ↠ b i) ＼ g ＞
-↠-pathᴾ {a} {b} {f} {g} pa = go where
-  go : ＜ f ／ (λ i → a i ↠ b i) ＼ g ＞
-  go i .mor = pa i
-  go i .epic {c} = is-prop→pathᴾ
-    {B = λ i → (f′ g′ : Hom (b i) c) → f′ ∘ pa i ＝ g′ ∘ pa i → f′ ＝ g′}
-    (λ _ → hlevel 1)
-    (f .epic) (g .epic) i
+  ≅-path : {f g : a ≅ b} → f .to ＝ g .to → f ＝ g
+  ≅-path = ≅-pathᴾ refl refl
+
+  ≅-path-from : {f g : a ≅ b} → f .from ＝ g .from → f ＝ g
+  ≅-path-from = ≅-pathᴾ-from refl refl
+
+  ↪-pathᴾ
+    : {a b : I → Ob} {f : a i0 ↪ b i0} {g : a i1 ↪ b i1}
+    → ＜ f .mor ／ (λ i → Hom (a i) (b i)) ＼ g .mor ＞
+    → ＜ f ／ (λ i → a i ↪ b i) ＼ g ＞
+  ↪-pathᴾ {a} {b} {f} {g} pa = go where
+    go : ＜ f ／ (λ i → a i ↪ b i) ＼ g ＞
+    go i .mor = pa i
+    go i .monic {c} = is-prop→pathᴾ
+      {B = λ i → (f′ g′ : Hom c (a i)) → pa i ∘ f′ ＝ pa i ∘ g′ → f′ ＝ g′}
+      (λ _ → hlevel 1)
+      (f .monic) (g .monic) i
+
+  ↠-pathᴾ
+    : {a b : I → Ob} {f : a i0 ↠ b i0} {g : a i1 ↠ b i1}
+    → ＜ f .mor ／ (λ i → Hom (a i) (b i)) ＼ g .mor ＞
+    → ＜ f ／ (λ i → a i ↠ b i) ＼ g ＞
+  ↠-pathᴾ {a} {b} {f} {g} pa = go where
+    go : ＜ f ／ (λ i → a i ↠ b i) ＼ g ＞
+    go i .mor = pa i
+    go i .epic {c} = is-prop→pathᴾ
+      {B = λ i → (f′ g′ : Hom (b i) c) → f′ ∘ pa i ＝ g′ ∘ pa i → f′ ＝ g′}
+      (λ _ → hlevel 1)
+      (f .epic) (g .epic) i
