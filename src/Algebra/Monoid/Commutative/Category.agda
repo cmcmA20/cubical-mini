@@ -31,7 +31,7 @@ instance
   CMonoids-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
   CMonoids-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : CMonoids ℓ ⇒ Sets ℓ
+Forget : CMonoids ℓ ⇒ Types ℓ
 Forget = Forget-structure (CMonoid-structure _)
 
 Forget-comm : CMonoids ℓ ⇒ Monoids ℓ

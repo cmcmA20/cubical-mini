@@ -17,7 +17,6 @@ poset→precategory P = cat where
   cat .id-r _      = prop!
   cat .id-l _      = prop!
   cat .assoc _ _ _ = prop!
-  cat .Hom-set _ _ = hlevel!
 
 -- TODO
 -- open Functor

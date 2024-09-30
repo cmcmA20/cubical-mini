@@ -18,6 +18,7 @@ private variable
   o h o′ h′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
   C : Precategory oᶜ hᵈ
   D : Precategory oᵈ hᵈ
+  n : HLevel
 
 record _=>_ {C : Precategory oᶜ hᶜ}
             {D : Precategory oᵈ hᵈ}
@@ -37,10 +38,17 @@ record _=>_ {C : Precategory oᶜ hᶜ}
 
 {-# INLINE make-nt #-}
 
-unquoteDecl H-Level-NT = declare-record-hlevel 2 H-Level-NT (quote _=>_)
 unquoteDecl NT-iso = declare-record-iso NT-iso (quote _=>_)
 
 open Precategory
+
+instance opaque
+  H-Level-NT
+    : {F G : C ⇒ D} ⦃ _ : n ≥ʰ 1 ⦄
+    → ⦃ hl : ∀ {x y} → H-Level n (D .Hom x y) ⦄ → H-Level n (F => G)
+  H-Level-NT {D} ⦃ s≤ʰs _ ⦄ ⦃ hl ⦄ .H-Level.has-of-hlevel = ≅→is-of-hlevel _ NT-iso
+    $ Σ-is-of-hlevel _ (hlevel _) λ z → Π³-is-of-hlevel _ λ x y f
+    → path-is-of-hlevel _ (is-of-hlevel-suc (suc _) (hlevel _)) _ _
 
 instance
   ⇒-nt : ⇒-notation (C ⇒ D) (C ⇒ D) _
@@ -147,15 +155,11 @@ module _ {C : Precategory oᶜ hᶜ}
   nt-pathᴾ : {F′ G′ : Functor C D}
            → (p : F ＝ F′) (q : G ＝ G′)
            → {a : F ⇒ G} {b : F′ ⇒ G′}
-           → (∀ x → ＜ a $ x ／ _ ＼ b $ x ＞)
+           → (r : ∀ x → ＜ a $ x ／ _ ＼ b $ x ＞)
+           → (s : ∀ x y f → ＜ a .is-natural x y f ／ (λ i → p i # f ∙ r y i ＝ r x i ∙ q i # f) ＼ b .is-natural x y f ＞)
            → ＜ a ／ (λ i → p i ⇒ q i) ＼ b ＞
-  nt-pathᴾ p q path i .η x = path x i
-  nt-pathᴾ p q {a} {b} path i .is-natural x y f =
-    is-prop→pathᴾ
-      (λ i → (D.Hom-set _ _)
-        (path y i D.∘ Functor.F₁ (p i) f) (Functor.F₁ (q i) f D.∘ path x i))
-      (a .is-natural x y f)
-      (b .is-natural x y f) i
+  nt-pathᴾ p q r s i .η x = r x i
+  nt-pathᴾ p q {a} {b} r s i .is-natural x y f = s x y f i
 
   _ηᵈ_ : {F′ G′ : C ⇒ D} {p : F ＝ F′} {q : G ＝ G′}
        → {a : F ⇒ G} {b : F′ ⇒ G′}
@@ -172,15 +176,16 @@ module _ {C : Precategory oᶜ hᶜ}
     Extensional-nt
       : ∀ {ℓr}
       → ⦃ sa : {x : ⌞ C ⌟} → Extensional (D .Hom (F $ x) (G $ x)) ℓr ⦄
+        ⦃ hl : ∀ {x y} → H-Level 2 (D .Hom x y) ⦄
       → Extensional (F ⇒ G) (oᶜ ⊔ ℓr)
     Extensional-nt ⦃ sa ⦄ .Pathᵉ f g = ∀ i → Pathᵉ sa (f $ i) (g $ i)
     Extensional-nt ⦃ sa ⦄ .reflᵉ x i = reflᵉ sa (x $ i)
     Extensional-nt ⦃ sa ⦄ .idsᵉ .to-path x = nt-pathᴾ refl refl
-      λ i → sa .idsᵉ .to-path (x i)
+      (λ i → sa .idsᵉ .to-path (x i)) λ _ _ _ → prop!
     Extensional-nt ⦃ sa ⦄ .idsᵉ .to-path-over h =
       is-prop→pathᴾ
         (λ i → Π-is-of-hlevel 1
-          λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa .idsᵉ)) (D .Hom-set _ _ _ _))
+          λ _ → ≃→is-of-hlevel 1 (identity-system-gives-path (sa .idsᵉ)) (hlevel 1))
         _ _
 
 module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
@@ -189,6 +194,18 @@ module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
     module D = Precategory D
 
   instance
+    ≅-Functor : ≅-notation (Functor C D) (Functor C D) (𝒰 (oᶜ ⊔ hᶜ ⊔ hᵈ))
+    ≅-Functor ._≅_ = Iso _=>_ _=>_
+
+    ⊣-Functor : ⊣-notation (Functor C D) (Functor D C) (𝒰 (oᶜ ⊔ hᶜ ⊔ oᵈ ⊔ hᵈ))
+    ⊣-Functor ._⊣_ L R = Adjoint Functor Functor Functor Functor C C.Hom D D.Hom L R _=>_ _=>_
+
+    Funlike-nt₁
+      : {F G : C ⇒ D} {x y : ⌞ C ⌟}
+      → Funlike ur (F ⇒ G) (C .Precategory.Hom x y) λ (α , f) → F # f ∙ α # y ＝ α # x ∙ G # f
+    Funlike-nt₁ ._#_ α = _=>_.is-natural α _ _
+
+  module _ ⦃ hl : ∀ {x y} → H-Level 2 (D .Hom x y) ⦄ where instance
     GAssoc-nt
       : GAssoc {A = Functor C D} _=>_ _=>_ _=>_ _=>_ _=>_ _=>_
     GAssoc-nt .∙-assoc α β γ = ext λ c → D.assoc (α # c) (β # c) (γ # c)
@@ -199,21 +216,13 @@ module _ {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} where
     GUnit-i-nt : GUnit-i {A = Functor C D} _=>_ _=>_
     GUnit-i-nt .∙-id-i α = ext λ c → D.id-l (α # c)
 
-    ≅-Functor : ≅-notation (Functor C D) (Functor C D) (𝒰 (oᶜ ⊔ hᶜ ⊔ hᵈ))
-    ≅-Functor ._≅_ = Iso _=>_ _=>_
 
-    Funlike-nt₁
-      : {F G : C ⇒ D} {x y : ⌞ C ⌟}
-      → Funlike ur (F ⇒ G) (C .Precategory.Hom x y) λ (α , f) → F # f ∙ α # y ＝ α # x ∙ G # f
-    Funlike-nt₁ ._#_ α = _=>_.is-natural α _ _
-
-    ⊣-Functor : ⊣-notation (Functor C D) (Functor D C) (𝒰 (oᶜ ⊔ hᶜ ⊔ oᵈ ⊔ hᵈ))
-    ⊣-Functor ._⊣_ L R = Adjoint Functor Functor Functor Functor C C.Hom D D.Hom L R _=>_ _=>_
-
-Cat[_,_] : Precategory o h → Precategory o′ h′ → Precategory (o ⊔ h ⊔ o′ ⊔ h′) (o ⊔ h ⊔ h′)
+Cat[_,_]
+  : (C : Precategory o h) (D : Precategory o′ h′)
+    ⦃ hl : ∀ {x y} → H-Level 2 (D .Hom x y) ⦄
+  → Precategory (o ⊔ h ⊔ o′ ⊔ h′) (o ⊔ h ⊔ h′)
 Cat[ C , D ] .Ob = C ⇒ D
 Cat[ C , D ] .Hom x y = x ⇒ y
-Cat[ C , D ] .Hom-set = hlevel!
 Cat[ C , D ] .id = refl
 Cat[ C , D ] ._∘_ = flip _∙_
 Cat[ C , D ] .id-l = ∙-id-i
@@ -224,7 +233,7 @@ instance
   ⇒-Precat-exp
     : ⇒-notation (Precategory o h) (Precategory o′ h′)
         (Precategory (o ⊔ h ⊔ o′ ⊔ h′) (o ⊔ h ⊔ h′))
-  ⇒-Precat-exp .⇒-notation.Constraint _ _ = ⊤ₜ
+  ⇒-Precat-exp .⇒-notation.Constraint _ D = ∀ {x y} → H-Level 2 (D .Hom x y)
   ⇒-Precat-exp ._⇒_ C D = Cat[ C , D ]
 
 PSh : ∀ κ {o ℓ} → Precategory o ℓ → Precategory (o ⊔ ℓ ⊔ ℓsuc κ) (o ⊔ ℓ ⊔ κ)

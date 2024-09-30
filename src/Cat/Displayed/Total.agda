@@ -21,15 +21,18 @@ module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ�
   open Total-hom
 
   instance
-    H-Level-Total-hom′ : ∀ {X Y n} ⦃ _ : n ≥ʰ 2 ⦄ → H-Level n (Total-hom′ X Y)
-    H-Level-Total-hom′ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 (≅→is-of-hlevel! 2 Total-hom-Iso)
+    H-Level-Total-hom′
+      : ∀ {X Y n}
+        ⦃ _ : ∀ {x y} → H-Level n (Hom x y) ⦄
+        ⦃ _ : ∀ {x y : Ob} {f : Hom x y} {x′ y′} → H-Level n (Hom[ f ] x′ y′) ⦄
+      → H-Level n (Total-hom′ X Y)
+    H-Level-Total-hom′ .H-Level.has-of-hlevel = ≅→is-of-hlevel _ Total-hom-Iso (hlevel _)
 
   private variable X X′ Y Y′ : Total
 
   ∫ : Precategory (o ⊔ o′) (ℓ ⊔ ℓ′)
   ∫ .Precategory.Ob = Total
   ∫ .Precategory.Hom = Total-hom′
-  ∫ .Precategory.Hom-set = hlevel!
   ∫ .Precategory.id .hom = id
   ∫ .Precategory.id .preserves = idᵈ
   ∫ .Precategory._∘_ f g .hom = f .hom ∘ g .hom

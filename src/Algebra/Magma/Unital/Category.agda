@@ -38,7 +38,7 @@ instance
   UMagmas-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
   UMagmas-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : UMagmas ℓ ⇒ Sets ℓ
+Forget : UMagmas ℓ ⇒ Types ℓ
 Forget = Forget-structure (UMagma-structure _)
 
 Forget-unit : UMagmas ℓ ⇒ Magmas ℓ

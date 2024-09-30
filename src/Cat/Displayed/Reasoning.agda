@@ -11,42 +11,28 @@ private
   module E = Displayed E
   module B = Cat.Morphism B
 
-hom[_] : ∀ {a b x y} {f g : B.Hom a b} → f ＝ g → E.Hom[ f ] x y → E.Hom[ g ] x y
+private variable
+  a b : B.Ob
+  x y : E.Ob[ a ]
+  f g h : B.Hom a b
+  n : HLevel
+
+hom[_] : f ＝ g → E.Hom[ f ] x y → E.Hom[ g ] x y
 hom[_] = subst (λ h → E.Hom[ h ] _ _)
 
-hom[_]⁻ : ∀ {a b x y} {f g : B.Hom a b} → g ＝ f → E.Hom[ f ] x y → E.Hom[ g ] x y
+hom[_]⁻ : g ＝ f → E.Hom[ f ] x y → E.Hom[ g ] x y
 hom[ p ]⁻ = hom[ sym p ]
 
-reindex
-  : ∀ {a b x y} {f g : B.Hom a b} (p q : f ＝ g) {f′ : E.Hom[ f ] x y}
-  → hom[ p ] f′ ＝ hom[ q ] f′
-reindex p q {f′} = ap (λ e → hom[ e ] f′) (B.Hom-set _ _ _ _ p q)
-
-cast[]
-  : ∀ {a b x y} {f g : B.Hom a b} {f′ : E.Hom[ f ] x y} {g′ : E.Hom[ g ] x y}
-  → {p q : f ＝ g}
-  → f′ E.＝[ p ] g′
-  → f′ E.＝[ q ] g′
-cast[] {f} {g} {f′} {g′} {p} {q} r =
-  coe0→1 (λ i → f′ E.＝[ B.Hom-set _ _ f g p q i ] g′) r
+hom[] : {p : f ＝ g} → E.Hom[ f ] x y → E.Hom[ g ] x y
+hom[] {p} f′ = hom[ p ] f′
 
 hom[]-∙
-  : ∀ {a b x y} {f g h : B.Hom a b} (p : f ＝ g) (q : g ＝ h)
-      {f′ : E.Hom[ f ] x y}
+  : {f g h : B.Hom a b} (p : f ＝ g) (q : g ＝ h) {f′ : E.Hom[ f ] x y}
   → hom[ q ] (hom[ p ] f′) ＝ hom[ p ∙ q ] f′
 hom[]-∙ p q = sym (subst-comp (λ h → E.Hom[ h ] _ _) _ _ _)
 
-duplicate
-  : ∀ {a b x y} {f f′ g : B.Hom a b} (p : f ＝ g) (q : f′ ＝ g) (r : f ＝ f′)
-      {f′ : E.Hom[ f ] x y}
-  → hom[ p ] f′ ＝ hom[ q ] (hom[ r ] f′)
-duplicate p q r = reindex _ _ ∙ sym (hom[]-∙ r q)
-
-hom[] : ∀ {a b x y} {f g : B.Hom a b} {p : f ＝ g} → E.Hom[ f ] x y → E.Hom[ g ] x y
-hom[] {p} f′ = hom[ p ] f′
-
-=↑ : {x y : B.Ob} {f g : x ⇒ y}
-     {x′ : E.Ob[ x ]} {y′ : E.Ob[ y ]}
+=↑ : {f g : a ⇒ b}
+     {x′ : E.Ob[ a ]} {y′ : E.Ob[ b ]}
      {f′ : E.Hom[ f ] x′ y′}
      {g′ : E.Hom[ g ] x′ y′}
      {p : f ＝ g}
@@ -54,12 +40,32 @@ hom[] {p} f′ = hom[ p ] f′
    → (f , f′) ＝ (g , g′)
 =↑ = Σ-pathᴾ _
 
-=↓ : {x y : B.Ob} {f g : x ⇒ y}
-     {x′ : E.Ob[ x ]} {y′ : E.Ob[ y ]}
+=↓ : {f g : a ⇒ b}
+     {x′ : E.Ob[ a ]} {y′ : E.Ob[ b ]}
      {f′ : E.Hom[ f ] x′ y′}
      {g′ : E.Hom[ g ] x′ y′}
    → (Σp : (f , f′) ＝ (g , g′))
    → f′ E.＝[ ap fst Σp ] g′
 =↓ = ap snd
 
--- TODO a ton of combinators
+module _ ⦃ _ : H-Level 2 (B.Hom a b) ⦄ where
+
+  reindex
+    : {f g : B.Hom a b} (p q : f ＝ g) {f′ : E.Hom[ f ] x y}
+    → hom[ p ] f′ ＝ hom[ q ] f′
+  reindex p q {f′} = ap (λ e → hom[ e ] f′) prop!
+
+  cast[]
+    : {f g : B.Hom a b} {f′ : E.Hom[ f ] x y} {g′ : E.Hom[ g ] x y}
+    → {p q : f ＝ g}
+    → f′ E.＝[ p ] g′
+    → f′ E.＝[ q ] g′
+  cast[] {f} {g} {f′} {g′} {p} {q} r =
+    coe0→1 (λ i → f′ E.＝[ hlevel 2 _ _ p q i ] g′) r
+
+  duplicate
+    : {f f′ g : B.Hom a b} (p : f ＝ g) (q : f′ ＝ g) (r : f ＝ f′){f′ : E.Hom[ f ] x y}
+    → hom[ p ] f′ ＝ hom[ q ] (hom[ r ] f′)
+  duplicate p q r = reindex _ _ ∙ sym (hom[]-∙ r q)
+
+-- -- TODO a ton of combinators

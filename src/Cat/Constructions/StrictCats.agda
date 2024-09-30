@@ -11,9 +11,12 @@ private variable
 
 open Precategory
 
-Functor-is-set : ⦃ ds : H-Level 2 (D .Ob) ⦄ → is-set (C ⇒ D)
-Functor-is-set = ≅→is-of-hlevel! 2 functor-iso
-
+Functor-is-set
+  : ⦃ ds : H-Level 2 (D .Ob) ⦄ ⦃ dhs : ∀ {x y} → H-Level 2 (D .Hom x y) ⦄
+  → is-set (C ⇒ D)
+Functor-is-set {D} ⦃ dhs ⦄ = ≅→is-of-hlevel 2 functor-iso
+  $ Σ-is-of-hlevel 2 (hlevel 2) λ f → Σ-is-of-hlevel 2 (hlevel 2) λ g
+  → Σ-is-of-hlevel 2 (is-prop→is-set (hlevel 1)) λ _ → is-prop→is-set (hlevel 1)
 
 -- TODO
 -- Strict-cats : ∀ o h → Precategory _ _

@@ -33,7 +33,7 @@ record is-pullback {P : Ob} (p₁ : P ⇒ X) (f : X ⇒ Z) (p₂ : P ⇒ Y) (g :
   unique² {p = o} p q r s = unique {p = o} p q ∙ sym (unique r s)
 
   pullback-univ
-    : {O : Ob}
+    : ⦃ hl : ∀ {x y} → H-Level 2 (Hom x y) ⦄ {O : Ob}
     → O ⇒ P
     ≃ Σ[ h ꞉ O ⇒ X ] Σ[ h′ ꞉ O ⇒ Y ] (f ∘ h ＝ g ∘ h′)
   pullback-univ .fst h = p₁ ∘ h , p₂ ∘ h , cat! C ∙ ap (_∘ h) square ∙ cat! C

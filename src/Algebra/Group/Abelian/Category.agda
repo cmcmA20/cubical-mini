@@ -30,7 +30,7 @@ instance
   AGroups-equational : is-equational (AGroup-structure ℓ)
   AGroups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : AGroups ℓ ⇒ Sets ℓ
+Forget : AGroups ℓ ⇒ Types ℓ
 Forget = Forget-structure (AGroup-structure _)
 
 Forget-comm : AGroups ℓ ⇒ Groups ℓ

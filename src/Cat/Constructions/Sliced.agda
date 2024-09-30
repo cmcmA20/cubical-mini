@@ -1,7 +1,8 @@
 {-# OPTIONS --safe #-}
 open import Cat.Prelude
 
-module Cat.Constructions.Sliced {o h} (C : Precategory o h) where
+module Cat.Constructions.Sliced {o h} (C : Precategory o h)
+  ⦃ hl : ∀ {x y} → H-Level 2 (Precategory.Hom C x y) ⦄ where
 
 open import Cat.Constructions.Slice C
 import Cat.Morphism
@@ -32,4 +33,4 @@ sliced≃sigma-slice
 sliced≃sigma-slice = ≅ₜ→≃ sliced-iso
                    ∙ Σ-ap-snd (λ _ → ×-swap)
                    ∙ Σ-assoc
-                   ∙ Σ-ap-fst (≅ₜ→≃ /-Obj-iso) ⁻¹
+                   ∙ Σ-ap-fst (≅ₜ→≃ /-Obj-Iso) ⁻¹

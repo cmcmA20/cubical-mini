@@ -23,7 +23,8 @@ is-categoryᵈ =
 
 open Iso
 
-module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
+module _ ⦃ _ : ∀{x y} → H-Level 2 (∫E.Hom x y) ⦄
+         (base-c : is-category B) (disp-c : is-categoryᵈ) where
   private
     piece-together
       : ∀ {x y} (p : x ≅ y) {A : Ob[ x ]} {B : Ob[ y ]} (f : A ≅[ p ] B)

@@ -124,17 +124,18 @@ instance
   Comp-Functor : Comp (Functor {oᶜ} {hᶜ}) (Functor {oᵈ} {hᵈ} {oᵉ} {hᵉ}) Functor
   Comp-Functor ._∙_ F G = G ∘ᶠ F
 
-  GAssoc-Functor
-    : GAssoc {A = Precategory o h} {B = Precategory o′ h′}
-             {C = Precategory oᶜ hᶜ} {D = Precategory oᵈ hᵈ}
-             Functor Functor Functor Functor Functor Functor
-  GAssoc-Functor .∙-assoc F G H = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
-
-  GUnit-o-Functor : GUnit-o {A = Precategory o h} {B = Precategory o′ h′} Functor Functor
-  GUnit-o-Functor .∙-id-o F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
-
-  GUnit-i-Functor : GUnit-i {A = Precategory o h} {B = Precategory o′ h′} Functor Functor
-  GUnit-i-Functor .∙-id-i F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
-
   ≅-Cat : ≅-notation (Precategory o h) (Precategory o′ h′) (𝒰 (o ⊔ h ⊔ o′ ⊔ h′))
   ≅-Cat ._≅_ = Iso Functor Functor
+
+  -- XXX FIXME
+  -- GAssoc-Functor
+  --   : GAssoc {A = Precategory o h} {B = Precategory o′ h′}
+  --            {C = Precategory oᶜ hᶜ} {D = Precategory oᵈ hᵈ}
+  --            Functor Functor Functor Functor Functor Functor
+  -- GAssoc-Functor .∙-assoc F G H = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
+
+  -- GUnit-o-Functor : GUnit-o {A = Precategory o h} {B = Precategory o′ h′} Functor Functor
+  -- GUnit-o-Functor .∙-id-o F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)
+
+  -- GUnit-i-Functor : GUnit-i {A = Precategory o h} {B = Precategory o′ h′} Functor Functor
+  -- GUnit-i-Functor .∙-id-i F = Equiv.injective (≅→≃ functor-iso) (refl ,ₚ refl ,ₚ prop!)

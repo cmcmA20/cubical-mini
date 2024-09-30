@@ -12,7 +12,6 @@ Lift-cat o′ ℓ′ C = liftc where
   liftc : Precategory _ _
   liftc .Ob = Lift o′ Ob
   liftc .Hom (lift x) (lift y) = Lift ℓ′ (x ⇒ y)
-  liftc .Hom-set = hlevel!
   liftc .id = lift id
   liftc ._∘_ (lift f) (lift g) = lift (f ∘ g)
   liftc .id-r (lift f) = lift $ id-r f

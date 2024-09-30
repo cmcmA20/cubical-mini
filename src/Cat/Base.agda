@@ -3,18 +3,13 @@ module Cat.Base where
 
 open import Meta.Prelude
   hiding (id ; _∘_)
-open import Meta.Projection
-open import Meta.Reflection.Base
 
 open import Structures.n-Type
 
-open import Data.Bool.Base
 open import Data.Empty.Base
-open import Data.Reflection.Argument
-open import Data.Reflection.Literal
-open import Data.Reflection.Term
 open import Data.Unit.Base
 
+-- I guess this would be called a wild precategry on 1lab
 record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
   -- no-eta-equality
   -- ^ this sucks, gonna wait for agda issue #6721
@@ -22,7 +17,6 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
   field
     Ob  : Type o
     Hom : Ob → Ob → Type h
-    Hom-set : (x y : Ob) → is-set (Hom x y)
     id   : ∀ {x} → Hom x x
     _∘_  : ∀ {x y z} → Hom y z → Hom x y → Hom x z
     id-l : ∀ {x y} (f : Hom x y) → id ∘ f ＝ f
@@ -42,14 +36,6 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
            → ＜ f .snd .snd ／ (λ i → Hom (p i) (q i)) ＼ g .snd .snd ＞
            → f ＝ g
   Mor-path p q r i = p i , q i , r i
-
-  opaque
-    hom-set′ : ∀ {x y} → is-set (Hom x y)
-    hom-set′ = Hom-set _ _
-
-    instance
-      H-Level-Hom : ∀ {x y} {k} → H-Level (2 + k) (Hom x y)
-      H-Level-Hom = hlevel-basic-instance 2 hom-set′
 
   instance
     Refl-Hom : Refl Hom
@@ -86,19 +72,9 @@ instance
   Underlying-precat {o} .Underlying.ℓ-underlying = o
   Underlying-precat .Underlying.⌞_⌟ = Ob
 
-  open Struct-proj-desc
-
-  hlevel-proj-precat : Struct-proj-desc true (quote Precategory.Hom)
-  hlevel-proj-precat .has-level = quote hom-set′
-  hlevel-proj-precat .upwards-closure = quote is-of-hlevel-≤
-  hlevel-proj-precat .get-level _ = pure (lit (nat 2))
-  hlevel-proj-precat .get-argument (_ ∷ _ ∷ x v∷ _) = pure x
-  hlevel-proj-precat .get-argument _ = type-error []
-
   Dual-Cat : Has-unary-op (Precategory o h)
   Dual-Cat .minv C .Ob = Ob C
   Dual-Cat .minv C .Hom x y = Hom C y x
-  Dual-Cat .minv C .Hom-set x y = Hom-set C y x
   Dual-Cat .minv C .id = C .id
   Dual-Cat .minv C ._∘_ f g = C ._∘_ g f
   Dual-Cat .minv C .id-l = C .id-r
@@ -115,17 +91,24 @@ instance
   ⊤-Cat : ⊤-notation (Precategory o h)
   ⊤-Cat .⊤ .Ob = ⊤
   ⊤-Cat .⊤ .Hom _ _ = ⊤
-  ⊤-Cat .⊤ .Hom-set _ _ = hlevel 2
   ⊤-Cat .⊤ .id = _
   ⊤-Cat .⊤ ._∘_ _ _ = _
   ⊤-Cat .⊤ .id-l _ = refl
   ⊤-Cat .⊤ .id-r _ = refl
   ⊤-Cat .⊤ .assoc _ _ _ = refl
 
+Types : (o : Level) → Precategory (ℓsuc o) o
+Types o .Ob = Type o
+Types _ .Hom = Fun
+Types _ .id x = x
+Types _ ._∘_ f g x = f (g x)
+Types _ .id-l _ = refl
+Types _ .id-r _ = refl
+Types _ .assoc _ _ _ = refl
+
 Sets : (o : Level) → Precategory (ℓsuc o) o
 Sets o .Ob = Set o
 Sets _ .Hom A B = ⌞ A ⇒ B ⌟
-Sets _ .Hom-set _ = hlevel!
 Sets _ .id x = x
 Sets _ ._∘_ f g x = f (g x)
 Sets _ .id-l _ = refl
