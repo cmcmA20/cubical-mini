@@ -3,7 +3,7 @@ module Cat.Functor.Base where
 
 open import Meta.Prelude
   hiding (id ; _∘_)
-open import Meta.Deriving.HLevel
+open import Meta.Extensionality
 open import Meta.Record
 
 open import Structures.n-Type
@@ -116,6 +116,47 @@ Const {D} x .F₀ _ = x
 Const {D} x .F₁ _ = Precategory.id D
 Const {D} x .F-id = refl
 Const {D} x .F-∘ _ _ = Precategory.id-l D _ ⁻¹
+
+
+module _ {C : Precategory o h} {D : Precategory o′ h′} where
+  open Functor
+  private
+    module C = Precategory C
+    module D = Precategory D
+
+  module _ {F G : Functor C D} where
+    private
+      module F = Functor F
+      module G = Functor G
+
+    functor-path
+      : (p₀ : (x : C.Ob) → F # x ＝ G # x)
+      → (p₁ : {x y : C.Ob} (f : C.Hom x y)
+            → ＜ F # f ／ (λ i → D.Hom (p₀ x i) (p₀ y i)) ＼ G # f ＞)
+      → (q : ∀ {x : C.Ob}
+           → Squareᴾ (λ i j → D.Hom (p₀ x i) (p₀ x i))
+               F.F-id (p₁ (C.id)) G.F-id (λ _ → D.id))
+      → (r : ∀ {x y z : C.Ob} (f : C.Hom y z) (g : C.Hom x y)
+           → Squareᴾ (λ i j → D.Hom (p₀ x i) (p₀ z i))
+               (F.F-∘ f g) (p₁ (g ∙ f)) (G.F-∘ f g) (λ i → p₁ g i ∙ p₁ f i))
+      → F ＝ G
+    functor-path p₀ _  _ _ i .F₀ x = p₀ x i
+    functor-path _  p₁ _ _ i .F₁ f = p₁ f i
+    functor-path _  _  q _ i .F-id j = q i j
+    functor-path _  _  _ r i .F-∘ f g j = r f g i j
+
+  -- TODO generalize
+  instance
+    Extensional-functor
+      : ⦃ hl : ∀ {x y} → H-Level 2 (D.Hom x y) ⦄
+      → Extensional (Functor C D) (o ⊔ h ⊔ o′ ⊔ h′)
+    Extensional-functor .Pathᵉ F G
+      = Σ[ p ꞉ ((x : C.Ob) → F # x ＝ G # x) ]
+        ({x y : C.Ob} (f : C.Hom x y) → ＜ F # f ／ (λ i → D.Hom (p x i) (p y i)) ＼ G # f ＞)
+    Extensional-functor .reflᵉ F = (λ _ → refl) , λ _ → refl
+    Extensional-functor .idsᵉ .to-path (p₀ , p₁) = functor-path p₀ p₁ prop! λ _ _ → prop!
+    Extensional-functor .idsᵉ .to-path-over (p₀ , p₁) = Σ-prop-pathᴾ! $ fun-ext λ x →
+      to-pathᴾ (subst-path-right _ _ ∙ ∙-id-o _)
 
 instance
   Refl-Functor : Refl (Functor {oᶜ} {hᶜ})
