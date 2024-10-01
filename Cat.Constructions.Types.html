@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Cat.Constructions.Types</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Cat.Constructions.Types.html" class="Module">Cat.Constructions.Types</a> <a id="55" class="Symbol">{</a><a id="56" href="Cat.Constructions.Types.html#56" class="Bound">ℓ</a><a id="57" class="Symbol">}</a> <a id="59" class="Keyword">where</a>
+
+<a id="66" class="Keyword">open</a> <a id="71" class="Keyword">import</a> <a id="78" href="Cat.Prelude.html" class="Module">Cat.Prelude</a>
+<a id="90" class="Keyword">open</a> <a id="95" class="Keyword">import</a> <a id="102" href="Cat.Diagram.Initial.html" class="Module">Cat.Diagram.Initial</a>
+<a id="122" class="Keyword">open</a> <a id="127" class="Keyword">import</a> <a id="134" href="Cat.Diagram.Terminal.html" class="Module">Cat.Diagram.Terminal</a>
+<a id="155" class="Keyword">open</a> <a id="160" class="Keyword">import</a> <a id="167" href="Cat.Morphism.html" class="Module">Cat.Morphism</a> <a id="180" class="Symbol">(</a><a id="181" href="Cat.Base.html#2587" class="Function">Types</a> <a id="187" href="Cat.Constructions.Types.html#56" class="Bound">ℓ</a><a id="188" class="Symbol">)</a> <a id="190" class="Symbol">as</a> <a id="Types"></a><a id="193" href="Cat.Constructions.Types.html#193" class="Module">Types</a>
+
+<a id="200" class="Keyword">open</a> <a id="205" href="Foundations.Notation.Isomorphism.html#735" class="Module">Iso</a>
+
+<a id="210" class="Comment">-- TODO check no-eta</a>
+<a id="231" class="Comment">-- @0 Types-is-category : is-category (Types ℓ)</a>
+<a id="279" class="Comment">-- Types-is-category .to-path i = ua (≅ₜ→≃ {!!}) -- (iso→equiv i)</a>
+<a id="345" class="Comment">-- Types-is-category .to-path-over p = {!!}</a>
+
+<a id="390" class="Keyword">instance</a>
+  <a id="Types-has-initial"></a><a id="401" href="Cat.Constructions.Types.html#401" class="Function">Types-has-initial</a> <a id="419" class="Symbol">:</a> <a id="421" href="Cat.Diagram.Initial.html#253" class="Record">Initial</a> <a id="429" class="Symbol">(</a><a id="430" href="Cat.Base.html#2587" class="Function">Types</a> <a id="436" href="Cat.Constructions.Types.html#56" class="Bound">ℓ</a><a id="437" class="Symbol">)</a>
+  <a id="441" href="Cat.Constructions.Types.html#401" class="Function">Types-has-initial</a> <a id="459" class="Symbol">.</a><a id="460" href="Cat.Diagram.Initial.html#345" class="Field">Initial.bot</a> <a id="472" class="Symbol">=</a> <a id="474" href="Foundations.Notation.Logic.html#4477" class="Field">⊥</a>
+  <a id="478" href="Cat.Constructions.Types.html#401" class="Function">Types-has-initial</a> <a id="496" class="Symbol">.</a><a id="497" href="Cat.Diagram.Initial.html#362" class="Field">Initial.has-⊥</a> <a id="511" class="Symbol">_</a> <a id="513" class="Symbol">.</a><a id="514" href="Agda.Builtin.Sigma.html#251" class="Field">fst</a> <a id="518" class="Symbol">=</a> <a id="520" class="Symbol">λ</a> <a id="522" class="Symbol">()</a>
+  <a id="527" href="Cat.Constructions.Types.html#401" class="Function">Types-has-initial</a> <a id="545" class="Symbol">.</a><a id="546" href="Cat.Diagram.Initial.html#362" class="Field">Initial.has-⊥</a> <a id="560" class="Symbol">_</a> <a id="562" class="Symbol">.</a><a id="563" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a> <a id="567" class="Symbol">_</a> <a id="569" class="Symbol">_</a> <a id="571" class="Symbol">()</a>
+
+  <a id="Types-has-terminal"></a><a id="577" href="Cat.Constructions.Types.html#577" class="Function">Types-has-terminal</a> <a id="596" class="Symbol">:</a> <a id="598" href="Cat.Diagram.Terminal.html#256" class="Record">Terminal</a> <a id="607" class="Symbol">(</a><a id="608" href="Cat.Base.html#2587" class="Function">Types</a> <a id="614" href="Cat.Constructions.Types.html#56" class="Bound">ℓ</a><a id="615" class="Symbol">)</a>
+  <a id="619" href="Cat.Constructions.Types.html#577" class="Function">Types-has-terminal</a> <a id="638" class="Symbol">.</a><a id="639" href="Cat.Diagram.Terminal.html#350" class="Field">Terminal.top</a> <a id="652" class="Symbol">=</a> <a id="654" href="Foundations.Notation.Logic.html#4569" class="Field">⊤</a>
+  <a id="658" href="Cat.Constructions.Types.html#577" class="Function">Types-has-terminal</a> <a id="677" class="Symbol">.</a><a id="678" href="Cat.Diagram.Terminal.html#367" class="Field">Terminal.has-⊤</a> <a id="693" class="Symbol">_</a> <a id="695" class="Symbol">=</a> <a id="697" class="Symbol">(λ</a> <a id="700" href="Cat.Constructions.Types.html#700" class="Bound">_</a> <a id="702" class="Symbol">→</a> <a id="704" class="Symbol">_)</a> <a id="707" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="709" class="Symbol">λ</a> <a id="711" href="Cat.Constructions.Types.html#711" class="Bound">_</a> <a id="713" class="Symbol">→</a> <a id="715" href="Foundations.Notation.Reflexivity.html#365" class="Field">refl</a>
+</pre></body></html>
