@@ -112,22 +112,22 @@ instance
 
 instance
   Reflects-Discrete : ⦃ di : is-discrete A ⦄ {x y : A} → Reflects (x ＝ y) ⌊ x ≟ y ⌋
-  Reflects-Discrete {x} {y} = Dec.elim {C = λ d → Reflects (x ＝ y) ⌊ d ⌋} ofʸ ofⁿ (x ≟ y)
+  Reflects-Discrete {x} {y} = Reflects-does (x ≟ y)
   {-# INCOHERENT Reflects-Discrete #-}
 
-caseᵈ-true_return_of_
+given-yes_return_then_
   : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
     (a : A) (C : Dec A → Type ℓ′)
   → C (yes a) → C d
-caseᵈ-true_return_of_ {A} a C cy = caseᵈ A return C of λ where
+given-yes_return_then_ {A} a C cy = caseᵈ A return C of λ where
   (yes a′) → subst C prop! cy
   (no  ¬a) → false! (¬a a)
 
-caseᵈ-false_return_of_
+given-no_return_then_
   : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
     (¬a : ¬ A) (C : Dec A → Type ℓ′)
   → C (no ¬a) → C d
-caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
+given-no_return_then_ {A} ¬a C cy = caseᵈ A return C of λ where
   (yes a)   → false! (¬a a)
   (no  ¬a′) → subst (C ∘ no) prop! cy
 

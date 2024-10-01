@@ -61,6 +61,10 @@ boolean-pred-ext f g p q = fun-ext λ _ → so-injₑ (prop-extₑ! p q)
 
 -- if
 
+if-same : ∀ {b} {x : A} → (if b then x else x) ＝ x
+if-same {b = true}  = refl
+if-same {b = false} = refl
+
 if-true : ∀ {b} {t f : A} → ⌞ b ⌟ → (if b then t else f) ＝ t
 if-true {b = true}  _  = refl
 

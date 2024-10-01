@@ -1,6 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.List.Operations.Properties where
 
+open import Meta.Prelude
 open import Foundations.Base
 
 open import Logic.Decidability
@@ -8,6 +9,7 @@ open import Logic.Discreteness
 
 open import Data.Empty as Empty
 open import Data.Bool.Base as Bool
+open import Data.Bool.Path
 open import Data.Bool.Properties
 open import Data.Sum.Base as Sum
 open import Data.Dec.Base as Dec
@@ -17,8 +19,12 @@ open import Data.List.Path
 open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
+open import Data.List.Correspondences.Unary.Any
+open import Data.List.Correspondences.Unary.Has
 open import Data.Nat.Base
 open import Data.Nat.Path
+open import Data.Nat.Two
+open import Data.Nat.Two.Properties
 open import Data.Nat.Order.Base
 open import Data.Nat.Properties
 
@@ -91,52 +97,54 @@ snoc-inj {xs = x ∷ xs} {ys = y ∷ ys} e =
 
 -- all
 
-reflects-all : ∀ (p : A → Bool) xs
-             → Reflects (All (So ∘ p) xs) (all p xs)
-reflects-all p []       = ofʸ []
-reflects-all p (x ∷ xs) with p x | recall p x
-... | false | ⟪ e ⟫ = ofⁿ (λ where (a ∷ as) → ¬-so-false (subst So e a))
-... | true  | ⟪ e ⟫ = Reflects.dmap (λ a → subst So (e ⁻¹) oh ∷ a)
-                       (λ ne → λ where (px ∷ a) → ne a)
-                       (reflects-all p xs)
+Reflects-all-bool : {p : A → Bool} {xs : List A}
+                  → Reflects (All (So ∘ p) xs) (all p xs)
+Reflects-all-bool     {xs = []}     = ofʸ []
+Reflects-all-bool {p} {xs = x ∷ xs} =
+  Reflects.dmap
+    (_∷_ $ₜ²_)
+    (contra (λ where (px ∷ ps) → px , ps))
+    (Reflects-× ⦃ rp = Reflects-So ⦄ ⦃ rq = Reflects-all-bool {xs = xs} ⦄)
+
+-- TODO `Decidable P` doesn't work
+Reflects-all-dec : {xs : List A} {P : A → 𝒰 ℓ′} (P? : ∀ x → Dec (P x))
+                 → Reflects (All P xs) (all (⌊_⌋ ∘ P?) xs)
+Reflects-all-dec {xs = []}     P? = ofʸ []
+Reflects-all-dec {xs = x ∷ xs} P? =
+  Reflects.dmap
+    (_∷_ $ₜ²_)
+    (contra (λ where (px ∷ ps) → px , ps))
+    (Reflects-× ⦃ rp = Reflects-does (P? x) ⦄ ⦃ rq = Reflects-all-dec {xs = xs} P? ⦄)
+
 
 all?-++ : ∀ {p : A → Bool} {xs ys : List A}
         → all p (xs ++ ys) ＝ all p xs and all p ys
 all?-++ {p} {xs = []}     {ys} = refl
 all?-++ {p} {xs = x ∷ xs} {ys} = ap (p x and_) (all?-++ {xs = xs}) ∙ and-assoc (p x) (all p xs) (all p ys) ⁻¹
 
--- elem
+-- any
 
-elem= : ⦃ A-dis : is-discrete A ⦄
-      → A → List A → Bool
-elem= = elem (λ a b → ⌊ a ≟ b ⌋)
-
-all-elem : ⦃ A-dis : is-discrete A ⦄
-         → ∀ (P : A → 𝒰 ℓ′) xs
-         → All P xs
-         → (z : A) → ⌞ elem= z xs ⌟ → P z
-all-elem P (x ∷ xs) (px ∷ a) z el with so→true! ⦃ reflects-or {x = ⌊ z ≟ x ⌋} ⦄ el
-... | inl z=x = subst P (sym $ so→true! z=x) px
-... | inr els = all-elem P xs a z els
-
-elem-all : ⦃ di : is-discrete A ⦄
-         → ∀ (P : A → 𝒰 ℓ′) xs
-         → ((z : A) → ⌞ elem= z xs ⌟ → P z)
-         → All P xs
-elem-all        P []       f = []
-elem-all {A} ⦃ di ⦄ P (x ∷ xs) f
-  = f x (true→so! ⦃ reflects-or ⦄ (inl (true→so! {P = x ＝ x} refl)))
-  ∷ elem-all P xs λ z el → f z (true→so! ⦃ reflects-or ⦄ (inr el))
-
-reflects-all-dis : ⦃ A-dis : is-discrete A ⦄
-                 → ∀ (p : A → Bool) xs
-                 → Reflects (∀ x → ⌞ elem= x xs ⌟ → ⌞ p x ⌟) (all p xs)
-reflects-all-dis p xs =
+Reflects-any-bool : {p : A → Bool} {xs : List A}
+                  → Reflects (Any (So ∘ p) xs) (any p xs)
+Reflects-any-bool {xs = []}     = ofⁿ ¬Any-[]
+Reflects-any-bool {xs = x ∷ xs} =
   Reflects.dmap
-    (all-elem (So ∘ p) xs)
-    (λ na e → na (elem-all (So ∘ p) xs e))
-    (reflects-all p xs)
+   [ here , there ]ᵤ
+   (contra (λ where
+               (here px) → inl px
+               (there ax) → inr ax))
+   (Reflects-⊎ ⦃ rp = Reflects-So ⦄ ⦃ rq = Reflects-any-bool {xs = xs} ⦄)
 
+Reflects-any-dec : {xs : List A} {P : A → 𝒰 ℓ′} (P? : ∀ x → Dec (P x))
+                 → Reflects (Any P xs) (any (⌊_⌋ ∘ P?) xs)
+Reflects-any-dec {xs = []}     P? = ofⁿ ¬Any-[]
+Reflects-any-dec {xs = x ∷ xs} P? =
+  Reflects.dmap
+   [ here , there ]ᵤ
+   (contra (λ where
+               (here px) → inl px
+               (there ax) → inr ax))
+   (Reflects-⊎ ⦃ rp = Reflects-does (P? x) ⦄ ⦃ rq = Reflects-any-dec {xs = xs} P? ⦄)
 
 -- replicate
 
@@ -154,6 +162,113 @@ All-replicate : {z : A} (xs : List A)
               → xs ＝ replicate (length xs) z
 All-replicate     []       []       = refl
 All-replicate {z} (x ∷ xs) (xa ∷ a) = ap² List._∷_ xa (All-replicate xs a)
+
+
+-- filter
+
+filter-false : (xs : List A)
+             → filter (λ _ → false) xs ＝ []
+filter-false []       = refl
+filter-false (x ∷ xs) = filter-false xs
+
+filter-true : (xs : List A)
+             → filter (λ _ → true) xs ＝ xs
+filter-true []       = refl
+filter-true (x ∷ xs) = ap (x ∷_) (filter-true xs)
+
+-- TODO generalize to subsets
+all→filter : {P : A → 𝒰 ℓ′} {p : A → Bool} {xs : List A}
+           → All P xs → All P (filter p xs)
+all→filter         {xs = []}     []       = []
+all→filter {P} {p} {xs = x ∷ xs} (px ∷ a) =
+  Bool.elim
+    {P = λ q → All P (if q then x ∷ filter p xs else filter p xs)}
+    (px ∷ all→filter a)
+    (all→filter a)
+    (p x)
+
+all-filter : {p : A → Bool} {xs : List A}
+           → ⌞ all p (filter p xs) ⌟
+all-filter {p} {xs = []}     = Oh
+all-filter {p} {xs = x ∷ xs} = 
+  Bool.elim
+    {P = λ q → p x ＝ q → ⌞ all p (if q then x ∷ filter p xs else filter p xs) ⌟}
+    (λ e → (so≃is-true ⁻¹ $ e) × all-filter {xs = xs})
+    (λ _ → all-filter {xs = xs})
+    (p x) refl
+        
+filter-all : {p : A → Bool} {xs : List A}
+           → ⌞ all p xs ⌟ → filter p xs ＝ xs
+filter-all {p = p} {xs = []}     _ = refl
+filter-all {p = p} {xs = x ∷ xs} s =
+  let pax = and-so-≃ {x = p x} $ s in
+  subst (λ q → (if q then x ∷ filter p xs else filter p xs) ＝ x ∷ xs) ((so≃is-true $ pax .fst) ⁻¹) $
+  ap (x ∷_) (filter-all (pax .snd))
+
+Reflects-filter-all : {p : A → Bool} {xs : List A} → Reflects (filter p xs ＝ xs) (all p xs)
+Reflects-filter-all {p} {xs} =
+  Reflects.dmap filter-all
+    (contra λ e → subst (So ∘ all p) e (all-filter {xs = xs}))
+    Reflects-So
+
+filter-has-eq : {p1 p2 : A → Bool} {xs : List A}
+             → (∀ x → Has x xs → p1 x ＝ p2 x)
+             → filter p1 xs ＝ filter p2 xs
+filter-has-eq {xs = []}     eqp = refl
+filter-has-eq {xs = x ∷ xs} eqp =
+  ap² (λ a b → if a then x ∷ b else b)
+      (eqp x (here refl))
+      (filter-has-eq {xs = xs} λ q hq → eqp q (there hq))
+
+-- count
+
+count-++ : ∀ (p : A → Bool) xs ys
+         → count p (xs ++ ys) ＝ count p xs + count p ys
+count-++ p []       ys = refl
+count-++ p (x ∷ xs) ys =
+    ap (bit (p x) +_) (count-++ p xs ys)
+  ∙ +-assoc (bit (p x)) (count p xs) (count p ys)
+
+Reflects-0<count : ∀ (p : A → Bool) xs
+                 → Reflects (0 < count p xs) (any p xs)
+Reflects-0<count p []       = ofⁿ false!
+Reflects-0<count p (x ∷ xs) =
+  Bool.elim
+    {P = λ q → Reflects (0 < bit q + count p xs) (q or any p xs)}
+    (ofʸ z<s) (Reflects-0<count p xs) (p x)
+
+length-filter : ∀ (p : A → Bool) xs
+              → length (filter p xs) ＝ count p xs
+length-filter p []       = refl
+length-filter p (x ∷ xs) =
+  Bool.elim
+    {P = λ q → length (if q then x ∷ filter p xs else filter p xs) ＝ bit q + count p xs}
+    (ap suc (length-filter p xs))
+    (length-filter p xs)
+    (p x) 
+
+count-union-inter : ∀ p1 p2 (xs : List A)
+                  → count (λ x → p1 x or p2 x) xs + count (λ x → p1 x and p2 x) xs ＝ count p1 xs + count p2 xs
+count-union-inter p1 p2 []       = refl
+count-union-inter p1 p2 (x ∷ xs) =
+    +-interchange (bit (p1 x or p2 x)) (count (λ x → p1 x or p2 x) xs) (bit (p1 x and p2 x)) (count (λ x → p1 x and p2 x) xs)
+  ∙ ap (bit (p1 x or p2 x) + bit (p1 x and p2 x) +_) (count-union-inter p1 p2 xs)
+  ∙ ap (_+ (count p1 xs + count p2 xs))
+       (Bool.elim
+          {P = λ q → bit (q or p2 x) + bit (q and p2 x)
+                   ＝ bit q + bit (p2 x)}
+          refl
+          (+-zero-r (bit (p2 x)))
+          (p1 x))
+  ∙ +-interchange (bit (p1 x)) (count p1 xs) (bit (p2 x)) (count p2 xs) ⁻¹
+
+count-false : (xs : List A)
+            → count (λ _ → false) xs ＝ 0
+count-false xs = length-filter (λ _ → false) xs ⁻¹ ∙ ap length (filter-false xs)
+
+count-true : (xs : List A)
+            → count (λ _ → true) xs ＝ length xs
+count-true xs = length-filter (λ _ → true) xs ⁻¹ ∙ ap length (filter-true xs)
 
 
 -- take & drop

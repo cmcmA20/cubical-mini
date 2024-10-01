@@ -10,6 +10,7 @@ open import Meta.Effect.Idiom
 open import Data.Bool.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
+open import Data.Nat.Two
 open import Data.Reflects.Base as Reflects
 
 open import Data.List.Base as List
@@ -25,8 +26,8 @@ private variable
   xs : List A
 
 empty? : List A → Bool
-empty? []      = false
-empty? (_ ∷ _) = true
+empty? []      = true
+empty? (_ ∷ _) = false
 
 snoc : List A → A → List A
 snoc []      x = x ∷ []
@@ -35,11 +36,14 @@ snoc (y ∷ l) x = y ∷ snoc l x
 _∷r_ = snoc
 infixl 20 _∷r_
 
+all : (A → Bool) → List A → Bool
+all p = List.rec true _and_ ∘ map p
+
 any : (A → Bool) → List A → Bool
 any p = List.rec false _or_ ∘ map p
 
-all : (A → Bool) → List A → Bool
-all p = List.rec true _and_ ∘ map p
+count : (A → Bool) → List A → ℕ
+count p = List.rec 0 (λ x n → bit (p x) + n)
 
 length : List A → ℕ
 length []       = 0
@@ -59,10 +63,8 @@ replicate 0 _       = []
 replicate (suc n) e = e ∷ replicate n e
 
 filter : (A → Bool) → List A → List A
-filter p [] = []
-filter p (x ∷ xs) with p x
-filter p (x ∷ xs)    | true  = x ∷ filter p xs
-filter p (x ∷ xs)    | false = filter p xs
+filter p []       = []
+filter p (x ∷ xs) = if p x then x ∷ filter p xs else filter p xs
 
 elem : (A → A → Bool) → A → List A → Bool
 elem _    t []       = false

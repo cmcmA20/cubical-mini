@@ -29,8 +29,8 @@ s＝s≃ = prop-extₑ! (ap suc) suc-inj
 +-suc-r (suc x) y = ap suc (+-suc-r x y)
 
 +-comm : (x y : ℕ) → x + y ＝ y + x
-+-comm 0       y = sym (+-zero-r y)
-+-comm (suc x) y = ap suc (+-comm x y) ∙ sym (+-suc-r y x)
++-comm 0       y = (+-zero-r y) ⁻¹
++-comm (suc x) y = ap suc (+-comm x y) ∙ (+-suc-r y x) ⁻¹
 
 +-assoc : (x y z : ℕ) → x + (y + z) ＝ x + y + z
 +-assoc 0       _ _ = refl
@@ -46,10 +46,13 @@ s＝s≃ = prop-extₑ! (ap suc) suc-inj
 +-comm-assoc : (x y z : ℕ) → x + (y + z) ＝ y + (x + z)
 +-comm-assoc x y z = +-assoc x y _
                    ∙ ap (_+ z) (+-comm x y)
-                   ∙ sym (+-assoc y x _)
+                   ∙ (+-assoc y x _) ⁻¹
 
 +-assoc-comm : (x y z : ℕ) → x + y + z ＝ x + z + y
-+-assoc-comm x y z = sym (+-assoc x _ _) ∙ ap (x +_) (+-comm y z) ∙ +-assoc x _ _
++-assoc-comm x y z = (+-assoc x _ _) ⁻¹ ∙ ap (x +_) (+-comm y z) ∙ +-assoc x _ _
+
++-interchange : (x y z w : ℕ) → (x + y) + (z + w) ＝ (x + z) + (y + w)
++-interchange x y z w = (+-assoc x y (z + w)) ⁻¹ ∙ ap (x +_) (+-comm-assoc y z w) ∙ +-assoc x z (y + w)
 
 +-cancel-l : ∀ m n1 n2 → m + n1 ＝ m + n2 → n1 ＝ n2
 +-cancel-l  zero   n1 n2 e = e
@@ -105,7 +108,7 @@ s＝s≃ = prop-extₑ! (ap suc) suc-inj
 ·-suc-r (suc x) y = ap suc $ ap (y +_) (·-suc-r x y) ∙ +-comm-assoc y x _
 
 ·-comm : (x y : ℕ) → x · y ＝ y · x
-·-comm 0       y = sym (·-absorb-r y)
+·-comm 0       y = (·-absorb-r y) ⁻¹
 ·-comm (suc x) y = ap (y +_) (·-comm x _) ∙ sym (·-suc-r y x)
 
 ·-id-l : (x : ℕ) → 1 · x ＝ x
@@ -158,8 +161,8 @@ min-comm (suc _) 0       = refl
 min-comm (suc x) (suc y) = ap suc $ min-comm x y
 
 min-assoc : (x y z : ℕ) → min x (min y z) ＝ min (min x y) z
-min-assoc 0       y       z       = min-absorb-l (min y z) ∙ sym (min-absorb-l z) ∙ ap (λ q → min q z) (min-absorb-l y ⁻¹)
-min-assoc (suc x) 0       z       = ap (min (suc x)) (min-absorb-l z) ∙ sym (min-absorb-l z)
+min-assoc 0       y       z       = min-absorb-l (min y z) ∙ (min-absorb-l z) ⁻¹ ∙ ap (λ q → min q z) (min-absorb-l y ⁻¹)
+min-assoc (suc x) 0       z       = ap (min (suc x)) (min-absorb-l z) ∙ (min-absorb-l z) ⁻¹
 min-assoc (suc _) (suc _) 0       = refl
 min-assoc (suc x) (suc y) (suc z) = ap suc $ min-assoc x y z
 
@@ -178,7 +181,7 @@ max-id-r 0       = refl
 max-id-r (suc _) = refl
 
 max-comm : (x y : ℕ) → max x y ＝ max y x
-max-comm 0       y       = max-id-l y ∙ sym (max-id-r y)
+max-comm 0       y       = max-id-l y ∙ (max-id-r y) ⁻¹
 max-comm (suc _) 0       = refl
 max-comm (suc x) (suc y) = ap suc $ max-comm x y
 
