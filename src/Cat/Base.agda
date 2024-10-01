@@ -106,11 +106,14 @@ Types _ .id-l _ = refl
 Types _ .id-r _ = refl
 Types _ .assoc _ _ _ = refl
 
+n-Types : (o : Level) (n : HLevel) → Precategory (ℓsuc o) o
+n-Types o n .Ob = n-Type o n
+n-Types _ _ .Hom A B = ⌞ A ⇒ B ⌟
+n-Types _ _ .id x = x
+n-Types _ _ ._∘_ f g x = f (g x)
+n-Types _ _ .id-l _ = refl
+n-Types _ _ .id-r _ = refl
+n-Types _ _ .assoc _ _ _ = refl
+
 Sets : (o : Level) → Precategory (ℓsuc o) o
-Sets o .Ob = Set o
-Sets _ .Hom A B = ⌞ A ⇒ B ⌟
-Sets _ .id x = x
-Sets _ ._∘_ f g x = f (g x)
-Sets _ .id-l _ = refl
-Sets _ .id-r _ = refl
-Sets _ .assoc _ _ _ = refl
+Sets o = n-Types o 2

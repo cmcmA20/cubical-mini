@@ -16,6 +16,7 @@ private variable
   o h o′ h′ oᶜ hᶜ oᵈ hᵈ oᵉ hᵉ : Level
   C : Precategory oᶜ hᵈ
   D : Precategory oᵈ hᵈ
+  n : HLevel
 
 record Functor
     (C : Precategory oᶜ hᶜ) (D : Precategory oᵈ hᵈ)
@@ -116,6 +117,12 @@ Const {D} x .F₀ _ = x
 Const {D} x .F₁ _ = Precategory.id D
 Const {D} x .F-id = refl
 Const {D} x .F-∘ _ _ = Precategory.id-l D _ ⁻¹
+
+Forget-hlevel : n-Types o n ⇒ Types o
+Forget-hlevel .F₀ = ⌞_⌟
+Forget-hlevel .F₁ f = f
+Forget-hlevel .F-id = refl
+Forget-hlevel .F-∘ _ _ = refl
 
 
 module _ {C : Precategory o h} {D : Precategory o′ h′} where
