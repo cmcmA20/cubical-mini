@@ -15,7 +15,7 @@ open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Two
 open import Data.Nat.Order.Base
-open import Data.Dec.Base 
+open import Data.Dec.Base
 open import Data.Reflects.Base as Reflects
 
 open import Data.List.Base as List
@@ -53,10 +53,10 @@ related? : {R : A → A → 𝒰 ℓ′}
          → A → List A → Bool
 related?     R? x0 []       = true
 related? {R} R? x0 (x ∷ xs) =
-  ⌊ R? {x = x0} {x = x} ⌋ and related? {R = R} R? x xs 
+  ⌊ R? {x = x0} {x = x} ⌋ and related? {R = R} R? x xs
 
 sorted? : {R : A → A → 𝒰 ℓ′}
-        → Decidable R 
+        → Decidable R
         → List A → Bool
 sorted?     R? []       = true
 sorted? {R} R? (x ∷ xs) = related? {R = R} R? x xs
@@ -126,7 +126,7 @@ Reflects-perm-count {A} {xs} {ys} =
                               (count-false zs ⁻¹ ∙ ap (λ q → count q zs) (fun-ext λ x →   ap (_and p x) (and-compl ⌊ x ≟ a ⌋ ⁻¹)
                                                                                         ∙ and-assoc ⌊ x ≟ a ⌋ (not ⌊ x ≟ a ⌋) (p x)))
                     ∙ count-union-inter (λ z → ⌊ z ≟ a ⌋) (λ z → not ⌊ z ≟ a ⌋ and p z) zs
-  
+
   aux : All (λ q → So (count (λ x → ⌊ x ≟ q ⌋) xs == count (λ y → ⌊ y ≟ q ⌋) ys)) (xs ++ ys)
       → (p : A → Bool)
       → ∀ n → count p (xs ++ ys) < n
@@ -158,7 +158,7 @@ Reflects-perm {A} {xs} =
      → ((p : A → Bool) → count p as ＝ count p bs) → Perm as bs
   to {as} {bs = []}     ceq =
     let asnil = length=0→nil $ count-true as ⁻¹ ∙ ceq (λ _ → true) ∙ count-true (the (List A) []) in
-    subst (λ q → Perm q []) (asnil ⁻¹) perm-refl 
+    subst (λ q → Perm q []) (asnil ⁻¹) perm-refl
   to {as} {bs = b ∷ bs} ceq =
     let hasb = so→true! ⦃ Reflects-any-dec {xs = as} (λ x → x ≟ b) ⦄ $
                true→so! ⦃ Reflects-0<count (λ x → ⌊ x ≟ b ⌋) as ⦄ $
@@ -169,7 +169,7 @@ Reflects-perm {A} {xs} =
         (ls , rs , eas) = Has-split hasb
         ih = to {as = ls ++ rs} {bs = bs} λ p →
                  count-++ p ls rs
-               ∙ +-inj-l (bit (p b)) (count p ls + count p rs) (count p bs) 
+               ∙ +-inj-l (bit (p b)) (count p ls + count p rs) (count p bs)
                  (  +-comm-assoc (bit (p b)) (count p ls) (count p rs)
                   ∙ count-++ p ls (b ∷ rs) ⁻¹
                   ∙ ap (count p) eas ⁻¹

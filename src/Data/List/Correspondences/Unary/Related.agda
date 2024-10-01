@@ -59,19 +59,19 @@ opaque
   code-related-is-of-hlevel {n} {x0} {xs = x ∷ xs} {u = ux ∷ʳ u} {v = vx ∷ʳ v} hl =
     ×-is-of-hlevel n (path-is-of-hlevel n (hl x0 x) ux vx)
                      (code-related-is-of-hlevel {xs = xs} hl)
-  
+
 related-is-contr
     : {R : A → A → 𝒰 ℓ} {x0 : A} {xs : List A}
     → (∀ x y → is-contr (R x y))
     → is-contr (Related R x0 xs)
 related-is-contr     {xs = []}     cntr = []ʳ , λ where []ʳ → refl
-related-is-contr {R} {x0} {xs = x ∷ xs} cntr = 
+related-is-contr {R} {x0} {xs = x ∷ xs} cntr =
  let (xc , xeq) = cntr x0 x
      (ac , aeq) = related-is-contr {xs = xs} cntr
   in
     xc ∷ʳ ac
   , λ where (px ∷ʳ pxs) → ap² {C = λ _ _ → Related R x0 (x ∷ xs)} _∷ʳ_ (xeq px) (aeq pxs)
-  
+
 related-is-of-hlevel
   : (n : HLevel) {x0 : A} {xs : List A}
   → (∀ x y → is-of-hlevel n (R x y))
@@ -147,7 +147,7 @@ sorted-is-contr     {xs = []}     cntr = []ˢ , λ where []ˢ → refl
 sorted-is-contr {R} {xs = x ∷ xs} cntr =
   let (c , eq) = related-is-contr {x0 = x} {xs = xs} cntr in
   (∷ˢ c) ,
-    λ where (∷ˢ sxs) → ap ∷ˢ (eq sxs) 
+    λ where (∷ˢ sxs) → ap ∷ˢ (eq sxs)
 
 sorted-is-of-hlevel
   : (n : HLevel) {xs : List A}

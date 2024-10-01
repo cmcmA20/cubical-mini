@@ -10,7 +10,7 @@ private variable
   A : 𝒰 ℓa
   B : 𝒰 ℓb
   _<_ : A → A → 𝒰 ℓ
-  
+
 Acc-on : (f : B → A) (b : B)
        → Acc _<_ (f b) → Acc (λ x y → f x < f y) b
 Acc-on f b (acc rec) = acc λ y p → Acc-on f y (rec (f y) p)

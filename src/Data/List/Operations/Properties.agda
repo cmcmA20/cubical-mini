@@ -190,13 +190,13 @@ all→filter {P} {p} {xs = x ∷ xs} (px ∷ a) =
 all-filter : {p : A → Bool} {xs : List A}
            → ⌞ all p (filter p xs) ⌟
 all-filter {p} {xs = []}     = Oh
-all-filter {p} {xs = x ∷ xs} = 
+all-filter {p} {xs = x ∷ xs} =
   Bool.elim
     {P = λ q → p x ＝ q → ⌞ all p (if q then x ∷ filter p xs else filter p xs) ⌟}
     (λ e → (so≃is-true ⁻¹ $ e) × all-filter {xs = xs})
     (λ _ → all-filter {xs = xs})
     (p x) refl
-        
+
 filter-all : {p : A → Bool} {xs : List A}
            → ⌞ all p xs ⌟ → filter p xs ＝ xs
 filter-all {p = p} {xs = []}     _ = refl
@@ -245,7 +245,7 @@ length-filter p (x ∷ xs) =
     {P = λ q → length (if q then x ∷ filter p xs else filter p xs) ＝ bit q + count p xs}
     (ap suc (length-filter p xs))
     (length-filter p xs)
-    (p x) 
+    (p x)
 
 count-union-inter : ∀ p1 p2 (xs : List A)
                   → count (λ x → p1 x or p2 x) xs + count (λ x → p1 x and p2 x) xs ＝ count p1 xs + count p2 xs

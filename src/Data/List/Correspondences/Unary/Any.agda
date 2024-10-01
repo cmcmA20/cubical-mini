@@ -46,7 +46,7 @@ module _ {A : 𝒰 ℓᵃ} {P : Pred A ℓ} ⦃ ep : {a : A} → Extensional (P 
     Extensional-Any      .Pathᵉ              = Code-Any
     Extensional-Any      .reflᵉ              = code-any-refl
     Extensional-Any      .idsᵉ .to-path      = decode-any
-    Extensional-Any {xs} .idsᵉ .to-path-over = decode-any-refl {xs} 
+    Extensional-Any {xs} .idsᵉ .to-path-over = decode-any-refl {xs}
 
 opaque
   code-any-is-of-hlevel
@@ -60,14 +60,14 @@ opaque
 
 -- technically it's also a set when P has level 0/1
 any-is-of-hlevel
-  : (n : HLevel) {xs : List A} 
+  : (n : HLevel) {xs : List A}
   → (∀ x → is-of-hlevel (2 + n) (P x))
   → is-of-hlevel (2 + n) (Any P xs)
 any-is-of-hlevel n {xs} hl a1 a2 =
   ≃→is-of-hlevel (1 + n)
     (identity-system-gives-path (Extensional-Any .idsᵉ) ⁻¹)
     (code-any-is-of-hlevel {u = a1} hl)
- 
+
 instance opaque
   H-Level-Any : ∀ {n} {xs : List A} → ⦃ n ≥ʰ 2 ⦄ → ⦃ A-hl : ∀ {x} → H-Level n (P x) ⦄ → H-Level n (Any P xs)
   H-Level-Any {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = any-is-of-hlevel _ (λ _ → hlevel n)
