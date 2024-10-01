@@ -27,6 +27,7 @@ module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ�
         ⦃ _ : ∀ {x y : Ob} {f : Hom x y} {x′ y′} → H-Level n (Hom[ f ] x′ y′) ⦄
       → H-Level n (Total-hom′ X Y)
     H-Level-Total-hom′ .H-Level.has-of-hlevel = ≅→is-of-hlevel _ Total-hom-Iso (hlevel _)
+    {-# OVERLAPPING H-Level-Total-hom′ #-}
 
   private variable X X′ Y Y′ : Total
 

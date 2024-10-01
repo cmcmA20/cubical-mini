@@ -4,7 +4,6 @@ module Cat.NT where
 open import Meta.Prelude
   hiding (id ; _∘_)
 open import Meta.Extensionality
-open import Meta.Deriving.HLevel
 open import Meta.Record
 
 open import Structures.n-Type
