@@ -1,16 +1,17 @@
 {-# OPTIONS --safe #-}
-module Data.Tri.Base where
+module Data.Dec.Tri.Base where
 
 open import Foundations.Prelude
-open import Data.Empty.Base renaming (elim to elimᵉ ; rec to recᵉ)
-open import Data.Bool.Base renaming (elim to elimᵇ ; rec to recᵇ)
+
+open import Data.Empty.Base using (_≠_)
+open import Data.Bool.Base using (Bool; false; true)
+open import Data.Dec.Base using (Dec; no; yes)
 open import Data.Sum.Base
-open import Data.Dec.Base renaming (elim to elimᵈ ; rec to recᵈ)
 
 data Tri {o ℓ} {T : 𝒰 ℓ} (_<_ : T → T → 𝒰 o) (x y : T) : 𝒰 (ℓ ⊔ o) where
-  lt : (x<y :   x < y) (x≠y : x ≠ y) (y≮x : ¬ y < x) → Tri _<_ x y
+  lt : (x<y :   x < y) (x≠y : x ≠  y) (y≮x : ¬ y < x) → Tri _<_ x y
   eq : (x≮y : ¬ x < y) (x=y : x ＝ y) (y≮x : ¬ y < x) → Tri _<_ x y
-  gt : (x≮y : ¬ x < y) (x≠y : x ≠ y) (y<x :   y < x) → Tri _<_ x y
+  gt : (x≮y : ¬ x < y) (x≠y : x ≠  y) (y<x :   y < x) → Tri _<_ x y
 
 private variable
   o ℓ ℓ′ : Level
@@ -20,9 +21,9 @@ private variable
   A : 𝒰 ℓ′
 
 elim : {C : Tri _<_ x y → 𝒰 ℓ′}
-     → ((x<y :   x < y) (x≠y : x ≠ y) (y≮x : ¬ y < x) → C (lt x<y x≠y y≮x))
+     → ((x<y :   x < y) (x≠y : x ≠  y) (y≮x : ¬ y < x) → C (lt x<y x≠y y≮x))
      → ((x≮y : ¬ x < y) (x=y : x ＝ y) (y≮x : ¬ y < x) → C (eq x≮y x=y y≮x))
-     → ((x≮y : ¬ x < y) (x≠y : x ≠ y) (y<x :   y < x) → C (gt x≮y x≠y y<x))
+     → ((x≮y : ¬ x < y) (x≠y : x ≠  y) (y<x :   y < x) → C (gt x≮y x≠y y<x))
      → (t : Tri _<_ x y) → C t
 elim tlt _   _   (lt x<y x≠y y≮x) = tlt x<y x≠y y≮x
 elim _   teq _   (eq x≮y x=y y≮x) = teq x≮y x=y y≮x
@@ -37,25 +38,10 @@ tri-flip (lt x<y x≠y y≮x) = gt y≮x (x≠y ∘ _⁻¹) x<y
 tri-flip (eq x≮y x=y y≮x) = eq y≮x (x=y ⁻¹) x≮y
 tri-flip (gt x≮y x≠y y<x) = lt y<x (x≠y ∘ _⁻¹) x≮y
 
-{-
-asym-connex→Tri : {T : 𝒰 ℓ} {_<_ : T → T → 𝒰 o}
-                   → (∀ {x y} → x < y → ¬ (y < x))
-                   → (∀ {x y} → (x ＝ y) ⊎ (x < y) ⊎ (y < x))
-                   → ∀ {x y} → Tri _<_ x y
-asym-connex→Tri {_<_} as co {x} {y} with co {x} {y}
-... | inl x=y       =
-        eq (λ x<y → as x<y (subst (_< x) x=y $ subst (x <_) (x=y ⁻¹) x<y))
-           x=y
-           λ y<x → as ((subst (x <_) x=y $ subst (_< x) (x=y ⁻¹) y<x)) y<x
-... | inr (inl x<y) =
-        lt x<y
-           (λ x=y → as x<y (subst (_< x) x=y $ subst (x <_) (x=y ⁻¹) x<y))
-           (as x<y)
-... | inr (inr y<x) =
-        gt (as y<x)
-           (λ x=y → as ((subst (x <_) x=y $ subst (_< x) (x=y ⁻¹) y<x)) y<x)
-           y<x
--}
+instance
+  Dual-Tri : Dual (Tri _<_) (Tri _<_)
+  Dual-Tri ._ᵒᵖ = tri-flip
+
 
 {- decidable projections -}
 
