@@ -69,14 +69,17 @@ instance
   H-Level-hedberg ⦃ di ⦄ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 (is-discrete→is-set auto)
   {-# INCOHERENT H-Level-hedberg #-}
 
-↣→is-discrete : (A ↣ B) → is-discrete B → is-discrete A
+↣→is-discrete : (B ↣ A) → is-discrete A → is-discrete B
 ↣→is-discrete (f , f-inj) B-dis = Dec.dmap f-inj (_∘ ap f) B-dis
 
-↪→is-discrete : (A ↪ B) → is-discrete B → is-discrete A
+↪→is-discrete : (B ↪ A) → is-discrete A → is-discrete B
 ↪→is-discrete = ↪→↣ ∙ ↣→is-discrete
 
 ≃→is-discrete : (B ≃ A) → is-discrete A → is-discrete B
 ≃→is-discrete = ≃→↪ ∙ ↪→is-discrete
+
+≅→is-discrete : (B ≅ A) → is-discrete A → is-discrete B
+≅→is-discrete = ≅→≃ ∙ ≃→is-discrete
 
 instance
   Σ-is-discrete
@@ -139,6 +142,9 @@ caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
 
 ≃→is-discrete! : (A ≃ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ≃→is-discrete! f = ≃→is-discrete f auto
+
+≅→is-discrete! : (A ≅ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
+≅→is-discrete! f = ≅→is-discrete f auto
 
 -- -- Usage
 -- private
