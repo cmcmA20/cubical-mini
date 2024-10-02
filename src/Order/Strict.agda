@@ -10,11 +10,12 @@ private variable n : HLevel
 
 record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   no-eta-equality
+  infix 4.5 _<_
   field
     Ob  : 𝒰 o
     _<_ : Ob → Ob → 𝒰 ℓ
     <-thin    : ∀ {x y} → is-prop (x < y)
-    <-irrefl    : ∀ {x} → ¬ (x < x)
+    <-irrefl  : ∀ {x} → ¬ (x < x)
     <-trans   : ∀ {x y z} → x < y → y < z → x < z
 
   instance opaque
@@ -29,16 +30,21 @@ record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     HAssoc-≤ : HAssoc _<_
     HAssoc-≤ .∙-assoc _ _ _ = prop!
 
-  <-asym : ∀ {x y} → x < y → ¬ (y < x)
-  <-asym x<y y<x = <-irrefl (<-trans x<y y<x)
+  _>_ _≮_ _≯_ : Ob → Ob → 𝒰 ℓ
+  _>_ = flip _<_
+  _≮_ x y = ¬ x < y
+  _≯_ x y = ¬ x > y
+
+  <-asym : ∀ {x y} → x < y → y ≮ x
+  <-asym x<y y<x = <-irrefl (x<y ∙ y<x)
 
   <→≠ : ∀ {x y} → x < y → x ≠ y
   <→≠ {x} x<y x=y = <-irrefl (subst (x <_) (x=y ⁻¹) x<y)
 
-  =→≮ : ∀ {x y} → x ＝ y → ¬ (x < y)
+  =→≮ : ∀ {x y} → x ＝ y → x ≮ y
   =→≮ {x} x=y x<y = <-irrefl (subst (x <_) (x=y ⁻¹) x<y)
 
-unquoteDecl strictposet-iso = declare-record-iso strictposet-iso (quote StrictPoset)
+unquoteDecl strict-poset-iso = declare-record-iso strict-poset-iso (quote StrictPoset)
 
 private variable o ℓ : Level
 
@@ -66,4 +72,3 @@ instance
   ⊥-StrictPoset : ⊥-notation (StrictPoset o ℓ)
   ⊥-StrictPoset .⊥ .StrictPoset.Ob = ⊥
   ⊥-StrictPoset .⊥ .StrictPoset._<_ _ _ = ⊥
-

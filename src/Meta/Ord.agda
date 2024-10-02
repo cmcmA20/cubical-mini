@@ -9,7 +9,7 @@ open import Data.Bool.Base as Bool
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Truncation.Propositional.Base as ∥-∥₁
-open import Data.Tri.Base renaming (elim to elimᵗ)
+open import Data.Dec.Tri.Base renaming (elim to elimᵗ)
 
 record Ord {ℓ} (T : Type ℓ) : Typeω where
   no-eta-equality

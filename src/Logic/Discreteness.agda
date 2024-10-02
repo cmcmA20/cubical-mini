@@ -113,11 +113,6 @@ instance
 
 -- Automation
 
-instance
-  Reflects-Discrete : ⦃ di : is-discrete A ⦄ {x y : A} → Reflects (x ＝ y) ⌊ x ≟ y ⌋
-  Reflects-Discrete {x} {y} = does-reflects (x ≟ y)
-  {-# INCOHERENT Reflects-Discrete #-}
-
 {- TODO move these 2 to Dec and have another here versions specialized to equalities? -}
 
 given-yes_return_then_
@@ -129,7 +124,7 @@ given-yes_return_then_ {A} a C cy = caseᵈ A return C of λ where
   (no  ¬a) → false! (¬a a)
 
 given-no_return_then_
-  : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
+  : {A : Type ℓ} ⦃ d : Dec A ⦄
     (¬a : ¬ A) (C : Dec A → Type ℓ′)
   → C (no ¬a) → C d
 given-no_return_then_ {A} ¬a C cy = caseᵈ A return C of λ where

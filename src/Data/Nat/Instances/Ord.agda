@@ -7,7 +7,7 @@ open import Meta.Ord
 
 open import Data.Empty.Base
 open import Data.Sum.Base
-open import Data.Tri.Base
+open import Data.Dec.Tri.Base
 open import Data.Nat.Base
 open import Data.Nat.Order.Inductive as ℕ-ord
 open import Data.Nat.Path
