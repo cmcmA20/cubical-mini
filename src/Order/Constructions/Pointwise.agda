@@ -11,13 +11,12 @@ open import Order.Diagram.Join
 open import Order.Diagram.Lub
 open import Order.Diagram.Meet
 open import Order.Diagram.Top
-import Order.Reasoning
 
 private variable o ℓ o′ ℓ′ ℓᵢ : Level
 
 Pointwise : (I : Type ℓᵢ) (P : I → Poset o ℓ) → Poset (ℓᵢ ⊔ o) (ℓᵢ ⊔ ℓ)
 Pointwise I P = po where
-  open module P {i} = Order.Reasoning (P i)
+  open module P {i} = Poset (P i)
   po : Poset _ _
   po .Poset.Ob = Π[ P ]
   po .Poset._≤_ f g = ∀[ i ꞉ I ] (f i ⇒ g i)
@@ -43,10 +42,10 @@ Poset[_,_]
   : (P : Poset o ℓ) (Q : Poset o′ ℓ′)
   → Poset (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) (o ⊔ ℓ′)
 Poset[_,_] P Q = po module Poset[_,_] where
-  open Order.Reasoning Q
+  open Poset Q
   po : Poset _ _
   po .Poset.Ob       = P ⇒ Q
-  po .Poset._≤_ f g  = Π[ x ꞉ P ] f # x ≤ g # x
+  po .Poset._≤_ f g  = Π[ x ꞉ P ] (f # x ≤ g # x)
   po .Poset.≤-thin   = hlevel 1
   po .Poset.≤-refl _ = refl
   po .Poset.≤-trans   f≤g g≤h x = f≤g x ∙ g≤h x

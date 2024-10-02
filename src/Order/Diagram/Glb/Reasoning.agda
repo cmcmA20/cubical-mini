@@ -11,7 +11,7 @@ open import Cat.Prelude
 
 open import Order.Diagram.Meet
 open import Order.Diagram.Top
-open import Order.Reasoning P
+open Poset P
 
 open import Data.Bool as Bool
 

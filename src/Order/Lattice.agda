@@ -10,7 +10,6 @@ open import Order.Diagram.Meet
 open import Order.Diagram.Top
 import Order.Diagram.Join.Reasoning as Joins
 import Order.Diagram.Meet.Reasoning as Meets
-import Order.Reasoning
 open import Order.Semilattice.Join
 open import Order.Semilattice.Meet
 
@@ -56,7 +55,7 @@ instance
   ⇒-Lattice ._⇒_ (P , lp) (Q , lq) = Total-hom Monotone is-lattice-hom lp lq
 
 module _ {R : Poset o″ ℓ″} where
-  open Order.Reasoning R
+  open Poset R
   open is-lattice-hom
 
   instance

@@ -5,14 +5,13 @@ open import Cat.Prelude
 
 open import Order.Base
 open import Order.Diagram.Glb
-import Order.Reasoning
 
 open import Data.Bool
 
 private variable o ℓ : Level
 
 module _ (P : Poset o ℓ) (a b : ⌞ P ⌟) where
-  open Order.Reasoning P
+  open Poset P
 
   record is-meet (glb : Ob) : Type (o ⊔ ℓ) where
     no-eta-equality
@@ -35,7 +34,7 @@ Has-meets : Poset o ℓ → Type (o ⊔ ℓ)
 Has-meets P = ∀{x y} → Meet P x y
 
 module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
-  open Order.Reasoning P
+  open Poset P
   open is-glb
   open is-meet
 

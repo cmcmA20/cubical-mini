@@ -9,7 +9,6 @@ open import Functions.Surjection
 open import Order.Base
 open import Order.Diagram.Glb
 open import Order.Diagram.Lub
-import Order.Reasoning
 
 private variable o ℓ o′ ℓ′ o″ ℓ″ ℓᵢ ℓⱼ ℓₖ : Level
 
@@ -21,8 +20,8 @@ Terminal-Poset .Terminal.has-⊤ _ .snd _ = trivial!
 
 _×ₚ_ : Poset o ℓ → Poset o′ ℓ′ → Poset (o ⊔ o′) (ℓ ⊔ ℓ′)
 P ×ₚ Q = po module ×ₚ where
-  module P = Order.Reasoning P
-  module Q = Order.Reasoning Q
+  module P = Poset P
+  module Q = Poset Q
 
   po : Poset _ _
   po .Poset.Ob = ⌞ P ⌟ × ⌞ Q ⌟

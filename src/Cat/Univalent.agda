@@ -9,14 +9,13 @@ open import Cat.Morphism.Instances
 import Cat.Morphism as CM
 
 is-category : ∀ {o h} (C : Precategory o h) → Type (o ⊔ h)
-is-category C = is-identity-system (CM.Isoᶜ C) (λ _ → refl)
+is-category C = is-identity-system (λ (x y : Ob) → x ≅ y) (λ _ → refl)
   where open Precategory C
 
-path→iso
-  : ∀{o h} {C : Precategory o h} {A B}
-  → A ＝ B → CM.Isoᶜ C A B
-path→iso {C} {A} p = transport (λ i → CM.Isoᶜ C A (p i)) refl
-  where open Precategory C
+module _ {o h} {C : Precategory o h} where
+  open Precategory C
+  path→iso : {A B : Ob} → A ＝ B → A ≅ B
+  path→iso {A} p = transport (λ i → A ≅ p i) refl
 
 module _ {o h} {C : Precategory o h} where
   module Univalent′ (r : is-category C) where

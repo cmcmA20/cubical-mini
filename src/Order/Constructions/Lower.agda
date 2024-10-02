@@ -12,7 +12,6 @@ open import Order.Diagram.Join
 open import Order.Diagram.Lub
 open import Order.Diagram.Meet
 open import Order.Diagram.Top
-import Order.Reasoning
 
 open import Data.Sum
 
@@ -26,7 +25,7 @@ module @0 _ (P : Poset o ℓ) (ℓ′ : Level) where
   Lower-set = ⌞ Lower-sets ⌟
 
 module _ {P : Poset o ℓ} where
-  open Order.Reasoning P
+  open Poset P
 
   infix 11 _⇓
   _⇓ : Ob → Lower-set P ℓ

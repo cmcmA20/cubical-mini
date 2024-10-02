@@ -9,7 +9,7 @@ module Order.Diagram.Join.Reasoning
 open import Algebra.Semigroup
 open import Cat.Prelude
 
-open import Order.Reasoning P
+open Poset P
 open Join
 
 instance

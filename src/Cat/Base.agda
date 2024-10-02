@@ -63,6 +63,10 @@ record Precategory (o h : Level) : Type (ℓsuc (o ⊔ h)) where
     ⇒-Hom ._⇒_ x y = Hom x y
     {-# OVERLAPPING ⇒-Hom #-}
 
+    ≅-Cat-Ob : ≅-notation Ob Ob (𝒰 h)
+    ≅-Cat-Ob ._≅_ = Iso Hom Hom
+    {-# OVERLAPPING ≅-Cat-Ob #-}
+
 private variable o h : Level
 
 open Precategory

@@ -4,7 +4,6 @@ module Order.Morphism where
 open import Cat.Prelude
 import Cat.Morphism
 open import Order.Base
-import Order.Reasoning
 
 private variable
   o o′ ℓ ℓ′ : Level
@@ -27,10 +26,10 @@ module _ (P : Poset o ℓ) (Q : Poset o′ ℓ′) (f : ⌞ P ⌟ → ⌞ Q ⌟)
 
 module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   private
-    module P = Order.Reasoning P
-    module Q = Order.Reasoning Q
+    module P = Poset P
+    module Q = Poset Q
 
-  open Order.Reasoning P
+  open Poset P
 
   is-order-embedding→is-embedding : (f : ⌞ P ⌟ → ⌞ Q ⌟) → is-order-embedding P Q f → is-embedding f
   is-order-embedding→is-embedding f e = set-injective→is-embedding! λ fx=fy →
@@ -65,8 +64,8 @@ module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
 
 module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   private
-    module P = Order.Reasoning P
-    module Q = Order.Reasoning Q
+    module P = Poset P
+    module Q = Poset Q
 
   has-retraction→is-order-reflection
     : (f : P ⇒ Q)
