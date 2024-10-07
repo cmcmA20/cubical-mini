@@ -21,6 +21,7 @@ open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Correspondences.Unary.Has
+open import Data.List.Correspondences.Binary.OPE
 open import Data.Nat.Base
 open import Data.Nat.Path
 open import Data.Nat.Two
@@ -220,6 +221,16 @@ filter-has-eq {xs = x ∷ xs} eqp =
       (eqp x (here refl))
       (filter-has-eq {xs = xs} λ q hq → eqp q (there hq))
 
+filter-OPE : {p : A → Bool} {xs : List A}
+           → OPE (filter p xs) xs
+filter-OPE     {xs = []}     = odone
+filter-OPE {p} {xs = x ∷ xs} =
+  Bool.elim
+    {P = λ q → OPE (if q then x ∷ filter p xs else filter p xs) (x ∷ xs)}
+    (otake refl filter-OPE)
+    (odrop filter-OPE)
+    (p x)
+  
 -- count
 
 count-++ : ∀ (p : A → Bool) xs ys
