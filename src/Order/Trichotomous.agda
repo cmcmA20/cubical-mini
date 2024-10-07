@@ -80,10 +80,10 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
     {-# OVERLAPPABLE Tri-order→is-discrete #-}
 
 
-module _ {o ℓ} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
+module _ {o ℓ ℓa} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
   open is-trichotomous t
 
-  private variable A : 𝒰 ℓ
+  private variable A : 𝒰 ℓa
 
   caseᵗ_>=<_of_ : (x y : Ob) → (Tri _<_ x y → A) → A
   caseᵗ_>=<_of_ x y f = f (trisect x y)
@@ -94,14 +94,14 @@ module _ {o ℓ} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
   caseᵗ_>=<_lt⇒_eq⇒_gt⇒_ x y l e g = Tri.rec l e g (trisect x y)
   {-# INLINE caseᵗ_>=<_lt⇒_eq⇒_gt⇒_ #-}
 
-  caseᵗ_>=<_return_of_ : (x y : Ob) (A : Tri _<_ x y → 𝒰 ℓ)
+  caseᵗ_>=<_return_of_ : (x y : Ob) (A : Tri _<_ x y → 𝒰 ℓa)
                        → (∀ t → A t) → A (trisect x y)
   caseᵗ_>=<_return_of_ x y A f = f (trisect x y)
   {-# INLINE caseᵗ_>=<_of_ #-}
 
   given-lt_return_then_ : {x y : Ob}
                         → (x<y : x < y)
-                        → (A : Tri _<_ x y → 𝒰 ℓ)
+                        → (A : Tri _<_ x y → 𝒰 ℓa)
                         → A (LT x<y)
                         → A (trisect x y)
   given-lt_return_then_ {x} {y} x<y A alt = Tri.elim {M = A}
@@ -112,7 +112,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
 
   given-eq_return_then_ : {x y : Ob}
                         → (x=y : x ＝ y)
-                        → (A : Tri _<_ x y → 𝒰 ℓ)
+                        → (A : Tri _<_ x y → 𝒰 ℓa)
                         → A (EQ x=y)
                         → A (trisect x y)
   given-eq_return_then_ {x} {y} x=y A aeq = Tri.elim {M = A}
@@ -123,7 +123,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
 
   given-gt_return_then_ : {x y : Ob}
                         → (y<x : y < x)
-                        → (A : Tri _<_ x y → 𝒰 ℓ)
+                        → (A : Tri _<_ x y → 𝒰 ℓa)
                         → A (GT y<x)
                         → A (trisect x y)
   given-gt_return_then_ {x} {y} y<x A agt = Tri.elim {M = A}
