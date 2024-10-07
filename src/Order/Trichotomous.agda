@@ -77,7 +77,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
   instance
     Tri-order→is-discrete : ⦃ t : is-trichotomous S ⦄ → is-discrete Ob
     Tri-order→is-discrete = tri-order→discrete auto
-    {-# INCOHERENT Tri-order→is-discrete #-}
+    {-# OVERLAPPABLE Tri-order→is-discrete #-}
 
 
 module _ {o ℓ} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
@@ -117,7 +117,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
                         → A (trisect x y)
   given-eq_return_then_ {x} {y} x=y A aeq = Tri.elim {M = A}
     (λ x<y → ⊥.rec (=→≮ x=y x<y))
-    (λ p → subst A (ap EQ (path-is-of-hlevel 1 (is-discrete→is-set (tri-order→discrete t)) x y x=y p)) aeq)
+    (λ p → subst A (ap EQ (prop! ⦃ H-Level-Pathᴾ ⦃ H-Level-hedberg ⦄ ⦄)) aeq)
     (λ y<x → ⊥.rec (=→≮ (sym x=y) y<x))
     (trisect x y)
 
