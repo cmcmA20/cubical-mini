@@ -1,6 +1,7 @@
 {-# OPTIONS --safe #-}
 open import Order.Base
 open import Order.Diagram.Join
+open import Order.Diagram.Top
 
 module Order.Diagram.Join.Reasoning
   {o ℓ} (P : Poset o ℓ) (hj : Has-joins P)
@@ -27,17 +28,19 @@ open joins renaming
   ; least  to ∪-universal
   ) public
 
+private variable x y x′ y′ z : Ob
+
 opaque
-  ∪-idem : {x : Ob} → x ∪ x ＝ x
+  ∪-idem : x ∪ x ＝ x
   ∪-idem = ≤-antisym (∪-universal _ refl refl) l≤∪
 
-  ∪-comm : {x y : Ob} → x ∪ y ＝ y ∪ x
+  ∪-comm : x ∪ y ＝ y ∪ x
   ∪-comm =
     ≤-antisym
       (∪-universal _ r≤∪ l≤∪)
       (∪-universal _ r≤∪ l≤∪)
 
-  ∪-assoc : {x y z : Ob} → x ∪ y ∪ z ＝ (x ∪ y) ∪ z
+  ∪-assoc : x ∪ y ∪ z ＝ (x ∪ y) ∪ z
   ∪-assoc =
     ≤-antisym
       (∪-universal _
@@ -52,26 +55,34 @@ opaque
   ∪-is-semigroup .is-semigroup.assoc _ _ _ = ∪-assoc
 
   ∪≤∪
-    : {x y x′ y′ : Ob}
-    → x ≤ x′
+    : x ≤ x′
     → y ≤ y′
     → x ∪ y ≤ x′ ∪ y′
   ∪≤∪ p q = ∪-universal _ (p ∙ l≤∪) (q ∙ r≤∪)
 
-  ∪≤∪-l : {x y x′ : Ob} → x ≤ x′ → x ∪ y ≤ x′ ∪ y
+  ∪≤∪-l : x ≤ x′ → x ∪ y ≤ x′ ∪ y
   ∪≤∪-l p = ∪≤∪ p refl
 
-  ∪≤∪-r : {x y y′ : Ob} → y ≤ y′ → x ∪ y ≤ x ∪ y′
+  ∪≤∪-r : y ≤ y′ → x ∪ y ≤ x ∪ y′
   ∪≤∪-r p = ∪≤∪ refl p
 
-  ∪→order : ∀ {x y} → x ∪ y ＝ y → x ≤ y
+  ∪→order : x ∪ y ＝ y → x ≤ y
   ∪→order {x} {y} p =
     x      ≤⟨ l≤∪ ⟩
     x ∪ y  =⟨ p ⟩
     y      ∎
 
-  order→∪ : ∀ {x y} → x ≤ y → x ∪ y ＝ y
+  order→∪ : x ≤ y → x ∪ y ＝ y
   order→∪ p = ≤-antisym (∪-universal _ p refl) r≤∪
 
-  ∪≃order : ∀ {x y} → (x ∪ y ＝ y) ≃ (x ≤ y)
+  ∪≃order : (x ∪ y ＝ y) ≃ (x ≤ y)
   ∪≃order = prop-extₑ! ∪→order order→∪
+
+module _ ⦃ t : Top P ⦄ where opaque
+  open Top t
+
+  ∪-absorb-l : ⊤ ∪ x ＝ ⊤
+  ∪-absorb-l = ≤-antisym ! l≤∪
+
+  ∪-absorb-r : x ∪ ⊤ ＝ ⊤
+  ∪-absorb-r = ≤-antisym ! r≤∪

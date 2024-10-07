@@ -42,7 +42,7 @@ record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   <→≠ {x} x<y x=y = <-irrefl (subst (x <_) (x=y ⁻¹) x<y)
 
   =→≮ : ∀ {x y} → x ＝ y → x ≮ y
-  =→≮ {x} x=y x<y = <-irrefl (subst (x <_) (x=y ⁻¹) x<y)
+  =→≮ = flip <→≠
 
 unquoteDecl strict-poset-iso = declare-record-iso strict-poset-iso (quote StrictPoset)
 

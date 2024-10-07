@@ -1,5 +1,6 @@
 {-# OPTIONS --safe #-}
 open import Order.Base
+open import Order.Diagram.Bottom
 open import Order.Diagram.Meet
 
 module Order.Diagram.Meet.Reasoning
@@ -27,17 +28,19 @@ open meets renaming
   ; greatest to ∩-universal)
   public
 
+private variable x y x′ y′ z : Ob
+
 opaque
-  ∩-idem : {x : Ob} → x ∩ x ＝ x
+  ∩-idem : x ∩ x ＝ x
   ∩-idem = ≤-antisym ∩≤l (∩-universal _ refl refl)
 
-  ∩-comm : {x y : Ob} → x ∩ y ＝ y ∩ x
+  ∩-comm : x ∩ y ＝ y ∩ x
   ∩-comm =
     ≤-antisym
       (∩-universal _ ∩≤r ∩≤l)
       (∩-universal _ ∩≤r ∩≤l)
 
-  ∩-assoc : {x y z : Ob} → x ∩ y ∩ z ＝ (x ∩ y) ∩ z
+  ∩-assoc : x ∩ y ∩ z ＝ (x ∩ y) ∩ z
   ∩-assoc =
     ≤-antisym
       (∩-universal _
@@ -52,26 +55,34 @@ opaque
   ∩-is-semigroup .is-semigroup.assoc _ _ _ = ∩-assoc
 
   ∩≤∩
-    : {x y x′ y′ : Ob}
-    → x ≤ x′
+    : x ≤ x′
     → y ≤ y′
     → (x ∩ y) ≤ (x′ ∩ y′)
   ∩≤∩ p q = ∩-universal _ (∩≤l ∙ p) (∩≤r ∙ q)
 
-  ∩≤∩-l : {x y x′ : Ob} → x ≤ x′ → x ∩ y ≤ x′ ∩ y
+  ∩≤∩-l : x ≤ x′ → x ∩ y ≤ x′ ∩ y
   ∩≤∩-l p = ∩≤∩ p refl
 
-  ∩≤∩-r : {x y y′ : Ob} → y ≤ y′ → (x ∩ y) ≤ (x ∩ y′)
+  ∩≤∩-r : y ≤ y′ → (x ∩ y) ≤ (x ∩ y′)
   ∩≤∩-r p = ∩≤∩ refl p
 
-  ∩→order : ∀ {x y} → x ∩ y ＝ x → x ≤ y
+  ∩→order : x ∩ y ＝ x → x ≤ y
   ∩→order {x} {y} p =
     x      =⟨ p ⟨
     x ∩ y  ≤⟨ ∩≤r ⟩
     y      ∎
 
-  order→∩ : ∀ {x y} → x ≤ y → x ∩ y ＝ x
+  order→∩ : x ≤ y → x ∩ y ＝ x
   order→∩ {x} {y} p = ≤-antisym ∩≤l (∩-universal _ refl p)
 
-  ∩≃order : ∀ {x y} → (x ∩ y ＝ x) ≃ (x ≤ y)
+  ∩≃order : (x ∩ y ＝ x) ≃ (x ≤ y)
   ∩≃order = prop-extₑ! ∩→order order→∩
+
+module _ ⦃ b : Bottom P ⦄ where opaque
+  open Bottom b
+
+  ∩-absorb-l : ⊥ ∩ x ＝ ⊥
+  ∩-absorb-l = ≤-antisym ∩≤l ¡
+
+  ∩-absorb-r : x ∩ ⊥ ＝ ⊥
+  ∩-absorb-r = ≤-antisym ∩≤r ¡

@@ -6,6 +6,9 @@ open import Foundations.Base
 open import Logic.Decidability
 open import Logic.Discreteness
 
+open import Order.Constructions.Minmax
+open import Order.Constructions.Nat
+
 open import Data.Empty as Empty
 open import Data.Bool.Base as Bool
 open import Data.Bool.Properties
@@ -168,11 +171,15 @@ drop-nil : {n : ℕ}
 drop-nil {n = zero}  = refl
 drop-nil {n = suc _} = refl
 
+open minmax ℕ-total
+
 length-take : {n : ℕ} {xs : List A}
             → length (take n xs) ＝ min n (length xs)
 length-take {n = zero}                = refl
 length-take {n = suc n} {xs = []}     = refl
-length-take {n = suc n} {xs = x ∷ xs} = ap suc length-take
+length-take {n = suc n} {xs = x ∷ xs} with compare-nat n (length xs) | length-take {n = n} {xs = xs}
+... | inl _ | r = ap suc r
+... | inr _ | r = ap suc r
 
 length-drop : {n : ℕ} {xs : List A}
             → length (drop n xs) ＝ length xs ∸ n
