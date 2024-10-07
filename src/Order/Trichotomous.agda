@@ -71,6 +71,10 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
     tri-order→dec-strict-total-order
       .is-decidable-strict-total-order.has-discrete = tri-order→discrete
 
+  instance
+    Tri-order→is-discrete : ⦃ t : is-trichotomous S ⦄ → is-discrete Ob
+    Tri-order→is-discrete = tri-order→discrete auto
+    {-# INCOHERENT Tri-order→is-discrete #-}
 
 
 module _ {o ℓ} {S : StrictPoset o ℓ} ⦃ t : is-trichotomous S ⦄ where
