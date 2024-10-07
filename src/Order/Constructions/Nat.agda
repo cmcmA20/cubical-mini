@@ -3,13 +3,23 @@ module Order.Constructions.Nat where
 
 open import Cat.Prelude
 open import Order.Base
+open import Order.Constructions.Minmax
 open import Order.Diagram.Bottom
 open import Order.Diagram.Join
 open import Order.Diagram.Meet
 open import Order.Diagram.Top
+open import Order.Strict
+open import Order.Total
+open import Order.Trichotomous
 
+open import Data.Bool.Base
+open import Data.Dec.Base as Dec
+open import Data.Dec.Tri as Tri
 open import Data.Nat.Base
+open import Data.Nat.Path
 open import Data.Nat.Order.Inductive
+open import Data.Reflects.Base as Reflects
+open import Data.Sum.Base
 
 ℕₚ : Poset 0ℓ 0ℓ
 ℕₚ .Poset.Ob = ℕ
@@ -19,52 +29,53 @@ open import Data.Nat.Order.Inductive
 ℕₚ .Poset.≤-trans = _∙_
 ℕₚ .Poset.≤-antisym = ≤-antisym
 
-ℕ-bottom : Bottom ℕₚ
-ℕ-bottom .Bottom.bot = 0
-ℕ-bottom .Bottom.has-bot _ = z≤
+Suc : ℕₚ ⇒ ℕₚ
+Suc .hom    = suc
+Suc .pres-≤ = s≤s
+
+compare-nat : (m n : ℕ) → (m ≤ n) ⊎ (m ≥ n)
+compare-nat 0       _ = inl z≤
+compare-nat (suc m) 0 = inr z≤
+compare-nat (suc m) (suc n) = [ s≤s ∙ inl , s≤s ∙ inr ]ᵤ (compare-nat m n)
+
+ℕ-total : is-total-order ℕₚ
+ℕ-total .is-total-order.compare = compare-nat
+
+ℕ-dec-total-order : is-decidable-total-order ℕₚ
+ℕ-dec-total-order .is-decidable-total-order.has-is-total = ℕ-total
+
+instance
+  ℕ-bottom : Bottom ℕₚ
+  ℕ-bottom .Bottom.bot = 0
+  ℕ-bottom .Bottom.has-bot _ = z≤
 
 ¬-ℕ-top : ¬ Top ℕₚ
 ¬-ℕ-top t = suc≰id ! where open Top t
 
--- TODO move this out
-private
-  min≤l : ∀ x y → min x y ≤ x
-  min≤l 0       _ = z≤
-  min≤l (suc x) 0 = z≤
-  min≤l (suc x) (suc y) = s≤s (min≤l x y)
+module _ where
+  open decminmax ℕ-dec-total-order
 
-  min≤r : ∀ x y → min x y ≤ y
-  min≤r 0       _ = z≤
-  min≤r (suc x) 0 = z≤
-  min≤r (suc x) (suc y) = s≤s (min≤r x y)
+  ℕ-meets : Has-meets ℕₚ
+  ℕ-meets {x} {y} .Meet.glb = min x y
+  ℕ-meets {x} {y} .Meet.has-meet = min-is-meet x y
 
-  min-univ : ∀ lb x y → lb ≤ x → lb ≤ y → lb ≤ min x y
-  min-univ 0 x y p q = z≤
-  min-univ (suc lb) (suc x) (suc y) p q = s≤s (min-univ lb x y (≤-peel p) (≤-peel q))
+  ℕ-joins : Has-joins ℕₚ
+  ℕ-joins {x} {y} .Join.lub = max x y
+  ℕ-joins {x} {y} .Join.has-join = max-is-join x y
 
-  l≤max : ∀ x y → x ≤ max x y
-  l≤max 0       y = z≤
-  l≤max (suc x) 0 = refl
-  l≤max (suc x) (suc y) = s≤s (l≤max x y)
 
-  r≤max : ∀ x y → y ≤ max x y
-  r≤max 0       y = refl
-  r≤max (suc x) 0 = z≤
-  r≤max (suc x) (suc y) = s≤s (r≤max x y)
+ℕₛ : StrictPoset 0ℓ 0ℓ
+ℕₛ .StrictPoset.Ob = ℕ
+ℕₛ .StrictPoset._<_ = _<_
+ℕₛ .StrictPoset.<-thin = hlevel 1
+ℕₛ .StrictPoset.<-irrefl = <-irr
+ℕₛ .StrictPoset.<-trans = <-trans
 
-  max-univ : ∀ ub x y → x ≤ ub → y ≤ ub → max x y ≤ ub
-  max-univ ub 0       y p q = q
-  max-univ ub (suc x) 0 p q = p
-  max-univ (suc ub) (suc x) (suc y) p q = s≤s (max-univ ub x y (≤-peel p) (≤-peel q))
+<-connex : (m n : ℕ) → ¬ (suc m ≤ n) → ¬ (suc n ≤ m) → m ＝ n
+<-connex 0       0       p q = refl
+<-connex 0       (suc n) p q = ⊥.rec (p (s≤s z≤))
+<-connex (suc m) 0       p q = ⊥.rec (q (s≤s z≤))
+<-connex (suc m) (suc n) p q = ap suc (<-connex m n (s≤s ∙ p) (s≤s ∙ q))
 
-ℕ-meets : Has-meets ℕₚ
-ℕ-meets {x} {y} .Meet.glb = min x y
-ℕ-meets {x} {y} .Meet.has-meet .is-meet.meet≤l = min≤l x y
-ℕ-meets {x} {y} .Meet.has-meet .is-meet.meet≤r = min≤r x y
-ℕ-meets {x} {y} .Meet.has-meet .is-meet.greatest lb = min-univ lb x y
-
-ℕ-joins : Has-joins ℕₚ
-ℕ-joins {x} {y} .Join.lub = max x y
-ℕ-joins {x} {y} .Join.has-join .is-join.l≤join = l≤max x y
-ℕ-joins {x} {y} .Join.has-join .is-join.r≤join = r≤max x y
-ℕ-joins {x} {y} .Join.has-join .is-join.least ub = max-univ ub x y
+ℕ-dec-strict-total-order : is-decidable-strict-total-order ℕₛ
+ℕ-dec-strict-total-order = discrete+dec+connnex→dec-strict-total-order auto auto <-connex

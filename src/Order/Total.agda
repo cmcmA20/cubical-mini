@@ -17,58 +17,7 @@ private variable o ℓ : Level
 record is-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
   open Poset P public
 
-  field compare : ∀ x y → (x ≤ y) ⊎ (y ≤ x)
-
-module minmax {o ℓ} {P : Poset o ℓ} (to : is-total-order P) where
-  open is-total-order to
-
-  min : (x y : Ob) → Ob
-  min x y = [ (λ _ → x) , (λ _ → y) ]ᵤ (compare x y)
-
-  opaque
-    min-≤l : ∀ x y → min x y ≤ x
-    min-≤l x y with compare x y
-    ... | inl _ = ≤-refl
-    ... | inr q = q
-
-    min-≤r : ∀ x y → min x y ≤ y
-    min-≤r x y with compare x y
-    ... | inl p = p
-    ... | inr _ = ≤-refl
-
-    min-univ : ∀ x y z → z ≤ x → z ≤ y → z ≤ min x y
-    min-univ x y z p q with compare x y
-    ... | inl _ = p
-    ... | inr _ = q
-
-  min-is-meet : ∀ x y → is-meet P x y (min x y)
-  min-is-meet x y .is-meet.meet≤l = min-≤l x y
-  min-is-meet x y .is-meet.meet≤r = min-≤r x y
-  min-is-meet x y .is-meet.greatest =  min-univ x y
-
-  max : (x y : Ob) → Ob
-  max x y = [ (λ _ → y) , (λ _ → x) ]ᵤ (compare x y)
-
-  opaque
-    max-≤l : ∀ x y → x ≤ max x y
-    max-≤l x y with compare x y
-    ... | inl p = p
-    ... | inr _ = ≤-refl
-
-    max-≤r : ∀ x y → y ≤ max x y
-    max-≤r x y with compare x y
-    ... | inl _ = ≤-refl
-    ... | inr q = q
-
-    max-univ : ∀ x y z → x ≤ z → y ≤ z → max x y ≤ z
-    max-univ x y z p q with compare x y
-    ... | inl _ = q
-    ... | inr _ = p
-
-  max-is-join : ∀ x y → is-join P x y (max x y)
-  max-is-join x y .is-join.l≤join = max-≤l x y
-  max-is-join x y .is-join.r≤join = max-≤r x y
-  max-is-join x y .is-join.least  = max-univ x y
+  field compare : ∀ x y → (x ≤ y) ⊎ (x ≥ y)
 
 
 is-decidable-poset : ∀ {o ℓ} (P : Poset o ℓ) → 𝒰 (o ⊔ ℓ)
@@ -96,13 +45,13 @@ record is-decidable-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) whe
   x ≰? y = not (x ≤? y)
   x ≱? y = not (x ≥? y)
 
-make-dec-total-order
+dec+total→dec-total-order
   : {P : Poset o ℓ}
-  → is-total-order P → Decidable P
+  → Decidable P → is-total-order P
   → is-decidable-total-order P
-make-dec-total-order t d .is-decidable-total-order.has-is-total = t
-make-dec-total-order t d .is-decidable-total-order.dec-≤ = d
-make-dec-total-order {P} t d .is-decidable-total-order.has-discrete {x} {y}
+dec+total→dec-total-order d t .is-decidable-total-order.has-is-total = t
+dec+total→dec-total-order d t .is-decidable-total-order.dec-≤ = d
+dec+total→dec-total-order {P} d t .is-decidable-total-order.has-discrete {x} {y}
   with d {x} {y} | d {y} {x}
 ... | yes x≤y | yes y≤x = yes (Poset.≤-antisym P x≤y y≤x)
 ... | yes x≤y | no ¬y≤x = no λ x=y → ¬y≤x $ subst (λ z → P .Poset._≤_ z x) x=y (P .Poset.≤-refl)
@@ -162,14 +111,39 @@ record is-decidable-strict-total-order {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o
   x ≮? y = not (x <? y)
   x ≯? y = not (x >? y)
 
-make-dec-strict-total-order
+dec+strict-total→dec-strict-total-order
   : {S : StrictPoset o ℓ}
-  → is-strict-total-order S → Decidable S
+  → Decidable S → is-strict-total-order S
   → is-decidable-strict-total-order S
-make-dec-strict-total-order sto d .is-decidable-strict-total-order.has-is-strict-total = sto
-make-dec-strict-total-order sto d .is-decidable-strict-total-order.dec-< = d
-make-dec-strict-total-order {S} sto d .is-decidable-strict-total-order.has-discrete {x} {y}
+dec+strict-total→dec-strict-total-order d sto .is-decidable-strict-total-order.has-is-strict-total = sto
+dec+strict-total→dec-strict-total-order d sto .is-decidable-strict-total-order.dec-< = d
+dec+strict-total→dec-strict-total-order {S} d sto .is-decidable-strict-total-order.has-discrete {x} {y}
   with d {x} {y} | d {y} {x}
 ... | yes x<y | _  = no $ StrictPoset.<→≠ S x<y
 ... | no  x≮y | yes y<x = no λ x=y → StrictPoset.<→≠ S y<x (x=y ⁻¹)
 ... | no  x≮y | no  y≮x = yes (sto .is-strict-total-order.connex x y x≮y y≮x)
+
+module _ {S : StrictPoset o ℓ} where
+  open StrictPoset S
+
+  discrete+dec+connnex→dec-strict-total-order
+    : is-discrete Ob → Decidable S
+    → (∀ x y → x ≮ y → y ≮ x → x ＝ y)
+    → is-decidable-strict-total-order S
+  discrete+dec+connnex→dec-strict-total-order di d co
+    .is-decidable-strict-total-order.has-is-strict-total
+    .is-strict-total-order.weak-linear x y z x<z with d {x} {y}
+  ... | yes x<y = inl x<y
+  ... | no  x≮y with d {y} {z}
+  ... | yes y<z = inr y<z
+  ... | no  y≮z =
+    let u = co y x (λ y<x → y≮z (y<x ∙ x<z)) x≮y
+        v = co z y (λ z<y → x≮y (x<z ∙ z<y)) y≮z
+     in ⊥.rec (<-irrefl (subst (_ <_) (v ∙ u) x<z))
+  discrete+dec+connnex→dec-strict-total-order di d co
+    .is-decidable-strict-total-order.has-is-strict-total
+    .is-strict-total-order.connex = co
+  discrete+dec+connnex→dec-strict-total-order di d co
+    .is-decidable-strict-total-order.dec-< = d
+  discrete+dec+connnex→dec-strict-total-order di d co
+    .is-decidable-strict-total-order.has-discrete = di
