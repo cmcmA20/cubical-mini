@@ -27,8 +27,8 @@ record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     Trans-< ._∙_ = <-trans
     {-# OVERLAPPING Trans-< #-}
 
-    HAssoc-≤ : HAssoc _<_
-    HAssoc-≤ .∙-assoc _ _ _ = prop!
+    HAssoc-< : HAssoc _<_
+    HAssoc-< .∙-assoc _ _ _ = prop!
 
   _>_ _≮_ _≯_ : Ob → Ob → 𝒰 ℓ
   _>_ = flip _<_
