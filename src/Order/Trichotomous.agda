@@ -10,11 +10,6 @@ open import Data.Dec
 open import Data.Dec.Tri as Tri
 open import Data.Sum
 
-module _ {o ℓ} (S : StrictPoset o ℓ) where
-  open StrictPoset S
-
-  private variable x y : Ob
-
 record is-trichotomous {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) where
   open StrictPoset S public
 
@@ -26,6 +21,17 @@ record is-trichotomous {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) where
 
     Sym-Tri< : Sym (Tri _<_)
     Sym-Tri< ._ᵒᵖ = Tri.elim GT (sym ∙ EQ) LT
+
+  private variable x y : Ob
+
+  ⌊_⌋≟ : Tri _<_ x y → Dec (x ＝ y)
+  ⌊_⌋≟ = Tri.elim (<→≠ ∙ no) yes (<→≠ ∙ (sym ∙_) ∙ no)
+
+  ⌊_⌋<¿ : Tri _<_ x y → Dec (x < y)
+  ⌊_⌋<¿ = Tri.elim yes (=→≮ ∙ no) (<-asym ∙ no)
+
+  ⌊_⌋>¿ : Tri _<_ x y → Dec (x > y)
+  ⌊_⌋>¿ = Tri.elim (<-asym ∙ no) (sym ∙ =→≮ ∙ no) yes
 
 
 module _ {o ℓ} {S : StrictPoset o ℓ} where
@@ -44,6 +50,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
   ... | no  y≮x = ⊥.rec (x≠y (d .is-decidable-strict-total-order.connex x y x≮y y≮x))
 
   module _ (t : is-trichotomous S) where
+    open is-trichotomous t hiding (Ob; _<_)
 
     tri-order→strict-total-order : is-strict-total-order S
     tri-order→strict-total-order .is-strict-total-order.weak-linear x y z x<z =
@@ -54,14 +61,10 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
         (t .is-trichotomous.trisect x y)
 
     tri-order→dec-strict-poset : is-decidable-strict-poset S
-    tri-order→dec-strict-poset {x} {y} =
-      Tri.elim yes (λ x=y → no $ =→≮ x=y) (λ y<x → no (<-asym y<x))
-        (t .is-trichotomous.trisect x y)
+    tri-order→dec-strict-poset {x} {y} = ⌊ trisect x y ⌋<¿
 
     tri-order→discrete : is-discrete Ob
-    tri-order→discrete {x} {y} =
-      Tri.elim (λ x<y → no $ <→≠ x<y) yes (λ y<x → no λ x=y → <→≠ y<x (sym x=y))
-        (t .is-trichotomous.trisect x y)
+    tri-order→discrete {x} {y} = ⌊ trisect x y ⌋≟
 
     tri-order→dec-strict-total-order : is-decidable-strict-total-order S
     tri-order→dec-strict-total-order
