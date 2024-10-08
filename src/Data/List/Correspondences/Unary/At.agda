@@ -19,8 +19,8 @@ private variable
   @0 xs ys : List A
 
 data At {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} (P : Pred A ℓ) : @0 List A → @0 ℕ → 𝒰 (ℓᵃ ⊔ ℓ) where
-  ahere  : ∀ {x xs} → (px : P x) → At P (x ∷ xs) zero
-  athere : ∀ {n x xs} → (pxs : At P xs n) → At P (x ∷ xs) (suc n)
+  ahere  : ∀ {x} {@0 xs : List A} → (px : P x) → At P (x ∷ xs) zero
+  athere : ∀ {n x} {@0 xs : List A} → (pxs : At P xs n) → At P (x ∷ xs) (suc n)
 
 all→at : {xs : List A}
        → All P xs → ∀ n → n < length xs → At P xs n
@@ -28,7 +28,7 @@ all→at {xs = []}      a       n      nlt = false! nlt
 all→at {xs = x ∷ xs} (px ∷ _) zero   nlt = ahere px
 all→at {xs = x ∷ xs} (_ ∷ a) (suc n) nlt = athere (all→at a n (<-peel nlt))
 
-any→at : {xs : List A}
+any→at : {@0 xs : List A}
        → (a : Any P xs) → At P xs (any→ℕ a)
 any→at (here px) = ahere px
 any→at (there a) = athere (any→at a)

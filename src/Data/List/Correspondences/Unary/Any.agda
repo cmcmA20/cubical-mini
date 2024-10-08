@@ -18,8 +18,8 @@ private variable
   @0 xs ys : List A
 
 data Any {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} (P : Pred A ℓ) : @0 List A → 𝒰 (ℓᵃ ⊔ ℓ) where
-  here  : ∀ {x xs} → (px : P x) → Any P (x ∷ xs)
-  there : ∀ {x xs} → (pxs : Any P xs) → Any P (x ∷ xs)
+  here  : ∀ {x} {@0 xs : List A} → (px : P x) → Any P (x ∷ xs)
+  there : ∀ {x} {@0 xs : List A} → (pxs : Any P xs) → Any P (x ∷ xs)
 
 module _ {A : 𝒰 ℓᵃ} {P : Pred A ℓ} ⦃ ep : {a : A} → Extensional (P a) ℓ ⦄ where
   Code-Any : {xs : List A} (p q : Any P xs) → 𝒰 ℓ
@@ -81,7 +81,7 @@ instance opaque
 ¬Any-∷ nx nxs (here px)   = nx px
 ¬Any-∷ nx nxs (there pxs) = nxs pxs
 
-any-++-l : {xs ys : List A} → Any P xs → Any P (xs ++ ys)
+any-++-l : {@0 xs ys : List A} → Any P xs → Any P (xs ++ ys)
 any-++-l (here px)  = here px
 any-++-l (there ax) = there (any-++-l ax)
 
@@ -105,4 +105,3 @@ any→ℕ (there a) = suc (any→ℕ a)
 any→fin : {xs : List A} → Any P xs → Fin (length xs)
 any→fin {xs = x ∷ xs} (here px) = fzero
 any→fin {xs = x ∷ xs} (there a) = fsuc (any→fin a)
-
