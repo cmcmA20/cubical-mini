@@ -142,55 +142,6 @@ s＝s≃ = prop-extₑ! (ap suc) suc-inj
 ·-cancel-l : ∀ m n1 n2 → m · n1 ＝ m · n2 → (n1 ＝ n2) ⊎ (m ＝ 0)
 ·-cancel-l m n1 n2 e = ·-cancel-r n1 n2 m (·-comm n1 m ∙ e ∙ ·-comm m n2)
 
--- minimum
-
-min-absorb-l : (x : ℕ) → min 0 x ＝ 0
-min-absorb-l 0       = refl
-min-absorb-l (suc _) = refl
-
-min-absorb-r : (x : ℕ) → min x 0 ＝ 0
-min-absorb-r 0       = refl
-min-absorb-r (suc _) = refl
-
-min-comm : (x y : ℕ) → min x y ＝ min y x
-min-comm 0       y       = min-absorb-l y ∙ sym (min-absorb-r y)
-min-comm (suc _) 0       = refl
-min-comm (suc x) (suc y) = ap suc $ min-comm x y
-
-min-assoc : (x y z : ℕ) → min x (min y z) ＝ min (min x y) z
-min-assoc 0       y       z       = min-absorb-l (min y z) ∙ sym (min-absorb-l z) ∙ ap (λ q → min q z) (min-absorb-l y ⁻¹)
-min-assoc (suc x) 0       z       = ap (min (suc x)) (min-absorb-l z) ∙ sym (min-absorb-l z)
-min-assoc (suc _) (suc _) 0       = refl
-min-assoc (suc x) (suc y) (suc z) = ap suc $ min-assoc x y z
-
-min-idem : (x : ℕ) → min x x ＝ x
-min-idem 0       = refl
-min-idem (suc x) = ap suc $ min-idem x
-
--- maximum
-
-max-id-l : (x : ℕ) → max 0 x ＝ x
-max-id-l 0       = refl
-max-id-l (suc _) = refl
-
-max-id-r : (x : ℕ) → max x 0 ＝ x
-max-id-r 0       = refl
-max-id-r (suc _) = refl
-
-max-comm : (x y : ℕ) → max x y ＝ max y x
-max-comm 0       y       = max-id-l y ∙ sym (max-id-r y)
-max-comm (suc _) 0       = refl
-max-comm (suc x) (suc y) = ap suc $ max-comm x y
-
-max-assoc : (x y z : ℕ) → max x (max y z) ＝ max (max x y) z
-max-assoc 0       y       z       = max-id-l (max y z) ∙ ap (λ q → max q z) (max-id-l y ⁻¹)
-max-assoc (suc x) 0       z       = ap (max (suc x)) (max-id-l z)
-max-assoc (suc x) (suc y) 0       = refl
-max-assoc (suc x) (suc y) (suc z) = ap suc $ max-assoc x y z
-
-max-idem : (x : ℕ) → max x x ＝ x
-max-idem 0       = refl
-max-idem (suc x) = ap suc $ max-idem x
 
 -- iteration
 

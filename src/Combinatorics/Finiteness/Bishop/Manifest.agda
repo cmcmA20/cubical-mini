@@ -3,7 +3,6 @@ module Combinatorics.Finiteness.Bishop.Manifest where
 
 open import Meta.Prelude
 open import Meta.Deriving.HLevel
-open import Meta.Ord
 open import Meta.Record
 
 open import Logic.Discreteness
@@ -14,7 +13,6 @@ open import Data.Dec.Base as Dec
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Closure
 open import Data.Fin.Computational.Path
-open import Data.Fin.Computational.Instances.Ord
 open import Data.Nat.Base
 open import Data.Nat.Path
 open import Data.Reflects.Base as Reflects
@@ -53,12 +51,6 @@ instance
     → Manifest-bishop-finite (Lift ℓ A)
   lift-manifest-bishop-finite ⦃ mbf ⦄ = finite $ lift≃id ∙ enumeration mbf
   {-# OVERLAPPING lift-manifest-bishop-finite #-}
-
-  manifest-bishop-finite→ord
-    : ⦃ mbf : Manifest-bishop-finite A ⦄
-    → Ord A
-  manifest-bishop-finite→ord = ≃→ord (auto .enumeration) Ord-Fin
-  {-# INCOHERENT manifest-bishop-finite→ord #-}
 
   ×-manifest-bishop-finite
     : ⦃ A-mbf : Manifest-bishop-finite A ⦄ ⦃ B-mbf : Manifest-bishop-finite B ⦄
