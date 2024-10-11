@@ -2,12 +2,15 @@
 open import Order.Base
 open import Order.Diagram.Join
 open import Order.Diagram.Top
+open import Order.Diagram.Bottom
+open import Data.Sum.Base
 
 module Order.Diagram.Join.Reasoning
   {o ℓ} (P : Poset o ℓ) (hj : Has-joins P)
   where
 
 open import Algebra.Semigroup
+open import Algebra.Monoid.Commutative
 open import Cat.Prelude
 
 open Poset P
@@ -78,6 +81,12 @@ opaque
   ∪≃order : (x ∪ y ＝ y) ≃ (x ≤ y)
   ∪≃order = prop-extₑ! ∪→order order→∪
 
+  ∪≃≤× : x ∪ y ≤ z ≃ (x ≤ z) × (y ≤ z)
+  ∪≃≤× = prop-extₑ! (λ ∩≤z → l≤∪ ∙ ∩≤z , r≤∪ ∙ ∩≤z) λ where (x≤z , y≤z) → ∪-universal _ x≤z y≤z
+
+  ≤⊎→∪ : (z ≤ x) ⊎ (z ≤ y) → z ≤ x ∪ y
+  ≤⊎→∪ = [ _∙ l≤∪ , _∙ r≤∪ ]ᵤ
+
 module _ ⦃ t : Top P ⦄ where opaque
   open Top t
 
@@ -86,3 +95,22 @@ module _ ⦃ t : Top P ⦄ where opaque
 
   ∪-absorb-r : x ∪ ⊤ ＝ ⊤
   ∪-absorb-r = ≤-antisym ! r≤∪
+
+module _ ⦃ b : Bottom P ⦄ where opaque
+  open Bottom b
+
+  ∪-id-l : ⊥ ∪ x ＝ x
+  ∪-id-l = order→∪ ¡
+
+  ∪-id-r : x ∪ ⊥ ＝ x
+  ∪-id-r = ∪-comm ∙ ∪-id-l
+
+  ∪-is-monoid : is-monoid {A = Ob} _∪_
+  ∪-is-monoid .is-monoid.has-semigroup = ∪-is-semigroup
+  ∪-is-monoid .is-monoid.id = ⊥
+  ∪-is-monoid .is-monoid.id-l _ = ∪-id-l
+  ∪-is-monoid .is-monoid.id-r _ = ∪-id-r
+
+  ∪-is-comm-monoid : is-comm-monoid {A = Ob} _∪_
+  ∪-is-comm-monoid .is-comm-monoid.has-monoid = ∪-is-monoid
+  ∪-is-comm-monoid .is-comm-monoid.comm _ _ = ∪-comm

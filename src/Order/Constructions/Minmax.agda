@@ -5,7 +5,9 @@ open import Cat.Prelude
 
 open import Order.Base
 open import Order.Diagram.Join
+open import Order.Diagram.Join.Reasoning
 open import Order.Diagram.Meet
+open import Order.Diagram.Meet.Reasoning
 open import Order.Total
 
 open import Data.Bool.Base
@@ -41,6 +43,18 @@ module minmax {o ℓ} {P : Poset o ℓ} (to : is-total-order P) where
   min-is-meet x y .is-meet.meet≤r = min≤r x y
   min-is-meet x y .is-meet.greatest =  min-univ x y
 
+  min-Meet : Has-meets P
+  min-Meet {x} {y} .Meet.glb = min x y
+  min-Meet {x} {y} .Meet.has-meet = min-is-meet x y
+
+  min→≤⊎ : ∀ x y z → min x y ≤ z → (x ≤ z) ⊎ (y ≤ z)
+  min→≤⊎ x y z min≤z with compare x y
+  ... | inl _ = inl min≤z
+  ... | inr _ = inr min≤z
+
+  min≃≤⊎₁ : ∀ x y z → min x y ≤ z ≃ (x ≤ z) ⊎₁ (y ≤ z)
+  min≃≤⊎₁ x y z = prop-extₑ! (∣_∣₁ ∘ₜ min→≤⊎ x y z) (elim! (≤⊎→∩ P min-Meet))
+
   max : (x y : Ob) → Ob
   max x y = [ (λ _ → y) , (λ _ → x) ]ᵤ (compare x y)
 
@@ -65,6 +79,17 @@ module minmax {o ℓ} {P : Poset o ℓ} (to : is-total-order P) where
   max-is-join x y .is-join.r≤join = max-≤r x y
   max-is-join x y .is-join.least  = max-univ x y
 
+  max-Join : Has-joins P
+  max-Join {x} {y} .Join.lub = max x y
+  max-Join {x} {y} .Join.has-join = max-is-join x y
+
+  max→≤⊎ : ∀ x y z → z ≤ max x y → (z ≤ x) ⊎ (z ≤ y)
+  max→≤⊎ x y z z≤max with compare x y
+  ... | inl _ = inr z≤max
+  ... | inr _ = inl z≤max
+
+  max≃≤⊎₁ : ∀ x y z → z ≤ max x y ≃ (z ≤ x) ⊎₁ (z ≤ y)
+  max≃≤⊎₁ x y z = prop-extₑ! (∣_∣₁ ∘ₜ max→≤⊎ x y z ) (elim! (≤⊎→∪ P max-Join))
 
 
 module decminmax {o ℓ} {P : Poset o ℓ} (dto : is-decidable-total-order P) where
@@ -94,7 +119,19 @@ module decminmax {o ℓ} {P : Poset o ℓ} (dto : is-decidable-total-order P) wh
   min-is-meet : ∀ x y → is-meet P x y (min x y)
   min-is-meet x y .is-meet.meet≤l = min≤l x y
   min-is-meet x y .is-meet.meet≤r = min≤r x y
-  min-is-meet x y .is-meet.greatest =  min-univ x y
+  min-is-meet x y .is-meet.greatest = min-univ x y
+
+  min-Meet : Has-meets P
+  min-Meet {x} {y} .Meet.glb = min x y
+  min-Meet {x} {y} .Meet.has-meet = min-is-meet x y
+
+  min→≤⊎ : ∀ x y z → min x y ≤ z → (x ≤ z) ⊎ (y ≤ z)
+  min→≤⊎ x y z min≤z with dec-≤ {x} {y}
+  ... | yes _ = inl min≤z
+  ... | no  _ = inr min≤z
+
+  min≃≤⊎₁ : ∀ x y z → min x y ≤ z ≃ (x ≤ z) ⊎₁ (y ≤ z)
+  min≃≤⊎₁ x y z = prop-extₑ! (∣_∣₁ ∘ₜ min→≤⊎ x y z) (elim! (≤⊎→∩ P min-Meet))
 
   max : (x y : Ob) → Ob
   max x y = if x ≤? y then y else x
@@ -121,3 +158,16 @@ module decminmax {o ℓ} {P : Poset o ℓ} (dto : is-decidable-total-order P) wh
   max-is-join x y .is-join.l≤join = max-≤l x y
   max-is-join x y .is-join.r≤join = max-≤r x y
   max-is-join x y .is-join.least  = max-univ x y
+
+  max-Join : Has-joins P
+  max-Join {x} {y} .Join.lub = max x y
+  max-Join {x} {y} .Join.has-join = max-is-join x y
+
+  max→≤⊎ : ∀ x y z → z ≤ max x y → (z ≤ x) ⊎ (z ≤ y)
+  max→≤⊎ x y z z≤max with dec-≤ {x} {y}
+  ... | yes _ = inr z≤max
+  ... | no  _ = inl z≤max
+
+  max≃≤⊎₁ : ∀ x y z → z ≤ max x y ≃ (z ≤ x) ⊎₁ (z ≤ y)
+  max≃≤⊎₁ x y z = prop-extₑ! (∣_∣₁ ∘ₜ max→≤⊎ x y z) (elim! (≤⊎→∪ P max-Join))
+
