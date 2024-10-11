@@ -58,6 +58,9 @@ rec {Q} = elim {C = λ _ → Q}
 ⌊_⌋ : Dec P → Bool
 ⌊_⌋ = does
 
+reflects-does : (P? : Dec P) → Reflects⁰ P ⌊ P? ⌋
+reflects-does = Reflects.dmap id id ∘ proof
+
 Soᵈ : Dec P → Type
 Soᵈ = So ∘ ⌊_⌋
 
@@ -113,6 +116,10 @@ instance
   Recomputable-Dec : ⦃ d : Dec P ⦄ → Recomputable P
   Recomputable-Dec ⦃ yes p ⦄ .recompute _ = p
   Recomputable-Dec ⦃ no ¬p ⦄ .recompute (erase p₀) = Reflects.falseᴱ! (¬p p₀)
+
+  Reflects-does : ⦃ P? : Dec P ⦄ → Reflects P ⌊ P? ⌋
+  Reflects-does = reflects-does auto
+  {-# INCOHERENT Reflects-does #-}
 
   Dec-So : ∀ {b} → Dec (So b)
   Dec-So = oh? _
