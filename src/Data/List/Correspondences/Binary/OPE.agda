@@ -4,7 +4,10 @@ module Data.List.Correspondences.Binary.OPE where
 open import Meta.Prelude
 
 open import Data.Empty.Base
+open import Data.Nat.Order.Base
+open import Data.Reflects
 open import Data.List.Base
+open import Data.List.Operations
 
 private variable
   ℓᵃ ℓᵇ ℓᶜ ℓ ℓ′ ℓ″ : Level
@@ -26,6 +29,14 @@ data OPE {ℓᵃ} {A : 𝒰 ℓᵃ}
   otake : ∀ {x y xs ys} → x ＝ y → OPE xs ys → OPE (x ∷ xs) (y ∷ ys)
   odrop : ∀ {xs y ys} → OPE xs ys → OPE xs (y ∷ ys)
 
+¬ope-cons-nil : ∀ {x} {xs : List A} → ¬ OPE (x ∷ xs) []
+¬ope-cons-nil ()
+
+ope-length : {xs ys : List A} → OPE xs ys → length xs ≤ length ys
+ope-length  odone      = z≤
+ope-length (otake _ l) = s≤s (ope-length l)
+ope-length (odrop l)   = ≤-trans (ope-length l) ≤-ascend
+
 ope-nil-l : {xs : List A} → OPE [] xs
 ope-nil-l {xs = []}     = odone
 ope-nil-l {xs = x ∷ xs} = odrop ope-nil-l
@@ -42,10 +53,15 @@ ope-refl {xs = x ∷ xs} = otake refl ope-refl
 
 ope-trans : {xs ys zs : List A}
           → OPE xs ys → OPE ys zs → OPE xs zs
-ope-trans                  {ys = .[]}       {zs = .[]}        oxy                      odone                                              = oxy
-ope-trans {xs = .(x ∷ xs)} {ys = .(y ∷ ys)} {zs = .(z ∷ zs)} (otake {x} {xs} exy oxy) (otake {x = y} {y = z} {xs = ys} {ys = zs} eyz oyz) = otake (exy ∙ eyz) (ope-trans oxy oyz)
-ope-trans                  {ys = .(y ∷ ys)} {zs = .(z ∷ zs)} (odrop oxy)              (otake {x = y} {y = z} {xs = ys} {ys = zs} eyz oyz) = odrop (ope-trans oxy oyz)
-ope-trans                                   {zs = .(z ∷ zs)}  oxy                     (odrop {y = z} {ys = zs} oyz)                       = odrop (ope-trans oxy oyz)
+ope-trans  oxy                      odone          = oxy
+ope-trans (otake {x} {xs} exy oxy) (otake eyz oyz) = otake (exy ∙ eyz) (ope-trans oxy oyz)
+ope-trans (odrop oxy)              (otake eyz oyz) = odrop (ope-trans oxy oyz)
+ope-trans  oxy                     (odrop oyz)     = odrop (ope-trans oxy oyz)
 
-¬ope-cons-nil : ∀ {x} {xs : List A} → ¬ OPE (x ∷ xs) []
-¬ope-cons-nil ()
+ope-antisym : {xs ys : List A}
+            → OPE xs ys → OPE ys xs → xs ＝ ys
+ope-antisym  odone           _            = refl
+ope-antisym (otake exy oxy) (otake _ oyx) = ap² _∷_ exy (ope-antisym oxy oyx)
+ope-antisym (otake _ oxy)   (odrop oyx)   = false! $ ≤-trans (ope-length oyx) (ope-length oxy)
+ope-antisym (odrop oxy)     (otake _ oyx) = false! $ ≤-trans (ope-length oxy) (ope-length oyx)
+ope-antisym (odrop oxy)     (odrop oyx)   = false! $ ≤≃≤+r {n = 2} ⁻¹ $ ≤-trans (s≤s $ ope-length oxy) (ope-length oyx)
