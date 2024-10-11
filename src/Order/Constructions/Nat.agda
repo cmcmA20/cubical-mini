@@ -33,6 +33,7 @@ Suc : ℕₚ ⇒ ℕₚ
 Suc .hom    = suc
 Suc .pres-≤ = s≤s
 
+-- NB avoid using it in computational code
 compare-nat : (m n : ℕ) → (m ≤ n) ⊎ (m ≥ n)
 compare-nat 0       _ = inl z≤
 compare-nat (suc m) 0 = inr z≤
