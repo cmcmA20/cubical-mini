@@ -41,13 +41,13 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
     : is-decidable-strict-total-order S
     → is-trichotomous S
   dec-strict-total-order→tri-order d .is-trichotomous.trisect x y
-    with d .is-decidable-strict-total-order.has-discrete {x} {y}
-  ... | yes x=y = EQ x=y
-  ... | no  x≠y with d .is-decidable-strict-total-order.dec-< {x} {y}
+    with d .is-decidable-strict-total-order.dec-< {x} {y}
   ... | yes x<y = LT x<y
   ... | no  x≮y with d .is-decidable-strict-total-order.dec-< {y} {x}
   ... | yes y<x = GT y<x
-  ... | no  y≮x = ⊥.rec (x≠y (d .is-decidable-strict-total-order.connex x y x≮y y≮x))
+  ... | no  y≮x = EQ
+    (d .is-decidable-strict-total-order.has-is-strict-total .is-strict-total-order.connex
+      x y x≮y y≮x)
 
   module _ (t : is-trichotomous S) where
     open is-trichotomous t hiding (Ob; _<_)

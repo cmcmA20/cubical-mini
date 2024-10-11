@@ -82,7 +82,7 @@ opaque
   ∪≃order = prop-extₑ! ∪→order order→∪
 
   ∪≃≤× : x ∪ y ≤ z ≃ (x ≤ z) × (y ≤ z)
-  ∪≃≤× = prop-extₑ! (λ ∩≤z → l≤∪ ∙ ∩≤z , r≤∪ ∙ ∩≤z) λ where (x≤z , y≤z) → ∪-universal _ x≤z y≤z
+  ∪≃≤× = prop-extₑ! < l≤∪ ∙_ , r≤∪ ∙_ > (∪-universal _ $ₜ²_)
 
   ≤⊎→∪ : (z ≤ x) ⊎ (z ≤ y) → z ≤ x ∪ y
   ≤⊎→∪ = [ _∙ l≤∪ , _∙ r≤∪ ]ᵤ

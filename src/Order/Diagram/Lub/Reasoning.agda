@@ -27,15 +27,16 @@ open lubs renaming
   ; least   to ⋃-universal
   ) public
 
-Bottom-Poset-Lub : Bottom P
-Bottom-Poset-Lub .Bottom.bot = ⋃ {I = Lift ℓ′ ⊥} λ()
-Bottom-Poset-Lub .Bottom.has-bot _ = ⋃-universal _ λ ()
+instance
+  Bottom-Poset-Lub : Bottom P
+  Bottom-Poset-Lub .Bottom.bot = ⋃ {I = Lift ℓ′ ⊥} λ()
+  Bottom-Poset-Lub .Bottom.has-bot _ = ⋃-universal _ λ ()
 
-Join-Poset-Lub : Has-joins P
-Join-Poset-Lub {x} {y} .Join.lub = ⋃ {I = Lift ℓ′ Bool} (rec! (if_then x else y))
-Join-Poset-Lub .Join.has-join .is-join.l≤join = ⋃-inj (lift true)
-Join-Poset-Lub .Join.has-join .is-join.r≤join = ⋃-inj (lift false)
-Join-Poset-Lub .Join.has-join .is-join.least ub′ p q = ⋃-universal _ (elim! (Bool.elim p q))
+  Join-Poset-Lub : Has-joins P
+  Join-Poset-Lub {x} {y} .Join.lub = ⋃ {I = Lift ℓ′ Bool} (rec! (if_then x else y))
+  Join-Poset-Lub .Join.has-join .is-join.l≤join = ⋃-inj (lift true)
+  Join-Poset-Lub .Join.has-join .is-join.r≤join = ⋃-inj (lift false)
+  Join-Poset-Lub .Join.has-join .is-join.least ub′ p q = ⋃-universal _ (elim! (Bool.elim p q))
 
 open Bottom Bottom-Poset-Lub public
 open import Order.Diagram.Join.Reasoning P Join-Poset-Lub public
@@ -99,26 +100,3 @@ module @0 _ {I : Type ℓ′} where opaque
   ≤-antisym
     ∪-distrib-⋃-≤-l
     (rec! (λ i → ∪-universal _ (l≤∪ ∙ ⋃-inj i) (⋃≤⋃ λ _ → r≤∪)) i)
-
-opaque
-  ∪-id-l : {x : Ob} → ⊥ ∪ x ＝ x
-  ∪-id-l {x} = ≤-antisym
-    (∪-universal _ ¡ refl)
-    r≤∪
-
-  ∪-id-r : {x : Ob} → x ∪ ⊥ ＝ x
-  ∪-id-r {x} = ≤-antisym
-    (∪-universal _ refl ¡)
-    l≤∪
-
-  ∪-is-comm-monoid : is-comm-monoid {A = Ob} _∪_
-  ∪-is-comm-monoid = to-is-comm-monoid go where
-    open make-comm-monoid
-    go : make-comm-monoid Ob
-    go .monoid-is-set = ob-is-set
-    go .id = ⊥
-    go ._⋆_ = _∪_
-    go .id-l _ = ∪-id-l
-    go .id-r _ = ∪-id-r
-    go .assoc _ _ _ = ∪-assoc
-    go .comm _ _ = ∪-comm
