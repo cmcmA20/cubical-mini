@@ -110,6 +110,7 @@ record ≅-notation {ℓa ℓb ℓ}
   infix 1 _≅_
   field _≅_ : A → B → R
 open ≅-notation ⦃ ... ⦄ public
+{-# DISPLAY ≅-notation._≅_ _ a b = a ≅ b #-}
 
 
 instance

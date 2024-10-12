@@ -8,7 +8,9 @@ open import Foundations.Notation.Closure             public
 open import Foundations.Notation.Commutativity       public
 open import Foundations.Notation.Composition         public
 open import Foundations.Notation.Decidability        public
+open import Foundations.Notation.Equivalence.Biinv   public
 open import Foundations.Notation.Duality             public
+open import Foundations.Notation.Invertibility.Bi    public
 open import Foundations.Notation.Invertibility.Quasi public
 open import Foundations.Notation.Involutivity        public
 open import Foundations.Notation.Isomorphism         public
