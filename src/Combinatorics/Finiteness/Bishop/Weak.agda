@@ -95,7 +95,7 @@ instance
     go = do
       e ← bf .enumeration₁
       pure $ λ {x} {y} → ≃→is-discrete e (_ because auto)
-  {-# OVERLAPS is-bishop-finite→is-discrete #-}
+  {-# INCOHERENT is-bishop-finite→is-discrete #-}
 
   is-bishop-finite→omniscient₁ : ⦃ bf : is-bishop-finite A ⦄ → Omniscient₁ A
   is-bishop-finite→omniscient₁ {A} ⦃ bf ⦄ .omniscient₁-β {P} P? = ∥-∥₁.proj! do

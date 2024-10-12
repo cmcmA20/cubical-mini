@@ -3,10 +3,9 @@ module Order.Diagram.Fixpoint where
 
 open import Cat.Prelude
 open import Order.Base
-import Order.Reasoning
 
 module _ {o ℓ} (P : Poset o ℓ) where
-  open Order.Reasoning P
+  open Poset P
 
   record is-lfp (f : P ⇒ P) (x : Ob) : Type (o ⊔ ℓ) where
     no-eta-equality
@@ -24,7 +23,7 @@ unquoteDecl H-Level-is-lfp = declare-record-hlevel 1 H-Level-is-lfp (quote is-lf
 unquoteDecl LFP-Iso = declare-record-iso LFP-Iso (quote LFP)
 
 module _ {o ℓ} {P : Poset o ℓ} where opaque
-  open Order.Reasoning P
+  open Poset P
   open is-lfp
 
   lfp-unique : ∀{f x y} → is-lfp P f x → is-lfp P f y → x ＝ y

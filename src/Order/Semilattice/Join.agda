@@ -7,7 +7,6 @@ open import Order.Base
 open import Order.Diagram.Bottom
 open import Order.Diagram.Join
 import Order.Diagram.Join.Reasoning as Joins
-import Order.Reasoning
 
 record is-join-semilattice {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
   field
@@ -32,7 +31,7 @@ record
   private
     module P = Poset P
     module Pₗ = is-join-semilattice P-slat
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
     module Qₗ = is-join-semilattice Q-slat
 
   field
@@ -80,7 +79,7 @@ instance
   ⇒-join-slat ._⇒_ (P , jp) (Q , jq) = Total-hom Monotone is-join-slat-hom jp jq
 
 module _ {R : Poset o″ ℓ″} where
-  open Order.Reasoning R
+  open Poset R
   open is-join-slat-hom
 
   instance

@@ -69,14 +69,17 @@ instance
   H-Level-hedberg ⦃ di ⦄ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 (is-discrete→is-set auto)
   {-# INCOHERENT H-Level-hedberg #-}
 
-↣→is-discrete : (A ↣ B) → is-discrete B → is-discrete A
+↣→is-discrete : (B ↣ A) → is-discrete A → is-discrete B
 ↣→is-discrete (f , f-inj) B-dis = Dec.dmap f-inj (_∘ ap f) B-dis
 
-↪→is-discrete : (A ↪ B) → is-discrete B → is-discrete A
+↪→is-discrete : (B ↪ A) → is-discrete A → is-discrete B
 ↪→is-discrete = ↪→↣ ∙ ↣→is-discrete
 
 ≃→is-discrete : (B ≃ A) → is-discrete A → is-discrete B
 ≃→is-discrete = ≃→↪ ∙ ↪→is-discrete
+
+≅→is-discrete : (B ≅ A) → is-discrete A → is-discrete B
+≅→is-discrete = ≅→≃ ∙ ≃→is-discrete
 
 instance
   Σ-is-discrete
@@ -110,10 +113,7 @@ instance
 
 -- Automation
 
-instance
-  Reflects-Discrete : ⦃ di : is-discrete A ⦄ {x y : A} → Reflects (x ＝ y) ⌊ x ≟ y ⌋
-  Reflects-Discrete {x} {y} = Reflects-does (x ≟ y)
-  {-# INCOHERENT Reflects-Discrete #-}
+{- TODO move these 2 to Dec and add here versions specialized to equalities? -}
 
 given-yes_return_then_
   : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
@@ -124,7 +124,7 @@ given-yes_return_then_ {A} a C cy = caseᵈ A return C of λ where
   (no  ¬a) → false! (¬a a)
 
 given-no_return_then_
-  : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
+  : {A : Type ℓ} ⦃ d : Dec A ⦄
     (¬a : ¬ A) (C : Dec A → Type ℓ′)
   → C (no ¬a) → C d
 given-no_return_then_ {A} ¬a C cy = caseᵈ A return C of λ where
@@ -139,6 +139,9 @@ given-no_return_then_ {A} ¬a C cy = caseᵈ A return C of λ where
 
 ≃→is-discrete! : (A ≃ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ≃→is-discrete! f = ≃→is-discrete f auto
+
+≅→is-discrete! : (A ≅ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
+≅→is-discrete! f = ≅→is-discrete f auto
 
 -- -- Usage
 -- private

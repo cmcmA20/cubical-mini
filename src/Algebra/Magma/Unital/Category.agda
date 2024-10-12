@@ -45,8 +45,8 @@ Forget-unit : UMagmas ℓ ⇒ Magmas ℓ
 Forget-unit .Functor.F₀ = second (unital-magma-on↪magma-on $_)
 Forget-unit .Functor.F₁ f .hom x = f $ x
 Forget-unit .Functor.F₁ f .preserves .pres-⋆ = f .preserves .pres-⋆
-Forget-unit .Functor.F-id = ext λ _ → refl
-Forget-unit .Functor.F-∘ _ _ = ext λ _ → refl
+Forget-unit .Functor.F-id = trivial!
+Forget-unit .Functor.F-∘ _ _ = trivial!
 
 forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
 forget-unit-is-faithful p = ext (p $ₚ_)

@@ -5,7 +5,6 @@ open import Cat.Prelude
 open import Functions.Surjection
 
 open import Order.Base
-import Order.Reasoning
 
 private variable o o′ ℓ ℓ′ ℓᵢ : Level
 
@@ -35,7 +34,7 @@ Has-lubs-of-size : Poset o ℓ → (ℓ′ : Level) → Type (o ⊔ ℓ ⊔ ℓs
 Has-lubs-of-size P ℓ′ = {I : Type ℓ′} {F : I → ⌞ P ⌟} → Lub P F
 
 module _ {P : Poset o ℓ} where
-  open Order.Reasoning P
+  open Poset P
   open is-lub
 
   lub-unique
@@ -189,7 +188,7 @@ module _ {P : Poset o ℓ} where
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} where
   private
     module P = Poset P
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
   open Iso
 
   ≅→is-lub : (e : P ≅ Q) {x : ⌞ P ⌟}
@@ -209,7 +208,7 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → 
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} where
   private
     module P = Poset P
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
   open Iso
 
   ≅→is-lub⁻ : (e : P ≅ Q) {y : ⌞ Q ⌟}

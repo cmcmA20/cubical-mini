@@ -278,14 +278,6 @@ id-invertible .is-invertible.inverses .inv-i = id-l id
 
 open Iso
 
-Isoᶜ : Ob → Ob → Type h
-Isoᶜ = Iso Hom Hom
-
-instance
-  ≅-Cat-Ob : ≅-notation Ob Ob (𝒰 h)
-  ≅-Cat-Ob ._≅_ = Isoᶜ
-  {-# OVERLAPPING ≅-Cat-Ob #-}
-
 Inverses-∘ : {f : a ⇒ b} {f⁻¹ : b ⇒ a} {g : b ⇒ c} {g⁻¹ : c ⇒ b}
            → Inverses f f⁻¹ → Inverses g g⁻¹ → Inverses (g ∘ f) (f⁻¹ ∘ g⁻¹)
 Inverses-∘ {f} {f⁻¹} {g} {g⁻¹} finv ginv = record { inv-o = l ; inv-i = r } where

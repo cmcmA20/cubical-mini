@@ -13,10 +13,10 @@ open import Data.Sum.Base
 private variable m n k : ℕ
 
 instance
-  ≤-reflects : {m n : ℕ} → Reflects (m ≤ n) (m ≤? n)
-  ≤-reflects {0}     {_}      = ofʸ z≤
-  ≤-reflects {suc _} {0}      = ofⁿ λ ()
-  ≤-reflects {suc m} {suc n} with m ≤? n | recall (m ≤?_) n
+  Reflects-ℕ-≤ : {m n : ℕ} → Reflects (m ≤ n) (m ≤? n)
+  Reflects-ℕ-≤ {0}     {_}      = ofʸ z≤
+  Reflects-ℕ-≤ {suc _} {0}      = ofⁿ λ ()
+  Reflects-ℕ-≤ {suc m} {suc n} with m ≤? n | recall (m ≤?_) n
   ... | false | ⟪ p ⟫ = ofⁿ λ where
     (s≤s m≤n) → so→false! (subst So (ap not p ⁻¹) oh) m≤n
   ... | true  | ⟪ p ⟫ = ofʸ (s≤s (so→true! (subst So (sym p) oh)))
