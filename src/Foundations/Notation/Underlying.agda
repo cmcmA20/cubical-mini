@@ -10,10 +10,8 @@ record Underlying {ℓ} (T : Type ℓ) : Typeω where
   field
     ℓ-underlying : Level
     ⌞_⌟          : T → Type ℓ-underlying
-
 open Underlying ⦃ ... ⦄ public
-
-{-# DISPLAY Underlying.⌞_⌟ f x = ⌞ x ⌟ #-}
+{-# DISPLAY Underlying.⌞_⌟ _ x = ⌞ x ⌟ #-}
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -67,7 +65,7 @@ record
   _$_ = _#_
 
 open Funlike ⦃ ... ⦄ public
-{-# DISPLAY Funlike._#_ p f x = f # x #-}
+{-# DISPLAY Funlike._#_ _ f x = f # x #-}
 
 ap$
   : {A : Type ℓ} {F : Type ℓ′} {B : (Σ F λ _ → A) → Type ℓ″}

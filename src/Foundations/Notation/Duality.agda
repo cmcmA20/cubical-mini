@@ -26,6 +26,8 @@ module _
     _⁻¹ = _ᵒᵖ
 
 open Dual ⦃ ... ⦄ public
+{-# DISPLAY Dual._ᵒᵖ _ a = a ᵒᵖ #-}
+{-# DISPLAY Dual._⁻¹ _ a = a ⁻¹ #-}
 
 
 -- homogeneous duality is symmetry
@@ -42,6 +44,7 @@ record Has-unary-op {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
   no-eta-equality
   field minv : A → A
 open Has-unary-op ⦃ ... ⦄ public
+{-# DISPLAY Has-unary-op.minv _ a = minv a #-}
 
 
 instance

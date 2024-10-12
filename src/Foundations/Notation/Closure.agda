@@ -12,6 +12,7 @@ record Closure-Π {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
     ℓ-total-Π : Level
     Π[_]      : A → Type ℓ-total-Π
 open Closure-Π ⦃ ... ⦄ public
+{-# DISPLAY Closure-Π.Π[_] _ f = Π[ f ] #-}
 
 record Closure-∀ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
   infixr 6 ∀[_]
@@ -19,6 +20,7 @@ record Closure-∀ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
     ℓ-total-∀ : Level
     ∀[_]      : A → Type ℓ-total-∀
 open Closure-∀ ⦃ ... ⦄ public
+{-# DISPLAY Closure-∀.∀[_] _ f = ∀[ f ] #-}
 
 record Closure-∀ᴱ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
   infixr 6 ∀ᴱ[_]
@@ -26,6 +28,7 @@ record Closure-∀ᴱ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
     ℓ-total-∀ᴱ : Level
     ∀ᴱ[_]      : @0 A → Type ℓ-total-∀ᴱ
 open Closure-∀ᴱ ⦃ ... ⦄ public
+{-# DISPLAY Closure-∀ᴱ.∀ᴱ[_] _ f = ∀ᴱ[ f ] #-}
 
 -- closing over free variables of an expression using a sigma quantifier
 -- is called a total space
@@ -35,6 +38,7 @@ record Total-Σ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
     ℓ-total-Σ : Level
     Σ[_]      : A → Type ℓ-total-Σ
 open Total-Σ ⦃ ... ⦄ public
+{-# DISPLAY Total-Σ.Σ[_] _ f = Σ[ f ] #-}
 
 instance
   Closure-Π-Type : Closure-Π (Type ℓ)

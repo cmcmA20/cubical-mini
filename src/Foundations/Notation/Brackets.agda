@@ -12,4 +12,4 @@ record ⟦⟧-notation {ℓ} (A : Type ℓ) : Typeω where
 
 open ⟦⟧-notation ⦃...⦄ public
   using(⟦_⟧)
-{-# DISPLAY ⟦⟧-notation.⟦_⟧ f x = ⟦ x ⟧ #-}
+{-# DISPLAY ⟦⟧-notation.⟦_⟧ _ x = ⟦ x ⟧ #-}
