@@ -5,7 +5,7 @@ open import Foundations.Prim.Type
 
 open import Foundations.Notation.Composition
 open import Foundations.Notation.Duality
-open import Foundations.Notation.Inverse
+open import Foundations.Notation.Invertibility.Quasi
 open import Foundations.Notation.Reflexivity
 open import Foundations.Notation.Retraction
 open import Foundations.Notation.Section
@@ -15,13 +15,13 @@ open import Foundations.Notation.Unital.Outer
 open import Agda.Builtin.Sigma
 
 module _
-  {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-  (F : A → B → 𝒰 ℓ′) (G : B → A → 𝒰 ℓ)
-  {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  (F : A → B → 𝒰 ℓf) (G : B → A → 𝒰 ℓg)
+  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
   ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
   ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄ where
 
-  record Iso (x : A) (y : B) : 𝒰 (ℓ ⊔ ℓ′ ⊔ ℓ″ ⊔ ℓ‴) where
+  record Iso (x : A) (y : B) : 𝒰 (ℓf ⊔ ℓg ⊔ ℓfg ⊔ ℓgf) where
     no-eta-equality
     constructor make-iso
     field
@@ -35,9 +35,9 @@ module _
 open Iso
 
 module _
-  {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-  {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-  {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
+  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
   ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
   ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
   {x : A} {y : B} where
@@ -50,16 +50,16 @@ module _
   iso f g r s .inverses .Inverses.inv-i = s
   {-# INLINE iso #-}
 
-  is-inv→≅ : (f : F x y) (fi : is-invertible f) → Iso F G x y
-  is-inv→≅ f fi .to = f
-  is-inv→≅ f fi .from = fi .is-invertible.inv
-  is-inv→≅ f fi .inverses = fi .is-invertible.inverses
-  {-# INLINE is-inv→≅ #-}
+  qinv→≅ : (f : F x y) (fi : quasi-inverse f) → Iso F G x y
+  qinv→≅ f fi .to = f
+  qinv→≅ f fi .from = fi .quasi-inverse.inv
+  qinv→≅ f fi .inverses = fi .quasi-inverse.inverses
+  {-# INLINE qinv→≅ #-}
 
-  ≅→is-inv : (i : Iso F G x y) → is-invertible (i .to)
-  ≅→is-inv i .is-invertible.inv = i .from
-  ≅→is-inv i .is-invertible.inverses = i .inverses
-  {-# INLINE ≅→is-inv #-}
+  ≅→qinv : (i : Iso F G x y) → quasi-inverse (i .to)
+  ≅→qinv i .quasi-inverse.inv = i .from
+  ≅→qinv i .quasi-inverse.inverses = i .inverses
+  {-# INLINE ≅→qinv #-}
 
   ≅→to-has-section : (i : Iso F G x y) → has-section (i .to)
   ≅→to-has-section i .section = i .from
@@ -81,17 +81,17 @@ module _
   ≅→from-has-retraction i .is-retraction = i .inv-o
   {-# INLINE ≅→from-has-retraction #-}
 
-  is-inv→retract : (f : F x y) → is-invertible f → Retract G x y
-  is-inv→retract _ fi .fst = fi .is-invertible.inv
-  is-inv→retract f _ .snd .section = f
-  is-inv→retract _ fi .snd .is-section = fi .is-invertible.inverses .Inverses.inv-i
-  {-# INLINE is-inv→retract #-}
+  qinv→retract : (f : F x y) → quasi-inverse f → Retract G x y
+  qinv→retract _ fi .fst = fi .quasi-inverse.inv
+  qinv→retract f _ .snd .section = f
+  qinv→retract _ fi .snd .is-section = fi .quasi-inverse.inverses .Inverses.inv-i
+  {-# INLINE qinv→retract #-}
 
-  is-inv→retract⁻ : (f : F x y) → is-invertible f → Retract F y x
-  is-inv→retract⁻ f _ .fst = f
-  is-inv→retract⁻ _ fi .snd .section = fi .is-invertible.inv
-  is-inv→retract⁻ _ fi .snd .is-section = fi .is-invertible.inverses .Inverses.inv-o
-  {-# INLINE is-inv→retract⁻ #-}
+  qinv→retract⁻ : (f : F x y) → quasi-inverse f → Retract F y x
+  qinv→retract⁻ f _ .fst = f
+  qinv→retract⁻ _ fi .snd .section = fi .quasi-inverse.inv
+  qinv→retract⁻ _ fi .snd .is-section = fi .quasi-inverse.inverses .Inverses.inv-o
+  {-# INLINE qinv→retract⁻ #-}
 
   ≅→retract : Iso F G x y → Retract F y x
   ≅→retract i .fst = i .to
@@ -105,8 +105,8 @@ HIso
 HIso R = Iso R R
 
 
-record ≅-notation {ℓᵃ ℓᵇ ℓ}
-  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) (R : 𝒰 ℓ) : 𝒰ω where
+record ≅-notation {ℓa ℓb ℓ}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   infix 1 _≅_
   field _≅_ : A → B → R
 open ≅-notation ⦃ ... ⦄ public
@@ -114,12 +114,11 @@ open ≅-notation ⦃ ... ⦄ public
 
 instance
   Funlike-≅
-    : {ℓᵃ ℓᵇ ℓᶜ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
-      {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-      ⦃ ua : Underlying A ⦄
-      {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-      {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
-      {x : A} {y : B} {C : Σ (F x y) (λ _ → ⌞ x ⌟) → 𝒰 ℓᶜ}
+    : {ℓa ℓb ℓc ℓf ℓg ℓfg ℓgf : Level}
+      {A : 𝒰 ℓa} {B : 𝒰 ℓb} ⦃ ua : Underlying A ⦄
+      {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
+      {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
+      {x : A} {y : B} {C : Σ (F x y) (λ _ → ⌞ x ⌟) → 𝒰 ℓc}
       ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
       ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
       ⦃ f : Funlike ur (F x y) ⌞ x ⌟ C ⦄
@@ -127,7 +126,7 @@ instance
   Funlike-≅ ._#_ i a = i .to # a
 
   Refl-≅
-    : ∀ {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} {R : A → A → 𝒰 ℓ}
+    : ∀ {ℓa ℓ} {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ}
       ⦃ _ : Refl R ⦄ ⦃ _ : Trans R ⦄ ⦃ _ : HUnit-o R ⦄
     → Refl (Iso R R)
   Refl-≅ .refl .to = refl
@@ -136,11 +135,11 @@ instance
   Refl-≅ .refl .inverses .Inverses.inv-i = ∙-id-o _
 
   Dual-≅
-    : ∀ {ℓᵃ ℓᵇ ℓᵃ̇ ℓᵇ̇ ℓ ℓ′} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
-      {F : A → B → 𝒰 ℓ}  {G : B → A → 𝒰 ℓ′}
-      {U : A → A → 𝒰 ℓᵃ̇} {V : B → B → 𝒰 ℓᵇ̇}
-      ⦃ _ : Comp F G U ⦄ ⦃ _ : Comp G F V ⦄
-      ⦃ _ : Refl U ⦄     ⦃ _ : Refl V ⦄
+    : ∀ {ℓa ℓb ℓa∙ ℓb∙ ℓf ℓg} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+      {F : A → B → 𝒰 ℓf}  {G : B → A → 𝒰 ℓg}
+      {U : A → A → 𝒰 ℓa∙} {V : B → B → 𝒰 ℓb∙}
+      ⦃ _ : Comp F G U ⦄   ⦃ _ : Comp G F V ⦄
+      ⦃ _ : Refl U ⦄       ⦃ _ : Refl V ⦄
     → Dual (Iso F G) (Iso G F)
   Dual-≅ ._ᵒᵖ i .to = i .from
   Dual-≅ ._ᵒᵖ i .from = i .to

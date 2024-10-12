@@ -9,24 +9,22 @@ open import Foundations.Notation.Composition
 open import Foundations.Notation.Reflexivity
 
 private variable
-  ℓᵃ ℓᵇ ℓᶜ ℓ : Level
-  A : 𝒰 ℓᵃ
-  B : 𝒰 ℓᵇ
-  C : 𝒰 ℓᶜ
+  ℓ : Level
+  A : 𝒰 ℓ
 
 module _
-  {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓl ℓr : Level}
+  {ℓa ℓb ℓl ℓr : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
   (L : A → B → 𝒰 ℓl) (R : B → B → 𝒰 ℓr) where
 
   GUnitality-i
-    : (r : Reflexivity R) (t : Composition L R L)
-    → {x : A} {y : B} (p : L x y)
+    : {x : A} {y : B} (p : L x y)
+      (r : Reflexivity R) (t : Composition L R L p r)
     → 𝒰 ℓl
-  GUnitality-i r t p = t p r ＝ p
+  GUnitality-i p r t = t ＝ p
 
-  record GUnit-i ⦃ r : Refl R ⦄ ⦃ t : Comp L R L ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓl ⊔ ℓr) where
+  record GUnit-i ⦃ r : Refl R ⦄ ⦃ t : Comp L R L ⦄ : 𝒰 (ℓa ⊔ ℓb ⊔ ℓl ⊔ ℓr) where
     no-eta-equality
-    field ∙-id-i : ∀{x y} (p : L x y) → GUnitality-i (r .refl) (t ._∙_) p
+    field ∙-id-i : ∀{x y} (p : L x y) → GUnitality-i p (r .refl) (t ._∙_ p refl)
 
 open GUnit-i ⦃ ... ⦄ public
 
@@ -36,12 +34,12 @@ HUnit-i R = GUnit-i R R
 
 
 -- right unitality of binary operator
-module _ {ℓᵃ} (A : 𝒰 ℓᵃ) where
+module _ {ℓ} (A : 𝒰 ℓ) where
 
-  Unitality-r : (r : A) (t : A → A → A) (x : A) → 𝒰 ℓᵃ
+  Unitality-r : (r : A) (t : A → A → A) (x : A) → 𝒰 ℓ
   Unitality-r r t x = t x r ＝ x
 
-  record Unit-r ⦃ r : Pointed A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓᵃ where
+  record Unit-r ⦃ r : Pointed A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓ where
     no-eta-equality
     field <>-id-r : ∀ x → Unitality-r (r .mempty) (t ._<>_) x
 

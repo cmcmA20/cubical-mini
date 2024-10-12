@@ -12,21 +12,20 @@ open import Foundations.Notation.Reflexivity
 open import Foundations.Notation.Unital.Outer
 
 private variable
-  ℓᵃ ℓᵇ ℓ ℓ′ : Level
-  A : 𝒰 ℓᵃ
-  B : 𝒰 ℓᵇ
+  ℓ : Level
+  A : 𝒰 ℓ
 
 module _
-  {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
-  {I : B → A → 𝒰 ℓ′} {O : A → B → 𝒰 ℓ} {I∙O : B → B → 𝒰 ℓ″}
+  {ℓᵃ ℓᵇ ℓi ℓo ℓ∙ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+  {I : B → A → 𝒰 ℓi} {O : A → B → 𝒰 ℓo} {I∙O : B → B → 𝒰 ℓ∙}
   ⦃ _ : Refl I∙O ⦄ ⦃ _ : Comp I O I∙O ⦄ {x : A} {y : B} where
 
-  _inner-inverse-of_ : (s : I y x) (r : O x y) → 𝒰 ℓ″
+  _inner-inverse-of_ : (s : I y x) (r : O x y) → 𝒰 ℓ∙
   s inner-inverse-of r = s ∙ r ＝ refl
 
   _section-of_ = _inner-inverse-of_
 
-  record has-section (r : O x y) : 𝒰 (ℓ′ ⊔ ℓ″) where
+  record has-section (r : O x y) : 𝒰 (ℓi ⊔ ℓ∙) where
     no-eta-equality
     constructor make-section
     field
@@ -44,11 +43,11 @@ Retract
 Retract F x y = Σ (F y x) has-section
 
 module _
-  {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
-  (I : A → B → 𝒰 ℓ) (O : B → A → 𝒰 ℓ′) (I∙O : A → A → 𝒰 ℓ″)
+  {ℓa ℓb ℓi ℓo ℓ∙ : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  (I : A → B → 𝒰 ℓi) (O : B → A → 𝒰 ℓo) (I∙O : A → A → 𝒰 ℓ∙)
   ⦃ r : Refl I∙O ⦄ ⦃ s : Dual I O ⦄ ⦃ t : Comp I O I∙O ⦄ where
 
-  record GInv-i : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ″) where
+  record GInv-i : 𝒰 (ℓa ⊔ ℓb ⊔ ℓi ⊔ ℓ∙) where
     no-eta-equality
     field ∙-inv-i : {x : A} {y : B} (p : I x y) → p section-of p ⁻¹
 
@@ -61,8 +60,8 @@ HInv-i R = GInv-i R R R
 
 -- binary operator having right inverses for all elements
 record Inv-r
-  {ℓᵃ} (A : 𝒰 ℓᵃ)
-  ⦃ r : Pointed A ⦄ ⦃ s : Has-unary-op A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓᵃ where
+  {ℓ} (A : 𝒰 ℓ)
+  ⦃ r : Pointed A ⦄ ⦃ s : Has-unary-op A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓ where
   no-eta-equality
   field <>-inv-r : (x : A) → x section-of (minv x)
 

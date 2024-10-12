@@ -5,20 +5,20 @@ open import Foundations.Prim.Type
 open import Agda.Builtin.Unit
 
 private variable
-  ℓᵃ ℓᵇ ℓ : Level
-  A : 𝒰 ℓᵃ
+  ℓ : Level
+  A : 𝒰 ℓ
 
 module _
-  {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ : Level}
-  (I : A → B → 𝒰 ℓ) (O : B → A → 𝒰 ℓ′) where
+  {ℓa ℓb ℓi ℓo : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  (I : A → B → 𝒰 ℓi) (O : B → A → 𝒰 ℓo) where
 
-  Duality : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ′)
-  Duality = {x : A} {y : B} → I x y → O y x
+  Duality : {x : A} {y : B} (i : I x y) → 𝒰 ℓo
+  Duality {x} {y} i = O y x
 
-  record Dual : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ′) where
+  record Dual : 𝒰 (ℓa ⊔ ℓb ⊔ ℓi ⊔ ℓo) where
     no-eta-equality
     infixl 60 _ᵒᵖ
-    field _ᵒᵖ : Duality
+    field _ᵒᵖ : {x : A} {y : B} (i : I x y) → Duality i
 
     -- TODO split this out?
     -- TODO additive notation
@@ -40,7 +40,7 @@ sym = _ᵒᵖ
 
 
 -- unindexed duality is having a chosen automorphism
-record Has-unary-op {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
+record Has-unary-op {ℓ} (A : 𝒰 ℓ) : 𝒰 ℓ where
   no-eta-equality
   field minv : A → A
 open Has-unary-op ⦃ ... ⦄ public

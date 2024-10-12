@@ -100,7 +100,7 @@ instance
 
 dec-prop≃ᴱbool : DecProp ℓ ≃ᴱ Bool
 dec-prop≃ᴱbool .fst X = ⌊ X .carrier-is-dec ⌋
-dec-prop≃ᴱbool .snd = is-invᴱ→is-equivᴱ
+dec-prop≃ᴱbool .snd = qinvᴱ→is-equivᴱ
   $ (if_then ⊤-DecProp .⊤ else ⊥-DecProp .⊥)
   , erase (fun-ext (Bool.elim refl refl))
   , erase (fun-ext li)

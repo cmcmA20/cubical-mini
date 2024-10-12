@@ -8,7 +8,9 @@ open import Foundations.Notation.Closure
 open import Foundations.Notation.Logic
 open import Foundations.Notation.Underlying
 
-open import Agda.Builtin.Sigma public
+open import Agda.Builtin.Sigma
+  renaming (Σ to Σₜ)
+  public
 open import Agda.Builtin.Unit as BU
 
 private variable
@@ -18,13 +20,13 @@ private variable
 
 infixr 8 _×ₜ_
 _×ₜ_ : (A : Type ℓ) (B : Type ℓ′) → Type (ℓ ⊔ ℓ′)
-A ×ₜ B = Σ A λ _ → B
+A ×ₜ B = Σₜ A λ _ → B
 
 instance
   Σ-Type
     : {A : Type ℓ} ⦃ ua : Underlying A ⦄
     → Σ-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
-  Σ-Type .Σ-notation.Σ X = Σ ⌞ X ⌟
+  Σ-Type .Σ-notation.Σ X = Σₜ ⌞ X ⌟
 
   ×-Type : ×-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
   ×-Type .×-notation.Constraint _ _ = BU.⊤
@@ -43,29 +45,35 @@ instance
   {-# OVERLAPPING Total-Σ-Variadic #-}
 
 
-<_,_> : {C : ∀ {a} → B a → Type ℓᶜ}
+<_,_> : {B : A → Type ℓᵇ} {C : ∀ {a} → B a → Type ℓᶜ}
       → (f : (x : A) → B x)
       → ((x : A) → C (f x))
       → ((x : A) → Σ (B x) C)
 < f , g > x = (f x , g x)
 
-bimap : {P : A → Type ℓ} {Q : ∀ {a} → P a → B a → Type ℓ′}
+bimap : {A : Type ℓᵃ} {B : A → Type ℓᵇ}
+        {P : A → Type ℓ} {Q : ∀ {a} → P a → B a → Type ℓ′}
       → (f : (a : A) → B a)
       → (∀ {a} (b : P a) → Q b (f a))
-      → ((a , b) : Σ A P)
+      → ((a , b) : Σₜ A P)
       → Σ (B a) (Q b)
 bimap f g (x , y) = f x , g y
 
-bimapˢ : {B : Type ℓᵇ} {P : A → Type ℓ} {Q : B → Type ℓ′}
+bimapˢ : {A : Type ℓᵃ} {B : Type ℓᵇ} {P : A → Type ℓ} {Q : B → Type ℓ′}
        → (f : A → B)
        → (∀ {x} → P x → Q (f x))
        → Σ A P → Σ B Q
 bimapˢ = bimap
 
-first : {B : A → Type ℓᵇ} {C : A → Type ℓᶜ} → (f : (a : A) → B a) → ((a , _) : Σ A C) → B a × C a
+first
+  : {B : A → Type ℓᵇ} {C : A → Type ℓᶜ}
+  → (f : (a : A) → B a)
+  → ((a , _) : Σₜ A C) → B a × C a
 first f = bimap f (λ x → x)
 
-second : {C : A → Type ℓᶜ} → (∀ {x} → B x → C x) → Σ A B → Σ A C
+second
+  : {A : Type ℓᵃ} {B : A → Type ℓᵇ} {C : A → Type ℓᶜ}
+  → (∀ {x} → B x → C x) → Σ A B → Σ A C
 second f = bimap (λ x → x) f
 
 

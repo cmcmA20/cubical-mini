@@ -149,7 +149,7 @@ instance
 opaque
   unfolding ua
   @0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
-  n-univalence {ℓ} {n} {X} {Y} = n-ua , is-inv→is-equiv (invertible inv (fun-ext rinv) (fun-ext (linv {Y}))) where
+  n-univalence {ℓ} {n} {X} {Y} = n-ua , qinv→is-equiv (qinv inv (fun-ext rinv) (fun-ext (linv {Y}))) where
     inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
     inv p = =→≃ (ap carrier p)
 

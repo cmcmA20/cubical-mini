@@ -18,92 +18,56 @@ private variable
 
 record Π-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
+  infixr 6 Π
   field Π : (X : A) (F : ⌞ X ⌟ → B) → R
-
-infixr 6 Π-syntax
-Π-syntax
-  : {A : Type ℓ} ⦃ u : Underlying A ⦄
-    {B : Type ℓ′} {R : Type ℓ″}
-    ⦃ p : Π-notation A B R ⦄
-    (X : A) (F : ⌞ X ⌟ → B)
-  → R
-Π-syntax ⦃ p ⦄ = p .Π-notation.Π
-syntax Π-syntax X (λ x → F) = Π[ x ꞉ X ] F
+  syntax Π X (λ x → F) = Π[ x ꞉ X ] F
+open Π-notation ⦃ ... ⦄ public
+{-# DISPLAY Π-notation.Π _ x f = Π x f #-}
 
 
 record Πᴱ-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
+  infixr 6 Πᴱ
   field Πᴱ : (X : A) (F : @0 ⌞ X ⌟ → B) → R
-
-infixr 6 Πᴱ-syntax
-Πᴱ-syntax
-  : {A : Type ℓ} ⦃ u : Underlying A ⦄
-    {B : Type ℓ′} {R : Type ℓ″}
-    ⦃ p : Πᴱ-notation A B R ⦄
-    (X : A) (F : @0 ⌞ X ⌟ → B)
-  → R
-Πᴱ-syntax ⦃ p ⦄ = p .Πᴱ-notation.Πᴱ
-syntax Πᴱ-syntax X (λ x → F) = Πᴱ[ x ꞉ X ] F
+  syntax Πᴱ X (λ x → F) = Πᴱ[ x ꞉ X ] F
+open Πᴱ-notation ⦃ ... ⦄ public
+{-# DISPLAY Πᴱ-notation.Πᴱ _ x f = Πᴱ x f #-}
 
 
 record ∀-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
+  infixr 6 ∀′
   field ∀′ : (X : A) (F : ⌞ X ⌟ → B) → R
-
-infixr 6 ∀-syntax
-∀-syntax
-  : {A : Type ℓ} ⦃ u : Underlying A ⦄
-    {B : Type ℓ′} {R : Type ℓ″}
-    ⦃ p : ∀-notation A B R ⦄
-    (X : A) (F : ⌞ X ⌟ → B)
-  → R
-∀-syntax ⦃ p ⦄ = p .∀-notation.∀′
-syntax ∀-syntax X (λ x → F) = ∀[ x ꞉ X ] F
+  syntax ∀′ X (λ x → F) = ∀[ x ꞉ X ] F
+open ∀-notation ⦃ ... ⦄ public
+{-# DISPLAY ∀-notation.∀′ _ x f = ∀′ x f #-}
 
 
 record ∀ᴱ-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
-  field ∀ᴱ′ : (X : A) (F : @0 ⌞ X ⌟ → B) → R
-
-infixr 6 ∀ᴱ-syntax
-∀ᴱ-syntax
-  : {A : Type ℓ} ⦃ u : Underlying A ⦄
-    {B : Type ℓ′} {R : Type ℓ″}
-    ⦃ p : ∀ᴱ-notation A B R ⦄
-    (X : A) (F : @0 ⌞ X ⌟ → B)
-  → R
-∀ᴱ-syntax ⦃ p ⦄ = p .∀ᴱ-notation.∀ᴱ′
-syntax ∀ᴱ-syntax X (λ x → F) = ∀ᴱ[ x ꞉ X ] F
+  infixr 6 ∀ᴱ
+  field ∀ᴱ : (X : A) (F : @0 ⌞ X ⌟ → B) → R
+  syntax ∀ᴱ X (λ x → F) = ∀ᴱ[ x ꞉ X ] F
+open ∀ᴱ-notation ⦃ ... ⦄ public
+{-# DISPLAY ∀ᴱ-notation.∀ᴱ _ x f = ∀ᴱ x f #-}
 
 
 record Σ-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
+  infixr 6 Σ
   field Σ : (X : A) (F : ⌞ X ⌟ → B) → R
-
-infixr 6 Σ-syntax
-Σ-syntax
-  : {A : Type ℓ} ⦃ u : Underlying A ⦄
-    {B : Type ℓ′} {R : Type ℓ″}
-    ⦃ p : Σ-notation ⌞ A ⌟ B R ⦄
-    (X : A) (F : ⌞ X ⌟ → B)
-  → R
-Σ-syntax ⦃ p ⦄ = p .Σ-notation.Σ
-syntax Σ-syntax X (λ x → F) = Σ[ x ꞉ X ] F
+  syntax Σ X (λ x → F) = Σ[ x ꞉ X ] F
+open Σ-notation ⦃ ... ⦄ public
+{-# DISPLAY Σ-notation.Σ _ x f = Σ x f #-}
 
 
 record ∃-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
+  infixr 6 ∃
   field ∃ : (X : A) (F : ⌞ X ⌟ → B) → R
-
-infixr 6 ∃-syntax
-∃-syntax
-  : {A : Type ℓ} ⦃ u : Underlying A ⦄
-    {B : Type ℓ′} {R : Type ℓ″}
-    ⦃ p : ∃-notation A B R ⦄
-    (X : A) (F : ⌞ X ⌟ → B)
-  → R
-∃-syntax ⦃ p ⦄ = p .∃-notation.∃
-syntax ∃-syntax X (λ x → F) = ∃[ x ꞉ X ] F
+  syntax ∃ X (λ x → F) = ∃[ x ꞉ X ] F
+open ∃-notation ⦃ ... ⦄ public
+{-# DISPLAY ∃-notation.∃ _ x f = ∃ x f #-}
 
 
 

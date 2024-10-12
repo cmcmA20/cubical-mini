@@ -59,7 +59,7 @@ module @0 subtype-classifier {ℓ} {B : Type ℓ} = Equiv (subtype-classifier {B
 subset-proj-is-embedding
   : {B : A → Type ℓ′}
   → (∀ x → is-prop (B x))
-  → is-embedding {A = Σ _ B} fst
+  → is-embedding {A = Σₜ _ B} fst
 subset-proj-is-embedding {B} B-prop x = ≃→is-of-hlevel 1 (Σ-fibre-equiv B x) (B-prop _)
 
 is-embedding→monic
@@ -137,8 +137,8 @@ is-equiv→is-embedding r y = is-contr→is-prop $ r .equiv-proof y
 ≃→↪ : A ≃ B → A ↪ B
 ≃→↪ = second is-equiv→is-embedding
 
-is-inv→is-embedding : {f : A → B} → is-invertible f → is-embedding f
-is-inv→is-embedding = is-equiv→is-embedding ∘ is-inv→is-equiv
+qinv→is-embedding : {f : A → B} → quasi-inverse f → is-embedding f
+qinv→is-embedding = is-equiv→is-embedding ∘ qinv→is-equiv
 
 ≅→↪ : A ≅ B → A ↪ B
 ≅→↪ = ≅→≃ ∙ ≃→↪

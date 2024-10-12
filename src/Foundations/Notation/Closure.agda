@@ -4,9 +4,11 @@ module Foundations.Notation.Closure where
 open import Foundations.Notation.Underlying
 open import Foundations.Prim.Type
 
-private variable ℓ ℓ′ : Level
+private variable
+  ℓ : Level
+  A : Type ℓ
 
-record Closure-Π {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
+record Closure-Π {ℓ} (A : 𝒰 ℓ) : Typeω where
   infixr 6 Π[_]
   field
     ℓ-total-Π : Level
@@ -14,7 +16,7 @@ record Closure-Π {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
 open Closure-Π ⦃ ... ⦄ public
 {-# DISPLAY Closure-Π.Π[_] _ f = Π[ f ] #-}
 
-record Closure-∀ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
+record Closure-∀ {ℓ} (A : 𝒰 ℓ) : Typeω where
   infixr 6 ∀[_]
   field
     ℓ-total-∀ : Level
@@ -22,7 +24,7 @@ record Closure-∀ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
 open Closure-∀ ⦃ ... ⦄ public
 {-# DISPLAY Closure-∀.∀[_] _ f = ∀[ f ] #-}
 
-record Closure-∀ᴱ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
+record Closure-∀ᴱ {ℓ} (A : 𝒰 ℓ) : Typeω where
   infixr 6 ∀ᴱ[_]
   field
     ℓ-total-∀ᴱ : Level
@@ -32,7 +34,7 @@ open Closure-∀ᴱ ⦃ ... ⦄ public
 
 -- closing over free variables of an expression using a sigma quantifier
 -- is called a total space
-record Total-Σ {ℓᵃ} (A : 𝒰 ℓᵃ) : Typeω where
+record Total-Σ {ℓ} (A : 𝒰 ℓ) : Typeω where
   infixr 6 Σ[_]
   field
     ℓ-total-Σ : Level
@@ -56,7 +58,7 @@ instance
   Closure-∀-Type .∀[_] f = f
   {-# OVERLAPPING Closure-∀-Type #-}
 
-  Closure-∀-Underlying : {A : Type ℓ} ⦃ u : Underlying A ⦄ → Closure-∀ A
+  Closure-∀-Underlying : ⦃ u : Underlying A ⦄ → Closure-∀ A
   Closure-∀-Underlying ⦃ u ⦄ .ℓ-total-∀ = u .ℓ-underlying
   Closure-∀-Underlying .∀[_] = ⌞_⌟
   {-# INCOHERENT Closure-∀-Underlying #-}
@@ -66,7 +68,7 @@ instance
   Closure-∀ᴱ-Type .∀ᴱ[_] f = f
   {-# OVERLAPPING Closure-∀ᴱ-Type #-}
 
-  @0 Closure-∀ᴱ-Underlying : {A : Type ℓ} ⦃ u : Underlying A ⦄ → Closure-∀ᴱ A
+  @0 Closure-∀ᴱ-Underlying : ⦃ u : Underlying A ⦄ → Closure-∀ᴱ A
   Closure-∀ᴱ-Underlying ⦃ u ⦄ .ℓ-total-∀ᴱ = u .ℓ-underlying
   Closure-∀ᴱ-Underlying .∀ᴱ[_] z = ⌞ z ⌟
   {-# INCOHERENT Closure-∀ᴱ-Underlying #-}
@@ -76,7 +78,7 @@ instance
   Total-Σ-Type .Σ[_] f = f
   {-# OVERLAPPING Total-Σ-Type #-}
 
-  Total-Σ-Underlying : {A : Type ℓ} ⦃ u : Underlying A ⦄ → Total-Σ A
+  Total-Σ-Underlying : ⦃ u : Underlying A ⦄ → Total-Σ A
   Total-Σ-Underlying ⦃ u ⦄ .ℓ-total-Σ = u .ℓ-underlying
   Total-Σ-Underlying .Σ[_] = ⌞_⌟
   {-# INCOHERENT Total-Σ-Underlying #-}

@@ -30,14 +30,14 @@ elim P-prop incc (squash₁ x y i) =
 
 -- Mere existence
 
-∃ : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
-∃ A B = ∥ Σ[ B ] ∥₁
+-- ∃ : (A : Type ℓ) (B : A → Type ℓ′) → Type (ℓ ⊔ ℓ′)
+-- ∃ A B = ∥ Σ[ B ] ∥₁
 
 instance
   ∃-Type
     : {A : Type ℓ} ⦃ ua : Underlying A ⦄
     → ∃-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
-  ∃-Type .∃-notation.∃ X = ∃ ⌞ X ⌟
+  ∃-Type .∃-notation.∃ X F = ∥ Σ[ F ] ∥₁
 
 Existential₁ⁿ : Variadic-binding¹
 Existential₁ⁿ = ∥_∥₁ ∘ Existentialⁿ

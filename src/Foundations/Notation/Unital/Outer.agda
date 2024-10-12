@@ -9,39 +9,37 @@ open import Foundations.Notation.Composition
 open import Foundations.Notation.Reflexivity
 
 private variable
-  ℓᵃ ℓᵇ ℓᶜ ℓ : Level
-  A : 𝒰 ℓᵃ
-  B : 𝒰 ℓᵇ
-  C : 𝒰 ℓᶜ
+  ℓ : Level
+  A : 𝒰 ℓ
 
 module _
-  {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓl ℓr : Level}
+  {ℓa ℓb ℓl ℓr : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
   (L : A → A → 𝒰 ℓl) (R : A → B → 𝒰 ℓr) where
 
   GUnitality-o
-    : (r : Reflexivity L) (t : Composition L R R)
-      {x : A} {y : B} (q : R x y)
+    : {x : A} {y : B} (q : R x y)
+      (r : Reflexivity L) (t : Composition L R R r q)
     → 𝒰 ℓr
-  GUnitality-o r t q = t r q ＝ q
+  GUnitality-o q r t = t ＝ q
 
-  record GUnit-o ⦃ r : Refl L ⦄ ⦃ t : Comp L R R ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓl ⊔ ℓr) where
+  record GUnit-o ⦃ r : Refl L ⦄ ⦃ t : Comp L R R ⦄ : 𝒰 (ℓa ⊔ ℓb ⊔ ℓl ⊔ ℓr) where
     no-eta-equality
-    field ∙-id-o : ∀ {x y} (q : R x y) → GUnitality-o (r .refl) (t ._∙_) q
+    field ∙-id-o : ∀ {x y} (q : R x y) → GUnitality-o q (r .refl) (t ._∙_ refl q)
 
 open GUnit-o ⦃ ... ⦄ public
 
 -- outer unitality of homogeneous correspondence
-HUnit-o : (R : A → A → 𝒰 ℓ) ⦃ r : Refl R ⦄ ⦃ t : Trans  R ⦄ → Type _
+HUnit-o : (R : A → A → 𝒰 ℓ) ⦃ r : Refl R ⦄ ⦃ t : Trans R ⦄ → Type _
 HUnit-o R = GUnit-o R R
 
 
 -- left unitality of binary operator
-module _ {ℓᵃ} (A : 𝒰 ℓᵃ) where
+module _ {ℓ} (A : 𝒰 ℓ) where
 
-  Unitality-l : (r : A) (t : A → A → A) (x : A) → 𝒰 ℓᵃ
+  Unitality-l : (r : A) (t : A → A → A) (x : A) → 𝒰 ℓ
   Unitality-l r t x = t r x ＝ x
 
-  record Unit-l ⦃ r : Pointed A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓᵃ where
+  record Unit-l ⦃ r : Pointed A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓ where
     no-eta-equality
     field <>-id-l : ∀ x → Unitality-l (r .mempty) (t ._<>_) x
 
