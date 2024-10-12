@@ -270,56 +270,7 @@ has-section+monic→has-retraction sect monic .is-retraction =
 
 open Inverses
 
-id-qinv : quasi-inverse (id {a})
-id-qinv .quasi-inverse.inv = id
-id-qinv .quasi-inverse.inverses .inv-o = id-l id
-id-qinv .quasi-inverse.inverses .inv-i = id-l id
-
 open Iso
-
-Inverses-∘ : {f : a ⇒ b} {f⁻¹ : b ⇒ a} {g : b ⇒ c} {g⁻¹ : c ⇒ b}
-           → Inverses f f⁻¹ → Inverses g g⁻¹ → Inverses (g ∘ f) (f⁻¹ ∘ g⁻¹)
-Inverses-∘ {f} {f⁻¹} {g} {g⁻¹} finv ginv = record { inv-o = l ; inv-i = r } where
-  module finv = Inverses finv
-  module ginv = Inverses ginv
-
-  opaque
-    l : (g ∘ f) ∘ f⁻¹ ∘ g⁻¹ ＝ id
-    l = (g ∘ f) ∘ f⁻¹ ∘ g⁻¹  ~⟨ cat! C ⟩
-        g ∘ (f ∘ f⁻¹) ∘ g⁻¹  ~⟨ (g⁻¹ ◁ finv.inv-o) ▷ g ⟩
-        g ∘ id ∘ g⁻¹         ~⟨ cat! C ⟩
-        g ∘ g⁻¹              ~⟨ ginv.inv-o ⟩
-        id                   ∎
-
-    r : (f⁻¹ ∘ g⁻¹) ∘ g ∘ f ＝ id
-    r = (f⁻¹ ∘ g⁻¹) ∘ g ∘ f  ~⟨ cat! C ⟩
-        f⁻¹ ∘ (g⁻¹ ∘ g) ∘ f  ~⟨ (f ◁ ginv.inv-i) ▷ f⁻¹ ⟩
-        f⁻¹ ∘ id ∘ f         ~⟨ cat! C ⟩
-        f⁻¹ ∘ f              ~⟨ finv.inv-i ⟩
-        id                   ∎
-
-
-qinv-∘
-  : {f : b ⇒ c} {g : a ⇒ b}
-  → quasi-inverse f → quasi-inverse g
-  → quasi-inverse (f ∘ g)
-qinv-∘ f-inv g-inv = record
-  { inv = g-inv.inv ∘ f-inv.inv
-  ; inverses = Inverses-∘ g-inv.inverses f-inv.inverses
-  }
-  where
-    module f-inv = quasi-inverse f-inv
-    module g-inv = quasi-inverse g-inv
-
--- _invertible⁻¹
---   : {f : Hom a b}
---   → (f-inv : quasi-inverse f)
---   → quasi-inverse (quasi-inverse.inv f-inv)
--- _invertible⁻¹ {f = f} f-inv .quasi-inverse.inv = f
--- _invertible⁻¹ f-inv .quasi-inverse.inverses .inv-o =
---   quasi-inverse.inv-i f-inv
--- _invertible⁻¹ f-inv .quasi-inverse.inverses .inv-i =
---   quasi-inverse.inv-o f-inv
 
 opaque
   private

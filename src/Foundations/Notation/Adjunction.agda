@@ -55,3 +55,4 @@ record ⊣-notation {ℓᵃ ℓᵇ ℓ}
   infix 1 _⊣_
   field _⊣_ : A → B → R
 open ⊣-notation ⦃ ... ⦄ public
+{-# DISPLAY ⊣-notation._⊣_ _ f g = f ⊣ g #-}

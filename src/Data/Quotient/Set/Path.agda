@@ -7,6 +7,7 @@ open import Meta.Extensionality
 open import Structures.n-Type
 
 open import Logic.Discreteness
+open import Logic.Equivalence
 
 open import Data.Bool.Base
 open import Data.Dec.Base as Dec
@@ -41,7 +42,6 @@ instance
 
 module @0 _ {R : Corr 2 (A , A) ℓ} (congr : is-congruence R) where
   open is-congruence congr
-  open Equivalence equivalence
 
   Code : A → A / R → Prop ℓ
   Code x = /₂.elim hlevel! (λ y → el! (R x y)) λ y z r →

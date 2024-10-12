@@ -66,8 +66,8 @@ quasi-inverse↓ = quasi-inverse[ id-qinv ]
 make-invertible↓
   : ∀ {x} {x′ x″ : Ob[ x ]} {f′ : Hom[ id ] x′ x″}
   → (g′ : Hom[ id ] x″ x′)
-  → f′ ∘ᵈ g′ ＝[ id-l _ ] idᵈ
-  → g′ ∘ᵈ f′ ＝[ id-l _ ] idᵈ
+  → f′ ∘ᵈ g′ ＝[ id-r _ ] idᵈ
+  → g′ ∘ᵈ f′ ＝[ id-r _ ] idᵈ
   → quasi-inverse↓ f′
 make-invertible↓ g′ p q .quasi-inverse[_].invᵈ = g′
 make-invertible↓ g′ p q .quasi-inverse[_].inversesᵈ .Inverses[_].inv-lᵈ = p

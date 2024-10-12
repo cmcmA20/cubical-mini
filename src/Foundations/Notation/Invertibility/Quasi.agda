@@ -8,6 +8,7 @@ open import Foundations.Notation.Duality
 open import Foundations.Notation.Reflexivity
 open import Foundations.Notation.Retraction
 open import Foundations.Notation.Section
+open import Foundations.Notation.Unital.Outer
 
 module _
   {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
@@ -71,6 +72,15 @@ module _
   qinv→has-section i .section = i .quasi-inverse.inv
   qinv→has-section i .is-section = i .quasi-inverse.inverses .Inverses.inv-o
   {-# INLINE qinv→has-section #-}
+
+module _
+  {ℓa ℓf : Level} {A : 𝒰 ℓa} {F : A → A → 𝒰 ℓf}
+  ⦃ _ : Refl F ⦄ ⦃ _ : Trans F ⦄ ⦃ _ : HUnit-o F ⦄ {x : A}  where
+
+  id-qinv : quasi-inverse {x = x} refl
+  id-qinv .quasi-inverse.inv = refl
+  id-qinv .quasi-inverse.inverses .Inverses.inv-o = ∙-id-o refl
+  id-qinv .quasi-inverse.inverses .Inverses.inv-i = ∙-id-o refl
 
 
 instance
