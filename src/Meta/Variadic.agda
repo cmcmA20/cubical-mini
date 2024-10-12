@@ -62,13 +62,13 @@ Quantⁿ {1}           Q T = Q _ λ x → ⌞ T x ⌟
 Quantⁿ {suc (suc _)} Q T = Q _ λ x → Quantⁿ Q (T x)
 
 Universalⁿ : Variadic-binding¹
-Universalⁿ = Quantⁿ Π-syntax
+Universalⁿ = Quantⁿ Π
 
 IUniversalⁿ : Variadic-binding¹
-IUniversalⁿ = Quantⁿ ∀-syntax
+IUniversalⁿ = Quantⁿ ∀′
 
 Existentialⁿ : Variadic-binding¹
-Existentialⁿ = Quantⁿ Σ-syntax
+Existentialⁿ = Quantⁿ Σ
 
 private variable ℓᵃ ℓᵇ ℓᶜ ℓᵈ ℓˣ ℓ ℓ′ ℓ″ : Level
 

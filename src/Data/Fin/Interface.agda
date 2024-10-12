@@ -29,7 +29,7 @@ record FinI {ℓ} (F : ℕ → Type ℓ) : Typeω where
   rec fz fs = elim _ fz (λ {_} {l} → fs l)
 
   fpred : ∀[ n ꞉ ℕ ] (F (suc (suc n)) → F (suc n))
-  fpred = [ (λ _ → fzero) , fst ]ᵤ ∘ fsplit
+  fpred {x = n} = [ (λ _ → fzero) , fst ]ᵤ ∘ fsplit
 
 
 record FinIᴱ {ℓ} (F : @0 ℕ → Type ℓ) : Typeω where
@@ -54,4 +54,4 @@ record FinIᴱ {ℓ} (F : @0 ℕ → Type ℓ) : Typeω where
   rec fz fs = elim _ fz (λ {_} {l} → fs l)
 
   fpred : ∀ᴱ[ n ꞉ ℕ ] (F (suc (suc n)) → F (suc n))
-  fpred = [ (λ _ → fzero) , fst ]ᵤ ∘ fsplit
+  fpred {x = n} = [ (λ _ → fzero) , fst ]ᵤ ∘ fsplit

@@ -37,7 +37,7 @@ instance
   ∀ᴱ-Type
     : {A : Type ℓ} ⦃ ua : Underlying A ⦄
     → ∀ᴱ-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
-  ∀ᴱ-Type .∀ᴱ-notation.∀ᴱ′ A B = {@0 x : ⌞ A ⌟} → B x
+  ∀ᴱ-Type .∀ᴱ-notation.∀ᴱ A B = {@0 x : ⌞ A ⌟} → B x
 
   Closure-Π-Variadic
     : {A : Type ℓ} {X : Type ℓ′}

@@ -28,16 +28,16 @@ record Inverses[_]
     inv-lᵈ : f′ ∘ᵈ g′ ＝[ Inverses.inv-o inv ] idᵈ
     inv-rᵈ : g′ ∘ᵈ f′ ＝[ Inverses.inv-i inv ] idᵈ
 
-record is-invertible[_]
+record quasi-inverse[_]
   {a b a′ b′} {f : Hom a b}
-  (f-inv : is-invertible f)
+  (f-inv : quasi-inverse f)
   (f′ : Hom[ f ] a′ b′)
   : Type ℓ′
   where
   no-eta-equality
   field
-    invᵈ      : Hom[ is-invertible.inv f-inv ] b′ a′
-    inversesᵈ : Inverses[ is-invertible.inverses f-inv ] f′ invᵈ
+    invᵈ      : Hom[ quasi-inverse.inv f-inv ] b′ a′
+    inversesᵈ : Inverses[ quasi-inverse.inverses f-inv ] f′ invᵈ
 
   open Inverses[_] inversesᵈ public
 
@@ -60,18 +60,18 @@ open _≅[_]_ public
 _≅↓_ : {x : Ob} (A B : Ob[ x ]) → Type ℓ′
 _≅↓_ = _≅[ refl ]_
 
-is-invertible↓ : {x : Ob} {x′ x″ : Ob[ x ]} → Hom[ id ] x′ x″ → Type _
-is-invertible↓ = is-invertible[ id-invertible ]
+quasi-inverse↓ : {x : Ob} {x′ x″ : Ob[ x ]} → Hom[ id ] x′ x″ → Type _
+quasi-inverse↓ = quasi-inverse[ id-qinv ]
 
 make-invertible↓
   : ∀ {x} {x′ x″ : Ob[ x ]} {f′ : Hom[ id ] x′ x″}
   → (g′ : Hom[ id ] x″ x′)
   → f′ ∘ᵈ g′ ＝[ id-l _ ] idᵈ
   → g′ ∘ᵈ f′ ＝[ id-l _ ] idᵈ
-  → is-invertible↓ f′
-make-invertible↓ g′ p q .is-invertible[_].invᵈ = g′
-make-invertible↓ g′ p q .is-invertible[_].inversesᵈ .Inverses[_].inv-lᵈ = p
-make-invertible↓ g′ p q .is-invertible[_].inversesᵈ .Inverses[_].inv-rᵈ = q
+  → quasi-inverse↓ f′
+make-invertible↓ g′ p q .quasi-inverse[_].invᵈ = g′
+make-invertible↓ g′ p q .quasi-inverse[_].inversesᵈ .Inverses[_].inv-lᵈ = p
+make-invertible↓ g′ p q .quasi-inverse[_].inversesᵈ .Inverses[_].inv-rᵈ = q
 
 opaque
   Inverses[]-are-prop
@@ -88,11 +88,11 @@ opaque
       refl (Inverses[_].inv-rᵈ inv[]) (Inverses[_].inv-rᵈ inv[]′) refl i
 
   -- TODO
-  -- is-invertible[]-is-prop
+  -- quasi-inverse[]-is-prop
   --   : ∀ {a b a′ b′} {f : Hom a b}
-  --   → (f-inv : is-invertible f)
+  --   → (f-inv : quasi-inverse f)
   --   → (f′ : Hom[ f ] a′ b′)
-  --   → is-prop (is-invertible[ f-inv ] f′)
+  --   → is-prop (quasi-inverse[ f-inv ] f′)
 
 make-iso[_]
   : ∀ {a b : Ob} {a′ b′}
@@ -116,15 +116,15 @@ make-vertical-iso = make-iso[ refl ]
 
 invertible[]→iso[]
   : ∀ {a b a′ b′} {f : Hom a b} {f′ : Hom[ f ] a′ b′}
-  → {i : is-invertible f}
-  → is-invertible[ i ] f′
-  → a′ ≅[ is-inv→≅ f i ] b′
+  → {i : quasi-inverse f}
+  → quasi-inverse[ i ] f′
+  → a′ ≅[ qinv→≅ f i ] b′
 invertible[]→iso[] {f′ = f′} i =
   make-iso[ _ ]
     f′
-    (is-invertible[_].invᵈ i)
-    (is-invertible[_].inv-lᵈ i)
-    (is-invertible[_].inv-rᵈ i)
+    (quasi-inverse[_].invᵈ i)
+    (quasi-inverse[_].inv-lᵈ i)
+    (quasi-inverse[_].inv-rᵈ i)
 
 -- TODO
 -- ≅[]-path

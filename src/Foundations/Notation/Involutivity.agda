@@ -8,23 +8,22 @@ open import Agda.Builtin.Unit
 open import Foundations.Notation.Duality
 
 private variable
-  ℓᵃ ℓᵇ ℓ ℓ′ : Level
-  A : 𝒰 ℓᵃ
-  B : 𝒰 ℓᵇ
+  ℓ : Level
+  A : 𝒰 ℓ
 
 module _
   {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ : Level}
   (I : A → B → 𝒰 ℓ) (O : B → A → 𝒰 ℓ′) where
 
   GInvolutivity
-    : (s₁ : Duality I O) (s₂ : Duality O I)
-      {x : A} {y : B} (i : I x y)
+    : {x : A} {y : B} (i : I x y)
+      (s₁ : Duality I O i) (s₂ : Duality O I s₁)
     → 𝒰 ℓ
-  GInvolutivity s₁ s₂ i = s₂ (s₁ i) ＝ i
+  GInvolutivity i s₁ s₂ = s₂ ＝ i
 
   record GInvol ⦃ s₁ : Dual I O ⦄ ⦃ s₂ : Dual O I ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ′) where
     no-eta-equality
-    field invol : ∀ {x y} (i : I x y) → GInvolutivity (s₁ ._ᵒᵖ) (s₂ ._ᵒᵖ) i
+    field invol : ∀ {x y} (i : I x y) → GInvolutivity i (s₁ ._ᵒᵖ i) (s₂ ._ᵒᵖ (s₁ ._ᵒᵖ i))
 
 open GInvol ⦃ ... ⦄ public
 

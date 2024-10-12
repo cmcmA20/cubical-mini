@@ -73,23 +73,23 @@ fin-sum {0}     B .fst ()
 fin-sum {0}     B .snd .equiv-proof ()
 fin-sum {suc n} B =
   fin-coproduct .fst ∘ f ,
-  is-equiv-comp (is-inv→is-equiv f-inv) (fin-coproduct .snd)
+  is-equiv-comp (qinv→is-equiv f-inv) (fin-coproduct .snd)
     where
       rec″ = fin-sum (B ∘ fsuc)
       module mrec = Equiv rec″
 
-      f : Σ _ (λ k → Fin (B k)) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
+      f : Σₜ _ (λ k → Fin (B k)) → Fin (B fzero) ⊎ Fin (sum n (B ∘ fsuc))
       f (fzero  , x) = inl x
       f (fsuc x , y) = inr (rec″ .fst (x , y))
 
-      f-inv : is-invertible f
-      f-inv .is-invertible.inv (inl x) = fzero , x
-      f-inv .is-invertible.inv (inr x) with mrec.from x
+      f-inv : quasi-inverse f
+      f-inv .quasi-inverse.inv (inl x) = fzero , x
+      f-inv .quasi-inverse.inv (inr x) with mrec.from x
       ... | x , y = fsuc x , y
-      f-inv .is-invertible.inverses .Inverses.inv-o i (inl x) = inl x
-      f-inv .is-invertible.inverses .Inverses.inv-o i (inr x) = inr (mrec.ε i x)
-      f-inv .is-invertible.inverses .Inverses.inv-i i (fzero  , y) = fzero , y
-      f-inv .is-invertible.inverses .Inverses.inv-i i (fsuc x , y)
+      f-inv .quasi-inverse.inverses .Inverses.inv-o i (inl x) = inl x
+      f-inv .quasi-inverse.inverses .Inverses.inv-o i (inr x) = inr (mrec.ε i x)
+      f-inv .quasi-inverse.inverses .Inverses.inv-i i (fzero  , y) = fzero , y
+      f-inv .quasi-inverse.inverses .Inverses.inv-i i (fsuc x , y)
         = fsuc (fst (mrec.η (~ i) (x , y)))
         , mrec.η (~ i) _ .snd
 

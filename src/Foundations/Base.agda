@@ -634,7 +634,7 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 -- Sigma path space
 Σ-pathᴾ
   : {A : I → Type ℓ} {B : ∀ i → A i → Type ℓ′}
-  → {x : Σ _ (B i0)} {y : Σ _ (B i1)}
+  → {x : Σ (A i0) (B i0)} {y : Σ (A i1) (B i1)}
   → (p : ＜ x .fst ／ A ＼ y .fst ＞)
   → ＜ x .snd ／ (λ i → B i (p i)) ＼ y .snd ＞
   → ＜ x ／ (λ i → Σ (A i) (B i)) ＼ y ＞

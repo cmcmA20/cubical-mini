@@ -172,15 +172,15 @@ Inverses-Iso
   → Inverses f g ≅ (f retraction-of g) × (f section-of g)
 unquoteDef Inverses-Iso = define-record-iso Inverses-Iso (quote Inverses)
 
-is-invertible-Iso
+quasi-inverse-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
     {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
     {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
     ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
     ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B} {f : F x y}
-  → is-invertible f ≅ Σ[ g ꞉ G y x ] Inverses f g
-unquoteDef is-invertible-Iso = define-record-iso is-invertible-Iso (quote is-invertible)
+  → quasi-inverse f ≅ Σ[ g ꞉ G y x ] Inverses f g
+unquoteDef quasi-inverse-Iso = define-record-iso quasi-inverse-Iso (quote quasi-inverse)
 
 Iso-Iso
   : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}

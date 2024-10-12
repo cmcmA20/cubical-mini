@@ -3,16 +3,16 @@ module Foundations.Notation.Decidability where
 
 open import Foundations.Prim.Type
 
-record Decidability {ℓᵃ}
-  (A : 𝒰 ℓᵃ) : 𝒰ω where
+record Decidability {ℓ}
+  (A : 𝒰 ℓ) : 𝒰ω where
   field
     ℓ-decidability : Level
     Decidable      : A → Type ℓ-decidability
 open Decidability ⦃ ... ⦄ public
 {-# DISPLAY Decidability.Decidable _ a = Decidable a #-}
 
-record Reflectance {ℓᵃ ℓᵇ}
-  (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) : 𝒰ω where
+record Reflectance {ℓa ℓb}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) : 𝒰ω where
   field
     ℓ-reflectance : Level
     Reflects      : A → B → Type ℓ-reflectance
