@@ -118,7 +118,7 @@ Reflects-all-dec {xs = x ∷ xs} P? =
   Reflects.dmap
     (_∷_ $ₜ²_)
     (contra (λ where (px ∷ ps) → px , ps))
-    (Reflects-× ⦃ rp = Reflects-does (P? x) ⦄ ⦃ rq = Reflects-all-dec {xs = xs} P? ⦄)
+    (Reflects-× ⦃ rp = reflects-does (P? x) ⦄ ⦃ rq = Reflects-all-dec {xs = xs} P? ⦄)
 
 
 all?-++ : ∀ {p : A → Bool} {xs ys : List A}
@@ -148,7 +148,7 @@ Reflects-any-dec {xs = x ∷ xs} P? =
    (contra (λ where
                (here px) → inl px
                (there ax) → inr ax))
-   (Reflects-⊎ ⦃ rp = Reflects-does (P? x) ⦄ ⦃ rq = Reflects-any-dec {xs = xs} P? ⦄)
+   (Reflects-⊎ ⦃ rp = reflects-does (P? x) ⦄ ⦃ rq = Reflects-any-dec {xs = xs} P? ⦄)
 
 -- replicate
 
@@ -233,7 +233,7 @@ filter-OPE {p} {xs = x ∷ xs} =
     (otake refl filter-OPE)
     (odrop filter-OPE)
     (p x)
-  
+
 -- count
 
 count-++ : ∀ (p : A → Bool) xs ys

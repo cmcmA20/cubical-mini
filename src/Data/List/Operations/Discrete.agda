@@ -96,7 +96,7 @@ Reflects-related     R? {x0} {xs = []}     = ofʸ []ʳ
 Reflects-related {R} R? {x0} {xs = x ∷ xs} =
   Reflects.dmap
     (λ where (r , rs) → r ∷ʳ rs) (contra (λ where (r ∷ʳ rs) → r , rs))
-    (Reflects-× ⦃ rp = Reflects-does (R? {x = x0} {y = x}) ⦄ ⦃ rq = Reflects-related {R = R} R? {x0 = x} {xs = xs} ⦄)
+    (Reflects-× ⦃ rp = reflects-does (R? {x = x0} {y = x}) ⦄ ⦃ rq = Reflects-related {R = R} R? {x0 = x} {xs = xs} ⦄)
 
 Reflects-sorted : {A : 𝒰 ℓ} {R : A → A → 𝒰 ℓ′}
                 → (R? : ∀ {x y} → Dec (R x y)) {- `Decidable R` fails -}
