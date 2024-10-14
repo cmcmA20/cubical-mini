@@ -72,7 +72,7 @@ Reflects-has {x} {xs} = Reflects-any-dec {xs = xs} (λ y → y ≟ x)
 
 Reflects-subseq : ⦃ d : is-discrete A ⦄ {xs ys : List A}
                 → Reflects (OPE xs ys) (subseq xs ys)
-Reflects-subseq {xs = []}     {ys}          = ofʸ ope-nil-l
+Reflects-subseq {xs = []}     {ys}          = ofʸ ope-init
 Reflects-subseq {xs = x ∷ xs} {ys = []}     = ofⁿ ¬ope-cons-nil
 Reflects-subseq {xs = x ∷ xs} {ys = y ∷ ys} =
   caseᵈ x ＝ y
