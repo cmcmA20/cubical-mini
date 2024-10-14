@@ -66,6 +66,10 @@ filter : (A → Bool) → List A → List A
 filter p []       = []
 filter p (x ∷ xs) = if p x then x ∷ filter p xs else filter p xs
 
+find : (A → Bool) → List A → ℕ
+find p []       = 0
+find p (x ∷ xs) = if p x then 0 else suc (find p xs)
+
 elem : (A → A → Bool) → A → List A → Bool
 elem _    t []       = false
 elem eq=? t (x ∷ xs) = eq=? t x or elem eq=? t xs

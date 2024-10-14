@@ -246,20 +246,38 @@ count-++ p (x ∷ xs) ys =
 Reflects-0<count : ∀ (p : A → Bool) xs
                  → Reflects (0 < count p xs) (any p xs)
 Reflects-0<count p []       = ofⁿ false!
-Reflects-0<count p (x ∷ xs) =
-  Bool.elim
-    {P = λ q → Reflects (0 < bit q + count p xs) (q or any p xs)}
-    (ofʸ z<s) (Reflects-0<count p xs) (p x)
+Reflects-0<count p (x ∷ xs) with p x
+... | false = Reflects-0<count p xs
+... | true  = ofʸ z<s
 
 length-filter : ∀ (p : A → Bool) xs
               → length (filter p xs) ＝ count p xs
 length-filter p []       = refl
-length-filter p (x ∷ xs) =
-  Bool.elim
-    {P = λ q → length (if q then x ∷ filter p xs else filter p xs) ＝ bit q + count p xs}
-    (ap suc (length-filter p xs))
-    (length-filter p xs)
-    (p x)
+length-filter p (x ∷ xs) with p x
+... | false = length-filter p xs
+... | true  = ap suc (length-filter p xs)
+
+count≤length : ∀ (p : A → Bool) xs
+             → count p xs ≤ length xs
+count≤length p []       = z≤
+count≤length p (x ∷ xs) with p x
+... | false = ≤-suc-r (count≤length p xs)
+... | true  = s≤s (count≤length p xs)
+
+count→all : ∀ (p : A → Bool) xs
+          → count p xs ＝ length xs → All (So ∘ p) xs
+count→all p []       e = []
+count→all p (x ∷ xs) e with p x | recall p x
+... | false | ⟪ eq ⟫ = absurd (suc≰id $ subst (_≤ length xs) e $ count≤length p xs)
+... | true  | ⟪ eq ⟫ = (so≃is-true ⁻¹ $ eq) ∷ count→all p xs (suc-inj e)
+
+all→count : ∀ (p : A → Bool) xs
+          → All (So ∘ p) xs → count p xs ＝ length xs
+all→count p []       []       = refl
+all→count p (x ∷ xs) (px ∷ a) =
+  subst (λ q → bit q + count p xs ＝ suc (length xs))
+        ((so≃is-true $ px) ⁻¹)
+        (ap suc (all→count p xs a))
 
 count-union-inter : ∀ p1 p2 (xs : List A)
                   → count (λ x → p1 x or p2 x) xs + count (λ x → p1 x and p2 x) xs ＝ count p1 xs + count p2 xs
@@ -284,6 +302,14 @@ count-true : (xs : List A)
             → count (λ _ → true) xs ＝ length xs
 count-true xs = length-filter (λ _ → true) xs ⁻¹ ∙ ap length (filter-true xs)
 
+-- find
+
+find≤length : ∀ (p : A → Bool) xs
+            → count p xs ≤ length xs
+find≤length p [] = z≤
+find≤length p (x ∷ xs) with p x
+... | false = ≤-suc-r (find≤length p xs)
+... | true  = s≤s (find≤length p xs)
 
 -- take & drop
 
@@ -303,7 +329,8 @@ length-take : {n : ℕ} {xs : List A}
             → length (take n xs) ＝ min n (length xs)
 length-take {n = zero}                = refl
 length-take {n = suc n} {xs = []}     = refl
-length-take {n = suc n} {xs = x ∷ xs} with compare-nat n (length xs) | length-take {n = n} {xs = xs}
+-- TODO add min/+ lemmas
+length-take {n = suc n} {xs = x ∷ xs} with compare-nat n (length xs) | length-take {n = n} {xs = xs}  
 ... | inl _ | r = ap suc r
 ... | inr _ | r = ap suc r
 
@@ -343,7 +370,7 @@ split-take-drop : (n : ℕ) {xs : List A}
                 → xs ＝ take n xs ++ drop n xs
 split-take-drop  zero                 = refl
 split-take-drop (suc n) {xs = []}     = refl
-split-take-drop (suc n ){xs = x ∷ xs} = ap (x ∷_) (split-take-drop n)
+split-take-drop (suc n) {xs = x ∷ xs} = ap (x ∷_) (split-take-drop n)
 
 
 -- span
