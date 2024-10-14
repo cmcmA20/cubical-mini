@@ -9,6 +9,7 @@ record Decidability {ℓᵃ}
     ℓ-decidability : Level
     Decidable      : A → Type ℓ-decidability
 open Decidability ⦃ ... ⦄ public
+{-# DISPLAY Decidability.Decidable _ a = Decidable a #-}
 
 record Reflectance {ℓᵃ ℓᵇ}
   (A : 𝒰 ℓᵃ) (B : 𝒰 ℓᵇ) : 𝒰ω where
@@ -16,6 +17,7 @@ record Reflectance {ℓᵃ ℓᵇ}
     ℓ-reflectance : Level
     Reflects      : A → B → Type ℓ-reflectance
 open Reflectance ⦃ ... ⦄ public
+{-# DISPLAY Reflectance.Reflects _ a = Reflects a #-}
 
 private variable ℓ ℓ′ ℓ″ : Level
 

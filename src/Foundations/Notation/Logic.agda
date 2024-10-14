@@ -116,6 +116,7 @@ record ×-notation {ℓa ℓb ℓ ℓ′}
     Constraint : A → B → Type ℓ′
     _×_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
 open ×-notation ⦃ ... ⦄ public using (_×_)
+{-# DISPLAY ×-notation._×_ _ a b = a × b #-}
 
 record ⊕-notation {ℓa ℓb ℓ ℓ′}
   (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
@@ -124,6 +125,7 @@ record ⊕-notation {ℓa ℓb ℓ ℓ′}
     Constraint : A → B → Type ℓ′
     _⊕_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
 open ⊕-notation ⦃ ... ⦄ public using (_⊕_)
+{-# DISPLAY ⊕-notation._⊕_ _ a b = a ⊕ b #-}
 
 record ⊎-notation {ℓa ℓb ℓ ℓ′}
   (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
@@ -132,6 +134,7 @@ record ⊎-notation {ℓa ℓb ℓ ℓ′}
     Constraint : A → B → Type ℓ′
     _⊎_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
 open ⊎-notation ⦃ ... ⦄ public using (_⊎_)
+{-# DISPLAY ⊎-notation._⊎_ _ a b = a ⊎ b #-}
 
 record ⊎₁-notation {ℓa ℓb ℓ ℓ′}
   (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
@@ -140,6 +143,7 @@ record ⊎₁-notation {ℓa ℓb ℓ ℓ′}
     Constraint : A → B → Type ℓ′
     _⊎₁_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
 open ⊎₁-notation ⦃ ... ⦄ public using (_⊎₁_)
+{-# DISPLAY ⊎₁-notation._⊎₁_ _ a b = a ⊎₁ b #-}
 
 record ⊻-notation {ℓa ℓb ℓ ℓ′}
   (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
@@ -148,6 +152,7 @@ record ⊻-notation {ℓa ℓb ℓ ℓ′}
     Constraint : A → B → Type ℓ′
     _⊻_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
 open ⊻-notation ⦃ ... ⦄ public using (_⊻_)
+{-# DISPLAY ⊻-notation._⊻_ _ a b = a ⊻ b #-}
 
 record ⇒-notation {ℓa ℓb ℓ ℓ′}
   (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
@@ -156,6 +161,7 @@ record ⇒-notation {ℓa ℓb ℓ ℓ′}
     Constraint : A → B → Type ℓ′
     _⇒_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
 open ⇒-notation ⦃ ... ⦄ public using (_⇒_)
+{-# DISPLAY ⇒-notation._⇒_ _ a b = a ⇒ b #-}
 
 record ¬-notation {ℓa ℓ ℓ′}
   (A : 𝒰 ℓa) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓ ⊔ ℓsuc ℓ′) where
@@ -164,6 +170,7 @@ record ¬-notation {ℓa ℓ ℓ′}
     Constraint : A → Type ℓ′
     ¬_ : (a : A) ⦃ _ : Constraint a ⦄ → R
 open ¬-notation ⦃ ... ⦄ public
+{-# DISPLAY ¬-notation.¬_ _ a = ¬ a #-}
 
 
 
@@ -173,12 +180,14 @@ record ⊥-notation {ℓ}
   (R : 𝒰 ℓ) : 𝒰ω where
   field ⊥ : R
 open ⊥-notation ⦃ ... ⦄ public
+{-# DISPLAY ⊥-notation.⊥ _ = ⊥ #-}
 
 
 record ⊤-notation {ℓ}
   (R : 𝒰 ℓ) : 𝒰ω where
   field ⊤ : R
 open ⊤-notation ⦃ ... ⦄ public
+{-# DISPLAY ⊤-notation.⊤ _ = ⊤ #-}
 
 
 -- Automation

@@ -18,6 +18,7 @@ module _ {ℓᵃ} {A : 𝒰 ℓᵃ} {ℓ : Level} (_~_ : A → A → 𝒰 ℓ) w
     field refl : Reflexivity
 
 open Refl ⦃ ... ⦄ public
+{-# DISPLAY Refl.refl _ = refl #-}
 
 
 -- unindexed reflexivity is being pointed
@@ -26,6 +27,7 @@ record Pointed {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
   field mempty : A
 
 open Pointed ⦃ ... ⦄ public
+{-# DISPLAY Pointed.mempty _ = mempty #-}
 
 instance
   Pointed→Refl : ⦃ Pointed A ⦄ → Refl {A = ⊤} λ _ _ → A

@@ -14,6 +14,7 @@ record Membership {ℓ ℓe} (A : Type ℓe) (ℙA : Type ℓ) ℓm : Type (ℓ 
   infix 30 _∈_
   field _∈_ : A → ℙA → Type ℓm
 open Membership ⦃ ... ⦄ public
+{-# DISPLAY Membership._∈_ _ a b = a ∈ b #-}
 
 private variable
   ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ : Level
@@ -37,11 +38,13 @@ record Intersection {ℓ ℓ′ ℓ″} (A : Type ℓ) (B : Type ℓ′) (R : Ty
   infixr 22 _∩_
   field _∩_ : A → B → R
 open Intersection ⦃ ... ⦄ public
+{-# DISPLAY Intersection._∩_ _ a b = a ∩ b #-}
 
 record Union {ℓ ℓ′ ℓ″} (A : Type ℓ) (B : Type ℓ′) (R : Type ℓ″) : Typeω where
   infixr 21 _∪_
   field _∪_ : A → B → R
 open Union ⦃ ... ⦄ public
+{-# DISPLAY Union._∪_ _ a b = a ∪ b #-}
 
 
 instance

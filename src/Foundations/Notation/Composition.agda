@@ -28,6 +28,8 @@ module _
     _∘ˢ_ r l = l ∙ r
 
 open Comp ⦃ ... ⦄ public
+{-# DISPLAY Comp._∙_ _ a b = a ∙ b #-}
+{-# DISPLAY Comp._∘ˢ_ _ a b = a ∘ˢ b #-}
 
 
 -- homogeneous composition is transitivity
@@ -41,6 +43,7 @@ record Has-binary-op {ℓᵃ} (A : 𝒰 ℓᵃ) : 𝒰 ℓᵃ where
   infixr 6 _<>_
   field _<>_ : A → A → A
 open Has-binary-op ⦃ ... ⦄ public
+{-# DISPLAY Has-binary-op._<>_ _ a b = a <> b #-}
 
 
 instance
