@@ -22,6 +22,14 @@ module _
   is-biinv : (f : F x y) → 𝒰 (ℓg ⊔ ℓfg ⊔ ℓgf)
   is-biinv f = Σ (has-retraction f)  λ _ → has-section f
 
+  make-is-biinv
+    : ∀ {f} (r : G y x) (rr : r retraction-of f)
+      (s : G y x) (ss : s section-of f)
+    → is-biinv f
+  make-is-biinv r rr s ss .fst = make-retract r rr
+  make-is-biinv r rr s ss .snd = make-section s ss
+  {-# INLINE make-is-biinv #-}
+
   qinv→is-biinv : ∀ {f} → quasi-inverse f → is-biinv f
   qinv→is-biinv qi .fst .retraction = qi .quasi-inverse.inv
   qinv→is-biinv qi .fst .is-retraction =
@@ -29,3 +37,4 @@ module _
   qinv→is-biinv qi .snd .section = qi .quasi-inverse.inv
   qinv→is-biinv qi .snd .is-section =
     qi .quasi-inverse.inverses .Inverses.inv-o
+  {-# INLINE qinv→is-biinv #-}

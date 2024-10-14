@@ -16,6 +16,8 @@ instance
   ≊-Fun : ≊-notation (𝒰 ℓ) (𝒰 ℓ′) (𝒰 (ℓ ⊔ ℓ′))
   ≊-Fun ._≊_ = Biinvₜ
 
+open Biinv
+
 module _
   {ℓa ℓa∙ ℓb ℓb∙ ℓf ℓf⁻ : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
   {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
@@ -44,7 +46,7 @@ module _
   is-biinv→qinv {f} (hr , hs) = qinv (hs .section) (hs .is-section) (is-biinv→section-is-retraction (hr , hs))
 
   ≊→≅ : Biinv F F⁻ x y → Iso F F⁻ x y
-  ≊→≅ e = qinv→≅ (e .fst) (is-biinv→qinv (e .snd))
+  ≊→≅ e = qinv→≅ (e .to) (is-biinv→qinv (e .has-biinv))
 
 module _
   {ℓa ℓa∙ ℓb ℓb∙ ℓf ℓf⁻ : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
@@ -73,11 +75,10 @@ module _
 
   instance
     Dual-≊ : Dual (Biinv F F⁻) (Biinv F⁻ F)
-    Dual-≊ ._ᵒᵖ (_ , hr , _ ) .fst = hr .retraction
-    Dual-≊ ._ᵒᵖ (f , hr , hs) .snd .fst .retraction = f
-    Dual-≊ ._ᵒᵖ (f , hr , hs) .snd .fst .is-retraction = is-biinv→retraction-is-section (hr , hs)
-    Dual-≊ ._ᵒᵖ (f , hr , hs) .snd .snd .section = f
-    Dual-≊ ._ᵒᵖ (f , hr , hs) .snd .snd .is-section = hr .is-retraction
+    Dual-≊ ._ᵒᵖ e .to = e .from
+    Dual-≊ ._ᵒᵖ e .has-biinv = make-is-biinv (e .to)
+      (is-biinv→retraction-is-section (e .has-biinv)) (e .to) (e .from-is-retraction)
+
 
 is-biinv→is-equiv : ∀{ℓa ℓb} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {f : A → B} → is-biinv f → is-equiv f
 is-biinv→is-equiv bf = qinv→is-equiv (is-biinv→qinv bf)
