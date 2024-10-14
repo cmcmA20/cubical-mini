@@ -330,7 +330,7 @@ length-take : {n : ℕ} {xs : List A}
 length-take {n = zero}                = refl
 length-take {n = suc n} {xs = []}     = refl
 -- TODO add min/+ lemmas
-length-take {n = suc n} {xs = x ∷ xs} with compare-nat n (length xs) | length-take {n = n} {xs = xs}  
+length-take {n = suc n} {xs = x ∷ xs} with compare-nat n (length xs) | length-take {n = n} {xs = xs}
 ... | inl _ | r = ap suc r
 ... | inr _ | r = ap suc r
 
