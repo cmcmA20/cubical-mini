@@ -274,23 +274,23 @@ open Iso
 
 opaque
   private
-    iso-inverse-unique-internal
+    ≅-inverse-unique-internal
       : (x y : Ob) (p : x ＝ y) (b d : Ob) (q : b ＝ d) {f : x ≅ b} {g : y ≅ d}
       → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
       → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
-    iso-inverse-unique-internal x = J>! λ y → J>! λ {f} {g} d →
+    ≅-inverse-unique-internal x = J>! λ p → J>! λ {f} {g} q →
       f .from                      ~⟨ f .from .id-r ⟨
       f .from ∘ id                 ~⟨ g .inv-o ▷ f .from ⟨
       f .from ∘ g .to ∘ g .from    ~⟨ assoc _ _ _ ⟨
-      (f .from ∘ g .to) ∘ g .from  ~⟨ g .from ◁ (sym d ▷ f .from) ∙ f .inv-i ⟩
+      (f .from ∘ g .to) ∘ g .from  ~⟨ g .from ◁ (sym q ▷ f .from) ∙ f .inv-i ⟩
       id ∘ g .from                 ~⟨ g .from .id-l ⟩
       g .from                      ∎
 
-  iso-inverse-unique
+  ≅-inverse-unique
     : {x y : Ob} (p : x ＝ y) {b d : Ob} (q : b ＝ d) {f : x ≅ b} {g : y ≅ d}
     → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
     → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
-  iso-inverse-unique p = iso-inverse-unique-internal _ _ p _ _
+  ≅-inverse-unique p = ≅-inverse-unique-internal _ _ p _ _
 
 
 module _ ⦃ _ : ∀ {x y} → H-Level 2 (Hom x y) ⦄ where
@@ -314,13 +314,13 @@ module _ ⦃ _ : ∀ {x y} → H-Level 2 (Hom x y) ⦄ where
     : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
     → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
     → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-  ≅-pathᴾ p q {f} {g} r = ≅-pathᴾ-internal p q r (iso-inverse-unique p q {f = f} {g = g} r)
+  ≅-pathᴾ p q {f} {g} r = ≅-pathᴾ-internal p q r (≅-inverse-unique p q {f = f} {g = g} r)
 
   ≅-pathᴾ-from
     : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
     → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
     → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-  ≅-pathᴾ-from p q {f} {g} r = ≅-pathᴾ-internal p q (iso-inverse-unique q p {f = f ⁻¹} {g = g ⁻¹} r) r
+  ≅-pathᴾ-from p q {f} {g} r = ≅-pathᴾ-internal p q (≅-inverse-unique q p {f = f ⁻¹} {g = g ⁻¹} r) r
 
   ≅-path : {f g : a ≅ b} → f .to ＝ g .to → f ＝ g
   ≅-path = ≅-pathᴾ refl refl

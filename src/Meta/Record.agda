@@ -192,6 +192,16 @@ Iso-Iso
   → Iso F G x y ≅ Σ[ f ꞉ F x y ] Σ[ g ꞉ G y x ] Inverses f g
 unquoteDef Iso-Iso = define-record-iso Iso-Iso (quote Iso)
 
+Biinv-Iso
+  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
+    {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
+    {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+    ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
+    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
+    {x : A} {y : B}
+  → Biinv F G x y ≅ Σ[ f ꞉ F x y ] is-biinv f
+unquoteDef Biinv-Iso = define-record-iso Biinv-Iso (quote Biinv)
+
 
 -- Usage
 private
