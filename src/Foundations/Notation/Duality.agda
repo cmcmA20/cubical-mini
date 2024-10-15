@@ -9,13 +9,13 @@ private variable
   A : 𝒰 ℓ
 
 module _
-  {ℓa ℓb ℓi ℓo : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  (I : A → B → 𝒰 ℓi) (O : B → A → 𝒰 ℓo) where
+  {ℓa ℓb ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  (I : A → B → 𝒰 ℓh) (O : B → A → 𝒰 ℓh) where
 
-  Duality : {x : A} {y : B} (i : I x y) → 𝒰 ℓo
+  Duality : {x : A} {y : B} (i : I x y) → 𝒰 ℓh
   Duality {x} {y} i = O y x
 
-  record Dual : 𝒰 (ℓa ⊔ ℓb ⊔ ℓi ⊔ ℓo) where
+  record Dual : 𝒰 (ℓa ⊔ ℓb ⊔ ℓh) where
     no-eta-equality
     infixl 60 _ᵒᵖ
     field _ᵒᵖ : {x : A} {y : B} (i : I x y) → Duality i

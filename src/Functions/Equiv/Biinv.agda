@@ -6,19 +6,17 @@ open import Meta.Extensionality
 open import Meta.Record
 
 module _
-  {ℓa ℓa∙ ℓb ℓb∙ ℓf ℓf⁻ : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
   {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
-  {F : A → B → 𝒰 ℓf} {F⁻ : B → A → 𝒰 ℓf⁻}
+  {F : A → B → 𝒰 ℓh} {F⁻ : B → A → 𝒰 ℓh}
   ⦃ _ : Refl A∙ ⦄ ⦃ _ : Refl B∙ ⦄
   ⦃ _ : Comp F F⁻ A∙ ⦄ ⦃ _ : Comp F⁻ F B∙ ⦄
-
-  ⦃ _ : Comp B∙ B∙ B∙ ⦄ ⦃ _ : Comp A∙ F F ⦄ ⦃ _ : Comp F B∙ F ⦄
-  ⦃ _ : Comp F⁻ A∙ F⁻ ⦄ ⦃ _ : Comp A∙ A∙ A∙ ⦄ ⦃ _ : Comp B∙ F⁻ F⁻ ⦄
-  ⦃ _ : GUnit-o B∙ B∙ ⦄ ⦃ _ : GUnit-o A∙ F ⦄ ⦃ _ : GUnit-o A∙ A∙ ⦄ ⦃ _ : GUnit-o B∙ F⁻ ⦄
-  ⦃ _ : GAssoc F⁻ F B∙ B∙ F B∙ ⦄ ⦃ _ : GAssoc F F⁻ F A∙ B∙ F ⦄
+  ⦃ _ : Comp F⁻ A∙ F⁻ ⦄ ⦃ _ : Comp B∙ F⁻ F⁻ ⦄
+  ⦃ _ : Comp A∙ A∙ A∙ ⦄ ⦃ _ : Comp B∙ B∙ B∙ ⦄
+  ⦃ _ : GUnit-o A∙ A∙ ⦄ ⦃ _ : GUnit-i B∙ B∙ ⦄
+  ⦃ _ : GUnit-i F⁻ A∙ ⦄ ⦃ _ : GUnit-o B∙ F⁻ ⦄
   ⦃ _ : GAssoc F F⁻ A∙ A∙ F⁻ A∙ ⦄ ⦃ _ : GAssoc F⁻ F F⁻ B∙ A∙ F⁻ ⦄
-
-  ⦃ _ : GUnit-i B∙ B∙ ⦄ ⦃ _ : GUnit-i F⁻ A∙ ⦄ ⦃ _ : GAssoc B∙ F⁻ F F⁻ B∙ B∙ ⦄
+  ⦃ _ : GAssoc B∙ F⁻ F F⁻ B∙ B∙ ⦄
 
   {x : A} {y : B}
   where
@@ -54,7 +52,7 @@ module _
         → ＜ e .from ／ (λ i → F⁻ (q i) (p i)) ＼ e′ .from ＞
       ≊-inverse-unique-internal = J>! (J>! λ {e e′} r
         → sym (∙-id-o _)
-        ∙ (sym (is-biinv→retraction-is-section (e′ .has-biinv)) ▷ e .from)
+        ∙ (sym ((is-biinv→unique-inverse (e′ .has-biinv) ▷ e′ .to) ∙ e′ .is-section) ▷ e .from)
         ∙ sym (∙-assoc _ (e′ .to) _)
         ∙ (e′ .from ◁ sym r ▷ e .from)
         ∙ (e′ .from ◁ e .from-is-retraction)

@@ -12,16 +12,16 @@ private variable
   A : 𝒰 ℓ
 
 module _
-  {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ : Level}
-  (I : A → B → 𝒰 ℓ) (O : B → A → 𝒰 ℓ′) where
+  {ℓa ℓb ℓh} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  (I : A → B → 𝒰 ℓh) (O : B → A → 𝒰 ℓh) where
 
   GInvolutivity
     : {x : A} {y : B} (i : I x y)
       (s₁ : Duality I O i) (s₂ : Duality O I s₁)
-    → 𝒰 ℓ
+    → 𝒰 ℓh
   GInvolutivity i s₁ s₂ = s₂ ＝ i
 
-  record GInvol ⦃ s₁ : Dual I O ⦄ ⦃ s₂ : Dual O I ⦄ : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ′) where
+  record GInvol ⦃ s₁ : Dual I O ⦄ ⦃ s₂ : Dual O I ⦄ : 𝒰 (ℓa ⊔ ℓb ⊔ ℓh) where
     no-eta-equality
     field invol : ∀ {x y} (i : I x y) → GInvolutivity i (s₁ ._ᵒᵖ i) (s₂ ._ᵒᵖ (s₁ ._ᵒᵖ i))
 

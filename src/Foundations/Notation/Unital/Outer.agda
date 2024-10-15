@@ -13,16 +13,16 @@ private variable
   A : 𝒰 ℓ
 
 module _
-  {ℓa ℓb ℓl ℓr : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  (L : A → A → 𝒰 ℓl) (R : A → B → 𝒰 ℓr) where
+  {ℓa ℓa∙ ℓb ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  (L : A → A → 𝒰 ℓa∙) (R : A → B → 𝒰 ℓh) where
 
   GUnitality-o
     : {x : A} {y : B} (q : R x y)
       (r : Reflexivity L) (t : Composition L R R r q)
-    → 𝒰 ℓr
+    → 𝒰 ℓh
   GUnitality-o q r t = t ＝ q
 
-  record GUnit-o ⦃ r : Refl L ⦄ ⦃ t : Comp L R R ⦄ : 𝒰 (ℓa ⊔ ℓb ⊔ ℓl ⊔ ℓr) where
+  record GUnit-o ⦃ r : Refl L ⦄ ⦃ t : Comp L R R ⦄ : 𝒰 (ℓa ⊔ ℓa∙ ⊔ ℓb ⊔ ℓh) where
     no-eta-equality
     field ∙-id-o : ∀ {x y} (q : R x y) → GUnitality-o q (r .refl) (t ._∙_ refl q)
 

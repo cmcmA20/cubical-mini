@@ -14,8 +14,8 @@ open Biinv
 
 biinv→equiv : {A B : Type ℓ} → A ≊ B → A ≃ B
 biinv→equiv e .fst = e .to
-biinv→equiv e .snd = qinv→is-equiv $ make-qinv (e .has-biinv .fst .retraction)
-  (make-inverses (is-biinv→section-is-retraction (sym e .has-biinv)) (e .has-biinv .fst .is-retraction))
+biinv→equiv e .snd = qinv→is-equiv $ make-qinv (e .from)
+  (make-inverses ((is-biinv→unique-inverse (e .has-biinv) ▷ e .to) ∙ e .is-section) (e .from-is-retraction))
 
 instance
   @0 Types-is-category : is-category (Types ℓ)

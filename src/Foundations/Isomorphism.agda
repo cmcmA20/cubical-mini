@@ -42,15 +42,15 @@ open quasi-inverse
 qinv→qinvᴱ : {f : A → B} → quasi-inverse f → quasi-inverseᴱ f
 qinv→qinvᴱ fi = fi .inv , erase (fi .inv-o) , erase (fi .inv-i)
 
-private
+private opaque
   retract-comp-helper
-    : {ℓa ℓb ℓb∙ ℓc ℓc∙ ℓf ℓf⁻ ℓg ℓg⁻ ℓfg ℓg⁻f⁻ : Level}
+    : {ℓa ℓb ℓb∙ ℓc ℓc∙ ℓab ℓac ℓbc : Level}
       {A : 𝒰 ℓa} {B : 𝒰 ℓb} {C : 𝒰 ℓc}
       {B∙ : B → B → 𝒰 ℓb∙} {C∙ : C → C → 𝒰 ℓc∙}
       ⦃ _ : Refl B∙ ⦄       ⦃ _ : Refl C∙ ⦄
-      {F   : A → B → 𝒰 ℓf}  {F⁻    : B → A → 𝒰 ℓf⁻}
-      {G   : B → C → 𝒰 ℓg}  {G⁻    : C → B → 𝒰 ℓg⁻}
-      {F∙G : A → C → 𝒰 ℓfg} {G⁻∙F⁻ : C → A → 𝒰 ℓg⁻f⁻}
+      {F   : A → B → 𝒰 ℓab} {F⁻    : B → A → 𝒰 ℓab}
+      {G   : B → C → 𝒰 ℓbc} {G⁻    : C → B → 𝒰 ℓbc}
+      {F∙G : A → C → 𝒰 ℓac} {G⁻∙F⁻ : C → A → 𝒰 ℓac}
       ⦃ _ : Comp F⁻ F  B∙ ⦄ ⦃ _ : Comp G⁻ G  C∙ ⦄
       ⦃ _ : Comp F G  F∙G ⦄ ⦃ _ : Comp G⁻ F⁻ G⁻∙F⁻ ⦄ ⦃ _ : Comp G⁻∙F⁻ F∙G  C∙ ⦄
       ⦃ _ : Comp B∙ G  G ⦄ ⦃ _ : Comp F⁻ F∙G  G ⦄
@@ -71,13 +71,13 @@ private
 
 instance
   Comp-Retract
-    : {ℓa ℓa∙ ℓb ℓb∙ ℓc ℓf ℓf⁻ ℓg ℓg⁻ ℓfg ℓg⁻f⁻ : Level}
+    : {ℓa ℓa∙ ℓb ℓb∙ ℓc ℓab ℓac ℓbc : Level}
       {A : 𝒰 ℓa} {B : 𝒰 ℓb} {C : 𝒰 ℓc}
       {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
       ⦃ _ : Refl A∙ ⦄ ⦃ _ : Refl B∙ ⦄
-      {F   : A → B → 𝒰 ℓf}  {F⁻    : B → A → 𝒰 ℓf⁻}
-      {G   : B → C → 𝒰 ℓg}  {G⁻    : C → B → 𝒰 ℓg⁻}
-      {F∙G : A → C → 𝒰 ℓfg} {G⁻∙F⁻ : C → A → 𝒰 ℓg⁻f⁻}
+      {F   : A → B → 𝒰 ℓab} {F⁻    : B → A → 𝒰 ℓab}
+      {G   : B → C → 𝒰 ℓbc} {G⁻    : C → B → 𝒰 ℓbc}
+      {F∙G : A → C → 𝒰 ℓac} {G⁻∙F⁻ : C → A → 𝒰 ℓac}
       ⦃ _ : Comp F F⁻ A∙ ⦄ ⦃ _ : Comp G G⁻ B∙ ⦄
       ⦃ _ : Comp F G  F∙G ⦄ ⦃ _ : Comp G⁻ F⁻ G⁻∙F⁻ ⦄ ⦃ _ : Comp F∙G G⁻∙F⁻ A∙ ⦄
       ⦃ _ : Comp B∙ F⁻  F⁻ ⦄ ⦃ _ : Comp G G⁻∙F⁻  F⁻ ⦄
@@ -102,11 +102,11 @@ instance
     , erase (fun-ext λ x → g  # (r′ # f  x) ∙ r  # x)
 
 module _
-  {ℓa ℓa∙ ℓb ℓb∙ ℓc ℓc∙ ℓf ℓf⁻ ℓg ℓg⁻ ℓfg ℓg⁻f⁻ : Level}
+  {ℓa ℓa∙ ℓb ℓb∙ ℓc ℓc∙ ℓab ℓac ℓbc : Level}
   {A : 𝒰 ℓa} {B : 𝒰 ℓb} {C : 𝒰 ℓc}
-  {F : A → B → 𝒰 ℓf} {F⁻ : B → A → 𝒰 ℓf⁻}
-  {G : B → C → 𝒰 ℓg} {G⁻ : C → B → 𝒰 ℓg⁻}
-  {F∙G : A → C → 𝒰 ℓfg} {G⁻∙F⁻ : C → A → 𝒰 ℓg⁻f⁻}
+  {F : A → B → 𝒰 ℓab} {F⁻ : B → A → 𝒰 ℓab}
+  {G : B → C → 𝒰 ℓbc} {G⁻ : C → B → 𝒰 ℓbc}
+  {F∙G : A → C → 𝒰 ℓac} {G⁻∙F⁻ : C → A → 𝒰 ℓac}
   {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙} {C∙ : C → C → 𝒰 ℓc∙}
   ⦃ _ : Comp F F⁻ A∙ ⦄ ⦃ _ : Comp F⁻ F  B∙ ⦄
   ⦃ _ : Comp G G⁻ B∙ ⦄ ⦃ _ : Comp G⁻ G  C∙ ⦄

@@ -17,13 +17,13 @@ open import Foundations.Notation.Unital.Outer
 open import Agda.Builtin.Sigma
 
 module _
-  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  (F : A → B → 𝒰 ℓf) (G : B → A → 𝒰 ℓg)
-  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄ where
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+  (F : A → B → 𝒰 ℓh) (G : B → A → 𝒰 ℓh)
+  ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp F G A∙ ⦄
+  ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp G F B∙ ⦄ where
 
-  record Biinv (x : A) (y : B) : 𝒰 (ℓf ⊔ ℓg ⊔ ℓfg ⊔ ℓgf) where
+  record Biinv (x : A) (y : B) : 𝒰 (ℓa∙ ⊔ ℓb∙ ⊔ ℓh) where
     no-eta-equality
     constructor make-biinv
     field
@@ -39,9 +39,9 @@ module _
 
 open Biinv
 module _
-  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
-  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+  {F∙G : A → A → 𝒰 ℓa∙} {G∙F : B → B → 𝒰 ℓb∙}
   ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
   ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄ where
 
@@ -75,10 +75,10 @@ open ≊-notation ⦃ ... ⦄ public
 open Biinv
 instance
   Funlike-≊
-    : {ℓa ℓb ℓc ℓf ℓg ℓfg ℓgf : Level}
+    : {ℓa ℓa∙ ℓb ℓb∙ ℓc ℓh : Level}
       {A : 𝒰 ℓa} {B : 𝒰 ℓb} ⦃ ua : Underlying A ⦄
-      {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
-      {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
+      {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+      {F∙G : A → A → 𝒰 ℓa∙} {G∙F : B → B → 𝒰 ℓb∙}
       {x : A} {y : B} {C : Σ (F x y) (λ _ → ⌞ x ⌟) → 𝒰 ℓc}
       ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
       ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
