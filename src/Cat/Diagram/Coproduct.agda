@@ -48,8 +48,8 @@ module _ {C : Precategory o h} where
 
   private variable A B : Ob
 
-  ⊎-unique : (c₁ c₂ : Coproduct C A B) → Coproduct.coapex c₁ ≅ Coproduct.coapex c₂
-  ⊎-unique c₁ c₂ = iso c₁→c₂ c₂→c₁ c₁→c₂→c₁ c₂→c₁→c₂
+  ⊎-unique : (c₁ c₂ : Coproduct C A B) → Coproduct.coapex c₁ ≊ Coproduct.coapex c₂
+  ⊎-unique c₁ c₂ = ≅→≊ $ iso c₁→c₂ c₂→c₁ c₁→c₂→c₁ c₂→c₁→c₂
     where
       module c₁ = Coproduct c₁
       module c₂ = Coproduct c₂

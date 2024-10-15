@@ -24,9 +24,11 @@ open import Cat.Solver
   hiding ( module NbE ; module Reflection )
   public
 open import Cat.Univalent
-  using ( is-category ; path→iso ; Hom-pathᴾ
+  using ( is-category ; path→equiv ; Hom-pathᴾ
         ; Hom-transport ; Hom-pathᴾ-refl-l ; Hom-pathᴾ-refl-r
         ; module Univalent )
   public
 
 open import Cat.Morphism.Instances public
+
+open import Functions.Equiv.Biinv public

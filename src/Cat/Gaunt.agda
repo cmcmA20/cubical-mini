@@ -11,7 +11,7 @@ record is-gaunt {o ℓ} (C : Precategory o ℓ) : Type (o ⊔ ℓ) where
     has-category : is-category C
     has-strict   : is-strict C
 
-  open Univalent.path→iso has-category
+  open Univalent.path→equiv has-category
     hiding (hlevel′)
     public
   open IdSS has-category has-strict
@@ -53,23 +53,24 @@ module _ {o ℓ} {C : Precategory o ℓ} where
   open Cat.Morphism C
   skeletal+trivial-automorphisms→gaunt
     : is-skeletal C
-    → (∀ {x : Ob} → (f : x ≅ x) → f ＝ refl)
+    → (∀ {x : Ob} → (f : x ≊ x) → f ＝ refl)
     → is-gaunt C
   skeletal+trivial-automorphisms→gaunt skel trivial-aut =
     skeletal+category→gaunt skel $
-      equiv-path→identity-system (≅ₜ→≃ path-iso)
+      equiv-path→identity-system (≅ₜ→≃ path-equiv)
     where
       open is-gaunt
+      open Iso
 
-      path-iso : {x y : Ob} → (x ≅ y) ≅ (x ＝ y)
-      path-iso .Iso.to f = skel .to-path ∣ f ∣₁
-      path-iso .Iso.from = path→iso
-      path-iso .Iso.inverses .Inverses.inv-o = fun-ext λ _ →
+      path-equiv : {x y : Ob} → (x ≊ y) ≅ (x ＝ y)
+      path-equiv .to f = skel .to-path ∣ f ∣₁
+      path-equiv .Iso.from = path→equiv
+      path-equiv .inverses .Inverses.inv-o = fun-ext λ _ →
         is-skeletal→is-strict _ skel _ _ _ _
-      path-iso {x} .Iso.inverses .Inverses.inv-i = fun-ext λ f →
+      path-equiv {x} .inverses .Inverses.inv-i = fun-ext λ f →
         IdS.J
         skel
-        (λ y′ ∥f∥₁ → ∀(f : x ≅ y′) → path→iso ((skel .to-path ∥f∥₁)) ＝ f)
+        (λ y′ ∥f∥₁ → ∀(f : x ≊ y′) → path→equiv ((skel .to-path ∥f∥₁)) ＝ f)
         (λ f → trivial-aut _ ∙ trivial-aut _ ⁻¹)
         ∣ f ∣₁
         f

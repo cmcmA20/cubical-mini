@@ -67,3 +67,21 @@ module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ�
     (f .from .preserves)
     (preserves # f .inv-o)
     (preserves # f .inv-i)
+
+  open Biinv
+
+  total-equiv→equiv : x ≊ y → x .fst ≊ y .fst
+  total-equiv→equiv f = biinv
+    (f .to .hom)
+    (f .from .hom)
+    (hom # f .from-is-retraction)
+    (f .section .hom)
+    (hom # f .is-section)
+
+  total-equiv→equiv[] : ∀ {x y : ∫E.Ob} → (f : x ≊ y) → x .snd ≊[ total-equiv→equiv f ] y .snd
+  total-equiv→equiv[] f = make-equiv[ total-equiv→equiv f ]
+    (f .to .preserves)
+    (f .from .preserves)
+    (preserves # f .from-is-retraction)
+    (f .section .preserves)
+    (preserves # f .is-section)
