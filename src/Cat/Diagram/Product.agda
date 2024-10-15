@@ -55,8 +55,8 @@ module _ {C : Precategory o h} where
 
   private variable A B : Ob
 
-  ×-unique : (p₁ p₂ : Product C A B) → Product.apex p₁ ≅ Product.apex p₂
-  ×-unique p₁ p₂ = iso p₁→p₂ p₂→p₁ p₁→p₂→p₁ p₂→p₁→p₂
+  ×-unique : (p₁ p₂ : Product C A B) → Product.apex p₁ ≊ Product.apex p₂
+  ×-unique p₁ p₂ = ≅→≊ $ iso p₁→p₂ p₂→p₁ p₁→p₂→p₁ p₂→p₁→p₂
     where
       module p₁ = Product p₁
       module p₂ = Product p₂
