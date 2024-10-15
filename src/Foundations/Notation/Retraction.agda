@@ -14,16 +14,16 @@ private variable
   A : 𝒰 ℓ
 
 module _
-  {ℓa ℓb ℓi ℓo ℓ∙ : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  {I : A → B → 𝒰 ℓi} {O : B → A → 𝒰 ℓo} {I∙O : A → A → 𝒰 ℓ∙}
-  ⦃ r : Refl I∙O ⦄ ⦃ t : Comp I O I∙O ⦄ {x : A} {y : B} where
+  {ℓa ℓa∙ ℓb ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {I : A → B → 𝒰 ℓh} {O : B → A → 𝒰 ℓh} {A∙ : A → A → 𝒰 ℓa∙}
+  ⦃ r : Refl A∙ ⦄ ⦃ t : Comp I O A∙ ⦄ {x : A} {y : B} where
 
-  _outer-inverse-of_ : (f : O y x) (g : I x y) → 𝒰 ℓ∙
+  _outer-inverse-of_ : (f : O y x) (g : I x y) → 𝒰 ℓa∙
   f outer-inverse-of g = g ∙ f ＝ refl
 
   _retraction-of_ = _outer-inverse-of_
 
-  record has-retraction (s : I x y) : 𝒰 (ℓo ⊔ ℓ∙) where
+  record has-retraction (s : I x y) : 𝒰 (ℓa∙ ⊔ ℓh) where
     no-eta-equality
     constructor make-retract
     field
@@ -34,10 +34,10 @@ open has-retraction public
 
 
 module _
-  {ℓa ℓb ℓi ℓo ℓ∙ : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  (I : A → B → 𝒰 ℓi) (O : B → A → 𝒰 ℓo) (I∙O : A → A → 𝒰 ℓ∙) where
+  {ℓa ℓa∙ ℓb ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  (I : A → B → 𝒰 ℓh) (O : B → A → 𝒰 ℓh) (A∙ : A → A → 𝒰 ℓa∙) where
 
-  record GInv-o ⦃ r : Refl I∙O ⦄ ⦃ s : Dual O I ⦄ ⦃ t : Comp I O I∙O ⦄ : 𝒰 (ℓa ⊔ ℓb ⊔ ℓo ⊔ ℓ∙) where
+  record GInv-o ⦃ r : Refl A∙ ⦄ ⦃ s : Dual O I ⦄ ⦃ t : Comp I O A∙ ⦄ : 𝒰 (ℓa ⊔ ℓa∙ ⊔ ℓb ⊔ ℓh) where
     no-eta-equality
     field ∙-inv-o : {x : A} {y : B} (p : O y x) → p retraction-of p ⁻¹
 

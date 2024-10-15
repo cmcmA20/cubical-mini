@@ -11,14 +11,14 @@ open import Foundations.Notation.Section
 open import Foundations.Notation.Unital.Outer
 
 module _
-  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
-  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄ where
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+  {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+  ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp F G A∙ ⦄
+  ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp G F B∙ ⦄ where
 
   -- not that useful in higher setting
-  record Inverses {x : A} {y : B} (f : F x y) (g : G y x) : 𝒰 (ℓfg ⊔ ℓgf) where
+  record Inverses {x : A} {y : B} (f : F x y) (g : G y x) : 𝒰 (ℓa∙ ⊔ ℓb∙) where
     no-eta-equality
     constructor make-inverses
     field
@@ -27,12 +27,12 @@ module _
   {-# INLINE make-inverses #-}
 
 record quasi-inverse
-  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
-  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
-  {x : A} {y : B} (f : F x y) : 𝒰 (ℓg ⊔ ℓfg ⊔ ℓgf) where
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+  {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+  ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp F G A∙ ⦄
+  ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp G F B∙ ⦄
+  {x : A} {y : B} (f : F x y) : 𝒰 (ℓa∙ ⊔ ℓb∙ ⊔ ℓh) where
   no-eta-equality
   constructor make-qinv
   field
@@ -49,11 +49,11 @@ record quasi-inverse
 
 
 module _
-  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
-  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+  {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+  ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp F G A∙ ⦄
+  ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp G F B∙ ⦄
   {x : A} {y : B} {f : F x y} where
 
   qinv : (g : G y x) → f retraction-of g → f section-of g
@@ -85,11 +85,11 @@ module _
 
 instance
   Dual-Inverses
-    : ∀ {ℓa ℓb ℓa∙ ℓb∙ ℓf ℓg} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-      {F : A → B → 𝒰 ℓf}  {G : B → A → 𝒰 ℓg}
-      {U : A → A → 𝒰 ℓa∙} {V : B → B → 𝒰 ℓb∙}
-      ⦃ _ : Comp F G U ⦄   ⦃ _ : Comp G F V ⦄
-      ⦃ _ : Refl U ⦄       ⦃ _ : Refl V ⦄
+    : ∀ {ℓa ℓb ℓa∙ ℓb∙ ℓh} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+      {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+      {F : A → B → 𝒰 ℓh}   {G : B → A → 𝒰 ℓh}
+      ⦃ _ : Comp F G A∙ ⦄   ⦃ _ : Comp G F B∙ ⦄
+      ⦃ _ : Refl A∙ ⦄       ⦃ _ : Refl B∙ ⦄
       {x : A} {y : B}
     → Dual (Inverses {F = F} {G = G} {x = x} {y = y}) Inverses
   Dual-Inverses ._ᵒᵖ i .Inverses.inv-o = Inverses.inv-i i

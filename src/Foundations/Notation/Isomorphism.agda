@@ -15,13 +15,13 @@ open import Foundations.Notation.Unital.Outer
 open import Agda.Builtin.Sigma
 
 module _
-  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  (F : A → B → 𝒰 ℓf) (G : B → A → 𝒰 ℓg)
-  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄ where
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+  (F : A → B → 𝒰 ℓh) (G : B → A → 𝒰 ℓh)
+  ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp F G A∙ ⦄
+  ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp G F B∙ ⦄ where
 
-  record Iso (x : A) (y : B) : 𝒰 (ℓf ⊔ ℓg ⊔ ℓfg ⊔ ℓgf) where
+  record Iso (x : A) (y : B) : 𝒰 (ℓa∙ ⊔ ℓb∙ ⊔ ℓh) where
     no-eta-equality
     constructor make-iso
     field
@@ -35,11 +35,11 @@ module _
 open Iso
 
 module _
-  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
-  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+  {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+  ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp F G A∙ ⦄
+  ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp G F B∙ ⦄
   {x : A} {y : B} where
 
   iso : (f : F x y) (g : G y x) → f retraction-of g → f section-of g
@@ -115,13 +115,13 @@ open ≅-notation ⦃ ... ⦄ public
 
 instance
   Funlike-≅
-    : {ℓa ℓb ℓc ℓf ℓg ℓfg ℓgf : Level}
+    : {ℓa ℓa∙ ℓb ℓb∙ ℓc ℓh : Level}
       {A : 𝒰 ℓa} {B : 𝒰 ℓb} ⦃ ua : Underlying A ⦄
-      {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
-      {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
+      {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+      {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
       {x : A} {y : B} {C : Σ (F x y) (λ _ → ⌞ x ⌟) → 𝒰 ℓc}
-      ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
-      ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
+      ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp F G A∙ ⦄
+      ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp G F B∙ ⦄
       ⦃ f : Funlike ur (F x y) ⌞ x ⌟ C ⦄
     → Funlike ur (Iso F G x y) ⌞ x ⌟ λ (i , a) → C (i .to , a)
   Funlike-≅ ._#_ i a = i .to # a
@@ -136,11 +136,11 @@ instance
   Refl-≅ .refl .inverses .Inverses.inv-i = ∙-id-o _
 
   Dual-≅
-    : ∀ {ℓa ℓb ℓa∙ ℓb∙ ℓf ℓg} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-      {F : A → B → 𝒰 ℓf}  {G : B → A → 𝒰 ℓg}
-      {U : A → A → 𝒰 ℓa∙} {V : B → B → 𝒰 ℓb∙}
-      ⦃ _ : Comp F G U ⦄   ⦃ _ : Comp G F V ⦄
-      ⦃ _ : Refl U ⦄       ⦃ _ : Refl V ⦄
+    : ∀ {ℓa ℓb ℓa∙ ℓb∙ ℓh} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+      {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+      {F : A → B → 𝒰 ℓh}   {G : B → A → 𝒰 ℓh}
+      ⦃ _ : Comp F G A∙ ⦄   ⦃ _ : Comp G F B∙ ⦄
+      ⦃ _ : Refl A∙ ⦄       ⦃ _ : Refl B∙ ⦄
     → Dual (Iso F G) (Iso G F)
   Dual-≅ ._ᵒᵖ i .to = i .from
   Dual-≅ ._ᵒᵖ i .from = i .to

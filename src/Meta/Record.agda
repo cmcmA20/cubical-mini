@@ -149,23 +149,23 @@ define-record-iso nm rec = do
 -- TODO move this
 
 has-section-Iso
-  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
-    {I : B → A → 𝒰 ℓ′} {O : A → B → 𝒰 ℓ} {I∙O : B → B → 𝒰 ℓ″}
+  : {ℓa ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+    {I : B → A → 𝒰 ℓh} {O : A → B → 𝒰 ℓh} {I∙O : B → B → 𝒰 ℓb∙}
     ⦃ _ : Refl I∙O ⦄ ⦃ _ : Comp I O I∙O ⦄ {x : A} {y : B} {r : O x y}
   → has-section r ≅ Σ[ s ꞉ I y x ] s section-of r
 unquoteDef has-section-Iso = define-record-iso has-section-Iso (quote has-section)
 
 has-retraction-Iso
-  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
-    {I : A → B → 𝒰 ℓ′} {O : B → A → 𝒰 ℓ} {I∙O : A → A → 𝒰 ℓ″}
+  : {ℓa ℓa∙ ℓb ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+    {I : A → B → 𝒰 ℓh} {O : B → A → 𝒰 ℓh} {I∙O : A → A → 𝒰 ℓa∙}
     ⦃ _ : Refl I∙O ⦄ ⦃ _ : Comp I O I∙O ⦄ {x : A} {y : B} {s : I x y}
   → has-retraction s ≅ Σ[ r ꞉ O y x ] r retraction-of s
 unquoteDef has-retraction-Iso = define-record-iso has-retraction-Iso (quote has-retraction)
 
 Inverses-Iso
-  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-    {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-    {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+  : {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+    {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+    {F∙G : A → A → 𝒰 ℓa∙} {G∙F : B → B → 𝒰 ℓb∙}
     ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
     ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B} {f : F x y} {g : G y x}
@@ -173,9 +173,9 @@ Inverses-Iso
 unquoteDef Inverses-Iso = define-record-iso Inverses-Iso (quote Inverses)
 
 quasi-inverse-Iso
-  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-    {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-    {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+  : {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+    {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+    {F∙G : A → A → 𝒰 ℓa∙} {G∙F : B → B → 𝒰 ℓb∙}
     ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
     ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B} {f : F x y}
@@ -183,9 +183,9 @@ quasi-inverse-Iso
 unquoteDef quasi-inverse-Iso = define-record-iso quasi-inverse-Iso (quote quasi-inverse)
 
 Iso-Iso
-  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-    {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-    {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+  : {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+    {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+    {F∙G : A → A → 𝒰 ℓa∙} {G∙F : B → B → 𝒰 ℓb∙}
     ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
     ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B}
@@ -193,9 +193,9 @@ Iso-Iso
 unquoteDef Iso-Iso = define-record-iso Iso-Iso (quote Iso)
 
 Biinv-Iso
-  : {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ ℓ‴ : Level}
-    {F : A → B → 𝒰 ℓ′} {G : B → A → 𝒰 ℓ}
-    {F∙G : A → A → 𝒰 ℓ″} {G∙F : B → B → 𝒰 ℓ‴}
+  : {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+    {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+    {F∙G : A → A → 𝒰 ℓa∙} {G∙F : B → B → 𝒰 ℓb∙}
     ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
     ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
     {x : A} {y : B}

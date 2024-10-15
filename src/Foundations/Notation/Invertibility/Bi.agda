@@ -12,14 +12,14 @@ open import Foundations.Notation.Section
 open import Agda.Builtin.Sigma
 
 module _
-  {ℓa ℓb ℓf ℓg ℓfg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-  {F : A → B → 𝒰 ℓf} {G : B → A → 𝒰 ℓg}
-  {F∙G : A → A → 𝒰 ℓfg} {G∙F : B → B → 𝒰 ℓgf}
-  ⦃ _ : Refl F∙G ⦄ ⦃ _ : Comp F G F∙G ⦄
-  ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
+  {ℓa ℓa∙ ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {A∙ : A → A → 𝒰 ℓa∙} {B∙ : B → B → 𝒰 ℓb∙}
+  {F : A → B → 𝒰 ℓh} {G : B → A → 𝒰 ℓh}
+  ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp F G A∙ ⦄
+  ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp G F B∙ ⦄
   {x : A} {y : B} where
 
-  is-biinv : (f : F x y) → 𝒰 (ℓg ⊔ ℓfg ⊔ ℓgf)
+  is-biinv : (f : F x y) → 𝒰 (ℓa∙ ⊔ ℓb∙ ⊔ ℓh)
   is-biinv f = Σ (has-retraction f)  λ _ → has-section f
 
   make-is-biinv
