@@ -18,11 +18,11 @@ is-half-adjoint-equiv {A} {B} f =
   Σ[ ε ꞉ g section-of′ f ]
   Π[ x ꞉ A ] (ap f (η x) ＝ ε (f x))
 
-is-inv→is-half-adjoint-equiv : {f : A → B} → is-invertible f → is-half-adjoint-equiv f
-is-inv→is-half-adjoint-equiv {A} {B} {f} iiso =
+qinv→is-half-adjoint-equiv : {f : A → B} → quasi-inverse f → is-half-adjoint-equiv f
+qinv→is-half-adjoint-equiv {A} {B} {f} iiso =
   g , η #_ , ε′ , λ x → zig x ⁻¹
   where
-    open is-invertible iiso renaming (inv to g ; inv-i to η ; inv-o to ε)
+    open quasi-inverse iiso renaming (inv to g ; inv-i to η ; inv-o to ε)
     ε′ : (y : B) → f (g y) ＝ y
     ε′ y = ε # (f (g y)) ⁻¹ ∙ ap f (η # g y) ∙ ε # y
 
@@ -62,8 +62,8 @@ is-half-adjoint-equiv→is-equiv {f} (g , η , ε , zig) .equiv-proof y = fib , 
       refl ∙ ε y                                ~⟨ ∙-id-o (ε y) ⟩
       ε y                                       ∎
 
-@0 is-inv→is-equiv′ : {f : A → B} → is-invertible f → is-equiv f
-is-inv→is-equiv′ = is-half-adjoint-equiv→is-equiv ∘ is-inv→is-half-adjoint-equiv
+@0 qinv→is-equiv′ : {f : A → B} → quasi-inverse f → is-equiv f
+qinv→is-equiv′ = is-half-adjoint-equiv→is-equiv ∘ qinv→is-half-adjoint-equiv
 
 is-equiv→is-half-adjoint-equiv : is-equiv f → is-half-adjoint-equiv f
 is-equiv→is-half-adjoint-equiv {f} eqv =

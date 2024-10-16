@@ -48,12 +48,12 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     Extensional-≅ ⦃ sa ⦄ = set-injective→extensional! ≅-path sa
 
     opaque
-      H-Level-is-inv-prop : {f : a ⇒ b} → H-Level 1 (is-invertible f)
-      H-Level-is-inv-prop {f} = hlevel-prop-instance go where
-        go : is-prop (is-invertible f)
+      H-Level-qinv-prop : {f : a ⇒ b} → H-Level 1 (quasi-inverse f)
+      H-Level-qinv-prop {f} = hlevel-prop-instance go where
+        go : is-prop (quasi-inverse f)
         go g h = p where
-          module g = is-invertible g
-          module h = is-invertible h
+          module g = quasi-inverse g
+          module h = quasi-inverse h
           g~h : g.inv ＝ h.inv
           g~h =
             g.inv              ~⟨ (h.inv-o ▷ g.inv) ∙ id-r _ ⟨
@@ -61,10 +61,10 @@ module _ {o ℓ} {C : Precategory o ℓ} where
             h.inv              ∎
 
           p : g ＝ h
-          p i .is-invertible.inv = g~h i
-          p i .is-invertible.inverses =
+          p i .quasi-inverse.inv = g~h i
+          p i .quasi-inverse.inverses =
             is-prop→pathᴾ (λ i → hlevel 1 ⦃ H-Level-inverses {g = g~h i} ⦄) g.inverses h.inverses i
-      {-# OVERLAPPING H-Level-is-inv-prop #-}
+      {-# OVERLAPPING H-Level-qinv-prop #-}
 
 
   module _ ⦃ hl : ∀{x y} → H-Level n (Hom x y) ⦄ where instance
@@ -84,6 +84,6 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     H-Level-≅ .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ Iso-Iso
 
     opaque
-      H-Level-is-inv-default : {f : a ⇒ b} ⦃ _ : n ≥ʰ 2 ⦄ → H-Level n (is-invertible f)
-      H-Level-is-inv-default .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ is-invertible-Iso
-      {-# INCOHERENT H-Level-is-inv-default #-}
+      H-Level-qinv-default : {f : a ⇒ b} ⦃ _ : n ≥ʰ 2 ⦄ → H-Level n (quasi-inverse f)
+      H-Level-qinv-default .H-Level.has-of-hlevel = ≅→is-of-hlevel! _ quasi-inverse-Iso
+      {-# INCOHERENT H-Level-qinv-default #-}

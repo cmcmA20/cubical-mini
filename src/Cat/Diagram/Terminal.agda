@@ -43,11 +43,11 @@ module _ {o h} {C : Precategory o h} where
   open Terminal
   open Iso
 
-  !-invertible : (t₁ t₂ : Terminal C) → is-invertible (! t₁ {top t₂})
-  !-invertible t₁ t₂ = invertible (! t₂) (!-unique² t₁ _ _) (!-unique² t₂ _ _)
+  !-qinv : (t₁ t₂ : Terminal C) → quasi-inverse (! t₁ {top t₂})
+  !-qinv t₁ t₂ = qinv (! t₂) (!-unique² t₁ _ _) (!-unique² t₂ _ _)
 
-  ⊤-unique : (t₁ t₂ : Terminal C) → top t₁ ≅ top t₂
-  ⊤-unique t₁ t₂ = is-inv→≅ (! t₂) (!-invertible t₂ t₁)
+  ⊤-unique : (t₁ t₂ : Terminal C) → top t₁ ≊ top t₂
+  ⊤-unique t₁ t₂ = ≅→≊ $ qinv→≅ (! t₂) (!-qinv t₂ t₁)
 
   opaque
     terminal-is-prop : is-category C → is-prop (Terminal C)

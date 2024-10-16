@@ -60,11 +60,11 @@ retract→is-of-hlevel (suc (suc h)) (f , hs) hlevel x y =
       refl ∙ path                                ~⟨ ∙-id-o path ⟩
       path                                       ∎
 
-is-inv→is-of-hlevel : (h : HLevel) (f : A → B) → is-invertible f → is-of-hlevel h A → is-of-hlevel h B
-is-inv→is-of-hlevel h f fi = retract→is-of-hlevel h (is-inv→retract⁻ f fi)
+qinv→is-of-hlevel : (h : HLevel) (f : A → B) → quasi-inverse f → is-of-hlevel h A → is-of-hlevel h B
+qinv→is-of-hlevel h f fi = retract→is-of-hlevel h (qinv→retract⁻ f fi)
 
 is-equiv→is-of-hlevel : (h : HLevel) (f : A → B) → is-equiv f → is-of-hlevel h A → is-of-hlevel h B
-is-equiv→is-of-hlevel h f eqv = is-inv→is-of-hlevel h f (is-equiv→is-inv eqv)
+is-equiv→is-of-hlevel h f eqv = qinv→is-of-hlevel h f (is-equiv→qinv eqv)
 
 ≅→is-of-hlevel : (h : HLevel) → B ≅ A → is-of-hlevel h A → is-of-hlevel h B
 ≅→is-of-hlevel h i = retract→is-of-hlevel h (i .from , ≅→from-has-section i)
@@ -104,7 +104,7 @@ fun-is-of-hlevel
   → is-of-hlevel n (A → B)
 fun-is-of-hlevel n hl = Π-is-of-hlevel n (λ _ → hl)
 
-Σ-is-of-hlevel : {B : A → Type ℓ′} (n : HLevel)
+Σ-is-of-hlevel : {A : Type ℓ} {B : A → Type ℓ′} (n : HLevel)
                → is-of-hlevel n A
                → ((x : A) → is-of-hlevel n (B x))
                → is-of-hlevel n (Σ A B)
@@ -228,17 +228,17 @@ instance opaque
 
 -- by Martin Escardo
 -- using retracts is crucial, because isomorphism proof is incredibly painful
-module _ {f : A → B} (fi : is-invertible f) where private
+module _ {f : A → B} (fi : quasi-inverse f) where private
   open import Foundations.Transport
-  open is-invertible fi renaming ( inv   to g
+  open quasi-inverse fi renaming ( inv   to g
                                  ; inv-i to v
                                  ; inv-o to u
                                  )
 
-  is-inv→is-equiv′ : is-equiv f
-  is-inv→is-equiv′ .equiv-proof y .fst .fst = g y
-  is-inv→is-equiv′ .equiv-proof y .fst .snd = u # y
-  is-inv→is-equiv′ .equiv-proof y .snd = retract→is-prop go
+  qinv→is-equiv′ : is-equiv f
+  qinv→is-equiv′ .equiv-proof y .fst .fst = g y
+  qinv→is-equiv′ .equiv-proof y .fst .snd = u # y
+  qinv→is-equiv′ .equiv-proof y .snd = retract→is-prop go
     (is-contr→is-prop (singletonₚ-is-contr (y , refl))) (g y , u # y)
     where
     go =

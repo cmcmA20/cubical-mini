@@ -173,7 +173,7 @@ macro
     (c , _) ← get-record-type n
     unify g (it Has-constr.from-constr ##ₙ def₀ (quote auto) ##ₙ lit (name c))
 
-_ : Path Term (`constructor Σ) (con₀ (quote _,_))
+_ : Path Term (`constructor Σₜ) (con₀ (quote _,_))
 _ = refl
 
 macro

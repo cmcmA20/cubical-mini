@@ -12,21 +12,20 @@ open import Foundations.Notation.Reflexivity
 open import Foundations.Notation.Unital.Outer
 
 private variable
-  ℓᵃ ℓᵇ ℓ ℓ′ : Level
-  A : 𝒰 ℓᵃ
-  B : 𝒰 ℓᵇ
+  ℓ : Level
+  A : 𝒰 ℓ
 
 module _
-  {ℓᵃ ℓᵇ : Level} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
-  {I : B → A → 𝒰 ℓ′} {O : A → B → 𝒰 ℓ} {I∙O : B → B → 𝒰 ℓ″}
-  ⦃ _ : Refl I∙O ⦄ ⦃ _ : Comp I O I∙O ⦄ {x : A} {y : B} where
+  {ℓa ℓb ℓb∙ ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  {I : B → A → 𝒰 ℓh} {O : A → B → 𝒰 ℓh} {B∙ : B → B → 𝒰 ℓb∙}
+  ⦃ _ : Refl B∙ ⦄ ⦃ _ : Comp I O B∙ ⦄ {x : A} {y : B} where
 
-  _inner-inverse-of_ : (s : I y x) (r : O x y) → 𝒰 ℓ″
+  _inner-inverse-of_ : (s : I y x) (r : O x y) → 𝒰 ℓb∙
   s inner-inverse-of r = s ∙ r ＝ refl
 
   _section-of_ = _inner-inverse-of_
 
-  record has-section (r : O x y) : 𝒰 (ℓ′ ⊔ ℓ″) where
+  record has-section (r : O x y) : 𝒰 (ℓb∙ ⊔ ℓh) where
     no-eta-equality
     constructor make-section
     field
@@ -37,18 +36,18 @@ open has-section public
 
 -- aka split epimorphism
 Retract
-  : {ℓa ℓb ℓf ℓg ℓgf : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-    (F : B → A → 𝒰 ℓf) {G : A → B → 𝒰 ℓg} {G∙F : A → A → 𝒰 ℓgf}
-    ⦃ _ : Refl G∙F ⦄ ⦃ _ : Comp G F G∙F ⦄
-    (x : A) (y : B) → 𝒰 (ℓf ⊔ ℓg ⊔ ℓgf)
+  : {ℓa ℓa∙ ℓb ℓh : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+    (F : B → A → 𝒰 ℓh) {G : A → B → 𝒰 ℓh} {A∙ : A → A → 𝒰 ℓa∙}
+    ⦃ _ : Refl A∙ ⦄ ⦃ _ : Comp G F A∙ ⦄
+    (x : A) (y : B) → 𝒰 (ℓa∙ ⊔ ℓh)
 Retract F x y = Σ (F y x) has-section
 
 module _
-  {ℓᵃ ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {ℓ ℓ′ ℓ″ : Level}
-  (I : A → B → 𝒰 ℓ) (O : B → A → 𝒰 ℓ′) (I∙O : A → A → 𝒰 ℓ″)
-  ⦃ r : Refl I∙O ⦄ ⦃ s : Dual I O ⦄ ⦃ t : Comp I O I∙O ⦄ where
+  {ℓa ℓb ℓh ℓa∙ : Level} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+  (I : A → B → 𝒰 ℓh) (O : B → A → 𝒰 ℓh) (A∙ : A → A → 𝒰 ℓa∙)
+  ⦃ r : Refl A∙ ⦄ ⦃ s : Dual I O ⦄ ⦃ t : Comp I O A∙ ⦄ where
 
-  record GInv-i : 𝒰 (ℓᵃ ⊔ ℓᵇ ⊔ ℓ ⊔ ℓ″) where
+  record GInv-i : 𝒰 (ℓa ⊔ ℓa∙ ⊔ ℓb ⊔ ℓh) where
     no-eta-equality
     field ∙-inv-i : {x : A} {y : B} (p : I x y) → p section-of p ⁻¹
 
@@ -61,8 +60,8 @@ HInv-i R = GInv-i R R R
 
 -- binary operator having right inverses for all elements
 record Inv-r
-  {ℓᵃ} (A : 𝒰 ℓᵃ)
-  ⦃ r : Pointed A ⦄ ⦃ s : Has-unary-op A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓᵃ where
+  {ℓ} (A : 𝒰 ℓ)
+  ⦃ r : Pointed A ⦄ ⦃ s : Has-unary-op A ⦄ ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓ where
   no-eta-equality
   field <>-inv-r : (x : A) → x section-of (minv x)
 
@@ -77,7 +76,7 @@ instance
   {-# INCOHERENT Inv-r→HInv-i #-}
 
   Refl-Retract
-    : ∀ {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} {R : A → A → 𝒰 ℓ}
+    : ∀ {ℓa ℓ} {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ}
       ⦃ _ : Refl R ⦄ ⦃ _ : Trans R ⦄ ⦃ _ : HUnit-o R ⦄
     → Refl (Retract R)
   Refl-Retract .refl .fst = refl

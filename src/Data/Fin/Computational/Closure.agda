@@ -87,7 +87,7 @@ fin-sum {0} _ .fst ()
 fin-sum {0} _ .snd .equiv-proof ()
 fin-sum {suc n} B =
   fin-coproduct {n = B fzero} .fst ∘ f ,
-  is-equiv-comp (is-inv→is-equiv f-inv) (fin-coproduct {n = B fzero} .snd)
+  is-equiv-comp (qinv→is-equiv f-inv) (fin-coproduct {n = B fzero} .snd)
     where
       rec″ : Σ[ k ꞉ Fin n ] Fin (B (fsuc k)) ≃ Fin (sum n (B ∘ fsuc))
       rec″ = fin-sum {n = n} (B ∘ fsuc)
@@ -97,14 +97,14 @@ fin-sum {suc n} B =
       f (mk-fin 0       , x) = inl x
       f (mk-fin (suc k) , y) = inr (mrec.to (mk-fin k , y))
 
-      f-inv : is-invertible f
-      f-inv .is-invertible.inv (inl x) = fzero , x
-      f-inv .is-invertible.inv (inr x) with mrec.from x
+      f-inv : quasi-inverse f
+      f-inv .quasi-inverse.inv (inl x) = fzero , x
+      f-inv .quasi-inverse.inv (inr x) with mrec.from x
       ... | x , y = fsuc x , y
-      f-inv .is-invertible.inverses .Inverses.inv-o i (inl x) = inl x
-      f-inv .is-invertible.inverses .Inverses.inv-o i (inr x) = inr (mrec.ε i x)
-      f-inv .is-invertible.inverses .Inverses.inv-i i (mk-fin 0 , s) = mk-fin 0 , s
-      f-inv .is-invertible.inverses .Inverses.inv-i i (mk-fin (suc k) , s)
+      f-inv .quasi-inverse.inverses .Inverses.inv-o i (inl x) = inl x
+      f-inv .quasi-inverse.inverses .Inverses.inv-o i (inr x) = inr (mrec.ε i x)
+      f-inv .quasi-inverse.inverses .Inverses.inv-i i (mk-fin 0 , s) = mk-fin 0 , s
+      f-inv .quasi-inverse.inverses .Inverses.inv-i i (mk-fin (suc k) , s)
         = fsuc (fst (mrec.η (~ i) (mk-fin k , s)))
         , snd (mrec.η (~ i) (mk-fin k , s))
 

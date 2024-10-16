@@ -8,10 +8,6 @@ open import Agda.Builtin.Unit
 open import Foundations.Notation.Composition
 open import Foundations.Notation.Duality
 
-private variable
-  ℓᵃ ℓ : Level
-  A : 𝒰 ℓᵃ
-
 -- A ---|--> C
 -- |         |
 -- |         |
@@ -29,11 +25,11 @@ private variable
 -- damn, generalized commutativity got hands
 -- what should it be, naturality?
 
-module _ {ℓᵃ} (A : 𝒰 ℓᵃ) where
-  Commutativity : (t : A → A → A) (x y : A) → 𝒰 ℓᵃ
+module _ {ℓ} (A : 𝒰 ℓ) where
+  Commutativity : (t : A → A → A) (x y : A) → 𝒰 ℓ
   Commutativity t x y = t y x ＝ t x y
 
-  record Comm ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓᵃ where
+  record Comm ⦃ t : Has-binary-op A ⦄ : 𝒰 ℓ where
     no-eta-equality
     field <>-comm : ∀ x y → Commutativity (t ._<>_) x y
 

@@ -270,77 +270,27 @@ has-section+monic→has-retraction sect monic .is-retraction =
 
 open Inverses
 
-id-invertible : is-invertible (id {a})
-id-invertible .is-invertible.inv = id
-id-invertible .is-invertible.inverses .inv-o = id-l id
-id-invertible .is-invertible.inverses .inv-i = id-l id
-
-
 open Iso
-
-Inverses-∘ : {f : a ⇒ b} {f⁻¹ : b ⇒ a} {g : b ⇒ c} {g⁻¹ : c ⇒ b}
-           → Inverses f f⁻¹ → Inverses g g⁻¹ → Inverses (g ∘ f) (f⁻¹ ∘ g⁻¹)
-Inverses-∘ {f} {f⁻¹} {g} {g⁻¹} finv ginv = record { inv-o = l ; inv-i = r } where
-  module finv = Inverses finv
-  module ginv = Inverses ginv
-
-  opaque
-    l : (g ∘ f) ∘ f⁻¹ ∘ g⁻¹ ＝ id
-    l = (g ∘ f) ∘ f⁻¹ ∘ g⁻¹  ~⟨ cat! C ⟩
-        g ∘ (f ∘ f⁻¹) ∘ g⁻¹  ~⟨ (g⁻¹ ◁ finv.inv-o) ▷ g ⟩
-        g ∘ id ∘ g⁻¹         ~⟨ cat! C ⟩
-        g ∘ g⁻¹              ~⟨ ginv.inv-o ⟩
-        id                   ∎
-
-    r : (f⁻¹ ∘ g⁻¹) ∘ g ∘ f ＝ id
-    r = (f⁻¹ ∘ g⁻¹) ∘ g ∘ f  ~⟨ cat! C ⟩
-        f⁻¹ ∘ (g⁻¹ ∘ g) ∘ f  ~⟨ (f ◁ ginv.inv-i) ▷ f⁻¹ ⟩
-        f⁻¹ ∘ id ∘ f         ~⟨ cat! C ⟩
-        f⁻¹ ∘ f              ~⟨ finv.inv-i ⟩
-        id                   ∎
-
-
-invertible-∘
-  : {f : b ⇒ c} {g : a ⇒ b}
-  → is-invertible f → is-invertible g
-  → is-invertible (f ∘ g)
-invertible-∘ f-inv g-inv = record
-  { inv = g-inv.inv ∘ f-inv.inv
-  ; inverses = Inverses-∘ g-inv.inverses f-inv.inverses
-  }
-  where
-    module f-inv = is-invertible f-inv
-    module g-inv = is-invertible g-inv
-
-_invertible⁻¹
-  : {f : Hom a b}
-  → (f-inv : is-invertible f)
-  → is-invertible (is-invertible.inv f-inv)
-_invertible⁻¹ {f = f} f-inv .is-invertible.inv = f
-_invertible⁻¹ f-inv .is-invertible.inverses .inv-o =
-  is-invertible.inv-i f-inv
-_invertible⁻¹ f-inv .is-invertible.inverses .inv-i =
-  is-invertible.inv-o f-inv
 
 opaque
   private
-    inverse-unique-internal
+    ≅-inverse-unique-internal
       : (x y : Ob) (p : x ＝ y) (b d : Ob) (q : b ＝ d) {f : x ≅ b} {g : y ≅ d}
       → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
       → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
-    inverse-unique-internal x = J>! λ y → J>! λ {f} {g} d →
+    ≅-inverse-unique-internal x = J>! λ p → J>! λ {f} {g} q →
       f .from                      ~⟨ f .from .id-r ⟨
       f .from ∘ id                 ~⟨ g .inv-o ▷ f .from ⟨
       f .from ∘ g .to ∘ g .from    ~⟨ assoc _ _ _ ⟨
-      (f .from ∘ g .to) ∘ g .from  ~⟨ g .from ◁ (sym d ▷ f .from) ∙ f .inv-i ⟩
+      (f .from ∘ g .to) ∘ g .from  ~⟨ g .from ◁ (sym q ▷ f .from) ∙ f .inv-i ⟩
       id ∘ g .from                 ~⟨ g .from .id-l ⟩
       g .from                      ∎
 
-  inverse-unique
+  ≅-inverse-unique
     : {x y : Ob} (p : x ＝ y) {b d : Ob} (q : b ＝ d) {f : x ≅ b} {g : y ≅ d}
     → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
     → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
-  inverse-unique p = inverse-unique-internal _ _ p _ _
+  ≅-inverse-unique p = ≅-inverse-unique-internal _ _ p _ _
 
 
 module _ ⦃ _ : ∀ {x y} → H-Level 2 (Hom x y) ⦄ where
@@ -364,13 +314,13 @@ module _ ⦃ _ : ∀ {x y} → H-Level 2 (Hom x y) ⦄ where
     : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
     → ＜ f .to ／ (λ i → Hom (p i) (q i)) ＼ g .to ＞
     → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-  ≅-pathᴾ p q {f} {g} r = ≅-pathᴾ-internal p q r (inverse-unique p q {f = f} {g = g} r)
+  ≅-pathᴾ p q {f} {g} r = ≅-pathᴾ-internal p q r (≅-inverse-unique p q {f = f} {g = g} r)
 
   ≅-pathᴾ-from
     : (p : a ＝ c) (q : b ＝ d) {f : a ≅ b} {g : c ≅ d}
     → ＜ f .from ／ (λ i → Hom (q i) (p i)) ＼ g .from ＞
     → ＜ f ／ (λ i → p i ≅ q i) ＼ g ＞
-  ≅-pathᴾ-from p q {f} {g} r = ≅-pathᴾ-internal p q (inverse-unique q p {f = f ⁻¹} {g = g ⁻¹} r) r
+  ≅-pathᴾ-from p q {f} {g} r = ≅-pathᴾ-internal p q (≅-inverse-unique q p {f = f ⁻¹} {g = g ⁻¹} r) r
 
   ≅-path : {f g : a ≅ b} → f .to ＝ g .to → f ＝ g
   ≅-path = ≅-pathᴾ refl refl

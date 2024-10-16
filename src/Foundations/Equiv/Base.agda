@@ -7,10 +7,6 @@ open import Foundations.Path.Base
 
 open import Foundations.Prim.Equiv public
 
--- include `equiv` or `_≃_` if the definition is about equivalences (`_≃_`)
--- include `is-equiv`       if the definition is about function being an equivalence (`is-equiv`)
--- use `ₑ` subscript for common operators on equivalences
-
 private variable
   ℓ ℓ′ ℓ″ : Level
   A : Type ℓ

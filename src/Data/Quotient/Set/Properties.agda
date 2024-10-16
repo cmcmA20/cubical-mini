@@ -6,6 +6,8 @@ open import Meta.Extensionality
 
 open import Structures.n-Type
 
+open import Logic.Equivalence
+
 open import Data.Quotient.Set.Base
 open import Data.Quotient.Set.Path
 import Data.Truncation.Propositional as ∥-∥₁

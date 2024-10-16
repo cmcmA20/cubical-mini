@@ -159,7 +159,7 @@ instance
       bc : (x : Fin (cardinality A-bf)) → ℕ
       bc = cardinality ∘ (λ z → fam {z}) ∘ aeq.from
 
-      fs : (Σ _ λ x → Fin (bc x)) ≃ Fin (sum (cardinality A-bf) bc)
+      fs : (Σₜ _ λ x → Fin (bc x)) ≃ Fin (sum (cardinality A-bf) bc)
       fs = fin-sum bc
       work = do
         t ← finite-choice A-bf $ enumeration₁ ∘ (λ z → fam {z})
