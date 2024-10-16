@@ -5,13 +5,13 @@
 <a id="50" class="Keyword">open</a> <a id="55" class="Keyword">import</a> <a id="62" href="Prelude.html" class="Module">Prelude</a>
   <a id="72" class="Keyword">renaming</a> <a id="81" class="Symbol">(</a> <a id="83" href="Functions.Embedding.html#468" class="Function Operator">_↪_</a> <a id="87" class="Symbol">to</a> <a id="90" class="Function Operator">_↪ₜ_</a>
            <a id="106" class="Symbol">;</a> <a id="108" href="Functions.Surjection.html#815" class="Function Operator">_↠_</a> <a id="112" class="Symbol">to</a> <a id="115" class="Function Operator">_↠ₜ_</a>
-           <a id="131" class="Symbol">;</a> <a id="133" href="Foundations.Pi.Base.html#3423" class="Function Operator">_∘_</a> <a id="137" class="Symbol">to</a> <a id="140" class="Function Operator">_∘ₜ_</a>
-           <a id="156" class="Symbol">;</a> <a id="158" href="Foundations.Pi.Base.html#2509" class="Function">id</a>  <a id="162" class="Symbol">to</a> <a id="165" class="Function">idₜ</a>
-           <a id="180" class="Symbol">;</a> <a id="182" href="Foundations.Isomorphism.html#8296" class="Function">≅→≃</a> <a id="186" class="Symbol">to</a> <a id="189" class="Function">≅ₜ→≃</a>
+           <a id="131" class="Symbol">;</a> <a id="133" href="Foundations.Pi.Base.html#3422" class="Function Operator">_∘_</a> <a id="137" class="Symbol">to</a> <a id="140" class="Function Operator">_∘ₜ_</a>
+           <a id="156" class="Symbol">;</a> <a id="158" href="Foundations.Pi.Base.html#2508" class="Function">id</a>  <a id="162" class="Symbol">to</a> <a id="165" class="Function">idₜ</a>
+           <a id="180" class="Symbol">;</a> <a id="182" href="Foundations.Isomorphism.html#8140" class="Function">≅→≃</a> <a id="186" class="Symbol">to</a> <a id="189" class="Function">≅ₜ→≃</a>
            <a id="205" class="Symbol">;</a> <a id="207" href="Foundations.Univalence.html#2597" class="Function">≅→=</a> <a id="211" class="Symbol">to</a> <a id="214" class="Function">≅ₜ→=</a>
-           <a id="230" class="Symbol">;</a> <a id="232" href="Foundations.Sigma.Properties.html#4875" class="Function">×-assoc</a> <a id="240" class="Symbol">to</a> <a id="243" class="Function">×ₜ-assoc</a>
+           <a id="230" class="Symbol">;</a> <a id="232" href="Foundations.Sigma.Properties.html#4888" class="Function">×-assoc</a> <a id="240" class="Symbol">to</a> <a id="243" class="Function">×ₜ-assoc</a>
 
-           <a id="264" class="Symbol">;</a> <a id="266" href="Functions.Embedding.html#7736" class="Function">Extensional-↪</a> <a id="280" class="Symbol">to</a> <a id="283" class="Function">Extensional-↪ₜ</a>
+           <a id="264" class="Symbol">;</a> <a id="266" href="Functions.Embedding.html#7731" class="Function">Extensional-↪</a> <a id="280" class="Symbol">to</a> <a id="283" class="Function">Extensional-↪ₜ</a>
            <a id="309" class="Symbol">;</a> <a id="311" href="Functions.Surjection.html#2499" class="Function">Extensional-↠</a> <a id="325" class="Symbol">to</a> <a id="328" class="Function">Extensional-↠ₜ</a>
            <a id="354" class="Symbol">)</a>
   <a id="358" class="Keyword">public</a>
@@ -25,10 +25,12 @@
   <a id="519" class="Keyword">hiding</a> <a id="526" class="Symbol">(</a> <a id="528" class="Keyword">module</a> <a id="535" href="Cat.Solver.html#533" class="Module">NbE</a> <a id="539" class="Symbol">;</a> <a id="541" class="Keyword">module</a> <a id="548" href="Cat.Solver.html#1861" class="Module">Reflection</a> <a id="559" class="Symbol">)</a>
   <a id="563" class="Keyword">public</a>
 <a id="570" class="Keyword">open</a> <a id="575" class="Keyword">import</a> <a id="582" href="Cat.Univalent.html" class="Module">Cat.Univalent</a>
-  <a id="598" class="Keyword">using</a> <a id="604" class="Symbol">(</a> <a id="606" href="Cat.Univalent.html#180" class="Function">is-category</a> <a id="618" class="Symbol">;</a> <a id="620" href="Cat.Univalent.html#404" class="Function">path→iso</a> <a id="629" class="Symbol">;</a> <a id="631" href="Cat.Univalent.html#2141" class="Function">Hom-pathᴾ</a>
-        <a id="649" class="Symbol">;</a> <a id="651" href="Cat.Univalent.html#1410" class="Function">Hom-transport</a> <a id="665" class="Symbol">;</a> <a id="667" href="Cat.Univalent.html#3044" class="Function">Hom-pathᴾ-refl-l</a> <a id="684" class="Symbol">;</a> <a id="686" href="Cat.Univalent.html#3273" class="Function">Hom-pathᴾ-refl-r</a>
-        <a id="711" class="Symbol">;</a> <a id="713" class="Keyword">module</a> <a id="720" href="Cat.Univalent.html#3596" class="Module">Univalent</a> <a id="730" class="Symbol">)</a>
-  <a id="734" class="Keyword">public</a>
+  <a id="598" class="Keyword">using</a> <a id="604" class="Symbol">(</a> <a id="606" href="Cat.Univalent.html#175" class="Function">is-category</a> <a id="618" class="Symbol">;</a> <a id="620" href="Cat.Univalent.html#399" class="Function">path→equiv</a> <a id="631" class="Symbol">;</a> <a id="633" href="Cat.Univalent.html#2194" class="Function">Hom-pathᴾ</a>
+        <a id="651" class="Symbol">;</a> <a id="653" href="Cat.Univalent.html#1451" class="Function">Hom-transport</a> <a id="667" class="Symbol">;</a> <a id="669" href="Cat.Univalent.html#3115" class="Function">Hom-pathᴾ-refl-l</a> <a id="686" class="Symbol">;</a> <a id="688" href="Cat.Univalent.html#3346" class="Function">Hom-pathᴾ-refl-r</a>
+        <a id="713" class="Symbol">;</a> <a id="715" class="Keyword">module</a> <a id="722" href="Cat.Univalent.html#3673" class="Module">Univalent</a> <a id="732" class="Symbol">)</a>
+  <a id="736" class="Keyword">public</a>
 
-<a id="742" class="Keyword">open</a> <a id="747" class="Keyword">import</a> <a id="754" href="Cat.Morphism.Instances.html" class="Module">Cat.Morphism.Instances</a> <a id="777" class="Keyword">public</a>
+<a id="744" class="Keyword">open</a> <a id="749" class="Keyword">import</a> <a id="756" href="Cat.Morphism.Instances.html" class="Module">Cat.Morphism.Instances</a> <a id="779" class="Keyword">public</a>
+
+<a id="787" class="Keyword">open</a> <a id="792" class="Keyword">import</a> <a id="799" href="Functions.Equiv.Biinv.html" class="Module">Functions.Equiv.Biinv</a> <a id="821" class="Keyword">public</a>
 </pre></body></html>
