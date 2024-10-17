@@ -6,14 +6,12 @@ open import Order.Base
 open import Order.Category
 open import Order.SupLattice
 
-import Order.Reasoning
-
 module Order.SupLattice.SmallBasis
   {o ℓ ℓ′}
   {P : Poset o ℓ} (L : is-sup-lattice P ℓ′)
   {B : 𝒰 ℓ′} (β : B → ⌞ P ⌟) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-sup-lattice L
   open is-lub
 

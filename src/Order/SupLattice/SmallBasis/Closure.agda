@@ -2,10 +2,6 @@
 module Order.SupLattice.SmallBasis.Closure where
 
 open import Cat.Prelude
-open import Functions.Surjection
-
-open import Data.Unit
-open import Data.Maybe renaming (rec to recᵐ)
 
 open import Order.Base
 open import Order.Constructions.Product
@@ -14,7 +10,9 @@ open import Order.Morphism
 open import Order.SupLattice
 open import Order.SupLattice.SmallBasis
 
-import Order.Reasoning
+open import Data.Maybe renaming (rec to recᵐ)
+open import Data.Unit
+open import Functions.Surjection
 
 module _ {o ℓ ℓ′}
          {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}

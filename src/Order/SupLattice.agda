@@ -9,7 +9,6 @@ open import Order.Diagram.Join
 open import Order.Diagram.Lub
 open import Order.Semilattice.Join
 import Order.Diagram.Lub.Reasoning as Lubs
-import Order.Reasoning
 
 open import Combinatorics.Power
 
@@ -37,6 +36,7 @@ instance
   ×-is-sup-lattice
     : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
     → ×-notation (is-sup-lattice P ℓᵢ) (is-sup-lattice Q ℓᵢ) (is-sup-lattice (P × Q) ℓᵢ)
+  ×-is-sup-lattice .×-notation.Constraint _ _ = ⊤
   ×-is-sup-lattice ._×_ sx sy .is-sup-lattice.has-lubs =
     sx .is-sup-lattice.has-lubs × sy .is-sup-lattice.has-lubs
 
@@ -49,7 +49,7 @@ record
   no-eta-equality
   private
     module P = Poset P
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
     module Pₗ = is-sup-lattice S
     module Qₗ = is-sup-lattice T
   field
@@ -84,16 +84,18 @@ instance
   ⇒-sup-lat : ⇒-notation
     (Σ[ P ꞉ Poset o ℓ ] is-sup-lattice P ℓᵢ) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-sup-lattice Q ℓᵢ)
     (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′ ⊔ ℓsuc ℓᵢ))
+  ⇒-sup-lat .⇒-notation.Constraint _ _ = ⊤
   ⇒-sup-lat ._⇒_ (P , slp) (Q , slq) = Total-hom Monotone is-sup-lat-hom slp slq
 
   ×-sup-lat : ×-notation
     (Σ[ P ꞉ Poset o ℓ ] is-sup-lattice P ℓᵢ) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-sup-lattice Q ℓᵢ)
     (Σ[ R ꞉ Poset (o ⊔ o′) (ℓ ⊔ ℓ′) ] is-sup-lattice R ℓᵢ)
+  ×-sup-lat .×-notation.Constraint _ _ = ⊤
   ×-sup-lat ._×_ (P , slp) (Q , slq) = P × Q , slp × slq
 
 
 module _ {R : Poset o″ ℓ″} where
-  open Order.Reasoning R
+  open Poset R
   open is-sup-lat-hom
 
   instance
@@ -111,7 +113,7 @@ module _
   {o ℓ ℓ′ : Level}
   {P : Poset o ℓ} (L : is-sup-lattice P ℓ′)
   {T : 𝒰 ℓ′} (β : T → ⌞ P ⌟) where
-  open Order.Reasoning P
+  open Poset P
   open is-sup-lattice L
 
   ℙ⋃ : ℙ T ℓ′ → ⌞ P ⌟
@@ -126,7 +128,7 @@ module _
   {P : Poset o ℓ} (L : is-sup-lattice P ℓ′)
   {I : 𝒰 ℓᵢ} (m : I → ⌞ P ⌟)
   (I-small : is-of-size ℓ′ I) where
-  open Order.Reasoning P
+  open Poset P
   open is-sup-lattice L
   open is-lub
 

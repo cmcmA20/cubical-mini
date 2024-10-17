@@ -9,7 +9,6 @@ open import Order.Diagram.Fixpoint
 open import Order.Diagram.Lub
 open import Order.SupLattice
 open import Order.SupLattice.SmallBasis
-import Order.Reasoning
 import Order.SupLattice.SmallPresentation as small-presentation-of-lattice
 
 open import Data.Empty
@@ -25,7 +24,7 @@ module _
   {B : 𝒰 ℓ′} {β : B → ⌞ P ⌟}
   (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-sup-lattice L
   open is-basis h
 
@@ -78,13 +77,13 @@ module local-inductive-definitions
   {B : 𝒰 ℓ′} {β : B → ⌞ P ⌟}
   (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-sup-lattice L
   open is-basis h
 
   _↓_ : ℙ (B × Ob) (o ⊔ ℓ′) → Ob → 𝒰 (o ⊔ ℓ ⊔ ℓ′)
-  φ ↓ a = Σ[ b ꞉ B ] ∃[ a' ꞉ Ob ] (b , a') ∈ φ × a' ≤ a
+  φ ↓ a = Σ[ b ꞉ B ] ∃[ a' ꞉ Ob ] ((b , a') ∈ φ) × (a' ≤ a)
 
   ↓→base : (ϕ : ℙ (B × Ob) (o ⊔ ℓ′)) → (a : Ob) → ϕ ↓ a → B
   ↓→base ϕ a = fst
@@ -172,7 +171,7 @@ module _
   {B : 𝒰 ℓ′} {β : B → ⌞ P ⌟}
   (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -362,7 +361,7 @@ module bounded-inductive-definitions
   {B : 𝒰 ℓ′} {β : B → ⌞ P ⌟}
   (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -410,7 +409,7 @@ module bounded-inductive-definitions
 
       S₀→↓-aux : {b : B}
                → Σ[ t ꞉ T ] Σ[ m ꞉ (α t → ↓ᴮ L β a) ] (b , ⋃ (m ∙ fst ∙ β)) ∈ ϕ
-               → Σ[ a' ꞉ Ob ] ((b , a') ∈ ϕ × a' ≤ a)
+               → Σ[ a' ꞉ Ob ] ((b , a') ∈ ϕ × (a' ≤ a))
       S₀→↓-aux (t , m , p) =
           ⋃ (m ∙ fst ∙ β) , p
         , ⋃-universal _ (snd ∘ₜ m)
@@ -448,7 +447,7 @@ module _
   {B : 𝒰 ℓ′} {β : B → ⌞ P ⌟}
   (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -558,7 +557,7 @@ module _
   {B : 𝒰 ℓ′} {β : B → ⌞ P ⌟}
   (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -623,7 +622,7 @@ module _
   {B : 𝒰 ℓ′} {β : B → ⌞ P ⌟}
   (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -653,7 +652,7 @@ module _
   {P : Poset o ℓ} {L : is-sup-lattice P ℓ′}
   {β : B → ⌞ P ⌟} (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-sup-lattice L
   open is-basis h
@@ -663,7 +662,7 @@ module _
   density-condition : (Ob → Ob) → (I : 𝒰 ℓ′) → (I → Ob)
                     → 𝒰 (o ⊔ ℓ ⊔ ℓ′)
   density-condition f I γ = (b : B) → (a : Ob) → b ≤ᴮ f a
-                          → ∃[ i ꞉ I ] b ≤ᴮ f (γ i) × γ i ≤ a
+                          → ∃[ i ꞉ I ] (b ≤ᴮ f (γ i)) × (γ i ≤ a)
 
   is-dense : (Ob → Ob) → 𝒰 (o ⊔ ℓ ⊔ ℓsuc ℓ′)
   is-dense f = Σ[ I ꞉ 𝒰 ℓ′ ] Σ[ γ ꞉ (I → Ob) ] density-condition f I γ
@@ -710,13 +709,13 @@ module _
 
       ↓ᴮ-fa→↓ : {a : Ob} {b : B}
              → b ≤ᴮ f # a
-             → ∃[ a' ꞉ Ob ] (b , a') ∈ φ × a' ≤ a
+             → ∃[ a' ꞉ Ob ] (b , a') ∈ φ × (a' ≤ a)
       ↓ᴮ-fa→↓ {a} {b} = map (λ (i , o , r) →
                                   γ i , (lift≃id ⁻¹ $ ∣ i , o , =ˢ-refl ∣₁) , r)
                       ∘ₜ f-dense b a
 
       ↓→↓ᴮ-fa : {a : Ob} {b : B}
-              → ∃[ a' ꞉ Ob ] (b , a') ∈ φ × a' ≤ a
+              → ∃[ a' ꞉ Ob ] (b , a') ∈ φ × (a' ≤ a)
               → b ≤ᴮ f # a
       ↓→↓ᴮ-fa {a} {b}
         = map (second $ first $ (lift≃id $_))
@@ -734,7 +733,7 @@ module _
   {B : 𝒰 ℓ′} {β : B → ⌞ P ⌟}
   (h : is-basis L β) where
 
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-sup-lattice L
   open is-basis h
