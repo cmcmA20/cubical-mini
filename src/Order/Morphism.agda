@@ -3,7 +3,6 @@ module Order.Morphism where
 
 open import Cat.Prelude
 import Cat.Morphism
-open import Functions.Surjection
 open import Order.Base
 open import Functions.Surjection
 
