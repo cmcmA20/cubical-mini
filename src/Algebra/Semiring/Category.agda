@@ -44,5 +44,5 @@ instance
   Semirings-equational .invert-id-hom p .pres-+ _ _ = sym (p .pres-+ _ _)
   Semirings-equational .invert-id-hom p .pres-· _ _ = sym (p .pres-· _ _)
 
-Forget : Semirings ℓ ⇒ Sets ℓ
+Forget : Semirings ℓ ⇒ Types ℓ
 Forget = Forget-structure (Semiring-structure _)

@@ -80,10 +80,10 @@ to-path-over-refl {x} ids = ap (ap snd) $ to-path-refl-coh ids x
 
 singleton-is-contr→identity-system
   : {A : Type ℓ} {R : A → A → Type ℓ′} {r : ∀ a → R a a}
-  → (∀ {a} → is-contr (Σ _ (R a)))
+  → (∀ {a} → is-contr (Σₜ _ (R a)))
   → is-identity-system R r
 singleton-is-contr→identity-system {R} {r} c = ids where
-  paths′ : ∀ {a} (p : Σ _ (R a)) → (a , r a) ＝ p
+  paths′ : ∀ {a} (p : Σₜ _ (R a)) → (a , r a) ＝ p
   paths′ p = is-contr→is-prop c _ _
 
   ids : is-identity-system R r
@@ -147,7 +147,7 @@ opaque
     : {R : A → A → Type ℓ′} {r : ∀ a → R a a}
     → is-prop (is-identity-system R r)
   is-identity-system-is-prop {A} {R} {r} =
-    retract→is-of-hlevel 1 from to (fun-ext cancel) λ x y i a → is-contr-is-prop (x a) (y a) i
+    retract→is-prop (from , make-section to (fun-ext cancel)) λ x y i a → is-contr-is-prop (x a) (y a) i
     where
       to : is-identity-system R r → ∀ x → is-contr (Σ A (R x))
       to ids x = singleton-is-contr ids

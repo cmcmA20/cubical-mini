@@ -12,7 +12,7 @@ private variable
   C : Type ℓᶜ
 
 ∥-∥₂-idempotent : is-set A → is-equiv ∣_∣₂
-∥-∥₂-idempotent {A} A-set = is-inv→is-equiv $ invertible proj! (fun-ext inc∘proj) refl where
+∥-∥₂-idempotent {A} A-set = qinv→is-equiv $ qinv proj! (fun-ext inc∘proj) refl where
   instance _ = hlevel-basic-instance 2 A-set
            _ = hlevel-basic-instance 2 squash₂
   inc∘proj : (x : ∥ A ∥₂) → ∣ proj! x ∣₂ ＝ x

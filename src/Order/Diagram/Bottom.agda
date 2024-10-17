@@ -7,12 +7,11 @@ open import Cat.Diagram.Initial
 open import Order.Base
 open import Order.Category
 open import Order.Diagram.Lub
-import Order.Reasoning
 
 private variable o ℓ : Level
 
 module _ (P : Poset o ℓ) where
-  open Order.Reasoning P
+  open Poset P
 
   is-bottom : Ob → Type _
   is-bottom bot = (x : Ob) → bot ≤ x
@@ -26,6 +25,7 @@ module _ (P : Poset o ℓ) where
     instance
       ⊥-Bottom : ⊥-notation Ob
       ⊥-Bottom .⊥ = bot
+    {-# OVERLAPPING ⊥-Bottom #-}
 
     ¡ : ∀{x} → ⊥ ≤ x
     ¡ = has-bot _
@@ -34,7 +34,7 @@ module _ (P : Poset o ℓ) where
 unquoteDecl Bottom-Iso = declare-record-iso Bottom-Iso (quote Bottom)
 
 module _ {P : Poset o ℓ} where
-  open Order.Reasoning P
+  open Poset P
 
   is-bottom→is-lub : ∀ {lub} {f : ⊥ → _} → is-bottom P lub → is-lub P f lub
   is-bottom→is-lub is-bot .is-lub.least x _ = is-bot x
@@ -51,7 +51,7 @@ module _ {P : Poset o ℓ} where
   Bottom-is-prop : is-prop (Bottom P)
   Bottom-is-prop = ≅→is-of-hlevel 1 Bottom-Iso λ x y → bottom-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Bottom
       : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Bottom P)

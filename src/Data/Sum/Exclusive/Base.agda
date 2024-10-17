@@ -21,7 +21,8 @@ private variable
 
 instance
   ⊻-Type : ⊻-notation (Type ℓᵃ) (Type ℓᵇ) (Type (ℓᵃ ⊔ ℓᵇ))
-  ⊻-Type ._⊻_ = _⊻ₜ_
+  ⊻-Type .⊻-notation.Constraint _ _ = ⊤ₜ
+  ⊻-Type ._⊻_ A B = A ⊻ₜ B
 
 [_,_]ₓ : (A → ¬ B → C) → (B → ¬ A → C) → (A ⊻ B) → C
 [ f , _ ]ₓ (inxl a ¬b) = f a ¬b
@@ -54,6 +55,7 @@ dmap-r = qmap id id
 
 instance
   ⊻-So : {x y : Bool} → ⊻-notation (So x) (So (not y)) (So (x xor y))
+  ⊻-So .⊻-notation.Constraint _ _ = ⊤ₜ
   ⊻-So {x = true} {y = false} ._⊻_ _ _ = oh -- biased
 
   Reflects-⊻

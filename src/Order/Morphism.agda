@@ -5,20 +5,11 @@ open import Cat.Prelude
 import Cat.Morphism
 open import Functions.Surjection
 open import Order.Base
-import Order.Reasoning
+open import Functions.Surjection
 
 private variable
   o o′ ℓ ℓ′ : Level
   P Q : Poset o ℓ
-
-module _ {P : Poset o ℓ} where
-  open Poset P
-
-  instance
-    ≅-Poset-Ob : ≅-notation Ob Ob (𝒰 ℓ)
-    ≅-Poset-Ob ._≅_ = Iso _≤_ _≤_
-    {-# INCOHERENT ≅-Poset-Ob #-}
-
 
 module _ (P : Poset o ℓ) (Q : Poset o′ ℓ′) (f : ⌞ P ⌟ → ⌞ Q ⌟) where
   private
@@ -37,10 +28,10 @@ module _ (P : Poset o ℓ) (Q : Poset o′ ℓ′) (f : ⌞ P ⌟ → ⌞ Q ⌟)
 
 module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   private
-    module P = Order.Reasoning P
-    module Q = Order.Reasoning Q
+    module P = Poset P
+    module Q = Poset Q
 
-  open Order.Reasoning P
+  open Poset P
 
   is-order-embedding→is-embedding : (f : ⌞ P ⌟ → ⌞ Q ⌟) → is-order-embedding P Q f → is-embedding f
   is-order-embedding→is-embedding f e = set-injective→is-embedding! λ fx=fy →
@@ -75,33 +66,32 @@ module _ {o ℓ o′ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
 
 module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   private
-    module P = Order.Reasoning P
-    module Q = Order.Reasoning Q
-
+    module P = Poset P
+    module Q = Poset Q
   open Iso
 
-  has-retract→is-order-reflection
+  has-retraction→is-order-reflection
     : (f : P ⇒ Q)
-    → has-retract f
+    → has-retraction f
     → is-order-reflection P Q (f #_)
-  has-retract→is-order-reflection f f-ret =
-    section→is-order-reflection (f .hom) (f-ret .retract)
-      (fun-ext $ ap hom (f-ret .is-retract) #_)
+  has-retraction→is-order-reflection f f-ret =
+    section→is-order-reflection (f .hom) (f-ret .retraction)
+      (fun-ext $ ap hom (f-ret .is-retraction) #_)
 
-  has-retract→is-order-embedding
+  has-retraction→is-order-embedding
     : (f : P ⇒ Q)
-    → has-retract f
+    → has-retraction f
     → is-order-embedding P Q (f #_)
-  has-retract→is-order-embedding f f-ret =
-    section→is-order-embedding f (f-ret .retract)
-      (fun-ext $ ap hom (f-ret .is-retract) #_)
+  has-retraction→is-order-embedding f f-ret =
+    section→is-order-embedding f (f-ret .retraction)
+      (fun-ext $ ap hom (f-ret .is-retraction) #_)
 
-  reflection-retract→is-monotone
+  reflection-retraction→is-monotone
     : (f : ⌞ P ⌟ → ⌞ Q ⌟) (g : ⌞ Q ⌟ → ⌞ P ⌟)
-    → f retract-of g
+    → f retraction-of g
     → is-order-reflection P Q f
     → is-monotone Q P g
-  reflection-retract→is-monotone f g r or {x} {y} le =
+  reflection-retraction→is-monotone f g r or {x} {y} le =
     or $ =→~⁻ (r ⁻¹ $ x) ∙ le ∙ =→~ (r ⁻¹ $ y)
 
   ≅ₚ→⊣ : (f : P ≅ Q) → f .to ⊣ f .from
@@ -113,7 +103,7 @@ module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   ≅→is-order-embedding
     : (f : P ≅ Q) → is-order-embedding P Q (f #_)
   ≅→is-order-embedding f =
-    has-retract→is-order-embedding (f .to) (≅→to-has-retract f)
+    has-retraction→is-order-embedding (f .to) (≅→to-has-retraction f)
 
   iso-order-embedding→≅
     : (f : ⌞ P ⌟ ≅ ⌞ Q ⌟)
@@ -123,7 +113,7 @@ module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   iso-order-embedding→≅ f oe .to .pres-≤ = oe #_
   iso-order-embedding→≅ f oe .from .hom = f ⁻¹ $_
   iso-order-embedding→≅ f oe .from .pres-≤ =
-    reflection-retract→is-monotone (f #_) (f ⁻¹ $_)
+    reflection-retraction→is-monotone (f #_) (f ⁻¹ $_)
      (f .inv-o) (oe ⁻¹ $_)
   iso-order-embedding→≅ f oe .inverses .Inverses.inv-o =
     ext $ f .inv-o #_

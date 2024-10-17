@@ -9,10 +9,9 @@ open import Order.Diagram.Meet
 open import Order.Diagram.Top
 import Order.Diagram.Join.Reasoning
 import Order.Diagram.Meet.Reasoning
-import Order.Reasoning
 
 module _ {o ℓ} {P : Poset o ℓ} where
-  open Order.Reasoning P
+  open Poset P
 
   record Down (c : Ob) : Type (o ⊔ ℓ) where
     no-eta-equality

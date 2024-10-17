@@ -14,6 +14,8 @@ open import Foundations.Notation.Unital.Inner
 open import Foundations.Notation.Unital.Outer
 open import Foundations.Sigma.Base
 
+open import Agda.Builtin.Unit as BU
+
 private variable ℓ ℓ′ ℓ″ ℓ‴ ℓᵃ ℓᵇ ℓᶜ ℓᵈ : Level
 
 instance
@@ -35,7 +37,7 @@ instance
   ∀ᴱ-Type
     : {A : Type ℓ} ⦃ ua : Underlying A ⦄
     → ∀ᴱ-notation A (Type ℓ′) (Type (ua .ℓ-underlying ⊔ ℓ′))
-  ∀ᴱ-Type .∀ᴱ-notation.∀ᴱ′ A B = {@0 x : ⌞ A ⌟} → B x
+  ∀ᴱ-Type .∀ᴱ-notation.∀ᴱ A B = {@0 x : ⌞ A ⌟} → B x
 
   Closure-Π-Variadic
     : {A : Type ℓ} {X : Type ℓ′}
@@ -166,4 +168,5 @@ is-equivᴱ {B} f = Π[ b ꞉ B ] is-contrᴱ (fibreᴱ f b)
 
 instance
   ⇒-Type : ⇒-notation (Type ℓ) (Type ℓ′) (Type (ℓ ⊔ ℓ′))
-  ⇒-Type ._⇒_ A B = A → B
+  ⇒-Type .⇒-notation.Constraint _ _ = BU.⊤
+  ⇒-Type .⇒-notation._⇒_ A B = A → B

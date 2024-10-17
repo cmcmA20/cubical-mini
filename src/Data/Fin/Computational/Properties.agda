@@ -30,7 +30,7 @@ strengthen {suc n} (mk-fin (suc k) {(b)}) = ⊎.dmap fsuc fsuc (strengthen (mk-f
 
 inject : m ≤ n → Fin m → Fin n
 inject {m} {n} p (mk-fin k {erase q}) = mk-fin k
-  {erase (true→so! ⦃ ≤-reflects {suc k} ⦄ (so→true! q ∙ p))}
+  {erase (true→so! ⦃ Reflects-ℕ-≤ {suc k} ⦄ (so→true! q ∙ p))}
 
 -- TODO too clunky, refactor this
 fin-injective : {m n : ℕ} → Fin m ≃ Fin n → m ＝ n

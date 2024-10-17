@@ -3,10 +3,9 @@ module Order.Diagram.Fixpoint where
 
 open import Cat.Prelude
 open import Order.Base
-import Order.Reasoning
 
 module _ {o ℓ} (P : Poset o ℓ) where
-  open Order.Reasoning P
+  open Poset P
 
   record is-lfp (f : P ⇒ P) (x : Ob) : Type (o ⊔ ℓ) where
     no-eta-equality
@@ -23,16 +22,15 @@ module _ {o ℓ} (P : Poset o ℓ) where
 unquoteDecl H-Level-is-lfp = declare-record-hlevel 1 H-Level-is-lfp (quote is-lfp)
 unquoteDecl LFP-Iso = declare-record-iso LFP-Iso (quote LFP)
 
-module _ {o ℓ} {P : Poset o ℓ} where
-  open Order.Reasoning P
+module _ {o ℓ} {P : Poset o ℓ} where opaque
+  open Poset P
   open is-lfp
 
-  opaque
-    lfp-unique : ∀{f x y} → is-lfp P f x → is-lfp P f y → x ＝ y
-    lfp-unique xl yl = ≤-antisym (xl .least _ (yl .fixed)) (yl .least _ (xl .fixed))
+  lfp-unique : ∀{f x y} → is-lfp P f x → is-lfp P f y → x ＝ y
+  lfp-unique xl yl = ≤-antisym (xl .least _ (yl .fixed)) (yl .least _ (xl .fixed))
 
-    LFP-is-prop : ∀{f} → is-prop (LFP P f)
-    LFP-is-prop = ≅→is-of-hlevel 1 LFP-Iso (λ xl yl → lfp-unique (xl .snd) (yl .snd) ,ₚ prop!)
+  LFP-is-prop : ∀{f} → is-prop (LFP P f)
+  LFP-is-prop = ≅→is-of-hlevel 1 LFP-Iso (λ xl yl → lfp-unique (xl .snd) (yl .snd) ,ₚ prop!)
 
   instance
     H-Level-LFP

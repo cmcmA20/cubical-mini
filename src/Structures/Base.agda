@@ -115,12 +115,12 @@ record Structure {ℓ₁ ℓ₂} (ℓ₃ : _)
   (S : Type ℓ₁ → Type ℓ₂) : Type (ℓsuc (ℓ₁ ⊔ ℓ₃) ⊔ ℓ₂) where
 
   constructor HomT→Str
-  field is-hom : (A B : Σ _ S) → (A .fst ≃ B .fst) → Type ℓ₃
+  field is-hom : (A B : Σₜ _ S) → (A .fst ≃ B .fst) → Type ℓ₃
 
 open Structure public
 
 Type-with : Structure ℓ S → Type _
-Type-with {S} _ = Σ _ S
+Type-with {S} _ = Σₜ _ S
 
 @0 is-univalent : Structure ℓ S → Type _
 is-univalent {S} ι =
@@ -129,7 +129,7 @@ is-univalent {S} ι =
   → ι .is-hom X Y f ≃ ＜ X .snd ／ (λ i → S (ua f i)) ＼ Y .snd ＞
 
 -- σ-homomorphic equivalences
-_≃s[_]_ : Σ _ S → Structure ℓ S → Σ _ S → Type _
+_≃s[_]_ : Σₜ _ S → Structure ℓ S → Σₜ _ S → Type _
 A ≃s[ σ ] B = Σ[ f ꞉ A .fst ≃ B .fst ] (σ .is-hom A B f)
 
 private variable σ : Structure ℓ S
@@ -138,7 +138,7 @@ private variable σ : Structure ℓ S
 -- structure`, then the path space of `Σ S` is equivalent to the space of
 -- S-homomorphic equivalences of types. Using groups as a grounding
 -- example: identification of groups is group isomorphism.
-@0 SIP : is-univalent σ → {X Y : Σ _ S}
+@0 SIP : is-univalent σ → {X Y : Σₜ _ S}
        → (X ≃s[ σ ] Y) ≃ (X ＝ Y)
 SIP {S} {σ} is-univ {X} {Y} =
   X ≃s[ σ ] Y                                                          ~⟨⟩
@@ -146,7 +146,7 @@ SIP {S} {σ} is-univ {X} {Y} =
   Σ[ p ꞉ X .fst ＝ Y .fst ] ＜ X .snd ／ (λ i → S (p i)) ＼ Y .snd ＞  ~⟨ ≅→≃ Σ-pathᴾ-iso ⟩
   X ＝ Y                                                               ∎
 
-@0 sip : is-univalent σ → {X Y : Σ _ S} → (X ≃s[ σ ] Y) → (X ＝ Y)
+@0 sip : is-univalent σ → {X Y : Σₜ _ S} → (X ≃s[ σ ] Y) → (X ＝ Y)
 sip is-univ = SIP is-univ .fst
 
 Equiv-action : (S : Type ℓ → Type ℓ₁) → Type _

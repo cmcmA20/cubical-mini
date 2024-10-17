@@ -36,5 +36,5 @@ instance
   Magmas-equational : is-equational (Magma-structure ℓ)
   Magmas-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Magmas ℓ ⇒ Sets ℓ
+Forget : Magmas ℓ ⇒ Types ℓ
 Forget = Forget-structure (Magma-structure _)

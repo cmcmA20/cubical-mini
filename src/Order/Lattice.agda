@@ -10,7 +10,6 @@ open import Order.Diagram.Meet
 open import Order.Diagram.Top
 import Order.Diagram.Join.Reasoning as Joins
 import Order.Diagram.Meet.Reasoning as Meets
-import Order.Reasoning
 open import Order.Semilattice.Join
 open import Order.Semilattice.Meet
 
@@ -49,12 +48,14 @@ unquoteDecl H-Level-is-lattice-hom =
   declare-record-hlevel 1 H-Level-is-lattice-hom (quote is-lattice-hom)
 
 instance
-  ⇒-Lattice : ⇒-notation
-    (Σ[ P ꞉ Poset o ℓ ] is-lattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-lattice Q) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Lattice
+    : ⇒-notation (Σ[ P ꞉ Poset o ℓ ] is-lattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-lattice Q)
+        (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-Lattice .⇒-notation.Constraint _ _ = ⊤
   ⇒-Lattice ._⇒_ (P , lp) (Q , lq) = Total-hom Monotone is-lattice-hom lp lq
 
 module _ {R : Poset o″ ℓ″} where
-  open Order.Reasoning R
+  open Poset R
   open is-lattice-hom
 
   instance

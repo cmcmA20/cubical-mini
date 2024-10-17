@@ -4,12 +4,11 @@ module Order.Diagram.Glb where
 open import Cat.Prelude
 
 open import Order.Base
-import Order.Reasoning
 
 private variable o o′ ℓ ℓ′ ℓᵢ : Level
 
 module _ (P : Poset o ℓ) where
-  open Order.Reasoning P
+  open Poset P
 
   record is-glb {ℓᵢ} {I : Type ℓᵢ} (F : I → Ob) (glb : Ob)
           : Type (o ⊔ ℓ ⊔ ℓᵢ) where
@@ -32,7 +31,7 @@ Has-glbs-of-size : Poset o ℓ → (ℓ′ : Level) → Type (o ⊔ ℓ ⊔ ℓs
 Has-glbs-of-size P ℓ′ = {I : Type ℓ′} {F : I → ⌞ P ⌟} → Glb P F
 
 module _ {P : Poset o ℓ} where
-  open Order.Reasoning P
+  open Poset P
   open is-glb
 
   glb-unique
@@ -48,7 +47,7 @@ module _ {P : Poset o ℓ} where
     → is-prop (Glb P F)
   Glb-is-prop = ≅→is-of-hlevel 1 Glb-Iso λ x y → glb-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Glb
       : ∀ {ℓᵢ} {I : Type ℓᵢ} {F : I → Ob} {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Glb P F)
@@ -108,7 +107,7 @@ module _ {P : Poset o ℓ} where
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} where
   private
     module P = Poset P
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
 
   open Iso
 
@@ -129,7 +128,7 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → 
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} where
   private
     module P = Poset P
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
   open Iso
 
   ≅→is-glb⁻ : (e : P ≅ Q) {y : ⌞ Q ⌟}

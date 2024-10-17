@@ -2,11 +2,9 @@
 module Order.Diagram.Lub where
 
 open import Cat.Prelude
-open import Functions.Surjection
-
 open import Order.Base
 open import Order.Morphism
-import Order.Reasoning
+open import Functions.Surjection
 
 private variable o o′ ℓ ℓ′ ℓᵢ : Level
 
@@ -36,7 +34,7 @@ Has-lubs-of-size : Poset o ℓ → (ℓ′ : Level) → Type (o ⊔ ℓ ⊔ ℓs
 Has-lubs-of-size P ℓ′ = {I : Type ℓ′} {F : I → ⌞ P ⌟} → Lub P F
 
 module _ {P : Poset o ℓ} where
-  open Order.Reasoning P
+  open Poset P
   open is-lub
 
   lub-unique
@@ -52,7 +50,7 @@ module _ {P : Poset o ℓ} where
     → is-prop (Lub P F)
   Lub-is-prop = ≅→is-of-hlevel 1 Lub-Iso λ x y → lub-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Lub
       : ∀ {ℓᵢ} {I : Type ℓᵢ} {F : I → Ob} {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Lub P F)
@@ -190,7 +188,7 @@ module _ {P : Poset o ℓ} where
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} where
   private
     module P = Poset P
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
 
   module _ {L : P ⇒ Q} {R : Q ⇒ P} (gc : L ⊣ R) where
     open Adjoint gc
@@ -209,11 +207,10 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → 
     ≅→Lub : Lub P F → Lub Q (F ∙ e #_)
     ≅→Lub = adjoint-l→Lub (≅ₚ→⊣ e)
 
-
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} (e : P ≅ Q) where
   private
     module P = Poset P
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
     module A = Adjoint (≅ₚ→⊣ (e ⁻¹))
     module B = Adjoint (≅ₚ→⊣ e)
   open Iso

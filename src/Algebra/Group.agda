@@ -24,8 +24,8 @@ record is-group {A : 𝒰 ℓ} (_⋆_ : A → A → A) : 𝒰 ℓ where
   open is-monoid has-monoid public
 
   field
-    inverse-l : ∀ x → x retract-of inverse x
-    inverse-r : ∀ x → x section-of inverse x
+    inverse-l : ∀ x → x retraction-of inverse x
+    inverse-r : ∀ x → x section-of    inverse x
 
   instance
     Has-unary-op-is-group : Has-unary-op A
@@ -111,8 +111,9 @@ instance opaque
   H-Level-group-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance group-hom-is-prop
 
 instance
-  ⇒-Group : ⇒-notation (Σ[ X ꞉ Set ℓ ] Group-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Group-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
-  ⇒-Group ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Group-hom {a = A} {b = B} X Y
+  ⇒-Group : ⇒-notation (Σ[ X ꞉ Type ℓ ] Group-on X) (Σ[ Y ꞉ Type ℓ′ ] Group-on Y) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Group .⇒-notation.Constraint _ _ = ⊤
+  ⇒-Group ._⇒_ (A , X) (B , Y) = Total-hom Fun Group-hom X Y
 
   Refl-Group-hom : Refl {A = Group-on A} (Group-hom refl)
   Refl-Group-hom .refl .Group-hom.pres-⋆ _ _ = refl

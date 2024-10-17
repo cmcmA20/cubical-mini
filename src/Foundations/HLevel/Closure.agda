@@ -17,44 +17,41 @@ private variable
 
 open Iso
 
-retract→is-contr : (f : A → B) (g : B → A)
-                 → f retract-of g
-                 → is-contr A
-                 → is-contr B
-retract→is-contr f g h isC .fst = f (isC .fst)
-retract→is-contr f g h isC .snd x =
-  f (isC .fst) ~⟨ ap f (isC .snd _) ⟩
-  f (g x)      ~⟨ h # x ⟩
-  x            ∎
+retract→is-contr : Retractₜ B A → is-contr A → is-contr B
+retract→is-contr (f , s) c .fst = f (centre c)
+retract→is-contr (f , s) c .snd x =
+  f (centre c)      ~⟨ ap f (paths c _) ⟩
+  f (s .section x)  ~⟨ s .is-section # x ⟩
+  x                 ∎
 
 opaque
-  retract→is-prop : (f : A → B) (g : B → A)
-                  → f retract-of g
-                  → is-prop A
-                  → is-prop B
-  retract→is-prop f g h propA x y =
-    x       ~⟨ h # x ⟨
-    f (g x) ~⟨ ap f (propA _ _) ⟩
-    f (g y) ~⟨ h # y ⟩
-    y       ∎
+  retract→is-prop : Retractₜ B A → is-prop A → is-prop B
+  retract→is-prop (f , s) propA x y =
+    x                 ~⟨ s .is-section # x ⟨
+    f (s .section x)  ~⟨ ap f (propA _ _) ⟩
+    f (s .section y)  ~⟨ s .is-section # y ⟩
+    y                 ∎
 
-retract→is-of-hlevel : (n : HLevel) (f : A → B) (g : B → A)
-                     → f retract-of g
+retract→is-of-hlevel : (n : HLevel)
+                     → Retractₜ B A
                      → is-of-hlevel n A
                      → is-of-hlevel n B
 retract→is-of-hlevel 0 = retract→is-contr
 retract→is-of-hlevel 1 = retract→is-prop
-retract→is-of-hlevel (suc (suc h)) f g p hlevel x y =
-  retract→is-of-hlevel (suc h) sect (ap g) inv (hlevel (g x) (g y))
+retract→is-of-hlevel (suc (suc h)) (f , hs) hlevel x y =
+  retract→is-of-hlevel (suc h) (sect , make-section (ap g) inv) (hlevel (g x) (g y))
   where
+    g = hs .section
+    p = hs .is-section
+
     sect : g x ＝ g y → x ＝ y
     sect path =
-      x       ~⟨ p # x ⟨
-      f (g x) ~⟨ ap f path ⟩
-      f (g y) ~⟨ p # y ⟩
-      y       ∎
+      x        ~⟨ p # x ⟨
+      f (g x)  ~⟨ ap f path ⟩
+      f (g y)  ~⟨ p # y ⟩
+      y        ∎
 
-    inv : sect retract-of (ap g)
+    inv : sect retraction-of (ap g)
     inv = fun-ext λ path →
       p # x ⁻¹ ∙ ap (g ∙ f) path ∙ p # y ∙ refl  ~⟨ p # x ⁻¹ ◁ ap (g ∙ f) path ◁ ∙-id-i (p # y) ⟩
       p # x ⁻¹ ∙ ap (g ∙ f) path ∙ p # y         ~⟨ p # x ⁻¹ ◁ homotopy-natural (p #_) path ⁻¹ ⟩
@@ -63,14 +60,14 @@ retract→is-of-hlevel (suc (suc h)) f g p hlevel x y =
       refl ∙ path                                ~⟨ ∙-id-o path ⟩
       path                                       ∎
 
-is-inv→is-of-hlevel : (h : HLevel) (f : A → B) → is-invertible f → is-of-hlevel h A → is-of-hlevel h B
-is-inv→is-of-hlevel h f fi = retract→is-of-hlevel h f (fi .is-invertible.inv) (fi .is-invertible.inv-o)
+qinv→is-of-hlevel : (h : HLevel) (f : A → B) → quasi-inverse f → is-of-hlevel h A → is-of-hlevel h B
+qinv→is-of-hlevel h f fi = retract→is-of-hlevel h (qinv→retract⁻ f fi)
 
 is-equiv→is-of-hlevel : (h : HLevel) (f : A → B) → is-equiv f → is-of-hlevel h A → is-of-hlevel h B
-is-equiv→is-of-hlevel h f eqv = is-inv→is-of-hlevel h f (is-equiv→is-inv eqv)
+is-equiv→is-of-hlevel h f eqv = qinv→is-of-hlevel h f (is-equiv→qinv eqv)
 
 ≅→is-of-hlevel : (h : HLevel) → B ≅ A → is-of-hlevel h A → is-of-hlevel h B
-≅→is-of-hlevel h i = is-inv→is-of-hlevel h (i .from) $ invertible (i .to) (i .inv-i) (i .inv-o)
+≅→is-of-hlevel h i = retract→is-of-hlevel h (i .from , ≅→from-has-section i)
 
 ≃→is-of-hlevel : (h : HLevel) → (B ≃ A) → is-of-hlevel h A → is-of-hlevel h B
 ≃→is-of-hlevel h e = ≅→is-of-hlevel h (≃→≅ e)
@@ -80,15 +77,13 @@ is-equiv→is-of-hlevel h f eqv = is-inv→is-of-hlevel h f (is-equiv→is-inv e
                → is-of-hlevel h (Π[ x ꞉ A ] B x)
 Π-is-of-hlevel 0 bhl = (λ _ → bhl _ .fst) , λ x i a → bhl _ .snd (x a) i
 Π-is-of-hlevel 1 bhl f g i a = bhl a (f a) (g a) i
-Π-is-of-hlevel (suc (suc h)) bhl f g =
-  retract→is-of-hlevel (suc h) fun-ext happly (λ x → refl)
-    (Π-is-of-hlevel (suc h) λ x → bhl x (f x) (g x))
+Π-is-of-hlevel (suc (suc h)) bhl f g = retract→is-of-hlevel (suc h) (fun-ext , make-section happly (λ _ → refl))
+  (Π-is-of-hlevel (suc h) λ x → bhl x (f x) (g x))
 
 ∀-is-of-hlevel : {B : A → Type ℓ′} (h : HLevel)
                  (Bhl : (x : A) → is-of-hlevel h (B x))
                → is-of-hlevel h ({x : A} → B x)
-∀-is-of-hlevel h bhl = retract→is-of-hlevel h
-  (λ f {x} → f x) (λ f x → f) (λ _ → refl)
+∀-is-of-hlevel h bhl = retract→is-of-hlevel h (implicit , make-section (λ f _ → f) λ _ → refl)
   (Π-is-of-hlevel h bhl)
 
 Π²-is-of-hlevel
@@ -109,7 +104,7 @@ fun-is-of-hlevel
   → is-of-hlevel n (A → B)
 fun-is-of-hlevel n hl = Π-is-of-hlevel n (λ _ → hl)
 
-Σ-is-of-hlevel : {B : A → Type ℓ′} (n : HLevel)
+Σ-is-of-hlevel : {A : Type ℓ} {B : A → Type ℓ′} (n : HLevel)
                → is-of-hlevel n A
                → ((x : A) → is-of-hlevel n (B x))
                → is-of-hlevel n (Σ A B)
@@ -119,10 +114,10 @@ fun-is-of-hlevel n hl = Π-is-of-hlevel n (λ _ → hl)
         ,ₚ is-prop→pathᴾ (λ _ → is-contr→is-prop (bcontr _)) _ _
 Σ-is-of-hlevel 1 aprop bprop (a , b) (a' , b') i =
   (aprop a a' i) , (is-prop→pathᴾ (λ i → bprop (aprop a a' i)) b b' i)
-Σ-is-of-hlevel {B} (suc (suc n)) h1 h2 x y =
-  let u = ≅→is-inv Σ-path-iso
-  in is-inv→is-of-hlevel (suc n) (is-invertible.op u .is-invertible.inv) u
-       (Σ-is-of-hlevel (suc n) (h1 (fst x) (fst y)) λ x → h2 _ _ _)
+Σ-is-of-hlevel {B} (suc (suc n)) h1 h2
+  = pathᴾ-is-of-hlevel (suc n) λ w z
+  → ≅→is-of-hlevel (suc n) (Σ-pathᴾ-iso ⁻¹)
+  $ Σ-is-of-hlevel (suc n) (h1 (w .fst) (z .fst)) λ p → pathᴾ-is-of-hlevel (suc n) (h2 _) (w .snd) (z .snd)
 
 ×-is-of-hlevel : {B : Type ℓ′}
                → (n : HLevel)
@@ -133,7 +128,7 @@ fun-is-of-hlevel n hl = Π-is-of-hlevel n (λ _ → hl)
 Lift-is-of-hlevel : (n : HLevel)
                   → is-of-hlevel n A
                   → is-of-hlevel n (Lift ℓ′ A)
-Lift-is-of-hlevel n a-hl = retract→is-of-hlevel n lift lower (λ _ → refl) a-hl
+Lift-is-of-hlevel n a-hl = retract→is-of-hlevel n (lift , make-section lower (λ _ → refl)) a-hl
 
 ≃-is-of-hlevel : (n : HLevel) → is-of-hlevel n A → is-of-hlevel n B → is-of-hlevel n (A ≃ B)
 ≃-is-of-hlevel {A} {B} zero Ahl Bhl = e , deform where
@@ -152,13 +147,13 @@ Lift-is-of-hlevel n a-hl = retract→is-of-hlevel n lift lower (λ _ → refl) a
 opaque
   ≃-is-of-hlevel-left-suc : (n : HLevel) → is-of-hlevel (suc n) A → is-of-hlevel (suc n) (A ≃ B)
   ≃-is-of-hlevel-left-suc zero    A-hl e =
-    ≃-is-of-hlevel 1 A-hl (retract→is-prop (e $_) (e ⁻¹ $_) (Equiv.ε e) A-hl) e
+    ≃-is-of-hlevel 1 A-hl (retract→is-prop (e .fst , make-section (e ⁻¹ $_) (Equiv.ε e)) A-hl) e
   ≃-is-of-hlevel-left-suc (suc n) A-hl e =
     ≃-is-of-hlevel (suc (suc n)) A-hl (≃→is-of-hlevel (suc (suc n)) (e ⁻¹) A-hl) e
 
   ≃-is-of-hlevel-right-suc : (n : HLevel) → is-of-hlevel (suc n) B → is-of-hlevel (suc n) (A ≃ B)
   ≃-is-of-hlevel-right-suc zero    B-hl e =
-    ≃-is-of-hlevel 1 (retract→is-prop (e ⁻¹ $_) (e $_) (Equiv.η e ⁻¹) B-hl) B-hl e
+    ≃-is-of-hlevel 1 (retract→is-prop ((e ⁻¹ $_) , make-section (e .fst) (Equiv.η e ⁻¹)) B-hl) B-hl e
   ≃-is-of-hlevel-right-suc (suc n) B-hl e =
     ≃-is-of-hlevel (suc (suc n)) (≃→is-of-hlevel (suc (suc n)) e B-hl) B-hl e
 
@@ -229,3 +224,25 @@ instance opaque
 
 ≅→is-of-hlevel! : (h : HLevel) → B ≅ A → ⦃ A-hl : H-Level h A ⦄ → is-of-hlevel h B
 ≅→is-of-hlevel! h e = ≅→is-of-hlevel h e (hlevel h)
+
+
+-- by Martin Escardo
+-- using retracts is crucial, because isomorphism proof is incredibly painful
+module _ {f : A → B} (fi : quasi-inverse f) where private
+  open import Foundations.Transport
+  open quasi-inverse fi renaming ( inv   to g
+                                 ; inv-i to v
+                                 ; inv-o to u
+                                 )
+
+  qinv→is-equiv′ : is-equiv f
+  qinv→is-equiv′ .equiv-proof y .fst .fst = g y
+  qinv→is-equiv′ .equiv-proof y .fst .snd = u # y
+  qinv→is-equiv′ .equiv-proof y .snd = retract→is-prop go
+    (is-contr→is-prop (singletonₚ-is-contr (y , refl))) (g y , u # y)
+    where
+    go =
+      Σ[ x  ꞉ A ] (f x ＝ y)         ~⟨ ≅→retract (≃→≅ (Σ-ap-snd (λ _ → sym-≃))) ⟩
+      Σ[ x  ꞉ A ] (y   ＝ f x)       ~⟨ Σ-retract-fst (g , make-section f v) ⟩
+      Σ[ y′ ꞉ B ] (y   ＝ f (g y′))  ~⟨ ≅→retract (≃→≅ (Σ-ap-snd λ y′ → subst-≃ (y ＝_) (u # y′ ⁻¹)))  ⟩
+      Σ[ y′ ꞉ B ] (y   ＝ y′)        ∎

@@ -17,12 +17,11 @@ private variable ℓ : Level
   r : Precategory _ _
   r .Ob = ⊤
   r .Hom _ _ = X
-  r .Hom-set _ _ = hlevel!
   r .Precategory.id = mm.id
   r .Precategory._∘_ = flip mm._⋆_
   r .id-r = mm.id-l
   r .id-l = mm.id-r
-  r .assoc _ _ _ = mm.assoc _ _ _ ⁻¹
+  r .assoc = mm.assoc
 
 module _ {X : Type ℓ} {M : Monoid-on X} where private
   module Mon = Monoid-on M

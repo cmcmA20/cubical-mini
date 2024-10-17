@@ -20,7 +20,7 @@ module _ {o h} (C : Precategory o h) where
     instance
       ⊤-Terminal : ⊤-notation Ob
       ⊤-Terminal .⊤ = top
-    {-# INCOHERENT ⊤-Terminal #-}
+    {-# OVERLAPPING ⊤-Terminal #-}
 
     ! : {x : Ob} → x ⇒ ⊤
     ! = centre $ has-⊤ _
@@ -31,6 +31,10 @@ module _ {o h} (C : Precategory o h) where
     !-unique² : {x : Ob} (f g : x ⇒ ⊤) → f ＝ g
     !-unique² =  is-contr→is-prop (has-⊤ _)
 
+    instance opaque
+      H-Level-! : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄ {x : Ob} → H-Level n (x ⇒ ⊤)
+      H-Level-! ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance !-unique²
+
 {-# DISPLAY Terminal.top = ⊤ #-}
 unquoteDecl Terminal-Iso = declare-record-iso Terminal-Iso (quote Terminal)
 
@@ -39,11 +43,11 @@ module _ {o h} {C : Precategory o h} where
   open Terminal
   open Iso
 
-  !-invertible : (t₁ t₂ : Terminal C) → is-invertible (! t₁ {top t₂})
-  !-invertible t₁ t₂ = invertible (! t₂) (!-unique² t₁ _ _) (!-unique² t₂ _ _)
+  !-qinv : (t₁ t₂ : Terminal C) → quasi-inverse (! t₁ {top t₂})
+  !-qinv t₁ t₂ = qinv (! t₂) (!-unique² t₁ _ _) (!-unique² t₂ _ _)
 
-  ⊤-unique : (t₁ t₂ : Terminal C) → top t₁ ≅ top t₂
-  ⊤-unique t₁ t₂ = is-inv→≅ (! t₂) (!-invertible t₂ t₁)
+  ⊤-unique : (t₁ t₂ : Terminal C) → top t₁ ≊ top t₂
+  ⊤-unique t₁ t₂ = ≅→≊ $ qinv→≅ (! t₂) (!-qinv t₂ t₁)
 
   opaque
     terminal-is-prop : is-category C → is-prop (Terminal C)
@@ -54,7 +58,7 @@ module _ {o h} {C : Precategory o h} where
     ≅→is-terminal : {a b : Ob} → a ≅ b → is-terminal C a → is-terminal C b
     ≅→is-terminal isom term x = isom .to ∘ centre (term x) , λ h →
       isom .to ∘ centre (term x)   ~⟨ paths (term x) _ ▷ isom .to ⟩
-      isom .to ∘ isom .from ∘ h    ~⟨ assoc _ _ _ ⟩
+      isom .to ∘ isom .from ∘ h    ~⟨ assoc _ _ _ ⟨
       (isom .to ∘ isom .from) ∘ h  ~⟨ h ◁ isom .inv-o ⟩
       id ∘ h                       ~⟨ id-l _ ⟩
       h                            ∎

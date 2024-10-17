@@ -12,12 +12,12 @@ open import Agda.Builtin.Sigma
 -- Yeah, I know it's not on par with iso notation,
 -- but doing it the same way proved to be intractable
 module _
-  {ℓa ℓa∙ ℓb ℓb∙ ℓah ℓbh ℓf ℓg ℓiη ℓiε : Level}
+  {ℓa ℓa∙ ℓb ℓb∙ ℓah ℓbh ℓh ℓiη ℓiε : Level}
   {A : 𝒰 ℓa} ⦃ ua : Underlying A ⦄
   {B : 𝒰 ℓb} ⦃ ub : Underlying B ⦄
   (A∙ : A → A → 𝒰 ℓa∙) ⦃ _ : Refl A∙ ⦄
   (B∙ : B → B → 𝒰 ℓb∙) ⦃ _ : Refl B∙ ⦄
-  (F  : A → B → 𝒰 ℓf)  (G  : B → A → 𝒰 ℓg)
+  (F  : A → B → 𝒰 ℓh)  (G  : B → A → 𝒰 ℓh)
   ⦃ _ : Comp F G A∙ ⦄   ⦃ _ : Comp G F B∙ ⦄
   (C : A) (CHom : ⌞ C ⌟ → ⌞ C ⌟ → 𝒰 ℓah) ⦃ _ : Refl CHom ⦄ ⦃ _ : Trans CHom ⦄
   (D : B) (DHom : ⌞ D ⌟ → ⌞ D ⌟ → 𝒰 ℓbh) ⦃ _ : Refl DHom ⦄ ⦃ _ : Trans DHom ⦄
@@ -55,3 +55,4 @@ record ⊣-notation {ℓᵃ ℓᵇ ℓ}
   infix 1 _⊣_
   field _⊣_ : A → B → R
 open ⊣-notation ⦃ ... ⦄ public
+{-# DISPLAY ⊣-notation._⊣_ _ f g = f ⊣ g #-}

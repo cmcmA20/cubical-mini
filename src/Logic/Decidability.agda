@@ -74,7 +74,7 @@ Dec-prop-Σ {B} A-pr (yes a) db with db {a}
 -- Decision procedure
 DProc
   : (arity : ℕ)
-    {ls : Levels arity} (As : Types _ ls)
+    {ls : Levels arity} (As : TyVec _ ls)
   → Type (ℓsup arity ls)
 DProc arity As = Arrows arity As Bool
 

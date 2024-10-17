@@ -117,33 +117,24 @@ are in accordance with [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
 
 - 3.2.2 Other identifier names **SHOULD** be in kebab case.
 
-- 3.2.3 Numerical superscripts **SHOULD** be used only for arity specification.
-
-- 3.2.4 Numerical subscripts **SHOULD** be used to indicate hlevel.
-
-- 3.2.6 Definition names **MUST NOT** refer to variable names.
+- 3.2.3 Definition names **MUST NOT** refer to variable names.
 
   > For example, prefer `+-comm` to something like `m+n≡n+m`.
 
-- 3.2.7 Identifier names **MUST NOT** contain `＝`, use `=` instead.
+- 3.2.4 Identifier names **MUST NOT** contain `＝`, use `=` instead.
 
   > Otherwise it garbles column alignment.
 
-- 3.2.8 Results about `Pathᴾ` (path overs) **SHOULD** end with
-  superscript `ᴾ`.
-
-- 3.2.9 Results about displayed stuff **SHOULD** end with superscript `ᴰ`.
-
-- 3.2.10 Predicate names **MUST** be written as suffixes, e.g.:
+- 3.2.5 Predicate names **MUST** be written as suffixes, e.g.:
 
   - `Nat-is-set`,
   - `is-prop-is-prop`,
   - `is-of-hlevel-is-prop`.
 
-- 3.2.11 Fields of a record indicating the truth of a predicate **MUST** be
+- 3.2.6 Fields of a record indicating the truth of a predicate **MUST** be
   prefixed with `has-`.
 
-- 3.2.12 All long names **SHOULD** be abbreviated, as in the table:
+- 3.2.7 All long names **SHOULD** be abbreviated, as in the table:
 
   | Long name             | Abbreviation |
   | ----------------------| ------------ |
@@ -160,7 +151,7 @@ are in accordance with [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
   | category              | `Cat`        |
   | homomorphism          | `hom`        |
 
-- 3.2.13 Level names **MUST** be descriptive or
+- 3.2.8 Level names **MUST** be descriptive or
 
   ```
   ℓ  ℓ′ ℓ″ ...
@@ -168,30 +159,46 @@ are in accordance with [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
   ℓa ℓb ℓc ...
   ```
 
-- 3.2.14 `≡` **SHOULD** refer to congruences or some other strict similarity
+- 3.2.9 `≡` **SHOULD** refer to congruences or some other strict similarity
   relations.
 
   > When defining a new target language, locally rename `＝`
   > to `≡` for definitional equalities of the target language if you
   > need so. Builtin Agda equality is called `_＝ⁱ_`.
 
-- 3.2.15 `→` **SHOULD** be used over `to`.
+- 3.2.10 `→` **SHOULD** be used over `to`.
 
-- 3.2.16 `equiv` or `≃` **SHOULD** refer to equivalences of types or
+- 3.2.11 `equiv` or `≃` **SHOULD** refer to equivalences of types or
   structures.
 
   > Operators can use subscript `ₑ`.
 
-- 3.2.17 `iso` or `≅` **SHOULD** refer to isomorphisms of types or
+- 3.2.12 `iso` or `≅` **SHOULD** refer to isomorphisms of types or
   structures.
 
   > Here an isomorphism is a function with a quasi-inverse,
   > i.e. a quasi-equivalence in the sense of the HoTT Book. Operators
   > can use subscript `ᵢ`.
 
-- 3.2.18 `Path` or `=` **SHOULD** refer to paths in names, not `Eq`, `Id`,
+- 3.2.13 `Path` or `=` **SHOULD** refer to paths in names, not `Eq`, `Id`,
   or other "equality" or "identity"-related names.
 
   > Operators can use subscript `ₚ`.
 
-- 3.2.19 Partial function names (returning `Maybe`) **SHOULD** end with `ᵐ`.
+- 3.2.14 Sub- and superscripts **MUST** be used in the following order:
+
+  - Alpha subscript,
+  - Numerical subscript,
+  - Alpha superscript,
+  - Numerical superscript.
+
+- 3.2.15 Numerical superscripts **SHOULD** be used for arity specification.
+
+- 3.2.16 Numerical subscripts **SHOULD** be used to indicate hlevel.
+
+- 3.2.17 Results about `Pathᴾ` (path overs) **SHOULD** end with
+  superscript `ᴾ`.
+
+- 3.2.18 Results about displayed stuff **SHOULD** end with superscript `ᴰ`.
+
+- 3.2.19 Partial function names (returning `Maybe`) **SHOULD** use superscript `ᵐ`.

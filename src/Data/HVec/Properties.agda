@@ -12,19 +12,19 @@ private variable
   ℓ : Level
   n : ℕ
 
-vec-of-types≃types : ∀ n → Vec (Type ℓ) n ≃ Types n (replicate n ℓ)
-vec-of-types≃types _ = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
-  to : ∀ {n} → Vec (Type ℓ) n → Types n (replicate n ℓ)
+vec-of-types≃type-vec : ∀ n → Vec (Type ℓ) n ≃ TyVec n (replicate n ℓ)
+vec-of-types≃type-vec _ = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
+  to : ∀ {n} → Vec (Type ℓ) n → TyVec n (replicate n ℓ)
   to {n = 0} _ = _
   to {n = 1} A = A
   to {n = suc (suc n)} (A , As) = A , to As
 
-  from : ∀ {n} → Types n (replicate n ℓ) → Vec (Type ℓ) n
+  from : ∀ {n} → TyVec n (replicate n ℓ) → Vec (Type ℓ) n
   from {n = 0} _ = _
   from {n = 1} x = x
   from {n = suc (suc n)} (A , As) = A , from As
 
-  ri : ∀ {n} (xs : Types n (replicate n ℓ)) → to (from xs) ＝ xs
+  ri : ∀ {n} (xs : TyVec n (replicate n ℓ)) → to (from xs) ＝ xs
   ri {n = 0} _ = refl
   ri {n = 1} _ = refl
   ri {n = suc (suc _)} (_ , xs) = refl ,ₚ ri xs
@@ -34,4 +34,4 @@ vec-of-types≃types _ = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
   li {n = 1} _ = refl
   li {n = suc (suc _)} (_ , xs) = refl ,ₚ li xs
 
-module vec-of-types≃types {n} {ℓ} = Equiv (vec-of-types≃types {ℓ} n)
+module vec-of-types≃type-vec {n} {ℓ} = Equiv (vec-of-types≃type-vec {ℓ} n)

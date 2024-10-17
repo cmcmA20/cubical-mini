@@ -4,6 +4,7 @@ module Algebra.Group.Category where
 open import Algebra.Group
 open import Algebra.Monoid.Category using (Monoids)
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism
@@ -33,7 +34,7 @@ instance
   Groups-equational : is-equational (Group-structure ℓ)
   Groups-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Groups ℓ ⇒ Sets ℓ
+Forget : Groups ℓ ⇒ Types ℓ
 Forget = Forget-structure (Group-structure _)
 
 Forget-inverse : Groups ℓ ⇒ Monoids ℓ
@@ -43,8 +44,8 @@ Forget-inverse .Functor.F₁ f .preserves .Monoid-hom.pres-id =
   pres-id (f .preserves)
 Forget-inverse .Functor.F₁ f .preserves .Monoid-hom.pres-⋆ =
   f .preserves .pres-⋆
-Forget-inverse .Functor.F-id = ext λ _ → refl
-Forget-inverse .Functor.F-∘ _ _ = ext λ _ → refl
+Forget-inverse .Functor.F-id = trivial!
+Forget-inverse .Functor.F-∘ _ _ = trivial!
 
 forget-inverse-is-faithful : is-faithful (Forget-inverse {ℓ})
 forget-inverse-is-faithful p = ext (p $ₚ_)

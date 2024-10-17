@@ -69,14 +69,17 @@ instance
   H-Level-hedberg ⦃ di ⦄ ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 (is-discrete→is-set auto)
   {-# INCOHERENT H-Level-hedberg #-}
 
-↣→is-discrete : (A ↣ B) → is-discrete B → is-discrete A
+↣→is-discrete : (B ↣ A) → is-discrete A → is-discrete B
 ↣→is-discrete (f , f-inj) B-dis = Dec.dmap f-inj (_∘ ap f) B-dis
 
-↪→is-discrete : (A ↪ B) → is-discrete B → is-discrete A
+↪→is-discrete : (B ↪ A) → is-discrete A → is-discrete B
 ↪→is-discrete = ↪→↣ ∙ ↣→is-discrete
 
 ≃→is-discrete : (B ≃ A) → is-discrete A → is-discrete B
 ≃→is-discrete = ≃→↪ ∙ ↪→is-discrete
+
+≅→is-discrete : (B ≅ A) → is-discrete A → is-discrete B
+≅→is-discrete = ≅→≃ ∙ ≃→is-discrete
 
 instance
   Σ-is-discrete
@@ -110,24 +113,21 @@ instance
 
 -- Automation
 
-instance
-  Reflects-Discrete : ⦃ di : is-discrete A ⦄ {x y : A} → Reflects (x ＝ y) ⌊ x ≟ y ⌋
-  Reflects-Discrete {x} {y} = Dec.elim {C = λ d → Reflects (x ＝ y) ⌊ d ⌋} ofʸ ofⁿ (x ≟ y)
-  {-# INCOHERENT Reflects-Discrete #-}
+{- TODO move these 2 to Dec and have another here versions specialized to equalities? -}
 
-caseᵈ-true_return_of_
+given-yes_return_then_
   : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
     (a : A) (C : Dec A → Type ℓ′)
   → C (yes a) → C d
-caseᵈ-true_return_of_ {A} a C cy = caseᵈ A return C of λ where
+given-yes_return_then_ {A} a C cy = caseᵈ A return C of λ where
   (yes a′) → subst C prop! cy
   (no  ¬a) → false! (¬a a)
 
-caseᵈ-false_return_of_
-  : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
+given-no_return_then_
+  : {A : Type ℓ} ⦃ d : Dec A ⦄
     (¬a : ¬ A) (C : Dec A → Type ℓ′)
   → C (no ¬a) → C d
-caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
+given-no_return_then_ {A} ¬a C cy = caseᵈ A return C of λ where
   (yes a)   → false! (¬a a)
   (no  ¬a′) → subst (C ∘ no) prop! cy
 
@@ -139,6 +139,9 @@ caseᵈ-false_return_of_ {A} ¬a C cy = caseᵈ A return C of λ where
 
 ≃→is-discrete! : (A ≃ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ≃→is-discrete! f = ≃→is-discrete f auto
+
+≅→is-discrete! : (A ≅ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
+≅→is-discrete! f = ≅→is-discrete f auto
 
 -- -- Usage
 -- private

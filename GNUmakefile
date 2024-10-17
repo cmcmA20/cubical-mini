@@ -6,7 +6,6 @@ RTS_OPTIONS=+RTS -H3G -RTS
 AGDA=$(AGDA_EXEC) $(RTS_OPTIONS)
 EVERYTHINGS?=cabal run exes --
 DATA_INSTANCE_DIRS=`find src/Data -type d -name Instances -printf "Data/%P\n"`
-STR_INSTANCE_DIRS=`find src/Structures -type d -name Instances -printf "Structures/%P\n"`
 
 .PHONY : all
 all : build
@@ -16,7 +15,7 @@ build :
 	$(MAKE) AGDA_EXEC=$(AGDA_BIN) gen-everythings check
 
 .PHONY : test
-test : check-whitespace gen-inst-everythings gen-and-check-everythings check-README check
+test : check-whitespace gen-and-check-everythings check-README check
 
 # checking and fixing whitespace
 
@@ -34,15 +33,10 @@ check-whitespace:
 check-everythings:
 	$(EVERYTHINGS) check-except System
 
-.PHONY : gen-inst-everythings
-gen-inst-everythings:
-	$(EVERYTHINGS) gen-public $(STR_INSTANCE_DIRS)
-	$(EVERYTHINGS) gen-public $(CON_INSTANCE_DIRS)
-	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
-
 .PHONY : gen-everythings
 gen-everythings:
-	$(EVERYTHINGS) gen-except Foundations System
+	$(EVERYTHINGS) gen-public $(DATA_INSTANCE_DIRS)
+	$(EVERYTHINGS) gen-except System
 	$(EVERYTHINGS) gen-unsafe System
 
 .PHONY : gen-and-check-everythings

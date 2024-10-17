@@ -24,10 +24,16 @@ data All {ℓ ℓᵃ} {A : Type ℓᵃ} (P : Pred A ℓ) : @0 List A → Type (�
   []  : All P []
   _∷_ : P x → All P xs → All P (x ∷ xs)
 
+all-head : All P (x ∷ xs) → P x
+all-head (x ∷ _) = x
+
+all-tail : All P (x ∷ xs) → All P xs
+all-tail (_ ∷ xs) = xs
+
 module _ {A : 𝒰 ℓᵃ} {P : Pred A ℓ} ⦃ ep : {a : A} → Extensional (P a) ℓ ⦄ where
   Code-All : {xs : List A} (p q : All P xs) → 𝒰 ℓ
   Code-All {xs = []}     []       []       = ⊤
-  Code-All {xs = x ∷ xs} (px ∷ p) (qx ∷ q) = ep .Pathᵉ px qx × Code-All p q
+  Code-All {xs = x ∷ xs} (px ∷ p) (qx ∷ q) = ep .Pathᵉ px qx ×ₜ Code-All p q
 
   code-all-refl : {xs : List A} (p : All P xs) → Code-All p p
   code-all-refl {xs = []}     []       = _
@@ -80,7 +86,7 @@ all-is-of-hlevel  zero   hl = all-is-contr hl
 all-is-of-hlevel (suc n) hl =
   identity-system→is-of-hlevel n (Extensional-All .idsᵉ) (λ x y → code-all-is-of-hlevel hl)
 
-instance opaque
+instance
   H-Level-All : ∀ {n} → {xs : List A} → ⦃ A-hl : ∀ {x} → H-Level n (P x) ⦄ → H-Level n (All P xs)
   H-Level-All {n} .H-Level.has-of-hlevel = all-is-of-hlevel _  (λ _ → hlevel n)
   {-# OVERLAPPING H-Level-All #-}
@@ -110,7 +116,7 @@ all-zip-with : {@0 xs : List A} → ∀ᴱ[ P ⇒ Q ⇒ R ] → All P xs → All
 all-zip-with     f [] [] = []
 all-zip-with {P} f (p ∷ ps) (q ∷ qs) = f p q ∷ all-zip-with {P = P} f ps qs
 
-all? : {ℓ ℓ′ : Level} {A : Type ℓ} {P : A → Type ℓ′} → Decidable P → Decidable (λ (xs : List A) → All P xs)
+all? : Decidable P → Decidable (λ (xs : List A) → All P xs)
 all? P? {([])}   = yes []
 all? P? {x ∷ xs} =
   Dec.dmap (_∷_ $ₜ²_)

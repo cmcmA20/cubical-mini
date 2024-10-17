@@ -55,28 +55,28 @@ is-equivᴱ≃is-equiv {B} {f} =
 @0 equivᴱ≃equiv : (A ≃ᴱ B) ≃ (A ≃ B)
 equivᴱ≃equiv = Σ-ap-snd λ _ → is-equivᴱ≃is-equiv
 
-@0 is-invᴱ≃is-inv : {@0 f : A → B} → is-invertibleᴱ f ≃ is-invertible f
-is-invᴱ≃is-inv {f} = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ ≅→≃ go where
-  go : _ ≅ is-invertible f
-  go .to = invertible $³_
+@0 qinvᴱ≃qinv : {@0 f : A → B} → quasi-inverseᴱ f ≃ quasi-inverse f
+qinvᴱ≃qinv {f} = Σ-ap-snd (λ _ → ×-ap erased≃id erased≃id) ∙ ≅→≃ go where
+  go : _ ≅ quasi-inverse f
+  go .to = qinv $³_
   go .from x
-    = x .is-invertible.inv
-    , x .is-invertible.inverses .Inverses.inv-o
-    , x .is-invertible.inverses .Inverses.inv-i
-  go .inverses .Inverses.inv-o i x .is-invertible.inv = x .is-invertible.inv
-  go .inverses .Inverses.inv-o i x .is-invertible.inverses .Inverses.inv-o =
-    x .is-invertible.inverses .Inverses.inv-o
-  go .inverses .Inverses.inv-o i x .is-invertible.inverses .Inverses.inv-i =
-    x .is-invertible.inverses .Inverses.inv-i
+    = x .quasi-inverse.inv
+    , x .quasi-inverse.inverses .Inverses.inv-o
+    , x .quasi-inverse.inverses .Inverses.inv-i
+  go .inverses .Inverses.inv-o i x .quasi-inverse.inv = x .quasi-inverse.inv
+  go .inverses .Inverses.inv-o i x .quasi-inverse.inverses .Inverses.inv-o =
+    x .quasi-inverse.inverses .Inverses.inv-o
+  go .inverses .Inverses.inv-o i x .quasi-inverse.inverses .Inverses.inv-i =
+    x .quasi-inverse.inverses .Inverses.inv-i
   go .inverses .Inverses.inv-i = refl
 
-is-invᴱ→is-equivᴱ : {@0 f : A → B} → is-invertibleᴱ f → is-equivᴱ f
-is-invᴱ→is-equivᴱ {f} (inv , erase ri , erase li) y = (inv y , erase (eqv y .fst .snd)) , erase go where
+qinvᴱ→is-equivᴱ : {@0 f : A → B} → quasi-inverseᴱ f → is-equivᴱ f
+qinvᴱ→is-equivᴱ {f} (inv , erase ri , erase li) y = (inv y , erase (eqv y .fst .snd)) , erase go where
   @0 eqv : _
-  eqv = is-inv→is-equiv (invertible inv ri li) .equiv-proof
+  eqv = qinv→is-equiv (qinv inv ri li) .equiv-proof
   @ 0 go : is-central (inv y , erase (eqv y .fst .snd))
   go (c , erase p) i =
-    let r = is-inv→fibre-is-prop (invertible inv ri li) y (inv y) c (ri # y) p
+    let r = qinv→fibre-is-prop (qinv inv ri li) y (inv y) c (ri # y) p
     in r i .fst , erase (r i .snd)
 
 erased-path : {@0 A : Type ℓᵃ} {@0 x y : A} → Erased (x ＝ y) ≃ (erase x ＝ erase y)
@@ -95,9 +95,9 @@ erased-is-of-hlevel (suc (suc n)) hl (erase x) (erase y) = ≃→is-of-hlevel (s
 infixr 30 _∙ᴱₑ_
 _∙ᴱₑ_ : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ B → B ≃ᴱ C → A ≃ᴱ C
 (f , fe) ∙ᴱₑ (g , ge) = f ∙ g , e where
-  open is-invertible
-  fi = is-equivᴱ→is-invᴱ fe
-  gi = is-equivᴱ→is-invᴱ ge
+  open quasi-inverse
+  fi = is-equivᴱ→qinvᴱ fe
+  gi = is-equivᴱ→qinvᴱ ge
 
   f⁻¹ = fi .fst
   g⁻¹ = gi .fst
@@ -106,11 +106,11 @@ _∙ᴱₑ_ : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ} → A ≃ᴱ
     @0 s : (g⁻¹ ∙ f⁻¹) section-of (f ∙ g)
     s = (g⁻¹ ◁ fi .snd .fst .erased ▷ g) ∙ gi .snd .fst .erased
 
-    @0 r : (g⁻¹ ∙ f⁻¹) retract-of (f ∙ g)
+    @0 r : (g⁻¹ ∙ f⁻¹) retraction-of (f ∙ g)
     r = (f ◁ gi .snd .snd .erased ▷ f⁻¹) ∙ fi .snd .snd .erased
 
   e : is-equivᴱ (f ∙ g)
-  e = is-invᴱ→is-equivᴱ $ (g⁻¹ ∙ f⁻¹) , erase s , erase r
+  e = qinvᴱ→is-equivᴱ $ (g⁻¹ ∙ f⁻¹) , erase s , erase r
 
 fibre→fibreᴱ : {A : Type ℓᵃ} {B : Type ℓᵇ} {f : A → B} {y : B} → fibre f y → fibreᴱ f y
 fibre→fibreᴱ = second (λ x → erase x)
@@ -126,7 +126,7 @@ is-equiv→is-equivᴱ fe y .snd .erased (c , erase p) i
 
 instance
   Dual-Erased-≃ : Dual (_≃ᴱ_ {ℓᵃ} {ℓᵇ}) _≃ᴱ_
-  Dual-Erased-≃ ._ᵒᵖ e = is-equivᴱ→inverse (e .snd) , is-invᴱ→is-equivᴱ
+  Dual-Erased-≃ ._ᵒᵖ e = is-equivᴱ→inverse (e .snd) , qinvᴱ→is-equivᴱ
     (e .fst
     , erase (fun-ext λ x → is-equivᴱ→unit (e .snd) x .erased)
     , erase (fun-ext λ x → is-equivᴱ→counit (e .snd) x .erased) )
@@ -137,7 +137,7 @@ instance
 Σ-contract-sndᴱ
   : {A : Type ℓᵃ} {B : A → Type ℓᵇ}
   → (∀ x → is-contrᴱ (B x)) → Σ A B ≃ᴱ A
-Σ-contract-sndᴱ B-contr = fst , is-invᴱ→is-equivᴱ
+Σ-contract-sndᴱ B-contr = fst , qinvᴱ→is-equivᴱ
   ( (λ x → x , B-contr x .fst)
   , erase refl
   , erase λ i (a , b) → a , B-contr a .snd .erased b i )

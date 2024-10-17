@@ -5,14 +5,13 @@ open import Cat.Prelude
 
 open import Order.Base
 open import Order.Diagram.Lub
-import Order.Reasoning
 
 open import Data.Bool
 
 private variable o ℓ : Level
 
 module _ (P : Poset o ℓ) (a b : ⌞ P ⌟) where
-  open Order.Reasoning P
+  open Poset P
 
   record is-join (lub : Ob) : 𝒰 (o ⊔ ℓ) where
     no-eta-equality
@@ -35,7 +34,7 @@ Has-joins : Poset o ℓ → Type (o ⊔ ℓ)
 Has-joins P = ∀{x y} → Join P x y
 
 module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
-  open Order.Reasoning P
+  open Poset P
   open is-lub
   open is-join
 
@@ -64,7 +63,7 @@ module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
   Join-is-prop : is-prop (Join P a b)
   Join-is-prop = ≅→is-of-hlevel 1 Join-Iso λ x y → join-unique (x .snd) (y .snd) ,ₚ prop!
 
-  instance
+  instance opaque
     H-Level-Join
       : ∀ {n} ⦃ _ : 1 ≤ʰ n ⦄
       → H-Level n (Join P a b)

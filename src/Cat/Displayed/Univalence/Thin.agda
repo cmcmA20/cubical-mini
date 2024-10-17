@@ -1,8 +1,9 @@
 {-# OPTIONS --safe #-}
 module Cat.Displayed.Univalence.Thin where
 
-open import Cat.Displayed.Base public
-open import Cat.Displayed.Total public
+open import Cat.Functor.Properties
+open import Cat.Displayed.Base
+open import Cat.Displayed.Total
 open import Cat.Displayed.Univalence
 open import Cat.Prelude
 
@@ -40,10 +41,9 @@ module _
   {ℓ o′ ℓ′} {S : Type ℓ → Type o′}
   (spec : Thin-structure ℓ′ S) where
 
-  Thin-structure-over : Displayed (Sets ℓ) o′ ℓ′
-  Thin-structure-over .Ob[_] x = S ⌞ x ⌟
+  Thin-structure-over : Displayed (Types ℓ) o′ ℓ′
+  Thin-structure-over .Ob[_] x = S x
   Thin-structure-over .Hom[_] f x y = ⌞ spec .is-hom f x y ⌟
-  Thin-structure-over .Hom[_]-set = hlevel!
   Thin-structure-over .idᵈ = spec .id-is-hom
   Thin-structure-over ._∘ᵈ_ = spec .∘-is-hom _ _
   Thin-structure-over .id-rᵈ _ = prop!
@@ -63,7 +63,7 @@ module _
   --       ( spec .id-hom-unique (x .snd .from′) (x .snd .to′)
   --       ∙ spec .id-hom-unique (y .snd .to′) (y .snd .from′))
 
-  Forget-structure : Functor Structured-objects (Sets ℓ)
+  Forget-structure : Functor Structured-objects (Types ℓ)
   Forget-structure = πᶠ Thin-structure-over
 
   Structured-hom-path : is-faithful Forget-structure
@@ -105,7 +105,7 @@ record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin
     → is-equiv (f $_)
     → Erased (a ＝ b)
   ∫-Path {a} {b} f eqv .erased
-    =  n-ua (f .hom , eqv)
+    =  ua (f .hom , eqv)
     ,ₚ Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e .fst) (a .snd) st ⌟
                         → ＜ a .snd ／ (λ i → S (ua e i)) ＼ st ＞)
         (λ st pres → to-pathᴾ (ap (λ e → subst S e (a .snd)) ua-idₑ

@@ -113,8 +113,9 @@ instance opaque
   H-Level-monoid-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance monoid-hom-is-prop
 
 instance
-  ⇒-Monoid : ⇒-notation (Σ[ X ꞉ Set ℓ ] Monoid-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Monoid-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
-  ⇒-Monoid ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Monoid-hom {a = A} {b = B} X Y
+  ⇒-Monoid : ⇒-notation (Σ[ X ꞉ Type ℓ ] Monoid-on X) (Σ[ Y ꞉ Type ℓ′ ] Monoid-on Y) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Monoid .⇒-notation.Constraint _ _ = ⊤
+  ⇒-Monoid ._⇒_ (A , X) (B , Y) = Total-hom Fun Monoid-hom X Y
 
   Refl-Monoid-hom : Refl {A = Monoid-on A} (Monoid-hom refl)
   Refl-Monoid-hom .refl .Monoid-hom.pres-⋆ _ _ = refl

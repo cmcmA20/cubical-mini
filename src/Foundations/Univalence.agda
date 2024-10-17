@@ -104,10 +104,10 @@ module @0 _ where
   path≅equiv {A} {B} = iso =→≃ ua (fun-ext $ equiv-ext ∘ fun-ext ∘ ua-β) (fun-ext ua-η)
 
   univalence : is-equiv (=→≃ {A = A} {B = B})
-  univalence = is-inv→is-equiv (make-invertible _ (path≅equiv .inverses))
+  univalence = qinv→is-equiv (make-qinv _ (path≅equiv .inverses))
 
   univalence⁻¹ : is-equiv (ua {A = A} {B = B})
-  univalence⁻¹ = is-inv→is-equiv (is-invertible.op (make-invertible _ (path≅equiv .inverses)))
+  univalence⁻¹ = qinv→is-equiv (quasi-inverse.op (make-qinv _ (path≅equiv .inverses)))
 
   opaque
     unfolding ua
@@ -144,7 +144,7 @@ module @0 _ where
         sys j (φ = i1) = outS (fib 1=1) .snd (~ j)
         sys j (ψ = i1) = par 1=1 .snd (~ j)
 
-        ctr : Σ _ _ [ _ ↦ _ ]
+        ctr : Σₜ _ _ [ _ ↦ _ ]
         ctr = inS $ₛ glue-inc φ {Tf = B} (λ { (φ = i1) → outS (fib 1=1) .fst })
                       (inS (hcomp (φ ∨ ψ) sys))
                    , (λ i → hfill (φ ∨ ψ) (~ i) sys)

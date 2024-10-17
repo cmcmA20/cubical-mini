@@ -48,18 +48,22 @@ instance
   hlevel-proj-DecProp .Struct-proj-desc.get-argument _ = type-error []
 
   ×-DecProp : ×-notation (DecProp ℓ) (DecProp ℓ′) _
+  ×-DecProp .×-notation.Constraint _ _ = ⊤
   ×-DecProp ._×_ (el A da p) (el B db q) =
     el (A × B) (da <,> db) (×-is-of-hlevel 1 p q)
 
   ⇒-DecProp : ⇒-notation (DecProp ℓ) (DecProp ℓ′) _
+  ⇒-DecProp .⇒-notation.Constraint _ _ = ⊤
   ⇒-DecProp ._⇒_ (el A da _) (el B db q) =
     el (A ⇒ B) (Dec-fun ⦃ da ⦄ ⦃ db ⦄) (fun-is-of-hlevel 1 q)
 
   ⊎₁-DecProp : ⊎₁-notation (DecProp ℓ) (DecProp ℓ′) (DecProp (ℓ ⊔ ℓ′))
+  ⊎₁-DecProp .⊎₁-notation.Constraint _ _ = ⊤
   ⊎₁-DecProp ._⊎₁_ (el A da p) (el B db q) =
     el (A ⊎₁ B) (∥-∥₁∘dec≃dec∘∥-∥₁ $ ∣ da <+> db ∣₁) squash₁
 
   ¬-DecProp : ¬-notation (DecProp ℓ) (DecProp ℓ)
+  ¬-DecProp .¬-notation.Constraint _ = ⊤
   ¬-DecProp .¬_ (el A da p) = el (¬ A) (Dec-¬ ⦃ da ⦄) (hlevel 1)
 
   Σ-DecProp : Σ-notation (DecProp ℓ) (DecProp ℓ′) (DecProp (ℓ ⊔ ℓ′))
@@ -96,7 +100,7 @@ instance
 
 dec-prop≃ᴱbool : DecProp ℓ ≃ᴱ Bool
 dec-prop≃ᴱbool .fst X = ⌊ X .carrier-is-dec ⌋
-dec-prop≃ᴱbool .snd = is-invᴱ→is-equivᴱ
+dec-prop≃ᴱbool .snd = qinvᴱ→is-equivᴱ
   $ (if_then ⊤-DecProp .⊤ else ⊥-DecProp .⊥)
   , erase (fun-ext (Bool.elim refl refl))
   , erase (fun-ext li)

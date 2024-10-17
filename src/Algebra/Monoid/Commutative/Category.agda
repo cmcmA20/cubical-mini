@@ -4,6 +4,7 @@ module Algebra.Monoid.Commutative.Category where
 open import Algebra.Monoid.Category using (Monoid-structure; Monoids)
 open import Algebra.Monoid.Commutative
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism
@@ -30,7 +31,7 @@ instance
   CMonoids-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
   CMonoids-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : CMonoids ℓ ⇒ Sets ℓ
+Forget : CMonoids ℓ ⇒ Types ℓ
 Forget = Forget-structure (CMonoid-structure _)
 
 Forget-comm : CMonoids ℓ ⇒ Monoids ℓ

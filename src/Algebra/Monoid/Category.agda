@@ -5,6 +5,7 @@ open import Algebra.Magma.Unital.Category using (UMagmas)
 open import Algebra.Monoid
 open import Algebra.Semigroup.Category using (Semigroups)
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism
@@ -38,7 +39,7 @@ instance
   Monoids-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
   Monoids-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : Monoids ℓ ⇒ Sets ℓ
+Forget : Monoids ℓ ⇒ Types ℓ
 Forget = Forget-structure (Monoid-structure _)
 
 Forget-unit : Monoids ℓ ⇒ Semigroups ℓ
@@ -46,8 +47,8 @@ Forget-unit .Functor.F₀ = second (monoid-on↪semigroup-on $_)
 Forget-unit .Functor.F₁ f .hom x = f $ x
 Forget-unit .Functor.F₁ f .preserves .n-Magma-hom.pres-⋆ =
   f .preserves .pres-⋆
-Forget-unit .Functor.F-id = ext λ _ → refl
-Forget-unit .Functor.F-∘ _ _ = ext λ _ → refl
+Forget-unit .Functor.F-id = trivial!
+Forget-unit .Functor.F-∘ _ _ = trivial!
 
 forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
 forget-unit-is-faithful p = ext (p $ₚ_)
@@ -60,8 +61,8 @@ Forget-assoc .Functor.F₁ f .preserves .UMagma-hom.pres-id =
   f .preserves .pres-id
 Forget-assoc .Functor.F₁ f .preserves .UMagma-hom.pres-⋆ =
   f .preserves .pres-⋆
-Forget-assoc .Functor.F-id = ext λ _ → refl
-Forget-assoc .Functor.F-∘ _ _ = ext λ _ → refl
+Forget-assoc .Functor.F-id = trivial!
+Forget-assoc .Functor.F-∘ _ _ = trivial!
 
 forget-assoc-is-faithful : is-faithful (Forget-assoc {ℓ})
 forget-assoc-is-faithful p = ext (p $ₚ_)

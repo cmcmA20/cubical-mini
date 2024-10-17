@@ -3,6 +3,8 @@ module Data.Quotient.Set.Split where
 
 open import Meta.Prelude
 
+open import Logic.Equivalence
+
 open import Data.Quotient.Set.Base as /₂
 open import Data.Quotient.Set.Path
 
@@ -14,7 +16,6 @@ record is-split-congruence
   {A : Type ℓ} {R : A → A → Type ℓ′}
   (co : is-congruence R) : Type (ℓ ⊔ ℓ′) where
   open is-congruence co
-  open Equivalence equivalence
 
   field
     has-is-set : is-set A

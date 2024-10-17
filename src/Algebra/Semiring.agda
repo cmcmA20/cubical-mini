@@ -118,8 +118,9 @@ instance opaque
   H-Level-semiring-hom ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance semiring-hom-is-prop
 
 instance
-  ⇒-Semiring : ⇒-notation (Σ[ X ꞉ Set ℓ ] Semiring-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Semiring-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
-  ⇒-Semiring ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) Semiring-hom {a = A} {b = B} X Y
+  ⇒-Semiring : ⇒-notation (Σ[ X ꞉ Type ℓ ] Semiring-on X) (Σ[ Y ꞉ Type ℓ′ ] Semiring-on Y) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Semiring .⇒-notation.Constraint _ _ = ⊤
+  ⇒-Semiring ._⇒_ (A , X) (B , Y) = Total-hom Fun Semiring-hom X Y
 
   Refl-Semiring-hom : Refl {A = Semiring-on A} (Semiring-hom refl)
   Refl-Semiring-hom .refl .Semiring-hom.pres-+ _ _ = refl

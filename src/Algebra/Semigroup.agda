@@ -59,9 +59,10 @@ instance opaque
   H-Level-semigroup-on ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 $ ↪→is-of-hlevel! 2 semigroup-on↪magma-on
 
 instance
-  ⇒-Semigroup : ⇒-notation (Σ[ X ꞉ Set ℓ ] Semigroup-on ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] Semigroup-on ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
-  ⇒-Semigroup ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟)
-    (λ f P Q → n-Magma-hom _ f (semigroup-on↪magma-on .fst P) (semigroup-on↪magma-on .fst Q)) {a = A} {b = B} X Y
+  ⇒-Semigroup : ⇒-notation (Σ[ X ꞉ Type ℓ ] Semigroup-on X) (Σ[ Y ꞉ Type ℓ′ ] Semigroup-on Y) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-Semigroup .⇒-notation.Constraint _ _ = ⊤
+  ⇒-Semigroup ._⇒_ (A , X) (B , Y) = Total-hom Fun
+    (λ f P Q → n-Magma-hom _ f (semigroup-on↪magma-on .fst P) (semigroup-on↪magma-on .fst Q)) X Y
 
 
 record make-semigroup {ℓ} (X : 𝒰 ℓ) : 𝒰 ℓ where

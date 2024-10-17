@@ -36,3 +36,4 @@ module _
           → OS h (f ∙ k) (g ∙ k)
 
 open Whisker-o ⦃ ... ⦄ public
+{-# DISPLAY Whisker-o._▷_ _ a b = a ▷ b #-}

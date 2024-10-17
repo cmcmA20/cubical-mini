@@ -26,7 +26,7 @@ Subsets X ℓ = Pointwise X (λ _ → Props ℓ)
 
 module @0 _ {ℓ ℓˣ} {X : Type ℓˣ} where private
   open import Combinatorics.Power.Base
-  open import Order.Reasoning (Subsets X ℓ)
+  open Poset (Subsets X ℓ)
 
   _ : Ob ＝ ℙ X ℓ
   _ = refl

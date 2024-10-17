@@ -4,6 +4,7 @@ module Algebra.Magma.Unital.Category where
 open import Algebra.Magma.Category using (Magma-structure; Magmas)
 open import Algebra.Magma.Unital
 
+open import Cat.Functor.Properties
 open import Cat.Displayed.Univalence.Thin
 open import Cat.Prelude
 import Cat.Morphism
@@ -37,15 +38,15 @@ instance
   UMagmas-equational .invert-id-hom p .pres-id = p .pres-id ⁻¹
   UMagmas-equational .invert-id-hom p .pres-⋆ _ _ = p .pres-⋆ _ _ ⁻¹
 
-Forget : UMagmas ℓ ⇒ Sets ℓ
+Forget : UMagmas ℓ ⇒ Types ℓ
 Forget = Forget-structure (UMagma-structure _)
 
 Forget-unit : UMagmas ℓ ⇒ Magmas ℓ
 Forget-unit .Functor.F₀ = second (unital-magma-on↪magma-on $_)
 Forget-unit .Functor.F₁ f .hom x = f $ x
 Forget-unit .Functor.F₁ f .preserves .pres-⋆ = f .preserves .pres-⋆
-Forget-unit .Functor.F-id = ext λ _ → refl
-Forget-unit .Functor.F-∘ _ _ = ext λ _ → refl
+Forget-unit .Functor.F-id = trivial!
+Forget-unit .Functor.F-∘ _ _ = trivial!
 
 forget-unit-is-faithful : is-faithful (Forget-unit {ℓ})
 forget-unit-is-faithful p = ext (p $ₚ_)

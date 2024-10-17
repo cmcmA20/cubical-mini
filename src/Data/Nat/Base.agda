@@ -33,25 +33,10 @@ elim P pz ps (suc n) = elim (P ∘ suc) (ps pz) ps n
 rec : A → (A → A) → ℕ → A
 rec z s = elim _ z s
 
-iter : ℕ → (A → A) → A → A
-iter zero    f = id
-iter (suc n) f = f ∘ iter n f
-
 infixr 8 _^_
 _^_ : ℕ → ℕ → ℕ
 x ^ zero  = 1
 x ^ suc y = x · (x ^ y)
-
-max : ℕ → ℕ → ℕ
-max zero    zero    = zero
-max zero    (suc y) = suc y
-max (suc x) zero    = suc x
-max (suc x) (suc y) = suc (max x y)
-
-min : ℕ → ℕ → ℕ
-min zero    _       = zero
-min (suc x) zero    = zero
-min (suc x) (suc y) = suc (min x y)
 
 pred : ℕ → ℕ
 pred zero    = zero
@@ -63,3 +48,7 @@ is-zero? (suc _) = false
 
 is-positive? : ℕ → Bool
 is-positive? = not ∘ is-zero?
+
+iter : ℕ → (A → A) → A → A
+iter zero    f = id
+iter (suc n) f = f ∘ iter n f

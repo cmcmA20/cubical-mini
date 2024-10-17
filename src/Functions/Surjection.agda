@@ -58,15 +58,15 @@ instance
     u′ , v′ ← φ u
     pure (u′ , ap g v′ ∙ v)
 
-retract→split-surjective
+retraction→split-surjective
   : {f : A → B} {g : B → A}
-  → f retract-of g → Split-surjective f
-retract→split-surjective {g} s b = g b , s # b
+  → f retraction-of g → Split-surjective f
+retraction→split-surjective {g} s b = g b , s # b
 
-retract→is-surjective
+retraction→is-surjective
   : {f : A → B} {g : B → A}
-  → f retract-of g → is-surjective f
-retract→is-surjective s b = ∣ retract→split-surjective s b ∣₁
+  → f retraction-of g → is-surjective f
+retraction→is-surjective s b = ∣ retraction→split-surjective s b ∣₁
 
 is-equiv→split-surjective : is-equiv f → Split-surjective f
 is-equiv→split-surjective r y = equiv-proof r y .fst

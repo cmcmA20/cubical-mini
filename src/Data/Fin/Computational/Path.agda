@@ -28,7 +28,7 @@ unquoteDecl fin-iso = declare-record-iso fin-iso (quote Fin)
 unquoteDecl H-Level-Fin = declare-record-hlevel 2 H-Level-Fin (quote Fin)
 
 fin-ext : {k₁ k₂ : Fin n} → k₁ .index ＝ k₂ .index → k₁ ＝ k₂
-fin-ext {n} p = apˢ {A = Σ-syntax ℕ λ x → Erased ⌞ x <? n ⌟} (≅→≃ fin-iso ⁻¹ $_) (p ,ₚ prop!)
+fin-ext {n} p = apˢ {A = Σ ℕ λ x → Erased ⌞ x <? n ⌟} (≅→≃ fin-iso ⁻¹ $_) (p ,ₚ prop!)
 
 mk-fin-inj
   : ∀ {x y : ℕ} {b₁ b₂}

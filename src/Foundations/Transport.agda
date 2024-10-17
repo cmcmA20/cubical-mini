@@ -64,6 +64,9 @@ subst-comp : {A : Type ℓ} (B : A → Type ℓ′)
 subst-comp B p q Bx i =
   transport (ap B (∙-filler-r p q (~ i))) (transport-filler-ext (ap B p) i Bx)
 
+subst-is-equiv : {B : A → Type ℓ′} (p : x ＝ y) → is-equiv (subst B p)
+subst-is-equiv {B} p = transport-is-equiv (ap B p)
+
 subst-slice : {A : Type ℓ} (B : A → Type ℓ′) (C : A → Type ℓ″)
               (F : ∀[ a ꞉ A ] (B a → C a))
               {x y : A} (p : x ＝ y) (b : B x)
@@ -80,5 +83,5 @@ subst-slice-filler : {ℓ ℓ′ ℓ″ : Level}
 subst-slice-filler B C F p i b = transport-filler (ap C p)
   (F (transport⁻-filler-ext (ap B p) i b)) i
 
-subst-equiv : (P : A → Type ℓ′) (p : x ＝ y) → P x ≃ P y
-subst-equiv P p = subst P p , transport-is-equiv (λ i → P (p i))
+subst-≃ : (P : A → Type ℓ′) (p : x ＝ y) → P x ≃ P y
+subst-≃ P = < subst P , subst-is-equiv >

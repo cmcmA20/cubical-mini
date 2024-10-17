@@ -40,6 +40,7 @@ record ∞-magma-hom
 
 instance
   ⇒-∞-Magma : ⇒-notation (Σ[ X ꞉ 𝒰 ℓ ] ∞-Magma-on X) (Σ[ Y ꞉ 𝒰 ℓ′ ] ∞-Magma-on Y) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-∞-Magma .⇒-notation.Constraint _ _ = ⊤
   ⇒-∞-Magma ._⇒_ X Y = Total-hom Fun ∞-magma-hom (X .snd) (Y .snd)
 
   Refl-∞-magma-hom : Refl {A = ∞-Magma-on A} (∞-magma-hom refl)
@@ -108,8 +109,9 @@ Magma-on = n-Magma-on 2
 2-Magma-on = n-Magma-on 3
 
 instance
-  ⇒-n-Magma : {n : HLevel} → ⇒-notation (Σ[ X ꞉ Set ℓ ] n-Magma-on n ⌞ X ⌟) (Σ[ Y ꞉ Set ℓ′ ] n-Magma-on n ⌞ Y ⌟) (𝒰 (ℓ ⊔ ℓ′))
-  ⇒-n-Magma {n} ._⇒_ (A , X) (B , Y) = Total-hom (λ P Q → ⌞ P ⌟ → ⌞ Q ⌟) (n-Magma-hom n) {a = A} {b = B} X Y
+  ⇒-n-Magma : {n : HLevel} → ⇒-notation (Σ[ X ꞉ Type ℓ ] n-Magma-on n X) (Σ[ Y ꞉ Type ℓ′ ] n-Magma-on n Y) (𝒰 (ℓ ⊔ ℓ′))
+  ⇒-n-Magma .⇒-notation.Constraint _ _ = ⊤
+  ⇒-n-Magma {n} ._⇒_ (A , X) (B , Y) = Total-hom Fun (n-Magma-hom n) X Y
 
   Refl-n-Magma-hom : Refl {A = n-Magma-on n A} (n-Magma-hom n refl)
   Refl-n-Magma-hom .refl .n-Magma-hom.pres-⋆ _ _ = refl

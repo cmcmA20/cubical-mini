@@ -45,7 +45,8 @@ infixr 0 ¬ₜ_
 
 instance
   ¬-Type : ¬-notation (𝒰 ℓ) (𝒰 ℓ)
-  ¬-Type .¬_ = ¬ₜ_
+  ¬-Type .¬-notation.Constraint _ = ⊤ₜ
+  ¬-Type .¬_ A = ¬ₜ A
 
 infix 4 _≠_
 _≠_ : ∀ {ℓ} {A : Type ℓ} → A → A → Type ℓ

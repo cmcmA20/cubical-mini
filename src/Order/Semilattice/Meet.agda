@@ -7,7 +7,6 @@ open import Order.Base
 open import Order.Diagram.Meet
 open import Order.Diagram.Top
 import Order.Diagram.Meet.Reasoning as Meets
-import Order.Reasoning
 
 record is-meet-semilattice {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
   field
@@ -32,7 +31,7 @@ record
   private
     module P = Poset P
     module Pₗ = is-meet-semilattice P-slat
-    module Q = Order.Reasoning Q
+    module Q = Poset Q
     module Qₗ = is-meet-semilattice Q-slat
 
   field
@@ -73,12 +72,14 @@ unquoteDecl H-Level-is-meet-slat-hom =
   declare-record-hlevel 1 H-Level-is-meet-slat-hom (quote is-meet-slat-hom)
 
 instance
-  ⇒-meet-slat : ⇒-notation
-    (Σ[ P ꞉ Poset o ℓ ] is-meet-semilattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-meet-semilattice Q) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-meet-slat
+    : ⇒-notation (Σ[ P ꞉ Poset o ℓ ] is-meet-semilattice P) (Σ[ Q ꞉ Poset o′ ℓ′ ] is-meet-semilattice Q)
+        (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
+  ⇒-meet-slat .⇒-notation.Constraint _ _ = ⊤
   ⇒-meet-slat ._⇒_ (P , mp) (Q , mq) = Total-hom Monotone is-meet-slat-hom mp mq
 
 module _ {R : Poset o″ ℓ″} where
-  open Order.Reasoning R
+  open Poset R
   open is-meet-slat-hom
 
   instance

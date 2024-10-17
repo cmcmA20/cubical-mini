@@ -58,18 +58,23 @@ instance
   {-# INCOHERENT Comp-n-Fun #-}
 
   ×-n-Type : ×-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
+  ×-n-Type .×-notation.Constraint _ _ = ⊤
   ×-n-Type ._×_ (el A p) (el B q) = el (A × B) (×-is-of-hlevel _ p q)
 
   ⇒-n-Type : ⇒-notation (n-Type ℓ m) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
+  ⇒-n-Type .⇒-notation.Constraint _ _ = ⊤
   ⇒-n-Type ._⇒_ (el A _) (el B q) = el (A ⇒ B) (fun-is-of-hlevel _ q)
 
   ⊎-n-Type : ⦃ 2 ≤ʰ n ⦄ → ⊎-notation (n-Type ℓ n) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) n)
+  ⊎-n-Type .⊎-notation.Constraint _ _ = ⊤
   ⊎-n-Type ⦃ s≤ʰs (s≤ʰs _) ⦄ ._⊎_ (el A p) (el B q) = el (A ⊎ B) (⊎-is-of-hlevel _ p q)
 
   ⊎₁-n-Type : ⦃ z : 1 ≤ʰ k ⦄ → ⊎₁-notation (n-Type ℓ m) (n-Type ℓ′ n) (n-Type (ℓ ⊔ ℓ′) k)
+  ⊎₁-n-Type .⊎₁-notation.Constraint _ _ = ⊤
   ⊎₁-n-Type ⦃ z = s≤ʰs _ ⦄ ._⊎₁_ (el A _) (el B _) = el (A ⊎₁ B) (is-prop→is-of-hlevel-suc squash₁)
 
   ¬-n-Type : ⦃ z : 1 ≤ʰ n ⦄ → ¬-notation (n-Type ℓ m) (n-Type ℓ n)
+  ¬-n-Type .¬-notation.Constraint _ = ⊤
   ¬-n-Type ⦃ z = s≤ʰs _ ⦄ .¬_ (el A _) = el (¬ A) (fun-is-of-hlevel _ (hlevel _))
 
   Π-n-Type
@@ -144,7 +149,7 @@ instance
 opaque
   unfolding ua
   @0 n-univalence : {X Y : n-Type ℓ n} → (⌞ X ⌟ ≃ ⌞ Y ⌟) ≃ (X ＝ Y)
-  n-univalence {ℓ} {n} {X} {Y} = n-ua , is-inv→is-equiv (invertible inv (fun-ext rinv) (fun-ext (linv {Y}))) where
+  n-univalence {ℓ} {n} {X} {Y} = n-ua , qinv→is-equiv (qinv inv (fun-ext rinv) (fun-ext (linv {Y}))) where
     inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
     inv p = =→≃ (ap carrier p)
 
@@ -209,7 +214,7 @@ Grpd ℓ = n-Type ℓ 3
 
 -- n-truncated correspondence
 n-Corr
-  : (arity : ℕ) (n : HLevel) {ls : Levels arity} (As : Types arity ls) (ℓ : Level)
+  : (arity : ℕ) (n : HLevel) {ls : Levels arity} (As : TyVec arity ls) (ℓ : Level)
   → Type (ℓsuc ℓ ⊔ ℓsup arity ls)
 n-Corr arity n As ℓ = SCorr arity As (n-Type ℓ n)
 
@@ -223,7 +228,7 @@ n-Corr⁵ = n-Corr 5
 
 -- Propositionally valued correspondence is called a relation
 Rel
-  : (arity : ℕ) {ls : Levels arity} (As : Types arity ls) (ℓ : Level)
+  : (arity : ℕ) {ls : Levels arity} (As : TyVec arity ls) (ℓ : Level)
   → Type (ℓsuc ℓ ⊔ ℓsup arity ls)
 Rel arity = n-Corr arity 1
 
@@ -346,7 +351,7 @@ private
 
 -- TODO restore
 -- corr→is-of-hlevelⁿ
---   : {arity : ℕ} {ls : Levels arity} {As : Types _ ls}
+--   : {arity : ℕ} {ls : Levels arity} {As : TyVec _ ls}
 --     {ℓ : Level} {h : HLevel} {P : n-Corr _ h As ℓ}
 --   → Π[ mapⁿ arity (is-of-hlevel h) ⌞ P ⌟ ]
 -- corr→is-of-hlevelⁿ {0} = hlevel!

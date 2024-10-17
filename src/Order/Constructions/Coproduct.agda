@@ -5,7 +5,6 @@ open import Cat.Prelude
 open import Cat.Diagram.Initial
 
 open import Order.Base
-import Order.Reasoning
 
 open import Data.Sum
 
@@ -19,8 +18,8 @@ Initial-Poset .Initial.has-⊥ _ .snd _ = ext λ()
 
 _⊎ₚ_ : Poset o ℓ → Poset o′ ℓ′ → Poset (o ⊔ o′) (ℓ ⊔ ℓ′)
 _⊎ₚ_ {ℓ} {ℓ′} P Q = po module ⊎ₚ where
-  module P = Order.Reasoning P
-  module Q = Order.Reasoning Q
+  module P = Poset P
+  module Q = Poset Q
 
   po : Poset _ _
   po .Poset.Ob = ⌞ P ⌟ ⊎ ⌞ Q ⌟
@@ -39,7 +38,8 @@ _⊎ₚ_ {ℓ} {ℓ′} P Q = po module ⊎ₚ where
 
 instance
   ⊎-Poset : ⊎-notation (Poset o ℓ) (Poset o′ ℓ′) _
-  ⊎-Poset ._⊎_ = _⊎ₚ_
+  ⊎-Poset .⊎-notation.Constraint _ _ = ⊤
+  ⊎-Poset ._⊎_ P Q = P ⊎ₚ Q
 
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   Inl : P ⇒ P ⊎ Q

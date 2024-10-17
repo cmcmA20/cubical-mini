@@ -18,6 +18,7 @@ private variable n : HLevel
 
 record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   no-eta-equality
+  infix 4.5 _≤_
   field
     Ob  : 𝒰 o
     _≤_ : Ob → Ob → 𝒰 ℓ
@@ -26,16 +27,28 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     ≤-trans   : ∀ {x y z} → x ≤ y → y ≤ z → x ≤ z
     ≤-antisym : ∀ {x y} → x ≤ y → y ≤ x → x ＝ y
 
-  instance opaque
-    H-Level-≤-prop : ∀ {x y} → H-Level (suc n) (x ≤ y)
-    H-Level-≤-prop = hlevel-prop-instance ≤-thin
+  opaque
+    instance
+      H-Level-≤-prop : ∀ {x y} → H-Level (suc n) (x ≤ y)
+      H-Level-≤-prop = hlevel-prop-instance ≤-thin
+
+    ob-is-set : is-set Ob
+    ob-is-set = identity-system→is-of-hlevel! 1
+      {r = λ _ → ≤-refl , ≤-refl}
+      (set-identity-system! (≤-antisym $ₜ²_))
+
+    instance
+      H-Level-poset-ob : ⦃ n ≥ʰ 2 ⦄ → H-Level n Ob
+      H-Level-poset-ob ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 ob-is-set
 
   instance
     Refl-≤ : Refl _≤_
     Refl-≤ .refl = ≤-refl
+    {-# OVERLAPPING Refl-≤ #-}
 
     Trans-≤ : Trans _≤_
     Trans-≤ ._∙_ = ≤-trans
+    {-# OVERLAPPING Trans-≤ #-}
 
     HAssoc-≤ : HAssoc _≤_
     HAssoc-≤ .∙-assoc _ _ _ = prop!
@@ -47,18 +60,28 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
     HUnit-i-≤ .∙-id-i _ = prop!
 
     ⇒-Hom : ⇒-notation Ob Ob (𝒰 ℓ)
-    ⇒-Hom ._⇒_ = _≤_
-    {-# INCOHERENT ⇒-Hom #-}
+    ⇒-Hom .⇒-notation.Constraint _ _ = ⊤
+    ⇒-Hom ._⇒_ x y = x ≤ y
+    {-# OVERLAPPING ⇒-Hom #-}
 
-  opaque
-    ob-is-set : is-set Ob
-    ob-is-set = identity-system→is-of-hlevel! 1
-      {r = λ _ → ≤-refl , ≤-refl}
-      (set-identity-system! (≤-antisym $ₜ²_))
+    ≅-Poset-Ob : ≅-notation Ob Ob (𝒰 ℓ)
+    ≅-Poset-Ob ._≅_ = Iso _≤_ _≤_
+    {-# OVERLAPPING ≅-Poset-Ob #-}
 
-  instance opaque
-    H-Level-poset-ob : ⦃ n ≥ʰ 2 ⦄ → H-Level n Ob
-    H-Level-poset-ob ⦃ s≤ʰs (s≤ʰs _) ⦄ = hlevel-basic-instance 2 ob-is-set
+  _≥_ _≰_ _≱_ : Ob → Ob → 𝒰 ℓ
+  _≥_ = flip _≤_
+  _≰_ x y = ¬ x ≤ y
+  _≱_ x y = ¬ x ≥ y
+
+  infixr 2 _≤⟨_⟩_
+  _≤⟨_⟩_ : ∀ a {b c} → a ≤ b → b ≤ c → a ≤ c
+  f ≤⟨ p ⟩ q = p ∙ q
+
+  =→≤ : ∀ {x y} → x ＝ y → x ≤ y
+  =→≤ = =→~
+
+  =→≥ : ∀ {x y} → x ＝ y → y ≤ x
+  =→≥ = =→~⁻
 
 unquoteDecl poset-iso = declare-record-iso poset-iso (quote Poset)
 
@@ -140,7 +163,8 @@ private variable P Q R : Poset o ℓ
 
 instance
   ⇒-Poset : ⇒-notation (Poset o ℓ) (Poset o′ ℓ′) (Type (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))
-  ⇒-Poset ._⇒_ = Monotone
+  ⇒-Poset .⇒-notation.Constraint _ _ = ⊤
+  ⇒-Poset ._⇒_ P Q = Monotone P Q
 
   Dual-Monotone : Dual {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone λ Q P → Monotone (P ᵒᵖ) (Q ᵒᵖ)
   Dual-Monotone ._ᵒᵖ F .hom = F .hom
@@ -227,11 +251,12 @@ unquoteDecl H-Level-NTₚ = declare-record-hlevel 1 H-Level-NTₚ (quote _=>ₚ_
 
 instance
   ⇒-ntₚ : ⇒-notation (P ⇒ Q) (P ⇒ Q) _
-  ⇒-ntₚ ._⇒_ = _=>ₚ_
+  ⇒-ntₚ .⇒-notation.Constraint _ _ = ⊤
+  ⇒-ntₚ ._⇒_ α β = α =>ₚ β
 
   Dual-ntₚ
     : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-    → Dual {A = Monotone P Q} {B = Monotone P Q} _=>ₚ_ λ G F → G ᵒᵖ =>ₚ F ᵒᵖ
+    → Dual {A = Monotone P Q} {B = Monotone P Q} _=>ₚ_ λ G F → G ᵒᵖ ⇒ F ᵒᵖ
   Dual-ntₚ ._ᵒᵖ α ._=>ₚ_.η = α ._=>ₚ_.η
 
   Funlike-ntₚ
@@ -274,14 +299,13 @@ instance
 Posets : (o ℓ : Level) → Precategory (ℓsuc o ⊔ ℓsuc ℓ) (o ⊔ ℓ)
 Posets o ℓ .Precategory.Ob = Poset o ℓ
 Posets o ℓ .Precategory.Hom = Monotone
-Posets o ℓ .Precategory.Hom-set = hlevel!
 Posets o ℓ .Precategory.id  = refl
 Posets o ℓ .Precategory._∘_ = _∘ˢ_
 Posets o ℓ .Precategory.id-r _ = trivial!
 Posets o ℓ .Precategory.id-l _ = trivial!
 Posets o ℓ .Precategory.assoc _ _ _ = trivial!
 
-Forget-poset : ∀ {o ℓ} → Functor (Posets o ℓ) (Sets o)
+Forget-poset : ∀ {o ℓ} → Posets o ℓ ⇒ Sets o
 Forget-poset .Functor.F₀ P = el! ⌞ P ⌟
 Forget-poset .Functor.F₁ = hom
 Forget-poset .Functor.F-id = refl
