@@ -9,7 +9,7 @@ open import Order.Diagram.Fixpoint
 open import Order.Diagram.Lub
 open import Order.SupLattice
 open import Order.SupLattice.SmallBasis
-import Order.SupLattice.SmallPresentation as small-presentation-of-lattice
+open import Order.SupLattice.SmallPresentation
 
 open import Data.Empty
 open import Data.Unit
@@ -452,32 +452,24 @@ module _
   open is-sup-lattice L
   open is-basis h
   open bounded-inductive-definitions h
-  open small-presentation-of-lattice h
 
   module small-QIT-from-bounded-and-small-presentation
-           (small-pres : has-small-presentation)
-           (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
-           (bnd : is-bounded ϕ)
-        where
+    (sp : small-presentation h)
+    (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
+    (bnd : is-bounded ϕ) where
 
-    I₁ : 𝒰 ℓ′
-    I₁ = small-pres .fst .fst
-    Y : I₁ → ℙ B ℓ′
-    Y = small-pres .fst .snd .fst
-    R : ℙ (B × ℙ B ℓ′) ℓ′
-    R = small-pres .fst .snd .snd
-    is-small-pres : is-a-small-presentation (I₁ , Y , R)
-    is-small-pres = small-pres .snd
+    open small-presentation sp
+      renaming (J to J₁)
 
     is-small-pres→ : (b : B) → (X : ℙ B ℓ′)
                    → b ≤ᴮ ℙ⋃ L β X
-                   → ∃[ j ꞉ I₁ ] Y j ⊆ X × (b , Y j) ∈ R
-    is-small-pres→ b X = is-small-pres b X $_
+                   → ∃[ j ꞉ J₁ ] Y j ⊆ X × (b , Y j) ∈ R
+    is-small-pres→ b X = has-small b X $_
 
     is-small-pres← : (b : B) → (X : ℙ B ℓ′)
-                   → ∃[ j ꞉ I₁ ] Y j ⊆ X × (b , Y j) ∈ R
+                   → ∃[ j ꞉ J₁ ] Y j ⊆ X × (b , Y j) ∈ R
                    → b ≤ᴮ ℙ⋃ L β X
-    is-small-pres← b X = is-small-pres b X ⁻¹ $_
+    is-small-pres← b X = has-small b X ⁻¹ $_
 
     ϕ-is-small : (a : Ob) → (b : B) → is-of-size ℓ′ ((b , a) ∈ ϕ)
     ϕ-is-small = bnd .fst
@@ -494,32 +486,32 @@ module _
     ϕ→small-ϕ : (a : Ob) → (b : B) → (b , a) ∈ ϕ → small-ϕ b a
     ϕ→small-ϕ a b = small-ϕ≃ϕ a b ⁻¹ $_
 
-    I₂ : 𝒰 ℓ′
-    I₂ = bnd .snd .fst
-    α : I₂ → 𝒰 ℓ′
+    J₂ : 𝒰 ℓ′
+    J₂ = bnd .snd .fst
+    α : J₂ → 𝒰 ℓ′
     α = bnd .snd .snd .fst
     cover-condition : (a : Ob) → (b : B) → (b , a) ∈ ϕ
-                    → ∃[ j ꞉ I₂ ] α j is-a-small-cover-of ↓ᴮ L β a
+                    → ∃[ j ꞉ J₂ ] α j is-a-small-cover-of ↓ᴮ L β a
     cover-condition = bnd .snd .snd .snd
 
     Small-c-closure : {ℓ″ : Level} (S : ℙ B ℓ″) → 𝒰 (ℓ′ ⊔ ℓ″)
-    Small-c-closure S = (j : I₁)
+    Small-c-closure S = (j : J₁)
                       → ((b : B) → b ∈ Y j → b ∈ S)
                       → (b : B) → (b , Y j) ∈ R
                       → b ∈ S
 
     Small-Φ-closure : {ℓ″ : Level} (S : ℙ B ℓ″) → 𝒰 (ℓ′ ⊔ ℓ″)
-    Small-Φ-closure S = (j : I₂) → (m : α j → B) → (b : B)
+    Small-Φ-closure S = (j : J₂) → (m : α j → B) → (b : B)
                       → small-ϕ b (⋃ (β ∘ₜ m))
                       → ((b' : B) → b' ≤ᴮ ⋃ (β ∘ₜ m) → b' ∈ S)
                       → b ∈ S
 
     data Small-𝓘 : B → 𝒰 ℓ′ where
-      Small-c-closed : (j : I₁)
+      Small-c-closed : (j : J₁)
                      → ((b : B) → b ∈ Y j → Small-𝓘 b)
                      → (b : B) → (b , Y j) ∈ R
                      → Small-𝓘 b
-      Small-ϕ-closed : (j : I₂) → (m : α j → B) → (b : B)
+      Small-ϕ-closed : (j : J₂) → (m : α j → B) → (b : B)
                      → small-ϕ b (⋃ (β ∘ₜ m))
                      → ((b' : B) → b' ≤ᴮ ⋃ (β ∘ₜ m) → Small-𝓘 b')
                      → Small-𝓘 b
@@ -562,17 +554,17 @@ module _
   open is-sup-lattice L
   open is-basis h
   open bounded-inductive-definitions h
-  open small-presentation-of-lattice h
 
   module 𝓘nd-is-small-from-bounded-and-small-presentation
-          (small-pres : has-small-presentation)
+          (sp : small-presentation h)
           (ϕ : ℙ (B × Ob) (o ⊔ ℓ′))
           (bnd : is-bounded ϕ)
          where
 
-    open small-QIT-from-bounded-and-small-presentation h small-pres ϕ bnd
+    open small-QIT-from-bounded-and-small-presentation h sp ϕ bnd
     open trunc-ind-def h ϕ
     open small-trunc-ind-def
+    open small-presentation sp
 
     𝓘nd-⊆-Small-𝓘nd : 𝓘nd ⊆ Small-𝓘nd
     𝓘nd-⊆-Small-𝓘nd = 𝓘nd-is-initial Small-𝓘nd c-cl-sm Φ-cl-sm
@@ -590,7 +582,7 @@ module _
                   u
                   (cover-condition a b p)
         where
-        u : Σ[ i ꞉ I₂ ] α i is-a-small-cover-of ↓ᴮ L β a → b ∈ Small-𝓘nd
+        u : Σ[ i ꞉ J₂ ] α i is-a-small-cover-of ↓ᴮ L β a → b ∈ Small-𝓘nd
         u (i₂ , s) = Small-𝓘nd-is-ϕ-closed i₂ (fst ∘ₜ s #_) b
                                  (ϕ→small-ϕ (⋃ (s #_ ∙ fst ∙ β)) b
                                             (subst (λ q → (b , q) ∈ ϕ) a=⋁α p))
@@ -628,10 +620,9 @@ module _
   open is-basis h
   open local-inductive-definitions h
   open bounded-inductive-definitions h
-  open small-presentation-of-lattice h
   open small-QIT-from-bounded-and-small-presentation h
 
-  Untruncated-LFP-Theorem : has-small-presentation
+  Untruncated-LFP-Theorem : (sp : small-presentation h)
                           → (f : P ⇒ P)
                           → Σ[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ bnd ꞉ is-bounded ϕ ] ((x : Ob) → Γ ϕ (bounded→local ϕ bnd) # x ＝ f # x)
                           → LFP P f
@@ -641,7 +632,7 @@ module _
      open 𝓘nd-is-small-from-bounded-and-small-presentation h small-pres ϕ bnd
      open smallness-assumption 𝓘nd-is-small
 
-  LFP-Theorem : has-small-presentation
+  LFP-Theorem : (sp : small-presentation h)
               → (f : P ⇒ P)
               → ∃[ ϕ ꞉ ℙ (B × Ob) (o ⊔ ℓ′) ] Σ[ bnd ꞉ is-bounded ϕ ] ((x : Ob) → Γ ϕ (bounded→local ϕ bnd) # x ＝ f # x)
               → LFP P f
@@ -738,10 +729,9 @@ module _
   open is-sup-lattice L
   open is-basis h
   open bounded-inductive-definitions h
-  open small-presentation-of-lattice h
   open small-QIT-from-bounded-and-small-presentation h
 
-  LFP-Theorem-from-Density : has-small-presentation
+  LFP-Theorem-from-Density : small-presentation h
                            → is-locally-of-size ℓ′ Ob
                            → (f : P ⇒ P)
                            → is-dense h (f $_)
