@@ -222,8 +222,8 @@ monotone-pathᴾ {P} {Q} {f} {g} q i .pres-≤ {x} {y} α =
   is-prop→pathᴾ
     (λ i → Π³-is-of-hlevel {A = ⌞ P i ⌟} {B = λ _ → ⌞ P i ⌟} {C = λ x y → P i .Poset._≤_ x y} 1
       λ x y _ → Q i .Poset.≤-thin {q i x} {q i y})
-    (λ _ _ α → f .pres-≤ α)
-    (λ _ _ α → g .pres-≤ α) i x y α
+    (λ _ _ α → f # α)
+    (λ _ _ α → g # α) i x y α
 
 instance
   Extensional-Monotone
