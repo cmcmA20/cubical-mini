@@ -27,6 +27,16 @@ unquoteDecl H-Level-is-lat =
 
 private variable o ℓ o′ ℓ′ o″ ℓ″ : Level
 
+module _ {R : Poset o ℓ} {l : is-lattice R} where
+  open Poset R
+  open is-lattice l
+
+  absorb-∪-∩ : (x y : Ob) → x ∪ (x ∩ y) ＝ x
+  absorb-∪-∩ x y = ∪-comm ∙ order→∪ ∩≤l
+
+  absorb-∩-∪ : (x y : Ob) → x ∩ (x ∪ y) ＝ x
+  absorb-∩-∪ x y = order→∩ l≤∪
+
 record
   is-lattice-hom
     {P : Poset o ℓ} {Q : Poset o′ ℓ′} (f : P ⇒ Q)

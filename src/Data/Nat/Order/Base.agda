@@ -104,6 +104,14 @@ opaque
   ≤-ascend = 1 , nat!
 
   instance
+    Refl-≤ : Refl _≤_
+    Refl-≤ .refl = ≤-refl
+    {-# OVERLAPPING Refl-≤ #-}
+
+    Trans-≤ : Trans _≤_
+    Trans-≤ ._∙_ = ≤-trans
+    {-# OVERLAPPING Trans-≤ #-}
+
     Reflects-suc≰id : Reflects (suc n ≤ n) false
     Reflects-suc≰id = ofⁿ λ where (k , p) → false! ((+-suc-r _ k ∙ p) ⁻¹)
     {-# INCOHERENT Reflects-suc≰id #-}
@@ -297,7 +305,7 @@ opaque
     go m (suc n) (q , e) = ih m λ y y<m → go y n (≤-trans y<m (q , suc-inj e))
 
 <-wf : Wf _<_
-<-wf = from-induction _<_ λ P → <-ind
+<-wf = from-induction λ P → <-ind
 
 -- addition
 

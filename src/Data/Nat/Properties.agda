@@ -66,6 +66,10 @@ s＝s≃ = prop-extₑ! (ap suc) suc-inj
 
 -- subtraction
 
+pred=∸1 : ∀ n → pred n ＝ n ∸ 1
+pred=∸1  zero   = refl
+pred=∸1 (suc n) = refl
+
 ∸-cancel : ∀ n → n ∸ n ＝ 0
 ∸-cancel  zero   = refl
 ∸-cancel (suc n) = ∸-cancel n
