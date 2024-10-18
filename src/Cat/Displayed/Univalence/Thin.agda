@@ -14,9 +14,8 @@ open Total-hom public
 open Precategory
 open Displayed
 open Cat.Displayed.Morphism
-open _≅[_]_
 
-open import Cat.Constructions.Sets
+open import Cat.Constructions.Types
 
 record
   Thin-structure {ℓ o′} ℓ′ (S : Type ℓ → Type o′)
@@ -53,15 +52,14 @@ module _
   Structured-objects : Precategory _ _
   Structured-objects = ∫ Thin-structure-over
 
-  -- TODO
-  -- Structured-objects-is-category : is-category Structured-objects
-  -- Structured-objects-is-category =
-  --   is-category-total Thin-structure-over Sets-is-category $
-  --     is-category-fibrewise _ Sets-is-category λ A x y →
-  --     Σ-prop-path
-  --       (λ _ _ _ → ≅[]-path _ (spec .is-hom _ _ _ .is-tr _ _))
-  --       ( spec .id-hom-unique (x .snd .from′) (x .snd .to′)
-  --       ∙ spec .id-hom-unique (y .snd .to′) (y .snd .from′))
+  @0 Structured-objects-is-category : is-category Structured-objects
+  Structured-objects-is-category =
+    is-category-total Thin-structure-over Types-is-category $
+      is-category-fibrewise _ Types-is-category λ A x y →
+        Σ-prop-path
+          (λ _ _ _ → ext (spec .is-hom _ _ _ .n-Type.carrier-is-tr _ _))
+          ( spec .id-hom-unique (x .snd .fromᵈ) (x .snd .toᵈ) .erased
+          ∙ spec .id-hom-unique (y .snd .toᵈ) (y .snd .fromᵈ) .erased)
 
   Forget-structure : Functor Structured-objects (Types ℓ)
   Forget-structure = πᶠ Thin-structure-over

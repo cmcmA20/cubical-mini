@@ -142,9 +142,13 @@ record has-retraction[_]
   (f′ : Hom[ f ] a′ b′) : Type ℓ′
   where
   no-eta-equality
+  constructor make-retraction[]
   field
     retractionᵈ    : Hom[ hr .retraction ] b′ a′
     is-retractionᵈ : retractionᵈ ∘ᵈ f′ ＝[ hr .is-retraction ] idᵈ
+
+unquoteDecl has-retraction[]-Iso = declare-record-iso has-retraction[]-Iso (quote has-retraction[_])
+
 
 record has-section[_]
   {a b : Ob} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
@@ -152,9 +156,12 @@ record has-section[_]
   (f′ : Hom[ f ] a′ b′) : Type ℓ′
   where
   no-eta-equality
+  constructor make-section[]
   field
     sectionᵈ    : Hom[ hs .section ] b′ a′
     is-sectionᵈ : f′ ∘ᵈ sectionᵈ ＝[ hs .is-section ] idᵈ
+
+unquoteDecl has-section[]-Iso = declare-record-iso has-section[]-Iso (quote has-section[_])
 
 is-biinv[_] : ∀ {a b a′ b′} {f : Hom a b} (f-bi : is-biinv f) (f′ : Hom[ f ] a′ b′) → Type ℓ′
 is-biinv[_] (hr , hs) f′ = has-retraction[ hr ] f′ × has-section[ hs ] f′
@@ -173,16 +180,17 @@ record _≊[_]_
     public
   open has-section[_] (has-biinvᵈ .snd) public
 
-open _≊[_]_
+open _≊[_]_ public
+
+unquoteDecl ≊[]-Iso = declare-record-iso ≊[]-Iso (quote _≊[_]_)
 
 _≊↓_ : {x : Ob} (A B : Ob[ x ]) → Type ℓ′
 _≊↓_ = _≊[ refl ]_
 
 is-biinv↓ : {x : Ob} {x′ x″ : Ob[ x ]} → Hom[ id ] x′ x″ → Type _
-is-biinv↓ = is-biinv[ (make-retract id (id-l id)) , make-section id (id-l id) ]
+is-biinv↓ = is-biinv[ (make-retraction id (id-l id)) , make-section id (id-l id) ]
 
 open Biinv
-open _≊[_]_
 
 make-equiv[_]
   : ∀ {a b : Ob} {a′ b′}
@@ -204,14 +212,6 @@ make-vertical-equiv
     (s′ : Hom[ id ] x″ x′) (ss′ : f′ ∘ᵈ s′ ＝[ id-r id ] idᵈ)
   → x′ ≊↓ x″
 make-vertical-equiv = make-equiv[ refl ]
-
--- TODO
--- ≊[]-path
---   : {x y : Ob} {A : Ob[ x ]} {B : Ob[ y ]} {e : x ≊ y}
---     {p q : A ≊[ e ] B}
---   → p .toᵈ ＝ q .toᵈ
---   → p ＝ q
--- ≊[]-path r = {!!}
 
 id-equiv↓ : ∀ {x} {x′ : Ob[ x ]} → x′ ≊↓ x′
 id-equiv↓ = make-equiv[ refl ] idᵈ idᵈ (id-rᵈ idᵈ) idᵈ (id-rᵈ idᵈ)
