@@ -14,11 +14,21 @@ open import Data.Sum
 
 private variable o ℓ : Level
 
+-- aka toset
 record is-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
   open Poset P public
 
   field compare : ∀ x y → (x ≤ y) ⊎ (x ≥ y)
 
+converse-complement : {P : Poset o ℓ}
+                    → is-total-order P
+                    → StrictPoset o ℓ
+converse-complement {P} _   .StrictPoset.Ob = P .Poset.Ob
+converse-complement {P} _   .StrictPoset._<_ x y = ¬ (P .Poset._≤_ y x)
+converse-complement     _   .StrictPoset.<-thin = hlevel!
+converse-complement {P} _   .StrictPoset.<-irrefl nx = nx (P .Poset.≤-refl)
+converse-complement {P} tot .StrictPoset.<-trans {x} {y} nyx nzy zx =
+  [ nzy ∘ₜ P .Poset.≤-trans zx , nyx ]ᵤ (tot .is-total-order.compare x y)
 
 is-decidable-poset : ∀ {o ℓ} (P : Poset o ℓ) → 𝒰 (o ⊔ ℓ)
 is-decidable-poset P = ∀ {x y} → Dec (x ≤ y) where open Poset P
@@ -78,7 +88,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
   weak-total-order→dec-total-order ⦃ de ⦄ wto .is-decidable-total-order.has-is-total .is-total-order.compare x y =
     Dec.rec inl (inr ∘ₜ wto .is-weak-total-order.from-≰) (de {x} {y})
 
-
+-- aka loset
 record is-strict-total-order {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) where
   open StrictPoset S public
 
