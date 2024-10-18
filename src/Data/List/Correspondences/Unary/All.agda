@@ -7,10 +7,11 @@ open import Meta.Extensionality
 open import Logic.Decidability
 open import Logic.Discreteness
 
+open import Data.Empty.Base
 open import Data.Unit.Base
 open import Data.List.Base
 open import Data.List.Path
-open import Data.Dec as Dec
+open import Data.List.Operations
 
 private variable
   ℓ ℓᵃ : Level
@@ -87,8 +88,8 @@ all-is-of-hlevel (suc n) hl =
   identity-system→is-of-hlevel n (Extensional-All .idsᵉ) (λ x y → code-all-is-of-hlevel hl)
 
 instance
-  H-Level-All : ∀ {n} → {xs : List A} → ⦃ A-hl : ∀ {x} → H-Level n (P x) ⦄ → H-Level n (All P xs)
-  H-Level-All {n} .H-Level.has-of-hlevel = all-is-of-hlevel _  (λ _ → hlevel n)
+  H-Level-All : ∀ {n} {xs : List A} → ⦃ A-hl : ∀ {x} → H-Level n (P x) ⦄ → H-Level n (All P xs)
+  H-Level-All {n} .H-Level.has-of-hlevel = all-is-of-hlevel _ (λ _ → hlevel n)
   {-# OVERLAPPING H-Level-All #-}
 
 all-uncons : {x : A} {@0 xs : List A} → All P (x ∷ xs) → P x × All P xs
@@ -116,9 +117,6 @@ all-zip-with : {@0 xs : List A} → ∀ᴱ[ P ⇒ Q ⇒ R ] → All P xs → All
 all-zip-with     f [] [] = []
 all-zip-with {P} f (p ∷ ps) (q ∷ qs) = f p q ∷ all-zip-with {P = P} f ps qs
 
-all? : Decidable P → Decidable (λ (xs : List A) → All P xs)
-all? P? {([])}   = yes []
-all? P? {x ∷ xs} =
-  Dec.dmap (_∷_ $ₜ²_)
-           (λ { ¬ps (px ∷ ps) → ¬ps (px , ps) })
-           (P? <,> all? P?)
+all-trivial : (∀ x → P x) → {xs : List A} → All P xs
+all-trivial pt {xs = []}     = []
+all-trivial pt {xs = x ∷ xs} = pt x ∷ all-trivial pt
