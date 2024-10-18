@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Order.Constructions.Nat where
+module Order.Constructions.Nat.Inductive where
 
 open import Cat.Prelude
 open import Order.Base
@@ -17,7 +17,7 @@ open import Data.Dec.Base as Dec
 open import Data.Dec.Tri as Tri
 open import Data.Nat.Base
 open import Data.Nat.Path
-open import Data.Nat.Order.Base
+open import Data.Nat.Order.Inductive
 open import Data.Reflects.Base as Reflects
 open import Data.Sum.Base
 
@@ -35,8 +35,8 @@ Suc .pres-≤ = s≤s
 
 -- NB avoid using it in computational code
 compare-nat : (m n : ℕ) → (m ≤ n) ⊎ (m ≥ n)
-compare-nat 0       _       = inl z≤
-compare-nat (suc m) 0       = inr z≤
+compare-nat 0       _ = inl z≤
+compare-nat (suc m) 0 = inr z≤
 compare-nat (suc m) (suc n) = [ s≤s ∙ inl , s≤s ∙ inr ]ᵤ (compare-nat m n)
 
 ℕ-total : is-total-order ℕₚ
@@ -72,12 +72,11 @@ module _ where
 ℕₛ .StrictPoset.<-irrefl = <-irr
 ℕₛ .StrictPoset.<-trans = <-trans
 
--- TODO move to order
-<-connex : (m n : ℕ) → ¬ (m < n) → ¬ (n < m) → m ＝ n
+<-connex : (m n : ℕ) → ¬ (suc m ≤ n) → ¬ (suc n ≤ m) → m ＝ n
 <-connex 0       0       p q = refl
-<-connex 0       (suc n) p q = ⊥.rec (p z<s)
-<-connex (suc m) 0       p q = ⊥.rec (q z<s)
-<-connex (suc m) (suc n) p q = ap suc (<-connex m n (s<s ∙ p) (s<s ∙ q))
+<-connex 0       (suc n) p q = ⊥.rec (p (s≤s z≤))
+<-connex (suc m) 0       p q = ⊥.rec (q (s≤s z≤))
+<-connex (suc m) (suc n) p q = ap suc (<-connex m n (s≤s ∙ p) (s≤s ∙ q))
 
 ℕ-dec-strict-total-order : is-decidable-strict-total-order ℕₛ
 ℕ-dec-strict-total-order = discrete+dec+connnex→dec-strict-total-order auto auto <-connex
