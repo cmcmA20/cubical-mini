@@ -69,6 +69,14 @@ opaque
   ∪≤∪-r : y ≤ y′ → x ∪ y ≤ x ∪ y′
   ∪≤∪-r p = ∪≤∪ refl p
 
+  ∪-intermediate : x ≤ y → y ≤ x ∪ z → y ∪ z ＝ x ∪ z
+  ∪-intermediate {x} {y} {z} x≤y y≤x∪z =
+    ≤-antisym
+      (subst (λ q → y ∪ z ≤ x ∪ q) ∪-idem $
+       subst (y ∪ z ≤_) (∪-assoc ⁻¹) $
+       ∪≤∪-l y≤x∪z)
+      (∪≤∪-l x≤y)
+
   ∪→order : x ∪ y ＝ y → x ≤ y
   ∪→order {x} {y} p =
     x      ≤⟨ l≤∪ ⟩
