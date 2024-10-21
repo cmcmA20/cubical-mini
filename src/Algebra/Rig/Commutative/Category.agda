@@ -12,7 +12,7 @@ import Cat.Morphism
 open Semiring-hom
 open CRig-on
 
-CRig-structure : ∀ ℓ → Thin-structure ℓ CRig-on
+CRig-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ CRig-on
 CRig-structure ℓ = Full-substructure ℓ CRig-on Rig-on
   (λ _ → comm-rig-on↪rig-on) (Rig-structure ℓ)
 

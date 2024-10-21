@@ -117,7 +117,7 @@ record Structure {ℓ₁ ℓ₂} (ℓ₃ : _)
   constructor HomT→Str
   field is-hom : (A B : Σₜ _ S) → (A .fst ≃ B .fst) → Type ℓ₃
 
-open Structure public
+open Structure
 
 Type-with : Structure ℓ S → Type _
 Type-with {S} _ = Σₜ _ S

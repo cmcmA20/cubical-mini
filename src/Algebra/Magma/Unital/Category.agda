@@ -12,7 +12,7 @@ import Cat.Morphism
 open n-Magma-hom
 open UMagma-hom
 
-UMagma-structure : ∀ ℓ → Thin-structure ℓ UMagma-on
+UMagma-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ UMagma-on
 UMagma-structure ℓ .is-hom f A B = el! (UMagma-hom f A B)
 UMagma-structure ℓ .id-is-hom .pres-id = refl
 UMagma-structure ℓ .id-is-hom .pres-⋆ _ _ = refl

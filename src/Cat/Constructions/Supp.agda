@@ -36,7 +36,7 @@ open Supported-hom
 unquoteDecl H-Level-supported-hom =
   declare-record-hlevel 1 H-Level-supported-hom (quote Supported-hom)
 
-Supported-structure : ∀ ℓ → Thin-structure {ℓ} (ℓ ⊔ ℓᵃ) Supported
+Supported-structure : ∀ ℓ → Thin-structure (Types ℓ) (ℓ ⊔ ℓᵃ) Supported
 Supported-structure ℓ .is-hom f X Y = el! (Supported-hom X Y f)
 Supported-structure _ .id-is-hom .sub-supp _ = refl
 Supported-structure _ .∘-is-hom f g p q .sub-supp x = q .sub-supp x ∘ₜ p .sub-supp _

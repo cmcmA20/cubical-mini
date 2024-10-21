@@ -12,7 +12,7 @@ import Cat.Morphism
 open Group-hom
 open AGroup-on
 
-AGroup-structure : ∀ ℓ → Thin-structure ℓ AGroup-on
+AGroup-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ AGroup-on
 AGroup-structure ℓ = Full-substructure ℓ AGroup-on Group-on
   (λ _ → abelian-group-on↪group-on) (Group-structure ℓ)
 

@@ -12,7 +12,7 @@ import Cat.Morphism
 open Monoid-hom
 open CMonoid-on
 
-CMonoid-structure : ∀ ℓ → Thin-structure ℓ CMonoid-on
+CMonoid-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ CMonoid-on
 CMonoid-structure ℓ = Full-substructure ℓ CMonoid-on Monoid-on
   (λ _ → comm-monoid-on↪monoid-on) (Monoid-structure ℓ)
 

@@ -4,13 +4,14 @@ module Algebra.Magma.Category where
 open import Algebra.Magma
 
 open import Cat.Prelude
+open import Cat.Constructions.Types
 open import Cat.Displayed.Univalence.Thin
 import Cat.Morphism
 
 open n-Magma-on
 open n-Magma-hom
 
-Magma-structure : ∀ ℓ → Thin-structure ℓ Magma-on
+Magma-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ Magma-on
 Magma-structure ℓ .is-hom f A B = el! (n-Magma-hom 2 f A B)
 Magma-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 Magma-structure ℓ .∘-is-hom f g p q .pres-⋆ a b =
@@ -28,9 +29,8 @@ Magma ℓ = Precategory.Ob (Magmas ℓ)
 
 private variable ℓ : Level
 
--- TODO univalent version
--- Magmas-is-category : ∀ {ℓ} → is-category (Magmas ℓ)
--- Magmas-is-category = Structured-objects-is-category (Magma-structure _)
+@0 Magmas-is-category : ∀ {ℓ} → is-category (Magmas ℓ)
+Magmas-is-category = Structured-objects-is-category (Magma-structure _) auto
 
 instance
   Magmas-equational : is-equational (Magma-structure ℓ)
