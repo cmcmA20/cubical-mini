@@ -164,6 +164,7 @@ instance
   ×-Variadic ⦃ im ⦄ .×-notation.Constraint f g =
     ∀ {x} → im .×-notation.Constraint (f x) (g x)
   ×-Variadic .×-notation._×_ f g x = f x × g x
+  {-# OVERLAPPING ×-Variadic #-}
 
   ⊕-Variadic
     : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
@@ -172,6 +173,7 @@ instance
   ⊕-Variadic ⦃ im ⦄ .⊕-notation.Constraint f g =
     ∀ {x} → im .⊕-notation.Constraint (f x) (g x)
   ⊕-Variadic .⊕-notation._⊕_ f g x = f x ⊕ g x
+  {-# OVERLAPPING ⊕-Variadic #-}
 
   ⊎-Variadic
     : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
@@ -180,6 +182,7 @@ instance
   ⊎-Variadic ⦃ im ⦄ .⊎-notation.Constraint f g =
     ∀ {x} → im .⊎-notation.Constraint (f x) (g x)
   ⊎-Variadic .⊎-notation._⊎_ f g x = f x ⊎ g x
+  {-# OVERLAPPING ⊎-Variadic #-}
 
   ⊎₁-Variadic
     : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
@@ -188,6 +191,7 @@ instance
   ⊎₁-Variadic ⦃ im ⦄ .⊎₁-notation.Constraint f g =
     ∀ {x} → im .⊎₁-notation.Constraint (f x) (g x)
   ⊎₁-Variadic .⊎₁-notation._⊎₁_ f g x = f x ⊎₁ g x
+  {-# OVERLAPPING ⊎₁-Variadic #-}
 
   ⊻-Variadic
     : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
@@ -196,6 +200,7 @@ instance
   ⊻-Variadic ⦃ im ⦄ .⊻-notation.Constraint f g =
     ∀ {x} → im .⊻-notation.Constraint (f x) (g x)
   ⊻-Variadic .⊻-notation._⊻_ f g x = f x ⊻ g x
+  {-# OVERLAPPING ⊻-Variadic #-}
 
   ⇒-Variadic
     : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
@@ -204,6 +209,7 @@ instance
   ⇒-Variadic ⦃ im ⦄ .⇒-notation.Constraint f g =
     ∀ {x} → im .⇒-notation.Constraint (f x) (g x)
   ⇒-Variadic .⇒-notation._⇒_ f g x = f x ⇒ g x
+  {-# OVERLAPPING ⇒-Variadic #-}
 
   ¬-Variadic
     : {A : Type ℓa} {R : Type ℓr}
@@ -212,3 +218,4 @@ instance
   ¬-Variadic ⦃ im ⦄ .¬-notation.Constraint f =
     ∀ {x} → im .¬-notation.Constraint (f x)
   ¬-Variadic .¬_ f x = ¬ f x
+  {-# OVERLAPPING ¬-Variadic #-}

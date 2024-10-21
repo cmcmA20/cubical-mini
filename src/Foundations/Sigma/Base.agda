@@ -32,6 +32,13 @@ instance
   ×-Type .×-notation.Constraint _ _ = BU.⊤
   ×-Type .×-notation._×_ A B = A ×ₜ B
 
+  ×-Fun : {A : Type ℓᵃ} {B : Type ℓᵇ} {X : A → Type ℓ} {Y : B → Type ℓ′}
+        → ×-notation ((a : A) → X a) ((b : B) → Y b)
+                     ((ab : A ×ₜ B) → X (ab .fst) × Y (ab .snd))
+  ×-Fun .×-notation.Constraint _ _ = BU.⊤
+  ×-Fun ._×_ f g (a , b) = f a , g b
+  {-# INCOHERENT ×-Fun #-}
+
   Underlying-Σ : ⦃ ua : Underlying A ⦄ → Underlying (Σ A B)
   Underlying-Σ ⦃ ua ⦄ .ℓ-underlying = ua .ℓ-underlying
   Underlying-Σ .⌞_⌟ x = ⌞ x .fst ⌟
@@ -49,7 +56,7 @@ instance
       → (f : (x : A) → B x)
       → ((x : A) → C (f x))
       → ((x : A) → Σ (B x) C)
-< f , g > x = (f x , g x)
+< f , g > x = f x , g x
 
 bimap : {A : Type ℓᵃ} {B : A → Type ℓᵇ}
         {P : A → Type ℓ} {Q : ∀ {a} → P a → B a → Type ℓ′}

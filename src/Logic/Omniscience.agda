@@ -32,9 +32,9 @@ open Omniscient public
 
 instance
   lift-omniscient : ⦃ omn : Omniscient A ⦄ → Omniscient (Lift ℓ A)
-  lift-omniscient ⦃ omn ⦄ .omniscient-β P? = Dec.dmap
+  lift-omniscient ⦃ omn ⦄ .omniscient-β {P} P? = Dec.dmap
     (bimap lift refl)
-    (_∘ bimap lower refl)
+    (contra (bimap lower refl))
     (omn .omniscient-β P?)
   {-# OVERLAPPING lift-omniscient #-}
 

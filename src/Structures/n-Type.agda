@@ -327,6 +327,9 @@ private
     _ : is-of-hlevel 3 Σ[ B × B ]
     _ = hlevel!
 
+    _ : is-of-hlevel 3 Σ[ the (⌞ A × A ⌟ → n-Type _ 3 × n-Type _ 3) (B × B) ]
+    _ = hlevel!
+
     _ : ∀ a → is-of-hlevel 5 (⌞ A ⌟ × ⌞ A ⌟ × (ℕ ⇒ ⌞ B a ⌟))
     _ = hlevel!
 

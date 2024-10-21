@@ -38,6 +38,14 @@ instance
 [ f , _ ]ᵤ (inl x) = f x
 [ _ , g ]ᵤ (inr x) = g x
 
+instance
+  ⊎-Fun : {A : Type ℓᵃ} {B : Type ℓᵇ} {X : A → Type ℓ} {Y : B → Type ℓ}
+        → ⊎-notation Π[ X ] Π[ Y ] Π[ [ X , Y ]ᵤ ]
+  ⊎-Fun .⊎-notation.Constraint _ _ = ⊤ₜ
+  ⊎-Fun ._⊎_ f g (inl a) = f a
+  ⊎-Fun ._⊎_ f g (inr b) = g b
+  {-# INCOHERENT ⊎-Fun #-}
+
 []ᵤ-unique
   : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
     {f : A → C} {g : B → C} {h : A ⊎ B → C}

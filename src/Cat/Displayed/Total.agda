@@ -46,7 +46,7 @@ module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ�
   πᶠ .Functor.F₀ = fst
   πᶠ .Functor.F₁ = Total-hom.hom
   πᶠ .Functor.F-id = refl
-  πᶠ .Functor.F-∘ f g = refl
+  πᶠ .Functor.F-∘ _ _ = refl
 
   private module ∫E = Cat.Morphism ∫
 

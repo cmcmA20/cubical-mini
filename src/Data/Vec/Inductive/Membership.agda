@@ -31,7 +31,7 @@ instance
   Dec-∈ᵥ {n = 0} {x} {([])} = no λ()
   Dec-∈ᵥ {n = suc _} {x} {a ∷ as} =
     Dec.dmap [ fzero ,_ , bimap fsuc id ]ᵤ
-             (_∘ go)
+             (contra go)
              (a ≟ x <+> Dec-∈ᵥ {x = x} {as})
     where
     go : _
