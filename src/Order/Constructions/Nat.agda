@@ -1,4 +1,5 @@
 {-# OPTIONS --safe #-}
+-- TODO generalize to naturally ordered monoid/semiring
 module Order.Constructions.Nat where
 
 open import Cat.Prelude

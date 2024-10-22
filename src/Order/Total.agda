@@ -20,15 +20,13 @@ record is-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
 
   field compare : ∀ x y → (x ≤ y) ⊎ (x ≥ y)
 
-converse-complement : {P : Poset o ℓ}
-                    → is-total-order P
-                    → StrictPoset o ℓ
-converse-complement {P} _   .StrictPoset.Ob = P .Poset.Ob
-converse-complement {P} _   .StrictPoset._<_ x y = ¬ (P .Poset._≤_ y x)
-converse-complement     _   .StrictPoset.<-thin = hlevel!
-converse-complement {P} _   .StrictPoset.<-irrefl nx = nx (P .Poset.≤-refl)
-converse-complement {P} tot .StrictPoset.<-trans {x} {y} nyx nzy zx =
-  [ nzy ∘ₜ P .Poset.≤-trans zx , nyx ]ᵤ (tot .is-total-order.compare x y)
+  converse-complement : StrictPoset o ℓ
+  converse-complement .StrictPoset.Ob = Ob
+  converse-complement .StrictPoset._<_ x y = y ≰ x
+  converse-complement .StrictPoset.<-thin = hlevel 1
+  converse-complement .StrictPoset.<-irrefl nx = nx refl
+  converse-complement .StrictPoset.<-trans {x} {y} nyx nzy zx =
+    [ ≤-trans zx ∙ nzy , nyx ]ᵤ (compare x y)
 
 is-decidable-poset : ∀ {o ℓ} (P : Poset o ℓ) → 𝒰 (o ⊔ ℓ)
 is-decidable-poset P = ∀ {x y} → Dec (x ≤ y) where open Poset P
@@ -88,6 +86,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
   weak-total-order→dec-total-order ⦃ de ⦄ wto .is-decidable-total-order.has-is-total .is-total-order.compare x y =
     Dec.rec inl (inr ∘ₜ wto .is-weak-total-order.from-≰) (de {x} {y})
 
+
 -- aka loset
 record is-strict-total-order {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) where
   open StrictPoset S public
@@ -95,6 +94,14 @@ record is-strict-total-order {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) 
   field
     weak-linear : ∀ x y z → x < z → (x < y) ⊎ (y < z)
     connex      : ∀ x y → x ≮ y → y ≮ x → x ＝ y
+
+  converse-complement : Poset o ℓ
+  converse-complement .Poset.Ob = Ob
+  converse-complement .Poset._≤_ x y = y ≯ x
+  converse-complement .Poset.≤-thin = hlevel 1
+  converse-complement .Poset.≤-refl = <-irrefl
+  converse-complement .Poset.≤-trans x≮y y≮z x<z = [ x≮y , y≮z ]ᵤ (weak-linear _ _ _ x<z)
+  converse-complement .Poset.≤-antisym x≮y y≮x = connex _ _ x≮y y≮x
 
 is-decidable-strict-poset : ∀ {o ℓ} (S : StrictPoset o ℓ) → 𝒰 (o ⊔ ℓ)
 is-decidable-strict-poset S = ∀ {x y} → Dec (x < y) where open StrictPoset S

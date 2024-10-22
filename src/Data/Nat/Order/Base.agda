@@ -248,7 +248,7 @@ opaque
   <≃suc≤ = refl
 
   ≤≃<suc : (m ≤ n) ≃ (m < suc n)
-  ≤≃<suc = Σ-ap-snd λ x → s＝s≃
+  ≤≃<suc = Σ-ap-snd λ x → s=s≃
 
 ≤≃≯ : (m ≤ n) ≃ (m ≯ n)
 ≤≃≯ = prop-extₑ! ≤→≯ ≯→≤

@@ -48,38 +48,34 @@ record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   =→≮ : ∀ {x y} → x ＝ y → x ≮ y
   =→≮ = flip <→≠
 
+  reflexive-closure : ⦃ _ : H-Level 2 Ob ⦄ → Poset o (o ⊔ ℓ)
+  reflexive-closure .Poset.Ob = Ob
+  reflexive-closure .Poset._≤_ x y = (x < y) ⊎ (x ＝ y)
+  reflexive-closure .Poset.≤-thin {x} {y} = disjoint-⊎-is-prop! (<→≠ $ₜ²_)
+  reflexive-closure .Poset.≤-refl = inr refl
+  reflexive-closure .Poset.≤-trans (inl x<y) (inl y<z) = inl (x<y ∙ y<z)
+  reflexive-closure .Poset.≤-trans (inl x<y) (inr y=z) = inl (subst (_ <_) y=z x<y)
+  reflexive-closure .Poset.≤-trans (inr x=y) (inl y<z) = inl (subst (_< _) (sym x=y) y<z)
+  reflexive-closure .Poset.≤-trans (inr x=y) (inr y=z) = inr (x=y ∙ y=z)
+  reflexive-closure .Poset.≤-antisym (inl x<y) (inl y<x) = ⊥.rec (<-asym x<y y<x)
+  reflexive-closure .Poset.≤-antisym (inl x<y) (inr y=x) = ⊥.rec (<→≠ x<y (sym y=x))
+  reflexive-closure .Poset.≤-antisym (inr x=y) (inl y<x) = ⊥.rec (<→≠ y<x (sym x=y))
+  reflexive-closure .Poset.≤-antisym (inr x=y) _ = x=y
+
 unquoteDecl strict-poset-iso = declare-record-iso strict-poset-iso (quote StrictPoset)
 
 private variable o ℓ : Level
 
 -- aka irreflexive kernel
-reflexive-reduction : Poset o ℓ
-                    → StrictPoset o (o ⊔ ℓ)
+reflexive-reduction : Poset o ℓ → StrictPoset o (o ⊔ ℓ)
 reflexive-reduction P .StrictPoset.Ob = P .Poset.Ob
 reflexive-reduction P .StrictPoset._<_ x y = (P .Poset._≤_ x y) × (x ≠ y)
-reflexive-reduction P .StrictPoset.<-thin = hlevel!
+reflexive-reduction P .StrictPoset.<-thin = hlevel 1
 reflexive-reduction P .StrictPoset.<-irrefl (_ , ne) = ne refl
-reflexive-reduction P .StrictPoset.<-trans {x} {y} {z} (lxy , nxy) (lyz , nyz) =
-    (P .Poset.≤-trans lxy lyz)
-  , λ x=z → nyz (P .Poset.≤-antisym lyz (subst (λ q → P .Poset._≤_ q y) x=z lxy))
-
-reflexive-closure : (S : StrictPoset o ℓ)
-                  → is-set (S .StrictPoset.Ob)
-                  → Poset o (o ⊔ ℓ)
-reflexive-closure S st .Poset.Ob = S .StrictPoset.Ob
-reflexive-closure S st .Poset._≤_ x y = (S .StrictPoset._<_ x y) ⊎ (x ＝ y)
-reflexive-closure S st .Poset.≤-thin {x} {y} =
-  disjoint-⊎-is-prop (S .StrictPoset.<-thin) (st x y)
-    λ where (x<y , x=y) → StrictPoset.<→≠ S x<y x=y
-reflexive-closure S st .Poset.≤-refl = inr refl
-reflexive-closure S st .Poset.≤-trans {x} {z} (inl x<y) (inl y<z) = inl (S. StrictPoset.<-trans x<y y<z)
-reflexive-closure S st .Poset.≤-trans {x} {z} (inl x<y) (inr y=z) = inl (subst (S. StrictPoset._<_ x) y=z x<y)
-reflexive-closure S st .Poset.≤-trans {x} {z} (inr x=y) (inl y<z) = inl (subst (λ q → S. StrictPoset._<_ q z) (x=y ⁻¹) y<z)
-reflexive-closure S st .Poset.≤-trans {x} {z} (inr x=y) (inr y=z) = inr (x=y ∙ y=z)
-reflexive-closure S st .Poset.≤-antisym {y = y} (inl x<y) (inl y<x) = ⊥.absurd (StrictPoset.<-asym S x<y y<x)
-reflexive-closure S st .Poset.≤-antisym {y = y} (inl x<y) (inr y=x) = ⊥.absurd (StrictPoset.<→≠ S x<y (y=x ⁻¹))
-reflexive-closure S st .Poset.≤-antisym {y = y} (inr x=y) (inl y<x) = ⊥.absurd (StrictPoset.<→≠ S y<x (x=y ⁻¹))
-reflexive-closure S st .Poset.≤-antisym {y = y} (inr x=y) (inr _)   = x=y
+reflexive-reduction P .StrictPoset.<-trans (lxy , nxy) (lyz , nyz)
+  = lxy ∙ lyz
+  , λ x=z → nyz (≤-antisym lyz (subst (_≤ _) x=z lxy))
+  where open Poset P
 
 instance
   Underlying-StrictPoset : Underlying (StrictPoset o ℓ)
