@@ -15,8 +15,8 @@ open import Data.Reflects.Base as R
 private variable
   m n : ℕ
 
-s＝s≃ : (m ＝ n) ≃ (suc m ＝ suc n)
-s＝s≃ = prop-extₑ! (ap suc) suc-inj
+s=s≃ : (m ＝ n) ≃ (suc m ＝ suc n)
+s=s≃ = prop-extₑ! (ap suc) suc-inj
 
 -- addition
 
