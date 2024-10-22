@@ -4,12 +4,6 @@ module Order.Lattice where
 open import Cat.Prelude
 
 open import Order.Base
-open import Order.Diagram.Bottom
-open import Order.Diagram.Join
-open import Order.Diagram.Meet
-open import Order.Diagram.Top
-import Order.Diagram.Join.Reasoning as Joins
-import Order.Diagram.Meet.Reasoning as Meets
 open import Order.Semilattice.Join
 open import Order.Semilattice.Meet
 
@@ -26,16 +20,6 @@ unquoteDecl H-Level-is-lat =
   declare-record-hlevel 1 H-Level-is-lat (quote is-lattice)
 
 private variable o ℓ o′ ℓ′ o″ ℓ″ : Level
-
-module _ {R : Poset o ℓ} {l : is-lattice R} where
-  open Poset R
-  open is-lattice l
-
-  absorb-∪-∩ : (x y : Ob) → x ∪ (x ∩ y) ＝ x
-  absorb-∪-∩ x y = ∪-comm ∙ order→∪ ∩≤l
-
-  absorb-∩-∪ : (x y : Ob) → x ∩ (x ∪ y) ＝ x
-  absorb-∩-∪ x y = order→∩ l≤∪
 
 record
   is-lattice-hom
