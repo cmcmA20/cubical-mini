@@ -3,14 +3,15 @@ module Order.Constructions.Product where
 
 open import Cat.Prelude
 open import Cat.Diagram.Terminal
-open import Functions.Surjection
 
 open import Order.Base
-open import Order.Strict
 open import Order.Diagram.Join
 open import Order.Diagram.Meet
 open import Order.Diagram.Glb
 open import Order.Diagram.Lub
+open import Order.Strict
+
+open import Functions.Surjection
 
 private variable o ℓ o′ ℓ′ o″ ℓ″ ℓᵢ ℓⱼ ℓₖ : Level
 
@@ -90,15 +91,16 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
       ×-is-meet ._×_ lp lq .is-meet.greatest (ub₁ , ub₂) (al , xl) (bl , yl) =
         lp .is-meet.greatest ub₁ al bl , lq .is-meet.greatest ub₂ xl yl
 
-    ×-Join : ×-notation (Join P a b) (Join Q x y) (Join (P × Q) (a , x) (b , y))
-    ×-Join .×-notation.Constraint _ _ = ⊤
-    ×-Join ._×_ α β .Join.lub      = α .Join.lub , β .Join.lub
-    ×-Join ._×_ α β .Join.has-join = α .Join.has-join × β .Join.has-join
+    instance
+      ×-Join : ×-notation (Join P a b) (Join Q x y) (Join (P × Q) (a , x) (b , y))
+      ×-Join .×-notation.Constraint _ _ = ⊤
+      ×-Join ._×_ α β .Join.lub      = α .Join.lub , β .Join.lub
+      ×-Join ._×_ α β .Join.has-join = α .Join.has-join × β .Join.has-join
 
-    ×-Meet : ×-notation (Meet P a b) (Meet Q x y) (Meet (P × Q) (a , x) (b , y))
-    ×-Meet .×-notation.Constraint _ _ = ⊤
-    ×-Meet ._×_ α β .Meet.glb      = α .Meet.glb , β .Meet.glb
-    ×-Meet ._×_ α β .Meet.has-meet = α .Meet.has-meet × β .Meet.has-meet
+      ×-Meet : ×-notation (Meet P a b) (Meet Q x y) (Meet (P × Q) (a , x) (b , y))
+      ×-Meet .×-notation.Constraint _ _ = ⊤
+      ×-Meet ._×_ α β .Meet.glb      = α .Meet.glb , β .Meet.glb
+      ×-Meet ._×_ α β .Meet.has-meet = α .Meet.has-meet × β .Meet.has-meet
 
   module _ {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} {G : I → ⌞ Q ⌟} where
     module _ {x : ⌞ P ⌟} {y : ⌞ Q ⌟} where instance
@@ -114,15 +116,16 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
       ×-is-glb ._×_ gp gq .is-glb.greatest (lbx , lby) =
         < (λ a i → a i .fst) ∙ gp .is-glb.greatest lbx , (λ a i → a i .snd) ∙ gq .is-glb.greatest lby >
 
-    ×-Lub : ×-notation (Lub P F) (Lub Q G) (Lub (P × Q) < F , G >)
-    ×-Lub .×-notation.Constraint _ _ = ⊤
-    ×-Lub ._×_ Lp Lq .Lub.lub = Lp .Lub.lub , Lq .Lub.lub
-    ×-Lub ._×_ Lp Lq .Lub.has-lub = Lp .Lub.has-lub × Lq .Lub.has-lub
+    instance
+      ×-Lub : ×-notation (Lub P F) (Lub Q G) (Lub (P × Q) < F , G >)
+      ×-Lub .×-notation.Constraint _ _ = ⊤
+      ×-Lub ._×_ Lp Lq .Lub.lub = Lp .Lub.lub , Lq .Lub.lub
+      ×-Lub ._×_ Lp Lq .Lub.has-lub = Lp .Lub.has-lub × Lq .Lub.has-lub
 
-    ×-Glb : ×-notation (Glb P F) (Glb Q G) (Glb (P × Q) < F , G >)
-    ×-Glb .×-notation.Constraint _ _ = ⊤
-    ×-Glb ._×_ Gp Gq .Glb.glb     = Gp .Glb.glb , Gq .Glb.glb
-    ×-Glb ._×_ Gp Gq .Glb.has-glb = Gp .Glb.has-glb × Gq .Glb.has-glb
+      ×-Glb : ×-notation (Glb P F) (Glb Q G) (Glb (P × Q) < F , G >)
+      ×-Glb .×-notation.Constraint _ _ = ⊤
+      ×-Glb ._×_ Gp Gq .Glb.glb     = Gp .Glb.glb , Gq .Glb.glb
+      ×-Glb ._×_ Gp Gq .Glb.has-glb = Gp .Glb.has-glb × Gq .Glb.has-glb
 
   module _ {I : 𝒰 ℓᵢ} {J : 𝒰 ℓⱼ} {K : 𝒰 ℓₖ} {F : J → ⌞ P ⌟} {G : K → ⌞ Q ⌟}
            (f₁ : I ↠ J) (f₂ : I ↠ K)
