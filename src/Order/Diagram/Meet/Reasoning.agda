@@ -73,9 +73,7 @@ opaque
   ∩-intermediate {x} {z} {y} x∩z≤y y≤x =
     ≤-antisym
       (∩≤∩-l y≤x)
-      (subst (λ q → x ∩ q ≤ y ∩ z) ∩-idem $
-       subst (_≤ y ∩ z) (∩-assoc ⁻¹) $
-       (∩≤∩-l x∩z≤y))
+      (∩-universal _ x∩z≤y ∩≤r)
 
   ∩→order : x ∩ y ＝ x → x ≤ y
   ∩→order {x} {y} p =
