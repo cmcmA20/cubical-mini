@@ -1,11 +1,11 @@
 {-# OPTIONS --safe #-}
-module Data.Wellfounded.Path where
+module Data.Acc.Path where
 
 open import Meta.Prelude
 
+open import Data.Acc.Base
 open import Data.Bool.Base
 open import Data.Reflects.Base
-open import Data.Wellfounded.Base
 
 private variable
   ℓ ℓ′ : Level
