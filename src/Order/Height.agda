@@ -2,15 +2,16 @@
 module Order.Height where
 
 open import Cat.Prelude
-open import Order.Strict
-open import Order.Diagram.Lub
 open import Order.Constructions.Nat
+open import Order.Diagram.Bottom
+open import Order.Diagram.Lub
+open import Order.Strict
 
 open import Data.Acc
 open import Data.Nat.Base
-open import Data.Nat.Properties
 open import Data.Nat.Order.Base
   hiding (_<_; _≤_; _≮_)
+open import Data.Nat.Properties
 open import Data.Reflects.Base
 open import Data.Star
 
@@ -25,16 +26,17 @@ private variable n : ℕ
 module _ {o ℓ} {S : StrictPoset o ℓ} where
   open StrictPoset S
   open is-of-height
+  open Bottom ℕ-bottom
 
   height0→empty : is-of-height S 0 → ¬ ⌞ S ⌟
   height0→empty h0 x = false! $ h0 .has-height .is-lub.fam≤lub $ sst x x refl
 
   empty→height0 : ¬ ⌞ S ⌟ → is-of-height S 0
   empty→height0 ¬s .has-height .is-lub.fam≤lub (sst x _ _) = ⊥.rec (¬s x)
-  empty→height0 ¬s .has-height .is-lub.least ub f = z≤
+  empty→height0 ¬s .has-height .is-lub.least _ _ = ¡
 
   height1→discrete : is-of-height S 1 → Π[ _≮_ ]
-  height1→discrete h1 x y x<y = false! $ ≤-peel (h1 .has-height .is-lub.fam≤lub (sst x y (x<y ◅ refl)))
+  height1→discrete h1 x y x<y = false! $ h1 .has-height .is-lub.fam≤lub (sst x y (x<y ◅ refl))
 
   inhabited-discrete→height1 : ∥ ⌞ S ⌟ ∥₁ → Π[ _≮_ ] → is-of-height S 1
   inhabited-discrete→height1 _ d .has-height .is-lub.fam≤lub (sst _ _ (ε _)) = refl
