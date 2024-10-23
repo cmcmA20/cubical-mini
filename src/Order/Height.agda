@@ -2,6 +2,7 @@
 module Order.Height where
 
 open import Cat.Prelude
+import Order.Complemented.Reasoning
 open import Order.Constructions.Nat
 open import Order.Diagram.Bottom
 open import Order.Diagram.Lub
@@ -11,7 +12,7 @@ open Variadics _
 open import Data.Acc
 open import Data.Nat.Base
 open import Data.Nat.Order.Base
-  hiding (_<_; _≤_; _≮_)
+  using (<≃suc≤ ; ∸=0→≤)
 open import Data.Nat.Properties
 open import Data.Reflects.Base
 open import Data.Star
@@ -28,6 +29,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
   open StrictPoset S
   open is-of-height
   open Bottom ℕ-bottom
+  open Order.Complemented.Reasoning ℕᶜᵖ using (<≃≱)
 
   height0→empty : is-of-height S 0 → ¬ ⌞ S ⌟
   height0→empty h0 x = false! $ h0 .has-height .is-lub.fam≤lub $ sst x x refl
@@ -42,7 +44,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
   inhabited-discrete→height1 : ∥ ⌞ S ⌟ ∥₁ → Π[ _≮_ ] → is-of-height S 1
   inhabited-discrete→height1 _ d .has-height .is-lub.fam≤lub (sst _ _ (ε _)) = refl
   inhabited-discrete→height1 _ d .has-height .is-lub.fam≤lub (sst x _ (xw ◅ _)) = false! $ d x _ xw
-  inhabited-discrete→height1 p _ .has-height .is-lub.least ub f = rec! (λ p′ → f (sst p′ p′ refl)) p
+  inhabited-discrete→height1 p _ .has-height .is-lub.least ub f = case p of λ p′ → f (sst p′ p′ refl)
 
   height-wf-ind : is-of-height S n
                 → ∀ {ℓ″} (P : ⌞ S ⌟ → 𝒰 ℓ″)
@@ -51,8 +53,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
   height-wf-ind {n} h P ih x = go x refl n refl
     where
     go : (a : ⌞ S ⌟) (s : Star _<_ a x) (m : ℕ) → m ＝ n ∸ star-len s → P a
-    go a s  zero   e = ⊥.rec $
-      (<≃≱ $ <≃suc≤ $ h .has-height .is-lub.fam≤lub (sst a x s)) (∸=0→≤ (e ⁻¹))
+    go a s  zero   e = false! $ (<≃≱ $ <≃suc≤ $ h .has-height .is-lub.fam≤lub (sst a x s)) (∸=0→≤ (e ⁻¹))
     go a s (suc m) e =
       ih a λ y y<x →
         go y (y<x ◅ s) m
@@ -71,8 +72,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
   height-noeth-ind {n} h P ih x = go x refl n refl
     where
     go : (a : ⌞ S ⌟) (s : Star _<_ x a) (m : ℕ) → m ＝ n ∸ star-len s → P a
-    go a s  zero   e = ⊥.rec $
-        (<≃≱ $ <≃suc≤ $ h .has-height .is-lub.fam≤lub (sst x a s)) (∸=0→≤ (e ⁻¹))
+    go a s  zero   e = false! $ (<≃≱ $ <≃suc≤ $ h .has-height .is-lub.fam≤lub (sst x a s)) (∸=0→≤ (e ⁻¹))
     go a s (suc m) e =
       ih a λ y a<y →
          go y (s ◅+ a<y) m

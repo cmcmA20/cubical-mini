@@ -16,6 +16,9 @@ open import Order.Total
 open import Data.Nat.Base
 open import Data.Nat.Path
 open import Data.Nat.Order.Base
+open import Data.Nat.Order.Base
+  using ( H-Level-≤ ; H-Level-<; Refl-≤ ; Trans-≤ ; Reflects-suc≰id ; Reflects-suc≰z)
+  public
 
 ℕᶜᵖ : ComplementedPoset 0ℓ 0ℓ
 ℕᶜᵖ .ComplementedPoset.Ob = ℕ
