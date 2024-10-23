@@ -4,6 +4,7 @@ module Data.Nat.Order.Inductive.Base where
 open import Foundations.Prelude
 
 open import Meta.Variadic
+open Variadics _
 
 open import Data.Bool.Base
 open import Data.Empty.Base

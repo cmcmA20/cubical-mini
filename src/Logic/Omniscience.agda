@@ -2,7 +2,7 @@
 module Logic.Omniscience where
 
 open import Meta.Prelude
-open import Meta.Effect.Map
+open Variadics _
 
 open import Logic.Decidability
 open import Logic.Exhaustibility

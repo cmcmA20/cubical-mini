@@ -4,13 +4,6 @@ module Foundations.Notation.Logic where
 open import Foundations.Notation.Underlying
 open import Foundations.Prim.Type
 
-private variable
-  ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ : Level
-  ℓa ℓb ℓr ℓx : Level
-  U : 𝒰 ℓ
-  V : 𝒰 ℓ′
-  W : 𝒰 ℓ″
-
 -- TODO code duplication makes me sick, but using one generic notation
 --      typeclass creates unpleasant goals after normalization
 
@@ -24,7 +17,6 @@ record Π-notation {ℓa ℓb ℓ}
 open Π-notation ⦃ ... ⦄ public
 {-# DISPLAY Π-notation.Π _ x f = Π x f #-}
 
-
 record Πᴱ-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 6 Πᴱ
@@ -32,7 +24,6 @@ record Πᴱ-notation {ℓa ℓb ℓ}
   syntax Πᴱ X (λ x → F) = Πᴱ[ x ꞉ X ] F
 open Πᴱ-notation ⦃ ... ⦄ public
 {-# DISPLAY Πᴱ-notation.Πᴱ _ x f = Πᴱ x f #-}
-
 
 record ∀-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
@@ -42,7 +33,6 @@ record ∀-notation {ℓa ℓb ℓ}
 open ∀-notation ⦃ ... ⦄ public
 {-# DISPLAY ∀-notation.∀′ _ x f = ∀′ x f #-}
 
-
 record ∀ᴱ-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 6 ∀ᴱ
@@ -50,7 +40,6 @@ record ∀ᴱ-notation {ℓa ℓb ℓ}
   syntax ∀ᴱ X (λ x → F) = ∀ᴱ[ x ꞉ X ] F
 open ∀ᴱ-notation ⦃ ... ⦄ public
 {-# DISPLAY ∀ᴱ-notation.∀ᴱ _ x f = ∀ᴱ x f #-}
-
 
 record Σ-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
@@ -60,7 +49,6 @@ record Σ-notation {ℓa ℓb ℓ}
 open Σ-notation ⦃ ... ⦄ public
 {-# DISPLAY Σ-notation.Σ _ x f = Σ x f #-}
 
-
 record ∃-notation {ℓa ℓb ℓ}
   (A : 𝒰 ℓa) ⦃ _ : Underlying A ⦄ (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰ω where
   infixr 6 ∃
@@ -68,7 +56,6 @@ record ∃-notation {ℓa ℓb ℓ}
   syntax ∃ X (λ x → F) = ∃[ x ꞉ X ] F
 open ∃-notation ⦃ ... ⦄ public
 {-# DISPLAY ∃-notation.∃ _ x f = ∃ x f #-}
-
 
 
 -- Connectives
@@ -137,7 +124,6 @@ open ¬-notation ⦃ ... ⦄ public
 {-# DISPLAY ¬-notation.¬_ _ a = ¬ a #-}
 
 
-
 -- Constants
 
 record ⊥-notation {ℓ}
@@ -146,76 +132,8 @@ record ⊥-notation {ℓ}
 open ⊥-notation ⦃ ... ⦄ public
 {-# DISPLAY ⊥-notation.⊥ _ = ⊥ #-}
 
-
 record ⊤-notation {ℓ}
   (R : 𝒰 ℓ) : 𝒰ω where
   field ⊤ : R
 open ⊤-notation ⦃ ... ⦄ public
 {-# DISPLAY ⊤-notation.⊤ _ = ⊤ #-}
-
-
--- Automation
-
-instance
-  ×-Variadic
-    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
-      {X : Type ℓx} ⦃ im : ×-notation {ℓ′ = ℓ} A B R ⦄
-    → ×-notation (X → A) (X → B) (X → R)
-  ×-Variadic ⦃ im ⦄ .×-notation.Constraint f g =
-    ∀ {x} → im .×-notation.Constraint (f x) (g x)
-  ×-Variadic .×-notation._×_ f g x = f x × g x
-  {-# OVERLAPPING ×-Variadic #-}
-
-  ⊕-Variadic
-    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
-      {X : Type ℓx} ⦃ im : ⊕-notation {ℓ′ = ℓ} A B R ⦄
-    → ⊕-notation (X → A) (X → B) (X → R)
-  ⊕-Variadic ⦃ im ⦄ .⊕-notation.Constraint f g =
-    ∀ {x} → im .⊕-notation.Constraint (f x) (g x)
-  ⊕-Variadic .⊕-notation._⊕_ f g x = f x ⊕ g x
-  {-# OVERLAPPING ⊕-Variadic #-}
-
-  ⊎-Variadic
-    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
-      {X : Type ℓx} ⦃ im : ⊎-notation {ℓ′ = ℓ} A B R ⦄
-    → ⊎-notation (X → A) (X → B) (X → R)
-  ⊎-Variadic ⦃ im ⦄ .⊎-notation.Constraint f g =
-    ∀ {x} → im .⊎-notation.Constraint (f x) (g x)
-  ⊎-Variadic .⊎-notation._⊎_ f g x = f x ⊎ g x
-  {-# OVERLAPPING ⊎-Variadic #-}
-
-  ⊎₁-Variadic
-    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
-      {X : Type ℓx} ⦃ im : ⊎₁-notation {ℓ′ = ℓ} A B R ⦄
-    → ⊎₁-notation (X → A) (X → B) (X → R)
-  ⊎₁-Variadic ⦃ im ⦄ .⊎₁-notation.Constraint f g =
-    ∀ {x} → im .⊎₁-notation.Constraint (f x) (g x)
-  ⊎₁-Variadic .⊎₁-notation._⊎₁_ f g x = f x ⊎₁ g x
-  {-# OVERLAPPING ⊎₁-Variadic #-}
-
-  ⊻-Variadic
-    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
-      {X : Type ℓx} ⦃ im : ⊻-notation {ℓ′ = ℓ} A B R ⦄
-    → ⊻-notation (X → A) (X → B) (X → R)
-  ⊻-Variadic ⦃ im ⦄ .⊻-notation.Constraint f g =
-    ∀ {x} → im .⊻-notation.Constraint (f x) (g x)
-  ⊻-Variadic .⊻-notation._⊻_ f g x = f x ⊻ g x
-  {-# OVERLAPPING ⊻-Variadic #-}
-
-  ⇒-Variadic
-    : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
-      {X : Type ℓx} ⦃ im : ⇒-notation {ℓ′ = ℓ} A B R ⦄
-    → ⇒-notation (X → A) (X → B) (X → R)
-  ⇒-Variadic ⦃ im ⦄ .⇒-notation.Constraint f g =
-    ∀ {x} → im .⇒-notation.Constraint (f x) (g x)
-  ⇒-Variadic .⇒-notation._⇒_ f g x = f x ⇒ g x
-  {-# OVERLAPPING ⇒-Variadic #-}
-
-  ¬-Variadic
-    : {A : Type ℓa} {R : Type ℓr}
-      {X : Type ℓx} ⦃ im : ¬-notation {ℓ′ = ℓ} A R ⦄
-    → ¬-notation (X → A) (X → R)
-  ¬-Variadic ⦃ im ⦄ .¬-notation.Constraint f =
-    ∀ {x} → im .¬-notation.Constraint (f x)
-  ¬-Variadic .¬_ f x = ¬ f x
-  {-# OVERLAPPING ¬-Variadic #-}

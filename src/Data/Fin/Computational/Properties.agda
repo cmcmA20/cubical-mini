@@ -26,7 +26,7 @@ open Fin
 strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
 strengthen {0}     (mk-fin k {(b)})       = inl (mk-fin k {b})
 strengthen {suc n} (mk-fin 0)             = inl fzero
-strengthen {suc n} (mk-fin (suc k) {(b)}) = ⊎.dmap fsuc fsuc (strengthen (mk-fin k {b}))
+strengthen {suc n} (mk-fin (suc k) {(b)}) = (fsuc ⊎ fsuc) $ strengthen (mk-fin k {b})
 
 inject : m ≤ n → Fin m → Fin n
 inject {m} {n} p (mk-fin k {erase q}) = mk-fin k

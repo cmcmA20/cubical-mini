@@ -2,6 +2,7 @@
 module Data.Vec.Inductive.Correspondences.Unary.Any.Computational where
 
 open import Meta.Prelude
+open Variadics _
 
 open import Logic.Decidability
 

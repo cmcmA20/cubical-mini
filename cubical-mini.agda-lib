@@ -10,6 +10,7 @@ flags:
   --hidden-argument-puns
   --no-import-sorts
   --postfix-projections
+  --qualified-instances
 
   -Werror
   -WnoUnsupportedIndexedMatch

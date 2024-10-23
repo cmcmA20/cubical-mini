@@ -37,7 +37,7 @@ instance
                      ((ab : A ×ₜ B) → X (ab .fst) × Y (ab .snd))
   ×-Fun .×-notation.Constraint _ _ = BU.⊤
   ×-Fun ._×_ f g (a , b) = f a , g b
-  {-# INCOHERENT ×-Fun #-}
+  {-# OVERLAPPABLE ×-Fun #-}
 
   Underlying-Σ : ⦃ ua : Underlying A ⦄ → Underlying (Σ A B)
   Underlying-Σ ⦃ ua ⦄ .ℓ-underlying = ua .ℓ-underlying
