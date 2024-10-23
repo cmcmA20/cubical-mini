@@ -3,13 +3,14 @@ module Order.Constructions.Nat.Inductive where
 
 open import Cat.Prelude
 open import Order.Base
-open import Order.Constructions.Minmax
 open import Order.Complemented
+open import Order.Constructions.Minmax
 open import Order.Diagram.Bottom
 open import Order.Diagram.Join
 open import Order.Diagram.Meet
 open import Order.Diagram.Top
 open import Order.Strict
+open import Order.Total
 
 open import Data.Nat.Base
 open import Data.Nat.Path
@@ -37,6 +38,12 @@ open ComplementedPoset
 Suc : ℕₚ ⇒ ℕₚ
 Suc .hom    = suc
 Suc .pres-≤ = s≤s
+
+ℕ-dec-total : is-decidable-total-order ℕₚ
+ℕ-dec-total = has-dec-total-order ℕᶜᵖ
+
+ℕ-total : is-total-order ℕₚ
+ℕ-total = is-decidable-total-order.has-is-total (has-dec-total-order ℕᶜᵖ)
 
 instance
   ℕ-bottom : Bottom ℕₚ

@@ -4,6 +4,7 @@ module Order.Constructions.Nat where
 
 open import Cat.Prelude
 open import Order.Base
+open import Order.Complemented
 open import Order.Constructions.Minmax
 open import Order.Diagram.Bottom
 open import Order.Diagram.Join
@@ -11,40 +12,39 @@ open import Order.Diagram.Meet
 open import Order.Diagram.Top
 open import Order.Strict
 open import Order.Total
-open import Order.Trichotomous
 
-open import Data.Bool.Base
-open import Data.Dec.Base as Dec
-open import Data.Dec.Tri as Tri
 open import Data.Nat.Base
 open import Data.Nat.Path
 open import Data.Nat.Order.Base
-open import Data.Reflects.Base as Reflects
-open import Data.Sum.Base
+
+ℕᶜᵖ : ComplementedPoset 0ℓ 0ℓ
+ℕᶜᵖ .ComplementedPoset.Ob = ℕ
+ℕᶜᵖ .ComplementedPoset._≤_ = _≤_
+ℕᶜᵖ .ComplementedPoset._<_ = _<_
+ℕᶜᵖ .ComplementedPoset.≤-thin = hlevel 1
+ℕᶜᵖ .ComplementedPoset.≤-refl = refl
+ℕᶜᵖ .ComplementedPoset.≤-trans = _∙_
+ℕᶜᵖ .ComplementedPoset.≤-antisym = ≤-antisym
+ℕᶜᵖ .ComplementedPoset.<-thin = hlevel 1
+ℕᶜᵖ .ComplementedPoset.<-irrefl = <-irr
+ℕᶜᵖ .ComplementedPoset.<-trans = <-trans
+ℕᶜᵖ .ComplementedPoset.≤≃≯ = ≤≃≯
+ℕᶜᵖ .ComplementedPoset.<≃≱ = <≃≱
+
+open ComplementedPoset
 
 ℕₚ : Poset 0ℓ 0ℓ
-ℕₚ .Poset.Ob = ℕ
-ℕₚ .Poset._≤_ = _≤_
-ℕₚ .Poset.≤-thin = hlevel 1
-ℕₚ .Poset.≤-refl = refl
-ℕₚ .Poset.≤-trans = _∙_
-ℕₚ .Poset.≤-antisym = ≤-antisym
+ℕₚ = complemented→poset ℕᶜᵖ
 
 Suc : ℕₚ ⇒ ℕₚ
 Suc .hom    = suc
 Suc .pres-≤ = s≤s
 
--- NB avoid using it in computational code
-compare-nat : (m n : ℕ) → (m ≤ n) ⊎ (m ≥ n)
-compare-nat 0       _       = inl z≤
-compare-nat (suc m) 0       = inr z≤
-compare-nat (suc m) (suc n) = [ s≤s ∙ inl , s≤s ∙ inr ]ᵤ (compare-nat m n)
+ℕ-dec-total : is-decidable-total-order ℕₚ
+ℕ-dec-total = has-dec-total-order ℕᶜᵖ
 
 ℕ-total : is-total-order ℕₚ
-ℕ-total .is-total-order.compare = compare-nat
-
-ℕ-dec-total-order : is-decidable-total-order ℕₚ
-ℕ-dec-total-order .is-decidable-total-order.has-is-total = ℕ-total
+ℕ-total = is-decidable-total-order.has-is-total ℕ-dec-total
 
 instance
   ℕ-bottom : Bottom ℕₚ
@@ -55,7 +55,7 @@ instance
 ¬-ℕ-top t = suc≰id ! where open Top t
 
 module _ where
-  open decminmax ℕ-dec-total-order
+  open decminmax (has-dec-total-order ℕᶜᵖ)
 
   ℕ-meets : Has-meets ℕₚ
   ℕ-meets {x} {y} .Meet.glb = min x y
@@ -67,18 +67,4 @@ module _ where
 
 
 ℕₛ : StrictPoset 0ℓ 0ℓ
-ℕₛ .StrictPoset.Ob = ℕ
-ℕₛ .StrictPoset._<_ = _<_
-ℕₛ .StrictPoset.<-thin = hlevel 1
-ℕₛ .StrictPoset.<-irrefl = <-irr
-ℕₛ .StrictPoset.<-trans = <-trans
-
--- TODO move to order
-<-connex : (m n : ℕ) → ¬ (m < n) → ¬ (n < m) → m ＝ n
-<-connex 0       0       p q = refl
-<-connex 0       (suc n) p q = ⊥.rec (p z<s)
-<-connex (suc m) 0       p q = ⊥.rec (q z<s)
-<-connex (suc m) (suc n) p q = ap suc (<-connex m n (s<s ∙ p) (s<s ∙ q))
-
-ℕ-dec-strict-total-order : is-decidable-strict-total-order ℕₛ
-ℕ-dec-strict-total-order = discrete+dec+connnex→dec-strict-total-order auto auto (<-connex _ _)
+ℕₛ = complemented→strict ℕᶜᵖ
