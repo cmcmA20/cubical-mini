@@ -23,6 +23,8 @@ record is-of-height {o ℓ} (S : StrictPoset o ℓ) (n : ℕ) : 𝒰 (o ⊔ ℓ)
   field
     has-height : is-lub ℕₚ {I = Substar _<_} (suc ∘ₜ star-len ∘ₜ Substar.path) n
 
+unquoteDecl H-Level-is-of-height = declare-record-hlevel 1 H-Level-is-of-height (quote is-of-height)
+
 private variable n : ℕ
 
 module _ {o ℓ} {S : StrictPoset o ℓ} where
@@ -39,7 +41,7 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
   empty→height0 ¬s .has-height .is-lub.least _ _ = ¡
 
   height1→discrete : is-of-height S 1 → Π[ _≮_ ]
-  height1→discrete h1 x y x<y = false! $ h1 .has-height .is-lub.fam≤lub (sst x y (x<y ◅ refl))
+  height1→discrete h1 x y x<y = false! $ h1 .has-height .is-lub.fam≤lub (sst x y (star-sng x<y))
 
   inhabited-discrete→height1 : ∥ ⌞ S ⌟ ∥₁ → Π[ _≮_ ] → is-of-height S 1
   inhabited-discrete→height1 _ d .has-height .is-lub.fam≤lub (sst _ _ (ε _)) = refl

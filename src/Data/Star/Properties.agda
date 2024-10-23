@@ -7,9 +7,11 @@ open import Data.Nat.Properties
 open import Data.Star.Base
 
 private variable
-  ℓᵃ ℓ : Level
-  A : 𝒰 ℓ
+  ℓa ℓb ℓ ℓ′ : Level
+  A : 𝒰 ℓa
+  B : 𝒰 ℓb
   R : A → A → 𝒰 ℓ
+  S : B → B → 𝒰 ℓ′
   x y z : A
 
 star-len : Star R x y → ℕ
@@ -17,7 +19,7 @@ star-len (ε _)   = 0
 star-len (_ ◅ s) = suc (star-len s)
 
 star-trans-len
-  : {A : Type ℓᵃ} {R : A → A → Type ℓ} {x y z : A}
+  : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y z : A}
   → (sxy : Star R x y) (syz : Star R y z)
   → star-len (sxy ∙ syz) ＝ star-len sxy + star-len syz
 star-trans-len (ε u)     (ε v)     = refl
@@ -28,3 +30,10 @@ star-◅+-len
   : (sxy : Star R x y) (ryz : R y z)
   → star-len (sxy ◅+ ryz) ＝ suc (star-len sxy)
 star-◅+-len sxy ryz = star-trans-len sxy (star-sng ryz) ∙ +-comm (star-len sxy) 1
+
+star-map-len
+  : {f : A → B} {r : ∀ {a b} → R a b → S (f a) (f b)}
+  → (sxy : Star R x y)
+  → star-len {R = S} (star-map r sxy) ＝ star-len sxy
+star-map-len (ε e)     = refl
+star-map-len (_ ◅ sxy) = ap suc (star-map-len sxy)

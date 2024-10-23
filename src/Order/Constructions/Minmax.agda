@@ -11,7 +11,7 @@ open import Order.Diagram.Meet.Reasoning
 open import Order.Total
 
 open import Data.Bool.Base
-open import Data.Dec.Base
+open import Data.Dec
 open import Data.Sum.Base
 
 private variable o ℓ : Level
@@ -91,6 +91,32 @@ module minmax {o ℓ} {P : Poset o ℓ} (to : is-total-order P) where
   max≃≤⊎₁ : ∀ x y z → z ≤ max x y ≃ (z ≤ x) ⊎₁ (z ≤ y)
   max≃≤⊎₁ x y z = prop-extₑ! (∣_∣₁ ∘ₜ max→≤⊎ x y z ) (elim! (≤⊎→∪ P max-Join))
 
+module minmaxprops {o ℓ o′ ℓ′} {P : Poset o ℓ} (toP : is-total-order P) {Q : Poset o′ ℓ′} (toQ : is-total-order Q) where
+  private
+    module Pt = is-total-order toP
+    module Qt = is-total-order toQ
+    module Pm = minmax toP
+    module Qm = minmax toQ
+
+  min-ap : ∀ (f : P ⇒ Q) (x y : ⌞ P ⌟)
+         → Qm.min (f $ x) (f $ y) ＝ (f $ Pm.min x y)
+  min-ap f x y with Pt.compare x y
+  min-ap f x y | inl x≤y with Qt.compare (f $ x) (f $ y)
+  min-ap f x y | inl x≤y | inl fx≤fy = refl
+  min-ap f x y | inl x≤y | inr fy≤fx = Qt.≤-antisym fy≤fx (f .pres-≤ x≤y)
+  min-ap f x y | inr y≤x with Qt.compare (f $ x) (f $ y)
+  min-ap f x y | inr y≤x | inl fx≤fy = Qt.≤-antisym fx≤fy (f .pres-≤ y≤x)
+  min-ap f x y | inr y≤x | inr fy≤fx = refl
+
+  max-ap : ∀ (f : P ⇒ Q) (x y : ⌞ P ⌟)
+         → Qm.max (f $ x) (f $ y) ＝ (f $ Pm.max x y)
+  max-ap f x y with Pt.compare x y
+  max-ap f x y | inl x≤y with Qt.compare (f $ x) (f $ y)
+  max-ap f x y | inl x≤y | inl fx≤fy = refl
+  max-ap f x y | inl x≤y | inr fy≤fx = Qt.≤-antisym (f .pres-≤ x≤y) fy≤fx
+  max-ap f x y | inr y≤x with Qt.compare (f $ x) (f $ y)
+  max-ap f x y | inr y≤x | inl fx≤fy = Qt.≤-antisym (f .pres-≤ y≤x) fx≤fy
+  max-ap f x y | inr y≤x | inr fy≤fx = refl
 
 module decminmax {o ℓ} {P : Poset o ℓ} (dto : is-decidable-total-order P) where
   open is-decidable-total-order dto
@@ -170,4 +196,37 @@ module decminmax {o ℓ} {P : Poset o ℓ} (dto : is-decidable-total-order P) wh
 
   max≃≤⊎₁ : ∀ x y z → z ≤ max x y ≃ (z ≤ x) ⊎₁ (z ≤ y)
   max≃≤⊎₁ x y z = prop-extₑ! (∣_∣₁ ∘ₜ max→≤⊎ x y z) (elim! (≤⊎→∪ P max-Join))
+
+module decminmaxprops {o ℓ o′ ℓ′} {P : Poset o ℓ} (dtoP : is-decidable-total-order P) {Q : Poset o′ ℓ′} (dtoQ : is-decidable-total-order Q) where
+  private
+    module Pt = is-decidable-total-order dtoP
+    module Qt = is-decidable-total-order dtoQ
+    module Pm = decminmax dtoP
+    module Qm = decminmax dtoQ
+
+  min-ap : ∀ (f : P ⇒ Q) (x y : ⌞ P ⌟)
+         → Qm.min (f $ x) (f $ y) ＝ (f $ Pm.min x y)
+  min-ap f x y with Pt.dec-≤ {x} {y}
+  min-ap f x y | yes x≤y =
+    given-yes_return_then_
+      ⦃ d = Qt.dec-≤ ⦄
+      (f .pres-≤ x≤y)
+      (λ q → (if ⌊ q ⌋ then (f $ x) else (f $ y)) ＝ (f $ x))
+      refl
+  min-ap f x y | no x≰y with Qt.dec-≤ {f $ x} {f $ y}
+  min-ap f x y | no x≰y | yes fx≤fy = Qt.≤-antisym fx≤fy (f .pres-≤ (Pt.≰→≥≠ x≰y .fst))
+  min-ap f x y | no x≰y | no  fy≤fx = refl
+
+  max-ap : ∀ (f : P ⇒ Q) (x y : ⌞ P ⌟)
+         → Qm.max (f $ x) (f $ y) ＝ (f $ Pm.max x y)
+  max-ap f x y with Pt.dec-≤ {x} {y}
+  max-ap f x y | yes x≤y =
+    given-yes_return_then_
+      ⦃ d = Qt.dec-≤ ⦄
+      (f .pres-≤ x≤y)
+      (λ q → (if ⌊ q ⌋ then (f $ y) else (f $ x)) ＝ (f $ y))
+      refl
+  max-ap f x y | no x≰y with Qt.dec-≤ {f $ x} {f $ y}
+  max-ap f x y | no x≰y | yes fx≤fy = Qt.≤-antisym (f .pres-≤ (Pt.≰→≥≠ x≰y .fst)) fx≤fy
+  max-ap f x y | no x≰y | no  fy≤fx = refl
 

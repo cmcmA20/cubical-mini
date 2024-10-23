@@ -171,17 +171,15 @@ drop-nil : {n : ℕ}
 drop-nil {n = zero}  = refl
 drop-nil {n = suc _} = refl
 
-open decminmax ℕ-dec-total
-
 module _ where
+  open decminmax ℕ-dec-total
+  open decminmaxprops ℕ-dec-total ℕ-dec-total
   open import Order.Complemented.Reasoning ℕᶜᵖ
   length-take : {n : ℕ} {xs : List A}
               → length (take n xs) ＝ min n (length xs)
   length-take {n = zero}                = refl
   length-take {n = suc n} {xs = []}     = refl
-  length-take {n = suc n} {xs = x ∷ xs} with n ≤? length xs | length-take {n = n} {xs = xs}
-  ... | false | r = ap suc r
-  ... | true  | r = ap suc r
+  length-take {n = suc n} {xs = x ∷ xs} = ap suc (length-take {n = n} {xs = xs}) ∙ min-ap Suc n (length xs) ⁻¹
 
 length-drop : {n : ℕ} {xs : List A}
             → length (drop n xs) ＝ length xs ∸ n

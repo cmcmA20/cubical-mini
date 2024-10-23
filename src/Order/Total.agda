@@ -21,6 +21,11 @@ record is-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
 
   field compare : ∀ x y → (x ≤ y) ⊎ (x ≥ y)
 
+  ≰→≥≠ : ∀ {x y} → x ≰ y → (x ≥ y) × (x ≠ y)
+  ≰→≥≠ {x} {y} x≰y with compare x y
+  ... | inl x≤y = ⊥.rec (x≰y x≤y)
+  ... | inr y≤x = y≤x , ⊥.contra =→≤ x≰y
+
   converse-complement : StrictPoset o ℓ
   converse-complement .StrictPoset.Ob = Ob
   converse-complement .StrictPoset._<_ x y = y ≰ x

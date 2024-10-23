@@ -83,6 +83,9 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   =→≥ : ∀ {x y} → x ＝ y → y ≤ x
   =→≥ = =→~⁻
 
+  ≤≠→≱ : ∀ {x y} → x ≤ y → x ≠ y → x ≱ y
+  ≤≠→≱ x≤y x≠y x≥y = ⊥.rec (x≠y (≤-antisym x≤y x≥y))
+
 unquoteDecl poset-iso = declare-record-iso poset-iso (quote Poset)
 
 private variable o o′ o″ o‴ ℓ ℓ′ ℓ″ ℓ‴ : Level
