@@ -100,16 +100,17 @@ record is-strict-total-order {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) 
   open StrictPoset S public
 
   field
+    -- aka cotransitivity
     <-weak-linear : ∀ {x y z} → x < z → (x < y) ⊎ (y < z)
     <-connex      : ∀ {x y} → x ≮ y → y ≮ x → x ＝ y
 
   converse-complement : Poset o ℓ
   converse-complement .Poset.Ob = Ob
-  converse-complement .Poset._≤_ x y = y ≯ x
+  converse-complement .Poset._≤_ x y = y ≮ x
   converse-complement .Poset.≤-thin = hlevel 1
   converse-complement .Poset.≤-refl = <-irrefl
-  converse-complement .Poset.≤-trans x≮y y≮z x<z = [ x≮y , y≮z ]ᵤ (<-weak-linear x<z)
-  converse-complement .Poset.≤-antisym x≮y y≮x = <-connex x≮y y≮x
+  converse-complement .Poset.≤-trans y≮x z≮y z<x = [ z≮y , y≮x ]ᵤ (<-weak-linear z<x)
+  converse-complement .Poset.≤-antisym y≮x x≮y = <-connex x≮y y≮x
 
 is-decidable-strict-poset : ∀ {o ℓ} (S : StrictPoset o ℓ) → 𝒰 (o ⊔ ℓ)
 is-decidable-strict-poset S = ∀ {x y} → Dec (x < y) where open StrictPoset S
