@@ -16,6 +16,7 @@ private variable o ℓ : Level
 
 -- aka toset
 record is-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
+  no-eta-equality
   open Poset P public
 
   field compare : ∀ x y → (x ≤ y) ⊎ (x ≥ y)
@@ -38,6 +39,7 @@ instance
 
 
 record is-decidable-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
+  no-eta-equality
   field has-is-total : is-total-order P
 
   open is-total-order has-is-total public
@@ -67,9 +69,10 @@ dec+total→dec-total-order {P} d t .is-decidable-total-order.has-discrete {x} {
 
 
 record is-weak-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
+  no-eta-equality
   open Poset P public
 
-  field from-≰ : ∀ {x y} → x ≰ y → y ≤ x
+  field from-≰ : ∀ {x y} → x ≰ y → x ≥ y
 
 module _ {o ℓ} {P : Poset o ℓ} where
   open Poset P
@@ -92,16 +95,16 @@ record is-strict-total-order {o ℓ} (S : StrictPoset o ℓ) : 𝒰 (o ⊔ ℓ) 
   open StrictPoset S public
 
   field
-    weak-linear : ∀ x y z → x < z → (x < y) ⊎ (y < z)
-    connex      : ∀ x y → x ≮ y → y ≮ x → x ＝ y
+    <-weak-linear : ∀ {x y z} → x < z → (x < y) ⊎ (y < z)
+    <-connex      : ∀ {x y} → x ≮ y → y ≮ x → x ＝ y
 
   converse-complement : Poset o ℓ
   converse-complement .Poset.Ob = Ob
   converse-complement .Poset._≤_ x y = y ≯ x
   converse-complement .Poset.≤-thin = hlevel 1
   converse-complement .Poset.≤-refl = <-irrefl
-  converse-complement .Poset.≤-trans x≮y y≮z x<z = [ x≮y , y≮z ]ᵤ (weak-linear _ _ _ x<z)
-  converse-complement .Poset.≤-antisym x≮y y≮x = connex _ _ x≮y y≮x
+  converse-complement .Poset.≤-trans x≮y y≮z x<z = [ x≮y , y≮z ]ᵤ (<-weak-linear x<z)
+  converse-complement .Poset.≤-antisym x≮y y≮x = <-connex x≮y y≮x
 
 is-decidable-strict-poset : ∀ {o ℓ} (S : StrictPoset o ℓ) → 𝒰 (o ⊔ ℓ)
 is-decidable-strict-poset S = ∀ {x y} → Dec (x < y) where open StrictPoset S
@@ -138,28 +141,28 @@ dec+strict-total→dec-strict-total-order {S} d sto .is-decidable-strict-total-o
   with d {x} {y} | d {y} {x}
 ... | yes x<y | _  = no $ StrictPoset.<→≠ S x<y
 ... | no  x≮y | yes y<x = no λ x=y → StrictPoset.<→≠ S y<x (x=y ⁻¹)
-... | no  x≮y | no  y≮x = yes (sto .is-strict-total-order.connex x y x≮y y≮x)
+... | no  x≮y | no  y≮x = yes (sto .is-strict-total-order.<-connex x≮y y≮x)
 
 module _ {S : StrictPoset o ℓ} where
   open StrictPoset S
 
   discrete+dec+connnex→dec-strict-total-order
     : is-discrete Ob → Decidable S
-    → (∀ x y → x ≮ y → y ≮ x → x ＝ y)
+    → (∀{x y} → x ≮ y → y ≮ x → x ＝ y)
     → is-decidable-strict-total-order S
   discrete+dec+connnex→dec-strict-total-order di d co
     .is-decidable-strict-total-order.has-is-strict-total
-    .is-strict-total-order.weak-linear x y z x<z with d {x} {y}
+    .is-strict-total-order.<-weak-linear {x} {y} {z} x<z with d {x} {y}
   ... | yes x<y = inl x<y
   ... | no  x≮y with d {y} {z}
   ... | yes y<z = inr y<z
   ... | no  y≮z =
-    let u = co y x (λ y<x → y≮z (y<x ∙ x<z)) x≮y
-        v = co z y (λ z<y → x≮y (x<z ∙ z<y)) y≮z
+    let u = co (λ y<x → y≮z (y<x ∙ x<z)) x≮y
+        v = co (λ z<y → x≮y (x<z ∙ z<y)) y≮z
      in ⊥.rec (<-irrefl (subst (_ <_) (v ∙ u) x<z))
   discrete+dec+connnex→dec-strict-total-order di d co
     .is-decidable-strict-total-order.has-is-strict-total
-    .is-strict-total-order.connex = co
+    .is-strict-total-order.<-connex = co
   discrete+dec+connnex→dec-strict-total-order di d co
     .is-decidable-strict-total-order.dec-< = d
   discrete+dec+connnex→dec-strict-total-order di d co

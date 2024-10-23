@@ -48,6 +48,10 @@ record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   =→≮ : ∀ {x y} → x ＝ y → x ≮ y
   =→≮ = flip <→≠
 
+  infixr 2 _<⟨_⟩_
+  _<⟨_⟩_ : ∀ a {b c} → a < b → b < c → a < c
+  f <⟨ p ⟩ q = p ∙ q
+
   reflexive-closure : ⦃ _ : H-Level 2 Ob ⦄ → Poset o (o ⊔ ℓ)
   reflexive-closure .Poset.Ob = Ob
   reflexive-closure .Poset._≤_ x y = (x < y) ⊎ (x ＝ y)

@@ -46,17 +46,17 @@ module _ {o ℓ} {S : StrictPoset o ℓ} where
   ... | no  x≮y with d .is-decidable-strict-total-order.dec-< {y} {x}
   ... | yes y<x = GT y<x
   ... | no  y≮x = EQ
-    (d .is-decidable-strict-total-order.has-is-strict-total .is-strict-total-order.connex
-      x y x≮y y≮x)
+    (d .is-decidable-strict-total-order.has-is-strict-total .is-strict-total-order.<-connex
+      x≮y y≮x)
 
   module _ (t : is-trichotomous S) where
     open is-trichotomous t hiding (Ob; _<_)
 
     tri-order→strict-total-order : is-strict-total-order S
-    tri-order→strict-total-order .is-strict-total-order.weak-linear x y z x<z =
+    tri-order→strict-total-order .is-strict-total-order.<-weak-linear {x} {y} {z} x<z =
       Tri.elim inl (λ x=y → inr (subst (_< z) x=y x<z)) (λ y<x → inr (y<x ∙ x<z))
         (t .is-trichotomous.trisect x y)
-    tri-order→strict-total-order .is-strict-total-order.connex x y x≮y y≮x =
+    tri-order→strict-total-order .is-strict-total-order.<-connex {x} {y} x≮y y≮x =
       Tri.elim (λ x<y → ⊥.rec (x≮y x<y)) refl (λ y<x → ⊥.rec (y≮x y<x))
         (t .is-trichotomous.trisect x y)
 

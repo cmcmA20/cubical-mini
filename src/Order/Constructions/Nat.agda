@@ -81,4 +81,4 @@ module _ where
 <-connex (suc m) (suc n) p q = ap suc (<-connex m n (s<s ∙ p) (s<s ∙ q))
 
 ℕ-dec-strict-total-order : is-decidable-strict-total-order ℕₛ
-ℕ-dec-strict-total-order = discrete+dec+connnex→dec-strict-total-order auto auto <-connex
+ℕ-dec-strict-total-order = discrete+dec+connnex→dec-strict-total-order auto auto (<-connex _ _)
