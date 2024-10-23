@@ -113,7 +113,7 @@ instance
 
 -- Automation
 
-{- TODO move these 2 to Dec and have another here versions specialized to equalities? -}
+{- TODO move these 2 to Dec and add here versions specialized to equalities? -}
 
 given-yes_return_then_
   : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
