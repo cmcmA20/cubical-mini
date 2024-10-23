@@ -6,6 +6,7 @@ open import Order.Constructions.Nat
 open import Order.Diagram.Bottom
 open import Order.Diagram.Lub
 open import Order.Strict
+open Variadics _
 
 open import Data.Acc
 open import Data.Nat.Base

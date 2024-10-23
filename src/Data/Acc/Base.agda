@@ -2,6 +2,7 @@
 module Data.Acc.Base where
 
 open import Foundations.Base
+open Variadics _
 
 data Acc
   {ℓ ℓ′} {A : Type ℓ} (_<_ : A → A → Type ℓ′)
@@ -64,4 +65,4 @@ from-ninduction {_<_} ind = ind (Acc (flip _<_)) λ _ → acc
 -- finite height
 
 is-of-finite-height : (A → A → Type ℓ′) → Type (level-of-type A ⊔ ℓ′)
-is-of-finite-height _<_ = Π[ Acc _<_ × Acc (flip _<_) ]
+is-of-finite-height _<_ = ∀ x → Acc _<_ x × Acc (flip _<_) x

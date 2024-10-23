@@ -2,6 +2,7 @@
 module Data.Acc.Properties where
 
 open import Meta.Prelude
+open Variadics _
 
 open import Data.Acc.Base
 open import Data.Empty.Base
