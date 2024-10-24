@@ -60,7 +60,7 @@ instance
   ⊎₁-DecProp : ⊎₁-notation (DecProp ℓ) (DecProp ℓ′) (DecProp (ℓ ⊔ ℓ′))
   ⊎₁-DecProp .⊎₁-notation.Constraint _ _ = ⊤
   ⊎₁-DecProp ._⊎₁_ (el A da p) (el B db q) =
-    el (A ⊎₁ B) (∥-∥₁∘dec≃dec∘∥-∥₁ $ ∣ da <+> db ∣₁) squash₁
+    el (A ⊎₁ B) (∥-∥₁-dec-comm $ ∣ da <+> db ∣₁) squash₁
 
   ¬-DecProp : ¬-notation (DecProp ℓ) (DecProp ℓ)
   ¬-DecProp .¬-notation.Constraint _ = ⊤
