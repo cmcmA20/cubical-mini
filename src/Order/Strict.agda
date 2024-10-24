@@ -6,6 +6,10 @@ open import Cat.Prelude
 open import Meta.Projection
 open import Meta.Reflection.Base
 
+open import Order.Base
+open import Data.Sum.Base
+open import Data.Sum.Path
+
 private variable n : HLevel
 
 record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
@@ -44,9 +48,38 @@ record StrictPoset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   =→≮ : ∀ {x y} → x ＝ y → x ≮ y
   =→≮ = flip <→≠
 
+  infixr 2 _<⟨_⟩_
+  _<⟨_⟩_ : ∀ a {b c} → a < b → b < c → a < c
+  f <⟨ p ⟩ q = p ∙ q
+
+  reflexive-closure : ⦃ _ : H-Level 2 Ob ⦄ → Poset o (o ⊔ ℓ)
+  reflexive-closure .Poset.Ob = Ob
+  reflexive-closure .Poset._≤_ x y = (x < y) ⊎ (x ＝ y)
+  reflexive-closure .Poset.≤-thin {x} {y} = disjoint-⊎-is-prop! (<→≠ $ₜ²_)
+  reflexive-closure .Poset.≤-refl = inr refl
+  reflexive-closure .Poset.≤-trans (inl x<y) (inl y<z) = inl (x<y ∙ y<z)
+  reflexive-closure .Poset.≤-trans (inl x<y) (inr y=z) = inl (subst (_ <_) y=z x<y)
+  reflexive-closure .Poset.≤-trans (inr x=y) (inl y<z) = inl (subst (_< _) (sym x=y) y<z)
+  reflexive-closure .Poset.≤-trans (inr x=y) (inr y=z) = inr (x=y ∙ y=z)
+  reflexive-closure .Poset.≤-antisym (inl x<y) (inl y<x) = ⊥.rec (<-asym x<y y<x)
+  reflexive-closure .Poset.≤-antisym (inl x<y) (inr y=x) = ⊥.rec (<→≠ x<y (sym y=x))
+  reflexive-closure .Poset.≤-antisym (inr x=y) (inl y<x) = ⊥.rec (<→≠ y<x (sym x=y))
+  reflexive-closure .Poset.≤-antisym (inr x=y) _ = x=y
+
 unquoteDecl strict-poset-iso = declare-record-iso strict-poset-iso (quote StrictPoset)
 
 private variable o ℓ : Level
+
+-- aka irreflexive kernel
+reflexive-reduction : Poset o ℓ → StrictPoset o (o ⊔ ℓ)
+reflexive-reduction P .StrictPoset.Ob = P .Poset.Ob
+reflexive-reduction P .StrictPoset._<_ x y = (P .Poset._≤_ x y) × (x ≠ y)
+reflexive-reduction P .StrictPoset.<-thin = hlevel 1
+reflexive-reduction P .StrictPoset.<-irrefl (_ , ne) = ne refl
+reflexive-reduction P .StrictPoset.<-trans (lxy , nxy) (lyz , nyz)
+  = lxy ∙ lyz
+  , λ x=z → nyz (≤-antisym lyz (subst (_≤ _) x=z lxy))
+  where open Poset P
 
 instance
   Underlying-StrictPoset : Underlying (StrictPoset o ℓ)

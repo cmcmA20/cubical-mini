@@ -69,6 +69,12 @@ opaque
   ∩≤∩-r : y ≤ y′ → (x ∩ y) ≤ (x ∩ y′)
   ∩≤∩-r p = ∩≤∩ refl p
 
+  ∩-intermediate : x ∩ z ≤ y → y ≤ x → y ∩ z ＝ x ∩ z
+  ∩-intermediate {x} {z} {y} x∩z≤y y≤x =
+    ≤-antisym
+      (∩≤∩-l y≤x)
+      (∩-universal _ x∩z≤y ∩≤r)
+
   ∩→order : x ∩ y ＝ x → x ≤ y
   ∩→order {x} {y} p =
     x      =⟨ p ⟨

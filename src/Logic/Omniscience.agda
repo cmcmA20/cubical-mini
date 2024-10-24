@@ -95,7 +95,7 @@ instance
     → ⦃ d : Decidable B ⦄
     → ⦃ omn₁ : Omniscient₁ A ⦄
     → Decidable Σ[ B ]
-  Dec-omni₁-prop = ∥-∥₁.proj! (∥-∥₁∘dec≃dec∘∥-∥₁ ⁻¹ $ Dec-∃)
+  Dec-omni₁-prop = ∥-∥₁.proj! (∥-∥₁-dec-comm ⁻¹ $ Dec-∃)
   {-# INCOHERENT Dec-omni₁-prop #-}
 
 

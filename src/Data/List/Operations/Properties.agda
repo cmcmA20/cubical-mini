@@ -30,15 +30,17 @@ private variable
   A : Type ℓ
   B : Type ℓ′
   C : Type ℓ″
+  m n : ℕ
+  xs : List A
+  x y z w : A
 
 -- length
 
-length=0→nil : {xs : List A} → length xs ＝ 0 → xs ＝ []
+length=0→nil : length xs ＝ 0 → xs ＝ []
 length=0→nil {xs = []}     eq = refl
 length=0→nil {xs = x ∷ xs} eq = false! eq
 
-length=1→sng : {A : 𝒰 ℓ} {xs : List A}
-             → length xs ＝ 1 → Σ[ x ꞉ A ] (xs ＝ x ∷ [])
+length=1→sng : length xs ＝ 1 → Σ[ x ꞉ A ] (xs ＝ x ∷ [])
 length=1→sng {xs = []}     eq = false! eq
 length=1→sng {xs = x ∷ xs} eq = x , ap (x ∷_) (length=0→nil (suc-inj eq))
 
@@ -72,9 +74,9 @@ snoc-++ []       ys y = refl
 snoc-++ (x ∷ xs) ys y = ap (x ∷_) (snoc-++ xs ys y)
 
 snoc-elim : (P : List A → 𝒰 ℓ′)
-  → P []
-  → (∀ xs x → P xs → P (snoc xs x))
-  → ∀ xs → P xs
+          → P []
+          → (∀ xs x → P xs → P (snoc xs x))
+          → ∀ xs → P xs
 snoc-elim P p[] ps xs = go [] xs p[]
   where
   go : ∀ xs ys → P xs → P (xs ++ ys)
@@ -143,16 +145,14 @@ reflects-all-dis p xs =
 
 -- replicate
 
-replicate-+ : {n m : ℕ} {z : A}
-            → replicate (n + m) z ＝ replicate n z ++ replicate m z
+replicate-+ : replicate (n + m) z ＝ replicate n z ++ replicate m z
 replicate-+ {n = zero}      = refl
 replicate-+ {n = suc n} {z} = ap (z ∷_) (replicate-+ {n = n})
 
-replicate-snoc : {n : ℕ} {z : A}
-               → replicate (suc n) z ＝ snoc (replicate n z) z
+replicate-snoc : replicate (suc n) z ＝ snoc (replicate n z) z
 replicate-snoc {n} {z} = ap (λ q → replicate q z) (+-comm 1 n) ∙ replicate-+ {m = 1} ∙ snoc-append _ ⁻¹
 
-All-replicate : {z : A} (xs : List A)
+All-replicate : (xs : List A)
               → All (_＝ z) xs
               → xs ＝ replicate (length xs) z
 All-replicate     []       []       = refl
@@ -161,40 +161,34 @@ All-replicate {z} (x ∷ xs) (xa ∷ a) = ap² List._∷_ xa (All-replicate xs a
 
 -- take & drop
 
-take-nil : {n : ℕ}
-         → take n (the (List A) []) ＝ []
+take-nil : take n (the (List A) []) ＝ []
 take-nil {n = zero}  = refl
 take-nil {n = suc _} = refl
 
-drop-nil : {n : ℕ}
-         → drop n (the (List A) []) ＝ []
+drop-nil : drop n (the (List A) []) ＝ []
 drop-nil {n = zero}  = refl
 drop-nil {n = suc _} = refl
 
-open minmax ℕ-total
+module _ where
+  open decminmax ℕ-dec-total
+  open decminmaxprops ℕ-dec-total ℕ-dec-total
 
-length-take : {n : ℕ} {xs : List A}
-            → length (take n xs) ＝ min n (length xs)
-length-take {n = zero}                = refl
-length-take {n = suc n} {xs = []}     = refl
-length-take {n = suc n} {xs = x ∷ xs} with compare-nat n (length xs) | length-take {n = n} {xs = xs}
-... | inl _ | r = ap suc r
-... | inr _ | r = ap suc r
+  length-take : length (take n xs) ＝ min n (length xs)
+  length-take {n = zero}                = refl
+  length-take {n = suc n} {xs = []}     = refl
+  length-take {n = suc n} {xs = x ∷ xs} = ap suc length-take ∙ min-ap Suc n (length xs)
 
-length-drop : {n : ℕ} {xs : List A}
-            → length (drop n xs) ＝ length xs ∸ n
+length-drop : length (drop n xs) ＝ length xs ∸ n
 length-drop {n = zero}                = refl
 length-drop {n = suc n} {xs = []}     = refl
 length-drop {n = suc n} {xs = x ∷ xs} = length-drop {n = n}
 
-take-+ : {n m : ℕ} {xs : List A}
-       → take (n + m) xs ＝ take n xs ++ take m (drop n xs)
+take-+ : take (n + m) xs ＝ take n xs ++ take m (drop n xs)
 take-+ {n = zero}                = refl
 take-+ {n = suc n} {xs = []}     = take-nil ⁻¹
 take-+ {n = suc n} {xs = x ∷ xs} = ap (x ∷_) (take-+ {n = n})
 
-drop-+ : {n m : ℕ} {xs : List A}
-       → drop (n + m) xs ＝ drop m (drop n xs)
+drop-+ : drop (n + m) xs ＝ drop m (drop n xs)
 drop-+ {n = zero}                    = refl
 drop-+ {n = suc n} {m} {xs = []}     = drop-nil {n = m} ⁻¹
 drop-+ {n = suc n}     {xs = x ∷ xs} = drop-+ {n = n}

@@ -1,6 +1,5 @@
 {-# OPTIONS --safe #-}
--- TODO generalize to naturally ordered monoid/semiring
-module Order.Constructions.Nat where
+module Order.Constructions.Nat.Inductive where
 
 open import Cat.Prelude
 open import Order.Base
@@ -15,15 +14,12 @@ open import Order.Total
 
 open import Data.Nat.Base
 open import Data.Nat.Path
-open import Data.Nat.Order.Base
-open import Data.Nat.Order.Base
-  using ( H-Level-≤ ; H-Level-<; Refl-≤ ; Trans-≤ ; Reflects-suc≰id ; Reflects-suc≰z)
-  public
+open import Data.Nat.Order.Inductive
 
 ℕᶜᵖ : ComplementedPoset 0ℓ 0ℓ
 ℕᶜᵖ .ComplementedPoset.Ob = ℕ
 ℕᶜᵖ .ComplementedPoset._≤_ = _≤_
-ℕᶜᵖ .ComplementedPoset._<_ = _<_
+ℕᶜᵖ .ComplementedPoset._<_ m n = suc m ≤ n
 ℕᶜᵖ .ComplementedPoset.≤-thin = hlevel 1
 ℕᶜᵖ .ComplementedPoset.≤-refl = refl
 ℕᶜᵖ .ComplementedPoset.≤-trans = _∙_
@@ -47,7 +43,7 @@ Suc .pres-≤ = s≤s
 ℕ-dec-total = has-dec-total-order ℕᶜᵖ
 
 ℕ-total : is-total-order ℕₚ
-ℕ-total = is-decidable-total-order.has-is-total ℕ-dec-total
+ℕ-total = is-decidable-total-order.has-is-total (has-dec-total-order ℕᶜᵖ)
 
 instance
   ℕ-bottom : Bottom ℕₚ

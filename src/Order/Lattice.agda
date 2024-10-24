@@ -4,12 +4,6 @@ module Order.Lattice where
 open import Cat.Prelude
 
 open import Order.Base
-open import Order.Diagram.Bottom
-open import Order.Diagram.Join
-open import Order.Diagram.Meet
-open import Order.Diagram.Top
-import Order.Diagram.Join.Reasoning as Joins
-import Order.Diagram.Meet.Reasoning as Meets
 open import Order.Semilattice.Join
 open import Order.Semilattice.Meet
 
