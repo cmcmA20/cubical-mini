@@ -7,22 +7,25 @@ open import Meta.Effect.Idiom
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path
-open import Data.Reflects.Base
 open import Data.Empty.Base
 open import Data.Empty.Properties
+open import Data.Reflects.Base
 open import Data.Sum.Properties
 import Data.Truncation.Propositional as ∥-∥₁
 open ∥-∥₁ using (∥_∥₁)
 
 private variable
   ℓ ℓ′ : Level
-  A P : Type ℓ
-  B : Type ℓ′
+  A B P : Type ℓ
 
-∥-∥₁∘dec≃dec∘∥-∥₁ : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
-∥-∥₁∘dec≃dec∘∥-∥₁ = prop-extₑ!
+-- prop truncation commutes with decidability
+∥-∥₁-dec-comm : ∥ Dec P ∥₁ ≃ Dec ∥ P ∥₁
+∥-∥₁-dec-comm = prop-extₑ!
   (rec! $ Dec.dmap pure λ ¬p ∣p∣₁ → rec! ¬p ∣p∣₁)
   (Dec.rec (yes <$>_) (pure ∘ no ∘ contra pure))
+
+@0 _ : ∀ {ℓ} → Commutativity (Type ℓ → Type ℓ) _∙_ ∥_∥₁ Dec
+_ = fun-ext λ _ → ua ∥-∥₁-dec-comm
 
 ae : A ≃ B → Dec A ≃ Dec B
 ae {A} {B} e = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where

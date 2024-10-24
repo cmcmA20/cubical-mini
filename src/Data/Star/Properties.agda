@@ -7,11 +7,9 @@ open import Data.Nat.Properties
 open import Data.Star.Base
 
 private variable
-  ℓa ℓb ℓ ℓ′ : Level
-  A : 𝒰 ℓa
-  B : 𝒰 ℓb
-  R : A → A → 𝒰 ℓ
-  S : B → B → 𝒰 ℓ′
+  ℓ ℓa : Level
+  A B : 𝒰 ℓ
+  R S : A → A → 𝒰 ℓ
   x y z : A
 
 star-len : Star R x y → ℕ

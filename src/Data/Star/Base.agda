@@ -16,11 +16,9 @@ record Substar {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} (R : A → A → 𝒰 ℓ) : 𝒰 
     path : Star R from to
 
 private variable
-  ℓa ℓb ℓ ℓ′ : Level
-  A : 𝒰 ℓa
-  B : 𝒰 ℓb
-  R : A → A → 𝒰 ℓ
-  S : B → B → 𝒰 ℓ′
+  ℓ : Level
+  A B : 𝒰 ℓ
+  R S : A → A → 𝒰 ℓ
   x x′ y y′ z : A
 
 star-sng : R x y → Star R x y

@@ -22,9 +22,9 @@ record is-total-order {o ℓ} (P : Poset o ℓ) : 𝒰 (o ⊔ ℓ) where
   field compare : ∀ x y → (x ≤ y) ⊎ (x ≥ y)
 
   ≰→≥≠ : ∀ {x y} → x ≰ y → (x ≥ y) × (x ≠ y)
-  ≰→≥≠ {x} {y} x≰y with compare x y
-  ... | inl x≤y = ⊥.rec (x≰y x≤y)
-  ... | inr y≤x = y≤x , ⊥.contra =→≤ x≰y
+  ≰→≥≠ {x} {y} x≰y = compare x y &
+    [ (λ x≤y → ⊥.rec (x≰y x≤y))
+    , (λ y≤x → y≤x , (⊥.contra =→≤ x≰y)) ]ᵤ
 
   converse-complement : StrictPoset o ℓ
   converse-complement .StrictPoset.Ob = Ob
@@ -85,8 +85,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
   dec-total-order→weak-total-order
     : is-decidable-total-order P → is-weak-total-order P
   dec-total-order→weak-total-order dto .is-weak-total-order.from-≰ {x} {y} =
-    [ (λ x≤y x≰y → ⊥.rec (x≰y x≤y)) , (λ z _ → z) ]ᵤ
-      (is-decidable-total-order.compare dto x y)
+    [ (λ x≤y x≰y → ⊥.rec (x≰y x≤y)) , (λ z _ → z) ]ᵤ (is-decidable-total-order.compare dto x y)
 
   weak-total-order→dec-total-order
     : ⦃ di : is-discrete Ob ⦄ ⦃ de : Decidable P ⦄

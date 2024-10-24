@@ -89,7 +89,7 @@ module minmax {o ℓ} {P : Poset o ℓ} (to : is-total-order P) where
   ... | inr _ = inl z≤max
 
   max≃≤⊎₁ : ∀ x y z → z ≤ max x y ≃ (z ≤ x) ⊎₁ (z ≤ y)
-  max≃≤⊎₁ x y z = prop-extₑ! (∣_∣₁ ∘ₜ max→≤⊎ x y z ) (elim! (≤⊎→∪ P max-Join))
+  max≃≤⊎₁ x y z = prop-extₑ! (∣_∣₁ ∘ₜ max→≤⊎ x y z) (elim! (≤⊎→∪ P max-Join))
 
 module minmaxprops {o ℓ o′ ℓ′} {P : Poset o ℓ} (toP : is-total-order P) {Q : Poset o′ ℓ′} (toQ : is-total-order Q) where
   private
@@ -203,30 +203,22 @@ module decminmaxprops {o ℓ o′ ℓ′} {P : Poset o ℓ} (dtoP : is-decidable
     module Qt = is-decidable-total-order dtoQ
     module Pm = decminmax dtoP
     module Qm = decminmax dtoQ
+    instance _ = Qt.dec-≤
 
   min-ap : ∀ (f : P ⇒ Q) (x y : ⌞ P ⌟)
-         → Qm.min (f $ x) (f $ y) ＝ (f $ Pm.min x y)
+         → Qm.min (f # x) (f # y) ＝ f # Pm.min x y
   min-ap f x y with Pt.dec-≤ {x} {y}
   min-ap f x y | yes x≤y =
-    given-yes_return_then_
-      ⦃ d = Qt.dec-≤ ⦄
-      (f .pres-≤ x≤y)
-      (λ q → (if ⌊ q ⌋ then (f $ x) else (f $ y)) ＝ (f $ x))
-      refl
-  min-ap f x y | no x≰y with Qt.dec-≤ {f $ x} {f $ y}
-  min-ap f x y | no x≰y | yes fx≤fy = Qt.≤-antisym fx≤fy (f .pres-≤ (Pt.≰→≥≠ x≰y .fst))
+    given-yes (f # x≤y) return (λ q → (if ⌊ q ⌋ then _ else _) ＝ _) then refl
+  min-ap f x y | no x≰y with Qt.dec-≤ {f # x} {f # y}
+  min-ap f x y | no x≰y | yes fx≤fy = Qt.≤-antisym fx≤fy (f # (Pt.≰→≥≠ x≰y .fst))
   min-ap f x y | no x≰y | no  fy≤fx = refl
 
   max-ap : ∀ (f : P ⇒ Q) (x y : ⌞ P ⌟)
-         → Qm.max (f $ x) (f $ y) ＝ (f $ Pm.max x y)
+         → Qm.max (f # x) (f # y) ＝ f # Pm.max x y
   max-ap f x y with Pt.dec-≤ {x} {y}
   max-ap f x y | yes x≤y =
-    given-yes_return_then_
-      ⦃ d = Qt.dec-≤ ⦄
-      (f .pres-≤ x≤y)
-      (λ q → (if ⌊ q ⌋ then (f $ y) else (f $ x)) ＝ (f $ y))
-      refl
-  max-ap f x y | no x≰y with Qt.dec-≤ {f $ x} {f $ y}
-  max-ap f x y | no x≰y | yes fx≤fy = Qt.≤-antisym (f .pres-≤ (Pt.≰→≥≠ x≰y .fst)) fx≤fy
+    given-yes (f # x≤y) return (λ q → (if ⌊ q ⌋ then _ else _) ＝ _) then refl
+  max-ap f x y | no x≰y with Qt.dec-≤ {f # x} {f # y}
+  max-ap f x y | no x≰y | yes fx≤fy = Qt.≤-antisym (f # (Pt.≰→≥≠ x≰y .fst)) fx≤fy
   max-ap f x y | no x≰y | no  fy≤fx = refl
-
