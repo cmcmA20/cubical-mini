@@ -57,13 +57,10 @@ module _ where
   open decminmax (has-dec-total-order ℕᶜᵖ)
 
   ℕ-meets : Has-meets ℕₚ
-  ℕ-meets {x} {y} .Meet.glb = min x y
-  ℕ-meets {x} {y} .Meet.has-meet = min-is-meet x y
+  ℕ-meets = min-meets
 
   ℕ-joins : Has-joins ℕₚ
-  ℕ-joins {x} {y} .Join.lub = max x y
-  ℕ-joins {x} {y} .Join.has-join = max-is-join x y
-
+  ℕ-joins = max-joins
 
 ℕₛ : StrictPoset 0ℓ 0ℓ
 ℕₛ = complemented→strict ℕᶜᵖ
