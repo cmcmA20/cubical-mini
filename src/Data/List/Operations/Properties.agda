@@ -23,7 +23,7 @@ open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
-open import Data.List.Correspondences.Unary.Has
+open import Data.List.Membership
 open import Data.List.Correspondences.Binary.OPE
 open import Data.Nat.Base
 open import Data.Nat.Path
@@ -132,7 +132,7 @@ all?-++ {p} {xs = x ∷ xs} {ys} = ap (p x and_) (all?-++ {xs = xs}) ∙ and-ass
 
 Reflects-any-bool : {p : A → Bool} {xs : List A}
                   → Reflects (Any (So ∘ p) xs) (any p xs)
-Reflects-any-bool {xs = []}     = ofⁿ ¬Any-[]
+Reflects-any-bool {xs = []}     = ofⁿ false!
 Reflects-any-bool {xs = x ∷ xs} =
   Reflects.dmap
    [ here , there ]ᵤ
@@ -143,7 +143,7 @@ Reflects-any-bool {xs = x ∷ xs} =
 
 Reflects-any-dec : {xs : List A} {P : A → 𝒰 ℓ′} (P? : ∀ x → Dec (P x))
                  → Reflects (Any P xs) (any (⌊_⌋ ∘ P?) xs)
-Reflects-any-dec {xs = []}     P? = ofⁿ ¬Any-[]
+Reflects-any-dec {xs = []}     P? = ofⁿ false!
 Reflects-any-dec {xs = x ∷ xs} P? =
   Reflects.dmap
    [ here , there ]ᵤ
@@ -216,7 +216,7 @@ Reflects-filter-all {p} {xs} =
     Reflects-So
 
 filter-has-eq : {p1 p2 : A → Bool} {xs : List A}
-             → (∀ x → Has x xs → p1 x ＝ p2 x)
+             → (∀ x → x ∈ xs → p1 x ＝ p2 x)
              → filter p1 xs ＝ filter p2 xs
 filter-has-eq {xs = []}     eqp = refl
 filter-has-eq {xs = x ∷ xs} eqp =
@@ -397,7 +397,7 @@ zip-with-++ : {f : A → B → C}
             → {as bs : List A} {xs ys : List B}
             → length as ＝ length xs
             → zip-with f (as ++ bs) (xs ++ ys) ＝ zip-with f as xs ++ zip-with f bs ys
-zip-with-++ {f} {as = []}     {xs = []}     e = refl
-zip-with-++ {f} {as = []}     {xs = x ∷ xs} e = false! e
-zip-with-++ {f} {as = a ∷ as} {xs = []}     e = false! e
+zip-with-++     {as = []}     {xs = []}     _ = refl
+zip-with-++     {as = []}     {xs = x ∷ xs} e = false! e
+zip-with-++     {as = a ∷ as} {xs = []}     e = false! e
 zip-with-++ {f} {as = a ∷ as} {xs = x ∷ xs} e = ap (f a x ∷_) (zip-with-++ (suc-inj e))
