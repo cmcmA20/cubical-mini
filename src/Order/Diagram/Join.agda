@@ -2,8 +2,10 @@
 module Order.Diagram.Join where
 
 open import Cat.Prelude
+open import Cat.Diagram.Coproduct
 
 open import Order.Base
+open import Order.Category
 open import Order.Diagram.Lub
 
 open import Data.Bool
@@ -37,26 +39,26 @@ module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
   open Poset P
   open is-lub
   open is-join
+  open Join
 
-  is-join→is-lub : ∀ {lub} → is-join P a b lub → is-lub P (if_then a else b) lub
+  private variable x y l : Ob
+
+  is-join→is-lub : is-join P a b l → is-lub P (if_then a else b) l
   is-join→is-lub join .fam≤lub true = join .l≤join
   is-join→is-lub join .fam≤lub false = join .r≤join
   is-join→is-lub join .least ub′ x = join .least ub′ (x true) (x false)
 
-  is-lub→is-join : ∀ {lub} → is-lub P (if_then a else b) lub → is-join P a b lub
+  is-lub→is-join : is-lub P (if_then a else b) l → is-join P a b l
   is-lub→is-join lub .l≤join = lub .fam≤lub true
   is-lub→is-join lub .r≤join = lub .fam≤lub false
   is-lub→is-join lub .least ub′ a<ub′ b<ub′ = lub .least ub′ λ where
     true  → a<ub′
     false → b<ub′
 
-  is-join≃is-lub : ∀ {lub} → is-join P a b lub ≃ is-lub P (if_then a else b) lub
+  is-join≃is-lub : is-join P a b l ≃ is-lub P (if_then a else b) l
   is-join≃is-lub = is-join→is-lub , biimp-is-equiv! _ is-lub→is-join
 
-  join-unique
-    : ∀ {x y}
-    → is-join P a b x → is-join P a b y
-    → x ＝ y
+  join-unique : is-join P a b x → is-join P a b y → x ＝ y
   join-unique {x} {y} p q =
     lub-unique (is-join→is-lub p) (is-join→is-lub q)
 
@@ -88,17 +90,23 @@ module _ {P : Poset o ℓ} {a b : ⌞ P ⌟} where
   gt-join : ∀ {l} → a ≤ b → is-join P a b l → b ＝ l
   gt-join a≤b l = join-unique (gt→is-join a≤b) l
 
-{-
+  =→is-join : y ＝ x → is-join P a b y → is-join P a b x
+  =→is-join p j .l≤join = subst (a ≤_) p (j .l≤join)
+  =→is-join p j .r≤join = subst (b ≤_) p (j .r≤join)
+  =→is-join p j .least ub′ a≤ub′ b≤ub′ = subst (_≤ ub′) p (j .least ub′ a≤ub′ b≤ub′)
+
+  =→join : (m : Join P a b) → m .lub ＝ x → Join P a b
+  =→join {x} j p .lub = x
+  =→join j p .has-join = =→is-join p (j .has-join)
+
   open is-coproduct
   open Coproduct
 
-  is-join→coproduct : ∀ {a b lub : Ob} → is-join P a b lub → Coproduct (poset→category P) a b
-  is-join→coproduct lub .coapex = _
-  is-join→coproduct lub .ι₁ = lub .is-join.l≤join
-  is-join→coproduct lub .ι₂ = lub .is-join.r≤join
-  is-join→coproduct lub .has-is-coproduct .[_,_] a<q b<q =
-    lub .is-join.least _ a<q b<q
-  is-join→coproduct lub .has-is-coproduct .[]∘ι₁ = prop!
-  is-join→coproduct lub .has-is-coproduct .[]∘ι₂ = prop!
-  is-join→coproduct lub .has-is-coproduct .unique _ _ = prop!
--}
+  join→coproduct : Join P a b → Coproduct (poset→precategory P) a b
+  join→coproduct j .coapex = _
+  join→coproduct j .ι₁ = j .l≤join
+  join→coproduct j .ι₂ = j .r≤join
+  join→coproduct j .has-is-coproduct .[_,_]₊ = j .has-join .least _
+  join→coproduct j .has-is-coproduct .[]∘ι₁ = prop!
+  join→coproduct j .has-is-coproduct .[]∘ι₂ = prop!
+  join→coproduct j .has-is-coproduct .unique _ _ = prop!

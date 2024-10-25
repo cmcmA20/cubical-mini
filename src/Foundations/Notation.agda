@@ -22,5 +22,6 @@ open import Foundations.Notation.Section             public
 open import Foundations.Notation.Underlying          public
 open import Foundations.Notation.Unital.Inner        public
 open import Foundations.Notation.Unital.Outer        public
+open import Foundations.Notation.Variadic            public
 open import Foundations.Notation.Whiskering.Inner    public
 open import Foundations.Notation.Whiskering.Outer    public

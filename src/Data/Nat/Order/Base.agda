@@ -2,20 +2,15 @@
 module Data.Nat.Order.Base where
 
 open import Meta.Prelude
+open Variadics _
 
 open import Logic.Decidability
 
+open import Data.Acc.Base
+open import Data.Bool.Base
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
-open import Data.Reflects.Base as Reflects
 open import Data.Empty.Properties
-open import Data.Sum.Base
-open import Data.Sum.Path
-open import Data.Truncation.Propositional.Base
-open import Data.Truncation.Propositional.Path
-open import Data.Wellfounded.Base
-
-open import Data.Bool.Base
 open import Data.Nat.Base
 open import Data.Nat.Order.Inductive.Base
   using ( _≤?_ ; _<?_ ; _≥?_ ; _>?_
@@ -24,6 +19,11 @@ open import Data.Nat.Order.Inductive.Base
 open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Solver
+open import Data.Reflects.Base as Reflects
+open import Data.Sum.Base
+open import Data.Sum.Path
+open import Data.Truncation.Propositional.Base
+open import Data.Truncation.Propositional.Path
 
 private variable
   m n k : ℕ
@@ -103,6 +103,14 @@ opaque
   ≤-ascend = 1 , nat!
 
   instance
+    Refl-≤ : Refl _≤_
+    Refl-≤ .refl = ≤-refl
+    {-# OVERLAPPING Refl-≤ #-}
+
+    Trans-≤ : Trans _≤_
+    Trans-≤ ._∙_ = ≤-trans
+    {-# OVERLAPPING Trans-≤ #-}
+
     Reflects-suc≰id : Reflects (suc n ≤ n) false
     Reflects-suc≰id = ofⁿ λ where (k , p) → false! ((+-suc-r _ k ∙ p) ⁻¹)
     {-# INCOHERENT Reflects-suc≰id #-}
@@ -240,7 +248,7 @@ opaque
   <≃suc≤ = refl
 
   ≤≃<suc : (m ≤ n) ≃ (m < suc n)
-  ≤≃<suc = Σ-ap-snd λ x → s＝s≃
+  ≤≃<suc = Σ-ap-snd λ x → s=s≃
 
 ≤≃≯ : (m ≤ n) ≃ (m ≯ n)
 ≤≃≯ = prop-extₑ! ≤→≯ ≯→≤
@@ -295,8 +303,8 @@ opaque
     go m  zero   m<n     = false! m<n
     go m (suc n) (q , e) = ih m λ y y<m → go y n (≤-trans y<m (q , suc-inj e))
 
-<-wf : Wf _<_
-<-wf = from-induction _<_ λ P → <-ind
+<-is-wf : is-wf _<_
+<-is-wf = from-induction λ P → <-ind
 
 -- addition
 

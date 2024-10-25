@@ -3,6 +3,7 @@ module Data.Vec.Inductive.Correspondences.Unary.All where
 
 open import Meta.Prelude
 open import Meta.Literals.FromProduct
+open Variadics _
 
 open import Logic.Decidability
 open import Logic.Discreteness

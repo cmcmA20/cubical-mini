@@ -12,7 +12,7 @@ import Cat.Morphism
 open n-Magma-hom
 open Semigroup-on
 
-Semigroup-structure : ∀ ℓ → Thin-structure ℓ Semigroup-on
+Semigroup-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ Semigroup-on
 Semigroup-structure ℓ = Full-substructure ℓ Semigroup-on Magma-on
   (λ _ → semigroup-on↪magma-on) (Magma-structure ℓ)
 

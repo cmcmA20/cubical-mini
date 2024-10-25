@@ -2,6 +2,7 @@
 module Data.Nat.Order.Inductive.Decidability where
 
 open import Meta.Prelude
+open Variadics _
 
 open import Data.Bool.Base
 open import Data.Dec.Base

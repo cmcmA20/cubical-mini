@@ -2,7 +2,7 @@
 module Logic.Omniscience where
 
 open import Meta.Prelude
-open import Meta.Effect.Map
+open Variadics _
 
 open import Logic.Decidability
 open import Logic.Exhaustibility
@@ -32,9 +32,9 @@ open Omniscient public
 
 instance
   lift-omniscient : ⦃ omn : Omniscient A ⦄ → Omniscient (Lift ℓ A)
-  lift-omniscient ⦃ omn ⦄ .omniscient-β P? = Dec.dmap
+  lift-omniscient ⦃ omn ⦄ .omniscient-β {P} P? = Dec.dmap
     (bimap lift refl)
-    (_∘ bimap lower refl)
+    (contra (bimap lower refl))
     (omn .omniscient-β P?)
   {-# OVERLAPPING lift-omniscient #-}
 
@@ -95,7 +95,7 @@ instance
     → ⦃ d : Decidable B ⦄
     → ⦃ omn₁ : Omniscient₁ A ⦄
     → Decidable Σ[ B ]
-  Dec-omni₁-prop = ∥-∥₁.proj! (∥-∥₁∘dec≃dec∘∥-∥₁ ⁻¹ $ Dec-∃)
+  Dec-omni₁-prop = ∥-∥₁.proj! (∥-∥₁-dec-comm ⁻¹ $ Dec-∃)
   {-# INCOHERENT Dec-omni₁-prop #-}
 
 

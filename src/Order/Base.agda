@@ -14,7 +14,11 @@ open import Data.Reflection.Literal
 open import Data.Reflection.Name
 open import Data.Reflection.Term
 
-private variable n : HLevel
+private variable
+  n : HLevel
+  ℓ : Level
+  A : Type ℓ
+  x y z : A
 
 record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   no-eta-equality
@@ -22,14 +26,14 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   field
     Ob  : 𝒰 o
     _≤_ : Ob → Ob → 𝒰 ℓ
-    ≤-thin    : ∀ {x y} → is-prop (x ≤ y)
-    ≤-refl    : ∀ {x} → x ≤ x
-    ≤-trans   : ∀ {x y z} → x ≤ y → y ≤ z → x ≤ z
-    ≤-antisym : ∀ {x y} → x ≤ y → y ≤ x → x ＝ y
+    ≤-thin    : is-prop (x ≤ y)
+    ≤-refl    : x ≤ x
+    ≤-trans   : x ≤ y → y ≤ z → x ≤ z
+    ≤-antisym : x ≤ y → y ≤ x → x ＝ y
 
   opaque
     instance
-      H-Level-≤-prop : ∀ {x y} → H-Level (suc n) (x ≤ y)
+      H-Level-≤-prop : H-Level (suc n) (x ≤ y)
       H-Level-≤-prop = hlevel-prop-instance ≤-thin
 
     ob-is-set : is-set Ob
@@ -74,18 +78,21 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   _≱_ x y = ¬ x ≥ y
 
   infixr 2 _≤⟨_⟩_
-  _≤⟨_⟩_ : ∀ a {b c} → a ≤ b → b ≤ c → a ≤ c
+  _≤⟨_⟩_ : ∀ x {y z} → x ≤ y → y ≤ z → x ≤ z
   f ≤⟨ p ⟩ q = p ∙ q
 
-  =→≤ : ∀ {x y} → x ＝ y → x ≤ y
+  =→≤ : x ＝ y → x ≤ y
   =→≤ = =→~
 
-  =→≥ : ∀ {x y} → x ＝ y → y ≤ x
+  =→≥ : x ＝ y → y ≤ x
   =→≥ = =→~⁻
+
+  ≤≠→≱ : x ≤ y → x ≠ y → x ≱ y
+  ≤≠→≱ x≤y x≠y x≥y = ⊥.rec (x≠y (≤-antisym x≤y x≥y))
 
 unquoteDecl poset-iso = declare-record-iso poset-iso (quote Poset)
 
-private variable o o′ o″ o‴ ℓ ℓ′ ℓ″ ℓ‴ : Level
+private variable o o′ o″ o‴ ℓ′ ℓ″ ℓ‴ : Level
 
 instance
   Underlying-Poset : Underlying (Poset o ℓ)
@@ -179,8 +186,7 @@ instance
   Funlike-Monotone₀ ._#_ = hom
 
   Funlike-Monotone₁
-    : {x y : ⌞ P ⌟}
-    → Funlike ur (P ⇒ Q) (Poset._≤_ P x y) (λ (f , _) → Poset._≤_ Q (f # x) (f # y))
+    : Funlike ur (P ⇒ Q) (Poset._≤_ P x y) (λ (f , _) → Poset._≤_ Q (f # x) (f # y))
   Funlike-Monotone₁ ._#_ x≤y = x≤y .pres-≤
 
   GInvol-Dual-Monotone : GInvol {A = Poset o ℓ} {B = Poset o′ ℓ′} Monotone (λ Q′ P′ → Monotone (P′ ᵒᵖ) (Q′ ᵒᵖ))
@@ -222,8 +228,8 @@ monotone-pathᴾ {P} {Q} {f} {g} q i .pres-≤ {x} {y} α =
   is-prop→pathᴾ
     (λ i → Π³-is-of-hlevel {A = ⌞ P i ⌟} {B = λ _ → ⌞ P i ⌟} {C = λ x y → P i .Poset._≤_ x y} 1
       λ x y _ → Q i .Poset.≤-thin {q i x} {q i y})
-    (λ _ _ α → f .pres-≤ α)
-    (λ _ _ α → g .pres-≤ α) i x y α
+    (λ _ _ α → f # α)
+    (λ _ _ α → g # α) i x y α
 
 instance
   Extensional-Monotone

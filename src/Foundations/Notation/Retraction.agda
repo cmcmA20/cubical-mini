@@ -25,7 +25,7 @@ module _
 
   record has-retraction (s : I x y) : 𝒰 (ℓa∙ ⊔ ℓh) where
     no-eta-equality
-    constructor make-retract
+    constructor make-retraction
     field
       retraction    : O y x
       is-retraction : retraction retraction-of s

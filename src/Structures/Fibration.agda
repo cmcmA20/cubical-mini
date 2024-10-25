@@ -23,6 +23,6 @@ module _ {ℓᵇ} (B : Type ℓᵇ) (ℓ : Level) where
   Fibration = Type-with fibration-str
 
   @0 _ : {U@(X , f) V@(Y , g) : Fibration} {e : X ≃ Y}
-       →  fibration-str .is-hom U V e
+       →  fibration-str .Structure.is-hom U V e
        ＝ Π[ x ꞉ X ] (f x ＝ g (e $ x))
   _ = refl

@@ -119,6 +119,24 @@ fun-is-of-hlevel n hl = Π-is-of-hlevel n (λ _ → hl)
   → ≅→is-of-hlevel (suc n) (Σ-pathᴾ-iso ⁻¹)
   $ Σ-is-of-hlevel (suc n) (h1 (w .fst) (z .fst)) λ p → pathᴾ-is-of-hlevel (suc n) (h2 _) (w .snd) (z .snd)
 
+base-is-contr+total-is-contr→fibres-are-contr
+  : {A : Type ℓ} {B : A → Type ℓ′}
+  → is-contr A → is-contr (Σ A B)
+  → ∀ a → is-contr (B a)
+base-is-contr+total-is-contr→fibres-are-contr {A} {B} (ac , apa) ((ac′ , bc) , bp) a .fst =
+  subst B (is-contr→is-prop (ac , apa) _ _ ∙ apa a) bc
+base-is-contr+total-is-contr→fibres-are-contr {A} {B} (ac , apa) ((ac′ , bc) , bp) a .snd b =
+  ap (λ φ → subst B φ bc) (is-contr→is-set (ac , apa) ac′ a _ _) ∙ from-pathᴾ (ap snd (bp (a , b)))
+
+base-is-prop+total-is-prop→fibres-are-prop
+  : {A : Type ℓ} {B : A → Type ℓ′}
+  → is-prop A → is-prop (Σ A B)
+  → ∀ a → is-prop (B a)
+base-is-prop+total-is-prop→fibres-are-prop {A} {B} A-pr Σ-pr a b₁ b₂
+  = transport-refl _ ⁻¹
+  ∙ ap (λ φ → subst B φ b₁) (is-prop→is-set A-pr a _ _ _)
+  ∙ from-pathᴾ (ap snd (Σ-pr (_ , b₁) (_ , b₂)))
+
 ×-is-of-hlevel : {B : Type ℓ′}
                → (n : HLevel)
                → is-of-hlevel n A → is-of-hlevel n B

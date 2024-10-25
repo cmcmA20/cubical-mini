@@ -26,7 +26,7 @@ module _
     : ∀ {f} (r : G y x) (rr : r retraction-of f)
       (s : G y x) (ss : s section-of f)
     → is-biinv f
-  make-is-biinv r rr s ss .fst = make-retract r rr
+  make-is-biinv r rr s ss .fst = make-retraction r rr
   make-is-biinv r rr s ss .snd = make-section s ss
   {-# INLINE make-is-biinv #-}
 

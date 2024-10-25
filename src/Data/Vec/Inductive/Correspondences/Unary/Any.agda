@@ -2,8 +2,7 @@
 module Data.Vec.Inductive.Correspondences.Unary.Any where
 
 open import Meta.Prelude
-
-open import Meta.Effect.Idiom
+open Variadics _
 
 open import Logic.Decidability
 open import Logic.Discreteness

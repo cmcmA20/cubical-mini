@@ -154,4 +154,4 @@ zip (a ∷ as) (b ∷ bs) = (a , b) ∷ zip as bs
 
 unzip : List (A × B) → List A × List B
 unzip [] = [] , []
-unzip ((a , b) ∷ xs) = bimap (a ∷_) (b ∷_) (unzip xs)
+unzip ((a , b) ∷ xs) = ((a ∷_) × (b ∷_)) $ unzip xs

@@ -35,7 +35,7 @@ cast-equiv p = cast p , cast-is-equiv _ p
 
 strengthen : {n : ℕ} → Fin (suc n) → Fin (suc n) ⊎ Fin n
 strengthen fzero            = inl fzero
-strengthen {suc n} (fsuc x) = ⊎.dmap fsuc fsuc $ strengthen x
+strengthen {suc n} (fsuc x) = (fsuc ⊎ fsuc) $ strengthen x
 
 inject : m ≤ n → Fin m → Fin n
 inject (s≤s _)  fzero    = fzero

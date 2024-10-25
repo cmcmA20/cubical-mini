@@ -37,8 +37,8 @@ universal = ≅→≃ the-iso where
 
 ⊎-ap : A ≃ B → C ≃ D → (A ⊎ C) ≃ (B ⊎ D)
 ⊎-ap f g = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
-  to = ⊎.dmap (f #_) (g #_)
-  from = [ inl ∘ (f ⁻¹ $_) , inr ∘ (g ⁻¹ $_) ]ᵤ
+  to   = (f    $_) ⊎ (g    $_)
+  from = (f ⁻¹ $_) ⊎ (g ⁻¹ $_)
   ri : _
   ri (inl x) = inl $ Equiv.ε f $ x
   ri (inr x) = inr $ Equiv.ε g $ x

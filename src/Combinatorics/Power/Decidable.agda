@@ -3,6 +3,7 @@ module Combinatorics.Power.Decidable where
 
 open import Meta.Prelude
 open import Meta.Extensionality
+open Variadics _
 
 open import Structures.n-Type
 

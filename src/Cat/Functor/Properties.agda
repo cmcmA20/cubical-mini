@@ -24,3 +24,6 @@ is-faithful {C} F = {x y : C.Ob} → Injective (Functor.F₁ F {x} {y})
 is-fully-faithful : C ⇒ D → Type _
 is-fully-faithful {C} F = {x y : C.Ob} → is-equiv (Functor.F₁ F {x} {y})
   where module C = Precategory C
+
+is-equiv-on-objects : (F : Functor C D) → Type _
+is-equiv-on-objects F = is-equiv (F .F₀) where open Functor

@@ -2,6 +2,7 @@
 module Meta.Variadic where
 
 open import Foundations.Prelude
+open Variadics _
 
 open import Data.HVec.Base public
 open import Data.Nat.Base
@@ -93,9 +94,9 @@ instance
         (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ′) (λ C D → C → D → 𝒰 ℓ″)
         _ _ _
   GAssoc-Corr² .∙-assoc {a = A} {b = B} {c = C} {d = D} R S T = fun-ext λ a → fun-ext λ d → ua $
-    (Σ[ b ꞉ B ] R a b × (Σ[ c ꞉ C ] S b c × T c d))                ~⟨ Σ-assoc ∙ Σ-swap ⟩
-    (Σ[ c ꞉ C ] Σ[ f ꞉ Σ[ b ꞉ B ] R a b ] S (f .fst) c × T c d)    ~⟨ Σ-ap-snd (λ c → Σ-assoc ∙ Σ-ap-fst (Σ-assoc ⁻¹)) ⟩
-    (Σ[ c ꞉ C ] (Σ[ b ꞉ B ] R a b × S b c) × T c d)                ∎
+    Σ[ b ꞉ B ] R a b × (Σ[ c ꞉ C ] S b c × T c d)              ~⟨ Σ-assoc ∙ Σ-swap ⟩
+    Σ[ c ꞉ C ] Σ[ f ꞉ Σ[ b ꞉ B ] R a b ] S (f .fst) c × T c d  ~⟨ Σ-ap-snd (λ c → Σ-assoc ∙ Σ-ap-fst (Σ-assoc ⁻¹)) ⟩
+    Σ[ c ꞉ C ] (Σ[ b ꞉ B ] R a b × S b c) × T c d              ∎
 
   @0 GUnit-i-Corr² : GUnit-i {A = 𝒰 ℓᵃ} (λ A B → A → B → 𝒰 ℓ) (λ B C → B → C → 𝒰 ℓ)
   GUnit-i-Corr² .∙-id-i {x = A} {y = B} R = fun-ext λ a → fun-ext λ b → ua

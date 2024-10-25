@@ -2,6 +2,7 @@
 module Algebra.Semiring where
 
 open import Cat.Prelude hiding (_+_)
+open Variadics _
 
 open import Algebra.Monoid.Commutative public
 

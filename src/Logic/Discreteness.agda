@@ -113,23 +113,7 @@ instance
 
 -- Automation
 
-{- TODO move these 2 to Dec and add here versions specialized to equalities? -}
-
-given-yes_return_then_
-  : {A : Type ℓ} ⦃ d : Dec A ⦄ ⦃ A-pr : H-Level 1 A ⦄
-    (a : A) (C : Dec A → Type ℓ′)
-  → C (yes a) → C d
-given-yes_return_then_ {A} a C cy = caseᵈ A return C of λ where
-  (yes a′) → subst C prop! cy
-  (no  ¬a) → false! (¬a a)
-
-given-no_return_then_
-  : {A : Type ℓ} ⦃ d : Dec A ⦄
-    (¬a : ¬ A) (C : Dec A → Type ℓ′)
-  → C (no ¬a) → C d
-given-no_return_then_ {A} ¬a C cy = caseᵈ A return C of λ where
-  (yes a)   → false! (¬a a)
-  (no  ¬a′) → subst (C ∘ no) prop! cy
+{- TODO givens specialized to equalities? -}
 
 ↣→is-discrete! : (A ↣ B) → ⦃ di : is-discrete B ⦄ → is-discrete A
 ↣→is-discrete! f = ↣→is-discrete f auto

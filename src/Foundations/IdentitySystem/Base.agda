@@ -118,7 +118,7 @@ identity-system-gives-path {R} {r} ids = ≅→≃ $ iso (ids .to-path) bw (fun-
 
 
 module _
-  {R S : A → A → Type ℓ′}
+  {R : A → A → Type ℓ′} {S : A → A → Type ℓ″}
   {r : ∀ a → R a a} {s : ∀ a → S a a}
   (ids : is-identity-system R r)
   (eqv : ∀ x y → R x y ≃ S x y)

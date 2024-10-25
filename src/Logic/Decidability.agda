@@ -2,6 +2,7 @@
 module Logic.Decidability where
 
 open import Meta.Prelude
+open Variadics _
 
 open import Logic.DoubleNegation
 

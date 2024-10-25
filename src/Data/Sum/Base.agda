@@ -63,6 +63,19 @@ map-r : (B → C) → A ⊎ B → A ⊎ C
 map-r f = dmap id f
 
 instance
+  ⊎-Fun : {A : Type ℓᵃ} {B : Type ℓᵇ} {X : Type ℓ} {Y : Type ℓ′}
+        → ⊎-notation (A → X) (B → Y) (A ⊎ B → X ⊎ Y)
+  ⊎-Fun .⊎-notation.Constraint _ _ = ⊤ₜ
+  ⊎-Fun ._⊎_ f g = dmap f g
+  {-# INCOHERENT ⊎-Fun #-}
+
+  ⊎-Funᵈ : {A : Type ℓᵃ} {B : Type ℓᵇ} {X : A → Type ℓ} {Y : B → Type ℓ}
+        → ⊎-notation Π[ X ] Π[ Y ] Π[ [ X , Y ]ᵤ ]
+  ⊎-Funᵈ .⊎-notation.Constraint _ _ = ⊤ₜ
+  ⊎-Funᵈ ._⊎_ f g (inl a) = f a
+  ⊎-Funᵈ ._⊎_ f g (inr b) = g b
+  {-# INCOHERENT ⊎-Funᵈ #-}
+
   ⊎-So : {x y : Bool} → ⊎-notation (So x) (So y) (So (x or y))
   ⊎-So .⊎-notation.Constraint _ _ = ⊤ₜ
   ⊎-So {x = true} ._⊎_ _ _ = oh

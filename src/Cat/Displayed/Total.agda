@@ -46,7 +46,7 @@ module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ�
   πᶠ .Functor.F₀ = fst
   πᶠ .Functor.F₁ = Total-hom.hom
   πᶠ .Functor.F-id = refl
-  πᶠ .Functor.F-∘ f g = refl
+  πᶠ .Functor.F-∘ _ _ = refl
 
   private module ∫E = Cat.Morphism ∫
 
@@ -85,3 +85,67 @@ module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} (E : Displayed B o′ ℓ�
     (preserves # f .from-is-retraction)
     (f .section .preserves)
     (preserves # f .is-section)
+
+  open has-retraction[_]
+  open has-section[_]
+
+  is-biinv-fibrewise≃is-biinv-total
+    : ∀ {x y : ∫E.Ob} {f : Hom (x .fst) (y .fst)} {f′ : Hom[ f ] (x .snd) (y .snd)}
+    → Σ[ fbi ꞉ is-biinv f ] is-biinv[ fbi ] f′
+    ≃ is-biinv {F = ∫E.Hom} (total-hom f f′)
+  is-biinv-fibrewise≃is-biinv-total {x} {y} {f} {f′} = ≅ₜ→≃ $ iso one two re se where
+    one : Σ[ fbi ꞉ is-biinv f ] is-biinv[ fbi ] f′ → is-biinv {F = ∫E.Hom} (total-hom f f′)
+    one ((hr , hs) , hrᵈ , hsᵈ) = make-is-biinv
+      (total-hom (hr .retraction) (hrᵈ .retractionᵈ))
+      (total-hom-path (hr .is-retraction) (hrᵈ .is-retractionᵈ))
+      (total-hom (hs .section) (hsᵈ .sectionᵈ))
+      (total-hom-path (hs .is-section) (hsᵈ .is-sectionᵈ))
+    two : is-biinv {F = ∫E.Hom} (total-hom f f′) → Σ[ fbi ꞉ is-biinv f ] is-biinv[ fbi ] f′
+    two (hr , hs) .fst .fst = make-retraction (hr .retraction .hom) (ap hom $ hr .is-retraction)
+    two (hr , hs) .fst .snd = make-section (hs .section .hom) (ap hom $ hs .is-section)
+    two (hr , hs) .snd .fst = make-retraction[] (hr .retraction .preserves) (ap preserves $ hr .is-retraction)
+    two (hr , hs) .snd .snd = make-section[] (hs .section .preserves) (ap preserves $ hs .is-section)
+
+    re : one retraction-of two
+    re i (hr , hs) .fst .retraction = hr .retraction
+    re i (hr , hs) .fst .is-retraction = hr .is-retraction
+    re i (hr , hs) .snd .section = hs .section
+    re i (hr , hs) .snd .is-section = hs .is-section
+
+    se : one section-of two
+    se i ((hr , hs) , hrᵈ , hsᵈ) .fst .fst .retraction = hr .retraction
+    se i ((hr , hs) , hrᵈ , hsᵈ) .fst .fst .is-retraction = hr .is-retraction
+    se i ((hr , hs) , hrᵈ , hsᵈ) .fst .snd .section = hs .section
+    se i ((hr , hs) , hrᵈ , hsᵈ) .fst .snd .is-section = hs .is-section
+    se i ((hr , hs) , hrᵈ , hsᵈ) .snd .fst .retractionᵈ = hrᵈ .retractionᵈ
+    se i ((hr , hs) , hrᵈ , hsᵈ) .snd .fst .is-retractionᵈ = hrᵈ .is-retractionᵈ
+    se i ((hr , hs) , hrᵈ , hsᵈ) .snd .snd .sectionᵈ = hsᵈ .sectionᵈ
+    se i ((hr , hs) , hrᵈ , hsᵈ) .snd .snd .is-sectionᵈ = hsᵈ .is-sectionᵈ
+
+  is-biinv[]-is-prop
+    : ∀ {x y : ∫E.Ob} {f : Hom (x .fst) (y .fst)} {f′ : Hom[ f ] (x .snd) (y .snd)}
+    → (fbi : is-biinv f) → is-prop (is-biinv[ fbi ] f′)
+  is-biinv[]-is-prop = base-is-prop+total-is-prop→fibres-are-prop (hlevel 1)
+    (≃→is-of-hlevel 1 is-biinv-fibrewise≃is-biinv-total (hlevel 1))
+
+
+module _ {o ℓ o′ ℓ′} {B : Precategory o ℓ} {E : Displayed B o′ ℓ′} where
+  open Precategory B
+  open Displayed E
+  open DM E
+  open Biinv
+
+  instance
+    H-Level-biinv[]
+      : ∀ {n} {a b : Ob} {a′ : Ob[ a ]} {b′ : Ob[ b ]}
+        {f : Hom a b} {f′ : Hom[ f ] a′ b′}
+      → {fbi : is-biinv f} ⦃ _ : n ≥ʰ 1 ⦄ → H-Level n (is-biinv[ fbi ] f′)
+    H-Level-biinv[] ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance (is-biinv[]-is-prop E _)
+
+  instance
+    Extensional-≊[]
+      : ∀ {ℓr} {a b : Ob} {a′ : Ob[ a ]} {b′ : Ob[ b ]} {f : a ≊ b}
+      → ⦃ sa : Extensional (Hom[ f .to ] a′ b′) ℓr ⦄
+      → Extensional (a′ ≊[ f ] b′) ℓr
+    Extensional-≊[] {f} ⦃ sa ⦄ = ↪→extensional (≃→↪ (≅ₜ→≃ ≊[]-Iso))
+      (Σ-prop→extensional! sa)

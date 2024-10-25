@@ -2,6 +2,7 @@
 module Data.Nat.Order.Inductive.Conversion where
 
 open import Meta.Prelude
+open Variadics _
 
 open import Data.Empty.Base
 open import Data.Nat.Order.Inductive.Base
@@ -43,7 +44,7 @@ private variable m n k : ℕ
   ≤→<⊎= : ∀[ _≤_ ⇒ _<_ ⊎ _＝_ {A = ℕ} ]
   ≤→<⊎= {x = 0}     {x = 0}     z≤      = inr refl
   ≤→<⊎= {x = 0}     {x = suc n} z≤      = inl (s≤s z≤)
-  ≤→<⊎= {x = suc m} {x = suc n} (s≤s p) = ⊎.dmap s≤s (ap suc) $ ≤→<⊎= p
+  ≤→<⊎= {x = suc m} {x = suc n} (s≤s p) = (s≤s ⊎ ap suc) $ ≤→<⊎= p
 
   <⊎=→≤ : ∀[ _<_ ⊎ _＝_ {A = ℕ} ⇒ _≤_ ]
   <⊎=→≤ {x = m} {x = n} = [ <→≤ , =→≤ ]ᵤ

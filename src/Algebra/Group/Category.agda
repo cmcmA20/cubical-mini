@@ -12,7 +12,7 @@ import Cat.Morphism
 open Group-hom
 open Group-on
 
-Group-structure : ∀ ℓ → Thin-structure ℓ Group-on
+Group-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ Group-on
 Group-structure ℓ .is-hom f A B = el! (Group-hom f A B)
 Group-structure ℓ .id-is-hom .pres-⋆ _ _ = refl
 Group-structure ℓ .∘-is-hom f g p q .pres-⋆ _ _ =

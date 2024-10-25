@@ -13,7 +13,7 @@ import Cat.Morphism
 open Monoid-hom
 open Monoid-on
 
-Monoid-structure : ∀ ℓ → Thin-structure ℓ Monoid-on
+Monoid-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ Monoid-on
 Monoid-structure ℓ .is-hom f A B = el! (Monoid-hom f A B)
 Monoid-structure ℓ .id-is-hom .pres-id = refl
 Monoid-structure ℓ .id-is-hom .pres-⋆ _ _ = refl

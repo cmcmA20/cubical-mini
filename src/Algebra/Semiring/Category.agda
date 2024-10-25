@@ -10,7 +10,7 @@ import Cat.Morphism
 open Semiring-hom
 open Semiring-on
 
-Semiring-structure : ∀ ℓ → Thin-structure ℓ Semiring-on
+Semiring-structure : ∀ ℓ → Thin-structure (Types ℓ) ℓ Semiring-on
 Semiring-structure ℓ .is-hom f A B = el! (Semiring-hom f A B)
 Semiring-structure ℓ .id-is-hom .pres-0 = refl
 Semiring-structure ℓ .id-is-hom .pres-1 = refl

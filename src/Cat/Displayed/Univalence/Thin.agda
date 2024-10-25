@@ -11,25 +11,21 @@ import Cat.Displayed.Morphism
 import Cat.Morphism
 
 open Total-hom public
-open Precategory
 open Displayed
 open Cat.Displayed.Morphism
-open _≅[_]_
 
-open import Cat.Constructions.Sets
-
-record
-  Thin-structure {ℓ o′} ℓ′ (S : Type ℓ → Type o′)
-    : Type (ℓsuc ℓ ⊔ o′ ⊔ ℓsuc ℓ′) where
+record Thin-structure {o h} (C : Precategory o h)
+  {o′} ℓ′ (S : ⌞ C ⌟ → Type o′) : Type (o ⊔ h ⊔ o′ ⊔ ℓsuc ℓ′) where
   no-eta-equality
+  private module C = Precategory C
   field
-    is-hom    : ∀ {x y : 𝒰 ℓ} → (x → y) → S x → S y → Prop ℓ′
+    is-hom    : ∀ {x y : C.Ob} → C.Hom x y → S x → S y → Prop ℓ′
     id-is-hom : ∀ {x} {s : S x} → ⌞ is-hom refl s s ⌟
 
     ∘-is-hom  :
-      ∀ {x y z} {s t u} (f : y → z) (g : x → y)
+      ∀ {x y z} {s t u} (f : C.Hom y z) (g : C.Hom x y)
       → (α : ⌞ is-hom f t u ⌟) (β : ⌞ is-hom g s t ⌟)
-      → ⌞ is-hom (f ∘ₜ g) s u ⌟
+      → ⌞ is-hom (g ∙ f) s u ⌟
 
     id-hom-unique
       : ∀ {x} {s t : S x}
@@ -38,11 +34,11 @@ record
 open Thin-structure public
 
 module _
-  {ℓ o′ ℓ′} {S : Type ℓ → Type o′}
-  (spec : Thin-structure ℓ′ S) where
+  {o h o′ ℓ′} {C : Precategory o h} {S : ⌞ C ⌟ → Type o′}
+  (spec : Thin-structure C ℓ′ S) where
 
-  Thin-structure-over : Displayed (Types ℓ) o′ ℓ′
-  Thin-structure-over .Ob[_] x = S x
+  Thin-structure-over : Displayed C o′ ℓ′
+  Thin-structure-over .Ob[_] = S
   Thin-structure-over .Hom[_] f x y = ⌞ spec .is-hom f x y ⌟
   Thin-structure-over .idᵈ = spec .id-is-hom
   Thin-structure-over ._∘ᵈ_ = spec .∘-is-hom _ _
@@ -53,73 +49,54 @@ module _
   Structured-objects : Precategory _ _
   Structured-objects = ∫ Thin-structure-over
 
-  -- TODO
-  -- Structured-objects-is-category : is-category Structured-objects
-  -- Structured-objects-is-category =
-  --   is-category-total Thin-structure-over Sets-is-category $
-  --     is-category-fibrewise _ Sets-is-category λ A x y →
-  --     Σ-prop-path
-  --       (λ _ _ _ → ≅[]-path _ (spec .is-hom _ _ _ .is-tr _ _))
-  --       ( spec .id-hom-unique (x .snd .from′) (x .snd .to′)
-  --       ∙ spec .id-hom-unique (y .snd .to′) (y .snd .from′))
+  @0 Structured-objects-is-category : is-category C → is-category Structured-objects
+  Structured-objects-is-category cc =
+    is-category-total Thin-structure-over cc $
+      is-category-fibrewise _ cc λ A x y →
+        Σ-prop-path
+          (λ _ _ _ → ext (spec .is-hom _ _ _ .n-Type.carrier-is-tr _ _))
+          ( spec .id-hom-unique (x .snd .fromᵈ) (x .snd .toᵈ) .erased
+          ∙ spec .id-hom-unique (y .snd .toᵈ) (y .snd .fromᵈ) .erased)
 
-  Forget-structure : Functor Structured-objects (Types ℓ)
+  Forget-structure : Functor Structured-objects C
   Forget-structure = πᶠ Thin-structure-over
 
   Structured-hom-path : is-faithful Forget-structure
   Structured-hom-path p = total-hom-path p prop!
 
-module _ {ℓ o′ ℓ′} {S : Type ℓ → Type o′} {spec : Thin-structure ℓ′ S} where
-  private
-    module So = Precategory (Structured-objects spec)
-    module Som = Cat.Morphism (Structured-objects spec)
+  open Precategory C
+  open Biinv
 
-  Homomorphism-monic
-    : {x y : So.Ob} (f : So.Hom x y)
-    → ({a b : ⌞ x ⌟} (p : f # a ＝ f # b) → a ＝ b)
-    → Som.is-monic f
-  Homomorphism-monic f wit g h p = ext λ x → wit (ap hom p $ₚ x)
+  record is-equational : Type (o ⊔ o′ ⊔ ℓ′) where
+    field invert-id-hom : ∀ {x} {s t : S x} → ⌞ spec .is-hom refl s t ⌟ → ⌞ spec .is-hom refl t s ⌟
 
+    private
+      module So = Precategory Structured-objects
+      module Som = Cat.Morphism Structured-objects
 
-record is-equational {ℓ o′ ℓ′} {S : Type ℓ → Type o′} (spec : Thin-structure ℓ′ S) : Type (ℓsuc ℓ ⊔ o′ ⊔ ℓ′) where
-  field
-    invert-id-hom : ∀ {x} {s t : S x} → ⌞ spec .is-hom refl s t ⌟ → ⌞ spec .is-hom refl t s ⌟
+    ∫-Path
+      : ∀ {a b : So.Ob}
+        (u : is-category C)
+      → (f : So.Hom a b)
+      → (eqv : is-biinv (f .hom))
+      → Erased (a ＝ b)
+    ∫-Path {a = x , sx} {b = y , sy} u f eqv .erased
+      =  Univalent.equiv→path u (make-biinv (f .hom) eqv)
+      ,ₚ Univalent.J-equiv u (λ B e → ∀ st → ⌞ spec .is-hom (e .to) sx st ⌟
+                                    → ＜ sx ／ (λ i → S (Univalent.equiv→path u e i)) ＼ st ＞)
+          (λ st pres → to-pathᴾ (ap (λ e → subst S e sx) (Univalent.equiv→path-id u)
+                    ∙∙ transport-refl _
+                    ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
+           (make-biinv (f .hom) eqv) sy (f .preserves) -- (f .preserves)
 
-  private
-    module So = Precategory (Structured-objects spec)
-    module Som = Cat.Morphism (Structured-objects spec)
-
-  opaque
-    @0 equiv-hom→inverse-hom
-      : {a b : So.Ob}
-      → (f : ⌞ a ⌟ ≃ ⌞ b ⌟)
-      → ⌞ spec .is-hom (f    $_) (a .snd) (b .snd) ⌟
-      → ⌞ spec .is-hom (f ⁻¹ $_) (b .snd) (a .snd) ⌟
-    equiv-hom→inverse-hom {a} {b} f e =
-      Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e $_) (a .snd) st ⌟ → ⌞ spec .is-hom (e ⁻¹ $_) st (a .snd) ⌟)
-         (λ _ → invert-id-hom) f (b .snd) e
-
-  ∫-Path
-    : ∀ {a b : So.Ob}
-    → (f : So.Hom a b)
-    → is-equiv (f $_)
-    → Erased (a ＝ b)
-  ∫-Path {a} {b} f eqv .erased
-    =  ua (f .hom , eqv)
-    ,ₚ Jₑ (λ B e → ∀ st → ⌞ spec .is-hom (e .fst) (a .snd) st ⌟
-                        → ＜ a .snd ／ (λ i → S (ua e i)) ＼ st ＞)
-        (λ st pres → to-pathᴾ (ap (λ e → subst S e (a .snd)) ua-idₑ
-                  ∙∙ transport-refl _
-                  ∙∙ spec .id-hom-unique pres (invert-id-hom pres) .erased))
-        (f .hom , eqv) (b .snd) (f .preserves)
-
-open is-equational ⦃ ... ⦄ public
+  open is-equational ⦃ ... ⦄ public
 
 Full-substructure
-  : ∀ {ℓ o′} ℓ′ (R S : Type ℓ → Type o′)
+  : ∀ {o h o′} {C : Precategory o h}
+    ℓ′ (R S : ⌞ C ⌟ → Type o′)
   → (∀ X → R X ↪ₜ S X)
-  → Thin-structure ℓ′ S
-  → Thin-structure ℓ′ R
+  → Thin-structure C ℓ′ S
+  → Thin-structure C ℓ′ R
 Full-substructure _ R S embed Sst .is-hom f x y =
   Sst .is-hom f (embed _ .fst x) (embed _ .fst y)
 Full-substructure _ R S embed Sst .id-is-hom = Sst .id-is-hom
