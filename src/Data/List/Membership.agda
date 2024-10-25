@@ -191,3 +191,25 @@ all-∈-map : ∀ {ℓ′} {P : Pred A ℓ} {Q : Pred A ℓ′}
             → All P xs → All Q xs
 all-∈-map {xs = []}     f []       = []
 all-∈-map {xs = x ∷ xs} f (p ∷ ps) = f (here refl) p ∷ all-∈-map (f ∘ there) ps
+
+-- uniqueness
+
+[]-unique : is-unique (the (List A) [])
+[]-unique x h1 = false! h1
+
+∷→unique : is-unique (x ∷ xs)
+         → x ∉ xs × is-unique xs
+∷→unique {x} u =
+    (λ hx → false! (u x (here refl) (there hx)))
+  , (λ y h1 h2 → there-inj (u y (there h1) (there h2)))
+
+unique→∷ : {x : A}
+         → is-set A
+         → x ∉ xs → is-unique xs
+         → is-unique (x ∷ xs)
+unique→∷ {x}               s nx u z (here e1)  (here e2)  = ap here (s z x e1 e2)
+unique→∷     {xs}          s nx u z (here e1)  (there h2) = ⊥.rec (nx (subst (λ q → Any (q ＝_) xs) e1 h2))
+unique→∷     {xs}          s nx u z (there h1) (here e2)  = ⊥.rec (nx (subst (λ q → Any (q ＝_) xs) e2 h1))
+unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
+  let (nx , u′) = ∷→unique u in
+  ap there (unique→∷ s nx u′ z h1 h2)

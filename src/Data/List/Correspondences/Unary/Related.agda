@@ -4,11 +4,14 @@ module Data.List.Correspondences.Unary.Related where
 open import Meta.Prelude
 open import Meta.Extensionality
 
-open import Data.Empty.Base
+open import Data.Empty.Base as ⊥
 open import Data.Unit.Base
+open import Data.Reflects.Base
 open import Data.List.Base
-open import Data.List.Correspondences.Unary.At
 open import Data.List.Correspondences.Unary.All
+open import Data.List.Correspondences.Unary.Any
+open import Data.List.Membership
+open import Data.List.Correspondences.Unary.At
 
 private variable
   ℓ ℓᵃ : Level
@@ -99,6 +102,18 @@ related→all {xs = []}     []ʳ       = []
 related→all {xs = x ∷ xs} (rx ∷ʳ r) =
   rx ∷ all-map (rx ∙_) (related→all {x0 = x} {xs = xs} r)
 
+related→unique : {x : A} {xs : List A} → ⦃ Trans R ⦄
+               → (∀ {x} → ¬ R x x) → is-set A
+               → Related R x xs → is-unique (x ∷ xs)
+related→unique     {x}               irr s         rel  z (here e1)  (here e2)  =
+  ap here (s z x e1 e2)
+related→unique {R} {x}               irr s         rel  z (here e1)  (there h2) =
+  ⊥.rec (irr (subst (R x) e1 (All→∀∈ (related→all rel) z h2)))
+related→unique {R} {x}               irr s         rel  z (there h1) (here e2)  =
+  ⊥.rec (irr (subst (R x) e2 (All→∀∈ (related→all rel) z h1)))
+related→unique     {x} {xs = y ∷ xs} irr s (rxy ∷ʳ rel) z (there h1) (there h2) =
+ ap there (related→unique irr s rel z h1 h2)
+
 {- sorted -}
 
 data Sorted {ℓ ℓᵃ} {A : 𝒰 ℓᵃ} (R : A → A → 𝒰 ℓ) : @0 List A → 𝒰 (ℓ ⊔ ℓᵃ) where
@@ -172,3 +187,9 @@ sorted-at0→related : {x0 : A} {xs : List A}
                    → Related R x0 xs
 sorted-at0→related {xs = []} []ˢ awnil = []ʳ
 sorted-at0→related {xs = x ∷ xs} (∷ˢ r) (awhere px) = px ∷ʳ r
+
+sorted→unique : {xs : List A} → ⦃ Trans R ⦄
+              → (∀ {x} → ¬ R x x) → is-set A
+              → Sorted R xs → is-unique xs
+sorted→unique {xs = []}     irr s []ˢ      = []-unique
+sorted→unique {xs = x ∷ xs} irr s (∷ˢ rel) = related→unique irr s rel
