@@ -27,7 +27,7 @@ universal {B} {A} B-set = ≅→≃ $ iso ff gg refl (fun-ext li) where
   gg : (A → B) → ∥ A ∥₂ → B
   gg = rec!
 
-  li : gg retract-of′ ff
+  li : gg retraction-of′ ff
   li f = fun-ext (elim! λ _ → refl)
 
 is-set→equiv-∥-∥₂ : is-set A → A ≃ ∥ A ∥₂

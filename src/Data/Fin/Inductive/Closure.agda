@@ -31,7 +31,7 @@ fin-suc = ≅→≃ $ iso f g (fun-ext rinv) (fun-ext linv) where
   rinv (inr _) = refl
   rinv (inl _) = refl
 
-  linv : g retract-of′ f
+  linv : g retraction-of′ f
   linv fzero = refl
   linv (fsuc x) = refl
 

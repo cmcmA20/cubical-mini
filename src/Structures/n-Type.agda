@@ -153,7 +153,7 @@ opaque
     inv : ∀ {Y} → X ＝ Y → ⌞ X ⌟ ≃ ⌞ Y ⌟
     inv p = =→≃ (ap carrier p)
 
-    linv : {Y : n-Type ℓ n} → inv {Y} retract-of′ n-ua
+    linv : {Y : n-Type ℓ n} → inv {Y} retraction-of′ n-ua
     linv x = fun-ext (λ z → transport-refl _) ,ₚ prop!
 
     rinv : ∀ {Y} → (inv {Y}) section-of′ n-ua

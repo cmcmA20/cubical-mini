@@ -41,7 +41,7 @@ total-fibres-equiv {A} {Q} {f} = ≅→≃ $ iso to from (fun-ext ri) (fun-ext l
          p
 
     li : {x : A} {v : Q x}
-       → from {x = x} {v = v} retract-of′ to
+       → from {x = x} {v = v} retraction-of′ to
     li (v , p) =
       Jₚ (λ { _ p → from (to (v , p)) ＝ (v , p) })
          (Jₚ-refl {A = Σ A Q} (λ { (x , v) _ → fibre (f x) v } ) (v , refl))

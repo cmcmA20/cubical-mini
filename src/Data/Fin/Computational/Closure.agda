@@ -40,7 +40,7 @@ fin-suc = ≅→≃ $ iso f g (fun-ext rinv) (fun-ext linv) where
   rinv : g section-of′ f
   rinv (inl _) = refl
   rinv (inr _) = refl
-  linv : g retract-of′ f
+  linv : g retraction-of′ f
   linv (mk-fin 0)       = refl
   linv (mk-fin (suc _)) = refl
 
@@ -56,7 +56,7 @@ fin-suc-universal {n} {A} = ≅→≃ $ iso ff gg refl (fun-ext li) where
   gg (z , f) (mk-fin 0)       = z
   gg (z , f) (mk-fin (suc k)) = f (mk-fin k)
 
-  li : gg retract-of′ ff
+  li : gg retraction-of′ ff
   li w = fun-ext λ where
     (mk-fin 0)       → refl
     (mk-fin (suc k)) → refl
