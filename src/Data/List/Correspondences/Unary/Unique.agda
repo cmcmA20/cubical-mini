@@ -23,6 +23,8 @@ Uniq-is-prop : is-prop (Uniq xs)
 Uniq-is-prop  []ᵘ         []ᵘ        = refl
 Uniq-is-prop (nx1 ∷ᵘ u1) (nx2 ∷ᵘ u2) = ap² _∷ᵘ_ prop! (Uniq-is-prop u1 u2)
 
+-- homotopy uniqueness
+
 Uniq-set→is-unique : {xs : List A}
                    → is-set A → Uniq xs → is-unique xs
 Uniq-set→is-unique {xs = x ∷ xs} sa (nx ∷ᵘ u) z (here e1)   (here e2)   = ap here (sa z x e1 e2)

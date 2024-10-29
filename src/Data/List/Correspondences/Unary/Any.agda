@@ -144,6 +144,10 @@ any-++-r : {xs ys : List A} → Any P ys → Any P (xs ++ ys)
 any-++-r {xs = []}     ay = ay
 any-++-r {xs = x ∷ xs} ay = there (any-++-r ay)
 
+any-uncons : {x : A} {xs : List A} → Any P (x ∷ xs) → P x ⊎ Any P xs
+any-uncons (here px) = inl px
+any-uncons (there a) = inr a
+
 any-split : {xs ys : List A} → Any P (xs ++ ys) → Any P xs ⊎ Any P ys
 any-split {xs = []}      a        = inr a
 any-split {xs = _ ∷ _}  (here px) = inl (here px)

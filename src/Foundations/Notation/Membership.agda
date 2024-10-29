@@ -4,6 +4,7 @@ module Foundations.Notation.Membership where
 open import Foundations.Notation.Logic
 open import Foundations.Notation.Underlying
 open import Foundations.Prim.Type
+open import Foundations.Prim.Equiv
 open import Foundations.Pi.Base
 open import Foundations.Sigma.Base
 
@@ -29,10 +30,20 @@ _⊆_
   → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
 _⊆_ {A} S T = ∀[ a ꞉ A ] (a ∈ S ⇒ a ∈ T)
 
+-- overlap
 _≬_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
   → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
 _≬_ {A} S T = Σ[ a ꞉ A ] (a ∈ S × a ∈ T)
 
+-- set-equivalence
+_≈_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
+    → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
+S ≈ T = S ⊆ T × T ⊆ S
+
+-- bag-equivalence
+_≈↔_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
+     → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
+_≈↔_ {A} S T = ∀[ a ꞉ A ] (a ∈ S ≃ a ∈ T)
 
 record Intersection {ℓ ℓ′ ℓ″} (A : Type ℓ) (B : Type ℓ′) (R : Type ℓ″) : Typeω where
   infixr 22 _∩_

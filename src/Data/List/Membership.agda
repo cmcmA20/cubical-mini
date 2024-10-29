@@ -148,7 +148,7 @@ instance
 
 ∈-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
            → (f : A → B) → x ∈ xs → f x ∈ map f xs
-∈-map {xs = x ∷ xs} f (here e)  = here (ap f e)
+∈-map {xs = x ∷ xs} f (here e)   = here (ap f e)
 ∈-map {xs = x ∷ xs} f (there hx) = there (∈-map f hx)
 
 ∈-split : {A : 𝒰 ℓᵃ} {x : A} {xs : List A}

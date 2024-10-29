@@ -10,10 +10,12 @@ open import Data.List.Properties
 open import Data.List.Instances.Map
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
+open import Data.List.Membership
 open import Data.Empty.Base
 open import Data.Bool.Base
 open import Data.Bool.Path
 open import Data.Bool.Properties
+open import Data.Sum.Base
 open import Data.Reflects.Base as Reflects
 
 private variable
@@ -110,3 +112,50 @@ perm-cons-cat-commassoc : {xs ys : List A} {x : A}
 perm-cons-cat-commassoc {xs} {ys} {x} =
   subst (Perm (x ∷ xs ++ ys)) (++-assoc xs (x ∷ []) ys) $
   perm-cat-2r {xs = x ∷ xs} (perm-cat-comm {xs = x ∷ []})
+
+-- bag-equivalence
+
+perm→bag-equiv : {xs ys : List A} → Perm xs ys → xs ≈↔ ys
+perm→bag-equiv (peq e)                                     {x = z} = =→≃ (ap (z ∈ₗ_) e)
+perm→bag-equiv (pprep {xs} {ys} {x} {y} e p)               {x = z} =
+  let ih = perm→bag-equiv p {x = z} in
+  ≅→≃ (make-iso (to ih) (fro ih) (make-inverses (re ih) (se ih)))
+  where
+  to : (z ∈ xs) ≃ (z ∈ ys) → z ∈ (x ∷ xs) → z ∈ (y ∷ ys)
+  to _   (here ex)  = here (ex ∙ e)
+  to eqv (there hz) = there (eqv $ hz)
+  fro : (z ∈ xs) ≃ (z ∈ ys) → z ∈ (y ∷ ys) → z ∈ (x ∷ xs)
+  fro _   (here ey)  = here (ey ∙ e ⁻¹)
+  fro eqv (there hz) = there (eqv ⁻¹ $ hz)
+  re : (eqv : (z ∈ xs) ≃ (z ∈ ys)) → to eqv retraction-of fro eqv
+  re eqv = fun-ext λ where
+                       (here ey)  → ap here (∙-cancel-r′ (∙-inv-o e))
+                       (there hz) → ap there (is-equiv→counit (eqv .snd) hz)
+  se : (eqv : (z ∈ xs) ≃ (z ∈ ys)) → to eqv section-of fro eqv
+  se eqv = fun-ext λ where
+                        (here ex)  → ap here (∙-cancel-r′ (∙-inv-i e))
+                        (there hz) → ap there (is-equiv→unit (eqv .snd) hz)
+perm→bag-equiv {A} (pswap {xs} {ys} {x} {y} {x′} {y′} ex ey p) {x = z} =
+  let ih = perm→bag-equiv p {x = z} in
+  ≅→≃ (make-iso (to ih) (fro ih) (make-inverses (re ih) (se ih)))
+  where
+  to : (z ∈ xs) ≃ (z ∈ ys) → _∈_ {ℙA = List A} z (x ∷ y ∷ xs) → _∈_ {ℙA = List A} z (y′ ∷ x′ ∷ ys)
+  to _   (here ez)          = there $ here (ez ∙ ex)
+  to _   (there (here ez))  = here (ez ∙ ey)
+  to eqv (there (there hz)) = there $ there (eqv $ hz)
+  fro : (z ∈ xs) ≃ (z ∈ ys) → _∈_ {ℙA = List A} z (y′ ∷ x′ ∷ ys) → _∈_ {ℙA = List A} z (x ∷ y ∷ xs)
+  fro _ (here ez)            = there $ here (ez ∙ ey ⁻¹)
+  fro _ (there (here ez))    = here (ez ∙ ex ⁻¹)
+  fro eqv (there (there hz)) = there $ there (eqv ⁻¹ $ hz)
+  re : (eqv : (z ∈ xs) ≃ (z ∈ ys)) → to eqv retraction-of fro eqv
+  re eqv = fun-ext λ where
+                       (here ez)          → ap here (∙-cancel-r′ (∙-inv-o ey))
+                       (there (here ez))  → ap (there ∘ here) (∙-cancel-r′ (∙-inv-o ex))
+                       (there (there hz)) → ap (there ∘ there) (is-equiv→counit (eqv .snd) hz)
+  se : (eqv : (z ∈ xs) ≃ (z ∈ ys)) → to eqv section-of fro eqv
+  se eqv = fun-ext λ where
+                       (here ez)          → ap here (∙-cancel-r′ (∙-inv-i ex))
+                       (there (here ez))  → ap (there ∘ here) (∙-cancel-r′ (∙-inv-i ey))
+                       (there (there hz)) → ap (there ∘ there) (is-equiv→unit (eqv .snd) hz)
+perm→bag-equiv (ptrans p1 p2)                              {x = z} =
+  perm→bag-equiv p1 {x = z} ∙ perm→bag-equiv p2 {x = z}
