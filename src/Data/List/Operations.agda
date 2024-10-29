@@ -11,6 +11,7 @@ open import Data.Bool.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Nat.Two
+open import Data.Fin.Computational.Base as Fin
 open import Data.Reflects.Base as Reflects
 
 open import Data.List.Base as List
@@ -53,6 +54,10 @@ _!ᵐ_ : List A → ℕ → Maybe A
 []       !ᵐ  _      = nothing
 (x ∷ _)  !ᵐ  zero   = just x
 (_ ∷ xs) !ᵐ (suc n) = xs !ᵐ n
+
+_!ᶠ_ : (xs : List A) → Fin (length xs) → A
+(x ∷ xs) !ᶠ mk-fin  zero               = x
+(x ∷ xs) !ᶠ mk-fin (suc index) {bound} = xs !ᶠ mk-fin index {bound}
 
 unconsᵐ : List A → Maybe (A × List A)
 unconsᵐ []       = nothing

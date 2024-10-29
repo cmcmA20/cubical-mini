@@ -42,6 +42,24 @@ instance
   ∈ₗ-head = ofʸ (here refl)
   {-# OVERLAPPING ∈ₗ-head #-}
 
+-- TODO can this be generalized to arbitrary hlevel?
+∈≃fibre : {xs : List A} → is-set A → x ∈ xs ≃ fibre (xs !ᶠ_) x
+∈≃fibre {A} {x} s = ≅→≃ (make-iso to fro (make-inverses (fun-ext re) (fun-ext se)))
+  where
+  to : {xs : List A} → x ∈ xs → fibre (xs !ᶠ_) x
+  to hx = any→fin hx , any→fin-!ᶠ hx ⁻¹
+  fro : {xs : List A} → fibre (xs !ᶠ_) x → x ∈ xs
+  fro {y ∷ xs} (mk-fin zero             , e) = here (e ⁻¹)
+  fro {y ∷ xs} (mk-fin (suc ix) {bound} , e) = there (fro ((mk-fin ix {bound}) , e))
+  re : {xs : List A} → (f : fibre (xs !ᶠ_) x) → to (fro f) ＝ f
+  re {y ∷ xs} (mk-fin zero             , e) = refl
+  re {y ∷ xs} (mk-fin (suc ix) {bound} , e) =
+    Σ-prop-path (λ q → s ((y ∷ xs) !ᶠ q) x)
+      (fin-ext (ap (suc ∘ Fin.index ∘ fst) (re {xs} (mk-fin ix {bound} , e))))
+  se : {xs : List A} → (h : x ∈ xs) → fro (to h) ＝ h
+  se {y ∷ xs} (here px) = refl
+  se {y ∷ xs} (there h) = ap there (se h)
+
 instance
   Dec-∈ₗ
     : {a : A} {xs : List A}

@@ -164,3 +164,7 @@ any→ℕ (there a) = suc (any→ℕ a)
 any→fin : {xs : List A} → Any P xs → Fin (length xs)
 any→fin {xs = x ∷ xs} (here _)  = fzero
 any→fin {xs = x ∷ xs} (there a) = fsuc (any→fin a)
+
+any→fin-!ᶠ : {xs : List A} → (a : Any P xs) → P (xs !ᶠ any→fin a)
+any→fin-!ᶠ {xs = x ∷ xs} (here px) = px
+any→fin-!ᶠ {xs = x ∷ xs} (there a) = any→fin-!ᶠ a
