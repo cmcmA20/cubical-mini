@@ -208,8 +208,8 @@ unique→∷ : {x : A}
          → x ∉ xs → is-unique xs
          → is-unique (x ∷ xs)
 unique→∷ {x}               s nx u z (here e1)  (here e2)  = ap here (s z x e1 e2)
-unique→∷     {xs}          s nx u z (here e1)  (there h2) = ⊥.rec (nx (subst (λ q → Any (q ＝_) xs) e1 h2))
-unique→∷     {xs}          s nx u z (there h1) (here e2)  = ⊥.rec (nx (subst (λ q → Any (q ＝_) xs) e2 h1))
+unique→∷     {xs}          s nx u z (here e1)  (there h2) = ⊥.rec (nx (subst (_∈ₗ xs) e1 h2))
+unique→∷     {xs}          s nx u z (there h1) (here e2)  = ⊥.rec (nx (subst (_∈ₗ xs) e2 h1))
 unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
   let (nx , u′) = ∷→unique u in
   ap there (unique→∷ s nx u′ z h1 h2)
