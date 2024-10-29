@@ -724,6 +724,13 @@ recall : {A : Type ℓ} {B : A → Type ℓ′}
        → Recall f x (f x)
 recall f x = ⟪ refl ⟫
 
+instance
+  refl-helper : {A : Type ℓ} {x : A} → x ＝ x
+  refl-helper {x} i = x
+  {-# INCOHERENT refl-helper #-}
+
+-- TODO move to Membership?
+
 infix 30 _∈!_
 _∈!_ : {A : Type ℓ} {ℙA : Type ℓ′} ⦃ m : Membership A ℙA ℓ″ ⦄
      → A → ℙA → Type ℓ″
@@ -732,8 +739,3 @@ x ∈! y = is-contr (x ∈ y)
 is-unique : {A : Type ℓ} {ℙA : Type ℓ′} ⦃ m : Membership A ℙA ℓ″ ⦄
           → ℙA → Type (ℓ ⊔ ℓ″)
 is-unique {A} y = (x : A) → is-prop (x ∈ y)
-
-instance
-  refl-helper : {A : Type ℓ} {x : A} → x ＝ x
-  refl-helper {x} i = x
-  {-# INCOHERENT refl-helper #-}
