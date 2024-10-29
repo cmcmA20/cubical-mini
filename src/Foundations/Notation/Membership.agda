@@ -40,6 +40,8 @@ _≈_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA�
     → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
 S ≈ T = S ⊆ T × T ⊆ S
 
+-- TODO subbag relation requires some notion of generalized injection/embedding
+
 -- bag-equivalence
 _≈↔_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
      → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
