@@ -26,12 +26,6 @@ data All {ℓ ℓᵃ} {A : Type ℓᵃ} (P : Pred A ℓ) : @0 List A → Type (�
   []  : All P []
   _∷_ : P x → All P xs → All P (x ∷ xs)
 
-all-head : All P (x ∷ xs) → P x
-all-head (x ∷ _) = x
-
-all-tail : All P (x ∷ xs) → All P xs
-all-tail (_ ∷ xs) = xs
-
 module _ {A : 𝒰 ℓᵃ} {P : Pred A ℓ} ⦃ ep : {a : A} → Extensional (P a) ℓ ⦄ where
   Code-All : {xs : List A} (p q : All P xs) → 𝒰 ℓ
   Code-All {xs = []}     []       []       = ⊤
@@ -93,8 +87,14 @@ instance
   H-Level-All {n} .H-Level.has-of-hlevel = all-is-of-hlevel _ (λ _ → hlevel n)
   {-# OVERLAPPING H-Level-All #-}
 
-all-uncons : {x : A} {@0 xs : List A} → All P (x ∷ xs) → P x × All P xs
-all-uncons (px ∷ pxs) = px , pxs
+all-uncons : All P (x ∷ xs) → P x × All P xs
+all-uncons (x ∷ xs) = x , xs
+
+all-head : All P (x ∷ xs) → P x
+all-head (x ∷ _) = x
+
+all-tail : All P (x ∷ xs) → All P xs
+all-tail (_ ∷ xs) = xs
 
 all-++ : {@0 xs : List A} → All P xs → All P ys → All P (xs ++ ys)
 all-++ []         pys = pys

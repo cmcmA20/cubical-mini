@@ -11,10 +11,12 @@ open import Data.List.Instances.Map
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
+open import Data.List.Correspondences.Unary.Unique
 open import Data.Empty.Base
 open import Data.Bool.Base
 open import Data.Bool.Path
 open import Data.Bool.Properties
+open import Data.Fin.Computational.Base
 open import Data.Sum.Base
 open import Data.Reflects.Base as Reflects
 
@@ -33,11 +35,11 @@ data Perm {ℓᵃ} {A : 𝒰 ℓᵃ} : List A → List A → 𝒰 ℓᵃ where
   ptrans : ∀ {xs ys zs}
          → Perm xs ys → Perm ys zs → Perm xs zs
 
-perm-size : {xs ys : List A} → Perm xs ys → length xs ＝ length ys
-perm-size (peq e)         = ap length e
-perm-size (pprep e p)     = ap suc (perm-size p)
-perm-size (pswap ex ey p) = ap (2 +_) (perm-size p)
-perm-size (ptrans p₁ p₂)  = perm-size p₁ ∙ perm-size p₂
+perm-len : {xs ys : List A} → Perm xs ys → length xs ＝ length ys
+perm-len (peq e)         = ap length e
+perm-len (pprep e p)     = ap suc (perm-len p)
+perm-len (pswap ex ey p) = ap (2 +_) (perm-len p)
+perm-len (ptrans p₁ p₂)  = perm-len p₁ ∙ perm-len p₂
 
 perm-map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A} {f : A → B}
          → Perm xs ys → Perm (map f xs) (map f ys)
@@ -159,6 +161,10 @@ perm→bag-equiv {A} (pswap {xs} {ys} {x} {y} {x′} {y′} ex ey p) {x = z} =
                        (there (there hz)) → ap (there ∘ there) (is-equiv→unit (eqv .snd) hz)
 perm→bag-equiv (ptrans p1 p2)                              {x = z} =
   perm→bag-equiv p1 {x = z} ∙ perm→bag-equiv p2 {x = z}
+
+perm-unique : {xs ys : List A}
+            → Perm xs ys → Uniq xs → Uniq ys
+perm-unique {xs} {ys} p u = uniq≈len=→uniq (perm-len p) (≈↔→≈ {S = xs} {T = ys} (perm→bag-equiv p)) u
 
 -- TODO
 -- bag-equiv→perm : {xs ys : List A} → xs ≈↔ ys → Perm xs ys

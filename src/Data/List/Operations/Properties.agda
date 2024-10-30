@@ -299,7 +299,7 @@ count-false : (xs : List A)
 count-false xs = length-filter (λ _ → false) xs ⁻¹ ∙ ap length (filter-false xs)
 
 count-true : (xs : List A)
-            → count (λ _ → true) xs ＝ length xs
+           → count (λ _ → true) xs ＝ length xs
 count-true xs = length-filter (λ _ → true) xs ⁻¹ ∙ ap length (filter-true xs)
 
 -- find
@@ -324,6 +324,7 @@ drop-nil {n = suc _} = refl
 module _ where
   open decminmax ℕ-dec-total
   open decminmaxprops ℕ-dec-total ℕ-dec-total
+
 
   length-take : length (take n xs) ＝ min n (length xs)
   length-take {n = zero}                = refl

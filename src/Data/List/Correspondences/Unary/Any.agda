@@ -136,6 +136,11 @@ instance
 ¬Any-∷ nx nxs (here px)   = nx px
 ¬Any-∷ nx nxs (there pxs) = nxs pxs
 
+¬Any-uncons : {x : A} {xs : List A}
+            → ¬ Any P (x ∷ xs)
+            → (¬ P x) × (¬ Any P xs)
+¬Any-uncons na = contra here na , contra there na
+
 any-++-l : {@0 xs ys : List A} → Any P xs → Any P (xs ++ ys)
 any-++-l (here px)  = here px
 any-++-l (there ax) = there (any-++-l ax)

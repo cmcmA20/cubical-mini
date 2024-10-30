@@ -47,6 +47,18 @@ _≈↔_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A �
      → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
 _≈↔_ {A} S T = ∀[ a ꞉ A ] (a ∈ S ≃ a ∈ T)
 
+≈-sym : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
+     → {S : ℙA₁} {T : ℙA₂}
+      → S ≈ T → T ≈ S
+≈-sym (S⊆T , T⊆S) = (T⊆S , S⊆T)
+
+≈↔→≈ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
+     → {S : ℙA₁} {T : ℙA₂}
+     → S ≈↔ T → S ≈ T
+≈↔→≈ beq = (beq $_) , (equiv-backward beq)
+
+-- TODO bag-equiv symmetry requires invertibility of equivs
+
 record Intersection {ℓ ℓ′ ℓ″} (A : Type ℓ) (B : Type ℓ′) (R : Type ℓ″) : Typeω where
   infixr 22 _∩_
   field _∩_ : A → B → R
