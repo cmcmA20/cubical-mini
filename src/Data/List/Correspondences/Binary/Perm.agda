@@ -159,3 +159,6 @@ perm→bag-equiv {A} (pswap {xs} {ys} {x} {y} {x′} {y′} ex ey p) {x = z} =
                        (there (there hz)) → ap (there ∘ there) (is-equiv→unit (eqv .snd) hz)
 perm→bag-equiv (ptrans p1 p2)                              {x = z} =
   perm→bag-equiv p1 {x = z} ∙ perm→bag-equiv p2 {x = z}
+
+-- TODO
+-- bag-equiv→perm : {xs ys : List A} → xs ≈↔ ys → Perm xs ys
