@@ -61,6 +61,7 @@ instance
   se {y ∷ xs} (there h) = ap there (se h)
 
 instance
+  -- TODO duplication with Data.List.Operations.Discrete
   Dec-∈ₗ
     : {a : A} {xs : List A}
     → ⦃ di : is-discrete A ⦄

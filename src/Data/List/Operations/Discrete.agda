@@ -24,6 +24,7 @@ open import Data.List.Base as List
 open import Data.List.Operations
 open import Data.List.Operations.Properties
 open import Data.List.Correspondences.Unary.All
+open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
 open import Data.List.Correspondences.Unary.Related
 open import Data.List.Correspondences.Binary.OPE
@@ -65,6 +66,9 @@ sorted? {R} R? (x ∷ xs) = related? {R = R} R? x xs
 
 perm? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
 perm? xs ys = all (λ q → count (λ x → ⌊ q ≟ x ⌋) xs == count (λ y → ⌊ q ≟ y ⌋) ys) (xs ++ ys)
+
+subset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
+subset? xs ys = all (λ x → has x ys) xs
 
 -- properties
 
@@ -194,3 +198,11 @@ Reflects-perm {A} {xs} =
               (fro pe p)
     ∙ +-assoc (bit (p y′)) (bit (p x′)) (count p ys′) ⁻¹
   fro (ptrans pe₁ pe₂)                                         p = fro pe₁ p ∙ fro pe₂ p
+
+Reflects-subset : ⦃ d : is-discrete A ⦄ {xs ys : List A}
+                → Reflects (xs ⊆ ys) (subset? xs ys)
+Reflects-subset {A} {xs} {ys} =
+  Reflects.dmap
+    (λ a {x} → All→∀∈ a x)
+    (contra (λ s → ∀∈→All λ x → s {x = x}))
+    (Reflects-all-dec {xs = xs} λ x → has x ys because (Reflects-has {xs = ys}))
