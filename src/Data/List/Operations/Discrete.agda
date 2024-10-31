@@ -41,10 +41,6 @@ private variable
 has : ⦃ d : is-discrete A ⦄ → A → List A → Bool
 has a = any (λ x → ⌊ a ≟ x ⌋)
 
-elem= : ⦃ A-dis : is-discrete A ⦄
-      → A → List A → Bool
-elem= = elem (λ a b → ⌊ a ≟ b ⌋)
-
 subseq : ⦃ A-dis : is-discrete A ⦄
         → List A → List A → Bool
 subseq     []       ys       = true
