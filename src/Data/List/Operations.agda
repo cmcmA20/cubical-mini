@@ -75,28 +75,26 @@ find : (A → Bool) → List A → ℕ
 find p []       = 0
 find p (x ∷ xs) = if p x then 0 else suc (find p xs)
 
-elem : (A → A → Bool) → A → List A → Bool
-elem _    t []       = false
-elem eq=? t (x ∷ xs) = eq=? t x or elem eq=? t xs
+-- slow: O(n²)
+nub-acc : (A → A → Bool) → List A → List A → List A
+nub-acc _    _   []       = []
+nub-acc eq=? acc (x ∷ xs) =
+  if any (eq=? x) acc
+    then nub-acc eq=? acc xs
+    else x ∷ nub-acc eq=? (x ∷ acc) xs
 
--- O(n²)
-nub-slow : (A → A → Bool) → List A → List A
-nub-slow {A} eq=? = nub′ [] where
-  nub′ : List A → List A → List A
-  nub′ _ [] = []
-  nub′ acc (x ∷ xs) =
-    if elem eq=? x acc
-      then nub′ acc xs
-      else x ∷ nub′ (x ∷ acc) xs
+nub : (A → A → Bool) → List A → List A
+nub eq=? = nub-acc eq=? [] 
 
-nub-unsafe : (A → A → Bool) → List A → List A
-nub-unsafe _ [] = []
-nub-unsafe _ (x ∷ []) = x ∷ []
-nub-unsafe eq=? (x ∷ y ∷ xs) =
+-- fast, but only removes consecutive duplicates
+nub-consec : (A → A → Bool) → List A → List A
+nub-consec _ [] = []
+nub-consec _ (x ∷ []) = x ∷ []
+nub-consec eq=? (x ∷ y ∷ xs) =
   if eq=? x y
     then id
     else x ∷_
-  $ nub-unsafe eq=? (y ∷ xs)
+  $ nub-consec eq=? (y ∷ xs)
 
 insert : (A → A → Bool) → A → List A → List A
 insert _ x [] = x ∷ []

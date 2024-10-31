@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.List.Operations.Sort where
+module Data.List.Operations.Rel where
 
 open import Meta.Prelude
 open import Foundations.Base
@@ -8,8 +8,8 @@ open import Data.Empty as Empty
 open import Data.Bool.Base as Bool
 open import Data.Bool.Path
 open import Data.Sum.Base as Sum
-
 open import Data.Reflects.Base
+open import Data.Dec.Base
 
 open import Data.List.Base as List
 open import Data.List.Operations
@@ -20,6 +20,7 @@ open import Data.List.Correspondences.Unary.At
 open import Data.List.Correspondences.Unary.Related
 open import Data.List.Correspondences.Unary.Unique
 open import Data.List.Correspondences.Binary.Perm
+open import Data.List.Operations.Properties
 
 private variable
   ℓ ℓ′ : Level
@@ -88,3 +89,22 @@ insertion-sort-sorted-uniq-strict {cmp} {R} tr stot {xs = x ∷ xs} (nx ∷ᵘ u
     (contra (≈↔→≈ {S = insertion-sort cmp xs} {T = xs} (perm→bag-equiv p) .fst) nx)
     (perm-unique (perm-sym p) u)
     (insertion-sort-sorted-uniq-strict {R = R} tr stot u)
+
+-- nub
+
+nub-acc-unique : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
+               → ∀ {acc xs}
+               → let res = nub-acc cmp acc xs in
+                 Uniq res × All (_∉ acc) res
+nub-acc-unique                 {xs = []}     = []ᵘ , []
+nub-acc-unique {cmp} {R} {acc} {xs = x ∷ xs} with any (cmp x) acc | recall (any (cmp x)) acc
+... | false | ⟪ eq ⟫ =
+  let (u , a) = nub-acc-unique {R = R} {acc = x ∷ acc} {xs = xs}
+      nx = so→false! {Q = ⊥} ⦃ Reflects-any-dec {xs = acc} (λ q → cmp x q because R x q) ⦄ $ not-so $ ¬so≃is-false ⁻¹ $ eq
+    in
+  ((λ hx → All→∀∈ a x hx (here refl)) ∷ᵘ u) , (nx ∷ all-map (λ {x = z} nz hz → nz (there hz)) a)
+... | true  | _  = nub-acc-unique {R = R} {acc = acc} {xs = xs}
+
+nub-unique : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
+           → ∀ {xs} → Uniq (nub cmp xs)
+nub-unique {R} {xs} = nub-acc-unique {R = R} {acc = []} {xs = xs} .fst

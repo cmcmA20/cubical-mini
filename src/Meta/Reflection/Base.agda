@@ -358,5 +358,5 @@ fv-dup = go 0 where
   go* nbind (arg _ x ∷ xs) =
     go nbind x List.++ go* nbind xs
 
-fv     = nub-slow _==_ ∘ˢ fv-dup
-fv-ord = nub-unsafe _==_ ∘ˢ insertion-sort (λ m n → m <? suc n) ∘ˢ fv-dup
+fv     = nub _==_ ∘ˢ fv-dup
+fv-ord = nub-consec _==_ ∘ˢ insertion-sort (λ m n → m <? suc n) ∘ˢ fv-dup
