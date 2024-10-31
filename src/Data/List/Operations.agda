@@ -84,7 +84,7 @@ nub-acc eq=? acc (x ∷ xs) =
     else x ∷ nub-acc eq=? (x ∷ acc) xs
 
 nub : (A → A → Bool) → List A → List A
-nub eq=? = nub-acc eq=? [] 
+nub eq=? = nub-acc eq=? []
 
 -- fast, but only removes consecutive duplicates
 nub-consec : (A → A → Bool) → List A → List A
