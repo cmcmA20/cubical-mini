@@ -12,10 +12,11 @@ open import Data.Empty.Base
 open import Data.Unit.Base
 open import Data.List.Base
 open import Data.List.Path
+open import Data.List.Instances.Map
 open import Data.List.Operations
 
 private variable
-  ℓ ℓᵃ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ : Level
   A : Type ℓᵃ
   P Q R : Pred A ℓ
   x : A
@@ -113,6 +114,16 @@ all-++-right = snd ∘ all-split
 all-map : {@0 xs : List A} → ∀[ P ⇒ Q ] → All P xs → All Q xs
 all-map     f []       = []
 all-map {P} f (p ∷ ps) = f p ∷ all-map f ps
+
+all→map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : Pred B ℓ′} {f : A → B} {xs : List A}
+        → All (S ∘ f) xs → All S (map f xs)
+all→map {xs = []}     []        = []
+all→map {xs = x ∷ xs} (sfx ∷ a) = sfx ∷ all→map a
+
+all←map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : Pred B ℓ′} {f : A → B} {xs : List A}
+        → All S (map f xs) → All (S ∘ f) xs
+all←map {xs = []}     []        = []
+all←map {xs = x ∷ xs} (sfx ∷ a) = sfx ∷ all←map a
 
 all-zip-with : {@0 xs : List A} → ∀ᴱ[ P ⇒ Q ⇒ R ] → All P xs → All Q xs → All R xs
 all-zip-with     f [] [] = []

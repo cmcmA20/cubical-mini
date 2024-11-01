@@ -8,15 +8,18 @@ open import Data.Empty.Base as ⊥
 open import Data.Unit.Base
 open import Data.Reflects.Base
 open import Data.List.Base
+open import Data.List.Instances.Map
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
 open import Data.List.Correspondences.Unary.At
 
 private variable
-  ℓ ℓᵃ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ : Level
   A : 𝒰 ℓᵃ
+  B : 𝒰 ℓᵇ
   P Q R : A → A → 𝒰 ℓ
+  S : B → B → 𝒰 ℓ′
   @0 x0 : A
   @0 xs ys : List A
 
@@ -102,6 +105,19 @@ related→all {xs = []}     []ʳ       = []
 related→all {xs = x ∷ xs} (rx ∷ʳ r) =
   rx ∷ all-map (rx ∙_) (related→all {x0 = x} {xs = xs} r)
 
+related→map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : B → B → 𝒰 ℓ′}
+              {x0 : A} {xs : List A} {f : A → B}
+            → Related (λ x y → S (f x) (f y)) x0 xs
+            → Related S (f x0) (map f xs)
+related→map {xs = []}     []ʳ       = []ʳ
+related→map {xs = x ∷ xs} (px ∷ʳ r) = px ∷ʳ (related→map r)
+
+related←map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : B → B → 𝒰 ℓ′}
+              {x0 : A} {xs : List A} {f : A → B}
+            → Related S (f x0) (map f xs)
+            → Related (λ x y → S (f x) (f y)) x0 xs
+related←map {xs = []}     []ʳ       = []ʳ
+related←map {xs = x ∷ xs} (px ∷ʳ r) = px ∷ʳ (related←map r)
 
 {- sorted -}
 
@@ -176,3 +192,17 @@ sorted-at0→related : {x0 : A} {xs : List A}
                    → Related R x0 xs
 sorted-at0→related {xs = []} []ˢ awnil = []ʳ
 sorted-at0→related {xs = x ∷ xs} (∷ˢ r) (awhere px) = px ∷ʳ r
+
+sorted→map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : B → B → 𝒰 ℓ′}
+             {xs : List A} {f : A → B}
+           → Sorted (λ x y → S (f x) (f y)) xs
+           → Sorted S (map f xs)
+sorted→map {xs = []}     []ˢ    = []ˢ
+sorted→map {xs = x ∷ xs} (∷ˢ r) = ∷ˢ (related→map r)
+
+sorted←map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : B → B → 𝒰 ℓ′}
+             {xs : List A} {f : A → B}
+           → Sorted S (map f xs)
+           → Sorted (λ x y → S (f x) (f y)) xs
+sorted←map {xs = []}     []ˢ    = []ˢ
+sorted←map {xs = x ∷ xs} (∷ˢ r) = ∷ˢ (related←map r)

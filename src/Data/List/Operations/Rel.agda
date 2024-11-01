@@ -20,6 +20,7 @@ open import Data.List.Correspondences.Unary.At
 open import Data.List.Correspondences.Unary.Related
 open import Data.List.Correspondences.Unary.Unique
 open import Data.List.Correspondences.Binary.Perm
+open import Data.List.Correspondences.Binary.OPE
 open import Data.List.Operations.Properties
 
 private variable
@@ -74,7 +75,8 @@ insert-sorted-uniq-strict {cmp} {x} {R} tr stot {xs = y ∷ xs} nx (ny ∷ᵘ u)
   ∷ˢ (sorted-at0→related
         (insert-sorted-uniq-strict {R = R} tr stot nxs u (related→sorted r))
         (all→atweak (perm-all (perm-sym insert-perm)
-                              ([ id , (λ e → absurd (ne e)) ]ᵤ (stot x y (so→false! ⦃ R x y ⦄ $ not-so $ ¬so≃is-false ⁻¹ $ eq)) ∷ (related→all ⦃ tr ⦄ r)))
+                              ([ id , (λ e → absurd (ne e)) ]ᵤ (stot x y (so→false! ⦃ R x y ⦄ $ not-so $ ¬so≃is-false ⁻¹ $ eq))
+                               ∷ (related→all ⦃ tr ⦄ r)))
                     0))
 ... | true  | ⟪ eq ⟫ = ∷ˢ ((so→true! ⦃ R x y ⦄ $ so≃is-true ⁻¹ $ eq) ∷ʳ r)
 
@@ -91,6 +93,43 @@ insertion-sort-sorted-uniq-strict {cmp} {R} tr stot {xs = x ∷ xs} (nx ∷ᵘ u
     (insertion-sort-sorted-uniq-strict {R = R} tr stot u)
 
 -- nub
+
+nub-acc-ope : ∀ {acc xs}
+            → OPE (nub-acc cmp acc xs) xs
+nub-acc-ope             {xs = []}     = odone
+nub-acc-ope {cmp} {acc} {xs = x ∷ xs} with any (cmp x) acc
+... | false = otake refl nub-acc-ope
+... | true  = odrop nub-acc-ope
+
+nub-ope : ∀ {xs}
+        → OPE (nub cmp xs) xs
+nub-ope = nub-acc-ope {acc = []}
+
+⊆-nub-acc : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
+           → ∀ {acc xs}
+           → xs ⊆ (acc ++ nub-acc cmp acc xs)
+⊆-nub-acc                 {xs = []}          hx        = false! hx
+⊆-nub-acc {cmp} {R} {acc} {xs = y ∷ xs} {x} (here e)   with any (cmp y) acc | recall (any (cmp y)) acc
+... | false | _      = any-++-r (here e)
+... | true  | ⟪ eq ⟫ =
+  any-++-l $
+  subst (_∈ acc) (e ⁻¹) $
+  so→true! ⦃ Reflects-any-dec {xs = acc} (λ q → cmp y q because R y q) ⦄ $ so≃is-true ⁻¹ $ eq
+⊆-nub-acc {cmp} {R} {acc} {xs = y ∷ xs} {x} (there hx) with any (cmp y) acc
+... | false =
+  (any-uncons $ ⊆-nub-acc {cmp = cmp} {R} {acc = y ∷ acc} hx) &
+  [ (λ e → any-++-r (here e)) , [ any-++-l {xs = acc} , any-++-r ∘ there ]ᵤ ∘ any-split ]ᵤ
+... | true  = ⊆-nub-acc {R = R} {acc = acc} hx
+
+⊆-nub : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
+       → ∀ {xs}
+       → xs ⊆ nub cmp xs
+⊆-nub {R} = ⊆-nub-acc {R = R}
+
+nub-≈ : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
+      → ∀ {xs}
+      → nub cmp xs ≈ xs
+nub-≈ {R} = (ope→subset nub-ope) , ⊆-nub {R = R}
 
 nub-acc-unique : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
                → ∀ {acc xs}

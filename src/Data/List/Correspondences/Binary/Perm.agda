@@ -162,9 +162,15 @@ perm→bag-equiv {A} (pswap {xs} {ys} {x} {y} {x′} {y′} ex ey p) {x = z} =
 perm→bag-equiv (ptrans p1 p2)                              {x = z} =
   perm→bag-equiv p1 {x = z} ∙ perm→bag-equiv p2 {x = z}
 
+perm→set-equiv : {xs ys : List A} → Perm xs ys → xs ≈ ys
+perm→set-equiv {xs} {ys} p = ≈↔→≈ {S = xs} {T = ys} (perm→bag-equiv p)
+
+perm→subset : {xs ys : List A} → Perm xs ys → xs ⊆ ys
+perm→subset p = perm→set-equiv p .fst
+
 perm-unique : {xs ys : List A}
             → Perm xs ys → Uniq xs → Uniq ys
-perm-unique {xs} {ys} p u = uniq≈len=→uniq (perm-len p) (≈↔→≈ {S = xs} {T = ys} (perm→bag-equiv p)) u
+perm-unique p u = uniq≈len=→uniq (perm-len p) (perm→set-equiv p) u
 
 -- TODO
 -- bag-equiv→perm : {xs ys : List A} → xs ≈↔ ys → Perm xs ys

@@ -9,6 +9,8 @@ open import Data.Nat.Order.Base
 open import Data.Reflects
 open import Data.List.Base
 open import Data.List.Operations
+open import Data.List.Correspondences.Unary.Any
+open import Data.List.Membership
 
 private variable
   ℓᵃ : Level
@@ -112,6 +114,12 @@ ope-init-unique : {xs : List A}
                 → (o : OPE [] xs) → o ＝ ope-init
 ope-init-unique  odone    = refl
 ope-init-unique (odrop o) = ap odrop (ope-init-unique o)
+
+ope→subset : {xs ys : List A}
+           → OPE xs ys → xs ⊆ ys
+ope→subset (otake e o) (here e′)  = here (e′ ∙ e)
+ope→subset (otake e o) (there hx) = there (ope→subset o hx)
+ope→subset (odrop o)    hx        = there (ope→subset o hx)
 
 instance
   HUnit-o-≤ : HUnit-o {A = List A} OPE

@@ -20,7 +20,7 @@ module _
   {x : A} {y : B} where
 
   is-biinv : (f : F x y) → 𝒰 (ℓa∙ ⊔ ℓb∙ ⊔ ℓh)
-  is-biinv f = Σ (has-retraction f)  λ _ → has-section f
+  is-biinv f = Σ (has-retraction f) λ _ → has-section f
 
   make-is-biinv
     : ∀ {f} (r : G y x) (rr : r retraction-of f)

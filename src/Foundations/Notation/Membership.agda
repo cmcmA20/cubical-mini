@@ -3,6 +3,9 @@ module Foundations.Notation.Membership where
 
 open import Foundations.Notation.Logic
 open import Foundations.Notation.Underlying
+open import Foundations.Notation.Reflexivity
+open import Foundations.Notation.Composition
+open import Foundations.Notation.Duality
 open import Foundations.Prim.Type
 open import Foundations.Prim.Equiv
 open import Foundations.Pi.Base
@@ -30,6 +33,17 @@ _⊆_
   → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
 _⊆_ {A} S T = ∀[ a ꞉ A ] (a ∈ S ⇒ a ∈ T)
 
+-- TODO making these and below into (inoherent) instances breaks Cat.Univalent
+
+Refl-⊆ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄
+       → Refl {A = ℙA₁} _⊆_
+Refl-⊆ .refl = id
+
+-- TODO Comp
+Trans-⊆ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄
+        → Trans {A = ℙA₁} _⊆_
+Trans-⊆ ._∙_ i o = o ∘ i
+
 -- overlap
 _≬_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
   → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
@@ -40,6 +54,19 @@ _≈_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA�
     → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
 S ≈ T = S ⊆ T × T ⊆ S
 
+Refl-≈ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄
+       → Refl {A = ℙA₁} _≈_
+Refl-≈ .refl = refl , refl
+
+-- TODO Comp
+Trans-≈ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄
+        → Trans {A = ℙA₁} _≈_
+Trans-≈ ._∙_ i o = i .fst ∙ o .fst , o .snd ∙ i .snd
+
+Dual-≈ : {A : Type ℓ} ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
+       → Dual (_≈_ ⦃ m₁ = m₁ ⦄)  (_≈_ ⦃ m₁ = m₂ ⦄)
+Dual-≈ ._ᵒᵖ (l , r) = r , l
+
 -- TODO subbag relation requires some notion of generalized injection/embedding
 
 -- bag-equivalence
@@ -47,17 +74,12 @@ _≈↔_ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A �
      → ℙA₁ → ℙA₂ → Type (level-of-type A ⊔ ℓ‴ ⊔ ℓ⁗)
 _≈↔_ {A} S T = ∀[ a ꞉ A ] (a ∈ S ≃ a ∈ T)
 
-≈-sym : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
-     → {S : ℙA₁} {T : ℙA₂}
-      → S ≈ T → T ≈ S
-≈-sym (S⊆T , T⊆S) = (T⊆S , S⊆T)
+-- TODO bag-equiv symmetry/reflexivity/transitivity requires properties of equivs
 
 ≈↔→≈ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ⁗ ⦄
      → {S : ℙA₁} {T : ℙA₂}
      → S ≈↔ T → S ≈ T
 ≈↔→≈ beq = (beq $_) , (equiv-backward beq)
-
--- TODO bag-equiv symmetry requires invertibility of equivs
 
 record Intersection {ℓ ℓ′ ℓ″} (A : Type ℓ) (B : Type ℓ′) (R : Type ℓ″) : Typeω where
   infixr 22 _∩_

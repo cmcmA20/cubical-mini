@@ -11,15 +11,18 @@ open import Data.Empty.Base as ⊥
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
 open import Data.List.Base
+open import Data.List.Instances.Map
 open import Data.List.Operations
 open import Data.Nat.Base
 open import Data.Reflects.Base as Reflects
 open import Data.Sum.Base
 
 private variable
-  ℓᵃ ℓ : Level
+  ℓᵃ ℓᵇ ℓ ℓ′ : Level
   A : 𝒰 ℓᵃ
+  B : 𝒰 ℓᵇ
   P Q R : Pred A ℓ
+  S : Pred B ℓ′
   x : A
   @0 xs ys : List A
   b : Bool
@@ -161,6 +164,16 @@ any-split {xs = _ ∷ xs} (there a) = [ inl ∘ there , inr ]ᵤ (any-split {xs 
 any-map : {@0 xs : List A} → ∀[ P ⇒ Q ] → Any P xs → Any Q xs
 any-map f (here px) = here (f px)
 any-map f (there a) = there (any-map f a)
+
+any→map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : Pred B ℓ′} {f : A → B} {xs : List A}
+        → Any (S ∘ f) xs → Any S (map f xs)
+any→map {xs = x ∷ xs} (here sfx) = here sfx
+any→map {xs = x ∷ xs} (there a)  = there (any→map a)
+
+any←map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : Pred B ℓ′} {f : A → B} {xs : List A}
+        → Any S (map f xs) → Any (S ∘ f) xs
+any←map {xs = x ∷ xs} (here sfx) = here sfx
+any←map {xs = x ∷ xs} (there a)  = there (any←map a)
 
 any→ℕ : {@0 xs : List A} → Any P xs → ℕ
 any→ℕ (here _)  = 0
