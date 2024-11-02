@@ -20,8 +20,9 @@ record Alt (M : Effect) : Typeω where
     fail  : M.₀ A
     _<|>_ : M.₀ A → M.₀ A → M.₀ A
   infixl 3 _<|>_
-
 open Alt ⦃ ... ⦄ public
+{-# DISPLAY Alt.fail _ = fail #-}
+{-# DISPLAY Alt._<|>_ _ m = _<|>_ m #-}
 
 module _ {M : Effect} (let module M = Effect M) ⦃ alt : Alt M ⦄ where
 

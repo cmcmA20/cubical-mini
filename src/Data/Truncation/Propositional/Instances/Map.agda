@@ -19,8 +19,9 @@ instance
   Map-∥-∥₁ .map f = rec! (∣_∣₁ ∘ f)
 
   Lawful-Map-∥-∥₁ : Lawful-Map (eff ∥_∥₁)
-  Lawful-Map-∥-∥₁ .Lawful-Map.has-map = Map-∥-∥₁
-  Lawful-Map-∥-∥₁ .Lawful-Map.map-pres-id =
-    fun-ext (elim! λ _ → refl)
-  Lawful-Map-∥-∥₁ .Lawful-Map.map-pres-comp =
-    fun-ext (elim! λ _ → refl)
+  Lawful-Map-∥-∥₁ .Lawful-Map.map-pres-id {A} = fun-ext go where opaque
+    go : (x : ∥ A ∥₁) → map refl x ＝ x
+    go = elim! λ _ → refl
+  Lawful-Map-∥-∥₁ .Lawful-Map.map-pres-comp {A} {f} {g} = fun-ext go where opaque
+    go : (x : ∥ A ∥₁) → map (f ∙ g) x ＝ (map f ∙ map g) x
+    go = elim! λ _ → refl

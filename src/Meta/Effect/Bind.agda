@@ -26,6 +26,7 @@ record Bind (M : Effect) : Typeω where
   _=<<_ f x = x >>= f
 
 open Bind ⦃ ... ⦄ public
+{-# DISPLAY Bind._>>=_ _ m = _>>=_ m #-}
 
 instance
   Bind-Erased : Bind (eff λ T → Erased T)
