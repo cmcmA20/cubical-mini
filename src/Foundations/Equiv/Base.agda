@@ -14,8 +14,8 @@ private variable
   C : Type ℓ″
   f : A → B
 
-_retract-of′_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
-_retract-of′_ {A} g f = Π[ x ꞉ A ] (g (f x) ＝ x)
+_retraction-of′_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
+_retraction-of′_ {A} g f = Π[ x ꞉ A ] (g (f x) ＝ x)
 
 _section-of′_ : {A : Type ℓ} {B : Type ℓ′} → (B → A) → (A → B) → Type _
 _section-of′_ {B} g f = Π[ y ꞉ B ] (f (g y) ＝ y)

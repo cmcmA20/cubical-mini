@@ -20,10 +20,10 @@ record Alternative (M : Effect) : Typeω where
   field
     empty : M.₀ ⊥
     _<+>_ : M.₀ A → M.₀ B → M.₀ (A ⊎ B)
-
   infixr 3 _<+>_
-
 open Alternative ⦃ ... ⦄ public
+{-# DISPLAY Alternative.empty _ = empty #-}
+{-# DISPLAY Alternative._<+>_ _ m = _<+>_ m #-}
 
 instance
   Alternative-Alt : {M : Effect} → ⦃ Map M ⦄ → ⦃ Alt M ⦄ → Alternative M

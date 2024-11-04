@@ -126,7 +126,7 @@ private
     gg _ f₀ = false! f₀
     ri : gg section-of′ ff
     ri (mk-fin 0) = refl
-    li : gg retract-of′ ff
+    li : gg retraction-of′ ff
     li _ = fun-ext λ ()
 
   bishop-finite-pi-fin (suc sz) {P} fam = ∥-∥₁.proj! do

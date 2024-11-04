@@ -97,5 +97,5 @@ fibre-comp {g} {f} {c} = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
   ri : from section-of′ to
   ri ((c′ , p) , a , q) i =
     (q i , ∙-filler-r (ap g q) p (~ i)) , a , λ j → q (i ∧ j)
-  li : from retract-of′ to
+  li : from retraction-of′ to
   li (a , p) i = a , ∙-filler-r refl p (~ i)

@@ -14,7 +14,7 @@ private variable
 is-half-adjoint-equiv : (f : A → B) → Type _
 is-half-adjoint-equiv {A} {B} f =
   Σ[ g ꞉ (B → A) ]
-  Σ[ η ꞉ g retract-of′ f ]
+  Σ[ η ꞉ g retraction-of′ f ]
   Σ[ ε ꞉ g section-of′ f ]
   Π[ x ꞉ A ] (ap f (η x) ＝ ε (f x))
 

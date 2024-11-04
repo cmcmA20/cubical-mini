@@ -57,5 +57,5 @@ ae e = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li)
   ri : from section-of′ to
   ri = elim! $ happly $ e.ε ▷ ∣_∣₂
 
-  li : from retract-of′ to
+  li : from retraction-of′ to
   li = elim! $ happly $ sym $ e.η ▷ ∣_∣₂

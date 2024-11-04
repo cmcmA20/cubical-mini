@@ -52,7 +52,7 @@ bool≃maybe⊤ = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
   ri (just _) = refl
   ri nothing  = refl
 
-  li : from retract-of′ to
+  li : from retraction-of′ to
   li false = refl
   li true  = refl
 

@@ -30,7 +30,7 @@ universal {B} {A} B-prop = ≅→≃ $ iso inc′ rec′ refl (fun-ext beta) whe
   rec′ f ∣ x ∣₁ = f x
   rec′ f (squash₁ x y i) = B-prop (rec′ f x) (rec′ f y) i
 
-  beta : rec′ retract-of′ inc′
+  beta : rec′ retraction-of′ inc′
   beta f = fun-ext $ elim! λ _ → refl
 
 is-prop≃equiv-∥-∥₁ : is-prop A ≃ (A ≃ ∥ A ∥₁)

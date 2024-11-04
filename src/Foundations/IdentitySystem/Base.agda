@@ -111,7 +111,7 @@ identity-system-gives-path {R} {r} ids = ≅→≃ $ iso (ids .to-path) bw (fun-
           ( ap (ids .to-path) (transport-refl _)
           ∙ to-path-refl ids)
 
-  li : ∀ {a b} → (bw {a} {b}) retract-of′ (ids .to-path)
+  li : ∀ {a b} → (bw {a} {b}) retraction-of′ (ids .to-path)
   li = J ids (λ y p → bw (ids .to-path p) ＝ p)
              ( ap bw (to-path-refl ids)
              ∙ transport-refl _ )
@@ -162,7 +162,7 @@ opaque
             (singleton-is-contr x .snd (b , s))
       cancel′ x s = is-prop→squareᴾ (λ _ _ → is-contr→is-prop (singleton-is-contr x)) _ _ _ _
 
-      cancel : from retract-of′ to
+      cancel : from retraction-of′ to
       cancel x i .to-path s = ap fst (cancel′ x s i)
       cancel x i .to-path-over s = ap snd (cancel′ x s i)
 

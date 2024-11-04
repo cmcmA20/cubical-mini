@@ -24,6 +24,7 @@ record Traversable (F : Effect) : Typeω where
   for x f = traverse f x
 
 open Traversable ⦃ ... ⦄ public
+{-# DISPLAY Traversable.traverse _ f = traverse f #-}
 
 sequence
   : ⦃ _ : Idiom M ⦄ ⦃ _ : Traversable F ⦄

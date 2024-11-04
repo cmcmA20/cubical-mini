@@ -15,10 +15,9 @@ private variable
 
 record Foldable (F : Effect) : Typeω where
   private module F = Effect F
-  field
-    fold-r : (A → B → B) → B → F.₀ A → B
-
+  field fold-r : (A → B → B) → B → F.₀ A → B
 open Foldable ⦃ ... ⦄ public
+{-# DISPLAY Foldable.fold-r _ f = fold-r f #-}
 
 
 asum : {F M : Effect} (let module F = Effect F; module M = Effect M)

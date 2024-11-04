@@ -21,7 +21,6 @@ instance
     go f (node l r) = node (go f l) (go f r)
 
   Lawful-Map-Tree : Lawful-Map (eff Tree)
-  Lawful-Map-Tree .Lawful-Map.has-map = Map-Tree
   Lawful-Map-Tree .Lawful-Map.map-pres-id {A} = fun-ext go
     where
     go : (xs : Tree A) → map refl xs ＝ xs

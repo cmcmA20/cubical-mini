@@ -41,7 +41,7 @@ private variable
             ap² (subst P) (e.zig′ x ⁻¹) (from-pathᴾ⁻ (ap k (e.η # x ⁻¹)))
           ∙ transport⁻-transport (ap (P ∘ e.to) (e.η # x)) (k x)
 
-  li : from retract-of′ to
+  li : from retraction-of′ to
   li k = fun-ext λ x →
       ap (subst P _) (from-pathᴾ⁻ (ap k (e.ε # x)))
     ∙ transport⁻-transport (ap P (e.ε # x) ⁻¹) _

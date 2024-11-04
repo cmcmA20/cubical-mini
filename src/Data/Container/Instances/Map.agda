@@ -19,6 +19,5 @@ instance
 
   -- excellent
   Lawful-Map-Container : Lawful-Map (eff ⟦ C ⟧)
-  Lawful-Map-Container .Lawful-Map.has-map = Map-Container
   Lawful-Map-Container .Lawful-Map.map-pres-id = refl
   Lawful-Map-Container .Lawful-Map.map-pres-comp = refl
