@@ -4,6 +4,7 @@ module Data.Nat.Solver where
 open import Foundations.Base
   hiding (const)
 
+open import Meta.Effect.Bind
 open import Meta.Effect.Idiom
 open import Meta.Literals.FromNat
 open import Meta.Marker
@@ -23,6 +24,9 @@ open import Data.Reflection.Term
 open import Data.Unit.Base
 open import Data.Vec.Inductive.Base
 open import Data.Vec.Inductive.Operations.Computational
+
+open Idiom ⦃ ... ⦄
+open Bind ⦃ ... ⦄
 
 private variable
   ℓᵃ : Level

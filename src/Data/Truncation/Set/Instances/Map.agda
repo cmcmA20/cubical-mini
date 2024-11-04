@@ -9,6 +9,9 @@ open import Meta.Inductive
 
 open import Data.Truncation.Set.Base
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+
 instance
   private
     H-Level-∥-∥₂ : ∀ {n ℓ} {A : Type ℓ} → H-Level (2 + n) ∥ A ∥₂

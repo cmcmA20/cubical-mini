@@ -2,6 +2,7 @@
 module Functions.Equiv.Weak where
 
 open import Meta.Prelude
+open import Meta.Effect
 -- Weak equivalences are actually builtin in Agda
 open import Foundations.Equiv public
 

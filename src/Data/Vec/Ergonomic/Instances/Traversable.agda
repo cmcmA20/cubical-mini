@@ -9,6 +9,9 @@ open import Meta.Effect.Traversable
 
 open import Data.Vec.Ergonomic.Base
 
+open Idiom ⦃ ... ⦄
+open Traversable ⦃ ... ⦄
+
 instance
   Traversable-Vec : ∀{n} → Traversable (eff λ T → Vec T n)
   Traversable-Vec .traverse {M} {A} {B} = go where

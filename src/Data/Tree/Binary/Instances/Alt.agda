@@ -6,6 +6,8 @@ open import Meta.Effect.Base
 
 open import Data.Tree.Binary.Base
 
+open Alt ⦃ ... ⦄
+
 instance
   Alt-Tree : Alt (eff Tree)
   Alt-Tree .fail  = empty

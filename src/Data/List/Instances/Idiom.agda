@@ -15,6 +15,11 @@ private variable
   ℓ : Level
   A B C : Type ℓ
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+open Idiom ⦃ ... ⦄
+open Lawful-Idiom ⦃ ... ⦄
+
 _<*>ₗ_ : List (A → B) → List A → List B
 []       <*>ₗ xs = []
 (f ∷ fs) <*>ₗ xs = map f xs ++ (fs <*>ₗ xs)
@@ -63,3 +68,4 @@ instance
       map g (fs <*> xs) ++ (pure _∘ˢ_ <*> gs <*> fs <*> xs)
         ~⟨ ap (map g (fs <*> xs) ++_) (go gs fs xs) ⟩
       map g (fs <*> xs) ++ (gs <*> (fs <*> xs)) ∎
+  Lawful-Idiom-List .map-pure = fun-ext λ _ → ++-id-r _ ⁻¹

@@ -2,7 +2,7 @@
 module Structures.n-Type where
 
 open import Meta.Prelude
-open import Meta.Effect.Alt
+open import Meta.Effect
 open import Meta.Extensionality
 open import Meta.Projection
 open import Meta.Record

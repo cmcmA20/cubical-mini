@@ -2,9 +2,8 @@
 module Data.Truncation.Set.Path where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Extensionality
-
-open import Meta.Effect.Map
 
 open import Structures.n-Type
 

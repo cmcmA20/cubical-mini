@@ -8,6 +8,9 @@ open import Meta.Effect.Map
 
 open import Data.Reflection.Argument
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+
 instance
   Map-Arg : Map (eff Arg)
   Map-Arg .map f (arg ai x) = arg ai (f x)

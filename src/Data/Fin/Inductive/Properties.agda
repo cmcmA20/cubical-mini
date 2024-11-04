@@ -2,9 +2,8 @@
 module Data.Fin.Inductive.Properties where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Extensionality
-
-open import Meta.Effect.Bind
 
 open import Data.Empty.Base as ⊥
 open import Data.Fin.Inductive.Base public

@@ -2,6 +2,7 @@
 module Data.Truncation.Propositional.Path where
 
 open import Meta.Prelude
+open import Meta.Effect
 
 open import Data.Bool.Base
 open import Data.Reflects.Base

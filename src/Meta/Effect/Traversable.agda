@@ -23,8 +23,7 @@ record Traversable (F : Effect) : Typeω where
     → F.₀ A → (A → M.₀ B) → M.₀ (F.₀ B)
   for x f = traverse f x
 
-open Traversable ⦃ ... ⦄ public
-{-# DISPLAY Traversable.traverse _ f = traverse f #-}
+open Traversable ⦃ ... ⦄
 
 sequence
   : ⦃ _ : Idiom M ⦄ ⦃ _ : Traversable F ⦄

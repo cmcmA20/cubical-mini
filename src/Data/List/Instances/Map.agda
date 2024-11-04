@@ -16,6 +16,9 @@ mapₗ : (A → B) → List A → List B
 mapₗ f []       = []
 mapₗ f (x ∷ xs) = f x ∷ mapₗ f xs
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+
 instance
   Map-List : Map (eff List)
   Map-List .map = mapₗ

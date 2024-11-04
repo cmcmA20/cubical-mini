@@ -10,6 +10,8 @@ open import Data.Bool.Base
 open import Data.Reflects.Base
 open import Data.Sum.Base
 
+open Alternative ⦃ ... ⦄
+
 instance
   Alternative-Reflects : Alternative (eff λ T → Reflects⁰ T false)
   Alternative-Reflects .empty = ofⁿ id

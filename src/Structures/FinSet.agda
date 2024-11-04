@@ -2,7 +2,7 @@
 module Structures.FinSet where
 
 open import Meta.Prelude
-open import Meta.Effect.Bind
+open import Meta.Effect
 open import Meta.Projection
 open import Meta.Record
 open import Meta.Reflection.Base

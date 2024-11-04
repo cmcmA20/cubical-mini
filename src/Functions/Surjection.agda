@@ -2,6 +2,7 @@
 module Functions.Surjection where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Extensionality
 
 open import Functions.Embedding
@@ -9,6 +10,7 @@ open import Functions.Embedding
 open import Data.Truncation.Propositional.Base
 open import Data.Truncation.Propositional.Path
 open import Data.Truncation.Propositional.Instances.Bind
+
 
 private variable
   ℓ ℓ′ ℓ″ : Level

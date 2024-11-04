@@ -8,6 +8,8 @@ open import Meta.Effect.Map.Base
 
 private variable ℓᵃ ℓᵇ ℓᶜ : Level
 
+open Map ⦃ ... ⦄
+
 record Lawful-Map (M : Effect) ⦃ m : Map M ⦄ : Typeω where
   private module M = Effect M
   field
@@ -18,5 +20,3 @@ record Lawful-Map (M : Effect) ⦃ m : Map M ⦄ : Typeω where
       : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
         {f : A → B} {g : B → C}
       → Path (M.₀ A → M.₀ C) (map (f ∙ g)) (map f ∙ map g)
-
-open Lawful-Map ⦃ ... ⦄ public

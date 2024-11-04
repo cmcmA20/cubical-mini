@@ -2,9 +2,7 @@
 module Meta.Reflection.Signature where
 
 open import Meta.Prelude
-
-open import Meta.Effect.Foldable
-open import Meta.Effect.Traversable
+open import Meta.Effect
 open import Meta.Show
 open import Meta.Reflection.Base
 open import Meta.Reflection.Neutral

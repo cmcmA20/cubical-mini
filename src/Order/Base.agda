@@ -4,6 +4,7 @@ module Order.Base where
 open import Cat.Prelude
 import Cat.Morphism
 
+open import Meta.Effect
 open import Meta.Projection
 open import Meta.Reflection.Base
 

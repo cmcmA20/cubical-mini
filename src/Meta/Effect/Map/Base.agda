@@ -13,8 +13,7 @@ private variable
 record Map (M : Effect) : Typeω where
   private module M = Effect M
   field map : (A → B) → M.₀ A → M.₀ B
-open Map ⦃ ... ⦄ public
-{-# DISPLAY Map.map _ f = map f #-}
+open Map ⦃ ... ⦄
 
 module _ {M : Effect} (let module M = Effect M) ⦃ _ : Map M ⦄ where
   infixl 4 _<$>_ _<&>_

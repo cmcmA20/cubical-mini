@@ -7,6 +7,8 @@ open import Meta.Effect.Traversable
 
 open import Data.Reflection.Argument
 
+open Traversable ⦃ ... ⦄
+
 instance
   Traversable-Arg : Traversable (eff Arg)
   Traversable-Arg .traverse f (arg ai x) = arg ai <$> f x

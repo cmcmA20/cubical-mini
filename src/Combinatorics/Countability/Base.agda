@@ -3,7 +3,7 @@ module Combinatorics.Countability.Base where
 
 open import Meta.Prelude
 open import Meta.Deriving.HLevel
-open import Meta.Effect.Bind
+open import Meta.Effect
 open import Meta.Record
 
 open import Logic.Discreteness

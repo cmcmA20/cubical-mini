@@ -2,7 +2,7 @@
 module Meta.Marker where
 
 open import Meta.Prelude
-
+open import Meta.Effect
 open import Meta.Reflection.Base
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct

@@ -15,6 +15,10 @@ private variable
   ℓ : Level
   A B C : Type ℓ
 
+open Idiom ⦃ ... ⦄
+open Bind ⦃ ... ⦄
+open Lawful-Bind ⦃ ... ⦄
+
 _>>=ₗ_ : List A → (A → List B) → List B
 []       >>=ₗ _ = []
 (x ∷ xs) >>=ₗ f = f x ++ (xs >>=ₗ f)

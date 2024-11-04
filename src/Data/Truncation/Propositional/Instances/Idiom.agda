@@ -12,6 +12,9 @@ open import Meta.Inductive
 open import Data.Truncation.Propositional.Base
 open import Data.Truncation.Propositional.Instances.Map public
 
+open Idiom ⦃ ... ⦄
+open Lawful-Idiom ⦃ ... ⦄
+
 private variable
   n : HLevel
   ℓ : Level
@@ -38,3 +41,4 @@ instance
     go : (g : ∥ (B → C) ∥₁) (f : ∥ (A → B) ∥₁) (x : ∥ A ∥₁)
        → (pure _∘ˢ_ <*> g <*> f <*> x) ＝ (g <*> (f <*> x))
     go = elim! (λ _ _ _ → refl)
+  Lawful-Idiom-∥-∥₁ .map-pure = fun-ext (elim! (λ _ → refl))

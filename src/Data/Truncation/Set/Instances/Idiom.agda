@@ -17,6 +17,9 @@ private variable
   ℓ : Level
   A : Type ℓ
 
+open Idiom ⦃ ... ⦄
+open Lawful-Idiom ⦃ ... ⦄
+
 instance
   private
     _ : H-Level (2 + n) ∥ A ∥₂
@@ -38,3 +41,4 @@ instance
     go : (g : ∥ (B → C) ∥₂) (f : ∥ (A → B) ∥₂) (x : ∥ A ∥₂)
        → (pure _∘ˢ_ <*> g <*> f <*> x) ＝ (g <*> (f <*> x))
     go = elim! (λ _ _ _ → refl)
+  Lawful-Idiom-∥-∥₂ .map-pure = fun-ext (elim! λ _ → refl)

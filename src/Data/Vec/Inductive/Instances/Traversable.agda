@@ -14,6 +14,9 @@ private variable
   A : Type ℓ
   @0 n : ℕ
 
+open Idiom ⦃ ... ⦄
+open Traversable ⦃ ... ⦄
+
 instance
   Traversable-Vec : Traversable (eff λ T → Vec T n)
   Traversable-Vec .traverse {M} {A} {B} = go where

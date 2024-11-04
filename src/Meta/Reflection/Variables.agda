@@ -4,6 +4,7 @@ module Meta.Reflection.Variables where
 open import Foundations.Base
   hiding ( _◁_ ; _▷_ )
 
+open import Meta.Effect.Bind
 open import Meta.Effect.Idiom
 open import Meta.Reflection.Base
 
@@ -17,6 +18,9 @@ open import Data.Maybe.Base
 open import Data.Nat.Base
 open import Data.Reflection
 open import Data.Vec.Inductive.Base
+
+open Idiom ⦃ ... ⦄
+open Bind ⦃ ... ⦄
 
 --------------------------------------------------------------------------------
 -- Variable Binding for Terms

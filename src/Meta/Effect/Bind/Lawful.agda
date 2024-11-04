@@ -9,6 +9,9 @@ open import Meta.Effect.Idiom
 
 private variable ℓᵃ ℓᵇ ℓᶜ : Level
 
+open Bind ⦃ ... ⦄
+open Idiom ⦃ ... ⦄
+
 record Lawful-Bind (M : Effect) ⦃ m : Bind M ⦄ : Typeω where
   private module M = Effect M
   field
@@ -23,5 +26,3 @@ record Lawful-Bind (M : Effect) ⦃ m : Bind M ⦄ : Typeω where
       : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
         {mx : M.₀ A} {f : A → M.₀ B} {g : B → M.₀ C}
       → (mx >>= f >>= g) ＝ (mx >>= λ x → f x >>= g)
-
-open Lawful-Bind ⦃ ... ⦄ public

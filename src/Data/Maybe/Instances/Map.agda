@@ -12,6 +12,9 @@ private variable
   ℓ : Level
   A B : Type ℓ
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+
 mapₘ : (A → B) → Maybe A → Maybe B
 mapₘ f (just x) = just (f x)
 mapₘ _ nothing  = nothing

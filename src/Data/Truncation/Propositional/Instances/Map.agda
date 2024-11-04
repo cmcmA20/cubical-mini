@@ -10,6 +10,9 @@ open import Meta.Inductive
 
 open import Data.Truncation.Propositional.Base
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+
 instance
   private
     H-Level-∥-∥₁ : ∀ {n ℓ} {A : Type ℓ} → H-Level (suc n) ∥ A ∥₁
