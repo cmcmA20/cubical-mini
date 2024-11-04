@@ -9,6 +9,9 @@ open import Meta.Effect.Bind
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Idiom public
 
+open Bind ⦃ ... ⦄
+open Lawful-Bind ⦃ ... ⦄
+
 instance
   Bind-Maybe : Bind (eff Maybe)
   Bind-Maybe ._>>=_ (just x) k = k x

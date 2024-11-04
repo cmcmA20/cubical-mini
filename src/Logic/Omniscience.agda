@@ -2,6 +2,7 @@
 module Logic.Omniscience where
 
 open import Meta.Prelude
+open import Meta.Effect
 open Variadics _
 
 open import Logic.Decidability

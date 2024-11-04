@@ -2,6 +2,7 @@
 module Data.Vec.Inductive.Correspondences.Unary.All where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Literals.FromProduct
 open Variadics _
 

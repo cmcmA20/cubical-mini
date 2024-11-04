@@ -2,6 +2,7 @@
 module Meta.Deriving.HLevel where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Record
 open import Meta.Reflection
 

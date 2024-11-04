@@ -8,6 +8,8 @@ open import Meta.Effect.Foldable
 
 open import Data.Vec.Ergonomic.Base
 
+open Foldable ⦃ ... ⦄
+
 instance
   Foldable-Vec : ∀{n} → Foldable (eff λ T → Vec T n)
   Foldable-Vec .fold-r f z = rec z f

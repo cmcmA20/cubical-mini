@@ -2,8 +2,7 @@
 module Meta.SIP where
 
 open import Meta.Prelude
-
-open import Meta.Effect.Alt
+open import Meta.Effect
 open import Meta.Literals.FromNat
 open import Meta.Literals.FromProduct
 open import Meta.Literals.FromString

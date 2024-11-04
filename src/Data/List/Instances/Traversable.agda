@@ -7,6 +7,9 @@ open import Meta.Effect.Traversable
 
 open import Data.List.Base
 
+open Idiom ⦃ ... ⦄
+open Traversable ⦃ ... ⦄
+
 instance
   Traversable-List : Traversable (eff List)
   Traversable-List .traverse {M} {A} {B} = go where

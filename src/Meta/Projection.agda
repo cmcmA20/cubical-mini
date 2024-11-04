@@ -3,6 +3,7 @@ module Meta.Projection where
 
 open import Foundations.Base
 
+open import Meta.Effect.Bind
 open import Meta.Literals.FromProduct
   public
 open import Meta.Reflection
@@ -28,6 +29,7 @@ open import Data.Reflection.Name
 open import Data.Reflection.Term
 open import Data.Unit.Base
 
+open Bind ⦃ ... ⦄
 
 private ⊤′ = ⊥ → ⊥
 

@@ -10,6 +10,8 @@ open import Data.Bool.Base
 open import Data.Dec.Base
 open import Data.Reflects.Instances.Monoidal
 
+open Monoidal ⦃ ... ⦄
+
 instance
   Monoidal-Dec : Monoidal (eff Dec)
   Monoidal-Dec .unit = yes tt

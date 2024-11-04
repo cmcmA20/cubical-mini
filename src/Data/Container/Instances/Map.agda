@@ -13,6 +13,9 @@ private variable
   s p : Level
   C : Container s p
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+
 instance
   Map-Container : Map (eff ⟦ C ⟧)
   Map-Container .map f = second (f ∘_)

@@ -13,6 +13,8 @@ private variable
   ℓ : Level
   A : Type ℓ
 
+open Idiom ⦃ ... ⦄
+
 instance
   Idiom-Vec : ∀{n} → Idiom (eff λ T → Vec T n)
   Idiom-Vec .pure x = replicate _ x

@@ -9,8 +9,11 @@ open import Meta.Effect.Map
 
 private variable ℓᵃ ℓᵇ ℓᶜ : Level
 
+open Idiom ⦃ ... ⦄
+
 record Lawful-Idiom (M : Effect) ⦃ m : Idiom M ⦄ : Typeω where
   private module M = Effect M
+  open Map ⦃ ... ⦄
   field
     ⦃ has-lawful-map ⦄ : Lawful-Map M
     pure-id
@@ -26,5 +29,6 @@ record Lawful-Idiom (M : Effect) ⦃ m : Idiom M ⦄ : Typeω where
       : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
         {u : M.₀ (B → C)} {v : M.₀ (A → B)} {w : M.₀ A}
       → Path (M.₀ C) (pure _∘ˢ_ <*> u <*> v <*> w) (u <*> (v <*> w))
-
-open Lawful-Idiom ⦃ ... ⦄ public
+    map-pure -- TODO check if it's provable
+      : {A : Type ℓᵃ} {B : Type ℓᵇ} {f : A → B}
+      → Path (M.₀ A → M.₀ B) (map f) (λ x → pure f <*> x)

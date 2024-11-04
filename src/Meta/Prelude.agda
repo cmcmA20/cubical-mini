@@ -12,7 +12,6 @@ open import Foundations.Prelude
          )
   public
 
-open import Meta.Effect    public
 open import Meta.Inductive public
 open import Meta.Variadic  public
 

@@ -12,6 +12,8 @@ private variable
   ℓᵃ ℓᵇ ℓᶜ : Level
   A : Type ℓᵃ
 
+open Map ⦃ ... ⦄
+
 map-++ : {A : Type ℓᵃ} {B : Type ℓᵇ} (f : A → B) (xs ys : List A)
        → map f (xs ++ ys) ＝ map f xs ++ map f ys
 map-++ f []       ys = refl

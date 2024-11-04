@@ -25,10 +25,7 @@ record Idiom (M : Effect) : Typeω where
     _<*>_ : M.₀ (A → B) → M.₀ A → M.₀ B
 
   infixl 4 _<*>_
-open Idiom ⦃ ... ⦄ public
-{-# DISPLAY Idiom.pure _ x = pure x #-}
-{-# DISPLAY Idiom._<*>_ _ m = _<*>_ m #-}
-
+open Idiom ⦃ ... ⦄
 
 module _ {M : Effect} (let module M = Effect M) ⦃ app : Idiom M ⦄ where
   when : Bool → M.₀ ⊤ → M.₀ ⊤

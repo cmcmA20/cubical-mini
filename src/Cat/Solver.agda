@@ -1,9 +1,8 @@
 {-# OPTIONS --safe --no-exact-split #-}
 module Cat.Solver where
 
-open import Foundations.Prelude hiding (id; _∘_)
-
-open import Meta.Effect.Idiom
+open import Meta.Prelude hiding (id; _∘_)
+open import Meta.Effect
 open import Meta.Marker
 open import Meta.Reflection.Base
 open import Meta.Reflection.Solver

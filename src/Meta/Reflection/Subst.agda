@@ -3,11 +3,7 @@ module Meta.Reflection.Subst where
 
 open import Foundations.Base
 
-open import Meta.Effect.Bind
-open import Meta.Effect.Foldable
-open import Meta.Effect.Idiom
-open import Meta.Effect.Map
-open import Meta.Effect.Traversable
+open import Meta.Effect
 open import Meta.Reflection.Base
 
 open import Data.Bool.Base

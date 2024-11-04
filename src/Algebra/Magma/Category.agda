@@ -1,12 +1,14 @@
 {-# OPTIONS --safe #-}
 module Algebra.Magma.Category where
 
-open import Algebra.Magma
-
 open import Cat.Prelude
 open import Cat.Constructions.Types
 open import Cat.Displayed.Univalence.Thin
 import Cat.Morphism
+
+open import Algebra.Magma
+
+open import Meta.Effect
 
 open n-Magma-on
 open n-Magma-hom

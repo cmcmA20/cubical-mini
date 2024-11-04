@@ -2,6 +2,7 @@
 module Data.List.Correspondences.Unary.All where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Extensionality
 open Variadics _
 

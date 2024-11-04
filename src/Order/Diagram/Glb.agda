@@ -1,6 +1,8 @@
 {-# OPTIONS --safe #-}
 module Order.Diagram.Glb where
 
+open import Meta.Effect
+
 open import Cat.Prelude
 
 open import Order.Base

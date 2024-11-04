@@ -1,7 +1,10 @@
 {-# OPTIONS --safe #-}
 module Order.Constructions.Subsets where
 
+open import Meta.Effect
+
 open import Cat.Prelude
+
 open import Order.Base
 open import Order.Constructions.Props
 open import Order.Constructions.Pointwise

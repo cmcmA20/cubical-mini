@@ -11,6 +11,8 @@ open import Data.List.Instances.Map
 open import Data.Reflection.Argument
 open import Data.Reflection.Term
 
+open Map ⦃ ... ⦄
+
 record Has-visibility {ℓ} (A : Type ℓ) : Type ℓ where
   field set-visibility : Visibility → A → A
 

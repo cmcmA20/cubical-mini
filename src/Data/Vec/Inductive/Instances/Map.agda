@@ -17,6 +17,9 @@ mapᵥ : (A → B) → Vec A n → Vec B n
 mapᵥ f []       = []
 mapᵥ f (x ∷ xs) = f x ∷ mapᵥ f xs
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+
 instance
   Map-Vec : Map (eff (λ T → Vec T n))
   Map-Vec .map = mapᵥ

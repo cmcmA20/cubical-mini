@@ -2,8 +2,7 @@
 module Data.Dec.Properties where
 
 open import Meta.Prelude
-
-open import Meta.Effect.Idiom
+open import Meta.Effect
 
 open import Data.Dec.Base as Dec
 open import Data.Dec.Path

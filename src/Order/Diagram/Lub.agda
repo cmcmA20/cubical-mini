@@ -1,7 +1,10 @@
 {-# OPTIONS --safe #-}
 module Order.Diagram.Lub where
 
+open import Meta.Effect
+
 open import Cat.Prelude
+
 open import Order.Base
 open import Order.Morphism
 open import Functions.Surjection

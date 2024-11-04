@@ -2,7 +2,7 @@
 module Meta.Deriving.Show where
 
 open import Meta.Prelude
-open import Meta.Effect.Traversable
+open import Meta.Effect
 open import Meta.Reflection
 open import Meta.Show public
 

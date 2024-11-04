@@ -3,6 +3,7 @@
 module Meta.Copattern where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Reflection
 
 open import Data.Bool.Base

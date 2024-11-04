@@ -12,6 +12,10 @@ open import Meta.Inductive
 open import Data.Truncation.Set.Base
 open import Data.Truncation.Set.Instances.Idiom public
 
+open Idiom ⦃ ... ⦄
+open Bind ⦃ ... ⦄
+open Lawful-Bind ⦃ ... ⦄
+
 private variable
   n : HLevel
   ℓ : Level

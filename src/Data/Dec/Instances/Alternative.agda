@@ -11,6 +11,8 @@ open import Data.Dec.Base
 open import Data.Reflects.Instances.Alternative
 open import Data.Sum.Base
 
+open Alternative ⦃ ... ⦄
+
 instance
   Alternative-Dec : Alternative (eff Dec)
   Alternative-Dec .empty = no id

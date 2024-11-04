@@ -4,6 +4,7 @@ module Meta.Extensionality where
 open import Foundations.Prelude
 
 open import Meta.Effect.Alt
+open import Meta.Effect.Bind
 open import Meta.Literals.FromProduct
 open import Meta.Reflection
 open import Meta.Variadic
@@ -18,6 +19,8 @@ open import Data.Reflection.Term
 open import Data.Reflects.Base
 open import Data.Unit.Base
 
+open Alt ⦃ ... ⦄
+open Bind ⦃ ... ⦄
 
 record Extensional {ℓ} (A : Type ℓ) (ℓ-rel : Level) : Type (ℓ ⊔ ℓsuc ℓ-rel) where
   no-eta-equality
