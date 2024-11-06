@@ -38,27 +38,19 @@ Rfl (x₁ , x₂) (y₁ , y₂) = (x₁ ≤ y₁) × (x₂ ≤ y₂)
 
 Tfl-empty-intersect : ∀ {x₁ x₂ y₁ y₂}
                     → Plus Tfl (x₁ , x₂) (y₁ , y₂)
-                    → y₁ ≤ x₁
-                    → y₂ ≤ x₂
+                    → Rfl (y₁ , y₂) (x₁ , x₂)
                     → ⊥
-Tfl-empty-intersect [ inl x<y₁ ]⁺       y≤x₁ y≤x₂ = <→≱ x<y₁ y≤x₁
-Tfl-empty-intersect [ inr (e , x<y₂) ]⁺ y≤x₁ y≤x₂ = <→≱ x<y₂ y≤x₂
-Tfl-empty-intersect (h ◅⁺ p)            y≤x₁ y≤x₂ =
-  [ (λ x<w₁ → <→≱ x<w₁ (prf p ∙ y≤x₁))
-  , (λ where (e , x<w₂) → Tfl-empty-intersect p (y≤x₁ ∙ =→≤ e) (y≤x₂ ∙ <→≤ x<w₂))
+Tfl-empty-intersect [ inl x<y₁ ]⁺       (y≤x₁ , y≤x₂) = <→≱ x<y₁ y≤x₁
+Tfl-empty-intersect [ inr (e , x<y₂) ]⁺ (y≤x₁ , y≤x₂) = <→≱ x<y₂ y≤x₂
+Tfl-empty-intersect (h ◅⁺ p)            (y≤x₁ , y≤x₂) =
+  [ ≤→≯ (plus-fold1 Trans-≤ (plus-map [ <→≤ , =→≤ ∘ fst ]ᵤ p) ∙ y≤x₁)
+  , (λ where (e , x<w₂) → Tfl-empty-intersect p (y≤x₁ ∙ =→≤ e , y≤x₂ ∙ <→≤ x<w₂))
   ]ᵤ h
-  where
-  prf : ∀ {x₁ x₂ y₁ y₂}
-      → Plus Tfl (x₁ , x₂) (y₁ , y₂)
-      → x₁ ≤ y₁
-  prf pl = plus-fold1 Trans-≤ (plus-map [ <→≤ , =→≤ ∘ fst ]ᵤ pl)
 
 flex : ℕ × ℕ → ℕ
 flex =
   to-induction
-    (AF→WF {R = Rfl} {T = Tfl}
-           (af-× af-≤ af-≤)
-           λ where p (y≤x₁ , y≤x₂) → Tfl-empty-intersect p y≤x₁ y≤x₂)
+    (AF→WF (af-× af-≤ af-≤) Tfl-empty-intersect)
     (λ _ → ℕ)
     λ x ih → go (x .fst) (x .snd) λ a b → ih (a , b)
   where
@@ -86,10 +78,9 @@ Tgr-trans (inr (x₂<y₁ , x₁<y₁)) (inr (_     , y₁<z₁)) = inr (<-trans
 
 Tgr-empty-intersect : ∀ {x₁ x₂ y₁ y₂}
                     → Plus Tgr (x₁ , x₂) (y₁ , y₂)
-                    → y₁ ≤ x₁
-                    → y₂ ≤ x₂
+                    → Rgr (y₁ , y₂) (x₁ , x₂)
                     → ⊥
-Tgr-empty-intersect p y≤x₁ y≤x₂ =
+Tgr-empty-intersect p (y≤x₁ , y≤x₂) =
   [ (λ where (_ , x<y₂) → <→≱ x<y₂ y≤x₂)
   , (λ where (_ , x<y₁) → <→≱ x<y₁ y≤x₁)
   ]ᵤ (plus-fold1 (record { _∙_ = Tgr-trans }) p)
@@ -97,9 +88,7 @@ Tgr-empty-intersect p y≤x₁ y≤x₂ =
 grok : ℕ × ℕ → ℕ
 grok =
   to-induction
-    (AF→WF {R = Rgr} {T = Tgr}
-           (af-× af-≤ af-≤)
-           λ where p (y≤x₁ , y≤x₂) → Tgr-empty-intersect p y≤x₁ y≤x₂)
+    (AF→WF (af-× af-≤ af-≤) Tgr-empty-intersect)
     (λ _ → ℕ)
     λ x ih → go (x .fst) (x .snd) λ a b → ih (a , b)
   where
@@ -118,7 +107,7 @@ Rf1 (x₁ , x₂) (y₁ , y₂) = x₁ + x₂ ≤ y₁ + y₂
 
 Tf1-intersection-empty : ∀ {x₁ x₂ y₁ y₂}
                        → Plus Tf1 (x₁ , x₂) (y₁ , y₂)
-                       → y₁ + y₂ ≤ x₁ + x₂
+                       → Rf1 (y₁ , y₂) (x₁ , x₂)
                        → ⊥
 Tf1-intersection-empty {x₁} {x₂} {y₁} {y₂} p y₁₂≤x₁₂ =
   ≤→≯ y₁₂≤x₁₂ $
@@ -129,9 +118,7 @@ Tf1-intersection-empty {x₁} {x₂} {y₁} {y₂} p y₁₂≤x₁₂ =
 flip1 : ℕ × ℕ → ℕ
 flip1 =
   to-induction
-    (AF→WF {R = Rf1} {T = Tf1}
-           (af-comap (λ where (x , y) → x + y) af-≤)
-           Tf1-intersection-empty)
+    (AF→WF (af-comap (λ where (x , y) → x + y) af-≤) Tf1-intersection-empty)
     (λ _ → ℕ)
     λ x ih → go (x .fst) (x .snd) λ a b → ih (a , b)
   where
@@ -179,12 +166,22 @@ T2-plus-inv (_◅⁺_ {y = (w₁ , w₂)} p2 pl) with T2-inv p2 | T2-plus-inv pl
 ... | inr (inr (x<w₁ , x<w₂)) | inr (inl (w<y₂ , w<y₁)) = inr $ inl (<-trans x<w₂ w<y₂ , <-trans x<w₁ w<y₁)
 ... | inr (inr (x<w₁ , x<w₂)) | inr (inr (w<y₁ , w<y₂)) = inr $ inr (<-trans x<w₁ w<y₁ , <-trans x<w₂ w<y₂)
 
+Tgn-plus-decompose : ∀ {x₁ x₂ y₁ y₂}
+                   → Plus Tgn (x₁ , x₂) (y₁ , y₂)
+                   → Tgn (x₁ , x₂) (y₁ , y₂)
+                   ⊎ Plus (pow 2 Tgn) (x₁ , x₂) (y₁ , y₂)
+                   ⊎ (Σ[ (z₁ , z₂) ꞉ ℕ × ℕ ] (Tgn (x₁ , x₂) (z₁ , z₂)) × (Plus (pow 2 Tgn) (z₁ , z₂) (y₁ , y₂)))
+Tgn-plus-decompose                     [ txy ]⁺                       = inl txy
+Tgn-plus-decompose {x₁} {x₂} {y₁} {y₂} (_◅⁺_ {y = (w₁ , w₂)} txw pwy) with Tgn-plus-decompose pwy
+... | inl twy                           = inr $ inl [ (w₁ , w₂) , txw , (y₁ , y₂) , twy , lift refl ]⁺
+... | inr (inl p)                       = inr $ inr ((w₁ , w₂) , txw , p)
+... | inr (inr ((z₁ , z₂) , twz , pzy)) = inr $ inl (((w₁ , w₂) , txw , (z₁ , z₂) , twz , lift refl) ◅⁺ pzy)
+
 Tgn-empty-intersect : ∀ {x₁ x₂ y₁ y₂}
                     → Plus Tgn (x₁ , x₂) (y₁ , y₂)
-                    → y₁ ≤ x₁
-                    → y₂ ≤ x₂
+                    → Rgn (y₁ , y₂) (x₁ , x₂)
                     → ⊥
-Tgn-empty-intersect p y≤x₁ y≤x₂ =
+Tgn-empty-intersect p (y≤x₁ , y≤x₂) =
   [ (λ where
          (inl (e , x₂<y₂)) → <→≱ x₂<y₂ y≤x₂
          (inr (e , x₂<y₁)) → <→≱ x₂<y₁ (y≤x₁ ∙ =→≤ e ∙ y≤x₂))
@@ -206,25 +203,12 @@ Tgn-empty-intersect p y≤x₁ y≤x₂ =
                     ]ᵤ txz
                   ]ᵤ (T2-plus-inv pzy))
     ]ᵤ
-  ]ᵤ (prf p)
-  where
-  prf : ∀ {x₁ x₂ y₁ y₂}
-      → Plus Tgn (x₁ , x₂) (y₁ , y₂)
-      → Tgn (x₁ , x₂) (y₁ , y₂)
-      ⊎ Plus (pow 2 Tgn) (x₁ , x₂) (y₁ , y₂)
-      ⊎ (Σ[ (z₁ , z₂) ꞉ ℕ × ℕ ] (Tgn (x₁ , x₂) (z₁ , z₂)) × (Plus (pow 2 Tgn) (z₁ , z₂) (y₁ , y₂)))
-  prf                     [ txy ]⁺                       = inl txy
-  prf {x₁} {x₂} {y₁} {y₂} (_◅⁺_ {y = (w₁ , w₂)} txw pwy) with prf pwy
-  ... | inl twy                           = inr $ inl [ (w₁ , w₂) , txw , (y₁ , y₂) , twy , lift refl ]⁺
-  ... | inr (inl p)                       = inr $ inr ((w₁ , w₂) , txw , p)
-  ... | inr (inr ((z₁ , z₂) , twz , pzy)) = inr $ inl (((w₁ , w₂) , txw , (z₁ , z₂) , twz , lift refl) ◅⁺ pzy)
+  ]ᵤ (Tgn-plus-decompose p)
 
 gnlex : ℕ × ℕ → ℕ
 gnlex =
   to-induction
-    (AF→WF {R = Rgn} {T = Tgn}
-           (af-× af-≤ af-≤)
-           λ where p (y≤x₁ , y≤x₂) → Tgn-empty-intersect p y≤x₁ y≤x₂)
+    (AF→WF (af-× af-≤ af-≤) Tgn-empty-intersect)
     (λ _ → ℕ)
     λ x ih → go (x .fst) (x .snd) λ a b → ih (a , b)
   where
