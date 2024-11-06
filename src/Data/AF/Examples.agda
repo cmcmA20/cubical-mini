@@ -63,9 +63,82 @@ flex =
     λ x ih → go (x .fst) (x .snd) λ a b → ih (a , b)
   where
   go : ∀ x y → (∀ a b → Tfl (a , b) (x , y) → ℕ) → ℕ
-  go  zero    y      ih = 1
-  go (suc x)  zero   ih = 1
+  go  zero    _      _  = 1
+  go (suc _)  zero   _  = 1
   go (suc x) (suc y) ih = ih x (2 + y) (inl <-ascend) + ih (1 + x) y (inr (refl , <-ascend))
+
+-- grok
+
+Tgr : ℕ × ℕ → ℕ × ℕ → 𝒰
+Tgr (x₁ , x₂) (y₁ , y₂) = ((x₁ ≤ y₂) × (x₂ < y₂)) ⊎ ((x₂ < y₁) × (x₁ < y₁))
+
+Rgr : ℕ × ℕ → ℕ × ℕ → 𝒰
+Rgr (x₁ , x₂) (y₁ , y₂) = (x₁ ≤ y₁) × (x₂ ≤ y₂)
+
+Tgr-trans : ∀ {x₁ x₂ y₁ y₂ z₁ z₂}
+          → Tgr (x₁ , x₂) (y₁ , y₂)
+          → Tgr (y₁ , y₂) (z₁ , z₂)
+          → Tgr (x₁ , x₂) (z₁ , z₂)
+Tgr-trans (inl (x₁≤y₂ , x₂<y₂)) (inl (_     , y₂<z₂)) = inl (x₁≤y₂ ∙ <→≤ y₂<z₂   , <-trans x₂<y₂ y₂<z₂)
+Tgr-trans (inl (x₁≤y₂ , x₂<y₂)) (inr (y₂<z₁ , _    )) = inr (<-trans x₂<y₂ y₂<z₁ , ≤-<-trans x₁≤y₂ y₂<z₁)
+Tgr-trans (inr (x₂<y₁ , x₁<y₁)) (inl (y₁≤z₂ , _    )) = inl (<→≤ x₁<y₁ ∙ y₁≤z₂   , <-≤-trans x₂<y₁ y₁≤z₂)
+Tgr-trans (inr (x₂<y₁ , x₁<y₁)) (inr (_     , y₁<z₁)) = inr (<-trans x₂<y₁ y₁<z₁ , <-trans x₁<y₁ y₁<z₁)
+
+Tgr-empty-intersect : ∀ {x₁ x₂ y₁ y₂}
+                    → Plus Tgr (x₁ , x₂) (y₁ , y₂)
+                    → y₁ ≤ x₁
+                    → y₂ ≤ x₂
+                    → ⊥
+Tgr-empty-intersect p y≤x₁ y≤x₂ =
+  [ (λ where (_ , x<y₂) → <→≱ x<y₂ y≤x₂)
+  , (λ where (_ , x<y₁) → <→≱ x<y₁ y≤x₁)
+  ]ᵤ (plus-fold1 (record { _∙_ = Tgr-trans }) p)
+
+grok : ℕ × ℕ → ℕ
+grok =
+  to-induction
+    (AF→WF {R = Rgr} {T = Tgr}
+           (af-× af-≤ af-≤)
+           λ where p (y≤x₁ , y≤x₂) → Tgr-empty-intersect p y≤x₁ y≤x₂)
+    (λ _ → ℕ)
+    λ x ih → go (x .fst) (x .snd) λ a b → ih (a , b)
+  where
+  go : ∀ x y → (∀ a b → Tgr (a , b) (x , y) → ℕ) → ℕ
+  go  zero    _      _  = 1
+  go (suc _)  zero   _  = 1
+  go (suc x) (suc y) ih = ih (1 + y) y (inl (refl , <-ascend)) + ih x x (inr (<-ascend , <-ascend))
+
+-- flip1
+
+Tf1 : ℕ × ℕ → ℕ × ℕ → 𝒰
+Tf1 (x₁ , x₂) (y₁ , y₂) = (x₁ ≤ y₂) × (x₂ < y₁)
+
+Rf1 : ℕ × ℕ → ℕ × ℕ → 𝒰
+Rf1 (x₁ , x₂) (y₁ , y₂) = x₁ + x₂ ≤ y₁ + y₂
+
+Tf1-intersection-empty : ∀ {x₁ x₂ y₁ y₂}
+                       → Plus Tf1 (x₁ , x₂) (y₁ , y₂)
+                       → y₁ + y₂ ≤ x₁ + x₂
+                       → ⊥
+Tf1-intersection-empty {x₁} {x₂} {y₁} {y₂} p y₁₂≤x₁₂ =
+  ≤→≯ y₁₂≤x₁₂ $
+  plus-fold1 {R = _<_} (record { _∙_ = <-trans}) $
+  plus-map (λ where {a = a₁ , a₂} {b = b₁ , b₂} (a₁≤b₂ , a₂<b₁) →
+                      subst (a₁ + a₂ <_) (+-comm b₂ b₁) $ ≤-<-+ a₁≤b₂ a₂<b₁) p
+
+flip1 : ℕ × ℕ → ℕ
+flip1 =
+  to-induction
+    (AF→WF {R = Rf1} {T = Tf1}
+           (af-comap (λ where (x , y) → x + y) af-≤)
+           Tf1-intersection-empty)
+    (λ _ → ℕ)
+    λ x ih → go (x .fst) (x .snd) λ a b → ih (a , b)
+  where
+  go : ∀ x y → (∀ a b → Tf1 (a , b) (x , y) → ℕ) → ℕ
+  go  zero    _      _  = 1
+  go (suc _)  zero   _  = 1
+  go (suc x) (suc y) ih = ih (1 + y) x (refl , <-ascend)
 
 -- gnlex
 
@@ -184,3 +257,4 @@ fsum =
   go (inl (suc x)) ih = ih (inr (2 + x)) (inl (x , (refl , refl)))
   go (inr x)       ih = ih (inl (x ∸ 2)) (inr (x , (refl , refl)))
 -}
+
