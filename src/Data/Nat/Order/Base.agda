@@ -330,6 +330,18 @@ opaque
 ≤-+ : ∀ {m n p q} → m ≤ p → n ≤ q → m + n ≤ p + q
 ≤-+ m≤p n≤q = ≤-trans (≤≃≤+r $ m≤p) (≤≃≤+l $ n≤q)
 
+opaque
+  unfolding _<_
+  <-≤-+ : ∀ {m n p q} → m < p → n ≤ q → m + n < p + q
+  <-≤-+ = ≤-+
+
+  ≤-<-+ : ∀ {m n p q} → m ≤ p → n < q → m + n < p + q
+  ≤-<-+ {m} {n} {p} {q} m≤p n<q =
+    subst (_≤ p + q) (+-suc-r m n) (≤-+ m≤p n<q)
+
+<-+ : ∀ {m n p q} → m < p → n < q → m + n < p + q
+<-+ m<p n<q = <-≤-+ m<p (<→≤ n<q)
+
 0<≃⊎₁ : ∀ {m n} → 0 < m + n ≃ (0 < m) ⊎₁ (0 < n)
 0<≃⊎₁ {m} {n} = prop-extₑ! (∣_∣₁ ∘ 0<→⊎ m n) (elim! [ <-+-r , <-+-l ]ᵤ)
   where
