@@ -3,8 +3,7 @@ module Data.AF.Prop where
 
 open import Foundations.Base
 open Variadics _
-open import Meta.Effect.Map
-open import Meta.Effect.Idiom
+open import Meta.Effect
 
 open import Data.Empty.Base
 open import Data.Unit.Base
@@ -13,8 +12,8 @@ open import Data.AF.Base
 open import Data.Truncation.Propositional as ∥-∥₁
 
 data AF₁ {ℓ ℓ′} {A : 𝒰 ℓ} (R : A → A → 𝒰 ℓ′) : 𝒰 (ℓ ⊔ ℓ′) where
-  AF₁full : (∀ x y → ∥ R x y ∥₁) → AF₁ R
-  AF₁lift : (∀ a → AF₁ (R ↑ a)) → AF₁ R
+  AF₁full   : (∀ x y → ∥ R x y ∥₁) → AF₁ R
+  AF₁lift   : (∀ a → AF₁ (R ↑ a)) → AF₁ R
   AF₁squash : is-prop (AF₁ R)
 
 private variable
@@ -38,17 +37,23 @@ af₁-mono sub (AF₁squash a₁ a₂ i) = AF₁squash (af₁-mono sub a₁) (af
 af₁-comap : ∀ {ℓa ℓb ℓr} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {R : A → A → 𝒰 ℓr}
          → (f : B → A)
          → AF₁ R → AF₁ (λ x y → R (f x) (f y))
-af₁-comap f (AF₁full af)        = AF₁full λ x y → af (f x) (f y)
-af₁-comap f (AF₁lift al)        = AF₁lift λ a → af₁-comap f (al (f a))
-af₁-comap f (AF₁squash a₁ a₂ i) = AF₁squash (af₁-comap f a₁) (af₁-comap f a₂) i
+af₁-comap f (AF₁full af)        =
+  AF₁full λ x y → af (f x) (f y)
+af₁-comap f (AF₁lift al)        =
+  AF₁lift λ a → af₁-comap f (al (f a))
+af₁-comap f (AF₁squash a₁ a₂ i) =
+  AF₁squash (af₁-comap f a₁) (af₁-comap f a₂) i
 
 af₁-map : ∀ {ℓa ℓb ℓr ℓt} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
            {R : A → A → 𝒰 ℓr} {T : B → B → 𝒰 ℓt}
        → {f : B → A} → (∀ x y → R (f x) (f y) → T x y)
        → AF₁ R → AF₁ T
-af₁-map {f} fr (AF₁full af)        = AF₁full λ x y → map (fr x y) (af (f x) (f y))
-af₁-map {f} fr (AF₁lift al)        = AF₁lift λ b → af₁-map (λ x y → [ inl ∘ fr x y , inr ∘ fr b x ]ᵤ) (al (f b))
-af₁-map {f} fr (AF₁squash a₁ a₂ i) = AF₁squash (af₁-map fr a₁) (af₁-map fr a₂) i
+af₁-map {f} fr (AF₁full af)        =
+  AF₁full λ x y → map (fr x y) (af (f x) (f y))
+af₁-map {f} fr (AF₁lift al)        =
+  AF₁lift λ b → af₁-map (λ x y → [ inl ∘ fr x y , inr ∘ fr b x ]ᵤ) (al (f b))
+af₁-map {f} fr (AF₁squash a₁ a₂ i) =
+  AF₁squash (af₁-map fr a₁) (af₁-map fr a₂) i
 
 af₁-rel-morph : ∀ {ℓa ℓb ℓr ℓt} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {R : A → A → 𝒰 ℓr} {T : B → B → 𝒰 ℓt}
               → (f : A → B → 𝒰 ℓ)
