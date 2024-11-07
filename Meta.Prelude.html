@@ -13,23 +13,22 @@
          <a id="250" class="Symbol">)</a>
   <a id="254" class="Keyword">public</a>
 
-<a id="262" class="Keyword">open</a> <a id="267" class="Keyword">import</a> <a id="274" href="Meta.Effect.html" class="Module">Meta.Effect</a>    <a id="289" class="Keyword">public</a>
-<a id="296" class="Keyword">open</a> <a id="301" class="Keyword">import</a> <a id="308" href="Meta.Inductive.html" class="Module">Meta.Inductive</a> <a id="323" class="Keyword">public</a>
-<a id="330" class="Keyword">open</a> <a id="335" class="Keyword">import</a> <a id="342" href="Meta.Variadic.html" class="Module">Meta.Variadic</a>  <a id="357" class="Keyword">public</a>
+<a id="262" class="Keyword">open</a> <a id="267" class="Keyword">import</a> <a id="274" href="Meta.Inductive.html" class="Module">Meta.Inductive</a> <a id="289" class="Keyword">public</a>
+<a id="296" class="Keyword">open</a> <a id="301" class="Keyword">import</a> <a id="308" href="Meta.Variadic.html" class="Module">Meta.Variadic</a>  <a id="323" class="Keyword">public</a>
 
-<a id="365" class="Keyword">open</a> <a id="370" class="Keyword">import</a> <a id="377" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a>
-  <a id="394" class="Keyword">using</a> <a id="400" class="Symbol">(</a> <a id="402" href="Data.Bool.Base.html#1713" class="Function">H-Level-So</a> <a id="413" class="Symbol">)</a>
-<a id="415" class="Keyword">open</a> <a id="420" class="Keyword">import</a> <a id="427" href="Data.Nat.Order.Inductive.Base.html" class="Module">Data.Nat.Order.Inductive.Base</a> <a id="457" class="Comment">-- for H-Levels</a>
-  <a id="475" class="Keyword">using</a> <a id="481" class="Symbol">()</a>
-  <a id="486" class="Keyword">renaming</a> <a id="495" class="Symbol">(</a> <a id="497" href="Data.Nat.Order.Inductive.Base.html#712" class="Datatype Operator">_≤_</a>       <a id="507" class="Symbol">to</a> <a id="510" class="Datatype Operator">_≤ʰ_</a>
-           <a id="526" class="Symbol">;</a> <a id="528" href="Data.Nat.Order.Inductive.Base.html#798" class="Function Operator">_≥_</a>       <a id="538" class="Symbol">to</a> <a id="541" class="Function Operator">_≥ʰ_</a>
-           <a id="557" class="Symbol">;</a> <a id="559" href="Data.Nat.Order.Inductive.Base.html#752" class="InductiveConstructor">z≤</a>        <a id="569" class="Symbol">to</a> <a id="572" class="InductiveConstructor">z≤ʰ</a>
-           <a id="587" class="Symbol">;</a> <a id="589" href="Data.Nat.Order.Inductive.Base.html#765" class="InductiveConstructor">s≤s</a>       <a id="599" class="Symbol">to</a> <a id="602" class="InductiveConstructor">s≤ʰs</a>
-           <a id="618" class="Symbol">;</a> <a id="620" href="Data.Nat.Order.Inductive.Base.html#1120" class="Function">s≤s′</a>      <a id="630" class="Symbol">to</a> <a id="633" class="Function">s≤ʰs′</a>
-           <a id="650" class="Symbol">;</a> <a id="652" href="Data.Nat.Order.Inductive.Base.html#1181" class="Function">≤-refl</a>    <a id="662" class="Symbol">to</a> <a id="665" class="Function">≤ʰ-refl</a>
-           <a id="684" class="Symbol">;</a> <a id="686" href="Data.Nat.Order.Inductive.Base.html#2057" class="Function">≤-suc-r′</a>  <a id="696" class="Symbol">to</a> <a id="699" class="Function">≤ʰ-suc-r′</a>
-           <a id="720" class="Symbol">;</a> <a id="722" href="Data.Nat.Order.Inductive.Base.html#1694" class="Function">H-Level-≤</a> <a id="732" class="Symbol">to</a> <a id="735" class="Function">H-Level-ℕ-≤</a>
-           <a id="758" class="Symbol">)</a>
-  <a id="762" class="Keyword">public</a>
-<a id="769" class="Keyword">open</a> <a id="774" class="Keyword">import</a> <a id="781" href="Data.Nat.Instances.FromNat.html" class="Module">Data.Nat.Instances.FromNat</a> <a id="808" class="Keyword">public</a>
+<a id="331" class="Keyword">open</a> <a id="336" class="Keyword">import</a> <a id="343" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a>
+  <a id="360" class="Keyword">using</a> <a id="366" class="Symbol">(</a> <a id="368" href="Data.Bool.Base.html#1713" class="Function">H-Level-So</a> <a id="379" class="Symbol">)</a>
+<a id="381" class="Keyword">open</a> <a id="386" class="Keyword">import</a> <a id="393" href="Data.Nat.Order.Inductive.Base.html" class="Module">Data.Nat.Order.Inductive.Base</a> <a id="423" class="Comment">-- for H-Levels</a>
+  <a id="441" class="Keyword">using</a> <a id="447" class="Symbol">()</a>
+  <a id="452" class="Keyword">renaming</a> <a id="461" class="Symbol">(</a> <a id="463" href="Data.Nat.Order.Inductive.Base.html#712" class="Datatype Operator">_≤_</a>       <a id="473" class="Symbol">to</a> <a id="476" class="Datatype Operator">_≤ʰ_</a>
+           <a id="492" class="Symbol">;</a> <a id="494" href="Data.Nat.Order.Inductive.Base.html#798" class="Function Operator">_≥_</a>       <a id="504" class="Symbol">to</a> <a id="507" class="Function Operator">_≥ʰ_</a>
+           <a id="523" class="Symbol">;</a> <a id="525" href="Data.Nat.Order.Inductive.Base.html#752" class="InductiveConstructor">z≤</a>        <a id="535" class="Symbol">to</a> <a id="538" class="InductiveConstructor">z≤ʰ</a>
+           <a id="553" class="Symbol">;</a> <a id="555" href="Data.Nat.Order.Inductive.Base.html#765" class="InductiveConstructor">s≤s</a>       <a id="565" class="Symbol">to</a> <a id="568" class="InductiveConstructor">s≤ʰs</a>
+           <a id="584" class="Symbol">;</a> <a id="586" href="Data.Nat.Order.Inductive.Base.html#1120" class="Function">s≤s′</a>      <a id="596" class="Symbol">to</a> <a id="599" class="Function">s≤ʰs′</a>
+           <a id="616" class="Symbol">;</a> <a id="618" href="Data.Nat.Order.Inductive.Base.html#1181" class="Function">≤-refl</a>    <a id="628" class="Symbol">to</a> <a id="631" class="Function">≤ʰ-refl</a>
+           <a id="650" class="Symbol">;</a> <a id="652" href="Data.Nat.Order.Inductive.Base.html#2057" class="Function">≤-suc-r′</a>  <a id="662" class="Symbol">to</a> <a id="665" class="Function">≤ʰ-suc-r′</a>
+           <a id="686" class="Symbol">;</a> <a id="688" href="Data.Nat.Order.Inductive.Base.html#1694" class="Function">H-Level-≤</a> <a id="698" class="Symbol">to</a> <a id="701" class="Function">H-Level-ℕ-≤</a>
+           <a id="724" class="Symbol">)</a>
+  <a id="728" class="Keyword">public</a>
+<a id="735" class="Keyword">open</a> <a id="740" class="Keyword">import</a> <a id="747" href="Data.Nat.Instances.FromNat.html" class="Module">Data.Nat.Instances.FromNat</a> <a id="774" class="Keyword">public</a>
 </pre></body></html>
