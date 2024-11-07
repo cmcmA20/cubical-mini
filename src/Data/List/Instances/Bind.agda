@@ -8,6 +8,7 @@ open import Meta.Effect.Bind
 open import Meta.Effect.Idiom
 
 open import Data.List.Base
+open import Data.List.Instances.Map
 open import Data.List.Instances.Idiom public
 open import Data.List.Properties
 
@@ -45,3 +46,10 @@ instance
     go : (xs : List A) → (xs >>= f >>= g) ＝ (xs >>= λ x → f x >>= g)
     go [] = refl
     go (x ∷ xs) = >>=ₗ-++-app (f x) (xs >>=ₗ f) g ∙ ap (_ ++_) (go xs)
+  Lawful-Bind-List .<*>->>= {A} {B} {mf} {mx} = go mf mx where opaque
+    go : (fs : List (A → B)) (xs : List A) → (fs <*> xs) ＝ (fs >>= λ f → xs >>= λ x → f x ∷ [])
+    go []       xs = refl
+    go (f ∷ fs) xs = ap (_++ (fs <*> xs)) (go₂ xs) ∙ ap (_ ++_) (go fs xs) where
+      go₂ : (xs : List A) → mapₗ f xs ＝ (xs >>= λ x → f x ∷ [])
+      go₂ [] = refl
+      go₂ (x ∷ xs) = ap (_ ∷_) (go₂ xs)

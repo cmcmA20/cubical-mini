@@ -23,3 +23,6 @@ instance
   Lawful-Bind-Maybe .>>=-id-r {mx = nothing} = refl
   Lawful-Bind-Maybe .>>=-assoc {mx = just x} = refl
   Lawful-Bind-Maybe .>>=-assoc {mx = nothing} = refl
+  Lawful-Bind-Maybe .<*>->>= {mf = just f} {just x} = refl
+  Lawful-Bind-Maybe .<*>->>= {mf = just f} {(nothing)} = refl
+  Lawful-Bind-Maybe .<*>->>= {mf = nothing} = refl

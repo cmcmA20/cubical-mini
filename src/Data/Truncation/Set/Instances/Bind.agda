@@ -37,3 +37,6 @@ instance
   Lawful-Bind-∥-∥₂ .Lawful-Bind.>>=-assoc {A} {mx} {f} {g} = go mx where opaque
     go : (x : ∥ A ∥₂) → (x >>= f >>= g) ＝ (x >>= λ x → f x >>= g)
     go = elim! λ _ → refl
+  Lawful-Bind-∥-∥₂ .<*>->>= {A} {B} {mf} {mx} = go mf mx where opaque
+    go : (f : ∥ (A → B) ∥₂) (x : ∥ A ∥₂) → (f <*> x) ＝ (f >>= λ f → x >>= (pure ∘ f))
+    go = elim! (λ _ _ → refl)

@@ -31,9 +31,6 @@ instance
 
   Lawful-Bind-∥-∥₁ : Lawful-Bind (eff ∥_∥₁)
   Lawful-Bind-∥-∥₁ .Lawful-Bind.>>=-id-l = refl
-  Lawful-Bind-∥-∥₁ .Lawful-Bind.>>=-id-r {A} {mx} = go mx where opaque
-    go : (x : ∥ A ∥₁) → (x >>= pure) ＝ x
-    go = elim! λ _ → refl
-  Lawful-Bind-∥-∥₁ .Lawful-Bind.>>=-assoc {A} {mx} {f} {g} = go mx where opaque
-    go : (x : ∥ A ∥₁) → (x >>= f >>= g) ＝ (x >>= λ x → f x >>= g)
-    go = elim! λ _ → refl
+  Lawful-Bind-∥-∥₁ .Lawful-Bind.>>=-id-r = prop!
+  Lawful-Bind-∥-∥₁ .Lawful-Bind.>>=-assoc = prop!
+  Lawful-Bind-∥-∥₁ .<*>->>= = prop!
