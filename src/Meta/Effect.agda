@@ -4,6 +4,7 @@ module Meta.Effect where
 open import Meta.Effect.Alt         public
 open import Meta.Effect.Alternative public
 open import Meta.Effect.Base        public
+open import Meta.Effect.Container   public
 open import Meta.Effect.Bind        public
 open import Meta.Effect.Foldable    public
 open import Meta.Effect.Idiom       public

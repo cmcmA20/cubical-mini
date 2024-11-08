@@ -7,6 +7,7 @@ open import Meta.Effect.Base
 open import Meta.Effect.Map
 
 open import Data.Vec.Inductive.Base as Vec
+open import Data.Vec.Inductive.Instances.Container
 
 private variable
   @0 n : ℕ
@@ -18,18 +19,13 @@ mapᵥ f []       = []
 mapᵥ f (x ∷ xs) = f x ∷ mapᵥ f xs
 
 open Map ⦃ ... ⦄
-open Lawful-Map ⦃ ... ⦄
 
 instance
   Map-Vec : Map (eff (λ T → Vec T n))
   Map-Vec .map = mapᵥ
 
-  Lawful-Map-Vec : Lawful-Map (eff (λ T → Vec T n))
-  Lawful-Map-Vec .map-pres-id {A} = fun-ext go where opaque
-    go : (xs : Vec A n) → map refl xs ＝ xs
-    go [] = refl
-    go (x ∷ xs) = ap (x ∷_) (go xs)
-  Lawful-Map-Vec .map-pres-comp {A} {f} {g} = fun-ext go where opaque
-    go : (xs : Vec A n) → map (f ∙ g) xs ＝ (map f ∙ map g) xs
-    go [] = refl
-    go (x ∷ xs) = ap (g (f x) ∷_) (go xs)
+  Lawful-Map-Vec : {n : ℕ} → Lawful-Map (eff (λ T → Vec T n))
+  Lawful-Map-Vec = Lawful-Map-AC (fun-ext ∘ go) where
+    go : ∀{ℓa ℓb n} {A : 𝒰 ℓa} {B : 𝒰 ℓb} (f : A → B) (xs : Vec A n) → map f xs ＝ Map-AC-default .map f xs
+    go {n = 0}     f [] = refl
+    go {n = suc n} f (x ∷ xs) = f x ∷_ $ go f xs

@@ -4,9 +4,11 @@ module Data.List.Instances.Map where
 open import Foundations.Base
 
 open import Meta.Effect.Base
+open import Meta.Effect.Container
 open import Meta.Effect.Map
 
 open import Data.List.Base
+open import Data.List.Instances.Container
 
 private variable
   ℓ : Level
@@ -17,18 +19,13 @@ mapₗ f []       = []
 mapₗ f (x ∷ xs) = f x ∷ mapₗ f xs
 
 open Map ⦃ ... ⦄
-open Lawful-Map ⦃ ... ⦄
 
 instance
   Map-List : Map (eff List)
   Map-List .map = mapₗ
 
   Lawful-Map-List : Lawful-Map (eff List)
-  Lawful-Map-List .map-pres-id {A} = fun-ext go where opaque
-    go : (xs : List A) → map refl xs ＝ xs
-    go [] = refl
-    go (x ∷ xs) = ap (_ ∷_) (go xs)
-  Lawful-Map-List .map-pres-comp {A} {f} {g} = fun-ext go where opaque
-    go : (xs : List A) → map (f ∙ g) xs ＝ (map f ∙ map g) xs
-    go [] = refl
-    go (x ∷ xs) = ap (_ ∷_) (go xs)
+  Lawful-Map-List = Lawful-Map-AC λ f → fun-ext $ go f where
+    go : ∀{ℓa ℓb} {A : 𝒰 ℓa} {B : 𝒰 ℓb} (f : A → B) (xs : List A) → map f xs ＝ Map-AC-default .map f xs
+    go f [] = refl
+    go f (x ∷ xs) = ap (f x ∷_) (go f xs)
