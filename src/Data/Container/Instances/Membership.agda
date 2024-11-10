@@ -11,3 +11,4 @@ instance
     : ∀ {ℓ s p} {X : Type ℓ} {S : Type s} {P : S → Type p}
     → Membership X (⟦ S ▶ P ⟧ X) (ℓ ⊔ p)
   Membership-container ._∈_ x (_ , p) = fibre p x
+  {-# INCOHERENT Membership-container #-}
