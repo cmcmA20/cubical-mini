@@ -95,9 +95,8 @@ af-rel-morph f surj mor (AFlift al) =
   AFlift λ x →
   let (a , fa) = surj x in
   af-rel-morph f surj
-    (λ x₁ x₂ y₁ y₂ f₁ f₂ → λ where
-                               (inl r₁₂) → inl (mor x₁ x₂ y₁ y₂ f₁ f₂ r₁₂)
-                               (inr ra₁) → inr (mor a  x₁ x  y₁ fa f₁ ra₁))
+    (λ x₁ x₂ y₁ y₂ f₁ f₂ → dmap (mor x₁ x₂ y₁ y₂ f₁ f₂)
+                                (mor a  x₁ x  y₁ fa f₁))
     (al a)
 
 -- derived versions
