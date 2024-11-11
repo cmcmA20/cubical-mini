@@ -6,6 +6,7 @@ open Variadics _
 
 open import Data.AF.Base
 open import Data.Acc.Base
+open import Data.Acc.Properties
 open import Data.Empty.Base
 open import Data.Dec.Base as Dec
 open import Data.Sum.Base
@@ -59,9 +60,27 @@ WQO→WF {A} {R} af tr = AF→WF af go
   go [ _ , nryx ]⁺ ryx = nryx ryx
   go ((rxw , nrwx) ◅⁺ p) ryx = go p (tr ._∙_ ryx rxw)
 
+WQO-antisym→WF : {A : 𝒰 ℓ} {R : A → A → 𝒰 ℓ′}
+               → AF R → Trans R → (∀ x y → R x y → R y x → x ＝ y)
+               → is-wf (λ x y → R x y × (x ≠ y))
+WQO-antisym→WF af tr as =
+  wf-map
+    (λ x y → λ where (rxy , ne) → rxy , contra (as x y rxy) ne)
+    (WQO→WF af tr)
+
 -- Noetherianness
 
 AF→Noeth : AF R
          → (∀ {x y} → Plus (flip T) x y → R y x → ⊥)
          → is-noeth T
-AF→Noeth af cm y = AF→Acc af λ Pxz Rzx _ → cm Pxz Rzx
+AF→Noeth = AF→WF
+
+WQO→Noeth : {A : 𝒰 ℓ} {R : A → A → 𝒰 ℓ′}
+          → AF R → Trans R
+          → is-noeth (λ x y → R y x × (¬ R x y))
+WQO→Noeth = WQO→WF
+
+WQO-antisym→Noeth : {A : 𝒰 ℓ} {R : A → A → 𝒰 ℓ′}
+                  → AF R → Trans R → (∀ x y → R x y → R y x → x ＝ y)
+                  → is-noeth (λ x y → R y x × (y ≠ x))
+WQO-antisym→Noeth = WQO-antisym→WF

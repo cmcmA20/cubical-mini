@@ -28,8 +28,7 @@ private variable
 
 ↑-mono : (∀ {x y} → R x y → T x y) -- TODO subseteq
        → ∀ {x y a} → (R ↑ a) x y → (T ↑ a) x y
-↑-mono sub (inl rxy) = inl $ sub rxy
-↑-mono sub (inr rax) = inr $ sub rax
+↑-mono sub = dmap sub sub
 
 -- list lifting
 _↑↑_ : (A → A → 𝒰 ℓ′) → List A
@@ -76,7 +75,7 @@ af-map : ∀ {ℓa ℓb ℓr ℓt} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
        → {f : B → A} → (∀ x y → R (f x) (f y) → T x y)
        → AF R → AF T
 af-map {f} fr (AFfull af) = AFfull λ x y → fr x y (af (f x) (f y))
-af-map {f} fr (AFlift al) = AFlift λ b → af-map (λ x y → [ inl ∘ fr x y , inr ∘ fr b x ]ᵤ) (al (f b))
+af-map {f} fr (AFlift al) = AFlift λ b → af-map (λ x y → dmap (fr x y) (fr b x)) (al (f b))
 
 -- surjective relational morphism
 
