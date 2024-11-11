@@ -1,8 +1,7 @@
 {-# OPTIONS --safe #-}
 module Data.AF.Constructions where
 
-open import Foundations.Base
-open import Foundations.HLevel
+open import Meta.Prelude
 open Variadics _
 
 open import Data.Empty.Base
@@ -15,7 +14,10 @@ open import Data.Sum.Path
 open import Data.Maybe.Base
 open import Data.Nat
 open import Data.Nat.Order.Base
---open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Base
+open import Data.Fin.Computational.Path
+
+open import Data.Truncation.Propositional.Base
 
 open import Data.AF.Base
 open import Data.AF.Ramsey
@@ -28,6 +30,11 @@ private variable
 
 af-unit : AF {A = A} (λ _ _ → Lift ℓ′ ⊤)
 af-unit = AFfull λ _ _ → lift tt
+
+af-≤ : AF _≤_
+af-≤ = af-mono ≯→≤ (WFdec→AF <-is-wf λ x y → <-dec)
+
+-- finite types
 
 af-⊤ : AF {A = ⊤} _＝_
 af-⊤ = AFfull (hlevel 1)
@@ -52,12 +59,29 @@ af-bool =
        b)
     a
 
--- TODO arbitrary fintypes
--- af-fin : ∀ {n} → AF {A = Fin n} _＝_
--- af-fin = {!!}
+-- TODO move to Fin.Properties, currently it's using inductive orders and there are no conversions
+bound-pos : ∀ {n} → ∥ Fin n ∥₁ → 0 < n
+bound-pos {n = 0}     f = false! f
+bound-pos {n = suc n} f = z<s
 
-af-≤ : AF _≤_
-af-≤ = af-mono ≯→≤ (WFdec→AF <-is-wf λ x y → <-dec)
+fin<bound : ∀ {n} → (x : Fin n) → Fin.index x < n
+fin<bound x = so→true! $ recompute Recomputable-So $ Fin.bound x
+
+af-fin : ∀ {n} → AF {A = Fin n} _＝_
+af-fin {n} =
+  af-mono {R = λ x y → (Fin.index x ≤ Fin.index y) × (n ∸ Fin.index x ≤ n ∸ Fin.index y)}
+    (λ {x} {y} →
+     λ where
+        (le₁ , le₂) →
+           fin-ext $
+           ≤-antisym le₁ $
+           ≤≃≤+r ⁻¹ $
+           ≤-∸-r-≃ {m = Fin.index y} (bound-pos ∣ y ∣₁) $
+           subst (n ≤_) (+∸-assoc (Fin.index x) n (Fin.index y) (<→≤ $ fin<bound y)) $
+           ∸≤≃≤+ {m = n} {n = Fin.index x} $ le₂)
+    (af-inter (af-comap Fin.index af-≤) (af-comap (λ q → n ∸ Fin.index q) af-≤))
+
+-- TODO arbitrary fintypes
 
 -- relation combinators
 -- TODO could also be made into data?
