@@ -1,9 +1,9 @@
 {-# OPTIONS --safe #-}
 module Data.AF.Prop where
 
-open import Foundations.Base
-open Variadics _
+open import Meta.Prelude
 open import Meta.Effect
+open Variadics _
 
 open import Data.Empty.Base
 open import Data.Unit.Base
@@ -21,18 +21,24 @@ private variable
   A B : 𝒰 ℓ
   R T : A → A → 𝒰 ℓ′
 
+instance opaque
+  H-Level-AF₁ : ∀ {n} → ⦃ n ≥ʰ 1 ⦄ → H-Level n (AF₁ R)
+  H-Level-AF₁ ⦃ s≤ʰs _ ⦄ = hlevel-prop-instance AF₁squash
+  {-# OVERLAPPING H-Level-AF₁ #-}
+
 af₁-inv : AF₁ R → ∀ {a} → AF₁ (R ↑ a)
 af₁-inv (AF₁full f)         = AF₁full λ x y → map inl (f x y)
 af₁-inv (AF₁lift l) {a}     = l a
 af₁-inv (AF₁squash a₁ a₂ i) = AF₁squash (af₁-inv a₁) (af₁-inv a₂) i
 
 af₁-mono : (∀ {x y} → R x y → T x y) -- TODO subseteq
-        → AF₁ R → AF₁ T
+         → AF₁ R → AF₁ T
 af₁-mono sub (AF₁full f) =
   AF₁full λ x y → map sub (f x y)
 af₁-mono sub (AF₁lift l) =
   AF₁lift λ a → af₁-mono (λ {x} {y} → ↑-mono sub {x} {y} {a}) (l a)
-af₁-mono sub (AF₁squash a₁ a₂ i) = AF₁squash (af₁-mono sub a₁) (af₁-mono sub a₂) i
+af₁-mono sub (AF₁squash a₁ a₂ i) =
+  AF₁squash (af₁-mono sub a₁) (af₁-mono sub a₂) i
 
 af₁-comap : ∀ {ℓa ℓb ℓr} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {R : A → A → 𝒰 ℓr}
          → (f : B → A)
@@ -62,20 +68,38 @@ af₁-rel-morph : ∀ {ℓa ℓb ℓr ℓt} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {R :
               → AF₁ R → AF₁ T
 af₁-rel-morph f surj mor (AF₁full af) =
   AF₁full λ x y →
-  (surj x) & ∥-∥₁.elim (λ _ → squash₁)
-  λ where (a , fa) →
-             (surj y) & ∥-∥₁.elim (λ _ → squash₁)
-              λ where (b , fb) →
-                         (af a b) & ∥-∥₁.elim (λ _ → squash₁)
-                          λ r → ∣ mor a b x y fa fb r ∣₁
+  (surj x) & elim! λ a fa →
+  (surj y) & elim! λ b fb →
+  map (mor a b x y fa fb) (af a b)
 af₁-rel-morph f surj mor (AF₁lift al) =
   AF₁lift λ x →
-  (surj x) & ∥-∥₁.elim (λ _ → AF₁squash)
-  λ where (a , fa) →
-            af₁-rel-morph f surj
-              (λ x₁ x₂ y₁ y₂ f₁ f₂ → λ where
-                                         (inl r₁₂) → inl (mor x₁ x₂ y₁ y₂ f₁ f₂ r₁₂)
-                                         (inr ra₁) → inr (mor a  x₁ x  y₁ fa f₁ ra₁))
-              (al a)
+  (surj x) & elim! λ a fa →
+  af₁-rel-morph f surj
+     (λ x₁ x₂ y₁ y₂ f₁ f₂ → dmap (mor x₁ x₂ y₁ y₂ f₁ f₂)
+                                 (mor a  x₁ x  y₁ fa f₁))
+     (al a)
 af₁-rel-morph f surj mor (AF₁squash a₁ a₂ i) =
   AF₁squash (af₁-rel-morph f surj mor a₁) (af₁-rel-morph f surj mor a₂) i
+
+-- derived versions
+
+af₁-mono′ : (∀ {x y} → R x y → T x y)
+          → AF₁ R → AF₁ T
+af₁-mono′ {T} f =
+  af₁-rel-morph _＝_ (λ y → ∣ y , refl ∣₁)
+    λ x₁ x₂ y₁ y₂ e₁ e₂ → subst (λ q → T q y₂) e₁ ∘ subst (T x₁) e₂ ∘ f
+
+af₁-comap′ : ∀ {ℓa ℓb ℓr} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {R : A → A → 𝒰 ℓr}
+           → (f : B → A)
+           → AF₁ R → AF₁ (λ x y → R (f x) (f y))
+af₁-comap′ {R} f =
+  af₁-rel-morph (λ x y → x ＝ f y) (λ y → ∣ f y , refl ∣₁)
+    λ x₁ x₂ y₁ y₂ e₁ e₂ → subst (λ q → R q (f y₂)) e₁ ∘ subst (R x₁) e₂
+
+af₁-map′ : ∀ {ℓa ℓb ℓr ℓt} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+             {R : A → A → 𝒰 ℓr} {T : B → B → 𝒰 ℓt}
+         → {f : B → A} → (∀ x y → R (f x) (f y) → T x y)
+         → AF₁ R → AF₁ T
+af₁-map′ {R} {f} fr =
+  af₁-rel-morph (λ x y → x ＝ f y) (λ y → ∣ f y , refl ∣₁)
+    λ x₁ x₂ y₁ y₂ e₁ e₂ → fr y₁ y₂ ∘ subst (λ q → R q (f y₂)) e₁ ∘ subst (R x₁) e₂
