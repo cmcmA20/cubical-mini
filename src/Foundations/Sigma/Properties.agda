@@ -241,6 +241,11 @@ open Iso
 ×-swap .fst (x , y) = y , x
 ×-swap .snd .equiv-proof = strict-contr-fibres _
 
+curry-≃ : {A : Type ℓ} {B : A → Type ℓ′} {C : (x : A) → B x → Type ℓ″}
+        → Π[ x ꞉ A ] Π[ y ꞉ B x ] C x y
+        ≃ Π[ (x , y) ꞉ Σ[ x ꞉ A ] B x ] C x y
+curry-≃ = ≅→≃ $ iso _$²_ curry² refl refl
+
 
 -- Automation
 

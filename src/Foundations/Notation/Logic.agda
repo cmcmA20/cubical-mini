@@ -69,6 +69,15 @@ record ×-notation {ℓa ℓb ℓ ℓ′}
 open ×-notation ⦃ ... ⦄ public using (_×_)
 {-# DISPLAY ×-notation._×_ _ a b = a × b #-}
 
+record ⊗-notation {ℓa ℓb ℓ ℓ′}
+  (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
+  infixr 8 _⊗_
+  field
+    Constraint : A → B → Type ℓ′
+    _⊗_ : (a : A) (b : B) ⦃ _ : Constraint a b ⦄ → R
+open ⊗-notation ⦃ ... ⦄ public using (_⊗_)
+{-# DISPLAY ⊗-notation._⊗_ _ a b = a ⊗ b #-}
+
 record ⊕-notation {ℓa ℓb ℓ ℓ′}
   (A : 𝒰 ℓa) (B : 𝒰 ℓb) (R : 𝒰 ℓ) : 𝒰 (ℓa ⊔ ℓb ⊔ ℓ ⊔ ℓsuc ℓ′) where
   infixr 7 _⊕_

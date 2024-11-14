@@ -19,6 +19,15 @@ record Variadics : Typeω where
     ×-Variadic .×-notation._×_ f g x = f x × g x
     {-# OVERLAPPING ×-Variadic #-}
 
+    ⊗-Variadic
+      : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
+        {X : Type ℓx} ⦃ im : ⊗-notation {ℓ′ = ℓ} A B R ⦄
+      → ⊗-notation (X → A) (X → B) (X → R)
+    ⊗-Variadic ⦃ im ⦄ .⊗-notation.Constraint f g =
+      ∀ {x} → im .⊗-notation.Constraint (f x) (g x)
+    ⊗-Variadic .⊗-notation._⊗_ f g x = f x ⊗ g x
+    {-# OVERLAPPING ⊗-Variadic #-}
+
     ⊕-Variadic
       : {A : Type ℓa} {B : Type ℓb} {R : Type ℓr}
         {X : Type ℓx} ⦃ im : ⊕-notation {ℓ′ = ℓ} A B R ⦄
