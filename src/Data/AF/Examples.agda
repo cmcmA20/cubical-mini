@@ -36,15 +36,34 @@ Tfl (x₁ , x₂) (y₁ , y₂) = (x₁ < y₁) ⊎ ((x₁ ＝ y₁) × (x₂ < 
 Rfl : ℕ × ℕ → ℕ × ℕ → 𝒰
 Rfl (x₁ , x₂) (y₁ , y₂) = (x₁ ≤ y₁) × (x₂ ≤ y₂)
 
+Tfl-trans : ∀ {x₁ x₂ y₁ y₂ z₁ z₂}
+          → Tfl (x₁ , x₂) (y₁ , y₂)
+          → Tfl (y₁ , y₂) (z₁ , z₂)
+          → Tfl (x₁ , x₂) (z₁ , z₂)
+Tfl-trans (inl x₁<y₁)            (inl y₁<z₁)           = inl (<-trans x₁<y₁ y₁<z₁)
+Tfl-trans (inl x₁<y₁)            (inr (y₁=z₁ , y₂<z₂)) = inl (<-≤-trans x₁<y₁ (=→≤ y₁=z₁))
+Tfl-trans (inr (x₁=y₁ , x₂<y₂))  (inl y₁<z₁)           = inl (≤-<-trans (=→≤ x₁=y₁) y₁<z₁)
+Tfl-trans (inr (x₁=y₁ , x₂<y₂))  (inr (y₁=z₁ , y₂<z₂)) = inr ((x₁=y₁ ∙ y₁=z₁) , (<-trans x₂<y₂ y₂<z₂))
+
 Tfl-empty-intersect : ∀ {x₁ x₂ y₁ y₂}
                     → Plus Tfl (x₁ , x₂) (y₁ , y₂)
                     → Rfl (y₁ , y₂) (x₁ , x₂)
                     → ⊥
-Tfl-empty-intersect [ inl x<y₁ ]⁺       (y≤x₁ , y≤x₂) = <→≱ x<y₁ y≤x₁
-Tfl-empty-intersect [ inr (e , x<y₂) ]⁺ (y≤x₁ , y≤x₂) = <→≱ x<y₂ y≤x₂
-Tfl-empty-intersect (h ◅⁺ p)            (y≤x₁ , y≤x₂) =
+Tfl-empty-intersect p (y₁≤x₁ , y₂≤x₂) =
+  [ (λ x₁<y₁ → <→≱ x₁<y₁ y₁≤x₁)
+  , (λ where (_ , x₂<y₂) → <→≱ x₂<y₂ y₂≤x₂)
+  ]ᵤ (plus-fold1 (record { _∙_ = Tfl-trans }) p)
+
+-- or directly by induction
+Tfl-empty-intersect′ : ∀ {x₁ x₂ y₁ y₂}
+                    → Plus Tfl (x₁ , x₂) (y₁ , y₂)
+                    → Rfl (y₁ , y₂) (x₁ , x₂)
+                    → ⊥
+Tfl-empty-intersect′ [ inl x<y₁ ]⁺       (y≤x₁ , y≤x₂) = <→≱ x<y₁ y≤x₁
+Tfl-empty-intersect′ [ inr (e , x<y₂) ]⁺ (y≤x₁ , y≤x₂) = <→≱ x<y₂ y≤x₂
+Tfl-empty-intersect′ (h ◅⁺ p)            (y≤x₁ , y≤x₂) =
   [ ≤→≯ (plus-fold1 Trans-≤ (plus-map [ <→≤ , =→≤ ∘ fst ]ᵤ p) ∙ y≤x₁)
-  , (λ where (e , x<w₂) → Tfl-empty-intersect p (y≤x₁ ∙ =→≤ e , y≤x₂ ∙ <→≤ x<w₂))
+  , (λ where (e , x<w₂) → Tfl-empty-intersect′ p (y≤x₁ ∙ =→≤ e , y≤x₂ ∙ <→≤ x<w₂))
   ]ᵤ h
 
 flex : ℕ × ℕ → ℕ
