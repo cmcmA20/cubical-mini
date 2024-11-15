@@ -2,10 +2,16 @@
 module Data.Plus.Properties where
 
 open import Foundations.Base
+
+open import Data.Empty.Base
+open import Data.Acc.Base
+open import Data.Acc.Properties
+open import Data.Sum.Base
 open import Data.Nat.Base
 open import Data.Nat.Properties
 open import Data.Plus.Base
 open import Data.Star.Base
+open import Data.Star.Properties
 
 private variable
   ℓ ℓa : Level
@@ -38,6 +44,26 @@ plus-map-len (_ ◅⁺ pxy) = ap suc (plus-map-len pxy)
 
 -- interaction with Star
 
+plus→star : Plus R x y → Star R x y
+plus→star [ rxy ]⁺   = rxy ◅ ε refl
+plus→star (rxw ◅⁺ p) = rxw ◅ plus→star p
+
+plus-uncons : ∀ {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y : A}
+            → Plus R x y → Σ[ z ꞉ A ] (R x z × Star R z y)
+plus-uncons {y} [ rxy ]⁺   = y , rxy , ε refl
+plus-uncons     (_◅⁺_ {y = w} rxw p) = w , rxw , plus→star p
+
+plus-last : ∀ {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y : A}
+          → Plus R x y → Σ[ z ꞉ A ] (Star R x z × R z y)
+plus-last {x} [ rxy ]⁺   = x , ε refl , rxy
+plus-last     (rxw ◅⁺ p) =
+  let (z , s , r) = plus-last p in
+  z , rxw ◅ s , r
+
+plus-trans-star : Plus R x y → Star R y z → Plus R x z
+plus-trans-star {R} {x} pxy (ε e)       = subst (Plus R x) e pxy
+plus-trans-star         pxy (ryw ◅ swz) = plus-trans-star (pxy ◅⁺∷ ryw) swz
+
 _◅⋆∷_ : Star R x y → R y z → Plus R x z
 _◅⋆∷_ {R} {z} (ε e) ryz = [ subst (λ q → R q z) (e ⁻¹) ryz ]⁺
 (rxw ◅ swy) ◅⋆∷ ryz     = rxw ◅⁺ (swy ◅⋆∷ ryz)
@@ -47,3 +73,11 @@ _◅⋆∷_ {R} {z} (ε e) ryz = [ subst (λ q → R q z) (e ⁻¹) ryz ]⁺
 plus-fold1 : Trans R → Plus R x y → R x y
 plus-fold1 tr [ rxy ]⁺     = rxy
 plus-fold1 tr (rxw ◅⁺ pwy) = tr ._∙_ rxw (plus-fold1 tr pwy)
+
+wf→acyclic+ : ∀ {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ}
+            → is-wf R
+            → ∀ x
+            → ¬ Plus R x x
+wf→acyclic+ {R = R} wf x p =
+  let (y , r , s) = plus-uncons p in
+  wf→acyclic wf x x y (ε refl) r s
