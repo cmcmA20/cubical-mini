@@ -9,7 +9,7 @@ open import Data.Acc.Base
 open import Data.Acc.Properties
 open import Data.Empty.Base
 open import Data.Dec.Base as Dec
-open import Data.Sum.Base
+open import Data.Sum.Base as ⊎
 open import Data.Star.Base
 open import Data.Plus.Base
 open import Data.Plus.Properties
@@ -41,7 +41,7 @@ WFdec→AF {R} wf dec =
     (λ q → AF ((λ x y → ¬ₜ R y x) ↑ q))
     λ b ih → AFlift λ a →
       Dec.rec
-        (λ rab  → af-mono [ inl ∘ inl , inr ∘ inl ]ᵤ (ih a rab))
+        (λ rab  → af-mono (⊎.dmap inl inl) (ih a rab))
         (λ nrab → AFfull λ _ _ → inr (inr nrab))
         (dec a b)
 

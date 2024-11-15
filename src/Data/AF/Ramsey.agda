@@ -59,11 +59,10 @@ af-zero-inter-rec {ℓ′} {X} {A} {B} =
     λ U V Ul Vl C ui vi →
        AFlift λ a →
        af-mono {R = λ x y → (C x y ⊎ C a x) ⊎ A × B}
-          [ [ inl ∘ inl , inr ∘ inl ]ᵤ , inr ∘ inr ]ᵤ
+          [ dmap inl inl , inr ∘ inr ]ᵤ
           (Ul a (C ↑ a)
-             (λ x y → [ [ inl ∘ inl , inr ]ᵤ ∘ ui x y
-                      , [ inl ∘ inr , inr ]ᵤ ∘ ui a x ]ᵤ)
-             (λ x y → [ inl ∘ inl , inr ]ᵤ ∘ vi x y))
+             (λ x y → [ map-l inl ∘ ui x y , map-l inr ∘ ui a x ]ᵤ)
+             (λ x y → map-l inl ∘ vi x y))
 
 af-zero-inter : ∀ {ℓ ℓ′} {X : 𝒰 ℓ} {A B : 𝒰 ℓ′} {R : X → X → 𝒰 ℓ′}
               → AF (λ x y → R x y ⊎ A)
