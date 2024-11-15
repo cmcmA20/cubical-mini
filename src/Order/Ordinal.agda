@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --no-exact-split #-}
+{-# OPTIONS --safe #-}
 module Order.Ordinal where
 
 open import Cat.Prelude
@@ -45,45 +45,6 @@ Ordinal : ∀ ℓ → 𝒰 (ℓsuc ℓ)
 Ordinal ℓ = Σ[ W ꞉ WESet ℓ ℓ ] (∀ {x y z} → WESet._<_ W x y → WESet._<_ W y z → WESet._<_ W x z)
 
 private variable o o′ o″ o‴ ℓ ℓ′ ℓ″ ℓ‴ : Level
-
-suco : Ordinal ℓ → Ordinal ℓ
-suco {ℓ} (W , tr) = Wsuc , λ {x} {y} {z} → ws-trans {x} {y} {z}
-  where
-  module W = WESet W
-  _<ws_ : ⊤ ⊎ W.Ob → ⊤ ⊎ W.Ob  → 𝒰 ℓ
-  (inl _) <ws  _      = ⊥
-  (inr _) <ws (inl _) = ⊤
-  (inr x) <ws (inr y) = x W.< y
-
-  ws-trans : ∀ {x y z} → x <ws y → y <ws z → x <ws z
-  ws-trans {x = inr x} {y = inr y} {z = inl tt} _  _  = lift tt
-  ws-trans {x = inr x} {y = inr y} {z = inr z}  xy yz = tr xy yz
-
-  ws-wf : is-wf _<ws_
-  ws-wf (inl tt) = acc λ where
-                           (inl tt) ()
-                           (inr x) _ → ws-wf (inr x)
-  ws-wf (inr x) = to-induction W.<-wf (λ q → Acc _<ws_ (inr q))
-                    (λ z ih → acc λ where
-                                      (inl tt) ()
-                                      (inr q) → ih q)
-                    x
-
-  Wsuc : WESet ℓ ℓ
-  Wsuc .WESet.Ob = ⊤ ⊎ W.Ob
-  Wsuc .WESet._<_ = _<ws_
-  Wsuc .WESet.<-thin {x = inr x} {y = inl _} = hlevel!
-  Wsuc .WESet.<-thin {x = inr x} {y = inr y} = hlevel!
-  Wsuc .WESet.<-wf = ws-wf
-  Wsuc .WESet.<-lext {x = inl tt} {y = inl tt} eqv = refl
-  Wsuc .WESet.<-lext {x = inl tt} {y = inr y}  eqv =
-    ⊥.rec (wf→irrefl W.<-wf y (eqv (inr y) $ lift tt))
-  Wsuc .WESet.<-lext {x = inr x}  {y = inl tt} eqv =
-    ⊥.rec (wf→irrefl W.<-wf x (eqv (inr x) ⁻¹ $ lift tt))
-  Wsuc .WESet.<-lext {x = inr x}  {y = inr y}  eqv =
-    ap inr $
-    W.<-lext λ z →
-    prop-extₑ! (eqv (inr z) $_) (eqv (inr z) ⁻¹ $_)
 
 module _ (P : WESet o ℓ) (Q : WESet o′ ℓ′) where
   private
