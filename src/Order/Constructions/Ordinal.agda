@@ -16,8 +16,8 @@ open import Order.Constructions.Lex
 private variable
   ℓ : Level
 
-suco : Ordinal ℓ → Ordinal ℓ
-suco {ℓ} (W , tr) = Wsuc , λ {x} {y} {z} → ws-trans {x} {y} {z}
+sucₒ : Ordinal ℓ → Ordinal ℓ
+sucₒ {ℓ} (W , tr) = Wsuc , λ {x} {y} {z} → ws-trans {x} {y} {z}
   where
   module W = WESet W
   _<ws_ : ⊤ ⊎ W.Ob → ⊤ ⊎ W.Ob → 𝒰 ℓ
@@ -55,8 +55,8 @@ suco {ℓ} (W , tr) = Wsuc , λ {x} {y} {z} → ws-trans {x} {y} {z}
     W.<-lext λ z →
     prop-extₑ! (eqv (inr z) $_) (eqv (inr z) ⁻¹ $_)
 
-_+o_ : Ordinal ℓ → Ordinal ℓ → Ordinal ℓ
-_+o_ {ℓ} (W₁ , tr₁) (W₂ , tr₂) = W+ , λ {x} {y} {z} → w+-trans {x} {y} {z}
+_+ₒ_ : Ordinal ℓ → Ordinal ℓ → Ordinal ℓ
+_+ₒ_ {ℓ} (W₁ , tr₁) (W₂ , tr₂) = W+ , λ {x} {y} {z} → w+-trans {x} {y} {z}
   where
   module W₁ = WESet W₁
   module W₂ = WESet W₂
@@ -108,8 +108,8 @@ _+o_ {ℓ} (W₁ , tr₁) (W₂ , tr₂) = W+ , λ {x} {y} {z} → w+-trans {x} 
     W₂.<-lext λ z →
     prop-extₑ! (eqv (inr z) $_) (eqv (inr z) ⁻¹ $_)
 
-_∙o_ : Ordinal ℓ → Ordinal ℓ → Ordinal ℓ
-_∙o_ {ℓ} (W₁ , tr₁) (W₂ , tr₂) = W∙ , λ {x} {y} {z} → w∙-trans {x} {y} {z}
+_∙ₒ_ : Ordinal ℓ → Ordinal ℓ → Ordinal ℓ
+_∙ₒ_ {ℓ} (W₁ , tr₁) (W₂ , tr₂) = W∙ , λ {x} {y} {z} → w∙-trans {x} {y} {z}
   where
   module W₁ = WESet W₁
   module W₂ = WESet W₂
@@ -145,9 +145,9 @@ _∙o_ {ℓ} (W₁ , tr₁) (W₂ , tr₂) = W∙ , λ {x} {y} {z} → w∙-tran
                    (λ z<x₂ → [ refl
                              , (λ where (_ , y<y₁) → ⊥.rec (wf→irrefl W₁.<-wf y₁ y<y₁))
                              ]ᵤ (eqv (y₁ , z) $ inl z<x₂))
-                   λ z<y₂ → [ refl
+                   (λ z<y₂ → [ refl
                              , (λ where (_ , x<x₁) → ⊥.rec (wf→irrefl W₁.<-wf x₁ x<x₁))
-                             ]ᵤ (eqv (x₁ , z) ⁻¹ $ (inl z<y₂))
+                             ]ᵤ (eqv (x₁ , z) ⁻¹ $ (inl z<y₂)))
       in
     ×-path
       (W₁.<-lext λ z →
@@ -155,7 +155,9 @@ _∙o_ {ℓ} (W₁ , tr₁) (W₂ , tr₂) = W∙ , λ {x} {y} {z} → w∙-tran
           (λ z<x₁ → [ (λ x<y₂ → ⊥.rec (wf→irrefl W₂.<-wf x₂ (subst (x₂ W₂.<_) (x=y₂ ⁻¹) x<y₂)))
                     , snd
                     ]ᵤ (eqv (z , x₂) $ inr (refl , z<x₁)))
-          λ z<y₁ → [ (λ y<x₂ → ⊥.rec (wf→irrefl W₂.<-wf y₂ (subst (y₂ W₂.<_) x=y₂ y<x₂)))
+          (λ z<y₁ → [ (λ y<x₂ → ⊥.rec (wf→irrefl W₂.<-wf y₂ (subst (y₂ W₂.<_) x=y₂ y<x₂)))
                     , snd
-                    ]ᵤ (eqv (z , y₂) ⁻¹ $ inr (refl , z<y₁)))
+                    ]ᵤ (eqv (z , y₂) ⁻¹ $ inr (refl , z<y₁))))
       x=y₂
+
+-- TODO exponentiation
