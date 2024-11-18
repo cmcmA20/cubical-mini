@@ -18,6 +18,9 @@ _<*>ᵥ_ : Vec (A → B) n → Vec A n → Vec B n
 []       <*>ᵥ _        = []
 (f ∷ fs) <*>ᵥ (x ∷ xs) = f x ∷ (fs <*>ᵥ xs)
 
+open Idiom ⦃ ... ⦄
+open Lawful-Idiom ⦃ ... ⦄
+
 instance
   Idiom-Vec : ∀ {n} → Idiom (eff (λ T → Vec T n))
   Idiom-Vec .pure = replicate _
@@ -41,3 +44,7 @@ instance
        → (pure _∘ˢ_ <*> gs <*> fs <*> xs) ＝ (gs <*> (fs <*> xs))
     go {0}     []       fs       _        = refl
     go {suc n} (g ∷ gs) (f ∷ fs) (x ∷ xs) = ap (_ ∷_) (go gs fs xs)
+  Lawful-Idiom-Vec .map-pure {A} {f} = fun-ext go where opaque
+    go : ∀ {n} (xs : Vec A n) → mapᵥ f xs ＝ (replicate n f <*> xs)
+    go {0}     []       = refl
+    go {suc n} (x ∷ xs) = ap (_ ∷_) (go xs)

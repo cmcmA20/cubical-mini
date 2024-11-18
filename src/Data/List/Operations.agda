@@ -18,6 +18,8 @@ open import Data.List.Base as List
 open import Data.List.Instances.Idiom
 open import Data.List.Instances.Map
 
+open Map ⦃ ... ⦄
+
 private variable
   ℓ ℓ′ ℓ″ : Level
   A : Type ℓ

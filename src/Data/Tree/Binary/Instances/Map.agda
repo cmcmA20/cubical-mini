@@ -12,6 +12,9 @@ private variable
   ℓ : Level
   A : Type ℓ
 
+open Map ⦃ ... ⦄
+open Lawful-Map ⦃ ... ⦄
+
 instance
   Map-Tree : Map (eff Tree)
   Map-Tree .map {A} {B} = go where

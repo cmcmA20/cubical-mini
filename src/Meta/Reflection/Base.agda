@@ -7,12 +7,7 @@ open import Meta.Literals.FromNat     public
 open import Meta.Literals.FromString  public
 open import Meta.Literals.FromProduct public
 
-open import Meta.Effect.Base
-open import Meta.Effect.Map
-open import Meta.Effect.Idiom
-open import Meta.Effect.Bind public
-open import Meta.Effect.Alt
-open import Meta.Effect.Traversable
+open import Meta.Effect
 open import Meta.Reflection.Argument
 open import Meta.Reflection.Neutral
 

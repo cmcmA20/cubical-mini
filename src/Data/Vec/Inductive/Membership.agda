@@ -13,6 +13,8 @@ open import Data.Fin.Inductive.Base
 open import Data.Sum.Base
 open import Data.Vec.Inductive.Operations
 
+open Alternative ⦃ ... ⦄
+
 private variable
   ℓ : Level
   A : Type ℓ

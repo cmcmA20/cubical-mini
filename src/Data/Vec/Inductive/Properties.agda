@@ -6,8 +6,7 @@ open import Meta.Prelude
 open import Data.Empty.Base
 open import Data.Fin.Inductive.Base as Fin
 open import Data.List.Base
-  renaming (List to Listⁱ)
-open import Data.List.Container
+open import Data.List.Instances.Container
 open import Data.Nat.Path
 open import Data.Reflects.Base
 open import Data.Vec.Inductive.Base public
@@ -37,7 +36,7 @@ vec-fun-equiv = ≅→≃ $ iso lookup tabulate (fun-ext lemma₁) (fun-ext lemm
   lemma₂ {n = 0}     []       = refl
   lemma₂ {n = suc n} (x ∷ xs) = ap (x ∷_) (lemma₂ _)
 
-list≃vec : Listⁱ A ≃ Σ[ n ꞉ ℕ ] Vec A n
+list≃vec : List A ≃ Σ[ n ꞉ ℕ ] Vec A n
 list≃vec
-  = list-container-equiv
+  = list≃cont
   ∙ Σ-ap-snd (λ _ → (vec-fun-equiv ∙ Π-dom-≃ Fin.default≃inductive) ⁻¹)

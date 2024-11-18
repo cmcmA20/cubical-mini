@@ -2,6 +2,7 @@
 module Structures.DecProp where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Extensionality
 open import Meta.Record
 open import Meta.Projection

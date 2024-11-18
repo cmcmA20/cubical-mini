@@ -12,6 +12,9 @@ open import Data.Vec.Ergonomic.Base
 open import Data.Vec.Ergonomic.Instances.Foldable
 open import Data.Vec.Ergonomic.Instances.Map
 
+open Map ⦃ ... ⦄
+open Foldable ⦃ ... ⦄
+
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level
   n : ℕ

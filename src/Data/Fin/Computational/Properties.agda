@@ -2,8 +2,7 @@
 module Data.Fin.Computational.Properties where
 
 open import Meta.Prelude
-
-open import Meta.Effect.Bind
+open import Meta.Effect
 
 open import Data.Empty.Base
 open import Data.Fin.Computational.Base public

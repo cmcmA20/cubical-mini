@@ -10,6 +10,9 @@ open import Meta.Effect.Traversable
 
 open import Data.Maybe.Base
 
+open Idiom ⦃ ... ⦄
+open Traversable ⦃ ... ⦄
+
 instance
   Traversable-Maybe : Traversable (eff Maybe)
   Traversable-Maybe .traverse f (just x) = just <$> f x

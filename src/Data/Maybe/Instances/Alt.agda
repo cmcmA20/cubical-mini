@@ -14,6 +14,9 @@ private variable
   A : Type ℓ
   M : Effect
 
+open Alt ⦃ ... ⦄
+open Idiom ⦃ ... ⦄
+
 maybe→alt : (let module M = Effect M)
             ⦃ _ : Alt M ⦄ ⦃ _ : Idiom M ⦄
           → Maybe A → M.₀ A

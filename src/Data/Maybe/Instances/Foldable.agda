@@ -8,6 +8,8 @@ open import Meta.Effect.Foldable
 
 open import Data.Maybe.Base
 
+open Foldable ⦃ ... ⦄
+
 instance
   Foldable-Maybe : Foldable (eff Maybe)
   Foldable-Maybe .fold-r f b (just x) = f x b

@@ -7,10 +7,13 @@ open import Meta.Effect.Base
 open import Meta.Effect.Map
 
 open import Data.Maybe.Base as Maybe
+open import Data.Maybe.Instances.Container
 
 private variable
   ℓ : Level
   A B : Type ℓ
+
+open Map ⦃ ... ⦄
 
 mapₘ : (A → B) → Maybe A → Maybe B
 mapₘ f (just x) = just (f x)
@@ -21,11 +24,7 @@ instance
   Map-Maybe .map = mapₘ
 
   Lawful-Map-Maybe : Lawful-Map (eff Maybe)
-  Lawful-Map-Maybe .map-pres-id {A} = fun-ext go where opaque
-    go : (mx : Maybe A) → map refl mx ＝ mx
-    go (just _) = refl
-    go nothing  = refl
-  Lawful-Map-Maybe .map-pres-comp {A} {f} {g} = fun-ext go where opaque
-    go : (mx : Maybe A) → map (f ∙ g) mx ＝ (map f ∙ map g) mx
-    go (just _) = refl
-    go nothing  = refl
+  Lawful-Map-Maybe = Lawful-Map-AC (fun-ext ∘ go) where
+    go : ∀{ℓa ℓb} {A : 𝒰 ℓa} {B : 𝒰 ℓb} (f : A → B) (mx : Maybe A) → map f mx ＝ Map-AC-default .map f mx
+    go _ (just _) = refl
+    go _ nothing  = refl

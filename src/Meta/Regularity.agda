@@ -2,6 +2,7 @@
 module Meta.Regularity where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Reflection.Base
 open import Meta.Reflection.Subst
 

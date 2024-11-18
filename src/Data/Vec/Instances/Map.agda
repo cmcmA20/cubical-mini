@@ -8,6 +8,8 @@ open import Meta.Effect.Map
 
 open import Data.Vec.Base
 
+open Map ⦃ ... ⦄
+
 instance
   Map-Vec : ∀{n} → Map (eff λ T → Vec T n)
   Map-Vec .map {A} {B} = go where

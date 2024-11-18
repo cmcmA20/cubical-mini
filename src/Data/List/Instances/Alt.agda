@@ -8,6 +8,8 @@ open import Meta.Effect.Base
 
 open import Data.List.Base
 
+open Alt ⦃ ... ⦄
+
 instance
   Alt-List : Alt (eff List)
   Alt-List .fail = []

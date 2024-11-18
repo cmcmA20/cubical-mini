@@ -6,6 +6,8 @@ module Cat.Constructions.Supp {ℓᵃ} (A : Set ℓᵃ) where
 open import Cat.Displayed.Univalence.Thin
 import Cat.Morphism
 
+open import Meta.Effect
+
 open import Data.Bool as Bool
 
 open Precategory

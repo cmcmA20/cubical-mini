@@ -2,6 +2,7 @@
 module Data.Quotient.Set.Properties where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Meta.Extensionality
 
 open import Structures.n-Type

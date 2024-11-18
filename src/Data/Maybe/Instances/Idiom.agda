@@ -14,9 +14,13 @@ private variable
   ℓ : Level
   A B C : Type ℓ
 
+open Map ⦃ ... ⦄
+open Idiom ⦃ ... ⦄
+open Lawful-Idiom ⦃ ... ⦄
+
 _<*>ₘ_ : Maybe (A → B) → Maybe A → Maybe B
 nothing <*>ₘ _  = nothing
-just f  <*>ₘ mx = mapₘ f mx
+just f  <*>ₘ mx = map f mx
 
 instance
   Idiom-Maybe : Idiom (eff Maybe)
@@ -40,3 +44,4 @@ instance
     go (just g) (just f) nothing  = refl
     go (just g) nothing  mx       = refl
     go nothing  _        _        = refl
+  Lawful-Idiom-Maybe .map-pure = refl

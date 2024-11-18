@@ -20,9 +20,9 @@ record Monoidal (M : Effect) : Typeω where
     unit  : M.₀ ⊤
     _<,>_ : M.₀ A → M.₀ B → M.₀ (A × B)
   infixr 4 _<,>_
-open Monoidal ⦃ ... ⦄ public
-{-# DISPLAY Monoidal.unit _ = unit #-}
-{-# DISPLAY Monoidal._<,>_ _ m = _<,>_ m #-}
+open Monoidal ⦃ ... ⦄
+
+open Idiom ⦃ ... ⦄
 
 instance
   Monoidal-Idiom : {M : Effect} → ⦃ Idiom M ⦄ → Monoidal M

@@ -36,9 +36,9 @@ record is-pullback {P : Ob} (p₁ : P ⇒ X) (f : X ⇒ Z) (p₂ : P ⇒ Y) (g :
     : ⦃ hl : ∀ {x y} → H-Level 2 (Hom x y) ⦄ {O : Ob}
     → O ⇒ P
     ≃ Σ[ h ꞉ O ⇒ X ] Σ[ h′ ꞉ O ⇒ Y ] (f ∘ h ＝ g ∘ h′)
-  pullback-univ .fst h = p₁ ∘ h , p₂ ∘ h , cat! C ∙ ap (_∘ h) square ∙ cat! C
-  pullback-univ .snd = qinv→is-equiv $ qinv (λ (f , g , α) → universal α)
-    (fun-ext λ _ → p₁∘universal ,ₚ p₂∘universal ,ₚ prop!)
+  pullback-univ .fst h = p₁ ∘ h , p₂ ∘ h , assoc _ _ _ ⁻¹ ∙ ap (_∘ h) square ∙ assoc _ _ _
+  pullback-univ {O} .snd = qinv→is-equiv $ qinv (λ (f , g , α) → universal α)
+    (fun-ext λ (h , h′ , prf) → p₁∘universal ,ₚ p₂∘universal ,ₚ prop!) -- TODO prove manually?
     (fun-ext λ _ → unique refl refl ⁻¹)
 
 

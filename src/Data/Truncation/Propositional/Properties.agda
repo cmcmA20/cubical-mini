@@ -2,7 +2,7 @@
 module Data.Truncation.Propositional.Properties where
 
 open import Meta.Prelude
-open import Meta.Effect.Map
+open import Meta.Effect
 open import Meta.Extensionality
 
 open import Functions.Constant

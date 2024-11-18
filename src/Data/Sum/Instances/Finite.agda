@@ -2,8 +2,7 @@
 module Data.Sum.Instances.Finite where
 
 open import Meta.Prelude
-
-open import Meta.Effect.Bind
+open import Meta.Effect
 
 open import Combinatorics.Finiteness.Bishop.Manifest
 open import Combinatorics.Finiteness.Bishop.Weak

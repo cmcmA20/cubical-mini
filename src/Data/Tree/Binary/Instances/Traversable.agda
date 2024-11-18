@@ -13,6 +13,9 @@ private variable
   ℓ : Level
   A : Type ℓ
 
+open Idiom ⦃ ... ⦄
+open Traversable ⦃ ... ⦄
+
 instance
   Traversable-Tree : Traversable (eff Tree)
   Traversable-Tree .traverse {M} {A} {B} = go where
