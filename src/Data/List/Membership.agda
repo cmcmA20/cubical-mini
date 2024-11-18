@@ -3,6 +3,7 @@ module Data.List.Membership where
 
 open import Meta.Prelude
 open import Meta.Extensionality
+open import Meta.Effect
 
 open import Logic.Discreteness
 

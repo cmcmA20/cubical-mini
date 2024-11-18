@@ -3,6 +3,7 @@ module Data.List.Correspondences.Unary.Any where
 
 open import Meta.Prelude
 open import Meta.Extensionality
+open import Meta.Effect
 open Variadics _
 
 open import Data.Bool.Base
