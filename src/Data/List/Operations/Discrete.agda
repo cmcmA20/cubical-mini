@@ -47,18 +47,16 @@ subseq     []       ys       = true
 subseq     (x ∷ xs) []       = false
 subseq xs₀@(x ∷ xs) (y ∷ ys) = subseq (if ⌊ x ≟ y ⌋ then xs else xs₀) ys
 
-related? : {R : A → A → 𝒰 ℓ′}
-         → Decidable R
+related? : (A → A → Bool)
          → A → List A → Bool
-related?     R? x0 []       = true
-related? {R} R? x0 (x ∷ xs) =
-  ⌊ R? {x = x0} {x = x} ⌋ and related? {R = R} R? x xs
+related? r? x0 []       = true
+related? r? x0 (x ∷ xs) =
+  r? x0 x and related? r? x xs
 
-sorted? : {R : A → A → 𝒰 ℓ′}
-        → Decidable R
+sorted? : (A → A → Bool)
         → List A → Bool
-sorted?     R? []       = true
-sorted? {R} R? (x ∷ xs) = related? {R = R} R? x xs
+sorted? r? []       = true
+sorted? r? (x ∷ xs) = related? r? x xs
 
 perm? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
 perm? xs ys = all (λ q → count (λ x → ⌊ q ≟ x ⌋) xs == count (λ y → ⌊ q ≟ y ⌋) ys) (xs ++ ys)
@@ -70,7 +68,7 @@ subset? xs ys = all (λ x → has x ys) xs
 
 Reflects-has : ⦃ d : is-discrete A ⦄ {x : A} {xs : List A}
              → Reflects (x ∈ xs) (has x xs)
-Reflects-has {x} = Reflects-any-dec (x ≟_)
+Reflects-has ⦃ d ⦄ {x} = Reflects-any λ y → d {x} {y} .proof
 
 Reflects-subseq : ⦃ d : is-discrete A ⦄ {xs ys : List A}
                 → Reflects (OPE xs ys) (subseq xs ys)
@@ -91,27 +89,26 @@ Reflects-subseq {xs = x ∷ xs} {ys = y ∷ ys} =
                                        (odrop o) → o)
                             (Reflects-subseq {xs = x ∷ xs} {ys = ys})
 
-Reflects-related : {A : 𝒰 ℓ} {R : A → A → 𝒰 ℓ′}
-                 → (R? : ∀ {x y} → Dec (R x y)) {- `Decidable R` fails -}
-                 → ∀ {x0} {xs} → Reflects (Related R x0 xs) (related? {R = R} R? x0 xs)
-Reflects-related     R? {x0} {xs = []}     = ofʸ []ʳ
-Reflects-related {R} R? {x0} {xs = x ∷ xs} =
+Reflects-related : {A : 𝒰 ℓ} {R : A → A → 𝒰 ℓ′} {r? : A → A → Bool}
+                 → (R? : ∀ {x y} → Reflects (R x y) (r? x y))
+                 → ∀ {x0 xs} → Reflects (Related R x0 xs) (related? r? x0 xs)
+Reflects-related R? {xs = []}     = ofʸ []ʳ
+Reflects-related R? {xs = x ∷ xs} =
   Reflects.dmap
     (λ where (r , rs) → r ∷ʳ rs) (contra (λ where (r ∷ʳ rs) → r , rs))
-    (Reflects-× ⦃ rp = reflects-does (R? {x = x0} {y = x}) ⦄ ⦃ rq = Reflects-related {R = R} R? {x0 = x} {xs = xs} ⦄)
+    (Reflects-× ⦃ rp = R? ⦄ ⦃ rq = Reflects-related R? {x0 = x} {xs = xs} ⦄)
 
-Reflects-sorted : {A : 𝒰 ℓ} {R : A → A → 𝒰 ℓ′}
-                → (R? : ∀ {x y} → Dec (R x y)) {- `Decidable R` fails -}
-                → ∀ {xs} → Reflects (Sorted R xs) (sorted? {R = R} R? xs)
+Reflects-sorted : {A : 𝒰 ℓ} {R : A → A → 𝒰 ℓ′} {r? : A → A → Bool}
+                → (R? : ∀ {x y} → Reflects (R x y) (r? x y))
+                → ∀ {xs} → Reflects (Sorted R xs) (sorted? r? xs)
 Reflects-sorted     R? {xs = []}     = ofʸ []ˢ
 Reflects-sorted {R} R? {xs = x ∷ xs} =
   Reflects.dmap ∷ˢ (contra (λ where (∷ˢ r) → r))
     (Reflects-related {R = R} R? {x0 = x} {xs})
 
-
 Reflects-perm-count : ⦃ d : is-discrete A ⦄ {xs ys : List A}
                     → Reflects (∀ p → count p xs ＝ count p ys) (perm? xs ys)
-Reflects-perm-count {A} {xs} {ys} =
+Reflects-perm-count {A} ⦃ d ⦄ {xs} {ys} =
   Reflects.dmap
     (λ a p → aux a p (suc (count p (xs ++ ys))) <-ascend)
     (contra λ e → all-trivial λ a → true→so! ⦃ Reflects-ℕ-Path {m = count (λ x → ⌊ a ≟ x ⌋) xs} ⦄ (e λ z → ⌊ a ≟ z ⌋))
@@ -143,7 +140,7 @@ Reflects-perm-count {A} {xs} {ys} =
                     ∙ ap² _+_ ceq (aux axy (λ z → not ⌊ a ≟ z ⌋ and p z) n
                          (<-≤-trans (<-≤-trans
                                        (<-+-0lr (so→true! ⦃ Reflects-0<count (λ x → ⌊ a ≟ x ⌋) (xs ++ ys) ⦄ $
-                                                 true→so! ⦃ Reflects-any-dec (a ≟_) ⦄ ha))
+                                                 true→so! ⦃ Reflects-any λ y → d {x = a} {y} .proof ⦄ ha))
                                        (=→≤ ((cnteq p (xs ++ ys) a pa) ⁻¹))
                                        )
                                     (≤≃<suc ⁻¹ $ lt)))
@@ -154,7 +151,7 @@ Reflects-perm-count {A} {xs} {ys} =
 
 Reflects-perm : ⦃ d : is-discrete A ⦄ {xs ys : List A}
               → Reflects (Perm xs ys) (perm? xs ys)
-Reflects-perm {A} {xs} =
+Reflects-perm {A} ⦃ d ⦄ {xs} =
   Reflects.dmap to (contra fro) (Reflects-perm-count {xs = xs})
   where
   to : {as bs : List A}
@@ -163,7 +160,7 @@ Reflects-perm {A} {xs} =
     let asnil = length=0→nil $ count-true as ⁻¹ ∙ ceq (λ _ → true) ∙ count-true (the (List A) []) in
     subst (λ q → Perm q []) (asnil ⁻¹) perm-refl
   to {as} {bs = b ∷ bs} ceq =
-    let hasb = so→true! ⦃ Reflects-any-dec {xs = as} (b ≟_) ⦄ $
+    let hasb = so→true! ⦃ Reflects-any {xs = as} λ y → d {x = b} {y} .proof ⦄ $
                true→so! ⦃ Reflects-0<count (λ x → ⌊ b ≟ x ⌋) as ⦄ $
                subst (0 <_) (ceq (λ x → ⌊ b ≟ x ⌋) ⁻¹)
                      (given-yes (the (b ＝ b) refl)
@@ -201,4 +198,4 @@ Reflects-subset {A} {xs} {ys} =
   Reflects.dmap
     (λ a {x} → All→∀∈ a x)
     (contra (λ s → ∀∈→All λ x → s {x = x}))
-    (Reflects-all-dec {xs = xs} λ x → has x ys because (Reflects-has {xs = ys}))
+    (Reflects-all {xs = xs} λ x → Reflects-has)

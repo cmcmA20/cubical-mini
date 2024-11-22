@@ -2,6 +2,7 @@
 module Data.List.Correspondences.Binary.Perm where
 
 open import Meta.Prelude
+open import Meta.Effect
 
 open import Data.List.Base
 open import Data.List.Path
