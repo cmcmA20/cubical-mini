@@ -80,6 +80,13 @@ not-invol = witness!
 ≠→=not : ∀ x y → x ≠ y → x ＝ not y
 ≠→=not = witness!
 
+so-not : ⌞ not x ⌟ → ¬ ⌞ x ⌟
+so-not {(false)} _  s = ¬-so-false s
+so-not {(true)}  sn _ = ¬-so-false sn
+
+not-so-≃ : ⌞ not x ⌟ ≃ (¬ ⌞ x ⌟)
+not-so-≃ = prop-extₑ! so-not not-so
+
 
 -- conjunction
 
