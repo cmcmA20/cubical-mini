@@ -2,6 +2,7 @@
 module Data.List.Operations.Properties where
 
 open import Meta.Prelude
+open import Meta.Effect
 open import Foundations.Base
 
 open import Logic.Decidability
@@ -24,6 +25,7 @@ open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
+open import Data.List.Instances.Map
 open import Data.List.Correspondences.Binary.OPE
 open import Data.Nat.Base
 open import Data.Nat.Path
@@ -40,6 +42,19 @@ private variable
   m n : ℕ
   xs : List A
   x y z w : A
+
+-- rec
+
+rec-++ : (z : B) (f : A → B → B) (xs ys : List A)
+       → List.rec z f (xs ++ ys) ＝ List.rec (List.rec z f ys) f xs
+rec-++ z f [] ys = refl
+rec-++ z f (x ∷ xs) ys = ap (f x) (rec-++ z f xs ys)
+
+rec-map : {A : Type ℓ} {B : Type ℓ′}
+          (z : C) (f : B → C → C) (h : A → B) (xs : List A)
+        → List.rec z f (map h xs) ＝ List.rec z (f ∘ h) xs
+rec-map z f h [] = refl
+rec-map z f h (x ∷ xs) = ap (f (h x)) (rec-map z f h xs)
 
 -- length
 
@@ -68,21 +83,21 @@ length=1→sng {xs = x ∷ xs} eq = x , ap (x ∷_) (length=0→nil (suc-inj eq)
 
 -- snoc
 
-snoc-append : (xs : List A) {x : A} → snoc xs x ＝ xs ++ x ∷ []
+snoc-append : (xs : List A) {x : A} → xs ∷r x ＝ xs ++ x ∷ []
 snoc-append []       = refl
 snoc-append (y ∷ xs) = ap (y ∷_) (snoc-append xs)
 
-++-snoc : (xs ys : List A) (y : A) → snoc xs y ++ ys ＝ xs ++ y ∷ ys
+++-snoc : (xs ys : List A) (y : A) → xs ∷r y ++ ys ＝ xs ++ y ∷ ys
 ++-snoc []       ys y = refl
 ++-snoc (x ∷ xs) ys y = ap (x ∷_) (++-snoc xs ys y)
 
-snoc-++ : (xs ys : List A) (y : A) → snoc (xs ++ ys) y ＝ xs ++ snoc ys y
+snoc-++ : (xs ys : List A) (y : A) → (xs ++ ys) ∷r y ＝ xs ++ ys ∷r y
 snoc-++ []       ys y = refl
 snoc-++ (x ∷ xs) ys y = ap (x ∷_) (snoc-++ xs ys y)
 
 snoc-elim : (P : List A → 𝒰 ℓ′)
           → P []
-          → (∀ xs x → P xs → P (snoc xs x))
+          → (∀ xs x → P xs → P (xs ∷r x))
           → ∀ xs → P xs
 snoc-elim P p[] ps xs = go [] xs p[]
   where
@@ -90,38 +105,109 @@ snoc-elim P p[] ps xs = go [] xs p[]
   go xs []       pxs = subst P (sym $ ++-id-r xs) pxs
   go xs (y ∷ ys) pxs = subst P (++-snoc xs ys y) (go (snoc xs y) ys (ps xs y pxs))
 
-snoc-length : (xs : List A) {x : A} → length (snoc xs x) ＝ suc (length xs)
+snoc-length : (xs : List A) {x : A} → length (xs ∷r x) ＝ suc (length xs)
 snoc-length xs {x} = ap length (snoc-append xs) ∙ ++-length xs (x ∷ []) ∙ +-comm (length xs) 1
 
-snoc-inj : {xs ys : List A} {z w : A} → snoc xs z ＝ snoc ys w → (xs ＝ ys) × (z ＝ w)
+snoc-inj : {xs ys : List A} {z w : A} → xs ∷r z ＝ ys ∷r w → (xs ＝ ys) × (z ＝ w)
 snoc-inj {xs = []}     {ys = []}     e = refl , (∷-head-inj e)
 snoc-inj {xs = []}     {ys = y ∷ ys} e = false! ⦃ Reflects-List-≠-tail ⦄ e
 snoc-inj {xs = x ∷ xs} {ys = []}     e = false! ⦃ Reflects-List-≠-tail ⦄ e
 snoc-inj {xs = x ∷ xs} {ys = y ∷ ys} e =
   first (ap² {C = λ _ _ → List _} _∷_ (∷-head-inj e)) $ snoc-inj (∷-tail-inj e)
 
+any-∷r-init : {P : Pred A ℓ′} {xs : List A} {x : A}
+            → Any P xs → Any P (xs ∷r x)
+any-∷r-init {P} {xs} pxs =
+  subst (λ q → Any P q) (snoc-append xs ⁻¹) (any-++-l pxs)
+
+any-∷r-last : {P : Pred A ℓ′} {xs : List A} {x : A}
+            → P x → Any P (xs ∷r x)
+any-∷r-last {P} {xs} px =
+  subst (λ q → Any P q) (snoc-append xs ⁻¹) (any-++-r (here px))
+
+rec-∷r : {z : B} {f : A → B → B} {xs : List A} {x : A}
+       → List.rec z f (xs ∷r x) ＝ List.rec (f x z) f xs
+rec-∷r {z} {f} {xs} {x} =
+    ap (List.rec z f) (snoc-append xs)
+  ∙ rec-++ z f xs (x ∷ [])
+
+map-∷r : ∀ {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {f : A → B} {xs : List A} {x : A}
+       → map f (xs ∷r x) ＝ map f xs ∷r f x
+map-∷r {f} {xs} {x} =
+    ap (map f) (snoc-append xs)
+  ∙ map-++ f xs (x ∷ [])
+  ∙ snoc-append (map f xs) ⁻¹
+
+-- reverse
+
+reverse-++ : ∀ {xs ys : List A}
+           → reverse (xs ++ ys) ＝ reverse ys ++ reverse xs
+reverse-++ {xs = []}     {ys} = ++-id-r (reverse ys) ⁻¹
+reverse-++ {xs = x ∷ xs} {ys} =
+    ap (_++ x ∷ []) (reverse-++ {xs = xs})
+  ∙ ++-assoc (reverse ys) (reverse xs) (x ∷ [])
+
+reverse-∷r : ∀ {xs : List A} {x}
+           → reverse (xs ∷r x) ＝ x ∷ reverse xs
+reverse-∷r {xs} = ap reverse (snoc-append xs) ∙ reverse-++ {xs = xs}
+
+reverse-inv : ∀ {xs : List A}
+            → reverse (reverse xs) ＝ xs
+reverse-inv {xs = []}     = refl
+reverse-inv {xs = x ∷ xs} =
+  reverse-++ {xs = reverse xs} ∙ ap (x ∷_) (reverse-inv {xs = xs})
+
+-- fold-l
+
+foldl-rev : (z : B) (f : B → A → B) (xs : List A)
+           → fold-l f z (reverse xs) ＝ List.rec z (flip f) xs
+foldl-rev z f xs =
+  snoc-elim (λ q → ∀ z′ → fold-l f z′ (reverse q) ＝ List.rec z′ (flip f) q)
+    (λ _ → refl)
+    (λ xs x ih z′ →   ap (fold-l f z′) (reverse-∷r {xs = xs})
+                    ∙ ih (f z′ x)
+                    ∙ rec-++ z′ (flip f) xs (x ∷ []) ⁻¹
+                    ∙ ap (List.rec z′ (flip f)) (snoc-append xs ⁻¹))
+     xs z
+
+foldl-++ : (z : B) (f : B → A → B) (xs ys : List A)
+         → fold-l f z (xs ++ ys) ＝ fold-l f (fold-l f z xs) ys
+foldl-++ z f xs ys =
+    ap (fold-l f z) (reverse-inv {xs = xs ++ ys} ⁻¹)
+  ∙ foldl-rev z f (reverse (xs ++ ys))
+  ∙ ap (List.rec z (flip f)) (reverse-++ {xs = xs})
+  ∙ rec-++ z (flip f) (reverse ys) (reverse xs)
+  ∙ foldl-rev (List.rec z (λ b a → f a b) (reverse xs)) f (reverse ys) ⁻¹
+  ∙ ap (fold-l f (List.rec z (flip f) (reverse xs))) (reverse-inv {xs = ys})
+  ∙ ap (λ q → fold-l f q ys) (foldl-rev z f (reverse xs) ⁻¹ ∙ ap (fold-l f z) (reverse-inv {xs = xs}))
+
+foldl-∷r : (z : B) (f : B → A → B) (xs : List A) (x : A)
+         → fold-l f z (xs ∷r x) ＝ f (fold-l f z xs) x
+foldl-∷r z f xs x = ap (fold-l f z) (snoc-append xs) ∙ foldl-++ z f xs (x ∷ [])
+
+-- reverse-fast
+
+reverse=reverse-fast : (xs : List A) → reverse xs ＝ reverse-fast xs
+reverse=reverse-fast =
+  snoc-elim (λ q → reverse q ＝ reverse-fast q)
+    refl
+    (λ xs x ih → reverse-∷r {xs = xs} ∙ ap (x ∷_) ih ∙ foldl-∷r [] (λ b a → a ∷ b) xs x ⁻¹)
 
 -- all
 
+Reflects-all : {xs : List A} {P : A → 𝒰 ℓ′} {p : A → Bool}
+             → (∀ x → Reflects (P x) (p x))
+             → Reflects (All P xs) (all p xs)
+Reflects-all {xs = []}     rp = ofʸ []
+Reflects-all {xs = x ∷ xs} rp =
+  Reflects.dmap
+    (_∷_ $ₜ²_)
+    (contra (λ where (px ∷ ps) → px , ps))
+    (Reflects-× ⦃ rp = rp x ⦄ ⦃ rq = Reflects-all {xs = xs} rp ⦄)
+
 Reflects-all-bool : {p : A → Bool} {xs : List A}
                   → Reflects (All (So ∘ p) xs) (all p xs)
-Reflects-all-bool     {xs = []}     = ofʸ []
-Reflects-all-bool {p} {xs = x ∷ xs} =
-  Reflects.dmap
-    (_∷_ $ₜ²_)
-    (contra (λ where (px ∷ ps) → px , ps))
-    (Reflects-× ⦃ rp = Reflects-So ⦄ ⦃ rq = Reflects-all-bool {xs = xs} ⦄)
-
--- TODO `Decidable P` doesn't work
-Reflects-all-dec : {xs : List A} {P : A → 𝒰 ℓ′} (P? : ∀ x → Dec (P x))
-                 → Reflects (All P xs) (all (⌊_⌋ ∘ P?) xs)
-Reflects-all-dec {xs = []}     P? = ofʸ []
-Reflects-all-dec {xs = x ∷ xs} P? =
-  Reflects.dmap
-    (_∷_ $ₜ²_)
-    (contra (λ where (px ∷ ps) → px , ps))
-    (Reflects-× ⦃ rp = reflects-does (P? x) ⦄ ⦃ rq = Reflects-all-dec {xs = xs} P? ⦄)
-
+Reflects-all-bool = Reflects-all λ x → Reflects-So
 
 all?-++ : ∀ {p : A → Bool} {xs ys : List A}
         → all p (xs ++ ys) ＝ all p xs and all p ys
@@ -130,27 +216,32 @@ all?-++ {p} {xs = x ∷ xs} {ys} = ap (p x and_) (all?-++ {xs = xs}) ∙ and-ass
 
 -- any
 
+Reflects-any : {xs : List A} {P : A → 𝒰 ℓ′} {p : A → Bool}
+             → (∀ x → Reflects (P x) (p x))
+             → Reflects (Any P xs) (any p xs)
+Reflects-any {xs = []}     rp = ofⁿ false!
+Reflects-any {xs = x ∷ xs} rp =
+  Reflects.dmap
+   [ here , there ]ᵤ
+   (contra (λ where
+               (here px) → inl px
+               (there ax) → inr ax))
+   (Reflects-⊎ ⦃ rp = rp x ⦄ ⦃ rq = Reflects-any {xs = xs} rp ⦄)
+
 Reflects-any-bool : {p : A → Bool} {xs : List A}
                   → Reflects (Any (So ∘ p) xs) (any p xs)
-Reflects-any-bool {xs = []}     = ofⁿ false!
-Reflects-any-bool {xs = x ∷ xs} =
-  Reflects.dmap
-   [ here , there ]ᵤ
-   (contra (λ where
-               (here px) → inl px
-               (there ax) → inr ax))
-   (Reflects-⊎ ⦃ rp = Reflects-So ⦄ ⦃ rq = Reflects-any-bool {xs = xs} ⦄)
+Reflects-any-bool = Reflects-any λ x → Reflects-So
 
-Reflects-any-dec : {xs : List A} {P : A → 𝒰 ℓ′} (P? : ∀ x → Dec (P x))
-                 → Reflects (Any P xs) (any (⌊_⌋ ∘ P?) xs)
-Reflects-any-dec {xs = []}     P? = ofⁿ false!
-Reflects-any-dec {xs = x ∷ xs} P? =
-  Reflects.dmap
-   [ here , there ]ᵤ
-   (contra (λ where
-               (here px) → inl px
-               (there ax) → inr ax))
-   (Reflects-⊎ ⦃ rp = reflects-does (P? x) ⦄ ⦃ rq = Reflects-any-dec {xs = xs} P? ⦄)
+--TODO move these 2 somewhere
+¬Any→All¬ : {xs : List A} {P : A → 𝒰 ℓ′}
+          → ¬ Any P xs → All (λ x → ¬ (P x)) xs
+¬Any→All¬ {xs = []}     na = []
+¬Any→All¬ {xs = x ∷ xs} na = contra here na ∷ ¬Any→All¬ (contra there na)
+
+Any¬→¬All : {xs : List A} {P : A → 𝒰 ℓ′}
+          → Any (λ x → ¬ (P x)) xs → ¬ All P xs
+Any¬→¬All {xs = x ∷ xs} (here npx) (px ∷ a) = npx px
+Any¬→¬All {xs = x ∷ xs} (there an) (px ∷ a) = Any¬→¬All an a
 
 -- replicate
 
@@ -180,16 +271,20 @@ filter-true : (xs : List A)
 filter-true []       = refl
 filter-true (x ∷ xs) = ap (x ∷_) (filter-true xs)
 
+filter-++ : ∀ {p : A → Bool} (xs : List A) {ys}
+          → filter p (xs ++ ys) ＝ filter p xs ++ filter p ys
+filter-++     [] = refl
+filter-++ {p} (x ∷ xs) with p x
+... | true  = ap (x ∷_) (filter-++ xs)
+... | false = filter-++ xs
+
 -- TODO generalize to subsets
 all→filter : {P : A → 𝒰 ℓ′} {p : A → Bool} {xs : List A}
            → All P xs → All P (filter p xs)
 all→filter         {xs = []}     []       = []
-all→filter {P} {p} {xs = x ∷ xs} (px ∷ a) =
-  Bool.elim
-    {P = λ q → All P (if q then x ∷ filter p xs else filter p xs)}
-    (px ∷ all→filter a)
-    (all→filter a)
-    (p x)
+all→filter {P} {p} {xs = x ∷ xs} (px ∷ a) with p x
+... | true  = px ∷ all→filter a
+... | false = all→filter a
 
 all-filter : {p : A → Bool} {xs : List A}
            → ⌞ all p (filter p xs) ⌟
@@ -209,7 +304,8 @@ filter-all {p = p} {xs = x ∷ xs} s =
   subst (λ q → (if q then x ∷ filter p xs else filter p xs) ＝ x ∷ xs) ((so≃is-true $ pax .fst) ⁻¹) $
   ap (x ∷_) (filter-all (pax .snd))
 
-Reflects-filter-all : {p : A → Bool} {xs : List A} → Reflects (filter p xs ＝ xs) (all p xs)
+Reflects-filter-all : {p : A → Bool} {xs : List A}
+                    → Reflects (filter p xs ＝ xs) (all p xs)
 Reflects-filter-all {p} {xs} =
   Reflects.dmap filter-all
     (contra λ e → subst (So ∘ all p) e (all-filter {xs = xs}))
@@ -224,15 +320,50 @@ filter-has-eq {xs = x ∷ xs} eqp =
       (eqp x (here refl))
       (filter-has-eq {xs = xs} λ q hq → eqp q (there hq))
 
+∈-filter : ∀ {p} {z : A} {xs}
+          → ⌞ p z ⌟ → z ∈ xs
+          → z ∈ filter p xs
+∈-filter {p} {xs = x ∷ xs} pz ixs with p x | recall p x
+∈-filter                   pz (here e)    | true  | _      = here e
+∈-filter                   pz (there ixs) | true  | _      =
+  there (∈-filter pz ixs)
+∈-filter {p}               pz (here e)    | false | ⟪ eq ⟫ =
+  false! $ (so≃is-true $ pz) ⁻¹ ∙ ap p e ∙ eq
+∈-filter                   pz (there ixs) | false | _      =
+  ∈-filter pz ixs
+
+filter-∈ : ∀ {p} {z : A} {xs}
+          → z ∈ filter p xs
+          → ⌞ p z ⌟ × z ∈ xs
+filter-∈     {xs = []}     pf = false! pf
+filter-∈ {p} {xs = x ∷ xs} pf with p x | recall p x
+filter-∈ {p} {xs = x ∷ xs} pf         | false | ⟪ eq ⟫ =
+  second there (filter-∈ {xs = xs} pf)
+filter-∈ {p} {xs = x ∷ xs} (here e)   | true | ⟪ eq ⟫ =
+  (so≃is-true ⁻¹ $ ap p e ∙ eq) , here e
+filter-∈ {p} {xs = x ∷ xs} (there pf) | true | ⟪ eq ⟫ =
+  second there (filter-∈ {xs = xs} pf)
+
+filter-and : ∀ {p1 p2 : A → Bool} {xs}
+           → filter (λ q → p1 q and p2 q) xs ＝ filter p1 (filter p2 xs)
+filter-and           {xs = []}     = refl
+filter-and {p1} {p2} {xs = x ∷ xs} with p2 x
+... | true  = ap² (λ a b → if a then x ∷ b else b) (and-id-r (p1 x)) (filter-and {xs = xs})
+... | false = if-false (subst (So ∘ not) (and-absorb-r (p1 x) ⁻¹) oh) ∙ filter-and {xs = xs}
+
+filter-comm : ∀ {p1 p2 : A → Bool} {xs}
+           → filter p1 (filter p2 xs) ＝ filter p2 (filter p1 xs)
+filter-comm {p1} {p2} {xs} =
+    filter-and {xs = xs} ⁻¹
+  ∙ ap (λ q → filter q xs) (fun-ext λ q → and-comm (p1 q) (p2 q))
+  ∙ filter-and {xs = xs}
+
 filter-OPE : {p : A → Bool} {xs : List A}
            → OPE (filter p xs) xs
 filter-OPE     {xs = []}     = odone
-filter-OPE {p} {xs = x ∷ xs} =
-  Bool.elim
-    {P = λ q → OPE (if q then x ∷ filter p xs else filter p xs) (x ∷ xs)}
-    (otake refl filter-OPE)
-    (odrop filter-OPE)
-    (p x)
+filter-OPE {p} {xs = x ∷ xs} with p x
+... | true  = otake refl filter-OPE
+... | false = odrop filter-OPE
 
 -- count
 
@@ -270,6 +401,14 @@ count→all p []       e = []
 count→all p (x ∷ xs) e with p x | recall p x
 ... | false | ⟪ eq ⟫ = absurd (suc≰id $ subst (_≤ length xs) e $ count≤length p xs)
 ... | true  | ⟪ eq ⟫ = (so≃is-true ⁻¹ $ eq) ∷ count→all p xs (suc-inj e)
+
+count<length : ∀ (p : A → Bool) xs
+             → Any (So ∘ not ∘ p) xs
+             → count p xs < length xs
+count<length p xs an =
+  ≤→<⊎= (count≤length p xs) &
+  [ id
+  , (λ e → absurd (Any¬→¬All (any-map so-not an) (count→all p xs e))) ]ᵤ
 
 all→count : ∀ (p : A → Bool) xs
           → All (So ∘ p) xs → count p xs ＝ length xs
