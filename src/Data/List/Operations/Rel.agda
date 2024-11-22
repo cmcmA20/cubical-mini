@@ -114,7 +114,7 @@ nub-ope = nub-acc-ope {acc = []}
 ... | true  | ⟪ eq ⟫ =
   any-++-l $
   subst (_∈ acc) (e ⁻¹) $
-  so→true! ⦃ Reflects-any-dec {xs = acc} (λ q → cmp y q because R y q) ⦄ $ so≃is-true ⁻¹ $ eq
+  so→true! ⦃ Reflects-any {xs = acc} (R y) ⦄ $ so≃is-true ⁻¹ $ eq
 ⊆-nub-acc {cmp} {R} {acc} {xs = y ∷ xs} {x} (there hx) with any (cmp y) acc
 ... | false =
   (any-uncons $ ⊆-nub-acc {cmp = cmp} {R} {acc = y ∷ acc} hx) &
@@ -139,7 +139,7 @@ nub-acc-unique                 {xs = []}     = []ᵘ , []
 nub-acc-unique {cmp} {R} {acc} {xs = x ∷ xs} with any (cmp x) acc | recall (any (cmp x)) acc
 ... | false | ⟪ eq ⟫ =
   let (u , a) = nub-acc-unique {R = R} {acc = x ∷ acc} {xs = xs}
-      nx = so→false! {Q = ⊥} ⦃ Reflects-any-dec {xs = acc} (λ q → cmp x q because R x q) ⦄ $ not-so $ ¬so≃is-false ⁻¹ $ eq
+      nx = so→false! {Q = ⊥} ⦃ Reflects-any {xs = acc} (R x) ⦄ $ not-so $ ¬so≃is-false ⁻¹ $ eq
     in
   ((λ hx → All→∀∈ a x hx (here refl)) ∷ᵘ u) , (nx ∷ all-map (λ {x = z} nz hz → nz (there hz)) a)
 ... | true  | _  = nub-acc-unique {R = R} {acc = acc} {xs = xs}

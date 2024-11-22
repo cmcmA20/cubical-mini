@@ -3,6 +3,7 @@ module Data.List.Correspondences.Unary.Related where
 
 open import Meta.Prelude
 open import Meta.Extensionality
+open import Meta.Effect
 
 open import Data.Empty.Base as ⊥
 open import Data.Unit.Base
