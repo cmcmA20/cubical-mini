@@ -2,6 +2,7 @@
 module Data.Star.Properties where
 
 open import Foundations.Base
+open import Foundations.Path
 
 open import Data.Empty.Base
 open import Data.Acc.Base
@@ -22,6 +23,21 @@ private variable
 star-len : Star R x y → ℕ
 star-len (ε _)   = 0
 star-len (_ ◅ s) = suc (star-len s)
+
+star-trans-id-l : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y : A}
+                → (sxy : Star R x y)
+                → refl ∙ sxy ＝ sxy
+star-trans-id-l         (ε e)       = ap ε (∙-id-o e)
+star-trans-id-l {R} {x} (rxw ◅ swy) =
+  ap² _◅_
+    (subst-refl {B = R x} rxw)
+    (star-trans-id-l swy)
+
+star-trans-id-r : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y : A}
+                → (sxy : Star R x y)
+                → sxy ∙ refl ＝ sxy
+star-trans-id-r (ε e)       = ap ε (∙-id-i e)
+star-trans-id-r (rxw ◅ swy) = ap (rxw ◅_) (star-trans-id-r swy)
 
 star-trans-len
   : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y z : A}
