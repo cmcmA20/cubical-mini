@@ -233,3 +233,19 @@ unique→∷     {xs}          s nx u z (there h1) (here e2)  = ⊥.rec (nx (sub
 unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
   let (nx , u′) = ∷→unique u in
   ap there (unique→∷ s nx u′ z h1 h2)
+
+-- disjointness
+-- TODO move out
+
+_∥_ : List A → List A → Type (level-of-type A)
+_∥_ {A} xs ys = ∀[ a ꞉ A ] (a ∈ xs → a ∈ ys → ⊥)
+
+∥-comm : {xs ys : List A} → xs ∥ ys → ys ∥ xs
+∥-comm dxy hy hx = dxy hx hy
+
+∥-∷-l : ∀ {x} {xs ys : List A} → x ∉ ys → xs ∥ ys → (x ∷ xs) ∥ ys
+∥-∷-l {ys} ny dxy (here e)   hy = ny (subst (_∈ ys) e hy)
+∥-∷-l      ny dxy (there hx) hy = dxy hx hy
+
+∥-∷-r : ∀ {y} {xs ys : List A} → y ∉ xs → xs ∥ ys → xs ∥ (y ∷ ys)
+∥-∷-r nx = ∥-comm ∘ ∥-∷-l nx ∘ ∥-comm
