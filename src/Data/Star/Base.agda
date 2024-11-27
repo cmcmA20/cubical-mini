@@ -32,7 +32,7 @@ star-cast {R} p q (e ◅ s) = subst (λ φ → R φ _) p e ◅ star-cast refl q 
 star-cast-l : (p : x ＝ x′)
             → Star R x y → Star R x′ y
 star-cast-l     p (ε e)   = ε (p ⁻¹ ∙ e)
-star-cast-l {R} p (e ◅ s) = subst (λ φ → R φ _) p e ◅ star-cast-l refl s
+star-cast-l {R} p (e ◅ s) = subst (λ φ → R φ _) p e ◅ s
 
 star-cast-r : (p : y ＝ y′)
             → Star R x y → Star R x y′
