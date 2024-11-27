@@ -30,25 +30,22 @@ Uniq-is-prop  []ᵘ         []ᵘ        = refl
 Uniq-is-prop (nx1 ∷ᵘ u1) (nx2 ∷ᵘ u2) = ap² _∷ᵘ_ prop! (Uniq-is-prop u1 u2)
 
 uniq→++ : {xs ys : List A}
-        → Uniq xs → Uniq ys → All (_∉ xs) ys
+        → Uniq xs → Uniq ys → xs ∥ ys
         → Uniq (xs ++ ys)
-uniq→++ {xs = []}      ux        uy ay = uy
-uniq→++ {xs = x ∷ xs} (nx ∷ᵘ ux) uy ay =
-     contra ([ id , (λ hx → absurd (All→∀∈ ay x hx (here refl))) ]ᵤ ∘ any-split {xs = xs}) nx
-  ∷ᵘ uniq→++ ux uy (all-map (λ {x = z} nz → nz ∘ there) ay)
+uniq→++ {xs = []}            ux  uy dxy = uy
+uniq→++ {xs = x ∷ xs} (nx ∷ᵘ ux) uy dxy =
+     (contra ([ id , (λ hxy → absurd (dxy (here refl) hxy)) ]ᵤ ∘ any-split {xs = xs}) nx)
+  ∷ᵘ uniq→++ ux uy (dxy ∘ there)
 
 ++→uniq : {xs ys : List A}
         → Uniq (xs ++ ys)
-        → Uniq xs × Uniq ys × All (_∉ xs) ys
-++→uniq {xs = []}           u        = []ᵘ , u , all-trivial λ x → false!
+        → Uniq xs × Uniq ys × xs ∥ ys
+++→uniq {xs = []}                 u  = []ᵘ , u , λ hx _ → false! hx
 ++→uniq {xs = x ∷ xs} {ys} (nx ∷ᵘ u) =
-  let (ux , uy , ay) = ++→uniq {xs = xs} u in
-    ((contra any-++-l nx) ∷ᵘ ux)
+  let (ux , uy , dxy) = ++→uniq {xs = xs} u in
+    (contra any-++-l nx) ∷ᵘ ux
   , uy
-  , all-∈-map (λ {x = z} hy nz → λ where
-                                      (here e) → nx (any-++-r (subst (_∈ ys) e hy))
-                                      (there hz) → nz hz)
-               ay
+  , ∥-∷-l (contra any-++-r nx) dxy
 
 -- homotopy uniqueness
 
@@ -123,6 +120,7 @@ uniq⊆len≤→uniq {xs = x ∷ xs} (nx ∷ᵘ u) sub le =
             ≤-peel $
             subst (_≤ suc (length xs)) (++-length ls (x ∷ rs) ∙ +-suc-r (length ls) (length rs)) $
             subst (λ q → length q ≤ suc (length xs)) e le
+      ulurar : Uniq ls × Uniq rs × ls ∥ rs
       ulurar = ++→uniq {xs = ls} $
                uniq⊆len≤→uniq {xs = xs} {ys = ls ++ rs} u sub″ le′
       nlr : x ∉ (ls ++ rs)
@@ -135,7 +133,7 @@ uniq⊆len≤→uniq {xs = x ∷ xs} (nx ∷ᵘ u) sub le =
   uniq→++
     (ulurar .fst)
     (contra any-++-r nlr ∷ᵘ (ulurar .snd .fst))
-    (contra any-++-l nlr ∷ (ulurar .snd .snd))
+    (∥-∷-r (contra any-++-l nlr) (ulurar .snd .snd))
 
 uniq≈→len= : {xs ys : List A}
                 → Uniq xs → Uniq ys
@@ -150,4 +148,3 @@ uniq≈len=→uniq : {xs ys : List A}
                 → Uniq xs → Uniq ys
 uniq≈len=→uniq es seq ux =
   uniq⊆len≤→uniq ux (seq .fst) (=→≤ (es ⁻¹))
-
