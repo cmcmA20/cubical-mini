@@ -12,25 +12,26 @@ open import Order.Diagram.Meet
 open import Order.Diagram.Top
 open import Order.Strict
 open import Order.Total
+open import Order.Ordinal
 
 open import Data.Nat.Base
 open import Data.Nat.Path
-open import Data.Nat.Order.Base
+open import Data.Nat.Order.Base renaming (_<_ to _<ℕ_ ; <-trans to <ℕ-trans ; _≤_ to _≤ℕ_)
 open import Data.Nat.Order.Base
   using ( H-Level-≤ ; H-Level-<; Refl-≤ ; Trans-≤ ; Reflects-suc≰id ; Reflects-suc≰z)
   public
 
 ℕᶜᵖ : ComplementedPoset 0ℓ 0ℓ
 ℕᶜᵖ .ComplementedPoset.Ob = ℕ
-ℕᶜᵖ .ComplementedPoset._≤_ = _≤_
-ℕᶜᵖ .ComplementedPoset._<_ = _<_
+ℕᶜᵖ .ComplementedPoset._≤_ = _≤ℕ_
+ℕᶜᵖ .ComplementedPoset._<_ = _<ℕ_
 ℕᶜᵖ .ComplementedPoset.≤-thin = hlevel 1
 ℕᶜᵖ .ComplementedPoset.≤-refl = refl
 ℕᶜᵖ .ComplementedPoset.≤-trans = _∙_
 ℕᶜᵖ .ComplementedPoset.≤-antisym = ≤-antisym
 ℕᶜᵖ .ComplementedPoset.<-thin = hlevel 1
 ℕᶜᵖ .ComplementedPoset.<-irrefl = <-irr
-ℕᶜᵖ .ComplementedPoset.<-trans = <-trans
+ℕᶜᵖ .ComplementedPoset.<-trans = <ℕ-trans
 ℕᶜᵖ .ComplementedPoset.≤≃≯ = ≤≃≯
 ℕᶜᵖ .ComplementedPoset.<≃≱ = <≃≱
 
@@ -68,3 +69,13 @@ module _ where
 
 ℕₛ : StrictPoset 0ℓ 0ℓ
 ℕₛ = complemented→strict ℕᶜᵖ
+
+ℕw : WESet 0ℓ 0ℓ
+ℕw .WESet.Ob = ℕ
+ℕw .WESet._<_ = _<ℕ_
+ℕw .WESet.<-thin = hlevel 1
+ℕw .WESet.<-wf = <-is-wf
+ℕw .WESet.<-lext = <-lext
+
+ℕω : Ordinal 0ℓ
+ℕω = ℕw , <ℕ-trans

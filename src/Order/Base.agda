@@ -39,6 +39,7 @@ record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
 
     ob-is-set : is-set Ob
     ob-is-set = identity-system→is-of-hlevel! 1
+      {R = λ x y → (x ≤ y) × (y ≤ x)}
       {r = λ _ → ≤-refl , ≤-refl}
       (set-identity-system! (≤-antisym $ₜ²_))
 

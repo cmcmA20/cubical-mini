@@ -24,8 +24,8 @@ wf→irrefl : is-wf _<_ → ∀ x → ¬ x < x
 wf→irrefl {_<_} wf = to-induction wf (λ z → ¬ z < z)
   λ x ih x<x → ih x x<x x<x
 
-is-wf→asym : is-wf _<_ → ∀ x y → x < y → ¬ y < x
-is-wf→asym {_<_} wf = to-induction wf (λ z → ∀ y → z < y → ¬ y < z)
+wf→asym : is-wf _<_ → ∀ x y → x < y → ¬ y < x
+wf→asym {_<_} wf = to-induction wf (λ z → ∀ y → z < y → ¬ y < z)
   λ x ih y x<y y<x → ih y y<x x y<x x<y
 
 wf-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}

@@ -96,6 +96,10 @@ instance
   Underlying-Bool .Underlying.ℓ-underlying = 0ℓ
   Underlying-Bool .Underlying.⌞_⌟ = So
 
+  Recomputable-So : ∀ {b} → Recomputable (So b)
+  Recomputable-So {b = false} .recompute ()
+  Recomputable-So {b = true} .recompute _ = oh
+
   ×-So : ×-notation (So b₁) (So b₂) (So (b₁ and b₂))
   ×-So .×-notation.Constraint _ _ = ⊤
   ×-So {b₁ = true} {b₂} ._×_ _ b = b
