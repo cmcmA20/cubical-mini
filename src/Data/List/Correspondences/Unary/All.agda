@@ -5,6 +5,7 @@ open import Meta.Prelude
 open import Meta.Effect
 open import Meta.Extensionality
 open Variadics _
+open import Foundations.Sigma
 
 open import Logic.Decidability
 open import Logic.Discreteness
@@ -91,6 +92,13 @@ instance
 
 all-uncons : All P (x ∷ xs) → P x × All P xs
 all-uncons (x ∷ xs) = x , xs
+
+all-×≃ : All P (x ∷ xs) ≃ P x × All P xs
+all-×≃ = ≅→≃ $
+         make-iso all-uncons (_∷_ $²_) $
+         make-inverses
+           (fun-ext λ where (px , ax) → refl)
+           (fun-ext λ where (px ∷ ax) → refl)
 
 all-head : All P (x ∷ xs) → P x
 all-head (x ∷ _) = x
