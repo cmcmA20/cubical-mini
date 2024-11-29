@@ -327,6 +327,10 @@ opaque
   <-+-lr : m < suc n + m
   <-+-lr {m} {n} = n , ap suc (+-comm m n)
 
+<-+-0lr : 0 < n → m < n + m
+<-+-0lr {n = zero}  0<n = false! 0<n
+<-+-0lr {n = suc n} 0<n = <-+-lr
+
 ≤-+ : ∀ {m n p q} → m ≤ p → n ≤ q → m + n ≤ p + q
 ≤-+ m≤p n≤q = ≤-trans (≤≃≤+r $ m≤p) (≤≃≤+l $ n≤q)
 
