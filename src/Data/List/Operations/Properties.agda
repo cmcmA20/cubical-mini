@@ -18,6 +18,7 @@ open import Data.Bool.Properties
 open import Data.Sum.Base as Sum
 open import Data.Dec.Base as Dec
 open import Data.Reflects.Base as Reflects
+open import Data.Reflects.Properties
 open import Data.List.Base as List
 open import Data.List.Path
 open import Data.List.Properties
@@ -200,9 +201,7 @@ Reflects-all : {xs : List A} {P : A → 𝒰 ℓ′} {p : A → Bool}
              → Reflects (All P xs) (all p xs)
 Reflects-all {xs = []}     rp = ofʸ []
 Reflects-all {xs = x ∷ xs} rp =
-  Reflects.dmap
-    (_∷_ $ₜ²_)
-    (contra (λ where (px ∷ ps) → px , ps))
+  ≃→reflects (all-×≃ ⁻¹)
     (Reflects-× ⦃ rp = rp x ⦄ ⦃ rq = Reflects-all {xs = xs} rp ⦄)
 
 Reflects-all-bool : {p : A → Bool} {xs : List A}
