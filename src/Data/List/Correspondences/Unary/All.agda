@@ -12,6 +12,7 @@ open import Logic.Discreteness
 
 open import Data.Empty.Base
 open import Data.Unit.Base
+open import Data.Sum.Base
 open import Data.List.Base
 open import Data.List.Path
 open import Data.List.Instances.Map
@@ -94,17 +95,23 @@ all-uncons : All P (x ∷ xs) → P x × All P xs
 all-uncons (x ∷ xs) = x , xs
 
 all-×≃ : All P (x ∷ xs) ≃ P x × All P xs
-all-×≃ = ≅→≃ $
-         make-iso all-uncons (_∷_ $²_) $
-         make-inverses
-           (fun-ext λ where (px , ax) → refl)
-           (fun-ext λ where (px ∷ ax) → refl)
+all-×≃ =
+  ≅→≃ $
+  make-iso all-uncons (_∷_ $²_) $
+  make-inverses
+    (fun-ext λ where (px , ax) → refl)
+    (fun-ext λ where (px ∷ ax) → refl)
 
 all-head : All P (x ∷ xs) → P x
 all-head (x ∷ _) = x
 
 all-tail : All P (x ∷ xs) → All P xs
 all-tail (_ ∷ xs) = xs
+
+¬all-∷ : {x : A} {xs : List A}
+       → (¬ P x) ⊎ (¬ All P xs) → ¬ All P (x ∷ xs)
+¬all-∷ (inl npx)  (px ∷ pxs) = npx px
+¬all-∷ (inr npxs) (px ∷ pxs) = npxs pxs
 
 all-++ : {@0 xs : List A} → All P xs → All P ys → All P (xs ++ ys)
 all-++ []         pys = pys
@@ -113,6 +120,28 @@ all-++ (px ∷ pxs) pys = px ∷ all-++ pxs pys
 all-split : {xs : List A} → All P (xs ++ ys) → All P xs × All P ys
 all-split {xs = []}      ps      = [] , ps
 all-split {xs = x ∷ xs} (p ∷ ps) = first (p ∷_) (all-split ps)
+
+all-split-++ : {xs ys : List A} {axs : All P xs} {ays : All P ys}
+             → all-split (all-++ axs ays) ＝ (axs , ays)
+all-split-++ {xs = []}     {axs = []}             = refl
+all-split-++ {xs = x ∷ xs} {axs = ax ∷ axs} {ays} =
+  let ih = all-split-++ {axs = axs} {ays = ays} in
+  ×-path (ap (ax ∷_) (ap fst ih)) (ap snd ih)
+
+all-++-split : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A} {axys : All P (xs ++ ys)}
+             → let (axs , ays) = all-split {xs = xs} axys in
+               all-++ axs ays ＝ axys
+all-++-split {xs = []}                        = refl
+all-++-split {xs = x ∷ xs} {axys = ax ∷ axys} =
+  ap (ax ∷_) (all-++-split {xs = xs} {axys = axys})
+
+all-++≃ : {xs ys : List A} → All P (xs ++ ys) ≃ All P xs × All P ys
+all-++≃ {xs} =
+  ≅→≃ $
+  make-iso all-split (all-++ $²_) $
+  make-inverses
+   (fun-ext λ where (axs , ays) → all-split-++)
+   (fun-ext λ axys → all-++-split {xs = xs})
 
 all-++-left : {xs : List A} → All P (xs ++ ys) → All P xs
 all-++-left = fst ∘ all-split

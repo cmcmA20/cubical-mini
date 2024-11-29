@@ -201,8 +201,7 @@ Reflects-all : {xs : List A} {P : A → 𝒰 ℓ′} {p : A → Bool}
              → Reflects (All P xs) (all p xs)
 Reflects-all {xs = []}     rp = ofʸ []
 Reflects-all {xs = x ∷ xs} rp =
-  ≃→reflects (all-×≃ ⁻¹)
-    (Reflects-× ⦃ rp = rp x ⦄ ⦃ rq = Reflects-all {xs = xs} rp ⦄)
+  ≃→reflects (all-×≃ ⁻¹) (Reflects-× ⦃ rp = rp x ⦄ ⦃ rq = Reflects-all {xs = xs} rp ⦄)
 
 Reflects-all-bool : {p : A → Bool} {xs : List A}
                   → Reflects (All (So ∘ p) xs) (all p xs)
@@ -220,12 +219,7 @@ Reflects-any : {xs : List A} {P : A → 𝒰 ℓ′} {p : A → Bool}
              → Reflects (Any P xs) (any p xs)
 Reflects-any {xs = []}     rp = ofⁿ false!
 Reflects-any {xs = x ∷ xs} rp =
-  Reflects.dmap
-   [ here , there ]ᵤ
-   (contra (λ where
-               (here px) → inl px
-               (there ax) → inr ax))
-   (Reflects-⊎ ⦃ rp = rp x ⦄ ⦃ rq = Reflects-any {xs = xs} rp ⦄)
+  ≃→reflects (any-⊎≃ ⁻¹) (Reflects-⊎ ⦃ rp = rp x ⦄ ⦃ rq = Reflects-any {xs = xs} rp ⦄)
 
 Reflects-any-bool : {p : A → Bool} {xs : List A}
                   → Reflects (Any (So ∘ p) xs) (any p xs)

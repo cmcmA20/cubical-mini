@@ -5,6 +5,7 @@ open import Meta.Prelude
 open import Meta.Extensionality
 open import Meta.Effect
 open Variadics _
+open import Foundations.Sigma
 
 open import Data.Bool.Base
 open import Data.Dec.Base as Dec
@@ -135,15 +136,34 @@ instance
   ¬Any[] : Reflects (Any P []) false
   ¬Any[] = ofⁿ λ ()
 
-¬Any-∷ : {x : A} {xs : List A}
-       → ¬ P x → ¬ Any P xs → ¬ Any P (x ∷ xs)
-¬Any-∷ nx nxs (here px)   = nx px
-¬Any-∷ nx nxs (there pxs) = nxs pxs
+any-uncons : {x : A} {xs : List A} → Any P (x ∷ xs) → P x ⊎ Any P xs
+any-uncons (here px) = inl px
+any-uncons (there a) = inr a
 
-¬Any-uncons : {x : A} {xs : List A}
+any-⊎≃ : {x : A} {xs : List A} → Any P (x ∷ xs) ≃ P x ⊎ Any P xs
+any-⊎≃ =
+  ≅→≃ $
+  make-iso any-uncons [ here , there ]ᵤ $
+  make-inverses
+    (fun-ext λ where
+                 (inl px) → refl
+                 (inr ax) → refl)
+    (fun-ext λ where
+                 (here px)  → refl
+                 (there ax) → refl)
+
+¬any-∷ : {x : A} {xs : List A}
+       → ¬ P x → ¬ Any P xs → ¬ Any P (x ∷ xs)
+¬any-∷ nx nxs (here px)   = nx px
+¬any-∷ nx nxs (there pxs) = nxs pxs
+
+¬any-uncons : {x : A} {xs : List A}
             → ¬ Any P (x ∷ xs)
             → (¬ P x) × (¬ Any P xs)
-¬Any-uncons na = contra here na , contra there na
+¬any-uncons na = contra here na , contra there na
+
+¬any-×≃ : {x : A} {xs : List A} → (¬ Any P (x ∷ xs)) ≃ ((¬ P x) × (¬ Any P xs))
+¬any-×≃ = prop-extₑ! ¬any-uncons (¬any-∷ $²_)
 
 any-++-l : {@0 xs ys : List A} → Any P xs → Any P (xs ++ ys)
 any-++-l (here px)  = here px
@@ -153,14 +173,40 @@ any-++-r : {xs ys : List A} → Any P ys → Any P (xs ++ ys)
 any-++-r {xs = []}     ay = ay
 any-++-r {xs = x ∷ xs} ay = there (any-++-r ay)
 
-any-uncons : {x : A} {xs : List A} → Any P (x ∷ xs) → P x ⊎ Any P xs
-any-uncons (here px) = inl px
-any-uncons (there a) = inr a
-
 any-split : {xs ys : List A} → Any P (xs ++ ys) → Any P xs ⊎ Any P ys
 any-split {xs = []}      a        = inr a
 any-split {xs = _ ∷ _}  (here px) = inl (here px)
 any-split {xs = _ ∷ xs} (there a) = [ inl ∘ there , inr ]ᵤ (any-split {xs = xs} a)
+
+any-split-l : {xs ys : List A} {a : Any P xs} → any-split {ys = ys} (any-++-l a) ＝ inl a
+any-split-l {xs = x ∷ xs} {a = here px} = refl
+any-split-l {xs = x ∷ xs} {a = there a} = ap [ inl ∘ there , inr ]ᵤ (any-split-l {a = a})
+
+any-split-r : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A} {a : Any P ys} → any-split {xs = xs} (any-++-r a) ＝ inr a
+any-split-r {xs = []}         = refl
+any-split-r {xs = x ∷ xs} {a} = ap [ inl ∘ there , inr ]ᵤ (any-split-r {a = a})
+
+any-lr-split : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A} {a : Any P (xs ++ ys)}
+             → [ any-++-l {xs = xs} , any-++-r ]ᵤ (any-split a) ＝ a
+any-lr-split {xs = []} {a = a} = refl
+any-lr-split {xs = x ∷ xs} {a = here px} = refl
+any-lr-split {xs = x ∷ xs} {a = there a} with any-split {xs = xs} a | recall (any-split {xs = xs}) a
+... | inl as | ⟪ eq ⟫ =
+  ap there $
+  ap ([ any-++-l {xs = xs} , any-++-r ]ᵤ) (eq ⁻¹) ∙ any-lr-split {xs = xs} {a = a}
+... | inr as | ⟪ eq ⟫ =
+  ap there $
+  ap ([ any-++-l {xs = xs} , any-++-r ]ᵤ) (eq ⁻¹) ∙ any-lr-split {xs = xs} {a = a}
+
+any-++≃ : {xs ys : List A} → Any P (xs ++ ys) ≃ Any P xs ⊎ Any P ys
+any-++≃ {xs} =
+  ≅→≃ $
+  make-iso any-split [ any-++-l , any-++-r ]ᵤ $
+  make-inverses
+    (fun-ext λ where
+                 (inl a) → any-split-l
+                 (inr a) → any-split-r)
+    (fun-ext λ a → any-lr-split {xs = xs} {a = a})
 
 any-map : {@0 xs : List A} → ∀[ P ⇒ Q ] → Any P xs → Any Q xs
 any-map f (here px) = here (f px)
