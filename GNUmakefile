@@ -5,7 +5,7 @@ FIX_WHITESPACE?=fix-whitespace
 RTS_OPTIONS=+RTS -H3G -RTS
 AGDA=$(AGDA_EXEC) $(RTS_OPTIONS)
 EVERYTHINGS?=cabal run exes --
-DATA_INSTANCE_DIRS=`find src/Data -type d -name Instances -printf "Data/%P\n"`
+DATA_INSTANCE_DIRS=`find src/Data -type d -name Instances | sed "s|src/||"`
 
 .PHONY : all
 all : build
