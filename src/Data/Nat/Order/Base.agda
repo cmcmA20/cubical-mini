@@ -289,6 +289,13 @@ instance
     (yes n<m) → inr $ inl n<m
     (no  n≮m) → inr $ inr $ ≤-antisym (≤≃≯ ⁻¹ $ n≮m) (≤≃≯ ⁻¹ $ m≮n)
 
+-- local extensionality
+
+<-lext : ∀ {x y} → (∀ z → (z < x) ≃ (z < y)) → x ＝ y
+<-lext {x = zero}  {y = zero}  _ = refl
+<-lext {x = zero}  {y = suc _} f = ⊥.rec (≮z (f 0 ⁻¹ $ z<s))
+<-lext {x = suc _} {y = zero}  f = ⊥.rec (≮z (f 0 $ z<s))
+<-lext {x = suc x} {y = suc y} f = ap suc (<-lext λ z → <≃<+l ∙ f (suc z) ∙ <≃<+l ⁻¹)
 
 -- well-foundedness
 
@@ -329,6 +336,18 @@ opaque
 
 ≤-+ : ∀ {m n p q} → m ≤ p → n ≤ q → m + n ≤ p + q
 ≤-+ m≤p n≤q = ≤-trans (≤≃≤+r $ m≤p) (≤≃≤+l $ n≤q)
+
+opaque
+  unfolding _<_
+  <-≤-+ : ∀ {m n p q} → m < p → n ≤ q → m + n < p + q
+  <-≤-+ = ≤-+
+
+  ≤-<-+ : ∀ {m n p q} → m ≤ p → n < q → m + n < p + q
+  ≤-<-+ {m} {n} {p} {q} m≤p n<q =
+    subst (_≤ p + q) (+-suc-r m n) (≤-+ m≤p n<q)
+
+<-+ : ∀ {m n p q} → m < p → n < q → m + n < p + q
+<-+ m<p n<q = <-≤-+ m<p (<→≤ n<q)
 
 0<≃⊎₁ : ∀ {m n} → 0 < m + n ≃ (0 < m) ⊎₁ (0 < n)
 0<≃⊎₁ {m} {n} = prop-extₑ! (∣_∣₁ ∘ 0<→⊎ m n) (elim! [ <-+-r , <-+-l ]ᵤ)
