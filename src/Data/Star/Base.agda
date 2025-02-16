@@ -32,7 +32,7 @@ star-cast {R} p q (e ◅ s) = subst (λ φ → R φ _) p e ◅ star-cast refl q 
 star-cast-l : (p : x ＝ x′)
             → Star R x y → Star R x′ y
 star-cast-l     p (ε e)   = ε (p ⁻¹ ∙ e)
-star-cast-l {R} p (e ◅ s) = subst (λ φ → R φ _) p e ◅ star-cast-l refl s
+star-cast-l {R} p (e ◅ s) = subst (λ φ → R φ _) p e ◅ s
 
 star-cast-r : (p : y ＝ y′)
             → Star R x y → Star R x y′
@@ -58,3 +58,15 @@ star-map : {f : A → B}
          → Star R x y → Star S (f x) (f y)
 star-map {f} fp (ε e)      = ε (ap f e)
 star-map     fp (xw ◅ swy) = fp xw ◅ star-map fp swy
+
+-- TODO generalize
+star-foldr : (∀ {x} → S x x)
+           → (∀ {x y z} → R x y → S y z → S x z)
+           → Star R x y → S x y
+star-foldr {S} {x} re tr (ε e)       = subst (S x) e (re {x})
+star-foldr         re tr (rxw ◅ swy) = tr rxw (star-foldr re tr swy)
+
+-- TODO
+-- star-foldl : (∀ {a} → S a a)
+--            → (∀ {a b c} → S a b → R b c → S a c)
+--            → Star R x y → S x y
