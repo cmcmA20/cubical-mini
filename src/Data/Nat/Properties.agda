@@ -29,8 +29,8 @@ s=s≃ = prop-extₑ! (ap suc) suc-inj
 +-suc-r (suc x) y = ap suc (+-suc-r x y)
 
 +-comm : (x y : ℕ) → x + y ＝ y + x
-+-comm 0       y = sym (+-zero-r y)
-+-comm (suc x) y = ap suc (+-comm x y) ∙ sym (+-suc-r y x)
++-comm 0       y = (+-zero-r y) ⁻¹
++-comm (suc x) y = ap suc (+-comm x y) ∙ (+-suc-r y x) ⁻¹
 
 +-assoc : (x y z : ℕ) → x + (y + z) ＝ x + y + z
 +-assoc 0       _ _ = refl
@@ -46,10 +46,13 @@ s=s≃ = prop-extₑ! (ap suc) suc-inj
 +-comm-assoc : (x y z : ℕ) → x + (y + z) ＝ y + (x + z)
 +-comm-assoc x y z = +-assoc x y _
                    ∙ ap (_+ z) (+-comm x y)
-                   ∙ sym (+-assoc y x _)
+                   ∙ (+-assoc y x _) ⁻¹
 
 +-assoc-comm : (x y z : ℕ) → x + y + z ＝ x + z + y
-+-assoc-comm x y z = sym (+-assoc x _ _) ∙ ap (x +_) (+-comm y z) ∙ +-assoc x _ _
++-assoc-comm x y z = (+-assoc x _ _) ⁻¹ ∙ ap (x +_) (+-comm y z) ∙ +-assoc x _ _
+
++-interchange : (x y z w : ℕ) → (x + y) + (z + w) ＝ (x + z) + (y + w)
++-interchange x y z w = (+-assoc x y (z + w)) ⁻¹ ∙ ap (x +_) (+-comm-assoc y z w) ∙ +-assoc x z (y + w)
 
 +-cancel-l : ∀ m n1 n2 → m + n1 ＝ m + n2 → n1 ＝ n2
 +-cancel-l  zero   n1 n2 e = e
@@ -109,7 +112,7 @@ pred=∸1 (suc n) = refl
 ·-suc-r (suc x) y = ap suc $ ap (y +_) (·-suc-r x y) ∙ +-comm-assoc y x _
 
 ·-comm : (x y : ℕ) → x · y ＝ y · x
-·-comm 0       y = sym (·-absorb-r y)
+·-comm 0       y = (·-absorb-r y) ⁻¹
 ·-comm (suc x) y = ap (y +_) (·-comm x _) ∙ sym (·-suc-r y x)
 
 ·-id-l : (x : ℕ) → 1 · x ＝ x
@@ -145,7 +148,6 @@ pred=∸1 (suc n) = refl
 
 ·-cancel-l : ∀ m n1 n2 → m · n1 ＝ m · n2 → (n1 ＝ n2) ⊎ (m ＝ 0)
 ·-cancel-l m n1 n2 e = ·-cancel-r n1 n2 m (·-comm n1 m ∙ e ∙ ·-comm m n2)
-
 
 -- iteration
 
