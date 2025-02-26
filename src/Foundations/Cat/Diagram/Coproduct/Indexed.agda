@@ -68,6 +68,7 @@ module _
   ∐[_] : {Idx : Type ℓi} ⦃ _ : Indexed-coproducts Ob Hom Idx ⦄ → (Idx → Ob ℓf) → Ob (ℓi l⊔ ℓf)
   ∐[_] = ∐
 
+  infixr 60 Σ-syntax
   Σ-syntax : ⦃ u : Underlying Ob Hom ⦄ (X : Ob ℓi) ⦃ _ : Indexed-coproducts Ob Hom ⌞ X ⌟ ⦄
            → (⌞ X ⌟ → Ob ℓf) → Ob (ℓf l⊔ u .ℓ-und ℓi)
   Σ-syntax _ F = ∐ F

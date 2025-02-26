@@ -40,7 +40,6 @@ module _
   -- take care, it's not a greek letter pi, it's n-ary product symbol (\prod)
   record Indexed-products : Typeω where
     no-eta-equality
-    infixr 60 ∏
     field
       ∏      : (Idx → Ob ℓf) → Ob (ℓi l⊔ ℓf)
       has-ip : {F : Idx → Ob ℓf} → Indexed-product Ob Hom F (∏ F)
@@ -70,6 +69,7 @@ module _
   ∏[_] = ∏
 
   -- and this one is \Pi
+  infixr 60 Π-syntax
   Π-syntax : ⦃ u : Underlying Ob Hom ⦄ (X : Ob ℓi) ⦃ _ : Indexed-products Ob Hom ⌞ X ⌟ ⦄
            → (⌞ X ⌟ → Ob ℓf) → Ob (ℓf l⊔ u .ℓ-und ℓi)
   Π-syntax _ F = ∏ F
