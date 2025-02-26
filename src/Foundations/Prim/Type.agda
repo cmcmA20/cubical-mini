@@ -10,12 +10,12 @@ open import Agda.Primitive public
         ; SSetω
         ; LevelUniv
         ; Level
-        ; _⊔_ )
+        ; lzero
+        ; lsuc)
   renaming ( Prop  to DIProp
            ; Set   to Type
            ; Setω  to Typeω
-           ; lzero to 0ℓ
-           ; lsuc  to ℓsuc )
+           ; _⊔_   to _l⊔_ )
 
 level-of-type : {ℓ : Level} → Type ℓ → Level
 level-of-type {ℓ} _ = ℓ
@@ -23,36 +23,19 @@ level-of-type {ℓ} _ = ℓ
 level-of-term : {ℓ : Level} {A : Type ℓ} → A → Level
 level-of-term {ℓ} _ = ℓ
 
+Fun : {ℓa ℓb : Level} → Type ℓa → Type ℓb → Type (ℓa l⊔ ℓb)
+Fun A B = A → B
 
-record Lift {ℓ} ℓ′ (A : Type ℓ) : Type (ℓ ⊔ ℓ′) where
-  constructor lift
-  field lower : A
-
-open Lift public
-
-instance
-  lift-inst : ∀ {ℓ ℓ′} {A : Type ℓ} → ⦃ A ⦄ → Lift ℓ′ A
-  lift-inst ⦃ (a) ⦄ = lift a
-
-record Liftω {ℓ} (A : Type ℓ) : Typeω where
-  constructor liftω
-  field lower : A
-
-open Liftω public
-
-instance
-  liftω-inst : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → Liftω A
-  liftω-inst ⦃ (a) ⦄ = liftω a
+Corr² : {ℓa ℓb : Level} (ℓ : Level) → Type ℓa → Type ℓb → Type (ℓa l⊔ ℓb l⊔ lsuc ℓ)
+Corr² ℓ A B = A → B → Type ℓ
 
 
--- types without runtime representation
-record Erased {ℓ} (@0 A : Type ℓ) : Type ℓ where
-  constructor erase
-  field @0 erased : A
+auto : {ℓ : Level} {A : Type ℓ} → ⦃ A ⦄ → A
+auto ⦃ (a) ⦄ = a
 
-open Erased public
+autoω : {A : Typeω} → ⦃ A ⦄ → A
+autoω ⦃ (a) ⦄ = a
 
-instance
-  Erased-default : ∀ {ℓ} {A : Type ℓ} → ⦃ A ⦄ → Erased A
-  Erased-default ⦃ (a) ⦄ .erased = a
-  {-# INCOHERENT Erased-default #-}
+-- Explicit type hint
+the : {ℓ : Level} (A : Type ℓ) → A → A
+the _ a = a

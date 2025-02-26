@@ -5,6 +5,7 @@ flags:
   --erased-cubical
   --erasure
   --erased-matches
+  --default-level
   --exact-split
   --guardedness
   --hidden-argument-puns
