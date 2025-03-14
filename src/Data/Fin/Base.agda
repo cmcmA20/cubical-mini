@@ -11,6 +11,7 @@ open import Data.Maybe.Base
 open import Data.Nat.Base
   using (ℕ; zero; suc)
 open import Data.Sum.Base
+  using (_⊎ₜ_; inl; inr)
 
 private variable
   ℓ : Level
