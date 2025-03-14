@@ -71,7 +71,7 @@ insert-sorted-uniq-strict : {R : ∀ x y → Reflects (x < y) (cmp x y)}
 insert-sorted-uniq-strict               _  _    {xs = []}     _   _         []ˢ   = ∷ˢ []ʳ
 insert-sorted-uniq-strict {cmp} {x} {R} tr stot {xs = y ∷ xs} nx (ny ∷ᵘ u) (∷ˢ r) with cmp x y | recall (cmp x) y
 ... | false | ⟪ eq ⟫ =
-  let (ne , nxs) = ¬Any-uncons nx in
+  let (ne , nxs) = ¬any-uncons nx in
   ∷ˢ (sorted-at0→related
         (insert-sorted-uniq-strict {R = R} tr stot nxs u (related→sorted r))
         (all→atweak (perm-all (perm-sym insert-perm)
