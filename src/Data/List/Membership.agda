@@ -61,22 +61,20 @@ instance
   se {y ∷ xs} (here px) = refl
   se {y ∷ xs} (there h) = ap there (se h)
 
+has : ⦃ d : is-discrete A ⦄ → A → List A → Bool
+has a = any (λ x → ⌊ a ≟ x ⌋)
+
+Reflects-has : ⦃ d : is-discrete A ⦄ {x : A} {xs : List A}
+             → Reflects (x ∈ xs) (has x xs)
+Reflects-has ⦃ d ⦄ {x} = Reflects-any λ y → d {x} {y} .proof
+
 instance
-  -- TODO duplication with Data.List.Operations.Discrete
   Dec-∈ₗ
     : {a : A} {xs : List A}
     → ⦃ di : is-discrete A ⦄
     → Dec (a ∈ xs)
-  Dec-∈ₗ {xs = []} = no λ()
-  Dec-∈ₗ {a} {xs = x ∷ xs} .does = (a =? x) or ⌊ Dec-∈ₗ {a = a} {xs = xs} ⌋
-  Dec-∈ₗ {a} {xs = x ∷ xs} .proof =
-    caseᵈ a ＝ x return (λ d → Reflects (a ∈ (x ∷ xs)) (⌊ d ⌋ or ⌊ Dec-∈ₗ {a = a} {xs = xs} ⌋)) of λ where
-      (yes a=x) → ofʸ (here a=x)
-      (no  a≠x) → case Dec-∈ₗ {a = a} {xs = xs} return (λ d → Reflects (a ∈ (x ∷ xs)) ⌊ d ⌋) of λ where
-        (yes a∈xs) → ofʸ (there a∈xs)
-        (no  a∉xs) → ofⁿ λ where
-          (here  a=x)  → a≠x a=x
-          (there a∈xs) → a∉xs a∈xs
+  Dec-∈ₗ {a} {xs} .does = has a xs
+  Dec-∈ₗ          .proof = Reflects-has
   {-# OVERLAPPING Dec-∈ₗ #-}
 
   ∈ₗ-is-discrete
@@ -167,9 +165,32 @@ instance
   ap fsuc (∈ₗ→fin-respects-∈!ₗ q (there-inj ∘ u ∘ there) q′ (there-inj ∘ v ∘ there) r)
 
 ∈-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
-           → (f : A → B) → x ∈ xs → f x ∈ map f xs
+       → (f : A → B) → x ∈ xs → f x ∈ map f xs
 ∈-map {xs = x ∷ xs} f (here e)   = here (ap f e)
 ∈-map {xs = x ∷ xs} f (there hx) = there (∈-map f hx)
+
+map-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
+       → (f : A → B) → Injective f
+       → f x ∈ map f xs → x ∈ xs 
+map-∈ {xs = x ∷ xs} f inj (here e)  = here (inj e)
+map-∈ {xs = x ∷ xs} f inj (there fx) = there (map-∈ f inj fx)
+
+{-
+map-∈-in : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {z : A} {xs : List A}
+       → (f : A → B)
+       → (∀ {x y} → y ∈ xs → f x ＝ f y → x ＝ y)
+       → f z ∈ map f xs → z ∈ xs 
+map-∈-in {xs = x ∷ xs} f inj (here e)  = here (inj (here refl) e)
+map-∈-in {xs = x ∷ xs} f inj (there fx) = there (map-∈-in f (λ {x} {y} y∈ e → inj (there y∈) e) fx)
+-}
+
+map-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {xs : List A}
+        → (f : A → B) 
+        → y ∈ map f xs → Σ[ x ꞉ A ] ((x ∈ xs) × (y ＝ f x))
+map-∈Σ {xs = x ∷ xs} f (here e) = x , here refl , e
+map-∈Σ {xs = x ∷ xs} f (there y∈) =
+  let (x , x∈ , xe) = map-∈Σ f y∈ in
+  x , there x∈ , xe
 
 ∈-split : {A : 𝒰 ℓᵃ} {x : A} {xs : List A}
          → x ∈ xs → Σ[ ls ꞉ List A ] Σ[ rs ꞉ List A ] (xs ＝ ls ++ x ∷ rs)
@@ -203,14 +224,24 @@ All→∀∈     {xs = y ∷ xs} (px ∷ pxs) x (there hx) = All→∀∈ pxs x 
 ∀∈→All : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs : List A}
         → ((x : A) → x ∈ xs → P x)
         → All P xs
-∀∈→All {xs = []} ax = []
+∀∈→All {xs = []}     ax = []
 ∀∈→All {xs = x ∷ xs} ax = ax x (here refl) ∷ ∀∈→All λ y hy → ax y (there hy)
+
+all-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A}
+       → xs ⊆ ys → All P ys → All P xs
+all-⊆ xsy ay = ∀∈→All λ x → All→∀∈ ay x ∘ xsy
 
 all-∈-map : ∀ {ℓ′} {P : Pred A ℓ} {Q : Pred A ℓ′}
             → (∀ {x} → x ∈ xs → P x → Q x)
             → All P xs → All Q xs
 all-∈-map {xs = []}     f []       = []
 all-∈-map {xs = x ∷ xs} f (p ∷ ps) = f (here refl) p ∷ all-∈-map (f ∘ there) ps
+
+any-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A}
+       → xs ⊆ ys → Any P xs → Any P ys
+any-⊆ xsy ax =
+  let (x , x∈ , px) = Any→Σ∈ ax in
+  ∈→Any (xsy x∈) px
 
 -- uniqueness
 

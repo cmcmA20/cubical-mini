@@ -11,7 +11,6 @@ open import Data.Nat.Base public
 open import Data.Nat.Path
 open import Data.Reflects.Base as R
 
-
 private variable
   m n : ℕ
 
@@ -162,3 +161,23 @@ iter-mul : {ℓ : Level} {A : 𝒰 ℓ}
          → iter (m · n) f x ＝ iter m (iter n f) x
 iter-mul  zero   n f x = refl
 iter-mul (suc m) n f x = iter-add n (m · n) f x ∙ ap (iter n f) (iter-mul m n f x)
+
+iter-swap : {ℓ : Level} {A : 𝒰 ℓ}
+         → (m n : ℕ) → (f : A → A) → (x : A)
+         → iter m f (iter n f x) ＝ iter n f (iter m f x)
+iter-swap m n f x = iter-add m n f x ⁻¹ ∙ ap (λ q → iter q f x) (+-comm m n) ∙ iter-add n m f x
+
+iter-idem : {ℓ : Level} {A : 𝒰 ℓ}
+        → (n : ℕ) → (f : A → A) → (x : A)
+        → (∀ m → f (iter m f x) ＝ iter m f x)
+        → iter n f x ＝ x
+iter-idem  zero   f x fid = refl
+iter-idem (suc n) f x fid = fid n ∙ iter-idem n f x fid
+
+-- TODO can't use Injective because of cyclic dependencies
+iter-inj : {ℓ : Level} {A : 𝒰 ℓ}
+         → (n : ℕ) (f : A → A)
+         → (∀ {x y} → f x ＝ f y → x ＝ y)
+         → ∀ {x y} → iter n f x ＝ iter n f y → x ＝ y
+iter-inj  zero   f inj {x} {y} e = e
+iter-inj (suc n) f inj {x} {y} e = iter-inj n f inj (inj e)

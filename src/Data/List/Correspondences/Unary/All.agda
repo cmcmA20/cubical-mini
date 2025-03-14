@@ -12,6 +12,10 @@ open import Logic.Discreteness
 
 open import Data.Empty.Base
 open import Data.Unit.Base
+open import Data.Bool.Base
+open import Data.Dec.Base as Dec
+open import Data.Reflects.Base as Reflects
+open import Data.Reflects.Properties
 open import Data.Sum.Base
 open import Data.List.Base
 open import Data.List.Path
@@ -158,6 +162,14 @@ all→map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : Pred B ℓ′} {f : A → B
 all→map {xs = []}     []        = []
 all→map {xs = x ∷ xs} (sfx ∷ a) = sfx ∷ all→map a
 
+all→zip : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {P : Pred A ℓ′} {Q : Pred B ℓ′} {xs : List A}  {ys : List B}
+        → All P xs → All Q ys
+        → All (λ x → P (x .fst) × Q (x .snd)) (zip xs ys)
+all→zip {xs = []}     {ys = []}      ax        ay       = []
+all→zip {xs = []}     {ys = y ∷ ys}  ax        ay       = []
+all→zip {xs = x ∷ xs} {ys = []}      ax        ay       = []
+all→zip {xs = x ∷ xs} {ys = y ∷ ys} (px ∷ ax) (qy ∷ ay) = (px , qy) ∷ all→zip ax ay
+
 all←map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : Pred B ℓ′} {f : A → B} {xs : List A}
         → All S (map f xs) → All (S ∘ f) xs
 all←map {xs = []}     []        = []
@@ -170,3 +182,16 @@ all-zip-with {P} f (p ∷ ps) (q ∷ qs) = f p q ∷ all-zip-with {P = P} f ps q
 all-trivial : (∀ x → P x) → {xs : List A} → All P xs
 all-trivial pt {xs = []}     = []
 all-trivial pt {xs = x ∷ xs} = pt x ∷ all-trivial pt
+
+-- reflection
+
+Reflects-all : {xs : List A} {P : A → 𝒰 ℓ′} {p : A → Bool}
+             → (∀ x → Reflects (P x) (p x))
+             → Reflects (All P xs) (all p xs)
+Reflects-all {xs = []}     rp = ofʸ []
+Reflects-all {xs = x ∷ xs} rp =
+  ≃→reflects (all-×≃ ⁻¹) (Reflects-× ⦃ rp = rp x ⦄ ⦃ rq = Reflects-all {xs = xs} rp ⦄)
+
+Reflects-all-bool : {p : A → Bool} {xs : List A}
+                  → Reflects (All (So ∘ p) xs) (all p xs)
+Reflects-all-bool = Reflects-all λ x → Reflects-So
