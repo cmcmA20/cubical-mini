@@ -34,7 +34,7 @@ Recomputable-× : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Type ℓᵇ}
 Recomputable-× ra rb .recompute e =
     ra .recompute (erase (e .erased .fst))
   , rb .recompute (erase (e .erased .snd))
-  
+
 Recomputable-≃ : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Type ℓᵇ}
                → (A ≃ B) → Recomputable A → Recomputable B
 Recomputable-≃ e ra .recompute eb = e $ ra .recompute (erase (e ⁻¹ $ eb .erased))

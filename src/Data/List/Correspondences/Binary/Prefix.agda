@@ -60,7 +60,7 @@ opaque
 
 opaque
   unfolding Prefix1
-  
+
   []-prefix1 : Prefix1 [] (y ∷ ys)
   []-prefix1 {y} {ys} = y , ys , refl
 
@@ -93,7 +93,7 @@ opaque
 
 prefix1-acc : Prefix1 xs (y ∷ ys) → Acc Prefix1 ys → Acc Prefix1 xs
 prefix1-acc {xs = []}     xyp  a        =
-  acc λ y ypr → absurd (¬prefix1-[] ypr) 
+  acc λ y ypr → absurd (¬prefix1-[] ypr)
 prefix1-acc {xs = x ∷ xs} xyp (acc rec) =
   acc λ y ypr → prefix1-acc ypr (rec xs (prefix1-peel xyp .snd))
 

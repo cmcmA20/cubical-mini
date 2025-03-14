@@ -171,7 +171,7 @@ instance
 
 map-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
        → (f : A → B) → Injective f
-       → f x ∈ map f xs → x ∈ xs 
+       → f x ∈ map f xs → x ∈ xs
 map-∈ {xs = x ∷ xs} f inj (here e)  = here (inj e)
 map-∈ {xs = x ∷ xs} f inj (there fx) = there (map-∈ f inj fx)
 
@@ -179,13 +179,13 @@ map-∈ {xs = x ∷ xs} f inj (there fx) = there (map-∈ f inj fx)
 map-∈-in : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {z : A} {xs : List A}
        → (f : A → B)
        → (∀ {x y} → y ∈ xs → f x ＝ f y → x ＝ y)
-       → f z ∈ map f xs → z ∈ xs 
+       → f z ∈ map f xs → z ∈ xs
 map-∈-in {xs = x ∷ xs} f inj (here e)  = here (inj (here refl) e)
 map-∈-in {xs = x ∷ xs} f inj (there fx) = there (map-∈-in f (λ {x} {y} y∈ e → inj (there y∈) e) fx)
 -}
 
 map-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {xs : List A}
-        → (f : A → B) 
+        → (f : A → B)
         → y ∈ map f xs → Σ[ x ꞉ A ] ((x ∈ xs) × (y ＝ f x))
 map-∈Σ {xs = x ∷ xs} f (here e) = x , here refl , e
 map-∈Σ {xs = x ∷ xs} f (there y∈) =

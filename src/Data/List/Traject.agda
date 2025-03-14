@@ -43,7 +43,7 @@ traj-last : {ℓ : Level} {A : 𝒰 ℓ}
           → {f : A → A} {x : A} {n : ℕ}
           → last x (traj f (f x) n) ＝ iter n f x
 traj-last         {n = zero}  = refl
-traj-last {f} {x} {n = suc n} =  
+traj-last {f} {x} {n = suc n} =
     ap (last x) (traj-snoc {f = f} {x = f x} {n = n})
   ∙ (last-snoc {xs = traj f (f x) n})
   ∙ iter-swap n 1 f x
@@ -56,7 +56,7 @@ traj-length {n = suc n} = ap suc traj-length
 
 -- TODO unneeded?
 traj-!ᵐ : {ℓ : Level} {A : 𝒰 ℓ}
-        → {f : A → A} {x : A} {n k : ℕ} 
+        → {f : A → A} {x : A} {n k : ℕ}
         → k < n → traj f x n !ᵐ k ＝ just (iter k f x)
 traj-!ᵐ         {n = zero}              k<n = false! k<n
 traj-!ᵐ         {n = suc n} {k = zero}  k<n = refl
@@ -84,7 +84,7 @@ traj-∈ {f} {x} {n = suc n} (there zm) =
   suc k , s<s k< , e ∙ iter-swap k 1 f x
 
 traj-add : {ℓ : Level} {A : 𝒰 ℓ}
-         → {f : A → A} {x : A} {m n : ℕ} 
+         → {f : A → A} {x : A} {m n : ℕ}
          → traj f x (m + n) ＝ traj f x m ++ traj f (iter m f x) n
 traj-add         {m = zero}      = refl
 traj-add {f} {x} {m = suc m} {n} =
@@ -100,7 +100,7 @@ traj-prefix {m = suc m} {n = zero}  m≤n = false! m≤n
 traj-prefix {m = suc m} {n = suc n} m≤n = ∷-prefix refl (traj-prefix (≤-peel m≤n))
 
 traj-take : {ℓ : Level} {A : 𝒰 ℓ}
-          → {f : A → A} {x : A} {n k : ℕ} 
+          → {f : A → A} {x : A} {n k : ℕ}
           → k ≤ n
           → take k (traj f x n) ＝ traj f x k
 traj-take                 {k = zero}  k≤n = refl

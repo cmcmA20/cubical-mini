@@ -168,7 +168,7 @@ uniq-reverse = uniq≈len=→uniq (reverse-length ⁻¹) reverse-≈
 -- map
 
 map-uniq : {B : 𝒰 ℓ} {f : A → B} {xs : List A}
-         → Uniq (mapₗ f xs) → Uniq xs 
+         → Uniq (mapₗ f xs) → Uniq xs
 map-uniq     {xs = []}     _           = []ᵘ
 map-uniq {f} {xs = x ∷ xs} (fx∉ ∷ᵘ um) =
   contra (∈-map f) fx∉ ∷ᵘ map-uniq um

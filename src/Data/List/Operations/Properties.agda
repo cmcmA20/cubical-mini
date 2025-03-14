@@ -223,10 +223,10 @@ reverse-inv {xs = x ∷ xs} =
 reverse-length : ∀ {xs : List A}
                → length (reverse xs) ＝ length xs
 reverse-length {xs = []}     = refl
-reverse-length {xs = x ∷ xs} = 
+reverse-length {xs = x ∷ xs} =
     ++-length (reverse xs) (x ∷ [])
   ∙ +-comm (length (reverse xs)) 1
-  ∙ ap suc reverse-length 
+  ∙ ap suc reverse-length
 
 reverse-⊆ : ∀ {xs : List A}
            → xs ⊆ reverse xs
@@ -268,7 +268,7 @@ last-change : ∀ {xs : List A} {z w}
 last-change {xs = []}     0<l = false! 0<l
 last-change {xs = x ∷ xs} 0<l = refl
 
-last-reverse : ∀ {xs : List A} {z} 
+last-reverse : ∀ {xs : List A} {z}
              → last z (reverse xs) ＝ head z xs
 last-reverse {xs = []}         = refl
 last-reverse {xs = x ∷ xs} {z} = ap (last z) (snoc-append (reverse xs) ⁻¹) ∙ last-snoc {xs = reverse xs}
@@ -277,7 +277,7 @@ head-last : ∀ {xs : List A} {z} → head (last z xs) xs ＝ head z xs
 head-last {xs = []}     = refl
 head-last {xs = x ∷ xs} = refl
 
-head-reverse : ∀ {xs : List A} {z} 
+head-reverse : ∀ {xs : List A} {z}
              → head z (reverse xs) ＝ last z xs
 head-reverse {xs} {z} = last-reverse {xs = reverse xs} ⁻¹ ∙ ap (last z) (reverse-inv {xs = xs})
 
@@ -691,7 +691,7 @@ count-from-to-suc-r {m = suc m} {n = zero} m≤n = false! m≤n
 count-from-to-suc-r {m = zero} {n = suc n} m≤n =
   ap (0 ∷_) (ap (map suc) (count-from-to-suc-r {m = 0} {n = n} z≤) ∙ map-∷r)
 count-from-to-suc-r {m = suc m} {n = suc n} m≤n =
-  ap (map suc) (count-from-to-suc-r {m = m} {n = n} (≤-peel m≤n)) ∙ map-∷r 
+  ap (map suc) (count-from-to-suc-r {m = m} {n = n} (≤-peel m≤n)) ∙ map-∷r
 
 -- TODO more arithmetics
 
@@ -716,7 +716,7 @@ count-from-to-∈ {m = suc m} {n = suc n} k∈ =
       (ih≤ , ih<) = count-from-to-∈ {m = m} {n = n} l∈
     in
   subst (λ q → (suc m ≤ q) × (q < suc n)) (le ⁻¹) $
-  (s≤s ih≤) , (s<s ih<) 
+  (s≤s ih≤) , (s<s ih<)
 
 ∈-count-from-to : {m n k : ℕ}
                  → m ≤ k → k < n
@@ -729,4 +729,4 @@ count-from-to-∈ {m = suc m} {n = suc n} k∈ =
 ∈-count-from-to {m = suc m} {n = suc n} {k = suc k} m≤k k<n =
   ∈-map suc (∈-count-from-to {m = m} {n = n} {k = k} (≤-peel m≤k) (<-peel k<n))
 
--- TODO ≃ 
+-- TODO ≃

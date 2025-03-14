@@ -127,7 +127,7 @@ instance
 ⊎₁-assoc : ((A ⊎₁ B) ⊎₁ C) ≃ (A ⊎₁ (B ⊎₁ C))
 ⊎₁-assoc =
   prop-extₑ!
-    (rec! [ map (map-r (∣_∣₁ ∘ inl))  
+    (rec! [ map (map-r (∣_∣₁ ∘ inl))
           , (λ c → ∣ inr ∣ inr c ∣₁ ∣₁)
           ]ᵤ)
     (rec! [ (λ a → ∣ inl ∣ inl a ∣₁ ∣₁)
