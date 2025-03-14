@@ -23,6 +23,22 @@ record Recomputable {ℓ} (A : Type ℓ) : Type ℓ where
 
 open Recomputable public
 
+Recomputable-Erased : {ℓᵃ : Level} {A : Type ℓᵃ}
+                    → Recomputable (Erased A)
+Recomputable-Erased .recompute (erase (erase e)) = erase e
+
+-- Σ seems non-trivial
+
+Recomputable-× : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Type ℓᵇ}
+               → Recomputable A → Recomputable B → Recomputable (A × B)
+Recomputable-× ra rb .recompute e =
+    ra .recompute (erase (e .erased .fst))
+  , rb .recompute (erase (e .erased .snd))
+  
+Recomputable-≃ : {ℓᵃ ℓᵇ : Level} {A : Type ℓᵃ} {B : Type ℓᵇ}
+               → (A ≃ B) → Recomputable A → Recomputable B
+Recomputable-≃ e ra .recompute eb = e $ ra .recompute (erase (e ⁻¹ $ eb .erased))
+
 @0 fibreᴱ≃fibre : {@0 f : A → B} {@0 y : B} → fibreᴱ f y ≃ fibre f y
 fibreᴱ≃fibre = Σ-ap-snd λ _ → erased≃id
 

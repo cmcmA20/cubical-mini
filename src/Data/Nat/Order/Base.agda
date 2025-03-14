@@ -191,6 +191,10 @@ opaque
   z<s : 0 < suc n
   z<s = _ , refl
 
+z<-suc-pred : 0 < n → n ＝ suc (pred n)
+z<-suc-pred {n = zero}  z<n = absurd (≮z z<n)
+z<-suc-pred {n = suc n} _   = refl
+
 opaque
   unfolding _≤_ _<_
   <≃<+l : (n < k) ≃ (m + n < m + k)
@@ -427,3 +431,6 @@ opaque
   unfolding _≤_
   ≤→Σ : ∀ m n → m ≤ n → Σ[ k ꞉ ℕ ] (m + k ＝ n)
   ≤→Σ m n = id
+
+  <→Σ : ∀ m n → m < n → Σ[ k ꞉ ℕ ] (m + suc k ＝ n)
+  <→Σ m n (k , e) = k , +-suc-r m k ∙ e

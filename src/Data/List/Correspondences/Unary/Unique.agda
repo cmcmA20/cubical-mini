@@ -4,6 +4,7 @@ module Data.List.Correspondences.Unary.Unique where
 open import Prelude
 open import Data.Empty
 open import Data.Reflects
+open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Order.Base
 open import Data.Sum.Base
@@ -29,6 +30,10 @@ Uniq-is-prop : is-prop (Uniq xs)
 Uniq-is-prop  []ᵘ         []ᵘ        = refl
 Uniq-is-prop (nx1 ∷ᵘ u1) (nx2 ∷ᵘ u2) = ap² _∷ᵘ_ prop! (Uniq-is-prop u1 u2)
 
+uniq-uncons : {x : A} {xs : List A}
+            → Uniq (x ∷ xs) → x ∉ xs × Uniq xs
+uniq-uncons (x∉ ∷ᵘ u) = x∉ , u
+
 uniq→++ : {xs ys : List A}
         → Uniq xs → Uniq ys → xs ∥ ys
         → Uniq (xs ++ ys)
@@ -46,6 +51,13 @@ uniq→++ {xs = x ∷ xs} (nx ∷ᵘ ux) uy dxy =
     (contra any-++-l nx) ∷ᵘ ux
   , uy
   , ∥-∷-l (contra any-++-r nx) dxy
+
+uniq-snoc : {xs : List A} {x : A}
+          → Uniq xs → x ∉ xs → Uniq (xs ∷r x)
+uniq-snoc {xs} u x∉ =
+  subst Uniq (snoc-append xs ⁻¹) $
+  uniq→++ u (false! ∷ᵘ []ᵘ)
+    λ x∈ → λ where (here e) → x∉ (subst (_∈ xs) e x∈)
 
 -- homotopy uniqueness
 
@@ -69,7 +81,7 @@ related→uniq : {ℓ′ : Level} {x : A} {xs : List A} {R : A → A → 𝒰 �
              → Related R x xs → Uniq (x ∷ xs)
 related→uniq     {xs = []}         _    _           = false! ∷ᵘ []ᵘ
 related→uniq {x} {xs = y ∷ xs} {R} irr (rxy ∷ʳ rel) =
-  ¬Any-∷ (contra (λ e → subst (R x) (e ⁻¹) rxy) irr)
+  ¬any-∷ (contra (λ e → subst (R x) (e ⁻¹) rxy) irr)
          (λ hx → irr (rxy ∙ All→∀∈ (related→all rel) x hx))
   ∷ᵘ related→uniq irr rel
 
@@ -148,3 +160,46 @@ uniq≈len=→uniq : {xs ys : List A}
                 → Uniq xs → Uniq ys
 uniq≈len=→uniq es seq ux =
   uniq⊆len≤→uniq ux (seq .fst) (=→≤ (es ⁻¹))
+
+uniq-reverse : {xs : List A}
+             → Uniq xs → Uniq (reverse xs)
+uniq-reverse = uniq≈len=→uniq (reverse-length ⁻¹) reverse-≈
+
+-- map
+
+map-uniq : {B : 𝒰 ℓ} {f : A → B} {xs : List A}
+         → Uniq (mapₗ f xs) → Uniq xs 
+map-uniq     {xs = []}     _           = []ᵘ
+map-uniq {f} {xs = x ∷ xs} (fx∉ ∷ᵘ um) =
+  contra (∈-map f) fx∉ ∷ᵘ map-uniq um
+
+uniq-map : {B : 𝒰 ℓ} {f : A → B} {xs : List A}
+         → Injective f
+         → Uniq xs → Uniq (mapₗ f xs)
+uniq-map     {xs = []}     inj  _         = []ᵘ
+uniq-map {f} {xs = x ∷ xs} inj (x∉ ∷ᵘ u) =
+  contra (map-∈ f inj) x∉ ∷ᵘ uniq-map inj u
+
+-- stronger local form
+uniq-map-∈ : {B : 𝒰 ℓ} {f : A → B} {xs : List A}
+         → (∀ {x y} → x ∈ xs → y ∈ xs → f x ＝ f y → x ＝ y)
+         → Uniq xs → Uniq (mapₗ f xs)
+uniq-map-∈     {xs = []}     inj  _         = []ᵘ
+uniq-map-∈ {f} {xs = x ∷ xs} inj (x∉ ∷ᵘ u) =
+     contra
+       (λ fx∈ →
+         let (q , q∈ , qe) = map-∈Σ f fx∈ in
+         subst (_∈ xs) (inj (here refl) (there q∈) qe ⁻¹) q∈)
+       x∉
+  ∷ᵘ uniq-map-∈ (λ {x} {y} x∈ y∈ e → inj (there x∈) (there y∈) e) u
+
+-- count-from-to
+
+count-from-to-uniq : {m n : ℕ}
+                   → Uniq (count-from-to m n)
+count-from-to-uniq {m = m}    {n = zero}  = []ᵘ
+count-from-to-uniq {m = zero} {n = suc n} =
+    (λ mx → let (n , _ , ne) = map-∈Σ suc mx in false! ne)
+  ∷ᵘ uniq-map suc-inj (count-from-to-uniq {m = 0} {n = n})
+count-from-to-uniq {m = suc m} {n = suc n} =
+  uniq-map suc-inj (count-from-to-uniq {m = m} {n = n})

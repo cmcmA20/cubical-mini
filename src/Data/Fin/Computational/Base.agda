@@ -12,6 +12,7 @@ open import Data.Nat.Base
 open import Data.Nat.Order.Inductive.Base
 open import Data.Reflects.Base
 open import Data.Sum.Base
+  using (_⊎ₜ_; inl; inr)
 
 private variable
   ℓ ℓ′ : Level

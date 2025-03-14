@@ -38,9 +38,6 @@ private variable
   x : A
   xs : List A
 
-has : ⦃ d : is-discrete A ⦄ → A → List A → Bool
-has a = any (λ x → ⌊ a ≟ x ⌋)
-
 subseq : ⦃ A-dis : is-discrete A ⦄
         → List A → List A → Bool
 subseq     []       ys       = true
@@ -65,10 +62,6 @@ subset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
 subset? xs ys = all (λ x → has x ys) xs
 
 -- properties
-
-Reflects-has : ⦃ d : is-discrete A ⦄ {x : A} {xs : List A}
-             → Reflects (x ∈ xs) (has x xs)
-Reflects-has ⦃ d ⦄ {x} = Reflects-any λ y → d {x} {y} .proof
 
 Reflects-subseq : ⦃ d : is-discrete A ⦄ {xs ys : List A}
                 → Reflects (OPE xs ys) (subseq xs ys)

@@ -17,6 +17,7 @@ open import Data.List.Instances.Map
 open import Data.List.Operations
 open import Data.Nat.Base
 open import Data.Reflects.Base as Reflects
+open import Data.Reflects.Properties
 open import Data.Sum.Base
 
 private variable
@@ -165,6 +166,22 @@ any-⊎≃ =
 ¬any-×≃ : {x : A} {xs : List A} → (¬ Any P (x ∷ xs)) ≃ ((¬ P x) × (¬ Any P xs))
 ¬any-×≃ = prop-extₑ! ¬any-uncons (¬any-∷ $²_)
 
+¬any-++ : {xs ys : List A}
+        → ¬ Any P xs → ¬ Any P ys → ¬ Any P (xs ++ ys)
+¬any-++ {xs = []}     nxs nys a = nys a
+¬any-++ {xs = x ∷ xs} nxs nys (here px) = nxs (here px)
+¬any-++ {xs = x ∷ xs} nxs nys (there a) = ¬any-++ (contra there nxs) nys a
+
+¬any-split : {xs ys : List A}
+           → ¬ Any P (xs ++ ys) → (¬ Any P xs) × (¬ Any P ys)
+¬any-split {xs = []} na = false! , na
+¬any-split {xs = x ∷ xs} na =
+  let (ihx , ihy) = ¬any-split {xs = xs} (contra there na) in
+  ¬any-∷ (contra here na) ihx , ihy
+
+¬any-++≃ : {xs ys : List A} → (¬ Any P (xs ++ ys)) ≃ ((¬ Any P xs) × (¬ Any P ys))
+¬any-++≃ = prop-extₑ! ¬any-split (¬any-++ $²_)
+
 any-++-l : {@0 xs ys : List A} → Any P xs → Any P (xs ++ ys)
 any-++-l (here px)  = here px
 any-++-l (there ax) = there (any-++-l ax)
@@ -233,3 +250,16 @@ any→fin {xs = x ∷ xs} (there a) = fsuc (any→fin a)
 any→fin-!ᶠ : {xs : List A} → (a : Any P xs) → P (xs !ᶠ any→fin a)
 any→fin-!ᶠ {xs = x ∷ xs} (here px) = px
 any→fin-!ᶠ {xs = x ∷ xs} (there a) = any→fin-!ᶠ a
+
+-- reflection
+
+Reflects-any : {xs : List A} {P : A → 𝒰 ℓ′} {p : A → Bool}
+             → (∀ x → Reflects (P x) (p x))
+             → Reflects (Any P xs) (any p xs)
+Reflects-any {xs = []}     rp = ofⁿ false!
+Reflects-any {xs = x ∷ xs} rp =
+  ≃→reflects (any-⊎≃ ⁻¹) (Reflects-⊎ ⦃ rp = rp x ⦄ ⦃ rq = Reflects-any {xs = xs} rp ⦄)
+
+Reflects-any-bool : {p : A → Bool} {xs : List A}
+                  → Reflects (Any (So ∘ p) xs) (any p xs)
+Reflects-any-bool = Reflects-any λ x → Reflects-So

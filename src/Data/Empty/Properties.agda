@@ -3,6 +3,7 @@ module Data.Empty.Properties where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.Erased
 open import Foundations.HLevel
 
 open import Data.Unit.Base
@@ -39,3 +40,6 @@ universal = _ , is-contr→is-equiv absurd-is-contr ⊤-is-contr
 
 ¬-≃ : (A → B) → (B → A) → (¬ A) ≃ (¬ B)
 ¬-≃ ab ba = prop-extₑ! (_∘ ba) (_∘ ab)
+
+Recomputable-⊥ : Recomputable ⊥
+Recomputable-⊥ .recompute ()

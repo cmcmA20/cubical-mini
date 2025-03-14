@@ -9,16 +9,21 @@ open import Functions.Constant
 open import Functions.Embedding
 open import Functions.Surjection
 
+open import Data.Sum.Base
+  using ([_,_]ᵤ; map-l; map-r; inl; inr)
+open import Data.Sum.Properties hiding (universal)
+
 open import Data.Truncation.Propositional.Base
 open import Data.Truncation.Propositional.Path
 open import Data.Truncation.Propositional.Instances.Map
 
 private variable
-  ℓ ℓ′ ℓ″ : Level
+  ℓ ℓ′ ℓ″ ℓ‴ : Level
   A : Type ℓ
   B : Type ℓ′
   f : A → B
   C : Type ℓ″
+  D : Type ℓ‴
 
 universal : is-prop B → (∥ A ∥₁ → B) ≃ (A → B)
 universal {B} {A} B-prop = ≅→≃ $ iso inc′ rec′ refl (fun-ext beta) where
@@ -105,6 +110,45 @@ instance
   Extensional-∥-∥₁-map ⦃ ea ⦄ =
     set-injective→extensional! (λ p → fun-ext (elim! (happly p))) ea
 
+-- ⊎₁ properties
+
+⊎₁-ap : A ≃ B → C ≃ D → (A ⊎₁ C) ≃ (B ⊎₁ D)
+⊎₁-ap ab = ae ∘ ⊎-ap ab
+
+⊎₁-ap-l : A ≃ B → (A ⊎₁ C) ≃ (B ⊎₁ C)
+⊎₁-ap-l f = ⊎₁-ap f refl
+
+⊎₁-ap-r : B ≃ C → (A ⊎₁ B) ≃ (A ⊎₁ C)
+⊎₁-ap-r f = ⊎₁-ap refl f
+
+⊎₁-comm : (A ⊎₁ B) ≃ (B ⊎₁ A)
+⊎₁-comm = ae ⊎-comm
+
+⊎₁-assoc : ((A ⊎₁ B) ⊎₁ C) ≃ (A ⊎₁ (B ⊎₁ C))
+⊎₁-assoc =
+  prop-extₑ!
+    (rec! [ map (map-r (∣_∣₁ ∘ inl))  
+          , (λ c → ∣ inr ∣ inr c ∣₁ ∣₁)
+          ]ᵤ)
+    (rec! [ (λ a → ∣ inl ∣ inl a ∣₁ ∣₁)
+          , map (map-l (∣_∣₁ ∘ inr))
+          ]ᵤ)
+
+⊎₁-idem : A ⊎₁ A ≃ ∥ A ∥₁
+⊎₁-idem = prop-extₑ! (map [ id , id ]ᵤ) (map inl)
+
+-- TODO factor through flatten
+⊎₁-trunc-l : A ⊎₁ B ≃ ∥ A ∥₁ ⊎₁ B
+⊎₁-trunc-l =
+  prop-extₑ!
+    (rec! [ (λ a → ∣ inl ∣ a ∣₁ ∣₁) , (λ b → ∣ inr b ∣₁) ]ᵤ )
+    (rec! [ map inl , (λ b → ∣ inr b ∣₁) ]ᵤ)
+
+⊎₁-trunc-r : A ⊎₁ B ≃ A ⊎₁ ∥ B ∥₁
+⊎₁-trunc-r =
+  prop-extₑ!
+    (rec! [ (λ a → ∣ inl a ∣₁) , (λ b → ∣ inr ∣ b ∣₁ ∣₁) ]ᵤ )
+    (rec! [ (λ a → ∣ inl a ∣₁) , map inr ]ᵤ)
 
 -- Truncated/connected factorization
 

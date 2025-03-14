@@ -33,8 +33,12 @@ empty? []      = true
 empty? (_ ∷ _) = false
 
 snoc : List A → A → List A
-snoc []      x = x ∷ []
-snoc (y ∷ l) x = y ∷ snoc l x
+snoc []      y = y ∷ []
+snoc (x ∷ l) y = x ∷ snoc l y
+
+last : A → List A → A
+last y []      = y
+last _ (x ∷ l) = last x l
 
 _∷r_ = snoc
 infixl 20 _∷r_
