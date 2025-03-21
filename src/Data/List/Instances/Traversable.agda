@@ -80,5 +80,3 @@ instance
   Lawful-Traversable-List : Lawful-Traversable (eff List)
   Lawful-Traversable-List .traverse-id = fun-ext list-traverse-id
   Lawful-Traversable-List .traverse-comp = fun-ext list-traverse-comp
-
-
