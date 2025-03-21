@@ -16,10 +16,10 @@ record Lawful-Idiom (M : Effect) ⦃ m : Idiom M ⦄ : Typeω where
   open Map ⦃ ... ⦄
   field
     ⦃ has-lawful-map ⦄ : Lawful-Map M
-    pure-id
+    pure-id -- TODO derivable from map-pure and map-pres-id
       : {A : Type ℓᵃ} {v : M.₀ A}
       → (pure id <*> v) ＝ v
-    pure-pres-app
+    pure-pres-app -- aka homomorphism
       : {A : Type ℓᵃ} {B : Type ℓᵇ} {f : A → B} {x : A}
       → Path (M.₀ B) (pure f <*> pure x) (pure (f x))
     pure-interchange
@@ -58,3 +58,19 @@ record Lawful-Idiom (M : Effect) ⦃ m : Idiom M ⦄ : Typeω where
       pure _∘ˢ_ <*> u <*> pure f <*> v       ~⟨ pure-comp ⟩
       u <*> (pure f <*> v)                   ~⟨ ap (u <*>_) (map-pure # v) ⟨
       u <*> map f v                          ∎
+
+instance
+  Lawful-Idiom-Erased : Lawful-Idiom (eff λ T → Erased T)
+  Lawful-Idiom-Erased .Lawful-Idiom.pure-id = congᴱ (erase refl)
+  Lawful-Idiom-Erased .Lawful-Idiom.pure-pres-app = congᴱ (erase refl)
+  Lawful-Idiom-Erased .Lawful-Idiom.pure-interchange = congᴱ (erase refl)
+  Lawful-Idiom-Erased .Lawful-Idiom.pure-comp = congᴱ (erase refl)
+  Lawful-Idiom-Erased .Lawful-Idiom.map-pure = fun-ext λ where (erase x) → congᴱ (erase refl)
+
+Lawful-Idiom-Id : Lawful-Idiom (eff id) ⦃ m = Idiom-Id ⦄
+Lawful-Idiom-Id .Lawful-Idiom.has-lawful-map = Lawful-Map-Id
+Lawful-Idiom-Id .Lawful-Idiom.pure-id = refl
+Lawful-Idiom-Id .Lawful-Idiom.pure-pres-app = refl
+Lawful-Idiom-Id .Lawful-Idiom.pure-interchange = refl
+Lawful-Idiom-Id .Lawful-Idiom.pure-comp = refl
+Lawful-Idiom-Id .Lawful-Idiom.map-pure = refl
