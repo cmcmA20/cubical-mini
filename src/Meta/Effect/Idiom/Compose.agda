@@ -29,11 +29,6 @@ module _ {M N : Effect} (let module M = Effect M; module N = Effect N)
                        → Lawful-Idiom (eff (M.₀ ∘ N.₀)) ⦃ m = Idiom-Compose ⦄
   Lawful-Idiom-Compose lm ln .has-lawful-map =
     Lawful-Map-Compose (lm .Lawful-Idiom.has-lawful-map) (ln .Lawful-Idiom.has-lawful-map)
-  Lawful-Idiom-Compose lm ln .pure-id {v} =
-    (⌜ (pureₘ _⊛ₙ_) ⊛ₘ pureₘ (pureₙ id) ⌝ ⊛ₘ v)   ~⟨ ap! (lm .Lawful-Idiom.pure-pres-app) ⟩
-    (pureₘ ⌜ pureₙ id ⊛ₙ_ ⌝ ⊛ₘ v)                  ~⟨ ap! (fun-ext λ x → ln .Lawful-Idiom.pure-id) ⟩
-    (pureₘ id ⊛ₘ v)                               ~⟨ lm .Lawful-Idiom.pure-id ⟩
-    v                                              ∎
   Lawful-Idiom-Compose lm ln .pure-pres-app {f} {x} =
     ⌜ pureₘ _⊛ₙ_ ⊛ₘ pureₘ (pureₙ f) ⌝ ⊛ₘ pureₘ (pureₙ x)  ~⟨ ap! (lm .Lawful-Idiom.pure-pres-app) ⟩
     pureₘ (_⊛ₙ_ (pureₙ f)) ⊛ₘ pureₘ (pureₙ x)              ~⟨ lm .Lawful-Idiom.pure-pres-app ⟩
