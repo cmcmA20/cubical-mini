@@ -214,7 +214,9 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → 
   private
     module P = Poset P
     module Q = Poset Q
-    module A = Adjoint (≅ₚ→⊣ (e ⁻¹))
+    e⁻¹ : Q ≅ P
+    e⁻¹ = e ⁻¹
+    module A = Adjoint (≅ₚ→⊣ e⁻¹)
     module B = Adjoint (≅ₚ→⊣ e)
   open Iso
 

@@ -131,20 +131,20 @@ module minmaxprops {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
     min-ap : (f : P ⇒ Q) (x y : ⌞ P ⌟)
            → f # (x ∩ y) ＝ (f # x) ∩ (f # y)
     min-ap f x y with Pt.compare x y
-    min-ap f x y | inl x≤y with Qt.compare (f # x) (f # y)
+    min-ap f x y | inl x≤y with Qt.compare (f .hom x) (f .hom y)
     min-ap f x y | inl x≤y | inl fx≤fy = refl
     min-ap f x y | inl x≤y | inr fy≤fx = Qt.≤-antisym (f # x≤y) fy≤fx
-    min-ap f x y | inr y≤x with Qt.compare (f # x) (f # y)
+    min-ap f x y | inr y≤x with Qt.compare (f .hom x) (f .hom y)
     min-ap f x y | inr y≤x | inl fx≤fy = Qt.≤-antisym (f # y≤x) fx≤fy
     min-ap f x y | inr y≤x | inr fy≤fx = refl
 
     max-ap : (f : P ⇒ Q) (x y : ⌞ P ⌟)
            → f # (x ∪ y) ＝ (f # x) ∪ (f # y)
     max-ap f x y with Pt.compare x y
-    max-ap f x y | inl x≤y with Qt.compare (f # x) (f # y)
+    max-ap f x y | inl x≤y with Qt.compare (f .hom x) (f .hom y)
     max-ap f x y | inl x≤y | inl fx≤fy = refl
     max-ap f x y | inl x≤y | inr fy≤fx = Qt.≤-antisym fy≤fx (f # x≤y)
-    max-ap f x y | inr y≤x with Qt.compare (f # x) (f # y)
+    max-ap f x y | inr y≤x with Qt.compare (f .hom x) (f .hom y)
     max-ap f x y | inr y≤x | inl fx≤fy = Qt.≤-antisym fx≤fy (f # y≤x)
     max-ap f x y | inr y≤x | inr fy≤fx = refl
 

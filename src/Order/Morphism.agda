@@ -104,20 +104,27 @@ module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   ≅→is-order-embedding f =
     has-retraction→is-order-embedding (f .to) (≅→to-has-retraction f)
 
-  iso-order-embedding→≅
-    : (f : ⌞ P ⌟ ≅ ⌞ Q ⌟)
-    → is-order-embedding P Q (f #_)
-    → P ≅ Q
-  iso-order-embedding→≅ f oe .to .hom = f #_
-  iso-order-embedding→≅ f oe .to .pres-≤ = oe #_
-  iso-order-embedding→≅ f oe .from .hom = f ⁻¹ $_
-  iso-order-embedding→≅ f oe .from .pres-≤ =
-    reflection-retraction→is-monotone (f #_) (f ⁻¹ $_)
-     (f .inv-o) (oe ⁻¹ $_)
-  iso-order-embedding→≅ f oe .inverses .Inverses.inv-o =
-    ext $ f .inv-o #_
-  iso-order-embedding→≅ f oe .inverses .Inverses.inv-i =
-    ext $ f .inv-i #_
+  module _ (f : ⌞ P ⌟ ≅ ⌞ Q ⌟) where
+    private
+      f→ : ⌞ P ⌟ → ⌞ Q ⌟
+      f→ = f #_
+
+      f← : ⌞ Q ⌟ → ⌞ P ⌟
+      f← = f ⁻¹ $_
+
+    iso-order-embedding→≅
+      : is-order-embedding P Q (f #_)
+      → P ≅ Q
+    iso-order-embedding→≅ oe .to .hom = f→
+    iso-order-embedding→≅ oe .to .pres-≤ = oe #_
+    iso-order-embedding→≅ oe .from .hom = f←
+    iso-order-embedding→≅ oe .from .pres-≤ =
+      reflection-retraction→is-monotone f→ f←
+        (f .inv-o) (oe ⁻¹ $_)
+    iso-order-embedding→≅ oe .inverses .Inverses.inv-o =
+      ext $ f .inv-o #_
+    iso-order-embedding→≅ oe .inverses .Inverses.inv-i =
+      ext $ f .inv-i #_
 
   iso-mono-refl→≅
     : (f : ⌞ P ⌟ ≅ ⌞ Q ⌟)

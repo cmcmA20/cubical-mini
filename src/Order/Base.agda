@@ -264,7 +264,7 @@ instance
 
   Dual-ntₚ
     : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
-    → Dual {A = Monotone P Q} {B = Monotone P Q} _=>ₚ_ λ G F → G ᵒᵖ ⇒ F ᵒᵖ
+    → Dual {A = Monotone P Q} {B = Monotone P Q} _=>ₚ_ λ G F → G ᵒᵖ =>ₚ F ᵒᵖ
   Dual-ntₚ ._ᵒᵖ α ._=>ₚ_.η = α ._=>ₚ_.η
 
   Funlike-ntₚ
