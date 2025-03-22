@@ -47,10 +47,6 @@ instance
   Idiom-List ._<*>_ = _<*>ₗ_
 
   Lawful-Idiom-List : Lawful-Idiom (eff List)
-  Lawful-Idiom-List .pure-id {A} {v} = go v where opaque
-    go : (xs : List A) → (pure id <*> xs) ＝ xs
-    go [] = refl
-    go (x ∷ xs) = ap (_ ∷_) (go xs)
   Lawful-Idiom-List .pure-pres-app = refl
   Lawful-Idiom-List .pure-interchange {A} {B} {u} {v} = go u v where opaque
     go : (fs : List (A → B)) (x : A) → (fs <*> pure x) ＝ (pure (_$ x) <*> fs)

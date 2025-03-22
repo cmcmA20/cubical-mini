@@ -51,6 +51,7 @@ Idiom-Id : Idiom (eff id)
 Idiom-Id .Idiom.Map-idiom = Map-Id
 Idiom-Id .Idiom.pure x = x
 Idiom-Id .Idiom._<*>_ f x = f x
+-- {-# INCOHERENT Idiom-Id #-}
 
 module _ {M N : Effect} (let module M = Effect M; module N = Effect N)
          ⦃ _ : Idiom M ⦄ ⦃ _ : Idiom N ⦄ where

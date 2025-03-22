@@ -28,10 +28,6 @@ instance
   Idiom-Maybe ._<*>_ = _<*>ₘ_
 
   Lawful-Idiom-Maybe : Lawful-Idiom (eff Maybe)
-  Lawful-Idiom-Maybe .pure-id {A} {v} = go v  where opaque
-    go : (mx : Maybe A) → map refl mx ＝ mx
-    go (just x) = refl
-    go nothing  = refl
   Lawful-Idiom-Maybe .pure-pres-app = refl
   Lawful-Idiom-Maybe .pure-interchange {A} {B} {u} {v} = go u v where opaque
     go : (mf : Maybe (A → B)) (x : A) → (mf <*> pure x) ＝ (pure (_$ x) <*> mf)
