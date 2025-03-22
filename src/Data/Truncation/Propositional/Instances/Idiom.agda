@@ -30,9 +30,6 @@ instance
   Idiom-∥-∥₁ ._<*>_ ∣f∣₁ ∣a∣₁ = rec! (_<$> ∣a∣₁) ∣f∣₁
 
   Lawful-Idiom-∥-∥₁ : Lawful-Idiom (eff ∥_∥₁)
-  Lawful-Idiom-∥-∥₁ .pure-id {A} {v} = go v where opaque
-    go : (x : ∥ A ∥₁) → (pure id <*> x) ＝ x
-    go = elim! λ _ → refl
   Lawful-Idiom-∥-∥₁ .pure-pres-app = refl
   Lawful-Idiom-∥-∥₁ .pure-interchange {A} {B} {u} {v} = go u v where opaque
     go : (f : ∥ (A → B) ∥₁) (x : A) → (f <*> pure x) ＝ (pure (_$ x) <*> f)

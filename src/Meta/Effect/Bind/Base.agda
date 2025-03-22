@@ -30,3 +30,7 @@ open Bind ⦃ ... ⦄
 instance
   Bind-Erased : Bind (eff λ T → Erased T)
   Bind-Erased ._>>=_ (erase x) mf .erased = mf x .erased
+
+Bind-Id : Bind (eff id)
+Bind-Id .Bind.Idiom-bind = Idiom-Id
+Bind-Id .Bind._>>=_ x f = f x

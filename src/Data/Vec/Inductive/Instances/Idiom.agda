@@ -27,10 +27,6 @@ instance
   Idiom-Vec ._<*>_ = _<*>ᵥ_
 
   Lawful-Idiom-Vec : ∀ {n} → Lawful-Idiom (eff (λ T → Vec T n))
-  Lawful-Idiom-Vec .pure-id {A} {v} = go v where opaque
-    go : ∀ {n} → (xs : Vec A n) → (pure id <*> xs) ＝ xs
-    go {0}     []       = refl
-    go {suc n} (x ∷ xs) = ap (x ∷_) (go xs)
   Lawful-Idiom-Vec .pure-pres-app {f} {x} = go where opaque
     go : ∀ {n} → (pure f <*> pure x) ＝ replicate n (f x)
     go {0}     = refl

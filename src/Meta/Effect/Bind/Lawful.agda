@@ -55,3 +55,17 @@ record Lawful-Bind (M : Effect) ⦃ m : Bind M ⦄ : Typeω where
       (mx >>= pure ∘ f >>= g)            ~⟨ >>=-assoc ⟩
       (mx >>= (λ x → pure (f x) >>= g))  ~⟨ ap (mx >>=_) (fun-ext (λ _ → >>=-id-l)) ⟩
       (mx >>= g ∘ f)                     ∎
+
+instance
+  Lawful-Bind-Erased : Lawful-Bind (eff λ T → Erased T)
+  Lawful-Bind-Erased .Lawful-Bind.>>=-id-l = congᴱ (erase refl)
+  Lawful-Bind-Erased .Lawful-Bind.>>=-id-r = congᴱ (erase refl)
+  Lawful-Bind-Erased .Lawful-Bind.>>=-assoc = congᴱ (erase refl)
+  Lawful-Bind-Erased .Lawful-Bind.<*>->>= = congᴱ (erase refl)
+
+Lawful-Bind-Id : Lawful-Bind (eff id) ⦃ m = Bind-Id ⦄
+Lawful-Bind-Id .Lawful-Bind.has-lawful-idiom = Lawful-Idiom-Id
+Lawful-Bind-Id .Lawful-Bind.>>=-id-l = refl
+Lawful-Bind-Id .Lawful-Bind.>>=-id-r = refl
+Lawful-Bind-Id .Lawful-Bind.>>=-assoc = refl
+Lawful-Bind-Id .Lawful-Bind.<*>->>= = refl

@@ -52,3 +52,29 @@ module _ {M : Effect} ⦃ ac : Abstract-Container M ⦄ where
       (λ mx → e ⁻¹ $ mapᶜ g (mapᶜ f (e $ mx)))       ~⟨ (((λ z → mapᶜ f (e $ z)) ◁ Equiv.ε e ⁻¹) ▷ mapᶜ g) ▷ is-equiv→inverse (e .snd)  ⟩
       Map-AC-default .map f ∙ Map-AC-default .map g  ~⟨ (p f ▷ m .map g) ∙ (_ ◁ p g) ⟨
       m .map f ∙ m .map g                            ∎
+
+instance
+  Lawful-Map-Erased : Lawful-Map (eff λ T → Erased T)
+  Lawful-Map-Erased .Lawful-Map.map-pres-id =
+    fun-ext λ where (erase x) → congᴱ (erase refl)
+  Lawful-Map-Erased .Lawful-Map.map-pres-comp =
+    fun-ext λ where (erase x) → congᴱ (erase refl)
+
+Lawful-Map-Id : Lawful-Map (eff id) ⦃ m = Map-Id ⦄
+Lawful-Map-Id .Lawful-Map.map-pres-id = refl
+Lawful-Map-Id .Lawful-Map.map-pres-comp = refl
+
+module _ {M N : Effect} (let module M = Effect M; module N = Effect N)
+         ⦃ _ : Map M ⦄ ⦃ _ : Map N ⦄ where
+
+  Lawful-Map-Compose : Lawful-Map (eff M.₀)
+                     → Lawful-Map (eff N.₀)
+                     → Lawful-Map (eff (M.₀ ∘ N.₀)) ⦃ m = Map-Compose ⦄
+  Lawful-Map-Compose lm ln .Lawful-Map.map-pres-id   =
+    fun-ext λ x →
+        ap (λ f → map f x) (ln .Lawful-Map.map-pres-id)
+      ∙ happly (lm .Lawful-Map.map-pres-id) x
+  Lawful-Map-Compose lm ln .Lawful-Map.map-pres-comp =
+    fun-ext λ x →
+        ap (λ f → map f x) (ln .Lawful-Map.map-pres-comp)
+      ∙ happly (lm .Lawful-Map.map-pres-comp) x
