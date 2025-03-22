@@ -19,9 +19,7 @@ open Total-hom
 
 is-categoryᵈ : Type _
 is-categoryᵈ =
-  ∀ {x y} (f : x ≊ y) (A : Ob[ x ]) → is-prop (Σ[ B ꞉ Ob[ y ] ] (A ≊[ f ] B))
-
-open Biinv
+  {x y : B.Ob} (f : x ≊ y) (A : Ob[ x ]) → is-prop (Σ[ B ꞉ Ob[ y ] ] (A ≊[ f ] B))
 
 module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
   open _≊[_]_
@@ -35,6 +33,7 @@ module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
       (total-hom-path (p .from-is-retraction) (f .from-is-retractionᵈ))
       (total-hom (p .section) (f .sectionᵈ))
       (total-hom-path (p .is-section) (f .is-sectionᵈ))
+      where open Biinv
 
     contract-vertical-equiv
       : ∀ {x : B.Ob} {A : Ob[ x ]} (B : Ob[ x ]) (f : A ≊↓ B)
@@ -52,7 +51,7 @@ module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
   is-category-total : is-category (∫ E)
   is-category-total = total-cat where
     wrapper
-      : ∀ {x y} (p : x ≊ y) (A : Ob[ x ]) (B : Ob[ y ]) (f : A ≊[ p ] B)
+      : {x y : B.Ob} (p : x ≊ y) (A : Ob[ x ]) (B : Ob[ y ]) (f : A ≊[ p ] B)
       → Path (Σ[ z ꞉ ∫E.Ob ] ((x , A) ≊ z))
           ((x , A) , refl)
           ((y , B) , piece-together p f)
@@ -63,19 +62,22 @@ module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
         contract-vertical-equiv
         p
 
+    private
+      helper : {x y : B.Ob} {x′ : Ob[ x ]} {y′ : Ob[ y ] } (p : _)
+          → ((x , x′) , refl) ＝ ((y , y′) , piece-together (total-equiv→equiv E p) (total-equiv→equiv[] E p))
+      helper p = wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p)
+
     total-cat : is-category (∫ E)
-    total-cat .to-path p = ap fst $
-      wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p)
-    total-cat .to-path-over p i .to =
-      wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p) i .snd .to
-    total-cat .to-path-over p i .has-biinv .fst .retraction =
-      wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p) i .snd .has-biinv .fst .retraction
-    total-cat .to-path-over p i .has-biinv .fst .is-retraction =
-      wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p) i .snd .has-biinv .fst .is-retraction
-    total-cat .to-path-over p i .has-biinv .snd .section =
-      wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p) i .snd .has-biinv .snd .section
-    total-cat .to-path-over p i .has-biinv .snd .is-section =
-      wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p) i .snd .has-biinv .snd .is-section
+    total-cat .to-path p = ap fst (helper p)
+    total-cat .to-path-over p i .Biinv.to = helper p i .snd .Biinv.to
+    total-cat .to-path-over p i .Biinv.has-biinv .fst .retraction =
+      helper p i .snd .Biinv.has-biinv .fst .retraction
+    total-cat .to-path-over p i .Biinv.has-biinv .fst .is-retraction =
+      helper p i .snd .Biinv.has-biinv .fst .is-retraction
+    total-cat .to-path-over p i .Biinv.has-biinv .snd .section =
+      helper p i .snd .Biinv.has-biinv .snd .section
+    total-cat .to-path-over p i .Biinv.has-biinv .snd .is-section =
+      helper p i .snd .Biinv.has-biinv .snd .is-section
 
 is-category-fibrewise
   : is-category B

@@ -40,7 +40,7 @@ module Path where
   code≃path U@(X , f , f-emb) V@(Y , g , g-emb) =
     Code U V                                      ~⟨⟩
     Σ[ e ꞉ X ≃ Y ] Π[ x ꞉ X ] (f x ＝ g (e $ x))  ~⟨ SIP (fibration-str-is-univalent _ _) ⟩
-    (X , f) ＝ (Y , g)                            ~⟨ Σ-prop-path-≃ hlevel! ⟩
+    (X , f) ＝ (Y , g)                            ~⟨ Σ-prop-path-≃ (λ _ → Π-is-of-hlevel 1 (λ _ → hlevel 1)) ⟩
     ((X , f) , f-emb) ＝ ((Y , g) , g-emb)        ~⟨ ap-≃ Σ-assoc ⟨
     U ＝ V                                        ∎
 

@@ -116,7 +116,7 @@ Types _ .assoc _ _ _ = refl
 
 n-Types : (o : Level) (n : HLevel) → Precategory (ℓsuc o) o
 n-Types o n .Ob = n-Type o n
-n-Types _ _ .Hom A B = ⌞ A ⇒ B ⌟
+n-Types _ _ .Hom A B = ⌞ A ⌟ ⇒ ⌞ B ⌟
 n-Types _ _ .id x = x
 n-Types _ _ ._∘_ f g x = f (g x)
 n-Types _ _ .id-l _ = refl
