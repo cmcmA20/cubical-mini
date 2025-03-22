@@ -46,3 +46,17 @@ instance
   Idiom-Erased : Idiom (eff λ T → Erased T)
   Idiom-Erased .pure x = erase x
   Idiom-Erased ._<*>_ (erase f) (erase x) .erased = f x
+
+Idiom-Id : Idiom (eff id)
+Idiom-Id .Idiom.Map-idiom = Map-Id
+Idiom-Id .Idiom.pure x = x
+Idiom-Id .Idiom._<*>_ f x = f x
+-- {-# INCOHERENT Idiom-Id #-}
+
+module _ {M N : Effect} (let module M = Effect M; module N = Effect N)
+         ⦃ _ : Idiom M ⦄ ⦃ _ : Idiom N ⦄ where
+
+  Idiom-Compose : Idiom (eff (M.₀ ∘ N.₀))
+  Idiom-Compose .Idiom.Map-idiom = Map-Compose
+  Idiom-Compose .Idiom.pure x = pure (pure x)
+  Idiom-Compose .Idiom._<*>_ f x = pure _<*>_ <*> f <*> x
