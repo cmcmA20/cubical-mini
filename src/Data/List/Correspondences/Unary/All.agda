@@ -195,3 +195,9 @@ Reflects-all {xs = x ∷ xs} rp =
 Reflects-all-bool : {p : A → Bool} {xs : List A}
                   → Reflects (All (So ∘ p) xs) (all p xs)
 Reflects-all-bool = Reflects-all λ x → Reflects-So
+
+Dec-all-bool : ∀ {p : A → Bool} {xs : List A}
+             → Dec (All (So ∘ p) xs)
+Dec-all-bool {p} {xs} .does = all p xs
+Dec-all-bool .proof = Reflects-all-bool
+

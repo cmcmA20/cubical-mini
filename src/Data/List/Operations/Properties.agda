@@ -364,6 +364,10 @@ Any¬→¬All {xs = x ∷ xs} (there an) (px ∷ a) = Any¬→¬All an a
 
 -- replicate
 
+length-replicate : length (replicate n z) ＝ n
+length-replicate {n = zero}  = refl
+length-replicate {n = suc n} = ap suc (length-replicate {n = n})
+
 replicate-+ : replicate (n + m) z ＝ replicate n z ++ replicate m z
 replicate-+ {n = zero}      = refl
 replicate-+ {n = suc n} {z} = ap (z ∷_) (replicate-+ {n = n})
@@ -657,7 +661,7 @@ span-all p (x ∷ xs) with p x | recall p x
 ... | true  | ⟪ e ⟫ = subst So (e ⁻¹) oh ∷ (span-all p xs)
 
 
--- zip-with
+-- zip / zip-with / unzip
 
 zip-with-++ : {f : A → B → C}
             → {as bs : List A} {xs ys : List B}
@@ -667,6 +671,48 @@ zip-with-++     {as = []}     {xs = []}     _ = refl
 zip-with-++     {as = []}     {xs = x ∷ xs} e = false! e
 zip-with-++     {as = a ∷ as} {xs = []}     e = false! e
 zip-with-++ {f} {as = a ∷ as} {xs = x ∷ xs} e = ap (f a x ∷_) (zip-with-++ (suc-inj e))
+
+∈-zip-with-l : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+                {f : A → B → C} {as : List A} {bs : List B} {a : A}
+              → length as ＝ length bs
+              → a ∈ as
+              → Σ[ b ꞉ B ] (b ∈ bs) × (f a b ∈ zip-with f as bs)
+∈-zip-with-l     {as = a ∷ as} {bs = []}     e  a∈        = false! e
+∈-zip-with-l {f} {as = a ∷ as} {bs = b ∷ bs} _ (here ae)   =
+  b , here refl , here (ap (λ q → f q b) ae)
+∈-zip-with-l {f} {as = a ∷ as} {bs = b ∷ bs} e (there a∈) =
+  let (b , b∈ , fab∈) = ∈-zip-with-l {f = f} (suc-inj e) a∈ in
+  b , there b∈ , there fab∈
+
+∈-zip-with-r : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+                {f : A → B → C} {as : List A} {bs : List B} {b : B}
+              → length as ＝ length bs
+              → b ∈ bs
+              → Σ[ a ꞉ A ] (a ∈ as) × (f a b ∈ zip-with f as bs)
+∈-zip-with-r     {as = []}     {bs = b ∷ bs} e  b∈        = false! e
+∈-zip-with-r {f} {as = a ∷ as} {bs = b ∷ bs} e (here be)   =
+  a , here refl , here (ap (f a) be)
+∈-zip-with-r {f} {as = a ∷ as} {bs = b ∷ bs} e (there b∈) =
+  let (a , a∈ , fab∈) = ∈-zip-with-r {f = f} (suc-inj e) b∈ in
+  a , there a∈ , there fab∈
+
+unzip-zip : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+            {xs : List A}  {ys : List B}
+          → length xs ＝ length ys
+          → unzip (zip xs ys) ＝ (xs , ys)
+unzip-zip {xs = []}     {ys = []}     e = refl
+unzip-zip {xs = []}     {ys = y ∷ ys} e = false! e
+unzip-zip {xs = x ∷ xs} {ys = []}     e = false! e
+unzip-zip {xs = x ∷ xs} {ys = y ∷ ys} e =
+  let xye = ×-path-inv $ unzip-zip {xs = xs} {ys = ys} (suc-inj e) in
+  ×-path (ap (x ∷_) (xye .fst)) (ap (y ∷_) (xye .snd))
+
+zip-unzip : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+            {xys : List (A × B)}
+          → let (xs , ys) = unzip xys in
+            zip xs ys ＝ xys
+zip-unzip {xys = []}            = refl
+zip-unzip {xys = (x , y) ∷ xys} = ap ((x , y) ∷_) (zip-unzip {xys = xys})
 
 -- count-from-to
 

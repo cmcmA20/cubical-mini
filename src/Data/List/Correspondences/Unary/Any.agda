@@ -263,3 +263,8 @@ Reflects-any {xs = x ∷ xs} rp =
 Reflects-any-bool : {p : A → Bool} {xs : List A}
                   → Reflects (Any (So ∘ p) xs) (any p xs)
 Reflects-any-bool = Reflects-any λ x → Reflects-So
+
+Dec-any-bool : {p : A → Bool} {xs : List A}
+             → Dec (Any (So ∘ p) xs)
+Dec-any-bool {p} {xs} .does  = any p xs
+Dec-any-bool {p} {xs} .proof = Reflects-any-bool
