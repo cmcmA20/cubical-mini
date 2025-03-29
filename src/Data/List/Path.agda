@@ -92,6 +92,15 @@ instance
   Reflects-List-≠-tail {x} = ofⁿ (false! ∘ ap tail)
   {-# OVERLAPS Reflects-List-≠-tail #-}
 
+  Reflects-id≠++-∷ : Reflects (xs ＝ xs ++ y ∷ ys) false
+  Reflects-id≠++-∷ {xs = []}     = Reflects-[]≠∷ --Reflects-ℕ-Path
+  Reflects-id≠++-∷ {xs = x ∷ xs} = Reflects.dmap (ap (x ∷_)) (contra ∷-tail-inj) (Reflects-id≠++-∷ {xs = xs})
+  {-# INCOHERENT Reflects-id≠++-∷ #-}
+
+  Reflects-++-∷≠id : Reflects (xs ++ y ∷ ys ＝ xs) false
+  Reflects-++-∷≠id = reflects-sym auto
+  {-# INCOHERENT Reflects-++-∷≠id #-}
+
   Reflects-∷=∷ : ⦃ rh : Reflects (x ＝ y) b₁ ⦄ ⦃ rt : Reflects (xs ＝ ys) b₂ ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) (b₁ and b₂)
   Reflects-∷=∷ = Reflects.dmap (λ p → ap² _∷_ (p .fst) (p .snd)) (contra < ∷-head-inj , ∷-tail-inj >) auto
   {-# OVERLAPPABLE Reflects-∷=∷ #-}

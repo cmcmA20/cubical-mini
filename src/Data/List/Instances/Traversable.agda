@@ -34,7 +34,7 @@ list-traverse-id (x ∷ xs) = ap (x ∷_) (list-traverse-id xs)
 list-traverse-comp : {M N : Effect}
                      ⦃ mi : Idiom M ⦄ (let module M = Effect M)
                      ⦃ ni : Idiom N ⦄ (let module N = Effect N)
-                     ⦃ lm : Lawful-Idiom M ⦄ ⦃ ln : Lawful-Idiom N ⦄
+                     ⦃ lm : Lawful-Idiom M ⦄
                      {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
                      {f : A → M.₀ B} {g : B → N.₀ C}
                      (xs : List A)

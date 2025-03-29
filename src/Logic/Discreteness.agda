@@ -46,7 +46,17 @@ _≟_ : ⦃ di : is-discrete A ⦄ (x y : A) → Dec (x ＝ y)
 _≟_ ⦃ di ⦄ x y = di
 
 _=?_ : ⦃ di : is-discrete A ⦄ (x y : A) → Bool
-_=?_ x y = ⌊ x ≟ y ⌋
+x =? y = ⌊ x ≟ y ⌋
+
+=?-sym : ⦃ di : is-discrete A ⦄ {x y : A}
+       → x =? y ＝ y =? x
+=?-sym {x} {y} with x ≟ y
+=?-sym {x} {y} | yes x=y with y ≟ x
+=?-sym {x} {y} | yes x=y | yes y=x = refl
+=?-sym {x} {y} | yes x=y | no y≠x = absurd (y≠x (x=y ⁻¹))
+=?-sym {x} {y} | no x≠y with y ≟ x
+=?-sym {x} {y} | no x≠y | yes y=x = absurd (x≠y (y=x ⁻¹))
+=?-sym {x} {y} | no x≠y | no y≠x = refl
 
 is-discrete→is-¬¬-separated : is-discrete A → is-¬¬-separated A
 is-discrete→is-¬¬-separated di _ _ = dec→essentially-classical di

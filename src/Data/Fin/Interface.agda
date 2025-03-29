@@ -5,7 +5,7 @@ open import Foundations.Base
 
 open import Data.Empty.Base using ()
 open import Data.Nat.Base using (ℕ; zero; suc)
-open import Data.Sum.Base
+open import Data.Sum.Base using ([_,_]ᵤ)
 
 record FinI {ℓ} (F : ℕ → Type ℓ) : Typeω where
   no-eta-equality

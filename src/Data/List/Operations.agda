@@ -10,6 +10,8 @@ open import Meta.Effect.Idiom
 open import Data.Bool.Base
 open import Data.Maybe.Base
 open import Data.Nat.Base
+open import Data.Nat.Two
+open import Data.Fin.Computational.Base as Fin
 open import Data.Reflects.Base as Reflects
 
 open import Data.List.Base as List
@@ -27,21 +29,28 @@ private variable
   xs : List A
 
 empty? : List A → Bool
-empty? []      = false
-empty? (_ ∷ _) = true
+empty? []      = true
+empty? (_ ∷ _) = false
 
 snoc : List A → A → List A
-snoc []      x = x ∷ []
-snoc (y ∷ l) x = y ∷ snoc l x
+snoc []      y = y ∷ []
+snoc (x ∷ l) y = x ∷ snoc l y
+
+last : A → List A → A
+last y []      = y
+last _ (x ∷ l) = last x l
 
 _∷r_ = snoc
 infixl 20 _∷r_
 
+all : (A → Bool) → List A → Bool
+all p = List.rec true _and_ ∘ map p
+
 any : (A → Bool) → List A → Bool
 any p = List.rec false _or_ ∘ map p
 
-all : (A → Bool) → List A → Bool
-all p = List.rec true _and_ ∘ map p
+count : (A → Bool) → List A → ℕ
+count p = List.rec 0 (λ x n → bit (p x) + n)
 
 length : List A → ℕ
 length []       = 0
@@ -52,6 +61,10 @@ _!ᵐ_ : List A → ℕ → Maybe A
 (x ∷ _)  !ᵐ  zero   = just x
 (_ ∷ xs) !ᵐ (suc n) = xs !ᵐ n
 
+_!ᶠ_ : (xs : List A) → Fin (length xs) → A
+(x ∷ xs) !ᶠ mk-fin  zero               = x
+(x ∷ xs) !ᶠ mk-fin (suc index) {bound} = xs !ᶠ mk-fin index {bound}
+
 unconsᵐ : List A → Maybe (A × List A)
 unconsᵐ []       = nothing
 unconsᵐ (x ∷ xs) = just (x , xs)
@@ -61,33 +74,33 @@ replicate 0 _       = []
 replicate (suc n) e = e ∷ replicate n e
 
 filter : (A → Bool) → List A → List A
-filter p [] = []
-filter p (x ∷ xs) with p x
-filter p (x ∷ xs)    | true  = x ∷ filter p xs
-filter p (x ∷ xs)    | false = filter p xs
+filter p []       = []
+filter p (x ∷ xs) = if p x then x ∷ filter p xs else filter p xs
 
-elem : (A → A → Bool) → A → List A → Bool
-elem _    t []       = false
-elem eq=? t (x ∷ xs) = eq=? t x or elem eq=? t xs
+find : (A → Bool) → List A → ℕ
+find p []       = 0
+find p (x ∷ xs) = if p x then 0 else suc (find p xs)
 
--- O(n²)
-nub-slow : (A → A → Bool) → List A → List A
-nub-slow {A} eq=? = nub′ [] where
-  nub′ : List A → List A → List A
-  nub′ _ [] = []
-  nub′ acc (x ∷ xs) =
-    if elem eq=? x acc
-      then nub′ acc xs
-      else x ∷ nub′ (x ∷ acc) xs
+-- slow: O(n²)
+nub-acc : (A → A → Bool) → List A → List A → List A
+nub-acc _    _   []       = []
+nub-acc eq=? acc (x ∷ xs) =
+  if any (eq=? x) acc
+    then nub-acc eq=? acc xs
+    else x ∷ nub-acc eq=? (x ∷ acc) xs
 
-nub-unsafe : (A → A → Bool) → List A → List A
-nub-unsafe _ [] = []
-nub-unsafe _ (x ∷ []) = x ∷ []
-nub-unsafe eq=? (x ∷ y ∷ xs) =
+nub : (A → A → Bool) → List A → List A
+nub eq=? = nub-acc eq=? []
+
+-- fast, but only removes consecutive duplicates
+nub-consec : (A → A → Bool) → List A → List A
+nub-consec _ [] = []
+nub-consec _ (x ∷ []) = x ∷ []
+nub-consec eq=? (x ∷ y ∷ xs) =
   if eq=? x y
     then id
     else x ∷_
-  $ nub-unsafe eq=? (y ∷ xs)
+  $ nub-consec eq=? (y ∷ xs)
 
 insert : (A → A → Bool) → A → List A → List A
 insert _ x [] = x ∷ []

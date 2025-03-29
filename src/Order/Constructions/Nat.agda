@@ -10,6 +10,7 @@ open import Order.Diagram.Bottom
 open import Order.Diagram.Join
 open import Order.Diagram.Meet
 open import Order.Diagram.Top
+open import Order.Semilattice.Join
 open import Order.Strict
 open import Order.Total
 open import Order.Ordinal
@@ -59,13 +60,17 @@ instance
 ¬-ℕ-top t = suc≰id ! where open Top t
 
 module _ where
-  open decminmax (has-dec-total-order ℕᶜᵖ)
+  open decminmax ℕ-dec-total
 
   ℕ-meets : Has-meets ℕₚ
   ℕ-meets = min-meets
 
   ℕ-joins : Has-joins ℕₚ
   ℕ-joins = max-joins
+
+  ℕ-join-slat : is-join-semilattice ℕₚ
+  ℕ-join-slat .is-join-semilattice.has-bottom = ℕ-bottom
+  ℕ-join-slat .is-join-semilattice.has-joins  = ℕ-joins
 
 ℕₛ : StrictPoset 0ℓ 0ℓ
 ℕₛ = complemented→strict ℕᶜᵖ

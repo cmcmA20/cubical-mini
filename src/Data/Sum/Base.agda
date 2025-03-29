@@ -4,7 +4,9 @@ module Data.Sum.Base where
 open import Foundations.Base
 
 open import Data.Bool.Base
+  using (Bool; So; _or_; oh; true; false; not)
 open import Data.Empty.Base
+  using ()
 import Data.Reflects.Base as Reflects
 open Reflects using (ofʸ; ofⁿ)
 
@@ -34,9 +36,15 @@ instance
   Union-pow ._∪_ S T x = ⌞ S x ⌟ ⊎ ⌞ T x ⌟
   {-# OVERLAPPABLE Union-pow #-}
 
+elim : {C : A ⊎ B → Type ℓ′}
+     → ((a : A) → C (inl a))
+     → ((b : B) → C (inr b))
+     → (d : A ⊎ B) → C d
+elim l _ (inl a) = l a
+elim _ r (inr b) = r b
+
 [_,_]ᵤ : (A → C) → (B → C) → (A ⊎ B) → C
-[ f , _ ]ᵤ (inl x) = f x
-[ _ , g ]ᵤ (inr x) = g x
+[_,_]ᵤ = elim
 
 []ᵤ-unique
   : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : Type ℓᶜ}
