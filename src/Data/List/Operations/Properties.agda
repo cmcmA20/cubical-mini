@@ -78,6 +78,10 @@ length=1→sng : length xs ＝ 1 → Σ[ x ꞉ A ] (xs ＝ x ∷ [])
 length=1→sng {xs = []}     eq = false! eq
 length=1→sng {xs = x ∷ xs} eq = x , ap (x ∷_) (length=0→nil (suc-inj eq))
 
+length>0→Σ : 0 < length xs → Σ[ z ꞉ A ] (z ∈ₗ xs)
+length>0→Σ {xs = []}     gt = false! gt
+length>0→Σ {xs = x ∷ xs} _  = x , here refl
+
 map-length : {A : Type ℓ} {B : Type ℓ′}
              {f : A → B} {xs : List A}
            → length (map f xs) ＝ length xs
@@ -375,6 +379,11 @@ replicate-+ {n = suc n} {z} = ap (z ∷_) (replicate-+ {n = n})
 replicate-snoc : replicate (suc n) z ＝ snoc (replicate n z) z
 replicate-snoc {n} {z} = ap (λ q → replicate q z) (+-comm 1 n) ∙ replicate-+ {m = 1} ∙ snoc-append _ ⁻¹
 
+replicate-all : (n : ℕ)
+              → All (_＝ z) (replicate n z)
+replicate-all  zero   = []
+replicate-all (suc n) = refl ∷ replicate-all n
+
 All-replicate : (xs : List A)
               → All (_＝ z) xs
               → xs ＝ replicate (length xs) z
@@ -594,7 +603,6 @@ module _ where
   open decminmax ℕ-dec-total
   open decminmaxprops ℕ-dec-total ℕ-dec-total
 
-
   length-take : length (take n xs) ＝ min n (length xs)
   length-take {n = zero}                = refl
   length-take {n = suc n} {xs = []}     = refl
@@ -671,6 +679,20 @@ zip-with-++     {as = []}     {xs = []}     _ = refl
 zip-with-++     {as = []}     {xs = x ∷ xs} e = false! e
 zip-with-++     {as = a ∷ as} {xs = []}     e = false! e
 zip-with-++ {f} {as = a ∷ as} {xs = x ∷ xs} e = ap (f a x ∷_) (zip-with-++ (suc-inj e))
+
+-- TODO coalesce decminmax stuff?
+module _ where
+  open decminmax ℕ-dec-total
+  open decminmaxprops ℕ-dec-total ℕ-dec-total
+
+  zip-with-length : ∀ {xs ys} {f : A → B → C}
+                  → length (zip-with f xs ys) ＝ min (length xs) (length ys)
+  zip-with-length {xs = []}     {ys = []}     = refl
+  zip-with-length {xs = []}     {ys = y ∷ ys} = refl
+  zip-with-length {xs = x ∷ xs} {ys = []}     = refl
+  zip-with-length {xs = x ∷ xs} {ys = y ∷ ys} =
+      ap suc zip-with-length
+    ∙ min-ap Suc (length xs) (length ys)
 
 ∈-zip-with-l : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
                 {f : A → B → C} {as : List A} {bs : List B} {a : A}
