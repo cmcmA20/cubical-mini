@@ -45,19 +45,19 @@ instance
 
 -- TODO can this be generalized to arbitrary hlevel?
 ∈≃fibre : {xs : List A} → is-set A → x ∈ xs ≃ fibre (xs !ᶠ_) x
-∈≃fibre {A} {x} s = ≅→≃ (make-iso to fro (make-inverses (fun-ext re) (fun-ext se)))
+∈≃fibre {A} {x} s = ≅→≃ (iso to (λ (n , p) → fro n p) (fun-ext λ (n , p) → re n p) (fun-ext se))
   where
   to : {xs : List A} → x ∈ xs → fibre (xs !ᶠ_) x
   to hx = any→fin hx , any→fin-!ᶠ hx ⁻¹
-  fro : {xs : List A} → fibre (xs !ᶠ_) x → x ∈ xs
-  fro {y ∷ xs} (mk-fin zero             , e) = here (e ⁻¹)
-  fro {y ∷ xs} (mk-fin (suc ix) {bound} , e) = there (fro ((mk-fin ix {bound}) , e))
-  re : {xs : List A} → (f : fibre (xs !ᶠ_) x) → to (fro f) ＝ f
-  re {y ∷ xs} (mk-fin zero             , e) = refl
-  re {y ∷ xs} (mk-fin (suc ix) {bound} , e) =
+  fro : {xs : List A} (k : Fin (length xs)) (e : xs !ᶠ k ＝ x) → x ∈ xs
+  fro {y ∷ xs} (mk-fin zero)     e = here (e ⁻¹)
+  fro {y ∷ xs} (mk-fin (suc ix)) e = there (fro (mk-fin ix) e)
+  re : {xs : List A} (k : Fin (length xs)) (e : xs !ᶠ k ＝ x) → to (fro k e) ＝ (k , e)
+  re {y ∷ xs} (mk-fin zero)             e = refl
+  re {y ∷ xs} (mk-fin (suc ix) {bound}) e =
     Σ-prop-path (λ q → s ((y ∷ xs) !ᶠ q) x)
-      (fin-ext (ap (suc ∘ Fin.index ∘ fst) (re {xs} (mk-fin ix {bound} , e))))
-  se : {xs : List A} → (h : x ∈ xs) → fro (to h) ＝ h
+      (fin-ext (ap (suc ∘ Fin.index ∘ fst) (re {xs} (mk-fin ix {bound}) e)))
+  se : {xs : List A} → (h : x ∈ xs) → let (k , e) = to h in fro k e ＝ h
   se {y ∷ xs} (here px) = refl
   se {y ∷ xs} (there h) = ap there (se h)
 

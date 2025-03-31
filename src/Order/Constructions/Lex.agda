@@ -437,7 +437,7 @@ List-lex<-dec da d {xs = x ∷ xs} {ys = y ∷ ys} | no x≮y | no x≠y = no [ 
   spo .StrictPoset._<_ = List-lex<₁ A._<_
   spo .StrictPoset.<-thin {x} {y} = List-lex<₁-prop A.<-thin A.<-irrefl {xs = x} {ys = y}
   spo .StrictPoset.<-irrefl {x} = List-lex<₁-irr A.<-irrefl {xs = x}
-  spo .StrictPoset.<-trans {x} {y} {z} = List-lex<₁-trans hlevel! A.<-trans {xs = x} {ys = y} {zs = z}
+  spo .StrictPoset.<-trans {x} {y} {z} = List-lex<₁-trans (hlevel 1) A.<-trans {xs = x} {ys = y} {zs = z}
 
 -- interaction
 

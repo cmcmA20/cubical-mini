@@ -10,6 +10,7 @@ open import Data.List.Path
 open import Data.List.Properties
 open import Data.List.Operations
 
+open import Data.Bool.Base
 open import Data.Empty.Base
 open import Data.Reflects.Base
 open import Data.Nat.Base
@@ -51,7 +52,7 @@ opaque
   prefix-antisym {xs}      ([]      , exy) (tyx     , eyx) = ++-id-r xs ⁻¹ ∙ exy
   prefix-antisym      {ys} (p ∷ txy , exy) ([]      , eyx) = eyx ⁻¹ ∙ ++-id-r ys
   prefix-antisym {xs}      (p ∷ txy , exy) (q ∷ tyx , eyx) =
-    false! $ ++-assoc xs (p ∷ txy) (q ∷ tyx) ⁻¹ ∙ subst (λ w → w ++ q ∷ tyx ＝ xs) (exy ⁻¹) eyx
+    false! (++-assoc xs (p ∷ txy) (q ∷ tyx) ⁻¹ ∙ subst (λ w → w ++ q ∷ tyx ＝ xs) (exy ⁻¹) eyx)
 
   prefix-++-l : Prefix (xs ++ zs) ys → Prefix xs ys
   prefix-++-l {xs} {zs} (ts , et) = (zs ++ ts) , (++-assoc xs zs ts ⁻¹ ∙ et)
