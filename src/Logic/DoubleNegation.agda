@@ -6,6 +6,7 @@ open import Meta.Effect
 
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
+open import Data.Empty.Properties
 
 private variable
   ℓ : Level
@@ -33,6 +34,9 @@ opaque
 
   Classically : Type ℓ → Type ℓ
   Classically = is-classical
+
+Erased→Classically : {A : 𝒰 ℓ} → Erased A → is-classical A
+Erased→Classically (erase a) = is-classical-η λ na → Recomputable-⊥ .recompute (erase (na a))
 
 opaque
   unfolding is-classical

@@ -10,17 +10,20 @@ open import Meta.Effect.Traversable
 open import Data.Vec.Inductive.Base
 
 private variable
-  ℓ : Level
-  A : Type ℓ
+  ℓᵃ ℓᵇ : Level
+  A : Type ℓᵃ
+  B : Type ℓᵇ
   @0 n : ℕ
 
 open Idiom ⦃ ... ⦄
 open Traversable ⦃ ... ⦄
 
+vec-traverse : {M : Effect} ⦃ i : Idiom M ⦄
+             → let module M = Effect M in
+                (A → M.₀ B) → Vec A n → M.₀ (Vec B n)
+vec-traverse _ []        = pure []
+vec-traverse f (x ∷ xs) = ⦇ f x ∷ vec-traverse f xs ⦈
+
 instance
   Traversable-Vec : Traversable (eff λ T → Vec T n)
-  Traversable-Vec .traverse {M} {A} {B} = go where
-    private module M = Effect M
-    go : (A → M.₀ B) → Vec A n → M.₀ (Vec B n)
-    go _ []       = pure []
-    go f (x ∷ xs) = ⦇ f x ∷ go f xs ⦈
+  Traversable-Vec .traverse = vec-traverse

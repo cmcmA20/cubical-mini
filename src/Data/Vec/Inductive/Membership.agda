@@ -23,6 +23,18 @@ private variable
 _∈ᵥ_ : A → Vec A n → Type _
 x ∈ᵥ xs = Σ[ idx ꞉ Fin _ ] (lookup xs idx ＝ x)
 
+hereᵥ : ∀ {x y} {xs : Vec A n} → x ＝ y → x ∈ᵥ (y ∷ xs)
+hereᵥ e = fzero , e ⁻¹
+
+thereᵥ : ∀ {x y} {xs : Vec A n} → x ∈ᵥ xs → x ∈ᵥ (y ∷ xs)
+thereᵥ (idx , e) = fsuc idx , e
+
+∈ᵥ-uncons : ∀ {z : A} {x} {xs : Vec A n}
+          → z ∈ᵥ (x ∷ xs) → (z ＝ x) ⊎ z ∈ᵥ xs
+∈ᵥ-uncons               (fzero    , e) = inl (e ⁻¹)
+∈ᵥ-uncons {xs = y ∷ xs} (fsuc idx , e) =
+  inr $ [ hereᵥ , thereᵥ ]ᵤ (∈ᵥ-uncons {xs = xs} (idx , e))
+
 instance
   Membership-Vec : Membership A (Vec A n) (level-of-type A)
   Membership-Vec ._∈_ = _∈ᵥ_

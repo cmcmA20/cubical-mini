@@ -3,16 +3,18 @@ module Data.Vec.Inductive.Operations where
 
 open import Foundations.Base
 
+open import Data.Bool
 open import Data.Fin.Inductive.Base
 open import Data.List.Base
 open import Data.List.Operations
-  hiding (lookup)
+  hiding (all ; lookup ; unzip)
 
 open import Data.Vec.Inductive.Base public
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ : Level
   A : Type ℓ
+  B : Type ℓ′
   @0 n : ℕ
 
 tabulate : {n : ℕ} → (Fin n → A) → Vec A n
@@ -38,3 +40,14 @@ list→vec [] = 0 , [] , refl
 list→vec (x ∷ xs) =
   let len′ , xs′ , p = list→vec xs
   in suc len′ , x ∷ xs′ , ap suc p
+
+unzip : Vec (A × B) n → Vec A n × Vec B n
+unzip []       = [] , []
+unzip ((x , y) ∷ xys) =
+  let (ihx , ihy) = unzip xys in
+  x ∷ ihx , y ∷ ihy
+
+all : (A → Bool) → Vec A n → Bool
+all p []       = true
+all p (x ∷ xs) = p x and all p xs
+

@@ -61,12 +61,19 @@ boolean-pred-ext f g p q = fun-ext λ _ → so-injₑ (prop-extₑ! p q)
 
 -- if
 
+if-same : ∀ {b} {x : A} → (if b then x else x) ＝ x
+if-same {b = true}  = refl
+if-same {b = false} = refl
+
 if-true : ∀ {b} {t f : A} → ⌞ b ⌟ → (if b then t else f) ＝ t
 if-true {b = true}  _  = refl
 
 if-false : ∀ {b} {t f : A} → ⌞ not b ⌟ → (if b then t else f) ＝ f
 if-false {b = false} _  = refl
 
+if-swap : ∀ {b} {t f : A} → (if b then t else f) ＝ (if not b then f else t)
+if-swap {b = true}  = refl
+if-swap {b = false} = refl
 
 -- negation
 
@@ -75,6 +82,13 @@ not-invol = witness!
 
 ≠→=not : ∀ x y → x ≠ y → x ＝ not y
 ≠→=not = witness!
+
+so-not : ⌞ not x ⌟ → ¬ ⌞ x ⌟
+so-not {(false)} _  s = ¬-so-false s
+so-not {(true)}  sn _ = ¬-so-false sn
+
+not-so-≃ : ⌞ not x ⌟ ≃ (¬ ⌞ x ⌟)
+not-so-≃ = prop-extₑ! so-not not-so
 
 
 -- conjunction
@@ -94,6 +108,10 @@ and-id-r = witness!
 
 and-absorb-r : ∀ x → x and false ＝ false
 and-absorb-r = witness!
+
+and-implies : ∀ x y → ⌞ x implies y ⌟ → x and y ＝ x
+and-implies false y     _ = refl
+and-implies true  true  _ = refl
 
 and-assoc : ∀ x y z → (x and y) and z ＝ x and y and z
 and-assoc = witness!
@@ -166,6 +184,10 @@ or-id-r = witness!
 or-absorb-r : ∀ x → x or true ＝ true
 or-absorb-r = witness!
 
+or-implies : ∀ x y → ⌞ y implies x ⌟ → x or y ＝ x
+or-implies false false _ = refl
+or-implies true  y     _ = refl
+
 or-assoc : ∀ x y z → (x or y) or z ＝ x or y or z
 or-assoc = witness!
 
@@ -197,6 +219,11 @@ not-xor-l = witness!
 
 not-xor-r : ∀ x y → not (x xor y) ＝ x xor not y
 not-xor-r = witness!
+
+-- implication
+
+implies-contra : ∀ x y → not y implies not x ＝ x implies y
+implies-contra = witness!
 
 
 -- distributivity

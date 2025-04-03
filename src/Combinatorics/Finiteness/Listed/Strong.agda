@@ -20,6 +20,7 @@ open import Data.Fin.Computational.Path as Fin
 open import Data.List.Base
 open import Data.List.Operations
 open import Data.List.Path
+open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
 
 record Listed {ℓ} (A : Type ℓ) : Type ℓ where
@@ -43,7 +44,7 @@ instance
   H-Level-Listed {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = ≅→is-of-hlevel n Listed-iso (hlevel n)
 
 listed→Σ∈!-is-discrete : (lis : Listed A) → is-discrete (Σ[ x ꞉ A ] x ∈! lis .support)
-listed→Σ∈!-is-discrete lis {a₁ , a₁∈l , u} {a₂ , a₂∈l , v} = caseᵈ ∈ₗ→fin a₁∈l ＝ ∈ₗ→fin a₂∈l of λ where
+listed→Σ∈!-is-discrete lis {a₁ , a₁∈l , u} {a₂ , a₂∈l , v} = caseᵈ any→fin a₁∈l ＝ any→fin a₂∈l of λ where
   (yes p=q) → yes (∈ₗ→fin-almost-injective a₁∈l a₂∈l p=q ,ₚ prop!)
   (no  p≠q) → no λ x → p≠q (∈ₗ→fin-respects-∈!ₗ a₁∈l u a₂∈l v (ap fst x))
 

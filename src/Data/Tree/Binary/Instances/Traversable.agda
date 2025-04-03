@@ -19,7 +19,7 @@ open Traversable ⦃ ... ⦄
 instance
   Traversable-Tree : Traversable (eff Tree)
   Traversable-Tree .traverse {M} {A} {B} = go where
-    private module M = Effect M
+    module M = Effect M
     go : (A → M.₀ B) → Tree A → M.₀ (Tree B)
     go f empty      = pure empty
     go f (leaf x)   = ⦇ leaf (f x) ⦈

@@ -62,8 +62,8 @@ universal = ≅→≃ the-iso where
 
 ⊎-assoc : ((A ⊎ B) ⊎ C) ≃ (A ⊎ (B ⊎ C))
 ⊎-assoc = ≅→≃ $ iso to from (fun-ext ri) (fun-ext li) where
-  to = [ [ inl , inr ∘ inl ]ᵤ , inr ∘ inr ]ᵤ
-  from = [ inl ∘ inl , [ inl ∘ inr , inr ]ᵤ ]ᵤ
+  to = [ map-r inl , inr ∘ inr ]ᵤ
+  from = [ inl ∘ inl , map-l inr ]ᵤ
   ri : _
   ri (inl _) = refl
   ri (inr (inl _)) = refl

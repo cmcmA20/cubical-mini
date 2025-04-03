@@ -3,6 +3,7 @@ module Data.Unit.Properties where
 
 open import Foundations.Base
 open import Foundations.Equiv
+open import Foundations.Erased
 
 open import Data.Unit.Base
 
@@ -20,3 +21,6 @@ is-contr→equiv-⊤ A-ctr .snd .equiv-proof tt .fst =
   A-ctr .fst , refl
 is-contr→equiv-⊤ A-ctr .snd .equiv-proof tt .snd (a , _) i =
   A-ctr .snd a i , λ _ → tt
+
+Recomputable-⊤ : Recomputable ⊤
+Recomputable-⊤ .recompute _ = tt

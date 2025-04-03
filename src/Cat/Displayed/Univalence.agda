@@ -62,10 +62,9 @@ module _ (base-c : is-category B) (disp-c : is-categoryᵈ) where
         contract-vertical-equiv
         p
 
-    private
-      helper : {x y : B.Ob} {x′ : Ob[ x ]} {y′ : Ob[ y ] } (p : _)
-          → ((x , x′) , refl) ＝ ((y , y′) , piece-together (total-equiv→equiv E p) (total-equiv→equiv[] E p))
-      helper p = wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p)
+    helper : {x y : B.Ob} {x′ : Ob[ x ]} {y′ : Ob[ y ] } (p : _)
+           → ((x , x′) , refl) ＝ ((y , y′) , piece-together (total-equiv→equiv E p) (total-equiv→equiv[] E p))
+    helper p = wrapper (total-equiv→equiv E p) _ _ (total-equiv→equiv[] E p)
 
     total-cat : is-category (∫ E)
     total-cat .to-path p = ap fst (helper p)

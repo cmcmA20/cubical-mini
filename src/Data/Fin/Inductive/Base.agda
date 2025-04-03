@@ -12,6 +12,7 @@ open import Data.Nat.Base as ℕ
   public
 open import Data.Reflects.Base
 open import Data.Sum.Base
+  using (_⊎ₜ_; inl; inr)
 
 private variable
   ℓ : Level

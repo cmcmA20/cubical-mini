@@ -26,14 +26,15 @@ private variable A B : ℙ X ℓ
 subst-∈ : (A : ℙ X ℓ) {x y : X} → x ＝ y → x ∈ A → y ∈ A
 subst-∈ A = subst (_∈ A)
 
+-- TODO remove in favor of general membership-based instances
 instance
-  Refl-⊆ : Refl {A = ℙ X ℓ} _⊆_
-  Refl-⊆ .refl = refl
-  {-# OVERLAPPING Refl-⊆ #-}
+  Refl-ℙ⊆ : Refl {A = ℙ X ℓ} _⊆_
+  Refl-ℙ⊆ .refl = refl
+  {-# OVERLAPPING Refl-ℙ⊆ #-}
 
-  Comp-⊆ : Comp {A = ℙ X ℓ} {B = ℙ X ℓ′} {C = ℙ X ℓ″} _⊆_ _⊆_ _⊆_
-  Comp-⊆ ._∙_ S T = S ∙ T
-  {-# OVERLAPPING Comp-⊆ #-}
+  Comp-ℙ⊆ : Comp {A = ℙ X ℓ} {B = ℙ X ℓ′} {C = ℙ X ℓ″} _⊆_ _⊆_ _⊆_
+  Comp-ℙ⊆ ._∙_ S T = S ∙ T
+  {-# OVERLAPPING Comp-ℙ⊆ #-}
 
 single : ⦃ X-set : H-Level 2 X ⦄ → X → ℙ X (level-of-type X)
 single x t = el! (x ＝ t)

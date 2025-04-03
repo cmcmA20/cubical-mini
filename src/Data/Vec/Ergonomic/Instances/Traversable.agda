@@ -15,7 +15,7 @@ open Traversable ⦃ ... ⦄
 instance
   Traversable-Vec : ∀{n} → Traversable (eff λ T → Vec T n)
   Traversable-Vec .traverse {M} {A} {B} = go where
-    private module M = Effect M
+    module M = Effect M
     go : ∀{n} → (A → M.₀ B) → Vec A n → M.₀ (Vec B n)
     go {0} _ _ = pure _
     go {1} f x = f x

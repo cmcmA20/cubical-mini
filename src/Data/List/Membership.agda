@@ -3,6 +3,7 @@ module Data.List.Membership where
 
 open import Meta.Prelude
 open import Meta.Extensionality
+open import Meta.Effect
 
 open import Logic.Discreteness
 
@@ -14,7 +15,10 @@ open import Data.Empty.Base as ⊥
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
 open import Data.List.Base
+open import Data.List.Instances.Map
 open import Data.List.Operations
+open import Data.List.Correspondences.Unary.All
+open import Data.List.Correspondences.Unary.Any
 open import Data.Maybe.Base
 open import Data.Maybe.Path using (just-inj)
 open import Data.Reflects.Base as Reflects
@@ -22,141 +26,55 @@ open import Data.Unit.Base
 
 private variable
   ℓᵃ ℓ : Level
-  A : Type ℓ
+  A : Type ℓᵃ
   a x y : A
   xs : List A
-  b b₁ b₂ : Bool
 
-data _∈ₗ_ {ℓ} {A : Type ℓ} (x : A) : List A → Type ℓ where
-  here  : (p : x ＝ y) → x ∈ₗ (y ∷ xs)
-  there : x ∈ₗ xs      → x ∈ₗ (y ∷ xs)
+_∈ₗ_ : ∀ {ℓᵃ} {A : Type ℓᵃ}
+     → A → List A → Type ℓᵃ
+x ∈ₗ xs = Any (x ＝_) xs
 
 instance
   Membership-List : {A : Type ℓ} → Membership A (List A) ℓ
   Membership-List ._∈_ = _∈ₗ_
-
-is-here? is-there? : x ∈ₗ xs → Bool
-is-here? (here  _) = true
-is-here? (there _) = false
-is-there? = not ∘ is-here?
-
-here-inj : {p p′ : x ＝ y} → here {xs = xs} p ＝ here p′ → p ＝ p′
-here-inj = just-inj ∘ ap unhere where
-  unhere : x ∈ₗ (y ∷ xs) → Maybe (x ＝ y)
-  unhere (here  p) = just p
-  unhere (there _) = nothing
-
-there-inj : {q q′ : x ∈ₗ xs} → there {y = y} q ＝ there q′ → q ＝ q′
-there-inj = just-inj ∘ ap unthere where
-  unthere : (a : x ∈ₗ (y ∷ xs)) → Maybe (x ∈ₗ xs)
-  unthere (here  _) = nothing
-  unthere (there q) = just q
-
-instance
-  Reflects-here≠there
-    : {p : x ＝ y} {q : x ∈ₗ xs}
-    → Reflects (here p ＝ there q) false
-  Reflects-here≠there = ofⁿ (λ z → ¬-so-false (subst So (ap is-here? z) oh))
-
-  Reflects-there≠here
-    : {p : x ＝ y} {q : x ∈ₗ xs}
-    → Reflects (there q ＝ here p) false
-  Reflects-there≠here = ofⁿ (λ z → ¬-so-false (subst So (ap is-there? z) oh))
-
-  Reflects-here=here
-    : {p p′ : x ＝ y} ⦃ _ : Reflects (p ＝ p′) b ⦄
-    → Reflects (Path (x ∈ₗ (y ∷ xs)) (here p) (here p′)) b
-  Reflects-here=here = Reflects.dmap (ap here) (contra here-inj) auto
-
-  Reflects-there=there
-    : {q q′ : x ∈ₗ xs} ⦃ _ : Reflects (q ＝ q′) b ⦄
-    → Reflects (Path (x ∈ₗ (y ∷ xs)) (there q) (there q′)) b
-  Reflects-there=there = Reflects.dmap (ap there) (contra there-inj) auto
-
-opaque
-  here≠there : {p : x ＝ y} {q : x ∈ₗ xs} → here p ≠ there q
-  here≠there = false!
-
-opaque
-  there≠here : {p : x ＝ y} {q : x ∈ₗ xs} → there q ≠ here p
-  there≠here = false!
 
 instance
   ∈ₗ-head : {xs : List A} → Reflects (x ∈ₗ (x ∷ xs)) true
   ∈ₗ-head = ofʸ (here refl)
   {-# OVERLAPPING ∈ₗ-head #-}
 
-  ∈ₗ-tail : {xs : List A} → ⦃ Reflects (x ∈ₗ xs) true ⦄ → Reflects (x ∈ₗ (y ∷ xs)) true
-  ∈ₗ-tail = ofʸ (there true!)
-  {-# OVERLAPPABLE ∈ₗ-tail #-}
+-- TODO can this be generalized to arbitrary hlevel?
+∈≃fibre : {xs : List A} → is-set A → x ∈ xs ≃ fibre (xs !ᶠ_) x
+∈≃fibre {A} {x} s = ≅→≃ (iso to (λ (n , p) → fro n p) (fun-ext λ (n , p) → re n p) (fun-ext se))
+  where
+  to : {xs : List A} → x ∈ xs → fibre (xs !ᶠ_) x
+  to hx = any→fin hx , any→fin-!ᶠ hx ⁻¹
+  fro : {xs : List A} (k : Fin (length xs)) (e : xs !ᶠ k ＝ x) → x ∈ xs
+  fro {y ∷ xs} (mk-fin zero)     e = here (e ⁻¹)
+  fro {y ∷ xs} (mk-fin (suc ix)) e = there (fro (mk-fin ix) e)
+  re : {xs : List A} (k : Fin (length xs)) (e : xs !ᶠ k ＝ x) → to (fro k e) ＝ (k , e)
+  re {y ∷ xs} (mk-fin zero)             e = refl
+  re {y ∷ xs} (mk-fin (suc ix) {bound}) e =
+    Σ-prop-path (λ q → s ((y ∷ xs) !ᶠ q) x)
+      (fin-ext (ap (suc ∘ Fin.index ∘ fst) (re {xs} (mk-fin ix {bound}) e)))
+  se : {xs : List A} → (h : x ∈ xs) → let (k , e) = to h in fro k e ＝ h
+  se {y ∷ xs} (here px) = refl
+  se {y ∷ xs} (there h) = ap there (se h)
 
-  ∉ₗ[] : Reflects (x ∈ₗ []) false
-  ∉ₗ[] = ofⁿ λ ()
+has : ⦃ d : is-discrete A ⦄ → A → List A → Bool
+has a = any (λ x → ⌊ a ≟ x ⌋)
 
-module _ {A : 𝒰 ℓᵃ} ⦃ sa : ∀ {x y : A} → Extensional (x ＝ y) ℓ ⦄ where
-  Code-∈ₗ : {x : A} {xs : List A} (p q : x ∈ xs) → 𝒰 ℓ
-  Code-∈ₗ (here  p) (here  p′) = sa .Pathᵉ p p′
-  Code-∈ₗ (there q) (there q′) = Code-∈ₗ q q′
-  Code-∈ₗ _ _  = ⊥
-
-  code-∈ₗ-refl : {x : A} {xs : List A} (p : x ∈ xs) → Code-∈ₗ p p
-  code-∈ₗ-refl (here  p) = sa .reflᵉ p
-  code-∈ₗ-refl (there q) = code-∈ₗ-refl q
-
-  decode-∈ₗ : {x : A} {xs : List A} {p q : x ∈ xs} (c : Code-∈ₗ p q) → p ＝ q
-  decode-∈ₗ {p = here p}  {here  p′} c = ap here (sa .idsᵉ .to-path c)
-  decode-∈ₗ {p = there q} {there q′} c = ap there (decode-∈ₗ c)
-
-  decode-∈ₗ-refl
-    : {x : A} {xs : List A} {p q : x ∈ xs} (c : Code-∈ₗ p q)
-    → code-∈ₗ-refl p ＝[ ap (Code-∈ₗ p) (decode-∈ₗ c) ]＝ c
-  decode-∈ₗ-refl {p = here  p} {here p′}  = sa .idsᵉ .to-path-over
-  decode-∈ₗ-refl {p = there q} {there q′} = decode-∈ₗ-refl {p = q}
-
-  Extensional-∈ₗ : {x : A} {xs : List A} → Extensional (x ∈ xs) ℓ
-  Extensional-∈ₗ .Pathᵉ = Code-∈ₗ
-  Extensional-∈ₗ .reflᵉ = code-∈ₗ-refl
-  Extensional-∈ₗ .idsᵉ .to-path = decode-∈ₗ
-  Extensional-∈ₗ .idsᵉ .to-path-over {a} = decode-∈ₗ-refl {p = a}
-
-opaque
-  -- TODO feels like it can be strengthened
-  code-∈ₗ-is-of-hlevel
-    : ∀ {n} {x : A} {xs : List A} {u v : x ∈ xs}
-    → is-of-hlevel (2 + n) A → is-of-hlevel (1 + n) (Code-∈ₗ u v)
-  code-∈ₗ-is-of-hlevel {u = here _} {here _} hl =
-    path-is-of-hlevel-same (suc _) (hl _ _)
-  code-∈ₗ-is-of-hlevel {u = here  _} {there _} _ = hlevel _
-  code-∈ₗ-is-of-hlevel {u = there _} {here _}  _ = hlevel _
-  code-∈ₗ-is-of-hlevel {u = there q} {there _} = code-∈ₗ-is-of-hlevel {u = q}
-
-  ∈ₗ-is-of-hlevel
-    : (n : HLevel) {x : A} {xs : List A}
-    → is-of-hlevel (2 + n) A
-    → is-of-hlevel (2 + n) (x ∈ xs)
-  ∈ₗ-is-of-hlevel n hl =
-    identity-system→is-of-hlevel (suc n) (Extensional-∈ₗ .idsᵉ) λ x _ → code-∈ₗ-is-of-hlevel {u = x} hl
-
-instance opaque
-  H-Level-∈ₗ : ∀ {n} ⦃ _ : n ≥ʰ 2 ⦄ → {x : A} {xs : List A} → ⦃ A-hl : H-Level n A ⦄ → H-Level n (x ∈ xs)
-  H-Level-∈ₗ {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = ∈ₗ-is-of-hlevel _ (hlevel n)
-  {-# OVERLAPPING H-Level-∈ₗ #-}
+Reflects-has : ⦃ d : is-discrete A ⦄ {x : A} {xs : List A}
+             → Reflects (x ∈ xs) (has x xs)
+Reflects-has ⦃ d ⦄ {x} = Reflects-any λ y → d {x} {y} .proof
 
 instance
   Dec-∈ₗ
     : {a : A} {xs : List A}
     → ⦃ di : is-discrete A ⦄
     → Dec (a ∈ xs)
-  Dec-∈ₗ {xs = []} = no λ()
-  Dec-∈ₗ {a} {xs = x ∷ xs} .does = (a =? x) or ⌊ Dec-∈ₗ {a = a} {xs = xs} ⌋
-  Dec-∈ₗ {a} {xs = x ∷ xs} .proof =
-    caseᵈ a ＝ x return (λ d → Reflects (a ∈ (x ∷ xs)) (⌊ d ⌋ or ⌊ Dec-∈ₗ {a = a} {xs = xs} ⌋)) of λ where
-      (yes a=x) → ofʸ (here a=x)
-      (no  a≠x) → case Dec-∈ₗ {a = a} {xs = xs} return (λ d → Reflects (a ∈ (x ∷ xs)) ⌊ d ⌋) of λ where
-        (yes a∈xs) → ofʸ (there a∈xs)
-        (no  a∉xs) → ofⁿ λ where
-          (here  a=x)  → a≠x a=x
-          (there a∈xs) → a∉xs a∈xs
+  Dec-∈ₗ {a} {xs} .does = has a xs
+  Dec-∈ₗ          .proof = Reflects-has
   {-# OVERLAPPING Dec-∈ₗ #-}
 
   ∈ₗ-is-discrete
@@ -209,26 +127,20 @@ instance
         (no  a∉!xs) → no  (¬here+¬there!→∉!ₗ a≠x a∉!xs)
   {-# OVERLAPPING Dec-∈!ₗ #-}
 
-∈ₗ→fin
-  : {a : A} {xs : List A}
-  → a ∈ xs → Fin (length xs)
-∈ₗ→fin (here  _)    = fzero
-∈ₗ→fin (there a∈xs) = fsuc (∈ₗ→fin a∈xs)
-
 ∈ₗ→fin-almost-injective
   : {A : Type ℓᵃ} {a b : A} {xs : List A}
     (u : a ∈ xs) (v : b ∈ xs)
-  → ∈ₗ→fin u ＝ ∈ₗ→fin v
+  → any→fin u ＝ any→fin v
   → a ＝ b
-∈ₗ→fin-almost-injective (here p)  (here p′)  _ = p ∙ p′ ⁻¹
-∈ₗ→fin-almost-injective (here p)  (there q)  r = false! r
-∈ₗ→fin-almost-injective (there q) (here p)   r = false! r
-∈ₗ→fin-almost-injective (there q) (there q′) r = ∈ₗ→fin-almost-injective q q′ (fsuc-inj r)
+∈ₗ→fin-almost-injective {xs = x ∷ xs} (here eu) (here ev) _ = eu ∙ ev ⁻¹
+∈ₗ→fin-almost-injective {xs = x ∷ xs} (here eu) (there v) r = false! r
+∈ₗ→fin-almost-injective {xs = x ∷ xs} (there u) (here ev) r = false! r
+∈ₗ→fin-almost-injective {xs = x ∷ xs} (there u) (there v) r = ∈ₗ→fin-almost-injective u v (fsuc-inj r)
 
 ∈!ₗ↪fin
   : {a : A} {xs : List A}
   → a ∈! xs ↪ Fin (length xs)
-∈!ₗ↪fin .fst = ∈ₗ→fin ∘ fst
+∈!ₗ↪fin .fst = any→fin ∘ fst
 ∈!ₗ↪fin .snd _ _ _ = prop!
 
 instance
@@ -243,11 +155,128 @@ instance
     (u : a ∈ xs) → is-central u
   → (v : b ∈ xs) → is-central v
   → a ＝ b
-  → ∈ₗ→fin u ＝ ∈ₗ→fin v
-∈ₗ→fin-respects-∈!ₗ (here  p) _ (here  p′) _ _ = refl
-∈ₗ→fin-respects-∈!ₗ (here  p) _ (there q) v r =
+  → any→fin u ＝ any→fin v
+∈ₗ→fin-respects-∈!ₗ {xs = x ∷ xs} (here  p) _ (here  p′) _ _ = refl
+∈ₗ→fin-respects-∈!ₗ {xs = x ∷ xs} (here  p) _ (there q)  v r =
   false! $ v $ here $ r ⁻¹ ∙ p
-∈ₗ→fin-respects-∈!ₗ (there q) u (here  p) _ r =
+∈ₗ→fin-respects-∈!ₗ {xs = x ∷ xs} (there q) u (here  p)  _ r =
   false! $ u $ here $ r ∙ p
-∈ₗ→fin-respects-∈!ₗ (there q) u (there q′) v r =
+∈ₗ→fin-respects-∈!ₗ {xs = x ∷ xs} (there q) u (there q′) v r =
   ap fsuc (∈ₗ→fin-respects-∈!ₗ q (there-inj ∘ u ∘ there) q′ (there-inj ∘ v ∘ there) r)
+
+∈-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
+       → (f : A → B) → x ∈ xs → f x ∈ map f xs
+∈-map {xs = x ∷ xs} f (here e)   = here (ap f e)
+∈-map {xs = x ∷ xs} f (there hx) = there (∈-map f hx)
+
+map-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
+       → (f : A → B) → Injective f
+       → f x ∈ map f xs → x ∈ xs
+map-∈ {xs = x ∷ xs} f inj (here e)  = here (inj e)
+map-∈ {xs = x ∷ xs} f inj (there fx) = there (map-∈ f inj fx)
+
+{-
+map-∈-in : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {z : A} {xs : List A}
+       → (f : A → B)
+       → (∀ {x y} → y ∈ xs → f x ＝ f y → x ＝ y)
+       → f z ∈ map f xs → z ∈ xs
+map-∈-in {xs = x ∷ xs} f inj (here e)  = here (inj (here refl) e)
+map-∈-in {xs = x ∷ xs} f inj (there fx) = there (map-∈-in f (λ {x} {y} y∈ e → inj (there y∈) e) fx)
+-}
+
+map-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {xs : List A}
+        → (f : A → B)
+        → y ∈ map f xs → Σ[ x ꞉ A ] ((x ∈ xs) × (y ＝ f x))
+map-∈Σ {xs = x ∷ xs} f (here e) = x , here refl , e
+map-∈Σ {xs = x ∷ xs} f (there y∈) =
+  let (x , x∈ , xe) = map-∈Σ f y∈ in
+  x , there x∈ , xe
+
+∈-split : {A : 𝒰 ℓᵃ} {x : A} {xs : List A}
+         → x ∈ xs → Σ[ ls ꞉ List A ] Σ[ rs ꞉ List A ] (xs ＝ ls ++ x ∷ rs)
+∈-split {xs = x ∷ xs} (here e)   = [] ,  xs , ap (_∷ xs) (e ⁻¹)
+∈-split {xs = x ∷ xs} (there hx) =
+  let (ls , rs , e) = ∈-split hx in
+  x ∷ ls , rs , ap (x ∷_) e
+
+-- interaction with any/all
+
+Any→Σ∈ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs : List A}
+         → Any P xs
+         → Σ[ x ꞉ A ] x ∈ xs × P x
+Any→Σ∈ {xs = x ∷ xs} (here px) = x , here refl , px
+Any→Σ∈ {xs = x ∷ xs} (there a)     =
+  let (x , h , p) = Any→Σ∈ a in
+  x , there h , p
+
+∈→Any : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs : List A} {x : A}
+       → x ∈ xs → P x
+       → Any P xs
+∈→Any {P} {xs = y ∷ xs} (here e)   px = here (subst P e px)
+∈→Any     {xs = y ∷ xs} (there hx) px = there (∈→Any hx px)
+
+All→∀∈ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs : List A}
+        → All P xs
+        → (x : A) → x ∈ xs → P x
+All→∀∈ {P} {xs = y ∷ xs} (px ∷ pxs) x (here e)   = subst P (e ⁻¹) px
+All→∀∈     {xs = y ∷ xs} (px ∷ pxs) x (there hx) = All→∀∈ pxs x hx
+
+∀∈→All : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs : List A}
+        → ((x : A) → x ∈ xs → P x)
+        → All P xs
+∀∈→All {xs = []}     ax = []
+∀∈→All {xs = x ∷ xs} ax = ax x (here refl) ∷ ∀∈→All λ y hy → ax y (there hy)
+
+all-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A}
+       → xs ⊆ ys → All P ys → All P xs
+all-⊆ xsy ay = ∀∈→All λ x → All→∀∈ ay x ∘ xsy
+
+all-∈-map : ∀ {ℓ′} {P : Pred A ℓ} {Q : Pred A ℓ′}
+            → (∀ {x} → x ∈ xs → P x → Q x)
+            → All P xs → All Q xs
+all-∈-map {xs = []}     f []       = []
+all-∈-map {xs = x ∷ xs} f (p ∷ ps) = f (here refl) p ∷ all-∈-map (f ∘ there) ps
+
+any-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A}
+       → xs ⊆ ys → Any P xs → Any P ys
+any-⊆ xsy ax =
+  let (x , x∈ , px) = Any→Σ∈ ax in
+  ∈→Any (xsy x∈) px
+
+-- uniqueness
+
+[]-unique : is-unique (the (List A) [])
+[]-unique x h1 = false! h1
+
+∷→unique : is-unique (x ∷ xs)
+         → x ∉ xs × is-unique xs
+∷→unique {x} u =
+    (λ hx → false! (u x (here refl) (there hx)))
+  , (λ y h1 h2 → there-inj (u y (there h1) (there h2)))
+
+unique→∷ : {x : A}
+         → is-set A
+         → x ∉ xs → is-unique xs
+         → is-unique (x ∷ xs)
+unique→∷ {x}               s nx u z (here e1)  (here e2)  = ap here (s z x e1 e2)
+unique→∷     {xs}          s nx u z (here e1)  (there h2) = ⊥.rec (nx (subst (_∈ₗ xs) e1 h2))
+unique→∷     {xs}          s nx u z (there h1) (here e2)  = ⊥.rec (nx (subst (_∈ₗ xs) e2 h1))
+unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
+  let (nx , u′) = ∷→unique u in
+  ap there (unique→∷ s nx u′ z h1 h2)
+
+-- disjointness
+-- TODO move out
+
+_∥_ : List A → List A → Type (level-of-type A)
+_∥_ {A} xs ys = ∀[ a ꞉ A ] (a ∈ xs → a ∈ ys → ⊥)
+
+∥-comm : {xs ys : List A} → xs ∥ ys → ys ∥ xs
+∥-comm dxy hy hx = dxy hx hy
+
+∥-∷-l : ∀ {x} {xs ys : List A} → x ∉ ys → xs ∥ ys → (x ∷ xs) ∥ ys
+∥-∷-l {ys} ny dxy (here e)   hy = ny (subst (_∈ ys) e hy)
+∥-∷-l      ny dxy (there hx) hy = dxy hx hy
+
+∥-∷-r : ∀ {y} {xs ys : List A} → y ∉ xs → xs ∥ ys → xs ∥ (y ∷ ys)
+∥-∷-r nx = ∥-comm ∘ ∥-∷-l nx ∘ ∥-comm
