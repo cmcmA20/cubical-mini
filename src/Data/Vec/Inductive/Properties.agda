@@ -18,6 +18,9 @@ private variable
   B : Type ℓ′
   m n : ℕ
 
+size0-nil : {xs : Vec A 0} → xs ＝ []
+size0-nil {xs = []} = refl
+
 cast : m ＝ n → Vec A m → Vec A n
 cast {0}     {0}     _ xs = xs
 cast {0}     {suc n} p = false! p

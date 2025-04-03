@@ -192,12 +192,18 @@ Reflects-all {xs = []}     rp = ofʸ []
 Reflects-all {xs = x ∷ xs} rp =
   ≃→reflects (all-×≃ ⁻¹) (Reflects-× ⦃ rp = rp x ⦄ ⦃ rq = Reflects-all {xs = xs} rp ⦄)
 
+Dec-all : {P : A → 𝒰 ℓ′} {xs : List A}
+        → (∀ x → Dec (P x))
+        → Dec (All P xs)
+Dec-all {xs} d .does  = all (λ x → d x .does) xs
+Dec-all      d .proof = Reflects-all λ x → d x .proof
+
 Reflects-all-bool : {p : A → Bool} {xs : List A}
                   → Reflects (All (So ∘ p) xs) (all p xs)
 Reflects-all-bool = Reflects-all λ x → Reflects-So
 
 Dec-all-bool : ∀ {p : A → Bool} {xs : List A}
              → Dec (All (So ∘ p) xs)
-Dec-all-bool {p} {xs} .does = all p xs
-Dec-all-bool .proof = Reflects-all-bool
+Dec-all-bool {p} {xs} .does  = all p xs
+Dec-all-bool          .proof = Reflects-all-bool
 
