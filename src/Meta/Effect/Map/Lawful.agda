@@ -53,6 +53,8 @@ module _ {M : Effect} ⦃ ac : Abstract-Container M ⦄ where
       Map-AC-default .map f ∙ Map-AC-default .map g  ~⟨ (p f ▷ m .map g) ∙ (_ ◁ p g) ⟨
       m .map f ∙ m .map g                            ∎
 
+-- instances
+
 instance
   Lawful-Map-Erased : Lawful-Map (eff λ T → Erased T)
   Lawful-Map-Erased .Lawful-Map.map-pres-id =

@@ -28,10 +28,12 @@ open import Data.String.Properties
 ListCharₚ : Poset 0ℓ 0ℓ
 ListCharₚ = []≤ Charₛ ⦃ auto ⦄
 
+_≤str_ : String → String → 𝒰
+x ≤str y = ListCharₚ .Order.Base.Poset._≤_ (string→list x) (string→list y)
+
 Strₚ : Poset 0ℓ 0ℓ
 Strₚ .Poset.Ob = String
-Strₚ .Poset._≤_ x y =
-  ListCharₚ .Order.Base.Poset._≤_ (string→list x) (string→list y)
+Strₚ .Poset._≤_ = _≤str_
 Strₚ .Poset.≤-thin {x} {y} =
   ListCharₚ .Order.Base.Poset.≤-thin
     {x = string→list x} {y = string→list y}
@@ -64,7 +66,7 @@ Str-dec-total .is-decidable-total-order.has-discrete = String-is-discrete
 instance
   Str-bottom : Bottom Strₚ
   Str-bottom .Bottom.bot = ""
-  Str-bottom .Bottom.has-bot _ = lift tt
+  Str-bottom .Bottom.bot-is-bot _ = lift tt
 
 -- TODO ?
 -- ¬-Str-top : ¬ Top Strₚ
@@ -135,3 +137,15 @@ Str-<→≱ {x} {y} =
     (λ {x} → Charₛ .StrictPoset.<-irrefl {x})
     (λ {x} {y} {z} → Charₛ .StrictPoset.<-trans {x} {y} {z})
     {xs = string→list x} {ys = string→list y}
+
+Strᶜᵖ : ComplementedPoset 0ℓ 0ℓ
+Strᶜᵖ = dec-strict-total-order→complemented Str-dec-strict-total
+
+-- TODO hacky
+module _ where
+  open decminmax (ComplementedPoset.has-dec-total-order Strᶜᵖ)
+
+  Strᶜᵖ-join-slat : is-join-semilattice (ComplementedPoset.complemented→poset Strᶜᵖ)
+  Strᶜᵖ-join-slat .is-join-semilattice.has-bottom .Bottom.bot = ""
+  Strᶜᵖ-join-slat .is-join-semilattice.has-bottom .Bottom.bot-is-bot _ = lower
+  Strᶜᵖ-join-slat .is-join-semilattice.has-joins  = max-joins
