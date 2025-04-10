@@ -5,6 +5,7 @@ open import Meta.Prelude
 open Variadics _
 
 open import Data.Acc.Base
+open import Data.Acc.Path
 open import Data.Empty.Base
 
 private variable
@@ -39,6 +40,26 @@ wf-lift : (f : B → A)
         → is-wf _<_ → is-wf (λ x y → f x < f y)
 wf-lift f wf x = acc-lift f x (wf (f x))
 
+to-induction-acc-eq : {A : 𝒰 ℓa} {_<_ : A → A → 𝒰 ℓ}
+                      (wf : is-wf _<_)
+                    → (P : A → 𝒰 ℓ′)
+                    → (ih : ∀ x → Π[ _< x ⇒ P ] → P x)
+                    → ∀ x → (ax : Acc _<_ x)
+                    → to-induction-acc P ih x ax
+                    ＝ ih x λ y _ → to-induction-acc P ih y (wf y)
+to-induction-acc-eq wf P ih x (acc a) =
+  ap (ih x) $
+  fun-ext λ y → fun-ext λ y<x →
+  ap (to-induction-acc P ih y) $
+  acc-is-prop y ((a y y<x)) (wf y)
+
+to-induction-eq : {A : 𝒰 ℓa} {_<_ : A → A → 𝒰 ℓ}
+                  (wf : is-wf _<_)
+                → (P : A → 𝒰 ℓ′)
+                → (ih : ∀ x → Π[ _< x ⇒ P ] → P x)
+                → ∀ x
+                → to-induction wf P ih x ＝ ih x λ y _ → to-induction wf P ih y
+to-induction-eq wf P ih x = to-induction-acc-eq wf P ih x (wf x)
 
 -- Noetherianness
 

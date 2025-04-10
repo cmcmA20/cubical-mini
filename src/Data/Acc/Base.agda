@@ -25,13 +25,17 @@ acc-rec (acc r) = r
 is-wf : (A → A → Type ℓ′) → Type (level-of-type A ⊔ ℓ′)
 is-wf _<_ = Π[ Acc _<_ ]
 
+to-induction-acc : {A : Type ℓ} {_<_ : A → A → Type ℓ′}
+                 → ∀ {ℓ″} (P : A → Type ℓ″)
+                 → (∀ x → Π[ _< x ⇒ P ] → P x)
+                 → ∀ x → Acc _<_ x → P x
+to-induction-acc P ih x (acc w) = ih x λ y y<x → to-induction-acc P ih y (w y y<x)
+
 to-induction
   : {A : Type ℓ} {_<_ : A → A → Type ℓ′}
   → is-wf _<_
   → ∀ {ℓ″} (P : A → Type ℓ″) → (∀ x → Π[ _< x ⇒ P ] → P x) → Π[ P ]
-to-induction {_<_} wf P work x = go x (wf x) where
-  go : ∀ x → Acc _<_ x → P x
-  go x (acc w) = work x λ y y<x → go y (w y y<x)
+to-induction {_<_} wf P ih x = to-induction-acc P ih x (wf x)
 
 from-induction
   : {_<_ : A → A → Type ℓ′}

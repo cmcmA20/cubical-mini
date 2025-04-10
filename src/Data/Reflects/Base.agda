@@ -106,6 +106,9 @@ reflects-not = auto
 reflects-and : Reflects (⌞ a ⌟ × ⌞ b ⌟) (a and b)
 reflects-and = auto
 
+reflects-implies : Reflects (⌞ a ⌟ → ⌞ b ⌟) (a implies b)
+reflects-implies = auto
+
 of : if b then P else ¬ P → Reflects P b
 of {b = false} ¬p = ofⁿ ¬p
 of {b = true }  p = ofʸ p
