@@ -61,11 +61,11 @@ instance
 module _ {I : Type ℓᵢ} {@0 P : Poset o ℓ} where instance
   Pointwise-pres-bottom : ⦃ b : Bottom P ⦄ → Bottom (Pointwise I λ _ → P)
   Pointwise-pres-bottom ⦃ b ⦄ .Bottom.bot _ = b .Bottom.bot
-  Pointwise-pres-bottom ⦃ b ⦄ .Bottom.has-bot _ = b .Bottom.has-bot _
+  Pointwise-pres-bottom ⦃ b ⦄ .Bottom.bot-is-bot _ = b .Bottom.bot-is-bot _
 
   Pointwise-pres-top : ⦃ t : Top P ⦄ → Top (Pointwise I λ _ → P)
   Pointwise-pres-top ⦃ t ⦄ .Top.top _ = t .Top.top
-  Pointwise-pres-top ⦃ t ⦄ .Top.has-top _ = t .Top.has-top _
+  Pointwise-pres-top ⦃ t ⦄ .Top.top-is-top _ = t .Top.top-is-top _
 
   Pointwise-pres-joins : ⦃ hj : Has-joins P ⦄ → Has-joins (Pointwise I λ _ → P)
   Pointwise-pres-joins ⦃ hj ⦄ {x = f} {y = g} .Join.lub i = hj {f i} {g i} .Join.lub
