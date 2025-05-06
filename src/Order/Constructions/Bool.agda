@@ -89,36 +89,36 @@ instance
   Bool-top .Top.top-is-top _ =
     true→so! ⦃ reflects-implies ⦄ λ _ → oh
 
-Bool-joins : Has-joins Boolₚ
-Bool-joins {x} {y} .Join.lub = x or y
-Bool-joins .Join.has-join .is-join.l≤join =
-  true→so! ⦃ reflects-implies ⦄ or-so-l
-Bool-joins .Join.has-join .is-join.r≤join =
-  true→so! ⦃ reflects-implies ⦄ or-so-r
-Bool-joins .Join.has-join .is-join.least z xz yz =
-  true→so! ⦃ reflects-implies ⦄ λ sxy →
-  [ so→true! ⦃ reflects-implies ⦄ xz
-  , so→true! ⦃ reflects-implies ⦄ yz
-  ]ᵤ (or-so-elim sxy)
+  Bool-joins : Has-joins Boolₚ
+  Bool-joins {x} {y} .Join.lub = x or y
+  Bool-joins .Join.has-join .is-join.l≤join =
+    true→so! ⦃ reflects-implies ⦄ or-so-l
+  Bool-joins .Join.has-join .is-join.r≤join =
+    true→so! ⦃ reflects-implies ⦄ or-so-r
+  Bool-joins .Join.has-join .is-join.least z xz yz =
+    true→so! ⦃ reflects-implies ⦄ λ sxy →
+    [ so→true! ⦃ reflects-implies ⦄ xz
+    , so→true! ⦃ reflects-implies ⦄ yz
+    ]ᵤ (or-so-elim sxy)
 
-Bool-meets : Has-meets Boolₚ
-Bool-meets {x} {y} .Meet.glb = x and y
-Bool-meets .Meet.has-meet .is-meet.meet≤l =
-  true→so! ⦃ reflects-implies ⦄ and-so-l
-Bool-meets .Meet.has-meet .is-meet.meet≤r =
-  true→so! ⦃ reflects-implies ⦄ and-so-r
-Bool-meets .Meet.has-meet .is-meet.greatest z zx zy =
-  true→so! ⦃ reflects-implies ⦄ λ sz →
-      so→true! ⦃ reflects-implies ⦄ zx sz
-    × so→true! ⦃ reflects-implies ⦄ zy sz
+  Bool-meets : Has-meets Boolₚ
+  Bool-meets {x} {y} .Meet.glb = x and y
+  Bool-meets .Meet.has-meet .is-meet.meet≤l =
+    true→so! ⦃ reflects-implies ⦄ and-so-l
+  Bool-meets .Meet.has-meet .is-meet.meet≤r =
+    true→so! ⦃ reflects-implies ⦄ and-so-r
+  Bool-meets .Meet.has-meet .is-meet.greatest z zx zy =
+    true→so! ⦃ reflects-implies ⦄ λ sz →
+        so→true! ⦃ reflects-implies ⦄ zx sz
+      × so→true! ⦃ reflects-implies ⦄ zy sz
 
-Bool-join-slat : is-join-semilattice Boolₚ
-Bool-join-slat .is-join-semilattice.has-bottom = Bool-bottom
-Bool-join-slat .is-join-semilattice.has-joins  = Bool-joins
+  Bool-join-slat : is-join-semilattice Boolₚ
+  Bool-join-slat .is-join-semilattice.has-bottom = Bool-bottom
+  Bool-join-slat .is-join-semilattice.has-joins  = Bool-joins
 
-Bool-meet-slat : is-meet-semilattice Boolₚ
-Bool-meet-slat .is-meet-semilattice.has-top   = Bool-top
-Bool-meet-slat .is-meet-semilattice.has-meets = Bool-meets
+  Bool-meet-slat : is-meet-semilattice Boolₚ
+  Bool-meet-slat .is-meet-semilattice.has-top   = Bool-top
+  Bool-meet-slat .is-meet-semilattice.has-meets = Bool-meets
 
 Boolₛ : StrictPoset 0ℓ 0ℓ
 Boolₛ = complemented→strict Boolᶜᵖ
