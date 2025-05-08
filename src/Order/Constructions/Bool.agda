@@ -11,6 +11,7 @@ open import Order.Diagram.Meet
 open import Order.Diagram.Top
 open import Order.Semilattice.Join
 open import Order.Semilattice.Meet
+open import Order.Lattice
 open import Order.Strict
 open import Order.Total
 open import Order.Ordinal
@@ -119,6 +120,10 @@ instance
   Bool-meet-slat : is-meet-semilattice Boolₚ
   Bool-meet-slat .is-meet-semilattice.has-top   = Bool-top
   Bool-meet-slat .is-meet-semilattice.has-meets = Bool-meets
+
+  Bool-lat : is-lattice Boolₚ
+  Bool-lat .is-lattice.has-join-slat = Bool-join-slat
+  Bool-lat .is-lattice.has-meet-slat = Bool-meet-slat
 
 Boolₛ : StrictPoset 0ℓ 0ℓ
 Boolₛ = complemented→strict Boolᶜᵖ
