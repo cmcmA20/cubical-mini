@@ -14,6 +14,18 @@ private variable
   B : 𝒰 ℓb
   _<_ _<′_ : A → A → 𝒰 ℓ
 
+acc-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}
+       → Π[ _<′_ ⇒ _<_ ]
+       → ∀ {x} → Acc _<_ x → Acc _<′_ x
+acc-map h {x} (acc rec) =
+  acc λ y y<′ → acc-map h (rec y (h y x y<′))
+
+acc-flip-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}
+       → Π[ _<′_ ⇒ _<_ ]
+       → ∀ {x} → Acc (flip _<_) x → Acc (flip _<′_) x
+acc-flip-map h {x} (acc rec) =
+  acc λ y x<′ → acc-flip-map h (rec y (h x y x<′))
+
 acc-lift : (f : B → A) (b : B)
          → Acc _<_ (f b) → Acc (λ x y → f x < f y) b
 acc-lift f b (acc rec) = acc λ y p → acc-lift f y (rec (f y) p)
@@ -32,9 +44,7 @@ wf→asym {_<_} wf = to-induction wf (λ z → ∀ y → z < y → ¬ y < z)
 wf-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}
        → Π[ _<′_ ⇒ _<_ ]
        → is-wf _<_ → is-wf _<′_
-wf-map {_<′_} h wf =
-  to-induction wf (Acc _<′_)
-    λ x ih → acc λ y y<′x → ih y (h y x y<′x)
+wf-map {_<′_} h wf x = acc-map h (wf x)
 
 wf-lift : (f : B → A)
         → is-wf _<_ → is-wf (λ x y → f x < f y)
@@ -76,9 +86,7 @@ noeth→asym {_<_} nth =
 noeth-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}
           → Π[ _<′_ ⇒ _<_ ]
           → is-noeth _<_ → is-noeth _<′_
-noeth-map {_<′_} h nth =
-  to-ninduction nth (Acc (flip _<′_))
-    λ x ih → acc λ y x<′y → ih y (h x y x<′y)
+noeth-map {_<′_} h nth x = acc-flip-map h (nth x)
 
 noeth-lift : (f : B → A)
            → is-noeth _<_ → is-noeth (λ x y → f x < f y)
