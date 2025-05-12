@@ -166,7 +166,7 @@ module _ {f : A → B} (r : quasi-inverse f) where
         k (i = i1) → v k x₀
         k (k = i0) → g (p₀ (~ i))
 
-      θ₀ : Square (ap g (sym p₀)) refl π₀ _
+      θ₀ : Square (ap g (sym p₀)) refl π₀ (v # x₀)
       θ₀ i j = hfill (∂ i) j λ where
         k (i = i0) → g y
         k (i = i1) → v k x₀
@@ -178,7 +178,7 @@ module _ {f : A → B} (r : quasi-inverse f) where
         j (i = i1) → v j x₁
         j (j = i0) → g (p₁ (~ i))
 
-      θ₁ : Square (ap g (sym p₁)) refl π₁ _
+      θ₁ : Square (ap g (sym p₁)) refl π₁ (v # x₁)
       θ₁ i j = hfill (∂ i) j λ where
         j (i = i0) → g y
         j (i = i1) → v j x₁
