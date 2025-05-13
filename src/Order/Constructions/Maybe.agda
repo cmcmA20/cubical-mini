@@ -20,10 +20,15 @@ private variable
 -- adjoin a bottom : nothing < just
 
 Maybe≤ : (A → A → 𝒰 ℓ)
-       →  Maybe A → Maybe A → 𝒰 ℓ
+       → Maybe A → Maybe A → 𝒰 ℓ
 Maybe≤ {ℓ} le  nothing  y       = ⊤
 Maybe≤     le (just x) (just y) = le x y
 Maybe≤     le (just x)  nothing = ⊥
+
+Maybe≤-just-l : {A : 𝒰 o} {le : A → A → 𝒰 ℓ} {x : A} {my : Maybe A}
+              → Maybe≤ le (just x) my
+              → Σ[ y ꞉ A ] (my ＝ just y) × le x y
+Maybe≤-just-l {my = just y} mle = y , refl , mle
 
 Maybeₚ : Poset o ℓ → Poset o ℓ
 Maybeₚ {ℓ} P = po module Maybeₚ where
@@ -98,3 +103,37 @@ Maybe-wf : {lt : A → A → 𝒰 ℓ}
          → is-wf (Maybe< lt)
 Maybe-wf wf (just x) = Maybe-acc (wf x)
 Maybe-wf wf nothing = acc λ y y< → absurd (¬<nothing {x = y} y<)
+
+-- interaction
+
+Maybe≤→¬> : {ma mb : Maybe A}
+            {le lt : A → A → 𝒰 ℓ}
+          → (∀ {x y} → le x y → lt y x → ⊥)
+          → Maybe≤ le ma mb → Maybe< lt mb ma → ⊥
+Maybe≤→¬> {ma = just a}  {mb = just b}  lenlt mle mlt = lenlt mle mlt
+Maybe≤→¬> {ma = nothing} {mb = nothing} lenlt mle mlt = lower mlt
+
+Maybe<→¬≥ : {ma mb : Maybe A}
+            {le lt : A → A → 𝒰 ℓ}
+          → (∀ {x y} → lt x y → le y x → ⊥)
+          → Maybe< lt ma mb → Maybe≤ le mb ma → ⊥
+Maybe<→¬≥ {ma = just a}  {mb = just b}  ltnle mlt mle = ltnle mlt mle
+Maybe<→¬≥ {ma = nothing} {mb = nothing} ltnle mlt mle = lower mlt
+
+Maybe¬>→≤ : {ma mb : Maybe A}
+            {le lt : A → A → 𝒰 ℓ}
+          → (∀ {x y} → ¬ lt y x → le x y)
+          → ¬ Maybe< lt mb ma → Maybe≤ le ma mb
+Maybe¬>→≤ {ma = just a}  {mb = just b}  nltle nmlt = nltle nmlt
+Maybe¬>→≤ {ma = just a}  {mb = nothing} nltle nmlt = lift (nmlt (lift tt))
+Maybe¬>→≤ {ma = nothing} {mb = just b}  nltle nmlt = lift tt
+Maybe¬>→≤ {ma = nothing} {mb = nothing} nltle nmlt = lift tt
+
+Maybe¬≥→< : {ma mb : Maybe A}
+            {le lt : A → A → 𝒰 ℓ}
+          → (∀ {x y} → ¬ le y x → lt x y)
+          → ¬ Maybe≤ le mb ma → Maybe< lt ma mb
+Maybe¬≥→< {ma = just a}  {mb = just b}  nlelt nmle = nlelt nmle
+Maybe¬≥→< {ma = just a}  {mb = nothing} nlelt nmle = lift (nmle (lift tt))
+Maybe¬≥→< {ma = nothing} {mb = just b}  nlelt nmle = lift tt
+Maybe¬≥→< {ma = nothing} {mb = nothing} nlelt nmle = lift (nmle (lift tt))
