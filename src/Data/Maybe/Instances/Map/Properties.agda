@@ -27,13 +27,6 @@ mapₘ-injective fi {x = just x}  {y = nothing} e = false! e
 mapₘ-injective fi {x = nothing} {y = just x}  e = false! e
 mapₘ-injective fi {x = nothing} {y = nothing} e = refl
 
-mapₘ=just : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
-              {f : A → B} {m : Maybe A} {y : B}
-          → mapₘ f m ＝ just y
-          → Σ[ x ꞉ A ] (m ＝ just x) × (f x ＝ y)
-mapₘ=just {f} {m = just x}  e = x , refl , just-inj e
-mapₘ=just {f} {m = nothing} e = false! e
-
 mapₘ=nothing : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
                 {f : A → B} {m : Maybe A}
              → mapₘ f m ＝ nothing

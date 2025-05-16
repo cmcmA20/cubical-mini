@@ -23,10 +23,3 @@ bindₘ=nothing : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
               → (m ＝ nothing) ⊎ (Σ[ x ꞉ A ] (m ＝ just x) × (f x ＝ nothing))
 bindₘ=nothing {m = just x}  e = inr (x , refl , e)
 bindₘ=nothing {m = nothing} e = inl refl
-
-bindₘ=just : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
-               {f : A → Maybe B} {m : Maybe A} {y : B}
-           → bindₘ m f ＝ just y
-           → (Σ[ x ꞉ A ] (m ＝ just x) × (f x ＝ just y))
-bindₘ=just {m = just x}  e = x , refl , e
-bindₘ=just {m = nothing} e = false! e
