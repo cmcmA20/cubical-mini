@@ -69,7 +69,7 @@ eqset? xs ys = subset? xs ys and subset? ys xs
 
 -- properties
 
-rem-∉ : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A} 
+rem-∉ : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
       → z ∉ xs → rem z xs ＝ xs
 rem-∉ ⦃ d ⦄ {xs} {z} z∉ =
   filter-all $
@@ -79,7 +79,7 @@ rem-∉ ⦃ d ⦄ {xs} {z} z∉ =
     contra (λ s → subst (_∈ xs) (so→true! ⦃ d .proof ⦄ s ⁻¹) x∈)
            z∉
 
-⊆-rem : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A} 
+⊆-rem : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
       → xs ⊆ (the (List A) (z ∷ rem z xs))
 ⊆-rem ⦃ d ⦄ {z} {x} x∈ with x ≟ z
 ... | yes x=z = here x=z
