@@ -10,6 +10,7 @@ open import Order.Diagram.Join
 open import Order.Diagram.Meet
 
 open import Data.Empty hiding (_≠_)
+open import Data.Reflects
 open import Data.Maybe
 open import Data.Acc
 
@@ -25,6 +26,13 @@ Maybe≤ {ℓ} le  nothing  y       = ⊤
 Maybe≤     le (just x) (just y) = le x y
 Maybe≤     le (just x)  nothing = ⊥
 
+Maybe≤-thin : {A : 𝒰 o} {le : A → A → 𝒰 ℓ} {mx my : Maybe A}
+            → (∀ {x y} → is-prop (le x y))
+            → is-prop (Maybe≤ le mx my)
+Maybe≤-thin {mx = nothing}               lp = hlevel 1
+Maybe≤-thin {mx = just x} {my = just y}  lp = lp
+Maybe≤-thin {mx = just x} {my = nothing} lp = hlevel 1
+
 Maybe≤-just-l : {A : 𝒰 o} {le : A → A → 𝒰 ℓ} {x : A} {my : Maybe A}
               → Maybe≤ le (just x) my
               → Σ[ y ꞉ A ] (my ＝ just y) × le x y
@@ -37,9 +45,7 @@ Maybeₚ {ℓ} P = po module Maybeₚ where
   po : Poset _ _
   po .Poset.Ob = Maybe ⌞ P ⌟
   po .Poset._≤_ = Maybe≤ P._≤_
-  po .Poset.≤-thin {x = nothing}              = hlevel 1
-  po .Poset.≤-thin {x = just x} {y = just y}  = hlevel 1
-  po .Poset.≤-thin {x = just x} {y = nothing} = hlevel 1
+  po .Poset.≤-thin {x} {y} = Maybe≤-thin {mx = x} {my = y} (hlevel 1)
   po .Poset.≤-refl {x = nothing} = lift tt
   po .Poset.≤-refl {x = just x}  = refl
   po .Poset.≤-trans {x = nothing}                          _  _  = lift tt
@@ -72,6 +78,21 @@ Maybe< lt (just x)  nothing = ⊥
 ¬<nothing {x = just x}  = lower
 ¬<nothing {x = nothing} = lower
 
+Maybe<-lr : {A : 𝒰 o} {lt : A → A → 𝒰 ℓ} {mx my : Maybe A}
+          → Maybe< lt mx my
+          → Σ[ y ꞉ A ] (my ＝ just y) × ((x : A) → mx ＝ just x → lt x y)
+Maybe<-lr {lt} {mx = just x}  {my = just y} mlt =
+  y , refl , λ x e → subst (λ q → lt q y) (just-inj e) mlt
+Maybe<-lr      {mx = nothing} {my = just y} mlt =
+  y , refl , λ x → false!
+
+Maybe<-irr : {lt : A → A → 𝒰 ℓ}
+           → (∀ {x} → ¬ lt x x)
+           → {x : Maybe A}
+           → ¬ (Maybe< lt x x)
+Maybe<-irr li {x = just x}  = li
+Maybe<-irr li {x = nothing} = lower
+
 Maybeₛ : StrictPoset o ℓ → StrictPoset o ℓ
 Maybeₛ {ℓ} S = spo module Maybeₛ where
   module S = StrictPoset S
@@ -83,8 +104,7 @@ Maybeₛ {ℓ} S = spo module Maybeₛ where
   spo .StrictPoset.<-thin {x = just x}  {y = nothing} = hlevel 1
   spo .StrictPoset.<-thin {x = nothing} {y = just y}  = hlevel 1
   spo .StrictPoset.<-thin {x = nothing} {y = nothing} = hlevel 1
-  spo .StrictPoset.<-irrefl {x = just x} = S.<-irrefl
-  spo .StrictPoset.<-irrefl {x = nothing} = lower
+  spo .StrictPoset.<-irrefl {x} = Maybe<-irr S.<-irrefl {x = x}
   spo .StrictPoset.<-trans {x = just x}  {y = just y} {z = just z} xy yz = xy ∙ yz
   spo .StrictPoset.<-trans {x = nothing} {y = just y} {z = just z} xy yz = lift tt
 
