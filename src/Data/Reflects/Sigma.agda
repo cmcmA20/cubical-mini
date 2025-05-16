@@ -13,6 +13,7 @@ open import Data.Maybe.Correspondences.Unary.Any
 
 open import Data.Reflects.Base hiding (dmap)
 
+-- `ReflectsΣ P m` = m is a potential solution to the function problem described by P
 data ReflectsΣ {ℓ ℓ′} {A : 𝒰 ℓ} (P : A → 𝒰 ℓ′) : Maybe A → 𝒰 (ℓ ⊔ ℓ′) where
   ofʲ : (x : A) → P x → ReflectsΣ P (just x)
   ofⁿ : (∀ x → ¬ P x) → ReflectsΣ P nothing
@@ -30,6 +31,10 @@ dmap : (∀ x → P x → Q x)
      → ReflectsΣ P m → ReflectsΣ Q m
 dmap to fro (ofʲ x px) = ofʲ x (to x px)
 dmap to fro (ofⁿ nx)   = ofⁿ λ x → fro x (nx x)
+
+reflectsΣ-∈ : {m : Maybe A} → ReflectsΣ (_∈ₘ m) m
+reflectsΣ-∈ {m = just x}  = ofʲ x (here refl)
+reflectsΣ-∈ {m = nothing} = ofⁿ λ x → false!
 
 -- combinators
 
