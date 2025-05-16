@@ -7,9 +7,10 @@ open import Meta.Effect.Base
 open import Meta.Effect.Idiom
 
 private variable
-  ℓᵃ ℓᵇ : Level
+  ℓᵃ ℓᵇ ℓᶜ : Level
   A : Type ℓᵃ
   B : Type ℓᵇ
+  C : Type ℓᶜ
 
 record Bind (M : Effect) : Typeω where
   private module M = Effect M
@@ -24,6 +25,14 @@ record Bind (M : Effect) : Typeω where
   infixr 1 _=<<_
   _=<<_ : (A → M.₀ B) → M.₀ A → M.₀ B
   _=<<_ f x = x >>= f
+
+  infixl 1 _>=>_
+  _>=>_ : (A → M.₀ B) → (B → M.₀ C) → (A → M.₀ C)
+  _>=>_ f g x = f x >>= g
+
+  infixr 1 _<=<_
+  _<=<_ : (B → M.₀ C) → (A → M.₀ B) → (A → M.₀ C)
+  _<=<_ g f x = f x >>= g
 
 open Bind ⦃ ... ⦄
 

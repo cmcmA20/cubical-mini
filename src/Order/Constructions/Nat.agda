@@ -54,7 +54,7 @@ Suc .pres-≤ = s≤s
 instance
   ℕ-bottom : Bottom ℕₚ
   ℕ-bottom .Bottom.bot = 0
-  ℕ-bottom .Bottom.has-bot _ = z≤
+  ℕ-bottom .Bottom.bot-is-bot _ = z≤
 
 ¬-ℕ-top : ¬ Top ℕₚ
 ¬-ℕ-top t = suc≰id ! where open Top t

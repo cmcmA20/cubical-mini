@@ -6,6 +6,8 @@ open import Meta.Effect
 open import Cat.Prelude
 
 open import Order.Base
+open import Order.Morphism
+open import Functions.Surjection
 
 private variable o o′ ℓ ℓ′ ℓᵢ : Level
 
@@ -81,68 +83,150 @@ module _ {P : Poset o ℓ} where
 
   module _
     {ℓᵢ ℓᵢ′} {Ix : Type ℓᵢ} {Im : Type ℓᵢ′}
-    {f : Ix → Im}
-    {F : Im → Ob}
-    (surj : is-surjective f)
-    where
-      cover-preserves-is-glb : ∀ {glb} → is-glb P F glb → is-glb P (F ∘ₜ f) glb
-      cover-preserves-is-glb g .glb≤fam i = g .glb≤fam (f i)
+    {F : Im → Ob} where
+    module _ (f : Ix ↠ Im) where
+      cover-preserves-is-glb : ∀ {glb} → is-glb P F glb → is-glb P (F ∘ₜ (f $_)) glb
+      cover-preserves-is-glb g .glb≤fam i = g .glb≤fam (f $ i)
       cover-preserves-is-glb g .greatest lb′ le = g .greatest lb′ λ i → ∥-∥₁.proj! do
-        (i′ , p) ← surj i
+        i′ , p ← f .snd i
         pure (le i′ ∙ =→≤ (ap F p))
 
-      cover-preserves-glb : Glb P F → Glb P (F ∘ₜ f)
+      cover-preserves-glb : Glb P F → Glb P (F ∘ₜ (f $_))
       cover-preserves-glb g .Glb.glb = _
       cover-preserves-glb g .Glb.has-glb = cover-preserves-is-glb (g .Glb.has-glb)
 
-      cover-reflects-is-glb : ∀ {glb} → is-glb P (F ∘ₜ f) glb → is-glb P F glb
+      cover-reflects-is-glb : ∀ {glb} → is-glb P (F ∘ₜ (f $_)) glb → is-glb P F glb
       cover-reflects-is-glb g .glb≤fam i = ∥-∥₁.proj! do
-        (y , p) ← surj i
+        y , p ← f .snd i
         pure (g .glb≤fam y ∙ =→≤ (ap F p))
-      cover-reflects-is-glb g .greatest lb′ le = g .greatest lb′ λ i → le (f i)
+      cover-reflects-is-glb g .greatest lb′ le = g .greatest lb′ λ i → le (f $  i)
 
-      cover-reflects-glb : Glb P (F ∘ₜ f) → Glb P F
+      cover-reflects-glb : Glb P (F ∘ₜ (f $_)) → Glb P F
       cover-reflects-glb g .Glb.glb = _
       cover-reflects-glb g .Glb.has-glb = cover-reflects-is-glb (g .Glb.has-glb)
 
+      cover-reindexing : (s s′ : Ob) → is-glb P F s → is-glb P (F ∘ₜ (f $_)) s′ → s ＝ s′
+      cover-reindexing s s′ g g′ = ≤-antisym
+          (greatest g′ s λ t′ → glb≤fam g (f $ t′))
+          (greatest g s′ λ t → elim! (λ x p → subst (λ φ → s′ ≤ F φ) p (glb≤fam g′ x)) (f .snd t))
 
-module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} where
-  private
-    module P = Poset P
-    module Q = Poset Q
+    module _ (f : Ix ≃ Im) where
+      equiv-reindexing : (s s′ : Ob) → is-glb P F s → is-glb P (F ∘ₜ (f $_)) s′ → s ＝ s′
+      equiv-reindexing = cover-reindexing (≃→↠ f)
 
-  open Iso
+  cast-is-glb
+    : ∀ {ℓᵢ ℓᵢ′} {I : 𝒰 ℓᵢ} {I′ : 𝒰 ℓᵢ′} {F : I → Ob} {G : I′ → Ob} {glb}
+    → (e : I ≃ I′)
+    → (∀ i → F i ＝ G (e $ i))
+    → is-glb P F glb
+    → is-glb P G glb
+  cast-is-glb {G} e p has-glb .glb≤fam i′ =
+      has-glb .glb≤fam (e ⁻¹ $ i′)
+    ∙ =→~ (p (e ⁻¹ $ i′) ∙ ap G (Equiv.ε e # i′))
+  cast-is-glb     e p has-glb .greatest lb lb≤G =
+    has-glb .greatest lb λ i → lb≤G (e $ i) ∙ =→~⁻ (p i)
 
-  ≅→is-glb : (e : P ≅ Q) {x : ⌞ P ⌟}
-           → is-glb P F x → is-glb Q (F ∙ e #_) (e # x)
-  ≅→is-glb e     g .is-glb.glb≤fam i = e .to # is-glb.glb≤fam g i
-  ≅→is-glb e {x} g .is-glb.greatest lb′ f
-    = subst (Q._≤ (e # x)) (e .inv-o #ₚ lb′) -- TODO Galois connections
-    $ e .to $ g .is-glb.greatest (e .from # lb′) λ i
-    → e .from # f i ∙ =→~ (e .inv-i #ₚ F i)
+  cast-glb
+    : ∀ {ℓᵢ ℓᵢ′} {I : 𝒰 ℓᵢ} {I′ : 𝒰 ℓᵢ′} {F : I → Ob} {G : I′ → Ob}
+    → (e : I ≃ I′)
+    → (∀ i → F i ＝ G (e $ i))
+    → Glb P F
+    → Glb P G
+  cast-glb e p g .Glb.glb     = g .Glb.glb
+  cast-glb e p g .Glb.has-glb = cast-is-glb e p (g .Glb.has-glb)
 
-  ≅→Glb : (e : P ≅ Q)
-        → Glb P F → Glb Q (F ∙ e #_)
-  ≅→Glb e l .Glb.glb = e # l .Glb.glb
-  ≅→Glb e l .Glb.has-glb = ≅→is-glb e (l .Glb.has-glb)
+  cast-is-glbᶠ
+    : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F G : I → Ob} {glb}
+    → (∀ i → F i ＝ G i)
+    → is-glb P F glb
+    → is-glb P G glb
+  cast-is-glbᶠ = cast-is-glb refl
+
+  fam-bound→is-glb
+    : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob}
+    → (i : I) → (∀ j → F i ≤ F j)
+    → is-glb P F (F i)
+  fam-bound→is-glb i le .glb≤fam       = le
+  fam-bound→is-glb i le .greatest y ge = ge i
+
+  glb-of-const-fam
+    : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob} {x}
+    → (∀ i j → F i ＝ F j)
+    → is-glb P F x
+    → ∀ i → F i ＝ x
+  glb-of-const-fam {F = F} is-const x-glb i =
+    ≤-antisym
+      (greatest x-glb (F i) λ j → =→~ (is-const i j))
+      (glb≤fam x-glb i)
+
+  const-inhabited-fam→is-glb
+    : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob} {x}
+    → (∀ i → F i ＝ x)
+    → ∥ I ∥₁
+    → is-glb P F x
+  const-inhabited-fam→is-glb {I} {F} {x} is-const =
+    rec! mk-is-glb where
+      mk-is-glb : I → is-glb P F x
+      mk-is-glb i .is-glb.glb≤fam j = =→~⁻ (is-const j)
+      mk-is-glb i .is-glb.greatest y ge =
+        y   ≤⟨ ge i ⟩
+        F i =⟨ is-const i ⟩
+        x   ∎
+
+  const-inhabited-fam→glb
+    : ∀ {ℓᵢ} {I : 𝒰 ℓᵢ} {F : I → Ob}
+    → (∀ i j → F i ＝ F j)
+    → ∥ I ∥₁
+    → Glb P F
+  const-inhabited-fam→glb {I} {F} is-const =
+    rec! mk-glb where
+      mk-glb : I → Glb P F
+      mk-glb i .Glb.glb = F i
+      mk-glb i .Glb.has-glb =
+        const-inhabited-fam→is-glb (λ j → is-const j i) ∣ i ∣₁
 
 
 module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ Q ⌟} where
   private
     module P = Poset P
     module Q = Poset Q
+
+  module _ {L : P ⇒ Q} {R : Q ⇒ P} (gc : L ⊣ R) where
+    open Adjoint gc
+    adjoint-r→is-glb : {x : ⌞ Q ⌟} → is-glb Q F x → is-glb P (F ∙ R #_) (R # x)
+    adjoint-r→is-glb {x} g .is-glb.glb≤fam i = R # (g .is-glb.glb≤fam i)
+    adjoint-r→is-glb {x} g .is-glb.greatest lb′ f =
+      adjunct-l (g .is-glb.greatest (L # lb′) λ i → adjunct-r (f i))
+
+    adjoint-r→Glb : Glb Q F → Glb P (F ∙ R #_)
+    adjoint-r→Glb g .Glb.glb = R # (g .Glb.glb)
+    adjoint-r→Glb g .Glb.has-glb = adjoint-r→is-glb (g .Glb.has-glb)
+
+  module _ (e : P ≅ Q) where
+    ≅→is-glb⁻ : {x : ⌞ Q ⌟} → is-glb Q F x → is-glb P (F ∙ (e ⁻¹) #_) ((e ⁻¹) # x)
+    ≅→is-glb⁻ = adjoint-r→is-glb (≅ₚ→⊣ e)
+
+    ≅→Glb⁻ : Glb Q F → Glb P (F ∙ (e ⁻¹) #_)
+    ≅→Glb⁻ = adjoint-r→Glb (≅ₚ→⊣ e)
+
+module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} (e : P ≅ Q) where
+  private
+    module P = Poset P
+    module Q = Poset Q
+    e⁻¹ : Q ≅ P
+    e⁻¹ = e ⁻¹
+    module A = Adjoint (≅ₚ→⊣ e⁻¹)
+    module B = Adjoint (≅ₚ→⊣ e)
   open Iso
 
-  ≅→is-glb⁻ : (e : P ≅ Q) {y : ⌞ Q ⌟}
-            → is-glb P (F ∙ e .from #_) (e .from # y) → is-glb Q F y
-  ≅→is-glb⁻ e {y} l = subst² (is-glb Q)
-    (fun-ext λ i → e .inv-o #ₚ F i) (e .inv-o #ₚ y)
-      (≅→is-glb e l)
+  ≅→is-glb : {x : ⌞ P ⌟} → is-glb Q (F ∙ e #_) (e # x) → is-glb P F x
+  ≅→is-glb {x} g .is-glb.glb≤fam i =
+    B.η # x ∙ (e .from # g .is-glb.glb≤fam i) ∙ A.ε # F i
+  ≅→is-glb {x} g .is-glb.greatest lb′ f =
+      B.η # lb′
+    ∙ e .from # g .is-glb.greatest (e .to # lb′) (λ i → e .to $ f i)
+    ∙ A.ε # x
 
-  ≅→Glb⁻ : (e : P ≅ Q)
-         → Glb P (F ∙ e .from #_) → Glb Q F
-  ≅→Glb⁻ e l .Glb.glb = e .to # l .Glb.glb
-  ≅→Glb⁻ e l .Glb.has-glb = ≅→is-glb⁻ e $
-    subst (is-glb P (F ∙ e .from #_))
-      (e .inv-i #ₚ l .Glb.glb ⁻¹)
-      (l .Glb.has-glb)
+  ≅→Glb : Glb Q (F ∙ e #_) → Glb P F
+  ≅→Glb g .Glb.glb = e .from # g .Glb.glb
+  ≅→Glb g .Glb.has-glb = ≅→is-glb (subst (is-glb Q _) (sym (e .inv-o #ₚ _)) (g .Glb.has-glb))

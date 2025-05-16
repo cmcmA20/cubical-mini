@@ -38,7 +38,10 @@ private variable
   x : A
   xs : List A
 
-subseq : ⦃ A-dis : is-discrete A ⦄
+rem : ⦃ d : is-discrete A ⦄ → A → List A → List A
+rem a = filter (λ x → not ⌊ a ≟ x ⌋)
+
+subseq : ⦃ d : is-discrete A ⦄
         → List A → List A → Bool
 subseq     []       ys       = true
 subseq     (x ∷ xs) []       = false
@@ -61,7 +64,30 @@ perm? xs ys = all (λ q → count (λ x → ⌊ q ≟ x ⌋) xs == count (λ y �
 subset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
 subset? xs ys = all (λ x → has x ys) xs
 
+eqset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
+eqset? xs ys = subset? xs ys and subset? ys xs
+
 -- properties
+
+rem-∉ : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
+      → z ∉ xs → rem z xs ＝ xs
+rem-∉ ⦃ d ⦄ {xs} {z} z∉ =
+  filter-all $
+  true→so! ⦃ Reflects-all-bool {p = λ x → not ⌊ z ≟ x ⌋} {xs = xs} ⦄ $
+  ∀∈→All λ x x∈ →
+    not-so $
+    contra (λ s → subst (_∈ xs) (so→true! ⦃ d .proof ⦄ s ⁻¹) x∈)
+           z∉
+
+⊆-rem : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
+      → xs ⊆ (the (List A) (z ∷ rem z xs))
+⊆-rem ⦃ d ⦄ {z} {x} x∈ with x ≟ z
+... | yes x=z = here x=z
+... | no x≠z  =
+      there $
+      ∈-filter
+         (not-so (contra (λ s → so→true! ⦃ d .proof ⦄ s ⁻¹) x≠z))
+         x∈
 
 Reflects-subseq : ⦃ d : is-discrete A ⦄ {xs ys : List A}
                 → Reflects (OPE xs ys) (subseq xs ys)
@@ -192,3 +218,9 @@ Reflects-subset {A} {xs} {ys} =
     (λ a {x} → All→∀∈ a x)
     (contra (λ s → ∀∈→All λ x → s {x = x}))
     (Reflects-all {xs = xs} λ x → Reflects-has)
+
+Reflects-eqset : ⦃ d : is-discrete A ⦄ {xs ys : List A}
+               → Reflects (xs ≈ ys) (eqset? xs ys)
+Reflects-eqset {A} {xs} {ys} =
+  Reflects-× ⦃ rp = Reflects-subset {xs = xs} {ys = ys} ⦄
+             ⦃ rq = Reflects-subset {xs = ys} {ys = xs} ⦄

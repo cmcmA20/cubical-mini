@@ -7,6 +7,7 @@ open import Data.Bool.Base
 open import Data.Empty.Base as ⊥
 open import Data.Unit.Base as ⊤
 
+-- `Reflects P b` = `b` is an answer to the decision problem described by `P`
 data Reflects⁰ {ℓ} (P : Type ℓ) : Bool → Type ℓ where
   ofʸ : ( p :   P) → Reflects⁰ P true
   ofⁿ : (¬p : ¬ P) → Reflects⁰ P false
@@ -105,6 +106,9 @@ reflects-not = auto
 
 reflects-and : Reflects (⌞ a ⌟ × ⌞ b ⌟) (a and b)
 reflects-and = auto
+
+reflects-implies : Reflects (⌞ a ⌟ → ⌞ b ⌟) (a implies b)
+reflects-implies = auto
 
 of : if b then P else ¬ P → Reflects P b
 of {b = false} ¬p = ofⁿ ¬p

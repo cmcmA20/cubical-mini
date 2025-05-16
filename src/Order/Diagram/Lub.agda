@@ -197,7 +197,8 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} {I : 𝒰 ℓᵢ} {F : I → 
     open Adjoint gc
     adjoint-l→is-lub : {x : ⌞ P ⌟} → is-lub P F x → is-lub Q (F ∙ L #_) (L # x)
     adjoint-l→is-lub {x} l .is-lub.fam≤lub i = L # (l .is-lub.fam≤lub i)
-    adjoint-l→is-lub {x} l .is-lub.least ub′ f = adjunct-r (l .is-lub.least (R # ub′) λ i → η # F i ∙ R # f i)
+    adjoint-l→is-lub {x} l .is-lub.least ub′ f =
+      adjunct-r (l .is-lub.least (R # ub′) λ i → adjunct-l (f i))
 
     adjoint-l→Lub : Lub P F → Lub Q (F ∙ L #_)
     adjoint-l→Lub l .Lub.lub = L # (l .Lub.lub)

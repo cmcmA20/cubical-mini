@@ -296,6 +296,7 @@ instance
         (λ _ → _=>ₚ_)
   Whisker-o-Monotone-ntₚ ._▷_ α K ._=>ₚ_.η x = K # (α # x)
 
+  -- Galois connection
   ⊣-Monotone
     : {P : Poset o ℓ} {Q : Poset o′ ℓ′}
     → ⊣-notation (Monotone P Q) (Monotone Q P) (𝒰 (o ⊔ ℓ ⊔ o′ ⊔ ℓ′))

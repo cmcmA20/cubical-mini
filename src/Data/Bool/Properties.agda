@@ -90,6 +90,13 @@ so-not {(true)}  sn _ = ¬-so-false sn
 not-so-≃ : ⌞ not x ⌟ ≃ (¬ ⌞ x ⌟)
 not-so-≃ = prop-extₑ! so-not not-so
 
+-- reflectance helpers
+
+true→is-true : ⦃ Reflects P b ⦄ → P → is-true b
+true→is-true p = so≃is-true $ true→so! p
+
+false→is-false : ⦃ Reflects P b ⦄ → ¬ P → is-false b
+false→is-false np = ¬so≃is-false $ so-not $ false→so! np
 
 -- conjunction
 
@@ -99,6 +106,15 @@ and-so-≃ = prop-extₑ! to from where
   to {(true)} = oh ,_
   from : ⌞ x ⌟ × ⌞ y ⌟ → ⌞ x and y ⌟
   from {(true)} = snd
+
+and-so-l : ∀ {x y} → ⌞ x and y ⌟ → ⌞ x ⌟
+and-so-l xy = (and-so-≃ $ xy) .fst
+
+and-so-r : ∀ {x y} → ⌞ x and y ⌟ → ⌞ y ⌟
+and-so-r xy = (and-so-≃ $ xy) .snd
+
+and-so-intro : ∀ {x y} → ⌞ x ⌟ → ⌞ y ⌟ → ⌞ x and y ⌟
+and-so-intro x y = and-so-≃ ⁻¹ $ x , y
 
 and-true-≃ : is-true (x and y) ≃ (is-true x × is-true y)
 and-true-≃ = so≃is-true ⁻¹ ∙ and-so-≃ ∙ ×-ap so≃is-true so≃is-true
@@ -150,6 +166,19 @@ or-so-≃ = prop-extₑ (hlevel 1) go to from where
   go {(false)} = disjoint-⊎-is-prop (hlevel 1) (disjoint-⊎-is-prop! λ ()) λ ()
   go {(true)} {(false)} = disjoint-⊎-is-prop (hlevel 1) (disjoint-⊎-is-prop! λ ()) ([ (λ()) , (λ()) ]ᵤ ∘ snd)
   go {(true)} {(true)} = disjoint-⊎-is-prop (hlevel 1) (disjoint-⊎-is-prop! λ ()) λ ()
+
+or-so-elim : ∀ {x y} → ⌞ x or y ⌟ → ⌞ x ⌟ ⊎ ⌞ y ⌟
+or-so-elim xy =
+  [ inl ∘ fst , [ inr ∘ snd , inl ∘ fst ]ᵤ ]ᵤ $
+  or-so-≃ $ xy
+
+or-so-l : ∀ {x y} → ⌞ x ⌟ → ⌞ x or y ⌟
+or-so-l {x = false} ()
+or-so-l {x = true} _ = oh
+
+or-so-r : ∀ {x y} → ⌞ y ⌟ → ⌞ x or y ⌟
+or-so-r {x = false} y = y
+or-so-r {x = true}  _ = oh
 
 -- TODO refactor
 or-true-≃
@@ -222,6 +251,15 @@ not-xor-r = witness!
 
 -- implication
 
+implies-true-l : ∀ x → true implies x ＝ x
+implies-true-l = witness!
+
+implies-curry : ∀ x y z → x implies y implies z ＝ (x and y) implies z
+implies-curry = witness!
+
+implies-not-or : ∀ x y → not x or y ＝ x implies y
+implies-not-or = witness!
+
 implies-contra : ∀ x y → not y implies not x ＝ x implies y
 implies-contra = witness!
 
@@ -240,6 +278,11 @@ and-distrib-or-l = witness!
 and-distrib-or-r : ∀ x y z → (x or y) and z ＝ (x and z) or (y and z)
 and-distrib-or-r = witness!
 
+or-distrib-and-l : ∀ x y z → x or (y and z) ＝ (x or y) and (x or z)
+or-distrib-and-l = witness!
+
+or-distrib-and-r : ∀ x y z → (x and y) or z ＝ (x or z) and (y or z)
+or-distrib-and-r = witness!
 
 -- -- Testing witness tactic, uncomment if needed
 -- private module _ where

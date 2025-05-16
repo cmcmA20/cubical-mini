@@ -3,8 +3,10 @@ module Data.Acc.Properties where
 
 open import Meta.Prelude
 open Variadics _
+open import Structures.n-Type
 
 open import Data.Acc.Base
+open import Data.Acc.Path
 open import Data.Empty.Base
 
 private variable
@@ -12,6 +14,18 @@ private variable
   A : 𝒰 ℓa
   B : 𝒰 ℓb
   _<_ _<′_ : A → A → 𝒰 ℓ
+
+acc-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}
+       → Π[ _<′_ ⇒ _<_ ]
+       → ∀ {x} → Acc _<_ x → Acc _<′_ x
+acc-map h {x} (acc rec) =
+  acc λ y y<′ → acc-map h (rec y (h y x y<′))
+
+acc-flip-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}
+       → Π[ _<′_ ⇒ _<_ ]
+       → ∀ {x} → Acc (flip _<_) x → Acc (flip _<′_) x
+acc-flip-map h {x} (acc rec) =
+  acc λ y x<′ → acc-flip-map h (rec y (h x y x<′))
 
 acc-lift : (f : B → A) (b : B)
          → Acc _<_ (f b) → Acc (λ x y → f x < f y) b
@@ -31,14 +45,41 @@ wf→asym {_<_} wf = to-induction wf (λ z → ∀ y → z < y → ¬ y < z)
 wf-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}
        → Π[ _<′_ ⇒ _<_ ]
        → is-wf _<_ → is-wf _<′_
-wf-map {_<′_} h wf =
-  to-induction wf (Acc _<′_)
-    λ x ih → acc λ y y<′x → ih y (h y x y<′x)
+wf-map {_<′_} h wf x = acc-map h (wf x)
 
 wf-lift : (f : B → A)
         → is-wf _<_ → is-wf (λ x y → f x < f y)
 wf-lift f wf x = acc-lift f x (wf (f x))
 
+to-induction-acc-eq : {A : 𝒰 ℓa} {_<_ : A → A → 𝒰 ℓ}
+                      (wf : is-wf _<_)
+                    → (P : A → 𝒰 ℓ′)
+                    → (ih : ∀ x → Π[ _< x ⇒ P ] → P x)
+                    → ∀ x → (ax : Acc _<_ x)
+                    → to-induction-acc P ih x ax
+                    ＝ ih x λ y _ → to-induction-acc P ih y (wf y)
+to-induction-acc-eq wf P ih x (acc a) =
+  ap (ih x) $
+  fun-ext λ y → fun-ext λ y<x →
+  ap (to-induction-acc P ih y) $
+  acc-is-prop y ((a y y<x)) (wf y)
+
+to-induction-eq : {A : 𝒰 ℓa} {_<_ : A → A → 𝒰 ℓ}
+                  (wf : is-wf _<_)
+                → (P : A → 𝒰 ℓ′)
+                → (ih : ∀ x → Π[ _< x ⇒ P ] → P x)
+                → ∀ x
+                → to-induction wf P ih x ＝ ih x λ y _ → to-induction wf P ih y
+to-induction-eq wf P ih x = to-induction-acc-eq wf P ih x (wf x)
+
+from-prop-induction
+  : {_<_ : A → A → Type ℓ′}
+  → (∀ {ℓ″} (P : A → Prop ℓ″)
+     → (∀ x → (∀ y → y < x → ⌞ P y ⌟) → ⌞ P x ⌟)
+     → ∀ x → ⌞ P x ⌟)
+  → is-wf _<_
+from-prop-induction {_<_} ind =
+  ind (λ z → el! (Acc _<_ z)) λ _ → acc
 
 -- Noetherianness
 
@@ -55,14 +96,22 @@ noeth→asym {_<_} nth =
 noeth-map : {_<_ : A → A → 𝒰 ℓ} {_<′_ : A → A → 𝒰 ℓ′}
           → Π[ _<′_ ⇒ _<_ ]
           → is-noeth _<_ → is-noeth _<′_
-noeth-map {_<′_} h nth =
-  to-ninduction nth (Acc (flip _<′_))
-    λ x ih → acc λ y x<′y → ih y (h x y x<′y)
+noeth-map {_<′_} h nth x = acc-flip-map h (nth x)
 
 noeth-lift : (f : B → A)
            → is-noeth _<_ → is-noeth (λ x y → f x < f y)
 noeth-lift f nth x = acc-lift f x (nth (f x))
 
+-- TODO to-ninduction-eq
+
+from-prop-ninduction
+  : {_<_ : A → A → Type ℓ′}
+  → (∀ {ℓ″} (P : A → Prop ℓ″)
+     → (∀ x → (∀ y → x < y → ⌞ P y ⌟) → ⌞ P x ⌟)
+     → ∀ x → ⌞ P x ⌟)
+  → is-noeth _<_
+from-prop-ninduction {_<_} ind =
+  ind (λ z → el! (Acc (flip _<_) z)) λ _ → acc
 
 -- finite height
 

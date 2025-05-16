@@ -350,10 +350,47 @@ reverse=reverse-fast =
 
 all?-++ : ∀ {p : A → Bool} {xs ys : List A}
         → all p (xs ++ ys) ＝ all p xs and all p ys
-all?-++ {p} {xs = []}     {ys} = refl
-all?-++ {p} {xs = x ∷ xs} {ys} = ap (p x and_) (all?-++ {xs = xs}) ∙ and-assoc (p x) (all p xs) (all p ys) ⁻¹
+all?-++     {xs = []}          = refl
+all?-++ {p} {xs = x ∷ xs} {ys} =
+    ap (p x and_) (all?-++ {xs = xs})
+  ∙ and-assoc (p x) (all p xs) (all p ys) ⁻¹
+
+all?-map : ∀ {A : Type ℓ} {B : Type ℓ′}
+             {p : B → Bool} {f : A → B} {xs : List A}
+         → all p (map f xs) ＝ all (p ∘ f) xs
+all?-map {p} {f} {xs} =
+  ap (List.rec true _and_)
+     (happly (map-pres-comp ⁻¹) xs)
+
+all?-or : ∀ {b} {p : A → Bool} {xs : List A}
+        → all (λ x → b or p x) xs ＝ b or all p xs
+all?-or {b}     {xs = []}     = or-absorb-r b ⁻¹
+all?-or {b} {p} {xs = x ∷ xs} =
+    ap ((b or p x) and_) (all?-or {p = p} {xs = xs})
+  ∙ or-distrib-and-l b (p x) (all p xs) ⁻¹
+
+not-all? : ∀ {p : A → Bool} {xs : List A}
+        → not (all p xs) ＝ any (not ∘ p) xs
+not-all?     {xs = []}     = refl
+not-all? {p} {xs = x ∷ xs} =
+    not-and (p x) _
+  ∙ ap (not (p x) or_) (not-all? {xs = xs})
 
 -- any
+
+any?-++ : ∀ {p : A → Bool} {xs ys : List A}
+        → any p (xs ++ ys) ＝ any p xs or any p ys
+any?-++ {xs = []} = refl
+any?-++ {p} {xs = x ∷ xs} {ys} =
+    ap (p x or_) (any?-++ {xs = xs})
+  ∙ or-assoc (p x) (any p xs) (any p ys) ⁻¹
+
+not-any? : ∀ {p : A → Bool} {xs : List A}
+        → not (any p xs) ＝ all (not ∘ p) xs
+not-any?     {xs = []}     = refl
+not-any? {p} {xs = x ∷ xs} =
+    not-or (p x) _
+  ∙ ap (not (p x) and_) (not-any? {xs = xs})
 
 --TODO move these 2 somewhere
 ¬Any→All¬ : {xs : List A} {P : A → 𝒰 ℓ′}
@@ -717,6 +754,19 @@ module _ where
 ∈-zip-with-r {f} {as = a ∷ as} {bs = b ∷ bs} e (there b∈) =
   let (a , a∈ , fab∈) = ∈-zip-with-r {f = f} (suc-inj e) b∈ in
   a , there a∈ , there fab∈
+
+zip-with-∈ : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+             {f : A → B → C} {as : List A} {bs : List B} {c : C}
+           → c ∈ zip-with f as bs
+           → Σ[ a ꞉ A ] Σ[ b ꞉ B ] ((a ∈ as) × (b ∈ bs) × (c ＝ f a b))
+zip-with-∈ {as = []}     {bs = []}     c∈         = false! c∈
+zip-with-∈ {as = []}     {bs = b ∷ bs} c∈         = false! c∈
+zip-with-∈ {as = a ∷ as} {bs = []}     c∈         = false! c∈
+zip-with-∈ {as = a ∷ as} {bs = b ∷ bs} (here ce)  =
+  a , b , here refl , here refl , ce
+zip-with-∈ {as = a ∷ as} {bs = b ∷ bs} (there c∈) =
+  let (a′ , b′ , a∈ , b∈ , ce) = zip-with-∈ {as = as} c∈ in
+  a′ , b′ , there a∈ , there b∈ , ce
 
 unzip-zip : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
             {xs : List A}  {ys : List B}

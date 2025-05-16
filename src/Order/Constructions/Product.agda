@@ -5,11 +5,16 @@ open import Cat.Prelude
 open import Cat.Diagram.Terminal
 
 open import Order.Base
+open import Order.Diagram.Bottom
+open import Order.Diagram.Top
 open import Order.Diagram.Join
 open import Order.Diagram.Meet
 open import Order.Diagram.Glb
 open import Order.Diagram.Lub
 open import Order.Strict
+open import Order.Semilattice.Join
+open import Order.Semilattice.Meet
+open import Order.Lattice
 
 open import Functions.Surjection
 
@@ -75,32 +80,75 @@ module _ {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   Poset⟨ F , G ⟩ .hom = < F .hom , G .hom >
   Poset⟨ F , G ⟩ .pres-≤ = < F .pres-≤ , G .pres-≤ >
 
-  module _ {a b : ⌞ P ⌟} {x y : ⌞ Q ⌟} where
-    module _ {c : ⌞ P ⌟} {z : ⌞ Q ⌟ } where instance
-      ×-is-join : ×-notation (is-join P a b c) (is-join Q x y z) (is-join (P × Q) (a , x) (b , y) (c , z))
-      ×-is-join .×-notation.Constraint _ _ = ⊤
-      ×-is-join ._×_ lp lq .is-join.l≤join = lp .is-join.l≤join , lq .is-join.l≤join
-      ×-is-join ._×_ lp lq .is-join.r≤join = lp .is-join.r≤join , lq .is-join.r≤join
-      ×-is-join ._×_ lp lq .is-join.least (ub₁ , ub₂) (al , xl) (bl , yl) =
-        lp .is-join.least ub₁ al bl , lq .is-join.least ub₂ xl yl
+  module _ {a : ⌞ P ⌟} {x : ⌞ Q ⌟} where
 
-      ×-is-meet : ×-notation (is-meet P a b c) (is-meet Q x y z) (is-meet (P × Q) (a , x) (b , y) (c , z))
-      ×-is-meet .×-notation.Constraint _ _ = ⊤
-      ×-is-meet ._×_ lp lq .is-meet.meet≤l = lp .is-meet.meet≤l , lq .is-meet.meet≤l
-      ×-is-meet ._×_ lp lq .is-meet.meet≤r = lp .is-meet.meet≤r , lq .is-meet.meet≤r
-      ×-is-meet ._×_ lp lq .is-meet.greatest (ub₁ , ub₂) (al , xl) (bl , yl) =
-        lp .is-meet.greatest ub₁ al bl , lq .is-meet.greatest ub₂ xl yl
+    ×-is-bottom : ×-notation (is-bottom P a) (is-bottom Q x) (is-bottom (P × Q) (a , x))
+    ×-is-bottom .×-notation.Constraint _ _ = ⊤
+    ×-is-bottom .×-notation._×_ α β (p , q) = α p , β q
 
-    instance
-      ×-Join : ×-notation (Join P a b) (Join Q x y) (Join (P × Q) (a , x) (b , y))
-      ×-Join .×-notation.Constraint _ _ = ⊤
-      ×-Join ._×_ α β .Join.lub      = α .Join.lub , β .Join.lub
-      ×-Join ._×_ α β .Join.has-join = α .Join.has-join × β .Join.has-join
+    ×-is-top : ×-notation (is-top P a) (is-top Q x) (is-top (P × Q) (a , x))
+    ×-is-top .×-notation.Constraint _ _ = ⊤
+    ×-is-top .×-notation._×_ α β (p , q) = α p , β q
 
-      ×-Meet : ×-notation (Meet P a b) (Meet Q x y) (Meet (P × Q) (a , x) (b , y))
-      ×-Meet .×-notation.Constraint _ _ = ⊤
-      ×-Meet ._×_ α β .Meet.glb      = α .Meet.glb , β .Meet.glb
-      ×-Meet ._×_ α β .Meet.has-meet = α .Meet.has-meet × β .Meet.has-meet
+    module _ {b : ⌞ P ⌟} {y : ⌞ Q ⌟} where
+
+      module _ {c : ⌞ P ⌟} {z : ⌞ Q ⌟ } where instance
+        ×-is-join : ×-notation (is-join P a b c) (is-join Q x y z) (is-join (P × Q) (a , x) (b , y) (c , z))
+        ×-is-join .×-notation.Constraint _ _ = ⊤
+        ×-is-join ._×_ lp lq .is-join.l≤join = lp .is-join.l≤join , lq .is-join.l≤join
+        ×-is-join ._×_ lp lq .is-join.r≤join = lp .is-join.r≤join , lq .is-join.r≤join
+        ×-is-join ._×_ lp lq .is-join.least (ub₁ , ub₂) (al , xl) (bl , yl) =
+          lp .is-join.least ub₁ al bl , lq .is-join.least ub₂ xl yl
+
+        ×-is-meet : ×-notation (is-meet P a b c) (is-meet Q x y z) (is-meet (P × Q) (a , x) (b , y) (c , z))
+        ×-is-meet .×-notation.Constraint _ _ = ⊤
+        ×-is-meet ._×_ lp lq .is-meet.meet≤l = lp .is-meet.meet≤l , lq .is-meet.meet≤l
+        ×-is-meet ._×_ lp lq .is-meet.meet≤r = lp .is-meet.meet≤r , lq .is-meet.meet≤r
+        ×-is-meet ._×_ lp lq .is-meet.greatest (ub₁ , ub₂) (al , xl) (bl , yl) =
+          lp .is-meet.greatest ub₁ al bl , lq .is-meet.greatest ub₂ xl yl
+
+      instance
+        ×-Join : ×-notation (Join P a b) (Join Q x y) (Join (P × Q) (a , x) (b , y))
+        ×-Join .×-notation.Constraint _ _ = ⊤
+        ×-Join ._×_ α β .Join.lub      = α .Join.lub , β .Join.lub
+        ×-Join ._×_ α β .Join.has-join = α .Join.has-join × β .Join.has-join
+
+        ×-Meet : ×-notation (Meet P a b) (Meet Q x y) (Meet (P × Q) (a , x) (b , y))
+        ×-Meet .×-notation.Constraint _ _ = ⊤
+        ×-Meet ._×_ α β .Meet.glb      = α .Meet.glb , β .Meet.glb
+        ×-Meet ._×_ α β .Meet.has-meet = α .Meet.has-meet × β .Meet.has-meet
+
+  instance
+    ×-Bottom : ×-notation (Bottom P) (Bottom Q) (Bottom (P × Q))
+    ×-Bottom .×-notation.Constraint _ _ = ⊤
+    ×-Bottom ._×_ α β .Bottom.bot = α .Bottom.bot , β .Bottom.bot
+    ×-Bottom ._×_ α β .Bottom.bot-is-bot = α .Bottom.bot-is-bot × β .Bottom.bot-is-bot
+
+    ×-Top : ×-notation (Top P) (Top Q) (Top (P × Q))
+    ×-Top .×-notation.Constraint _ _ = ⊤
+    ×-Top ._×_ α β .Top.top = α .Top.top , β .Top.top
+    ×-Top ._×_ α β .Top.top-is-top = α .Top.top-is-top × β .Top.top-is-top
+
+    ×-is-join-semilattice : ×-notation (is-join-semilattice P) (is-join-semilattice Q) (is-join-semilattice (P × Q))
+    ×-is-join-semilattice .×-notation.Constraint _ _ = ⊤
+    ×-is-join-semilattice .×-notation._×_ α β .is-join-semilattice.has-bottom =
+      α .is-join-semilattice.has-bottom × β .is-join-semilattice.has-bottom
+    ×-is-join-semilattice .×-notation._×_ α β .is-join-semilattice.has-joins =
+      α .is-join-semilattice.has-joins × β .is-join-semilattice.has-joins
+
+    ×-is-meet-semilattice : ×-notation (is-meet-semilattice P) (is-meet-semilattice Q) (is-meet-semilattice (P × Q))
+    ×-is-meet-semilattice .×-notation.Constraint _ _ = ⊤
+    ×-is-meet-semilattice .×-notation._×_ α β .is-meet-semilattice.has-top =
+      α .is-meet-semilattice.has-top × β .is-meet-semilattice.has-top
+    ×-is-meet-semilattice .×-notation._×_ α β .is-meet-semilattice.has-meets =
+      α .is-meet-semilattice.has-meets × β .is-meet-semilattice.has-meets
+
+    ×-is-lattice : ×-notation (is-lattice P) (is-lattice Q) (is-lattice (P × Q))
+    ×-is-lattice .×-notation.Constraint _ _ = ⊤
+    ×-is-lattice .×-notation._×_ α β .is-lattice.has-join-slat =
+      α .is-lattice.has-join-slat × β .is-lattice.has-join-slat
+    ×-is-lattice .×-notation._×_ α β .is-lattice.has-meet-slat =
+      α .is-lattice.has-meet-slat × β .is-lattice.has-meet-slat
 
   module _ {I : 𝒰 ℓᵢ} {F : I → ⌞ P ⌟} {G : I → ⌞ Q ⌟} where
     module _ {x : ⌞ P ⌟} {y : ⌞ Q ⌟} where instance

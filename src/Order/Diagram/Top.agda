@@ -18,8 +18,8 @@ module _ (P : Poset o ℓ) where
 
   record Top : Type (o ⊔ ℓ) where
     field
-      top     : Ob
-      has-top : is-top top
+      top        : Ob
+      top-is-top : is-top top
 
     instance
       ⊤-Top : ⊤-notation Ob
@@ -27,7 +27,7 @@ module _ (P : Poset o ℓ) where
     {-# OVERLAPPING ⊤-Top #-}
 
     ! : ∀ {x} → x ≤ ⊤
-    ! = has-top _
+    ! = top-is-top _
 
 {-# DISPLAY Top.top = ⊤ #-}
 unquoteDecl Top-Iso = declare-record-iso Top-Iso (quote Top)
@@ -58,11 +58,11 @@ module _ {P : Poset o ℓ} where
 
   Top→Glb : ∀ {f : ⊥ → _} → Top P → Glb P f
   Top→Glb top .Glb.glb = Top.top top
-  Top→Glb top .Glb.has-glb = is-top→is-glb (Top.has-top top)
+  Top→Glb top .Glb.has-glb = is-top→is-glb (Top.top-is-top top)
 
   Glb→Top : ∀ {f : ⊥ → _} → Glb P f → Top P
   Glb→Top glb .Top.top = Glb.glb glb
-  Glb→Top glb .Top.has-top = is-glb→is-top (Glb.has-glb glb)
+  Glb→Top glb .Top.top-is-top = is-glb→is-top (Glb.has-glb glb)
 
   Top≃Glb : ∀ {f} → Top P ≃ Glb P f
   Top≃Glb = Top→Glb , biimp-is-equiv! _ Glb→Top
