@@ -44,14 +44,14 @@ module _ {o ℓ} {P : Poset o ℓ} where
   instance
     Down-has-top : {c : Ob} → Top (c ↓)
     Down-has-top .Top.top = cut refl
-    Down-has-top .Top.has-top = down
+    Down-has-top .Top.top-is-top = down
 
     Down-pres-bottom : ⦃ hb : Bottom P ⦄ {c : Ob} → Bottom (c ↓)
     Down-pres-bottom ⦃ hb ⦄ = go where
       open Bottom hb
       go : Bottom _
       go .Bottom.bot = cut ¡
-      go .Bottom.has-bot _ = ¡
+      go .Bottom.bot-is-bot _ = ¡
 
     Down-pres-joins : ⦃ hj : Has-joins P ⦄ {c : Ob} → Has-joins (c ↓)
     Down-pres-joins ⦃ hj ⦄ {c} {x} {y} = go where
