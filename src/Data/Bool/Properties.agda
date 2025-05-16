@@ -90,6 +90,13 @@ so-not {(true)}  sn _ = ¬-so-false sn
 not-so-≃ : ⌞ not x ⌟ ≃ (¬ ⌞ x ⌟)
 not-so-≃ = prop-extₑ! so-not not-so
 
+-- reflectance helpers
+
+true→is-true : ⦃ Reflects P b ⦄ → P → is-true b
+true→is-true p = so≃is-true $ true→so! p
+
+false→is-false : ⦃ Reflects P b ⦄ → ¬ P → is-false b
+false→is-false np = ¬so≃is-false $ so-not $ false→so! np
 
 -- conjunction
 

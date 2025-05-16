@@ -3,6 +3,7 @@ module Data.Acc.Properties where
 
 open import Meta.Prelude
 open Variadics _
+open import Structures.n-Type
 
 open import Data.Acc.Base
 open import Data.Acc.Path
@@ -71,6 +72,15 @@ to-induction-eq : {A : 𝒰 ℓa} {_<_ : A → A → 𝒰 ℓ}
                 → to-induction wf P ih x ＝ ih x λ y _ → to-induction wf P ih y
 to-induction-eq wf P ih x = to-induction-acc-eq wf P ih x (wf x)
 
+from-prop-induction
+  : {_<_ : A → A → Type ℓ′}
+  → (∀ {ℓ″} (P : A → Prop ℓ″)
+     → (∀ x → (∀ y → y < x → ⌞ P y ⌟) → ⌞ P x ⌟)
+     → ∀ x → ⌞ P x ⌟)
+  → is-wf _<_
+from-prop-induction {_<_} ind =
+  ind (λ z → el! (Acc _<_ z)) λ _ → acc
+
 -- Noetherianness
 
 noeth→irrefl : is-noeth _<_ → ∀ x → ¬ x < x
@@ -92,6 +102,16 @@ noeth-lift : (f : B → A)
            → is-noeth _<_ → is-noeth (λ x y → f x < f y)
 noeth-lift f nth x = acc-lift f x (nth (f x))
 
+-- TODO to-ninduction-eq
+
+from-prop-ninduction
+  : {_<_ : A → A → Type ℓ′}
+  → (∀ {ℓ″} (P : A → Prop ℓ″)
+     → (∀ x → (∀ y → x < y → ⌞ P y ⌟) → ⌞ P x ⌟)
+     → ∀ x → ⌞ P x ⌟)
+  → is-noeth _<_
+from-prop-ninduction {_<_} ind =
+  ind (λ z → el! (Acc (flip _<_) z)) λ _ → acc
 
 -- finite height
 

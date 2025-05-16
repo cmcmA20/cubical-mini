@@ -4,14 +4,16 @@ module Data.Dec.Sigma where
 open import Foundations.Prelude
 
 open import Data.Bool.Base as Bool
-  using (Bool; false; true; not; if_then_else_; is-true; So; oh; Underlying-Bool)
+  hiding (elim)
 open import Data.Empty.Base as ⊥
-  using ()
+  hiding (elim)
 open import Data.Maybe.Base as Maybe
-  using (Maybe; just; nothing)
-open import Data.Reflects.Sigma as Reflects
---  using (Reflects⁰; ofⁿ; ofʸ; Reflectance-Underlying)
-  public
+  hiding (elim)
+open import Data.Maybe.Correspondences.Unary.Any
+open import Data.Maybe.Membership
+
+open import Data.Reflects.Base
+open import Data.Reflects.Sigma
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -19,7 +21,7 @@ private variable
   P : A → Type ℓ′
   m : Maybe A
 
--- witness of a predicate being (already) decided
+-- witness of an indexed predicate being (already) decided
 infix 2 _becauseᵐ_
 record DecΣ {ℓ ℓ′} {A : 𝒰 ℓ} (P : A → 𝒰 ℓ′) : 𝒰 (ℓ ⊔ ℓ′) where
   constructor _becauseᵐ_
@@ -41,3 +43,7 @@ elim y n (nom np)   = n np
 ⌊_⌋m : {A : 𝒰 ℓ} {P : A → 𝒰 ℓ′}
     → DecΣ {A = A} P → Maybe A
 ⌊_⌋m = doesm
+
+decΣ-∈ : (m : Maybe A) → DecΣ (_∈ₘ m)
+decΣ-∈ m .doesm  = m
+decΣ-∈ m .proofm = reflectsΣ-∈
