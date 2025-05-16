@@ -15,6 +15,8 @@ open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
 open import Data.Maybe.Operations
 open import Data.Maybe.Instances.Map
+open import Data.Maybe.Instances.Idiom
+open import Data.Maybe.Instances.Bind
 open import Data.Maybe.Correspondences.Unary.Any
 
 open import Data.Reflects.Base as Reflects
@@ -58,19 +60,56 @@ instance
 ¬here→∉ : a ≠ x → a ∉ just x
 ¬here→∉ ne (here px) = ne px
 
+-- map
+
 ∈-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xm : Maybe A}
        → (f : A → B) → x ∈ xm → f x ∈ map f xm
 ∈-map {xm = just x} f (here e) = here (ap f e)
 
-map-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xm : Maybe A}
+map-inj-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xm : Maybe A}
        → (f : A → B) → Injective f
        → f x ∈ map f xm → x ∈ xm
-map-∈ {xm = just x} f inj (here e) = here (inj e)
+map-inj-∈ {xm = just x} f inj (here e) = here (inj e)
 
 map-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {xm : Maybe A}
         → (f : A → B)
-        → y ∈ map f xm → Σ[ x ꞉ A ] ((x ∈ xm) × (y ＝ f x))
+        → y ∈ map f xm
+        → Σ[ x ꞉ A ] ((x ∈ xm) × (y ＝ f x))
 map-∈Σ {xm = just x} f (here e) = x , here refl , e
+
+-- <*>
+
+∈-<*> : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+        {f : A → B} {fm : Maybe (A → B)} {x : A} {xm : Maybe A}
+      → f ∈ fm → x ∈ xm → f x ∈ (fm <*> xm)
+∈-<*> {fm = just f} {xm = just x} (here ef) (here ex) = here (ap² _$_ ef ex)
+
+<*>-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {fm : Maybe (A → B)} {xm : Maybe A}
+       → y ∈ (fm <*> xm)
+       → Σ[ f ꞉ (A → B) ] Σ[ x ꞉ A ] (f ∈ fm) × (x ∈ xm) × (f x ＝ y)
+<*>-∈Σ {fm = just f} {xm = just x} (here ey) = f , x , here refl , here refl , ey ⁻¹
+
+∈-map² : ∀ {ℓᵇ ℓᶜ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
+        {f : A → B → C} {x : A} {xm : Maybe A} {y : B} {ym : Maybe B}
+      → x ∈ xm → y ∈ ym → f x y ∈ map² f xm ym
+∈-map² {f} {xm = just x} {ym = just y} (here ex) (here ey) = here (ap² f ex ey)
+
+map²-∈Σ : ∀ {ℓᵇ ℓᶜ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 ℓᶜ}
+        {f : A → B → C} {xm : Maybe A} {ym : Maybe B} {z : C}
+       → z ∈ map² f xm ym
+       → Σ[ x ꞉ A ] Σ[ y ꞉ B ] (x ∈ xm) × (y ∈ ym) × (f x y ＝ z)
+map²-∈Σ {xm = just x} {ym = just y} (here ez) = x , y , here refl , here refl , ez ⁻¹
+
+-- bind
+
+-- TODO forward direction
+
+bind-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {fm : A → Maybe B} {xm : Maybe A}
+       → y ∈ (xm >>= fm)
+       → Σ[ x ꞉ A ] (x ∈ xm) × (y ∈ fm x)
+bind-∈Σ {xm = just x} yi = x , here refl , yi
+
+-- Any
 
 Any→Σ∈ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xm : Maybe A}
          → Any P xm
