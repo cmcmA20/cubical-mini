@@ -140,7 +140,3 @@ Dec-any-bool : {p : A → Bool} {xm : Maybe A}
              → Dec (Any (So ∘ p) xm)
 Dec-any-bool {p} {xm} .does  = any p xm
 Dec-any-bool {p} {xm} .proof = Reflects-any-bool
-
-
-
-
