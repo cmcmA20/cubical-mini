@@ -43,17 +43,13 @@ af-zero-inter-rec {ℓ′} {X} {A} {B} =
     (λ U V Uf Va C ui vi →
        af-mono (λ {x} {y} →
                    [ inl
-                   , (λ b → [ inl
-                            , (λ a → inr (a , b))
-                            ]ᵤ (ui x y (Uf x y)))
+                   , (λ b → map-r (_, b) (ui x y (Uf x y)))
                    ]ᵤ ∘ vi x y)
                Va)
     (λ U V Ua Vf C ui vi →
        af-mono (λ {x} {y} →
                    [ inl
-                   , (λ a → [ inl
-                            , (λ b → inr (a , b))
-                            ]ᵤ (vi x y (Vf x y)))
+                   , (λ a → map-r (a ,_) (vi x y (Vf x y)))
                    ]ᵤ ∘ ui x y)
                Ua)
     λ U V Ul Vl C ui vi →
@@ -84,34 +80,30 @@ af-one-inter-rec {ℓ′} {X} {A} {B} =
                → AF (λ x y → C x y ⊎ A x × B x)}
     (λ U V Uf Va C ui vi →
        af-mono (λ {x} {y} → [ inl
-                            , (λ bx → [ inl
-                                      , (λ ax → inr (ax , bx))
-                                      ]ᵤ (ui x y (Uf x y)))
+                            , (λ bx → map-r (_, bx) (ui x y (Uf x y)))
                             ]ᵤ ∘ (vi x y)) Va)
     (λ U V Ua Vf C ui vi →
        af-mono (λ {x} {y} → [ inl
-                            , (λ ax → [ inl
-                                      , (λ bx → inr (ax , bx))
-                                      ]ᵤ (vi x y (Vf x y)))
+                            , (λ ax → map-r (ax ,_) (vi x y (Vf x y)))
                             ]ᵤ ∘ (ui x y)) Ua)
     (λ U V Ul Vl C ui vi →
        AFlift λ a →
        af-mono {R = λ x y → ((C x y ⊎ A x × B x) ⊎ C a x) ⊎ A a × B a}
-          [ [ [ inl ∘ inl , inl ∘ inr ]ᵤ , inr ∘ inl ]ᵤ , inr ∘ inr ]ᵤ
+          [ map-r inl , inr ∘ inr ]ᵤ
           (af-zero-inter
              (af-mono
-               [ [ [ inl ∘ inl ∘ inl , inl ∘ inr ]ᵤ , inr ]ᵤ , inl ∘ inl ∘ inr ]ᵤ
+               [ map-l (map-l inl) , inl ∘ inl ∘ inr ]ᵤ
                (Ul a (λ x y → (C x y ⊎ C a x) ⊎ A a)
-                   (λ x y → [ [ inl ∘ inl ∘ inl , inr ]ᵤ ∘ ui x y
-                            , [ inl ∘ inl ∘ inr , inl ∘ inr ]ᵤ ∘ ui a x ]ᵤ)
-                   λ x y → [ inl ∘ inl ∘ inl , inr ]ᵤ ∘ vi x y))
+                   (λ x y → [ map-l (inl ∘ inl) ∘ ui x y
+                            , inl ∘ map-l inr ∘ ui a x ]ᵤ)
+                   λ x y → map-l (inl ∘ inl) ∘ vi x y))
              (af-mono
-               [ [ [ inl ∘ inl ∘ inl , inl ∘ inr ]ᵤ , inr ]ᵤ , inl ∘ inl ∘ inr ]ᵤ
+               [ map-l (map-l inl) , inl ∘ inl ∘ inr ]ᵤ
                (Vl a (λ x y → (C x y ⊎ C a x) ⊎ B a)
-                   (λ x y → [ inl ∘ inl ∘ inl , inr ]ᵤ ∘ ui x y)
-                   λ x y → [ [ inl ∘ inl ∘ inl , inr ]ᵤ ∘ vi x y
-                            , [ inl ∘ inl ∘ inr , inl ∘ inr ]ᵤ ∘ vi a x ]ᵤ)))
-                            )
+                   (λ x y → map-l (inl ∘ inl) ∘ ui x y)
+                   λ x y → [ map-l (inl ∘ inl) ∘ vi x y
+                           , inl ∘ map-l inr ∘ vi a x ]ᵤ)))
+                           )
 
 af-one-inter : ∀ {ℓ ℓ′} {X : 𝒰 ℓ} {A B : X → 𝒰 ℓ′} {R : X → X → 𝒰 ℓ′}
               → AF (λ x y → R x y ⊎ A x)
