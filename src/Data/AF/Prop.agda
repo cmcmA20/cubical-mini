@@ -1,5 +1,5 @@
 {-# OPTIONS --safe #-}
-module Data.AF.Prop1 where
+module Data.AF.Prop where
 
 open import Meta.Prelude
 open import Meta.Effect
@@ -14,6 +14,7 @@ open import Data.Truncation.Propositional as ∥-∥₁
 _↑₁_ : ∀ {ℓ ℓ′} {A : 𝒰 ℓ} → (A → A → 𝒰 ℓ′) → A → A → A → 𝒰 ℓ′
 (R ↑₁ a) x y = R x y ⊎₁ R a x
 
+-- TODO R : A → A → Prop ℓ′ ?
 data AF₁ {ℓ ℓ′} {A : 𝒰 ℓ} (R : A → A → 𝒰 ℓ′) : 𝒰 (ℓ ⊔ ℓ′) where
   AF₁full   : (∀ x y → ∥ R x y ∥₁) → AF₁ R
   AF₁lift   : (∀ a → AF₁ (R ↑₁ a)) → AF₁ R
@@ -49,8 +50,8 @@ af₁-mono sub (AF₁squash a₁ a₂ i) =
   AF₁squash (af₁-mono sub a₁) (af₁-mono sub a₂) i
 
 af₁-comap : ∀ {ℓa ℓb ℓr} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {R : A → A → 𝒰 ℓr}
-         → (f : B → A)
-         → AF₁ R → AF₁ (λ x y → R (f x) (f y))
+          → (f : B → A)
+          → AF₁ R → AF₁ (λ x y → R (f x) (f y))
 af₁-comap f (AF₁full af)        =
   AF₁full λ x y → af (f x) (f y)
 af₁-comap f (AF₁lift al)        =
@@ -59,9 +60,9 @@ af₁-comap f (AF₁squash a₁ a₂ i) =
   AF₁squash (af₁-comap f a₁) (af₁-comap f a₂) i
 
 af₁-map : ∀ {ℓa ℓb ℓr ℓt} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
-           {R : A → A → 𝒰 ℓr} {T : B → B → 𝒰 ℓt}
-       → {f : B → A} → (∀ x y → R (f x) (f y) → T x y)
-       → AF₁ R → AF₁ T
+            {R : A → A → 𝒰 ℓr} {T : B → B → 𝒰 ℓt}
+        → {f : B → A} → (∀ x y → R (f x) (f y) → T x y)
+        → AF₁ R → AF₁ T
 af₁-map {f} fr (AF₁full af)        =
   AF₁full λ x y → map (fr x y) (af (f x) (f y))
 af₁-map {f} fr (AF₁lift al)        =
@@ -69,7 +70,8 @@ af₁-map {f} fr (AF₁lift al)        =
 af₁-map {f} fr (AF₁squash a₁ a₂ i) =
   AF₁squash (af₁-map fr a₁) (af₁-map fr a₂) i
 
-af₁-rel-morph : ∀ {ℓa ℓb ℓr ℓt} {A : 𝒰 ℓa} {B : 𝒰 ℓb} {R : A → A → 𝒰 ℓr} {T : B → B → 𝒰 ℓt}
+af₁-rel-morph : ∀ {ℓa ℓb ℓr ℓt} {A : 𝒰 ℓa} {B : 𝒰 ℓb}
+                  {R : A → A → 𝒰 ℓr} {T : B → B → 𝒰 ℓt}
               → (f : A → B → 𝒰 ℓ)
               → ((y : B) → ∃[ x ꞉ A ] (f x y))
               → ((x₁ x₂ : A) → (y₁ y₂ : B) → f x₁ y₁ → f x₂ y₂ → R x₁ x₂ → T y₁ y₂)
