@@ -11,8 +11,10 @@ open import Order.Diagram.Meet
 
 open import Data.Empty hiding (_≠_)
 open import Data.Reflects
+open import Data.Sum
 open import Data.Maybe
 open import Data.Acc
+open import Data.AF
 
 private variable
   o ℓ : Level
@@ -20,6 +22,7 @@ private variable
 
 -- adjoin a bottom : nothing < just
 
+-- TODO rename to ↑ᵐ or some version thereof
 Maybe≤ : (A → A → 𝒰 ℓ)
        → Maybe A → Maybe A → 𝒰 ℓ
 Maybe≤ {ℓ} le  nothing  y       = ⊤
@@ -62,6 +65,30 @@ module _ {P : Poset o ℓ} where
   Just : P ⇒ Maybeₚ P
   Just .hom = just
   Just .pres-≤ = id
+
+Maybe-af : {le : A → A → 𝒰 ℓ}
+         → AF le → AF (Maybe≤ le)
+Maybe-af {le} =
+    af-rel-morph
+      (λ where
+           (inl x) (just y) → x ＝ y
+           (inl x)  nothing → ⊥
+           (inr x) (just y) → ⊥
+           (inr x)  nothing → ⊤)
+      (λ where
+           (just x) → inl x  , refl
+           nothing  → inr tt , lift tt)
+      (λ where
+           (inl x₁) (inl x₂) (just y₁) (just y₂) h₁ h₂ l → subst (λ q → le q  y₂) h₁ $
+                                                           subst (      le x₁   ) h₂ l
+           (inl x₁) (inl x₂) (just y₁)  nothing  h₁ h₂ l → false! h₂
+           (inl x₁) (inl x₂)  nothing   y₂       h₁ h₂ l → lift tt
+           (inr x₁) (inl x₂) (just y₁) (just y₂) h₁ h₂ l → false! h₁
+           (inr x₁) (inr x₂) (just y₁) (just y₂) h₁ h₂ l → false! h₁
+           (inr x₁) (inr x₂) (just y₁)  nothing  h₁ h₂ l → false! h₁
+           (inr x₁) (inr x₂)  nothing  (just y₂) h₁ h₂ l → false! h₂
+           (inr x₁) (inr x₂)  nothing   nothing  h₁ h₂ l → lift tt)
+  ∘ af-↑⊎-l
 
 -- strict
 

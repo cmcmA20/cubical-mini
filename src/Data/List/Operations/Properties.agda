@@ -768,6 +768,15 @@ zip-with-∈ {as = a ∷ as} {bs = b ∷ bs} (there c∈) =
   let (a′ , b′ , a∈ , b∈ , ce) = zip-with-∈ {as = as} c∈ in
   a′ , b′ , there a∈ , there b∈ , ce
 
+unzip-∷-l : ∀ {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {a : A} {abs as bs}
+          → unzip abs ＝ (a ∷ as , bs)
+          → Σ[ b ꞉ B ] Σ[ bs′ ꞉ List B ] Σ[ abs′ ꞉ List (A × B) ] (b ∷ bs′ ＝ bs) × (abs ＝ (a , b) ∷ abs′)
+unzip-∷-l {abs = []}                            e = false! (×-path-inv e .fst)
+unzip-∷-l {abs = (a′ , b) ∷ abs}  {bs = []}     e = false! (×-path-inv e .snd)
+unzip-∷-l {abs = (a′ , b′) ∷ abs} {bs = b ∷ bs} e =
+  let (e1 , e2) = ×-path-inv e in
+  b , bs , abs , refl , (ap (_∷ abs) (×-path (∷-head-inj e1) (∷-head-inj e2)))
+
 unzip-zip : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
             {xs : List A}  {ys : List B}
           → length xs ＝ length ys

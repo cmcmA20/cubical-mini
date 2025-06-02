@@ -23,7 +23,7 @@ open import Data.Reflects.Base as Reflects
 open import Data.Unit.Base
 
 private variable
-  ℓᵃ ℓ : Level
+  ℓᵃ ℓ ℓ′ : Level
   A : Type ℓᵃ
   a x y : A
   xm : Maybe A
@@ -121,8 +121,16 @@ Any→Σ∈ {xm = just x} (here px) = x , here refl , px
        → Any P xm
 ∈→Any {P} {xm = just y} (here e) px = here (subst P e px)
 
+any-map∈ : {xm : Maybe A} {P : Pred A ℓ} {Q : Pred A ℓ′}
+         → (∀ {x} → x ∈ xm → P x → Q x)
+         → Any P xm → Any Q xm
+any-map∈ f a =
+  let (x , x∈ , px) = Any→Σ∈ a in
+  ∈→Any x∈ (f x∈ px)
+
 any-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xm ym : Maybe A}
-       → xm ⊆ ym → Any P xm → Any P ym
+       → xm ⊆ ym
+       → Any P xm → Any P ym
 any-⊆ xsy ax =
   let (x , x∈ , px) = Any→Σ∈ ax in
   ∈→Any (xsy x∈) px

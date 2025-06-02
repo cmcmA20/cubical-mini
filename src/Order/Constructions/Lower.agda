@@ -46,7 +46,7 @@ module _ {P : Poset o ℓ} where
     Lower-sets-top : Top (Lower-sets P ℓ′)
     Lower-sets-top .Top.top .hom _ = ⊤
     Lower-sets-top .Top.top .pres-≤ = _
-    Lower-sets-top .Top.has-top = _
+    Lower-sets-top .Top.top-is-top = _
 
     @0 Lower-sets-have-joins : Has-joins (Lower-sets P ℓ′)
     Lower-sets-have-joins {x = A} {y = B} .Join.lub .hom t = A # t ⊎₁ B # t
