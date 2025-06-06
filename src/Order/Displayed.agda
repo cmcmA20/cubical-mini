@@ -50,7 +50,7 @@ module _ {ℓ ℓ' ℓₒ ℓᵣ} {P : Poset ℓₒ ℓᵣ} (D : Displayed ℓ �
   -- Total space of a displayed poset
   -- a preorder form of the Grothendieck construction
 
-  ∫ : Poset _ _
+  ∫ : Poset (ℓ ⊔ ℓₒ) (ℓ' ⊔ ℓᵣ)
   ∫ .Poset.Ob = Σ ⌞ P ⌟ D.Ob[_]
   ∫ .Poset._≤_ (x , x') (y , y') = Σ (x P.≤ y) λ f → D.Rel[ f ] x' y'
   ∫ .Poset.≤-thin = Σ-is-of-hlevel 1 P.≤-thin λ f → D.≤-thin' f
@@ -61,7 +61,7 @@ module _ {ℓ ℓ' ℓₒ ℓᵣ} {P : Poset ℓₒ ℓᵣ} (D : Displayed ℓ �
 
   -- Fibre poset
 
-  Fibre : ⌞ P ⌟ → Poset _ _
+  Fibre : ⌞ P ⌟ → Poset ℓ ℓ'
   Fibre x .Poset.Ob = D.Ob[ x ]
   Fibre x .Poset._≤_ = D.Rel[ P.≤-refl ]
   Fibre x .Poset.≤-thin = D.≤-thin' P.≤-refl
