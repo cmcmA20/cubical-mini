@@ -36,7 +36,7 @@ instance
   Union-pow ._∪_ S T x = ⌞ S x ⌟ ⊎ ⌞ T x ⌟
   {-# OVERLAPPABLE Union-pow #-}
 
-elim : {C : A ⊎ B → Type ℓ′}
+elim : {A : Type ℓᵃ} {B : Type ℓᵇ} {C : A ⊎ B → Type ℓ′}
      → ((a : A) → C (inl a))
      → ((b : B) → C (inr b))
      → (d : A ⊎ B) → C d

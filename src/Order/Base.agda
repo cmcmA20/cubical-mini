@@ -23,7 +23,7 @@ private variable
 
 record Poset o ℓ : 𝒰 (ℓsuc (o ⊔ ℓ)) where
   no-eta-equality
-  infix 4.5 _≤_
+  infix 3 _≤_
   field
     Ob  : 𝒰 o
     _≤_ : Ob → Ob → 𝒰 ℓ

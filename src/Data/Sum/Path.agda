@@ -107,10 +107,10 @@ instance
   Reflects-inr≠inl : Reflects (inr y ＝ inl x) false
   Reflects-inr≠inl = reflects-sym auto
 
-  Reflects-inl=inl : ⦃ Reflects (Path A x y) b ⦄ → Reflects (Path (A ⊎ B) (inl x) (inl y)) b
+  Reflects-inl=inl : {A : Type ℓᵃ} {x y : A} ⦃ _ : Reflects (Path A x y) b ⦄ → Reflects (Path (A ⊎ B) (inl x) (inl y)) b
   Reflects-inl=inl = Reflects.dmap (ap inl) (contra inl-inj) auto
 
-  Reflects-inr=inr : ⦃ Reflects (Path B x y) b ⦄ → Reflects (Path (A ⊎ B) (inr x) (inr y)) b
+  Reflects-inr=inr : {B : Type ℓᵇ} {x y : B} ⦃ _ : Reflects (Path B x y) b ⦄ → Reflects (Path (A ⊎ B) (inr x) (inr y)) b
   Reflects-inr=inr = Reflects.dmap (ap inr) (contra inr-inj) auto
 
   ⊎-is-discrete : ⦃ _ : is-discrete A ⦄ ⦃ _ : is-discrete B ⦄ → is-discrete (A ⊎ B)

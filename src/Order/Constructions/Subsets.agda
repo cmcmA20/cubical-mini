@@ -34,5 +34,5 @@ module @0 _ {ℓ ℓˣ} {X : Type ℓˣ} where private
   _ : Ob ＝ ℙ X ℓ
   _ = refl
 
-  _ : {A B : Ob} → A ≤ B ＝ A ⊆ B
+  _ : {A B : Ob} → (A ≤ B) ＝ (A ⊆ B)
   _ = refl

@@ -91,12 +91,12 @@ instance
   Reflects-inxr≠inxl = reflects-sym auto
 
   Reflects-inxl=inxl
-    : {a a′ : A} {¬b ¬b′ : ¬ B}
+    : {A : Type ℓᵃ} {a a′ : A} {¬b ¬b′ : ¬ B}
     → ⦃ Reflects (Path A a a′) x ⦄ → Reflects (Path (A ⊻ B) (inxl a ¬b) (inxl a′ ¬b′)) x
   Reflects-inxl=inxl = Reflects.dmap (λ p → ap² inxl p prop!) (contra inxl-inj) auto
 
   Reflects-inxr=inxr
-    : {b b′ : B} {¬a ¬a′ : ¬ A}
+    : {B : Type ℓᵇ} {b b′ : B} {¬a ¬a′ : ¬ A}
     → ⦃ Reflects (Path B b b′) x ⦄ → Reflects (Path (A ⊻ B) (inxr b ¬a) (inxr b′ ¬a′)) x
   Reflects-inxr=inxr = Reflects.dmap (λ p → ap² inxr p prop!) (contra inxr-inj) auto
 

@@ -643,7 +643,7 @@ module _ {A : I → Type ℓ} {x : A i0} {y : A i1} where opaque
 _,ₚ_ = Σ-pathᴾ
 infixr 4 _,ₚ_
 
-Σ-path : {x y : Σ A B}
+Σ-path : {A : Type ℓ} {B : A → Type ℓ′} {x y : Σ A B}
          (p : x .fst ＝ y .fst)
        → subst B p (x .snd) ＝ (y .snd)
        → x ＝ y

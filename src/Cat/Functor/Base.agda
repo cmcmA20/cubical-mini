@@ -55,7 +55,7 @@ instance
   Funlike-Functor₀  ._#_ = Functor.F₀
 
   Funlike-Functor₁
-    : {x y : ⌞ C ⌟}
+    : {C : Precategory oᶜ hᶜ} {D : Precategory oᵈ hᵈ} {x y : ⌞ C ⌟}
     → Funlike ur (Functor C D) (Precategory.Hom C x y) λ (F , _) → Precategory.Hom D (F # x) (F # y)
   Funlike-Functor₁ ._#_ F = F .Functor.F₁
 

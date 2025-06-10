@@ -38,12 +38,12 @@ module @0 _ where opaque
 
   ua-pathᴾ→= : (e : A ≃ B) {x : A} {y : B}
              → ＜ x ／ (λ i → ua e i) ＼ y ＞
-             → e # x ＝ y
+             → e .fst x ＝ y
   ua-pathᴾ→= e p i = ua-unglue e i (p i)
 
   ua-glue : (e : A ≃ B) (i : I)
             (x : Partial (~ i) A)
-            (y : B [ _ ↦ (λ { (i = i0) → e # (x 1=1) }) ])
+            (y : B [ _ ↦ (λ { (i = i0) → e .fst (x 1=1) }) ])
           → ua e i [ _ ↦ (λ { (i = i0) → x 1=1
                             ; (i = i1) → outS y
                             }) ]
@@ -53,12 +53,12 @@ module @0 _ where opaque
                                    (outS y))
 
   =→ua-pathᴾ : (e : A ≃ B) {x : A} {y : B}
-             → e # x ＝ y
+             → e .fst x ＝ y
              → ＜ x ／ (λ i → ua e i) ＼ y ＞
   =→ua-pathᴾ e {x} p i = outS (ua-glue e i (λ { (i = i0) → x }) (inS (p i)))
 
   ua-pathᴾ≃= : (e : A ≃ B) {x : A} {y : B}
-             → (e # x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
+             → (e .fst x ＝ y) ≃ ＜ x ／ (λ i → ua e i) ＼ y ＞
   ua-pathᴾ≃= eqv .fst = =→ua-pathᴾ eqv
   ua-pathᴾ≃= eqv .snd .equiv-proof y .fst = strict-contr-fibres (ua-pathᴾ→= eqv) y .fst
   ua-pathᴾ≃= eqv .snd .equiv-proof y .snd = strict-contr-fibres (ua-pathᴾ→= eqv) y .snd
@@ -87,7 +87,7 @@ opaque
   @0 ua-idₑ : ua refl ＝ refl {x = A}
   ua-idₑ {A} i j = Glue A {φ = i ∨ ∂ j} (λ _ → A , refl)
 
-  ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e # x
+  ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e .fst x
   ua-β e x = transport-refl _
 
   @0 ua-η : (p : A ＝ B) → ua (=→≃ p) ＝ p
