@@ -13,6 +13,7 @@ open import Data.Bool.Base
 open import Data.Dec.Base as Dec
 open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
+open import Data.Maybe.Path
 open import Data.Maybe.Operations
 open import Data.Maybe.Instances.Map
 open import Data.Maybe.Instances.Idiom
@@ -35,6 +36,11 @@ x ∈ₘ xm = Any (x ＝_) xm
 instance
   Membership-Maybe : {A : Type ℓ} → Membership A (Maybe A) ℓ
   Membership-Maybe ._∈_ = _∈ₘ_
+
+=just→∈ : ∀ {ℓᵃ} {A : Type ℓᵃ} {x : A} {m : Maybe A}
+        → m ＝ just x → x ∈ₘ m
+=just→∈ {m = just x}  e = here (just-inj e ⁻¹)
+=just→∈ {m = nothing} e = false! e
 
 instance
   ∈ₘ-just : Reflects (x ∈ₘ just x) true
@@ -102,7 +108,10 @@ map²-∈Σ {xm = just x} {ym = just y} (here ez) = x , y , here refl , here ref
 
 -- bind
 
--- TODO forward direction
+∈ₘ-bind : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xm : Maybe A}
+       → {y : B} {fm : A → Maybe B} → x ∈ xm → y ∈ fm x 
+       → y ∈ (xm >>= fm)
+∈ₘ-bind {xm = just z} {y} {fm} (here xe) yi = subst (λ q → y ∈ₘ fm q) xe yi
 
 bind-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {fm : A → Maybe B} {xm : Maybe A}
        → y ∈ (xm >>= fm)

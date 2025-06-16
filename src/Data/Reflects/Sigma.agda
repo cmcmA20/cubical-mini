@@ -36,6 +36,10 @@ reflectsΣ-∈ : {m : Maybe A} → ReflectsΣ (_∈ₘ m) m
 reflectsΣ-∈ {m = just x}  = ofʲ x (here refl)
 reflectsΣ-∈ {m = nothing} = ofⁿ λ x → false!
 
+reflectsΣ-= : {m : Maybe A} → ReflectsΣ (λ x → m ＝ just x) m
+reflectsΣ-= {m = just x}  = ofʲ x refl
+reflectsΣ-= {m = nothing} = ofⁿ λ x → false!
+
 -- combinators
 
 reflectsΣ-map : {A : Type ℓᵃ} {B : Type ℓᵇ}
@@ -85,3 +89,14 @@ ReflectsΣ→Reflects (ofⁿ nx) = ofⁿ false!
 ∈→true {P} (ofʲ x px) (here e) = subst P (e ⁻¹) px
 
 -- the other way requires (∀ {x y} → P x → P y → x ＝ y)
+
+nothing→false : {A : Type ℓᵃ} {P : A → Type ℓ′} {m : Maybe A}
+              → ReflectsΣ P m → m ＝ nothing → ∀ {x} → ¬ P x
+nothing→false (ofʲ _ _) e     = false! e
+nothing→false (ofⁿ nx)  e {x} = nx x
+
+false→nothing : {A : Type ℓᵃ} {P : A → Type ℓ′} {m : Maybe A}
+              → ReflectsΣ P m → (∀ {x} → ¬ P x) → m ＝ nothing
+false→nothing (ofʲ x p) c = absurd (c p)
+false→nothing (ofⁿ _)   _ = refl
+
