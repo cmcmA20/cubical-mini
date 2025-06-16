@@ -13,10 +13,12 @@ _＝_ : ∀{ℓ} {A : 𝒰 ℓ} (x y : A) → 𝒰 ℓ
 x ＝ y = (z : _) → z ＝ₚ x → z ＝ₚ y
 
 private variable
-  ℓ ℓ′ ℓᵃ ℓᵇ : Level
+  ℓ ℓ′ ℓᵃ ℓᵇ ℓᶜ : Level
   A : 𝒰 ℓᵃ
   B : 𝒰 ℓᵇ
+  C : 𝒰 ℓᶜ
   x y z : A
+  a b c : B
 
 instance
   Refl-＝ : Refl (_＝_ {A = A})
@@ -33,6 +35,11 @@ transportˢ p = transport (p _ refl)
 
 apˢ : (f : A → B) → x ＝ y → f x ＝ f y
 apˢ f p _ q = q ∙ ap f (p _ refl)
+
+-- TODO simplified
+ap²ˢ : (f : A → B → C) → x ＝ y → a ＝ b
+     → f x a ＝ f y b
+ap²ˢ f p q z x = ?
 
 substˢ : (P : A → Type ℓ)
        → x ＝ y → P x → P y

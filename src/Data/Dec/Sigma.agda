@@ -4,11 +4,11 @@ module Data.Dec.Sigma where
 open import Foundations.Prelude
 
 open import Data.Bool.Base as Bool
-  hiding (elim)
+  hiding (elim ; rec)
 open import Data.Empty.Base as ⊥
-  hiding (elim)
+  hiding (elim ; rec)
 open import Data.Maybe.Base as Maybe
-  hiding (elim)
+  hiding (elim ; rec)
 open import Data.Maybe.Correspondences.Unary.Any
 open import Data.Maybe.Membership
 
@@ -33,12 +33,15 @@ open DecΣ public
 pattern yesm x p = (just x) becauseᵐ ofʲ _ p
 pattern nom ¬p   = nothing becauseᵐ ofⁿ ¬p
 
-elim : {C : DecΣ P → Type ℓ″}
+elim : {C : DecΣ P → 𝒰 ℓ″}
      → ((x : A) → ( p : P x) → C (yesm x p))
      → ((¬p : ∀ x → ¬ P x)   → C (nom ¬p))
      → (d : DecΣ P) → C d
 elim y n (yesm x p) = y x p
 elim y n (nom np)   = n np
+
+rec : {Q : 𝒰 ℓ″} → ((x : A) → P x → Q) → ((∀ x → ¬ P x) → Q) → DecΣ P → Q
+rec {Q} = elim {C = λ _ → Q}
 
 ⌊_⌋m : {A : 𝒰 ℓ} {P : A → 𝒰 ℓ′}
     → DecΣ {A = A} P → Maybe A

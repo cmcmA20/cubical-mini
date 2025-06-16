@@ -120,6 +120,19 @@ pred=∸1 (suc n) = refl
 ·-id-r : (x : ℕ) → x · 1 ＝ x
 ·-id-r x = ·-comm x 1 ∙ ·-id-l x
 
+·-one : (x y : ℕ) → x · y ＝ 1 → (x ＝ 1) × (y ＝ 1)
+·-one  zero          _            xy = false! xy
+·-one (suc x)        zero         xy = false! (·-absorb-r x ⁻¹ ∙ xy)
+·-one (suc zero)    (suc zero)    xy = refl , refl
+·-one (suc zero)    (suc (suc y)) xy = false! (suc-inj xy)
+·-one (suc (suc x)) (suc zero)    xy = false! (suc-inj xy)
+·-one (suc (suc x)) (suc (suc y)) xy = false! (suc-inj xy)
+
+·-one≃ : (x y : ℕ) → x · y ＝ 1 ≃ (x ＝ 1) × (y ＝ 1)
+·-one≃ x y =
+  prop-extₑ! (·-one x y)
+             λ where (x1 , y1) → ap² _·_ x1 y1
+
 ·-distrib-+-r : (x y z : ℕ) → (x + y) · z ＝ x · z + y · z
 ·-distrib-+-r 0       _ _ = refl
 ·-distrib-+-r (suc x) y z = ap (z +_) (·-distrib-+-r x y z) ∙ +-assoc z (x · z) (y · z)

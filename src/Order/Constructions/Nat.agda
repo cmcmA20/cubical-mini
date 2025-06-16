@@ -15,6 +15,7 @@ open import Order.Strict
 open import Order.Total
 open import Order.Ordinal
 
+open import Data.Sum.Base
 open import Data.Nat.Base
 open import Data.Nat.Path
 open import Data.Nat.Order.Base renaming (_<_ to _<ℕ_ ; <-trans to <ℕ-trans ; _≤_ to _≤ℕ_)
@@ -44,6 +45,14 @@ open ComplementedPoset
 Suc : ℕₚ ⇒ ℕₚ
 Suc .hom    = suc
 Suc .pres-≤ = s≤s
+
+AddL : ℕ → ℕₚ ⇒ ℕₚ
+AddL n .hom    = n +_
+AddL n .pres-≤ = ≤≃≤+l $_
+
+MulL : ℕ → ℕₚ ⇒ ℕₚ
+MulL n .hom    = n ·_
+MulL n .pres-≤ = (≤≃≤·l {m = n} ⁻¹ $_) ∘ₜ ∣_∣₁ ∘ₜ inr
 
 ℕ-dec-total : is-decidable-total-order ℕₚ
 ℕ-dec-total = has-dec-total-order ℕᶜᵖ
