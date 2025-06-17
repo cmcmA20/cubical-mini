@@ -4,6 +4,7 @@ module Meta.Effect.Alt where
 open import Foundations.Base
 
 open import Meta.Effect.Base
+open import Meta.Effect.Choice
 open import Meta.Effect.Bind
 open import Meta.Effect.Idiom
 
@@ -17,9 +18,8 @@ private variable
 record Alt (M : Effect) : Typeω where
   private module M = Effect M
   field
+    ⦃ Choice-alt ⦄ : Choice M
     fail  : M.₀ A
-    _<|>_ : M.₀ A → M.₀ A → M.₀ A
-  infixl 3 _<|>_
 open Alt ⦃ ... ⦄
 
 module _ {M : Effect} (let module M = Effect M) ⦃ alt : Alt M ⦄ where

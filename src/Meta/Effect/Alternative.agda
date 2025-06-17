@@ -3,8 +3,9 @@ module Meta.Effect.Alternative where
 
 open import Foundations.Base
 
-open import Meta.Effect.Alt
 open import Meta.Effect.Base
+open import Meta.Effect.Choice
+open import Meta.Effect.Alt
 open import Meta.Effect.Map.Base
 
 open import Data.Empty.Base
@@ -23,6 +24,7 @@ record Alternative (M : Effect) : Typeω where
   infixr 3 _<+>_
 open Alternative ⦃ ... ⦄
 
+open Choice ⦃ ... ⦄
 open Alt ⦃ ... ⦄
 
 instance

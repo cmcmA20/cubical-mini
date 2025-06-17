@@ -4,6 +4,7 @@ module Meta.Effect where
 open import Meta.Effect.Alt         public
 open import Meta.Effect.Alternative public
 open import Meta.Effect.Base        public
+open import Meta.Effect.Choice      public
 open import Meta.Effect.Container   public
 open import Meta.Effect.Bind        public
 open import Meta.Effect.Foldable    public
@@ -12,9 +13,10 @@ open import Meta.Effect.Map         public
 open import Meta.Effect.Monoidal    public
 open import Meta.Effect.Traversable public
 
+open Choice ⦃ ... ⦄ public
+{-# DISPLAY Choice._<|>_ _ m = _<|>_ m #-}
 open Alt ⦃ ... ⦄ public
 {-# DISPLAY Alt.fail _ = fail #-}
-{-# DISPLAY Alt._<|>_ _ m = _<|>_ m #-}
 open Alternative ⦃ ... ⦄ public
 {-# DISPLAY Alternative.empty _ = empty #-}
 {-# DISPLAY Alternative._<+>_ _ m = _<+>_ m #-}
