@@ -127,6 +127,10 @@ module minmaxprops {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′}
     module Qmr = MR Q Qm.min-meets
     module Qjr = JR Q Qm.max-joins
 
+  -- TODO factor out
+  -- these hold for any poset with meets (joins), we only need the converses:
+  -- f # (x ∩ y) Q.≤ (f # x) ∩ (f # y)
+  -- (f # x) ∪ (f # y) Q.≤ f # (x ∪ y)
   opaque
     min-ap : (f : P ⇒ Q) (x y : ⌞ P ⌟)
            → f # (x ∩ y) ＝ (f # x) ∩ (f # y)
