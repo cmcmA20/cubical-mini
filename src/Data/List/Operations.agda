@@ -9,6 +9,7 @@ open import Meta.Effect.Idiom
 
 open import Data.Bool.Base
 open import Data.Maybe.Base
+open import Data.Maybe.Instances.Map
 open import Data.Nat.Base
 open import Data.Nat.Two
 open import Data.Fin.Computational.Base as Fin
@@ -68,6 +69,12 @@ _!ᶠ_ : (xs : List A) → Fin (length xs) → A
 unconsᵐ : List A → Maybe (A × List A)
 unconsᵐ []       = nothing
 unconsᵐ (x ∷ xs) = just (x , xs)
+
+headᵐ : List A → Maybe A
+headᵐ = map fst ∘ unconsᵐ
+
+tailᵐ : List A → Maybe (List A)
+tailᵐ = map snd ∘ unconsᵐ
 
 replicate : ℕ → A → List A
 replicate 0 _       = []
