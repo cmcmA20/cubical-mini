@@ -109,7 +109,7 @@ map²-∈Σ {xm = just x} {ym = just y} (here ez) = x , y , here refl , here ref
 -- bind
 
 ∈ₘ-bind : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xm : Maybe A}
-       → {y : B} {fm : A → Maybe B} → x ∈ xm → y ∈ fm x 
+       → {y : B} {fm : A → Maybe B} → x ∈ xm → y ∈ fm x
        → y ∈ (xm >>= fm)
 ∈ₘ-bind {xm = just z} {y} {fm} (here xe) yi = subst (λ q → y ∈ₘ fm q) xe yi
 
