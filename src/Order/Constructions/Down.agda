@@ -31,7 +31,7 @@ module _ {o ℓ} {P : Poset o ℓ} where
       → Extensional (Down c) ℓr
     Extensional-Down = ≅→extensional Down-Iso (Σ-prop→extensional! auto)
 
-  -- down set aka decategorified slice
+  -- downward closure aka decategorified slice
   infix 14 _↓
   _↓ : Ob → Poset (o ⊔ ℓ) ℓ
   (c ↓) .Poset.Ob = Down c
