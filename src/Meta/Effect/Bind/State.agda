@@ -13,10 +13,9 @@ open import Meta.Effect.Alt
 
 private
   variable
-    ℓa ℓs ℓi ℓo : Level
+    ℓa ℓs ℓ : Level
     A : 𝒰 ℓa
     S : 𝒰 ℓs
-    M : 𝒰 ℓi → 𝒰 ℓo
 
 -- State monad operations
 
@@ -33,13 +32,15 @@ record BindState (S : 𝒰 ℓs) (M : Effect) : Typeω where
   get : M.₀ S
   get = gets id
 
+open BindState ⦃ ... ⦄
+
 -- State monad transformer
 
 record StateT
        (S : 𝒰 ℓs)
-       (M : 𝒰 (ℓs ⊔ ℓa) → 𝒰 ℓo)
+       (M : 𝒰 (ℓs ⊔ ℓa) → 𝒰 ℓ)
        (A : 𝒰 ℓa)
-       : 𝒰 (ℓs ⊔ ℓo) where
+       : 𝒰 (ℓs ⊔ ℓ) where
   constructor mkstatet
   field run-stateT : S → M (S × A)
 open StateT public
