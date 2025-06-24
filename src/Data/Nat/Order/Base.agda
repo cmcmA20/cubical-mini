@@ -16,6 +16,7 @@ open import Data.Nat.Order.Inductive.Base
   using ( _≤?_ ; _<?_ ; _≥?_ ; _>?_
         ; _≰?_ ; _≮?_ ; _≱?_ ; _≯?_
         )
+  public
 open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Solver

@@ -4,7 +4,10 @@ open import Foundations.Base
 
 open import Data.String.Base public
 open import Data.String.Operations
+open import Data.Char.Base
 open import Data.List.Base
+open import Data.List.Operations
+open import Data.List.Operations.Properties
 open import Data.Nat.Base
 open import Data.Maybe.Base as Maybe
 
@@ -12,3 +15,12 @@ postulate
   string→list-++ₛ : {s₁ s₂ : String} → string→list (s₁ ++ₛ s₂) ＝ string→list s₁ ++ string→list s₂
 
   length-tail : {s : String} → lengthₛ s ＝ Maybe.rec zero (suc ∘ lengthₛ) (tailₛ s)
+
+  list→string→list : {xs : List Char} → string→list (list→string xs) ＝ xs
+
+  string→list→string : {s : String} → list→string (string→list s) ＝ s
+
+lengthₛ-++ₛ : {s₁ s₂ : String} → lengthₛ (s₁ ++ₛ s₂) ＝ lengthₛ s₁ + lengthₛ s₂
+lengthₛ-++ₛ {s₁} {s₂} =
+    ap length (string→list-++ₛ {s₁})
+  ∙ ++-length (string→list s₁) (string→list s₂)
