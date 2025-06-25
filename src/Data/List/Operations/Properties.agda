@@ -21,6 +21,8 @@ open import Data.Reflects.Base as Reflects
 open import Data.Reflects.Properties
 open import Data.Maybe.Base as Maybe
 open import Data.Maybe.Path
+open import Data.Maybe.Properties renaming (rec-fusion to rec-fusionᵐ)
+open import Data.Maybe.Instances.Map.Properties
 open import Data.List.Base as List
 open import Data.List.Path
 open import Data.List.Properties
@@ -54,6 +56,7 @@ rec-++ : (z : B) (f : A → B → B) (xs ys : List A)
 rec-++ z f [] ys = refl
 rec-++ z f (x ∷ xs) ys = ap (f x) (rec-++ z f xs ys)
 
+-- TODO move to Data.List.Operations.Properties.Map ?
 rec-map : {A : Type ℓ} {B : Type ℓ′}
           (z : C) (f : B → C → C) (h : A → B) (xs : List A)
         → List.rec z f (map h xs) ＝ List.rec z (f ∘ h) xs
@@ -131,6 +134,20 @@ opaque
   ap² {C = λ x xs → List _} _∷_
      (just-inj $ e 0)
      (!ᵐ-ext (e ∘ suc))
+
+-- unconsᵐ / tailᵐ
+
+unconsᵐ-∷ : ∀ {A : Type ℓ} {xs : List A}
+          → xs ＝ Maybe.rec [] (_∷_ $²_) (unconsᵐ xs)
+unconsᵐ-∷ {xs = []} = refl
+unconsᵐ-∷ {xs = x ∷ xs} = refl
+
+length-tailᵐ : ∀ {A : Type ℓ} {xs : List A}
+             → length xs ＝ Maybe.rec zero (suc ∘ length) (tailᵐ xs)
+length-tailᵐ {xs} =
+    ap length unconsᵐ-∷
+  ∙ rec-fusionᵐ {g = length} (unconsᵐ xs)
+  ∙ mapₘ-rec {m = unconsᵐ xs} ⁻¹
 
 -- snoc
 

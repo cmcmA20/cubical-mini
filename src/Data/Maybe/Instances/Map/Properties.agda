@@ -9,7 +9,7 @@ open import Meta.Effect.Container
 open import Meta.Effect.Map
 
 open import Data.Reflects.Base
-open import Data.Maybe.Base as Mabye
+open import Data.Maybe.Base
 open import Data.Maybe.Path
 open import Data.Maybe.Instances.Map
 
@@ -18,6 +18,12 @@ private variable
   A B : Type ℓ
 
 -- ad-hoc properties
+
+mapₘ-rec : ∀ {ℓ ℓ′ ℓ″} {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
+           {f : A → B} {g : B → C} {z : C} {m : Maybe A}
+         → rec z g (mapₘ f m) ＝ rec z (g ∘ f) m
+mapₘ-rec {m = just x}  = refl
+mapₘ-rec {m = nothing} = refl
 
 mapₘ-injective : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
                   {f : A → B}
