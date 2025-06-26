@@ -2,11 +2,14 @@ module Data.String.Properties.Unsafe where
 
 open import Foundations.Base
 open import Meta.Effect
+open import Logic.Discreteness
 
 open import Data.String.Base public
 open import Data.String.Operations
 open import Data.Char.Base
+open import Data.Char.Path
 open import Data.List.Base
+open import Data.List.Path
 open import Data.List.Operations
 open import Data.List.Operations.Properties
 open import Data.Nat.Base
@@ -19,7 +22,9 @@ postulate
 
   string→list-++ₛ : {s₁ s₂ : String} → string→list (s₁ ++ₛ s₂) ＝ string→list s₁ ++ string→list s₂
 
-  string-uncons : {s : String} → mapₘ (second string→list) (uncons s) ＝ unconsᵐ (string→list s)
+  string→list-uncons : {s : String} → mapₘ (second string→list) (uncons s) ＝ unconsᵐ (string→list s)
+
+  string→list-=ₛ : {s₁ s₂ : String} → s₁ =ₛ s₂ ＝ string→list s₁ =? string→list s₂
 
 lengthₛ-++ₛ : {s₁ s₂ : String} → lengthₛ (s₁ ++ₛ s₂) ＝ lengthₛ s₁ + lengthₛ s₂
 lengthₛ-++ₛ {s₁} {s₂} =
@@ -30,7 +35,7 @@ string-tailₛ : {s : String} → mapₘ string→list (tailₛ s) ＝ tailᵐ (
 string-tailₛ {s} =
     happly (map-pres-comp {M = eff Maybe} ⁻¹ ∙ map-pres-comp {M = eff Maybe})
            (uncons s)
-  ∙ ap (mapₘ snd) (string-uncons {s = s})
+  ∙ ap (mapₘ snd) (string→list-uncons {s = s})
 
 length-tailₛ : {s : String} → lengthₛ s ＝ Maybe.rec zero (suc ∘ lengthₛ) (tailₛ s)
 length-tailₛ {s} =

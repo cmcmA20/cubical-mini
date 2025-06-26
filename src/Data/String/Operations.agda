@@ -19,6 +19,9 @@ headₛ = map fst ∘ uncons
 tailₛ : String → Maybe String
 tailₛ = map snd ∘ uncons
 
+replicateₛ : ℕ → Char → String
+replicateₛ n = list→string ∘ replicate n
+
 concat-string : List String → String
 concat-string []       = ""
 concat-string (x ∷ xs) = x ++ₛ concat-string xs

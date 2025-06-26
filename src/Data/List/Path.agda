@@ -77,6 +77,12 @@ instance opaque
   H-Level-List {n} ⦃ s≤ʰs (s≤ʰs _) ⦄ .H-Level.has-of-hlevel = list-is-of-hlevel _ (hlevel n)
   {-# OVERLAPPING H-Level-List #-}
 
+List-= : (A → A → Bool) → List A → List A → Bool
+List-= e []       []       = true
+List-= e []       (_ ∷ _)  = false
+List-= e (_ ∷ _)  []       = false
+List-= e (x ∷ xs) (y ∷ ys) = e x y and List-= e xs ys
+
 instance
   Reflects-∷≠[] : Reflects (x ∷ xs ＝ []) false
   Reflects-∷≠[] = ofⁿ λ p → ¬-so-false (subst So (ap is-cons? p) oh)
@@ -101,16 +107,24 @@ instance
   Reflects-++-∷≠id = reflects-sym auto
   {-# INCOHERENT Reflects-++-∷≠id #-}
 
-  Reflects-∷=∷ : ⦃ rh : Reflects (x ＝ y) b₁ ⦄ ⦃ rt : Reflects (xs ＝ ys) b₂ ⦄ → Reflects (x ∷ xs ＝ y ∷ ys) (b₁ and b₂)
-  Reflects-∷=∷ = Reflects.dmap (λ p → ap² _∷_ (p .fst) (p .snd)) (contra < ∷-head-inj , ∷-tail-inj >) auto
+  Reflects-∷=∷ : ⦃ rh : Reflects (x ＝ y) b₁ ⦄ ⦃ rt : Reflects (xs ＝ ys) b₂ ⦄
+               → Reflects (x ∷ xs ＝ y ∷ ys) (b₁ and b₂)
+  Reflects-∷=∷ = Reflects.dmap (λ p → ap² _∷_ (p .fst) (p .snd))
+                               (contra < ∷-head-inj , ∷-tail-inj >)
+                               auto
   {-# OVERLAPPABLE Reflects-∷=∷ #-}
 
+  Reflects-List-= : {e : A → A → Bool} ⦃ r : ∀ {x y} → Reflects (x ＝ y) (e x y) ⦄
+                  → Reflects (xs ＝ ys) (List-= e xs ys)
+  Reflects-List-= {xs = []}     {ys = []}      = ofʸ refl
+  Reflects-List-= {xs = []}     {ys = _ ∷ _}   = Reflects-[]≠∷
+  Reflects-List-= {xs = _ ∷ _}  {ys = []}      = Reflects-∷≠[]
+  Reflects-List-= {xs = x ∷ xs} {ys = y ∷ ys}  = Reflects-∷=∷ ⦃ rh = auto ⦄ ⦃ rt = Reflects-List-= ⦄
+  {-# OVERLAPPABLE Reflects-List-= #-}
+
   List-is-discrete : ⦃ d : is-discrete A ⦄ → is-discrete (List A)
-  List-is-discrete {x = []}     {([])}   = true because auto
-  List-is-discrete {x = []}     {_ ∷ _}  = false because auto
-  List-is-discrete {x = _ ∷ _}  {([])}   = false because auto
-  List-is-discrete {x = x ∷ xs} {y ∷ ys} .does  = (x =? y) and ⌊ List-is-discrete {x = xs} {y = ys} ⌋
-  List-is-discrete {x = x ∷ xs} {y ∷ ys} .proof = Reflects-∷=∷ ⦃ auto ⦄ ⦃ List-is-discrete {x = xs} {y = ys} .proof ⦄
+  List-is-discrete ⦃ d ⦄ {x} {y} .does  = List-= (λ x y → d {x = x} {y = y} .does) x y
+  List-is-discrete               .proof = Reflects-List-=
 
   Reflects-snoc≠[] : Reflects (xs ∷r x ＝ []) false
   Reflects-snoc≠[] {xs = []} = Reflects-∷≠[]
@@ -120,3 +134,4 @@ instance
   Reflects-[]≠snoc : Reflects ([] ＝ xs ∷r x) false
   Reflects-[]≠snoc = reflects-sym auto
   {-# INCOHERENT Reflects-[]≠snoc #-}
+
