@@ -31,3 +31,10 @@ words x = concat-string $ intersperse " " x
 
 lines : List String → String
 lines x = concat-string $ intersperse "\n" x
+
+substring : ℕ → ℕ → String → String
+substring start end str =
+  list→string $
+  take (end ∸ start) $
+  drop start $
+  string→list str

@@ -103,4 +103,9 @@ module _ {M : Effect} (let module M = Effect M) ⦃ ch : Alt M ⦄ where
     alt-stateT .Alt.Choice-alt = choice-stateT {M = M}
     alt-stateT .Alt.fail .run-stateT _ = fail
 
+-- State
+
+State : 𝒰 ℓs → 𝒰 ℓa → 𝒰 (ℓs ⊔ ℓa)
+State S = StateT S (eff id)
+
 -- TODO lawful

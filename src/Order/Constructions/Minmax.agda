@@ -25,6 +25,10 @@ module minmax {o ℓ} {P : Poset o ℓ} (to : is-total-order P) where
   min : (x y : Ob) → Ob
   min x y = [ (λ _ → x) , (λ _ → y) ]ᵤ (compare x y)
 
+  min-on : ∀ {ℓ} {A : 𝒰 ℓ}
+         → (A → Ob) → (x y : A) → A
+  min-on f x y = [ (λ _ → x) , (λ _ → y) ]ᵤ (compare (f x) (f y))
+
   opaque
     min≤l : ∀ x y → min x y ≤ x
     min≤l x y with compare x y
@@ -70,6 +74,10 @@ module minmax {o ℓ} {P : Poset o ℓ} (to : is-total-order P) where
 
   max : (x y : Ob) → Ob
   max x y = [ (λ _ → y) , (λ _ → x) ]ᵤ (compare x y)
+
+  max-on : ∀ {ℓ} {A : 𝒰 ℓ}
+         → (A → Ob) → (x y : A) → A
+  max-on f x y = [ (λ _ → y) , (λ _ → x) ]ᵤ (compare (f x) (f y))
 
   opaque
     max-≤l : ∀ x y → x ≤ max x y
@@ -164,6 +172,10 @@ module decminmax {o ℓ} {P : Poset o ℓ} (dto : is-decidable-total-order P) wh
   min : (x y : Ob) → Ob
   min x y = if x ≤? y then x else y
 
+  min-on : ∀ {ℓ} {A : 𝒰 ℓ}
+         → (A → Ob) → (x y : A) → A
+  min-on f x y = if f x ≤? f y then x else y
+
   total-min=dec-total-min : ∀ {x y} → tm.min x y ＝ min x y
   total-min=dec-total-min {x} {y} with tot.compare x y | dec-≤ {x} {y}
   ... | inl p | yes q = refl
@@ -195,6 +207,10 @@ module decminmax {o ℓ} {P : Poset o ℓ} (dto : is-decidable-total-order P) wh
 
   max : (x y : Ob) → Ob
   max x y = if x ≤? y then y else x
+
+  max-on : ∀ {ℓ} {A : 𝒰 ℓ}
+         → (A → Ob) → (x y : A) → A
+  max-on f x y = if f x ≤? f y then y else x
 
   total-max=dec-total-max : ∀ {x y} → tm.max x y ＝ max x y
   total-max=dec-total-max {x} {y} with tot.compare x y | dec-≤ {x} {y}

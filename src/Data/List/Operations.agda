@@ -88,6 +88,10 @@ find : (A → Bool) → List A → ℕ
 find p []       = 0
 find p (x ∷ xs) = if p x then 0 else suc (find p xs)
 
+findᵐ : (A → Bool) → List A → Maybe A
+findᵐ p []       = nothing
+findᵐ p (x ∷ xs) = if p x then just x else findᵐ p xs
+
 -- slow: O(n²)
 nub-acc : (A → A → Bool) → List A → List A → List A
 nub-acc _    _   []       = []
