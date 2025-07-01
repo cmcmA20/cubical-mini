@@ -10,6 +10,9 @@ open import Data.List
 open import Data.Nat
 open import Data.Maybe
 
+char→string : Char → String
+char→string c = list→string $ c ∷ []
+
 lengthₛ : String → ℕ
 lengthₛ = length ∘ string→list
 

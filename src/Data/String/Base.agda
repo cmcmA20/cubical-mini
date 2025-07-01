@@ -8,7 +8,7 @@ open import Agda.Builtin.String public
     ; primStringUncons   to uncons
     ; primStringToList   to string→list
     ; primStringFromList to list→string
-    ; primShowChar       to char→string
+    ; primShowChar       to show-char
     ; primStringEquality to infixl 5 _=ₛ_
     ; primShowString     to show-string
     ; primShowNat        to show-ℕ
