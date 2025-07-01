@@ -11,7 +11,7 @@ open import Functions.Embedding
 open import Functions.Surjection
 
 open import Data.Empty.Base
-  using (⊥ₜ ; ¬ₜ_ ; contra) 
+  using (⊥ₜ ; ¬ₜ_ ; contra)
 
 open import Data.Sum.Base
   using ([_,_]ᵤ; map-l; map-r; inl; inr)
