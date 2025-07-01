@@ -2,6 +2,7 @@
 module Data.Sum.Properties where
 
 open import Meta.Prelude
+open import Foundations.Sigma
 
 open import Functions.Embedding
 
@@ -82,6 +83,9 @@ universal = ≅→≃ the-iso where
 ⊎-zero-l .fst (inr x) = x
 ⊎-zero-l .snd .equiv-proof y .fst = inr y , refl
 ⊎-zero-l .snd .equiv-proof y .snd (inr x , p) i = inr (p (~ i)) , λ j → p (~ i ∨ j)
+
+⊎-¬-distribute : (¬ (A ⊎ B)) ≃ (¬ A) × (¬ B)
+⊎-¬-distribute = universal
 
 ⊎-×-distribute : ((A ⊎ B) × C) ≃ ((A × C) ⊎ (B × C))
 ⊎-×-distribute = ≅→≃ i where

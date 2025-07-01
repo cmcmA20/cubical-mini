@@ -142,6 +142,9 @@ opaque
 =→≤ : m ＝ n → m ≤ n
 =→≤ {m} {n} e = subst (m ≤_) e ≤-refl
 
+≤0≃=0 : n ≤ 0 ≃ n ＝ 0
+≤0≃=0 = prop-extₑ! ≤0→=0 =→≤
+
 ≤≃≤+l : (n ≤ k) ≃ (m + n ≤ m + k)
 ≤≃≤+l {n} {k} {m} = prop-extₑ! (ff m n k) (gg m n k)
   where
@@ -461,3 +464,19 @@ opaque
   ∙ whisker-path-lₑ (ap² _∸_ (·-comm m k) (·-comm n k))
   ∙ ∸=0≃≤
   ∙ ≤≃≤·l
+
+<≃<·l : (m · n < m · k) ≃ (0 < m) × (n < k)
+<≃<·l {m} =
+    <≃≱
+  ∙ ≃→¬≃ (≤≃≤·l {m = m})
+  ∙ ⊎₁-¬-distribute
+  ∙ ×-ap (≃→¬≃ (≤0≃=0 ⁻¹) ∙ <≃≱ ⁻¹)
+         (<≃≱ ⁻¹)
+
+<≃<·r : (m · k < n · k) ≃ (0 < k) × (m < n)
+<≃<·r {m} {k} {n} =
+    <≃≱
+  ∙ ≃→¬≃ (≤≃≤·r {m = n} {n = m})
+  ∙ ⊎₁-¬-distribute
+  ∙ ×-ap (≃→¬≃ (≤0≃=0 ⁻¹) ∙ <≃≱ ⁻¹)
+         (<≃≱ ⁻¹)

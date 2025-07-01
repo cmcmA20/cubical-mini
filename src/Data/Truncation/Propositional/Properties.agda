@@ -4,10 +4,14 @@ module Data.Truncation.Propositional.Properties where
 open import Meta.Prelude
 open import Meta.Effect
 open import Meta.Extensionality
+open import Foundations.Sigma
 
 open import Functions.Constant
 open import Functions.Embedding
 open import Functions.Surjection
+
+open import Data.Empty.Base
+  using (⊥ₜ ; ¬ₜ_ ; contra) 
 
 open import Data.Sum.Base
   using ([_,_]ᵤ; map-l; map-r; inl; inr)
@@ -149,6 +153,9 @@ instance
   prop-extₑ!
     (rec! [ (λ a → ∣ inl a ∣₁) , (λ b → ∣ inr ∣ b ∣₁ ∣₁) ]ᵤ )
     (rec! [ (λ a → ∣ inl a ∣₁) , map inr ]ᵤ)
+
+⊎₁-¬-distribute : (¬ (A ⊎₁ B)) ≃ (¬ A) × (¬ B)
+⊎₁-¬-distribute = universal (hlevel 1) ∙ ⊎-¬-distribute
 
 -- Truncated/connected factorization
 

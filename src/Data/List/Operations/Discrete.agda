@@ -41,6 +41,12 @@ private variable
 rem : ⦃ d : is-discrete A ⦄ → A → List A → List A
 rem a = filter (λ x → not ⌊ a ≟ x ⌋)
 
+diff : ⦃ d : is-discrete A ⦄ → List A → List A → List A
+diff xs ys = filter (λ x → not (has x ys)) xs
+
+intersect : ⦃ d : is-discrete A ⦄ → List A → List A → List A
+intersect xs ys = filter (λ x → has x ys) xs
+
 subseq : ⦃ d : is-discrete A ⦄
         → List A → List A → Bool
 subseq     []       ys       = true
@@ -63,6 +69,9 @@ perm? xs ys = all (λ q → count (λ x → ⌊ q ≟ x ⌋) xs == count (λ y �
 
 subset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
 subset? xs ys = all (λ x → has x ys) xs
+
+psubset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
+psubset? xs ys = subset? xs ys and any (λ y → not (has y xs)) ys
 
 eqset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
 eqset? xs ys = subset? xs ys and subset? ys xs
