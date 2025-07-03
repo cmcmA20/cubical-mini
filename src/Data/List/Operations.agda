@@ -156,6 +156,12 @@ span p (x ∷ xs) =
   if p x then first (x ∷_) (span p xs)
          else [] , x ∷ xs
 
+partition : (p : A → Bool) → List A → List A × List A
+partition p []       = [] , []
+partition p (x ∷ xs) =
+  if p x then first (x ∷_) (partition p xs)
+         else second (x ∷_) (partition p xs)
+
 split-at : ℕ → List A → List A × List A
 split-at 0       xs       = [] , xs
 split-at (suc n) []       = [] , []
