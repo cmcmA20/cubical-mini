@@ -185,8 +185,8 @@ map-∈-in {xs = x ∷ xs} f inj (there fx) = there (map-∈-in f (λ {x} {y} y�
 -}
 
 map-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {xs : List A}
-        → (f : A → B)
-        → y ∈ map f xs → Σ[ x ꞉ A ] ((x ∈ xs) × (y ＝ f x))
+       → (f : A → B)
+       → y ∈ map f xs → Σ[ x ꞉ A ] ((x ∈ xs) × (y ＝ f x))
 map-∈Σ {xs = x ∷ xs} f (here e) = x , here refl , e
 map-∈Σ {xs = x ∷ xs} f (there y∈) =
   let (x , x∈ , xe) = map-∈Σ f y∈ in
@@ -198,6 +198,13 @@ map-∈Σ {xs = x ∷ xs} f (there y∈) =
 ∈-split {xs = x ∷ xs} (there hx) =
   let (ls , rs , e) = ∈-split hx in
   x ∷ ls , rs , ap (x ∷_) e
+
+map-with-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+           → (xs : List A)
+           → ((a : A) → a ∈ xs → B)
+           → List B
+map-with-∈ []       f = []
+map-with-∈ (x ∷ xs) f = f x (here refl) ∷ map-with-∈ xs (λ a → f a ∘ there)
 
 -- interaction with any/all
 

@@ -203,6 +203,20 @@ any-∷r-last : {P : Pred A ℓ′} {xs : List A} {x : A}
 any-∷r-last {P} {xs} px =
   subst (λ q → Any P q) (snoc-append xs ⁻¹) (any-++-r (here px))
 
+any-∷r-split : {P : Pred A ℓ′} {x : A} {xs : List A}
+             → Any P (xs ∷r x) → Any P xs ⊎ P x
+any-∷r-split {P} {xs} pxs =
+  map-r (any-¬there false!) (any-split (subst (λ q → Any P q) (snoc-append xs) pxs))
+
+any-¬last : {P : Pred A ℓ′} {x : A} {xs : List A}
+          → ¬ P x → Any P (xs ∷r x) → Any P xs
+any-¬last {P} {xs} nx pxs =
+  [ id , (λ a → absurd (nx a)) ]ᵤ (any-∷r-split pxs)
+
+¬any-∷r : {P : Pred A ℓ′} {x : A} {xs : List A}
+       → ¬ Any P xs → ¬ P x → ¬ Any P (xs ∷r x)
+¬any-∷r nxs nx = contra (any-¬last nx) nxs
+
 rec-∷r : {z : B} {f : A → B → B} {xs : List A} {x : A}
        → List.rec z f (xs ∷r x) ＝ List.rec (f x z) f xs
 rec-∷r {z} {f} {xs} {x} =

@@ -173,10 +173,19 @@ any-⊎≃ =
                  (here px)  → refl
                  (there ax) → refl)
 
+any-¬here : {x : A} {xs : List A}
+          → ¬ P x → Any P (x ∷ xs) → Any P xs
+any-¬here nx (here px)   = absurd (nx px)
+any-¬here nx (there pxs) = pxs
+
+any-¬there : {x : A} {xs : List A}
+          → ¬ Any P xs → Any P (x ∷ xs) → P x
+any-¬there nxs (here px)   = px
+any-¬there nxs (there pxs) = absurd (nxs pxs)
+
 ¬any-∷ : {x : A} {xs : List A}
        → ¬ P x → ¬ Any P xs → ¬ Any P (x ∷ xs)
-¬any-∷ nx nxs (here px)   = nx px
-¬any-∷ nx nxs (there pxs) = nxs pxs
+¬any-∷ = contra ∘ any-¬here
 
 ¬any-uncons : {x : A} {xs : List A}
             → ¬ Any P (x ∷ xs)
