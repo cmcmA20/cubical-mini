@@ -19,8 +19,14 @@ private variable
 
 -- ad-hoc properties
 
+mapₗ-empty : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
+             {f : A → B} {xs : List A}
+           → mapₗ f xs ＝ [] → xs ＝ []
+mapₗ-empty {xs = []}     _ = refl
+mapₗ-empty {xs = x ∷ xs}   = false!
+
 mapₗ-injective : ∀ {ℓ ℓ′} {A : Type ℓ} {B : Type ℓ′}
-                  {f : A → B}
+                   {f : A → B}
                → Injective f → Injective (mapₗ f)
 mapₗ-injective fi {x = []}     {y = []}     e = refl
 mapₗ-injective fi {x = []}     {y = y ∷ ys} e = false! e

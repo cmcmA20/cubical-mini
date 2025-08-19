@@ -105,6 +105,16 @@ rem-∉ ⦃ d ⦄ {xs} {z} z∉ =
          (not-so (contra (λ s → so→true! ⦃ d .proof ⦄ s ⁻¹) x≠z))
          x∈
 
+diff-⊆ : ⦃ d : is-discrete A ⦄ {xs ys : List A}
+       → diff xs ys ＝ [] → xs ⊆ ys
+diff-⊆ {xs} e {x} =
+  so→true! ⦃ Reflects-has ⦄ ∘
+  All→∀∈
+    (so→true! ⦃ Reflects-all-bool ⦄ $
+     subst So (not-invol (all _ xs)) $
+     subst (So ∘ not) (not-all? {xs = xs} ⁻¹) $
+     none-filter {xs = xs} e) x
+
 Reflects-intersect-disjoint : ⦃ d : is-discrete A ⦄
                             → {xs ys : List A}
                             → Reflects (xs ∥ ys) (is-nil? $ intersect xs ys)

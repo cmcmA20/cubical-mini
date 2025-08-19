@@ -111,8 +111,8 @@ nub-ope : ∀ {xs}
 nub-ope = nub-acc-ope {acc = []}
 
 ⊆-nub-acc : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
-           → ∀ {acc xs}
-           → xs ⊆ (acc ++ nub-acc cmp acc xs)
+          → ∀ {acc xs}
+          → xs ⊆ (acc ++ nub-acc cmp acc xs)
 ⊆-nub-acc                 {xs = []}          hx        = false! hx
 ⊆-nub-acc {cmp} {R} {acc} {xs = y ∷ xs} {x} (here e)   with any (cmp y) acc | recall (any (cmp y)) acc
 ... | false | _      = any-++-r (here e)
@@ -127,8 +127,8 @@ nub-ope = nub-acc-ope {acc = []}
 ... | true  = ⊆-nub-acc {R = R} {acc = acc} hx
 
 ⊆-nub : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
-       → ∀ {xs}
-       → xs ⊆ nub cmp xs
+      → ∀ {xs}
+      → xs ⊆ nub cmp xs
 ⊆-nub {R} = ⊆-nub-acc {R = R}
 
 nub-≈ : {R : ∀ x y → Reflects (x ＝ y) (cmp x y)}
