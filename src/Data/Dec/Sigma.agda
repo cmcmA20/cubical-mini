@@ -12,8 +12,8 @@ open import Data.Maybe.Base as Maybe
 open import Data.Maybe.Correspondences.Unary.Any
 open import Data.Maybe.Membership
 
-open import Data.Reflects.Base
-open import Data.Reflects.Sigma
+open import Data.Reflects.Base hiding (dmap)
+open import Data.Reflects.Sigma renaming (dmap to dmapΣ)
 
 private variable
   ℓ ℓ′ ℓ″ : Level
@@ -43,8 +43,15 @@ elim y n (nom np)   = n np
 rec : {Q : 𝒰 ℓ″} → ((x : A) → P x → Q) → ((∀ x → ¬ P x) → Q) → DecΣ P → Q
 rec {Q} = elim {C = λ _ → Q}
 
+dmap : {Q : A → 𝒰 ℓ″}
+     → (f : ∀ x → P x → Q x)
+     → (f : ∀ x → ¬ P x → ¬ Q x)
+     → DecΣ P → DecΣ Q
+dmap t f d .doesm  = d .doesm
+dmap t f d .proofm = dmapΣ t f (d .proofm)
+
 ⌊_⌋m : {A : 𝒰 ℓ} {P : A → 𝒰 ℓ′}
-    → DecΣ {A = A} P → Maybe A
+     → DecΣ {A = A} P → Maybe A
 ⌊_⌋m = doesm
 
 decΣ-∈ : (m : Maybe A) → DecΣ (_∈ₘ m)

@@ -122,6 +122,16 @@ opaque
     subst (length xs <_) (+-comm (suc (length ts)) (length xs) ∙ ++-length xs (t ∷ ts) ⁻¹) $
     <-+-lr
 
+-- is-nil?
+
+Reflects-is-nil? : Reflects (xs ＝ []) (is-nil? xs)
+Reflects-is-nil? {xs = []}     = ofʸ refl
+Reflects-is-nil? {xs = x ∷ xs} = ofⁿ false!
+
+Dec-is-nil? : Dec (xs ＝ [])
+Dec-is-nil? {xs} .does = is-nil? xs
+Dec-is-nil? .proof = Reflects-is-nil?
+
 -- !ᵐ
 
 !ᵐ-ext : ∀ {A : Type ℓ} {xs ys : List A}
@@ -488,13 +498,24 @@ all→filter {P} {p} {xs = x ∷ xs} (px ∷ a) with p x
 
 all-filter : {p : A → Bool} {xs : List A}
            → ⌞ all p (filter p xs) ⌟
-all-filter {p} {xs = []}     = Oh
+all-filter {p} {xs = []}     = oh
 all-filter {p} {xs = x ∷ xs} =
   Bool.elim
     {P = λ q → p x ＝ q → ⌞ all p (if q then x ∷ filter p xs else filter p xs) ⌟}
     (λ e → (so≃is-true ⁻¹ $ e) × all-filter {xs = xs})
     (λ _ → all-filter {xs = xs})
     (p x) refl
+
+none-filter : {p : A → Bool} {xs : List A}
+            → filter p xs ＝ []
+            → ⌞ not (any p xs) ⌟
+none-filter {p} {xs = []}     _ = oh
+none-filter {p} {xs = x ∷ xs}   =
+  Bool.elim
+    {P = λ q → (if q then x ∷ filter p xs else filter p xs) ＝ [] → ⌞ not (q or any p xs) ⌟}
+    false!
+    (none-filter {xs = xs})
+    (p x)
 
 filter-all : {p : A → Bool} {xs : List A}
            → ⌞ all p xs ⌟ → filter p xs ＝ xs
@@ -888,3 +909,16 @@ count-from-to-∈ {m = suc m} {n = suc n} k∈ =
   ∈-map suc (∈-count-from-to {m = m} {n = n} {k = k} (≤-peel m≤k) (<-peel k<n))
 
 -- TODO ≃
+
+-- partition
+
+partition-filter : {p : A → Bool} {xs : List A}
+                 → partition p xs ＝ (filter p xs , filter (not ∘ p) xs)
+partition-filter     {xs = []}     = refl
+partition-filter {p} {xs = x ∷ xs} with p x
+... | true  =
+  let ih = ×-path-inv $ partition-filter {p = p} {xs = xs} in
+  ×-path (ap (x ∷_) (ih .fst)) (ih .snd)
+... | false =
+  let ih = ×-path-inv $ partition-filter {p = p} {xs = xs} in
+  ×-path (ih .fst) (ap (x ∷_) (ih .snd))

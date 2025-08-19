@@ -263,6 +263,11 @@ implies-not-or = witness!
 implies-contra : ∀ x y → not y implies not x ＝ x implies y
 implies-contra = witness!
 
+-- biimplication
+
+biimplies-equals : ∀ x y → (x implies y) and (y implies x) ＝ x equals y
+biimplies-equals = witness!
+
 
 -- distributivity
 

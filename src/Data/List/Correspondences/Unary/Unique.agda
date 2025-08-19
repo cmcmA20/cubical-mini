@@ -50,7 +50,7 @@ uniq→++ {xs = x ∷ xs} (nx ∷ᵘ ux) uy dxy =
   let (ux , uy , dxy) = ++→uniq {xs = xs} u in
     (contra any-++-l nx) ∷ᵘ ux
   , uy
-  , ∥-∷-l (contra any-++-r nx) dxy
+  , ∥-∷→l (contra any-++-r nx) dxy
 
 uniq-snoc : {xs : List A} {x : A}
           → Uniq xs → x ∉ xs → Uniq (xs ∷r x)
@@ -145,7 +145,7 @@ uniq⊆len≤→uniq {xs = x ∷ xs} (nx ∷ᵘ u) sub le =
   uniq→++
     (ulurar .fst)
     (contra any-++-r nlr ∷ᵘ (ulurar .snd .fst))
-    (∥-∷-r (contra any-++-l nlr) (ulurar .snd .snd))
+    (∥-∷→r (contra any-++-l nlr) (ulurar .snd .snd))
 
 uniq≈→len= : {xs ys : List A}
                 → Uniq xs → Uniq ys

@@ -12,6 +12,7 @@ open import Data.Reflects.Base
 open import Data.Dec.Base
 
 open import Data.List.Base as List
+open import Data.List.Path
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
@@ -93,6 +94,10 @@ insertion-sort-sorted-uniq-strict {cmp} {R} tr stot {xs = x ∷ xs} (nx ∷ᵘ u
     (insertion-sort-sorted-uniq-strict {R = R} tr stot u)
 
 -- nub
+
+nub-[] : ∀ {xs} → nub cmp xs ＝ [] → xs ＝ []
+nub-[] {xs = []}     _ = refl
+nub-[] {xs = x ∷ xs} e = false! e
 
 nub-acc-ope : ∀ {acc xs}
             → OPE (nub-acc cmp acc xs) xs

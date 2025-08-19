@@ -16,7 +16,7 @@ open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Two
 open import Data.Nat.Order.Base
-open import Data.Dec.Base
+open import Data.Dec.Base as Dec
 open import Data.Dec.Properties
 open import Data.Reflects.Base as Reflects
 
@@ -78,6 +78,13 @@ eqset? xs ys = subset? xs ys and subset? ys xs
 
 -- properties
 
+∉-rem-= : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
+        → z ∉ rem z xs
+∉-rem-= ⦃ d ⦄ {xs} {z} z∈ =
+  so→false! ⦃ d .proof ⦄
+    (filter-∈ {p = λ x → not ⌊ z ≟ x ⌋} {xs = xs} z∈ .fst)
+    refl
+
 rem-∉ : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
       → z ∉ xs → rem z xs ＝ xs
 rem-∉ ⦃ d ⦄ {xs} {z} z∉ =
@@ -97,6 +104,28 @@ rem-∉ ⦃ d ⦄ {xs} {z} z∉ =
       ∈-filter
          (not-so (contra (λ s → so→true! ⦃ d .proof ⦄ s ⁻¹) x≠z))
          x∈
+
+Reflects-intersect-disjoint : ⦃ d : is-discrete A ⦄
+                            → {xs ys : List A}
+                            → Reflects (xs ∥ ys) (is-nil? $ intersect xs ys)
+Reflects-intersect-disjoint {xs = []}     = ofʸ ∥-[]-l
+Reflects-intersect-disjoint {xs = x ∷ xs} {ys} =
+  Dec.elim
+    {C = λ q → Reflects ((x ∷ xs) ∥ ys)
+                        (is-nil? $ if ⌊ q ⌋ then x ∷ filter (λ q → has q ys) xs
+                                            else filter (λ q → has q ys) xs)}
+    (λ x∈ → ofⁿ λ d → d (here refl) x∈)
+    (λ x∉ → Reflects.dmap
+              (∥-∷→l x∉)
+              (contra (snd ∘ ∥-∷←l))
+              (Reflects-intersect-disjoint {xs = xs} {ys = ys}))
+    (x ∈? ys)
+
+Dec-disjoint : ⦃ d : is-discrete A ⦄
+             → (xs ys : List A)
+             → Dec (xs ∥ ys)
+Dec-disjoint xs ys .does  = is-nil? $ intersect xs ys
+Dec-disjoint xs ys .proof = Reflects-intersect-disjoint
 
 Reflects-subseq : ⦃ d : is-discrete A ⦄ {xs ys : List A}
                 → Reflects (OPE xs ys) (subseq xs ys)
