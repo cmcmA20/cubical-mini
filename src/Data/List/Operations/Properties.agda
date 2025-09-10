@@ -51,6 +51,11 @@ private variable
 
 -- rec
 
+rec-id : {xs : List A}
+       → List.rec [] _∷_ xs ＝ xs
+rec-id {xs = []}     = refl
+rec-id {xs = x ∷ xs} = ap (x ∷_) rec-id
+
 rec-++ : (z : B) (f : A → B → B) (xs ys : List A)
        → List.rec z f (xs ++ ys) ＝ List.rec (List.rec z f ys) f xs
 rec-++ z f [] ys = refl
@@ -105,6 +110,12 @@ map-length {f} {xs = x ∷ xs} = ap suc (map-length {xs = xs})
 ++-same-inj {A} (a ∷ as) (x ∷ xs) el e =
   let ih = ++-same-inj as xs (suc-inj el) (∷-tail-inj e) in
   ap² {C = λ _ _ → List A} _∷_ (∷-head-inj e) (ih .fst) , ih .snd
+
+++=[]-2 : (xs ys : List A) → xs ++ ys ＝ [] → (xs ＝ []) × (ys ＝ [])
+++=[]-2 xs ys e =
+  ++-same-inj xs []
+    (+=0-2 (length xs) _ (++-length xs _ ⁻¹ ∙ ap length e) .fst)
+    e
 
 opaque
   unfolding Prefix
@@ -246,6 +257,17 @@ prefix-∷r-l {xs} {ys} p =
   (subst (λ q → Prefix q ys) (snoc-append xs) $
    p)
 
+-- concat
+
+∈-concat : {x : A} {xss : List (List A)}
+         → x ∈ concat xss
+         → Σ[ xs ꞉ List A ] (xs ∈ xss × x ∈ xs)
+∈-concat {xss = xs ∷ xss} x∈ =
+  [ (λ x∈h → xs , here refl , x∈h)
+  , (λ x∈t → let (xs , xs∈ , x∈xs) = ∈-concat x∈t in
+             xs , there xs∈ , x∈xs)
+  ]ᵤ (any-split {xs = xs} x∈)
+
 -- reverse
 
 reverse-++ : ∀ {xs ys : List A}
@@ -273,7 +295,7 @@ reverse-length {xs = x ∷ xs} =
   ∙ +-comm (length (reverse xs)) 1
   ∙ ap suc reverse-length
 
-reverse-⊆ : ∀ {xs : List A}
+reverse-⊆ : {xs : List A}
            → xs ⊆ reverse xs
 reverse-⊆ {xs = x ∷ xs} (here e)   = any-++-r {xs = reverse xs} (here e)
 reverse-⊆ {xs = x ∷ xs} (there me) = any-++-l {xs = reverse xs} (reverse-⊆ me)
