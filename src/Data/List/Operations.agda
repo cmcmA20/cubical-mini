@@ -8,7 +8,7 @@ open import Meta.Effect.Map
 open import Meta.Effect.Idiom
 
 open import Data.Bool.Base
-open import Data.Maybe.Base
+open import Data.Maybe.Base as Maybe
 open import Data.Maybe.Instances.Map
 open import Data.Nat.Base
 open import Data.Nat.Two
@@ -145,6 +145,14 @@ count-from-to : ℕ → ℕ → List ℕ
 count-from-to _          0        = []
 count-from-to 0          (suc to) = 0 ∷ (suc <$> count-from-to 0 to)
 count-from-to (suc from) (suc to) = suc <$> count-from-to from to
+
+map-maybe : (A → Maybe B) → List A → List B
+map-maybe f []       = []
+map-maybe f (x ∷ xs) =
+  Maybe.rec
+    (map-maybe f xs)
+    (_∷ map-maybe f xs)
+    (f x)
 
 map-up : (ℕ → A → B) → ℕ → List A → List B
 map-up _ _ []       = []

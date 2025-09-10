@@ -206,6 +206,14 @@ map-with-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
 map-with-∈ []       f = []
 map-with-∈ (x ∷ xs) f = f x (here refl) ∷ map-with-∈ xs (λ a → f a ∘ there)
 
+rec-with-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+           → B
+           → (xs : List A)
+           → ((a : A) → a ∈ xs → B → B)
+           → B
+rec-with-∈ z []       f = z
+rec-with-∈ z (x ∷ xs) f = f x (here refl) (rec-with-∈ z xs λ a → f a ∘ there)
+
 -- interaction with any/all
 
 Any→Σ∈ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs : List A}
