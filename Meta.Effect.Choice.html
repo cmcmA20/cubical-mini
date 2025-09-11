@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Meta.Effect.Choice</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--safe</a> <a id="20" class="Symbol">#-}</a>
+<a id="24" class="Keyword">module</a> <a id="31" href="Meta.Effect.Choice.html" class="Module">Meta.Effect.Choice</a> <a id="50" class="Keyword">where</a>
+
+<a id="57" class="Keyword">open</a> <a id="62" class="Keyword">import</a> <a id="69" href="Foundations.Base.html" class="Module">Foundations.Base</a>
+
+<a id="87" class="Keyword">open</a> <a id="92" class="Keyword">import</a> <a id="99" href="Meta.Effect.Base.html" class="Module">Meta.Effect.Base</a>
+
+<a id="117" class="Keyword">private</a> <a id="125" class="Keyword">variable</a>
+  <a id="136" href="Meta.Effect.Choice.html#136" class="Generalizable">ℓ</a> <a id="138" class="Symbol">:</a> <a id="140" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="148" href="Meta.Effect.Choice.html#148" class="Generalizable">A</a> <a id="150" class="Symbol">:</a> <a id="152" href="Foundations.Prim.Type.html#322" class="Primitive">Type</a> <a id="157" href="Meta.Effect.Choice.html#136" class="Generalizable">ℓ</a>
+
+<a id="160" class="Keyword">record</a> <a id="Choice"></a><a id="167" href="Meta.Effect.Choice.html#167" class="Record">Choice</a> <a id="174" class="Symbol">(</a><a id="175" href="Meta.Effect.Choice.html#175" class="Bound">M</a> <a id="177" class="Symbol">:</a> <a id="179" href="Meta.Effect.Base.html#92" class="Record">Effect</a><a id="185" class="Symbol">)</a> <a id="187" class="Symbol">:</a> <a id="189" href="Foundations.Prim.Type.html#349" class="Primitive">Typeω</a> <a id="195" class="Keyword">where</a>
+  <a id="203" class="Keyword">private</a> <a id="211" class="Keyword">module</a> <a id="Choice.M"></a><a id="218" href="Meta.Effect.Choice.html#218" class="Module">M</a> <a id="220" class="Symbol">=</a> <a id="222" href="Meta.Effect.Base.html#92" class="Module">Effect</a> <a id="229" href="Meta.Effect.Choice.html#175" class="Bound">M</a>
+  <a id="233" class="Keyword">field</a>
+    <a id="Choice._&lt;|&gt;_"></a><a id="243" href="Meta.Effect.Choice.html#243" class="Field Operator">_&lt;|&gt;_</a> <a id="249" class="Symbol">:</a> <a id="251" href="Meta.Effect.Base.html#169" class="Function">M.₀</a> <a id="255" href="Meta.Effect.Choice.html#148" class="Generalizable">A</a> <a id="257" class="Symbol">→</a> <a id="259" href="Meta.Effect.Base.html#169" class="Function">M.₀</a> <a id="263" href="Meta.Effect.Choice.html#148" class="Generalizable">A</a> <a id="265" class="Symbol">→</a> <a id="267" href="Meta.Effect.Base.html#169" class="Function">M.₀</a> <a id="271" href="Meta.Effect.Choice.html#148" class="Generalizable">A</a>
+  <a id="275" class="Keyword">infixl</a> <a id="282" class="Number">3</a> _&lt;|&gt;_
+<a id="290" class="Keyword">open</a> <a id="295" href="Meta.Effect.Choice.html#167" class="Module">Choice</a> <a id="302" class="Symbol">⦃</a> <a id="304" class="Symbol">...</a> <a id="308" class="Symbol">⦄</a>
+</pre></body></html>
