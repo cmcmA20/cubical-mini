@@ -1,4 +1,4 @@
-module Data.String.Properties.Unsafe where
+module Unsafe.Data.String.Properties.Unsafe where
 
 open import Foundations.Base
 open import Meta.Effect
@@ -14,6 +14,7 @@ open import Data.List.Operations
 open import Data.List.Operations.Properties
 open import Data.Nat.Base
 open import Data.Maybe as Maybe
+open import Data.Maybe.Instances.Map.Properties
 
 postulate
   list→string→list : {xs : List Char} → string→list (list→string xs) ＝ xs
