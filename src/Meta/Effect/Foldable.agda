@@ -4,6 +4,7 @@ module Meta.Effect.Foldable where
 open import Foundations.Base
 
 open import Meta.Effect.Base
+open import Meta.Effect.Choice
 open import Meta.Effect.Alt
 open import Meta.Effect.Map.Base
 open import Meta.Effect.Idiom
@@ -18,6 +19,7 @@ record Foldable (F : Effect) : Typeω where
   field fold-r : (A → B → B) → B → F.₀ A → B
 open Foldable ⦃ ... ⦄
 
+open Choice ⦃ ... ⦄
 open Alt ⦃ ... ⦄
 
 asum : {F M : Effect} (let module F = Effect F; module M = Effect M)

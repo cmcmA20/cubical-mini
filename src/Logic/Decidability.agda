@@ -15,6 +15,7 @@ open import Data.Empty.Base as ⊥
 open import Data.Reflects.Base
 open import Data.Truncation.Propositional.Base as ∥-∥₁
 open import Data.Unit.Base
+open import Data.Sum.Base
 
 private variable
   ℓ ℓ′ ℓ″ ℓᵃ ℓᵇ : Level
@@ -39,6 +40,10 @@ instance
   Dec-× : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A × B)
   Dec-× ⦃ da ⦄ ⦃ db ⦄ .does = ⌊ da ⌋ and ⌊ db ⌋
   Dec-× ⦃ da ⦄ ⦃ db ⦄ .proof = Reflects-× ⦃ da .proof ⦄ ⦃ db .proof ⦄
+
+  Dec-⊎ : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A ⊎ B)
+  Dec-⊎ ⦃ da ⦄ ⦃ db ⦄ .does = ⌊ da ⌋ or ⌊ db ⌋
+  Dec-⊎ ⦃ da ⦄ ⦃ db ⦄ .proof = Reflects-⊎ ⦃ da .proof ⦄ ⦃ db .proof ⦄
 
   Dec-fun : ⦃ da : Dec A ⦄ → ⦃ db : Dec B ⦄ → Dec (A → B)
   Dec-fun ⦃ da ⦄ ⦃ db ⦄ .does = ⌊ da ⌋ implies ⌊ db ⌋

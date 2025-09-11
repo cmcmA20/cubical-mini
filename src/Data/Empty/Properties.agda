@@ -41,5 +41,8 @@ universal = _ , is-contr→is-equiv absurd-is-contr ⊤-is-contr
 ¬-≃ : (A → B) → (B → A) → (¬ A) ≃ (¬ B)
 ¬-≃ ab ba = prop-extₑ! (_∘ ba) (_∘ ab)
 
+≃→¬≃ : A ≃ B → (¬ A) ≃ (¬ B)
+≃→¬≃ ab = ¬-≃ (ab $_) (ab ⁻¹ $_)
+
 Recomputable-⊥ : Recomputable ⊥
 Recomputable-⊥ .recompute ()

@@ -28,6 +28,8 @@ private variable
   A B : 𝒰 ℓ
   R T : A → A → 𝒰 ℓ′
 
+-- TODO move to various Order.Constructions files?
+
 af-unit : AF {A = A} (λ _ _ → Lift ℓ′ ⊤)
 af-unit = AFfull λ _ _ → lift tt
 
@@ -79,7 +81,8 @@ af-fin {n} =
            ≤-∸-r-≃ {m = Fin.index y} (bound-pos ∣ y ∣₁) $
            subst (n ≤_) (+∸-assoc (Fin.index x) n (Fin.index y) (<→≤ $ fin<bound y)) $
            ∸≤≃≤+ {m = n} {n = Fin.index x} $ le₂)
-    (af-inter (af-comap Fin.index af-≤) (af-comap (λ q → n ∸ Fin.index q) af-≤))
+    (af-inter (af-comap Fin.index af-≤)
+              (af-comap (λ q → n ∸ Fin.index q) af-≤))
 
 -- TODO arbitrary fintypes
 
@@ -122,7 +125,7 @@ _↑⊎-r _ (inl _)  (inr _)  = ⊥
 _↑⊎-r _ (inr _)  (inl _)  = ⊥
 _↑⊎-r T (inr bx) (inr by) = T bx by
 
--- maybe
+-- maybe lift (only on just)
 
 _↑ᵐ : (A → A → 𝒰 ℓ′)
     → Maybe A → Maybe A → 𝒰 ℓ′
@@ -281,3 +284,78 @@ af-dec⇓→↑ {A} {R} {a} dr ar =
          (inr x₁) (inr x₂) y₁ y₂ e₁ e₂ r → inl $ subst (λ q → R q        y₂) e₁ $
                                                  subst (      R (fst x₁)   ) e₂ r)
     (af-↑⊎ {A = Σ[ x ꞉ A ] R a x} af-unit ar)
+
+-- fin-quantified
+
+_↑Σ : {n : ℕ} {X : Fin n → 𝒰 ℓ′}
+    → (∀ f → X f → X f → 𝒰 ℓ″)
+    → (Σ[ f ꞉ Fin n ] (X f) → Σ[ f ꞉ Fin n ] (X f) → 𝒰 ℓ″)
+_↑Σ {X} R (f1 , x1) (f2 , x2) = Σ[ e ꞉ f1 ＝ f2 ] R f2 (subst X e x1) x2
+
+af-finΣ : {n : ℕ} {X : Fin n → 𝒰 ℓ′} {R : ∀ f → X f → X f → 𝒰 ℓ″}
+        → (∀ f → AF (R f))
+        → AF (R ↑Σ)
+af-finΣ {n = zero}          afr = AFfull λ where (x , _) → false! x
+af-finΣ {n = suc n} {X} {R} afr =
+  af-rel-morph
+    (λ where
+         (inl x)       (q , y) → Σ[ e ꞉ fzero  ＝ q ] (subst X e x ＝ y)
+         (inr (p , x)) (q , y) → Σ[ e ꞉ fsuc p ＝ q ] (subst X e x ＝ y))
+    (λ where
+         (p , x) → [ (λ p0 → inl (subst X p0 x) , p0 ⁻¹ , subst⁻-subst X p0 x)
+                   , (λ where (k , ps) → inr (k , subst X ps x) , ps ⁻¹ , subst⁻-subst X ps x)
+                   ]ᵤ (fsplit p))
+    (λ where
+         (inl x₁)        (inl x₂)        (p3 , x3) (p4 , x4) (e3 , ex3) (e4 , ex4) ll →
+           Jₚ² (λ z ez w ew → (fz : X z)
+                            → (fw : X w)
+                            → (exz : subst X ez x₁ ＝ fz)
+                            → (exw : subst X ew x₂ ＝ fw)
+                            → (R ↑Σ) (z , fz) (w , fw))
+               (λ fz fw exz exw →
+                      refl
+                    , (subst (λ q → R fzero q fw)
+                             (subst-refl {B = X} x₁ ⁻¹ ∙ exz ∙ subst-refl {B = X} fz ⁻¹) $
+                       subst (R fzero x₁)
+                             (subst-refl {B = X} x₂ ⁻¹ ∙ exw)
+                             ll)
+                    )
+               e3 e4 x3 x4 ex3 ex4
+         (inl x₁)        (inr (p₂ , x₂))  _         _         _          _         ll → false! ll
+         (inr (p₁ , x₁)) (inl x₂)         _         _         _          _         ll → false! ll
+         (inr (p₁ , x₁)) (inr (p₂ , x₂)) (p3 , x3) (p4 , x4) (e3 , ex3) (e4 , ex4) (ep , rs) →
+           Jₚ² (λ z ez w ew → (fz : X z)
+                            → (fw : X w)
+                            → (exz : subst X ez x₁ ＝ fz)
+                            → (exw : subst X ew x₂ ＝ fw)
+                            → (R ↑Σ) (z , fz) (w , fw))
+               (λ fz fw exz exw →
+                     (ap fsuc ep)
+                   , (subst (λ q → R (fsuc p₂) (subst X (ap fsuc ep) q) fw)
+                            (subst-refl {B = X} x₁ ⁻¹ ∙ exz) $
+                      subst (R (fsuc p₂) (subst X (ap fsuc ep) x₁))
+                            (subst-refl {B = X} x₂ ⁻¹ ∙ exw)
+                            rs))
+               e3 e4 x3 x4 ex3 ex4)
+    (af-↑⊎ (afr fzero) (af-finΣ {n = n} (afr ∘ fsuc)))
+
+af-fin∀ : {n : ℕ} {X : Fin n → 𝒰 ℓ′} {R : ∀ f → X f → X f → 𝒰 ℓ″}
+        → (∀ f → AF (R f))
+        → AF {A = ∀ f → X f} (λ x y → ∀ f → R f (x f) (y f))
+af-fin∀ {n = zero}      afr = AFfull λ x y f → false! f
+af-fin∀ {n = suc n} {R} afr =
+  af-rel-morph
+     (λ where (a , x) y → (a ＝ y fzero) × (∀ (f : Fin n) → x f ＝ y (fsuc f)))
+     (λ y → (y fzero , y ∘ fsuc) , refl , λ _ → refl)
+     (λ where (a₁ , x₁) (a₂ , x₂) y₁ y₂ (e1 , ex1) (e2 , ex2) (r0 , rs) f →
+                 [ (λ f0 → subst (λ q → R q (y₁ q) (y₂ q)) (f0 ⁻¹) $
+                           subst (λ q → R fzero q (y₂ fzero)) e1 $
+                           subst (R fzero a₁) e2 $
+                           r0)
+                 , (λ where (k , fs) →
+                              subst (λ q → R q (y₁ q) (y₂ q)) (fs ⁻¹) $
+                              subst (λ q → R (fsuc k) q (y₂ (fsuc k))) (ex1 k) $
+                              subst (R (fsuc k) (x₁ k)) (ex2 k) $
+                              rs k)
+                 ]ᵤ (fsplit f))
+     (af-× (afr fzero) (af-fin∀ {n = n} (afr ∘ fsuc)))

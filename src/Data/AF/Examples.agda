@@ -75,6 +75,18 @@ flex =
   go (suc _)  zero   _  = 1
   go (suc x) (suc y) ih = ih x (2 + y) (inl <-ascend) + ih (1 + x) y (inr (refl , <-ascend))
 
+-- Ackermann
+
+ack : ℕ × ℕ → ℕ
+ack =
+  to-induction (AF→WF A× Tfl-empty-intersect) (λ _ → ℕ)
+  λ x ih → go (x .fst) (x .snd) λ a b → ih (a , b)
+  where
+  go : ∀ x y → (∀ a b → Tfl (a , b) (x , y) → ℕ) → ℕ
+  go    zero      n        _  = suc n
+  go   (suc m-1)  zero     ih = ih m-1 1 (inl <-ascend)
+  go m@(suc m-1) (suc n-1) ih = ih m-1 (ih m n-1 (inr (refl , <-ascend))) (inl <-ascend)
+
 -- grok
 
 Tgr : ℕ × ℕ → ℕ × ℕ → 𝒰

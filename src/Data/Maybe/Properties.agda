@@ -7,16 +7,23 @@ open import Logic.Decidability
 
 open import Data.Bool.Base
 open import Data.Dec.Base
-open import Data.Maybe.Base public
+open import Data.Maybe.Base as Maybe public
 open import Data.Maybe.Path
 open import Data.Sum.Base
 open import Data.Sum.Properties
 open import Data.Unit.Base
 
 private variable
-  ℓ ℓ′ : Level
+  ℓ ℓ′ ℓ″ : Level
   A : Type ℓ
   x : Maybe A
+
+rec-fusion : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
+             {z : B} {f : A → B} {g : B → C}
+             (xm : Maybe A)
+           → g (Maybe.rec z f xm) ＝ Maybe.rec (g z) (g ∘ f) xm
+rec-fusion (just x) = refl
+rec-fusion nothing = refl
 
 maybe-as-sum : Maybe A ≃ (⊤ ⊎ A)
 maybe-as-sum = ≅→≃ i where

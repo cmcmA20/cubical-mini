@@ -8,7 +8,8 @@ open import Meta.Effect.Map
 open import Meta.Effect.Idiom
 
 open import Data.Bool.Base
-open import Data.Maybe.Base
+open import Data.Maybe.Base as Maybe
+open import Data.Maybe.Instances.Map
 open import Data.Nat.Base
 open import Data.Nat.Two
 open import Data.Fin.Computational.Base as Fin
@@ -69,6 +70,12 @@ unconsᵐ : List A → Maybe (A × List A)
 unconsᵐ []       = nothing
 unconsᵐ (x ∷ xs) = just (x , xs)
 
+headᵐ : List A → Maybe A
+headᵐ = map fst ∘ unconsᵐ
+
+tailᵐ : List A → Maybe (List A)
+tailᵐ = map snd ∘ unconsᵐ
+
 replicate : ℕ → A → List A
 replicate 0 _       = []
 replicate (suc n) e = e ∷ replicate n e
@@ -80,6 +87,10 @@ filter p (x ∷ xs) = if p x then x ∷ filter p xs else filter p xs
 find : (A → Bool) → List A → ℕ
 find p []       = 0
 find p (x ∷ xs) = if p x then 0 else suc (find p xs)
+
+findᵐ : (A → Bool) → List A → Maybe A
+findᵐ p []       = nothing
+findᵐ p (x ∷ xs) = if p x then just x else findᵐ p xs
 
 -- slow: O(n²)
 nub-acc : (A → A → Bool) → List A → List A → List A
@@ -135,6 +146,14 @@ count-from-to _          0        = []
 count-from-to 0          (suc to) = 0 ∷ (suc <$> count-from-to 0 to)
 count-from-to (suc from) (suc to) = suc <$> count-from-to from to
 
+map-maybe : (A → Maybe B) → List A → List B
+map-maybe f []       = []
+map-maybe f (x ∷ xs) =
+  Maybe.rec
+    (map-maybe f xs)
+    (_∷ map-maybe f xs)
+    (f x)
+
 map-up : (ℕ → A → B) → ℕ → List A → List B
 map-up _ _ []       = []
 map-up f n (x ∷ xs) = f n x ∷ map-up f (suc n) xs
@@ -144,6 +163,12 @@ span p []       = [] , []
 span p (x ∷ xs) =
   if p x then first (x ∷_) (span p xs)
          else [] , x ∷ xs
+
+partition : (p : A → Bool) → List A → List A × List A
+partition p []       = [] , []
+partition p (x ∷ xs) =
+  if p x then first (x ∷_) (partition p xs)
+         else second (x ∷_) (partition p xs)
 
 split-at : ℕ → List A → List A × List A
 split-at 0       xs       = [] , xs

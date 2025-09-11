@@ -185,8 +185,8 @@ map-∈-in {xs = x ∷ xs} f inj (there fx) = there (map-∈-in f (λ {x} {y} y�
 -}
 
 map-∈Σ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {y : B} {xs : List A}
-        → (f : A → B)
-        → y ∈ map f xs → Σ[ x ꞉ A ] ((x ∈ xs) × (y ＝ f x))
+       → (f : A → B)
+       → y ∈ map f xs → Σ[ x ꞉ A ] ((x ∈ xs) × (y ＝ f x))
 map-∈Σ {xs = x ∷ xs} f (here e) = x , here refl , e
 map-∈Σ {xs = x ∷ xs} f (there y∈) =
   let (x , x∈ , xe) = map-∈Σ f y∈ in
@@ -198,6 +198,21 @@ map-∈Σ {xs = x ∷ xs} f (there y∈) =
 ∈-split {xs = x ∷ xs} (there hx) =
   let (ls , rs , e) = ∈-split hx in
   x ∷ ls , rs , ap (x ∷_) e
+
+map-with-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+           → (xs : List A)
+           → ((a : A) → a ∈ xs → B)
+           → List B
+map-with-∈ []       f = []
+map-with-∈ (x ∷ xs) f = f x (here refl) ∷ map-with-∈ xs (λ a → f a ∘ there)
+
+rec-with-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+           → B
+           → (xs : List A)
+           → ((a : A) → a ∈ xs → B → B)
+           → B
+rec-with-∈ z []       f = z
+rec-with-∈ z (x ∷ xs) f = f x (here refl) (rec-with-∈ z xs λ a → f a ∘ there)
 
 -- interaction with any/all
 
@@ -266,7 +281,7 @@ unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
   ap there (unique→∷ s nx u′ z h1 h2)
 
 -- disjointness
--- TODO move out
+-- TODO move to Notation.Membership
 
 _∥_ : List A → List A → Type (level-of-type A)
 _∥_ {A} xs ys = ∀[ a ꞉ A ] (a ∈ xs → a ∈ ys → ⊥)
@@ -274,9 +289,18 @@ _∥_ {A} xs ys = ∀[ a ꞉ A ] (a ∈ xs → a ∈ ys → ⊥)
 ∥-comm : {xs ys : List A} → xs ∥ ys → ys ∥ xs
 ∥-comm dxy hy hx = dxy hx hy
 
-∥-∷-l : ∀ {x} {xs ys : List A} → x ∉ ys → xs ∥ ys → (x ∷ xs) ∥ ys
-∥-∷-l {ys} ny dxy (here e)   hy = ny (subst (_∈ ys) e hy)
-∥-∷-l      ny dxy (there hx) hy = dxy hx hy
+∥-[]-l : {xs : List A} → [] ∥ xs
+∥-[]-l = false!
 
-∥-∷-r : ∀ {y} {xs ys : List A} → y ∉ xs → xs ∥ ys → xs ∥ (y ∷ ys)
-∥-∷-r nx = ∥-comm ∘ ∥-∷-l nx ∘ ∥-comm
+∥-[]-r : {xs : List A} → xs ∥ []
+∥-[]-r _ = false!
+
+∥-∷→l : ∀ {x} {xs ys : List A} → x ∉ ys → xs ∥ ys → (x ∷ xs) ∥ ys
+∥-∷→l {ys} ny dxy (here e)   hy = ny (subst (_∈ ys) e hy)
+∥-∷→l      ny dxy (there hx) hy = dxy hx hy
+
+∥-∷←l : ∀ {x} {xs ys : List A} → (x ∷ xs) ∥ ys → x ∉ ys × xs ∥ ys
+∥-∷←l d = d (here refl) , d ∘ there
+
+∥-∷→r : ∀ {y} {xs ys : List A} → y ∉ xs → xs ∥ ys → xs ∥ (y ∷ ys)
+∥-∷→r nx = ∥-comm ∘ ∥-∷→l nx ∘ ∥-comm

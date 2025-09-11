@@ -26,11 +26,11 @@ Props _ .Poset.≤-antisym f g = ext (f , g)
 instance
   Props-has-bot : Bottom (Props ℓ)
   Props-has-bot .Bottom.bot = ⊥
-  Props-has-bot .Bottom.has-bot _ ()
+  Props-has-bot .Bottom.bot-is-bot _ ()
 
   Props-has-top : Top (Props ℓ)
   Props-has-top .Top.top = ⊤
-  Props-has-top .Top.has-top _ _ = lift tt
+  Props-has-top .Top.top-is-top _ _ = lift tt
 
   Props-has-joins : Has-joins (Props ℓ)
   Props-has-joins {x = P} {y = Q} .Join.lub = P ⊎₁ Q

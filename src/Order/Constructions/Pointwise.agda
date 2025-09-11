@@ -3,14 +3,15 @@ module Order.Constructions.Pointwise where
 
 open import Cat.Prelude
 open import Order.Base
-open import Order.Constructions.Product
-open import Order.Constructions.Props
 open import Order.Diagram.Bottom
-open import Order.Diagram.Glb
-open import Order.Diagram.Join
-open import Order.Diagram.Lub
-open import Order.Diagram.Meet
 open import Order.Diagram.Top
+open import Order.Diagram.Join
+open import Order.Diagram.Meet
+open import Order.Diagram.Lub
+open import Order.Diagram.Glb
+open import Order.Semilattice.Join
+open import Order.Semilattice.Meet
+open import Order.Lattice
 
 private variable o ℓ o′ ℓ′ ℓᵢ : Level
 
@@ -61,11 +62,11 @@ instance
 module _ {I : Type ℓᵢ} {@0 P : Poset o ℓ} where instance
   Pointwise-pres-bottom : ⦃ b : Bottom P ⦄ → Bottom (Pointwise I λ _ → P)
   Pointwise-pres-bottom ⦃ b ⦄ .Bottom.bot _ = b .Bottom.bot
-  Pointwise-pres-bottom ⦃ b ⦄ .Bottom.has-bot _ = b .Bottom.has-bot _
+  Pointwise-pres-bottom ⦃ b ⦄ .Bottom.bot-is-bot _ = b .Bottom.bot-is-bot _
 
   Pointwise-pres-top : ⦃ t : Top P ⦄ → Top (Pointwise I λ _ → P)
   Pointwise-pres-top ⦃ t ⦄ .Top.top _ = t .Top.top
-  Pointwise-pres-top ⦃ t ⦄ .Top.has-top _ = t .Top.has-top _
+  Pointwise-pres-top ⦃ t ⦄ .Top.top-is-top _ = t .Top.top-is-top _
 
   Pointwise-pres-joins : ⦃ hj : Has-joins P ⦄ → Has-joins (Pointwise I λ _ → P)
   Pointwise-pres-joins ⦃ hj ⦄ {x = f} {y = g} .Join.lub i = hj {f i} {g i} .Join.lub
@@ -78,6 +79,24 @@ module _ {I : Type ℓᵢ} {@0 P : Poset o ℓ} where instance
   Pointwise-pres-meets ⦃ hm ⦄ .Meet.has-meet .is-meet.meet≤l = is-meet.meet≤l (hm .Meet.has-meet)
   Pointwise-pres-meets ⦃ hm ⦄ .Meet.has-meet .is-meet.meet≤r = is-meet.meet≤r (hm .Meet.has-meet)
   Pointwise-pres-meets ⦃ hm ⦄ .Meet.has-meet .is-meet.greatest _ u v = is-meet.greatest (hm .Meet.has-meet) _ u v
+
+  Pointwise-pres-join-slat : ⦃ js : is-join-semilattice P ⦄ → is-join-semilattice (Pointwise I λ _ → P)
+  Pointwise-pres-join-slat ⦃ js ⦄ .is-join-semilattice.has-bottom =
+    Pointwise-pres-bottom ⦃ b = js .is-join-semilattice.has-bottom ⦄
+  Pointwise-pres-join-slat ⦃ js ⦄ .is-join-semilattice.has-joins =
+    Pointwise-pres-joins ⦃ hj = js .is-join-semilattice.has-joins ⦄
+
+  Pointwise-pres-meet-slat : ⦃ ms : is-meet-semilattice P ⦄ → is-meet-semilattice (Pointwise I λ _ → P)
+  Pointwise-pres-meet-slat ⦃ ms ⦄ .is-meet-semilattice.has-top =
+    Pointwise-pres-top ⦃ t = ms .is-meet-semilattice.has-top ⦄
+  Pointwise-pres-meet-slat ⦃ ms ⦄ .is-meet-semilattice.has-meets =
+    Pointwise-pres-meets ⦃ hm = ms .is-meet-semilattice.has-meets ⦄
+
+  Pointwise-pres-lat : ⦃ lt : is-lattice P ⦄ → is-lattice (Pointwise I λ _ → P)
+  Pointwise-pres-lat ⦃ lt ⦄ .is-lattice.has-join-slat =
+    Pointwise-pres-join-slat ⦃ js = lt .is-lattice.has-join-slat ⦄
+  Pointwise-pres-lat ⦃ lt ⦄ .is-lattice.has-meet-slat =
+    Pointwise-pres-meet-slat ⦃ ms = lt .is-lattice.has-meet-slat ⦄
 
   Pointwise-pres-lubs : ⦃ hl : Has-lubs-of-size P ℓ′ ⦄ → Has-lubs-of-size (Pointwise I λ _ → P) ℓ′
   Pointwise-pres-lubs ⦃ hl ⦄ {I = J} {F} .Lub.lub j = hl {I = J} {F = λ k → F k j} .Lub.lub

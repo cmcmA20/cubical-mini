@@ -3,6 +3,7 @@ module Meta.Extensionality where
 
 open import Foundations.Prelude
 
+open import Meta.Effect.Choice
 open import Meta.Effect.Alt
 open import Meta.Effect.Bind
 open import Meta.Literals.FromProduct
@@ -19,6 +20,7 @@ open import Data.Reflection.Term
 open import Data.Reflects.Base
 open import Data.Unit.Base
 
+open Choice ⦃ ... ⦄
 open Alt ⦃ ... ⦄
 open Bind ⦃ ... ⦄
 

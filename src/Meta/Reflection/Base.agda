@@ -84,9 +84,11 @@ instance
   Bind-TC : Bind (eff TC)
   Bind-TC ._>>=_ = bindTC
 
+  Choice-TC : Choice (eff TC)
+  Choice-TC ._<|>_ = catchTC
+
   Alt-TC : Alt (eff TC)
   Alt-TC .fail  = type-error []
-  Alt-TC ._<|>_ = catchTC
 
   Map-Arg : Map (eff Arg)
   Map-Arg .map f (arg ai x) = arg ai (f x)

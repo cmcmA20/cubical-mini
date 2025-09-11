@@ -19,8 +19,8 @@ module _ (P : Poset o ℓ) where
   record Bottom : Type (o ⊔ ℓ) where
     no-eta-equality
     field
-      bot     : Ob
-      has-bot : is-bottom bot
+      bot        : Ob
+      bot-is-bot : is-bottom bot
 
     instance
       ⊥-Bottom : ⊥-notation Ob
@@ -28,7 +28,7 @@ module _ (P : Poset o ℓ) where
     {-# OVERLAPPING ⊥-Bottom #-}
 
     ¡ : ∀{x} → ⊥ ≤ x
-    ¡ = has-bot _
+    ¡ = bot-is-bot _
 
 {-# DISPLAY Bottom.bot = ⊥ #-}
 unquoteDecl Bottom-Iso = declare-record-iso Bottom-Iso (quote Bottom)
@@ -59,11 +59,11 @@ module _ {P : Poset o ℓ} where
 
   Bottom→Lub : ∀ {f} → Bottom P → Lub P f
   Bottom→Lub bottom .Lub.lub = Bottom.bot bottom
-  Bottom→Lub bottom .Lub.has-lub = is-bottom→is-lub (Bottom.has-bot bottom)
+  Bottom→Lub bottom .Lub.has-lub = is-bottom→is-lub (Bottom.bot-is-bot bottom)
 
   Lub→Bottom : ∀ {f} → Lub P f → Bottom P
   Lub→Bottom lub .Bottom.bot = Lub.lub lub
-  Lub→Bottom lub .Bottom.has-bot = is-lub→is-bottom (Lub.has-lub lub)
+  Lub→Bottom lub .Bottom.bot-is-bot = is-lub→is-bottom (Lub.has-lub lub)
 
   Bottom≃Lub : ∀ {f} → Bottom P ≃ Lub P f
   Bottom≃Lub = Bottom→Lub , biimp-is-equiv! _ Lub→Bottom

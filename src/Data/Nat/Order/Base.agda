@@ -16,6 +16,7 @@ open import Data.Nat.Order.Inductive.Base
   using ( _≤?_ ; _<?_ ; _≥?_ ; _>?_
         ; _≰?_ ; _≮?_ ; _≱?_ ; _≯?_
         )
+  public
 open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Solver
@@ -24,6 +25,7 @@ open import Data.Sum.Base
 open import Data.Sum.Path
 open import Data.Truncation.Propositional.Base
 open import Data.Truncation.Propositional.Path
+open import Data.Truncation.Propositional.Properties
 
 private variable
   m n k : ℕ
@@ -36,6 +38,12 @@ opaque
 
   m ≤ n = Σ[ k ꞉ ℕ ] (m + k ＝ n)
   m < n = suc m ≤ n
+
+  ≤→Σ : ∀ m n → m ≤ n → Σ[ k ꞉ ℕ ] (m + k ＝ n)
+  ≤→Σ m n = id
+
+  <→Σ : ∀ m n → m < n → Σ[ k ꞉ ℕ ] (m + suc k ＝ n)
+  <→Σ m n (k , e) = k , +-suc-r m k ∙ e
 
 _≥_ _>_ _≰_ _≮_ _≱_ _≯_ : Corr _ (ℕ , ℕ) 0ℓ
 
@@ -133,6 +141,9 @@ opaque
 
 =→≤ : m ＝ n → m ≤ n
 =→≤ {m} {n} e = subst (m ≤_) e ≤-refl
+
+≤0≃=0 : n ≤ 0 ≃ n ＝ 0
+≤0≃=0 = prop-extₑ! ≤0→=0 =→≤
 
 ≤≃≤+l : (n ≤ k) ≃ (m + n ≤ m + k)
 ≤≃≤+l {n} {k} {m} = prop-extₑ! (ff m n k) (gg m n k)
@@ -408,6 +419,9 @@ opaque
 ∸=0≃≤ : (m ∸ n ＝ 0) ≃ (m ≤ n)
 ∸=0≃≤ = prop-extₑ! ∸=0→≤ ≤→∸=0
 
+∸>0≃> : (0 < m ∸ n) ≃ (n < m)
+∸>0≃> = <≃≱ ∙ ≃→¬≃ (≤0≃=0 ∙ ∸=0≃≤) ∙ <≃≱ ⁻¹
+
 ∸≤≃≤+ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ≤ n + p)
 ∸≤≃≤+ {m} {n} {p} = ∸=0≃≤ ⁻¹ ∙ whisker-path-lₑ (sym (∸-+-assoc n m p)) ∙ ∸=0≃≤
 
@@ -427,10 +441,45 @@ opaque
 <-∸-l-≃ {m} {n} {p = suc p} p>0 = <≃suc≤ ⁻¹ ∙ ≤≃≤+l {m = 1} ⁻¹ ∙ ∸≤≃≤+ {m} {n} ∙ ≤≃≤+l
                                 ∙ subst (λ q → suc m ≤ q ≃ suc m ≤ n + suc p) (+-suc-r n p) refl ∙ <≃suc≤
 
-opaque
-  unfolding _≤_
-  ≤→Σ : ∀ m n → m ≤ n → Σ[ k ꞉ ℕ ] (m + k ＝ n)
-  ≤→Σ m n = id
+-- multiplication
 
-  <→Σ : ∀ m n → m < n → Σ[ k ꞉ ℕ ] (m + suc k ＝ n)
-  <→Σ m n (k , e) = k , +-suc-r m k ∙ e
+≤-·-l : 0 < n → m ≤ n · m
+≤-·-l {n = zero}  zn = false! zn
+≤-·-l {n = suc n} _  = ≤-+-r
+
+≤-·-r : 0 < n → m ≤ m · n
+≤-·-r {m} zn = subst (m ≤_) (·-comm _ m) (≤-·-l zn)
+
+≤≃≤·l : (m · n ≤ m · k) ≃ (m ＝ 0) ⊎₁ (n ≤ k)
+≤≃≤·l {m} {n} {k} =
+    ∸=0≃≤ ⁻¹
+  ∙ whisker-path-lₑ (·-distrib-∸-l m n k ⁻¹)
+  -- TODO cannot put this into Data.Nat.Properties because of circularity
+  -- ·-zero≃ : (x y : ℕ) → x · y ＝ 0 ≃ (x ＝ 0) ⊎₁ (y ＝ 0)
+  ∙ prop-extₑ! (∣_∣₁ ∘ ·-zero m (n ∸ k))
+               (rec! [ (ap (_· (n ∸ k)))
+                     , (λ nk0 → ap (m ·_) nk0 ∙ ·-absorb-r m) ]ᵤ)
+  ∙ ⊎₁-ap-r ∸=0≃≤
+
+≤≃≤·r : (m · k ≤ n · k) ≃ (k ＝ 0) ⊎₁ (m ≤ n)
+≤≃≤·r {m} {k} {n} =
+    ∸=0≃≤ ⁻¹
+  ∙ whisker-path-lₑ (ap² _∸_ (·-comm m k) (·-comm n k))
+  ∙ ∸=0≃≤
+  ∙ ≤≃≤·l
+
+<≃<·l : (m · n < m · k) ≃ (0 < m) × (n < k)
+<≃<·l {m} =
+    <≃≱
+  ∙ ≃→¬≃ (≤≃≤·l {m = m})
+  ∙ ⊎₁-¬-distribute
+  ∙ ×-ap (≃→¬≃ (≤0≃=0 ⁻¹) ∙ <≃≱ ⁻¹)
+         (<≃≱ ⁻¹)
+
+<≃<·r : (m · k < n · k) ≃ (0 < k) × (m < n)
+<≃<·r {m} {k} {n} =
+    <≃≱
+  ∙ ≃→¬≃ (≤≃≤·r {m = n} {n = m})
+  ∙ ⊎₁-¬-distribute
+  ∙ ×-ap (≃→¬≃ (≤0≃=0 ⁻¹) ∙ <≃≱ ⁻¹)
+         (<≃≱ ⁻¹)

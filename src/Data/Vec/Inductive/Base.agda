@@ -34,7 +34,20 @@ impl .VecIᴱ.[] = []
 impl .VecIᴱ._∷_ = _∷_
 impl .VecIᴱ.elim = elim
 
+rec : {P : (@0 n : ℕ) → Type ℓ′}
+    → P 0
+    → ({@0 n : ℕ} → A → P n → P (suc n))
+    → {@0 n : ℕ} → Vec A n → P n
 rec = VecIᴱ.rec impl
+
+-- unerased
+-- TODO elimU
+recU : {P : ℕ → Type ℓ′}
+     → P 0
+     → ({n : ℕ} → A → {xs : Vec A n} → P n → P (suc n))
+     → {n : ℕ} → Vec A n → P n
+recU     p0 pxs {n = 0}     []       = p0
+recU {P} p0 pxs {n = suc n} (x ∷ xs) = pxs x {xs = xs} (recU {P = P} p0 pxs {n = n} xs)
 
 replicate : (n : ℕ) → A → Vec A n
 replicate 0       x = []

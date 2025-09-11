@@ -46,7 +46,7 @@ module _ {P : Poset o ℓ} where
     Lower-sets-top : Top (Lower-sets P ℓ′)
     Lower-sets-top .Top.top .hom _ = ⊤
     Lower-sets-top .Top.top .pres-≤ = _
-    Lower-sets-top .Top.has-top = _
+    Lower-sets-top .Top.top-is-top = _
 
     @0 Lower-sets-have-joins : Has-joins (Lower-sets P ℓ′)
     Lower-sets-have-joins {x = A} {y = B} .Join.lub .hom t = A # t ⊎₁ B # t
@@ -62,12 +62,14 @@ module _ {P : Poset o ℓ} where
     Lower-sets-have-meets .Meet.has-meet .is-meet.meet≤r _ = snd
     Lower-sets-have-meets .Meet.has-meet .is-meet.greatest _ f g x p = f x p , g x p
 
+    -- aka cocompleteness
     @0 Lower-sets-have-lubs : Has-lubs-of-size (Lower-sets P ℓ′) ℓ′
     Lower-sets-have-lubs {I} {F} .Lub.lub .hom i = el! (∃[ j ꞉ I ] i ∈ (F j $_))
     Lower-sets-have-lubs {F} .Lub.lub .pres-≤ y≤x = map (second λ {i} → F i # y≤x)
     Lower-sets-have-lubs .Lub.has-lub .is-lub.fam≤lub i _ z = ∣ i , z ∣₁
     Lower-sets-have-lubs .Lub.has-lub .is-lub.least x f y = rec! λ z → f z y
 
+    -- aka completeness
     @0 Lower-sets-have-glbs : Has-glbs-of-size (Lower-sets P ℓ′) ℓ′
     Lower-sets-have-glbs {I} {F} .Glb.glb .hom i = el! (Π[ j ꞉ I ] i ∈ (F j $_))
     Lower-sets-have-glbs {F} .Glb.glb .pres-≤ y≤x f j = (F j # y≤x) $ f j

@@ -9,13 +9,20 @@ open import Meta.Effect.Bind
 open import Data.Maybe.Base
 open import Data.Maybe.Instances.Idiom public
 
+private variable
+  ℓ : Level
+  A B : Type ℓ
+
 open Bind ⦃ ... ⦄
 open Lawful-Bind ⦃ ... ⦄
 
+bindₘ : Maybe A → (A → Maybe B) → Maybe B
+bindₘ (just x) k = k x
+bindₘ  nothing _ = nothing
+
 instance
   Bind-Maybe : Bind (eff Maybe)
-  Bind-Maybe ._>>=_ (just x) k = k x
-  Bind-Maybe ._>>=_ nothing  _ = nothing
+  Bind-Maybe ._>>=_ = bindₘ
 
   Lawful-Bind-Maybe : Lawful-Bind (eff Maybe)
   Lawful-Bind-Maybe .>>=-id-l = refl

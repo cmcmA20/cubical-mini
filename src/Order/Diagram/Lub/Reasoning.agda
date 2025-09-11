@@ -30,7 +30,7 @@ open lubs renaming
 instance
   Bottom-Poset-Lub : Bottom P
   Bottom-Poset-Lub .Bottom.bot = ⋃ {I = Lift ℓ′ ⊥} λ()
-  Bottom-Poset-Lub .Bottom.has-bot _ = ⋃-universal _ λ ()
+  Bottom-Poset-Lub .Bottom.bot-is-bot _ = ⋃-universal _ λ ()
 
   Join-Poset-Lub : Has-joins P
   Join-Poset-Lub {x} {y} .Join.lub = ⋃ {I = Lift ℓ′ Bool} (rec! (if_then x else y))

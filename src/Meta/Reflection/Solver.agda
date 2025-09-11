@@ -3,6 +3,7 @@ module Meta.Reflection.Solver where
 
 open import Foundations.Base
 
+open import Meta.Effect.Choice
 open import Meta.Effect.Alt
 open import Meta.Effect.Bind
 open import Meta.Effect.Idiom
@@ -21,6 +22,7 @@ open import Data.Reflection.Name
 open import Data.Reflection.Term
 open import Data.Unit.Base
 
+open Choice ⦃ ... ⦄
 open Alt ⦃ ... ⦄
 open Bind ⦃ ... ⦄
 open Idiom ⦃ ... ⦄

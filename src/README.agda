@@ -46,3 +46,6 @@ import Functions.Everything
 
 -- I/O and related stuff.
 import System.Everything
+
+-- Reasonable postulates.
+import Unsafe.Everything

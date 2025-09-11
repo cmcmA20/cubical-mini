@@ -16,7 +16,7 @@ open import Data.Nat.Path
 open import Data.Nat.Properties
 open import Data.Nat.Two
 open import Data.Nat.Order.Base
-open import Data.Dec.Base
+open import Data.Dec.Base as Dec
 open import Data.Dec.Properties
 open import Data.Reflects.Base as Reflects
 
@@ -38,7 +38,16 @@ private variable
   x : A
   xs : List A
 
-subseq : ⦃ A-dis : is-discrete A ⦄
+rem : ⦃ d : is-discrete A ⦄ → A → List A → List A
+rem a = filter (λ x → not ⌊ a ≟ x ⌋)
+
+diff : ⦃ d : is-discrete A ⦄ → List A → List A → List A
+diff xs ys = filter (λ x → not (has x ys)) xs
+
+intersect : ⦃ d : is-discrete A ⦄ → List A → List A → List A
+intersect xs ys = filter (λ x → has x ys) xs
+
+subseq : ⦃ d : is-discrete A ⦄
         → List A → List A → Bool
 subseq     []       ys       = true
 subseq     (x ∷ xs) []       = false
@@ -61,7 +70,72 @@ perm? xs ys = all (λ q → count (λ x → ⌊ q ≟ x ⌋) xs == count (λ y �
 subset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
 subset? xs ys = all (λ x → has x ys) xs
 
+psubset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
+psubset? xs ys = subset? xs ys and any (λ y → not (has y xs)) ys
+
+eqset? : ⦃ d : is-discrete A ⦄ → List A → List A → Bool
+eqset? xs ys = subset? xs ys and subset? ys xs
+
 -- properties
+
+∉-rem-= : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
+        → z ∉ rem z xs
+∉-rem-= ⦃ d ⦄ {xs} {z} z∈ =
+  so→false! ⦃ d .proof ⦄
+    (filter-∈ {p = λ x → not ⌊ z ≟ x ⌋} {xs = xs} z∈ .fst)
+    refl
+
+rem-∉ : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
+      → z ∉ xs → rem z xs ＝ xs
+rem-∉ ⦃ d ⦄ {xs} {z} z∉ =
+  filter-all $
+  true→so! ⦃ Reflects-all-bool {p = λ x → not ⌊ z ≟ x ⌋} {xs = xs} ⦄ $
+  ∀∈→All λ x x∈ →
+    not-so $
+    contra (λ s → subst (_∈ xs) (so→true! ⦃ d .proof ⦄ s ⁻¹) x∈)
+           z∉
+
+⊆-rem : ⦃ d : is-discrete A ⦄ {xs : List A} {z : A}
+      → xs ⊆ (the (List A) (z ∷ rem z xs))
+⊆-rem ⦃ d ⦄ {z} {x} x∈ with x ≟ z
+... | yes x=z = here x=z
+... | no x≠z  =
+      there $
+      ∈-filter
+         (not-so (contra (λ s → so→true! ⦃ d .proof ⦄ s ⁻¹) x≠z))
+         x∈
+
+diff-⊆ : ⦃ d : is-discrete A ⦄ {xs ys : List A}
+       → diff xs ys ＝ [] → xs ⊆ ys
+diff-⊆ {xs} e {x} =
+  so→true! ⦃ Reflects-has ⦄ ∘
+  All→∀∈
+    (so→true! ⦃ Reflects-all-bool ⦄ $
+     subst So (not-invol (all _ xs)) $
+     subst (So ∘ not) (not-all? {xs = xs} ⁻¹) $
+     none-filter {xs = xs} e) x
+
+Reflects-intersect-disjoint : ⦃ d : is-discrete A ⦄
+                            → {xs ys : List A}
+                            → Reflects (xs ∥ ys) (is-nil? $ intersect xs ys)
+Reflects-intersect-disjoint {xs = []}     = ofʸ ∥-[]-l
+Reflects-intersect-disjoint {xs = x ∷ xs} {ys} =
+  Dec.elim
+    {C = λ q → Reflects ((x ∷ xs) ∥ ys)
+                        (is-nil? $ if ⌊ q ⌋ then x ∷ filter (λ q → has q ys) xs
+                                            else filter (λ q → has q ys) xs)}
+    (λ x∈ → ofⁿ λ d → d (here refl) x∈)
+    (λ x∉ → Reflects.dmap
+              (∥-∷→l x∉)
+              (contra (snd ∘ ∥-∷←l))
+              (Reflects-intersect-disjoint {xs = xs} {ys = ys}))
+    (x ∈? ys)
+
+Dec-disjoint : ⦃ d : is-discrete A ⦄
+             → (xs ys : List A)
+             → Dec (xs ∥ ys)
+Dec-disjoint xs ys .does  = is-nil? $ intersect xs ys
+Dec-disjoint xs ys .proof = Reflects-intersect-disjoint
 
 Reflects-subseq : ⦃ d : is-discrete A ⦄ {xs ys : List A}
                 → Reflects (OPE xs ys) (subseq xs ys)
@@ -192,3 +266,9 @@ Reflects-subset {A} {xs} {ys} =
     (λ a {x} → All→∀∈ a x)
     (contra (λ s → ∀∈→All λ x → s {x = x}))
     (Reflects-all {xs = xs} λ x → Reflects-has)
+
+Reflects-eqset : ⦃ d : is-discrete A ⦄ {xs ys : List A}
+               → Reflects (xs ≈ ys) (eqset? xs ys)
+Reflects-eqset {A} {xs} {ys} =
+  Reflects-× ⦃ rp = Reflects-subset {xs = xs} {ys = ys} ⦄
+             ⦃ rq = Reflects-subset {xs = ys} {ys = xs} ⦄

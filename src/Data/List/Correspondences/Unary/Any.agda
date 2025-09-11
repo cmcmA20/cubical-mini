@@ -74,7 +74,27 @@ opaque
   code-any-is-of-hlevel {n} {xs = x ∷ xs} {u = there u} {v = here vx} hl = hlevel (suc n)
   code-any-is-of-hlevel {n} {xs = x ∷ xs} {u = there u} {v = there v} hl = code-any-is-of-hlevel {u = u} {v = v} hl
 
--- technically it's also a set when P has level 0/1
+-- TODO refactor?
+any-contr-is-set
+  : {xs : List A}
+  → (∀ x → is-contr (P x))
+  → is-set (Any P xs)
+any-contr-is-set {xs} cp a b =
+  ≃→is-of-hlevel 1
+    (identity-system-gives-path (Extensional-Any .idsᵉ) ⁻¹)
+    (code-any-is-of-hlevel {n = 0} {u = a} {v = b}
+       (is-of-hlevel-+ 0 2 ∘ cp))
+
+any-prop-is-set
+  : {xs : List A}
+  → (∀ x → is-prop (P x))
+  → is-set (Any P xs)
+any-prop-is-set {xs} pp a b =
+  ≃→is-of-hlevel 1
+    (identity-system-gives-path (Extensional-Any .idsᵉ) ⁻¹)
+    (code-any-is-of-hlevel {n = 0} {u = a} {v = b}
+      (is-of-hlevel-+ 1 1 ∘ pp))
+
 any-is-of-hlevel
   : (n : HLevel) {xs : List A}
   → (∀ x → is-of-hlevel (2 + n) (P x))
@@ -153,10 +173,19 @@ any-⊎≃ =
                  (here px)  → refl
                  (there ax) → refl)
 
+any-¬here : {x : A} {xs : List A}
+          → ¬ P x → Any P (x ∷ xs) → Any P xs
+any-¬here nx (here px)   = absurd (nx px)
+any-¬here nx (there pxs) = pxs
+
+any-¬there : {x : A} {xs : List A}
+          → ¬ Any P xs → Any P (x ∷ xs) → P x
+any-¬there nxs (here px)   = px
+any-¬there nxs (there pxs) = absurd (nxs pxs)
+
 ¬any-∷ : {x : A} {xs : List A}
        → ¬ P x → ¬ Any P xs → ¬ Any P (x ∷ xs)
-¬any-∷ nx nxs (here px)   = nx px
-¬any-∷ nx nxs (there pxs) = nxs pxs
+¬any-∷ = contra ∘ any-¬here
 
 ¬any-uncons : {x : A} {xs : List A}
             → ¬ Any P (x ∷ xs)

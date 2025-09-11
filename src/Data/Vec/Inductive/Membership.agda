@@ -1,7 +1,8 @@
 {-# OPTIONS --safe #-}
 module Data.Vec.Inductive.Membership where
 
-open import Foundations.Base
+open import Meta.Prelude
+open Variadics _
 
 open import Meta.Effect.Alternative
 
@@ -12,6 +13,7 @@ open import Data.Empty.Base
 open import Data.Fin.Inductive.Base
 open import Data.Sum.Base
 open import Data.Vec.Inductive.Operations
+open import Data.Vec.Inductive.Correspondences.Unary.All
 
 open Alternative ⦃ ... ⦄
 
@@ -38,6 +40,18 @@ thereᵥ (idx , e) = fsuc idx , e
 instance
   Membership-Vec : Membership A (Vec A n) (level-of-type A)
   Membership-Vec ._∈_ = _∈ᵥ_
+
+∉[] : {x : A} → x ∉ (the (Vec A 0) [])
+∉[] ()
+
+All→∀∈ : {A : 𝒰 ℓ} {P : Pred A ℓ} {xs : Vec A n}
+        → All P xs
+        → (z : A) → z ∈ xs → P z
+All→∀∈     {xs = []}           ax  z z∈ = absurd (∉[] z∈)
+All→∀∈ {P} {xs = x ∷ xs} (px ∷ ax) z z∈ =
+  [ (λ ze → subst P (ze ⁻¹) px)
+  , (λ z∈′ → All→∀∈ ax z z∈′)
+  ]ᵤ (∈ᵥ-uncons z∈)
 
 instance
   Dec-∈ᵥ : ⦃ di : is-discrete A ⦄

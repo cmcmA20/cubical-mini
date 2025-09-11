@@ -39,6 +39,9 @@ opaque
         w = apⁱ Id≃path.to z
     in Id≃path.to (subst² _＝ⁱ_ (Id≃path.ε # _) (Id≃path.ε # _) w)
 
+is-set→is-set-overⁱ : is-set A → (x y : A) (p q : x ＝ⁱ y) → p ＝ q
+is-set→is-set-overⁱ A-set x y p q =
+  Equiv.injective Id≃path (A-set x y (Equiv.to Id≃path p) (Equiv.to Id≃path q))
 
 is-discreteⁱ→is-discrete : is-discreteⁱ A → is-discrete A
 is-discreteⁱ→is-discrete d = Dec.dmap Id≃path.to (contra Id≃path.from) (d _ _)
@@ -46,7 +49,17 @@ is-discreteⁱ→is-discrete d = Dec.dmap Id≃path.to (contra Id≃path.from) (
 is-discrete→is-discreteⁱ : is-discrete A → is-discreteⁱ A
 is-discrete→is-discreteⁱ d _ _ = Dec.dmap Id≃path.from (contra Id≃path.to) d
 
--- opacitiy breaks solvers
+-- opacity breaks solvers
 instance
   id-is-discrete : ∀ {ℓ} {A : Type ℓ} {x y : A} ⦃ d : Dec (x ＝ y) ⦄ → Dec (x ＝ⁱ y)
   id-is-discrete ⦃ d ⦄ = Dec.dmap Id≃path.from (contra Id≃path.to) d
+
+substⁱ-filler-set : ∀ {ℓ ℓ'} {A : Type ℓ} (P : A → Type ℓ')
+                  → is-set A
+                  → {a : A}
+                  → (p : a ＝ⁱ a)
+                  → (x : P a) → x ＝ substⁱ P p x
+substⁱ-filler-set P s {a} p x =
+  subst (λ q → x ＝ substⁱ P q x)
+        (is-set→is-set-overⁱ s a a reflⁱ p)
+        refl
