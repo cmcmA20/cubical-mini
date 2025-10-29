@@ -165,14 +165,14 @@ instance
   ap fsuc (∈ₗ→fin-respects-∈!ₗ q (there-inj ∘ u ∘ there) q′ (there-inj ∘ v ∘ there) r)
 
 ∈-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
-       → (f : A → B) → x ∈ xs → f x ∈ map f xs
+      → (f : A → B) → x ∈ xs → f x ∈ map f xs
 ∈-map {xs = x ∷ xs} f (here e)   = here (ap f e)
 ∈-map {xs = x ∷ xs} f (there hx) = there (∈-map f hx)
 
 map-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
-       → (f : A → B) → Injective f
-       → f x ∈ map f xs → x ∈ xs
-map-∈ {xs = x ∷ xs} f inj (here e)  = here (inj e)
+      → (f : A → B) → Injective f
+      → f x ∈ map f xs → x ∈ xs
+map-∈ {xs = x ∷ xs} f inj (here e)   = here (inj e)
 map-∈ {xs = x ∷ xs} f inj (there fx) = there (map-∈ f inj fx)
 
 {-
@@ -191,6 +191,23 @@ map-∈Σ {xs = x ∷ xs} f (here e) = x , here refl , e
 map-∈Σ {xs = x ∷ xs} f (there y∈) =
   let (x , x∈ , xe) = map-∈Σ f y∈ in
   x , there x∈ , xe
+
+map-⊆ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A}
+      → (f : A → B)
+      → xs ⊆ ys
+      → map f xs ⊆ map f ys
+map-⊆ {ys} f sub {x} x∈m =
+  let (z , z∈ , xe) = map-∈Σ f x∈m in
+  subst (_∈ map f ys) (xe ⁻¹) $
+  ∈-map f $
+  sub z∈
+
+⊆-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A}
+      → (f : A → B) → Injective f
+      → map f xs ⊆ map f ys
+      → xs ⊆ ys
+⊆-map {ys} f fi sub {x} x∈xs =
+  map-∈ f fi $ sub $ ∈-map f x∈xs
 
 ∈-split : {A : 𝒰 ℓᵃ} {x : A} {xs : List A}
          → x ∈ xs → Σ[ ls ꞉ List A ] Σ[ rs ꞉ List A ] (xs ＝ ls ++ x ∷ rs)

@@ -8,6 +8,7 @@ open import Data.Bool.Base
 open import Data.Nat.Order.Base
 open import Data.Reflects
 open import Data.List.Base
+open import Data.List.Path
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
@@ -55,10 +56,11 @@ ope-uncons : ∀ {x y} {xs ys : List A}
 ope-uncons               (otake _ o) = o
 ope-uncons {ys = y ∷ ys} (odrop o)   = odrop (ope-uncons o)
 
-ope-refl : {xs : List A}
-         → OPE xs xs
-ope-refl {xs = []}     = odone
-ope-refl {xs = x ∷ xs} = otake refl ope-refl
+=→ope : {xs ys : List A} → xs ＝ ys → OPE xs ys
+=→ope {xs = []}     {ys = []}     e = odone
+=→ope {xs = []}     {ys = y ∷ ys} e = false! e
+=→ope {xs = x ∷ xs} {ys = []}     e = false! e
+=→ope {xs = x ∷ xs} {ys = y ∷ ys} e = otake (∷-head-inj e) (=→ope (∷-tail-inj e))
 
 ope-trans : {xs ys zs : List A}
           → OPE xs ys → OPE ys zs → OPE xs zs
@@ -69,10 +71,20 @@ ope-trans  oxy                     (odrop oyz)     = odrop (ope-trans oxy oyz)
 
 instance
   Refl-OPE : Refl {A = List A} OPE
-  Refl-OPE .refl = ope-refl
+  Refl-OPE .refl = =→ope refl
 
   Trans-OPE : Trans {A = List A} OPE
   Trans-OPE ._∙_ = ope-trans
+
+ope-++-l : {A : 𝒰 ℓᵃ} {xs ys : List A}
+         → OPE xs (ys ++ xs)
+ope-++-l {ys = []}     = refl
+ope-++-l {ys = x ∷ ys} = odrop ope-++-l
+
+ope-++-r : {A : 𝒰 ℓᵃ} {xs ys : List A}
+         → OPE xs (xs ++ ys)
+ope-++-r {xs = []}     = ope-init
+ope-++-r {xs = x ∷ xs} = otake refl ope-++-r
 
 -- TODO move to properties
 

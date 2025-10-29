@@ -6,6 +6,7 @@ open import Meta.Prelude
 open import Logic.Decidability
 
 open import Data.Bool.Base
+open import Data.Reflects.Base
 open import Data.Dec.Base
 open import Data.Maybe.Base as Maybe public
 open import Data.Maybe.Path
@@ -37,6 +38,10 @@ maybe-as-sum = ≅→≃ i where
   i .inverses .Inverses.inv-o _ (inr x) = inr x
   i .inverses .Inverses.inv-i j (just x) = just x
   i .inverses .Inverses.inv-i j nothing = nothing
+
+reflects-is-nothing? : (m : Maybe A) → Reflects (m ＝ nothing) (is-nothing? m)
+reflects-is-nothing? (just x) = ofⁿ false!
+reflects-is-nothing?  nothing = ofʸ refl
 
 fibre-just : (m : Maybe A) ⦃ _ : So (is-just? m) ⦄ → fibre just m
 fibre-just (just x) = x , refl

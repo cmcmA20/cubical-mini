@@ -23,6 +23,7 @@ open import Data.Maybe.Base as Maybe
 open import Data.Maybe.Path
 open import Data.Maybe.Properties renaming (rec-fusion to rec-fusionᵐ)
 open import Data.Maybe.Instances.Map.Properties
+open import Data.Maybe.Correspondences.Unary.Any renaming (Any to Anyᵐ ; any-map to any-mapᵐ ; Reflects-any-bool to Reflects-Anyᵐ-bool)
 open import Data.List.Base as List
 open import Data.List.Path
 open import Data.List.Properties
@@ -75,6 +76,8 @@ rec-fusion : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
            → h (List.rec z f xs) ＝ List.rec (h z) g xs
 rec-fusion             []       eq = refl
 rec-fusion {z} {f} {g} (x ∷ xs) eq = eq x (List.rec z f xs) ∙ ap (g x) (rec-fusion xs eq)
+
+-- TODO lemmas when f is associative/commutative
 
 -- length
 
@@ -197,6 +200,16 @@ snoc-elim P p[] ps xs = go [] xs p[]
 snoc-length : (xs : List A) {x : A} → length (xs ∷r x) ＝ suc (length xs)
 snoc-length xs {x} = ap length (snoc-append xs) ∙ ++-length xs (x ∷ []) ∙ +-comm (length xs) 1
 
+length>0→snoc : {A : 𝒰 ℓ} {xs : List A}
+              → 0 < length xs → Σ[ ys ꞉ List A ] Σ[ y ꞉ A ] (xs ＝ ys ∷r y)
+length>0→snoc {A} {xs} =
+  snoc-elim
+    (λ q → 0 < length q
+         → Σ[ ys ꞉ List A ] Σ[ y ꞉ A ] (q ＝ ys ∷r y))
+    false!
+    (λ ys y _ _ → ys , y , refl)
+    xs
+
 snoc-inj : {xs ys : List A} {z w : A} → xs ∷r z ＝ ys ∷r w → (xs ＝ ys) × (z ＝ w)
 snoc-inj {xs = []}     {ys = []}     e = refl , (∷-head-inj e)
 snoc-inj {xs = []}     {ys = y ∷ ys} e = false! ⦃ Reflects-List-≠-tail ⦄ e
@@ -256,6 +269,40 @@ prefix-∷r-l {xs} {ys} p =
   prefix-++-l $
   (subst (λ q → Prefix q ys) (snoc-append xs) $
    p)
+
+-- unsnoc
+
+unsnoc-snoc : {xs : List A} {z w : A}
+            → unsnoc z (xs ∷r w) ＝ (z ∷ xs , w)
+unsnoc-snoc {xs = []}             =
+  refl
+unsnoc-snoc {xs = x ∷ xs} {z} {w} =
+  let ih = unsnoc-snoc {xs = xs} {z = x} in
+  ×-path (ap (λ q → z ∷ fst q) ih) (ap snd ih)
+
+snoc-unsnoc : {z : A}
+            → let (ys , y) = unsnoc z xs in
+              ys ∷r y ＝ z ∷ xs
+snoc-unsnoc {xs} {z} =
+  snoc-elim
+    (λ q → let (ys , y) = unsnoc z q in
+           ys ∷r y ＝ z ∷ q)
+    refl
+    (λ ys y _ →
+         let e = unsnoc-snoc {xs = ys} {z = z} {w = y} in
+         ap² _∷r_ (ap fst e) (ap snd e))
+    xs
+
+unsnocᵐ-∷r : ∀ {A : Type ℓ} {xs : List A}
+           → xs ＝ Maybe.rec [] (_∷r_ $²_) (unsnocᵐ xs)
+unsnocᵐ-∷r {xs = []}     = refl
+unsnocᵐ-∷r {xs = x ∷ xs} = snoc-unsnoc ⁻¹
+
+unsnocᵐ-len>0 : ∀ {A : Type ℓ} {xs : List A}
+              → 0 < length xs
+              → Anyᵐ (λ where (ys , y) → xs ＝ ys ∷r y) (unsnocᵐ xs)
+unsnocᵐ-len>0 {xs = []}     prf = false! prf
+unsnocᵐ-len>0 {xs = x ∷ xs} prf = here (snoc-unsnoc ⁻¹)
 
 -- concat
 
@@ -541,17 +588,31 @@ none-filter {p} {xs = x ∷ xs}   =
 
 filter-all : {p : A → Bool} {xs : List A}
            → ⌞ all p xs ⌟ → filter p xs ＝ xs
-filter-all {p = p} {xs = []}     _ = refl
-filter-all {p = p} {xs = x ∷ xs} s =
+filter-all     {xs = []}     _ = refl
+filter-all {p} {xs = x ∷ xs} s =
   let pax = and-so-≃ {x = p x} $ s in
-  subst (λ q → (if q then x ∷ filter p xs else filter p xs) ＝ x ∷ xs) ((so≃is-true $ pax .fst) ⁻¹) $
-  ap (x ∷_) (filter-all (pax .snd))
+  if-true (pax .fst) ∙ ap (x ∷_) (filter-all (pax .snd))
+
+filter-none : {p : A → Bool} {xs : List A}
+            → ⌞ not (any p xs) ⌟
+            → filter p xs ＝ []
+filter-none     {xs = []}     na = refl
+filter-none {p} {xs = x ∷ xs} na =
+  let nax = and-so-≃ {x = not (p x)} $ subst So (not-or (p x) _) na in
+  if-false (nax .fst) ∙ filter-none {xs = xs} (nax .snd)
 
 Reflects-filter-all : {p : A → Bool} {xs : List A}
                     → Reflects (filter p xs ＝ xs) (all p xs)
 Reflects-filter-all {p} {xs} =
   Reflects.dmap filter-all
     (contra λ e → subst (So ∘ all p) e (all-filter {xs = xs}))
+    Reflects-So
+
+Reflects-filter-none : {p : A → Bool} {xs : List A}
+                    → Reflects (filter p xs ＝ []) (not (any p xs))
+Reflects-filter-none {p} {xs} =
+  Reflects.dmap (filter-none {xs = xs})
+    (contra $ none-filter {xs = xs})
     Reflects-So
 
 filter-has-eq : {p1 p2 : A → Bool} {xs : List A}
@@ -608,6 +669,13 @@ filter-OPE {p} {xs = x ∷ xs} with p x
 ... | true  = otake refl filter-OPE
 ... | false = odrop filter-OPE
 
+filter-map : {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {xs : List A} {p : B → Bool} {f : A → B}
+           → filter p (map f xs) ＝ map f (filter (p ∘ f) xs)
+filter-map {xs = []}     = refl
+filter-map {xs = x ∷ xs} {p} {f} with p (f x)
+... | true = ap (f x ∷_) (filter-map {xs = xs})
+... | false = filter-map {xs = xs}
+
 {-
 filter-size-neg : {p : A → Bool} {s : List A} {z : A}
                 → ⌞ not (p z) ⌟ → z ∈ s → length (filter p s) < length s
@@ -662,11 +730,20 @@ count<length p xs an =
 
 all→count : ∀ (p : A → Bool) xs
           → All (So ∘ p) xs → count p xs ＝ length xs
-all→count p []       []       = refl
-all→count p (x ∷ xs) (px ∷ a) =
-  subst (λ q → bit q + count p xs ＝ suc (length xs))
-        ((so≃is-true $ px) ⁻¹)
-        (ap suc (all→count p xs a))
+all→count p xs px =
+    length-filter p xs ⁻¹
+  ∙ ap length
+       (filter-all $
+        true→so! ⦃ Reflects-all-bool ⦄ px)
+
+none→count : ∀ (p : A → Bool) xs
+           → All (So ∘ not ∘ p) xs → count p xs ＝ 0
+none→count p xs na =
+    length-filter p xs ⁻¹
+  ∙ ap length
+       (filter-none {xs = xs} $
+        subst So (not-any? {xs = xs} ⁻¹) $
+        true→so! ⦃ Reflects-all-bool ⦄ na)
 
 count-union-inter : ∀ p1 p2 (xs : List A)
                   → count (λ x → p1 x or p2 x) xs + count (λ x → p1 x and p2 x) xs ＝ count p1 xs + count p2 xs
@@ -690,6 +767,10 @@ count-false xs = length-filter (λ _ → false) xs ⁻¹ ∙ ap length (filter-f
 count-true : (xs : List A)
            → count (λ _ → true) xs ＝ length xs
 count-true xs = length-filter (λ _ → true) xs ⁻¹ ∙ ap length (filter-true xs)
+
+count-map : {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {xs : List A} {p : B → Bool} {f : A → B}
+          → count p (map f xs) ＝ count (p ∘ f) xs
+count-map {xs} {p} {f} = rec-map 0 (λ x n → bit (p x) + n) f xs
 
 -- find
 
@@ -779,6 +860,13 @@ span-all p (x ∷ xs) with p x | recall p x
 ... | false | ⟪ e ⟫ = []
 ... | true  | ⟪ e ⟫ = subst So (e ⁻¹) oh ∷ (span-all p xs)
 
+span-++-r : ∀ {p : A → Bool} xs {ys}
+          → All (So ∘ p) xs
+          → span p (xs ++ ys) ＝ (xs ++ span p ys .fst , span p ys .snd)
+span-++-r     []          []        = refl
+span-++-r {p} (x ∷ xs) {ys} (px ∷ ax) =
+  let ih = span-++-r xs {ys = ys} ax in
+  if-true px ∙ ×-path (ap (λ q → x ∷ fst q) ih) (ap snd ih)
 
 -- zip / zip-with / unzip
 

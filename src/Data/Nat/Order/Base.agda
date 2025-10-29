@@ -400,6 +400,9 @@ opaque
 ∸∸-assoc-swap : ∀ m n p → p ≤ n → m ∸ (n ∸ p) ＝ m + p ∸ n
 ∸∸-assoc-swap m n p p≤n = sym (∸-cancel-+-r m p (n ∸ p)) ∙ ap ((m + p) ∸_) (∸+=id p n p≤n)
 
+∸∸=id : ∀ m n → m ≤ n → n ∸ (n ∸ m) ＝ m
+∸∸=id m n m≤n = ∸∸-assoc-swap n n m m≤n ∙ ∸+-comm n n m ≤-refl ⁻¹ ∙ ap (_+ m) (∸-cancel n)
+
 ∸∸-assoc : ∀ m n p → p ≤ n → n ≤ m → m ∸ (n ∸ p) ＝ m ∸ n + p
 ∸∸-assoc m n p p≤n n≤m = ∸∸-assoc-swap m n p p≤n ∙ sym (∸+-comm m n p n≤m)
 
@@ -425,21 +428,29 @@ opaque
 ∸≤≃≤+ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ≤ n + p)
 ∸≤≃≤+ {m} {n} {p} = ∸=0≃≤ ⁻¹ ∙ whisker-path-lₑ (sym (∸-+-assoc n m p)) ∙ ∸=0≃≤
 
-≤-∸-l-≃ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ∸ p ≤ n)
-≤-∸-l-≃ {m} {n} {p} = ∸≤≃≤+ ∙ subst (λ q → m ≤ n + p ≃ m ≤ q) (+-comm n p) refl ∙ ∸≤≃≤+ ⁻¹
+<-∸-l-≃ : ∀ {m n p} → 0 < p → (m ∸ n < p) ≃ (m < n + p)
+<-∸-l-≃         {p = zero}  p>0 = absurd (≮z p>0)
+<-∸-l-≃ {m} {n} {p = suc p} p>0 = <≃suc≤ ⁻¹ ∙ ≤≃≤+l {m = 1} ⁻¹ ∙ ∸≤≃≤+ {m} {n} ∙ ≤≃≤+l
+                                ∙ subst (λ q → suc m ≤ q ≃ suc m ≤ n + suc p) (+-suc-r n p) refl ∙ <≃suc≤
 
 <-∸-r-≃ : ∀ {m n p} → (n < p ∸ m) ≃ (m + n < p)
 <-∸-r-≃ {m} {n} {p} = <≃≱ ∙ ¬-≃ (∸≤≃≤+ .fst) ((∸≤≃≤+ ⁻¹) .fst) ∙ <≃≱ ⁻¹
+
+≤-∸-l-≃ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ∸ p ≤ n)
+≤-∸-l-≃ {m} {n} {p} = ∸≤≃≤+ ∙ subst (λ q → m ≤ n + p ≃ m ≤ q) (+-comm n p) refl ∙ ∸≤≃≤+ ⁻¹
 
 ≤-∸-r-≃ : ∀ {m n p} → 0 < n → (n ≤ p ∸ m) ≃ (m + n ≤ p)
 ≤-∸-r-≃     {n = zero}      n>0 = false! n>0
 ≤-∸-r-≃ {m} {n = suc n} {p} n>0 = <≃suc≤ ∙ <-∸-r-≃ ∙ <≃suc≤ ⁻¹
                                 ∙ subst (λ q → q ≤ p ≃ m + suc n ≤ p) (+-suc-r m n) refl
 
-<-∸-l-≃ : ∀ {m n p} → 0 < p → (m ∸ n < p) ≃ (m < n + p)
-<-∸-l-≃         {p = zero}  p>0 = absurd (≮z p>0)
-<-∸-l-≃ {m} {n} {p = suc p} p>0 = <≃suc≤ ⁻¹ ∙ ≤≃≤+l {m = 1} ⁻¹ ∙ ∸≤≃≤+ {m} {n} ∙ ≤≃≤+l
-                                ∙ subst (λ q → suc m ≤ q ≃ suc m ≤ n + suc p) (+-suc-r n p) refl ∙ <≃suc≤
+<-∸-2l-≃ : ∀ {m n p} → n ≤ m → (m ∸ n < m ∸ p) ≃ (p < n)
+<-∸-2l-≃ {m} {n} {p} n≤m =
+    <-∸-r-≃ ∙ =→≃ (ap (_< m) (+-comm p _))
+  ∙ <-∸-r-≃ ⁻¹ ∙ =→≃ (ap (p <_) (∸∸=id _ _ n≤m))
+
+<-∸-2r-≃ : ∀ {m n p} → p ≤ m → (m ∸ p < n ∸ p) ≃ (m < n)
+<-∸-2r-≃ {m} {n} {p} p≤m = <-∸-r-≃ ∙ =→≃ (ap (_< n) (+-comm p _ ∙ ∸+=id _ _ p≤m))
 
 -- multiplication
 
