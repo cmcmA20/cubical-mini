@@ -19,6 +19,7 @@ open import Data.Maybe.Instances.Map
 open import Data.Maybe.Instances.Idiom
 open import Data.Maybe.Instances.Bind
 open import Data.Maybe.Correspondences.Unary.Any
+open import Data.Maybe.Correspondences.Unary.All
 
 open import Data.Reflects.Base as Reflects
 open import Data.Unit.Base
@@ -42,6 +43,16 @@ instance
 =just→∈ {m = just x}  e = here (just-inj e ⁻¹)
 =just→∈ {m = nothing} e = false! e
 
+∈→=just : ∀ {ℓᵃ} {A : Type ℓᵃ} {x : A} {m : Maybe A}
+        → x ∈ₘ m → m ＝ just x
+∈→=just {m = just x}  x∈ = ap just (unhere x∈ ⁻¹)
+∈→=just {m = nothing} x∈ = false! x∈
+
+=nothing→∉ : ∀ {ℓᵃ} {A : Type ℓᵃ} {x : A} {m : Maybe A}
+           → m ＝ nothing → x ∉ m
+=nothing→∉ {m = just x}  e = false! e
+=nothing→∉ {m = nothing} e = false!
+
 instance
   ∈ₘ-just : Reflects (x ∈ₘ just x) true
   ∈ₘ-just = ofʸ (here refl)
@@ -63,7 +74,7 @@ instance
   Dec-∈ₘ          .proof = Reflects-has
   {-# OVERLAPPING Dec-∈ₘ #-}
 
-¬here→∉ : a ≠ x → a ∉ just x
+¬here→∉ : a ≠ x → ¬ (a ∈ₘ just x) -- TODO why
 ¬here→∉ ne (here px) = ne px
 
 -- map
@@ -143,3 +154,28 @@ any-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xm ym : Maybe A}
 any-⊆ xsy ax =
   let (x , x∈ , px) = Any→Σ∈ ax in
   ∈→Any (xsy x∈) px
+
+-- All
+
+All→∀∈ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xm : Maybe A}
+        → All P xm
+        → (x : A) → x ∈ xm → P x
+All→∀∈ {P} {xm = just y} (just px) x (here e) = subst P (e ⁻¹) px
+
+∀∈→All : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xm : Maybe A}
+        → ((x : A) → x ∈ xm → P x)
+        → All P xm
+∀∈→All {xm = just x}  ax = just (ax x (here refl))
+∀∈→All {xm = nothing} ax = nothing
+
+{-
+all-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A}
+       → xs ⊆ ys → All P ys → All P xs
+all-⊆ xsy ay = ∀∈→All λ x → All→∀∈ ay x ∘ xsy
+
+all-∈-map : ∀ {ℓ′} {P : Pred A ℓ} {Q : Pred A ℓ′}
+            → (∀ {x} → x ∈ xs → P x → Q x)
+            → All P xs → All Q xs
+all-∈-map {xs = []}     f []       = []
+all-∈-map {xs = x ∷ xs} f (p ∷ ps) = f (here refl) p ∷ all-∈-map (f ∘ there) ps
+-}

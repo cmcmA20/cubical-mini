@@ -7,6 +7,7 @@ open import Meta.Effect
 
 open import Data.Empty
 open import Data.Acc as Acc
+open import Data.Bool as Bool
 open import Data.Dec as Dec
 open import Data.Sum.Base as ⊎
 open import Data.Sum.Path
@@ -177,6 +178,14 @@ List-lex _A<_ []        ys      = ⊤
 List-lex _A<_ (x ∷ xs)  []      = ⊥
 List-lex _A<_ (x ∷ xs) (y ∷ ys) = (x A< y) ⊎ ((x ＝ y) × List-lex _A<_ xs ys)
 
+List-lex? : {A : 𝒰 o}
+          → (_A=?_ : A → A → Bool)
+          → (_A<?_ : A → A → Bool)
+          → List A → List A → Bool
+List-lex? _A=?_ _A<?_ []        ys      = true
+List-lex? _A=?_ _A<?_ (x ∷ xs)  []      = false
+List-lex? _A=?_ _A<?_ (x ∷ xs) (y ∷ ys) = (x A<? y) or ((x A=? y) and List-lex? _A=?_ _A<?_ xs ys)
+
 List-lex-refl : {A : 𝒰 o}
                 {_A<_ : A → A → 𝒰 ℓ}
               → ∀ {xs} → (List-lex _A<_ xs xs)
@@ -316,6 +325,14 @@ List-lex< : {A : 𝒰 o}
 List-lex< _A<_ xs        []      = ⊥
 List-lex< _A<_ []       (y ∷ ys) = ⊤
 List-lex< _A<_ (x ∷ xs) (y ∷ ys) = (x A< y) ⊎ ((x ＝ y) × List-lex< _A<_ xs ys)
+
+List-lex<? : {A : 𝒰 o}
+           → (_A=?_ : A → A → Bool)
+           → (_A<?_ : A → A → Bool)
+           → List A → List A → Bool
+List-lex<? _A=?_ _A<?_ xs        []      = false
+List-lex<? _A=?_ _A<?_ []       (y ∷ ys) = true
+List-lex<? _A=?_ _A<?_ (x ∷ xs) (y ∷ ys) = (x A<? y) or ((x A=? y) and List-lex<? _A=?_ _A<?_ xs ys)
 
 List-lex<-irr : {A : 𝒰 o}
                 {_A<_ : A → A → 𝒰 ℓ}

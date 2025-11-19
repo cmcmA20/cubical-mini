@@ -66,7 +66,7 @@ rec-++ z f (x ∷ xs) ys = ap (f x) (rec-++ z f xs ys)
 rec-map : {A : Type ℓ} {B : Type ℓ′}
           (z : C) (f : B → C → C) (h : A → B) (xs : List A)
         → List.rec z f (map h xs) ＝ List.rec z (f ∘ h) xs
-rec-map z f h [] = refl
+rec-map z f h []       = refl
 rec-map z f h (x ∷ xs) = ap (f (h x)) (rec-map z f h xs)
 
 rec-fusion : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
@@ -648,6 +648,30 @@ filter-∈ {p} {xs = x ∷ xs} (here e)   | true | ⟪ eq ⟫ =
 filter-∈ {p} {xs = x ∷ xs} (there pf) | true | ⟪ eq ⟫ =
   second there (filter-∈ {xs = xs} pf)
 
+⊆-filter : ∀ {p : A → Bool} {xs ys}
+         → xs ⊆ ys → filter p xs ⊆ filter p ys
+⊆-filter {xs} {ys} sub {x} x∈ =
+  let (px , x∈') = filter-∈ {xs = xs} x∈ in
+  ∈-filter {xs = ys} px (sub x∈')
+
+ope-filter : ∀ {p : A → Bool} {xs ys}
+           → OPE xs ys → OPE (filter p xs) (filter p ys)
+ope-filter      odone          = odone
+ope-filter {p} (otake {x} {y} exy oxy) with p x | recall p x
+ope-filter {p} (otake {x} {y} exy oxy) | false | ⟪ eq ⟫ =
+  ope-trans
+    (ope-filter oxy)
+    (=→ope (if-false (not-so (¬so≃is-false ⁻¹ $ ap p exy ⁻¹ ∙ eq)) ⁻¹))
+ope-filter {p} (otake {x} {y} exy oxy) | true | ⟪ eq ⟫ =
+  ope-trans
+    (otake exy (ope-filter oxy))
+    (=→ope (if-true (so≃is-true ⁻¹ $ ap p exy ⁻¹ ∙ eq) ⁻¹))
+ope-filter {p} (odrop {y} oxy) with p y | recall p y
+ope-filter {p} (odrop {y} oxy) | false | ⟪ eq ⟫ =
+  ope-filter oxy
+ope-filter {p} (odrop {y} oxy) | true | ⟪ eq ⟫ =
+  odrop (ope-filter oxy)
+
 filter-and : ∀ {p1 p2 : A → Bool} {xs}
            → filter (λ q → p1 q and p2 q) xs ＝ filter p1 (filter p2 xs)
 filter-and           {xs = []}     = refl
@@ -691,6 +715,13 @@ count-++ p []       ys = refl
 count-++ p (x ∷ xs) ys =
     ap (bit (p x) +_) (count-++ p xs ys)
   ∙ +-assoc (bit (p x)) (count p xs) (count p ys)
+
+count-∷r : ∀ (p : A → Bool) xs x
+         → count p (xs ∷r x) ＝ count p xs + bit (p x)
+count-∷r p xs x =
+    ap (count p) (snoc-append xs)
+  ∙ count-++ p xs (x ∷ [])
+  ∙ ap (count p xs +_) (+-zero-r _)
 
 Reflects-0<count : ∀ (p : A → Bool) xs
                  → Reflects (0 < count p xs) (any p xs)
@@ -760,6 +791,16 @@ count-union-inter p1 p2 (x ∷ xs) =
           (p1 x))
   ∙ +-interchange (bit (p1 x)) (count p1 xs) (bit (p2 x)) (count p2 xs) ⁻¹
 
+count-complement : ∀ p (xs : List A)
+                 → count p xs + count (not ∘ p) xs ＝ length xs
+count-complement p xs =
+    count-union-inter p (not ∘ p) xs ⁻¹
+  ∙ ap² _+_ (all→count (λ z → p z or not (p z)) xs
+               (all-trivial λ x → so≃is-true ⁻¹ $ or-compl (p x)))
+            (none→count (λ z → p z and not (p z)) xs
+               (all-trivial λ x → not-so-≃ ⁻¹ $ ¬so≃is-false ⁻¹ $ and-compl (p x)))
+  ∙ +-zero-r (length xs)
+
 count-false : (xs : List A)
             → count (λ _ → false) xs ＝ 0
 count-false xs = length-filter (λ _ → false) xs ⁻¹ ∙ ap length (filter-false xs)
@@ -771,6 +812,36 @@ count-true xs = length-filter (λ _ → true) xs ⁻¹ ∙ ap length (filter-tru
 count-map : {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {xs : List A} {p : B → Bool} {f : A → B}
           → count p (map f xs) ＝ count (p ∘ f) xs
 count-map {xs} {p} {f} = rec-map 0 (λ x n → bit (p x) + n) f xs
+
+ope-count : ∀ {p : A → Bool} {xs ys}
+          → OPE xs ys → count p xs ≤ count p ys
+ope-count {p} {xs} {ys} ope =
+  =→≤ (length-filter p xs ⁻¹) ∙ ope-length (ope-filter ope) ∙ =→≤ (length-filter p ys)
+
+-- TODO All?
+count-≤-implies : ∀ {p q : A → Bool} {xs}
+                → (∀ {x} → x ∈ xs → ⌞ p x implies q x ⌟)
+                → count p xs ≤ count q xs
+count-≤-implies {xs = []}     imp = refl
+count-≤-implies {xs = x ∷ xs} imp =
+  ≤-+
+    (bit-implies _ _ (imp (here refl)))
+    (count-≤-implies (imp ∘ there))
+
+-- TODO All+Any?
+-- TODO better proof
+count-<-implies : {A : 𝒰 ℓ} {p q : A → Bool} {xs : List A}
+                → (∀ {x} → x ∈ xs → ⌞ p x implies q x ⌟)
+                → (Σ[ x ꞉ A ] x ∈ xs × ⌞ not (p x) ⌟ × ⌞ q x ⌟)
+                → count p xs < count q xs
+count-<-implies {p} {q} {xs = x ∷ xs} imp (z , here ez  , npz , qz) =
+  <-≤-+
+    (≤-<-trans (=→≤ (ap bit (ap p (ez ⁻¹) ∙ (¬so≃is-false $ so-not npz))))
+       (<-≤-trans z<s
+          (=→≤ (ap bit ((so≃is-true $ qz) ⁻¹ ∙ ap q ez)))))
+    (count-≤-implies (imp ∘ there))
+count-<-implies         {xs = x ∷ xs} imp (z , there z∈ , npz , qz) =
+  ≤-<-+ (bit-implies _ _ (imp (here refl))) (count-<-implies (imp ∘ there) (z , z∈ , npz , qz))
 
 -- find
 
@@ -835,6 +906,22 @@ split-take-drop  zero                 = refl
 split-take-drop (suc n) {xs = []}     = refl
 split-take-drop (suc n) {xs = x ∷ xs} = ap (x ∷_) (split-take-drop n)
 
+-- map-maybe
+
+map-maybe-∈-= : ∀ {ℓᵇ} {B : 𝒰 ℓᵇ} {xs : List A}
+              → {f g : A → Maybe B}
+              → (∀ {x} → x ∈ xs → f x ＝ g x)
+              → map-maybe f xs ＝ map-maybe g xs
+map-maybe-∈-= {xs = []}     e = refl
+map-maybe-∈-= {xs = x ∷ xs} e =
+  ap² (λ a b → Maybe.rec a (_∷ a) b) (map-maybe-∈-= (e ∘ there)) (e (here refl))
+
+count-map-maybe : {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {xs : List A} {p : B → Bool} {f : A → Maybe B}
+                → count p (map-maybe f xs) ＝ count (Maybe.rec false p ∘ f) xs
+count-map-maybe {xs = []}     {p} {f} = refl
+count-map-maybe {xs = x ∷ xs} {p} {f} with f x
+... | just z  = ap (bit (p z) +_) (count-map-maybe {xs = xs})
+... | nothing = count-map-maybe {xs = xs}
 
 -- span
 

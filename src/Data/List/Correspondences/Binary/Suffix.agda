@@ -33,8 +33,11 @@ opaque
   []-suffix : Suffix [] ys
   []-suffix {ys} = ys , ++-id-r ys
 
+  =→suffix : xs ＝ ys → Suffix xs ys
+  =→suffix exy = [] , exy
+
   suffix-refl : Suffix xs xs
-  suffix-refl {xs} = [] , refl
+  suffix-refl = =→suffix refl
 
   suffix-trans : Suffix xs ys → Suffix ys zs → Suffix xs zs
   suffix-trans {xs} (txy , exy) (tyz , eyz) =

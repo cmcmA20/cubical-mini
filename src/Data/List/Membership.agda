@@ -175,6 +175,13 @@ map-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
 map-∈ {xs = x ∷ xs} f inj (here e)   = here (inj e)
 map-∈ {xs = x ∷ xs} f inj (there fx) = there (map-∈ f inj fx)
 
+map-∈-= : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs : List A}
+       → {f g : A → B}
+       → (∀ {x} → x ∈ xs → f x ＝ g x)
+       → map f xs ＝ map g xs
+map-∈-= {xs = []}     e = refl
+map-∈-= {xs = x ∷ xs} e = ap² {C = λ _ _ → List _} _∷_ (e (here refl)) (map-∈-= (e ∘ there))
+
 {-
 map-∈-in : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {z : A} {xs : List A}
        → (f : A → B)
@@ -321,3 +328,20 @@ _∥_ {A} xs ys = ∀[ a ꞉ A ] (a ∈ xs → a ∈ ys → ⊥)
 
 ∥-∷→r : ∀ {y} {xs ys : List A} → y ∉ xs → xs ∥ ys → xs ∥ (y ∷ ys)
 ∥-∷→r nx = ∥-comm ∘ ∥-∷→l nx ∘ ∥-comm
+
+map-∥ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+          {xs ys : List A} {f : A → B}
+      → map f xs ∥ map f ys
+      → xs ∥ ys
+map-∥ {f} d xm ym =
+  d (∈-map f xm) (∈-map f ym)
+
+∥-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+          {xs ys : List A} {f : A → B}
+      → Injective f
+      → xs ∥ ys → map f xs ∥ map f ys
+∥-map {ys} {f} inj d xm ym =
+  let (a , am , xe) = map-∈Σ f xm
+      (b , bm , ye) = map-∈Σ f ym
+    in
+  d am (subst (_∈ ys) (inj (ye ⁻¹ ∙ xe)) bm)
