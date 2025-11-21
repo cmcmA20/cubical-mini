@@ -444,6 +444,16 @@ opaque
 ≤-∸-r-≃ {m} {n = suc n} {p} n>0 = <≃suc≤ ∙ <-∸-r-≃ ∙ <≃suc≤ ⁻¹
                                 ∙ subst (λ q → q ≤ p ≃ m + suc n ≤ p) (+-suc-r m n) refl
 
+≤-∸-2l-≃ : ∀ {m n p} → p ≤ m → (m ∸ n ≤ m ∸ p) ≃ (p ≤ n)
+≤-∸-2l-≃ {m} {n} {p} p≤m =
+    ≤-∸-l-≃ {m = m} {n = n}
+  ∙ =→≃ (ap (_≤ n) (∸∸=id _ _ p≤m))
+
+≤-∸-2r-≃ : ∀ {m n p} → p ≤ n → (m ∸ p ≤ n ∸ p) ≃ (m ≤ n)
+≤-∸-2r-≃ {m} {n} {p} p≤n =
+    ∸≤≃≤+ {m = m} {n = p}
+  ∙ =→≃ (ap (m ≤_) (+∸=id _ _ p≤n))
+
 <-∸-2l-≃ : ∀ {m n p} → n ≤ m → (m ∸ n < m ∸ p) ≃ (p < n)
 <-∸-2l-≃ {m} {n} {p} n≤m =
     <-∸-r-≃ ∙ =→≃ (ap (_< m) (+-comm p _))
