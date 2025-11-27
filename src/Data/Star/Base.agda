@@ -59,12 +59,19 @@ star-map : {f : A → B}
 star-map {f} fp (ε e)      = ε (ap f e)
 star-map     fp (xw ◅ swy) = fp xw ◅ star-map fp swy
 
--- TODO generalize
-star-foldr : (∀ {x} → S x x)
+-- recursor
+-- TODO generalize ?
+star-foldr : (∀ {x y} → x ＝ y → S x y)
            → (∀ {x y z} → R x y → S y z → S x z)
            → Star R x y → S x y
-star-foldr {S} {x} re tr (ε e)       = subst (S x) e (re {x})
-star-foldr         re tr (rxw ◅ swy) = tr rxw (star-foldr re tr swy)
+star-foldr re tr (ε e)       = re e
+star-foldr re tr (rxw ◅ swy) = tr rxw (star-foldr re tr swy)
+
+star-foldrm : (∀ {x y} → x ＝ y → S x y)
+            → (∀ {x y} → R x y → S x y)
+            → (pl : ∀ {x y z} → S x y → S y z → S x z)
+            → Star R x y → S x y
+star-foldrm re mf pl = star-foldr re (pl ∘ mf)
 
 -- TODO
 -- star-foldl : (∀ {a} → S a a)

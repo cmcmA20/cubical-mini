@@ -90,6 +90,9 @@ opaque
   ua-β : (e : A ≃ B) (x : A) → transport (ua e) x ＝ e .fst x
   ua-β e x = transport-refl _
 
+  ua-β⁻¹ : (e : A ≃ B) (x : B) → transport (λ i → ua e (~ i)) x ＝ is-equiv→inverse (e .snd) x
+  ua-β⁻¹ e x = ap (λ q → e .snd .equiv-proof q .fst .fst) (transport-refl x)
+
   @0 ua-η : (p : A ＝ B) → ua (=→≃ p) ＝ p
   ua-η {A} {B} p i j = Glue B ω where
     ω : Partial (i ∨ ∂ j) (Σ[ T ꞉ Type (level-of-type B) ] (T ≃ B))
