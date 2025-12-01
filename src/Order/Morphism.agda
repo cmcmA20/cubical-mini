@@ -142,5 +142,5 @@ module _ {o o′ ℓ ℓ′} {P : Poset o ℓ} {Q : Poset o′ ℓ′} where
   surj-order-embedding→≅ f oe =
     iso-order-embedding→≅
       (≃→≅ $ f #_ , is-surjective-embedding→is-equiv (f .snd)
-                       (is-order-embedding→is-embedding {P = P} {Q = Q} (f .fst) oe))
+                       (is-order-embedding→is-embedding {P = P} {Q = Q} (f #_) oe))
       oe
