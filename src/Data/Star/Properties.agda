@@ -31,6 +31,11 @@ star-cast-l-refl : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y : A}
 star-cast-l-refl (ε e) = ap ε (∙-id-o e)
 star-cast-l-refl {R} {x} (r ◅ sxy) = ap (_◅ sxy) (subst-refl {B = R x} r)
 
+star-trans-sng : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y z : A}
+               → (rxy : R x y) (syz : Star R y z)
+               → rxy ◅ syz ＝ star-sng rxy ∙ syz
+star-trans-sng rxy syz = ap (rxy ◅_) (star-cast-l-refl syz ⁻¹)
+
 star-trans-id-l : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {x y : A}
                 → (sxy : Star R x y)
                 → refl ∙ sxy ＝ sxy
@@ -140,4 +145,3 @@ wf→acyclic {R} wf =
       , (λ (w , swz , rwx) →
            ih w                rwx  y z (rwx ◅ sxy) ryz                                 swz)
       ]ᵤ ∘ star-last
-
