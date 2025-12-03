@@ -9,11 +9,14 @@ open import Logic.Discreteness
 
 open import Functions.Embedding
 
-open import Data.Bool.Base
-open import Data.Dec.Base as Dec
+open import Data.Unit.Base
 open import Data.Empty.Base as ⊥
+open import Data.Bool.Base
+open import Data.Reflects.Base as Reflects
+open import Data.Dec.Base as Dec
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
+open import Data.Sum.Base
 open import Data.List.Base
 open import Data.List.Instances.Map
 open import Data.List.Operations
@@ -21,8 +24,6 @@ open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.Maybe.Base
 open import Data.Maybe.Path using (just-inj)
-open import Data.Reflects.Base as Reflects
-open import Data.Unit.Base
 
 private variable
   ℓᵃ ℓ : Level
@@ -303,6 +304,15 @@ unique→∷     {xs}          s nx u z (there h1) (here e2)  = ⊥.rec (nx (sub
 unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
   let (nx , u′) = ∷→unique u in
   ap there (unique→∷ s nx u′ z h1 h2)
+
+-- set-equivalence
+
+≈-∷ : {x : A} {xs ys : List A}
+    → xs ≈ ys
+    → (x ∷ xs) ≈ (x ∷ ys)
+≈-∷ (xy , yx) =
+    [ here , there ∘ xy ]ᵤ ∘ any-uncons
+  , [ here , there ∘ yx ]ᵤ ∘ any-uncons
 
 -- disjointness
 -- TODO move to Notation.Membership

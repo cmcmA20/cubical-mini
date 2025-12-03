@@ -18,16 +18,16 @@ private variable
 Flip≃⊎ : Flip R x y ≃ (R x y ⊎ R y x)
 Flip≃⊎ {R} =
   ≅→≃ $
-  make-iso (rec inl (⊎-comm $_))
+  make-iso (rec inl inr)
            [ fwd , bwd ]ᵤ $
   make-inverses
     (fun-ext re)
     (fun-ext se)
   where
-  re : (q : R x y ⊎ R y x) → rec {R = R} inl (⊎-comm $_) ([ fwd , bwd ]ᵤ q) ＝ q
+  re : (q : R x y ⊎ R y x) → rec {R = R} inl inr ([ fwd , bwd ]ᵤ q) ＝ q
   re (inl x) = refl
   re (inr x) = refl
-  se : (q : Flip R x y) → [ fwd , bwd ]ᵤ (rec {R = R} inl (⊎-comm $_) q) ＝ q
+  se : (q : Flip R x y) → [ fwd , bwd ]ᵤ (rec {R = R} inl inr q) ＝ q
   se (fwd x) = refl
   se (bwd x) = refl
 

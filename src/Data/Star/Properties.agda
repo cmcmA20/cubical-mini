@@ -11,7 +11,7 @@ open import Data.Sum.Base
 
 open import Data.Nat.Base
 open import Data.Nat.Properties
-open import Data.Star.Base
+open import Data.Star.Base as Star
 open import Data.Sum.Base
 
 private variable
@@ -88,12 +88,12 @@ star-last {R} {x} {y} (r ◅ s) =
   , (λ where (z , swz , rzy) → inr (z , r ◅ swz , rzy)) ]ᵤ
     (star-last s)
 
-star-foldr-emp : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {S : A → A → 𝒰 ℓ′}
+star-rec-emp : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {S : A → A → 𝒰 ℓ′}
                → (re : ∀ {x y} → x ＝ y → S x y)
                → {tr : ∀ {x y z} → R x y → S y z → S x z}
                → {x : A}
-               → star-foldr re tr (the (Star R x x) refl) ＝ re (refl)
-star-foldr-emp {S} re {x} = refl
+               → Star.rec re tr (the (Star R x x) refl) ＝ re (refl)
+star-rec-emp {S} re {x} = refl
 
 star-foldrm-trans : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {S : A → A → 𝒰 ℓ′} {x y z : A}
                   → (re : ∀ {x y} → x ＝ y → S x y)
@@ -112,7 +112,7 @@ star-foldrm-trans {R} {S} {x} {z} re mf pl pllu plas (ε e)       syz =
      (λ sxz → ap (star-foldrm re mf pl) (star-cast-l-refl sxz)
               ∙ pllu ⁻¹
               ∙ ap (λ q → pl q (star-foldrm re mf pl sxz))
-                   (star-foldr-emp (λ {x} → re {x}) {tr = pl ∘ mf} ⁻¹))
+                   (star-rec-emp (λ {x} → re {x}) {tr = pl ∘ mf} ⁻¹))
      e syz
 star-foldrm-trans                 re mf pl pllu plas (rxw ◅ swy) syz =
   ap (pl (mf rxw)) (star-foldrm-trans re mf pl pllu plas swy syz) ∙ plas

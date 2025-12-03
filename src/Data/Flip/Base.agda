@@ -14,12 +14,17 @@ private variable
   R S : A → A → 𝒰 ℓ′
   x x′ y y′ z : A
 
--- TODO eliminator
+elim : {P : ∀ {a b} → Flip R a b → 𝒰 ℓ′}
+     → (∀ {a b} (r : R a b) → P (fwd r))
+     → (∀ {a b} (r : R b a) → P (bwd r))
+     → ∀ {a b} (fr : Flip R a b) → P fr
+elim f g (fwd xy) = f xy
+elim f g (bwd yx) = g yx
+
 rec : (∀ {a b} → R a b → S a b)
-    → (∀ {a b} → S a b → S b a)
+    → (∀ {a b} → R b a → S a b)
     → Flip R x y → S x y
-rec g s (fwd r) = g r
-rec g s (bwd r) = s (g r)
+rec f g = elim f g
 
 flip-sng : R x y → Flip R x y
 flip-sng = fwd
@@ -32,10 +37,17 @@ instance
   Sym-Flip : Sym (Flip R)
   Sym-Flip Dual.ᵒᵖ = flip-sym
 
+-- derived versions
+
+recS : (∀ {a b} → R a b → S a b)
+     → (∀ {a b} → S a b → S b a)
+     → Flip R x y → S x y
+recS g s = rec g (s ∘ g)
+
 flip-map : {f : A → B}
          → (∀ {a b} → R a b → S (f a) (f b))
          → Flip R x y → Flip S (f x) (f y)
-flip-map g = rec (flip-sng ∘ g) flip-sym
+flip-map {S} {f} g = recS (flip-sng ∘ g) flip-sym
 
 flip-concat : Flip (Flip R) x y → Flip R x y
-flip-concat = rec id flip-sym
+flip-concat = recS id flip-sym
