@@ -23,10 +23,18 @@ private variable
 
 elim : {P : ∀ {x y} → Star R x y → 𝒰 ℓ″}
      → (∀ {x y} (e : x ＝ y) → P (ε e))
-     → (∀ {x y z} (rxy : R x y) {swy : Star R y z} → P swy → P (rxy ◅ swy))
+     → (∀ {x y z} (rxy : R x y) {syz : Star R y z} → P syz → P (rxy ◅ syz))
      → ∀ {x y} (sxy : Star R x y) → P sxy
 elim pe pt (ε e)       = pe e
-elim pe pt (rxy ◅ swy) = pt rxy (elim pe pt swy)
+elim pe pt (rxy ◅ syz) = pt rxy (elim pe pt syz)
+
+-- don't use to define operations, J creates monstruous terms!
+elimJ : {P : ∀ {x y} → Star R x y → 𝒰 ℓ″}
+     → (∀ {x} → P (ε (λ _ → x)))
+     → (∀ {x y z} (rxy : R x y) {syz : Star R y z} → P syz → P (rxy ◅ syz))
+     → ∀ {x y} (sxy : Star R x y) → P sxy
+elimJ {P} pr pt (ε e)       = Jₚ (λ y ey → P (ε ey)) pr e
+elimJ     pr pt (rxy ◅ syz) = pt rxy (elimJ pr pt syz)
 
 rec : (∀ {x y} → x ＝ y → S x y)
     → (∀ {x y z} → R x y → S y z → S x z)

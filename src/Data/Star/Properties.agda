@@ -15,7 +15,7 @@ open import Data.Star.Base as Star
 open import Data.Sum.Base
 
 private variable
-  ℓ ℓ′ ℓa : Level
+  ℓ ℓ′ ℓ″ ℓa : Level
   A B : 𝒰 ℓ
   R : A → A → 𝒰 ℓ
   S : A → A → 𝒰 ℓ′
@@ -72,6 +72,25 @@ star-◅+-len
   : (sxy : Star R x y) (ryz : R y z)
   → star-len (sxy ◅+ ryz) ＝ suc (star-len sxy)
 star-◅+-len sxy ryz = star-trans-len sxy (star-sng ryz) ∙ +-comm (star-len sxy) 1
+
+elim-◅+ : {P : ∀ {x y} → Star R x y → 𝒰 ℓ″}
+        → (∀ {x y} (e : x ＝ y) → P (ε e))
+        → (∀ {x y z} {sxy : Star R x y} → P sxy → (ryz : R y z) → P (sxy ◅+ ryz))
+        → ∀ {x y} (sxy : Star R x y) → P sxy
+elim-◅+ {R} {P} pe pc sxy =
+  subst P (star-cast-l-refl sxy) $
+  go refl sxy (pe refl)
+  where
+  go : ∀ {a b c} (ab : Star R a b) (bc : Star R b c) → P ab → P (ab ∙ bc)
+  go ab (ε eq)   pab =
+    Jₚ (λ z ez → P (ab ∙ ε ez))
+       (subst P (star-trans-id-r ab ⁻¹) pab)
+       eq
+  go ab (e ◅ bc) pab =
+    subst P
+      (  star-trans-assoc ab (star-sng e) bc
+       ∙ ap (ab ∙_) (star-trans-sng e bc ⁻¹)) $
+    go (ab ◅+ e) bc (pc pab e)
 
 star-map-len
   : {f : A → B} {r : ∀ {a b} → R a b → S (f a) (f b)}
@@ -140,8 +159,23 @@ wf→acyclic : ∀ {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ}
 wf→acyclic {R} wf =
   to-induction wf (λ x → ∀ y z → Star R x y → R y z → Star R z x → ⊥)
    λ x ih y z sxy ryz →
-      [ (λ e →
-           ih y (subst (R y) e ryz) y z (ε refl)    ryz (subst (λ q → Star R q y) (e ⁻¹) sxy))
+      [ (λ z=x →
+           ih y (subst (R y) z=x ryz) y z (ε refl)    ryz (subst (λ q → Star R q y) (z=x ⁻¹) sxy))
       , (λ (w , swz , rwx) →
-           ih w                rwx  y z (rwx ◅ sxy) ryz                                 swz)
+           ih w                  rwx  y z (rwx ◅ sxy) ryz                                    swz)
       ]ᵤ ∘ star-last
+
+-- TODO reorder vars to match wf→acyclic
+noeth→acyclic : ∀ {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ}
+           → is-noeth R
+           → ∀ x y z
+           → Star R y x → R z y → Star R x z
+           → ⊥
+noeth→acyclic {R} nth =
+  to-ninduction nth (λ x → ∀ y z → Star R y x → R z y → Star R x z → ⊥)
+   λ x ih y z syx rzy →
+   λ where
+       (ε x=z) →
+         ih y (subst (λ q → R q y) (x=z ⁻¹) rzy) y z (ε refl)     rzy (subst (Star R y) x=z syx)
+       (rxw ◅ swz) →
+         ih _  rxw                               y z (syx ◅+ rxw) rzy                       swz

@@ -53,6 +53,10 @@ instance
 =nothing→∉ {m = just x}  e = false! e
 =nothing→∉ {m = nothing} e = false!
 
+∈ₘ-unique : ∀ {ℓᵃ} {A : Type ℓᵃ} {x y : A} {m : Maybe A}
+          → x ∈ₘ m → y ∈ₘ m → x ＝ y
+∈ₘ-unique x∈ y∈ = just-inj (∈→=just x∈ ⁻¹ ∙ ∈→=just y∈)
+
 instance
   ∈ₘ-just : Reflects (x ∈ₘ just x) true
   ∈ₘ-just = ofʸ (here refl)
