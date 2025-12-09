@@ -73,24 +73,36 @@ star-◅+-len
   → star-len (sxy ◅+ ryz) ＝ suc (star-len sxy)
 star-◅+-len sxy ryz = star-trans-len sxy (star-sng ryz) ∙ +-comm (star-len sxy) 1
 
+elim-◅+-concat : {A : 𝒰 ℓa} {R : A → A → 𝒰 ℓ} {P : ∀ {x y} → Star R x y → 𝒰 ℓ″}
+               → ({x y z : A} (sxy : Star R x y) → P sxy → (ryz : R y z) → P (sxy ◅+ ryz))
+               → {x y z : A} (sxy : Star R x y) (syz : Star R y z) → P sxy → P (sxy ∙ syz)
+elim-◅+-concat {P} pc sxy (ε eq)   pxy =
+  Jₚ (λ z ez → P (sxy ∙ ε ez))
+     (subst P (star-trans-id-r sxy ⁻¹) pxy)
+     eq
+elim-◅+-concat {P} pc sxy (ryw ◅ swz) pxy =
+  subst P
+        (  star-trans-assoc sxy (star-sng ryw) swz
+         ∙ ap (sxy ∙_) (star-trans-sng ryw swz ⁻¹)) $
+  elim-◅+-concat
+    pc
+    (sxy ◅+ ryw) swz (pc _ pxy ryw)
+
 elim-◅+ : {P : ∀ {x y} → Star R x y → 𝒰 ℓ″}
         → (∀ {x y} (e : x ＝ y) → P (ε e))
-        → (∀ {x y z} {sxy : Star R x y} → P sxy → (ryz : R y z) → P (sxy ◅+ ryz))
+        → (∀ {x y z} (sxy : Star R x y) → P sxy → (ryz : R y z) → P (sxy ◅+ ryz))
         → ∀ {x y} (sxy : Star R x y) → P sxy
 elim-◅+ {R} {P} pe pc sxy =
   subst P (star-cast-l-refl sxy) $
-  go refl sxy (pe refl)
-  where
-  go : ∀ {a b c} (ab : Star R a b) (bc : Star R b c) → P ab → P (ab ∙ bc)
-  go ab (ε eq)   pab =
-    Jₚ (λ z ez → P (ab ∙ ε ez))
-       (subst P (star-trans-id-r ab ⁻¹) pab)
-       eq
-  go ab (e ◅ bc) pab =
-    subst P
-      (  star-trans-assoc ab (star-sng e) bc
-       ∙ ap (ab ∙_) (star-trans-sng e bc ⁻¹)) $
-    go (ab ◅+ e) bc (pc pab e)
+  elim-◅+-concat pc refl sxy (pe refl)
+
+elim-◅+J : {P : ∀ {x y} → Star R x y → 𝒰 ℓ″}
+         → (∀ {x} → P (ε (λ _ → x)))
+         → (∀ {x y z} (sxy : Star R x y) → P sxy → (ryz : R y z) → P (sxy ◅+ ryz))
+         → ∀ {x y} (sxy : Star R x y) → P sxy
+elim-◅+J {R} {P} pe pc sxy =
+  subst P (star-cast-l-refl sxy) $
+  elim-◅+-concat pc refl sxy pe
 
 star-map-len
   : {f : A → B} {r : ∀ {a b} → R a b → S (f a) (f b)}
