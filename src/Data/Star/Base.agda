@@ -39,7 +39,7 @@ elimJ     pr pt (rxy ◅ syz) = pt rxy (elimJ pr pt syz)
 rec : (∀ {x y} → x ＝ y → S x y)
     → (∀ {x y z} → R x y → S y z → S x z)
     → Star R x y → S x y
-rec re tr = elim re (λ rxy  → tr rxy)
+rec re tr = elim re (λ rxy → tr rxy)
 
 star-sng : R x y → Star R x y
 star-sng rxy = rxy ◅ ε refl
