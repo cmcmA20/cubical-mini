@@ -60,10 +60,18 @@ Refl-≈ : ⦃ m₁ : Membership A ℙA₁ ℓ′ ⦄
        → Refl {A = ℙA₁} _≈_
 Refl-≈ .refl = refl , refl
 
+Trans-≈ : ⦃ m₁ : Membership A ℙA₁ ℓ‴ ⦄
+        → Trans {A = ℙA₁} _≈_
+Trans-≈ ._∙_ i o = i .fst ∙ o .fst , o .snd ∙ i .snd
+
+-- doesn't work very well as is
 Comp-≈ : ⦃ m₁ : Membership A ℙA₁ ℓ′ ⦄
          ⦃ m₂ : Membership A ℙA₂ ℓ″ ⦄
          ⦃ m₃ : Membership A ℙA₃ ℓ‴ ⦄
-        → Comp {A = ℙA₁} {B = ℙA₂} {C = ℙA₃} _≈_ _≈_ _≈_
+        → Comp {A = ℙA₁} {B = ℙA₂} {C = ℙA₃}
+               (_≈_ ⦃ m₁ = m₁ ⦄ ⦃ m₂ = m₂ ⦄)
+               (_≈_ ⦃ m₁ = m₂ ⦄ ⦃ m₂ = m₃ ⦄)
+               (_≈_ ⦃ m₁ = m₁ ⦄ ⦃ m₂ = m₃ ⦄)
 Comp-≈ ._∙_ i o = i .fst ∙ o .fst , o .snd ∙ i .snd
 
 Dual-≈ : {A : Type ℓ} ⦃ m₁ : Membership A ℙA₁ ℓ′ ⦄ ⦃ m₂ : Membership A ℙA₂ ℓ″ ⦄
