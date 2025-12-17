@@ -121,6 +121,21 @@ map²-∈Σ : ∀ {ℓᵇ ℓᶜ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {C : 𝒰 
        → Σ[ x ꞉ A ] Σ[ y ꞉ B ] (x ∈ xm) × (y ∈ ym) × (f x y ＝ z)
 map²-∈Σ {xm = just x} {ym = just y} (here ez) = x , y , here refl , here refl , ez ⁻¹
 
+map-with-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+           → (xm : Maybe A)
+           → ((a : A) → a ∈ xm → B)
+           → Maybe B
+map-with-∈ (just x) f = just (f x (here refl))
+map-with-∈ nothing f = nothing
+
+rec-with-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+           → (xm : Maybe A)
+           → (xm ＝ nothing → B)
+           → ((a : A) → a ∈ xm → B)
+           → B
+rec-with-∈ (just x) z f = f x (here refl)
+rec-with-∈  nothing z f = z refl
+
 -- bind
 
 ∈ₘ-bind : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xm : Maybe A}
