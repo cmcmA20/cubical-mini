@@ -142,9 +142,9 @@ Reflects-is-nil? : Reflects (xs ＝ []) (is-nil? xs)
 Reflects-is-nil? {xs = []}     = ofʸ refl
 Reflects-is-nil? {xs = x ∷ xs} = ofⁿ false!
 
-Dec-is-nil? : Dec (xs ＝ [])
-Dec-is-nil? {xs} .does = is-nil? xs
-Dec-is-nil? .proof = Reflects-is-nil?
+Dec-is-nil? : (xs : List A) → Dec (xs ＝ [])
+Dec-is-nil? xs .does  = is-nil? xs
+Dec-is-nil? _  .proof = Reflects-is-nil?
 
 -- !ᵐ
 

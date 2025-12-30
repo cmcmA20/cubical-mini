@@ -14,16 +14,17 @@ open import Data.Nat.Order.Base
 open import Data.Acc.Base
 
 private variable
-  ℓᵃ ℓ : Level
+  ℓᵃ ℓᵇ ℓ : Level
   A : Type ℓᵃ
+  B : Type ℓᵇ
   x y : A
   xs ys zs ts : List A
 
 opaque
-  Suffix Suffix1 : Corr _ (List A , List A) (level-of-type A)
+  Suffix Suffix1 : Corr² (List A , List A) (level-of-type A)
 
   Suffix {A} xs ys = Σ[ ts ꞉ List A ] (ts ++ xs ＝ ys)
-  Suffix1 {A} xs ys = Σ[ t ꞉ A ] Σ[ ts ꞉ List A ] (t ∷ ts ++ xs ＝ ys)
+  Suffix1 {A} xs ys = Σ[ t ꞉ A ] Σ[ ts ꞉ List A ] (ts ++ t ∷ xs ＝ ys)
 
 -- TODO add more
 
@@ -46,12 +47,16 @@ opaque
   suffix-∷ : Suffix xs (x ∷ xs)
   suffix-∷ {x} = x ∷ [] , refl
 
-  suffix-uncons : Suffix (x ∷ xs) ys → Suffix xs ys
-  suffix-uncons {x} {xs} (txy , exy) =
-    txy ∷r x , ap (_++ xs) (snoc-append txy) ∙ ++-assoc txy _ _ ∙ exy
+  suffix-uncons1 : Suffix (x ∷ xs) ys → Suffix1 xs ys
+  suffix-uncons1 {x} {xs} (txy , exy) =
+    x , txy , exy
 
   suffix-length : Suffix xs ys → length xs ≤ length ys
   suffix-length (txy , exy) = ≤-+-l ∙ =→≤ (++-length txy _ ⁻¹ ∙ ap length exy)
 
   suffix→ope : Suffix xs ys → OPE xs ys
   suffix→ope (txy , exy) = ope-++-l ∙ =→ope exy
+
+  suffix1-weaken : Suffix1 xs ys → Suffix xs ys
+  suffix1-weaken {xs} (t , txy , exy) =
+    txy ∷r t , ap (_++ xs) (snoc-append txy) ∙ ++-assoc txy _ _ ∙ exy

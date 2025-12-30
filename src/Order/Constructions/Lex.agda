@@ -16,6 +16,7 @@ open import Data.Nat.Order.Base renaming (_<_ to _<ℕ_)
 open import Data.List.Base
 open import Data.List.Path
 open import Data.List.Operations
+open import Data.List.Correspondences.Binary.Prefix
 
 open import Order.Base
 open import Order.Strict
@@ -380,6 +381,17 @@ List-lex<-++-r : {A : 𝒰 o}
 List-lex<-++-r               {ys = []}     ly = ⊥.absurd (≮z ly)
 List-lex<-++-r {xs = []}     {ys = y ∷ ys} _  = lift tt
 List-lex<-++-r {xs = x ∷ xs} {ys = y ∷ ys} _  = inr (refl , (List-lex<-++-r {xs = xs} {ys = y ∷ ys} z<s))
+
+opaque
+  unfolding Prefix1
+  List-lex<-prefix1 : {A : 𝒰 o}
+                      {_A<_ : A → A → 𝒰 ℓ}
+                    → ∀ {xs ys}
+                    → Prefix1 xs ys
+                    → List-lex< _A<_ xs ys
+  List-lex<-prefix1 {_A<_} {xs} (t , txy , exy) =
+    subst (List-lex< _A<_ xs) exy $
+    List-lex<-++-r {xs = xs} {ys = t ∷ txy} z<s
 
 -- strict truncated
 
