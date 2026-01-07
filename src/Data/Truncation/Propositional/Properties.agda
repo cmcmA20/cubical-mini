@@ -37,7 +37,7 @@ universal {B} {A} B-prop = ≅→≃ $ iso inc′ rec′ refl (fun-ext beta) whe
 
   rec′ : (f : A → B) → ∥ A ∥₁ → B
   rec′ = rec B-prop
-  
+
   beta : rec′ retraction-of′ inc′
   beta f = fun-ext $ elim! λ _ → refl
 
