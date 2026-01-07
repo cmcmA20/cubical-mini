@@ -25,8 +25,8 @@ private variable o ℓ o′ ℓ′ o″ ℓ″ ℓᵢ ℓⱼ ℓₖ : Level
 record List≤ {ℓ : Level} (A : 𝒰 ℓ) (n : ℕ) : 𝒰 ℓ where
   constructor _[<_>]
   field
-    ls : List A
-    prf : length ls ≤ n
+    ls   : List A
+    lprf : length ls ≤ n
 open List≤ public
 
 map≤ : {A : 𝒰 o} {B : 𝒰 o′} {n : ℕ}
@@ -35,6 +35,11 @@ map≤ : {A : 𝒰 o} {B : 𝒰 o′} {n : ℕ}
 map≤ f (xs [< prf >]) = (map f xs) [< =→≤ map-length ∙ prf >]
 
 -- TODO other variants
+
+List≤-lex : {A : 𝒰 o} {n : ℕ}
+          → (_A<_ : A → A → 𝒰 ℓ)
+          → List≤ A n → List≤ A n → 𝒰 (o ⊔ ℓ)
+List≤-lex _A<_ x y = List-lex _A<_ (x .ls) (y .ls)
 
 -- strict
 

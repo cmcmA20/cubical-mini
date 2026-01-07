@@ -93,6 +93,8 @@ _≈↔_ {A} S T = ∀[ a ꞉ A ] (a ∈ S ≃ a ∈ T)
      → S ≈↔ T → S ≈ T
 ≈↔→≈ beq = (beq $_) , (equiv-backward beq)
 
+-- TODO apartness
+
 record Intersection {ℓ ℓ′ ℓ″} (A : Type ℓ) (B : Type ℓ′) (R : Type ℓ″) : Typeω where
   infixr 22 _∩_
   field _∩_ : A → B → R

@@ -5,7 +5,9 @@ open import Meta.Prelude
 
 open import Data.Empty.Base
 open import Data.Empty.Properties as ⊥
+open import Data.Reflects.Base
 open import Data.List.Base
+open import Data.List.Path
 open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Operations.Properties
@@ -29,10 +31,14 @@ opaque
 -- TODO add more
 
 opaque
-  unfolding Suffix
+  unfolding Suffix Suffix1
 
   []-suffix : Suffix [] ys
   []-suffix {ys} = ys , ++-id-r ys
+
+  ¬-suffix1-[] : ¬ Suffix1 xs []
+  ¬-suffix1-[] (t , []     , e) = false! e
+  ¬-suffix1-[] (t , x ∷ ts , e) = false! e
 
   =→suffix : xs ＝ ys → Suffix xs ys
   =→suffix exy = [] , exy
