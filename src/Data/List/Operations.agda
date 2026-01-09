@@ -165,6 +165,18 @@ map-up : (ℕ → A → B) → ℕ → List A → List B
 map-up _ _ []       = []
 map-up f n (x ∷ xs) = f n x ∷ map-up f (suc n) xs
 
+take-while : (A → Bool) → List A → List A
+take-while p []       = []
+take-while p (x ∷ xs) =
+  if p x then x ∷ take-while p xs
+         else []
+
+drop-while : (A → Bool) → List A → List A
+drop-while p []       = []
+drop-while p (x ∷ xs) =
+  if p x then drop-while p xs
+         else x ∷ xs
+
 span : (p : A → Bool) → List A → List A × List A
 span p []       = [] , []
 span p (x ∷ xs) =

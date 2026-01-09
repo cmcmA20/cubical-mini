@@ -801,9 +801,16 @@ count-complement p xs =
                (all-trivial λ x → not-so-≃ ⁻¹ $ ¬so≃is-false ⁻¹ $ and-compl (p x)))
   ∙ +-zero-r (length xs)
 
+count-none : {p : A → Bool} {xs : List A}
+            → ⌞ not (any p xs) ⌟
+            → count p xs ＝ 0
+count-none {p} {xs} np =
+  length-filter p xs ⁻¹ ∙ ap length (filter-none {xs = xs} np)
+
 count-false : (xs : List A)
             → count (λ _ → false) xs ＝ 0
-count-false xs = length-filter (λ _ → false) xs ⁻¹ ∙ ap length (filter-false xs)
+count-false xs =
+  length-filter (λ _ → false) xs ⁻¹ ∙ ap length (filter-false xs)
 
 count-true : (xs : List A)
            → count (λ _ → true) xs ＝ length xs
@@ -923,7 +930,35 @@ count-map-maybe {xs = x ∷ xs} {p} {f} with f x
 ... | just z  = ap (bit (p z) +_) (count-map-maybe {xs = xs})
 ... | nothing = count-map-maybe {xs = xs}
 
+-- take-while & drop-while
+
+all-take-while : ∀ {A : 𝒰 ℓ} {p : A → Bool} xs
+               → All (So ∘ p) xs
+               → take-while p xs ＝ xs
+all-take-while []        _        = refl
+all-take-while (x ∷ xs) (px ∷ ax) = if-true px ∙ ap (x ∷_) (all-take-while xs ax)
+
+take-while-all : ∀ {A : 𝒰 ℓ} (p : A → Bool) xs
+               → All (So ∘ p) (take-while p xs)
+take-while-all p []       = []
+take-while-all p (x ∷ xs) with p x | recall p x
+... | false | ⟪ e ⟫ = []
+... | true  | ⟪ e ⟫ = subst So (e ⁻¹) oh ∷ (take-while-all p xs)
+
+eq-take-drop-while : ∀ {A : 𝒰 ℓ} (p : A → Bool) xs
+                   → Any (So ∘ p) xs
+                   → Σ[ x ꞉ A ] (  So (p x)
+                                 × (xs ＝              take-while (not ∘ p) xs
+                                          ++ x ∷ tail (drop-while (not ∘ p) xs)))
+eq-take-drop-while p (x ∷ xs) a with p x | recall p x
+... | true | ⟪ eq ⟫ =
+    x , (so≃is-true ⁻¹ $ eq) , refl
+... | false | ⟪ eq ⟫ =
+  let (q , pq , e) = eq-take-drop-while p xs (any-¬here (¬so≃is-false ⁻¹ $ eq) a) in
+  q , pq , ap (x ∷_) e
+
 -- span
+-- TODO duplication with above
 
 span-append : ∀ (p : A → Bool) xs
             → let (ys , zs) = span p xs in

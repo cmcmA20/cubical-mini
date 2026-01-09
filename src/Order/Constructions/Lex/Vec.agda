@@ -22,6 +22,20 @@ private variable o ℓ o′ ℓ′ o″ ℓ″ ℓᵢ ℓⱼ ℓₖ : Level
 
 -- TODO other variants
 
+Vec-lex : {A : 𝒰 o} {n : ℕ}
+        → (_A<_ : A → A → 𝒰 ℓ)
+        → Vec A n → Vec A n → 𝒰 (o ⊔ ℓ)
+Vec-lex {n = zero}  _A<_  []       []      = ⊤
+Vec-lex {n = suc n} _A<_ (x ∷ xs) (y ∷ ys) = (x A< y) ⊎ ((x ＝ y) × Vec-lex _A<_ xs ys)
+
+Vec-leq-eq : {A : 𝒰 o} {n : ℕ}
+             {_A<_ : A → A → 𝒰 ℓ}
+           → {xs ys : Vec A n}
+           → xs ＝ ys → Vec-lex _A<_ xs ys
+Vec-leq-eq {n = zero}  {xs = []}     {ys = []}     e = lift tt
+Vec-leq-eq {n = suc n} {xs = x ∷ xs} {ys = y ∷ ys} e =
+  inr (∷-head-inj e , Vec-leq-eq {n = n} {xs = xs} {ys = ys} (∷-tail-inj e))
+
 -- strict
 
 Vec-lex< : {A : 𝒰 o} {n : ℕ}
@@ -54,6 +68,40 @@ Vec-lex<-trans {n = suc n} {_A<_} atr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z �
   inl (subst (_A< z) (x=y ⁻¹) y<z)
 Vec-lex<-trans {n = suc n}        atr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs<ys)) (inr (y=z , ys<zs)) =
   inr (x=y ∙ y=z , Vec-lex<-trans atr {xs = xs} {ys = ys} {zs = zs} xs<ys ys<zs)
+
+Vec-lex<-≤trans : {A : 𝒰 o} {n : ℕ}
+                 {_A<_ : A → A → 𝒰 ℓ}
+               → (∀ {x y z} → x A< y → y A< z → x A< z)
+               → {xs ys zs : Vec A n}
+               → Vec-lex< _A<_ xs ys
+               → Vec-lex  _A<_ ys zs
+               → Vec-lex< _A<_ xs zs
+Vec-lex<-≤trans {n = zero}         tr {xs = []}     {ys = []}     {zs = []}      xys                 yzs                = xys
+Vec-lex<-≤trans {n = suc n}        tr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)           (inl y<z)           =
+  inl (tr x<y y<z)
+Vec-lex<-≤trans {n = suc n} {_A<_} tr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)           (inr (y=z , ys<zs)) =
+  inl (subst (x A<_) y=z x<y)
+Vec-lex<-≤trans {n = suc n} {_A<_} tr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs<ys)) (inl y<z)           =
+  inl (subst (_A< z) (x=y ⁻¹) y<z)
+Vec-lex<-≤trans {n = suc n}        tr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs<ys)) (inr (y=z , ys<zs)) =
+  inr (x=y ∙ y=z , Vec-lex<-≤trans tr {xs = xs} {ys = ys} {zs = zs} xs<ys ys<zs)
+
+Vec-lex≤-<trans : {A : 𝒰 o} {n : ℕ}
+                 {_A<_ : A → A → 𝒰 ℓ}
+               → (∀ {x y z} → x A< y → y A< z → x A< z)
+               → {xs ys zs : Vec A n}
+               → Vec-lex  _A<_ xs ys
+               → Vec-lex< _A<_ ys zs
+               → Vec-lex< _A<_ xs zs
+Vec-lex≤-<trans {n = zero}         tr {xs = []}     {ys = []}     {zs = []}      xys                 yzs                = yzs
+Vec-lex≤-<trans {n = suc n}        tr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)           (inl y<z)           =
+  inl (tr x<y y<z)
+Vec-lex≤-<trans {n = suc n} {_A<_} tr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)           (inr (y=z , ys<zs)) =
+  inl (subst (x A<_) y=z x<y)
+Vec-lex≤-<trans {n = suc n} {_A<_} tr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs<ys)) (inl y<z)           =
+  inl (subst (_A< z) (x=y ⁻¹) y<z)
+Vec-lex≤-<trans {n = suc n}        tr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs<ys)) (inr (y=z , ys<zs)) =
+  inr (x=y ∙ y=z , Vec-lex≤-<trans tr {xs = xs} {ys = ys} {zs = zs} xs<ys ys<zs)
 
 -- TODO Vec-lex<-set-prop
 
