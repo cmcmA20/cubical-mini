@@ -3,15 +3,18 @@ module Data.List.Correspondences.Binary.Suffix where
 
 open import Meta.Prelude
 
-open import Data.Empty.Base
-open import Data.Empty.Properties as ⊥
-open import Data.Reflects.Base
 open import Data.List.Base
 open import Data.List.Path
 open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Operations.Properties
+open import Data.List.Correspondences.Unary.Any
 open import Data.List.Correspondences.Binary.OPE
+open import Data.List.Membership
+
+open import Data.Empty.Base
+open import Data.Empty.Properties as ⊥
+open import Data.Reflects.Base
 open import Data.Nat.Order.Base
 open import Data.Acc.Base
 
@@ -52,6 +55,18 @@ opaque
 
   suffix-∷ : Suffix xs (x ∷ xs)
   suffix-∷ {x} = x ∷ [] , refl
+
+  suffix-uncons-r : x ≠ y → Suffix (x ∷ xs) (y ∷ ys) → Suffix (x ∷ xs) ys
+  suffix-uncons-r x≠y ([]    , e) =
+    absurd (x≠y (∷-head-inj e))
+  suffix-uncons-r x≠y (z ∷ t , e) =
+    t , ∷-tail-inj e
+
+  suffix-split-r : x ∉ zs → Suffix (x ∷ xs) (zs ++ ys) → Suffix (x ∷ xs) ys
+  suffix-split-r {zs = []}     x∉ sf = sf
+  suffix-split-r {zs = z ∷ zs} x∉ sf =
+    let (x≠z , x∉') = ¬any-uncons x∉ in
+    suffix-split-r x∉' (suffix-uncons-r x≠z sf)
 
   suffix-uncons1 : Suffix (x ∷ xs) ys → Suffix1 xs ys
   suffix-uncons1 {x} {xs} (txy , exy) =

@@ -176,6 +176,11 @@ map-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
 map-∈ {xs = x ∷ xs} f inj (here e)   = here (inj e)
 map-∈ {xs = x ∷ xs} f inj (there fx) = there (map-∈ f inj fx)
 
+∉-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A} {f : A → B}
+      → Injective f
+      → x ∉ xs → f x ∉ map f xs
+∉-map fi = contra (map-∈ _ fi)
+
 map-∈-= : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs : List A}
        → {f g : A → B}
        → (∀ {x} → x ∈ xs → f x ＝ g x)
@@ -242,8 +247,8 @@ rec-with-∈ z (x ∷ xs) f = f x (here refl) (rec-with-∈ z xs λ a → f a �
 -- interaction with any/all
 
 Any→Σ∈ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs : List A}
-         → Any P xs
-         → Σ[ x ꞉ A ] x ∈ xs × P x
+       → Any P xs
+       → Σ[ x ꞉ A ] x ∈ xs × P x
 Any→Σ∈ {xs = x ∷ xs} (here px) = x , here refl , px
 Any→Σ∈ {xs = x ∷ xs} (there a)     =
   let (x , h , p) = Any→Σ∈ a in
@@ -266,6 +271,22 @@ All→∀∈     {xs = y ∷ xs} (px ∷ pxs) x (there hx) = All→∀∈ pxs x 
         → All P xs
 ∀∈→All {xs = []}     ax = []
 ∀∈→All {xs = x ∷ xs} ax = ax x (here refl) ∷ ∀∈→All λ y hy → ax y (there hy)
+
+¬Any→All¬ : {xs : List A} {P : A → 𝒰 ℓ}
+          → ¬ Any P xs → All (λ x → ¬ (P x)) xs
+¬Any→All¬ nan = ∀∈→All λ x x∈ → nan ∘ ∈→Any x∈
+
+All¬→¬Any : {xs : List A} {P : A → 𝒰 ℓ}
+          → All (λ x → ¬ (P x)) xs → ¬ Any P xs 
+All¬→¬Any al an =
+  let (x , x∈ , px) = Any→Σ∈ an in
+  All→∀∈ al x x∈ px
+
+Any¬→¬All : {xs : List A} {P : A → 𝒰 ℓ}
+          → Any (λ x → ¬ (P x)) xs → ¬ All P xs
+Any¬→¬All an al =
+  let (x , x∈ , px) = Any→Σ∈ an in
+  px $ All→∀∈ al x x∈ 
 
 all-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A}
        → xs ⊆ ys → All P ys → All P xs

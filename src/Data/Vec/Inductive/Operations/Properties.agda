@@ -32,6 +32,7 @@ private variable
   x y z w : A
 
 -- tabulate
+-- TODO exist as helpers in Data.Vec.Inductive.Properties
 
 lookup-tabulate : {A : 𝒰 ℓ} {n : ℕ} {f : Fin n → A}
                 → (k : Fin n)
@@ -39,6 +40,11 @@ lookup-tabulate : {A : 𝒰 ℓ} {n : ℕ} {f : Fin n → A}
 lookup-tabulate {n = suc n}      fzero   = refl
 lookup-tabulate {n = suc n} {f} (fsuc k) =
   lookup-tabulate {f = f ∘ fsuc} k
+
+tabulate-lookup : {A : 𝒰 ℓ} {n : ℕ} {xs : Vec A n}
+                → tabulate (lookup xs) ＝ xs
+tabulate-lookup {n = zero}  {xs = []}     = refl
+tabulate-lookup {n = suc n} {xs = x ∷ xs} = ap (x ∷_) (tabulate-lookup {n = n} {xs = xs})
 
 -- replicate
 

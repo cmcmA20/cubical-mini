@@ -148,6 +148,13 @@ Dec-is-nil? _  .proof = Reflects-is-nil?
 
 -- !ᵐ
 
+!ᵐ-≥ : ∀ {A : Type ℓ} {xs : List A} {n : ℕ}
+     → length xs ≤ n
+     → xs !ᵐ n ＝ nothing
+!ᵐ-≥ {xs = []}                 n≥ = refl
+!ᵐ-≥ {xs = x ∷ xs} {n = zero}  n≥ = false! n≥
+!ᵐ-≥ {xs = x ∷ xs} {n = suc n} n≥ = !ᵐ-≥ {xs = xs} {n = n} (≤-peel n≥)
+
 !ᵐ-ext : ∀ {A : Type ℓ} {xs ys : List A}
        → (∀ n → xs !ᵐ n ＝ ys !ᵐ n)
        → xs ＝ ys
@@ -158,6 +165,27 @@ Dec-is-nil? _  .proof = Reflects-is-nil?
   ap² {C = λ x xs → List _} _∷_
      (just-inj $ e 0)
      (!ᵐ-ext (e ∘ suc))
+
+!ᵐ-++< : ∀ {A : Type ℓ} {xs ys : List A} {n : ℕ}
+       → n < length xs
+       → (xs ++ ys) !ᵐ n ＝ xs !ᵐ n
+!ᵐ-++< {xs = []}                 n< = false! n<
+!ᵐ-++< {xs = x ∷ xs} {n = zero}  n< = refl
+!ᵐ-++< {xs = x ∷ xs} {n = suc n} n< = !ᵐ-++< {xs = xs} (<-peel n<)
+
+!ᵐ-++≥ : ∀ {A : Type ℓ} {xs ys : List A} {n : ℕ}
+       → length xs ≤ n
+       → (xs ++ ys) !ᵐ n ＝ ys !ᵐ (n ∸ length xs)
+!ᵐ-++≥ {xs = []}                 n≥ = refl
+!ᵐ-++≥ {xs = x ∷ xs} {n = zero}  n≥ = false! n≥
+!ᵐ-++≥ {xs = x ∷ xs} {n = suc n} n≥ = !ᵐ-++≥ {xs = xs} (≤-peel n≥)
+
+opaque
+  unfolding Prefix
+  !ᵐ-prefix< : ∀ {A : Type ℓ} {xs ys : List A} {n : ℕ}
+             → Prefix xs ys → n < length xs
+             → ys !ᵐ n ＝ xs !ᵐ n
+  !ᵐ-prefix< {n} (ts , e) n< = ap (_!ᵐ n) (e ⁻¹) ∙ !ᵐ-++< n<
 
 -- unconsᵐ / tailᵐ
 
@@ -270,6 +298,19 @@ prefix-∷r-l {xs} {ys} p =
   (subst (λ q → Prefix q ys) (snoc-append xs) $
    p)
 
+snoc-!ᵐ< : ∀ {A : Type ℓ} {xs : List A} {n : ℕ} {x : A}
+         → n < length xs
+         → (xs ∷r x) !ᵐ n ＝ xs !ᵐ n
+snoc-!ᵐ< {xs} {n} n< = ap (_!ᵐ n) (snoc-append xs) ∙ !ᵐ-++< n<
+
+snoc-!ᵐ= : ∀ {A : Type ℓ} {xs : List A} {n : ℕ} {x : A}
+         → n ＝ length xs
+         → (xs ∷r x) !ᵐ n ＝ just x
+snoc-!ᵐ= {xs} {n} {x} e =
+    ap (_!ᵐ n) (snoc-append xs)
+  ∙ !ᵐ-++≥ {xs = xs} (=→≤ (e ⁻¹))
+  ∙ ap ((x ∷ []) !ᵐ_) (≤→∸=0 (=→≤ e))
+
 -- unsnoc
 
 unsnoc-snoc : {xs : List A} {z w : A}
@@ -323,6 +364,10 @@ reverse-++ {xs = []}     {ys} = ++-id-r (reverse ys) ⁻¹
 reverse-++ {xs = x ∷ xs} {ys} =
     ap (_++ x ∷ []) (reverse-++ {xs = xs})
   ∙ ++-assoc (reverse ys) (reverse xs) (x ∷ [])
+
+reverse-∷ : ∀ {xs : List A} {x}
+          → reverse (x ∷ xs) ＝ reverse xs ∷r x
+reverse-∷ {xs} = snoc-append (reverse xs) ⁻¹
 
 reverse-∷r : ∀ {xs : List A} {x}
            → reverse (xs ∷r x) ＝ x ∷ reverse xs
@@ -502,17 +547,6 @@ not-any? {p} {xs = x ∷ xs} =
     not-or (p x) _
   ∙ ap (not (p x) and_) (not-any? {xs = xs})
 
---TODO move these 2 somewhere
-¬Any→All¬ : {xs : List A} {P : A → 𝒰 ℓ′}
-          → ¬ Any P xs → All (λ x → ¬ (P x)) xs
-¬Any→All¬ {xs = []}     na = []
-¬Any→All¬ {xs = x ∷ xs} na = contra here na ∷ ¬Any→All¬ (contra there na)
-
-Any¬→¬All : {xs : List A} {P : A → 𝒰 ℓ′}
-          → Any (λ x → ¬ (P x)) xs → ¬ All P xs
-Any¬→¬All {xs = x ∷ xs} (here npx) (px ∷ a) = npx px
-Any¬→¬All {xs = x ∷ xs} (there an) (px ∷ a) = Any¬→¬All an a
-
 -- replicate
 
 length-replicate : length (replicate n z) ＝ n
@@ -536,7 +570,6 @@ All-replicate : (xs : List A)
               → xs ＝ replicate (length xs) z
 All-replicate     []       []       = refl
 All-replicate {z} (x ∷ xs) (xa ∷ a) = ap² List._∷_ xa (All-replicate xs a)
-
 
 -- filter
 
@@ -932,18 +965,33 @@ count-map-maybe {xs = x ∷ xs} {p} {f} with f x
 
 -- take-while & drop-while
 
-all-take-while : ∀ {A : 𝒰 ℓ} {p : A → Bool} xs
-               → All (So ∘ p) xs
-               → take-while p xs ＝ xs
-all-take-while []        _        = refl
-all-take-while (x ∷ xs) (px ∷ ax) = if-true px ∙ ap (x ∷_) (all-take-while xs ax)
-
 take-while-all : ∀ {A : 𝒰 ℓ} (p : A → Bool) xs
                → All (So ∘ p) (take-while p xs)
 take-while-all p []       = []
 take-while-all p (x ∷ xs) with p x | recall p x
 ... | false | ⟪ e ⟫ = []
 ... | true  | ⟪ e ⟫ = subst So (e ⁻¹) oh ∷ (take-while-all p xs)
+
+take-while-++-l : ∀ {A : 𝒰 ℓ} {p : A → Bool} xs {ys}
+                → All (So ∘ p) xs
+                → take-while p (xs ++ ys) ＝ xs ++ take-while p ys
+take-while-++-l []       []       = refl
+take-while-++-l (x ∷ xs) (a ∷ as) = if-true a ∙ ap (x ∷_) (take-while-++-l xs as)
+
+all-take-while : ∀ {A : 𝒰 ℓ} {p : A → Bool} xs
+               → All (So ∘ p) xs
+               → take-while p xs ＝ xs
+all-take-while {p} xs a =
+    ap (take-while p) (++-id-r xs ⁻¹)
+  ∙ take-while-++-l xs {ys = []} a
+  ∙ ++-id-r xs
+
+take-while-prefix : ∀ {A : 𝒰 ℓ} {p : A → Bool} {xs}
+                  → Prefix (take-while p xs) xs
+take-while-prefix     {xs = []}     = []-prefix
+take-while-prefix {p} {xs = x ∷ xs} with p x
+... | false = []-prefix
+... | true  = ∷-prefix refl (take-while-prefix {xs = xs})
 
 eq-take-drop-while : ∀ {A : 𝒰 ℓ} (p : A → Bool) xs
                    → Any (So ∘ p) xs
