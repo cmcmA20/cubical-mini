@@ -945,7 +945,7 @@ split-take-drop : (n : ℕ) {xs : List A}
 split-take-drop  zero                 = refl
 split-take-drop (suc n) {xs = []}     = refl
 split-take-drop (suc n) {xs = x ∷ xs} = ap (x ∷_) (split-take-drop n)
-
+             
 -- map-maybe
 
 map-maybe-∈-= : ∀ {ℓᵇ} {B : 𝒰 ℓᵇ} {xs : List A}

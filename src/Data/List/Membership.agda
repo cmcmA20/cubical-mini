@@ -91,7 +91,6 @@ instance
       (no  q≠q′) → no (contra there-inj q≠q′)
   {-# OVERLAPPING ∈ₗ-is-discrete #-}
 
-
 here+there→∉!ₗ : a ＝ x → a ∈ xs → a ∉! (x ∷ xs)
 here+there→∉!ₗ _   a∈xs (here  p , uniq) = here≠there $ uniq (there a∈xs)
 here+there→∉!ₗ a=x _    (there q , uniq) = there≠here $ uniq (here a=x)
@@ -164,6 +163,13 @@ instance
   false! $ u $ here $ r ∙ p
 ∈ₗ→fin-respects-∈!ₗ {xs = x ∷ xs} (there q) u (there q′) v r =
   ap fsuc (∈ₗ→fin-respects-∈!ₗ q (there-inj ∘ u ∘ there) q′ (there-inj ∘ v ∘ there) r)
+
+-- TODO move to Notation.Membership
+=→⊆ₗ : {xs ys : List A}
+    → xs ＝ ys → xs ⊆ ys
+=→⊆ₗ e {x} = subst (x ∈ₗ_) e
+
+-- interaction with map
 
 ∈-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
       → (f : A → B) → x ∈ xs → f x ∈ map f xs

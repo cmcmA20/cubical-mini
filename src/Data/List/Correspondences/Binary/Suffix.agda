@@ -81,3 +81,8 @@ opaque
   suffix1-weaken : Suffix1 xs ys → Suffix xs ys
   suffix1-weaken {xs} (t , txy , exy) =
     txy ∷r t , ap (_++ xs) (snoc-append txy) ∙ ++-assoc txy _ _ ∙ exy
+
+  -- can't be placed in Data.List.Operations.Properties due to import cycles
+  drop-suffix : {n : ℕ} {xs : List A}
+              → Suffix (drop n xs) xs
+  drop-suffix {n} {xs} = take n xs , split-take-drop n ⁻¹              
