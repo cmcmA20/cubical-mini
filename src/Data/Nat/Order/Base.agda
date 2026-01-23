@@ -504,3 +504,39 @@ opaque
   ∙ ⊎₁-¬-distribute
   ∙ ×-ap (≃→¬≃ (≤0≃=0 ⁻¹) ∙ <≃≱ ⁻¹)
          (<≃≱ ⁻¹)
+
+≤-2· : ∀ {p} → m ≤ n → k ≤ p → m · k ≤ n · p
+≤-2· {n} m≤n k≤p = (≤≃≤·r ⁻¹ $ ∣ inr m≤n ∣₁) ∙ (≤≃≤·l {m = n} ⁻¹ $ ∣ inr k≤p ∣₁)
+
+<-2· : ∀ {p} → m < n → k < p → m · k < n · p
+<-2· {n} m<n k<p =
+  ≤-<-trans (≤≃≤·r ⁻¹ $ ∣ inr (<-weaken _ _ m<n) ∣₁)
+            (<≃<·l {m = n} ⁻¹ $ ≤-<-trans z≤ m<n , k<p)
+
+-- exponentiation
+
+<0-^ : 0 < m → 0 < m ^ n
+<0-^ {m} {n} =
+  ≱→< ∘ contra (λ le → ^-zero m n (≤0→=0 le) ⁻¹) ∘ <→≠
+
+≤-^-l : m ≤ n → m ^ k ≤ n ^ k
+≤-^-l {k = zero}  m≤n = refl
+≤-^-l {k = suc k} m≤n = ≤-2· m≤n (≤-^-l {k = k} m≤n)
+
+≤-^-r : 0 < m → n ≤ k → m ^ n ≤ m ^ k
+≤-^-r     {n = zero}  {k}         z<m _   = <≃suc≤ ⁻¹ $ <0-^ {n = k} z<m
+≤-^-r     {n = suc n} {k = zero}  _   n≤k = false! n≤k
+≤-^-r {m} {n = suc n} {k = suc k} z<m n≤k = ≤≃≤·l {m = m} ⁻¹ $ ∣ inr (≤-^-r z<m (≤-peel n≤k)) ∣₁
+
+<-^-l : m < n → 0 < k → m ^ k < n ^ k
+<-^-l {k = zero}        m<n z<k = false! z<k
+<-^-l {k = suc zero}    m<n z<k = <≃<·r ⁻¹ $ z<k , m<n
+<-^-l {k = suc (suc k)} m<n z<k = <-2· m<n (<-^-l {k = suc k} m<n z<s)
+
+<-^-r : 1 < m → n < k → m ^ n < m ^ k
+<-^-r {m = zero}                          1<m n<k = false! 1<m
+<-^-r {m = suc m}             {k = zero}  1<m n<k = false! n<k
+<-^-r {m = suc m} {n = zero}  {k = suc k} 1<m n<k =
+  ≤-<-trans (=→≤ (^-absorb-l (suc k) ⁻¹)) (<-^-l {k = suc k} 1<m z<s)
+<-^-r {m = suc m} {n = suc n} {k = suc k} 1<m n<k =
+  <≃<·l {m = suc m} ⁻¹ $ z<s , <-^-r 1<m (<-peel n<k)
