@@ -85,4 +85,4 @@ opaque
   -- can't be placed in Data.List.Operations.Properties due to import cycles
   drop-suffix : {n : ℕ} {xs : List A}
               → Suffix (drop n xs) xs
-  drop-suffix {n} {xs} = take n xs , split-take-drop n ⁻¹              
+  drop-suffix {n} {xs} = take n xs , split-take-drop n ⁻¹
