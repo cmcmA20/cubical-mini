@@ -169,6 +169,10 @@ instance
     → xs ＝ ys → xs ⊆ ys
 =→⊆ₗ e {x} = subst (x ∈ₗ_) e
 
+=→≈ₗ : {xs ys : List A}
+    → xs ＝ ys → xs ≈ ys
+=→≈ₗ = < =→⊆ₗ , =→⊆ₗ ∘ _⁻¹ >
+
 -- interaction with map
 
 ∈-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
@@ -283,7 +287,7 @@ All→∀∈     {xs = y ∷ xs} (px ∷ pxs) x (there hx) = All→∀∈ pxs x 
 ¬Any→All¬ nan = ∀∈→All λ x x∈ → nan ∘ ∈→Any x∈
 
 All¬→¬Any : {xs : List A} {P : A → 𝒰 ℓ}
-          → All (λ x → ¬ (P x)) xs → ¬ Any P xs 
+          → All (λ x → ¬ (P x)) xs → ¬ Any P xs
 All¬→¬Any al an =
   let (x , x∈ , px) = Any→Σ∈ an in
   All→∀∈ al x x∈ px
@@ -292,7 +296,7 @@ Any¬→¬All : {xs : List A} {P : A → 𝒰 ℓ}
           → Any (λ x → ¬ (P x)) xs → ¬ All P xs
 Any¬→¬All an al =
   let (x , x∈ , px) = Any→Σ∈ an in
-  px $ All→∀∈ al x x∈ 
+  px $ All→∀∈ al x x∈
 
 all-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A}
        → xs ⊆ ys → All P ys → All P xs
@@ -334,12 +338,24 @@ unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
 
 -- set-equivalence
 
+≈-++-comm : {xs ys : List A}
+          → (xs ++ ys) ≈ (ys ++ xs)
+≈-++-comm {xs} {ys} =
+    [ any-++-r {xs = ys} , any-++-l ]ᵤ ∘ any-split
+  , [ any-++-r {xs = xs} , any-++-l ]ᵤ ∘ any-split
+
+≈-++ : {xs ys zs ws : List A}
+     → xs ≈ ys
+     → zs ≈ ws
+     → (xs ++ zs) ≈ (ys ++ ws)
+≈-++ {xs} {ys} {zs} {ws} (xy , yx) (zw , wz) =
+    [ any-++-l ∘ xy , any-++-r {xs = ys} ∘ zw ]ᵤ ∘ any-split {xs = xs}
+  , [ any-++-l ∘ yx , any-++-r {xs = xs} ∘ wz ]ᵤ ∘ any-split {xs = ys}
+
 ≈-∷ : {x : A} {xs ys : List A}
     → xs ≈ ys
     → (x ∷ xs) ≈ (x ∷ ys)
-≈-∷ (xy , yx) =
-    [ here , there ∘ xy ]ᵤ ∘ any-uncons
-  , [ here , there ∘ yx ]ᵤ ∘ any-uncons
+≈-∷ = ≈-++ (=→≈ₗ refl)
 
 -- disjointness
 -- TODO move to Notation.Membership
@@ -365,6 +381,14 @@ _∥_ {A} xs ys = ∀[ a ꞉ A ] (a ∈ xs → a ∈ ys → ⊥)
 
 ∥-∷→r : ∀ {y} {xs ys : List A} → y ∉ xs → xs ∥ ys → xs ∥ (y ∷ ys)
 ∥-∷→r nx = ∥-comm ∘ ∥-∷→l nx ∘ ∥-comm
+
+∥-++→l : {xs ys zs : List A} → xs ∥ zs → ys ∥ zs → (xs ++ ys) ∥ zs
+∥-++→l dxz dyz x∈xys x∈zs =
+  [ (λ x∈xs → dxz x∈xs x∈zs)
+  , (λ x∈ys → dyz x∈ys x∈zs) ]ᵤ (any-split x∈xys)
+
+∥-++←l : {xs ys zs : List A} → (xs ++ ys) ∥ zs → xs ∥ zs × ys ∥ zs
+∥-++←l d = d ∘ any-++-l , d ∘ any-++-r
 
 map-∥ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
           {xs ys : List A} {f : A → B}

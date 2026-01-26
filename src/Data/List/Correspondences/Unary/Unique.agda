@@ -148,16 +148,16 @@ uniq⊆len≤→uniq {xs = x ∷ xs} (nx ∷ᵘ u) sub le =
     (∥-∷→r (contra any-++-l nlr) (ulurar .snd .snd))
 
 uniq≈→len= : {xs ys : List A}
-                → Uniq xs → Uniq ys
-                → xs ≈ ys
-                → length xs ＝ length ys
+           → Uniq xs → Uniq ys
+           → xs ≈ ys
+           → length xs ＝ length ys
 uniq≈→len= ux uy seq =
   ≤-antisym (uniq⊆→len≤ ux (seq .fst)) (uniq⊆→len≤ uy (seq .snd))
 
 uniq≈len=→uniq : {xs ys : List A}
-                → length xs ＝ length ys
-                → xs ≈ ys
-                → Uniq xs → Uniq ys
+               → length xs ＝ length ys
+               → xs ≈ ys
+               → Uniq xs → Uniq ys
 uniq≈len=→uniq es seq ux =
   uniq⊆len≤→uniq ux (seq .fst) (=→≤ (es ⁻¹))
 

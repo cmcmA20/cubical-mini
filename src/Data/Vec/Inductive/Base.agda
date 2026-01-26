@@ -40,6 +40,13 @@ rec : {P : (@0 n : ℕ) → Type ℓ′}
     → {@0 n : ℕ} → Vec A n → P n
 rec = VecIᴱ.rec impl
 
+fold-l : {P : (@0 n : ℕ) → Type ℓ′}
+        → ({@0 n : ℕ} → P n → A → P (suc n))
+        → P 0
+        → {@0 n : ℕ} → Vec A n → P n
+fold-l     f z []       = z
+fold-l {P} f z (x ∷ xs) = fold-l {P = λ n → P (suc n)} f (f z x) xs
+
 -- unerased
 -- TODO elimU
 recU : {P : ℕ → Type ℓ′}
@@ -48,6 +55,13 @@ recU : {P : ℕ → Type ℓ′}
      → {n : ℕ} → Vec A n → P n
 recU     p0 pxs {n = 0}     []       = p0
 recU {P} p0 pxs {n = suc n} (x ∷ xs) = pxs x {xs = xs} (recU {P = P} p0 pxs {n = n} xs)
+
+fold-lU : {P : (n : ℕ) → Type ℓ′}
+       → ((n : ℕ) → P n → A → P (suc n))
+       → P 0
+       → {n : ℕ} → Vec A n → P n
+fold-lU f z {n = zero}  []       = z
+fold-lU f z {n = suc n} (x ∷ xs) = fold-lU (f ∘ suc) (f 0 z x) xs
 
 replicate : (n : ℕ) → A → Vec A n
 replicate 0       x = []
