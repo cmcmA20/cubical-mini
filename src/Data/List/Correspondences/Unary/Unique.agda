@@ -12,6 +12,7 @@ open import Data.List
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Correspondences.Unary.Related
+open import Data.List.Correspondences.Binary.OPE
 open import Data.List.Membership
 open import Data.List.Operations
 open import Data.List.Operations.Properties
@@ -91,7 +92,14 @@ sorted→uniq : {ℓ′ : Level} {xs : List A} {R : A → A → 𝒰 ℓ′} →
 sorted→uniq {xs = []}     irr []ˢ      = []ᵘ
 sorted→uniq {xs = x ∷ xs} irr (∷ˢ rel) = related→uniq irr rel
 
--- subset & set-equivalence
+-- OPE, subset & set-equivalence
+
+uniq-ope : {xs ys : List A}
+         → OPE xs ys → Uniq ys → Uniq xs
+uniq-ope  odone              []ᵘ       = []ᵘ
+uniq-ope (otake {ys} e ope) (ny ∷ᵘ uy) =
+  contra (subst (_∈ ys) e ∘ ope→subset ope) ny ∷ᵘ uniq-ope ope uy
+uniq-ope (odrop ope)        (_ ∷ᵘ uy)  = uniq-ope ope uy
 
 uniq⊆→len≤ : {xs ys : List A}
            → Uniq xs → xs ⊆ ys → length xs ≤ length ys

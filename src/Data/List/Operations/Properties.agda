@@ -356,6 +356,13 @@ unsnocᵐ-len>0 {xs = x ∷ xs} prf = here (snoc-unsnoc ⁻¹)
              xs , there xs∈ , x∈xs)
   ]ᵤ (any-split {xs = xs} x∈)
 
+ope-concat : {xss yss : List (List A)}
+           → OPE xss yss
+           → OPE (concat xss) (concat yss)
+ope-concat  odone        = odone
+ope-concat (otake e ope) = ope-++-ap (=→ope e) (ope-concat ope)
+ope-concat (odrop ope)   = ope-concat ope ∙ ope-++-l
+
 -- reverse
 
 reverse-++ : ∀ {xs ys : List A}
@@ -945,6 +952,12 @@ split-take-drop : (n : ℕ) {xs : List A}
 split-take-drop  zero                 = refl
 split-take-drop (suc n) {xs = []}     = refl
 split-take-drop (suc n) {xs = x ∷ xs} = ap (x ∷_) (split-take-drop n)
+
+opaque
+  unfolding Prefix
+  take-prefix : {n : ℕ} {xs : List A}
+              → Prefix (take n xs) xs
+  take-prefix {n} {xs} = drop n xs , split-take-drop n ⁻¹
 
 -- map-maybe
 

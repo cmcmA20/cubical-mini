@@ -2,6 +2,7 @@
 module Data.List.Correspondences.Binary.OPE where
 
 open import Meta.Prelude
+open import Meta.Effect
 
 open import Data.Empty.Base
 open import Data.Bool.Base
@@ -9,13 +10,16 @@ open import Data.Nat.Order.Base
 open import Data.Reflects
 open import Data.List.Base
 open import Data.List.Path
+open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
+open import Data.List.Instances.Map
 
 private variable
-  ℓᵃ : Level
+  ℓᵃ ℓᵇ : Level
   A : 𝒰 ℓᵃ
+  B : 𝒰 ℓᵇ 
   x : A
   xs ys zs : List A
 
@@ -76,15 +80,21 @@ instance
   Trans-OPE : Trans {A = List A} OPE
   Trans-OPE ._∙_ = ope-trans
 
+ope-++-ap : {A : 𝒰 ℓᵃ} {xs ys zs ws : List A}
+          → OPE xs ys
+          → OPE zs ws
+          → OPE (xs ++ zs) (ys ++ ws)
+ope-++-ap  odone        ozw = ozw
+ope-++-ap (otake e oxy) ozw = otake e (ope-++-ap oxy ozw)
+ope-++-ap (odrop oxy)   ozw = odrop (ope-++-ap oxy ozw)
+
 ope-++-l : {A : 𝒰 ℓᵃ} {xs ys : List A}
          → OPE xs (ys ++ xs)
-ope-++-l {ys = []}     = refl
-ope-++-l {ys = x ∷ ys} = odrop ope-++-l
+ope-++-l = ope-++-ap ope-init refl
 
 ope-++-r : {A : 𝒰 ℓᵃ} {xs ys : List A}
          → OPE xs (xs ++ ys)
-ope-++-r {xs = []}     = ope-init
-ope-++-r {xs = x ∷ xs} = otake refl ope-++-r
+ope-++-r = =→ope (++-id-r _ ⁻¹) ∙ ope-++-ap refl ope-init
 
 -- TODO move to properties
 
@@ -92,6 +102,12 @@ ope-length : {xs ys : List A} → OPE xs ys → length xs ≤ length ys
 ope-length  odone      = z≤
 ope-length (otake _ l) = s≤s (ope-length l)
 ope-length (odrop l)   = ≤-trans (ope-length l) ≤-ascend
+
+ope-map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A} {f : A → B}
+        → OPE xs ys → OPE (map f xs) (map f ys)
+ope-map      odone        = odone
+ope-map {f} (otake e ope) = otake (ap f e) (ope-map ope)
+ope-map     (odrop ope)   = odrop (ope-map ope)
 
 ope-antisym : {xs ys : List A}
             → OPE xs ys → OPE ys xs → xs ＝ ys
