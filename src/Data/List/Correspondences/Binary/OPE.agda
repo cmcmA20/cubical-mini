@@ -19,7 +19,7 @@ open import Data.List.Instances.Map
 private variable
   ℓᵃ ℓᵇ : Level
   A : 𝒰 ℓᵃ
-  B : 𝒰 ℓᵇ 
+  B : 𝒰 ℓᵇ
   x : A
   xs ys zs : List A
 
