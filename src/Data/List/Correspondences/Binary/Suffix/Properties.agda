@@ -9,6 +9,7 @@ open Variadics _
 open import Logic.Decidability
 open import Logic.Discreteness
 
+open import Data.Bool
 open import Data.Dec as Dec
 open import Data.Empty.Base
 open import Data.Empty.Properties as ⊥
@@ -34,6 +35,12 @@ opaque
              → Suffix (mapₗ f xs) (mapₗ f ys)
   suffix-map {f} (txy , exy) =
     map f txy , map-++ f txy _ ⁻¹ ∙ ap (map f) exy
+
+  suffix-filter : {p : A → Bool} {xs ys : List A}
+                → Suffix xs ys
+                → Suffix (filter p xs) (filter p ys)
+  suffix-filter {p} (txy , exy) =
+    filter p txy , filter-++ txy ⁻¹ ∙ ap (filter p) exy
 
   suffix→reverse-prefix : {xs ys : List A}
                         → Suffix xs ys
