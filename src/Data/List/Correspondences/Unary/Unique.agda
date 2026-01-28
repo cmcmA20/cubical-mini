@@ -12,6 +12,7 @@ open import Data.List
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Correspondences.Unary.Related
+open import Data.List.Correspondences.Unary.Pairwise
 open import Data.List.Correspondences.Binary.OPE
 open import Data.List.Membership
 open import Data.List.Operations
@@ -59,6 +60,23 @@ uniq-snoc {xs} u x∉ =
   subst Uniq (snoc-append xs ⁻¹) $
   uniq→++ u (false! ∷ᵘ []ᵘ)
     λ x∈ → λ where (here e) → x∉ (subst (_∈ xs) e x∈)
+
+uniq-concat : {xss : List (List A)}
+            → Uniq (concat xss)
+            → All Uniq xss × Pairwise _∥_ xss
+uniq-concat {xss = []}       _   = [] , []ᵖ
+uniq-concat {xss = xs ∷ xss} uss =
+  let (ux , uss' , dx) = ++→uniq {xs = xs} uss
+      (axs , pxs) = uniq-concat {xss = xss} uss'
+    in
+  ux ∷ axs , ∥-concat dx ∷ᵖ pxs
+
+concat-uniq : {xss : List (List A)}
+            → All Uniq xss → Pairwise _∥_ xss
+            → Uniq (concat xss)
+concat-uniq {xss = []}       _          _          = []ᵘ
+concat-uniq {xss = xs ∷ xss} (u ∷ axs) (ax ∷ᵖ pxs) =
+  uniq→++ u (concat-uniq axs pxs) (concat-∥ ax)
 
 -- homotopy uniqueness
 

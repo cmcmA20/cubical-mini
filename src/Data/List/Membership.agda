@@ -390,6 +390,14 @@ _∥_ {A} xs ys = ∀[ a ꞉ A ] (a ∈ xs → a ∈ ys → ⊥)
 ∥-++←l : {xs ys zs : List A} → (xs ++ ys) ∥ zs → xs ∥ zs × ys ∥ zs
 ∥-++←l d = d ∘ any-++-l , d ∘ any-++-r
 
+∥-++→r : {xs ys zs : List A} → xs ∥ ys → xs ∥ zs → xs ∥ (ys ++ zs)
+∥-++→r dxy dxz = ∥-comm (∥-++→l (∥-comm dxy) (∥-comm dxz))
+
+∥-++←r : {xs ys zs : List A} → xs ∥ (ys ++ zs) → xs ∥ ys × xs ∥ zs
+∥-++←r {ys} d =
+  let (dyx , dzx) = ∥-++←l {xs = ys} (∥-comm d) in
+  ∥-comm dyx , ∥-comm dzx
+
 map-∥ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
           {xs ys : List A} {f : A → B}
       → map f xs ∥ map f ys

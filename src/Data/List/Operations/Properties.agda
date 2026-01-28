@@ -32,6 +32,7 @@ open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
 open import Data.List.Instances.Map
+open import Data.List.Correspondences.Unary.Pairwise
 open import Data.List.Correspondences.Binary.Prefix
 open import Data.List.Correspondences.Binary.OPE
 open import Data.Nat.Base
@@ -363,6 +364,19 @@ ope-concat  odone        = odone
 ope-concat (otake e ope) = ope-++-ap (=→ope e) (ope-concat ope)
 ope-concat (odrop ope)   = ope-concat ope ∙ ope-++-l
 
+∥-concat : {xss : List (List A)}
+         → ys ∥ concat xss → All (_∥_ ys) xss
+∥-concat {xss = []} _ = []
+∥-concat {xss = xs ∷ xss} d =
+  let (dyx , d') = ∥-++←r {ys = xs} d in
+  dyx ∷ ∥-concat d'
+
+concat-∥ : {xss : List (List A)}
+         → All (_∥_ ys) xss
+         → ys ∥ concat xss
+concat-∥ {xss = []}       []       = ∥-[]-r
+concat-∥ {xss = xs ∷ xss} (dx ∷ a) = ∥-++→r dx (concat-∥ a)
+
 -- reverse
 
 reverse-++ : ∀ {xs ys : List A}
@@ -604,6 +618,13 @@ all→filter         {xs = []}     []       = []
 all→filter {P} {p} {xs = x ∷ xs} (px ∷ a) with p x
 ... | true  = px ∷ all→filter a
 ... | false = all→filter a
+
+pairwise→filter : {R : A → A → 𝒰 ℓ′} {xs : List A} {p : A → Bool}
+                → Pairwise R xs → Pairwise R (filter p xs)
+pairwise→filter {xs = []}          []ᵖ       = []ᵖ
+pairwise→filter {xs = x ∷ xs} {p} (ax ∷ᵖ px) with p x
+... | true = all→filter ax ∷ᵖ pairwise→filter px
+... | false = pairwise→filter px
 
 all-filter : {p : A → Bool} {xs : List A}
            → ⌞ all p (filter p xs) ⌟
