@@ -168,12 +168,21 @@ Dec-is-nil? _  .proof = Reflects-is-nil?
 
 -- !ᵐ
 
+-- TODO reflects?
+
 !ᵐ-≥ : ∀ {A : Type ℓ} {xs : List A} {n : ℕ}
      → length xs ≤ n
      → xs !ᵐ n ＝ nothing
 !ᵐ-≥ {xs = []}                 n≥ = refl
 !ᵐ-≥ {xs = x ∷ xs} {n = zero}  n≥ = false! n≥
 !ᵐ-≥ {xs = x ∷ xs} {n = suc n} n≥ = !ᵐ-≥ {xs = xs} {n = n} (≤-peel n≥)
+
+≥-!ᵐ : ∀ {A : Type ℓ} {xs : List A} {n : ℕ}
+     → xs !ᵐ n ＝ nothing
+     → length xs ≤ n
+≥-!ᵐ {xs = []} {n = n} e = z≤
+≥-!ᵐ {xs = x ∷ xs} {n = zero} e = false! e
+≥-!ᵐ {xs = x ∷ xs} {n = suc n} e = s≤s (≥-!ᵐ e)
 
 !ᵐ-ext : ∀ {A : Type ℓ} {xs ys : List A}
        → (∀ n → xs !ᵐ n ＝ ys !ᵐ n)
@@ -417,6 +426,12 @@ concat-∷r {xss} {xs} =
   , (λ x∈t → let (xs , xs∈ , x∈xs) = ∈-concat x∈t in
              xs , there xs∈ , x∈xs)
   ]ᵤ (any-split {xs = xs} x∈)
+
+concat-∈ : {x : A} {xss : List (List A)} {xs : List A}
+         → xs ∈ xss → x ∈ xs
+         → x ∈ concat xss
+concat-∈ {x} {xss = zs ∷ xss} (here px)   x∈ = any-++-l (subst (x ∈_) px x∈ )
+concat-∈     {xss = zs ∷ xss} (there xs∈) x∈ = any-++-r (concat-∈ xs∈ x∈)
 
 ope-concat : {xss yss : List (List A)}
            → OPE xss yss
