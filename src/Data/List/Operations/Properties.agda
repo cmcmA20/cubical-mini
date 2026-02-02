@@ -24,13 +24,15 @@ open import Data.Maybe.Path
 open import Data.Maybe.Properties renaming (rec-fusion to rec-fusionᵐ)
 open import Data.Maybe.Instances.Map.Properties
 open import Data.Maybe.Correspondences.Unary.Any renaming (Any to Anyᵐ ; any-map to any-mapᵐ ; Reflects-any-bool to Reflects-Anyᵐ-bool)
+open import Data.Maybe.Membership
 open import Data.List.Base as List
 open import Data.List.Path
 open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
-open import Data.List.Membership
+open import Data.List.Correspondences.Unary.At
+open import Data.List.Membership as List
 open import Data.List.Instances.Map
 open import Data.List.Correspondences.Unary.Pairwise
 open import Data.List.Correspondences.Binary.Prefix
@@ -72,11 +74,11 @@ rec-map z f h (x ∷ xs) = ap (f (h x)) (rec-map z f h xs)
 
 rec-fusion : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
              {z : B} {f : A → B → B} {g : A → C → C} {h : B → C}
-             (xs : List A)
            → (∀ x y → h (f x y) ＝ g x (h y))
+           → (xs : List A)
            → h (List.rec z f xs) ＝ List.rec (h z) g xs
-rec-fusion             []       eq = refl
-rec-fusion {z} {f} {g} (x ∷ xs) eq = eq x (List.rec z f xs) ∙ ap (g x) (rec-fusion xs eq)
+rec-fusion             eq []       = refl
+rec-fusion {z} {f} {g} eq (x ∷ xs) = eq x (List.rec z f xs) ∙ ap (g x) (rec-fusion eq xs)
 
 -- TODO lemmas when f is associative/commutative
 
@@ -137,6 +139,23 @@ opaque
     subst (length xs <_) (+-comm (suc (length ts)) (length xs) ∙ ++-length xs (t ∷ ts) ⁻¹) $
     <-+-lr
 
+any→ℕ≤length : {P : Pred A ℓ′} {xs : List A}
+               (a : Any P xs) → any→ℕ a < length xs
+any→ℕ≤length {xs = x ∷ xs} (here px) = z<s
+any→ℕ≤length {xs = x ∷ xs} (there a) = s<s (any→ℕ≤length a)
+
+-- TODO this should go into Prefix.Properties?
+
+opaque
+  unfolding Prefix
+  at-prefix : {P : Pred A ℓ′} {xs : List A} {n : ℕ}
+            → Prefix xs ys → n < length xs
+            → At P ys n → At P xs n
+  at-prefix {P} {xs} {n} (pr , e) n< ay =
+    [ id
+    , (λ where (l≤ , _) → absurd (<→≱ n< l≤))
+    ]ᵤ (at-++-split {xs = xs} $ subst (λ q → At P q n) (e ⁻¹) ay)
+
 -- is-nil?
 
 Reflects-is-nil? : Reflects (xs ＝ []) (is-nil? xs)
@@ -183,10 +202,22 @@ Dec-is-nil? _  .proof = Reflects-is-nil?
 
 opaque
   unfolding Prefix
-  !ᵐ-prefix< : ∀ {A : Type ℓ} {xs ys : List A} {n : ℕ}
+  !ᵐ-prefix< : {A : 𝒰 ℓ} {xs ys : List A} {n : ℕ}
              → Prefix xs ys → n < length xs
              → ys !ᵐ n ＝ xs !ᵐ n
   !ᵐ-prefix< {n} (ts , e) n< = ap (_!ᵐ n) (e ⁻¹) ∙ !ᵐ-++< n<
+
+At→Σ∈ₘ : {A : 𝒰 ℓ} {P : Pred A ℓ′} {xs : List A} {n : ℕ}
+       → At P xs n
+       → Σ[ x ꞉ A ] (x ∈ (xs !ᵐ n)) × P x
+At→Σ∈ₘ {xs = x ∷ xs} (ahere px) = x , here refl , px
+At→Σ∈ₘ {xs = x ∷ xs} (athere a) = At→Σ∈ₘ a
+
+∈ₘ→At : {A : 𝒰 ℓ} {P : Pred A ℓ′} {xs : List A} {n : ℕ}
+      → {z : A} → z ∈ (xs !ᵐ n) → P z
+      → At P xs n
+∈ₘ→At {P} {xs = x ∷ xs} {n = zero}  {z} (here e) pz = ahere (subst P e pz)
+∈ₘ→At     {xs = x ∷ xs} {n = suc n} {z}  z∈      pz = athere (∈ₘ→At z∈ pz)
 
 -- unconsᵐ / tailᵐ
 
@@ -265,6 +296,18 @@ any-∷r-last : {P : Pred A ℓ′} {xs : List A} {x : A}
             → P x → Any P (xs ∷r x)
 any-∷r-last {P} {xs} px =
   subst (λ q → Any P q) (snoc-append xs ⁻¹) (any-++-r (here px))
+
+at-∷r-init : {P : Pred A ℓ′} {xs : List A} {x : A} {n : ℕ}
+           → At P xs n → At P (xs ∷r x) n
+at-∷r-init {P} {xs} {n} pxs =
+  subst (λ q → At P q n) (snoc-append xs ⁻¹) (at-++-l pxs)
+
+at-∷r-last : {P : Pred A ℓ′} {xs : List A} {x : A}
+           → P x → At P (xs ∷r x) (length xs)
+at-∷r-last {P} {xs} {x} px =
+  subst (λ q → At P (xs ∷r x) q) (+-zero-r (length xs)) $
+  subst (λ q → At P q (length xs + 0)) (snoc-append xs ⁻¹)  $
+  at-++-r {xs = xs} (ahere px)
 
 any-∷r-split : {P : Pred A ℓ′} {x : A} {xs : List A}
              → Any P (xs ∷r x) → Any P xs ⊎ P x
@@ -347,6 +390,24 @@ unsnocᵐ-len>0 {xs = []}     prf = false! prf
 unsnocᵐ-len>0 {xs = x ∷ xs} prf = here (snoc-unsnoc ⁻¹)
 
 -- concat
+
+-- TODO split into sum + map length ?
+length-concat : {xss : List (List A)}
+              → length (concat xss) ＝ List.rec 0 (λ xs → length xs +_) xss
+length-concat {xss} = rec-fusion ++-length xss
+
+concat-++ : {xss yss : List (List A)}
+          → concat (xss ++ yss) ＝ concat xss ++ concat yss
+concat-++ {xss} {yss} =
+    rec-++ _ _ xss yss
+  ∙ rec-fusion (λ x y → ++-assoc x y _) xss ⁻¹
+
+concat-∷r : {xss : List (List A)} {xs : List A}
+          → concat (xss ∷r xs) ＝ concat xss ++ xs
+concat-∷r {xss} {xs} =
+    ap concat (snoc-append xss)
+  ∙ concat-++ {xss = xss}
+  ∙ ap (concat xss ++_) (++-id-r xs)
 
 ∈-concat : {x : A} {xss : List (List A)}
          → x ∈ concat xss
@@ -1195,32 +1256,32 @@ count-from-to-len {m = zero}  {n = suc n} = ap suc (map-length ∙ count-from-to
 count-from-to-len {m = suc m} {n = suc n} = map-length ∙ count-from-to-len {m = m} {n = n}
 
 count-from-to-∈ : {m n k : ℕ}
-                  → k ∈ count-from-to m n
-                  → (m ≤ k) × (k < n)
+                → k ∈ count-from-to m n
+                → (m ≤ k) × (k < n)
 count-from-to-∈ {m = zero} {n = suc n} (here e)   =
   z≤ , subst (_< suc n) (e ⁻¹) z<s
 count-from-to-∈ {m = zero} {n = suc n} (there k∈) =
-  let (l , l∈ , le) = map-∈Σ suc k∈
+  let (l , l∈ , le) = List.map-∈Σ suc k∈
       ih< = count-from-to-∈ l∈ .snd
     in
   z≤ , subst (_< suc n) (le ⁻¹) (s<s ih<)
 count-from-to-∈ {m = suc m} {n = suc n} k∈ =
-  let (l , l∈ , le) = map-∈Σ suc k∈
+  let (l , l∈ , le) = List.map-∈Σ suc k∈
       (ih≤ , ih<) = count-from-to-∈ {m = m} {n = n} l∈
     in
   subst (λ q → (suc m ≤ q) × (q < suc n)) (le ⁻¹) $
   (s≤s ih≤) , (s<s ih<)
 
 ∈-count-from-to : {m n k : ℕ}
-                 → m ≤ k → k < n
-                 → k ∈ count-from-to m n
+                → m ≤ k → k < n
+                → k ∈ count-from-to m n
 ∈-count-from-to             {n = zero}              _   k<n = false! k<n
 ∈-count-from-to {m = zero}  {n = suc n} {k = zero}  _   _   = here refl
 ∈-count-from-to {m = zero}  {n = suc n} {k = suc k} _   k<n =
-  there (∈-map suc (∈-count-from-to {m = 0} {n = n} {k = k} z≤ (<-peel k<n)))
+  there (List.∈-map suc (∈-count-from-to {m = 0} {n = n} {k = k} z≤ (<-peel k<n)))
 ∈-count-from-to {m = suc m} {n = suc n} {k = zero}  m≤k _   = false! m≤k
 ∈-count-from-to {m = suc m} {n = suc n} {k = suc k} m≤k k<n =
-  ∈-map suc (∈-count-from-to {m = m} {n = n} {k = k} (≤-peel m≤k) (<-peel k<n))
+  List.∈-map suc (∈-count-from-to {m = m} {n = n} {k = k} (≤-peel m≤k) (<-peel k<n))
 
 -- TODO ≃
 

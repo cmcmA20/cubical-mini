@@ -19,6 +19,7 @@ open import Data.Fin.Computational.Path
 open import Data.Sum.Base
 open import Data.List.Base
 open import Data.List.Instances.Map
+open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
@@ -348,9 +349,18 @@ unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
      → xs ≈ ys
      → zs ≈ ws
      → (xs ++ zs) ≈ (ys ++ ws)
-≈-++ {xs} {ys} {zs} {ws} (xy , yx) (zw , wz) =
+≈-++ {xs} {ys} (xy , yx) (zw , wz) =
     [ any-++-l ∘ xy , any-++-r {xs = ys} ∘ zw ]ᵤ ∘ any-split {xs = xs}
   , [ any-++-l ∘ yx , any-++-r {xs = xs} ∘ wz ]ᵤ ∘ any-split {xs = ys}
+
+≈-++-comm-assoc : {xs ys zs : List A}
+                → (xs ++ ys ++ zs) ≈ (ys ++ xs ++ zs)
+≈-++-comm-assoc {xs} {ys} {zs} =
+  Trans-≈ ._∙_ {x = xs ++ ys ++ zs}
+     (=→≈ₗ (++-assoc xs ys zs ⁻¹))
+     (Trans-≈ ._∙_ {x = (xs ++ ys) ++ zs}
+        (≈-++ {xs = xs ++ ys} (≈-++-comm {xs = xs}) (=→≈ₗ refl))
+        (=→≈ₗ (++-assoc ys xs zs)))
 
 ≈-∷ : {x : A} {xs ys : List A}
     → xs ≈ ys
