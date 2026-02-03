@@ -540,3 +540,14 @@ opaque
   ≤-<-trans (=→≤ (^-absorb-l (suc k) ⁻¹)) (<-^-l {k = suc k} 1<m z<s)
 <-^-r {m = suc m} {n = suc n} {k = suc k} 1<m n<k =
   <≃<·l {m = suc m} ⁻¹ $ z<s , <-^-r 1<m (<-peel n<k)
+
+<1-^-r : 1 < m → n < m ^ n
+<1-^-r     {n = zero}  1<m = z<s
+<1-^-r {m} {n = suc n} 1<m =
+  let (k , e) = <→Σ _ _ 1<m in
+  <-≤-trans (s<s $ <1-^-r {n = n} 1<m)
+     (  ≤-+ (<≃suc≤ ⁻¹ $ <≃<·r {m = 0} {k = m ^ n} ⁻¹ $
+             (  <0-^ {m = m} {n = n} (<-trans <-ascend 1<m))
+              , z<s {n = k})
+            refl
+      ∙ =→≤ (+-comm _ (m ^ n) ∙ ap (_· m ^ n) e))

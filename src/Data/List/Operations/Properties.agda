@@ -590,6 +590,13 @@ foldl-∷r : (z : B) (f : B → A → B) (xs : List A) (x : A)
          → fold-l f z (xs ∷r x) ＝ f (fold-l f z xs) x
 foldl-∷r z f xs x = ap (fold-l f z) (snoc-append xs) ∙ foldl-++ z f xs (x ∷ [])
 
+-- TODO move to Data.List.Operations.Properties.Map ?
+foldl-map : {A : Type ℓ} {B : Type ℓ′}
+            (z : C) (f : C → B → C) (h : A → B) (xs : List A)
+          → fold-l f z (map h xs) ＝ fold-l (λ c → f c ∘ h) z xs
+foldl-map z f h []       = refl
+foldl-map z f h (x ∷ xs) = foldl-map (f z (h x)) f h xs
+
 -- reverse-fast
 
 reverse=reverse-fast : (xs : List A) → reverse xs ＝ reverse-fast xs
@@ -1261,6 +1268,24 @@ count-from-to-suc-r {m = zero} {n = suc n} m≤n =
   ap (0 ∷_) (ap (map suc) (count-from-to-suc-r {m = 0} {n = n} z≤) ∙ map-∷r)
 count-from-to-suc-r {m = suc m} {n = suc n} m≤n =
   ap (map suc) (count-from-to-suc-r {m = m} {n = n} (≤-peel m≤n)) ∙ map-∷r
+
+count-from-to-split : {m n p : ℕ}
+                    → m ≤ p → p ≤ n
+                    → count-from-to m n ＝ count-from-to m p ++ count-from-to p n
+count-from-to-split     {n} {p = zero}  m≤p _   =
+  ap (λ q → count-from-to q n) (≤0→=0 m≤p)
+count-from-to-split {m} {n} {p = suc p} m≤p p≤n =
+  [ (λ m< → let m≤ = ≤≃<suc ⁻¹ $ m< in
+              count-from-to-split {n = n} m≤ (≤-ascend ∙ p≤n)
+            ∙ ap (count-from-to m p ++_)
+                 (count-from-to-suc-l {n = n} (<≃suc≤ $ p≤n))
+            ∙ ++-assoc (count-from-to m p) _ _ ⁻¹
+            ∙ ap (_++ count-from-to (1 + p) n)
+                 (  snoc-append (count-from-to m p) ⁻¹
+                  ∙ count-from-to-suc-r {m = m} m≤ ⁻¹))
+  , (λ m= →   ap (_++ count-from-to m n) (count-from-to-idem {n = m} ⁻¹)
+            ∙ ap (λ q → count-from-to m q ++ count-from-to q n) m=)
+  ]ᵤ (≤→<⊎= m≤p)
 
 -- TODO more arithmetics
 
