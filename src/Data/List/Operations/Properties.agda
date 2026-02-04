@@ -78,7 +78,9 @@ rec-fusion : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
            → (xs : List A)
            → h (List.rec z f xs) ＝ List.rec (h z) g xs
 rec-fusion             eq []       = refl
-rec-fusion {z} {f} {g} eq (x ∷ xs) = eq x (List.rec z f xs) ∙ ap (g x) (rec-fusion eq xs)
+rec-fusion {z} {f} {g} eq (x ∷ xs) =
+    eq x (List.rec z f xs)
+  ∙ ap (g x) (rec-fusion eq xs)
 
 -- TODO lemmas when f is associative/commutative
 
@@ -228,20 +230,6 @@ At→Σ∈ₘ {xs = x ∷ xs} (athere a) = At→Σ∈ₘ a
 ∈ₘ→At {P} {xs = x ∷ xs} {n = zero}  {z} (here e) pz = ahere (subst P e pz)
 ∈ₘ→At     {xs = x ∷ xs} {n = suc n} {z}  z∈      pz = athere (∈ₘ→At z∈ pz)
 
--- unconsᵐ / tailᵐ
-
-unconsᵐ-∷ : ∀ {A : Type ℓ} {xs : List A}
-          → xs ＝ Maybe.rec [] (_∷_ $²_) (unconsᵐ xs)
-unconsᵐ-∷ {xs = []} = refl
-unconsᵐ-∷ {xs = x ∷ xs} = refl
-
-length-tailᵐ : ∀ {A : Type ℓ} {xs : List A}
-             → length xs ＝ Maybe.rec zero (suc ∘ length) (tailᵐ xs)
-length-tailᵐ {xs} =
-    ap length unconsᵐ-∷
-  ∙ rec-fusionᵐ {g = length} (unconsᵐ xs)
-  ∙ mapₘ-rec {m = unconsᵐ xs} ⁻¹
-
 -- snoc
 
 snoc-append : (xs : List A) {x : A} → xs ∷r x ＝ xs ++ x ∷ []
@@ -364,6 +352,111 @@ snoc-!ᵐ= {xs} {n} {x} e =
   ∙ !ᵐ-++≥ {xs = xs} (=→≤ (e ⁻¹))
   ∙ ap ((x ∷ []) !ᵐ_) (≤→∸=0 (=→≤ e))
 
+-- reverse
+
+reverse-++ : ∀ {xs ys : List A}
+           → reverse (xs ++ ys) ＝ reverse ys ++ reverse xs
+reverse-++ {xs = []}     {ys} = ++-id-r (reverse ys) ⁻¹
+reverse-++ {xs = x ∷ xs} {ys} =
+    ap (_++ x ∷ []) (reverse-++ {xs = xs})
+  ∙ ++-assoc (reverse ys) (reverse xs) (x ∷ [])
+
+reverse-∷ : ∀ {xs : List A} {x}
+          → reverse (x ∷ xs) ＝ reverse xs ∷r x
+reverse-∷ {xs} = snoc-append (reverse xs) ⁻¹
+
+reverse-∷r : ∀ {xs : List A} {x}
+           → reverse (xs ∷r x) ＝ x ∷ reverse xs
+reverse-∷r {xs} = ap reverse (snoc-append xs) ∙ reverse-++ {xs = xs}
+
+reverse-inv : ∀ {xs : List A}
+            → reverse (reverse xs) ＝ xs
+reverse-inv {xs = []}     = refl
+reverse-inv {xs = x ∷ xs} =
+  reverse-++ {xs = reverse xs} ∙ ap (x ∷_) (reverse-inv {xs = xs})
+
+reverse-length : ∀ {xs : List A}
+               → length (reverse xs) ＝ length xs
+reverse-length {xs = []}     = refl
+reverse-length {xs = x ∷ xs} =
+    ++-length (reverse xs) (x ∷ [])
+  ∙ +-comm (length (reverse xs)) 1
+  ∙ ap suc reverse-length
+
+reverse-⊆ : {xs : List A}
+           → xs ⊆ reverse xs
+reverse-⊆ {xs = x ∷ xs} (here e)   = any-++-r {xs = reverse xs} (here e)
+reverse-⊆ {xs = x ∷ xs} (there me) = any-++-l {xs = reverse xs} (reverse-⊆ me)
+
+⊆-reverse : ∀ {xs : List A}
+           → reverse xs ⊆ xs
+⊆-reverse {xs = x ∷ xs} me with any-split {xs = reverse xs} me
+... | inl m = there (⊆-reverse m)
+... | inr (here e) = here e
+
+reverse-≈ : ∀ {xs : List A}
+          → xs ≈ reverse xs
+reverse-≈ = reverse-⊆ , ⊆-reverse
+
+-- fold-l
+
+foldl-rev : (z : B) (f : B → A → B) (xs : List A)
+           → fold-l f z (reverse xs) ＝ List.rec z (flip f) xs
+foldl-rev z f xs =
+  snoc-elim (λ q → ∀ z′ → fold-l f z′ (reverse q) ＝ List.rec z′ (flip f) q)
+    (λ _ → refl)
+    (λ xs x ih z′ →   ap (fold-l f z′) (reverse-∷r {xs = xs})
+                    ∙ ih (f z′ x)
+                    ∙ rec-++ z′ (flip f) xs (x ∷ []) ⁻¹
+                    ∙ ap (List.rec z′ (flip f)) (snoc-append xs ⁻¹))
+     xs z
+
+foldl-++ : (z : B) (f : B → A → B) (xs ys : List A)
+         → fold-l f z (xs ++ ys) ＝ fold-l f (fold-l f z xs) ys
+foldl-++ z f xs ys =
+    ap (fold-l f z) (reverse-inv {xs = xs ++ ys} ⁻¹)
+  ∙ foldl-rev z f (reverse (xs ++ ys))
+  ∙ ap (List.rec z (flip f)) (reverse-++ {xs = xs})
+  ∙ rec-++ z (flip f) (reverse ys) (reverse xs)
+  ∙ foldl-rev (List.rec z (λ b a → f a b) (reverse xs)) f (reverse ys) ⁻¹
+  ∙ ap (fold-l f (List.rec z (flip f) (reverse xs))) (reverse-inv {xs = ys})
+  ∙ ap (λ q → fold-l f q ys) (foldl-rev z f (reverse xs) ⁻¹ ∙ ap (fold-l f z) (reverse-inv {xs = xs}))
+
+foldl-∷r : (z : B) (f : B → A → B) (xs : List A) (x : A)
+         → fold-l f z (xs ∷r x) ＝ f (fold-l f z xs) x
+foldl-∷r z f xs x = ap (fold-l f z) (snoc-append xs) ∙ foldl-++ z f xs (x ∷ [])
+
+-- TODO move to Data.List.Operations.Properties.Map ?
+foldl-map : {A : Type ℓ} {B : Type ℓ′}
+            (z : C) (f : C → B → C) (h : A → B) (xs : List A)
+          → fold-l f z (map h xs) ＝ fold-l (λ c → f c ∘ h) z xs
+foldl-map z f h []       = refl
+foldl-map z f h (x ∷ xs) = foldl-map (f z (h x)) f h xs
+
+foldl-fusion : {A : Type ℓ} {B : Type ℓ′} {C : Type ℓ″}
+             {z : B} {f : B → A → B} {g : C → A → C} {h : B → C}
+           → (∀ x y → h (f x y) ＝ g (h x) y)
+           → (xs : List A)
+           → h (fold-l f z xs) ＝ fold-l g (h z) xs
+foldl-fusion                 eq []       = refl
+foldl-fusion {z} {f} {g} {h} eq (x ∷ xs) =
+    foldl-fusion {z = f z x} {g = g} eq xs
+  ∙ ap (λ q → fold-l g q xs) (eq z x)
+
+-- unconsᵐ / tailᵐ
+
+unconsᵐ-∷ : ∀ {A : Type ℓ} {xs : List A}
+          → xs ＝ Maybe.rec [] (_∷_ $²_) (unconsᵐ xs)
+unconsᵐ-∷ {xs = []} = refl
+unconsᵐ-∷ {xs = x ∷ xs} = refl
+
+length-tailᵐ : ∀ {A : Type ℓ} {xs : List A}
+             → length xs ＝ Maybe.rec zero (suc ∘ length) (tailᵐ xs)
+length-tailᵐ {xs} =
+    ap length unconsᵐ-∷
+  ∙ rec-fusionᵐ {g = length} (unconsᵐ xs)
+  ∙ mapₘ-rec {m = unconsᵐ xs} ⁻¹
+
 -- unsnoc
 
 unsnoc-snoc : {xs : List A} {z w : A}
@@ -453,52 +546,6 @@ concat-∥ : {xss : List (List A)}
 concat-∥ {xss = []}       []       = ∥-[]-r
 concat-∥ {xss = xs ∷ xss} (dx ∷ a) = ∥-++→r dx (concat-∥ a)
 
--- reverse
-
-reverse-++ : ∀ {xs ys : List A}
-           → reverse (xs ++ ys) ＝ reverse ys ++ reverse xs
-reverse-++ {xs = []}     {ys} = ++-id-r (reverse ys) ⁻¹
-reverse-++ {xs = x ∷ xs} {ys} =
-    ap (_++ x ∷ []) (reverse-++ {xs = xs})
-  ∙ ++-assoc (reverse ys) (reverse xs) (x ∷ [])
-
-reverse-∷ : ∀ {xs : List A} {x}
-          → reverse (x ∷ xs) ＝ reverse xs ∷r x
-reverse-∷ {xs} = snoc-append (reverse xs) ⁻¹
-
-reverse-∷r : ∀ {xs : List A} {x}
-           → reverse (xs ∷r x) ＝ x ∷ reverse xs
-reverse-∷r {xs} = ap reverse (snoc-append xs) ∙ reverse-++ {xs = xs}
-
-reverse-inv : ∀ {xs : List A}
-            → reverse (reverse xs) ＝ xs
-reverse-inv {xs = []}     = refl
-reverse-inv {xs = x ∷ xs} =
-  reverse-++ {xs = reverse xs} ∙ ap (x ∷_) (reverse-inv {xs = xs})
-
-reverse-length : ∀ {xs : List A}
-               → length (reverse xs) ＝ length xs
-reverse-length {xs = []}     = refl
-reverse-length {xs = x ∷ xs} =
-    ++-length (reverse xs) (x ∷ [])
-  ∙ +-comm (length (reverse xs)) 1
-  ∙ ap suc reverse-length
-
-reverse-⊆ : {xs : List A}
-           → xs ⊆ reverse xs
-reverse-⊆ {xs = x ∷ xs} (here e)   = any-++-r {xs = reverse xs} (here e)
-reverse-⊆ {xs = x ∷ xs} (there me) = any-++-l {xs = reverse xs} (reverse-⊆ me)
-
-⊆-reverse : ∀ {xs : List A}
-           → reverse xs ⊆ xs
-⊆-reverse {xs = x ∷ xs} me with any-split {xs = reverse xs} me
-... | inl m = there (⊆-reverse m)
-... | inr (here e) = here e
-
-reverse-≈ : ∀ {xs : List A}
-          → xs ≈ reverse xs
-reverse-≈ = reverse-⊆ , ⊆-reverse
-
 -- head
 
 head-map : ∀ {A : 𝒰 ℓ} {B : 𝒰 ℓ′} {xs : List A} {z} {f : A → B}
@@ -561,41 +608,6 @@ all→last : ∀ {xs x} {P : A → Type ℓ′}
          → P x → All P xs → P (last x xs)
 all→last {xs = []}     px  _        = px
 all→last {xs = x ∷ xs} _  (px ∷ ax) = all→last px ax
-
--- fold-l
-
-foldl-rev : (z : B) (f : B → A → B) (xs : List A)
-           → fold-l f z (reverse xs) ＝ List.rec z (flip f) xs
-foldl-rev z f xs =
-  snoc-elim (λ q → ∀ z′ → fold-l f z′ (reverse q) ＝ List.rec z′ (flip f) q)
-    (λ _ → refl)
-    (λ xs x ih z′ →   ap (fold-l f z′) (reverse-∷r {xs = xs})
-                    ∙ ih (f z′ x)
-                    ∙ rec-++ z′ (flip f) xs (x ∷ []) ⁻¹
-                    ∙ ap (List.rec z′ (flip f)) (snoc-append xs ⁻¹))
-     xs z
-
-foldl-++ : (z : B) (f : B → A → B) (xs ys : List A)
-         → fold-l f z (xs ++ ys) ＝ fold-l f (fold-l f z xs) ys
-foldl-++ z f xs ys =
-    ap (fold-l f z) (reverse-inv {xs = xs ++ ys} ⁻¹)
-  ∙ foldl-rev z f (reverse (xs ++ ys))
-  ∙ ap (List.rec z (flip f)) (reverse-++ {xs = xs})
-  ∙ rec-++ z (flip f) (reverse ys) (reverse xs)
-  ∙ foldl-rev (List.rec z (λ b a → f a b) (reverse xs)) f (reverse ys) ⁻¹
-  ∙ ap (fold-l f (List.rec z (flip f) (reverse xs))) (reverse-inv {xs = ys})
-  ∙ ap (λ q → fold-l f q ys) (foldl-rev z f (reverse xs) ⁻¹ ∙ ap (fold-l f z) (reverse-inv {xs = xs}))
-
-foldl-∷r : (z : B) (f : B → A → B) (xs : List A) (x : A)
-         → fold-l f z (xs ∷r x) ＝ f (fold-l f z xs) x
-foldl-∷r z f xs x = ap (fold-l f z) (snoc-append xs) ∙ foldl-++ z f xs (x ∷ [])
-
--- TODO move to Data.List.Operations.Properties.Map ?
-foldl-map : {A : Type ℓ} {B : Type ℓ′}
-            (z : C) (f : C → B → C) (h : A → B) (xs : List A)
-          → fold-l f z (map h xs) ＝ fold-l (λ c → f c ∘ h) z xs
-foldl-map z f h []       = refl
-foldl-map z f h (x ∷ xs) = foldl-map (f z (h x)) f h xs
 
 -- reverse-fast
 
