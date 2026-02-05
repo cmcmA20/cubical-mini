@@ -211,6 +211,13 @@ Dec-is-nil? _  .proof = Reflects-is-nil?
 !ᵐ-++≥ {xs = x ∷ xs} {n = zero}  n≥ = false! n≥
 !ᵐ-++≥ {xs = x ∷ xs} {n = suc n} n≥ = !ᵐ-++≥ {xs = xs} (≤-peel n≥)
 
+!ᵐ-++2< : ∀ {A : Type ℓ} {xs ys zs : List A} {n : ℕ}
+       → n < length xs
+       → (xs ++ ys) !ᵐ n ＝ (xs ++ zs) !ᵐ n
+!ᵐ-++2< {xs = []}                 n< = false! n<
+!ᵐ-++2< {xs = x ∷ xs} {n = zero}  n< = refl
+!ᵐ-++2< {xs = x ∷ xs} {n = suc n} n< = !ᵐ-++2< {xs = xs} (<-peel n<)
+
 opaque
   unfolding Prefix
   !ᵐ-prefix< : {A : 𝒰 ℓ} {xs ys : List A} {n : ℕ}
@@ -305,6 +312,16 @@ at-∷r-last {P} {xs} {x} px =
   subst (λ q → At P (xs ∷r x) q) (+-zero-r (length xs)) $
   subst (λ q → At P q (length xs + 0)) (snoc-append xs ⁻¹)  $
   at-++-r {xs = xs} (ahere px)
+
+at-∷r-split : {P : Pred A ℓ′} {xs : List A} {x : A} {n : ℕ}
+            → At P (xs ∷r x) n → At P xs n ⊎ (n ＝ length xs) × P x
+at-∷r-split {P} {xs} {n} a =
+  map-r
+    (λ where (le , a') →
+               [ (λ where (px , eq) → ≤-antisym (∸=0≃≤ .fst eq) le , px)
+               , (λ a'' → absurd (¬at-[] a''))
+               ]ᵤ (at-uncons a'))
+    (at-++-split {xs = xs} (subst (λ q → At P q n) (snoc-append xs) a))
 
 any-∷r-split : {P : Pred A ℓ′} {x : A} {xs : List A}
              → Any P (xs ∷r x) → Any P xs ⊎ P x
@@ -443,20 +460,6 @@ foldl-fusion {z} {f} {g} {h} eq (x ∷ xs) =
     foldl-fusion {z = f z x} {g = g} eq xs
   ∙ ap (λ q → fold-l g q xs) (eq z x)
 
--- unconsᵐ / tailᵐ
-
-unconsᵐ-∷ : ∀ {A : Type ℓ} {xs : List A}
-          → xs ＝ Maybe.rec [] (_∷_ $²_) (unconsᵐ xs)
-unconsᵐ-∷ {xs = []} = refl
-unconsᵐ-∷ {xs = x ∷ xs} = refl
-
-length-tailᵐ : ∀ {A : Type ℓ} {xs : List A}
-             → length xs ＝ Maybe.rec zero (suc ∘ length) (tailᵐ xs)
-length-tailᵐ {xs} =
-    ap length unconsᵐ-∷
-  ∙ rec-fusionᵐ {g = length} (unconsᵐ xs)
-  ∙ mapₘ-rec {m = unconsᵐ xs} ⁻¹
-
 -- unsnoc
 
 unsnoc-snoc : {xs : List A} {z w : A}
@@ -480,6 +483,26 @@ snoc-unsnoc {xs} {z} =
          ap² _∷r_ (ap fst e) (ap snd e))
     xs
 
+-- unconsᵐ / tailᵐ / unsnocᵐ
+
+unconsᵐ-∷ : ∀ {A : Type ℓ} {xs : List A}
+          → xs ＝ Maybe.rec [] (_∷_ $²_) (unconsᵐ xs)
+unconsᵐ-∷ {xs = []} = refl
+unconsᵐ-∷ {xs = x ∷ xs} = refl
+
+length-tailᵐ : ∀ {A : Type ℓ} {xs : List A}
+             → length xs ＝ Maybe.rec zero (suc ∘ length) (tailᵐ xs)
+length-tailᵐ {xs} =
+    ap length unconsᵐ-∷
+  ∙ rec-fusionᵐ {g = length} (unconsᵐ xs)
+  ∙ mapₘ-rec {m = unconsᵐ xs} ⁻¹
+
+unsnocᵐ-nothing : ∀ {A : Type ℓ} {xs : List A}
+                → unsnocᵐ xs ＝ nothing
+                → xs ＝ []
+unsnocᵐ-nothing {xs = []}     e = refl
+unsnocᵐ-nothing {xs = x ∷ xs} e = false! e
+
 unsnocᵐ-∷r : ∀ {A : Type ℓ} {xs : List A}
            → xs ＝ Maybe.rec [] (_∷r_ $²_) (unsnocᵐ xs)
 unsnocᵐ-∷r {xs = []}     = refl
@@ -490,6 +513,22 @@ unsnocᵐ-len>0 : ∀ {A : Type ℓ} {xs : List A}
               → Anyᵐ (λ where (ys , y) → xs ＝ ys ∷r y) (unsnocᵐ xs)
 unsnocᵐ-len>0 {xs = []}     prf = false! prf
 unsnocᵐ-len>0 {xs = x ∷ xs} prf = here (snoc-unsnoc ⁻¹)
+
+∷r-unsnocᵐ : ∀ {A : Type ℓ} {xs : List A} {z : A}
+           → (xs , z) ∈ unsnocᵐ (xs ∷r z)
+∷r-unsnocᵐ {xs} {z} =
+  any-mapᵐ
+    (λ where {x = (ys , y)} e →
+                let (e1 , e2) = snoc-inj e in
+                ×-path e1 e2)
+    (unsnocᵐ-len>0 {xs = xs ∷r z} $
+     <-≤-trans z<s (=→≤ (snoc-length xs ⁻¹)))
+
+∷r-unsnocᵐ→ : ∀ {A : Type ℓ} {xs ys : List A} {z : A}
+            → (ys , z) ∈ unsnocᵐ xs
+            → xs ＝ ys ∷r z
+∷r-unsnocᵐ→ m =
+  unsnocᵐ-∷r ∙ ap (Maybe.rec [] (_$ₜ²_ _∷r_)) (∈→=just m)
 
 -- concat
 
@@ -1349,3 +1388,4 @@ partition-filter {p} {xs = x ∷ xs} with p x
 ... | false =
   let ih = ×-path-inv $ partition-filter {p = p} {xs = xs} in
   ×-path (ih .fst) (ap (x ∷_) (ih .snd))
+

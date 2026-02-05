@@ -92,6 +92,16 @@ instance opaque
   H-Level-At {k} ⦃ s≤ʰs _ ⦄ .H-Level.has-of-hlevel = at-is-of-hlevel _ (λ _ → hlevel k)
   {-# OVERLAPPING H-Level-At #-}
 
+¬at-[] : ∀ {n}
+       → ¬ At P [] n
+¬at-[] ()
+
+at-uncons : ∀ {x xs n}
+          → At P (x ∷ xs) n
+          → P x × (n ＝ 0) ⊎ At P xs (pred n)
+at-uncons (ahere px) = inl (px , refl)
+at-uncons (athere a) = inr a
+
 at-map : ∀ {xs n} → ∀[ P ⇒ Q ] → At P xs n → At Q xs n
 at-map {xs = x ∷ xs} f (ahere px)  = ahere (f px)
 at-map {xs = x ∷ xs} f (athere at) = athere (at-map f at)
