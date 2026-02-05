@@ -96,6 +96,12 @@ instance opaque
        → ¬ At P [] n
 ¬at-[] ()
 
+¬at-oversize : ∀ {xs n}
+             → length xs ≤ n
+             → ¬ At P xs n
+¬at-oversize {xs = x ∷ xs} le (ahere _)  = false! le
+¬at-oversize {xs = x ∷ xs} le (athere a) = ¬at-oversize (≤-peel le) a
+
 at-uncons : ∀ {x xs n}
           → At P (x ∷ xs) n
           → P x × (n ＝ 0) ⊎ At P xs (pred n)
