@@ -22,6 +22,7 @@ open import Data.Reflects.Properties
 open import Data.Maybe.Base as Maybe
 open import Data.Maybe.Path
 open import Data.Maybe.Properties renaming (rec-fusion to rec-fusionᵐ)
+open import Data.Maybe.Instances.Map
 open import Data.Maybe.Instances.Map.Properties
 open import Data.Maybe.Correspondences.Unary.Any renaming (Any to Anyᵐ ; any-map to any-mapᵐ ; Reflects-any-bool to Reflects-Anyᵐ-bool)
 open import Data.Maybe.Membership
@@ -483,6 +484,14 @@ snoc-unsnoc {xs} {z} =
          ap² _∷r_ (ap fst e) (ap snd e))
     xs
 
+unsnoc-map : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+             {z : A} {xs : List A} {f : A → B}
+           → unsnoc (f z) (map f xs) ＝ bimap (map f) f (unsnoc z xs)
+unsnoc-map     {xs = []}     = refl
+unsnoc-map {z} {xs = x ∷ xs} {f} =
+  let ih = unsnoc-map {z = x} {xs = xs} {f = f} in
+  ×-path (ap (λ q → f z ∷ fst q) ih) (ap snd ih)
+
 -- unconsᵐ / tailᵐ / unsnocᵐ
 
 unconsᵐ-∷ : ∀ {A : Type ℓ} {xs : List A}
@@ -496,6 +505,12 @@ length-tailᵐ {xs} =
     ap length unconsᵐ-∷
   ∙ rec-fusionᵐ {g = length} (unconsᵐ xs)
   ∙ mapₘ-rec {m = unconsᵐ xs} ⁻¹
+
+unsnocᵐ-map : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
+              {xs : List A} {f : A → B}
+            → unsnocᵐ (map f xs) ＝ map (bimap (map f) f) (unsnocᵐ xs)
+unsnocᵐ-map {xs = []} = refl
+unsnocᵐ-map {xs = x ∷ xs} = ap just unsnoc-map
 
 unsnocᵐ-nothing : ∀ {A : Type ℓ} {xs : List A}
                 → unsnocᵐ xs ＝ nothing
@@ -1388,4 +1403,3 @@ partition-filter {p} {xs = x ∷ xs} with p x
 ... | false =
   let ih = ×-path-inv $ partition-filter {p = p} {xs = xs} in
   ×-path (ih .fst) (ap (x ∷_) (ih .snd))
-

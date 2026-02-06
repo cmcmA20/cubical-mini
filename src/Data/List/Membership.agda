@@ -367,6 +367,12 @@ unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
     → (x ∷ xs) ≈ (x ∷ ys)
 ≈-∷ = ≈-++ (=→≈ₗ refl)
 
+map-≈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A}
+      → (f : A → B)
+      → xs ≈ ys
+      → map f xs ≈ map f ys
+map-≈ f (xy , yx) = map-⊆ f xy , map-⊆ f yx
+
 -- disjointness
 -- TODO move to Notation.Membership
 
