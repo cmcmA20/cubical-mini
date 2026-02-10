@@ -10,6 +10,9 @@ open import Logic.Discreteness
 
 open import Order.Constructions.Minmax
 open import Order.Constructions.Nat
+open decminmax ℕ-dec-total
+open decminmaxprops ℕ-dec-total ℕ-dec-total
+open import Order.Diagram.Meet.Reasoning ℕₚ min-meets
 
 open import Data.Empty as Empty
 open import Data.Bool.Base as Bool
@@ -1079,14 +1082,18 @@ drop-nil : drop n (the (List A) []) ＝ []
 drop-nil {n = zero}  = refl
 drop-nil {n = suc _} = refl
 
-module _ where
-  open decminmax ℕ-dec-total
-  open decminmaxprops ℕ-dec-total ℕ-dec-total
+length-take : length (take n xs) ＝ min n (length xs)
+length-take {n = zero}                = refl
+length-take {n = suc n} {xs = []}     = refl
+length-take {n = suc n} {xs = x ∷ xs} = ap suc length-take ∙ min-ap Suc n (length xs)
 
-  length-take : length (take n xs) ＝ min n (length xs)
-  length-take {n = zero}                = refl
-  length-take {n = suc n} {xs = []}     = refl
-  length-take {n = suc n} {xs = x ∷ xs} = ap suc length-take ∙ min-ap Suc n (length xs)
+take-take : {m n : ℕ} {xs : List A}
+        → take m (take n xs) ＝ take (min m n) xs
+take-take {m = zero}                            = refl
+take-take {m = suc m} {n = zero}                = refl
+take-take {m = suc m} {n = suc n} {xs = []}     = take-nil ⁻¹
+take-take {m = suc m} {n = suc n} {xs = x ∷ xs} =
+  ap (x ∷_) take-take ∙ ap (λ q → take q (x ∷ xs)) (min-ap Suc m n)
 
 length-drop : length (drop n xs) ＝ length xs ∸ n
 length-drop {n = zero}                = refl
@@ -1128,6 +1135,16 @@ opaque
   take-prefix : {n : ℕ} {xs : List A}
               → Prefix (take n xs) xs
   take-prefix {n} {xs} = drop n xs , split-take-drop n ⁻¹
+
+take-take-l : {m n : ℕ} {xs : List A}
+            → m ≤ n
+            → take m (take n xs) ＝ take m xs
+take-take-l {xs} m≤n = take-take ∙ ap (λ q → take q xs) (order→∩ m≤n)
+
+take-take-r : {m n : ℕ} {xs : List A}
+            → n ≤ m
+            → take m (take n xs) ＝ take n xs
+take-take-r {m} {xs} n≤m = take-take ∙ ap (λ q → take q xs) (∩-comm {x = m} ∙ order→∩ n≤m)
 
 -- map-maybe
 
@@ -1232,19 +1249,14 @@ zip-with-++     {as = []}     {xs = x ∷ xs} e = false! e
 zip-with-++     {as = a ∷ as} {xs = []}     e = false! e
 zip-with-++ {f} {as = a ∷ as} {xs = x ∷ xs} e = ap (f a x ∷_) (zip-with-++ (suc-inj e))
 
--- TODO coalesce decminmax stuff?
-module _ where
-  open decminmax ℕ-dec-total
-  open decminmaxprops ℕ-dec-total ℕ-dec-total
-
-  zip-with-length : ∀ {xs ys} {f : A → B → C}
-                  → length (zip-with f xs ys) ＝ min (length xs) (length ys)
-  zip-with-length {xs = []}     {ys = []}     = refl
-  zip-with-length {xs = []}     {ys = y ∷ ys} = refl
-  zip-with-length {xs = x ∷ xs} {ys = []}     = refl
-  zip-with-length {xs = x ∷ xs} {ys = y ∷ ys} =
-      ap suc zip-with-length
-    ∙ min-ap Suc (length xs) (length ys)
+zip-with-length : ∀ {xs ys} {f : A → B → C}
+                → length (zip-with f xs ys) ＝ min (length xs) (length ys)
+zip-with-length {xs = []}     {ys = []}     = refl
+zip-with-length {xs = []}     {ys = y ∷ ys} = refl
+zip-with-length {xs = x ∷ xs} {ys = []}     = refl
+zip-with-length {xs = x ∷ xs} {ys = y ∷ ys} =
+    ap suc zip-with-length
+  ∙ min-ap Suc (length xs) (length ys)
 
 ∈-zip-with-l : {A : 𝒰 ℓ} {B : 𝒰 ℓ′}
                 {f : A → B → C} {as : List A} {bs : List B} {a : A}
