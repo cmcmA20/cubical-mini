@@ -104,7 +104,7 @@ instance opaque
 
 at→nonempty : ∀ {xs n}
             → At P xs n
-            → 0 < length xs 
+            → 0 < length xs
 at→nonempty {xs = x ∷ xs} _ = z<s
 
 at-uncons : ∀ {x xs n}
