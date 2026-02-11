@@ -153,6 +153,9 @@ count-from-to _          0        = []
 count-from-to 0          (suc to) = 0 ∷ (suc <$> count-from-to 0 to)
 count-from-to (suc from) (suc to) = suc <$> count-from-to from to
 
+natsum : List ℕ → ℕ
+natsum = List.rec 0 _+_
+
 map-maybe : (A → Maybe B) → List A → List B
 map-maybe f []       = []
 map-maybe f (x ∷ xs) =

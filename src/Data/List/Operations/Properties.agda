@@ -373,6 +373,23 @@ snoc-!ᵐ= {xs} {n} {x} e =
   ∙ !ᵐ-++≥ {xs = xs} (=→≤ (e ⁻¹))
   ∙ ap ((x ∷ []) !ᵐ_) (≤→∸=0 (=→≤ e))
 
+-- natsum
+
+sum-++ : ∀ {xs ys} → natsum (xs ++ ys) ＝ natsum xs + natsum ys
+sum-++ {xs} {ys} =
+    rec-++ 0 _+_ xs ys
+  ∙ ap (λ q → List.rec q _+_ xs) (+-zero-r (natsum ys) ⁻¹)
+  ∙ rec-fusion {z = 0} {f = _+_} {g = _+_} {h = natsum ys +_}
+      (+-comm-assoc (natsum ys))
+      xs ⁻¹
+  ∙ +-comm (natsum ys) (natsum xs)
+
+sum-∷r : ∀ {xs x} → natsum (xs ∷r x) ＝ natsum xs + x
+sum-∷r {xs} {x} =
+    ap natsum (snoc-append xs)
+  ∙ sum-++ {xs = xs}
+  ∙ ap (natsum xs +_) (+-zero-r x)
+
 -- reverse
 
 reverse-++ : ∀ {xs ys : List A}
