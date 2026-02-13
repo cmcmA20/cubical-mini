@@ -373,6 +373,22 @@ snoc-!ᵐ= {xs} {n} {x} e =
   ∙ !ᵐ-++≥ {xs = xs} (=→≤ (e ⁻¹))
   ∙ ap ((x ∷ []) !ᵐ_) (≤→∸=0 (=→≤ e))
 
+pairwise-∷r : {R : A → A → 𝒰 ℓ′} {xs : List A} {z : A}
+            → Pairwise R xs
+            → All (λ x → R x z) xs
+            → Pairwise R (xs ∷r z)
+pairwise-∷r {R} {xs} {z} pxs a =
+  subst (λ q → Pairwise R q) (snoc-append xs ⁻¹) $
+  pairwise-++ pxs ([] ∷ᵖ []ᵖ) (all-map (_∷ []) a)
+
+∷r-pairwise : {R : A → A → 𝒰 ℓ′} {xs : List A} {z : A}
+            → Pairwise R (xs ∷r z)
+            → Pairwise R xs × All (λ x → R x z) xs
+∷r-pairwise {R} {xs} {z} pxs =
+  let ps = pairwise-split {xs = xs} $
+           subst (λ q → Pairwise R q) (snoc-append xs) pxs in
+  ps .fst , all-map all-head (ps .snd .snd)
+
 -- natsum
 
 sum-++ : ∀ {xs ys} → natsum (xs ++ ys) ＝ natsum xs + natsum ys
@@ -576,7 +592,7 @@ concat-++ : {xss yss : List (List A)}
           → concat (xss ++ yss) ＝ concat xss ++ concat yss
 concat-++ {xss} {yss} =
     rec-++ _ _ xss yss
-  ∙ rec-fusion (λ x y → ++-assoc x y _) xss ⁻¹
+  ∙ rec-fusion {h = _++ concat yss} (λ x y → ++-assoc x y _) xss ⁻¹
 
 concat-∷r : {xss : List (List A)} {xs : List A}
           → concat (xss ∷r xs) ＝ concat xss ++ xs
