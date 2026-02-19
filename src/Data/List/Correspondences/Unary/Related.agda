@@ -13,7 +13,6 @@ open import Data.List.Instances.Map
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
-open import Data.List.Correspondences.Unary.At
 
 private variable
   ℓ ℓ′ ℓᵃ ℓᵇ : Level
@@ -188,11 +187,13 @@ related→sorted : {x0 : A} {xs : List A}
 related→sorted {xs = []}     r        = []ˢ
 related→sorted {xs = x ∷ xs} (_ ∷ʳ r) = ∷ˢ r
 
+{-
 sorted-at0→related : {x0 : A} {xs : List A}
                    → Sorted R xs → AtWeak (R x0) xs 0
                    → Related R x0 xs
 sorted-at0→related {xs = []} []ˢ awnil = []ʳ
 sorted-at0→related {xs = x ∷ xs} (∷ˢ r) (awhere px) = px ∷ʳ r
+-}
 
 sorted→map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : B → B → 𝒰 ℓ′}
              {xs : List A} {f : A → B}
