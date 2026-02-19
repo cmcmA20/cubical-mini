@@ -35,7 +35,6 @@ open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
-open import Data.List.Correspondences.Unary.At
 open import Data.List.Membership as List
 open import Data.List.Instances.Map
 open import Data.List.Correspondences.Unary.Pairwise
@@ -150,18 +149,6 @@ any→ℕ≤length : {P : Pred A ℓ′} {xs : List A}
 any→ℕ≤length {xs = x ∷ xs} (here px) = z<s
 any→ℕ≤length {xs = x ∷ xs} (there a) = s<s (any→ℕ≤length a)
 
--- TODO this should go into Prefix.Properties?
-
-opaque
-  unfolding Prefix
-  at-prefix : {P : Pred A ℓ′} {xs : List A} {n : ℕ}
-            → Prefix xs ys → n < length xs
-            → At P ys n → At P xs n
-  at-prefix {P} {xs} {n} (pr , e) n< ay =
-    [ id
-    , (λ where (l≤ , _) → absurd (<→≱ n< l≤))
-    ]ᵤ (at-++-split {xs = xs} $ subst (λ q → At P q n) (e ⁻¹) ay)
-
 -- is-nil?
 
 Reflects-is-nil? : Reflects (xs ＝ []) (is-nil? xs)
@@ -229,18 +216,6 @@ opaque
              → ys !ᵐ n ＝ xs !ᵐ n
   !ᵐ-prefix< {n} (ts , e) n< = ap (_!ᵐ n) (e ⁻¹) ∙ !ᵐ-++< n<
 
-At→Σ∈ₘ : {A : 𝒰 ℓ} {P : Pred A ℓ′} {xs : List A} {n : ℕ}
-       → At P xs n
-       → Σ[ x ꞉ A ] (x ∈ (xs !ᵐ n)) × P x
-At→Σ∈ₘ {xs = x ∷ xs} (ahere px) = x , here refl , px
-At→Σ∈ₘ {xs = x ∷ xs} (athere a) = At→Σ∈ₘ a
-
-∈ₘ→At : {A : 𝒰 ℓ} {P : Pred A ℓ′} {xs : List A} {n : ℕ}
-      → {z : A} → z ∈ (xs !ᵐ n) → P z
-      → At P xs n
-∈ₘ→At {P} {xs = x ∷ xs} {n = zero}  {z} (here e) pz = ahere (subst P e pz)
-∈ₘ→At     {xs = x ∷ xs} {n = suc n} {z}  z∈      pz = athere (∈ₘ→At z∈ pz)
-
 -- snoc
 
 snoc-append : (xs : List A) {x : A} → xs ∷r x ＝ xs ++ x ∷ []
@@ -304,28 +279,6 @@ any-∷r-last : {P : Pred A ℓ′} {xs : List A} {x : A}
             → P x → Any P (xs ∷r x)
 any-∷r-last {P} {xs} px =
   subst (λ q → Any P q) (snoc-append xs ⁻¹) (any-++-r (here px))
-
-at-∷r-init : {P : Pred A ℓ′} {xs : List A} {x : A} {n : ℕ}
-           → At P xs n → At P (xs ∷r x) n
-at-∷r-init {P} {xs} {n} pxs =
-  subst (λ q → At P q n) (snoc-append xs ⁻¹) (at-++-l pxs)
-
-at-∷r-last : {P : Pred A ℓ′} {xs : List A} {x : A}
-           → P x → At P (xs ∷r x) (length xs)
-at-∷r-last {P} {xs} {x} px =
-  subst (λ q → At P (xs ∷r x) q) (+-zero-r (length xs)) $
-  subst (λ q → At P q (length xs + 0)) (snoc-append xs ⁻¹)  $
-  at-++-r {xs = xs} (ahere px)
-
-at-∷r-split : {P : Pred A ℓ′} {xs : List A} {x : A} {n : ℕ}
-            → At P (xs ∷r x) n → At P xs n ⊎ (n ＝ length xs) × P x
-at-∷r-split {P} {xs} {n} a =
-  map-r
-    (λ where (le , a') →
-               [ (λ where (px , eq) → ≤-antisym (∸=0≃≤ .fst eq) le , px)
-               , (λ a'' → absurd (¬at-[] a''))
-               ]ᵤ (at-uncons a'))
-    (at-++-split {xs = xs} (subst (λ q → At P q n) (snoc-append xs) a))
 
 any-∷r-split : {P : Pred A ℓ′} {x : A} {xs : List A}
              → Any P (xs ∷r x) → Any P xs ⊎ P x
