@@ -30,6 +30,16 @@ bit-compl : ∀ x → bit x + bit (not x) ＝ 1
 bit-compl false = refl
 bit-compl true  = refl
 
+-- TODO Reflects
+bit-implies : ∀ x y → ⌞ x implies y ⌟ → bit x ≤ bit y
+bit-implies false y    imp = z≤
+bit-implies true  true imp = refl
+
+implies-bit : ∀ x y → bit x ≤ bit y → ⌞ x implies y ⌟
+implies-bit false y     le = oh
+implies-bit true  false le = false! le
+implies-bit true  true  le = oh
+
 odd-+ : ∀ m n → odd (m + n) ＝ odd m xor odd n
 odd-+  zero   n = refl
 odd-+ (suc m) n = ap not (odd-+ m n) ∙ sym (xor-assoc true (odd m) (odd n))

@@ -37,12 +37,15 @@ snoc : List A → A → List A
 snoc []      y = y ∷ []
 snoc (x ∷ l) y = x ∷ snoc l y
 
-last : A → List A → A
-last y []      = y
-last _ (x ∷ l) = last x l
-
 _∷r_ = snoc
 infixl 20 _∷r_
+
+unsnoc : A → List A → List A × A
+unsnoc y []       = [] , y
+unsnoc y (x ∷ xs) = first (y ∷_) (unsnoc x xs)
+
+last : A → List A → A
+last y = snd ∘ unsnoc y
 
 all : (A → Bool) → List A → Bool
 all p = List.rec true _and_ ∘ map p
@@ -69,6 +72,10 @@ _!ᶠ_ : (xs : List A) → Fin (length xs) → A
 unconsᵐ : List A → Maybe (A × List A)
 unconsᵐ []       = nothing
 unconsᵐ (x ∷ xs) = just (x , xs)
+
+unsnocᵐ : List A → Maybe (List A × A)
+unsnocᵐ []       = nothing
+unsnocᵐ (x ∷ xs) = just (unsnoc x xs)
 
 headᵐ : List A → Maybe A
 headᵐ = map fst ∘ unconsᵐ
@@ -146,6 +153,9 @@ count-from-to _          0        = []
 count-from-to 0          (suc to) = 0 ∷ (suc <$> count-from-to 0 to)
 count-from-to (suc from) (suc to) = suc <$> count-from-to from to
 
+natsum : List ℕ → ℕ
+natsum = List.rec 0 _+_
+
 map-maybe : (A → Maybe B) → List A → List B
 map-maybe f []       = []
 map-maybe f (x ∷ xs) =
@@ -157,6 +167,18 @@ map-maybe f (x ∷ xs) =
 map-up : (ℕ → A → B) → ℕ → List A → List B
 map-up _ _ []       = []
 map-up f n (x ∷ xs) = f n x ∷ map-up f (suc n) xs
+
+take-while : (A → Bool) → List A → List A
+take-while p []       = []
+take-while p (x ∷ xs) =
+  if p x then x ∷ take-while p xs
+         else []
+
+drop-while : (A → Bool) → List A → List A
+drop-while p []       = []
+drop-while p (x ∷ xs) =
+  if p x then drop-while p xs
+         else x ∷ xs
 
 span : (p : A → Bool) → List A → List A × List A
 span p []       = [] , []

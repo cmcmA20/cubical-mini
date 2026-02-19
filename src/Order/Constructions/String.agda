@@ -18,6 +18,8 @@ open import Order.Trichotomous
 open import Order.Constructions.Lex
 open import Order.Constructions.Char
 
+open import Data.Bool.Base
+open import Data.Nat.Base
 open import Data.List.Base
 open import Data.Char.Base
 open import Data.Char.Path
@@ -47,6 +49,12 @@ Strₚ .Poset.≤-antisym {x} {y} x≤y y≤x =
   string→list-inj $
   ListCharₚ .Order.Base.Poset.≤-antisym
     {x = string→list x} {y = string→list y} x≤y y≤x
+
+_≤str?_ : String → String → Bool
+x ≤str? y =
+  List-lex? (λ a b → char→ℕ a == char→ℕ b)
+            (λ a b → char→ℕ a <? char→ℕ b)
+            (string→list x) (string→list y)
 
 ListChar-dec-total : is-decidable-total-order ListCharₚ
 ListChar-dec-total = []≤-dto Char-dec-strict-total
@@ -102,6 +110,12 @@ Strₛ .StrictPoset.<-irrefl {x} =
 Strₛ .StrictPoset.<-trans {x} {y} {z} =
   ListCharₛ .Order.Strict.StrictPoset.<-trans
     {x = string→list x} {y = string→list y} {z = string→list z}
+
+_<str?_ : String → String → Bool
+x <str? y =
+  List-lex<? (λ a b → char→ℕ a == char→ℕ b)
+             (λ a b → char→ℕ a <? char→ℕ b)
+             (string→list x) (string→list y)
 
 ListChar-dec-strict-total : is-decidable-strict-total-order ListCharₛ
 ListChar-dec-strict-total = []<-dsto Char-dec-strict-total

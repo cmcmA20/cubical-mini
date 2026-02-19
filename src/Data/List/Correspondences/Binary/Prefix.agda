@@ -9,6 +9,7 @@ open import Data.List.Base
 open import Data.List.Path
 open import Data.List.Properties
 open import Data.List.Operations
+open import Data.List.Correspondences.Binary.OPE
 
 open import Data.Bool.Base
 open import Data.Empty.Base
@@ -56,6 +57,9 @@ opaque
 
   prefix-++-l : Prefix (xs ++ zs) ys → Prefix xs ys
   prefix-++-l {xs} {zs} (ts , et) = (zs ++ ts) , (++-assoc xs zs ts ⁻¹ ∙ et)
+
+  prefix→ope : Prefix xs ys → OPE xs ys
+  prefix→ope (txy , exy) = ope-++-r ∙ =→ope exy
 
 -- strict
 

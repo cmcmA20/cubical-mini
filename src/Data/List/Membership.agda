@@ -9,20 +9,22 @@ open import Logic.Discreteness
 
 open import Functions.Embedding
 
-open import Data.Bool.Base
-open import Data.Dec.Base as Dec
+open import Data.Unit.Base
 open import Data.Empty.Base as ⊥
+open import Data.Bool.Base
+open import Data.Reflects.Base as Reflects
+open import Data.Dec.Base as Dec
 open import Data.Fin.Computational.Base
 open import Data.Fin.Computational.Path
+open import Data.Sum.Base
 open import Data.List.Base
 open import Data.List.Instances.Map
+open import Data.List.Properties
 open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.Maybe.Base
 open import Data.Maybe.Path using (just-inj)
-open import Data.Reflects.Base as Reflects
-open import Data.Unit.Base
 
 private variable
   ℓᵃ ℓ : Level
@@ -89,7 +91,6 @@ instance
       (yes q=q′) → yes (ap there q=q′)
       (no  q≠q′) → no (contra there-inj q≠q′)
   {-# OVERLAPPING ∈ₗ-is-discrete #-}
-
 
 here+there→∉!ₗ : a ＝ x → a ∈ xs → a ∉! (x ∷ xs)
 here+there→∉!ₗ _   a∈xs (here  p , uniq) = here≠there $ uniq (there a∈xs)
@@ -164,16 +165,39 @@ instance
 ∈ₗ→fin-respects-∈!ₗ {xs = x ∷ xs} (there q) u (there q′) v r =
   ap fsuc (∈ₗ→fin-respects-∈!ₗ q (there-inj ∘ u ∘ there) q′ (there-inj ∘ v ∘ there) r)
 
+-- TODO move to Notation.Membership
+=→⊆ₗ : {xs ys : List A}
+    → xs ＝ ys → xs ⊆ ys
+=→⊆ₗ e {x} = subst (x ∈ₗ_) e
+
+=→≈ₗ : {xs ys : List A}
+    → xs ＝ ys → xs ≈ ys
+=→≈ₗ = < =→⊆ₗ , =→⊆ₗ ∘ _⁻¹ >
+
+-- interaction with map
+
 ∈-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
-       → (f : A → B) → x ∈ xs → f x ∈ map f xs
+      → (f : A → B) → x ∈ xs → f x ∈ map f xs
 ∈-map {xs = x ∷ xs} f (here e)   = here (ap f e)
 ∈-map {xs = x ∷ xs} f (there hx) = there (∈-map f hx)
 
 map-∈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A}
-       → (f : A → B) → Injective f
-       → f x ∈ map f xs → x ∈ xs
-map-∈ {xs = x ∷ xs} f inj (here e)  = here (inj e)
+      → (f : A → B) → Injective f
+      → f x ∈ map f xs → x ∈ xs
+map-∈ {xs = x ∷ xs} f inj (here e)   = here (inj e)
 map-∈ {xs = x ∷ xs} f inj (there fx) = there (map-∈ f inj fx)
+
+∉-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {x : A} {xs : List A} {f : A → B}
+      → Injective f
+      → x ∉ xs → f x ∉ map f xs
+∉-map fi = contra (map-∈ _ fi)
+
+map-∈-= : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs : List A}
+       → {f g : A → B}
+       → (∀ {x} → x ∈ xs → f x ＝ g x)
+       → map f xs ＝ map g xs
+map-∈-= {xs = []}     e = refl
+map-∈-= {xs = x ∷ xs} e = ap² {C = λ _ _ → List _} _∷_ (e (here refl)) (map-∈-= (e ∘ there))
 
 {-
 map-∈-in : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {z : A} {xs : List A}
@@ -191,6 +215,23 @@ map-∈Σ {xs = x ∷ xs} f (here e) = x , here refl , e
 map-∈Σ {xs = x ∷ xs} f (there y∈) =
   let (x , x∈ , xe) = map-∈Σ f y∈ in
   x , there x∈ , xe
+
+map-⊆ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A}
+      → (f : A → B)
+      → xs ⊆ ys
+      → map f xs ⊆ map f ys
+map-⊆ {ys} f sub {x} x∈m =
+  let (z , z∈ , xe) = map-∈Σ f x∈m in
+  subst (_∈ map f ys) (xe ⁻¹) $
+  ∈-map f $
+  sub z∈
+
+⊆-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A}
+      → (f : A → B) → Injective f
+      → map f xs ⊆ map f ys
+      → xs ⊆ ys
+⊆-map {ys} f fi sub {x} x∈xs =
+  map-∈ f fi $ sub $ ∈-map f x∈xs
 
 ∈-split : {A : 𝒰 ℓᵃ} {x : A} {xs : List A}
          → x ∈ xs → Σ[ ls ꞉ List A ] Σ[ rs ꞉ List A ] (xs ＝ ls ++ x ∷ rs)
@@ -217,8 +258,8 @@ rec-with-∈ z (x ∷ xs) f = f x (here refl) (rec-with-∈ z xs λ a → f a �
 -- interaction with any/all
 
 Any→Σ∈ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs : List A}
-         → Any P xs
-         → Σ[ x ꞉ A ] x ∈ xs × P x
+       → Any P xs
+       → Σ[ x ꞉ A ] x ∈ xs × P x
 Any→Σ∈ {xs = x ∷ xs} (here px) = x , here refl , px
 Any→Σ∈ {xs = x ∷ xs} (there a)     =
   let (x , h , p) = Any→Σ∈ a in
@@ -241,6 +282,22 @@ All→∀∈     {xs = y ∷ xs} (px ∷ pxs) x (there hx) = All→∀∈ pxs x 
         → All P xs
 ∀∈→All {xs = []}     ax = []
 ∀∈→All {xs = x ∷ xs} ax = ax x (here refl) ∷ ∀∈→All λ y hy → ax y (there hy)
+
+¬Any→All¬ : {xs : List A} {P : A → 𝒰 ℓ}
+          → ¬ Any P xs → All (λ x → ¬ (P x)) xs
+¬Any→All¬ nan = ∀∈→All λ x x∈ → nan ∘ ∈→Any x∈
+
+All¬→¬Any : {xs : List A} {P : A → 𝒰 ℓ}
+          → All (λ x → ¬ (P x)) xs → ¬ Any P xs
+All¬→¬Any al an =
+  let (x , x∈ , px) = Any→Σ∈ an in
+  All→∀∈ al x x∈ px
+
+Any¬→¬All : {xs : List A} {P : A → 𝒰 ℓ}
+          → Any (λ x → ¬ (P x)) xs → ¬ All P xs
+Any¬→¬All an al =
+  let (x , x∈ , px) = Any→Σ∈ an in
+  px $ All→∀∈ al x x∈
 
 all-⊆ : {A : 𝒰 ℓᵃ} {P : Pred A ℓ} {xs ys : List A}
        → xs ⊆ ys → All P ys → All P xs
@@ -280,6 +337,42 @@ unique→∷     {xs = y ∷ xs} s nx u z (there h1) (there h2) =
   let (nx , u′) = ∷→unique u in
   ap there (unique→∷ s nx u′ z h1 h2)
 
+-- set-equivalence
+
+≈-++-comm : {xs ys : List A}
+          → (xs ++ ys) ≈ (ys ++ xs)
+≈-++-comm {xs} {ys} =
+    [ any-++-r {xs = ys} , any-++-l ]ᵤ ∘ any-split
+  , [ any-++-r {xs = xs} , any-++-l ]ᵤ ∘ any-split
+
+≈-++ : {xs ys zs ws : List A}
+     → xs ≈ ys
+     → zs ≈ ws
+     → (xs ++ zs) ≈ (ys ++ ws)
+≈-++ {xs} {ys} (xy , yx) (zw , wz) =
+    [ any-++-l ∘ xy , any-++-r {xs = ys} ∘ zw ]ᵤ ∘ any-split {xs = xs}
+  , [ any-++-l ∘ yx , any-++-r {xs = xs} ∘ wz ]ᵤ ∘ any-split {xs = ys}
+
+≈-++-comm-assoc : {xs ys zs : List A}
+                → (xs ++ ys ++ zs) ≈ (ys ++ xs ++ zs)
+≈-++-comm-assoc {xs} {ys} {zs} =
+  Trans-≈ ._∙_ {x = xs ++ ys ++ zs}
+     (=→≈ₗ (++-assoc xs ys zs ⁻¹))
+     (Trans-≈ ._∙_ {x = (xs ++ ys) ++ zs}
+        (≈-++ {xs = xs ++ ys} (≈-++-comm {xs = xs}) (=→≈ₗ refl))
+        (=→≈ₗ (++-assoc ys xs zs)))
+
+≈-∷ : {x : A} {xs ys : List A}
+    → xs ≈ ys
+    → (x ∷ xs) ≈ (x ∷ ys)
+≈-∷ = ≈-++ (=→≈ₗ refl)
+
+map-≈ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A}
+      → (f : A → B)
+      → xs ≈ ys
+      → map f xs ≈ map f ys
+map-≈ f (xy , yx) = map-⊆ f xy , map-⊆ f yx
+
 -- disjointness
 -- TODO move to Notation.Membership
 
@@ -304,3 +397,36 @@ _∥_ {A} xs ys = ∀[ a ꞉ A ] (a ∈ xs → a ∈ ys → ⊥)
 
 ∥-∷→r : ∀ {y} {xs ys : List A} → y ∉ xs → xs ∥ ys → xs ∥ (y ∷ ys)
 ∥-∷→r nx = ∥-comm ∘ ∥-∷→l nx ∘ ∥-comm
+
+∥-++→l : {xs ys zs : List A} → xs ∥ zs → ys ∥ zs → (xs ++ ys) ∥ zs
+∥-++→l dxz dyz x∈xys x∈zs =
+  [ (λ x∈xs → dxz x∈xs x∈zs)
+  , (λ x∈ys → dyz x∈ys x∈zs) ]ᵤ (any-split x∈xys)
+
+∥-++←l : {xs ys zs : List A} → (xs ++ ys) ∥ zs → xs ∥ zs × ys ∥ zs
+∥-++←l d = d ∘ any-++-l , d ∘ any-++-r
+
+∥-++→r : {xs ys zs : List A} → xs ∥ ys → xs ∥ zs → xs ∥ (ys ++ zs)
+∥-++→r dxy dxz = ∥-comm (∥-++→l (∥-comm dxy) (∥-comm dxz))
+
+∥-++←r : {xs ys zs : List A} → xs ∥ (ys ++ zs) → xs ∥ ys × xs ∥ zs
+∥-++←r {ys} d =
+  let (dyx , dzx) = ∥-++←l {xs = ys} (∥-comm d) in
+  ∥-comm dyx , ∥-comm dzx
+
+map-∥ : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+          {xs ys : List A} {f : A → B}
+      → map f xs ∥ map f ys
+      → xs ∥ ys
+map-∥ {f} d xm ym =
+  d (∈-map f xm) (∈-map f ym)
+
+∥-map : ∀ {ℓᵇ} {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ}
+          {xs ys : List A} {f : A → B}
+      → Injective f
+      → xs ∥ ys → map f xs ∥ map f ys
+∥-map {ys} {f} inj d xm ym =
+  let (a , am , xe) = map-∈Σ f xm
+      (b , bm , ye) = map-∈Σ f ym
+    in
+  d am (subst (_∈ ys) (inj (ye ⁻¹ ∙ xe)) bm)

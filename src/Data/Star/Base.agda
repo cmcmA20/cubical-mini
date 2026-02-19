@@ -16,10 +16,30 @@ record Substar {ℓᵃ ℓ} {A : 𝒰 ℓᵃ} (R : A → A → 𝒰 ℓ) : 𝒰 
     path : Star R from to
 
 private variable
-  ℓ : Level
+  ℓ ℓ′ ℓ″ : Level
   A B : 𝒰 ℓ
-  R S : A → A → 𝒰 ℓ
+  R S : A → A → 𝒰 ℓ′
   x x′ y y′ z : A
+
+elim : {P : ∀ {x y} → Star R x y → 𝒰 ℓ″}
+     → (∀ {x y} (e : x ＝ y) → P (ε e))
+     → (∀ {x y z} (rxy : R x y) {syz : Star R y z} → P syz → P (rxy ◅ syz))
+     → ∀ {x y} (sxy : Star R x y) → P sxy
+elim pe pt (ε e)       = pe e
+elim pe pt (rxy ◅ syz) = pt rxy (elim pe pt syz)
+
+-- don't use to define operations, J creates monstruous terms!
+elimJ : {P : ∀ {x y} → Star R x y → 𝒰 ℓ″}
+     → (∀ {x} → P (ε (λ _ → x)))
+     → (∀ {x y z} (rxy : R x y) {syz : Star R y z} → P syz → P (rxy ◅ syz))
+     → ∀ {x y} (sxy : Star R x y) → P sxy
+elimJ {P} pr pt (ε e)       = Jₚ (λ y ey → P (ε ey)) pr e
+elimJ     pr pt (rxy ◅ syz) = pt rxy (elimJ pr pt syz)
+
+rec : (∀ {x y} → x ＝ y → S x y)
+    → (∀ {x y z} → R x y → S y z → S x z)
+    → Star R x y → S x y
+rec re tr = elim re (λ rxy → tr rxy)
 
 star-sng : R x y → Star R x y
 star-sng rxy = rxy ◅ ε refl
@@ -59,12 +79,11 @@ star-map : {f : A → B}
 star-map {f} fp (ε e)      = ε (ap f e)
 star-map     fp (xw ◅ swy) = fp xw ◅ star-map fp swy
 
--- TODO generalize
-star-foldr : (∀ {x} → S x x)
-           → (∀ {x y z} → R x y → S y z → S x z)
-           → Star R x y → S x y
-star-foldr {S} {x} re tr (ε e)       = subst (S x) e (re {x})
-star-foldr         re tr (rxw ◅ swy) = tr rxw (star-foldr re tr swy)
+star-foldrm : (∀ {x y} → x ＝ y → S x y)
+            → (∀ {x y} → R x y → S x y)
+            → (pl : ∀ {x y z} → S x y → S y z → S x z)
+            → Star R x y → S x y
+star-foldrm re mf pl = rec re (pl ∘ mf)
 
 -- TODO
 -- star-foldl : (∀ {a} → S a a)

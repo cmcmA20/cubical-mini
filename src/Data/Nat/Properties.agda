@@ -161,6 +161,34 @@ pred=∸1 (suc n) = refl
 ·-cancel-l : ∀ m n1 n2 → m · n1 ＝ m · n2 → (n1 ＝ n2) ⊎ (m ＝ 0)
 ·-cancel-l m n1 n2 e = ·-cancel-r n1 n2 m (·-comm n1 m ∙ e ∙ ·-comm m n2)
 
+-- exponentiation
+
+^-id-r : (x : ℕ) → x ^ 1 ＝ x
+^-id-r = ·-id-r
+
+^-absorb-l : (x : ℕ) → 1 ^ x ＝ 1
+^-absorb-l  zero   = refl
+^-absorb-l (suc x) = +-zero-r (1 ^ x) ∙ ^-absorb-l x
+
+^-distrib-+-*-l : ∀ m n o → m ^ (n + o) ＝ m ^ n · m ^ o
+^-distrib-+-*-l m  zero   o = +-zero-r (m ^ o) ⁻¹
+^-distrib-+-*-l m (suc n) o = ap (m ·_) (^-distrib-+-*-l m n o) ∙ ·-assoc m (m ^ n) (m ^ o)
+
+^-·-assoc : ∀ m n o → (m ^ n) ^ o ＝ m ^ (n · o)
+^-·-assoc m n  zero   = ap (m ^_) (·-absorb-r n ⁻¹)
+^-·-assoc m n (suc o) =
+    ap ((m ^ n) ·_) (^-·-assoc m n o)
+  ∙ ^-distrib-+-*-l m n  (n · o) ⁻¹
+  ∙ ap (m ^_) (·-suc-r n o ⁻¹)
+
+^-zero : ∀ m n → m ^ n ＝ 0 → m ＝ 0
+^-zero m  zero   e = false! e
+^-zero m (suc n) e = [ id , ^-zero m n ]ᵤ (·-zero m (m ^ n) e)
+
+^-one : ∀ m n → m ^ n ＝ 1 → (m ＝ 1) ⊎ (n ＝ 0)
+^-one m  zero   e = inr refl
+^-one m (suc n) e = inl (·-one m (m ^ n) e .fst)
+
 -- iteration
 
 iter-add : {ℓ : Level} {A : 𝒰 ℓ}

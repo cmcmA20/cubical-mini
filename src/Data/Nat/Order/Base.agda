@@ -400,6 +400,9 @@ opaque
 ∸∸-assoc-swap : ∀ m n p → p ≤ n → m ∸ (n ∸ p) ＝ m + p ∸ n
 ∸∸-assoc-swap m n p p≤n = sym (∸-cancel-+-r m p (n ∸ p)) ∙ ap ((m + p) ∸_) (∸+=id p n p≤n)
 
+∸∸=id : ∀ m n → m ≤ n → n ∸ (n ∸ m) ＝ m
+∸∸=id m n m≤n = ∸∸-assoc-swap n n m m≤n ∙ ∸+-comm n n m ≤-refl ⁻¹ ∙ ap (_+ m) (∸-cancel n)
+
 ∸∸-assoc : ∀ m n p → p ≤ n → n ≤ m → m ∸ (n ∸ p) ＝ m ∸ n + p
 ∸∸-assoc m n p p≤n n≤m = ∸∸-assoc-swap m n p p≤n ∙ sym (∸+-comm m n p n≤m)
 
@@ -425,21 +428,39 @@ opaque
 ∸≤≃≤+ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ≤ n + p)
 ∸≤≃≤+ {m} {n} {p} = ∸=0≃≤ ⁻¹ ∙ whisker-path-lₑ (sym (∸-+-assoc n m p)) ∙ ∸=0≃≤
 
-≤-∸-l-≃ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ∸ p ≤ n)
-≤-∸-l-≃ {m} {n} {p} = ∸≤≃≤+ ∙ subst (λ q → m ≤ n + p ≃ m ≤ q) (+-comm n p) refl ∙ ∸≤≃≤+ ⁻¹
+<-∸-l-≃ : ∀ {m n p} → 0 < p → (m ∸ n < p) ≃ (m < n + p)
+<-∸-l-≃         {p = zero}  p>0 = absurd (≮z p>0)
+<-∸-l-≃ {m} {n} {p = suc p} p>0 = <≃suc≤ ⁻¹ ∙ ≤≃≤+l {m = 1} ⁻¹ ∙ ∸≤≃≤+ {m} {n} ∙ ≤≃≤+l
+                                ∙ subst (λ q → suc m ≤ q ≃ suc m ≤ n + suc p) (+-suc-r n p) refl ∙ <≃suc≤
 
 <-∸-r-≃ : ∀ {m n p} → (n < p ∸ m) ≃ (m + n < p)
 <-∸-r-≃ {m} {n} {p} = <≃≱ ∙ ¬-≃ (∸≤≃≤+ .fst) ((∸≤≃≤+ ⁻¹) .fst) ∙ <≃≱ ⁻¹
+
+≤-∸-l-≃ : ∀ {m n p} → (m ∸ n ≤ p) ≃ (m ∸ p ≤ n)
+≤-∸-l-≃ {m} {n} {p} = ∸≤≃≤+ ∙ subst (λ q → m ≤ n + p ≃ m ≤ q) (+-comm n p) refl ∙ ∸≤≃≤+ ⁻¹
 
 ≤-∸-r-≃ : ∀ {m n p} → 0 < n → (n ≤ p ∸ m) ≃ (m + n ≤ p)
 ≤-∸-r-≃     {n = zero}      n>0 = false! n>0
 ≤-∸-r-≃ {m} {n = suc n} {p} n>0 = <≃suc≤ ∙ <-∸-r-≃ ∙ <≃suc≤ ⁻¹
                                 ∙ subst (λ q → q ≤ p ≃ m + suc n ≤ p) (+-suc-r m n) refl
 
-<-∸-l-≃ : ∀ {m n p} → 0 < p → (m ∸ n < p) ≃ (m < n + p)
-<-∸-l-≃         {p = zero}  p>0 = absurd (≮z p>0)
-<-∸-l-≃ {m} {n} {p = suc p} p>0 = <≃suc≤ ⁻¹ ∙ ≤≃≤+l {m = 1} ⁻¹ ∙ ∸≤≃≤+ {m} {n} ∙ ≤≃≤+l
-                                ∙ subst (λ q → suc m ≤ q ≃ suc m ≤ n + suc p) (+-suc-r n p) refl ∙ <≃suc≤
+≤-∸-2l-≃ : ∀ {m n p} → p ≤ m → (m ∸ n ≤ m ∸ p) ≃ (p ≤ n)
+≤-∸-2l-≃ {m} {n} {p} p≤m =
+    ≤-∸-l-≃ {m = m} {n = n}
+  ∙ =→≃ (ap (_≤ n) (∸∸=id _ _ p≤m))
+
+≤-∸-2r-≃ : ∀ {m n p} → p ≤ n → (m ∸ p ≤ n ∸ p) ≃ (m ≤ n)
+≤-∸-2r-≃ {m} {n} {p} p≤n =
+    ∸≤≃≤+ {m = m} {n = p}
+  ∙ =→≃ (ap (m ≤_) (+∸=id _ _ p≤n))
+
+<-∸-2l-≃ : ∀ {m n p} → n ≤ m → (m ∸ n < m ∸ p) ≃ (p < n)
+<-∸-2l-≃ {m} {n} {p} n≤m =
+    <-∸-r-≃ ∙ =→≃ (ap (_< m) (+-comm p _))
+  ∙ <-∸-r-≃ ⁻¹ ∙ =→≃ (ap (p <_) (∸∸=id _ _ n≤m))
+
+<-∸-2r-≃ : ∀ {m n p} → p ≤ m → (m ∸ p < n ∸ p) ≃ (m < n)
+<-∸-2r-≃ {m} {n} {p} p≤m = <-∸-r-≃ ∙ =→≃ (ap (_< n) (+-comm p _ ∙ ∸+=id _ _ p≤m))
 
 -- multiplication
 
@@ -483,3 +504,50 @@ opaque
   ∙ ⊎₁-¬-distribute
   ∙ ×-ap (≃→¬≃ (≤0≃=0 ⁻¹) ∙ <≃≱ ⁻¹)
          (<≃≱ ⁻¹)
+
+≤-2· : ∀ {p} → m ≤ n → k ≤ p → m · k ≤ n · p
+≤-2· {n} m≤n k≤p = (≤≃≤·r ⁻¹ $ ∣ inr m≤n ∣₁) ∙ (≤≃≤·l {m = n} ⁻¹ $ ∣ inr k≤p ∣₁)
+
+<-2· : ∀ {p} → m < n → k < p → m · k < n · p
+<-2· {n} m<n k<p =
+  ≤-<-trans (≤≃≤·r ⁻¹ $ ∣ inr (<-weaken _ _ m<n) ∣₁)
+            (<≃<·l {m = n} ⁻¹ $ ≤-<-trans z≤ m<n , k<p)
+
+-- exponentiation
+
+<0-^ : 0 < m → 0 < m ^ n
+<0-^ {m} {n} =
+  ≱→< ∘ contra (λ le → ^-zero m n (≤0→=0 le) ⁻¹) ∘ <→≠
+
+≤-^-l : m ≤ n → m ^ k ≤ n ^ k
+≤-^-l {k = zero}  m≤n = refl
+≤-^-l {k = suc k} m≤n = ≤-2· m≤n (≤-^-l {k = k} m≤n)
+
+≤-^-r : 0 < m → n ≤ k → m ^ n ≤ m ^ k
+≤-^-r     {n = zero}  {k}         z<m _   = <≃suc≤ ⁻¹ $ <0-^ {n = k} z<m
+≤-^-r     {n = suc n} {k = zero}  _   n≤k = false! n≤k
+≤-^-r {m} {n = suc n} {k = suc k} z<m n≤k = ≤≃≤·l {m = m} ⁻¹ $ ∣ inr (≤-^-r z<m (≤-peel n≤k)) ∣₁
+
+<-^-l : m < n → 0 < k → m ^ k < n ^ k
+<-^-l {k = zero}        m<n z<k = false! z<k
+<-^-l {k = suc zero}    m<n z<k = <≃<·r ⁻¹ $ z<k , m<n
+<-^-l {k = suc (suc k)} m<n z<k = <-2· m<n (<-^-l {k = suc k} m<n z<s)
+
+<-^-r : 1 < m → n < k → m ^ n < m ^ k
+<-^-r {m = zero}                          1<m n<k = false! 1<m
+<-^-r {m = suc m}             {k = zero}  1<m n<k = false! n<k
+<-^-r {m = suc m} {n = zero}  {k = suc k} 1<m n<k =
+  ≤-<-trans (=→≤ (^-absorb-l (suc k) ⁻¹)) (<-^-l {k = suc k} 1<m z<s)
+<-^-r {m = suc m} {n = suc n} {k = suc k} 1<m n<k =
+  <≃<·l {m = suc m} ⁻¹ $ z<s , <-^-r 1<m (<-peel n<k)
+
+<1-^-r : 1 < m → n < m ^ n
+<1-^-r     {n = zero}  1<m = z<s
+<1-^-r {m} {n = suc n} 1<m =
+  let (k , e) = <→Σ _ _ 1<m in
+  <-≤-trans (s<s $ <1-^-r {n = n} 1<m)
+     (  ≤-+ (<≃suc≤ ⁻¹ $ <≃<·r {m = 0} {k = m ^ n} ⁻¹ $
+             (  <0-^ {m = m} {n = n} (<-trans <-ascend 1<m))
+              , z<s {n = k})
+            refl
+      ∙ =→≤ (+-comm _ (m ^ n) ∙ ap (_· m ^ n) e))

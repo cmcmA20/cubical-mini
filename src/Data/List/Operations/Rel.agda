@@ -17,7 +17,6 @@ open import Data.List.Operations
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Membership
-open import Data.List.Correspondences.Unary.At
 open import Data.List.Correspondences.Unary.Related
 open import Data.List.Correspondences.Unary.Unique
 open import Data.List.Correspondences.Binary.Perm
@@ -42,6 +41,7 @@ insertion-sort-perm : Perm (insertion-sort cmp xs) xs
 insertion-sort-perm {xs = []}     = perm-refl
 insertion-sort-perm {xs = x ∷ xs} = ptrans insert-perm (pprep refl insertion-sort-perm)
 
+{-
 insert-sorted : {R : ∀ x y → Reflects (x ≤ y) (cmp x y)}
               → Trans _≤_ → (∀ x y → ¬ x ≤ y → y ≤ x)
               → ∀ {xs} → Sorted _≤_ xs → Sorted _≤_ (insert cmp x xs)
@@ -92,6 +92,7 @@ insertion-sort-sorted-uniq-strict {cmp} {R} tr stot {xs = x ∷ xs} (nx ∷ᵘ u
     (contra (≈↔→≈ {S = insertion-sort cmp xs} {T = xs} (perm→bag-equiv p) .fst) nx)
     (perm-unique (perm-sym p) u)
     (insertion-sort-sorted-uniq-strict {R = R} tr stot u)
+-}
 
 -- nub
 

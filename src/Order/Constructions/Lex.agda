@@ -5,6 +5,10 @@ open import Cat.Prelude
 open import Foundations.Base
 open import Meta.Effect
 
+open import Data.Empty
+open import Data.Acc as Acc
+open import Data.Bool as Bool
+open import Data.Reflects as Reflects
 open import Data.Dec as Dec
 open import Data.Sum.Base as ⊎
 open import Data.Sum.Path
@@ -13,6 +17,7 @@ open import Data.Nat.Order.Base renaming (_<_ to _<ℕ_)
 open import Data.List.Base
 open import Data.List.Path
 open import Data.List.Operations
+open import Data.List.Correspondences.Binary.Prefix
 
 open import Order.Base
 open import Order.Strict
@@ -52,6 +57,51 @@ private variable o ℓ o′ ℓ′ o″ ℓ″ ℓᵢ ℓⱼ ℓₖ : Level
   inl (subst (_P< pz) (px=py ⁻¹) py<pz)
 ×-lex-trans        ptr qtr      (inr (px=py , qx≤qy)) (inr (py=pz , qy≤qz)) =
   inr ( px=py ∙ py=pz , qtr qx≤qy qy≤qz)
+
+-- TODO simplify?
+×-ind : {P : 𝒰 o} {Q : 𝒰 o′}
+        {_P<_ : P → P → 𝒰 ℓ} {_Q<_ : Q → Q → 𝒰 ℓ′}
+      → (∀ {ℓ} {Pp : P → 𝒰 ℓ} → (∀ x → (∀ y → y P< x → Pp y) → Pp x) → ∀ x → Pp x)
+      → (∀ {ℓ} {Qp : Q → 𝒰 ℓ} → (∀ x → (∀ y → y Q< x → Qp y) → Qp x) → ∀ x → Qp x)
+      → ∀ {ℓ} {PQp : P × Q → 𝒰 ℓ} → (∀ x → (∀ y → ×-lex _P<_ _Q<_ y x → PQp y) → PQp x) → ∀ x → PQp x
+×-ind {_P<_} {_Q<_} wp wq {PQp} ih (a , b) =
+  ih (a , b) λ where (p , q) →
+                      [ (λ p<a → go₁ a p<a q)
+                      , (λ where (p=a , q<b) → go₂ p b (go₁ p) q<b)
+                      ]ᵤ
+  where
+  go₂ : ∀ u w → (∀ {v} → v P< u → ∀ w → PQp (v , w))
+              → ∀ {z} → z Q< w → PQp (u , z)
+  go₂ u w ih₁ =
+    wq {Qp = λ x → ∀ {z} → z Q< x → PQp (u , z)}
+       (λ x ih₂ {z} z<x →
+          ih (u , z) λ where (f , g) →
+                               [ (λ f<u → ih₁ f<u g)
+                               , (λ where (f=u , g<z) →
+                                            subst (λ q → PQp (q , g))
+                                                  (f=u ⁻¹)
+                                                  (ih₂ z z<x g<z)) ]ᵤ)
+       w
+
+  go₁ : ∀ u {v} → v P< u → ∀ w → PQp (v , w)
+  go₁ =
+    wp λ x ih₁ {v} v<x w →
+         ih (_ , w) λ where (f , g) →
+                             [ (λ f<v → ih₁ _ v<x f<v g)
+                             , (λ where (f=v , g<w) →
+                                         go₂ f w
+                                          (subst (λ q → ∀ {z} → z P< q → ∀ w → PQp (z , w))
+                                                 (f=v ⁻¹)
+                                                 (λ {w} → ih₁ v v<x {w}))
+                                          g<w) ]ᵤ
+
+×-wf : {P : 𝒰 o} {Q : 𝒰 o′}
+       {_P<_ : P → P → 𝒰 ℓ} {_Q<_ : Q → Q → 𝒰 ℓ′}
+     → is-wf _P<_
+     → is-wf _Q<_
+     → is-wf (×-lex _P<_ _Q<_)
+×-wf wp wq = from-induction λ P → ×-ind (λ {_} {Pp} → to-induction wp Pp)
+                                        (λ {_} {Qp} → to-induction wq Qp)
 
 -- left strict + set, right poset
 _<×≤_ : (P : StrictPoset o ℓ) → ⦃ _ : H-Level 2 (StrictPoset.Ob P) ⦄ → Poset o′ ℓ′ → Poset (o ⊔ o′) (o ⊔ ℓ ⊔ ℓ′)
@@ -130,11 +180,26 @@ List-lex _A<_ []        ys      = ⊤
 List-lex _A<_ (x ∷ xs)  []      = ⊥
 List-lex _A<_ (x ∷ xs) (y ∷ ys) = (x A< y) ⊎ ((x ＝ y) × List-lex _A<_ xs ys)
 
+List-lex? : {A : 𝒰 o}
+          → (_A=?_ : A → A → Bool)
+          → (_A<?_ : A → A → Bool)
+          → List A → List A → Bool
+List-lex? _A=?_ _A<?_ []        ys      = true
+List-lex? _A=?_ _A<?_ (x ∷ xs)  []      = false
+List-lex? _A=?_ _A<?_ (x ∷ xs) (y ∷ ys) = (x A<? y) or ((x A=? y) and List-lex? _A=?_ _A<?_ xs ys)
+
+List-lex-eq : {A : 𝒰 o}
+              {_A<_ : A → A → 𝒰 ℓ}
+            → ∀ {xs ys} → xs ＝ ys → List-lex _A<_ xs ys
+List-lex-eq {xs = []}     {ys = []}     e = lift tt
+List-lex-eq {xs = []}     {ys = y ∷ ys} e = false! e
+List-lex-eq {xs = x ∷ xs} {ys = []}     e = false! e
+List-lex-eq {xs = x ∷ xs} {ys = y ∷ ys} e = inr (∷-head-inj e , List-lex-eq {xs = xs} {ys = ys} (∷-tail-inj e))
+
 List-lex-refl : {A : 𝒰 o}
                 {_A<_ : A → A → 𝒰 ℓ}
-              → ∀ {xs} → (List-lex _A<_ xs xs)
-List-lex-refl {xs = []} = lift tt
-List-lex-refl {xs = x ∷ xs} = inr (refl , List-lex-refl {xs = xs})
+              → ∀ {xs} → List-lex _A<_ xs xs
+List-lex-refl {xs} = List-lex-eq {xs = xs} refl
 
 List-lex-trans : {A : 𝒰 o}
                  {_A<_ : A → A → 𝒰 ℓ}
@@ -196,6 +261,17 @@ List-lex-++-r : {A : 𝒰 o}
               → List-lex _A<_ xs (xs ++ ys)
 List-lex-++-r {xs = []}     = lift tt
 List-lex-++-r {xs = x ∷ xs} = inr (refl , List-lex-++-r {xs = xs})
+
+opaque
+  unfolding Prefix
+  List-lex-prefix : {A : 𝒰 o}
+                    {_A<_ : A → A → 𝒰 ℓ}
+                  → ∀ {xs ys}
+                  → Prefix xs ys
+                  → List-lex _A<_ xs ys
+  List-lex-prefix {_A<_} {xs} (txy , exy) =
+    subst (List-lex _A<_ xs) exy $
+    List-lex-++-r {xs = xs} {ys = txy}
 
 -- TODO is this too strong?
 List-lex-compare : {A : 𝒰 o}
@@ -264,36 +340,82 @@ List-lex-dec da d {xs = x ∷ xs} {ys = y ∷ ys} | no  x≮y | no x≠y = no [ 
 -- strict
 
 List-lex< : {A : 𝒰 o}
-         → (_A<_ : A → A → 𝒰 ℓ)
-         → List A → List A → 𝒰 (o ⊔ ℓ)
+          → (_A<_ : A → A → 𝒰 ℓ)
+          → List A → List A → 𝒰 (o ⊔ ℓ)
 List-lex< _A<_ xs        []      = ⊥
 List-lex< _A<_ []       (y ∷ ys) = ⊤
 List-lex< _A<_ (x ∷ xs) (y ∷ ys) = (x A< y) ⊎ ((x ＝ y) × List-lex< _A<_ xs ys)
 
+List-lex<? : {A : 𝒰 o}
+           → (_A=?_ : A → A → Bool)
+           → (_A<?_ : A → A → Bool)
+           → List A → List A → Bool
+List-lex<? _A=?_ _A<?_ xs        []      = false
+List-lex<? _A=?_ _A<?_ []       (y ∷ ys) = true
+List-lex<? _A=?_ _A<?_ (x ∷ xs) (y ∷ ys) = (x A<? y) or ((x A=? y) and List-lex<? _A=?_ _A<?_ xs ys)
+
 List-lex<-irr : {A : 𝒰 o}
-               {_A<_ : A → A → 𝒰 ℓ}
-             → (∀ {x} → ¬ (x A< x))
-             → ∀ {xs} → ¬ (List-lex< _A<_ xs xs)
+                {_A<_ : A → A → 𝒰 ℓ}
+              → (∀ {x} → ¬ (x A< x))
+              → ∀ {xs} → ¬ (List-lex< _A<_ xs xs)
 List-lex<-irr xir {xs = x ∷ xs} (inl l)       = xir l
 List-lex<-irr xir {xs = x ∷ xs} (inr (_ , r)) = List-lex<-irr xir {xs = xs} r
 
 List-lex<-trans : {A : 𝒰 o}
-                 {_A<_ : A → A → 𝒰 ℓ}
-               → (∀ {x y z} → x A< y → y A< z → x A< z)
-               → ∀ {xs ys zs}
-               → List-lex< _A<_ xs ys
-               → List-lex< _A<_ ys zs
-               → List-lex< _A<_ xs zs
+                  {_A<_ : A → A → 𝒰 ℓ}
+                → (∀ {x y z} → x A< y → y A< z → x A< z)
+                → ∀ {xs ys zs}
+                → List-lex< _A<_ xs ys
+                → List-lex< _A<_ ys zs
+                → List-lex< _A<_ xs zs
 List-lex<-trans        xtr {xs = []}     {ys = y ∷ ys} {zs = z ∷ zs}  xyl                  yzl                =
   lift tt
 List-lex<-trans        xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)            (inl y<z)           =
   inl (xtr x<y y<z)
-List-lex<-trans {_A<_} xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)            (inr (y=z , ys<zs)) =
+List-lex<-trans {_A<_} xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)            (inr (y=z , _    )) =
   inl (subst (x A<_) y=z x<y)
-List-lex<-trans {_A<_} xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs<ys))  (inl y<z)           =
+List-lex<-trans {_A<_} xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , _    ))  (inl y<z)           =
   inl (subst (_A< z) (x=y ⁻¹) y<z)
 List-lex<-trans        xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs<ys))  (inr (y=z , ys<zs)) =
-  inr ((x=y ∙ y=z) , (List-lex<-trans xtr {xs = xs} {ys = ys} {zs = zs} xs<ys ys<zs))
+  inr (x=y ∙ y=z , List-lex<-trans xtr {xs = xs} {ys = ys} {zs = zs} xs<ys ys<zs)
+
+List-lex≤-<-trans : {A : 𝒰 o}
+                    {_A<_ : A → A → 𝒰 ℓ}
+                  → (∀ {x y z} → x A< y → y A< z → x A< z)
+                  → ∀ {xs ys zs}
+                  → List-lex  _A<_ xs ys
+                  → List-lex< _A<_ ys zs
+                  → List-lex< _A<_ xs zs
+List-lex≤-<-trans        xtr {xs = []}     {ys = []}     {zs = z ∷ zs}  xyl                 yzl                =
+  lift tt
+List-lex≤-<-trans        xtr {xs = []}     {ys = y ∷ ys} {zs = z ∷ zs}  xyl                 yzl                =
+  lift tt
+List-lex≤-<-trans        xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)           (inl y<z)           =
+  inl (xtr x<y y<z)
+List-lex≤-<-trans {_A<_} xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)           (inr (y=z , ys<zs)) =
+  inl (subst (x A<_) y=z x<y)
+List-lex≤-<-trans {_A<_} xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs≤ys)) (inl y<z)           =
+  inl (subst (_A< z) (x=y ⁻¹) y<z)
+List-lex≤-<-trans        xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs≤ys)) (inr (y=z , ys<zs)) =
+  inr (x=y ∙ y=z , List-lex≤-<-trans xtr {xs = xs} {ys = ys} {zs = zs} xs≤ys ys<zs)
+
+List-lex<-≤-trans : {A : 𝒰 o}
+                    {_A<_ : A → A → 𝒰 ℓ}
+                  → (∀ {x y z} → x A< y → y A< z → x A< z)
+                  → ∀ {xs ys zs}
+                  → List-lex< _A<_ xs ys
+                  → List-lex  _A<_ ys zs
+                  → List-lex< _A<_ xs zs
+List-lex<-≤-trans        xtr {xs = []}     {ys = y ∷ ys} {zs = z ∷ zs}  xyl                 yzl                =
+  lift tt
+List-lex<-≤-trans        xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)           (inl y<z)           =
+  inl (xtr x<y y<z)
+List-lex<-≤-trans {_A<_} xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inl x<y)           (inr (y=z , _))     =
+  inl (subst (x A<_) y=z x<y)
+List-lex<-≤-trans {_A<_} xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , _    )) (inl y<z)           =
+  inl (subst (_A< z) (x=y ⁻¹) y<z)
+List-lex<-≤-trans        xtr {xs = x ∷ xs} {ys = y ∷ ys} {zs = z ∷ zs} (inr (x=y , xs<ys)) (inr (y=z , ys≤zs)) =
+  inr (x=y ∙ y=z , List-lex<-≤-trans xtr {xs = xs} {ys = ys} {zs = zs} xs<ys ys≤zs)
 
 List-lex<-set-prop : {A : 𝒰 o}
                   → is-set A
@@ -308,6 +430,14 @@ List-lex<-set-prop as {_A<_} ath air {xs = x ∷ xs} {ys = y ∷ ys} =
     (×-is-of-hlevel 1 (as x y) (List-lex<-set-prop as ath air {xs = xs} {ys = ys}))
     λ where (x<y , x=y , _) → air (subst (x A<_) (x=y ⁻¹) x<y)
 
+List-lex<-∷r : {A : 𝒰 o}
+               {_A<_ : A → A → 𝒰 ℓ}
+             → ∀ {xs y z}
+             → y A< z
+             → List-lex< _A<_ (xs ∷r y) (xs ∷r z)
+List-lex<-∷r {xs = []}     y<z = inl y<z
+List-lex<-∷r {xs = x ∷ xs} y<z = inr (refl , List-lex<-∷r {xs = xs} y<z)
+
 List-lex<-++-r : {A : 𝒰 o}
                  {_A<_ : A → A → 𝒰 ℓ}
                → ∀ {xs ys}
@@ -316,6 +446,19 @@ List-lex<-++-r : {A : 𝒰 o}
 List-lex<-++-r               {ys = []}     ly = ⊥.absurd (≮z ly)
 List-lex<-++-r {xs = []}     {ys = y ∷ ys} _  = lift tt
 List-lex<-++-r {xs = x ∷ xs} {ys = y ∷ ys} _  = inr (refl , (List-lex<-++-r {xs = xs} {ys = y ∷ ys} z<s))
+
+opaque
+  unfolding Prefix1
+  List-lex<-prefix1 : {A : 𝒰 o}
+                      {_A<_ : A → A → 𝒰 ℓ}
+                    → ∀ {xs ys}
+                    → Prefix1 xs ys
+                    → List-lex< _A<_ xs ys
+  List-lex<-prefix1 {_A<_} {xs} (t , txy , exy) =
+    subst (List-lex< _A<_ xs) exy $
+    List-lex<-++-r {xs = xs} {ys = t ∷ txy} z<s
+
+-- strict truncated
 
 List-lex<₁ : {A : 𝒰 o}
          → (_A<_ : A → A → 𝒰 ℓ)

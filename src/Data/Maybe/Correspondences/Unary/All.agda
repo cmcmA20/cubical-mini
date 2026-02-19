@@ -14,6 +14,7 @@ open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
 open import Data.Maybe.Operations
 open import Data.Maybe.Instances.Map
+open import Data.Maybe.Correspondences.Unary.Any
 open import Data.Reflects.Base as Reflects
 open import Data.Reflects.Properties
 
@@ -109,6 +110,9 @@ all←map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : Pred B ℓ′} {f : A → B
         → All S (map f xm) → All (S ∘ f) xm
 all←map {xm = just x}  (just px) = just px
 all←map {xm = nothing}  nothing  = nothing
+
+any→all : Any P xm → All P xm
+any→all (here px) = just px
 
 -- reflection
 

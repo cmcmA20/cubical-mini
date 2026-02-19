@@ -2,19 +2,26 @@
 module Data.List.Correspondences.Binary.OPE where
 
 open import Meta.Prelude
+open import Meta.Effect
 
 open import Data.Empty.Base
 open import Data.Bool.Base
 open import Data.Nat.Order.Base
 open import Data.Reflects
 open import Data.List.Base
+open import Data.List.Path
+open import Data.List.Properties
 open import Data.List.Operations
+open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
+open import Data.List.Correspondences.Unary.Pairwise
 open import Data.List.Membership
+open import Data.List.Instances.Map
 
 private variable
-  ℓᵃ : Level
+  ℓᵃ ℓᵇ : Level
   A : 𝒰 ℓᵃ
+  B : 𝒰 ℓᵇ
   x : A
   xs ys zs : List A
 
@@ -55,10 +62,11 @@ ope-uncons : ∀ {x y} {xs ys : List A}
 ope-uncons               (otake _ o) = o
 ope-uncons {ys = y ∷ ys} (odrop o)   = odrop (ope-uncons o)
 
-ope-refl : {xs : List A}
-         → OPE xs xs
-ope-refl {xs = []}     = odone
-ope-refl {xs = x ∷ xs} = otake refl ope-refl
+=→ope : {xs ys : List A} → xs ＝ ys → OPE xs ys
+=→ope {xs = []}     {ys = []}     e = odone
+=→ope {xs = []}     {ys = y ∷ ys} e = false! e
+=→ope {xs = x ∷ xs} {ys = []}     e = false! e
+=→ope {xs = x ∷ xs} {ys = y ∷ ys} e = otake (∷-head-inj e) (=→ope (∷-tail-inj e))
 
 ope-trans : {xs ys zs : List A}
           → OPE xs ys → OPE ys zs → OPE xs zs
@@ -69,10 +77,26 @@ ope-trans  oxy                     (odrop oyz)     = odrop (ope-trans oxy oyz)
 
 instance
   Refl-OPE : Refl {A = List A} OPE
-  Refl-OPE .refl = ope-refl
+  Refl-OPE .refl = =→ope refl
 
   Trans-OPE : Trans {A = List A} OPE
   Trans-OPE ._∙_ = ope-trans
+
+ope-++-ap : {A : 𝒰 ℓᵃ} {xs ys zs ws : List A}
+          → OPE xs ys
+          → OPE zs ws
+          → OPE (xs ++ zs) (ys ++ ws)
+ope-++-ap  odone        ozw = ozw
+ope-++-ap (otake e oxy) ozw = otake e (ope-++-ap oxy ozw)
+ope-++-ap (odrop oxy)   ozw = odrop (ope-++-ap oxy ozw)
+
+ope-++-l : {A : 𝒰 ℓᵃ} {xs ys : List A}
+         → OPE xs (ys ++ xs)
+ope-++-l = ope-++-ap ope-init refl
+
+ope-++-r : {A : 𝒰 ℓᵃ} {xs ys : List A}
+         → OPE xs (xs ++ ys)
+ope-++-r = =→ope (++-id-r _ ⁻¹) ∙ ope-++-ap refl ope-init
 
 -- TODO move to properties
 
@@ -81,10 +105,16 @@ ope-length  odone      = z≤
 ope-length (otake _ l) = s≤s (ope-length l)
 ope-length (odrop l)   = ≤-trans (ope-length l) ≤-ascend
 
+ope-map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {xs ys : List A} {f : A → B}
+        → OPE xs ys → OPE (map f xs) (map f ys)
+ope-map      odone        = odone
+ope-map {f} (otake e ope) = otake (ap f e) (ope-map ope)
+ope-map     (odrop ope)   = odrop (ope-map ope)
+
 ope-antisym : {xs ys : List A}
             → OPE xs ys → OPE ys xs → xs ＝ ys
 ope-antisym  odone           _            = refl
-ope-antisym (otake exy oxy) (otake _ oyx) = ap² _∷_ exy (ope-antisym oxy oyx)
+ope-antisym (otake exy oxy) (otake _ oyx) = ap² {C = λ _ _ → List _} _∷_ exy (ope-antisym oxy oyx)
 ope-antisym (otake _ oxy)   (odrop oyx)   = false! $ ≤-trans (ope-length oyx) (ope-length oxy)
 ope-antisym (odrop oxy)     (otake _ oyx) = false! $ ≤-trans (ope-length oxy) (ope-length oyx)
 ope-antisym (odrop oxy)     (odrop oyx)   = false! $ ≤≃≤+r {n = 2} ⁻¹ $ ≤-trans (s≤s $ ope-length oxy) (ope-length oyx)
@@ -120,6 +150,19 @@ ope→subset : {xs ys : List A}
 ope→subset (otake e o) (here e′)  = here (e′ ∙ e)
 ope→subset (otake e o) (there hx) = there (ope→subset o hx)
 ope→subset (odrop o)    hx        = there (ope→subset o hx)
+
+all-ope : {xs ys : List A} {P : A → 𝒰 ℓᵃ}
+        → OPE xs ys → All P ys → All P xs
+all-ope      odone      []        = []
+all-ope {P} (otake e o) (py ∷ ay) = subst P (e ⁻¹) py ∷ all-ope o ay
+all-ope     (odrop o)   (_ ∷ ay)  = all-ope o ay
+
+pairwise-ope : {xs ys : List A} {P : A → A → 𝒰 ℓᵃ}
+             → OPE xs ys → Pairwise P ys → Pairwise P xs
+pairwise-ope      odone            []ᵖ       = []ᵖ
+pairwise-ope {P} (otake {ys} e o) (ay ∷ᵖ py) =
+  all-ope o (subst (λ q → All (P q) ys) (e ⁻¹) ay) ∷ᵖ pairwise-ope o py
+pairwise-ope     (odrop o)        (_ ∷ᵖ py)  = pairwise-ope o py
 
 instance
   HUnit-o-≤ : HUnit-o {A = List A} OPE

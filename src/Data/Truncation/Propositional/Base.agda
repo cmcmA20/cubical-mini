@@ -27,6 +27,11 @@ elim P-prop incc (squash₁ x y i) =
                                                (elim P-prop incc y)
                                                i
 
+rec : {A : Type ℓ} {B : Type ℓ′}
+    → is-prop B
+    → (A → B)
+    → ∥ A ∥₁ → B
+rec pb = elim (λ _ → pb)
 
 -- Mere existence
 

@@ -13,11 +13,12 @@ open import Data.Empty.Base as ⊥
 open import Data.Maybe.Base
 open import Data.Maybe.Operations
 open import Data.Maybe.Instances.Map
+open import Data.Maybe.Instances.Bind
 open import Data.Reflects.Base as Reflects
 open import Data.Reflects.Properties
 
 private variable
-  ℓᵃ ℓᵇ ℓ ℓ′ : Level
+  ℓᵃ ℓᵇ ℓ ℓ′ ℓ″ : Level
   A : 𝒰 ℓᵃ
   B : 𝒰 ℓᵇ
   P Q R : Pred A ℓ
@@ -123,6 +124,14 @@ any→map (here px) = here px
 any←map : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {S : Pred B ℓ′} {f : A → B} {xm : Maybe A}
         → Any S (map f xm) → Any (S ∘ f) xm
 any←map {xm = just x} (here px) = here px
+
+-- TODO is this good?
+any→bind : {A : 𝒰 ℓᵃ} {B : 𝒰 ℓᵇ} {P : Pred A ℓ′} {S : Pred B ℓ″} {f : A → Maybe B} {xm : Maybe A}
+         → Any P xm
+         → (∀ x → P x → Any S (f x))
+         → Any S (xm >>= f)
+any→bind {xm = just x}  pxm afx = afx x (unhere pxm)
+any→bind {xm = nothing} pxm afx = false! pxm
 
 -- reflection
 

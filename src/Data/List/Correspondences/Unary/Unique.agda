@@ -12,6 +12,8 @@ open import Data.List
 open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
 open import Data.List.Correspondences.Unary.Related
+open import Data.List.Correspondences.Unary.Pairwise
+open import Data.List.Correspondences.Binary.OPE
 open import Data.List.Membership
 open import Data.List.Operations
 open import Data.List.Operations.Properties
@@ -59,6 +61,23 @@ uniq-snoc {xs} u x∉ =
   uniq→++ u (false! ∷ᵘ []ᵘ)
     λ x∈ → λ where (here e) → x∉ (subst (_∈ xs) e x∈)
 
+uniq-concat : {xss : List (List A)}
+            → Uniq (concat xss)
+            → All Uniq xss × Pairwise _∥_ xss
+uniq-concat {xss = []}       _   = [] , []ᵖ
+uniq-concat {xss = xs ∷ xss} uss =
+  let (ux , uss' , dx) = ++→uniq {xs = xs} uss
+      (axs , pxs) = uniq-concat {xss = xss} uss'
+    in
+  ux ∷ axs , ∥-concat dx ∷ᵖ pxs
+
+concat-uniq : {xss : List (List A)}
+            → All Uniq xss → Pairwise _∥_ xss
+            → Uniq (concat xss)
+concat-uniq {xss = []}       _          _          = []ᵘ
+concat-uniq {xss = xs ∷ xss} (u ∷ axs) (ax ∷ᵖ pxs) =
+  uniq→++ u (concat-uniq axs pxs) (concat-∥ ax)
+
 -- homotopy uniqueness
 
 Uniq-set→is-unique : {xs : List A}
@@ -91,7 +110,14 @@ sorted→uniq : {ℓ′ : Level} {xs : List A} {R : A → A → 𝒰 ℓ′} →
 sorted→uniq {xs = []}     irr []ˢ      = []ᵘ
 sorted→uniq {xs = x ∷ xs} irr (∷ˢ rel) = related→uniq irr rel
 
--- subset & set-equivalence
+-- OPE, subset & set-equivalence
+
+uniq-ope : {xs ys : List A}
+         → OPE xs ys → Uniq ys → Uniq xs
+uniq-ope  odone              []ᵘ       = []ᵘ
+uniq-ope (otake {ys} e ope) (ny ∷ᵘ uy) =
+  contra (subst (_∈ ys) e ∘ ope→subset ope) ny ∷ᵘ uniq-ope ope uy
+uniq-ope (odrop ope)        (_ ∷ᵘ uy)  = uniq-ope ope uy
 
 uniq⊆→len≤ : {xs ys : List A}
            → Uniq xs → xs ⊆ ys → length xs ≤ length ys
@@ -148,16 +174,16 @@ uniq⊆len≤→uniq {xs = x ∷ xs} (nx ∷ᵘ u) sub le =
     (∥-∷→r (contra any-++-l nlr) (ulurar .snd .snd))
 
 uniq≈→len= : {xs ys : List A}
-                → Uniq xs → Uniq ys
-                → xs ≈ ys
-                → length xs ＝ length ys
+           → Uniq xs → Uniq ys
+           → xs ≈ ys
+           → length xs ＝ length ys
 uniq≈→len= ux uy seq =
   ≤-antisym (uniq⊆→len≤ ux (seq .fst)) (uniq⊆→len≤ uy (seq .snd))
 
 uniq≈len=→uniq : {xs ys : List A}
-                → length xs ＝ length ys
-                → xs ≈ ys
-                → Uniq xs → Uniq ys
+               → length xs ＝ length ys
+               → xs ≈ ys
+               → Uniq xs → Uniq ys
 uniq≈len=→uniq es seq ux =
   uniq⊆len≤→uniq ux (seq .fst) (=→≤ (es ⁻¹))
 
