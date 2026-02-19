@@ -12,7 +12,9 @@ open import Data.List.Base
 open import Data.List.Path
 open import Data.List.Properties
 open import Data.List.Operations
+open import Data.List.Correspondences.Unary.All
 open import Data.List.Correspondences.Unary.Any
+open import Data.List.Correspondences.Unary.Pairwise
 open import Data.List.Membership
 open import Data.List.Instances.Map
 
@@ -112,7 +114,7 @@ ope-map     (odrop ope)   = odrop (ope-map ope)
 ope-antisym : {xs ys : List A}
             → OPE xs ys → OPE ys xs → xs ＝ ys
 ope-antisym  odone           _            = refl
-ope-antisym (otake exy oxy) (otake _ oyx) = ap² _∷_ exy (ope-antisym oxy oyx)
+ope-antisym (otake exy oxy) (otake _ oyx) = ap² {C = λ _ _ → List _} _∷_ exy (ope-antisym oxy oyx)
 ope-antisym (otake _ oxy)   (odrop oyx)   = false! $ ≤-trans (ope-length oyx) (ope-length oxy)
 ope-antisym (odrop oxy)     (otake _ oyx) = false! $ ≤-trans (ope-length oxy) (ope-length oyx)
 ope-antisym (odrop oxy)     (odrop oyx)   = false! $ ≤≃≤+r {n = 2} ⁻¹ $ ≤-trans (s≤s $ ope-length oxy) (ope-length oyx)
@@ -148,6 +150,19 @@ ope→subset : {xs ys : List A}
 ope→subset (otake e o) (here e′)  = here (e′ ∙ e)
 ope→subset (otake e o) (there hx) = there (ope→subset o hx)
 ope→subset (odrop o)    hx        = there (ope→subset o hx)
+
+all-ope : {xs ys : List A} {P : A → 𝒰 ℓᵃ}
+        → OPE xs ys → All P ys → All P xs
+all-ope      odone      []        = []
+all-ope {P} (otake e o) (py ∷ ay) = subst P (e ⁻¹) py ∷ all-ope o ay
+all-ope     (odrop o)   (_ ∷ ay)  = all-ope o ay
+
+pairwise-ope : {xs ys : List A} {P : A → A → 𝒰 ℓᵃ}
+             → OPE xs ys → Pairwise P ys → Pairwise P xs
+pairwise-ope      odone            []ᵖ       = []ᵖ
+pairwise-ope {P} (otake {ys} e o) (ay ∷ᵖ py) =
+  all-ope o (subst (λ q → All (P q) ys) (e ⁻¹) ay) ∷ᵖ pairwise-ope o py
+pairwise-ope     (odrop o)        (_ ∷ᵖ py)  = pairwise-ope o py
 
 instance
   HUnit-o-≤ : HUnit-o {A = List A} OPE
