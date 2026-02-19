@@ -1231,12 +1231,15 @@ eq-take-drop-while : ∀ {A : 𝒰 ℓ} (p : A → Bool) xs
                    → Σ[ x ꞉ A ] (  So (p x)
                                  × (xs ＝              take-while (not ∘ p) xs
                                           ++ x ∷ tail (drop-while (not ∘ p) xs)))
-eq-take-drop-while p (x ∷ xs) a with p x | recall p x
-... | true | ⟪ eq ⟫ =
-    x , (so≃is-true ⁻¹ $ eq) , refl
-... | false | ⟪ eq ⟫ =
-  let (q , pq , e) = eq-take-drop-while p xs (any-¬here (¬so≃is-false ⁻¹ $ eq) a) in
-  q , pq , ap (x ∷_) e
+eq-take-drop-while {A} p (x ∷ xs) a =
+  Bool.elim
+    {P = λ q → p x ＝ q
+             → Σ[ z ꞉ A ] (  So (p z) × (x ∷ xs ＝ ((if not q then x ∷ take-while (not ∘ p) xs else [])
+                                                ++ z ∷ tail (if not q then drop-while (not ∘ p) xs else (x ∷ xs)))))}
+    (λ eq → x , ((so≃is-true ⁻¹) .fst eq) , refl)
+    (λ neq → let (q , pq , e) = eq-take-drop-while p xs (any-¬here (¬so≃is-false ⁻¹ $ neq) a) in
+             q , pq , ap (x ∷_) e)
+    (p x) refl
 
 -- span
 -- TODO duplication with above
