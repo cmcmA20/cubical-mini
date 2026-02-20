@@ -49,7 +49,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        agda-tag: [ nightly , v2.7.0.1 , v2.8.0 ]
+        agda-tag: [ v2.7.0.1 , v2.8.0 ]
     steps:
       - name: Install cabal
         uses: haskell-actions/setup@v2
